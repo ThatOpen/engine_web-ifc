@@ -5,8 +5,19 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="web-ifc-src">
+      <UniqueIdentifier>{355b2b93-f5a9-41d7-a33e-456c7f146a73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="web-ifc-test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="web-ifc-src\web-ifc.h">
+      <Filter>web-ifc-src</Filter>
+    </ClInclude>
+    <ClInclude Include="web-ifc-src\ifc2x3.h">
+      <Filter>web-ifc-src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

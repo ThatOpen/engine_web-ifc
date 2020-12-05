@@ -21,6 +21,10 @@
   <ItemGroup>
     <ClCompile Include="web-ifc-test.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="web-ifc-src\ifc2x3.h" />
+    <ClInclude Include="web-ifc-src\web-ifc.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{473E2C90-D0BE-4511-8C60-5BA2B1259B5F}</ProjectGuid>
