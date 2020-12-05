@@ -1,0 +1,1 @@
+em++ -O2 -s ASSERTIONS=1 -s EXTRA_EXPORTED_RUNTIME_METHODS="['ccall']" -s EXPORTED_FUNCTIONS="['_functionCall', '_main']" web-ifc-wasm.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -o web-ifc-page/web-ifc.js
