@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <deque>
+#include <unordered_map>
 #include <chrono>
 #include <algorithm>
 
@@ -89,12 +90,6 @@ namespace webifc
 				//
 			}
 
-
-			IfcLine l;
-			l.expressID = 0;
-			l.lineIndex = 0;
-			lines.push_back(l);
-
 			uint64_t maxExpressId = 0;
 			for (int i = 0; i < lineTokens.size(); i++)
 			{
@@ -111,7 +106,16 @@ namespace webifc
 					{
 						auto& type = line[1];
 						l.ifcType = crc32Simple(&buf[type.pos], type.end - type.pos);
+						ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
 					}
+
+					lines.push_back(l);
+				}
+				else
+				{
+					IfcLine l;
+					l.expressID = 0;
+					l.ifcType = 0;
 
 					lines.push_back(l);
 				}
@@ -123,6 +127,43 @@ namespace webifc
 			{
 				expressIDToLine[lines[i].expressID] = i;
 			}
+		}
+
+		std::vector<uint32_t>& GetLineIDsWithType(uint32_t type)
+		{
+			return ifcTypeToLineID[type];
+		}
+
+		std::vector<uint32_t> GetExpressIDsWithType(uint32_t type)
+		{
+			auto& list = ifcTypeToLineID[type];
+			std::vector<uint32_t> ret(list.size());
+
+			std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID) {
+				return lines[lineID].expressID;
+			});
+
+			return ret;
+		}
+
+		uint32_t ExpressIDToLineID(uint32_t expressID)
+		{
+			return expressIDToLine[expressID];
+		}
+
+		IfcLine& GetLine(uint32_t lineID)
+		{
+			return lines[lineID];
+		}
+
+		std::vector<IfcToken>& GetLineTokens(uint32_t lineID)
+		{
+			return lineTokens[lineID];
+		}
+
+		std::string GetString(IfcToken& token)
+		{
+			return std::string(&buf[token.pos], token.end - token.pos);
 		}
 
 	private:
@@ -205,7 +246,12 @@ namespace webifc
 
 					IfcToken token;
 					token.type = IfcTokenType::REAL;
+					bool negative = buf[pos - 1] == '-';
 					token.real = readDouble();
+					if (negative)
+					{
+						token.real *= -1;
+					}
 					token.pos = pos;
 					line.push_back(token);
 				}
@@ -301,5 +347,6 @@ namespace webifc
 		std::deque<std::vector<IfcToken>> lineTokens;
 		std::vector<IfcLine> lines;
 		std::vector<uint32_t> expressIDToLine;
+		std::unordered_map<uint32_t, std::vector<uint32_t>> ifcTypeToLineID;
 	};
 }

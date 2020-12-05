@@ -42,3 +42,5 @@ Release
 x64
 ifcPrune.vcxproj.user
 output
+debug_output
+deps

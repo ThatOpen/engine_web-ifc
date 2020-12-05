@@ -3,6 +3,8 @@
 #include <fstream>
 
 #include "web-ifc-src/web-ifc.h"
+#include "web-ifc-src/web-ifc-geometry.h"
+#include "web-ifc-src/ifc2x3.h"
 
 std::string ReadFile(std::wstring filename)
 {
@@ -30,6 +32,12 @@ int main()
     auto start = webifc::ms();
     loader.LoadFile(content);
     auto time = webifc::ms() - start;
+
+    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCWALLSTANDARDCASE);
+
+    webifc::IfcGeometryLoader geometryLoader(loader);
+
+    geometryLoader.GetMesh(walls[0]);
 
     std::cout << "Took " << time << "ms" << std::endl;
 

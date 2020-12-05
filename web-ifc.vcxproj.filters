@@ -19,5 +19,11 @@
     <ClInclude Include="web-ifc-src\ifc2x3.h">
       <Filter>web-ifc-src</Filter>
     </ClInclude>
+    <ClInclude Include="web-ifc-src\web-ifc-geometry.h">
+      <Filter>web-ifc-src</Filter>
+    </ClInclude>
+    <ClInclude Include="web-ifc-src\util.h">
+      <Filter>web-ifc-src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
