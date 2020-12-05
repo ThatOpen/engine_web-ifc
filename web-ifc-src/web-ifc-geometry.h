@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <chrono>
 #include <algorithm>
+#include <sstream>
+#include <fstream>
 
 #include <glm/glm.hpp>
 #include "deps/glm/glm/gtx/transform.hpp"
@@ -27,7 +29,7 @@ namespace webifc
 
 	struct IfcGeometry
 	{
-		std::vector<double> vertexData;
+		std::vector<glm::dvec3> points;
 		std::vector<Face> faces;
 	};
 	
@@ -185,13 +187,20 @@ namespace webifc
 				double depth = tokens[GetArgumentOffset(tokens, 3)].real;
 
 				IfcProfile profile = GetProfile(profileID);
+				glm::dmat4 placement = GetLocalPlacement(placementID);
+				glm::dvec3 dir = GetCartesianPoint3D(directionID);
 
 				if (DEBUG_DUMP_SVG)
 				{
 					DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
 				}
 
+				IfcGeometry geom = Extrude(profile, placement, dir, depth);
 
+				if (DEBUG_DUMP_SVG)
+				{
+					DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
+				}
 
 				mesh.transformation = glm::dmat4(1);
 
@@ -203,6 +212,75 @@ namespace webifc
 			}
 
 			return IfcComposedMesh();
+		}
+
+		std::string ToObj(IfcGeometry& geom)
+		{
+			std::stringstream obj;
+
+			double scale = 0.001;
+
+			for (auto& pt : geom.points)
+			{
+				obj << "v " << pt.x * scale << " " << pt.y * scale << " " << pt.z * scale << "\n";
+			}
+
+			for (auto& f : geom.faces)
+			{
+				obj << "f " << (f.i0+1) << "// " << (f.i1+1) << "// " << (f.i2+1) << "//\n";
+			}
+
+			return obj.str();
+		}
+
+		void DumpIfcGeometry(IfcGeometry& geom, std::wstring filename)
+		{
+			std::ofstream out(L"debug_output/" + filename);
+			out << ToObj(geom);
+		}
+
+		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance)
+		{
+			IfcGeometry geom;
+
+			// TODO: triangulate profile and append to geom
+
+			// for each line
+			for (int i = 1; i < profile.curve.points.size(); i++)
+			{
+				auto& start = profile.curve.points[i - 1];
+				auto& end = profile.curve.points[i];
+
+				glm::dvec4 sb = placement * glm::vec4(start, 0, 1);
+				glm::dvec4 eb = placement * glm::vec4(end, 0, 1);
+
+				glm::dvec4 st = placement * glm::vec4(glm::dvec3(start, 0) + dir * distance, 1);
+				glm::dvec4 et = placement * glm::vec4(glm::dvec3(end, 0) + dir * distance, 1);
+
+				int offset = geom.points.size();
+				geom.points.push_back(sb);
+				geom.points.push_back(eb);
+
+				geom.points.push_back(st);
+				geom.points.push_back(et);
+
+				// sb st eb
+				Face f1;
+				f1.i0 = offset + 0;
+				f1.i1 = offset + 2;
+				f1.i2 = offset + 1;
+
+				// st et eb
+				Face f2;
+				f2.i0 = offset + 2;
+				f2.i1 = offset + 3;
+				f2.i2 = offset + 1;
+
+				geom.faces.push_back(f1);
+				geom.faces.push_back(f2);
+			}
+
+			return geom;
 		}
 
 		IfcProfile GetProfileByLine(uint64_t lineID)
@@ -228,6 +306,60 @@ namespace webifc
 			return IfcProfile();
 		}
 
+		glm::dvec3 computeNormal(glm::dvec3 v1, glm::dvec3 v2, glm::dvec3 v3)
+		{
+			glm::dvec3 v12(v2 - v1);
+			glm::dvec3 v13(v3 - v1);
+
+			glm::dvec3 norm = glm::cross(v12, v13);
+
+			return glm::normalize(norm);
+		}
+
+		glm::mat4 GetLocalPlacement(uint64_t expressID)
+		{
+			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			auto& tokens = _loader.GetLineTokens(lineID);
+			switch (line.ifcType)
+			{
+			case ifc2x3::IFCAXIS2PLACEMENT3D:
+			{
+				uint32_t posID = tokens[GetArgumentOffset(tokens, 0)].num;
+				IfcToken zID = tokens[GetArgumentOffset(tokens, 1)];
+				IfcToken xID = tokens[GetArgumentOffset(tokens, 2)];
+
+				glm::dvec3 pos = GetCartesianPoint3D(posID);
+
+				glm::dvec3 zAxis(0, 1, 0);
+				glm::dvec3 xAxis(1, 0, 0);
+				
+				if (zID.type == IfcTokenType::REF)
+				{
+					zAxis = GetCartesianPoint3D(zID.num);
+				}
+
+				if (xID.type == IfcTokenType::REF)
+				{
+					xAxis = GetCartesianPoint3D(xID.num);
+				}
+
+				glm::dvec3 yAxis = glm::cross(xAxis, zAxis);
+
+				return glm::dmat4(
+					glm::vec4(xAxis, 1),
+					glm::vec4(yAxis, 1),
+					glm::vec4(zAxis, 1),
+					glm::vec4(pos, 1)
+				);
+			}
+
+			default:
+				break;
+			}
+
+			return glm::dmat4();
+		}
 
 		IfcCurve GetCurve(uint64_t expressID)
 		{
@@ -245,7 +377,7 @@ namespace webifc
 				for (auto& token : points)
 				{
 					uint32_t pointId = tokens[token].num;
-					curve.points.push_back(GetCartesianPoint(pointId));
+					curve.points.push_back(GetCartesianPoint2D(pointId));
 				}
 
 				return curve;
@@ -258,7 +390,7 @@ namespace webifc
 			return IfcCurve();
 		}
 
-		glm::dvec2 GetCartesianPoint(uint64_t expressID)
+		glm::dvec2 GetCartesianPoint2D(uint64_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -269,6 +401,23 @@ namespace webifc
 			glm::dvec2 point(
 				tokens[coords[0]].real,
 				tokens[coords[1]].real
+			);
+
+			return point;
+		}
+
+		glm::dvec3 GetCartesianPoint3D(uint64_t expressID)
+		{
+			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			auto& tokens = _loader.GetLineTokens(lineID);
+
+			auto coords = GetSetArgument(tokens, 0);
+
+			glm::dvec3 point(
+				tokens[coords[0]].real,
+				tokens[coords[1]].real,
+				tokens[coords[2]].real
 			);
 
 			return point;
