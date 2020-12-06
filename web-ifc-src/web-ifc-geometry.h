@@ -287,8 +287,8 @@ namespace webifc
 					{
 						Face f1;
 						f1.i0 = offset + 0;
-						f1.i1 = offset + i-1;
-						f1.i2 = offset + i;
+						f1.i1 = offset + i;
+						f1.i2 = offset + i - 1;
 
 						geom.faces.push_back(f1);
 					}
@@ -305,8 +305,8 @@ namespace webifc
 					{
 						Face f2;
 						f2.i0 = offset + 0;
-						f2.i1 = offset + i;
-						f2.i2 = offset + i - 1;
+						f2.i1 = offset + i - 1;
+						f2.i2 = offset + i;
 
 						geom.faces.push_back(f2);
 					}
@@ -339,14 +339,14 @@ namespace webifc
 				// sb st eb
 				Face f1;
 				f1.i0 = offset + 0;
-				f1.i1 = offset + 2;
-				f1.i2 = offset + 1;
+				f1.i1 = offset + 1;
+				f1.i2 = offset + 2;
 
 				// st et eb
 				Face f2;
 				f2.i0 = offset + 2;
-				f2.i1 = offset + 3;
-				f2.i2 = offset + 1;
+				f2.i1 = offset + 1;
+				f2.i2 = offset + 3;
 
 				geom.faces.push_back(f1);
 				geom.faces.push_back(f2);
