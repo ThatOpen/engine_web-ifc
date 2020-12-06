@@ -389,6 +389,35 @@ namespace webifc
 
 				return profile;
 			}
+			case ifc2x3::IFCRECTANGLEPROFILEDEF:
+			{
+				IfcProfile profile;
+
+				profile.type = GetStringArgument(tokens, 0);
+				profile.isConvex = true;
+				double xdim = tokens[GetArgumentOffset(tokens, 3)].real;
+				double ydim = tokens[GetArgumentOffset(tokens, 4)].real;
+
+				uint32_t placementID = tokens[GetArgumentOffset(tokens, 2)].num;
+				glm::dmat3 placement = GetAxis2Placement2D(placementID);
+
+				glm::dvec2 bl = placement * glm::dvec3(0, 0, 1);
+				glm::dvec2 br = placement * glm::dvec3(xdim, 0, 1);
+				
+				glm::dvec2 tl = placement * glm::dvec3(0, ydim, 1);
+				glm::dvec2 tr = placement * glm::dvec3(xdim, ydim, 1);
+
+				IfcCurve c;
+				c.points.push_back(bl);
+				c.points.push_back(tl);
+				c.points.push_back(tr);
+				c.points.push_back(br);
+				c.points.push_back(bl);
+
+				profile.curve = c;
+
+				return profile;
+			}
 
 			default:
 				break;
@@ -405,6 +434,32 @@ namespace webifc
 			glm::dvec3 norm = glm::cross(v12, v13);
 
 			return glm::normalize(norm);
+		}
+
+		glm::mat3 GetAxis2Placement2D(uint64_t expressID)
+		{
+			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			auto& tokens = _loader.GetLineTokens(lineID);
+
+			uint32_t locationID = tokens[GetArgumentOffset(tokens, 0)].num;
+			IfcToken dirToken = tokens[GetArgumentOffset(tokens, 1)];
+
+			glm::dvec2 pos = GetCartesianPoint2D(locationID);
+			glm::dvec2 xAxis = glm::dvec2(1, 0);
+
+			if (dirToken.type == IfcTokenType::REF)
+			{
+				xAxis = GetCartesianPoint2D(dirToken.num);
+			}
+
+			glm::dvec2 yAxis = glm::dvec2(xAxis.y, -xAxis.x);
+
+			return glm::dmat3(
+				glm::vec3(xAxis, 0),
+				glm::vec3(yAxis, 0),
+				glm::vec3(pos, 1)
+			);
 		}
 
 		glm::mat4 GetLocalPlacement(uint64_t expressID)
