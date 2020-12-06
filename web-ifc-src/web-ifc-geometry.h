@@ -77,6 +77,12 @@ namespace webifc
 			return GetProfileByLine(_loader.ExpressIDToLineID(expressID));
 		}
 
+		void DumpMesh(IfcComposedMesh& mesh, std::wstring filename)
+		{
+			std::ofstream out(L"debug_output/" + filename);
+			out << ToObj(mesh, NormalizeIFC);
+		}
+
 	private:
 
 		int GetArgumentOffset(std::vector<IfcToken> line, int argumentIndex)
@@ -217,7 +223,7 @@ namespace webifc
 			return IfcComposedMesh();
 		}
 
-		std::string ToObj(IfcGeometry& geom)
+		std::string ToObj(IfcGeometry& geom, glm::dmat4 transform = glm::dmat4(1), int offset = 0)
 		{
 			std::stringstream obj;
 
@@ -225,15 +231,35 @@ namespace webifc
 
 			for (auto& pt : geom.points)
 			{
-				obj << "v " << pt.x * scale << " " << pt.y * scale << " " << pt.z * scale << "\n";
+				glm::dvec4 t = transform * glm::dvec4(pt, 1);
+				obj << "v " << t.x * scale << " " << t.y * scale << " " << t.z * scale << "\n";
 			}
 
 			for (auto& f : geom.faces)
 			{
-				obj << "f " << (f.i0+1) << "// " << (f.i1+1) << "// " << (f.i2+1) << "//\n";
+				obj << "f " << (f.i0+1 + offset) << "// " << (f.i1+1 + offset) << "// " << (f.i2+1 + offset) << "//\n";
 			}
 
 			return obj.str();
+		}
+
+		std::string ToObj(IfcComposedMesh& mesh, glm::dmat4 mat = glm::dmat4(1), int offset = 0)
+		{
+			std::string complete;
+
+			int currentOffset = offset;
+			glm::dmat4 trans = mat * mesh.transformation;
+
+			complete += ToObj(mesh.geom, trans, currentOffset);
+			currentOffset += mesh.geom.points.size();
+
+			for (auto c : mesh.children)
+			{
+				complete += ToObj(c, trans, currentOffset);
+				currentOffset += mesh.geom.points.size();
+			}
+
+			return complete;
 		}
 
 		void DumpIfcGeometry(IfcGeometry& geom, std::wstring filename)
@@ -396,7 +422,7 @@ namespace webifc
 
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
-				glm::dvec3 zAxis(0, 1, 0);
+				glm::dvec3 zAxis(0, 0, 1);
 				glm::dvec3 xAxis(1, 0, 0);
 				
 				if (zID.type == IfcTokenType::REF)
@@ -408,7 +434,7 @@ namespace webifc
 				{
 					xAxis = GetCartesianPoint3D(xID.num);
 				}
-
+					
 				glm::dvec3 yAxis = glm::cross(xAxis, zAxis);
 
 				return glm::dmat4(

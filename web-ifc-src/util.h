@@ -69,4 +69,11 @@ namespace webifc
 	{
 		return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) >= 0;
 	}
+
+	glm::dmat4 NormalizeIFC(
+		glm::dvec4(1, 0, 0, 0),
+		glm::dvec4(0, 0, -1, 0),
+		glm::dvec4(0, 1, 0, 0),
+		glm::dvec4(0, 0, 0, 1)
+	);
 }

@@ -37,7 +37,14 @@ int main()
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
-    auto mesh = geometryLoader.GetMesh(walls[0]);
+
+    auto mesh = geometryLoader.GetMesh(walls[18]);
+
+    for (int i = 0; i < walls.size(); i++)
+    {
+        auto mesh = geometryLoader.GetMesh(walls[i]);
+        geometryLoader.DumpMesh(mesh, L"IFCWALLSTANDARDCASE" + std::to_wstring(i) + L".obj");
+    }
 
     std::cout << "Took " << time << "ms" << std::endl;
 
