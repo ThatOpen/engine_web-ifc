@@ -65,5 +65,8 @@ namespace webifc
 		out << makeSVGLines(points);
 	}
 
-
+	bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
+	{
+		return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) >= 0;
+	}
 }

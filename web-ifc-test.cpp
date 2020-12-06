@@ -37,7 +37,7 @@ int main()
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
-    geometryLoader.GetMesh(walls[0]);
+    auto mesh = geometryLoader.GetMesh(walls[0]);
 
     std::cout << "Took " << time << "ms" << std::endl;
 

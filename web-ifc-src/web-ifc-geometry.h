@@ -42,12 +42,14 @@ namespace webifc
 	{
 		std::string type;
 		IfcCurve curve;
+		bool isConvex;
 	};
 
 	struct IfcComposedMesh
 	{
 		glm::dmat4 transformation;
 		uint64_t geometryRef;
+		IfcGeometry geom; // TODO: remove and make ref
 		std::vector<IfcComposedMesh> children;
 	};
 
@@ -141,7 +143,7 @@ namespace webifc
 				uint32_t localPlacement = tokens[GetArgumentOffset(tokens, 5)].num;
 				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 6)].num;
 
-				mesh.transformation = GetTransformationByLine(localPlacement);
+				mesh.transformation = GetLocalPlacement(localPlacement);
 				mesh.children.push_back(GetMesh(ifcPresentation));
 
 				return mesh;
@@ -203,6 +205,7 @@ namespace webifc
 				}
 
 				mesh.transformation = glm::dmat4(1);
+				mesh.geom = geom;
 
 				return mesh;
 			}
@@ -241,9 +244,52 @@ namespace webifc
 
 		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance)
 		{
+			// TODO: This code generates much more vertices than needed!
 			IfcGeometry geom;
 
-			// TODO: triangulate profile and append to geom
+			if (profile.isConvex)
+			{
+				// simplified convex fan triangulation
+				int offset = 0;
+				for (int i = 0; i < profile.curve.points.size(); i++)
+				{
+					glm::dvec2 pt = profile.curve.points[i];
+					glm::dvec4 sb = placement * glm::vec4(glm::dvec3(pt, 0), 1);
+					geom.points.push_back(sb);
+
+					if (i > 1)
+					{
+						Face f1;
+						f1.i0 = offset + 0;
+						f1.i1 = offset + i-1;
+						f1.i2 = offset + i;
+
+						geom.faces.push_back(f1);
+					}
+				}
+
+				offset = geom.points.size();
+				for (int i = 0; i < profile.curve.points.size(); i++)
+				{
+					glm::dvec2 pt = profile.curve.points[i];
+					glm::dvec4 et = placement * glm::vec4(glm::dvec3(pt, 0) + dir * distance, 1);
+					geom.points.push_back(et);
+
+					if (i > 0)
+					{
+						Face f2;
+						f2.i0 = offset + 0;
+						f2.i1 = offset + i;
+						f2.i2 = offset + i - 1;
+
+						geom.faces.push_back(f2);
+					}
+				}
+			}
+			else
+			{
+				// TODO: triangulate concave profile and append to geom
+			}
 
 			// for each line
 			for (int i = 1; i < profile.curve.points.size(); i++)
@@ -283,6 +329,24 @@ namespace webifc
 			return geom;
 		}
 
+		bool IsCurveConvex(IfcCurve& curve)
+		{
+			for (int i = 2; i < curve.points.size(); i++)
+			{
+				glm::dvec2 a = curve.points[i - 2];
+				glm::dvec2 b = curve.points[i - 1];
+				glm::dvec2 c = curve.points[i - 0];
+
+				if (!isConvexOrColinear(a, b, c))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+
 		IfcProfile GetProfileByLine(uint64_t lineID)
 		{
 			auto& line = _loader.GetLine(lineID);
@@ -295,6 +359,7 @@ namespace webifc
 
 				profile.type = GetStringArgument(tokens, 0);
 				profile.curve = GetCurve(tokens[GetArgumentOffset(tokens, 2)].num);
+				profile.isConvex = IsCurveConvex(profile.curve);
 
 				return profile;
 			}
@@ -347,11 +412,27 @@ namespace webifc
 				glm::dvec3 yAxis = glm::cross(xAxis, zAxis);
 
 				return glm::dmat4(
-					glm::vec4(xAxis, 1),
-					glm::vec4(yAxis, 1),
-					glm::vec4(zAxis, 1),
+					glm::vec4(xAxis, 0),
+					glm::vec4(yAxis, 0),
+					glm::vec4(zAxis, 0),
 					glm::vec4(pos, 1)
 				);
+			}
+			case ifc2x3::IFCLOCALPLACEMENT:
+			{
+				IfcToken relPlacementToken = tokens[GetArgumentOffset(tokens, 0)];
+				uint32_t axis2PlacementID = tokens[GetArgumentOffset(tokens, 1)].num;
+
+				glm::dmat4 relPlacement(1);
+				glm::dmat4 axis2Placement = GetLocalPlacement(axis2PlacementID);
+
+				if (relPlacementToken.type == IfcTokenType::REF)
+				{
+					relPlacement = GetLocalPlacement(relPlacementToken.num);
+				}
+
+				auto result = relPlacement * axis2Placement;
+				return result;;
 			}
 
 			default:
@@ -421,11 +502,6 @@ namespace webifc
 			);
 
 			return point;
-		}
-
-		glm::dmat4 GetTransformationByLine(uint64_t lineID)
-		{
-			return glm::dmat4(1);
 		}
 
 		IfcLoader& _loader;
