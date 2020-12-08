@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
+#include <iostream>
 
 #include <glm/glm.hpp>
 #include "deps/glm/glm/gtx/transform.hpp"
@@ -401,11 +402,14 @@ namespace webifc
 				uint32_t placementID = tokens[GetArgumentOffset(tokens, 2)].num;
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				glm::dvec2 bl = placement * glm::dvec3(0, 0, 1);
-				glm::dvec2 br = placement * glm::dvec3(xdim, 0, 1);
+				double halfX = xdim / 2;
+				double halfY = ydim / 2;
+
+				glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
+				glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
 				
-				glm::dvec2 tl = placement * glm::dvec3(0, ydim, 1);
-				glm::dvec2 tr = placement * glm::dvec3(xdim, ydim, 1);
+				glm::dvec2 tl = placement * glm::dvec3(-halfX, halfY, 1);
+				glm::dvec2 tr = placement * glm::dvec3(halfX, halfY, 1);
 
 				IfcCurve c;
 				c.points.push_back(bl);
@@ -456,9 +460,9 @@ namespace webifc
 			glm::dvec2 yAxis = glm::dvec2(xAxis.y, -xAxis.x);
 
 			return glm::dmat3(
-				glm::vec3(xAxis, 0),
-				glm::vec3(yAxis, 0),
-				glm::vec3(pos, 1)
+				glm::dvec3(xAxis, 0),
+				glm::dvec3(yAxis, 0),
+				glm::dvec3(pos, 1)
 			);
 		}
 
@@ -490,7 +494,7 @@ namespace webifc
 					xAxis = GetCartesianPoint3D(xID.num);
 				}
 					
-				glm::dvec3 yAxis = glm::cross(xAxis, zAxis);
+				glm::dvec3 yAxis = glm::cross(zAxis, xAxis);
 
 				return glm::dmat4(
 					glm::vec4(xAxis, 0),

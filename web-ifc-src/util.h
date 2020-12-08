@@ -72,7 +72,7 @@ namespace webifc
 
 	glm::dmat4 NormalizeIFC(
 		glm::dvec4(1, 0, 0, 0),
-		glm::dvec4(0, 0, 1, 0),
+		glm::dvec4(0, 0, -1, 0),
 		glm::dvec4(0, 1, 0, 0),
 		glm::dvec4(0, 0, 0, 1)
 	);
