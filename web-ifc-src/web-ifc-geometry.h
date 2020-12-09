@@ -17,6 +17,8 @@
 #include "web-ifc.h"
 #include "util.h"
 
+#define CONST_PI 3.141592653589793238462643383279502884L
+
 const bool DEBUG_DUMP_SVG = true;
 
 namespace webifc
@@ -143,6 +145,9 @@ namespace webifc
 			auto& tokens = _loader.GetLineTokens(lineID);
 			switch (line.ifcType)
 			{
+			case ifc2x3::IFCCOLUMN:
+			case ifc2x3::IFCSLAB:
+			case ifc2x3::IFCBEAM:
 			case ifc2x3::IFCWALLSTANDARDCASE:
 			{
 				IfcComposedMesh mesh;
@@ -151,6 +156,30 @@ namespace webifc
 				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 6)].num;
 
 				mesh.transformation = GetLocalPlacement(localPlacement);
+				mesh.children.push_back(GetMesh(ifcPresentation));
+
+				return mesh;
+			}
+			case ifc2x3::IFCMAPPEDITEM:
+			{
+				IfcComposedMesh mesh;
+
+				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 0)].num;
+				uint32_t localPlacement = tokens[GetArgumentOffset(tokens, 1)].num;
+
+				mesh.transformation = GetLocalPlacement(localPlacement);
+				mesh.children.push_back(GetMesh(ifcPresentation));
+
+				return mesh;
+			}
+			case ifc2x3::IFCREPRESENTATIONMAP:
+			{
+				IfcComposedMesh mesh;
+
+				uint32_t axis2Placement = tokens[GetArgumentOffset(tokens, 0)].num;
+				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 1)].num;
+
+				mesh.transformation = GetLocalPlacement(axis2Placement);
 				mesh.children.push_back(GetMesh(ifcPresentation));
 
 				return mesh;
@@ -185,7 +214,6 @@ namespace webifc
 
 				return mesh;
 			}
-
 			case ifc2x3::IFCEXTRUDEDAREASOLID:
 			{
 				IfcComposedMesh mesh;
@@ -316,6 +344,7 @@ namespace webifc
 			else
 			{
 				// TODO: triangulate concave profile and append to geom
+				std::cout << "CONCAVE!" << std::endl;
 			}
 
 			// for each line
@@ -422,6 +451,39 @@ namespace webifc
 
 				return profile;
 			}
+			case ifc2x3::IFCCIRCLEPROFILEDEF:
+			{
+				IfcProfile profile;
+
+				profile.type = GetStringArgument(tokens, 0);
+				profile.isConvex = true;
+
+				uint32_t placementID = tokens[GetArgumentOffset(tokens, 2)].num;
+				double radius = tokens[GetArgumentOffset(tokens, 3)].real;
+				
+				glm::dmat3 placement = GetAxis2Placement2D(placementID);
+
+				const int CIRCLE_SEGMENTS = 5;
+
+				IfcCurve c;
+
+				for (int i = 0; i < CIRCLE_SEGMENTS; i++)
+				{
+					double ratio = static_cast<double>(i) / CIRCLE_SEGMENTS;
+					double angle = ratio * CONST_PI * 2;
+					glm::dvec2 circleCoordinate (
+						radius * std::sinf(angle),
+						radius * std::cosf(angle)
+					);
+					glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
+					c.points.push_back(pos);
+				}
+				c.points.push_back(c.points[0]);
+
+				profile.curve = c;
+
+				return profile;
+			}
 
 			default:
 				break;
@@ -497,10 +559,10 @@ namespace webifc
 				glm::dvec3 yAxis = glm::cross(zAxis, xAxis);
 
 				return glm::dmat4(
-					glm::vec4(xAxis, 0),
-					glm::vec4(yAxis, 0),
-					glm::vec4(zAxis, 0),
-					glm::vec4(pos, 1)
+					glm::dvec4(xAxis, 0),
+					glm::dvec4(yAxis, 0),
+					glm::dvec4(zAxis, 0),
+					glm::dvec4(pos, 1)
 				);
 			}
 			case ifc2x3::IFCLOCALPLACEMENT:
@@ -518,6 +580,50 @@ namespace webifc
 
 				auto result = relPlacement * axis2Placement;
 				return result;;
+			}
+			case ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
+			case ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM:
+			{
+				IfcToken a1Token = tokens[GetArgumentOffset(tokens, 0)];
+				IfcToken a2Token = tokens[GetArgumentOffset(tokens, 1)];
+				uint32_t posID = tokens[GetArgumentOffset(tokens, 2)].num;
+				IfcToken s1Token = tokens[GetArgumentOffset(tokens, 3)];
+				IfcToken a3Token = tokens[GetArgumentOffset(tokens, 4)];
+
+				IfcToken s2Token;
+				IfcToken s3Token;
+
+				if (line.ifcType == ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
+				{
+					s2Token = tokens[GetArgumentOffset(tokens, 5)];
+					s3Token = tokens[GetArgumentOffset(tokens, 6)];
+				}
+
+				double scale1 = 1.0;
+				double scale2 = 1.0;
+				double scale3 = 1.0;
+
+				if (s1Token.type == IfcTokenType::REF) scale1 = s1Token.real;
+				if (s2Token.type == IfcTokenType::REF) scale2 = s2Token.real;
+				if (s3Token.type == IfcTokenType::REF) scale3 = s3Token.real;
+
+				
+				glm::dvec3 pos = GetCartesianPoint3D(posID);
+
+				glm::dvec3 Axis1(1, 0, 0);
+				glm::dvec3 Axis2(0, 1, 0);
+				glm::dvec3 Axis3(0, 0, 1);
+
+				if (a1Token.type == IfcTokenType::REF) Axis1 = GetCartesianPoint3D(a1Token.num);
+				if (a2Token.type == IfcTokenType::REF) Axis2 = GetCartesianPoint3D(a2Token.num);
+				if (a3Token.type == IfcTokenType::REF) Axis3 = GetCartesianPoint3D(a3Token.num);
+
+				return glm::dmat4(
+					glm::dvec4(Axis1 * scale1, 0),
+					glm::dvec4(Axis2 * scale2, 0),
+					glm::dvec4(Axis3 * scale3, 0),
+					glm::dvec4(pos, 1)
+				);
 			}
 
 			default:

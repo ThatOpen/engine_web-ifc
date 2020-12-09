@@ -47,6 +47,7 @@ namespace webifc
 
 	enum class IfcTokenType
 	{
+		UNKNOWN,
 		STRING,
 		ENUM,
 		REAL,
@@ -60,7 +61,7 @@ namespace webifc
 
 	struct IfcToken
 	{
-		IfcTokenType type;
+		IfcTokenType type = IfcTokenType::UNKNOWN;
 		uint64_t num;
 		double real;
 		uint64_t pos;
