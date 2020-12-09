@@ -148,6 +148,8 @@ namespace webifc
 			case ifc2x3::IFCCOLUMN:
 			case ifc2x3::IFCSLAB:
 			case ifc2x3::IFCBEAM:
+			case ifc2x3::IFCFOOTING:
+			case ifc2x3::IFCOPENINGELEMENT:
 			case ifc2x3::IFCWALLSTANDARDCASE:
 			{
 				IfcComposedMesh mesh;
@@ -181,6 +183,17 @@ namespace webifc
 
 				mesh.transformation = GetLocalPlacement(axis2Placement);
 				mesh.children.push_back(GetMesh(ifcPresentation));
+
+				return mesh;
+			}
+			case ifc2x3::IFCFACETEDBREP:
+			{
+				IfcComposedMesh mesh;
+
+				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 0)].num;
+
+				mesh.transformation = glm::dmat4(1);
+				mesh.geom = GetBrep(ifcPresentation);
 
 				return mesh;
 			}
@@ -250,6 +263,123 @@ namespace webifc
 			}
 
 			return IfcComposedMesh();
+		}
+
+		IfcGeometry GetBrep(uint64_t expressID)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			auto& tokens = _loader.GetLineTokens(lineID);
+			switch (line.ifcType)
+			{
+			case ifc2x3::IFCCLOSEDSHELL:
+			{
+				auto faces = GetSetArgument(tokens, 0);
+
+				IfcGeometry geometry;
+				for (auto& faceToken : faces)
+				{
+					uint32_t faceID = tokens[faceToken].num;
+					AddFaceToGeometry(faceID, geometry);
+				}
+
+				return geometry;
+			}
+
+			default:
+				break;
+			}
+
+			return IfcGeometry();
+		}
+
+		void AddFaceToGeometry(uint64_t expressID, IfcGeometry& geometry)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			auto& tokens = _loader.GetLineTokens(lineID);
+
+			switch (line.ifcType)
+			{
+			case ifc2x3::IFCFACE:
+			{
+				auto bounds = GetSetArgument(tokens, 0);
+
+				for (auto& boundToken : bounds)
+				{
+					uint32_t boundID = tokens[boundToken].num;
+					AddBoundToGeometry(boundID, geometry);
+				}
+
+				return;
+			}
+
+			default:
+				break;
+			}
+		}
+
+		void AddBoundToGeometry(uint64_t expressID, IfcGeometry& geometry)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			auto& tokens = _loader.GetLineTokens(lineID);
+
+			switch (line.ifcType)
+			{
+			case ifc2x3::IFCFACEOUTERBOUND:
+			{
+				uint32_t loop = tokens[GetArgumentOffset(tokens, 0)].num;
+				IfcToken orientation = tokens[GetArgumentOffset(tokens, 1)];
+
+				IfcCurve curve = GetLoop(loop);
+
+				TriangulateCurve(geometry, curve);
+			}
+
+			default:
+				break;
+			}
+		}
+
+		IfcCurve GetLoop(uint64_t expressID)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			auto& tokens = _loader.GetLineTokens(lineID);
+
+			switch (line.ifcType)
+			{
+			case ifc2x3::IFCPOLYLOOP:
+			{
+				IfcCurve curve;
+
+				auto points = GetSetArgument(tokens, 0);
+
+				for (auto& token : points)
+				{
+					uint32_t pointId = tokens[token].num;
+					curve.points.push_back(GetCartesianPoint3D(pointId));
+				}
+
+				return curve;
+			}
+
+			default:
+				break;
+			}
+		}
+
+		void TriangulateCurve(IfcGeometry& geometry, IfcCurve& c)
+		{
+			if (c.points.size() == 3)
+			{
+				// triangle
+			}
+			else if (c.points.size() == 4)
+			{
+				// quad ?
+			}
 		}
 
 		std::string ToObj(IfcGeometry& geom, glm::dmat4 transform = glm::dmat4(1), int offset = 0)

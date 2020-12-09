@@ -33,7 +33,7 @@ int main()
     loader.LoadFile(content);
     auto time = webifc::ms() - start;
 
-    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCCOLUMN);
+    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCOPENINGELEMENT);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
@@ -43,7 +43,7 @@ int main()
     for (int i = 0; i < walls.size(); i++)
     {
         auto mesh = geometryLoader.GetMesh(walls[i]);
-        geometryLoader.DumpMesh(mesh, L"IFCOLUMN" + std::to_wstring(i) + L".obj");
+        geometryLoader.DumpMesh(mesh, L"IFCOPENINGELEMENT" + std::to_wstring(i) + L".obj");
     }
 
     std::cout << "Took " << time << "ms" << std::endl;
