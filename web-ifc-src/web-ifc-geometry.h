@@ -19,7 +19,7 @@
 
 #define CONST_PI 3.141592653589793238462643383279502884L
 
-const bool DEBUG_DUMP_SVG = true;
+const bool DEBUG_DUMP_SVG = false;
 
 namespace webifc
 {
@@ -39,6 +39,11 @@ namespace webifc
 	struct IfcCurve
 	{
 		std::vector<glm::dvec2> points;
+	};
+
+	struct IfcCurve3D
+	{
+		std::vector<glm::dvec3> points;
 	};
 
 	struct IfcProfile
@@ -83,12 +88,13 @@ namespace webifc
 		void DumpMesh(IfcComposedMesh& mesh, std::wstring filename)
 		{
 			std::ofstream out(L"debug_output/" + filename);
-			out << ToObj(mesh, NormalizeIFC);
+			int offset = 0;
+			out << ToObj(mesh, offset, NormalizeIFC);
 		}
 
 	private:
 
-		int GetArgumentOffset(std::vector<IfcToken> line, int argumentIndex)
+		int GetArgumentOffset(std::vector<IfcToken>& line, int argumentIndex)
 		{
 			// first tokens are ref, type, openset, start at 3
 			int currentArgument = 0;
@@ -116,14 +122,14 @@ namespace webifc
 			}
 		}
 
-		std::string GetStringArgument(std::vector<IfcToken> line, int argumentIndex)
+		std::string GetStringArgument(std::vector<IfcToken>& line, int argumentIndex)
 		{
 			int offset = GetArgumentOffset(line, argumentIndex);
 			IfcToken& str = line[offset];
 			return _loader.GetString(str);
 		}
 
-		std::vector<uint32_t> GetSetArgument(std::vector<IfcToken> line, int argumentIndex)
+		inline std::vector<uint32_t> GetSetArgument(std::vector<IfcToken>& line, int argumentIndex)
 		{
 			std::vector<uint32_t> tokenIds;
 			int offset = GetArgumentOffset(line, argumentIndex) + 1;
@@ -332,7 +338,7 @@ namespace webifc
 				uint32_t loop = tokens[GetArgumentOffset(tokens, 0)].num;
 				IfcToken orientation = tokens[GetArgumentOffset(tokens, 1)];
 
-				IfcCurve curve = GetLoop(loop);
+				IfcCurve3D curve = GetLoop(loop);
 
 				TriangulateCurve(geometry, curve);
 			}
@@ -342,7 +348,7 @@ namespace webifc
 			}
 		}
 
-		IfcCurve GetLoop(uint64_t expressID)
+		IfcCurve3D GetLoop(uint64_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -352,7 +358,7 @@ namespace webifc
 			{
 			case ifc2x3::IFCPOLYLOOP:
 			{
-				IfcCurve curve;
+				IfcCurve3D curve;
 
 				auto points = GetSetArgument(tokens, 0);
 
@@ -370,19 +376,50 @@ namespace webifc
 			}
 		}
 
-		void TriangulateCurve(IfcGeometry& geometry, IfcCurve& c)
+		void TriangulateCurve(IfcGeometry& geometry, IfcCurve3D& c)
 		{
 			if (c.points.size() == 3)
 			{
 				// triangle
+				geometry.points.push_back(c.points[0]);
+				geometry.points.push_back(c.points[1]);
+				geometry.points.push_back(c.points[2]);
+
+				int offset = geometry.points.size();
+
+				Face f1;
+				f1.i0 = offset + 0;
+				f1.i1 = offset + 1;
+				f1.i2 = offset + 2;
+
+				geometry.faces.push_back(f1);
 			}
 			else if (c.points.size() == 4)
 			{
-				// quad ?
+				// quad, since the loop is genus 1 we can always triangulate this
+				geometry.points.push_back(c.points[0]);
+				geometry.points.push_back(c.points[1]);
+				geometry.points.push_back(c.points[2]);
+				geometry.points.push_back(c.points[3]);
+
+				int offset = geometry.points.size();
+
+				Face f1;
+				f1.i0 = offset + 0;
+				f1.i1 = offset + 1;
+				f1.i2 = offset + 2;
+
+				Face f2;
+				f2.i0 = offset + 2;
+				f2.i1 = offset + 3;
+				f2.i2 = offset + 0;
+
+				geometry.faces.push_back(f1);
+				geometry.faces.push_back(f2);
 			}
 		}
 
-		std::string ToObj(IfcGeometry& geom, glm::dmat4 transform = glm::dmat4(1), int offset = 0)
+		std::string ToObj(IfcGeometry& geom, int& offset, glm::dmat4 transform = glm::dmat4(1))
 		{
 			std::stringstream obj;
 
@@ -399,23 +436,22 @@ namespace webifc
 				obj << "f " << (f.i0+1 + offset) << "// " << (f.i1+1 + offset) << "// " << (f.i2+1 + offset) << "//\n";
 			}
 
+			offset += geom.points.size();
+
 			return obj.str();
 		}
 
-		std::string ToObj(IfcComposedMesh& mesh, glm::dmat4 mat = glm::dmat4(1), int offset = 0)
+		std::string ToObj(IfcComposedMesh& mesh, int& offset, glm::dmat4 mat = glm::dmat4(1))
 		{
 			std::string complete;
 
-			int currentOffset = offset;
 			glm::dmat4 trans = mat * mesh.transformation;
 
-			complete += ToObj(mesh.geom, trans, currentOffset);
-			currentOffset += mesh.geom.points.size();
+			complete += ToObj(mesh.geom, offset, trans);
 
 			for (auto c : mesh.children)
 			{
-				complete += ToObj(c, trans, currentOffset);
-				currentOffset += mesh.geom.points.size();
+				complete += ToObj(c, offset, trans);
 			}
 
 			return complete;
@@ -424,7 +460,8 @@ namespace webifc
 		void DumpIfcGeometry(IfcGeometry& geom, std::wstring filename)
 		{
 			std::ofstream out(L"debug_output/" + filename);
-			out << ToObj(geom);
+			int offset = 0;
+			out << ToObj(geom, offset);
 		}
 
 		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance)

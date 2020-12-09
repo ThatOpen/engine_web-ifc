@@ -33,6 +33,10 @@ int main()
     loader.LoadFile(content);
     auto time = webifc::ms() - start;
 
+    std::cout << "Reading took " << time << "ms" << std::endl;
+
+    start = webifc::ms();
+
     auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCOPENINGELEMENT);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
@@ -45,8 +49,10 @@ int main()
         auto mesh = geometryLoader.GetMesh(walls[i]);
         geometryLoader.DumpMesh(mesh, L"IFCOPENINGELEMENT" + std::to_wstring(i) + L".obj");
     }
+    time = webifc::ms() - start;
 
-    std::cout << "Took " << time << "ms" << std::endl;
+
+    std::cout << "Generating geometry took " << time << "ms" << std::endl;
 
     std::cout << "Done" << std::endl;
 }
