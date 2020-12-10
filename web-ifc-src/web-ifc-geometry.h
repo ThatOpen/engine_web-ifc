@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 #include <deque>
 #include <unordered_map>
 #include <chrono>
@@ -12,6 +13,7 @@
 
 #include <glm/glm.hpp>
 #include "deps/glm/glm/gtx/transform.hpp"
+#include "deps/earcut.hpp"
 
 #include "ifc2x3.h"
 #include "web-ifc.h"
@@ -512,6 +514,52 @@ namespace webifc
 			{
 				// TODO: triangulate concave profile and append to geom
 				std::cout << "CONCAVE!" << std::endl;
+
+				using Point = std::array<double, 2>;
+				std::vector<std::vector<Point>> polygon;
+				polygon.resize(1);
+
+				for (int i = 0; i < profile.curve.points.size(); i++)
+				{
+					glm::dvec2 pt = profile.curve.points[i];
+					glm::dvec4 et = placement * glm::vec4(glm::dvec3(pt, 0) + dir * distance, 1);
+
+					geom.points.push_back(et);
+					polygon[0].push_back({ pt.x, pt.y });
+				}
+
+				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
+
+				int offset = 0;
+				for (int i = 0; i < indices.size(); i += 3)
+				{
+					Face f2;
+					f2.i0 = offset + indices[i + 0];
+					f2.i1 = offset + indices[i + 1];
+					f2.i2 = offset + indices[i + 2];
+
+					geom.faces.push_back(f2);
+				}
+
+				offset += geom.points.size();
+
+				for (int i = 0; i < profile.curve.points.size(); i++)
+				{
+					glm::dvec2 pt = profile.curve.points[i];
+					glm::dvec4 et = placement * glm::vec4(glm::dvec3(pt, 0), 1);
+
+					geom.points.push_back(et);
+				}
+
+				for (int i = 0; i < indices.size(); i += 3)
+				{
+					Face f2;
+					f2.i0 = offset + indices[i + 0];
+					f2.i1 = offset + indices[i + 2];
+					f2.i2 = offset + indices[i + 1];
+
+					geom.faces.push_back(f2);
+				}
 			}
 
 			// for each line
