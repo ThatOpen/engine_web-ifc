@@ -48,6 +48,19 @@ namespace webifc
 		std::vector<glm::dvec3> points;
 	};
 
+	enum class IfcBoundType
+	{
+		OUTERBOUND,
+		BOUND
+	};
+
+	struct IfcBound3D
+	{
+		IfcBoundType type;
+		bool orientation;
+		IfcCurve3D curve;
+	};
+
 	struct IfcProfile
 	{
 		std::string type;
@@ -313,13 +326,15 @@ namespace webifc
 			{
 				auto bounds = GetSetArgument(tokens, 0);
 
+				std::vector<IfcBound3D> bounds3D;
+
 				for (auto& boundToken : bounds)
 				{
 					uint32_t boundID = tokens[boundToken].num;
-					AddBoundToGeometry(boundID, geometry);
+					bounds3D.push_back(GetBound(boundID));
 				}
 
-				return;
+				TriangulateBounds(geometry, bounds3D);
 			}
 
 			default:
@@ -327,7 +342,7 @@ namespace webifc
 			}
 		}
 
-		void AddBoundToGeometry(uint64_t expressID, IfcGeometry& geometry)
+		IfcBound3D GetBound(uint64_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -340,14 +355,31 @@ namespace webifc
 				uint32_t loop = tokens[GetArgumentOffset(tokens, 0)].num;
 				IfcToken orientation = tokens[GetArgumentOffset(tokens, 1)];
 
-				IfcCurve3D curve = GetLoop(loop);
+				IfcBound3D bound;
+				bound.curve = GetLoop(loop);
+				bound.orientation = true;
+				bound.type = IfcBoundType::OUTERBOUND;
 
-				TriangulateCurve(geometry, curve);
+				return bound;
+			}
+			case ifc2x3::IFCFACEBOUND:
+			{
+				uint32_t loop = tokens[GetArgumentOffset(tokens, 0)].num;
+				IfcToken orientation = tokens[GetArgumentOffset(tokens, 1)];
+
+				IfcBound3D bound;
+				bound.curve = GetLoop(loop);
+				bound.orientation = true;
+				bound.type = IfcBoundType::BOUND;
+
+				return bound;
 			}
 
 			default:
 				break;
 			}
+
+			return IfcBound3D();
 		}
 
 		IfcCurve3D GetLoop(uint64_t expressID)
@@ -378,16 +410,18 @@ namespace webifc
 			}
 		}
 
-		void TriangulateCurve(IfcGeometry& geometry, IfcCurve3D& c)
+		void TriangulateBounds(IfcGeometry& geometry, std::vector<IfcBound3D>& bounds)
 		{
-			if (c.points.size() == 3)
+			if (bounds.size() == 1 && bounds[0].curve.points.size() == 3)
 			{
+				auto c = bounds[0].curve;
+
+				int offset = geometry.points.size();
+
 				// triangle
 				geometry.points.push_back(c.points[0]);
 				geometry.points.push_back(c.points[1]);
 				geometry.points.push_back(c.points[2]);
-
-				int offset = geometry.points.size();
 
 				Face f1;
 				f1.i0 = offset + 0;
@@ -396,15 +430,17 @@ namespace webifc
 
 				geometry.faces.push_back(f1);
 			}
-			else if (c.points.size() == 4)
+			else if (bounds.size() == 1 && bounds[0].curve.points.size() == 4)
 			{
+				auto c = bounds[0].curve;
+				
+				int offset = geometry.points.size();
+
 				// quad, since the loop is genus 1 we can always triangulate this
 				geometry.points.push_back(c.points[0]);
 				geometry.points.push_back(c.points[1]);
 				geometry.points.push_back(c.points[2]);
 				geometry.points.push_back(c.points[3]);
-
-				int offset = geometry.points.size();
 
 				Face f1;
 				f1.i0 = offset + 0;
@@ -412,12 +448,122 @@ namespace webifc
 				f1.i2 = offset + 2;
 
 				Face f2;
-				f2.i0 = offset + 2;
-				f2.i1 = offset + 3;
-				f2.i2 = offset + 0;
+				f2.i0 = offset + 0;
+				f2.i1 = offset + 2;
+				f2.i2 = offset + 3;
 
 				geometry.faces.push_back(f1);
 				geometry.faces.push_back(f2);
+
+				// TODO: assuming 0,1,2 NOT colinear!
+				glm::dvec3 v1 = bounds[0].curve.points[0];
+				glm::dvec3 v2 = bounds[0].curve.points[1];
+				glm::dvec3 v3 = bounds[0].curve.points[2];
+
+				glm::dvec3 v12(glm::normalize(v2 - v1));
+				glm::dvec3 v13(glm::normalize(v3 - v1));
+				glm::dvec3 n = glm::normalize(glm::cross(v12, v13));
+				v12 = glm::cross(v13, n);
+
+
+				glm::dvec3 pt0 = c.points[0] - v1;
+				glm::dvec2 p0(
+					glm::dot(pt0, v12),
+					glm::dot(pt0, v13)
+				);
+
+				glm::dvec3 pt1 = c.points[1] - v1;
+				glm::dvec2 p1(
+					glm::dot(pt1, v12),
+					glm::dot(pt1, v13)
+				);
+				glm::dvec3 pt2 = c.points[2] - v1;
+				glm::dvec2 p2(
+					glm::dot(pt2, v12),
+					glm::dot(pt2, v13)
+				);
+				glm::dvec3 pt3 = c.points[3] - v1;
+				glm::dvec2 p3(
+					glm::dot(pt3, v12),
+					glm::dot(pt3, v13)
+				);
+
+				std::vector<glm::dvec2> temp;
+				temp.push_back(p0);
+				temp.push_back(p1);
+				temp.push_back(p2);
+				temp.push_back(p3);
+
+				std::vector<uint32_t> indices;
+				indices.push_back(0);
+				indices.push_back(1);
+				indices.push_back(2);
+
+				indices.push_back(0);
+				indices.push_back(2);
+				indices.push_back(3);
+
+				DumpSVGCurve(temp, L"bounds.html", indices);
+			}
+			else
+			{
+				// bound greater than 4 vertices or with holes, triangulateusing Point = std::array<double, 2>;
+				using Point = std::array<double, 2>;
+				std::vector<std::vector<Point>> polygon;
+
+				int offset = geometry.points.size();
+				
+				// TODO: reorder such that outer bound is first!
+
+				// TODO: assuming 0,1,2 NOT colinear!
+				glm::dvec3 v1 = bounds[0].curve.points[0];
+				glm::dvec3 v2 = bounds[0].curve.points[1];
+				glm::dvec3 v3 = bounds[0].curve.points[2];
+
+				glm::dvec3 v12(glm::normalize(v2 - v1));
+				glm::dvec3 v13(glm::normalize(v3 - v1));
+				glm::dvec3 n = glm::normalize(glm::cross(v12, v13));
+				v12 = glm::cross(v13, n);
+
+				std::vector<glm::dvec2> temp;
+
+				for (auto& bound : bounds)
+				{
+					std::vector<Point> points;
+					for (int i = 0; i < bound.curve.points.size(); i++)
+					{
+						glm::dvec3 pt = bound.curve.points[i];
+						geometry.points.push_back(pt);
+
+						// project pt onto plane of curve to obtain 2d coords
+						glm::dvec3 pt2 = pt - v1;
+
+						glm::dvec2 proj(
+							glm::dot(pt2, v12),
+							glm::dot(pt2, v13)
+						);
+
+						temp.push_back(proj);
+						points.push_back({ proj.x, proj.y });
+					}
+
+					polygon.push_back(points);
+				}
+
+
+				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
+
+				DumpSVGCurve(temp, L"bounds.html", indices);
+
+				for (int i = 0; i < indices.size(); i += 3)
+				{
+					Face f2;
+					f2.i0 = offset + indices[i + 0];
+					f2.i1 = offset + indices[i + 1];
+					f2.i2 = offset + indices[i + 2];
+
+					geometry.faces.push_back(f2);
+				}
 			}
 		}
 

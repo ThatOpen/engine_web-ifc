@@ -25,20 +25,28 @@ namespace webifc
 			max = glm::max(max, pt);
 		}
 
+		double width = max.x - min.x;
+		double height = max.y - min.y;
+
+		if (width == 0 || height == 0)
+		{
+			printf("asdf");
+		}
+
 		for (auto& pt : input)
 		{
 			retval.emplace_back(
-				((pt.x - min.x) / (max.x - min.x)) * size.x + offset.x,
-				((pt.y - min.y) / (max.y - min.y)) * size.y + offset.y
+				((pt.x - min.x) / (width)) * size.x + offset.x,
+				((pt.y - min.y) / (height)) * size.y + offset.y
 			);
 		}
 
 		return retval;
 	}
 
-	std::string makeSVGLines(std::vector<glm::dvec2> input)
+	std::string makeSVGLines(std::vector<glm::dvec2> input, std::vector<uint32_t> indices)
 	{
-		glm::dvec2 size(1024, 52);
+		glm::dvec2 size(512, 512);
 		glm::dvec2 offset(5, 5);
 
 		auto rescaled = rescale(input, size, offset);
@@ -56,13 +64,22 @@ namespace webifc
 			svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
 		}
 
+		for (int i = 0; i < indices.size(); i += 3)
+		{
+			glm::dvec2 a = rescaled[indices[i + 0]];
+			glm::dvec2 b = rescaled[indices[i + 1]];
+			glm::dvec2 c = rescaled[indices[i + 2]];
+
+			svg << "<polygon points=\"" << a.x << "," << a.y << " " << b.x << "," << b.y << " " << c.x << "," << c.y << "\" style=\"fill:gray; stroke:none; stroke - width:0\" />`;";
+		}
+
 		return svg.str();
 	}
 
-	void DumpSVGCurve(std::vector<glm::dvec2> points, std::wstring filename)
+	void DumpSVGCurve(std::vector<glm::dvec2> points, std::wstring filename, std::vector<uint32_t> indices = {})
 	{
 		std::ofstream out(L"debug_output/" + filename);
-		out << makeSVGLines(points);
+		out << makeSVGLines(points, indices);
 	}
 
 	bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
