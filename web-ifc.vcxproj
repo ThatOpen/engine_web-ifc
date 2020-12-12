@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -22,7 +22,13 @@
     <ClCompile Include="web-ifc-test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="web-ifc-src\bool-mesh-mesh.h" />
     <ClInclude Include="web-ifc-src\ifc2x3.h" />
+    <ClInclude Include="web-ifc-src\intersect-mesh-mesh.h" />
+    <ClInclude Include="web-ifc-src\intersect-ray-tri.h" />
+    <ClInclude Include="web-ifc-src\is-inside-mesh.h" />
+    <ClInclude Include="web-ifc-src\line-segment-intersect.h" />
+    <ClInclude Include="web-ifc-src\triangulate-with-boundaries.h" />
     <ClInclude Include="web-ifc-src\util.h" />
     <ClInclude Include="web-ifc-src\web-ifc-geometry.h" />
     <ClInclude Include="web-ifc-src\web-ifc.h" />
