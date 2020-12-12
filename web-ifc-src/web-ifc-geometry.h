@@ -25,57 +25,6 @@ const bool DEBUG_DUMP_SVG = false;
 
 namespace webifc
 {
-	struct Face
-	{
-		int i0;
-		int i1;
-		int i2;
-	};
-
-	struct IfcGeometry
-	{
-		std::vector<glm::dvec3> points;
-		std::vector<Face> faces;
-	};
-	
-	struct IfcCurve
-	{
-		std::vector<glm::dvec2> points;
-	};
-
-	struct IfcCurve3D
-	{
-		std::vector<glm::dvec3> points;
-	};
-
-	enum class IfcBoundType
-	{
-		OUTERBOUND,
-		BOUND
-	};
-
-	struct IfcBound3D
-	{
-		IfcBoundType type;
-		bool orientation;
-		IfcCurve3D curve;
-	};
-
-	struct IfcProfile
-	{
-		std::string type;
-		IfcCurve curve;
-		bool isConvex;
-	};
-
-	struct IfcComposedMesh
-	{
-		glm::dmat4 transformation;
-		uint64_t geometryRef;
-		IfcGeometry geom; // TODO: remove and make ref
-		std::vector<IfcComposedMesh> children;
-	};
-
 	class IfcGeometryLoader
 	{
 	public:
@@ -507,14 +456,14 @@ namespace webifc
 			}
 			else
 			{
-				// bound greater than 4 vertices or with holes, triangulateusing Point = std::array<double, 2>;
+				// bound greater than 4 vertices or with holes, triangulate
+				// TODO: modify to use glm::dvec2 with custom accessors
 				using Point = std::array<double, 2>;
 				std::vector<std::vector<Point>> polygon;
 
 				int offset = geometry.points.size();
 				
-				// TODO: reorder such that outer bound is first!
-
+				// TODO: assuming that outer bound is first!
 				// TODO: assuming 0,1,2 NOT colinear!
 				glm::dvec3 v1 = bounds[0].curve.points[0];
 				glm::dvec3 v2 = bounds[0].curve.points[1];
@@ -851,16 +800,6 @@ namespace webifc
 			}
 
 			return IfcProfile();
-		}
-
-		glm::dvec3 computeNormal(glm::dvec3 v1, glm::dvec3 v2, glm::dvec3 v3)
-		{
-			glm::dvec3 v12(v2 - v1);
-			glm::dvec3 v13(v3 - v1);
-
-			glm::dvec3 norm = glm::cross(v12, v13);
-
-			return glm::normalize(norm);
 		}
 
 		glm::mat3 GetAxis2Placement2D(uint64_t expressID)

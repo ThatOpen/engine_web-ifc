@@ -2,9 +2,72 @@
 
 #include <sstream>
 #include <fstream>
+#include <vector>
+
+#include <glm/glm.hpp>
 
 namespace webifc
 {
+	const double EPS_SMALL = 1e-8;
+
+	struct Face
+	{
+		int i0;
+		int i1;
+		int i2;
+	};
+
+	struct Loop
+	{
+		bool hasOne;
+		glm::dvec2 v1;
+		glm::dvec2 v2;
+	};
+
+	struct IfcGeometry
+	{
+		std::vector<glm::dvec3> points;
+		std::vector<Face> faces;
+	};
+
+	struct IfcCurve
+	{
+		std::vector<glm::dvec2> points;
+	};
+
+	struct IfcCurve3D
+	{
+		std::vector<glm::dvec3> points;
+	};
+
+	enum class IfcBoundType
+	{
+		OUTERBOUND,
+		BOUND
+	};
+
+	struct IfcBound3D
+	{
+		IfcBoundType type;
+		bool orientation;
+		IfcCurve3D curve;
+	};
+
+	struct IfcProfile
+	{
+		std::string type;
+		IfcCurve curve;
+		bool isConvex;
+	};
+
+	struct IfcComposedMesh
+	{
+		glm::dmat4 transformation;
+		uint64_t geometryRef;
+		IfcGeometry geom; // TODO: remove and make ref
+		std::vector<IfcComposedMesh> children;
+	};
+
 	std::vector<glm::dvec2> rescale(std::vector<glm::dvec2> input, glm::dvec2 size, glm::dvec2 offset)
 	{
 		std::vector<glm::dvec2> retval;
@@ -93,4 +156,33 @@ namespace webifc
 		glm::dvec4(0, 1, 0, 0),
 		glm::dvec4(0, 0, 0, 1)
 	);
+
+	glm::dvec3 computeNormal(glm::dvec3 v1, glm::dvec3 v2, glm::dvec3 v3)
+	{
+		glm::dvec3 v12(v2 - v1);
+		glm::dvec3 v13(v3 - v1);
+
+		glm::dvec3 norm = glm::cross(v12, v13);
+
+		return glm::normalize(norm);
+	}
+
+	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
+	}
+
+	bool equals2d(glm::dvec2 A, glm::dvec2 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps;
+	}
+
+	double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+	{
+		glm::dvec3 ab = b - a;
+		glm::dvec3 ac = c - a;
+
+		glm::dvec3 norm = glm::cross(ab, ac);
+		return glm::length(norm) / 2;
+	}
 }
