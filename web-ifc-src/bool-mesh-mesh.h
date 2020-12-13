@@ -35,7 +35,7 @@ namespace webifc
         }
     }
 
-    IfcGeometry& boolIntersect(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    IfcGeometry boolIntersect(IfcGeometry& mesh1, IfcGeometry& mesh2)
     {
         IfcGeometry resultingMesh;
 
@@ -45,7 +45,7 @@ namespace webifc
         return resultingMesh;
     }
 
-    IfcGeometry& boolJoin(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    IfcGeometry boolJoin(IfcGeometry& mesh1, IfcGeometry& mesh2)
     {
         IfcGeometry resultingMesh;
 
@@ -56,7 +56,7 @@ namespace webifc
     }
 
     // TODO: I don't think XOR works right now...
-    IfcGeometry& boolXOR(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    IfcGeometry boolXOR(IfcGeometry& mesh1, IfcGeometry& mesh2)
     {
         IfcGeometry resultingMesh;
 
@@ -66,7 +66,7 @@ namespace webifc
         return resultingMesh;
     }
 
-    IfcGeometry& boolSubtract(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    IfcGeometry boolSubtract(IfcGeometry& mesh1, IfcGeometry& mesh2)
     {
         IfcGeometry resultingMesh;
 

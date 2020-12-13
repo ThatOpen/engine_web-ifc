@@ -276,7 +276,7 @@ namespace webifc
 
     bool addPointToTriangle(Triangle& t, Point& p, Point& prev, bool split, std::vector<Triangle>& triangles)
     {
-        if (t.id != -1)
+        if (t.id == -1)
         {
             return false;
         }
@@ -574,7 +574,7 @@ namespace webifc
         }
     }
 
-    Point& getPoint(const glm::dvec2& pt, std::vector<Point>& points)
+    Point getPoint(const glm::dvec2& pt, std::vector<Point>& points)
     {
         for (int i = 0; i < points.size(); i++)
         {
@@ -595,24 +595,28 @@ namespace webifc
 
         std::vector<Triangle> triangles;
         std::vector<Point> points;
-        makeTriangle(triangles, getPoint(a, points), getPoint(b, points), getPoint(c, points));
+        Point pa = getPoint(a, points);
+        Point pb = getPoint(b, points);
+        Point pc = getPoint(c, points);
+
+        makeTriangle(triangles, pa, pb, pc);
 
         for (auto& loop : loops)
         {
             Point prev;
             if (loop.hasOne)
             {
-                Point& pt = getPoint(loop.v1, points);
+                Point pt = getPoint(loop.v1, points);
                 addPoint(pt, prev, triangles);
                 prev = pt;
             }
             else
             {
-                Point& pt1 = getPoint(loop.v1, points);
+                Point pt1 = getPoint(loop.v1, points);
 
                 addPoint(pt1, prev, triangles);
 
-                Point& pt2 = getPoint(loop.v2, points);
+                Point pt2 = getPoint(loop.v2, points);
 
                 addPoint(pt2, pt1, triangles);
             }

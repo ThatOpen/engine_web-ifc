@@ -166,21 +166,27 @@ namespace webifc
 				auto relVoids = _relVoids[line.expressID];
 
 				IfcComposedMesh resultMesh;
+				resultMesh.transformation = glm::dmat4(1);
+
+				auto flatElementMesh = flatten(mesh);
 
 				for (auto relVoidExpressID : relVoids)
 				{
 					IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
+					auto flatVoidMesh = flatten(voidMesh);
 
 					IfcGeometry m1;
 					IfcGeometry m2;
 
-					//intersectMeshMesh(resultMesh, voidMesh, m1, m2);
+					intersectMeshMesh(flatElementMesh, flatVoidMesh, m1, m2);
 
 					// TODO: this is inefficient, better make one-to-many subtraction in bool logic
-					//resultMesh = boolSubtract(m1, m2);
+					flatElementMesh = boolSubtract(m1, m2);
 				}
 
-				return mesh;
+				resultMesh.geom = flatElementMesh;
+
+				return resultMesh;
 			}
 			case ifc2x3::IFCMAPPEDITEM:
 			{

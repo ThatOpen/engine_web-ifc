@@ -30,19 +30,19 @@ namespace webifc
 
     glm::dvec2 projectOnTriangle(const glm::dvec3& pt, const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c)
     {
-        glm::dvec3 v1 = b - a;
-        glm::dvec3 v2 = c - a;
+        glm::dvec3 v1 = glm::normalize(b - a);
+        glm::dvec3 v2 = glm::normalize(c - a);
 
-        glm::dvec3 norm = cross(v1, v2);
-        v2 = cross(norm, v1);
+        glm::dvec3 norm = glm::cross(v1, v2);
+        v2 = glm::normalize(glm::cross(norm, v1));
 
         glm::dvec3 rel = pt - a;
         double d1 = dot(v1, rel);
         double d2 = dot(v2, rel);
 
         return {
-            d1 * 10,
-            d2 * 10
+            d1,
+            d2
         };
     }
 
@@ -54,8 +54,8 @@ namespace webifc
         glm::dvec3 norm = cross(v1, v2);
         v2 = cross(norm, v1);
 
-        double d1 = pt.x / 10 / glm::length(v1);
-        double d2 = pt.y / 10 / glm::length(v2);
+        double d1 = pt.x;
+        double d2 = pt.y;
 
         glm::dvec3 p = v1 * d1 + v2 * d2;
 

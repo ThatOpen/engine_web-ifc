@@ -28,6 +28,27 @@ namespace webifc
 	{
 		std::vector<glm::dvec3> points;
 		std::vector<Face> faces;
+
+		void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		{
+			points.push_back(a);
+			points.push_back(b);
+			points.push_back(c);
+
+			Face f;
+			f.i0 = points.size() - 3;
+			f.i1 = points.size() - 2;
+			f.i2 = points.size() - 1;
+
+			faces.push_back(f);
+		}
+	};
+
+	struct IfcTransformedGeometry
+	{
+		glm::dmat4 matrix;
+		std::vector<glm::dvec3> points;
+		std::vector<Face> faces;
 	};
 
 	struct IfcCurve
@@ -67,6 +88,36 @@ namespace webifc
 		IfcGeometry geom; // TODO: remove and make ref
 		std::vector<IfcComposedMesh> children;
 	};
+
+	void flattenRecursive(IfcComposedMesh& mesh, IfcGeometry& geom, glm::dmat4 mat)
+	{
+		glm::dmat4 newMat = mat * mesh.transformation;
+
+		if (!mesh.geom.faces.empty())
+		{
+			for (int i = 0; i < mesh.geom.faces.size(); i ++)
+			{
+				Face& f = mesh.geom.faces[i];
+				glm::dvec3 a = newMat * glm::dvec4(mesh.geom.points[f.i0], 1);
+				glm::dvec3 b = newMat * glm::dvec4(mesh.geom.points[f.i1], 1);
+				glm::dvec3 c = newMat * glm::dvec4(mesh.geom.points[f.i2], 1);
+
+				geom.AddFace(a, b, c);
+			}
+		}
+
+		for (auto& c : mesh.children)
+		{
+			flattenRecursive(c, geom, newMat);
+		}
+	}
+
+	IfcGeometry flatten(IfcComposedMesh& mesh)
+	{
+		IfcGeometry geom;
+		flattenRecursive(mesh, geom, glm::dmat4(1));
+		return geom;
+	}
 
 	std::vector<glm::dvec2> rescale(std::vector<glm::dvec2> input, glm::dvec2 size, glm::dvec2 offset)
 	{
