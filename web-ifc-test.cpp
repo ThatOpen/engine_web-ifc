@@ -37,12 +37,12 @@ int main()
 
     start = webifc::ms();
 
-    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCOPENINGELEMENT);
+    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCWALLSTANDARDCASE);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
 
-    auto mesh = geometryLoader.GetMesh(walls[34]);
+    auto mesh = geometryLoader.GetMesh(walls[64]);
 
         for (int i = 0; i < walls.size(); i++)
     {

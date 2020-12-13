@@ -117,28 +117,6 @@ namespace webifc
         return !(has_neg && has_pos);
     }
 
-    void addPoint(Point& p, Point& prev, std::vector<Triangle>& triangles)
-    {
-        for (int i = 0; i < triangles.size(); i++)
-        {
-            if (addPointToTriangle(triangles[i], p, prev, true, triangles))
-            {
-                return;
-            }
-        }
-    }
-
-    void closeLoop(Point& p, Point& prev, std::vector<Triangle>& triangles)
-    {
-        for (int i = 0; i < triangles.size(); i++)
-        {
-            if (addPointToTriangle(triangles[i], p, prev, false, triangles))
-            {
-                return;
-            }
-        }
-    }
-
     // TODO: slow
     int32_t FindTriangleWithEdge(int32_t a, int32_t b, std::vector<Triangle>& triangles)
     {
@@ -462,7 +440,7 @@ namespace webifc
                         if (split && didSplit)
                         {
                             printf("Something went wrong!");
-                            return;
+                            return false;
                         }
                         else
                         {
@@ -473,7 +451,7 @@ namespace webifc
                     if (!startTriangle || !curTriangle)
                     {
                         printf("Something went wrong!");
-                        return;
+                        return false;
                     }
 
                     uint32_t drawnTriangle = curTriangle;
@@ -572,6 +550,28 @@ namespace webifc
             } 
         }
         return true;
+    }
+
+    void addPoint(Point& p, Point& prev, std::vector<Triangle>& triangles)
+    {
+        for (int i = 0; i < triangles.size(); i++)
+        {
+            if (addPointToTriangle(triangles[i], p, prev, true, triangles))
+            {
+                return;
+            }
+        }
+    }
+
+    void closeLoop(Point& p, Point& prev, std::vector<Triangle>& triangles)
+    {
+        for (int i = 0; i < triangles.size(); i++)
+        {
+            if (addPointToTriangle(triangles[i], p, prev, false, triangles))
+            {
+                return;
+            }
+        }
     }
 
     Point& getPoint(const glm::dvec2& pt, std::vector<Point>& points)

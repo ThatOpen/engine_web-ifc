@@ -6,6 +6,15 @@
 
 namespace webifc
 {
+	double cross2d(const glm::dvec2& point1, const glm::dvec2& point2) {
+		return point1.x * point2.y - point1.y * point2.x;
+	}
+
+	bool allEqual(bool b1, bool b2, bool b3, bool b4)
+	{
+		return b1 == b2 && b1 == b3 && b1 == b4;
+	}
+
 	bool doLineSegmentsIntersect(const glm::dvec2& p, const glm::dvec2& p2, const glm::dvec2& q, const glm::dvec2& q2) {
 		glm::dvec2 r = p2 - p;
 		glm::dvec2 s = q2 - q;
@@ -44,14 +53,5 @@ namespace webifc
 		double t = cross2d(q - p, s) / denominator;
 
 		return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1);
-	}
-
-	double cross2d(const glm::dvec2& point1, const glm::dvec2& point2) {
-		return point1.x * point2.y - point1.y * point2.x;
-	}
-
-	bool allEqual(bool b1, bool b2, bool b3, bool b4)
-	{
-		return b1 == b2 && b1 == b3 && b1 == b4;
 	}
 }

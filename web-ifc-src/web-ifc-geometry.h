@@ -15,6 +15,9 @@
 #include "deps/glm/glm/gtx/transform.hpp"
 #include "deps/earcut.hpp"
 
+#include "intersect-mesh-mesh.h"
+#include "bool-mesh-mesh.h"
+
 #include "ifc2x3.h"
 #include "web-ifc.h"
 #include "util.h"
@@ -36,7 +39,7 @@ namespace webifc
 
 		IfcGeometry& GetGeometry(uint64_t index)
 		{
-			return geometry[index];
+			return _geometry[index];
 		}
 
 		IfcComposedMesh GetMesh(uint64_t expressID)
@@ -57,7 +60,6 @@ namespace webifc
 		}
 
 	private:
-
 		int GetArgumentOffset(std::vector<IfcToken>& line, int argumentIndex)
 		{
 			// first tokens are ref, type, openset, start at 3
@@ -109,8 +111,39 @@ namespace webifc
 			return tokenIds;
 		}
 
+		void PopulateRelVoidsMap()
+		{
+			auto relVoids = _loader.GetExpressIDsWithType(ifc2x3::IFCRELVOIDSELEMENT);
+
+			for (uint64_t relVoidID : relVoids)
+			{
+				uint32_t lineID = _loader.ExpressIDToLineID(relVoidID);
+				auto& line = _loader.GetLine(lineID);
+				auto& tokens = _loader.GetLineTokens(lineID);
+
+				uint64_t relatingBuildingElement = tokens[GetArgumentOffset(tokens, 4)].num;
+				uint64_t relatedOpeningElement = tokens[GetArgumentOffset(tokens, 5)].num;
+
+				_relVoids[relatingBuildingElement].push_back(relatedOpeningElement);
+			}
+		
+			_isRelVoidsMapPopulated = true;
+		}
+
+		void PopulateRelVoidsMapIfNeeded()
+		{
+			if (_isRelVoidsMapPopulated)
+			{
+				return;
+			}
+
+			PopulateRelVoidsMap();
+		}
+
 		IfcComposedMesh GetMeshByLine(uint64_t lineID)
 		{
+			PopulateRelVoidsMapIfNeeded();
+
 			auto& line = _loader.GetLine(lineID);
 			auto& tokens = _loader.GetLineTokens(lineID);
 			switch (line.ifcType)
@@ -129,6 +162,23 @@ namespace webifc
 
 				mesh.transformation = GetLocalPlacement(localPlacement);
 				mesh.children.push_back(GetMesh(ifcPresentation));
+
+				auto relVoids = _relVoids[line.expressID];
+
+				IfcComposedMesh resultMesh;
+
+				for (auto relVoidExpressID : relVoids)
+				{
+					IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
+
+					IfcGeometry m1;
+					IfcGeometry m2;
+
+					//intersectMeshMesh(resultMesh, voidMesh, m1, m2);
+
+					// TODO: this is inefficient, better make one-to-many subtraction in bool logic
+					//resultMesh = boolSubtract(m1, m2);
+				}
 
 				return mesh;
 			}
@@ -996,6 +1046,8 @@ namespace webifc
 		}
 
 		IfcLoader& _loader;
-		std::vector<IfcGeometry> geometry;
+		std::vector<IfcGeometry> _geometry;
+		std::unordered_map<uint64_t, std::vector<uint64_t>> _relVoids;
+		bool _isRelVoidsMapPopulated = false;
 	};
 }

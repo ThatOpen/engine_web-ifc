@@ -147,15 +147,15 @@ namespace webifc
         return outputMesh;
     }
 
-    void intersectMeshMesh(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    void intersectMeshMesh(const IfcGeometry& mesh1, const IfcGeometry& mesh2, IfcGeometry& result1, IfcGeometry& result2)
     {
         MeshIntersections meshIntersections1;
         MeshIntersections meshIntersections2;
 
 
-        for (int i = 0; i < mesh1.faces.size(); i++)
+        for (uint32_t i = 0; i < mesh1.faces.size(); i++)
         {
-            for (int j = 0; j < mesh2.faces.size(); j++)
+            for (uint32_t j = 0; j < mesh2.faces.size(); j++)
             {
                 Face t1 = mesh1.faces[i];
                 Face t2 = mesh2.faces[j];
@@ -185,7 +185,7 @@ namespace webifc
             }
         }
 
-        IfcGeometry newMesh1 = retriangulateMesh(mesh1, meshIntersections1);
-        IfcGeometry newMesh2 = retriangulateMesh(mesh2, meshIntersections2);
+        result1 = std::move(retriangulateMesh(mesh1, meshIntersections1));
+        result2 = std::move(retriangulateMesh(mesh2, meshIntersections2));
     }
 }

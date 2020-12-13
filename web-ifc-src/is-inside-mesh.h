@@ -7,7 +7,7 @@
 
 namespace webifc
 {
-    enum MeshLocation
+    enum class MeshLocation
     {
         INSIDE,
         OUTSIDE,
@@ -35,7 +35,7 @@ namespace webifc
                 double d = glm::dot(norm, dir);
                 if (distance == 0.0)
                 {
-                    return BOUNDARY;
+                    return MeshLocation::BOUNDARY;
                 }
                 if (d >= 0)
                 {
@@ -48,6 +48,6 @@ namespace webifc
             }
         }
 
-        return winding > 0 ? INSIDE : OUTSIDE;
+        return winding > 0 ? MeshLocation::INSIDE : MeshLocation::OUTSIDE;
     }
 }
