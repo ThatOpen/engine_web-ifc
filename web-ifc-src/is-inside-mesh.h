@@ -14,7 +14,7 @@ namespace webifc
         BOUNDARY
     };
 
-    MeshLocation isInsideMesh(const glm::dvec3& pt, IfcGeometry& g)
+    MeshLocation isInsideMesh(const glm::dvec3& pt, glm::dvec3 normal, IfcGeometry& g)
     {
         glm::dvec3 dir(1, 1.1, 1.3);
 
@@ -31,9 +31,10 @@ namespace webifc
             bool hasIntersection = intersect_ray_triangle(pt, pt + dir, a, b, c, intersection, distance, true);
             if (hasIntersection)
             {
-                glm::dvec3 norm = computeNormal(a, b, c);
-                double d = glm::dot(norm, dir);
-                if (distance == 0.0)
+                glm::dvec3 otherNormal = computeNormal(a, b, c);
+                double d = glm::dot(otherNormal, dir);
+                double dn = glm::dot(otherNormal, normal);
+                if (distance == 0.0 && dn == -1)
                 {
                     return MeshLocation::BOUNDARY;
                 }

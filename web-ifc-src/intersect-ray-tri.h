@@ -69,8 +69,8 @@ namespace webifc
         bool fd = intersect_ray_triangle(f, d, a, b, c, pfd, t);
 
         // count intersecting edges
-        bool abc = ab + bc + ca;
-        bool def = de + ef + fd;
+        int abc = ab + bc + ca;
+        int def = de + ef + fd;
 
         // no intersect
         if (!abc && !def)

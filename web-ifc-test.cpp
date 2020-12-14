@@ -43,6 +43,7 @@ int main()
 
 
     auto mesh = geometryLoader.GetMesh(walls[64]);
+    geometryLoader.DumpMesh(mesh, L"TEST.obj");
 
         for (int i = 0; i < walls.size(); i++)
     {

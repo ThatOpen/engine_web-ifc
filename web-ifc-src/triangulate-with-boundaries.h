@@ -274,7 +274,7 @@ namespace webifc
     }
 
 
-    bool addPointToTriangle(Triangle& t, Point& p, Point& prev, bool split, std::vector<Triangle>& triangles)
+    bool addPointToTriangle(Triangle t, Point& p, Point& prev, bool split, std::vector<Triangle>& triangles)
     {
         if (t.id == -1)
         {
@@ -287,8 +287,8 @@ namespace webifc
         else
         {
             bool didSplit = false;
-            int32_t e1;
-            int32_t e2;
+            int32_t e1 = -1;
+            int32_t e2 = -1;
             if (split)
             {
                 if (p.id == t.a.id || p.id == t.b.id || p.id == t.c.id)
@@ -356,6 +356,8 @@ namespace webifc
                         makeTriangle(triangles, t.a, p, t.c);
                         makeTriangle(triangles, p, t.b, t.c);
 
+                        // TODO: t is a copy!
+                        triangles[t.id].id = -1;
                         t.id = -1;
                     }
                 }

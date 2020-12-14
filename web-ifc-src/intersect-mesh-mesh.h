@@ -48,10 +48,10 @@ namespace webifc
 
     glm::dvec3 unProjectFromTriangle(glm::dvec2& pt, const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c)
     {
-        glm::dvec3 v1 = b - a;
-        glm::dvec3 v2 = c - a;
+        glm::dvec3 v1 = glm::normalize(b - a);
+        glm::dvec3 v2 = glm::normalize(c - a);
 
-        glm::dvec3 norm = cross(v1, v2);
+        glm::dvec3 norm = glm::normalize(cross(v1, v2));
         v2 = cross(norm, v1);
 
         double d1 = pt.x;
@@ -88,7 +88,7 @@ namespace webifc
             {
                 // TODO: stupid implementation, too many triangle checks needed
                 // TODO: flipped this because of the triangle winding, but is probably not a general solution!
-                loops.push_back({ true, pe, ps });
+                loops.push_back({ false, pe, ps });
             }
         }
 
@@ -114,6 +114,10 @@ namespace webifc
                 glm::dvec2 pa = projectOnTriangle(a, a, b, c);
                 glm::dvec2 pb = projectOnTriangle(b, a, b, c);
                 glm::dvec2 pc = projectOnTriangle(c, a, b, c);
+
+                glm::dvec3 uupa = unProjectFromTriangle(pa, a, b, c);
+                glm::dvec3 uupb = unProjectFromTriangle(pb, a, b, c);
+                glm::dvec3 uupc = unProjectFromTriangle(pc, a, b, c);
 
                 auto loops = makeLoops(a, b, c, ints);
 
@@ -177,7 +181,7 @@ namespace webifc
                         j
                     });
 
-                    meshIntersections2[i].push_back(MeshIntersection{
+                    meshIntersections2[j].push_back(MeshIntersection{
                         intersectionLine,
                         i
                     });
@@ -187,5 +191,7 @@ namespace webifc
 
         result1 = std::move(retriangulateMesh(mesh1, meshIntersections1));
         result2 = std::move(retriangulateMesh(mesh2, meshIntersections2));
+        DumpIfcGeometry(result1, L"m1.obj");
+        DumpIfcGeometry(result2, L"m2.obj");
     }
 }

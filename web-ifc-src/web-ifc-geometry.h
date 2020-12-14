@@ -572,51 +572,6 @@ namespace webifc
 			}
 		}
 
-		std::string ToObj(IfcGeometry& geom, int& offset, glm::dmat4 transform = glm::dmat4(1))
-		{
-			std::stringstream obj;
-
-			double scale = 0.001;
-
-			for (auto& pt : geom.points)
-			{
-				glm::dvec4 t = transform * glm::dvec4(pt, 1);
-				obj << "v " << t.x * scale << " " << t.y * scale << " " << t.z * scale << "\n";
-			}
-
-			for (auto& f : geom.faces)
-			{
-				obj << "f " << (f.i0+1 + offset) << "// " << (f.i1+1 + offset) << "// " << (f.i2+1 + offset) << "//\n";
-			}
-
-			offset += geom.points.size();
-
-			return obj.str();
-		}
-
-		std::string ToObj(IfcComposedMesh& mesh, int& offset, glm::dmat4 mat = glm::dmat4(1))
-		{
-			std::string complete;
-
-			glm::dmat4 trans = mat * mesh.transformation;
-
-			complete += ToObj(mesh.geom, offset, trans);
-
-			for (auto c : mesh.children)
-			{
-				complete += ToObj(c, offset, trans);
-			}
-
-			return complete;
-		}
-
-		void DumpIfcGeometry(IfcGeometry& geom, std::wstring filename)
-		{
-			std::ofstream out(L"debug_output/" + filename);
-			int offset = 0;
-			out << ToObj(geom, offset);
-		}
-
 		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance)
 		{
 			// TODO: This code generates much more vertices than needed!

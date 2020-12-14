@@ -16,9 +16,11 @@ namespace webifc
             glm::dvec3 b = source.points[tri.i1];
             glm::dvec3 c = source.points[tri.i2];
 
+            glm::dvec3 n = computeNormal(a, b, c);
+
             glm::dvec3 triCenter = (a + b + c) * 1.0 / 3.0;
 
-            auto isInsideTarget = isInsideMesh(triCenter, target);
+            auto isInsideTarget = isInsideMesh(triCenter, n, target);
 
             if ((isInsideTarget == MeshLocation::INSIDE && !invert) || (isInsideTarget == MeshLocation::OUTSIDE && invert) || (isInsideTarget == MeshLocation::BOUNDARY && keepBoundary))
             {
