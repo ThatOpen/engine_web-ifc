@@ -577,11 +577,16 @@ namespace webifc
 			// TODO: This code generates much more vertices than needed!
 			IfcGeometry geom;
 
-			if (profile.isConvex)
+			if (false && profile.isConvex)
 			{
+				int profileSize = profile.curve.points.size();
+				if (equals2d(profile.curve.points[0], profile.curve.points[profileSize - 1]))
+				{
+					profileSize--;
+				}
 				// simplified convex fan triangulation
 				int offset = 0;
-				for (int i = 0; i < profile.curve.points.size(); i++)
+				for (int i = 0; i < profileSize; i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 sb = placement * glm::vec4(glm::dvec3(pt, 0), 1);
@@ -595,17 +600,19 @@ namespace webifc
 						f1.i2 = offset + i - 1;
 
 						geom.faces.push_back(f1);
+
+						CheckTriangle(f1, geom.points);
 					}
 				}
 
 				offset = geom.points.size();
-				for (int i = 0; i < profile.curve.points.size(); i++)
+				for (int i = 0; i < profileSize; i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 et = placement * glm::vec4(glm::dvec3(pt, 0) + dir * distance, 1);
 					geom.points.push_back(et);
 
-					if (i > 0)
+					if (i > 1)
 					{
 						Face f2;
 						f2.i0 = offset + 0;
@@ -613,6 +620,7 @@ namespace webifc
 						f2.i2 = offset + i;
 
 						geom.faces.push_back(f2);
+						CheckTriangle(f2, geom.points);
 					}
 				}
 			}
@@ -645,6 +653,7 @@ namespace webifc
 					f2.i2 = offset + indices[i + 2];
 
 					geom.faces.push_back(f2);
+					CheckTriangle(f2, geom.points);
 				}
 
 				offset += geom.points.size();
@@ -665,6 +674,7 @@ namespace webifc
 					f2.i2 = offset + indices[i + 1];
 
 					geom.faces.push_back(f2);
+					CheckTriangle(f2, geom.points);
 				}
 			}
 
@@ -701,6 +711,8 @@ namespace webifc
 
 				geom.faces.push_back(f1);
 				geom.faces.push_back(f2);
+				CheckTriangle(f1, geom.points);
+				CheckTriangle(f2, geom.points);
 			}
 
 			return geom;

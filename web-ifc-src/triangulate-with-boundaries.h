@@ -441,7 +441,7 @@ namespace webifc
                     {
                         if (split && didSplit)
                         {
-                            printf("Something went wrong!");
+                            printf("Something went wrong 1!");
                             return false;
                         }
                         else
@@ -452,7 +452,7 @@ namespace webifc
 
                     if (!startTriangle || !curTriangle)
                     {
-                        printf("Something went wrong!");
+                        printf("Something went wrong 2!");
                         return false;
                     }
 

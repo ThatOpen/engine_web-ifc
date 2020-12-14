@@ -237,6 +237,21 @@ namespace webifc
 		return glm::length(norm) / 2;
 	}
 
+	void CheckTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+	{
+		if (areaOfTriangle(a, b, c) == 0)
+		{
+			printf("asdf");
+		}
+	}
+
+	void CheckTriangle(Face& f, std::vector<glm::dvec3>& pts)
+	{
+		if (areaOfTriangle(pts[f.i0], pts[f.i1], pts[f.i2]) == 0)
+		{
+			printf("asdf");
+		}
+	}
 
 	std::string ToObj(IfcGeometry& geom, int& offset, glm::dmat4 transform = glm::dmat4(1))
 	{
