@@ -34,9 +34,18 @@ namespace webifc
                 glm::dvec3 otherNormal = computeNormal(a, b, c);
                 double d = glm::dot(otherNormal, dir);
                 double dn = glm::dot(otherNormal, normal);
-                if (distance == 0.0 && dn == -1)
+                if (distance == 0.0)
                 {
-                    return MeshLocation::BOUNDARY;
+                    if (dn == 1)
+                    {
+                        // normals facing same direction, means an inside boundary
+                        return MeshLocation::BOUNDARY;
+                    }
+                    else
+                    {
+                        // normals facing away, means that these touch
+                        return MeshLocation::OUTSIDE;
+                    }
                 }
                 if (d >= 0)
                 {
