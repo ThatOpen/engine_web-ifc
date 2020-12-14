@@ -196,6 +196,163 @@ namespace webifc
 		out << makeSVGLines(points, indices);
 	}
 
+    struct Point
+    {
+        double x;
+        double y;
+        int32_t id = -1;
+
+        glm::dvec2 operator()()
+        {
+            return glm::dvec2(
+                x, y
+            );
+        }
+    };
+
+    struct Triangle
+    {
+        Point a;
+        Point b;
+        Point c;
+
+        int32_t id = -1;
+    };
+
+    struct Edge
+    {
+        int32_t a = -1;
+        int32_t b = -1;
+    };
+
+	struct Bounds
+	{
+		glm::dvec2 min;
+		glm::dvec2 max;
+	};
+
+	glm::dvec2 cmin(glm::dvec2 m, Point p)
+	{
+		return glm::dvec2(
+			std::min(m.x, p.x),
+			std::min(m.y, p.y)
+		);
+	}
+
+	glm::dvec2 cmax(glm::dvec2 m, Point p)
+	{
+		return glm::dvec2(
+			std::max(m.x, p.x),
+			std::max(m.y, p.y)
+		);
+	}
+
+	Bounds getBounds(std::vector<Triangle> input, glm::dvec2 size, glm::dvec2 offset)
+	{
+		std::vector<glm::dvec2> retval;
+
+		glm::dvec2 min(
+			DBL_MAX,
+			DBL_MAX
+		);
+
+		glm::dvec2 max(
+			-DBL_MAX,
+			-DBL_MAX
+		);
+
+		for (auto& tri : input)
+		{
+			min = cmin(min, tri.a);
+			max = cmax(max, tri.a);
+
+			min = cmin(min, tri.b);
+			max = cmax(max, tri.b);
+
+			min = cmin(min, tri.c);
+			max = cmax(max, tri.c);
+		}
+
+		double width = max.x - min.x;
+		double height = max.y - min.y;
+
+		if (width == 0 || height == 0)
+		{
+			printf("asdf");
+		}
+
+		return {
+			min,
+			max
+		};
+	}
+
+	glm::dvec2 rescale(Point p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
+	{
+		return glm::dvec2(
+			((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
+			((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y
+		);
+	}
+
+	void svgMakeLine(glm::dvec2 a, glm::dvec2 b, std::stringstream& svg)
+	{
+		svg << "<line x1=\"" << a.x << "\" y1=\"" << a.y << "\" ";
+		svg << "x2=\"" << b.x << "\" y2=\"" << b.y << "\" ";
+		svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
+	}
+
+	std::string makeSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev)
+	{
+		glm::dvec2 size(512, 512);
+		glm::dvec2 offset(5, 5);
+
+		Bounds bounds = getBounds(triangles, size, offset);
+
+		std::stringstream svg;
+
+		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "\">";
+
+		for (auto& t : triangles)
+		{
+			if (t.id != -1)
+			{
+				glm::dvec2 a = rescale(t.a, bounds, size, offset);
+				glm::dvec2 b = rescale(t.b, bounds, size, offset);
+				glm::dvec2 c = rescale(t.c, bounds, size, offset);
+
+				svgMakeLine(a, b, svg);
+				svgMakeLine(b, c, svg);
+				svgMakeLine(c, a, svg);
+			}
+		}
+
+		glm::dvec2 rp = rescale(p, bounds, size, offset);
+		glm::dvec2 rprev = rescale(prev, bounds, size, offset);
+
+		svg << "<circle cx = \"" << rp.x << "\" cy = \"" << rp.y << "\" r = \"3\" style = \"stroke:rgb(0,0,255);stroke-width:2\" />";
+		svg << "<circle cx = \"" << rprev.x << "\" cy = \"" << rprev.y << "\" r = \"3\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
+
+
+		/*
+		for (int i = 0; i < indices.size(); i += 3)
+		{
+			glm::dvec2 a = rescaled[indices[i + 0]];
+			glm::dvec2 b = rescaled[indices[i + 1]];
+			glm::dvec2 c = rescaled[indices[i + 2]];
+
+			svg << "<polygon points=\"" << a.x << "," << a.y << " " << b.x << "," << b.y << " " << c.x << "," << c.y << "\" style=\"fill:gray; stroke:none; stroke - width:0\" />`;";
+		}*/
+
+		return svg.str();
+	}
+
+	void DumpSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev, std::wstring filename)
+	{
+		std::ofstream out(L"debug_output/" + filename);
+		out << makeSVGTriangles(triangles, p, prev);
+	}
+
 	bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
 	{
 		return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) >= 0;

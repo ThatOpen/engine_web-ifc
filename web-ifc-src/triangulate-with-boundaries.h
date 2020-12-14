@@ -11,35 +11,6 @@ namespace webifc
     uint32_t pointID = 0;
     uint32_t triangleID = 0;
 
-    struct Point
-    {
-        double x;
-        double y;
-        int32_t id = -1;
-
-        glm::dvec2 operator()()
-        {
-            return glm::dvec2(
-                x, y
-            );
-        }
-    };
-
-    struct Triangle
-    {
-        Point a;
-        Point b;
-        Point c;
-
-        int32_t id = -1;
-    };
-
-    struct Edge
-    {
-        int32_t a = -1;
-        int32_t b = -1;
-    };
-
     double sign(const Point& p1, const Point& p2, const Point& p3)
     {
         return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
@@ -441,6 +412,7 @@ namespace webifc
                     {
                         if (split && didSplit)
                         {
+                            DumpSVGTriangles(triangles, p, prev, L"triangles.html");
                             printf("Something went wrong 1!");
                             return false;
                         }
