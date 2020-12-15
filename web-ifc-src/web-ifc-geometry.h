@@ -643,7 +643,7 @@ namespace webifc
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = placement * glm::vec4(glm::dvec3(pt, 0) + dir * distance, 1);
+					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
 					geom.points.push_back(et);
 					polygon[0].push_back({ pt.x, pt.y });
@@ -668,7 +668,7 @@ namespace webifc
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = placement * glm::vec4(glm::dvec3(pt, 0), 1);
+					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
 
 					geom.points.push_back(et);
 				}
@@ -691,11 +691,11 @@ namespace webifc
 				auto& start = profile.curve.points[i - 1];
 				auto& end = profile.curve.points[i];
 
-				glm::dvec4 sb = placement * glm::vec4(start, 0, 1);
-				glm::dvec4 eb = placement * glm::vec4(end, 0, 1);
+				glm::dvec4 sb = placement * glm::dvec4(start, 0, 1);
+				glm::dvec4 eb = placement * glm::dvec4(end, 0, 1);
 
-				glm::dvec4 st = placement * glm::vec4(glm::dvec3(start, 0) + dir * distance, 1);
-				glm::dvec4 et = placement * glm::vec4(glm::dvec3(end, 0) + dir * distance, 1);
+				glm::dvec4 st = placement * glm::dvec4(glm::dvec3(start, 0) + dir * distance, 1);
+				glm::dvec4 et = placement * glm::dvec4(glm::dvec3(end, 0) + dir * distance, 1);
 
 				int offset = geom.points.size();
 				geom.points.push_back(sb);
