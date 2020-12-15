@@ -9,6 +9,7 @@
 namespace webifc
 {
 	const double EPS_SMALL = 1e-6;
+	const double EPS_BIG = 1e-4;
 
 	struct Face
 	{
@@ -287,6 +288,43 @@ namespace webifc
 		};
 	}
 
+	Bounds getBounds(std::vector<std::vector<glm::dvec2>> input, glm::dvec2 size, glm::dvec2 offset)
+	{
+		std::vector<glm::dvec2> retval;
+
+		glm::dvec2 min(
+			DBL_MAX,
+			DBL_MAX
+		);
+
+		glm::dvec2 max(
+			-DBL_MAX,
+			-DBL_MAX
+		);
+
+		for (auto& loop : input)
+		{
+			for (auto& point : loop)
+			{
+				min = glm::min(min, point);
+				max = glm::max(max, point);
+			}
+		}
+
+		double width = max.x - min.x;
+		double height = max.y - min.y;
+
+		if (width == 0 || height == 0)
+		{
+			printf("asdf");
+		}
+
+		return {
+			min,
+			max
+		};
+	}
+
 	glm::dvec2 rescale(Point p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
 	{
 		return glm::dvec2(
@@ -330,19 +368,56 @@ namespace webifc
 		glm::dvec2 rp = rescale(p, bounds, size, offset);
 		glm::dvec2 rprev = rescale(prev, bounds, size, offset);
 
-		svg << "<circle cx = \"" << rp.x << "\" cy = \"" << rp.y << "\" r = \"3\" style = \"stroke:rgb(0,0,255);stroke-width:2\" />";
-		svg << "<circle cx = \"" << rprev.x << "\" cy = \"" << rprev.y << "\" r = \"3\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
-
-
-		/*
-		for (int i = 0; i < indices.size(); i += 3)
+		if (p.id != -1)
 		{
-			glm::dvec2 a = rescaled[indices[i + 0]];
-			glm::dvec2 b = rescaled[indices[i + 1]];
-			glm::dvec2 c = rescaled[indices[i + 2]];
+			svg << "<circle cx = \"" << rp.x << "\" cy = \"" << rp.y << "\" r = \"3\" style = \"stroke:rgb(0,0,255);stroke-width:2\" />";
+		}
 
-			svg << "<polygon points=\"" << a.x << "," << a.y << " " << b.x << "," << b.y << " " << c.x << "," << c.y << "\" style=\"fill:gray; stroke:none; stroke - width:0\" />`;";
-		}*/
+		if (prev.id != -1)
+		{
+			svg << "<circle cx = \"" << rprev.x << "\" cy = \"" << rprev.y << "\" r = \"3\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
+		}
+
+		return svg.str();
+	}
+
+	glm::dvec2 rescale(glm::dvec2 p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
+	{
+		return glm::dvec2(
+			((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
+			((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y
+		);
+	}
+
+	std::string makeSVGLines(std::vector<std::vector<glm::dvec2>> lines)
+	{
+		glm::dvec2 size(512, 512);
+		glm::dvec2 offset(5, 5);
+
+		Bounds bounds = getBounds(lines, size, offset);
+
+		std::stringstream svg;
+
+		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "\">";
+
+		for (auto& line : lines)
+		{
+			if (line.size() > 1)
+			{
+				for (int i = 1; i < line.size(); i++)
+				{
+					glm::dvec2 a = rescale(line[i], bounds, size, offset);
+					glm::dvec2 b = rescale(line[i - 1], bounds, size, offset);
+
+					svgMakeLine(a, b, svg);
+				}
+			}
+			else
+			{
+				glm::dvec2 a = rescale(line[0], bounds, size, offset);
+				svg << "<circle cx = \"" << a.x << "\" cy = \"" << a.y << "\" r = \"3\" style = \"stroke:rgb(0,0,255);stroke-width:2\" />";
+			}
+		}
 
 		return svg.str();
 	}
@@ -351,6 +426,12 @@ namespace webifc
 	{
 		std::ofstream out(L"debug_output/" + filename);
 		out << makeSVGTriangles(triangles, p, prev);
+	}
+
+	void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::wstring filename)
+	{
+		std::ofstream out(L"debug_output/" + filename);
+		out << makeSVGLines(lines);
 	}
 
 	bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
@@ -423,7 +504,7 @@ namespace webifc
 		}
 	}
 
-	std::string ToObj(IfcGeometry& geom, int& offset, glm::dmat4 transform = glm::dmat4(1))
+	std::string ToObj(const IfcGeometry& geom, int& offset, glm::dmat4 transform = glm::dmat4(1))
 	{
 		std::stringstream obj;
 
@@ -461,7 +542,7 @@ namespace webifc
 		return complete;
 	}
 
-	void DumpIfcGeometry(IfcGeometry& geom, std::wstring filename)
+	void DumpIfcGeometry(const IfcGeometry& geom, std::wstring filename)
 	{
 		std::ofstream out(L"debug_output/" + filename);
 		int offset = 0;

@@ -19,7 +19,7 @@ namespace webifc
     bool onEdge(const Point& p, const Point& a, const Point& b)
     {
         double dist = std::fabs(sign(p, a, b));
-        return dist < EPS_SMALL;
+        return dist < EPS_BIG;
     }
 
     double dot2d(const Point& p1, const Point& p2)
@@ -312,6 +312,7 @@ namespace webifc
                         int32_t tri1 = FindTriangleWithEdge(pA.id, pB.id, triangles);
                         int32_t tri2 = FindTriangleWithEdge(pB.id, pA.id, triangles);
 
+                        DumpSVGTriangles(triangles, p, prev, L"tris.html");
                         if (tri1 != -1)
                         {
                             triangles[tri1].id = -1;
@@ -324,6 +325,7 @@ namespace webifc
                             makeTriangle(triangles, p, pB, tri1p);
 
                         }
+                        DumpSVGTriangles(triangles, p, prev, L"tris.html");
                         if (tri2 != -1)
                         {
                             triangles[tri2].id = -1;
@@ -332,13 +334,17 @@ namespace webifc
                             makeTriangle(triangles, pA, tri1p, p);
                             makeTriangle(triangles, p, tri1p, pB);
                         }
+                        DumpSVGTriangles(triangles, p, prev, L"tris.html");
                     }
                     else
                     {
+                        DumpSVGTriangles(triangles, p, prev, L"tris.html");
+
                         // nope, its in the interior, lets split the triangle in 3 subtriangles.
                         makeTriangle(triangles, t.a, t.b, p);
                         makeTriangle(triangles, t.a, p, t.c);
                         makeTriangle(triangles, p, t.b, t.c);
+
 
                         // TODO: t is a copy!
                         triangles[t.id].id = -1;
@@ -456,6 +462,7 @@ namespace webifc
 
                     if (startTriangle == -1 || curTriangle == -1)
                     {
+                        DumpSVGTriangles(triangles, p, prev, L"triangles.html");
                         printf("Something went wrong 2!");
                         return false;
                     }
@@ -528,6 +535,8 @@ namespace webifc
                             curTriangle = nextTriangle;
                         }
                     }
+
+                    DumpSVGTriangles(triangles, p, prev, L"triangles.html");
 
                     // remove duplicates
                     std::vector<Point> boundaryDedupe = deduplicatePoints(boundary);
@@ -603,8 +612,17 @@ namespace webifc
         return newPt;
     }
 
+    int instance = 0;
+
     std::vector<Triangle> triangulate(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c, std::vector<Loop>& loops)
     {
+        instance++;
+
+        if (instance == 5)
+        {
+            printf("asdf");
+        }
+
         triangleID = 0;
         pointID = 0;
 
@@ -618,6 +636,8 @@ namespace webifc
 
         for (auto& loop : loops)
         {
+            DumpSVGTriangles(triangles, Point(), Point(), L"triangles.html");
+
             Point prev;
             if (loop.hasOne)
             {
@@ -631,13 +651,14 @@ namespace webifc
 
                 addPoint(pt1, prev, triangles);
 
+                DumpSVGTriangles(triangles, Point(), Point(), L"triangles.html");
+
                 Point pt2 = getPoint(loop.v2, points);
 
                 addPoint(pt2, pt1, triangles);
             }
         }
 
-        // drawTriangles(triangles);
 
         return triangles;
     }

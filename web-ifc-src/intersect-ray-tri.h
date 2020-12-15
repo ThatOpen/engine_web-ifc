@@ -24,8 +24,19 @@ namespace webifc
         double u = det * glm::dot(E2, (Q * -1.0));
         double v = det * glm::dot(E1, Q);
         t = det * glm::dot(ROV0, (N * -1.0));
+
+        if (t > 0.9999 && t < 1)
+        {
+            t = 1;
+        }
+
+        if (t < 0.0001 && t > 0)
+        {
+            t = 0;
+        }
+
         //log(t, u, v, det);
-        bool result = (t >= 0.0 && u >= 0.0 && v >= 0.0 && (u + v) <= 1.0 && (t <= 1 || infiniteLength));
+        bool result = (t >= 0.0 - EPS_SMALL && u >= 0.0 - EPS_SMALL && v >= 0.0 - EPS_SMALL && (u + v) <= 1.0 + EPS_SMALL && (t <= 1 + EPS_SMALL || infiniteLength));
         if (result)
         {
             glm::dvec3 vec = origin + (dir * t);
@@ -80,11 +91,6 @@ namespace webifc
             return result;
         }
 
-        if (!abc || !def)
-        {
-            // debugger;
-        }
-
         if (abc == 3 || def == 3)
         {
             TriTriResult result;
@@ -118,15 +124,39 @@ namespace webifc
         }
         else
         {
-            // both intersect with one element
-            glm::dvec3 p1 = ab ? pab : bc ? pbc : pca;
-            glm::dvec3 p2 = de ? pde : ef ? pef : pfd;
+            // TODO: this is shady
+            if (abc == 1 && def == 0)
+            {
+                glm::dvec3 p1 = ab ? pab : bc ? pbc : pca;
 
-            return TriTriResult{
-                true,
-                p1,
-                p2
-            };
+                return TriTriResult{
+                    true,
+                    p1,
+                    p1
+                };
+            }
+            else if (abc == 0 && def == 1)
+            {
+                glm::dvec3 p2 = de ? pde : ef ? pef : pfd;
+
+                return TriTriResult{
+                    true,
+                    p2,
+                    p2
+                };
+            }
+            else
+            {
+                // both intersect with at least one element
+                glm::dvec3 p1 = ab ? pab : bc ? pbc : pca;
+                glm::dvec3 p2 = de ? pde : ef ? pef : pfd;
+
+                return TriTriResult{
+                    true,
+                    p1,
+                    p2
+                };
+            }
         }
     }
 }

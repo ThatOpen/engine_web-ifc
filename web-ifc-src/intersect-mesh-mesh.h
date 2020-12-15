@@ -121,6 +121,31 @@ namespace webifc
 
                 auto loops = makeLoops(a, b, c, ints);
 
+                std::vector<std::vector<glm::dvec2>> lines;
+
+                for (auto& loop : loops)
+                {
+                    std::vector<glm::dvec2> vec;
+
+                    if (loop.hasOne)
+                    {
+                        vec.push_back(loop.v1);
+                    }
+                    else
+                    {
+                        vec.push_back(loop.v1);
+                        vec.push_back(loop.v2);
+                    }
+
+                    lines.push_back(vec);
+                }
+
+                lines.push_back({ pa, pb });
+                lines.push_back({ pb, pc });
+                lines.push_back({ pc, pa });
+
+                DumpSVGLines(lines, L"lines.html");
+
                 // drawInSVG(loops, pa, pb, pc);
 
                 // eartcut.hpp seems to have issues with colinear points in holes, so for now use custom slow algo
@@ -176,6 +201,10 @@ namespace webifc
 
                 if (intersectionLine.hasIntersection)
                 {
+                    if (i == 10)
+                    {
+                        printf("asdf");
+                    }
                     meshIntersections1[i].push_back(MeshIntersection{
                         intersectionLine,
                         j
@@ -189,9 +218,11 @@ namespace webifc
             }
         }
 
+        DumpIfcGeometry(mesh1, L"m1.obj");
+        DumpIfcGeometry(mesh2, L"m2.obj");
         result1 = std::move(retriangulateMesh(mesh1, meshIntersections1));
         result2 = std::move(retriangulateMesh(mesh2, meshIntersections2));
-        DumpIfcGeometry(result1, L"m1.obj");
-        DumpIfcGeometry(result2, L"m2.obj");
+        DumpIfcGeometry(result1, L"m1r.obj");
+        DumpIfcGeometry(result2, L"m2r.obj");
     }
 }

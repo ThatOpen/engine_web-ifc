@@ -165,28 +165,35 @@ namespace webifc
 
 				auto relVoids = _relVoids[line.expressID];
 
-				IfcComposedMesh resultMesh;
-				resultMesh.transformation = glm::dmat4(1);
-
-				auto flatElementMesh = flatten(mesh);
-
-				for (auto relVoidExpressID : relVoids)
+				if (!relVoids.empty())
 				{
-					IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
-					auto flatVoidMesh = flatten(voidMesh);
+					IfcComposedMesh resultMesh;
+					resultMesh.transformation = glm::dmat4(1);
 
-					IfcGeometry m1;
-					IfcGeometry m2;
+					auto flatElementMesh = flatten(mesh);
 
-					intersectMeshMesh(flatElementMesh, flatVoidMesh, m1, m2);
+					for (auto relVoidExpressID : relVoids)
+					{
+						IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
+						auto flatVoidMesh = flatten(voidMesh);
 
-					// TODO: this is inefficient, better make one-to-many subtraction in bool logic
-					flatElementMesh = boolSubtract(m1, m2);
+						IfcGeometry m1;
+						IfcGeometry m2;
+
+						intersectMeshMesh(flatElementMesh, flatVoidMesh, m1, m2);
+
+						// TODO: this is inefficient, better make one-to-many subtraction in bool logic
+						flatElementMesh = boolSubtract(m1, m2);
+					}
+
+					resultMesh.geom = flatElementMesh;
+
+					return resultMesh;
 				}
-
-				resultMesh.geom = flatElementMesh;
-
-				return resultMesh;
+				else
+				{
+					return mesh;
+				}
 			}
 			case ifc2x3::IFCMAPPEDITEM:
 			{
@@ -589,7 +596,7 @@ namespace webifc
 				for (int i = 0; i < profileSize; i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 sb = placement * glm::vec4(glm::dvec3(pt, 0), 1);
+					glm::dvec4 sb = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
 					geom.points.push_back(sb);
 
 					if (i > 1)
@@ -609,7 +616,7 @@ namespace webifc
 				for (int i = 0; i < profileSize; i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = placement * glm::vec4(glm::dvec3(pt, 0) + dir * distance, 1);
+					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 					geom.points.push_back(et);
 
 					if (i > 1)
@@ -825,7 +832,7 @@ namespace webifc
 			return IfcProfile();
 		}
 
-		glm::mat3 GetAxis2Placement2D(uint64_t expressID)
+		glm::dmat3 GetAxis2Placement2D(uint64_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -851,7 +858,7 @@ namespace webifc
 			);
 		}
 
-		glm::mat4 GetLocalPlacement(uint64_t expressID)
+		glm::dmat4 GetLocalPlacement(uint64_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
