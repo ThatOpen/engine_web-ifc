@@ -8,7 +8,7 @@
 
 namespace webifc
 {
-	const double EPS_SMALL = 1e-8;
+	const double EPS_SMALL = 1e-6;
 
 	struct Face
 	{
@@ -392,6 +392,19 @@ namespace webifc
 
 		glm::dvec3 norm = glm::cross(ab, ac);
 		return glm::length(norm) / 2;
+	}
+
+	double cross2d(const glm::dvec2& point1, const glm::dvec2& point2) {
+		return point1.x * point2.y - point1.y * point2.x;
+	}
+
+	double areaOfTriangle(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
+	{
+		glm::dvec2 ab = b - a;
+		glm::dvec2 ac = c - a;
+
+		double norm = cross2d(ab, ac) / 2;
+		return norm;
 	}
 
 	void CheckTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)

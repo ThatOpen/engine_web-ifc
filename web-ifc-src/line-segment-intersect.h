@@ -6,9 +6,6 @@
 
 namespace webifc
 {
-	double cross2d(const glm::dvec2& point1, const glm::dvec2& point2) {
-		return point1.x * point2.y - point1.y * point2.x;
-	}
 
 	bool allEqual(bool b1, bool b2, bool b3, bool b4)
 	{

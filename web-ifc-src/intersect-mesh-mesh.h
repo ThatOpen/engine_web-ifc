@@ -37,8 +37,8 @@ namespace webifc
         v2 = glm::normalize(glm::cross(norm, v1));
 
         glm::dvec3 rel = pt - a;
-        double d1 = dot(v1, rel);
-        double d2 = dot(v2, rel);
+        double d1 = dot(v1, rel) / 1000.0;
+        double d2 = dot(v2, rel) / 1000.0;
 
         return {
             d1,
@@ -54,8 +54,8 @@ namespace webifc
         glm::dvec3 norm = glm::normalize(cross(v1, v2));
         v2 = cross(norm, v1);
 
-        double d1 = pt.x;
-        double d2 = pt.y;
+        double d1 = pt.x * 1000.0;
+        double d2 = pt.y * 1000.0;
 
         glm::dvec3 p = v1 * d1 + v2 * d2;
 

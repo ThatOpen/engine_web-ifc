@@ -18,7 +18,8 @@ namespace webifc
 
     bool onEdge(const Point& p, const Point& a, const Point& b)
     {
-        return std::fabs(sign(p, a, b) < EPS_SMALL);
+        double dist = std::fabs(sign(p, a, b));
+        return dist < EPS_SMALL;
     }
 
     double dot2d(const Point& p1, const Point& p2)
@@ -59,7 +60,7 @@ namespace webifc
     }
 
     // ccw
-    Triangle& makeTriangle(std::vector<Triangle>& triangles, const Point& a, const Point& b, const Point& c)
+    bool makeTriangle(std::vector<Triangle>& triangles, const Point& a, const Point& b, const Point& c)
     {
         Triangle t;
         t.a = a;
@@ -67,10 +68,18 @@ namespace webifc
         t.c = c;
         t.id = triangleID++;
 
+        double area = areaOfTriangle(t.a(), t.b(), t.c());
+
+        if (area < EPS_SMALL)
+        {
+            printf("asdf");
+            return false;
+        }
+
         triangles.resize(t.id + 1);
         triangles[t.id] = t;
 
-        return triangles[t.id];
+        return true;
     }
 
     bool PointInTriangle(const Triangle& t, const Point& p)
@@ -258,6 +267,7 @@ namespace webifc
         else
         {
             bool didSplit = false;
+            bool isOnEdge = false;
             int32_t e1 = -1;
             int32_t e2 = -1;
             if (split)
@@ -271,7 +281,7 @@ namespace webifc
                 {
                     didSplit = true;
                     // inside the triangle but unequal to any existing point, lets check the edges
-                    bool isOnEdge = false;
+                    isOnEdge = false;
                     Point pA;
                     Point pB;
                     if (onEdge(p, t.a, t.b))
@@ -307,7 +317,10 @@ namespace webifc
                             triangles[tri1].id = -1;
 
                             Point tri1p = GetOtherPoint(triangles[tri1], pA.id, pB.id);
-                            makeTriangle(triangles, pA, p, tri1p);
+                            if (!makeTriangle(triangles, pA, p, tri1p))
+                            {
+                                DumpSVGTriangles(triangles, p, prev, L"tris.html");
+                            }
                             makeTriangle(triangles, p, pB, tri1p);
 
                         }
@@ -346,6 +359,14 @@ namespace webifc
                 }
                 else
                 {
+                    if (triangles.size() == 74)
+                    {
+                        DumpSVGTriangles(triangles, p, prev, L"triangles.html");
+                        DumpSVGTriangles({ t }, p, prev, L"t.html");
+                        double area = areaOfTriangle(t.a(), t.b(), t.c());
+                        printf("asdf");
+                    }
+
                     // no edge to previous
                     Point dirToPrev = {
                         prev.x - p.x,
@@ -353,12 +374,12 @@ namespace webifc
                     };
 
                     // below p.id != t.a.id && p.id != t.b.id is needed for the connection phase, where the containing triangle is not split
-                    // below e1 != t.a.id && e2 != t.b.id is needed for the connection phase, where the matching edge was split and t.a -> t.b no longer exists
+                    // below !(e1 == t.a.id && e2 == t.b.id) is needed for the connection phase, where the matching edge was split and t.a -> t.b no longer exists
                     // TODO: simplify this based on previous split phase
                     // TODO: skip conversion to glm
-                    bool i1 = (e1 != t.a.id && e2 != t.b.id) && (p.id != t.a.id && p.id != t.b.id) && doLineSegmentsIntersect(t.a(), t.b(), p(), prev());
-                    bool i2 = (e1 != t.b.id && e2 != t.c.id) && (p.id != t.b.id && p.id != t.c.id) && doLineSegmentsIntersect(t.b(), t.c(), p(), prev());
-                    bool i3 = (e1 != t.c.id && e2 != t.a.id) && (p.id != t.c.id && p.id != t.a.id) && doLineSegmentsIntersect(t.c(), t.a(), p(), prev());
+                    bool i1 = !(e1 == t.a.id && e2 == t.b.id) && (p.id != t.a.id && p.id != t.b.id) && doLineSegmentsIntersect(t.a(), t.b(), p(), prev());
+                    bool i2 = !(e1 == t.b.id && e2 == t.c.id) && (p.id != t.b.id && p.id != t.c.id) && doLineSegmentsIntersect(t.b(), t.c(), p(), prev());
+                    bool i3 = !(e1 == t.c.id && e2 == t.a.id) && (p.id != t.c.id && p.id != t.a.id) && doLineSegmentsIntersect(t.c(), t.a(), p(), prev());
 
                     int32_t startTriangle = -1;
                     int32_t curTriangle = -1;
@@ -369,7 +390,7 @@ namespace webifc
                     {
                         tris = FindTrianglesWithEdge(t.a.id, t.b.id, triangles);
                         startTriangle = tris[0];
-                        curTriangle = tris[1];
+                        curTriangle = tris.size() > 1 ? tris[1] : -1;
                         if (!HasPoint(triangles[tris[0]], p.id))
                         {
                             std::swap(startTriangle, curTriangle);
@@ -383,7 +404,7 @@ namespace webifc
                     {
                         tris = FindTrianglesWithEdge(t.b.id, t.c.id, triangles);
                         startTriangle = tris[0];
-                        curTriangle = tris[1];
+                        curTriangle = tris.size() > 1 ? tris[1] : -1;
                         if (!HasPoint(triangles[tris[0]], p.id))
                         {
                             std::swap(startTriangle, curTriangle);
@@ -398,7 +419,7 @@ namespace webifc
 
                         tris = FindTrianglesWithEdge(t.c.id, t.a.id, triangles);
                         startTriangle = tris[0];
-                        curTriangle = tris[1];
+                        curTriangle = tris.size() > 1 ? tris[1] : -1;
                         if (!HasPoint(triangles[tris[0]], p.id))
                         {
                             std::swap(startTriangle, curTriangle);
@@ -412,17 +433,28 @@ namespace webifc
                     {
                         if (split && didSplit)
                         {
-                            DumpSVGTriangles(triangles, p, prev, L"triangles.html");
-                            printf("Something went wrong 1!");
-                            return false;
+                            if (isOnEdge)
+                            {
+                                // this can happen, we split one of the triangles and we're searching in the other direction
+                                // lets do a safe exit
+                                return false;
+                            }
+                            else
+                            {
+                                // this is weird!
+                                DumpSVGTriangles(triangles, p, prev, L"triangles.html");
+                                printf("Something went wrong 1!");
+                                return false;
+                            }
                         }
                         else
                         {
+                            // didn't split, could be we're looking at the wrong triangle!
                             return false;
                         }
                     }
 
-                    if (!startTriangle || !curTriangle)
+                    if (startTriangle == -1 || curTriangle == -1)
                     {
                         printf("Something went wrong 2!");
                         return false;
@@ -436,6 +468,7 @@ namespace webifc
                     {
                         if (curTriangle == -1)
                         {
+                            DumpSVGTriangles(triangles, p, prev, L"triangles.html");
                             printf("Failed to find cur triangle!");
                             return true;
                         }
@@ -453,11 +486,11 @@ namespace webifc
                         else
                         {
                             // select new triangle
-                            bool i1 = prevEdge.a != cur.a.id && prevEdge.b != cur.b.id
+                            bool i1 = !(prevEdge.a == cur.a.id && prevEdge.b == cur.b.id)
                                 && doLineSegmentsIntersect(cur.a(), cur.b(), p(), prev());
-                            bool i2 = prevEdge.a != cur.b.id && prevEdge.b != cur.c.id
+                            bool i2 = !(prevEdge.a == cur.b.id && prevEdge.b == cur.c.id)
                                 && doLineSegmentsIntersect(cur.b(), cur.c(), p(), prev());
-                            bool i3 = prevEdge.a != cur.c.id && prevEdge.b != cur.a.id
+                            bool i3 = !(prevEdge.a == cur.c.id && prevEdge.b == cur.a.id)
                                 && doLineSegmentsIntersect(cur.c(), cur.a(), p(), prev());
                             int32_t nextTriangle = -1;
                             if (i1)
@@ -484,6 +517,14 @@ namespace webifc
                                 boundary.push_back(cur.c);
                                 boundary.push_back(cur.a);
                             }
+
+                            if (nextTriangle == -1)
+                            {
+                                DumpSVGTriangles(triangles, p, prev, L"triangles.html");
+                                printf("Failed to find cur triangle!");
+                                return true;
+                            }
+
                             curTriangle = nextTriangle;
                         }
                     }
