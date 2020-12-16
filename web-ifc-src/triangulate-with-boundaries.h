@@ -320,7 +320,6 @@ namespace webifc
                             makeTriangle(triangles, p, pB, tri1p);
 
                         }
-                        DumpSVGTriangles(triangles, p, prev, L"tris.html");
                         if (tri2 != -1)
                         {
                             triangles[tri2].id = -1;

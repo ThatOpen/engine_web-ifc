@@ -41,14 +41,23 @@ int main()
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
+    bool writeFiles = false;
 
     auto mesh = geometryLoader.GetMesh(walls[16]);
-    geometryLoader.DumpMesh(mesh, L"TEST.obj");
+
+    if (writeFiles)
+    {
+        geometryLoader.DumpMesh(mesh, L"TEST.obj");
+    }
 
     for (int i = 0; i < walls.size(); i++)
     {
         auto mesh = geometryLoader.GetMesh(walls[i]);
-        geometryLoader.DumpMesh(mesh, L"IFCOPENINGELEMENT" + std::to_wstring(i) + L".obj");
+
+        if (writeFiles)
+        {
+            geometryLoader.DumpMesh(mesh, L"IFCOPENINGELEMENT" + std::to_wstring(i) + L".obj");
+        }
     }
     time = webifc::ms() - start;
 

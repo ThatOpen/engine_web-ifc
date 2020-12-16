@@ -514,8 +514,6 @@ namespace webifc
 				indices.push_back(0);
 				indices.push_back(2);
 				indices.push_back(3);
-
-				DumpSVGCurve(temp, L"bounds.html", indices);
 			}
 			else
 			{
@@ -564,8 +562,6 @@ namespace webifc
 
 
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
-
-				DumpSVGCurve(temp, L"bounds.html", indices);
 
 				for (int i = 0; i < indices.size(); i += 3)
 				{
