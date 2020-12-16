@@ -37,13 +37,13 @@ int main()
 
     start = webifc::ms();
 
-    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCWALLSTANDARDCASE);
+    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCSLAB);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
-    bool writeFiles = false;
+    bool writeFiles = true;
 
-    auto mesh = geometryLoader.GetMesh(walls[16]);
+    auto mesh = geometryLoader.GetMesh(walls[1]);
 
     if (writeFiles)
     {
@@ -56,7 +56,7 @@ int main()
 
         if (writeFiles)
         {
-            geometryLoader.DumpMesh(mesh, L"IFCOPENINGELEMENT" + std::to_wstring(i) + L".obj");
+            geometryLoader.DumpMesh(mesh, L"IFCSLAB" + std::to_wstring(i) + L".obj");
         }
     }
     time = webifc::ms() - start;

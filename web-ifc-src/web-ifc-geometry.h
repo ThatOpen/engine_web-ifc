@@ -177,6 +177,8 @@ namespace webifc
 						IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
 						auto flatVoidMesh = flatten(voidMesh);
 
+						DumpIfcGeometry(flatVoidMesh, L"void.obj");
+
 						IfcGeometry m1;
 						IfcGeometry m2;
 
@@ -273,12 +275,23 @@ namespace webifc
 				glm::dmat4 placement = GetLocalPlacement(placementID);
 				glm::dvec3 dir = GetCartesianPoint3D(directionID);
 
+				double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
+				bool flipWinding = dirDot < 0; // can't be perp according to spec
+
 				if (DEBUG_DUMP_SVG)
 				{
 					DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
 				}
 
 				IfcGeometry geom = Extrude(profile, placement, dir, depth);
+
+				if (flipWinding)
+				{
+					for (auto& face : geom.faces)
+					{
+						std::swap(face.i1, face.i2);
+					}
+				}
 
 				if (DEBUG_DUMP_SVG)
 				{
