@@ -42,7 +42,7 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
 
-    auto mesh = geometryLoader.GetMesh(walls[48]);
+    auto mesh = geometryLoader.GetMesh(walls[16]);
     geometryLoader.DumpMesh(mesh, L"TEST.obj");
 
         for (int i = 0; i < walls.size(); i++)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <iostream>
 
 #include "intersect-ray-tri.h"
 #include "util.h"
@@ -34,9 +35,9 @@ namespace webifc
                 glm::dvec3 otherNormal = computeNormal(a, b, c);
                 double d = glm::dot(otherNormal, dir);
                 double dn = glm::dot(otherNormal, normal);
-                if (distance == 0.0)
+                if (std::fabs(distance) < EPS_SMALL)
                 {
-                    if (dn == 1)
+                    if (dn >= 1 - EPS_SMALL)
                     {
                         // normals facing same direction, means an inside boundary
                         return MeshLocation::BOUNDARY;
