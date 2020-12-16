@@ -634,8 +634,6 @@ namespace webifc
 			else
 			{
 				// TODO: triangulate concave profile and append to geom
-				std::cout << "CONCAVE!" << std::endl;
-
 				using Point = std::array<double, 2>;
 				std::vector<std::vector<Point>> polygon;
 				polygon.resize(1);

@@ -13,7 +13,7 @@ namespace webifc
     {
         if (areaOfTriangle(a, b, c) <= EPS_SMALL)
         {
-            printf("asdf");
+            printf("0 triangle");
         }
 
         geometry.points.push_back(a);
@@ -144,7 +144,7 @@ namespace webifc
                 lines.push_back({ pb, pc });
                 lines.push_back({ pc, pa });
 
-                DumpSVGLines(lines, L"lines.html");
+                // DumpSVGLines(lines, L"lines.html");
 
                 // drawInSVG(loops, pa, pb, pc);
 
@@ -201,10 +201,6 @@ namespace webifc
 
                 if (intersectionLine.hasIntersection)
                 {
-                    if (i == 10)
-                    {
-                        printf("asdf");
-                    }
                     meshIntersections1[i].push_back(MeshIntersection{
                         intersectionLine,
                         j
@@ -218,11 +214,7 @@ namespace webifc
             }
         }
 
-        DumpIfcGeometry(mesh1, L"m1.obj");
-        DumpIfcGeometry(mesh2, L"m2.obj");
         result1 = std::move(retriangulateMesh(mesh1, meshIntersections1));
         result2 = std::move(retriangulateMesh(mesh2, meshIntersections2));
-        DumpIfcGeometry(result1, L"m1r.obj");
-        DumpIfcGeometry(result2, L"m2r.obj");
     }
 }

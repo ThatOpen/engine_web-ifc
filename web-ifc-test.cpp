@@ -45,7 +45,7 @@ int main()
     auto mesh = geometryLoader.GetMesh(walls[16]);
     geometryLoader.DumpMesh(mesh, L"TEST.obj");
 
-        for (int i = 0; i < walls.size(); i++)
+    for (int i = 0; i < walls.size(); i++)
     {
         auto mesh = geometryLoader.GetMesh(walls[i]);
         geometryLoader.DumpMesh(mesh, L"IFCOPENINGELEMENT" + std::to_wstring(i) + L".obj");

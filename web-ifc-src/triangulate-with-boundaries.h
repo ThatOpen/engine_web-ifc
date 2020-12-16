@@ -72,7 +72,7 @@ namespace webifc
 
         if (area < EPS_SMALL)
         {
-            printf("asdf");
+            printf("0 triangle");
             return false;
         }
 
@@ -192,7 +192,6 @@ namespace webifc
                 }
                 else
                 {
-                    printf("not convex");
                     notConvex = true;
                 }
                 if (i != 1 && isConvex(boundary[i - 2], boundary[i - 1], boundary[i]))
@@ -312,16 +311,12 @@ namespace webifc
                         int32_t tri1 = FindTriangleWithEdge(pA.id, pB.id, triangles);
                         int32_t tri2 = FindTriangleWithEdge(pB.id, pA.id, triangles);
 
-                        DumpSVGTriangles(triangles, p, prev, L"tris.html");
                         if (tri1 != -1)
                         {
                             triangles[tri1].id = -1;
 
                             Point tri1p = GetOtherPoint(triangles[tri1], pA.id, pB.id);
-                            if (!makeTriangle(triangles, pA, p, tri1p))
-                            {
-                                DumpSVGTriangles(triangles, p, prev, L"tris.html");
-                            }
+                            makeTriangle(triangles, pA, p, tri1p);
                             makeTriangle(triangles, p, pB, tri1p);
 
                         }
@@ -334,12 +329,9 @@ namespace webifc
                             makeTriangle(triangles, pA, tri1p, p);
                             makeTriangle(triangles, p, tri1p, pB);
                         }
-                        DumpSVGTriangles(triangles, p, prev, L"tris.html");
                     }
                     else
                     {
-                        DumpSVGTriangles(triangles, p, prev, L"tris.html");
-
                         // nope, its in the interior, lets split the triangle in 3 subtriangles.
                         makeTriangle(triangles, t.a, t.b, p);
                         makeTriangle(triangles, t.a, p, t.c);
@@ -365,14 +357,6 @@ namespace webifc
                 }
                 else
                 {
-                    if (triangles.size() == 74)
-                    {
-                        DumpSVGTriangles(triangles, p, prev, L"triangles.html");
-                        DumpSVGTriangles({ t }, p, prev, L"t.html");
-                        double area = areaOfTriangle(t.a(), t.b(), t.c());
-                        printf("asdf");
-                    }
-
                     // no edge to previous
                     Point dirToPrev = {
                         prev.x - p.x,
@@ -536,8 +520,6 @@ namespace webifc
                         }
                     }
 
-                    DumpSVGTriangles(triangles, p, prev, L"triangles.html");
-
                     // remove duplicates
                     std::vector<Point> boundaryDedupe = deduplicatePoints(boundary);
                     
@@ -618,11 +600,6 @@ namespace webifc
     {
         instance++;
 
-        if (instance == 5)
-        {
-            printf("asdf");
-        }
-
         triangleID = 0;
         pointID = 0;
 
@@ -636,8 +613,6 @@ namespace webifc
 
         for (auto& loop : loops)
         {
-            DumpSVGTriangles(triangles, Point(), Point(), L"triangles.html");
-
             Point prev;
             if (loop.hasOne)
             {
@@ -650,8 +625,6 @@ namespace webifc
                 Point pt1 = getPoint(loop.v1, points);
 
                 addPoint(pt1, prev, triangles);
-
-                DumpSVGTriangles(triangles, Point(), Point(), L"triangles.html");
 
                 Point pt2 = getPoint(loop.v2, points);
 
