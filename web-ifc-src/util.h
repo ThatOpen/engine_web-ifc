@@ -57,6 +57,14 @@ namespace webifc
 		std::vector<glm::dvec2> points;
 	};
 
+	struct IfcTrimmingSelect
+	{
+		bool hasParam = false;
+		bool hasPos = false;
+		double param;
+		glm::dvec2 pos;
+	};
+
 	struct IfcCurve3D
 	{
 		std::vector<glm::dvec3> points;

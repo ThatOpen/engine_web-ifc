@@ -970,6 +970,24 @@ namespace webifc
 			return glm::dmat4();
 		}
 
+		IfcTrimmingSelect ParseTrimSelect(std::vector<IfcToken>& tokens, std::vector<uint32_t>& offsets)
+		{
+			IfcTrimmingSelect ts;
+
+			if (offsets.size() > 2)
+			{
+				std::string type = _loader.GetString(tokens[offsets[0]]);
+
+				if (type == "IFCPARAMETERVALUE")
+				{
+					ts.hasParam = true;
+					ts.param = tokens[offsets[2]].real;
+				}
+			}
+
+			return ts;
+		}
+
 		IfcCurve GetCurve(uint64_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
@@ -991,12 +1009,73 @@ namespace webifc
 
 				return curve;
 			}
+			case ifc2x3::IFCCOMPOSITECURVE:
+			{
+				IfcCurve curve;
+
+				auto segments = GetSetArgument(tokens, 0);
+				auto selfIntersects = GetStringArgument(tokens, 1);
+
+				if (selfIntersects == "T")
+				{
+					// TODO: this is probably bad news
+					printf("Self intersecting composite curve!");
+				}
+
+				for (auto& token : segments)
+				{
+					uint32_t segmentId = tokens[token].num;
+					IfcCurve c = GetCompositeCurveSegment(segmentId);
+					curve.points.insert(curve.points.begin(), c.points.begin(), c.points.end());
+				}
+
+				return curve;
+			}
+			case ifc2x3::IFCTRIMMEDCURVE:
+			{
+
+				auto basisCurveID = tokens[GetArgumentOffset(tokens, 0)].num;
+				auto trim1Set = GetSetArgument(tokens, 1);
+				auto trim2Set = GetSetArgument(tokens, 2);
+				auto senseAgreement = GetStringArgument(tokens, 3);
+				auto trimmingPreference = GetStringArgument(tokens, 4);
+
+				IfcCurve basisCurve = GetCurve(basisCurveID);
+
+				auto trim1 = ParseTrimSelect(tokens, trim1Set);
+				auto trim2 = ParseTrimSelect(tokens, trim2Set);
+
+
+				return basisCurve;
+			}
 
 			default:
 				break;
 			}
 
 			return IfcCurve();
+		}
+
+
+		IfcCurve GetCompositeCurveSegment(uint64_t expressID)
+		{
+			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			auto& tokens = _loader.GetLineTokens(lineID);
+			switch (line.ifcType)
+			{
+			case ifc2x3::IFCCOMPOSITECURVESEGMENT:
+			{
+				auto transition = GetStringArgument(tokens, 0);
+				auto sameSense = GetStringArgument(tokens, 1);
+				auto parentID = tokens[GetArgumentOffset(tokens, 2)].num;
+
+				return GetCurve(parentID);
+			}
+
+			default:
+				break;
+			}
 		}
 
 		glm::dvec2 GetCartesianPoint2D(uint64_t expressID)

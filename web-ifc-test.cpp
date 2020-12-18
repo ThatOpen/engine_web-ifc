@@ -43,7 +43,7 @@ int main()
 
     bool writeFiles = true;
 
-    auto mesh = geometryLoader.GetMesh(walls[1]);
+    auto mesh = geometryLoader.GetMesh(walls[0]);
 
     if (writeFiles)
     {
