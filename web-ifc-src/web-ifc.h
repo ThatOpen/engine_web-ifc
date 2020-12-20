@@ -170,7 +170,8 @@ namespace webifc
 	private:
 		bool TokenizeLine()
 		{
-			std::vector<IfcToken> line;
+			static std::vector<IfcToken> line;
+			line.clear();
 			bool eof = false;
 			while (true)
 			{
@@ -180,16 +181,14 @@ namespace webifc
 					break;
 				}
 
-				char c = buf[pos];
+				const char c = buf[pos];
 
 				// whitespace check
 				if (c == ' ' || c == '\n' || c == '\r' || c == '\t')
 				{
 					pos++;
 					continue;
-				}
-
-				if (c == '\'')
+				}else if (c == '\'')
 				{
 					pos++;
 					bool prevSlash = false;
@@ -212,10 +211,9 @@ namespace webifc
 					token.type = IfcTokenType::STRING;
 					token.pos = start;
 					token.end = pos;
-					line.push_back(token);
-				}
-
-				if (c == '#')
+					line.push_back(std::move(token));
+				} 
+				else if (c == '#')
 				{
 					pos++;
 
@@ -223,26 +221,23 @@ namespace webifc
 					token.type = IfcTokenType::REF;
 					token.num = readInt();
 					token.pos = pos;
-					line.push_back(token);
-				}
-
-				if (c == '$' || c == '*')
+					line.push_back(std::move(token));
+				} 
+				else if (c == '$' || c == '*')
 				{
 					IfcToken token;
 					token.type = IfcTokenType::EMPTY;
 					token.pos = pos;
-					line.push_back(token);
+					line.push_back(std::move(token));
 				}
-
-				if (c == '(')
+				else if (c == '(')
 				{
 					IfcToken token;
 					token.type = IfcTokenType::SET_BEGIN;
 					token.pos = pos;
-					line.push_back(token);
+					line.push_back(std::move(token));
 				}
-
-				if (c >= '0' && c <= '9')
+				else if (c >= '0' && c <= '9')
 				{
 
 					IfcToken token;
@@ -254,10 +249,9 @@ namespace webifc
 						token.real *= -1;
 					}
 					token.pos = pos;
-					line.push_back(token);
+					line.push_back(std::move(token));
 				}
-
-				if (c == '.')
+				else if (c == '.')
 				{
 					pos++;
 					uint32_t start = pos;
@@ -269,10 +263,9 @@ namespace webifc
 					token.type = IfcTokenType::ENUM;
 					token.pos = start;
 					token.end = pos;
-					line.push_back(token);
+					line.push_back(std::move(token));
 				}
-
-				if (c >= 'A' && c <= 'Z')
+				else if (c >= 'A' && c <= 'Z')
 				{
 					uint32_t start = pos;
 					while ((buf[pos] >= 'A' && buf[pos] <= 'Z') || buf[pos] >= '0' && buf[pos] <= '9')
@@ -283,20 +276,18 @@ namespace webifc
 					token.type = IfcTokenType::STRING;
 					token.pos = start;
 					token.end = pos;
-					line.push_back(token);
+					line.push_back(std::move(token));
 
 					pos--;
 				}
-
-				if (c == ')')
+				else if (c == ')')
 				{
 					IfcToken token;
 					token.type = IfcTokenType::SET_END;
 					token.pos = pos;
-					line.push_back(token);
+					line.push_back(std::move(token));
 				}
-
-				if (c == ';')
+				else if (c == ';')
 				{
 					pos++;
 					break;
@@ -309,7 +300,7 @@ namespace webifc
 			token.type = IfcTokenType::LINE_END;
 			token.pos = pos;
 
-			line.push_back(token);
+			line.push_back(std::move(token));
 
 			lineTokens.push_back(line);
 			return !eof;

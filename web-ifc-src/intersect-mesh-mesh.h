@@ -214,6 +214,9 @@ namespace webifc
             }
         }
 
+
+        DumpIfcGeometry(mesh1, L"mesh1.obj");
+        DumpIfcGeometry(mesh2, L"mesh2.obj");
         result1 = std::move(retriangulateMesh(mesh1, meshIntersections1));
         result2 = std::move(retriangulateMesh(mesh2, meshIntersections2));
     }

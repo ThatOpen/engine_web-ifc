@@ -65,6 +65,13 @@ namespace webifc
 		glm::dvec2 pos;
 	};
 
+	struct IfcTrimmingArguments
+	{
+		bool exist = false;
+		IfcTrimmingSelect start;
+		IfcTrimmingSelect end;
+	};
+
 	struct IfcCurve3D
 	{
 		std::vector<glm::dvec3> points;
@@ -151,6 +158,8 @@ namespace webifc
 		double width = max.x - min.x;
 		double height = max.y - min.y;
 
+		double maxSize = std::max(width, height);
+
 		if (width == 0 || height == 0)
 		{
 			printf("asdf");
@@ -159,8 +168,8 @@ namespace webifc
 		for (auto& pt : input)
 		{
 			retval.emplace_back(
-				((pt.x - min.x) / (width)) * size.x + offset.x,
-				((pt.y - min.y) / (height)) * size.y + offset.y
+				((pt.x - min.x) / (maxSize)) * size.x + offset.x,
+				((pt.y - min.y) / (maxSize)) * size.y + offset.y
 			);
 		}
 

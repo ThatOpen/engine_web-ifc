@@ -24,7 +24,7 @@
 
 #define CONST_PI 3.141592653589793238462643383279502884L
 
-const bool DEBUG_DUMP_SVG = false;
+const bool DEBUG_DUMP_SVG = true;
 
 namespace webifc
 {
@@ -178,6 +178,7 @@ namespace webifc
 						auto flatVoidMesh = flatten(voidMesh);
 
 						DumpIfcGeometry(flatVoidMesh, L"void.obj");
+						DumpIfcGeometry(flatElementMesh, L"mesh.obj");
 
 						IfcGeometry m1;
 						IfcGeometry m2;
@@ -983,12 +984,23 @@ namespace webifc
 					ts.hasParam = true;
 					ts.param = tokens[offsets[2]].real;
 				}
+				else
+				{
+					printf("Unsupported IfcTrimmingSelect type: IfcCartesianPoint");
+				}
 			}
 
 			return ts;
 		}
 
 		IfcCurve GetCurve(uint64_t expressID)
+		{
+			IfcCurve curve;
+			ComputeCurve(expressID, curve);
+			return curve;
+		}
+
+		void ComputeCurve(uint64_t expressID, IfcCurve& curve, IfcTrimmingArguments trim = {})
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -997,8 +1009,6 @@ namespace webifc
 			{
 			case ifc2x3::IFCPOLYLINE:
 			{
-				IfcCurve curve;
-
 				auto points = GetSetArgument(tokens, 0);
 
 				for (auto& token : points)
@@ -1007,12 +1017,10 @@ namespace webifc
 					curve.points.push_back(GetCartesianPoint2D(pointId));
 				}
 
-				return curve;
+				break;
 			}
 			case ifc2x3::IFCCOMPOSITECURVE:
 			{
-				IfcCurve curve;
-
 				auto segments = GetSetArgument(tokens, 0);
 				auto selfIntersects = GetStringArgument(tokens, 1);
 
@@ -1024,57 +1032,107 @@ namespace webifc
 
 				for (auto& token : segments)
 				{
+					if (DEBUG_DUMP_SVG)
+					{
+						DumpSVGCurve(curve.points, L"partial_curve.html");
+					}
+
 					uint32_t segmentId = tokens[token].num;
-					IfcCurve c = GetCompositeCurveSegment(segmentId);
-					curve.points.insert(curve.points.begin(), c.points.begin(), c.points.end());
+
+					ComputeCurve(segmentId, curve);
 				}
 
-				return curve;
-			}
-			case ifc2x3::IFCTRIMMEDCURVE:
-			{
-
-				auto basisCurveID = tokens[GetArgumentOffset(tokens, 0)].num;
-				auto trim1Set = GetSetArgument(tokens, 1);
-				auto trim2Set = GetSetArgument(tokens, 2);
-				auto senseAgreement = GetStringArgument(tokens, 3);
-				auto trimmingPreference = GetStringArgument(tokens, 4);
-
-				IfcCurve basisCurve = GetCurve(basisCurveID);
-
-				auto trim1 = ParseTrimSelect(tokens, trim1Set);
-				auto trim2 = ParseTrimSelect(tokens, trim2Set);
-
-
-				return basisCurve;
-			}
-
-			default:
 				break;
 			}
-
-			return IfcCurve();
-		}
-
-
-		IfcCurve GetCompositeCurveSegment(uint64_t expressID)
-		{
-			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
-			switch (line.ifcType)
-			{
 			case ifc2x3::IFCCOMPOSITECURVESEGMENT:
 			{
 				auto transition = GetStringArgument(tokens, 0);
 				auto sameSense = GetStringArgument(tokens, 1);
 				auto parentID = tokens[GetArgumentOffset(tokens, 2)].num;
 
-				return GetCurve(parentID);
+				ComputeCurve(parentID, curve);
+
+				break;
+			}
+			case ifc2x3::IFCTRIMMEDCURVE:
+			{
+				auto basisCurveID = tokens[GetArgumentOffset(tokens, 0)].num;
+				auto trim1Set = GetSetArgument(tokens, 1);
+				auto trim2Set = GetSetArgument(tokens, 2);
+				auto senseAgreement = GetStringArgument(tokens, 3);
+				auto trimmingPreference = GetStringArgument(tokens, 4);
+
+				auto trim1 = ParseTrimSelect(tokens, trim1Set);
+				auto trim2 = ParseTrimSelect(tokens, trim2Set);
+
+				IfcTrimmingArguments trim;
+				trim.exist = true;
+				trim.start = trim1;
+				trim.end = trim2;
+
+				ComputeCurve(basisCurveID, curve, trim);
+
+				break;
+			}
+			case ifc2x3::IFCCIRCLE:
+			{
+				auto positionID = tokens[GetArgumentOffset(tokens, 0)].num;
+				double radius = tokens[GetArgumentOffset(tokens, 1)].real;
+
+				glm::dmat3 placement = GetAxis2Placement2D(positionID);
+
+				const int CIRCLE_SEGMENTS = 10;
+
+				double startDegrees = 0;
+				double endDegrees = 360;
+
+				if (trim.exist)
+				{
+					// TODO: support cartesian?
+					startDegrees = trim.start.hasParam ? trim.start.param : 0;
+					endDegrees = trim.end.hasParam ? trim.end.param : 360;
+				}
+
+				if (endDegrees < startDegrees)
+				{
+					endDegrees += 360;
+				}
+
+				double startRad = startDegrees / 180 * CONST_PI;
+				double endRad = endDegrees / 180 * CONST_PI;
+
+				double lengthRad = endRad - startRad;
+
+				int startIndex = curve.points.size();
+
+				for (int i = 0; i < CIRCLE_SEGMENTS; i++)
+				{
+					double ratio = static_cast<double>(i) / ( CIRCLE_SEGMENTS - 1);
+					double angle = startRad + ratio * lengthRad;
+					glm::dvec2 circleCoordinate(
+						radius * std::cosf(angle),
+						- radius * std::sinf(angle) // TODO: figure out why this has to be negative
+					);
+					glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
+					curve.points.push_back(pos);
+				}
+
+				// without a trim, we close the circle
+				if (!trim.exist)
+				{
+					curve.points.push_back(curve.points[startIndex]);
+				}
+
+				break;
 			}
 
 			default:
 				break;
+			}
+
+			if (DEBUG_DUMP_SVG)
+			{
+				DumpSVGCurve(curve.points, L"partial_curve.html");
 			}
 		}
 
