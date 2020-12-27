@@ -8,6 +8,8 @@
 
 namespace webifc
 {
+    bool DUMP_SVG_TRIANGLES = false;
+
     uint32_t pointID = 0;
     uint32_t triangleID = 0;
 
@@ -17,6 +19,12 @@ namespace webifc
     }
 
     bool onEdge(const Point& p, const Point& a, const Point& b)
+    {
+        double dist = std::fabs(sign(p, a, b));
+        return dist <= EPS_SMALL;
+    }
+
+    bool onEdge2(const Point& p, const Point& a, const Point& b)
     {
         double dist = std::fabs(sign(p, a, b));
         return dist < EPS_BIG;
@@ -70,10 +78,12 @@ namespace webifc
 
         double area = areaOfTriangle(t.a(), t.b(), t.c());
 
-        if (area < EPS_SMALL)
+        if (area == 0)
         {
+            // Should we be making this triangle at all?
+            //triangles.resize(t.id + 1);
+            //triangles[t.id].id = -1;
             printf("0 triangle");
-            return false;
         }
 
         triangles.resize(t.id + 1);
@@ -91,8 +101,8 @@ namespace webifc
         d2 = sign(p, t.b, t.c);
         d3 = sign(p, t.c, t.a);
 
-        has_neg = (d1 < -EPS_SMALL) || (d2 < -EPS_SMALL) || (d3 < -EPS_SMALL);
-        has_pos = (d1 > EPS_SMALL) || (d2 > EPS_SMALL) || (d3 > EPS_SMALL);
+        has_neg = (d1 < -EPS_TINY) || (d2 < -EPS_TINY) || (d3 < -EPS_TINY);
+        has_pos = (d1 > EPS_TINY) || (d2 > EPS_TINY) || (d3 > EPS_TINY);
 
         return !(has_neg && has_pos);
     }
@@ -127,39 +137,90 @@ namespace webifc
     std::vector<int32_t> FindTrianglesWithEdge(int32_t a, int32_t b, std::vector<Triangle>& triangles)
     {
         std::vector<int32_t> result;
+        std::vector<int32_t> deleted;
+        glm::dvec2 apt;
+        glm::dvec2 bpt;
+
         for (int i = 0; i < triangles.size(); i++)
         {
-            Triangle&  t = triangles[i];
+            Triangle& t = triangles[i];
 
-            if (t.id == -1) continue;
-
+            bool found = false;
             if (t.a.id == a && t.b.id == b)
             {
-                result.push_back(i);
+                found = true;
+                apt = t.a();
+                bpt = t.b();
             }
             else if (t.b.id == a && t.c.id == b)
             {
-                result.push_back(i);
+                found = true;
+                apt = t.b();
+                bpt = t.c();
             }
             else if (t.c.id == a && t.a.id == b)
             {
-                result.push_back(i);
+                found = true;
+                apt = t.c();
+                bpt = t.a();
             }
             else if (t.a.id == b && t.b.id == a)
             {
-                result.push_back(i);
+                found = true;
+                apt = t.b();
+                bpt = t.a();
             }
             else if (t.b.id == b && t.c.id == a)
             {
-                result.push_back(i);
+                found = true;
+                apt = t.c();
+                bpt = t.b();
             }
             else if (t.c.id == b && t.a.id == a)
             {
-                result.push_back(i);
+                found = true;
+                apt = t.a();
+                bpt = t.c();
+            }
+
+            if (found)
+            {
+                if (t.id == -1)
+                {
+                    deleted.push_back(i);
+                }
+                else
+                {
+                    result.push_back(i);
+                }
             }
         }
 
+        Triangle& t = triangles[0];
+        Point pta;
+        pta.x = apt.x;
+        pta.y = apt.y;
+        Point ptb;
+        ptb.x = bpt.x;
+        ptb.y = bpt.y;
+
+        bool bothOnEdge = (onEdge2(pta, t.a, t.b) && onEdge2(ptb, t.a, t.b)) || (onEdge2(pta, t.b, t.c) && onEdge2(ptb, t.b, t.c)) || (onEdge2(pta, t.c, t.a) && onEdge2(ptb, t.c, t.a));
+
+        // every edge must be replaced by a new edge, whether it has 1 or 2 adjacent triangles
+        // a mismatch here means we made a mistake
+        if (result.size() > 2)
+        {
+            printf("Triangle with this edge already deleted!");
+        }
+
         return result;
+    }
+
+    void CheckTriangleEdges(Triangle& t, std::vector<Triangle>& triangles)
+    {
+        FindTrianglesWithEdge(t.a.id, t.b.id, triangles);
+        FindTrianglesWithEdge(t.b.id, t.c.id, triangles);
+        FindTrianglesWithEdge(t.c.id, t.a.id, triangles);
     }
 
     void triangulateBoundary(std::vector<Point>& boundary, std::vector<Triangle>& triangles)
@@ -252,342 +313,384 @@ namespace webifc
         return false;
     }
 
-
-    bool addPointToTriangle(Triangle t, Point& p, Point& prev, bool split, std::vector<Triangle>& triangles)
+    bool EdgeEqual(Edge& e, Point& a, Point& b)
     {
-        if (t.id == -1)
+        return (e.a == a.id && e.b == b.id) || (e.b == a.id && e.a == b.id);
+    }
+
+    void DumpPrevTriangles(int num, Point& p, Point& prev, std::vector<Triangle>& triangles)
+    {
+        std::vector<Triangle> temp;
+        for (int i = 0; i < num; i++)
+        {
+            Triangle t = triangles[triangles.size() - 1 - i];
+            CheckTriangleEdges(t, triangles);
+
+            t.id = 0;
+            temp.push_back(t);
+        }
+        DumpSVGTriangles(temp, p, prev, L"triangles.svg");
+    }
+
+    void DumpTriangleID(int num, Point& p, Point& prev, std::vector<Triangle>& triangles)
+    {
+        std::vector<Triangle> temp;
+        Triangle t = triangles[num];
+        t.id = 0;
+        temp.push_back(t);
+        DumpSVGTriangles(temp, p, prev, L"triangle.svg");
+    }
+
+    bool addPointToTriangle(Triangle t, Point& p, Point& prev, std::vector<Triangle>& triangles)
+    {
+        bool isInTriangle = PointInTriangle(t, p);
+        if (!isInTriangle)
         {
             return false;
         }
-        if (!PointInTriangle(t, p))
+        if (DUMP_SVG_TRIANGLES) DumpTriangleID(t.id, p, prev, triangles);
+
+        bool isOnEdge = false;
+        Edge edge;
+
+        Point pA;
+        Point pB;
+        if (onEdge(p, t.a, t.b))
         {
-            return false;
+            isOnEdge = true;
+            pA = t.a;
+            pB = t.b;
         }
-        else
+        else if (onEdge(p, t.b, t.c))
         {
-            bool didSplit = false;
-            bool isOnEdge = false;
-            int32_t e1 = -1;
-            int32_t e2 = -1;
-            if (split)
+            isOnEdge = true;
+            pA = t.b;
+            pB = t.c;
+        }
+        else if (onEdge(p, t.c, t.a))
+        {
+            isOnEdge = true;
+            pA = t.c;
+            pB = t.a;
+        }
+
+        if (isOnEdge)
+        {
+            edge.a = pA.id;
+            edge.b = pB.id;
+
+            // yep, its on an edge
+            int32_t tri1 = FindTriangleWithEdge(pA.id, pB.id, triangles);
+            int32_t tri2 = FindTriangleWithEdge(pB.id, pA.id, triangles);
+
+            if (tri1 != -1)
             {
-                if (p.id == t.a.id || p.id == t.b.id || p.id == t.c.id)
-                {
-                    // this point is already in the triangle
-                    // we can skip to the connecton phase (if that phase is needed)
-                }
-                else
-                {
-                    didSplit = true;
-                    // inside the triangle but unequal to any existing point, lets check the edges
-                    isOnEdge = false;
-                    Point pA;
-                    Point pB;
-                    if (onEdge(p, t.a, t.b))
-                    {
-                        isOnEdge = true;
-                        pA = t.a;
-                        pB = t.b;
-                    }
-                    else if (onEdge(p, t.b, t.c))
-                    {
-                        isOnEdge = true;
-                        pA = t.b;
-                        pB = t.c;
-                    }
-                    else if (onEdge(p, t.c, t.a))
-                    {
-                        isOnEdge = true;
-                        pA = t.c;
-                        pB = t.a;
-                    }
+                triangles[tri1].id = -1;
 
-                    if (isOnEdge)
-                    {
-                        e1 = pA.id;
-                        e2 = pB.id;
+                Point tri1p = GetOtherPoint(triangles[tri1], pA.id, pB.id);
+                makeTriangle(triangles, pA, p, tri1p);
+                makeTriangle(triangles, p, pB, tri1p);
 
-                        // yep, its on an edge
-                        int32_t tri1 = FindTriangleWithEdge(pA.id, pB.id, triangles);
-                        int32_t tri2 = FindTriangleWithEdge(pB.id, pA.id, triangles);
+            }
 
-                        if (tri1 != -1)
-                        {
-                            triangles[tri1].id = -1;
-
-                            Point tri1p = GetOtherPoint(triangles[tri1], pA.id, pB.id);
-                            makeTriangle(triangles, pA, p, tri1p);
-                            makeTriangle(triangles, p, pB, tri1p);
-
-                        }
-                        if (tri2 != -1)
-                        {
-                            triangles[tri2].id = -1;
-
-                            Point tri1p = GetOtherPoint(triangles[tri2], pA.id, pB.id);
-                            makeTriangle(triangles, pA, tri1p, p);
-                            makeTriangle(triangles, p, tri1p, pB);
-                        }
-                    }
-                    else
-                    {
-                        // nope, its in the interior, lets split the triangle in 3 subtriangles.
-                        makeTriangle(triangles, t.a, t.b, p);
-                        makeTriangle(triangles, t.a, p, t.c);
-                        makeTriangle(triangles, p, t.b, t.c);
+            if (tri1 != -1 && tri2 == -1)
+            {
+                if (DUMP_SVG_TRIANGLES) DumpPrevTriangles(2, p, prev, triangles);
+            }
 
 
-                        // TODO: t is a copy!
-                        triangles[t.id].id = -1;
-                        t.id = -1;
-                    }
-                }
+            if (tri2 != -1)
+            {
+                triangles[tri2].id = -1;
+
+                Point tri2p = GetOtherPoint(triangles[tri2], pA.id, pB.id);
+                makeTriangle(triangles, pA, tri2p, p);
+                makeTriangle(triangles, p, tri2p, pB);
+
+                if (DUMP_SVG_TRIANGLES) DumpPrevTriangles(2, p, prev, triangles);
+            }
+
+            // also check tri1
+            if (tri1 != -1 && tri2 != -1)
+            {
+                if (DUMP_SVG_TRIANGLES) DumpPrevTriangles(4, p, prev, triangles);
+            }
+         
+            return true;
+        }
+        else // not on an edge, but is inside triangle
+        {
+            // nope, its in the interior, lets split the triangle in 3 subtriangles.
+            makeTriangle(triangles, t.a, t.b, p);
+            makeTriangle(triangles, t.a, p, t.c);
+            makeTriangle(triangles, p, t.b, t.c);
+
+            // TODO: t is a copy!
+            triangles[t.id].id = -1;
+            t.id = -1;
+
+            if (DUMP_SVG_TRIANGLES) DumpPrevTriangles(3, p, prev, triangles);
+
+            return true;
+        }
+    }
+
+    void TriangulateBoundary(Point& p, Point& prev, std::vector<Triangle>& triangles, std::vector<Point>& boundary)
+    {
+        Point dirToPrev = {
+            prev.x - p.x,
+            prev.y - p.y
+        };
+
+        // remove duplicates
+        std::vector<Point> boundaryDedupe = deduplicatePoints(boundary);
+
+        // figure out what the mountains are
+        std::vector<Point> boundaryUp;
+        std::vector<Point> boundaryDown;
+
+        for (auto& pt : boundaryDedupe)
+        {
+            if (isAboveLine(p, dirToPrev, pt))
+            {
+                boundaryUp.push_back(pt);
             }
             else
             {
-                //debugger;
+                boundaryDown.push_back(pt);
+            }
+        }
+
+
+        // now we have two boundaries and a line segment, we can create two monotone mountains and triangulate them
+        boundaryUp.insert(boundaryUp.begin(), p);
+        boundaryUp.push_back(prev);
+
+        boundaryDown.insert(boundaryDown.begin(), p);
+        boundaryDown.push_back(prev);
+        std::reverse(boundaryDown.begin(), boundaryDown.end());
+
+
+        int start = triangles.size();
+
+        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles1.svg");
+        triangulateBoundary(boundaryUp, triangles);
+        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles2.svg");
+        triangulateBoundary(boundaryDown, triangles);
+        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles3.svg");
+
+        int size = triangles.size() - start;
+
+        if (DUMP_SVG_TRIANGLES) DumpPrevTriangles(size, p, prev, triangles);
+    }
+
+    bool connectPointsFromTriangle(Triangle t, Point& p, Point& prev, std::vector<Triangle>& triangles)
+    {
+        if (prev.id == t.a.id || prev.id == t.b.id || prev.id == t.c.id)
+        {
+            // we already have an edge from p to prev, because it's part of triangle t
+            return true;
+        }
+        else
+        {
+            // no edge to previous
+            Point dirToPrev = {
+                prev.x - p.x,
+                prev.y - p.y
+            };
+
+            // because P is on the triangle, there's only one possible intersection line, the line not containing p
+            Point p1;
+            Point p2;
+
+            if (t.a.id == p.id)
+            {
+                p1 = t.b;
+                p2 = t.c;
+            }
+            else if (t.b.id == p.id)
+            {
+                p1 = t.c;
+                p2 = t.a;
+            }
+            else if (t.c.id == p.id)
+            {
+                p1 = t.a;
+                p2 = t.b;
             }
 
-            if (prev.id != -1)
+
+            // TODO: check if p1 or p2 lies exactly on p -> prev, if so recursive call on that point
+            // this is unlikely to happen, really only when a void has an internal touch OR when we start processing multiple voids in one pass.
+            // checking for this situation would also have to happen below
+
+            // p1 or p2 don't lie on p -> prev, so either internal segment p1 -> p2 intersects, or we don't have any intersection
+            bool linesIntersect = doLineSegmentsIntersect(p1(), p2(), p(), prev());
+
+            if (!linesIntersect)
             {
-                if (prev.id == t.a.id || prev.id == t.b.id || prev.id == t.c.id)
+                if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles.svg");
+                Triangle tempCopy = t;
+                tempCopy.id = 0;
+                if (DUMP_SVG_TRIANGLES) DumpSVGTriangles({ tempCopy }, p, prev, L"triangle.svg");
+                // no intersection at p1, p2, or p1 -> p2, so this triangle is facing the wrong way
+                return false;
+            }
+
+            // we search in direction of p1 -> p2, so find other triangle on that edge
+            uint32_t curTriangle = FindTriangleWithEdge(p2.id, p1.id, triangles);
+
+            if (curTriangle == -1)
+            {
+                if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles.svg");
+                Triangle tempCopy = t;
+                tempCopy.id = 0;
+                if (DUMP_SVG_TRIANGLES) DumpSVGTriangles({ tempCopy }, p, prev, L"triangle.svg");
+                printf("Something went wrong 2!");
+                return false;
+            }
+
+            uint32_t drawnTriangle = curTriangle;
+
+            triangles[t.id].id = -1;
+            t.id = -1;
+            triangles[curTriangle].id = -1;
+            if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles0.svg");
+
+            std::vector<Point> boundary;
+            boundary.push_back(p1);
+            boundary.push_back(p2);
+
+            Edge prevEdge;
+            prevEdge.a = p2.id;
+            prevEdge.b = p1.id;
+
+            while (true)
+            {
+                if (curTriangle == -1)
                 {
-                    // we already have an edge to previous, because its part of the subdivided triangle t
+                    if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles.svg");
+                    printf("Failed to find cur triangle!");
+                    return true;
+                }
+
+                // proces this triangle
+                triangles[curTriangle].id = -1;
+
+                Triangle& cur = triangles[curTriangle];
+
+                if (cur.a.id == prev.id || cur.b.id == prev.id || cur.c.id == prev.id)
+                {
+                    // reached prev
+                    break;
                 }
                 else
                 {
-                    // no edge to previous
-                    Point dirToPrev = {
-                        prev.x - p.x,
-                        prev.y - p.y
-                    };
-
-                    // below p.id != t.a.id && p.id != t.b.id is needed for the connection phase, where the containing triangle is not split
-                    // below !(e1 == t.a.id && e2 == t.b.id) is needed for the connection phase, where the matching edge was split and t.a -> t.b no longer exists
-                    // TODO: simplify this based on previous split phase
-                    // TODO: skip conversion to glm
-                    bool i1 = !(e1 == t.a.id && e2 == t.b.id) && (p.id != t.a.id && p.id != t.b.id) && doLineSegmentsIntersect(t.a(), t.b(), p(), prev());
-                    bool i2 = !(e1 == t.b.id && e2 == t.c.id) && (p.id != t.b.id && p.id != t.c.id) && doLineSegmentsIntersect(t.b(), t.c(), p(), prev());
-                    bool i3 = !(e1 == t.c.id && e2 == t.a.id) && (p.id != t.c.id && p.id != t.a.id) && doLineSegmentsIntersect(t.c(), t.a(), p(), prev());
-
-                    int32_t startTriangle = -1;
-                    int32_t curTriangle = -1;
-                    std::vector<Point> boundary;
-                    std::vector<int32_t> tris;
-                    Edge prevEdge;
+                    // select new triangle
+                    bool i1 = !EdgeEqual(prevEdge, cur.a, cur.b)
+                        && doLineSegmentsIntersect(cur.a(), cur.b(), p(), prev());
+                    bool i2 = !EdgeEqual(prevEdge, cur.b, cur.c)
+                        && doLineSegmentsIntersect(cur.b(), cur.c(), p(), prev());
+                    bool i3 = !EdgeEqual(prevEdge, cur.c, cur.a)
+                        && doLineSegmentsIntersect(cur.c(), cur.a(), p(), prev());
+                    int32_t nextTriangle = -1;
                     if (i1)
                     {
-                        tris = FindTrianglesWithEdge(t.a.id, t.b.id, triangles);
-                        startTriangle = tris[0];
-                        curTriangle = tris.size() > 1 ? tris[1] : -1;
-                        if (!HasPoint(triangles[tris[0]], p.id))
-                        {
-                            std::swap(startTriangle, curTriangle);
-                        }
-                        prevEdge.a = t.b.id;
-                        prevEdge.b = t.a.id;
-                        boundary.push_back(t.a);
-                        boundary.push_back(t.b);
+                        nextTriangle = FindTriangleWithEdge(cur.b.id, cur.a.id, triangles);
+                        prevEdge.a = cur.b.id;
+                        prevEdge.b = cur.a.id;
+                        boundary.push_back(cur.a);
+                        boundary.push_back(cur.b);
                     }
                     else if (i2)
                     {
-                        tris = FindTrianglesWithEdge(t.b.id, t.c.id, triangles);
-                        startTriangle = tris[0];
-                        curTriangle = tris.size() > 1 ? tris[1] : -1;
-                        if (!HasPoint(triangles[tris[0]], p.id))
-                        {
-                            std::swap(startTriangle, curTriangle);
-                        }
-                        prevEdge.a = t.c.id;
-                        prevEdge.b = t.b.id;
-                        boundary.push_back(t.b);
-                        boundary.push_back(t.c);
+                        nextTriangle = FindTriangleWithEdge(cur.c.id, cur.b.id, triangles);
+                        prevEdge.a = cur.c.id;
+                        prevEdge.b = cur.b.id;
+                        boundary.push_back(cur.b);
+                        boundary.push_back(cur.c);
                     }
                     else if (i3)
                     {
-
-                        tris = FindTrianglesWithEdge(t.c.id, t.a.id, triangles);
-                        startTriangle = tris[0];
-                        curTriangle = tris.size() > 1 ? tris[1] : -1;
-                        if (!HasPoint(triangles[tris[0]], p.id))
-                        {
-                            std::swap(startTriangle, curTriangle);
-                        }
-                        prevEdge.a = t.a.id;
-                        prevEdge.b = t.c.id;
-                        boundary.push_back(t.c);
-                        boundary.push_back(t.a);
+                        nextTriangle = FindTriangleWithEdge(cur.a.id, cur.c.id, triangles);
+                        prevEdge.a = cur.a.id;
+                        prevEdge.b = cur.c.id;
+                        boundary.push_back(cur.c);
+                        boundary.push_back(cur.a);
                     }
-                    else
+
+                    if (nextTriangle == -1)
                     {
-                        if (split && didSplit)
-                        {
-                            if (isOnEdge)
-                            {
-                                // this can happen, we split one of the triangles and we're searching in the other direction
-                                // lets do a safe exit
-                                return false;
-                            }
-                            else
-                            {
-                                // this is weird!
-                                DumpSVGTriangles(triangles, p, prev, L"triangles.html");
-                                printf("Something went wrong 1!");
-                                return false;
-                            }
-                        }
-                        else
-                        {
-                            // didn't split, could be we're looking at the wrong triangle!
-                            return false;
-                        }
+                        Triangle tempCopyT = t;
+                        tempCopyT.id = 0;
+                        Triangle tempCopyCur = triangles[curTriangle];
+                        tempCopyCur.id = 0;
+                        DumpSVGTriangles({ tempCopyT, tempCopyCur }, p, prev, L"triangle.svg");
+
+                        DumpSVGTriangles(triangles, p, prev, L"triangles.svg");
+                        printf("Failed to find cur triangle!");
+                        return true;
                     }
 
-                    if (startTriangle == -1 || curTriangle == -1)
-                    {
-                        DumpSVGTriangles(triangles, p, prev, L"triangles.html");
-                        printf("Something went wrong 2!");
-                        return false;
-                    }
+                    curTriangle = nextTriangle;
+                }
+            }
 
-                    uint32_t drawnTriangle = curTriangle;
-
-                    triangles[startTriangle].id = -1;
-
-                    while (true)
-                    {
-                        if (curTriangle == -1)
-                        {
-                            DumpSVGTriangles(triangles, p, prev, L"triangles.html");
-                            printf("Failed to find cur triangle!");
-                            return true;
-                        }
-
-                        // proces this triangle
-                        triangles[curTriangle].id = -1;
-
-                        Triangle& cur = triangles[curTriangle];
-
-                        if (cur.a.id == prev.id || cur.b.id == prev.id || cur.c.id == prev.id)
-                        {
-                            // reached prev
-                            break;
-                        }
-                        else
-                        {
-                            // select new triangle
-                            bool i1 = !(prevEdge.a == cur.a.id && prevEdge.b == cur.b.id)
-                                && doLineSegmentsIntersect(cur.a(), cur.b(), p(), prev());
-                            bool i2 = !(prevEdge.a == cur.b.id && prevEdge.b == cur.c.id)
-                                && doLineSegmentsIntersect(cur.b(), cur.c(), p(), prev());
-                            bool i3 = !(prevEdge.a == cur.c.id && prevEdge.b == cur.a.id)
-                                && doLineSegmentsIntersect(cur.c(), cur.a(), p(), prev());
-                            int32_t nextTriangle = -1;
-                            if (i1)
-                            {
-                                nextTriangle = FindTriangleWithEdge(cur.b.id, cur.a.id, triangles);
-                                prevEdge.a = cur.b.id;
-                                prevEdge.b = cur.a.id;
-                                boundary.push_back(cur.a);
-                                boundary.push_back(cur.b);
-                            }
-                            else if (i2)
-                            {
-                                nextTriangle = FindTriangleWithEdge(cur.c.id, cur.b.id, triangles);
-                                prevEdge.a = cur.c.id;
-                                prevEdge.b = cur.b.id;
-                                boundary.push_back(cur.b);
-                                boundary.push_back(cur.c);
-                            }
-                            else if (i3)
-                            {
-                                nextTriangle = FindTriangleWithEdge(cur.a.id, cur.c.id, triangles);
-                                prevEdge.a = cur.a.id;
-                                prevEdge.b = cur.c.id;
-                                boundary.push_back(cur.c);
-                                boundary.push_back(cur.a);
-                            }
-
-                            if (nextTriangle == -1)
-                            {
-                                DumpSVGTriangles(triangles, p, prev, L"triangles.html");
-                                printf("Failed to find cur triangle!");
-                                return true;
-                            }
-
-                            curTriangle = nextTriangle;
-                        }
-                    }
-
-                    // remove duplicates
-                    std::vector<Point> boundaryDedupe = deduplicatePoints(boundary);
-                    
-                    // figure out what the mountains are
-                    std::vector<Point> boundaryUp;
-                    std::vector<Point> boundaryDown;
-
-                    for (auto& pt : boundaryDedupe)
-                    {
-                        if (isAboveLine(p, dirToPrev, pt))
-                        {
-                            boundaryUp.push_back(pt);
-                        }
-                        else
-                        {
-                            boundaryDown.push_back(pt);
-                        }
-                    }
-
-
-                    // now we have two boundaries and a line segment, we can create two monotone mountains and triangulate them
-                    boundaryUp.insert(boundaryUp.begin(), p);
-                    boundaryUp.push_back(prev);
-
-                    boundaryDown.insert(boundaryDown.begin(), p);
-                    boundaryDown.push_back(prev);
-                    std::reverse(boundaryDown.begin(), boundaryDown.end());
-
-                    triangulateBoundary(boundaryUp, triangles);
-                    triangulateBoundary(boundaryDown, triangles);
-
-                } 
-                
-            } 
-        }
-        return true;
+            TriangulateBoundary(p, prev, triangles, boundary);
+            return true;
+        } 
     }
 
     void addPoint(Point& p, Point& prev, std::vector<Triangle>& triangles)
     {
-        for (int i = 0; i < triangles.size(); i++)
+        // prevent infinite loops
+        int numTriangles = triangles.size();
+        for (int i = 0; i < numTriangles; i++)
         {
-            if (addPointToTriangle(triangles[i], p, prev, true, triangles))
+            if (triangles[i].id != -1)
             {
-                return;
+                if (addPointToTriangle(triangles[i], p, prev, triangles))
+                {
+                    return;
+                }
             }
         }
+        printf("no bueno");
     }
 
-    void closeLoop(Point& p, Point& prev, std::vector<Triangle>& triangles)
+    void connectPoints(Point& p, Point& prev, std::vector<Triangle>& triangles)
     {
-        for (int i = 0; i < triangles.size(); i++)
+        // prevent infinite loops
+        int numTriangles = triangles.size();
+        for (int i = 0; i < numTriangles; i++)
         {
-            if (addPointToTriangle(triangles[i], p, prev, false, triangles))
+            Triangle& t = triangles[i];
+            if (t.id != -1)
             {
-                return;
+                if (t.a.id == p.id || t.b.id == p.id || t.c.id == p.id)
+                {
+                    if (connectPointsFromTriangle(t, p, prev, triangles))
+                    {
+                        return;
+                    }
+                }
             }
         }
+        printf("no bueno");
     }
 
-    Point getPoint(const glm::dvec2& pt, std::vector<Point>& points)
+    Point getPoint(const glm::dvec2& pt, std::vector<Point>& points, bool& added)
     {
+        added = false;
         for (int i = 0; i < points.size(); i++)
         {
+            // TODO: looks like EPS_SMALL may not be enough here
             if (equals2d(pt, points[i](), EPS_SMALL))
             {
                 return points[i];
             }
         }
+        added = true;
         Point newPt = makePoint(pt.x, pt.y);
         points.push_back(newPt);
         return newPt;
@@ -599,38 +702,66 @@ namespace webifc
     {
         instance++;
 
+        if (instance == 6)
+        {
+            // printf("asdfasfd");
+        }
+
         triangleID = 0;
         pointID = 0;
 
         std::vector<Triangle> triangles;
         std::vector<Point> points;
-        Point pa = getPoint(a, points);
-        Point pb = getPoint(b, points);
-        Point pc = getPoint(c, points);
+        bool added;
+        Point pa = getPoint(a, points, added);
+        Point pb = getPoint(b, points, added);
+        Point pc = getPoint(c, points, added);
 
         makeTriangle(triangles, pa, pb, pc);
 
+        std::vector<glm::dvec2> sortedPoints;
         for (auto& loop : loops)
         {
-            Point prev;
             if (loop.hasOne)
             {
-                Point pt = getPoint(loop.v1, points);
-                addPoint(pt, prev, triangles);
-                prev = pt;
+                sortedPoints.push_back(loop.v1);
             }
             else
             {
-                Point pt1 = getPoint(loop.v1, points);
-
-                addPoint(pt1, prev, triangles);
-
-                Point pt2 = getPoint(loop.v2, points);
-
-                addPoint(pt2, pt1, triangles);
+                sortedPoints.push_back(loop.v1);
+                sortedPoints.push_back(loop.v2);
             }
         }
 
+        std::sort(sortedPoints.begin(), sortedPoints.end(), [&](glm::dvec2 v1, glm::dvec2 v2) {
+            double dist1 = std::min(glm::distance(v1, a), std::min(glm::distance(v1, b), glm::distance(v1, c)));
+            double dist2 = std::min(glm::distance(v2, a), std::min(glm::distance(v2, b), glm::distance(v2, c)));
+            return dist1 < dist2;
+        });
+
+        // add all the points to triangle a,b,c
+        for (auto& p : sortedPoints)
+        {
+            Point prev;
+            Point pt = getPoint(p, points, added);
+            if (added)
+            {
+                addPoint(pt, prev, triangles);
+                if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"triangles.svg");
+            }
+        }
+
+        // connect any loops that need connecting
+        for (auto& loop : loops)
+        {
+            if (!loop.hasOne)
+            {
+                Point pt1 = getPoint(loop.v1, points, added);
+                Point pt2 = getPoint(loop.v2, points, added);
+
+                connectPoints(pt1, pt2, triangles);
+            }
+        }
 
         return triangles;
     }

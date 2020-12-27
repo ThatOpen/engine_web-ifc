@@ -24,7 +24,7 @@
 
 #define CONST_PI 3.141592653589793238462643383279502884L
 
-const bool DEBUG_DUMP_SVG = true;
+const bool DEBUG_DUMP_SVG = false;
 
 namespace webifc
 {
@@ -177,8 +177,8 @@ namespace webifc
 						IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
 						auto flatVoidMesh = flatten(voidMesh);
 
-						DumpIfcGeometry(flatVoidMesh, L"void.obj");
-						DumpIfcGeometry(flatElementMesh, L"mesh.obj");
+						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
+						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
 
 						IfcGeometry m1;
 						IfcGeometry m2;
@@ -1014,7 +1014,7 @@ namespace webifc
 				for (auto& token : points)
 				{
 					uint32_t pointId = tokens[token].num;
-					curve.points.push_back(GetCartesianPoint2D(pointId));
+					curve.Add(GetCartesianPoint2D(pointId));
 				}
 
 				break;
@@ -1114,13 +1114,13 @@ namespace webifc
 						- radius * std::sinf(angle) // TODO: figure out why this has to be negative
 					);
 					glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
-					curve.points.push_back(pos);
+					curve.Add(pos);
 				}
 
 				// without a trim, we close the circle
 				if (!trim.exist)
 				{
-					curve.points.push_back(curve.points[startIndex]);
+					curve.Add(curve.points[startIndex]);
 				}
 
 				break;

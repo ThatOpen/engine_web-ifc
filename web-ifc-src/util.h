@@ -8,6 +8,7 @@
 
 namespace webifc
 {
+	const double EPS_TINY = 1e-9;
 	const double EPS_SMALL = 1e-6;
 	const double EPS_BIG = 1e-4;
 
@@ -52,9 +53,25 @@ namespace webifc
 		std::vector<Face> faces;
 	};
 
+	bool equals2d(glm::dvec2 A, glm::dvec2 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps;
+	}
+
 	struct IfcCurve
 	{
 		std::vector<glm::dvec2> points;
+		inline void Add(const glm::dvec2& pt)
+		{
+			if (points.empty())
+			{
+				points.push_back(pt);
+			}
+			else if (!equals2d(pt, points.back()))
+			{
+				points.push_back(pt);
+			}
+		}
 	};
 
 	struct IfcTrimmingSelect
@@ -160,7 +177,7 @@ namespace webifc
 
 		double maxSize = std::max(width, height);
 
-		if (width == 0 || height == 0)
+		if (width == 0 && height == 0)
 		{
 			printf("asdf");
 		}
@@ -185,7 +202,7 @@ namespace webifc
 
 		std::stringstream svg;
 
-		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "\">";
+		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "\" xmlns=\"http://www.w3.org/2000/svg\" >";
 
 		for (int i = 1; i < rescaled.size(); i++)
 		{
@@ -219,6 +236,23 @@ namespace webifc
         double x;
         double y;
         int32_t id = -1;
+
+		Point()
+		{
+
+		}
+
+		Point(double xx, double yy)
+		{
+			x = xx;
+			y = yy;
+		}
+
+		Point(glm::dvec2 p)
+		{
+			x = p.x;
+			y = p.y;
+		}
 
         glm::dvec2 operator()()
         {
@@ -294,7 +328,7 @@ namespace webifc
 		double width = max.x - min.x;
 		double height = max.y - min.y;
 
-		if (width == 0 || height == 0)
+		if (width == 0 && height == 0)
 		{
 			printf("asdf");
 		}
@@ -331,7 +365,7 @@ namespace webifc
 		double width = max.x - min.x;
 		double height = max.y - min.y;
 
-		if (width == 0 || height == 0)
+		if (width == 0 && height == 0)
 		{
 			printf("asdf");
 		}
@@ -354,7 +388,7 @@ namespace webifc
 	{
 		svg << "<line x1=\"" << a.x << "\" y1=\"" << a.y << "\" ";
 		svg << "x2=\"" << b.x << "\" y2=\"" << b.y << "\" ";
-		svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
+		svg << "style = \"stroke:rgb(255,0,0);stroke-width:1\" />";
 	}
 
 	std::string makeSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev)
@@ -366,7 +400,7 @@ namespace webifc
 
 		std::stringstream svg;
 
-		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "\">";
+		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "  \" xmlns=\"http://www.w3.org/2000/svg\" >";
 
 		for (auto& t : triangles)
 		{
@@ -408,14 +442,14 @@ namespace webifc
 
 	std::string makeSVGLines(std::vector<std::vector<glm::dvec2>> lines)
 	{
-		glm::dvec2 size(512, 512);
+		glm::dvec2 size(2048, 2048);
 		glm::dvec2 offset(5, 5);
 
 		Bounds bounds = getBounds(lines, size, offset);
 
 		std::stringstream svg;
 
-		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "\">";
+		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << " \" xmlns=\"http://www.w3.org/2000/svg\">";
 
 		for (auto& line : lines)
 		{
@@ -478,11 +512,6 @@ namespace webifc
 		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
 	}
 
-	bool equals2d(glm::dvec2 A, glm::dvec2 B, double eps = 0)
-	{
-		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps;
-	}
-
 	double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
 		glm::dvec3 ab = b - a;
@@ -502,14 +531,14 @@ namespace webifc
 		glm::dvec2 ac = c - a;
 
 		double norm = cross2d(ab, ac) / 2;
-		return norm;
+		return std::fabs(norm);
 	}
 
 	void CheckTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
 		if (areaOfTriangle(a, b, c) == 0)
 		{
-			printf("asdf");
+			printf("0 triangle\n");
 		}
 	}
 
@@ -517,7 +546,7 @@ namespace webifc
 	{
 		if (areaOfTriangle(pts[f.i0], pts[f.i1], pts[f.i2]) == 0)
 		{
-			printf("asdf");
+			printf("0 triangle\n");
 		}
 	}
 

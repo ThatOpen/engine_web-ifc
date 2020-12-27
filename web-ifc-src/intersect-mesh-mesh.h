@@ -11,7 +11,7 @@ namespace webifc
 {
     void addTri(IfcGeometry& geometry, glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
     {
-        if (areaOfTriangle(a, b, c) <= EPS_SMALL)
+        if (areaOfTriangle(a, b, c) == 0)
         {
             printf("0 triangle");
         }
@@ -121,6 +121,21 @@ namespace webifc
 
                 auto loops = makeLoops(a, b, c, ints);
 
+                if (!(loops.size() == 1 && loops[0].hasOne))
+                {
+                    std::vector<std::vector<glm::dvec2>> vecs;
+                    std::transform(loops.begin(), loops.end(), std::back_inserter(vecs), [](const Loop& l) -> std::vector<glm::dvec2> {
+                        return { l.v1, l.v2 };
+                    });
+
+                    vecs.push_back({ { pa.x, pa.y } });
+                    vecs.push_back({ { pb.x, pb.y } });
+                    vecs.push_back({ { pc.x, pc.y } });
+
+                    // DumpSVGLines(vecs, L"loops.html");
+                }
+
+
                 std::vector<std::vector<glm::dvec2>> lines;
 
                 for (auto& loop : loops)
@@ -214,9 +229,32 @@ namespace webifc
             }
         }
 
+        IfcGeometry m1;
+        IfcGeometry m2;
 
-        DumpIfcGeometry(mesh1, L"mesh1.obj");
-        DumpIfcGeometry(mesh2, L"mesh2.obj");
+        for (auto& i : meshIntersections1)
+        {
+            if (!i.second.empty())
+            {
+                Face f = mesh1.faces[i.first];
+                addTri(m1, mesh1.points[f.i0], mesh1.points[f.i1], mesh1.points[f.i2]);
+            }
+        }
+
+        for (auto& i : meshIntersections2)
+        {
+            if (!i.second.empty())
+            {
+                Face f = mesh2.faces[i.first];
+                addTri(m2, mesh2.points[f.i0], mesh2.points[f.i1], mesh2.points[f.i2]);
+            }
+        }
+
+        //DumpIfcGeometry(m1, L"mesh1ints.obj");
+        //DumpIfcGeometry(m2, L"mesh2ints.obj");
+
+        //DumpIfcGeometry(mesh1, L"mesh1.obj");
+        //DumpIfcGeometry(mesh2, L"mesh2.obj");
         result1 = std::move(retriangulateMesh(mesh1, meshIntersections1));
         result2 = std::move(retriangulateMesh(mesh2, meshIntersections2));
     }
