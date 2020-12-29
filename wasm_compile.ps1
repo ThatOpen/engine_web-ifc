@@ -5,6 +5,7 @@ $f_export = "[" + [string]::Join(',',
     ,"'_OpenModel'"
     ,"'_CloseModel'"
     ,"'_IsModelOpen'"
+    ,"'_GetExpressIdsWithType'"
 ) + "]";
 
 Write-Host "Exporting:"

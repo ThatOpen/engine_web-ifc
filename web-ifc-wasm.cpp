@@ -3,8 +3,10 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include "web-ifc-cpp/web-ifc.h"
+#include "web-ifc-interop/gen/Types.h"
 
 std::vector<webifc::IfcLoader> loaders;
 
@@ -25,14 +27,18 @@ std::string ReadFile(const std::string& filename)
     return buffer;
 }
 
-extern "C" int OpenModel(const std::string& filename)
+extern "C" int OpenModel(std::string filename)
 {
-    std::string content = ReadFile(filename);
+    std::cout << "Loading: " << filename << std::endl;
+
+    std::string content = ReadFile("filename");
 
     webifc::IfcLoader loader;
     uint32_t modelID = loaders.size();
     loaders.push_back(loader);
     loaders[modelID].LoadFile(content);
+
+    std::cout << "Loaded " << loaders[modelID].GetNumLines() << " lines!" << std::endl;
 
     return modelID;
 }
@@ -46,10 +52,15 @@ extern "C" void CloseModel(uint32_t modelID)
 }
 
 std::vector<uint32_t> expressIds;
-extern "C" void* GetExpressIdsWithType(uint32_t modelID, uint32_t type)
+ExpressIDList ExpressIDListMessage;
+
+extern "C" ExpressIDList* GetExpressIdsWithType(uint32_t modelID, uint32_t type)
 {
     expressIds = loaders[modelID].GetExpressIDsWithType(type);
-    return &expressIds[0];
+    ExpressIDListMessage.expressIds_data = &expressIds[0];
+    ExpressIDListMessage.expressIds_length = expressIds.size();
+
+    return &ExpressIDListMessage;
 }
 
 extern "C" bool IsModelOpen(uint32_t modelID)

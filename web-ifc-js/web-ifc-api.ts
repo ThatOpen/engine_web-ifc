@@ -1,4 +1,7 @@
 const wasm_module = require("./wasm-lib/web-ifc.js");
+import { ExpressIDList } from "../web-ifc-interop/gen/Types";
+
+export let module = wasm_module;
 
 export function ms() {
     return new Date().getTime();
@@ -15,9 +18,18 @@ function readInt32(ptr)
     return wasm_module.HEAP32[ptr/4];
 }
 
+export async function WaitForModuleReady()
+{
+    return new Promise((resolve, reject) => {
+        wasm_module["onRuntimeInitialized"] = () => {
+            resolve();
+        };
+    })
+}
+
 export function OpenModel(filename: string, data: string): number
 {
-    wasm_module['FS_createDataFile']('/', filename, data, true, true, true);
+    wasm_module['FS_createDataFile']('/', "filename", data, true, true, true);
     return wasm_module._OpenModel(filename);
 }
 
@@ -31,15 +43,10 @@ export function IsModelOpen(modelID: number): boolean
     return wasm_module._IsModelOpen(modelID);
 }
 
-export async function WaitForModuleReady()
+export function GetExpressIdsWithType(modelID: number, type: number): number
 {
-    return new Promise((resolve, reject) => {
-        wasm_module["onRuntimeInitialized"] = () => {
-            resolve();
-        };
-    })
+    return wasm_module._GetExpressIdsWithType(modelID, type);
 }
-
 
 wasm_module["onRuntimeInitialized"] = () => {
 

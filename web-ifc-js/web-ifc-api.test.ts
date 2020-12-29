@@ -1,6 +1,8 @@
 import * as API from "./web-ifc-api";
 import * as fs from "fs";
 
+import { ExpressIDList } from "../web-ifc-interop/gen/Types";
+
 function assert(name: string, clause: boolean)
 {
     if (!clause)
@@ -34,6 +36,9 @@ test('Test opening and closing file', async () => {
 
     assert("Model ID is initialized", modelID == 1);
     assert("Model ID is open", API.IsModelOpen(modelID));
+
+    let expressIds = ExpressIDList.expressIds(API.module, API.GetExpressIdsWithType(modelID, 1529196076)); // IFCSLAB
+    console.log(expressIds);
     
     API.CloseModel(modelID);
 

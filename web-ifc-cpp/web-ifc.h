@@ -132,6 +132,11 @@ namespace webifc
             _open = true;
 		}
 
+        int GetNumLines()
+        {
+            return lines.size();
+        }
+
 		std::vector<uint32_t>& GetLineIDsWithType(uint32_t type)
 		{
 			return ifcTypeToLineID[type];
