@@ -1,0 +1,25 @@
+{
+  "name": "txter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "watch": {
+    "start": {
+      "patterns": [
+        "./"
+      ],
+      "extensions": "js"
+    }
+  },
+  "scripts": {
+    "start": "node gen.js",
+    "watch": "npm-watch "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "npm-watch": "^0.7.0",
+    "watch": "^1.0.2"
+  },
+  "devDependencies": {}
+}

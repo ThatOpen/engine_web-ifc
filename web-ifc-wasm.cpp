@@ -45,6 +45,13 @@ extern "C" void CloseModel(uint32_t modelID)
     loaders[modelID] = loader;
 }
 
+std::vector<uint32_t> expressIds;
+extern "C" void* GetExpressIdsWithType(uint32_t modelID, uint32_t type)
+{
+    expressIds = loaders[modelID].GetExpressIDsWithType(type);
+    return &expressIds[0];
+}
+
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
     return loaders[modelID].IsOpen();
