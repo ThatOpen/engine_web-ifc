@@ -11,7 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="web-ifc-test.cpp" />
-    <ClCompile Include="web-ifc-wasm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="web-ifc-src\web-ifc.h">

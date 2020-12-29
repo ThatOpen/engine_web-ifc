@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "../deps/glm/glm/glm.hpp"
 
 #include "util.h"
 #include "is-inside-mesh.h"

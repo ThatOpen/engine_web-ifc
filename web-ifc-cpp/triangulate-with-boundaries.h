@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include <glm/glm.hpp>
+#include "../deps/glm/glm/glm.hpp"
 
 #include "util.h"
 #include "line-segment-intersect.h"

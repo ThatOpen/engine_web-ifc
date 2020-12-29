@@ -1,2 +1,6 @@
 TYPE ExpressIDList
 ARRAY UINT expressIds
+
+TYPE GeometryBuffer
+ARRAY FLOAT vertexData
+ARRAY UINT indexData

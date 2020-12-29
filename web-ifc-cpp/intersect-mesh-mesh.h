@@ -1,8 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
 #include <map>
 
+#include "../deps/glm/glm/glm.hpp"
 #include "util.h"
 #include "intersect-ray-tri.h"
 #include "triangulate-with-boundaries.h"

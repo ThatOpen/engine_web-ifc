@@ -4,13 +4,21 @@
 #include <fstream>
 #include <vector>
 
-#include <glm/glm.hpp>
+#include "../deps/glm/glm/glm.hpp"
 
 namespace webifc
 {
 	const double EPS_TINY = 1e-9;
 	const double EPS_SMALL = 1e-6;
 	const double EPS_BIG = 1e-4;
+
+    void writeFile(std::wstring filename, std::string data)
+    {
+    #ifdef _MSC_VER
+		std::ofstream out(L"debug_output/" + filename);
+		out << data;
+    #endif
+    }
 
 	struct Face
 	{
@@ -227,8 +235,7 @@ namespace webifc
 
 	void DumpSVGCurve(std::vector<glm::dvec2> points, std::wstring filename, std::vector<uint32_t> indices = {})
 	{
-		std::ofstream out(L"debug_output/" + filename);
-		out << makeSVGLines(points, indices);
+        writeFile(filename, makeSVGLines(points, indices));
 	}
 
     struct Point
@@ -475,14 +482,12 @@ namespace webifc
 
 	void DumpSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev, std::wstring filename)
 	{
-		std::ofstream out(L"debug_output/" + filename);
-		out << makeSVGTriangles(triangles, p, prev);
+        writeFile(filename, makeSVGTriangles(triangles, p, prev));
 	}
 
 	void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::wstring filename)
 	{
-		std::ofstream out(L"debug_output/" + filename);
-		out << makeSVGLines(lines);
+        writeFile(filename, makeSVGLines(lines));
 	}
 
 	bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
@@ -590,8 +595,7 @@ namespace webifc
 
 	void DumpIfcGeometry(const IfcGeometry& geom, std::wstring filename)
 	{
-		std::ofstream out(L"debug_output/" + filename);
 		int offset = 0;
-		out << ToObj(geom, offset);
+        writeFile(filename, ToObj(geom, offset));
 	}
 }

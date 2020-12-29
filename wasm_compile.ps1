@@ -6,6 +6,7 @@ $f_export = "[" + [string]::Join(',',
     ,"'_CloseModel'"
     ,"'_IsModelOpen'"
     ,"'_GetExpressIdsWithType'"
+    ,"'_GetFlattenedGeometry'"
 ) + "]";
 
 Write-Host "Exporting:"

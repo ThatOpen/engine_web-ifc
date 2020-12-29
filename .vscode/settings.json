@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "xiosbase": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "map": "cpp"
     }
 }

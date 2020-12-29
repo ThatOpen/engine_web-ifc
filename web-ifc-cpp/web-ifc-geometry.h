@@ -11,9 +11,9 @@
 #include <fstream>
 #include <iostream>
 
-#include <glm/glm.hpp>
-#include "deps/glm/glm/gtx/transform.hpp"
-#include "deps/earcut.hpp"
+#include "../deps/glm/glm/glm.hpp"
+#include "../deps/glm/glm/gtx/transform.hpp"
+#include "../deps/earcut.hpp"
 
 #include "intersect-mesh-mesh.h"
 #include "bool-mesh-mesh.h"
@@ -42,6 +42,12 @@ namespace webifc
 			return _geometry[index];
 		}
 
+		IfcGeometry GetFlattenedGeometry(uint64_t expressID)
+		{
+			auto mesh = GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+            return flatten(mesh);
+		}
+
 		IfcComposedMesh GetMesh(uint64_t expressID)
 		{
 			return GetMeshByLine(_loader.ExpressIDToLineID(expressID));
@@ -54,9 +60,8 @@ namespace webifc
 
 		void DumpMesh(IfcComposedMesh& mesh, std::wstring filename)
 		{
-			std::ofstream out(L"debug_output/" + filename);
 			int offset = 0;
-			out << ToObj(mesh, offset, NormalizeIFC);
+            writeFile(filename, ToObj(mesh, offset, NormalizeIFC));
 		}
 
 	private:

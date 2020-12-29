@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "../deps/glm/glm/glm.hpp"
 
 namespace webifc
 {

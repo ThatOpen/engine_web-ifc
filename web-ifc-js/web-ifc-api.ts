@@ -47,6 +47,10 @@ export function GetExpressIdsWithType(modelID: number, type: number): number
 {
     return wasm_module._GetExpressIdsWithType(modelID, type);
 }
+export function GetFlattenedGeometry(modelID: number, expressID: number): number
+{
+    return wasm_module._GetFlattenedGeometry(modelID, expressID);
+}
 
 wasm_module["onRuntimeInitialized"] = () => {
 

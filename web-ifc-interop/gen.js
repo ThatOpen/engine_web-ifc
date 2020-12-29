@@ -75,12 +75,32 @@ function GenTypescriptData(types)
             return "<unknown type>";
         }
     }
+
+    function typeToHEAPType(type)
+    {
+        if (type === "UINT")
+        {
+            return "HEAPU32";
+        }
+        if (type === "FLOAT")
+        {
+            return "HEAPF32";
+        }
+        else
+        {
+            return "<unknown type>";
+        }
+    }
     
     function ArrayTypeToTSType(type)
     {
         if (type === "UINT")
         {
             return "Uint32Array";
+        }
+        else if (type === "FLOAT")
+        {
+            return "Float32Array";
         }
         else
         {
@@ -101,8 +121,9 @@ function GenTypescriptData(types)
                 typeData.push(`\t{`);
                 let arrayOffset = field.offset / 4;
                 let lengthOffset = field.offset / 4 + 1;
-                typeData.push(`\t\tlet dataPtr = module.HEAP32[ptr/4 + ${arrayOffset}]/4;`);
-                typeData.push(`\t\treturn module.HEAP32.subarray(dataPtr, dataPtr + module.HEAP32[ptr/4 + ${lengthOffset}])`);
+                let heap = typeToHEAPType(field.elementType);
+                typeData.push(`\t\tlet dataPtr = module.HEAPU32[ptr/4 + ${arrayOffset}]/4;`);
+                typeData.push(`\t\treturn module.${heap}.subarray(dataPtr, dataPtr + module.HEAPU32[ptr/4 + ${lengthOffset}])`);
                 typeData.push(`\t}`);
             }
             else
@@ -112,6 +133,8 @@ function GenTypescriptData(types)
         });
 
         typeData.push(`};`);
+        typeData.push(``);
+        typeData.push(``);
         data += typeData.join("\n");
     });
 
@@ -140,6 +163,10 @@ function GenCPPData(types)
         {
             return "uint32_t*";
         }
+        else if (type === "FLOAT")
+        {
+            return "float*";
+        }
         else
         {
             return "<unknown type>";
@@ -165,6 +192,8 @@ function GenCPPData(types)
         });
 
         typeData.push(`};`);
+        typeData.push(``);
+        typeData.push(``);
         data += typeData.join("\n");
     });
 

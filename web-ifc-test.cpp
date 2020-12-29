@@ -22,8 +22,8 @@ int main()
 {
     std::cout << "Hello web IFC test!\n";
 
-    std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
-    // std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
+     std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
 
     std::string content = ReadFile(filename);
 
@@ -43,7 +43,11 @@ int main()
 
     bool writeFiles = true;
 
+    start = webifc::ms();
     auto mesh = geometryLoader.GetMesh(walls[0]);
+    time = webifc::ms() - start;
+    
+    std::cout << "First slab took " << time << "ms" << std::endl;
 
     if (writeFiles)
     {
