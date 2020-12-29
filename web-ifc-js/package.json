@@ -6,7 +6,7 @@
   "watch": {
     "start": {
       "patterns": [
-        "src"
+        "./"
       ],
       "extensions": "ts"
     }

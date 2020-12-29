@@ -1,6 +1,6 @@
 const wasm_module = require("./wasm-lib/web-ifc.js");
 
-let ms = () => {
+export function ms() {
     return new Date().getTime();
 }
 
@@ -24,6 +24,11 @@ export function OpenModel(filename: string, data: string): number
 export function CloseModel(modelID: number)
 {
     wasm_module._CloseModel(modelID);
+}
+
+export function IsModelOpen(modelID: number): boolean
+{
+    return wasm_module._IsModelOpen(modelID);
 }
 
 export async function WaitForModuleReady()

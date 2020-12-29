@@ -12,7 +12,11 @@ function assert(name: string, clause: boolean)
 async function test(name: string, f: any)
 {
     try {
+        let startTime = API.ms();
         await f();
+        let endTime = API.ms();
+        let time = endTime - startTime;
+        console.log(`Completed ${name} successfully in ${time}ms`);
     }
     catch(e)
     {
@@ -25,9 +29,13 @@ test('Test opening and closing file', async () => {
     let data = fs.readFileSync("B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc").toString();
 
     await API.WaitForModuleReady();
+
     let modelID = API.OpenModel("02_BIMcollab_Example_STR_optimized.ifc", data);
 
     assert("Model ID is initialized", modelID == 1);
-
+    assert("Model ID is open", API.IsModelOpen(modelID));
+    
     API.CloseModel(modelID);
+
+    assert("Model ID is closed", !API.IsModelOpen(modelID));
 });

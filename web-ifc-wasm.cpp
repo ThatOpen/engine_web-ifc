@@ -32,7 +32,7 @@ extern "C" int OpenModel(const std::string& filename)
     webifc::IfcLoader loader;
     uint32_t modelID = loaders.size();
     loaders.push_back(loader);
-    loader.LoadFile(content);
+    loaders[modelID].LoadFile(content);
 
     return modelID;
 }
@@ -43,6 +43,11 @@ extern "C" void CloseModel(uint32_t modelID)
 
     // overwrite old loader, thereby destructing it
     loaders[modelID] = loader;
+}
+
+extern "C" bool IsModelOpen(uint32_t modelID)
+{
+    return loaders[modelID].IsOpen();
 }
 
 struct s

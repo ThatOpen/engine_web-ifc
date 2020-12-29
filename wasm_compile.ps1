@@ -4,6 +4,7 @@ $f_export = "[" + [string]::Join(',',
     ,"'_getString'"
     ,"'_OpenModel'"
     ,"'_CloseModel'"
+    ,"'_IsModelOpen'"
 ) + "]";
 
 Write-Host "Exporting:"
