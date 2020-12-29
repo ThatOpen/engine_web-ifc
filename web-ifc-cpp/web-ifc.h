@@ -34,7 +34,7 @@ namespace webifc
 		}
 	}
 
-	__forceinline uint32_t crc32Simple(const void* buf, size_t len)
+	uint32_t crc32Simple(const void* buf, size_t len)
 	{
 		uint32_t c = 0 ^ 0xFFFFFFFF;
 		const uint8_t* u = static_cast<const uint8_t*>(buf);
@@ -128,6 +128,8 @@ namespace webifc
 			{
 				expressIDToLine[lines[i].expressID] = i;
 			}
+
+            _open = true;
 		}
 
 		std::vector<uint32_t>& GetLineIDsWithType(uint32_t type)
@@ -167,7 +169,14 @@ namespace webifc
 			return std::string(&buf[token.pos], token.end - token.pos);
 		}
 
+        bool IsOpen()
+        {
+            return _open;
+        }
+
 	private:
+        bool _open = false;
+
 		bool TokenizeLine()
 		{
 			static std::vector<IfcToken> line;
@@ -197,7 +206,7 @@ namespace webifc
 					{
 						if (buf[pos] == '\\')
 						{
-							prevSlash != prevSlash;
+							prevSlash = !prevSlash;
 						}
 						else
 						{

@@ -2,9 +2,9 @@
 #include <iostream>
 #include <fstream>
 
-#include "web-ifc-src/web-ifc.h"
-#include "web-ifc-src/web-ifc-geometry.h"
-#include "web-ifc-src/ifc2x3.h"
+#include "web-ifc-cpp/web-ifc.h"
+#include "web-ifc-cpp/web-ifc-geometry.h"
+#include "web-ifc-cpp/ifc2x3.h"
 
 std::string ReadFile(std::wstring filename)
 {
