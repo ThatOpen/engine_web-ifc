@@ -1,0 +1,30 @@
+{
+  "name": "txter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "watch": {
+    "start": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "ts"
+    }
+  },
+  "scripts": {
+    "start": "esbuild web-ifc-api.test.ts --bundle --platform=node --outfile=./wasm-lib/node-test-bundle.js && node ./wasm-lib/node-test-bundle.js",
+    "watch": "npm-watch "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/jest": "^26.0.14",
+    "npm-watch": "^0.7.0",
+    "watch": "^1.0.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.7.16",
+    "esbuild-jest": "^0.3.0-beta.0",
+    "jest": "^26.5.3"
+  }
+}
