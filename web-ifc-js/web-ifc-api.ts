@@ -1,21 +1,14 @@
-const wasm_module = require("./wasm-lib/web-ifc.js");
 import { ExpressIDList } from "../web-ifc-interop/gen/Types";
 
-export let module = wasm_module;
+let wasm_module = undefined;
+
+export  function SetModule(module: any)
+{
+    wasm_module = module;
+}
 
 export function ms() {
     return new Date().getTime();
-}
-
-function readString(ptr, len)
-{
-    let string = wasm_module.HEAP8.subarray(ptr, ptr + len);
-    return wasm_module.UTF8ArrayToString(string, 0);
-}
-
-function readInt32(ptr)
-{
-    return wasm_module.HEAP32[ptr/4];
 }
 
 export async function WaitForModuleReady()
@@ -51,38 +44,3 @@ export function GetFlattenedGeometry(modelID: number, expressID: number): number
 {
     return wasm_module._GetFlattenedGeometry(modelID, expressID);
 }
-
-wasm_module["onRuntimeInitialized"] = () => {
-
-    console.log("init");
-
-    {
-        let start = ms();
-        let ptr = wasm_module._getBuffer();
-        let end = ms();
-
-        let arr = wasm_module.HEAP8.subarray(ptr, ptr + 1000);
-        console.log(`Took ${end - start} ms`);
-        console.log(wasm_module.HEAP8[ptr + 1]);
-
-        console.log(arr);
-    }
-
-
-    {
-        let start = ms();
-        let str;
-        let value;
-        for (let i = 0; i < 100; i++)
-        {
-            let structPtr = wasm_module._getString();
-            str = readString(wasm_module.HEAP32[structPtr / 4], wasm_module.HEAP32[structPtr / 4 + 1]);
-            value = readInt32(structPtr + 8);
-        }
-        let end = ms();
-        console.log(`Took ${end - start} ms`);
-
-        console.log(str);
-        console.log(value);
-    }
-};

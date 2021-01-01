@@ -1,5 +1,8 @@
 import * as API from "./web-ifc-api";
 import * as fs from "fs";
+const wasm_module = require("./wasm-lib/web-ifc.js");
+
+API.SetModule(wasm_module);
 
 import { ExpressIDList, GeometryBuffer } from "../web-ifc-interop/gen/Types";
 
