@@ -1,5 +1,13 @@
 import * as API from "../web-ifc-js/web-ifc-api";
 
+async function LoadModel(data: Uint8Array)
+{
+    let start = API.ms();
+    API.OpenModel("example.ifc", data);
+    let time = API.ms() - start;
+    console.log(`Opening model took ${time} ms`);
+}
+
 async function fileInputChanged()
 {
     let fileInput = document.getElementById("finput");
@@ -19,14 +27,10 @@ async function fileInputChanged()
 
     var fr = new FileReader();
     fr.onload = function() {
-        console.log("Open Model");
-        API.OpenModel("example.ifc", fr.result);
-
-        console.log("Model open");
-
+        LoadModel(new Uint8Array(fr.result));
         fileInput.value = '';
     };
-    fr.readAsText(file);
+    fr.readAsArrayBuffer(file);
 }
 
 //@ts-ignore

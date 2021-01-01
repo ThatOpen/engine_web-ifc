@@ -20,9 +20,10 @@ export async function WaitForModuleReady()
     })
 }
 
-export function OpenModel(filename: string, data: string): number
+export function OpenModel(filename: string, data: string | Uint8Array): number
 {
     wasm_module['FS_createDataFile']('/', "filename", data, true, true, true);
+    console.log("Wrote file");
     return wasm_module._OpenModel(filename);
 }
 
