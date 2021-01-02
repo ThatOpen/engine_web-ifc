@@ -230,6 +230,8 @@ namespace webifc
 			svg << "<polygon points=\"" << a.x << "," << a.y << " " << b.x << "," << b.y << " " << c.x << "," << c.y << "\" style=\"fill:gray; stroke:none; stroke - width:0\" />`;";
 		}
 
+		svg << "</svg>";
+
 		return svg.str();
 	}
 
@@ -436,6 +438,8 @@ namespace webifc
 			svg << "<circle cx = \"" << rprev.x << "\" cy = \"" << rprev.y << "\" r = \"3\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
 		}
 
+		svg << "</svg>";
+
 		return svg.str();
 	}
 
@@ -476,6 +480,8 @@ namespace webifc
 				svg << "<circle cx = \"" << a.x << "\" cy = \"" << a.y << "\" r = \"3\" style = \"stroke:rgb(0,0,255);stroke-width:2\" />";
 			}
 		}
+
+		svg << "</svg>";
 
 		return svg.str();
 	}

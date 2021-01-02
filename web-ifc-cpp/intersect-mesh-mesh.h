@@ -132,7 +132,7 @@ namespace webifc
                     vecs.push_back({ { pb.x, pb.y } });
                     vecs.push_back({ { pc.x, pc.y } });
 
-                    // DumpSVGLines(vecs, L"loops.html");
+                    DumpSVGLines(vecs, L"loops.html");
                 }
 
 

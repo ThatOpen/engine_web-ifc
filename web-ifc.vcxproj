@@ -22,16 +22,16 @@
     <ClCompile Include="web-ifc-test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="web-ifc-src\bool-mesh-mesh.h" />
-    <ClInclude Include="web-ifc-src\ifc2x3.h" />
-    <ClInclude Include="web-ifc-src\intersect-mesh-mesh.h" />
-    <ClInclude Include="web-ifc-src\intersect-ray-tri.h" />
-    <ClInclude Include="web-ifc-src\is-inside-mesh.h" />
-    <ClInclude Include="web-ifc-src\line-segment-intersect.h" />
-    <ClInclude Include="web-ifc-src\triangulate-with-boundaries.h" />
-    <ClInclude Include="web-ifc-src\util.h" />
-    <ClInclude Include="web-ifc-src\web-ifc-geometry.h" />
-    <ClInclude Include="web-ifc-src\web-ifc.h" />
+    <ClInclude Include="web-ifc-cpp\bool-mesh-mesh.h" />
+    <ClInclude Include="web-ifc-cpp\ifc2x3.h" />
+    <ClInclude Include="web-ifc-cpp\intersect-mesh-mesh.h" />
+    <ClInclude Include="web-ifc-cpp\intersect-ray-tri.h" />
+    <ClInclude Include="web-ifc-cpp\is-inside-mesh.h" />
+    <ClInclude Include="web-ifc-cpp\line-segment-intersect.h" />
+    <ClInclude Include="web-ifc-cpp\triangulate-with-boundaries.h" />
+    <ClInclude Include="web-ifc-cpp\util.h" />
+    <ClInclude Include="web-ifc-cpp\web-ifc-geometry.h" />
+    <ClInclude Include="web-ifc-cpp\web-ifc.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -5,43 +5,43 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="web-ifc-src">
-      <UniqueIdentifier>{355b2b93-f5a9-41d7-a33e-456c7f146a73}</UniqueIdentifier>
+    <Filter Include="web-ifc-cpp">
+      <UniqueIdentifier>{c8c958a5-9e2c-4a1c-911d-1a80cf28be5e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="web-ifc-test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="web-ifc-src\web-ifc.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\bool-mesh-mesh.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\ifc2x3.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\ifc2x3.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\web-ifc-geometry.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\intersect-mesh-mesh.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\util.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\intersect-ray-tri.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\bool-mesh-mesh.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\is-inside-mesh.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\intersect-mesh-mesh.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\line-segment-intersect.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\intersect-ray-tri.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\triangulate-with-boundaries.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\is-inside-mesh.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\util.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\triangulate-with-boundaries.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\web-ifc.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-src\line-segment-intersect.h">
-      <Filter>web-ifc-src</Filter>
+    <ClInclude Include="web-ifc-cpp\web-ifc-geometry.h">
+      <Filter>web-ifc-cpp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

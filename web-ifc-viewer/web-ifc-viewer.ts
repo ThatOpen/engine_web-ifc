@@ -15,6 +15,7 @@ async function LoadModel(data: Uint8Array)
     let time = API.ms() - start;
     console.log(`Opening model took ${time} ms`);
     
+    let startGeomTime = API.ms();
     let slabs = API.GetExpressIdsWithType(modelID, 1529196076).expressIds(); // IFCSLAB
     for (let i = 0; i < slabs.length; i++)
     {
@@ -27,6 +28,15 @@ async function LoadModel(data: Uint8Array)
     {
         AddDefaultGeometryForExpressID(modelID, walls[i]);
     }
+    
+    walls = API.GetExpressIdsWithType(modelID, 2391406946).expressIds(); // IFCWALL
+    for (let i = 0; i < walls.length; i++)
+    {
+        AddDefaultGeometryForExpressID(modelID, walls[i]);
+    }
+    let endGeomTime = API.ms();
+    let totalGeomTime = endGeomTime - startGeomTime;
+    console.log(`Loading geometry took ${totalGeomTime} ms`);
 }
 
 function AddDefaultGeometryForExpressID(modelID: number, expressID: number)

@@ -268,17 +268,20 @@ namespace webifc
         }
     }
 
-    std::vector<Point> deduplicatePoints(std::vector<Point>& pts)
+    std::vector<Point> deduplicateConcecutivePoints(std::vector<Point>& pts)
     {
-        std::map<int32_t, bool> indicesmap = {};
         std::vector<Point> result;
 
-        for (int i = 0; i < pts.size(); i++)
+        if (!pts.empty())
+        {
+            result.push_back(pts[0]);
+        }
+        for (int i = 1; i < pts.size(); i++)
         {
             Point& p = pts[i];
-            if (!indicesmap[p.id])
+            Point& prev = pts[i - 1];
+            if (p.id != prev.id)
             {
-                indicesmap[p.id] = true;
                 result.push_back(p);
             }
         }
@@ -341,6 +344,20 @@ namespace webifc
         DumpSVGTriangles(temp, p, prev, L"triangle.svg");
     }
 
+    void DeleteTriangle(int id, std::vector<Triangle>& triangles)
+    {
+        auto t = triangles[id];
+     /*
+        int a = 5;
+        int b = 72;
+        if ((t.a.id == a && t.b.id == b) || (t.b.id == a && t.c.id == b) || (t.c.id == a && t.a.id == b))
+        {
+            printf("asdf");
+        }
+        */
+        triangles[id].id = -1;
+    }
+
     bool addPointToTriangle(Triangle t, Point& p, Point& prev, std::vector<Triangle>& triangles)
     {
         bool isInTriangle = PointInTriangle(t, p);
@@ -385,7 +402,7 @@ namespace webifc
 
             if (tri1 != -1)
             {
-                triangles[tri1].id = -1;
+                DeleteTriangle(tri1, triangles);
 
                 Point tri1p = GetOtherPoint(triangles[tri1], pA.id, pB.id);
                 makeTriangle(triangles, pA, p, tri1p);
@@ -401,7 +418,7 @@ namespace webifc
 
             if (tri2 != -1)
             {
-                triangles[tri2].id = -1;
+                DeleteTriangle(tri2, triangles);
 
                 Point tri2p = GetOtherPoint(triangles[tri2], pA.id, pB.id);
                 makeTriangle(triangles, pA, tri2p, p);
@@ -425,9 +442,8 @@ namespace webifc
             makeTriangle(triangles, t.a, p, t.c);
             makeTriangle(triangles, p, t.b, t.c);
 
-            // TODO: t is a copy!
-            triangles[t.id].id = -1;
-            t.id = -1;
+
+            DeleteTriangle(t.id, triangles);
 
             if (DUMP_SVG_TRIANGLES) DumpPrevTriangles(3, p, prev, triangles);
 
@@ -442,14 +458,11 @@ namespace webifc
             prev.y - p.y
         };
 
-        // remove duplicates
-        std::vector<Point> boundaryDedupe = deduplicatePoints(boundary);
-
         // figure out what the mountains are
         std::vector<Point> boundaryUp;
         std::vector<Point> boundaryDown;
 
-        for (auto& pt : boundaryDedupe)
+        for (auto& pt : boundary)
         {
             if (isAboveLine(p, dirToPrev, pt))
             {
@@ -460,6 +473,10 @@ namespace webifc
                 boundaryDown.push_back(pt);
             }
         }
+
+        // remove consecutive duplicates
+        boundaryUp = deduplicateConcecutivePoints(boundaryUp);
+        boundaryDown = deduplicateConcecutivePoints(boundaryDown);
 
 
         // now we have two boundaries and a line segment, we can create two monotone mountains and triangulate them
@@ -552,9 +569,8 @@ namespace webifc
 
             uint32_t drawnTriangle = curTriangle;
 
-            triangles[t.id].id = -1;
-            t.id = -1;
-            triangles[curTriangle].id = -1;
+            DeleteTriangle(t.id, triangles);
+            DeleteTriangle(curTriangle, triangles);
             if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles0.svg");
 
             std::vector<Point> boundary;
@@ -575,7 +591,7 @@ namespace webifc
                 }
 
                 // proces this triangle
-                triangles[curTriangle].id = -1;
+                DeleteTriangle(curTriangle, triangles);
 
                 Triangle& cur = triangles[curTriangle];
 
