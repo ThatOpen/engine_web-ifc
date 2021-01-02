@@ -5,7 +5,7 @@ import { GeometryBuffer } from "../web-ifc-interop/gen/Types";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 let controls;
 
 async function LoadModel(data: Uint8Array)
@@ -16,19 +16,28 @@ async function LoadModel(data: Uint8Array)
     console.log(`Opening model took ${time} ms`);
     
     let slabs = API.GetExpressIdsWithType(modelID, 1529196076).expressIds(); // IFCSLAB
-    console.log(slabs);
     for (let i = 0; i < slabs.length; i++)
     {
         let slabEID = slabs[i];
-        console.log(`Adding slab ${slabEID}`);
-        let flatGeometry = API.GetFlattenedGeometry(modelID, slabEID);
-        let threeGeometry = IfcGeometryToThreejs(flatGeometry);
-        threeGeometry.computeFaceNormals();
-        
-        const material = new THREE.MeshPhongMaterial( { color: 0xDDDDDD } );
-        let mesh = new THREE.Mesh( threeGeometry, material );
-        scene.add( mesh );
+        AddDefaultGeometryForExpressID(modelID, slabEID);
     }
+    
+    let walls = API.GetExpressIdsWithType(modelID, 3512223829).expressIds(); // IFCWALLSTANDARDCASE
+    for (let i = 0; i < walls.length; i++)
+    {
+        AddDefaultGeometryForExpressID(modelID, walls[i]);
+    }
+}
+
+function AddDefaultGeometryForExpressID(modelID: number, expressID: number)
+{
+    let flatGeometry = API.GetFlattenedGeometry(modelID, expressID);
+    let threeGeometry = IfcGeometryToThreejs(flatGeometry);
+    threeGeometry.computeFaceNormals();
+    
+    const material = new THREE.MeshPhongMaterial( { color: 0xDDDDDD } );
+    let mesh = new THREE.Mesh( threeGeometry, material );
+    scene.add( mesh );
 }
 
 async function fileInputChanged()
@@ -101,7 +110,7 @@ function Init3DView()
     controls = new OrbitControls( camera, renderer.domElement )
 
     const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
+    const material = new THREE.MeshPhongMaterial( { color: 0xffffff } );
     cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
     
@@ -116,6 +125,8 @@ function Init3DView()
     
     const ambientLight = new THREE.AmbientLight( 0xffffee, 0.25 );
     scene.add( ambientLight );
+
+    scene.background = new THREE.Color(0x8cc7de)
 
     camera.position.z = 5;
 }
