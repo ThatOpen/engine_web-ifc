@@ -44,7 +44,7 @@ int main()
     bool writeFiles = true;
 
     start = webifc::ms();
-    auto mesh = geometryLoader.GetFlattenedGeometry(walls[5]);
+    auto mesh = geometryLoader.GetFlattenedGeometry(walls[42]);
     time = webifc::ms() - start;
     
     std::cout << "First slab took " << time << "ms" << std::endl;

@@ -54,7 +54,8 @@ namespace webifc
 
     bool isConvex(const Point& a, const Point& b, const Point& c)
     {
-        return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) < 0;
+        double sign = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+        return sign < -EPS_MINISCULE;
     }
 
     Point makePoint(double x, double y)
@@ -255,6 +256,7 @@ namespace webifc
                 {
                     notConvex = true;
                 }
+
                 if (i != 1 && isConvex(boundary[i - 2], boundary[i - 1], boundary[i]))
                 {
                     i = i - 1;
@@ -347,14 +349,26 @@ namespace webifc
     void DeleteTriangle(int id, std::vector<Triangle>& triangles)
     {
         auto t = triangles[id];
-     /*
-        int a = 5;
-        int b = 72;
+     
+        /*
+        int a = 17;
+        int b = 18;
         if ((t.a.id == a && t.b.id == b) || (t.b.id == a && t.c.id == b) || (t.c.id == a && t.a.id == b))
         {
             printf("asdf");
         }
+        
+        int check = 18;
+        if (t.a.id == 18 || t.b.id == 18 || t.c.id == 18)
+        {
+            printf("asdf");
+        }
+        if (t.id == 43)
+        {
+            printf("asdf");
+        }
         */
+
         triangles[id].id = -1;
     }
 
@@ -569,6 +583,7 @@ namespace webifc
 
             uint32_t drawnTriangle = curTriangle;
 
+            if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"trianglesx.svg");
             DeleteTriangle(t.id, triangles);
             DeleteTriangle(curTriangle, triangles);
             if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles0.svg");

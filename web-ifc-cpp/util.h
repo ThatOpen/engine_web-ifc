@@ -8,6 +8,7 @@
 
 namespace webifc
 {
+	const double EPS_MINISCULE = 1e-12; // what?
 	const double EPS_TINY = 1e-9;
 	const double EPS_SMALL = 1e-6;
 	const double EPS_BIG = 1e-4;
