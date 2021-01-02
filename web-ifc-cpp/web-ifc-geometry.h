@@ -45,7 +45,7 @@ namespace webifc
 		IfcGeometry GetFlattenedGeometry(uint64_t expressID)
 		{
 			auto mesh = GetMeshByLine(_loader.ExpressIDToLineID(expressID));
-            return flatten(mesh);
+            return flatten(mesh, NormalizeIFC);
 		}
 
 		IfcComposedMesh GetMesh(uint64_t expressID)

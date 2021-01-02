@@ -154,10 +154,10 @@ namespace webifc
 		}
 	}
 
-	IfcGeometry flatten(IfcComposedMesh& mesh)
+	IfcGeometry flatten(IfcComposedMesh& mesh, glm::dmat4 mat = glm::dmat4(1))
 	{
 		IfcGeometry geom;
-		flattenRecursive(mesh, geom, glm::dmat4(1));
+		flattenRecursive(mesh, geom, mat);
 		return geom;
 	}
 
