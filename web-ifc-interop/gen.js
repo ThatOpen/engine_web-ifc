@@ -110,20 +110,31 @@ function GenTypescriptData(types)
 
     types.forEach(type => {
         let typeData = [];
+        typeData.push(``);
+        typeData.push(`// this is generated code, do not modify`);
         typeData.push(`export class ${type.name}`);
         typeData.push("{");
+        typeData.push("\tprivate module: any = undefined;");
+        typeData.push("\tprivate ptr: number = -1;");
+        typeData.push(``);
+        typeData.push("\tconstructor(module: any, ptr: number)");
+        typeData.push("\t{");
+        typeData.push("\t\tthis.module = module;");
+        typeData.push("\t\tthis.ptr = ptr;");
+        typeData.push("\t}");
+        typeData.push("");
 
         type.fields.forEach(field => {
             if (field.type === "ARRAY")
             {  
                 let tsElementType = ArrayTypeToTSType(field.elementType);
-                typeData.push(`\tstatic ${field.name}(module: any, ptr: number): ${tsElementType}`);
+                typeData.push(`\t${field.name}(): ${tsElementType}`);
                 typeData.push(`\t{`);
                 let arrayOffset = field.offset / 4;
                 let lengthOffset = field.offset / 4 + 1;
                 let heap = typeToHEAPType(field.elementType);
-                typeData.push(`\t\tlet dataPtr = module.HEAPU32[ptr/4 + ${arrayOffset}]/4;`);
-                typeData.push(`\t\treturn module.${heap}.subarray(dataPtr, dataPtr + module.HEAPU32[ptr/4 + ${lengthOffset}])`);
+                typeData.push(`\t\tlet dataPtr = this.module.HEAPU32[this.ptr/4 + ${arrayOffset}]/4;`);
+                typeData.push(`\t\treturn this.module.${heap}.subarray(dataPtr, dataPtr + this.module.HEAPU32[this.ptr/4 + ${lengthOffset}])`);
                 typeData.push(`\t}`);
             }
             else

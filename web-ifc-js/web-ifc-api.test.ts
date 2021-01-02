@@ -40,23 +40,23 @@ test('Test opening and closing file', async () => {
     assert("Model ID is initialized", modelID == 1);
     assert("Model ID is open", API.IsModelOpen(modelID));
 
-    let expressIds;
+    let expressIds: ExpressIDList;
     {
         let start = API.ms();
-        expressIds = ExpressIDList.expressIds(API.module, API.GetExpressIdsWithType(modelID, 1529196076)); // IFCSLAB
+        expressIds = API.GetExpressIdsWithType(modelID, 1529196076); // IFCSLAB
         let time = API.ms() - start;
         console.log(`Call took ${time} ms`);
         console.log(expressIds);
     }
 
-    let firstSlabExpressId = expressIds[0];
+    let firstSlabExpressId = expressIds.expressIds[0];
     console.log(firstSlabExpressId);
 
     {
         let start = API.ms();
-        let geometryPtr = API.GetFlattenedGeometry(modelID, firstSlabExpressId);
-        let vertexData = GeometryBuffer.vertexData(API.module, geometryPtr)
-        let indexData = GeometryBuffer.indexData(API.module, geometryPtr)
+        let geometryBuffer = API.GetFlattenedGeometry(modelID, firstSlabExpressId);
+        let vertexData = geometryBuffer.vertexData();
+        let indexData = geometryBuffer.indexData();
         let time = API.ms() - start;
         console.log(`Call took ${time} ms`);
 

@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "npm-watch": "^0.7.0",
+    "three": "^0.124.0",
     "watch": "^1.0.2"
   },
   "devDependencies": {
