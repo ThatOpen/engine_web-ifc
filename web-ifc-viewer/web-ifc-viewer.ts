@@ -23,8 +23,9 @@ async function LoadModel(data: Uint8Array)
         console.log(`Adding slab ${slabEID}`);
         let flatGeometry = API.GetFlattenedGeometry(modelID, slabEID);
         let threeGeometry = IfcGeometryToThreejs(flatGeometry);
+        threeGeometry.computeFaceNormals();
         
-        const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
+        const material = new THREE.MeshPhongMaterial( { color: 0xDDDDDD } );
         let mesh = new THREE.Mesh( threeGeometry, material );
         scene.add( mesh );
     }
@@ -100,9 +101,21 @@ function Init3DView()
     controls = new OrbitControls( camera, renderer.domElement )
 
     const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    const material = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
     cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
+    
+    const directionalLight1 = new THREE.DirectionalLight( 0xffeeff, 0.8 );
+    directionalLight1.position.set(1, 1, 1);
+    scene.add( directionalLight1 );
+    
+    const directionalLight2 = new THREE.DirectionalLight( 0xffffff, 0.8 );
+    directionalLight2.position.set(-1, 0.5, -1);
+    scene.add( directionalLight2 );
+    
+    
+    const ambientLight = new THREE.AmbientLight( 0xffffee, 0.25 );
+    scene.add( ambientLight );
 
     camera.position.z = 5;
 }
