@@ -202,7 +202,8 @@ namespace webifc
 				{
 					pos++;
 					continue;
-				}else if (c == '\'')
+				}
+				else if (c == '\'')
 				{
 					pos++;
 					bool prevSlash = false;

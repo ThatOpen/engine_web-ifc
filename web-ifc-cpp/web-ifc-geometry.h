@@ -155,6 +155,7 @@ namespace webifc
 			{
 			case ifc2x3::IFCCOLUMN:
 			case ifc2x3::IFCSLAB:
+			case ifc2x3::IFCWALL:
 			case ifc2x3::IFCBEAM:
 			case ifc2x3::IFCFOOTING:
 			case ifc2x3::IFCOPENINGELEMENT:

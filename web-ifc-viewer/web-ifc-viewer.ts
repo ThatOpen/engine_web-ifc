@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GeometryBuffer } from "../web-ifc-interop/gen/Types";
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 let controls;
 
@@ -14,7 +14,7 @@ async function LoadModel(data: Uint8Array)
     let modelID = API.OpenModel("example.ifc", data);
     let time = API.ms() - start;
     console.log(`Opening model took ${time} ms`);
-    
+
     let startGeomTime = API.ms();
     let slabs = API.GetExpressIdsWithType(modelID, 1529196076).expressIds(); // IFCSLAB
     for (let i = 0; i < slabs.length; i++)
@@ -34,6 +34,19 @@ async function LoadModel(data: Uint8Array)
     {
         AddDefaultGeometryForExpressID(modelID, walls[i]);
     }
+
+    let elements = API.GetExpressIdsWithType(modelID, 753842376).expressIds(); // IFCBEAM
+    for (let i = 0; i < elements.length; i++)
+    {
+        AddDefaultGeometryForExpressID(modelID, elements[i]);
+    }
+
+    elements = API.GetExpressIdsWithType(modelID, 843113511).expressIds(); // IFCCOLUMN
+    for (let i = 0; i < elements.length; i++)
+    {
+        AddDefaultGeometryForExpressID(modelID, elements[i]);
+    }
+
     let endGeomTime = API.ms();
     let totalGeomTime = endGeomTime - startGeomTime;
     console.log(`Loading geometry took ${totalGeomTime} ms`);
