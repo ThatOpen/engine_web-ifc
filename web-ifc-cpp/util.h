@@ -605,4 +605,115 @@ namespace webifc
 		int offset = 0;
         writeFile(filename, ToObj(geom, offset));
 	}
+
+	//! This is essentially a chunked tightly packed dynamic array
+	template<uint32_t N>
+	class DynamicTape
+	{
+	public:
+		DynamicTape()
+		{
+			AddChunk();
+		}
+
+		inline void AddChunk()
+		{
+			frontChunk = new uint8_t[N];
+			chunks.push_back(frontChunk);
+			sizes.push_back(0);
+			frontSize = &sizes.back();
+		}
+
+		inline void CheckChunk(unsigned long long size)
+		{
+			if (*frontSize + size >= N)
+			{
+				AddChunk();
+			}
+		}
+
+		inline void push(char v)
+		{
+			CheckChunk(1);
+			frontChunk[*frontSize] = v;
+			*frontSize += 1;
+		}
+
+		inline void push(void* v, unsigned long long size)
+		{
+			CheckChunk(size);
+			memcpy(frontChunk + *frontSize, v, size);
+			*frontSize += size;
+		}
+
+		uint64_t GetTotalSize()
+		{
+			return chunks.size() * N;
+		}
+
+		void Reset()
+		{
+			readChunkIndex = 0;
+			readPtr = 0;
+		}
+
+		template <typename T>
+		inline T Read()
+		{
+			uint8_t* chunk = chunks[readChunkIndex];
+			uint8_t* valuePtr = &chunk[readPtr];
+			T v = *(T*)(valuePtr);
+			AdvanceRead(sizeof(T));
+			return v;
+		}
+
+		inline void Reverse()
+		{
+			if (readPtr > 0)
+			{
+				readPtr--;
+			}
+			else
+			{
+				readChunkIndex--;
+				readPtr = sizes[readChunkIndex] - 1;
+			}
+		}
+
+		inline bool AtEnd()
+		{
+			return readChunkIndex == chunks.size();
+		}
+
+		inline uint32_t GetReadOffset()
+		{
+			return readChunkIndex * N + readPtr;
+		}
+
+		inline void MoveTo(uint32_t pos)
+		{
+			readChunkIndex = pos / N;
+			readPtr = pos % N;
+		}
+
+	private:
+
+		inline void AdvanceRead(unsigned long long size)
+		{
+			readPtr += size;
+			if (readPtr == sizes[readChunkIndex])
+			{
+				readChunkIndex++;
+				readPtr = 0;
+			}
+		}
+
+		uint32_t readPtr = 0;
+		uint32_t readChunkIndex = 0;
+		uint8_t* frontChunk = nullptr;
+		size_t* frontSize = nullptr;
+		std::vector<uint8_t*> chunks;
+		std::vector<size_t> sizes;
+	};
+
 }

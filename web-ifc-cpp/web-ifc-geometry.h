@@ -65,56 +65,6 @@ namespace webifc
 		}
 
 	private:
-		int GetArgumentOffset(std::vector<IfcToken>& line, int argumentIndex)
-		{
-			// first tokens are ref, type, openset, start at 3
-			int currentArgument = 0;
-			bool insideSet = false; // assume no nested sets
-			for (int i = 3; i < line.size(); i++)
-			{
-				if (currentArgument == argumentIndex)
-				{
-					return i;
-				}
-
-				if (line[i].type == IfcTokenType::SET_BEGIN)
-				{
-					insideSet = true;
-				}
-				if (line[i].type == IfcTokenType::SET_END)
-				{
-					insideSet = false;
-				}
-
-				if (!insideSet)
-				{
-					currentArgument++;
-				}
-			}
-		}
-
-		std::string GetStringArgument(std::vector<IfcToken>& line, int argumentIndex)
-		{
-			int offset = GetArgumentOffset(line, argumentIndex);
-			IfcToken& str = line[offset];
-			return _loader.GetString(str);
-		}
-
-		inline std::vector<uint32_t> GetSetArgument(std::vector<IfcToken>& line, int argumentIndex)
-		{
-			std::vector<uint32_t> tokenIds;
-			int offset = GetArgumentOffset(line, argumentIndex) + 1;
-			for (int i = offset; i < line.size(); i++)
-			{
-				if (line[i].type == IfcTokenType::SET_END)
-				{
-					break;
-				}
-				tokenIds.push_back(i);
-			}
-
-			return tokenIds;
-		}
 
 		void PopulateRelVoidsMap()
 		{
@@ -126,8 +76,10 @@ namespace webifc
 				auto& line = _loader.GetLine(lineID);
 				auto& tokens = _loader.GetLineTokens(lineID);
 
-				uint64_t relatingBuildingElement = tokens[GetArgumentOffset(tokens, 4)].num;
-				uint64_t relatedOpeningElement = tokens[GetArgumentOffset(tokens, 5)].num;
+				_loader.MoveToArgumentOffset(line, 4);
+
+				uint64_t relatingBuildingElement = _loader.GetRefArgument();
+				uint64_t relatedOpeningElement = _loader.GetRefArgument();
 
 				_relVoids[relatingBuildingElement].push_back(relatedOpeningElement);
 			}
@@ -163,8 +115,9 @@ namespace webifc
 			{
 				IfcComposedMesh mesh;
 
-				uint32_t localPlacement = tokens[GetArgumentOffset(tokens, 5)].num;
-				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 6)].num;
+				_loader.MoveToArgumentOffset(line, 5);
+				uint32_t localPlacement = _loader.GetRefArgument();
+				uint32_t ifcPresentation = _loader.GetRefArgument();
 
 				mesh.transformation = GetLocalPlacement(localPlacement);
 				mesh.children.push_back(GetMesh(ifcPresentation));
@@ -208,8 +161,9 @@ namespace webifc
 			{
 				IfcComposedMesh mesh;
 
-				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 0)].num;
-				uint32_t localPlacement = tokens[GetArgumentOffset(tokens, 1)].num;
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t ifcPresentation = _loader.GetRefArgument();
+				uint32_t localPlacement = _loader.GetRefArgument();
 
 				mesh.transformation = GetLocalPlacement(localPlacement);
 				mesh.children.push_back(GetMesh(ifcPresentation));
@@ -220,8 +174,9 @@ namespace webifc
 			{
 				IfcComposedMesh mesh;
 
-				uint32_t axis2Placement = tokens[GetArgumentOffset(tokens, 0)].num;
-				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 1)].num;
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t axis2Placement = _loader.GetRefArgument();
+				uint32_t ifcPresentation = _loader.GetRefArgument();
 
 				mesh.transformation = GetLocalPlacement(axis2Placement);
 				mesh.children.push_back(GetMesh(ifcPresentation));
@@ -232,7 +187,8 @@ namespace webifc
 			{
 				IfcComposedMesh mesh;
 
-				uint32_t ifcPresentation = tokens[GetArgumentOffset(tokens, 0)].num;
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t ifcPresentation = _loader.GetRefArgument();
 
 				mesh.transformation = glm::dmat4(1);
 				mesh.geom = GetBrep(ifcPresentation);
@@ -243,12 +199,13 @@ namespace webifc
 			{
 				IfcComposedMesh mesh;
 
-				auto representations = GetSetArgument(tokens, 2);
+				_loader.MoveToArgumentOffset(line, 2);
+				auto representations = _loader.GetSetArgument();
 
 				mesh.transformation = glm::dmat4(1);
 				for (auto& repToken : representations)
 				{
-					uint32_t repID = tokens[repToken].num;
+					uint32_t repID = _loader.GetRefArgument(repToken);
 					mesh.children.push_back(GetMesh(repID));
 				}
 
@@ -258,12 +215,13 @@ namespace webifc
 			{
 				IfcComposedMesh mesh;
 
-				auto repItems = GetSetArgument(tokens, 3);
+				_loader.MoveToArgumentOffset(line, 3);
+				auto repItems = _loader.GetSetArgument();
 
 				mesh.transformation = glm::dmat4(1);
 				for (auto& repToken : repItems)
 				{
-					uint32_t repID = tokens[repToken].num;
+					uint32_t repID = _loader.GetRefArgument(repToken);
 					mesh.children.push_back(GetMesh(repID));
 				}
 
@@ -273,10 +231,11 @@ namespace webifc
 			{
 				IfcComposedMesh mesh;
 
-				uint32_t profileID = tokens[GetArgumentOffset(tokens, 0)].num;
-				uint32_t placementID = tokens[GetArgumentOffset(tokens, 1)].num;
-				uint32_t directionID = tokens[GetArgumentOffset(tokens, 2)].num;
-				double depth = tokens[GetArgumentOffset(tokens, 3)].real;
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t profileID = _loader.GetRefArgument();
+				uint32_t placementID = _loader.GetRefArgument();
+				uint32_t directionID = _loader.GetRefArgument();
+				double depth = _loader.GetDoubleArgument();
 
 				IfcProfile profile = GetProfile(profileID);
 				glm::dmat4 placement = GetLocalPlacement(placementID);
@@ -327,12 +286,13 @@ namespace webifc
 			{
 			case ifc2x3::IFCCLOSEDSHELL:
 			{
-				auto faces = GetSetArgument(tokens, 0);
+				_loader.MoveToArgumentOffset(line, 0);
+				auto faces = _loader.GetSetArgument();
 
 				IfcGeometry geometry;
 				for (auto& faceToken : faces)
 				{
-					uint32_t faceID = tokens[faceToken].num;
+					uint32_t faceID = _loader.GetRefArgument(faceToken);
 					AddFaceToGeometry(faceID, geometry);
 				}
 
@@ -356,13 +316,14 @@ namespace webifc
 			{
 			case ifc2x3::IFCFACE:
 			{
-				auto bounds = GetSetArgument(tokens, 0);
+				_loader.MoveToArgumentOffset(line, 0);
+				auto bounds = _loader.GetSetArgument();
 
 				std::vector<IfcBound3D> bounds3D;
 
 				for (auto& boundToken : bounds)
 				{
-					uint32_t boundID = tokens[boundToken].num;
+					uint32_t boundID = _loader.GetRefArgument(boundToken);
 					bounds3D.push_back(GetBound(boundID));
 				}
 
@@ -384,8 +345,9 @@ namespace webifc
 			{
 			case ifc2x3::IFCFACEOUTERBOUND:
 			{
-				uint32_t loop = tokens[GetArgumentOffset(tokens, 0)].num;
-				IfcToken orientation = tokens[GetArgumentOffset(tokens, 1)];
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t loop = _loader.GetRefArgument();
+				// IfcToken orientation = tokens[_loader.GetArgumentOffset(tokens, 1)];
 
 				IfcBound3D bound;
 				bound.curve = GetLoop(loop);
@@ -396,8 +358,9 @@ namespace webifc
 			}
 			case ifc2x3::IFCFACEBOUND:
 			{
-				uint32_t loop = tokens[GetArgumentOffset(tokens, 0)].num;
-				IfcToken orientation = tokens[GetArgumentOffset(tokens, 1)];
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t loop = _loader.GetRefArgument();
+				// IfcToken orientation = tokens[_loader.GetArgumentOffset(tokens, 1)];
 
 				IfcBound3D bound;
 				bound.curve = GetLoop(loop);
@@ -426,11 +389,12 @@ namespace webifc
 			{
 				IfcCurve3D curve;
 
-				auto points = GetSetArgument(tokens, 0);
+				_loader.MoveToArgumentOffset(line, 0);
+				auto points = _loader.GetSetArgument();
 
 				for (auto& token : points)
 				{
-					uint32_t pointId = tokens[token].num;
+					uint32_t pointId = _loader.GetRefArgument(token);
 					curve.points.push_back(GetCartesianPoint3D(pointId));
 				}
 
@@ -767,8 +731,10 @@ namespace webifc
 			{
 				IfcProfile profile;
 
-				profile.type = GetStringArgument(tokens, 0);
-				profile.curve = GetCurve(tokens[GetArgumentOffset(tokens, 2)].num);
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
+				_loader.MoveToArgumentOffset(line, 2);
+				profile.curve = GetCurve(_loader.GetRefArgument());
 				profile.isConvex = IsCurveConvex(profile.curve);
 
 				return profile;
@@ -777,12 +743,15 @@ namespace webifc
 			{
 				IfcProfile profile;
 
-				profile.type = GetStringArgument(tokens, 0);
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
 				profile.isConvex = true;
-				double xdim = tokens[GetArgumentOffset(tokens, 3)].real;
-				double ydim = tokens[GetArgumentOffset(tokens, 4)].real;
 
-				uint32_t placementID = tokens[GetArgumentOffset(tokens, 2)].num;
+				_loader.MoveToArgumentOffset(line, 2);
+				uint32_t placementID = _loader.GetRefArgument();
+				double xdim = _loader.GetDoubleArgument();
+				double ydim = _loader.GetDoubleArgument();
+
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
 				double halfX = xdim / 2;
@@ -809,11 +778,13 @@ namespace webifc
 			{
 				IfcProfile profile;
 
-				profile.type = GetStringArgument(tokens, 0);
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
 				profile.isConvex = true;
 
-				uint32_t placementID = tokens[GetArgumentOffset(tokens, 2)].num;
-				double radius = tokens[GetArgumentOffset(tokens, 3)].real;
+				_loader.MoveToArgumentOffset(line, 2);
+				uint32_t placementID = _loader.GetRefArgument();
+				double radius = _loader.GetDoubleArgument();
 				
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
@@ -852,16 +823,18 @@ namespace webifc
 			auto& line = _loader.GetLine(lineID);
 			auto& tokens = _loader.GetLineTokens(lineID);
 
-			uint32_t locationID = tokens[GetArgumentOffset(tokens, 0)].num;
-			IfcToken dirToken = tokens[GetArgumentOffset(tokens, 1)];
+			_loader.MoveToArgumentOffset(line, 0);
+			uint32_t locationID = _loader.GetRefArgument();
+			IfcTokenType dirToken = _loader.GetTokenType();
+
+			glm::dvec2 xAxis = glm::dvec2(1, 0);
+			if (dirToken == IfcTokenType::REF)
+			{
+				_loader.Reverse();
+				xAxis = GetCartesianPoint2D(_loader.GetRefArgument());
+			}
 
 			glm::dvec2 pos = GetCartesianPoint2D(locationID);
-			glm::dvec2 xAxis = glm::dvec2(1, 0);
-
-			if (dirToken.type == IfcTokenType::REF)
-			{
-				xAxis = GetCartesianPoint2D(dirToken.num);
-			}
 
 			glm::dvec2 yAxis = glm::dvec2(xAxis.y, -xAxis.x);
 
@@ -881,24 +854,29 @@ namespace webifc
 			{
 			case ifc2x3::IFCAXIS2PLACEMENT3D:
 			{
-				uint32_t posID = tokens[GetArgumentOffset(tokens, 0)].num;
-				IfcToken zID = tokens[GetArgumentOffset(tokens, 1)];
-				IfcToken xID = tokens[GetArgumentOffset(tokens, 2)];
+				glm::dvec3 zAxis(0, 0, 1);
+				glm::dvec3 xAxis(1, 0, 0);
+
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t posID = _loader.GetRefArgument();
+				IfcTokenType zID = _loader.GetTokenType();
+				if (zID == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					zAxis = GetCartesianPoint3D(_loader.GetRefArgument());
+				}
+
+				_loader.MoveToArgumentOffset(line, 2);
+				IfcTokenType xID = _loader.GetTokenType();
+				if (xID == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					xAxis = GetCartesianPoint3D(_loader.GetRefArgument());
+				}
 
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
-				glm::dvec3 zAxis(0, 0, 1);
-				glm::dvec3 xAxis(1, 0, 0);
-				
-				if (zID.type == IfcTokenType::REF)
-				{
-					zAxis = GetCartesianPoint3D(zID.num);
-				}
 
-				if (xID.type == IfcTokenType::REF)
-				{
-					xAxis = GetCartesianPoint3D(xID.num);
-				}
 					
 				glm::dvec3 yAxis = glm::cross(zAxis, xAxis);
 
@@ -911,16 +889,22 @@ namespace webifc
 			}
 			case ifc2x3::IFCLOCALPLACEMENT:
 			{
-				IfcToken relPlacementToken = tokens[GetArgumentOffset(tokens, 0)];
-				uint32_t axis2PlacementID = tokens[GetArgumentOffset(tokens, 1)].num;
-
 				glm::dmat4 relPlacement(1);
+				
+				_loader.MoveToArgumentOffset(line, 0);
+				IfcTokenType relPlacementToken = _loader.GetTokenType();
+				uint32_t relPlacementID;
+				if (relPlacementToken == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					relPlacement = GetLocalPlacement(_loader.GetRefArgument());
+				}
+
+				_loader.MoveToArgumentOffset(line, 1);
+				uint32_t axis2PlacementID = _loader.GetRefArgument();
+
 				glm::dmat4 axis2Placement = GetLocalPlacement(axis2PlacementID);
 
-				if (relPlacementToken.type == IfcTokenType::REF)
-				{
-					relPlacement = GetLocalPlacement(relPlacementToken.num);
-				}
 
 				auto result = relPlacement * axis2Placement;
 				return result;;
@@ -928,39 +912,62 @@ namespace webifc
 			case ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
 			case ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM:
 			{
-				IfcToken a1Token = tokens[GetArgumentOffset(tokens, 0)];
-				IfcToken a2Token = tokens[GetArgumentOffset(tokens, 1)];
-				uint32_t posID = tokens[GetArgumentOffset(tokens, 2)].num;
-				IfcToken s1Token = tokens[GetArgumentOffset(tokens, 3)];
-				IfcToken a3Token = tokens[GetArgumentOffset(tokens, 4)];
-
-				IfcToken s2Token;
-				IfcToken s3Token;
-
-				if (line.ifcType == ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
-				{
-					s2Token = tokens[GetArgumentOffset(tokens, 5)];
-					s3Token = tokens[GetArgumentOffset(tokens, 6)];
-				}
-
 				double scale1 = 1.0;
 				double scale2 = 1.0;
 				double scale3 = 1.0;
-
-				if (s1Token.type == IfcTokenType::REF) scale1 = s1Token.real;
-				if (s2Token.type == IfcTokenType::REF) scale2 = s2Token.real;
-				if (s3Token.type == IfcTokenType::REF) scale3 = s3Token.real;
-
-				
-				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
 				glm::dvec3 Axis1(1, 0, 0);
 				glm::dvec3 Axis2(0, 1, 0);
 				glm::dvec3 Axis3(0, 0, 1);
 
-				if (a1Token.type == IfcTokenType::REF) Axis1 = GetCartesianPoint3D(a1Token.num);
-				if (a2Token.type == IfcTokenType::REF) Axis2 = GetCartesianPoint3D(a2Token.num);
-				if (a3Token.type == IfcTokenType::REF) Axis3 = GetCartesianPoint3D(a3Token.num);
+
+				_loader.MoveToArgumentOffset(line, 0);
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					Axis1 = GetCartesianPoint3D(_loader.GetRefArgument());
+				}
+				_loader.MoveToArgumentOffset(line, 1);
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					Axis2 = GetCartesianPoint3D(_loader.GetRefArgument());
+				}
+
+				_loader.MoveToArgumentOffset(line, 2);
+				uint32_t posID = _loader.GetRefArgument();
+				glm::dvec3 pos = GetCartesianPoint3D(posID);
+
+				_loader.MoveToArgumentOffset(line, 3);
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					scale1 = _loader.GetDoubleArgument();
+				}
+				_loader.MoveToArgumentOffset(line, 4);
+				IfcTokenType a3Token = _loader.GetTokenType();
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					Axis3 = GetCartesianPoint3D(_loader.GetRefArgument());
+				}
+
+				if (line.ifcType == ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
+				{
+					_loader.MoveToArgumentOffset(line, 5);
+					if (_loader.GetTokenType() == IfcTokenType::REF)
+					{
+						_loader.Reverse();
+						scale2 = _loader.GetDoubleArgument();
+					}
+
+					_loader.MoveToArgumentOffset(line, 6);
+					if (_loader.GetTokenType() == IfcTokenType::REF)
+					{
+						_loader.Reverse();
+						scale3 = _loader.GetDoubleArgument();
+					}
+				}
 
 				return glm::dmat4(
 					glm::dvec4(Axis1 * scale1, 0),
@@ -977,18 +984,20 @@ namespace webifc
 			return glm::dmat4();
 		}
 
-		IfcTrimmingSelect ParseTrimSelect(std::vector<IfcToken>& tokens, std::vector<uint32_t>& offsets)
+		IfcTrimmingSelect ParseTrimSelect(std::vector<uint32_t>& tapeOffsets)
 		{
 			IfcTrimmingSelect ts;
 
-			if (offsets.size() > 2)
+			if (tapeOffsets.size() > 2)
 			{
-				std::string type = _loader.GetString(tokens[offsets[0]]);
+				_loader.MoveTo(tapeOffsets[0]);
+				std::string type = _loader.GetStringArgument();
 
 				if (type == "IFCPARAMETERVALUE")
 				{
 					ts.hasParam = true;
-					ts.param = tokens[offsets[2]].real;
+					_loader.MoveTo(tapeOffsets[2]);
+					ts.param = _loader.GetDoubleArgument();
 				}
 				else
 				{
@@ -1015,11 +1024,12 @@ namespace webifc
 			{
 			case ifc2x3::IFCPOLYLINE:
 			{
-				auto points = GetSetArgument(tokens, 0);
+				_loader.MoveToArgumentOffset(line, 0);
+				auto points = _loader.GetSetArgument();
 
 				for (auto& token : points)
 				{
-					uint32_t pointId = tokens[token].num;
+					uint32_t pointId = _loader.GetRefArgument(token);
 					curve.Add(GetCartesianPoint2D(pointId));
 				}
 
@@ -1027,8 +1037,9 @@ namespace webifc
 			}
 			case ifc2x3::IFCCOMPOSITECURVE:
 			{
-				auto segments = GetSetArgument(tokens, 0);
-				auto selfIntersects = GetStringArgument(tokens, 1);
+				_loader.MoveToArgumentOffset(line, 0);
+				auto segments = _loader.GetSetArgument();
+				auto selfIntersects = _loader.GetStringArgument();
 
 				if (selfIntersects == "T")
 				{
@@ -1043,7 +1054,7 @@ namespace webifc
 						DumpSVGCurve(curve.points, L"partial_curve.html");
 					}
 
-					uint32_t segmentId = tokens[token].num;
+					uint32_t segmentId = _loader.GetRefArgument(token);
 
 					ComputeCurve(segmentId, curve);
 				}
@@ -1052,9 +1063,10 @@ namespace webifc
 			}
 			case ifc2x3::IFCCOMPOSITECURVESEGMENT:
 			{
-				auto transition = GetStringArgument(tokens, 0);
-				auto sameSense = GetStringArgument(tokens, 1);
-				auto parentID = tokens[GetArgumentOffset(tokens, 2)].num;
+				_loader.MoveToArgumentOffset(line, 0);
+				auto transition = _loader.GetStringArgument();
+				auto sameSense = _loader.GetStringArgument();
+				auto parentID = _loader.GetRefArgument();
 
 				ComputeCurve(parentID, curve);
 
@@ -1062,14 +1074,15 @@ namespace webifc
 			}
 			case ifc2x3::IFCTRIMMEDCURVE:
 			{
-				auto basisCurveID = tokens[GetArgumentOffset(tokens, 0)].num;
-				auto trim1Set = GetSetArgument(tokens, 1);
-				auto trim2Set = GetSetArgument(tokens, 2);
-				auto senseAgreement = GetStringArgument(tokens, 3);
-				auto trimmingPreference = GetStringArgument(tokens, 4);
+				_loader.MoveToArgumentOffset(line, 0);
+				auto basisCurveID = _loader.GetRefArgument();
+				auto trim1Set = _loader.GetSetArgument();
+				auto trim2Set = _loader.GetSetArgument();
+				auto senseAgreement = _loader.GetStringArgument();
+				auto trimmingPreference = _loader.GetStringArgument();
 
-				auto trim1 = ParseTrimSelect(tokens, trim1Set);
-				auto trim2 = ParseTrimSelect(tokens, trim2Set);
+				auto trim1 = ParseTrimSelect(trim1Set);
+				auto trim2 = ParseTrimSelect(trim2Set);
 
 				IfcTrimmingArguments trim;
 				trim.exist = true;
@@ -1082,8 +1095,9 @@ namespace webifc
 			}
 			case ifc2x3::IFCCIRCLE:
 			{
-				auto positionID = tokens[GetArgumentOffset(tokens, 0)].num;
-				double radius = tokens[GetArgumentOffset(tokens, 1)].real;
+				_loader.MoveToArgumentOffset(line, 0);
+				auto positionID = _loader.GetRefArgument();
+				double radius = _loader.GetDoubleArgument();
 
 				glm::dmat3 placement = GetAxis2Placement2D(positionID);
 
@@ -1148,11 +1162,12 @@ namespace webifc
 			auto& line = _loader.GetLine(lineID);
 			auto& tokens = _loader.GetLineTokens(lineID);
 
-			auto coords = GetSetArgument(tokens, 0);
+			_loader.MoveToArgumentOffset(line, 0);
+			auto coords = _loader.GetSetArgument();
 
 			glm::dvec2 point(
-				tokens[coords[0]].real,
-				tokens[coords[1]].real
+				_loader.GetDoubleArgument(coords[0]),
+				_loader.GetDoubleArgument(coords[1])
 			);
 
 			return point;
@@ -1164,12 +1179,13 @@ namespace webifc
 			auto& line = _loader.GetLine(lineID);
 			auto& tokens = _loader.GetLineTokens(lineID);
 
-			auto coords = GetSetArgument(tokens, 0);
+			_loader.MoveToArgumentOffset(line, 0);
+			auto coords = _loader.GetSetArgument();
 
 			glm::dvec3 point(
-				tokens[coords[0]].real,
-				tokens[coords[1]].real,
-				tokens[coords[2]].real
+				_loader.GetDoubleArgument(coords[0]),
+				_loader.GetDoubleArgument(coords[1]),
+				_loader.GetDoubleArgument(coords[2])
 			);
 
 			return point;

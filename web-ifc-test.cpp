@@ -22,9 +22,9 @@ int main()
 {
     std::cout << "Hello web IFC test!\n";
 
-    //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
-    //std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
-    std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
+    std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
+   // std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
+    // std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
 
     std::string content = ReadFile(filename);
 
@@ -38,14 +38,14 @@ int main()
 
     start = webifc::ms();
 
-    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCWALL);
+    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCSLAB);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     bool writeFiles = true;
 
     start = webifc::ms();
-    auto mesh = geometryLoader.GetFlattenedGeometry(walls[320]);
+    auto mesh = geometryLoader.GetFlattenedGeometry(walls[0]);
     time = webifc::ms() - start;
     
     std::cout << "First slab took " << time << "ms" << std::endl;

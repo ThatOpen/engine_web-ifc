@@ -8,6 +8,7 @@
 #include <algorithm>
 
 #include "ifc2x3.h"
+#include "util.h"
 
 namespace webifc
 {
@@ -45,34 +46,44 @@ namespace webifc
 		return c ^ 0xFFFFFFFF;
 	}
 
-	enum class IfcTokenType
+	enum IfcTokenType : char
 	{
 		UNKNOWN,
 		STRING,
 		ENUM,
 		REAL,
 		REF,
-		EXPRESSTYPE,
 		EMPTY,
 		SET_BEGIN,
 		SET_END,
 		LINE_END
 	};
 
+	struct IfcPosition
+	{
+		uint32_t pos;
+		uint32_t end;
+	};
+
+	union IfcValue
+	{
+		uint64_t number;
+		double real;
+		IfcPosition pos;
+	};
+
 	struct IfcToken
 	{
+		IfcValue value;
 		IfcTokenType type = IfcTokenType::UNKNOWN;
-		uint64_t num;
-		double real;
-		uint64_t pos;
-		uint64_t end;
 	};
 
 	struct IfcLine 
 	{
-		uint64_t expressID;
-		uint64_t ifcType;
-		uint64_t lineIndex;
+		uint32_t expressID;
+		uint32_t ifcType;
+		uint32_t lineIndex;
+		uint32_t tapeOffset;
 	};
 
 	class IfcLoader
@@ -91,14 +102,25 @@ namespace webifc
 				//
 			}
 
-			uint64_t maxExpressId = 0;
+			uint64_t expectedMem = 0;
+			for (auto& line : lineTokens)
+			{
+				expectedMem += line.size() * sizeof(IfcToken);
+			}
+
+			std::cout << "Token " << sizeof(IfcToken) << std::endl;
+			std::cout << "Expected " << expectedMem / 1024 / 1024 << std::endl;
+			std::cout << "Tape " << _tape.GetTotalSize() / 1024 / 1024 << std::endl;
+
+			/*
+			uint32_t maxExpressId = 0;
 			for (int i = 0; i < lineTokens.size(); i++)
 			{
 				auto& line = lineTokens[i];
 				if (line[0].type == IfcTokenType::REF)
 				{
 					IfcLine l;
-					l.expressID = line[0].num;
+					l.expressID = line[0].value.number;
 					l.lineIndex = i;
 
 					maxExpressId = std::max(maxExpressId, l.expressID);
@@ -106,7 +128,7 @@ namespace webifc
 					if (line[1].type == IfcTokenType::STRING)
 					{
 						auto& type = line[1];
-						l.ifcType = crc32Simple(&buf[type.pos], type.end - type.pos);
+						l.ifcType = crc32Simple(&buf[type.value.pos.pos], type.value.pos.end - type.value.pos.pos);
 						ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
 					}
 
@@ -121,6 +143,79 @@ namespace webifc
 					lines.push_back(l);
 				}
 			}
+			*/
+
+			uint32_t maxExpressId = 0;
+			uint32_t lineStart = 0;
+			std::vector<IfcLine> tempLines;
+			uint32_t currentIfcType = 0;
+			uint32_t currentExpressID = 0;
+			uint32_t currentTapeOffset = 0;
+			while (!_tape.AtEnd())
+			{
+				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
+
+				switch (t)
+				{
+				case IfcTokenType::LINE_END:
+				{
+					IfcLine l;
+					l.expressID = currentExpressID;
+					l.ifcType = currentIfcType;
+					l.lineIndex = lines.size();
+					l.tapeOffset = currentTapeOffset;
+
+					ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
+					maxExpressId = std::max(maxExpressId, l.expressID);
+
+					lines.push_back(l);
+
+					// reset
+					currentExpressID = 0;
+					currentIfcType = 0;
+					currentTapeOffset = _tape.GetReadOffset();
+
+					break;
+				}
+				case IfcTokenType::UNKNOWN:
+				case IfcTokenType::EMPTY:
+				case IfcTokenType::SET_BEGIN:
+				case IfcTokenType::SET_END:
+					break;
+				case IfcTokenType::STRING:
+				case IfcTokenType::ENUM:
+				{
+					uint32_t start = _tape.Read<uint32_t>();
+					uint32_t end = _tape.Read<uint32_t>();
+
+					if (currentIfcType == 0)
+					{
+						currentIfcType = crc32Simple(&buf[start], end - start);
+					}
+
+					break;
+				}
+				case IfcTokenType::REF:
+				{
+					uint32_t ref = _tape.Read<uint32_t>();
+					if (currentExpressID == 0)
+					{
+						currentExpressID = ref;
+					}
+					break;
+				}
+				case IfcTokenType::REAL:
+				{
+					_tape.Read<double>();
+					break;
+				}
+				default:
+					break;
+				}
+			}
+
+			std::cout << "Lines tape " << tempLines.size() << std::endl;
+			std::cout << "Lines normal " << lines.size() << std::endl;
 
 			expressIDToLine.resize(maxExpressId + 1);
 
@@ -169,23 +264,160 @@ namespace webifc
 			return lineTokens[lineID];
 		}
 
-		std::string GetString(IfcToken& token)
-		{
-			return std::string(&buf[token.pos], token.end - token.pos);
-		}
-
         bool IsOpen()
         {
             return _open;
         }
 
+		void MoveToArgumentOffset(IfcLine& line, int argumentIndex)
+		{
+			_tape.MoveTo(line.tapeOffset);
+
+			int movedOver = -3; // first is express id, second is express type, third is set begin
+			bool insideSet = false; // assume no nested sets
+			while (movedOver != argumentIndex)
+			{
+				if (!insideSet)
+				{
+					movedOver++;
+				}
+
+				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
+
+				switch (t)
+				{
+				case IfcTokenType::LINE_END:
+				{
+					assert(false);
+					break;
+				}
+				case IfcTokenType::UNKNOWN:
+				case IfcTokenType::EMPTY:
+					break;
+				case IfcTokenType::SET_BEGIN:
+					insideSet = movedOver != 0;
+					break;
+				case IfcTokenType::SET_END:
+					insideSet = false;
+					break;
+				case IfcTokenType::STRING:
+				case IfcTokenType::ENUM:
+				{
+					uint32_t start = _tape.Read<uint32_t>();
+					uint32_t end = _tape.Read<uint32_t>();
+
+					break;
+				}
+				case IfcTokenType::REF:
+				{
+					uint32_t ref = _tape.Read<uint32_t>();
+					break;
+				}
+				case IfcTokenType::REAL:
+				{
+					_tape.Read<double>();
+					break;
+				}
+				default:
+					break;
+				}
+			}
+		}
+
+		inline void MoveToLine(uint32_t lineID)
+		{
+			_tape.MoveTo(lines[lineID].tapeOffset);
+		}
+
+		inline void MoveTo(uint32_t offset)
+		{
+			_tape.MoveTo(offset);
+		}
+
+		inline void MoveToLineArgument(uint32_t lineID, int argumentIndex)
+		{
+			MoveToArgumentOffset(lines[lineID], argumentIndex);
+		}
+
+		inline std::string GetStringArgument()
+		{
+			_tape.Read<char>(); // string type
+			uint32_t start = _tape.Read<uint32_t>();
+			uint32_t end = _tape.Read<uint32_t>();
+			return std::string(&buf[start], end - start);
+		}
+
+		inline double GetDoubleArgument()
+		{
+			_tape.Read<char>(); // real type
+			return _tape.Read<double>();
+		}
+
+		inline double GetDoubleArgument(uint32_t tapeOffset)
+		{
+			_tape.MoveTo(tapeOffset);
+			return GetDoubleArgument();
+		}
+
+		inline uint32_t GetRefArgument()
+		{
+			_tape.Read<char>(); // ref type
+			return _tape.Read<uint32_t>();
+		}
+
+		inline uint32_t GetRefArgument(uint32_t tapeOffset)
+		{
+			_tape.MoveTo(tapeOffset);
+			return GetRefArgument();
+		}
+
+		inline IfcTokenType GetTokenType()
+		{
+			return static_cast<IfcTokenType>(_tape.Read<char>());
+		}
+
+		inline void Reverse()
+		{
+			_tape.Reverse();
+		}
+
+		inline std::vector<uint32_t> GetSetArgument()
+		{
+			std::vector<uint32_t> tapeOffsets;
+			_tape.Read<char>(); // set begin
+			while (true)
+			{
+				uint32_t offset = _tape.GetReadOffset();
+				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
+
+				if (t == IfcTokenType::SET_END)
+				{
+					break;
+				}
+				else
+				{
+					tapeOffsets.push_back(offset);
+
+					if (t == IfcTokenType::REAL)
+					{
+						_tape.Read<double>();
+					}
+					else if (t == IfcTokenType::REF)
+					{
+						_tape.Read<uint32_t>();
+					}
+				}
+			}
+
+			return tapeOffsets;
+		}
+
 	private:
         bool _open = false;
+		webifc::DynamicTape<1 << 20> _tape; // 1mb chunked tape
 
 		bool TokenizeLine()
 		{
-			static std::vector<IfcToken> line;
-			line.clear();
 			bool eof = false;
 			while (true)
 			{
@@ -207,7 +439,7 @@ namespace webifc
 				{
 					pos++;
 					bool prevSlash = false;
-					int start = pos;
+					uint32_t start = pos;
 					while (!(buf[pos] == '\'' && !prevSlash))
 					{
 						if (buf[pos] == '\\')
@@ -222,49 +454,39 @@ namespace webifc
 						pos++;
 					}
 
-					IfcToken token;
-					token.type = IfcTokenType::STRING;
-					token.pos = start;
-					token.end = pos;
-					line.push_back(std::move(token));
+					_tape.push(IfcTokenType::STRING);
+					_tape.push(&start, sizeof(uint32_t));
+					_tape.push(&pos, sizeof(uint32_t));
 				} 
 				else if (c == '#')
 				{
 					pos++;
 
-					IfcToken token;
-					token.type = IfcTokenType::REF;
-					token.num = readInt();
-					token.pos = pos;
-					line.push_back(std::move(token));
+					uint32_t num = readInt();
+
+					_tape.push(IfcTokenType::REF);
+					_tape.push(&num, sizeof(uint32_t));
 				} 
 				else if (c == '$' || c == '*')
 				{
-					IfcToken token;
-					token.type = IfcTokenType::EMPTY;
-					token.pos = pos;
-					line.push_back(std::move(token));
+					_tape.push(IfcTokenType::EMPTY);
 				}
 				else if (c == '(')
 				{
-					IfcToken token;
-					token.type = IfcTokenType::SET_BEGIN;
-					token.pos = pos;
-					line.push_back(std::move(token));
+					_tape.push(IfcTokenType::SET_BEGIN);
 				}
 				else if (c >= '0' && c <= '9')
 				{
 
-					IfcToken token;
-					token.type = IfcTokenType::REAL;
 					bool negative = buf[pos - 1] == '-';
-					token.real = readDouble();
+					double value = readDouble();
 					if (negative)
 					{
-						token.real *= -1;
+						value *= -1;
 					}
-					token.pos = pos;
-					line.push_back(std::move(token));
+
+					_tape.push(IfcTokenType::REAL);
+					_tape.push(&value, sizeof(double));
 				}
 				else if (c == '.')
 				{
@@ -274,11 +496,10 @@ namespace webifc
 					{
 						pos++;
 					}
-					IfcToken token;
-					token.type = IfcTokenType::ENUM;
-					token.pos = start;
-					token.end = pos;
-					line.push_back(std::move(token));
+					
+					_tape.push(IfcTokenType::ENUM);
+					_tape.push(&start, sizeof(uint32_t));
+					_tape.push(&pos, sizeof(uint32_t));
 				}
 				else if (c >= 'A' && c <= 'Z')
 				{
@@ -287,20 +508,16 @@ namespace webifc
 					{
 						pos++;
 					}
-					IfcToken token;
-					token.type = IfcTokenType::STRING;
-					token.pos = start;
-					token.end = pos;
-					line.push_back(std::move(token));
+
+					_tape.push(IfcTokenType::STRING);
+					_tape.push(&start, sizeof(uint32_t));
+					_tape.push(&pos, sizeof(uint32_t));
 
 					pos--;
 				}
 				else if (c == ')')
 				{
-					IfcToken token;
-					token.type = IfcTokenType::SET_END;
-					token.pos = pos;
-					line.push_back(std::move(token));
+					_tape.push(IfcTokenType::SET_END);
 				}
 				else if (c == ';')
 				{
@@ -311,13 +528,8 @@ namespace webifc
 				pos++;
 			}
 
-			IfcToken token;
-			token.type = IfcTokenType::LINE_END;
-			token.pos = pos;
-
-			line.push_back(std::move(token));
-
-			lineTokens.push_back(line);
+			_tape.push(IfcTokenType::LINE_END);
+			
 			return !eof;
 		}
 
