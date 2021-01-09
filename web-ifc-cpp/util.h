@@ -619,14 +619,15 @@ namespace webifc
 		inline void AddChunk()
 		{
 			frontChunk = new uint8_t[N];
+			memset(frontChunk, 0, N);
 			chunks.push_back(frontChunk);
 			sizes.push_back(0);
-			frontSize = &sizes.back();
+			writePtr++;
 		}
 
 		inline void CheckChunk(unsigned long long size)
 		{
-			if (*frontSize + size >= N)
+			if (sizes[writePtr] + size >= N)
 			{
 				AddChunk();
 			}
@@ -635,15 +636,15 @@ namespace webifc
 		inline void push(char v)
 		{
 			CheckChunk(1);
-			frontChunk[*frontSize] = v;
-			*frontSize += 1;
+			frontChunk[sizes[writePtr]] = v;
+			sizes[writePtr] += 1;
 		}
 
 		inline void push(void* v, unsigned long long size)
 		{
 			CheckChunk(size);
-			memcpy(frontChunk + *frontSize, v, size);
-			*frontSize += size;
+			memcpy(frontChunk + sizes[writePtr], v, size);
+			sizes[writePtr] += size;
 		}
 
 		uint64_t GetTotalSize()
@@ -662,7 +663,14 @@ namespace webifc
 		{
 			uint8_t* chunk = chunks[readChunkIndex];
 			uint8_t* valuePtr = &chunk[readPtr];
-			T v = *(T*)(valuePtr);
+
+			//T v = *(T*)(valuePtr);
+			// make this memory access aligned for emscripten
+
+			T v;
+
+			memcpy(&v, valuePtr, sizeof(T));
+
 			AdvanceRead(sizeof(T));
 			return v;
 		}
@@ -701,7 +709,7 @@ namespace webifc
 		inline void AdvanceRead(unsigned long long size)
 		{
 			readPtr += size;
-			if (readPtr == sizes[readChunkIndex])
+			if (readPtr >= sizes[readChunkIndex])
 			{
 				readChunkIndex++;
 				readPtr = 0;
@@ -710,8 +718,8 @@ namespace webifc
 
 		uint32_t readPtr = 0;
 		uint32_t readChunkIndex = 0;
+		uint32_t writePtr = -1;
 		uint8_t* frontChunk = nullptr;
-		size_t* frontSize = nullptr;
 		std::vector<uint8_t*> chunks;
 		std::vector<size_t> sizes;
 	};

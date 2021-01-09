@@ -92,39 +92,6 @@ namespace webifc
 
 			std::cout << "Tape " << _tape.GetTotalSize() / 1024 / 1024 << std::endl;
 
-			/*
-			uint32_t maxExpressId = 0;
-			for (int i = 0; i < lineTokens.size(); i++)
-			{
-				auto& line = lineTokens[i];
-				if (line[0].type == IfcTokenType::REF)
-				{
-					IfcLine l;
-					l.expressID = line[0].value.number;
-					l.lineIndex = i;
-
-					maxExpressId = std::max(maxExpressId, l.expressID);
-
-					if (line[1].type == IfcTokenType::STRING)
-					{
-						auto& type = line[1];
-						l.ifcType = crc32Simple(&buf[type.value.pos.pos], type.value.pos.end - type.value.pos.pos);
-						ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
-					}
-
-					lines.push_back(l);
-				}
-				else
-				{
-					IfcLine l;
-					l.expressID = 0;
-					l.ifcType = 0;
-
-					lines.push_back(l);
-				}
-			}
-			*/
-
 			uint32_t maxExpressId = 0;
 			uint32_t lineStart = 0;
 			uint32_t currentIfcType = 0;

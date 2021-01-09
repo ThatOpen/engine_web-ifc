@@ -38,17 +38,17 @@ int main()
 
     start = webifc::ms();
 
-    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCWALLSTANDARDCASE);
+    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCWALL);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
-    bool writeFiles = true;
+    bool writeFiles = false;
 
     start = webifc::ms();
-    auto mesh = geometryLoader.GetMesh(walls[0]);
+    //auto mesh = geometryLoader.GetMesh(walls[0]);
     if (writeFiles)
     {
-        geometryLoader.DumpMesh(mesh, L"TEST.obj");
+      //  geometryLoader.DumpMesh(mesh, L"TEST.obj");
     }
     time = webifc::ms() - start;
     

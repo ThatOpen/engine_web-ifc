@@ -398,6 +398,9 @@ namespace webifc
 			default:
 				break;
 			}
+
+			IfcCurve3D curve;
+			return curve;
 		}
 
 		void TriangulateBounds(IfcGeometry& geometry, std::vector<IfcBound3D>& bounds)

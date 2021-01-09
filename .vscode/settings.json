@@ -2,6 +2,7 @@
     "files.associations": {
         "xiosbase": "cpp",
         "sstream": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "vector": "cpp"
     }
 }

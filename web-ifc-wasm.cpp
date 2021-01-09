@@ -33,10 +33,13 @@ extern "C" int OpenModel(std::string filename)
     std::cout << "Loading: " << filename << std::endl;
 
     std::string content = ReadFile("filename");
+    
+    std::cout << "Read " << std::endl;
 
     webifc::IfcLoader loader;
     uint32_t modelID = loaders.size();
     loaders.push_back(loader);
+    std::cout << "Loading " << std::endl;
     loaders[modelID].LoadFile(content);
 
     std::cout << "Loaded " << loaders[modelID].GetNumLines() << " lines!" << std::endl;
