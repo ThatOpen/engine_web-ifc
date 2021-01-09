@@ -38,14 +38,18 @@ int main()
 
     start = webifc::ms();
 
-    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCSLAB);
+    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCWALLSTANDARDCASE);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     bool writeFiles = true;
 
     start = webifc::ms();
-    auto mesh = geometryLoader.GetFlattenedGeometry(walls[0]);
+    auto mesh = geometryLoader.GetMesh(walls[0]);
+    if (writeFiles)
+    {
+        geometryLoader.DumpMesh(mesh, L"TEST.obj");
+    }
     time = webifc::ms() - start;
     
     std::cout << "First slab took " << time << "ms" << std::endl;

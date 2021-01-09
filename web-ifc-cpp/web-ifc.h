@@ -127,7 +127,6 @@ namespace webifc
 
 			uint32_t maxExpressId = 0;
 			uint32_t lineStart = 0;
-			std::vector<IfcLine> tempLines;
 			uint32_t currentIfcType = 0;
 			uint32_t currentExpressID = 0;
 			uint32_t currentTapeOffset = 0;
@@ -195,7 +194,6 @@ namespace webifc
 				}
 			}
 
-			std::cout << "Lines tape " << tempLines.size() << std::endl;
 			std::cout << "Lines normal " << lines.size() << std::endl;
 
 			expressIDToLine.resize(maxExpressId + 1);
@@ -414,6 +412,8 @@ namespace webifc
 		bool TokenizeLine()
 		{
 			bool eof = false;
+			bool isSTEPLine = false;
+			bool firstToken = true;
 			while (true)
 			{
 				if (pos >= len)
@@ -424,13 +424,27 @@ namespace webifc
 
 				const char c = buf[pos];
 
-				// whitespace check
-				if (c == ' ' || c == '\n' || c == '\r' || c == '\t')
+				bool isWhiteSpace = c == ' ' || c == '\n' || c == '\r' || c == '\t';
+
+				// only consider a line a stepline if the very first non-whitespace character is a ref
+				if (!isWhiteSpace && firstToken && c == '#')
+				{
+					isSTEPLine = true;
+				}
+				
+				if (isWhiteSpace)
 				{
 					pos++;
 					continue;
 				}
-				else if (c == '\'')
+
+				if (!isSTEPLine)
+				{
+					pos++;
+					continue;
+				}
+
+				if (c == '\'')
 				{
 					pos++;
 					bool prevSlash = false;
