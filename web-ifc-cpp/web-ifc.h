@@ -65,19 +65,6 @@ namespace webifc
 		uint32_t end;
 	};
 
-	union IfcValue
-	{
-		uint64_t number;
-		double real;
-		IfcPosition pos;
-	};
-
-	struct IfcToken
-	{
-		IfcValue value;
-		IfcTokenType type = IfcTokenType::UNKNOWN;
-	};
-
 	struct IfcLine 
 	{
 		uint32_t expressID;
@@ -97,19 +84,12 @@ namespace webifc
 			pos = 0;
 			len = content.size();
 
+			uint32_t numLines = 0;
 			while (TokenizeLine())
 			{
-				//
+				numLines++;
 			}
 
-			uint64_t expectedMem = 0;
-			for (auto& line : lineTokens)
-			{
-				expectedMem += line.size() * sizeof(IfcToken);
-			}
-
-			std::cout << "Token " << sizeof(IfcToken) << std::endl;
-			std::cout << "Expected " << expectedMem / 1024 / 1024 << std::endl;
 			std::cout << "Tape " << _tape.GetTotalSize() / 1024 / 1024 << std::endl;
 
 			/*
@@ -151,6 +131,7 @@ namespace webifc
 			uint32_t currentIfcType = 0;
 			uint32_t currentExpressID = 0;
 			uint32_t currentTapeOffset = 0;
+			lines.reserve(numLines);
 			while (!_tape.AtEnd())
 			{
 				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
@@ -257,11 +238,6 @@ namespace webifc
 		IfcLine& GetLine(uint32_t lineID)
 		{
 			return lines[lineID];
-		}
-
-		std::vector<IfcToken>& GetLineTokens(uint32_t lineID)
-		{
-			return lineTokens[lineID];
 		}
 
         bool IsOpen()
@@ -563,7 +539,6 @@ namespace webifc
 		uint32_t len;
 		const char* buf;
 
-		std::deque<std::vector<IfcToken>> lineTokens;
 		std::vector<IfcLine> lines;
 		std::vector<uint32_t> expressIDToLine;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> ifcTypeToLineID;

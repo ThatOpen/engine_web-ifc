@@ -74,7 +74,6 @@ namespace webifc
 			{
 				uint32_t lineID = _loader.ExpressIDToLineID(relVoidID);
 				auto& line = _loader.GetLine(lineID);
-				auto& tokens = _loader.GetLineTokens(lineID);
 
 				_loader.MoveToArgumentOffset(line, 4);
 
@@ -102,7 +101,6 @@ namespace webifc
 			PopulateRelVoidsMapIfNeeded();
 
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x3::IFCCOLUMN:
@@ -281,7 +279,6 @@ namespace webifc
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x3::IFCCLOSEDSHELL:
@@ -310,7 +307,6 @@ namespace webifc
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 
 			switch (line.ifcType)
 			{
@@ -339,7 +335,6 @@ namespace webifc
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 
 			switch (line.ifcType)
 			{
@@ -381,7 +376,6 @@ namespace webifc
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 
 			switch (line.ifcType)
 			{
@@ -724,7 +718,6 @@ namespace webifc
 		IfcProfile GetProfileByLine(uint64_t lineID)
 		{
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x3::IFCARBITRARYCLOSEDPROFILEDEF:
@@ -821,7 +814,6 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 			uint32_t locationID = _loader.GetRefArgument();
@@ -849,7 +841,6 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x3::IFCAXIS2PLACEMENT3D:
@@ -1019,7 +1010,6 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x3::IFCPOLYLINE:
@@ -1160,7 +1150,6 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 			auto coords = _loader.GetSetArgument();
@@ -1177,7 +1166,6 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
-			auto& tokens = _loader.GetLineTokens(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 			auto coords = _loader.GetSetArgument();
