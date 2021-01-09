@@ -361,14 +361,19 @@ namespace webifc
 		{
 			std::vector<uint32_t> tapeOffsets;
 			_tape.Read<char>(); // set begin
+			int depth = 1;
 			while (true)
 			{
 				uint32_t offset = _tape.GetReadOffset();
 				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
 
-				if (t == IfcTokenType::SET_END)
+				if (t == IfcTokenType::SET_BEGIN)
 				{
-					break;
+					depth++;
+				}
+				else if (t == IfcTokenType::SET_END)
+				{
+					depth--;
 				}
 				else
 				{
@@ -382,6 +387,20 @@ namespace webifc
 					{
 						_tape.Read<uint32_t>();
 					}
+					else if (t == IfcTokenType::STRING)
+					{
+						_tape.Read<uint32_t>();
+						_tape.Read<uint32_t>();
+					}
+					else
+					{
+						assert(false);
+					}
+				}
+
+				if (depth == 0)
+				{
+					break;
 				}
 			}
 
@@ -531,7 +550,7 @@ namespace webifc
 			char* end;
 			double d = std::strtod(&buf[pos], &end);
 			int size = end - &buf[pos];
-			pos += size;
+			pos += size - 1;
 			return d;
 		}
 

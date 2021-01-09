@@ -979,7 +979,7 @@ namespace webifc
 		{
 			IfcTrimmingSelect ts;
 
-			if (tapeOffsets.size() > 2)
+			if (tapeOffsets.size() == 2)
 			{
 				_loader.MoveTo(tapeOffsets[0]);
 				std::string type = _loader.GetStringArgument();
@@ -987,7 +987,7 @@ namespace webifc
 				if (type == "IFCPARAMETERVALUE")
 				{
 					ts.hasParam = true;
-					_loader.MoveTo(tapeOffsets[2]);
+					_loader.MoveTo(tapeOffsets[1]);
 					ts.param = _loader.GetDoubleArgument();
 				}
 				else
