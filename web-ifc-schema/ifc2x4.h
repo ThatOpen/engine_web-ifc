@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 // unique list of crc32 codes for ifc classes
 
 namespace ifc2x4 {
@@ -779,781 +781,269 @@ namespace ifc2x4 {
 	static const unsigned int IFCZSHAPEPROFILEDEF = 2543172580;
 	bool IsIfcElement(unsigned int ifcCode) {
 		switch(ifcCode) {
-			case 3821786052: return true;
-			case 2296667514: return true;
-			case 3630933823: return true;
 			case 4288193352: return true;
-			case 2874132201: return true;
-			case 618182010: return true;
-			case 1635779807: return true;
-			case 2603310189: return true;
-			case 3406155212: return true;
 			case 1634111441: return true;
 			case 177149247: return true;
-			case 1411407467: return true;
-			case 3352864051: return true;
 			case 2056796094: return true;
-			case 1871374353: return true;
 			case 3087945054: return true;
-			case 3001207471: return true;
-			case 1674181508: return true;
-			case 669184980: return true;
-			case 639542469: return true;
-			case 411424972: return true;
-			case 130549933: return true;
-			case 3869604511: return true;
-			case 3798115385: return true;
-			case 1310608509: return true;
-			case 2705031697: return true;
-			case 3460190687: return true;
-			case 3207858831: return true;
 			case 277319702: return true;
-			case 1532957894: return true;
-			case 4261334040: return true;
-			case 3125803723: return true;
-			case 2740243338: return true;
 			case 753842376: return true;
 			case 2906023776: return true;
-			case 819618141: return true;
-			case 616511568: return true;
-			case 1334484129: return true;
 			case 32344328: return true;
-			case 231477066: return true;
-			case 3649129432: return true;
-			case 2736907675: return true;
-			case 4037036970: return true;
-			case 1136057603: return true;
-			case 1560379544: return true;
-			case 3367102660: return true;
-			case 1387855156: return true;
-			case 2069777674: return true;
-			case 1260505505: return true;
-			case 4182860854: return true;
-			case 2581212453: return true;
-			case 2713105998: return true;
-			case 1967976161: return true;
-			case 2461110595: return true;
-			case 2887950389: return true;
-			case 167062518: return true;
-			case 4031249490: return true;
 			case 2979338954: return true;
-			case 39481116: return true;
 			case 1095909175: return true;
-			case 1909888760: return true;
-			case 3124254112: return true;
-			case 1177604601: return true;
 			case 2938176219: return true;
-			case 2188180465: return true;
 			case 635142910: return true;
-			case 395041908: return true;
 			case 3758799889: return true;
-			case 3293546465: return true;
 			case 1051757585: return true;
-			case 2674252688: return true;
 			case 4217484030: return true;
-			case 1285652485: return true;
-			case 1123145078: return true;
-			case 574549367: return true;
-			case 1675464909: return true;
-			case 2059837836: return true;
-			case 59481748: return true;
-			case 3749851601: return true;
-			case 3486308946: return true;
-			case 3331915920: return true;
-			case 1416205885: return true;
-			case 3150382593: return true;
 			case 3902619387: return true;
-			case 2951183804: return true;
 			case 3296154744: return true;
-			case 2197970202: return true;
-			case 2611217952: return true;
-			case 2937912522: return true;
-			case 1383045692: return true;
 			case 1677625105: return true;
-			case 3893394355: return true;
-			case 747523909: return true;
-			case 647927063: return true;
-			case 2205249479: return true;
 			case 639361253: return true;
-			case 2301859152: return true;
-			case 776857604: return true;
-			case 3285139300: return true;
-			case 3264961684: return true;
 			case 843113511: return true;
 			case 905975707: return true;
-			case 300633059: return true;
 			case 3221913625: return true;
-			case 400855858: return true;
-			case 2542286263: return true;
-			case 3875453745: return true;
-			case 3732776249: return true;
-			case 15328376: return true;
-			case 2485617015: return true;
-			case 1485152156: return true;
 			case 3571504051: return true;
-			case 3850581409: return true;
 			case 2272882330: return true;
-			case 2816379211: return true;
-			case 2510884976: return true;
-			case 370225590: return true;
-			case 1981873012: return true;
-			case 2859738748: return true;
-			case 45288368: return true;
-			case 2614616156: return true;
-			case 2732653382: return true;
-			case 775493141: return true;
-			case 1959218052: return true;
-			case 3898045240: return true;
-			case 2185764099: return true;
-			case 1060000209: return true;
-			case 4105962743: return true;
-			case 488727124: return true;
-			case 1525564444: return true;
-			case 2559216714: return true;
-			case 2574617495: return true;
-			case 3419103109: return true;
-			case 3050246964: return true;
-			case 3293443760: return true;
 			case 25142252: return true;
-			case 578613899: return true;
-			case 2889183280: return true;
-			case 2713554722: return true;
 			case 4136498852: return true;
-			case 335055490: return true;
 			case 3640358203: return true;
-			case 2954562838: return true;
-			case 1785450214: return true;
-			case 1466758467: return true;
-			case 3895139033: return true;
-			case 1419761937: return true;
-			case 602808272: return true;
 			case 1973544240: return true;
-			case 1916426348: return true;
-			case 3295246426: return true;
-			case 1815067380: return true;
-			case 2506170314: return true;
-			case 2147822146: return true;
-			case 2898889636: return true;
-			case 539742890: return true;
 			case 3495092785: return true;
-			case 1457835157: return true;
-			case 2601014836: return true;
-			case 2827736869: return true;
-			case 2629017746: return true;
-			case 3800577675: return true;
-			case 1105321065: return true;
-			case 2367409068: return true;
-			case 3510044353: return true;
-			case 1213902940: return true;
 			case 4074379575: return true;
-			case 3961806047: return true;
-			case 3632507154: return true;
-			case 1765591967: return true;
-			case 1045800335: return true;
-			case 2949456006: return true;
-			case 32440307: return true;
 			case 1335981549: return true;
-			case 2635815018: return true;
 			case 1052013943: return true;
-			case 1599208980: return true;
-			case 562808652: return true;
 			case 1062813311: return true;
-			case 2063403501: return true;
 			case 1945004755: return true;
-			case 3256556792: return true;
 			case 3040386961: return true;
-			case 3849074793: return true;
-			case 3041715199: return true;
-			case 3205830791: return true;
-			case 1154170062: return true;
-			case 770865208: return true;
-			case 3732053477: return true;
 			case 395920057: return true;
-			case 2963535650: return true;
-			case 1714330368: return true;
 			case 3242481149: return true;
-			case 526551008: return true;
-			case 2323601079: return true;
-			case 445594917: return true;
-			case 4006246654: return true;
 			case 342316401: return true;
-			case 869906466: return true;
 			case 3518393246: return true;
-			case 3760055223: return true;
 			case 1360408905: return true;
-			case 2030761528: return true;
-			case 3900360178: return true;
-			case 476780140: return true;
-			case 1472233963: return true;
 			case 1904799276: return true;
-			case 663422040: return true;
 			case 862014818: return true;
-			case 2417008758: return true;
 			case 3310460725: return true;
-			case 3277789161: return true;
 			case 264262732: return true;
-			case 1534661035: return true;
 			case 402227799: return true;
-			case 1217240411: return true;
 			case 1003880860: return true;
-			case 712377611: return true;
-			case 1758889154: return true;
-			case 2777663545: return true;
 			case 4123344466: return true;
-			case 2397081782: return true;
-			case 1623761950: return true;
-			case 2590856083: return true;
-			case 1883228015: return true;
-			case 339256511: return true;
-			case 1704287377: return true;
-			case 2835456948: return true;
 			case 1658829314: return true;
-			case 2107101300: return true;
 			case 2814081492: return true;
-			case 132023988: return true;
 			case 3747195512: return true;
-			case 3174744832: return true;
 			case 484807127: return true;
-			case 3390157468: return true;
-			case 4148101412: return true;
-			case 211053100: return true;
-			case 4024345920: return true;
-			case 297599258: return true;
-			case 4294318154: return true;
-			case 2242383968: return true;
-			case 1040185647: return true;
-			case 3548104201: return true;
-			case 3200245327: return true;
-			case 1437805879: return true;
-			case 1209101575: return true;
-			case 2853485674: return true;
-			case 477187591: return true;
-			case 2804161546: return true;
-			case 2556980723: return true;
-			case 2047409740: return true;
-			case 1809719519: return true;
-			case 803316827: return true;
-			case 3008276851: return true;
-			case 807026263: return true;
-			case 3737207727: return true;
-			case 4219587988: return true;
 			case 3415622556: return true;
-			case 346874300: return true;
 			case 647756555: return true;
-			case 2489546625: return true;
-			case 2827207264: return true;
-			case 2143335405: return true;
-			case 1287392070: return true;
-			case 738692330: return true;
-			case 374418227: return true;
-			case 315944413: return true;
 			case 819412036: return true;
-			case 1810631287: return true;
 			case 1426591983: return true;
-			case 4222183408: return true;
-			case 2652556860: return true;
 			case 2058353004: return true;
-			case 3907093117: return true;
 			case 4278956645: return true;
-			case 3198132628: return true;
 			case 182646315: return true;
-			case 4037862832: return true;
 			case 2188021234: return true;
-			case 3815607619: return true;
 			case 3132237377: return true;
-			case 1482959167: return true;
 			case 987401354: return true;
-			case 1834744321: return true;
 			case 707683696: return true;
-			case 1339347760: return true;
 			case 2223149337: return true;
-			case 2297155007: return true;
 			case 3508470533: return true;
-			case 3009222698: return true;
 			case 900683007: return true;
-			case 1893162501: return true;
 			case 263784265: return true;
-			case 4238390223: return true;
 			case 1509553395: return true;
-			case 1268542332: return true;
 			case 3493046030: return true;
-			case 4095422895: return true;
-			case 987898635: return true;
-			case 3448662350: return true;
-			case 2453401579: return true;
-			case 4142052618: return true;
-			case 3590301190: return true;
-			case 3009204131: return true;
-			case 852622518: return true;
-			case 178086475: return true;
-			case 2706460486: return true;
-			case 812098782: return true;
 			case 3319311131: return true;
-			case 1251058090: return true;
 			case 2068733104: return true;
-			case 1806887404: return true;
-			case 3905492369: return true;
-			case 3570813810: return true;
-			case 2571569899: return true;
-			case 178912537: return true;
-			case 2294589976: return true;
-			case 1437953363: return true;
-			case 2133299955: return true;
 			case 4175244083: return true;
-			case 3946677679: return true;
-			case 3113134337: return true;
-			case 2391368822: return true;
-			case 3741457305: return true;
-			case 3020489413: return true;
-			case 1484403080: return true;
 			case 2176052936: return true;
-			case 4288270099: return true;
-			case 3827777499: return true;
-			case 428585644: return true;
-			case 1585845231: return true;
 			case 76236018: return true;
-			case 1051575348: return true;
-			case 2655187982: return true;
-			case 3452421091: return true;
-			case 4162380809: return true;
 			case 629592764: return true;
-			case 1161773419: return true;
-			case 1566485204: return true;
-			case 1402838566: return true;
-			case 125510826: return true;
-			case 2604431987: return true;
-			case 4266656042: return true;
-			case 1520743889: return true;
-			case 3422422726: return true;
-			case 1281925730: return true;
-			case 2624227202: return true;
-			case 1008929658: return true;
-			case 572779678: return true;
-			case 1425443689: return true;
-			case 3057273783: return true;
-			case 2347385850: return true;
-			case 1838606355: return true;
-			case 1847130766: return true;
-			case 3708119000: return true;
-			case 2852063980: return true;
-			case 760658860: return true;
-			case 2022407955: return true;
-			case 248100487: return true;
-			case 3303938423: return true;
-			case 1303795690: return true;
-			case 1847252529: return true;
-			case 2199411900: return true;
-			case 2235152071: return true;
-			case 164193824: return true;
-			case 3079605661: return true;
-			case 3404854881: return true;
-			case 552965576: return true;
-			case 3265635763: return true;
-			case 853536259: return true;
-			case 1507914824: return true;
-			case 2597039031: return true;
 			case 377706215: return true;
-			case 2108223431: return true;
 			case 1437502449: return true;
-			case 1114901282: return true;
 			case 1073191201: return true;
 			case 1911478936: return true;
-			case 3181161470: return true;
-			case 3368373690: return true;
-			case 2998442950: return true;
-			case 2706619895: return true;
 			case 2474470126: return true;
-			case 977012517: return true;
-			case 1918398963: return true;
-			case 3888040117: return true;
-			case 219451334: return true;
-			case 2251480897: return true;
-			case 3701648758: return true;
-			case 4143007308: return true;
-			case 3388369263: return true;
-			case 3505215534: return true;
 			case 3588315303: return true;
 			case 3079942009: return true;
-			case 2665983363: return true;
-			case 4251960020: return true;
-			case 1411181986: return true;
-			case 1029017970: return true;
-			case 144952367: return true;
 			case 3694346114: return true;
-			case 2837617999: return true;
-			case 1207048766: return true;
-			case 2529465313: return true;
-			case 2519244187: return true;
-			case 1682466193: return true;
-			case 2382730787: return true;
-			case 3566463478: return true;
-			case 3327091369: return true;
-			case 2077209135: return true;
-			case 101040310: return true;
-			case 3021840470: return true;
-			case 2483315170: return true;
-			case 2226359599: return true;
 			case 1687234759: return true;
-			case 1158309216: return true;
 			case 310824031: return true;
-			case 804291784: return true;
 			case 3612865200: return true;
-			case 4231323485: return true;
-			case 597895409: return true;
-			case 2004835150: return true;
-			case 603570806: return true;
-			case 1663979128: return true;
-			case 220341763: return true;
 			case 3171933400: return true;
 			case 1156407060: return true;
-			case 4017108033: return true;
-			case 2067069095: return true;
-			case 4022376103: return true;
-			case 1423911732: return true;
-			case 2775532180: return true;
-			case 2839578677: return true;
-			case 3724593414: return true;
-			case 2924175390: return true;
-			case 3740093272: return true;
-			case 3355820592: return true;
-			case 759155922: return true;
-			case 2559016684: return true;
-			case 3727388367: return true;
-			case 3778827333: return true;
-			case 3967405729: return true;
-			case 1775413392: return true;
-			case 677532197: return true;
-			case 2022622350: return true;
-			case 1304840413: return true;
-			case 3119450353: return true;
-			case 2417041796: return true;
-			case 2744685151: return true;
-			case 569719735: return true;
-			case 2945172077: return true;
-			case 4208778838: return true;
-			case 673634403: return true;
-			case 2095639259: return true;
-			case 3958567839: return true;
-			case 2802850158: return true;
-			case 103090709: return true;
-			case 3843373140: return true;
 			case 3651124850: return true;
-			case 653396225: return true;
-			case 2904328755: return true;
-			case 2598011224: return true;
-			case 986844984: return true;
-			case 871118103: return true;
-			case 1680319473: return true;
-			case 148025276: return true;
-			case 4166981789: return true;
-			case 3710013099: return true;
-			case 2752243245: return true;
-			case 941946838: return true;
-			case 1451395588: return true;
-			case 3357820518: return true;
-			case 492091185: return true;
-			case 3650150729: return true;
-			case 110355661: return true;
-			case 3521284610: return true;
-			case 1482703590: return true;
 			case 738039164: return true;
 			case 2295281155: return true;
-			case 655969474: return true;
-			case 1842657554: return true;
-			case 3219374653: return true;
 			case 90941305: return true;
-			case 2250791053: return true;
-			case 2044713172: return true;
-			case 2093928680: return true;
-			case 931644368: return true;
-			case 2090586900: return true;
-			case 3252649465: return true;
-			case 2405470396: return true;
-			case 825690147: return true;
 			case 2262370178: return true;
-			case 2893384427: return true;
 			case 3024970846: return true;
 			case 3283111854: return true;
-			case 2324767716: return true;
-			case 1469900589: return true;
-			case 1232101972: return true;
-			case 683857671: return true;
-			case 2770003689: return true;
-			case 3615266464: return true;
-			case 2798486643: return true;
-			case 3454111270: return true;
-			case 3915482550: return true;
-			case 2433181523: return true;
-			case 3413951693: return true;
-			case 1580146022: return true;
-			case 3765753017: return true;
 			case 979691226: return true;
-			case 2572171363: return true;
-			case 3027567501: return true;
-			case 964333572: return true;
 			case 2320036040: return true;
-			case 2310774935: return true;
-			case 160246688: return true;
-			case 3939117080: return true;
-			case 1683148259: return true;
-			case 2495723537: return true;
-			case 1307041759: return true;
-			case 1027710054: return true;
-			case 4278684876: return true;
-			case 2857406711: return true;
-			case 205026976: return true;
-			case 1865459582: return true;
-			case 4095574036: return true;
-			case 919958153: return true;
-			case 2728634034: return true;
-			case 982818633: return true;
-			case 3840914261: return true;
-			case 2655215786: return true;
-			case 478536968: return true;
-			case 826625072: return true;
-			case 1204542856: return true;
-			case 3945020480: return true;
-			case 3190031847: return true;
-			case 4201705270: return true;
-			case 2127690289: return true;
-			case 1638771189: return true;
-			case 504942748: return true;
-			case 3678494232: return true;
-			case 3242617779: return true;
-			case 886880790: return true;
-			case 2802773753: return true;
-			case 2565941209: return true;
-			case 2551354335: return true;
-			case 693640335: return true;
-			case 1462361463: return true;
-			case 4186316022: return true;
-			case 307848117: return true;
-			case 781010003: return true;
-			case 3940055652: return true;
-			case 279856033: return true;
-			case 427948657: return true;
-			case 3268803585: return true;
-			case 750771296: return true;
-			case 1245217292: return true;
-			case 4122056220: return true;
-			case 366585022: return true;
-			case 3451746338: return true;
-			case 3523091289: return true;
-			case 1521410863: return true;
-			case 1401173127: return true;
-			case 816062949: return true;
-			case 1076942058: return true;
-			case 3377609919: return true;
-			case 3008791417: return true;
-			case 1660063152: return true;
-			case 2914609552: return true;
-			case 2943643501: return true;
-			case 1608871552: return true;
-			case 2439245199: return true;
-			case 1042787934: return true;
-			case 1856042241: return true;
-			case 3243963512: return true;
-			case 4158566097: return true;
-			case 3626867408: return true;
 			case 2016517767: return true;
-			case 2781568857: return true;
-			case 2341007311: return true;
-			case 2778083089: return true;
 			case 3053780830: return true;
-			case 1768891740: return true;
-			case 1054537805: return true;
-			case 2157484638: return true;
-			case 1509187699: return true;
-			case 2042790032: return true;
-			case 4165799628: return true;
 			case 4086658281: return true;
-			case 1783015770: return true;
 			case 1329646415: return true;
-			case 4074543187: return true;
-			case 867548509: return true;
-			case 3982875396: return true;
-			case 4240577450: return true;
-			case 4124623270: return true;
-			case 3692461612: return true;
-			case 3663146110: return true;
-			case 4097777520: return true;
-			case 448429030: return true;
 			case 1529196076: return true;
 			case 3127900445: return true;
 			case 3027962421: return true;
-			case 2533589738: return true;
-			case 2609359061: return true;
 			case 3420628829: return true;
-			case 1072016465: return true;
-			case 723233188: return true;
-			case 3856911033: return true;
 			case 1999602285: return true;
-			case 1305183839: return true;
-			case 3812236995: return true;
-			case 1412071761: return true;
-			case 710998568: return true;
-			case 2706606064: return true;
-			case 3893378262: return true;
-			case 463610769: return true;
-			case 2481509218: return true;
-			case 451544542: return true;
-			case 4015995234: return true;
 			case 1404847402: return true;
-			case 3112655638: return true;
 			case 331165859: return true;
 			case 4252922144: return true;
-			case 1039846685: return true;
-			case 338393293: return true;
-			case 682877961: return true;
-			case 3544373492: return true;
-			case 2515109513: return true;
-			case 1179482911: return true;
-			case 2273995522: return true;
-			case 1004757350: return true;
-			case 4243806635: return true;
-			case 214636428: return true;
-			case 2445595289: return true;
-			case 2757150158: return true;
-			case 3136571912: return true;
-			case 1807405624: return true;
-			case 2162789131: return true;
-			case 385403989: return true;
-			case 3478079324: return true;
-			case 1252848954: return true;
-			case 1595516126: return true;
-			case 609421318: return true;
-			case 2668620305: return true;
-			case 2473145415: return true;
-			case 1973038258: return true;
-			case 1597423693: return true;
-			case 1190533807: return true;
-			case 2525727697: return true;
-			case 3408363356: return true;
-			case 530289379: return true;
-			case 1621171031: return true;
-			case 2082059205: return true;
-			case 734778138: return true;
-			case 1235345126: return true;
-			case 3689010777: return true;
-			case 2986769608: return true;
-			case 3657597509: return true;
-			case 1975003073: return true;
-			case 3979015343: return true;
-			case 2218152070: return true;
-			case 603775116: return true;
-			case 3958052878: return true;
-			case 3049322572: return true;
-			case 2830218821: return true;
-			case 148013059: return true;
-			case 4095615324: return true;
-			case 2233826070: return true;
-			case 2513912981: return true;
-			case 699246055: return true;
-			case 2028607225: return true;
 			case 3101698114: return true;
-			case 2809605785: return true;
-			case 4124788165: return true;
-			case 2934153892: return true;
-			case 1300840506: return true;
-			case 3303107099: return true;
-			case 1607154358: return true;
-			case 1878645084: return true;
-			case 846575682: return true;
-			case 1351298697: return true;
-			case 626085974: return true;
-			case 2247615214: return true;
-			case 1260650574: return true;
-			case 1096409881: return true;
-			case 230924584: return true;
 			case 1162798199: return true;
-			case 2315554128: return true;
-			case 2254336722: return true;
 			case 413509423: return true;
-			case 1580310250: return true;
-			case 985171141: return true;
-			case 2043862942: return true;
-			case 531007025: return true;
 			case 812556717: return true;
-			case 5716631: return true;
-			case 3473067441: return true;
-			case 1549132990: return true;
-			case 2771591690: return true;
-			case 3206491090: return true;
-			case 912023232: return true;
 			case 3824725483: return true;
 			case 2347447852: return true;
-			case 3081323446: return true;
-			case 2415094496: return true;
-			case 2387106220: return true;
-			case 901063453: return true;
-			case 4282788508: return true;
-			case 3124975700: return true;
-			case 1447204868: return true;
-			case 1983826977: return true;
-			case 2636378356: return true;
-			case 1640371178: return true;
-			case 280115917: return true;
-			case 1742049831: return true;
-			case 2552916305: return true;
-			case 1210645708: return true;
-			case 3611470254: return true;
-			case 1199560280: return true;
-			case 3101149627: return true;
-			case 581633288: return true;
-			case 1377556343: return true;
-			case 1735638870: return true;
-			case 1935646853: return true;
 			case 3825984169: return true;
-			case 1692211062: return true;
 			case 1620046519: return true;
-			case 2097647324: return true;
-			case 2715220739: return true;
-			case 2916149573: return true;
-			case 3593883385: return true;
-			case 3071757647: return true;
 			case 3026737570: return true;
-			case 1600972822: return true;
-			case 1628702193: return true;
-			case 3736923433: return true;
-			case 2347495698: return true;
-			case 3698973494: return true;
 			case 630975310: return true;
-			case 3179687236: return true;
 			case 4292641817: return true;
-			case 1911125066: return true;
-			case 180925521: return true;
-			case 427810014: return true;
 			case 4207607924: return true;
-			case 728799441: return true;
-			case 1417489154: return true;
-			case 2799835756: return true;
-			case 2759199220: return true;
-			case 1907098498: return true;
 			case 2391383451: return true;
-			case 3313531582: return true;
 			case 2769231204: return true;
-			case 891718957: return true;
 			case 926996030: return true;
 			case 2391406946: return true;
 			case 4156078855: return true;
 			case 3512223829: return true;
-			case 1898987631: return true;
 			case 4237592921: return true;
-			case 1133259667: return true;
 			case 3304561284: return true;
-			case 336235671: return true;
-			case 512836454: return true;
 			case 486154966: return true;
-			case 1299126871: return true;
-			case 4009809668: return true;
-			case 4088093105: return true;
-			case 1028945134: return true;
-			case 4218914973: return true;
-			case 3342526732: return true;
-			case 1236880293: return true;
-			case 1033361043: return true;
-			case 2543172580: return true;
 			default: return false;
 		}
 	}
+	std::vector<unsigned int> IfcElements { 
+		4288193352,
+		1634111441,
+		177149247,
+		2056796094,
+		3087945054,
+		277319702,
+		753842376,
+		2906023776,
+		32344328,
+		2979338954,
+		1095909175,
+		2938176219,
+		635142910,
+		3758799889,
+		1051757585,
+		4217484030,
+		3902619387,
+		3296154744,
+		1677625105,
+		639361253,
+		843113511,
+		905975707,
+		3221913625,
+		3571504051,
+		2272882330,
+		25142252,
+		4136498852,
+		3640358203,
+		1973544240,
+		3495092785,
+		4074379575,
+		1335981549,
+		1052013943,
+		1062813311,
+		1945004755,
+		3040386961,
+		395920057,
+		3242481149,
+		342316401,
+		3518393246,
+		1360408905,
+		1904799276,
+		862014818,
+		3310460725,
+		264262732,
+		402227799,
+		1003880860,
+		4123344466,
+		1658829314,
+		2814081492,
+		3747195512,
+		484807127,
+		3415622556,
+		647756555,
+		819412036,
+		1426591983,
+		2058353004,
+		4278956645,
+		182646315,
+		2188021234,
+		3132237377,
+		987401354,
+		707683696,
+		2223149337,
+		3508470533,
+		900683007,
+		263784265,
+		1509553395,
+		3493046030,
+		3319311131,
+		2068733104,
+		4175244083,
+		2176052936,
+		76236018,
+		629592764,
+		377706215,
+		1437502449,
+		1073191201,
+		1911478936,
+		2474470126,
+		3588315303,
+		3079942009,
+		3694346114,
+		1687234759,
+		310824031,
+		3612865200,
+		3171933400,
+		1156407060,
+		3651124850,
+		738039164,
+		2295281155,
+		90941305,
+		2262370178,
+		3024970846,
+		3283111854,
+		979691226,
+		2320036040,
+		2016517767,
+		3053780830,
+		4086658281,
+		1329646415,
+		1529196076,
+		3127900445,
+		3027962421,
+		3420628829,
+		1999602285,
+		1404847402,
+		331165859,
+		4252922144,
+		3101698114,
+		1162798199,
+		413509423,
+		812556717,
+		3824725483,
+		2347447852,
+		3825984169,
+		1620046519,
+		3026737570,
+		630975310,
+		4292641817,
+		4207607924,
+		2391383451,
+		2769231204,
+		926996030,
+		2391406946,
+		4156078855,
+		3512223829,
+		4237592921,
+		3304561284,
+		486154966
+	};
 };

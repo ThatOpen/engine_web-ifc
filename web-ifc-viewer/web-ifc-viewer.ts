@@ -17,37 +17,14 @@ async function LoadModel(data: Uint8Array)
     console.log(`Opening model took ${time} ms`);
 
     let startGeomTime = API.ms();
-    let slabs = API.GetExpressIdsWithType(modelID, IfcSchema.IFCSLAB).expressIds(); // IFCSLAB
-    for (let i = 0; i < slabs.length; i++)
-    {
-        let slabEID = slabs[i];
-        AddDefaultGeometryForExpressID(modelID, slabEID);
-    }
-    
-    let walls = API.GetExpressIdsWithType(modelID, IfcSchema.IFCWALLSTANDARDCASE).expressIds(); // IFCWALLSTANDARDCASE
-    for (let i = 0; i < walls.length; i++)
-    {
-        AddDefaultGeometryForExpressID(modelID, walls[i]);
-    }
-    
-    walls = API.GetExpressIdsWithType(modelID, IfcSchema.IFCWALL).expressIds(); // IFCWALL
-    for (let i = 0; i < walls.length; i++)
-    {
-        AddDefaultGeometryForExpressID(modelID, walls[i]);
-    }
-
-    let elements = API.GetExpressIdsWithType(modelID, IfcSchema.IFCBEAM).expressIds(); // IFCBEAM
-    for (let i = 0; i < elements.length; i++)
-    {
-        AddDefaultGeometryForExpressID(modelID, elements[i]);
-    }
-
-    elements = API.GetExpressIdsWithType(modelID, IfcSchema.IFCCOLUMN).expressIds(); // IFCCOLUMN
-    for (let i = 0; i < elements.length; i++)
-    {
-        AddDefaultGeometryForExpressID(modelID, elements[i]);
-    }
-
+    IfcSchema.IfcElements.forEach((elementCode) => {
+        let elementIDs = API.GetExpressIdsWithType(modelID, elementCode).expressIds();
+        for (let i = 0; i < elementIDs.length; i++)
+        {
+            let elementID = elementIDs[i];
+            AddDefaultGeometryForExpressID(modelID, elementID);
+        }
+    });
     let endGeomTime = API.ms();
     let totalGeomTime = endGeomTime - startGeomTime;
     console.log(`Loading geometry took ${totalGeomTime} ms`);

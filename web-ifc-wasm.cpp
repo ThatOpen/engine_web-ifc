@@ -79,7 +79,7 @@ extern "C" GeometryBuffer* GetFlattenedGeometry(uint32_t modelID, uint64_t expre
     auto start = webifc::ms();
     flatGeometry = geomLoader.GetFlattenedGeometry(expressID);
     auto end = webifc::ms() - start;
-    std::cout << "Geometry generation took " << end << " ms" << std::endl;
+    // std::cout << "Geometry generation took " << end << " ms" << std::endl;
 
     indexData.resize(flatGeometry.faces.size() * 3);
     vertexData.resize(flatGeometry.points.size() * 3);

@@ -18,6 +18,43 @@ std::string ReadFile(std::wstring filename)
     return buffer;
 }
 
+void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
+{
+    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCWALL);
+
+    bool writeFiles = false;
+    auto mesh = geometryLoader.GetMesh(walls[0]);
+    if (writeFiles)
+    {
+        geometryLoader.DumpMesh(mesh, L"TEST.obj");
+    }
+
+    for (int i = 0; i < walls.size(); i++)
+    {
+        auto mesh = geometryLoader.GetMesh(walls[i]);
+
+        if (writeFiles)
+        {
+            geometryLoader.DumpMesh(mesh, L"IFCSLAB" + std::to_wstring(i) + L".obj");
+        }
+    }
+
+    std::cout << walls.size() << " elements" << std::endl;
+}
+
+void LoadAllTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
+{
+    for (auto type : ifc2x4::IfcElements)
+    {
+        auto elements = loader.GetExpressIDsWithType(type);
+
+        for (int i = 0; i < elements.size(); i++)
+        {
+            auto mesh = geometryLoader.GetMesh(elements[i]);
+        }
+    }
+}
+
 int main()
 {
     std::cout << "Hello web IFC test!\n";
@@ -38,35 +75,13 @@ int main()
 
     start = webifc::ms();
 
-    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCWALL);
-
     webifc::IfcGeometryLoader geometryLoader(loader);
 
-    bool writeFiles = false;
+    // SpecificLoadTest(loader, geometryLoader);
+    LoadAllTest(loader, geometryLoader);
 
-    start = webifc::ms();
-    //auto mesh = geometryLoader.GetMesh(walls[0]);
-    if (writeFiles)
-    {
-      //  geometryLoader.DumpMesh(mesh, L"TEST.obj");
-    }
-    time = webifc::ms() - start;
-    
-    std::cout << "First slab took " << time << "ms" << std::endl;
-
-    for (int i = 0; i < walls.size(); i++)
-    {
-        auto mesh = geometryLoader.GetMesh(walls[i]);
-
-        if (writeFiles)
-        {
-            geometryLoader.DumpMesh(mesh, L"IFCSLAB" + std::to_wstring(i) + L".obj");
-        }
-    }
     time = webifc::ms() - start;
 
-
-    std::cout << walls.size() << " elements" << std::endl;
     std::cout << "Generating geometry took " << time << "ms" << std::endl;
 
     std::cout << "Done" << std::endl;

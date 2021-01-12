@@ -35,6 +35,8 @@ let tsHeader = [];
 let cppHeader = [];
 cppHeader.push("#pragma once");
 cppHeader.push("");
+cppHeader.push("#include <vector>");
+cppHeader.push("");
 cppHeader.push("// unique list of crc32 codes for ifc classes");
 cppHeader.push("");
 cppHeader.push("namespace ifc2x4 {");
@@ -49,7 +51,7 @@ Object.keys(entities).forEach(element => {
 cppHeader.push("\tbool IsIfcElement(unsigned int ifcCode) {");
 cppHeader.push("\t\tswitch(ifcCode) {");
 
-Object.keys(entities).forEach(element => {
+Object.keys(elements).forEach(element => {
     let name = element.toUpperCase();
     let code = crc32(name);
     cppHeader.push(`\t\t\tcase ${code}: return true;`);
@@ -60,7 +62,25 @@ cppHeader.push(`\t\t\tdefault: return false;`);
 cppHeader.push("\t\t}");
 cppHeader.push("\t}");
 
+cppHeader.push("\tstd::vector<unsigned int> IfcElements { ");
+cppHeader.push(Object.keys(elements).map(element => {
+    let name = element.toUpperCase();
+    let code = crc32(name);
+    return `\t\t${code}`;
+}).join(",\n"));
+cppHeader.push("\t};");
+
 cppHeader.push("};");
+
+tsHeader.push("");
+tsHeader.push("export const IfcElements = [");
+tsHeader.push(Object.keys(elements).map(element => {
+    let name = element.toUpperCase();
+    let code = crc32(name);
+    return `\t${code}`;
+}).join(",\n"));
+tsHeader.push("];");
+
 
 fs.writeFileSync("ifc2x4.h", cppHeader.join("\n")); 
 fs.writeFileSync("ifc2x4.ts", tsHeader.join("\n")); 
