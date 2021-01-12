@@ -108,11 +108,32 @@ namespace webifc
 				IfcComposedMesh mesh;
 
 				_loader.MoveToArgumentOffset(line, 5);
-				uint32_t localPlacement = _loader.GetRefArgument();
-				uint32_t ifcPresentation = _loader.GetRefArgument();
+				uint32_t localPlacement = 0;
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					localPlacement = _loader.GetRefArgument();
+				}
+				uint32_t ifcPresentation = 0;
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					ifcPresentation = _loader.GetRefArgument();
+				}
 
-				mesh.transformation = GetLocalPlacement(localPlacement);
-				mesh.children.push_back(GetMesh(ifcPresentation));
+				if (localPlacement != 0)
+				{
+					mesh.transformation = GetLocalPlacement(localPlacement);
+				}
+				else
+				{
+					mesh.transformation = glm::dmat4(1);
+				}
+
+				if (ifcPresentation != 0)
+				{
+					mesh.children.push_back(GetMesh(ifcPresentation));
+				}
 
 				auto relVoids = _relVoids[line.expressID];
 
