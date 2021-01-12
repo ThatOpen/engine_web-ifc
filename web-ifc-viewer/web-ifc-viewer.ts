@@ -2,6 +2,7 @@ import * as API from "../web-ifc-js/web-ifc-api";
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GeometryBuffer } from "../web-ifc-interop/gen/Types";
+import * as IfcSchema from "../web-ifc-schema/ifc2x4";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -16,32 +17,32 @@ async function LoadModel(data: Uint8Array)
     console.log(`Opening model took ${time} ms`);
 
     let startGeomTime = API.ms();
-    let slabs = API.GetExpressIdsWithType(modelID, 1529196076).expressIds(); // IFCSLAB
+    let slabs = API.GetExpressIdsWithType(modelID, IfcSchema.IFCSLAB).expressIds(); // IFCSLAB
     for (let i = 0; i < slabs.length; i++)
     {
         let slabEID = slabs[i];
         AddDefaultGeometryForExpressID(modelID, slabEID);
     }
     
-    let walls = API.GetExpressIdsWithType(modelID, 3512223829).expressIds(); // IFCWALLSTANDARDCASE
+    let walls = API.GetExpressIdsWithType(modelID, IfcSchema.IFCWALLSTANDARDCASE).expressIds(); // IFCWALLSTANDARDCASE
     for (let i = 0; i < walls.length; i++)
     {
         AddDefaultGeometryForExpressID(modelID, walls[i]);
     }
     
-    walls = API.GetExpressIdsWithType(modelID, 2391406946).expressIds(); // IFCWALL
+    walls = API.GetExpressIdsWithType(modelID, IfcSchema.IFCWALL).expressIds(); // IFCWALL
     for (let i = 0; i < walls.length; i++)
     {
         AddDefaultGeometryForExpressID(modelID, walls[i]);
     }
 
-    let elements = API.GetExpressIdsWithType(modelID, 753842376).expressIds(); // IFCBEAM
+    let elements = API.GetExpressIdsWithType(modelID, IfcSchema.IFCBEAM).expressIds(); // IFCBEAM
     for (let i = 0; i < elements.length; i++)
     {
         AddDefaultGeometryForExpressID(modelID, elements[i]);
     }
 
-    elements = API.GetExpressIdsWithType(modelID, 843113511).expressIds(); // IFCCOLUMN
+    elements = API.GetExpressIdsWithType(modelID, IfcSchema.IFCCOLUMN).expressIds(); // IFCCOLUMN
     for (let i = 0; i < elements.length; i++)
     {
         AddDefaultGeometryForExpressID(modelID, elements[i]);

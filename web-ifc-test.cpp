@@ -4,7 +4,7 @@
 
 #include "web-ifc-cpp/web-ifc.h"
 #include "web-ifc-cpp/web-ifc-geometry.h"
-#include "web-ifc-cpp/ifc2x3.h"
+#include "web-ifc-schema/ifc2x4.h"
 
 std::string ReadFile(std::wstring filename)
 {
@@ -38,7 +38,7 @@ int main()
 
     start = webifc::ms();
 
-    auto walls = loader.GetExpressIDsWithType(ifc2x3::IFCWALL);
+    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCWALL);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 

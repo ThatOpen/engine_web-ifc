@@ -16,9 +16,6 @@
     <ClInclude Include="web-ifc-cpp\bool-mesh-mesh.h">
       <Filter>web-ifc-cpp</Filter>
     </ClInclude>
-    <ClInclude Include="web-ifc-cpp\ifc2x3.h">
-      <Filter>web-ifc-cpp</Filter>
-    </ClInclude>
     <ClInclude Include="web-ifc-cpp\intersect-mesh-mesh.h">
       <Filter>web-ifc-cpp</Filter>
     </ClInclude>

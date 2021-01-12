@@ -23,7 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="web-ifc-cpp\bool-mesh-mesh.h" />
-    <ClInclude Include="web-ifc-cpp\ifc2x3.h" />
     <ClInclude Include="web-ifc-cpp\intersect-mesh-mesh.h" />
     <ClInclude Include="web-ifc-cpp\intersect-ray-tri.h" />
     <ClInclude Include="web-ifc-cpp\is-inside-mesh.h" />

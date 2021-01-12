@@ -18,7 +18,8 @@
 #include "intersect-mesh-mesh.h"
 #include "bool-mesh-mesh.h"
 
-#include "ifc2x3.h"
+
+#include "../web-ifc-schema/ifc2x4.h"
 #include "web-ifc.h"
 #include "util.h"
 
@@ -68,7 +69,7 @@ namespace webifc
 
 		void PopulateRelVoidsMap()
 		{
-			auto relVoids = _loader.GetExpressIDsWithType(ifc2x3::IFCRELVOIDSELEMENT);
+			auto relVoids = _loader.GetExpressIDsWithType(ifc2x4::IFCRELVOIDSELEMENT);
 
 			for (uint64_t relVoidID : relVoids)
 			{
@@ -101,15 +102,8 @@ namespace webifc
 			PopulateRelVoidsMapIfNeeded();
 
 			auto& line = _loader.GetLine(lineID);
-			switch (line.ifcType)
-			{
-			case ifc2x3::IFCCOLUMN:
-			case ifc2x3::IFCSLAB:
-			case ifc2x3::IFCWALL:
-			case ifc2x3::IFCBEAM:
-			case ifc2x3::IFCFOOTING:
-			case ifc2x3::IFCOPENINGELEMENT:
-			case ifc2x3::IFCWALLSTANDARDCASE:
+			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
+			if (isIfcElement)
 			{
 				IfcComposedMesh mesh;
 
@@ -155,121 +149,126 @@ namespace webifc
 					return mesh;
 				}
 			}
-			case ifc2x3::IFCMAPPEDITEM:
+			else
 			{
-				IfcComposedMesh mesh;
-
-				_loader.MoveToArgumentOffset(line, 0);
-				uint32_t ifcPresentation = _loader.GetRefArgument();
-				uint32_t localPlacement = _loader.GetRefArgument();
-
-				mesh.transformation = GetLocalPlacement(localPlacement);
-				mesh.children.push_back(GetMesh(ifcPresentation));
-
-				return mesh;
-			}
-			case ifc2x3::IFCREPRESENTATIONMAP:
-			{
-				IfcComposedMesh mesh;
-
-				_loader.MoveToArgumentOffset(line, 0);
-				uint32_t axis2Placement = _loader.GetRefArgument();
-				uint32_t ifcPresentation = _loader.GetRefArgument();
-
-				mesh.transformation = GetLocalPlacement(axis2Placement);
-				mesh.children.push_back(GetMesh(ifcPresentation));
-
-				return mesh;
-			}
-			case ifc2x3::IFCFACETEDBREP:
-			{
-				IfcComposedMesh mesh;
-
-				_loader.MoveToArgumentOffset(line, 0);
-				uint32_t ifcPresentation = _loader.GetRefArgument();
-
-				mesh.transformation = glm::dmat4(1);
-				mesh.geom = GetBrep(ifcPresentation);
-
-				return mesh;
-			}
-			case ifc2x3::IFCPRODUCTDEFINITIONSHAPE:
-			{
-				IfcComposedMesh mesh;
-
-				_loader.MoveToArgumentOffset(line, 2);
-				auto representations = _loader.GetSetArgument();
-
-				mesh.transformation = glm::dmat4(1);
-				for (auto& repToken : representations)
+				switch (line.ifcType)
 				{
-					uint32_t repID = _loader.GetRefArgument(repToken);
-					mesh.children.push_back(GetMesh(repID));
+				case ifc2x4::IFCMAPPEDITEM:
+				{
+					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t ifcPresentation = _loader.GetRefArgument();
+					uint32_t localPlacement = _loader.GetRefArgument();
+
+					mesh.transformation = GetLocalPlacement(localPlacement);
+					mesh.children.push_back(GetMesh(ifcPresentation));
+
+					return mesh;
 				}
-
-				return mesh;
-			}
-			case ifc2x3::IFCSHAPEREPRESENTATION:
-			{
-				IfcComposedMesh mesh;
-
-				_loader.MoveToArgumentOffset(line, 3);
-				auto repItems = _loader.GetSetArgument();
-
-				mesh.transformation = glm::dmat4(1);
-				for (auto& repToken : repItems)
+				case ifc2x4::IFCREPRESENTATIONMAP:
 				{
-					uint32_t repID = _loader.GetRefArgument(repToken);
-					mesh.children.push_back(GetMesh(repID));
+					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t axis2Placement = _loader.GetRefArgument();
+					uint32_t ifcPresentation = _loader.GetRefArgument();
+
+					mesh.transformation = GetLocalPlacement(axis2Placement);
+					mesh.children.push_back(GetMesh(ifcPresentation));
+
+					return mesh;
 				}
-
-				return mesh;
-			}
-			case ifc2x3::IFCEXTRUDEDAREASOLID:
-			{
-				IfcComposedMesh mesh;
-
-				_loader.MoveToArgumentOffset(line, 0);
-				uint32_t profileID = _loader.GetRefArgument();
-				uint32_t placementID = _loader.GetRefArgument();
-				uint32_t directionID = _loader.GetRefArgument();
-				double depth = _loader.GetDoubleArgument();
-
-				IfcProfile profile = GetProfile(profileID);
-				glm::dmat4 placement = GetLocalPlacement(placementID);
-				glm::dvec3 dir = GetCartesianPoint3D(directionID);
-
-				double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
-				bool flipWinding = dirDot < 0; // can't be perp according to spec
-
-				if (DEBUG_DUMP_SVG)
+				case ifc2x4::IFCFACETEDBREP:
 				{
-					DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
+					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t ifcPresentation = _loader.GetRefArgument();
+
+					mesh.transformation = glm::dmat4(1);
+					mesh.geom = GetBrep(ifcPresentation);
+
+					return mesh;
 				}
-
-				IfcGeometry geom = Extrude(profile, placement, dir, depth);
-
-				if (flipWinding)
+				case ifc2x4::IFCPRODUCTDEFINITIONSHAPE:
 				{
-					for (auto& face : geom.faces)
+					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 2);
+					auto representations = _loader.GetSetArgument();
+
+					mesh.transformation = glm::dmat4(1);
+					for (auto& repToken : representations)
 					{
-						std::swap(face.i1, face.i2);
+						uint32_t repID = _loader.GetRefArgument(repToken);
+						mesh.children.push_back(GetMesh(repID));
 					}
-				}
 
-				if (DEBUG_DUMP_SVG)
+					return mesh;
+				}
+				case ifc2x4::IFCSHAPEREPRESENTATION:
 				{
-					DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
+					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 3);
+					auto repItems = _loader.GetSetArgument();
+
+					mesh.transformation = glm::dmat4(1);
+					for (auto& repToken : repItems)
+					{
+						uint32_t repID = _loader.GetRefArgument(repToken);
+						mesh.children.push_back(GetMesh(repID));
+					}
+
+					return mesh;
+				}
+				case ifc2x4::IFCEXTRUDEDAREASOLID:
+				{
+					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t profileID = _loader.GetRefArgument();
+					uint32_t placementID = _loader.GetRefArgument();
+					uint32_t directionID = _loader.GetRefArgument();
+					double depth = _loader.GetDoubleArgument();
+
+					IfcProfile profile = GetProfile(profileID);
+					glm::dmat4 placement = GetLocalPlacement(placementID);
+					glm::dvec3 dir = GetCartesianPoint3D(directionID);
+
+					double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
+					bool flipWinding = dirDot < 0; // can't be perp according to spec
+
+					if (DEBUG_DUMP_SVG)
+					{
+						DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
+					}
+
+					IfcGeometry geom = Extrude(profile, placement, dir, depth);
+
+					if (flipWinding)
+					{
+						for (auto& face : geom.faces)
+						{
+							std::swap(face.i1, face.i2);
+						}
+					}
+
+					if (DEBUG_DUMP_SVG)
+					{
+						DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
+					}
+
+					mesh.transformation = glm::dmat4(1);
+					mesh.geom = geom;
+
+					return mesh;
 				}
 
-				mesh.transformation = glm::dmat4(1);
-				mesh.geom = geom;
-
-				return mesh;
-			}
-
-			default:
-				break;
+				default:
+					break;
+				}
 			}
 
 			return IfcComposedMesh();
@@ -281,7 +280,7 @@ namespace webifc
 			auto& line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x3::IFCCLOSEDSHELL:
+			case ifc2x4::IFCCLOSEDSHELL:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto faces = _loader.GetSetArgument();
@@ -310,7 +309,7 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
-			case ifc2x3::IFCFACE:
+			case ifc2x4::IFCFACE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto bounds = _loader.GetSetArgument();
@@ -338,7 +337,7 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
-			case ifc2x3::IFCFACEOUTERBOUND:
+			case ifc2x4::IFCFACEOUTERBOUND:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t loop = _loader.GetRefArgument();
@@ -351,7 +350,7 @@ namespace webifc
 
 				return bound;
 			}
-			case ifc2x3::IFCFACEBOUND:
+			case ifc2x4::IFCFACEBOUND:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t loop = _loader.GetRefArgument();
@@ -379,7 +378,7 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
-			case ifc2x3::IFCPOLYLOOP:
+			case ifc2x4::IFCPOLYLOOP:
 			{
 				IfcCurve3D curve;
 
@@ -723,7 +722,7 @@ namespace webifc
 			auto& line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x3::IFCARBITRARYCLOSEDPROFILEDEF:
+			case ifc2x4::IFCARBITRARYCLOSEDPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -735,7 +734,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x3::IFCRECTANGLEPROFILEDEF:
+			case ifc2x4::IFCRECTANGLEPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -770,7 +769,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x3::IFCCIRCLEPROFILEDEF:
+			case ifc2x4::IFCCIRCLEPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -846,7 +845,7 @@ namespace webifc
 			auto& line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x3::IFCAXIS2PLACEMENT3D:
+			case ifc2x4::IFCAXIS2PLACEMENT3D:
 			{
 				glm::dvec3 zAxis(0, 0, 1);
 				glm::dvec3 xAxis(1, 0, 0);
@@ -881,7 +880,7 @@ namespace webifc
 					glm::dvec4(pos, 1)
 				);
 			}
-			case ifc2x3::IFCLOCALPLACEMENT:
+			case ifc2x4::IFCLOCALPLACEMENT:
 			{
 				glm::dmat4 relPlacement(1);
 				
@@ -903,8 +902,8 @@ namespace webifc
 				auto result = relPlacement * axis2Placement;
 				return result;;
 			}
-			case ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
-			case ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM:
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM:
 			{
 				double scale1 = 1.0;
 				double scale2 = 1.0;
@@ -946,7 +945,7 @@ namespace webifc
 					Axis3 = GetCartesianPoint3D(_loader.GetRefArgument());
 				}
 
-				if (line.ifcType == ifc2x3::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
+				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
 				{
 					_loader.MoveToArgumentOffset(line, 5);
 					if (_loader.GetTokenType() == IfcTokenType::REF)
@@ -1015,7 +1014,7 @@ namespace webifc
 			auto& line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x3::IFCPOLYLINE:
+			case ifc2x4::IFCPOLYLINE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto points = _loader.GetSetArgument();
@@ -1028,7 +1027,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x3::IFCCOMPOSITECURVE:
+			case ifc2x4::IFCCOMPOSITECURVE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto segments = _loader.GetSetArgument();
@@ -1054,7 +1053,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x3::IFCCOMPOSITECURVESEGMENT:
+			case ifc2x4::IFCCOMPOSITECURVESEGMENT:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto transition = _loader.GetStringArgument();
@@ -1065,7 +1064,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x3::IFCTRIMMEDCURVE:
+			case ifc2x4::IFCTRIMMEDCURVE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto basisCurveID = _loader.GetRefArgument();
@@ -1086,7 +1085,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x3::IFCCIRCLE:
+			case ifc2x4::IFCCIRCLE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto positionID = _loader.GetRefArgument();

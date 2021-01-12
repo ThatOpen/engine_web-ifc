@@ -7,7 +7,7 @@
 #include <chrono>
 #include <algorithm>
 
-#include "ifc2x3.h"
+#include "../web-ifc-schema/ifc2x4.h"
 #include "util.h"
 
 namespace webifc
