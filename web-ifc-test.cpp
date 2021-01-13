@@ -60,8 +60,9 @@ int main()
     std::cout << "Hello web IFC test!\n";
 
     //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
-    // std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
-    std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
+    std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
 
     std::string content = ReadFile(filename);
 

@@ -200,6 +200,26 @@ namespace webifc
 
 					return mesh;
 				}
+				case ifc2x4::IFCSHELLBASEDSURFACEMODEL:
+				{
+					IfcComposedMesh mesh;
+
+					mesh.transformation = glm::dmat4(1);
+
+					_loader.MoveToArgumentOffset(line, 0);
+					auto shells = _loader.GetSetArgument();
+
+					for (auto& shell : shells)
+					{
+						uint32_t shellRef = _loader.GetRefArgument(shell);
+						IfcComposedMesh temp;
+						temp.geom = GetBrep(shellRef);
+						temp.transformation = glm::dmat4(1);
+						mesh.children.push_back(temp);
+					}
+
+					return mesh;
+				}
 				case ifc2x4::IFCFACETEDBREP:
 				{
 					IfcComposedMesh mesh;
@@ -231,6 +251,14 @@ namespace webifc
 				case ifc2x4::IFCSHAPEREPRESENTATION:
 				{
 					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 1);
+					auto type = _loader.GetStringArgument();
+
+					if (type != "Body")
+					{
+						return mesh;
+					}
 
 					_loader.MoveToArgumentOffset(line, 3);
 					auto repItems = _loader.GetSetArgument();
@@ -288,6 +316,7 @@ namespace webifc
 				}
 
 				default:
+					std::cout << "Unexpected mesh type: " << line.ifcType << " at " << line.expressID << std::endl;
 					break;
 				}
 			}
@@ -315,8 +344,22 @@ namespace webifc
 
 				return geometry;
 			}
+			case ifc2x4::IFCOPENSHELL:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto faces = _loader.GetSetArgument();
 
+				IfcGeometry geometry;
+				for (auto& faceToken : faces)
+				{
+					uint32_t faceID = _loader.GetRefArgument(faceToken);
+					AddFaceToGeometry(faceID, geometry);
+				}
+
+				return geometry;
+			}
 			default:
+				std::cout << "Unexpected shell type: " << line.ifcType << " at " << expressID << std::endl;
 				break;
 			}
 
@@ -344,9 +387,11 @@ namespace webifc
 				}
 
 				TriangulateBounds(geometry, bounds3D);
+				break;
 			}
 
 			default:
+				std::cout << "Unexpected face type: " << line.ifcType << " at " << expressID << std::endl;
 				break;
 			}
 		}
@@ -386,6 +431,7 @@ namespace webifc
 			}
 
 			default:
+				std::cout << "Unexpected bound type: " << line.ifcType << " at " << expressID << std::endl;
 				break;
 			}
 
@@ -416,6 +462,7 @@ namespace webifc
 			}
 
 			default:
+				std::cout << "Unexpected curve type: " << line.ifcType << " at " << expressID << std::endl;
 				break;
 			}
 
@@ -827,6 +874,7 @@ namespace webifc
 			}
 
 			default:
+				std::cout << "Unexpected profile type: " << line.ifcType << " at " << line.expressID << std::endl;
 				break;
 			}
 
@@ -991,6 +1039,7 @@ namespace webifc
 			}
 
 			default:
+				std::cout << "Unexpected placement type: " << line.ifcType << " at " << expressID << std::endl;
 				break;
 			}
 
@@ -1159,6 +1208,7 @@ namespace webifc
 			}
 
 			default:
+				std::cout << "Unexpected curve type: " << line.ifcType << " at " << expressID << std::endl;
 				break;
 			}
 
