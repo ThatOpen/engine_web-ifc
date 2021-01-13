@@ -77,8 +77,8 @@ int main()
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
-    SpecificLoadTest(loader, geometryLoader);
-    //LoadAllTest(loader, geometryLoader);
+    //SpecificLoadTest(loader, geometryLoader);
+    LoadAllTest(loader, geometryLoader);
 
     time = webifc::ms() - start;
 

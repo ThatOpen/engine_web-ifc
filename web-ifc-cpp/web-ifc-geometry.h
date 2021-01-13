@@ -959,7 +959,6 @@ namespace webifc
 					scale1 = _loader.GetDoubleArgument();
 				}
 				_loader.MoveToArgumentOffset(line, 4);
-				IfcTokenType a3Token = _loader.GetTokenType();
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
 					_loader.Reverse();
