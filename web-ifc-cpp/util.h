@@ -562,7 +562,7 @@ namespace webifc
 		}
 	}
 
-	std::string ToObj(const IfcGeometry& geom, int& offset, glm::dmat4 transform = glm::dmat4(1))
+	std::string ToObj(const IfcGeometry& geom, size_t& offset, glm::dmat4 transform = glm::dmat4(1))
 	{
 		std::stringstream obj;
 
@@ -584,7 +584,7 @@ namespace webifc
 		return obj.str();
 	}
 
-	std::string ToObj(IfcComposedMesh& mesh, int& offset, glm::dmat4 mat = glm::dmat4(1))
+	std::string ToObj(IfcComposedMesh& mesh, size_t& offset, glm::dmat4 mat = glm::dmat4(1))
 	{
 		std::string complete;
 
@@ -602,7 +602,7 @@ namespace webifc
 
 	void DumpIfcGeometry(const IfcGeometry& geom, std::wstring filename)
 	{
-		int offset = 0;
+		size_t offset = 0;
         writeFile(filename, ToObj(geom, offset));
 	}
 
@@ -684,7 +684,7 @@ namespace webifc
 			else
 			{
 				readChunkIndex--;
-				readPtr = sizes[readChunkIndex] - 1;
+				readPtr = static_cast<uint32_t>(sizes[readChunkIndex] - 1);
 			}
 		}
 
@@ -708,7 +708,7 @@ namespace webifc
 
 		inline void AdvanceRead(unsigned long long size)
 		{
-			readPtr += size;
+			readPtr += static_cast<uint32_t>(size);
 			if (readPtr >= sizes[readChunkIndex])
 			{
 				readChunkIndex++;

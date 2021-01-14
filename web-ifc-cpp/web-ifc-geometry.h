@@ -33,7 +33,8 @@ namespace webifc
 	{
 	public:
 		IfcGeometryLoader(IfcLoader& l) :
-			_loader(l)
+			_loader(l),
+			_isRelVoidsMapPopulated(false)
 		{
 
 		}
@@ -43,25 +44,25 @@ namespace webifc
 			return _geometry[index];
 		}
 
-		IfcGeometry GetFlattenedGeometry(uint64_t expressID)
+		IfcGeometry GetFlattenedGeometry(uint32_t expressID)
 		{
-			auto mesh = GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+			auto mesh = GetMesh(expressID);
             return flatten(mesh, NormalizeIFC);
 		}
 
-		IfcComposedMesh GetMesh(uint64_t expressID)
+		IfcComposedMesh GetMesh(uint32_t expressID)
 		{
 			return GetMeshByLine(_loader.ExpressIDToLineID(expressID));
 		}
 
-		IfcProfile GetProfile(uint64_t expressID)
+		IfcProfile GetProfile(uint32_t expressID)
 		{
 			return GetProfileByLine(_loader.ExpressIDToLineID(expressID));
 		}
 
 		void DumpMesh(IfcComposedMesh& mesh, std::wstring filename)
 		{
-			int offset = 0;
+			size_t offset = 0;
             writeFile(filename, ToObj(mesh, offset, NormalizeIFC));
 		}
 
@@ -71,15 +72,15 @@ namespace webifc
 		{
 			auto relVoids = _loader.GetExpressIDsWithType(ifc2x4::IFCRELVOIDSELEMENT);
 
-			for (uint64_t relVoidID : relVoids)
+			for (uint32_t relVoidID : relVoids)
 			{
 				uint32_t lineID = _loader.ExpressIDToLineID(relVoidID);
 				auto& line = _loader.GetLine(lineID);
 
 				_loader.MoveToArgumentOffset(line, 4);
 
-				uint64_t relatingBuildingElement = _loader.GetRefArgument();
-				uint64_t relatedOpeningElement = _loader.GetRefArgument();
+				uint32_t relatingBuildingElement = _loader.GetRefArgument();
+				uint32_t relatedOpeningElement = _loader.GetRefArgument();
 
 				_relVoids[relatingBuildingElement].push_back(relatedOpeningElement);
 			}
@@ -97,7 +98,7 @@ namespace webifc
 			PopulateRelVoidsMap();
 		}
 
-		IfcComposedMesh GetMeshByLine(uint64_t lineID)
+		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
 			PopulateRelVoidsMapIfNeeded();
 
@@ -324,7 +325,7 @@ namespace webifc
 			return IfcComposedMesh();
 		}
 
-		IfcGeometry GetBrep(uint64_t expressID)
+		IfcGeometry GetBrep(uint32_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -366,7 +367,7 @@ namespace webifc
 			return IfcGeometry();
 		}
 
-		void AddFaceToGeometry(uint64_t expressID, IfcGeometry& geometry)
+		void AddFaceToGeometry(uint32_t expressID, IfcGeometry& geometry)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -396,7 +397,7 @@ namespace webifc
 			}
 		}
 
-		IfcBound3D GetBound(uint64_t expressID)
+		IfcBound3D GetBound(uint32_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -438,7 +439,7 @@ namespace webifc
 			return IfcBound3D();
 		}
 
-		IfcCurve3D GetLoop(uint64_t expressID)
+		IfcCurve3D GetLoop(uint32_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -478,7 +479,7 @@ namespace webifc
 			{
 				auto c = bounds[0].curve;
 
-				int offset = geometry.points.size();
+				size_t offset = geometry.points.size();
 
 				// triangle
 				geometry.points.push_back(c.points[0]);
@@ -486,9 +487,9 @@ namespace webifc
 				geometry.points.push_back(c.points[2]);
 
 				Face f1;
-				f1.i0 = offset + 0;
-				f1.i1 = offset + 1;
-				f1.i2 = offset + 2;
+				f1.i0 = static_cast<uint32_t>(offset + 0);
+				f1.i1 = static_cast<uint32_t>(offset + 1);
+				f1.i2 = static_cast<uint32_t>(offset + 2);
 
 				geometry.faces.push_back(f1);
 			}
@@ -496,7 +497,7 @@ namespace webifc
 			{
 				auto c = bounds[0].curve;
 				
-				int offset = geometry.points.size();
+				size_t offset = geometry.points.size();
 
 				// quad, since the loop is genus 1 we can always triangulate this
 				geometry.points.push_back(c.points[0]);
@@ -505,14 +506,14 @@ namespace webifc
 				geometry.points.push_back(c.points[3]);
 
 				Face f1;
-				f1.i0 = offset + 0;
-				f1.i1 = offset + 1;
-				f1.i2 = offset + 2;
+				f1.i0 = static_cast<uint32_t>(offset + 0);
+				f1.i1 = static_cast<uint32_t>(offset + 1);
+				f1.i2 = static_cast<uint32_t>(offset + 2);
 
 				Face f2;
-				f2.i0 = offset + 0;
-				f2.i1 = offset + 2;
-				f2.i2 = offset + 3;
+				f2.i0 = static_cast<uint32_t>(offset + 0);
+				f2.i1 = static_cast<uint32_t>(offset + 2);
+				f2.i2 = static_cast<uint32_t>(offset + 3);
 
 				geometry.faces.push_back(f1);
 				geometry.faces.push_back(f2);
@@ -574,7 +575,7 @@ namespace webifc
 				using Point = std::array<double, 2>;
 				std::vector<std::vector<Point>> polygon;
 
-				int offset = geometry.points.size();
+				size_t offset = geometry.points.size();
 				
 				// TODO: assuming that outer bound is first!
 				// TODO: assuming 0,1,2 NOT colinear!
@@ -618,9 +619,9 @@ namespace webifc
 				for (int i = 0; i < indices.size(); i += 3)
 				{
 					Face f2;
-					f2.i0 = offset + indices[i + 0];
-					f2.i1 = offset + indices[i + 1];
-					f2.i2 = offset + indices[i + 2];
+					f2.i0 = static_cast<uint32_t>(offset + indices[i + 0]);
+					f2.i1 = static_cast<uint32_t>(offset + indices[i + 1]);
+					f2.i2 = static_cast<uint32_t>(offset + indices[i + 2]);
 
 					geometry.faces.push_back(f2);
 				}
@@ -634,13 +635,13 @@ namespace webifc
 
 			if (false && profile.isConvex)
 			{
-				int profileSize = profile.curve.points.size();
+				size_t profileSize = profile.curve.points.size();
 				if (equals2d(profile.curve.points[0], profile.curve.points[profileSize - 1]))
 				{
 					profileSize--;
 				}
 				// simplified convex fan triangulation
-				int offset = 0;
+				size_t offset = 0;
 				for (int i = 0; i < profileSize; i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
@@ -650,9 +651,9 @@ namespace webifc
 					if (i > 1)
 					{
 						Face f1;
-						f1.i0 = offset + 0;
-						f1.i1 = offset + i;
-						f1.i2 = offset + i - 1;
+						f1.i0 = static_cast<uint32_t>(offset + 0);
+						f1.i1 = static_cast<uint32_t>(offset + i);
+						f1.i2 = static_cast<uint32_t>(offset + i - 1);
 
 						geom.faces.push_back(f1);
 
@@ -670,9 +671,9 @@ namespace webifc
 					if (i > 1)
 					{
 						Face f2;
-						f2.i0 = offset + 0;
-						f2.i1 = offset + i - 1;
-						f2.i2 = offset + i;
+						f2.i0 = static_cast<uint32_t>(offset + 0);
+						f2.i1 = static_cast<uint32_t>(offset + i - 1);
+						f2.i2 = static_cast<uint32_t>(offset + i);
 
 						geom.faces.push_back(f2);
 						CheckTriangle(f2, geom.points);
@@ -697,13 +698,13 @@ namespace webifc
 
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
-				int offset = 0;
+				size_t offset = 0;
 				for (int i = 0; i < indices.size(); i += 3)
 				{
 					Face f2;
-					f2.i0 = offset + indices[i + 0];
-					f2.i1 = offset + indices[i + 1];
-					f2.i2 = offset + indices[i + 2];
+					f2.i0 = static_cast<uint32_t>(offset + indices[i + 0]);
+					f2.i1 = static_cast<uint32_t>(offset + indices[i + 1]);
+					f2.i2 = static_cast<uint32_t>(offset + indices[i + 2]);
 
 					geom.faces.push_back(f2);
 					CheckTriangle(f2, geom.points);
@@ -722,9 +723,9 @@ namespace webifc
 				for (int i = 0; i < indices.size(); i += 3)
 				{
 					Face f2;
-					f2.i0 = offset + indices[i + 0];
-					f2.i1 = offset + indices[i + 2];
-					f2.i2 = offset + indices[i + 1];
+					f2.i0 = static_cast<uint32_t>(offset + indices[i + 0]);
+					f2.i1 = static_cast<uint32_t>(offset + indices[i + 2]);
+					f2.i2 = static_cast<uint32_t>(offset + indices[i + 1]);
 
 					geom.faces.push_back(f2);
 					CheckTriangle(f2, geom.points);
@@ -743,7 +744,7 @@ namespace webifc
 				glm::dvec4 st = placement * glm::dvec4(glm::dvec3(start, 0) + dir * distance, 1);
 				glm::dvec4 et = placement * glm::dvec4(glm::dvec3(end, 0) + dir * distance, 1);
 
-				int offset = geom.points.size();
+				size_t offset = geom.points.size();
 				geom.points.push_back(sb);
 				geom.points.push_back(eb);
 
@@ -752,15 +753,15 @@ namespace webifc
 
 				// sb st eb
 				Face f1;
-				f1.i0 = offset + 0;
-				f1.i1 = offset + 1;
-				f1.i2 = offset + 2;
+				f1.i0 = static_cast<uint32_t>(offset + 0);
+				f1.i1 = static_cast<uint32_t>(offset + 1);
+				f1.i2 = static_cast<uint32_t>(offset + 2);
 
 				// st et eb
 				Face f2;
-				f2.i0 = offset + 2;
-				f2.i1 = offset + 1;
-				f2.i2 = offset + 3;
+				f2.i0 = static_cast<uint32_t>(offset + 2);
+				f2.i1 = static_cast<uint32_t>(offset + 1);
+				f2.i2 = static_cast<uint32_t>(offset + 3);
 
 				geom.faces.push_back(f1);
 				geom.faces.push_back(f2);
@@ -789,7 +790,7 @@ namespace webifc
 		}
 
 
-		IfcProfile GetProfileByLine(uint64_t lineID)
+		IfcProfile GetProfileByLine(uint32_t lineID)
 		{
 			auto& line = _loader.GetLine(lineID);
 			switch (line.ifcType)
@@ -864,8 +865,8 @@ namespace webifc
 					double ratio = static_cast<double>(i) / CIRCLE_SEGMENTS;
 					double angle = ratio * CONST_PI * 2;
 					glm::dvec2 circleCoordinate (
-						radius * std::sinf(angle),
-						radius * std::cosf(angle)
+						radius * std::sin(angle),
+						radius * std::cos(angle)
 					);
 					glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
 					c.points.push_back(pos);
@@ -885,7 +886,7 @@ namespace webifc
 			return IfcProfile();
 		}
 
-		glm::dmat3 GetAxis2Placement2D(uint64_t expressID)
+		glm::dmat3 GetAxis2Placement2D(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -912,7 +913,7 @@ namespace webifc
 			);
 		}
 
-		glm::dmat4 GetLocalPlacement(uint64_t expressID)
+		glm::dmat4 GetLocalPlacement(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -959,7 +960,6 @@ namespace webifc
 				
 				_loader.MoveToArgumentOffset(line, 0);
 				IfcTokenType relPlacementToken = _loader.GetTokenType();
-				uint32_t relPlacementID;
 				if (relPlacementToken == IfcTokenType::REF)
 				{
 					_loader.Reverse();
@@ -1074,14 +1074,14 @@ namespace webifc
 			return ts;
 		}
 
-		IfcCurve GetCurve(uint64_t expressID)
+		IfcCurve GetCurve(uint32_t expressID)
 		{
 			IfcCurve curve;
 			ComputeCurve(expressID, curve);
 			return curve;
 		}
 
-		void ComputeCurve(uint64_t expressID, IfcCurve& curve, IfcTrimmingArguments trim = {})
+		void ComputeCurve(uint32_t expressID, IfcCurve& curve, IfcTrimmingArguments trim = {})
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -1188,15 +1188,15 @@ namespace webifc
 
 				double lengthRad = endRad - startRad;
 
-				int startIndex = curve.points.size();
+				size_t startIndex = curve.points.size();
 
 				for (int i = 0; i < CIRCLE_SEGMENTS; i++)
 				{
 					double ratio = static_cast<double>(i) / ( CIRCLE_SEGMENTS - 1);
 					double angle = startRad + ratio * lengthRad;
 					glm::dvec2 circleCoordinate(
-						radius * std::cosf(angle),
-						- radius * std::sinf(angle) // TODO: figure out why this has to be negative
+						radius * std::cos(angle),
+						- radius * std::sin(angle) // TODO: figure out why this has to be negative
 					);
 					glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
 					curve.Add(pos);
@@ -1222,7 +1222,7 @@ namespace webifc
 			}
 		}
 
-		glm::dvec2 GetCartesianPoint2D(uint64_t expressID)
+		glm::dvec2 GetCartesianPoint2D(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -1238,7 +1238,7 @@ namespace webifc
 			return point;
 		}
 
-		glm::dvec3 GetCartesianPoint3D(uint64_t expressID)
+		glm::dvec3 GetCartesianPoint3D(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -1269,7 +1269,7 @@ namespace webifc
 
 		IfcLoader& _loader;
 		std::vector<IfcGeometry> _geometry;
-		std::unordered_map<uint64_t, std::vector<uint64_t>> _relVoids;
+		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
 		bool _isRelVoidsMapPopulated = false;
 	};
 }

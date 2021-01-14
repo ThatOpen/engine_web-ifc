@@ -323,10 +323,10 @@ namespace webifc
         return (e.a == a.id && e.b == b.id) || (e.b == a.id && e.a == b.id);
     }
 
-    void DumpPrevTriangles(int num, Point& p, Point& prev, std::vector<Triangle>& triangles)
+    void DumpPrevTriangles(size_t num, Point& p, Point& prev, std::vector<Triangle>& triangles)
     {
         std::vector<Triangle> temp;
-        for (int i = 0; i < num; i++)
+        for (size_t i = 0; i < num; i++)
         {
             Triangle t = triangles[triangles.size() - 1 - i];
             CheckTriangleEdges(t, triangles);
@@ -502,7 +502,7 @@ namespace webifc
         std::reverse(boundaryDown.begin(), boundaryDown.end());
 
 
-        int start = triangles.size();
+        size_t start = triangles.size();
 
         if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles1.svg");
         triangulateBoundary(boundaryUp, triangles);
@@ -510,7 +510,7 @@ namespace webifc
         triangulateBoundary(boundaryDown, triangles);
         if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles3.svg");
 
-        int size = triangles.size() - start;
+        size_t size = triangles.size() - start;
 
         if (DUMP_SVG_TRIANGLES) DumpPrevTriangles(size, p, prev, triangles);
     }
@@ -675,8 +675,8 @@ namespace webifc
     void addPoint(Point& p, Point& prev, std::vector<Triangle>& triangles)
     {
         // prevent infinite loops
-        int numTriangles = triangles.size();
-        for (int i = 0; i < numTriangles; i++)
+        size_t numTriangles = triangles.size();
+        for (size_t i = 0; i < numTriangles; i++)
         {
             if (triangles[i].id != -1)
             {
@@ -692,8 +692,8 @@ namespace webifc
     void connectPoints(Point& p, Point& prev, std::vector<Triangle>& triangles)
     {
         // prevent infinite loops
-        int numTriangles = triangles.size();
-        for (int i = 0; i < numTriangles; i++)
+        size_t numTriangles = triangles.size();
+        for (size_t i = 0; i < numTriangles; i++)
         {
             Triangle& t = triangles[i];
             if (t.id != -1)

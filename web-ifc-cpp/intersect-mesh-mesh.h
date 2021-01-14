@@ -21,9 +21,9 @@ namespace webifc
         geometry.points.push_back(c);
 
         Face f;
-        f.i0 = geometry.points.size() - 3;
-        f.i1 = geometry.points.size() - 2;
-        f.i2 = geometry.points.size() - 1;
+        f.i0 = static_cast<uint32_t>(geometry.points.size() - 3);
+        f.i1 = static_cast<uint32_t>(geometry.points.size() - 2);
+        f.i2 = static_cast<uint32_t>(geometry.points.size() - 1);
 
         geometry.faces.push_back(f);
     }

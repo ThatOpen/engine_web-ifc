@@ -10,10 +10,12 @@
 #include "web-ifc-interop/gen/Types.h"
 
 std::vector<webifc::IfcLoader> loaders;
+std::vector<webifc::IfcGeometryLoader> geomLoaders;
 
 // use to construct API placeholders
 int main() {
     loaders.emplace_back();
+    geomLoaders.emplace_back(loaders[0]);
     return 0;
 }
 
@@ -41,6 +43,7 @@ extern "C" int OpenModel(std::string filename)
     loaders.push_back(loader);
     std::cout << "Loading " << std::endl;
     loaders[modelID].LoadFile(content);
+    geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
 
     std::cout << "Loaded " << loaders[modelID].GetNumLines() << " lines!" << std::endl;
 
@@ -74,7 +77,7 @@ std::vector<float> vertexData;
 
 extern "C" GeometryBuffer* GetFlattenedGeometry(uint32_t modelID, uint64_t expressID)
 {
-    webifc::IfcGeometryLoader geomLoader(loaders[modelID]);
+    webifc::IfcGeometryLoader& geomLoader = geomLoaders[modelID];
     
     auto start = webifc::ms();
     flatGeometry = geomLoader.GetFlattenedGeometry(expressID);

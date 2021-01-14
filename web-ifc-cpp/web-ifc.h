@@ -82,7 +82,7 @@ namespace webifc
 
 			buf = content.data();
 			pos = 0;
-			len = content.size();
+			len = static_cast<uint32_t>(content.size());
 
 			uint32_t numLines = 0;
 			while (TokenizeLine())
@@ -109,13 +109,13 @@ namespace webifc
 					IfcLine l;
 					l.expressID = currentExpressID;
 					l.ifcType = currentIfcType;
-					l.lineIndex = lines.size();
+					l.lineIndex = static_cast<uint32_t>(lines.size());
 					l.tapeOffset = currentTapeOffset;
 
 					ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
 					maxExpressId = std::max(maxExpressId, l.expressID);
 
-					lines.push_back(l);
+					lines.push_back(std::move(l));
 
 					// reset
 					currentExpressID = 0;
@@ -173,7 +173,7 @@ namespace webifc
             _open = true;
 		}
 
-        int GetNumLines()
+        size_t GetNumLines()
         {
             return lines.size();
         }
@@ -511,9 +511,9 @@ namespace webifc
 			return !eof;
 		}
 
-		uint64_t readInt()
+		uint32_t readInt()
 		{
-			uint64_t val = 0;
+			uint32_t val = 0;
 			char c = buf[pos];
 			
 			while (c >= '0' && c <= '9')
@@ -532,8 +532,8 @@ namespace webifc
 		{
 			char* end;
 			double d = std::strtod(&buf[pos], &end);
-			int size = end - &buf[pos];
-			pos += size - 1;
+			ptrdiff_t size = end - &buf[pos];
+			pos += static_cast<uint32_t>(size - 1);
 			return d;
 		}
 

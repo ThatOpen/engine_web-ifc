@@ -20,10 +20,10 @@ std::string ReadFile(std::wstring filename)
 
 void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
 {
-    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCOPENINGELEMENT);
+    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCSLAB);
 
-    bool writeFiles = false;
-    auto mesh = geometryLoader.GetMesh(walls[88]);
+    bool writeFiles = true;
+    auto mesh = geometryLoader.GetMesh(walls[0]);
     if (writeFiles)
     {
         geometryLoader.DumpMesh(mesh, L"TEST.obj");
@@ -62,7 +62,8 @@ int main()
     //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
-    std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
+    std::wstring filename = L"B:\\ifcfiles\\0912104-04slab_recess_tek_1.ifc";
 
     std::string content = ReadFile(filename);
 
@@ -78,8 +79,8 @@ int main()
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
-    //SpecificLoadTest(loader, geometryLoader);
-    LoadAllTest(loader, geometryLoader);
+    SpecificLoadTest(loader, geometryLoader);
+    //LoadAllTest(loader, geometryLoader);
 
     time = webifc::ms() - start;
 
