@@ -24,7 +24,9 @@ export function OpenModel(filename: string, data: string | Uint8Array): number
 {
     wasm_module['FS_createDataFile']('/', "filename", data, true, true, true);
     console.log("Wrote file");
-    return wasm_module._OpenModel(filename);
+    let result = wasm_module._OpenModel(filename);
+    wasm_module['FS_unlink']('/', "filename");
+    return result;
 }
 
 export function CloseModel(modelID: number)

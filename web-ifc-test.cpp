@@ -20,10 +20,10 @@ std::string ReadFile(std::wstring filename)
 
 void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
 {
-    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCCOVERING);
+    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCOPENINGELEMENT);
 
     bool writeFiles = false;
-    auto mesh = geometryLoader.GetMesh(walls[1206]);
+    auto mesh = geometryLoader.GetMesh(walls[88]);
     if (writeFiles)
     {
         geometryLoader.DumpMesh(mesh, L"TEST.obj");
@@ -61,8 +61,8 @@ int main()
 
     //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
-    std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
-    //std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
+    std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
 
     std::string content = ReadFile(filename);
 

@@ -416,7 +416,9 @@ namespace webifc
 					pos++;
 					bool prevSlash = false;
 					uint32_t start = pos;
-					while (!(buf[pos] == '\'' && !prevSlash))
+					// apparently string escaping is not allowed in IFC ???
+					// example from uptown: #114143= IFCPROPERTYSINGLEVALUE('Type Comments',$,IFCTEXT('Type G5 - 800kg/m\X2\00B2\X0\'),$);
+					while (!(buf[pos] == '\'' /*&& !prevSlash*/))
 					{
 						if (buf[pos] == '\\')
 						{
