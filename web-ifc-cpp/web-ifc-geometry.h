@@ -452,6 +452,8 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				auto points = _loader.GetSetArgument();
 
+				curve.points.resize(points.size());
+
 				for (auto& token : points)
 				{
 					uint32_t pointId = _loader.GetRefArgument(token);
@@ -515,6 +517,7 @@ namespace webifc
 				geometry.faces.push_back(f1);
 				geometry.faces.push_back(f2);
 
+				/*
 				// TODO: assuming 0,1,2 NOT colinear!
 				glm::dvec3 v1 = bounds[0].curve.points[0];
 				glm::dvec3 v2 = bounds[0].curve.points[1];
@@ -562,6 +565,7 @@ namespace webifc
 				indices.push_back(0);
 				indices.push_back(2);
 				indices.push_back(3);
+				*/
 			}
 			else
 			{
@@ -1239,14 +1243,26 @@ namespace webifc
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
 
+			/*
 			_loader.MoveToArgumentOffset(line, 0);
 			auto coords = _loader.GetSetArgument();
 
-			glm::dvec3 point(
+			glm::dvec3 point1(
 				_loader.GetDoubleArgument(coords[0]),
 				_loader.GetDoubleArgument(coords[1]),
 				_loader.GetDoubleArgument(coords[2])
 			);
+			*/
+
+			// we should do the above, but its slow, so we do this:
+			_loader.MoveToArgumentOffset(line, 0);
+			IfcTokenType t = _loader.GetTokenType();
+
+			// because these calls cannot be reordered we have to use intermediate variables
+			double x = _loader.GetDoubleArgument();
+			double y = _loader.GetDoubleArgument();
+			double z = _loader.GetDoubleArgument();
+			glm::dvec3 point(x, y, z);
 
 			return point;
 		}
