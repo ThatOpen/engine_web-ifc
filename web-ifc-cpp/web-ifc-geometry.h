@@ -452,7 +452,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				auto points = _loader.GetSetArgument();
 
-				curve.points.resize(points.size());
+				curve.points.reserve(points.size());
 
 				for (auto& token : points)
 				{
