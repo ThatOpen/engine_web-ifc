@@ -42,10 +42,12 @@ extern "C" int OpenModel(std::string filename)
     uint32_t modelID = loaders.size();
     loaders.push_back(loader);
     std::cout << "Loading " << std::endl;
+    auto start = webifc::ms();
     loaders[modelID].LoadFile(content);
+    auto end = webifc::ms() - start;
     geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
 
-    std::cout << "Loaded " << loaders[modelID].GetNumLines() << " lines!" << std::endl;
+    std::cout << "Loaded " << loaders[modelID].GetNumLines() << " lines in " << end << " ms!" << std::endl;
 
     return modelID;
 }

@@ -15,6 +15,7 @@ async function LoadModel(data: Uint8Array)
     let modelID = API.OpenModel("example.ifc", data);
     let time = API.ms() - start;
     console.log(`Opening model took ${time} ms`);
+    return;
 
     let startGeomTime = API.ms();
     IfcSchema.IfcElements.forEach((elementCode) => {

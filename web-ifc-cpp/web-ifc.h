@@ -9,6 +9,7 @@
 
 #include "../web-ifc-schema/ifc2x4.h"
 #include "util.h"
+#include "crack_atof.h"
 
 namespace webifc
 {
@@ -530,13 +531,32 @@ namespace webifc
 
 		double readDouble()
 		{
-			char* end;
-			double d = std::strtod(&buf[pos], &end);
-			ptrdiff_t size = end - &buf[pos];
+			/*
+			char* end1;
+			double d1 = std::strtod(&buf[pos], &end1);
+			ptrdiff_t size1 = end1 - &buf[pos];
+			*/
+
+			const char* start = &buf[pos];
+			const char* end = start;
+			double d = crack_atof(end, &buf[len]);
+			ptrdiff_t size = end - start;
+
+			/*
+			if (size1 != size)
+			{
+				printf("asdf");
+			}
+			if (std::fabs(d1 - d) > 1e-4)
+			{
+				printf("asdf");
+			}
+			*/
+
 			pos += static_cast<uint32_t>(size - 1);
+
 			return d;
 		}
-
 		uint32_t pos;
 		uint32_t len;
 		const char* buf;
