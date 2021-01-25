@@ -41,21 +41,54 @@ namespace webifc
 
 		IfcGeometry& GetCachedGeometry(uint32_t index)
 		{
-			return _geometryCache[index];
+			return _expressIDToGeometry[index];
 		}
 
 		IfcGeometry GetFlattenedGeometry(uint32_t expressID)
 		{
 			auto mesh = GetMesh(expressID);
-            return flatten(mesh, NormalizeIFC);
+            return flatten(mesh, _expressIDToGeometry, NormalizeIFC);
+		}
+
+		void AddComposedMeshToFlatMesh(IfcFlatMesh& flatMesh, const IfcComposedMesh& composedMesh, const glm::dmat4& parentMatrix = glm::dmat4(1), const glm::dvec4& color = glm::dvec4(1), bool hasColor = false)
+		{
+			glm::dvec4 newParentColor = color;
+			bool newHasColor = hasColor;
+			glm::dmat4 newMatrix = parentMatrix * composedMesh.transformation;
+
+			if (composedMesh.hasColor && !hasColor)
+			{
+				newHasColor = true;
+				newParentColor = composedMesh.color;
+			}
+
+			if (composedMesh.hasGeometry)
+			{
+				IfcPlacedGeometry geometry;
+
+				geometry.color = newParentColor;
+				geometry.transformation = newMatrix;
+				geometry.geometryExpressID = composedMesh.expressID;
+
+				flatMesh.geometries.push_back(geometry);
+			}
+
+			for (auto& c : composedMesh.children)
+			{
+				AddComposedMeshToFlatMesh(flatMesh, c, newMatrix, newParentColor, newHasColor);
+			}
 		}
 
 		IfcFlatMesh GetFlatMesh(uint32_t expressID)
 		{
-			IfcFlatMesh mesh;
+			IfcFlatMesh flatMesh;
+
+			IfcComposedMesh composedMesh = GetMesh(expressID);
+
+			AddComposedMeshToFlatMesh(flatMesh, composedMesh);
 
 
-			return mesh;
+			return flatMesh;
 		}
 
 		IfcComposedMesh GetMesh(uint32_t expressID)
@@ -71,7 +104,7 @@ namespace webifc
 		void DumpMesh(IfcComposedMesh& mesh, std::wstring filename)
 		{
 			size_t offset = 0;
-            writeFile(filename, ToObj(mesh, offset, NormalizeIFC));
+            writeFile(filename, ToObj(mesh, _expressIDToGeometry, offset, NormalizeIFC));
 		}
 
 	private:
@@ -110,7 +143,14 @@ namespace webifc
 		{
 			PopulateRelVoidsMapIfNeeded();
 
+
 			auto& line = _loader.GetLine(lineID);
+			auto it = _expressIDToMesh.find(line.expressID);
+			if (it != _expressIDToMesh.end())
+			{
+				return _expressIDToMesh[line.expressID];
+			}
+
 			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
 			if (isIfcElement)
 			{
@@ -151,12 +191,12 @@ namespace webifc
 					IfcComposedMesh resultMesh;
 					resultMesh.transformation = glm::dmat4(1);
 
-					auto flatElementMesh = flatten(mesh);
+					auto flatElementMesh = flatten(mesh, _expressIDToGeometry);
 
 					for (auto relVoidExpressID : relVoids)
 					{
 						IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
-						auto flatVoidMesh = flatten(voidMesh);
+						auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry);
 
 						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
 						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
@@ -170,12 +210,14 @@ namespace webifc
 						flatElementMesh = boolSubtract(m1, m2);
 					}
 
-					resultMesh.geom = flatElementMesh;
+					_expressIDToGeometry[line.expressID] = flatElementMesh;
 
+					_expressIDToMesh[line.expressID] = resultMesh;
 					return resultMesh;
 				}
 				else
 				{
+					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 			}
@@ -194,6 +236,7 @@ namespace webifc
 					mesh.transformation = GetLocalPlacement(localPlacement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
 
+					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCREPRESENTATIONMAP:
@@ -207,6 +250,7 @@ namespace webifc
 					mesh.transformation = GetLocalPlacement(axis2Placement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
 
+					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCSHELLBASEDSURFACEMODEL:
@@ -222,28 +266,32 @@ namespace webifc
 					{
 						uint32_t shellRef = _loader.GetRefArgument(shell);
 						IfcComposedMesh temp;
-						temp.geom = GetBrep(shellRef);
+						temp.expressID = line.expressID;
+						_expressIDToGeometry[line.expressID] = GetBrep(shellRef);
 						temp.transformation = glm::dmat4(1);
 						mesh.children.push_back(temp);
 					}
 
+					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCFACETEDBREP:
 				{
 					IfcComposedMesh mesh;
+					mesh.expressID = line.expressID;
 
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
 
 					mesh.transformation = glm::dmat4(1);
-					mesh.geom = GetBrep(ifcPresentation);
+					_expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
 
 					return mesh;
 				}
 				case ifc2x4::IFCPRODUCTDEFINITIONSHAPE:
 				{
 					IfcComposedMesh mesh;
+					mesh.expressID = line.expressID;
 
 					_loader.MoveToArgumentOffset(line, 2);
 					auto representations = _loader.GetSetArgument();
@@ -255,11 +303,13 @@ namespace webifc
 						mesh.children.push_back(GetMesh(repID));
 					}
 
+					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCSHAPEREPRESENTATION:
 				{
 					IfcComposedMesh mesh;
+					mesh.expressID = line.expressID;
 
 					_loader.MoveToArgumentOffset(line, 1);
 					auto type = _loader.GetStringArgument();
@@ -279,11 +329,13 @@ namespace webifc
 						mesh.children.push_back(GetMesh(repID));
 					}
 
+					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCEXTRUDEDAREASOLID:
 				{
 					IfcComposedMesh mesh;
+					mesh.expressID = line.expressID;
 
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t profileID = _loader.GetRefArgument();
@@ -322,8 +374,10 @@ namespace webifc
 					}
 
 					mesh.transformation = glm::dmat4(1);
-					mesh.geom = geom;
+					_expressIDToGeometry[line.expressID] = geom;
 
+
+					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 
@@ -1255,7 +1309,8 @@ namespace webifc
 		}
 
 		IfcLoader& _loader;
-		std::unordered_map<uint32_t, IfcGeometry> _geometryCache;
+		std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
+		std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
 		bool _isRelVoidsMapPopulated = false;
 	};

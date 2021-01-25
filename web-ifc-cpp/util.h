@@ -209,7 +209,7 @@ namespace webifc
 	{
 		glm::dvec4 color;
 		glm::dmat4 transformation;
-		uint32_t bufferGeometryID;
+		uint32_t geometryExpressID;
 	};
 
 	struct IfcFlatMesh
@@ -219,24 +219,28 @@ namespace webifc
 
 	struct IfcComposedMesh
 	{
+		glm::dvec4 color;
 		glm::dmat4 transformation;
-		uint32_t geometryID;
-		IfcGeometry geom; // TODO: remove and make ref
+		uint32_t expressID;
+		bool hasGeometry = false;
+		bool hasColor = false;
 		std::vector<IfcComposedMesh> children;
 	};
 
-	void flattenRecursive(IfcComposedMesh& mesh, IfcGeometry& geom, glm::dmat4 mat)
+	void flattenRecursive(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, IfcGeometry& geom, glm::dmat4 mat)
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
-		if (mesh.geom.numFaces)
+		auto& meshGeom = geometryMap[mesh.expressID];
+
+		if (meshGeom.numFaces)
 		{
-			for (uint32_t i = 0; i < mesh.geom.numFaces; i ++)
+			for (uint32_t i = 0; i < meshGeom.numFaces; i ++)
 			{
-				Face f = mesh.geom.GetFace(i);
-				glm::dvec3 a = newMat * glm::dvec4(mesh.geom.GetPoint(f.i0), 1);
-				glm::dvec3 b = newMat * glm::dvec4(mesh.geom.GetPoint(f.i1), 1);
-				glm::dvec3 c = newMat * glm::dvec4(mesh.geom.GetPoint(f.i2), 1);
+				Face f = meshGeom .GetFace(i);
+				glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
+				glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
+				glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
 
 				geom.AddFace(a, b, c);
 			}
@@ -244,14 +248,14 @@ namespace webifc
 
 		for (auto& c : mesh.children)
 		{
-			flattenRecursive(c, geom, newMat);
+			flattenRecursive(c, geometryMap, geom, newMat);
 		}
 	}
 
-	IfcGeometry flatten(IfcComposedMesh& mesh, glm::dmat4 mat = glm::dmat4(1))
+	IfcGeometry flatten(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, glm::dmat4 mat = glm::dmat4(1))
 	{
 		IfcGeometry geom;
-		flattenRecursive(mesh, geom, mat);
+		flattenRecursive(mesh, geometryMap, geom, mat);
 		return geom;
 	}
 
@@ -669,17 +673,19 @@ namespace webifc
 		return obj.str();
 	}
 
-	std::string ToObj(IfcComposedMesh& mesh, size_t& offset, glm::dmat4 mat = glm::dmat4(1))
+	std::string ToObj(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, size_t& offset, glm::dmat4 mat = glm::dmat4(1))
 	{
 		std::string complete;
 
 		glm::dmat4 trans = mat * mesh.transformation;
 
-		complete += ToObj(mesh.geom, offset, trans);
+		auto& geom = geometryMap[mesh.expressID];
+
+		complete += ToObj(geom, offset, trans);
 
 		for (auto c : mesh.children)
 		{
-			complete += ToObj(c, offset, trans);
+			complete += ToObj(c, geometryMap, offset, trans);
 		}
 
 		return complete;
