@@ -35,31 +35,113 @@ namespace webifc
 		glm::dvec2 v2;
 	};
 
+	constexpr int VERTEX_FORMAT_SIZE_FLOATS = 6;
+
+	glm::dvec3 computeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3)
+	{
+		glm::dvec3 v12(v2 - v1);
+		glm::dvec3 v13(v3 - v1);
+
+		glm::dvec3 norm = glm::cross(v12, v13);
+
+		return glm::normalize(norm);
+	}
+
 	struct IfcGeometry
 	{
-		std::vector<glm::dvec3> points;
-		std::vector<Face> faces;
+		std::vector<double> vertexData;
+		std::vector<uint32_t> indexData;
 
-		void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		uint32_t numPoints = 0;
+		uint32_t numFaces = 0;
+
+		inline void AddPoint(glm::dvec4& pt, glm::dvec3& n)
 		{
-			points.push_back(a);
-			points.push_back(b);
-			points.push_back(c);
-
-			Face f;
-			f.i0 = static_cast<uint32_t>(points.size() - 3);
-			f.i1 = static_cast<uint32_t>(points.size() - 2);
-			f.i2 = static_cast<uint32_t>(points.size() - 1);
-
-			faces.push_back(f);
+			glm::dvec3 p = pt;
+			AddPoint(p, n);
 		}
-	};
 
-	struct IfcTransformedGeometry
-	{
-		glm::dmat4 matrix;
-		std::vector<glm::dvec3> points;
-		std::vector<Face> faces;
+		inline void AddPoint(glm::dvec3& pt, glm::dvec3& n)
+		{
+			//vertexData.reserve((numPoints + 1) * VERTEX_FORMAT_SIZE_FLOATS);
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
+			vertexData.push_back(pt.x);
+			vertexData.push_back(pt.y);
+			vertexData.push_back(pt.z);
+
+			vertexData.push_back(n.x);
+			vertexData.push_back(n.y);
+			vertexData.push_back(n.z);
+
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
+
+			numPoints += 1;
+		}
+
+		inline void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		{
+			AddFace(numPoints + 0, numPoints + 1, numPoints + 2);
+
+			glm::dvec3 normal = computeNormal(a, b, c);
+			AddPoint(a, normal);
+			AddPoint(b, normal);
+			AddPoint(c, normal);
+		}
+
+		inline void AddFace(uint32_t a, uint32_t b, uint32_t c)
+		{
+			//indexData.reserve((numFaces + 1) * 3);
+			//indexData[numFaces * 3 + 0] = a;
+			//indexData[numFaces * 3 + 1] = b;
+			//indexData[numFaces * 3 + 2] = c;
+			indexData.push_back(a);
+			indexData.push_back(b);
+			indexData.push_back(c);
+
+			numFaces++;
+		}
+
+		inline Face GetFace(uint32_t index) const
+		{
+			Face f;
+			f.i0 = indexData[index * 3 + 0];
+			f.i1 = indexData[index * 3 + 1];
+			f.i2 = indexData[index * 3 + 2];
+			return f;
+		}
+
+		inline glm::dvec3 GetPoint(uint32_t index) const
+		{
+			return glm::dvec3(
+				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0],
+				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
+				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
+			);
+		}
+
+		double* GetVertexData()
+		{
+			return &vertexData[0];
+		}
+
+		size_t GetVertexDataSize()
+		{
+			return vertexData.size();
+		}
+
+		uint32_t* GetIndexData()
+		{
+			return &indexData[0];
+		}
+
+		size_t GetIndexDataSize()
+		{
+			return indexData.size();
+		}
 	};
 
 	bool equals2d(glm::dvec2 A, glm::dvec2 B, double eps = 0)
@@ -123,10 +205,22 @@ namespace webifc
 		bool isConvex;
 	};
 
+	struct IfcPlacedGeometry
+	{
+		glm::dvec4 color;
+		glm::dmat4 transformation;
+		uint32_t bufferGeometryID;
+	};
+
+	struct IfcFlatMesh
+	{
+		std::vector<IfcPlacedGeometry> geometries;
+	};
+
 	struct IfcComposedMesh
 	{
 		glm::dmat4 transformation;
-		uint64_t geometryRef;
+		uint32_t geometryID;
 		IfcGeometry geom; // TODO: remove and make ref
 		std::vector<IfcComposedMesh> children;
 	};
@@ -135,14 +229,14 @@ namespace webifc
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
-		if (!mesh.geom.faces.empty())
+		if (mesh.geom.numFaces)
 		{
-			for (int i = 0; i < mesh.geom.faces.size(); i ++)
+			for (uint32_t i = 0; i < mesh.geom.numFaces; i ++)
 			{
-				Face& f = mesh.geom.faces[i];
-				glm::dvec3 a = newMat * glm::dvec4(mesh.geom.points[f.i0], 1);
-				glm::dvec3 b = newMat * glm::dvec4(mesh.geom.points[f.i1], 1);
-				glm::dvec3 c = newMat * glm::dvec4(mesh.geom.points[f.i2], 1);
+				Face f = mesh.geom.GetFace(i);
+				glm::dvec3 a = newMat * glm::dvec4(mesh.geom.GetPoint(f.i0), 1);
+				glm::dvec3 b = newMat * glm::dvec4(mesh.geom.GetPoint(f.i1), 1);
+				glm::dvec3 c = newMat * glm::dvec4(mesh.geom.GetPoint(f.i2), 1);
 
 				geom.AddFace(a, b, c);
 			}
@@ -509,16 +603,6 @@ namespace webifc
 		glm::dvec4(0, 0, 0, 1)
 	);
 
-	glm::dvec3 computeNormal(glm::dvec3 v1, glm::dvec3 v2, glm::dvec3 v3)
-	{
-		glm::dvec3 v12(v2 - v1);
-		glm::dvec3 v13(v3 - v1);
-
-		glm::dvec3 norm = glm::cross(v12, v13);
-
-		return glm::normalize(norm);
-	}
-
 	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
 	{
 		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
@@ -568,18 +652,19 @@ namespace webifc
 
 		double scale = 0.001;
 
-		for (auto& pt : geom.points)
+		for (uint32_t i = 0; i < geom.numPoints; i++)
 		{
-			glm::dvec4 t = transform * glm::dvec4(pt, 1);
+			glm::dvec4 t = transform * glm::dvec4(geom.GetPoint(i), 1);
 			obj << "v " << t.x * scale << " " << t.y * scale << " " << t.z * scale << "\n";
 		}
 
-		for (auto& f : geom.faces)
+		for (uint32_t i = 0; i < geom.numFaces; i++)
 		{
+			Face f = geom.GetFace(i);
 			obj << "f " << (f.i0 + 1 + offset) << "// " << (f.i1 + 1 + offset) << "// " << (f.i2 + 1 + offset) << "//\n";
 		}
 
-		offset += geom.points.size();
+		offset += geom.numPoints;
 
 		return obj.str();
 	}
@@ -702,6 +787,15 @@ namespace webifc
 		{
 			readChunkIndex = pos / N;
 			readPtr = pos % N;
+		}
+
+		void DumpToDisk()
+		{
+			std::ofstream file("tape.bin");
+			for (int i = 0; i < chunks.size(); i++)
+			{
+				file.write((char*)(chunks[i]), sizes[i]);
+			}
 		}
 
 	private:

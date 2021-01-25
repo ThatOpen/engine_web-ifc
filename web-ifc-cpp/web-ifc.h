@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <chrono>
 #include <algorithm>
+#include <set>
 
 #include "../web-ifc-schema/ifc2x4.h"
 #include "util.h"
@@ -77,6 +78,16 @@ namespace webifc
 	class IfcLoader
 	{
 	public:
+		void GetRefs(uint32_t id, std::unordered_map<uint32_t, std::vector<uint32_t>>& refs, std::set<uint32_t>& items)
+		{
+			items.insert(id);
+			auto refsForId = refs[id];
+			for (auto& ref : refsForId)
+			{
+				GetRefs(ref, refs, items);
+			}
+		}
+
 		void LoadFile(const std::string& content)
 		{
 			makeCRCTable();
@@ -150,6 +161,7 @@ namespace webifc
 					{
 						currentExpressID = ref;
 					}
+
 					break;
 				}
 				case IfcTokenType::REAL:
@@ -172,6 +184,13 @@ namespace webifc
 			}
 
             _open = true;
+
+			// DumpToDisk();
+		}
+
+		void DumpToDisk()
+		{
+			_tape.DumpToDisk();
 		}
 
         size_t GetNumLines()

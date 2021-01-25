@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iostream>
 
+#include <emscripten/bind.h>
+
 #include "web-ifc-cpp/web-ifc.h"
 #include "web-ifc-cpp/web-ifc-geometry.h"
 #include "web-ifc-interop/gen/Types.h"
@@ -12,10 +14,27 @@
 std::vector<webifc::IfcLoader> loaders;
 std::vector<webifc::IfcGeometryLoader> geomLoaders;
 
+
+
+struct Test
+{
+    int a;
+    int b;
+};
+
+struct Mesh
+{
+    std::vector<Test> tests;
+};
+
+Test t { 5, 3};
+Mesh m;
 // use to construct API placeholders
 int main() {
     loaders.emplace_back();
     geomLoaders.emplace_back(loaders[0]);
+    m.tests.push_back(t);
+
     return 0;
 }
 
@@ -112,25 +131,43 @@ extern "C" GeometryBuffer* GetFlattenedGeometry(uint32_t modelID, uint64_t expre
     return &GeometryBufferMessage;
 }
 
+extern "C" void LoadAllGeometry(uint32_t modelID)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+    webifc::IfcGeometryLoader& geomLoader = geomLoaders[modelID];
+    for (auto type : ifc2x4::IfcElements)
+    {
+        auto elements = loader.GetExpressIDsWithType(type);
+
+        // std::cout << type << std::endl;
+        // std::cout << elements.size() << std::endl;
+
+        for (int i = 0; i < elements.size(); i++)
+        {
+            auto mesh = geomLoader.GetMesh(elements[i]);
+        }
+    }
+}
+
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
     return loaders[modelID].IsOpen();
 }
+    
+Mesh getTest() {
+    return m;
+}
 
-struct s
-{
-    const char* str;
-    int32_t strLen;
-    int32_t test;
-};
+EMSCRIPTEN_BINDINGS(my_module) {
+    emscripten::value_object<Test>("Test")
+        .field("a", &Test::a)
+        .field("b", &Test::b)
+        ;
+    emscripten::register_vector<Test>("VectorTest");
 
-s bla;
+    emscripten::value_object<Mesh>("Mesh")
+        .field("tests", &Mesh::tests)
+        ;
 
-extern "C" s* getString()
-{
-    bla.str = "asdfÉÎÐÑáąğƇ";
-    bla.strLen = strlen(bla.str);
-    bla.test = 31;
-
-    return &bla;
+    emscripten::function("getTest", &getTest);
 }

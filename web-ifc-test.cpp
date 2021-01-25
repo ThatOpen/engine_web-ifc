@@ -75,9 +75,9 @@ int main()
 
     std::cout << "Reading took " << time << "ms" << std::endl;
 
-    start = webifc::ms();
-
     webifc::IfcGeometryLoader geometryLoader(loader);
+
+    start = webifc::ms();
 
     //SpecificLoadTest(loader, geometryLoader);
     LoadAllTest(loader, geometryLoader);

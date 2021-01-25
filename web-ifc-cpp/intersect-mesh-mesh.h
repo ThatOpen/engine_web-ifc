@@ -9,24 +9,6 @@
 
 namespace webifc
 {
-    void addTri(IfcGeometry& geometry, glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
-    {
-        if (areaOfTriangle(a, b, c) == 0)
-        {
-            printf("0 triangle");
-        }
-
-        geometry.points.push_back(a);
-        geometry.points.push_back(b);
-        geometry.points.push_back(c);
-
-        Face f;
-        f.i0 = static_cast<uint32_t>(geometry.points.size() - 3);
-        f.i1 = static_cast<uint32_t>(geometry.points.size() - 2);
-        f.i2 = static_cast<uint32_t>(geometry.points.size() - 1);
-
-        geometry.faces.push_back(f);
-    }
 
     glm::dvec2 projectOnTriangle(const glm::dvec3& pt, const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c)
     {
@@ -99,13 +81,13 @@ namespace webifc
     {
         IfcGeometry outputMesh;
 
-        for (int i = 0; i < mesh.faces.size(); i++)
+        for (uint32_t i = 0; i < mesh.numFaces; i++)
         {
-            Face f = mesh.faces[i];
+            Face f = mesh.GetFace(i);
 
-            const glm::dvec3& a = mesh.points[f.i0];
-            const glm::dvec3& b = mesh.points[f.i1];
-            const glm::dvec3& c = mesh.points[f.i2];
+            const glm::dvec3& a = mesh.GetPoint(f.i0);
+            const glm::dvec3& b = mesh.GetPoint(f.i1);
+            const glm::dvec3& c = mesh.GetPoint(f.i2);
 
             // warning: ints may have line segments where end === start
             std::vector<MeshIntersection> ints = intersections[i];
@@ -178,13 +160,13 @@ namespace webifc
                         glm::dvec3 upb = unProjectFromTriangle(tb, a, b, c);
                         glm::dvec3 upc = unProjectFromTriangle(tc, a, b, c);
 
-                        addTri(outputMesh, upa, upb, upc);
+                        outputMesh.AddFace(upa, upb, upc);
                     }
                 }
             }
             else
             {
-                addTri(outputMesh, a, b, c);
+                outputMesh.AddFace(a, b, c);
             }
         }
 
@@ -197,20 +179,20 @@ namespace webifc
         MeshIntersections meshIntersections2;
 
 
-        for (uint32_t i = 0; i < mesh1.faces.size(); i++)
+        for (uint32_t i = 0; i < mesh1.numFaces; i++)
         {
-            for (uint32_t j = 0; j < mesh2.faces.size(); j++)
+            for (uint32_t j = 0; j < mesh2.numFaces; j++)
             {
-                Face t1 = mesh1.faces[i];
-                Face t2 = mesh2.faces[j];
+                Face t1 = mesh1.GetFace(i);
+                Face t2 = mesh2.GetFace(j);
 
-                const glm::dvec3& a = mesh1.points[t1.i0];
-                const glm::dvec3& b = mesh1.points[t1.i1];
-                const glm::dvec3& c = mesh1.points[t1.i2];
+                const glm::dvec3& a = mesh1.GetPoint(t1.i0);
+                const glm::dvec3& b = mesh1.GetPoint(t1.i1);
+                const glm::dvec3& c = mesh1.GetPoint(t1.i2);
 
-                const glm::dvec3& d = mesh2.points[t2.i0];
-                const glm::dvec3& e = mesh2.points[t2.i1];
-                const glm::dvec3& f = mesh2.points[t2.i2];
+                const glm::dvec3& d = mesh2.GetPoint(t2.i0);
+                const glm::dvec3& e = mesh2.GetPoint(t2.i1);
+                const glm::dvec3& f = mesh2.GetPoint(t2.i2);
 
                 TriTriResult intersectionLine = intersect_triangle_triangle(a, b, c, d, e, f);
 
@@ -236,8 +218,8 @@ namespace webifc
         {
             if (!i.second.empty())
             {
-                Face f = mesh1.faces[i.first];
-                addTri(m1, mesh1.points[f.i0], mesh1.points[f.i1], mesh1.points[f.i2]);
+                Face f = mesh1.GetFace(i.first);
+                m1.AddFace(mesh1.GetPoint(f.i0), mesh1.GetPoint(f.i1), mesh1.GetPoint(f.i2));
             }
         }
 
@@ -245,8 +227,8 @@ namespace webifc
         {
             if (!i.second.empty())
             {
-                Face f = mesh2.faces[i.first];
-                addTri(m2, mesh2.points[f.i0], mesh2.points[f.i1], mesh2.points[f.i2]);
+                Face f = mesh2.GetFace(i.first);
+                m2.AddFace(mesh2.GetPoint(f.i0), mesh2.GetPoint(f.i1), mesh2.GetPoint(f.i2));
             }
         }
 

@@ -20,12 +20,12 @@ namespace webifc
         glm::dvec3 dir(1, 1.1, 1.3);
 
         int winding = 0;
-        for (int i = 0; i < g.faces.size(); i++)
+        for (uint32_t i = 0; i < g.numFaces; i++)
         {
-            Face& f = g.faces[i];
-            const glm::dvec3& a = g.points[f.i0];
-            const glm::dvec3& b = g.points[f.i1];
-            const glm::dvec3& c = g.points[f.i2];
+            Face f = g.GetFace(i);
+            const glm::dvec3 a = g.GetPoint(f.i0);
+            const glm::dvec3 b = g.GetPoint(f.i1);
+            const glm::dvec3 c = g.GetPoint(f.i2);
 
             glm::dvec3 intersection;
             double distance;

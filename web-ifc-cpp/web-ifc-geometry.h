@@ -39,15 +39,23 @@ namespace webifc
 
 		}
 
-		IfcGeometry& GetGeometry(uint64_t index)
+		IfcGeometry& GetCachedGeometry(uint32_t index)
 		{
-			return _geometry[index];
+			return _geometryCache[index];
 		}
 
 		IfcGeometry GetFlattenedGeometry(uint32_t expressID)
 		{
 			auto mesh = GetMesh(expressID);
             return flatten(mesh, NormalizeIFC);
+		}
+
+		IfcFlatMesh GetFlatMesh(uint32_t expressID)
+		{
+			IfcFlatMesh mesh;
+
+
+			return mesh;
 		}
 
 		IfcComposedMesh GetMesh(uint32_t expressID)
@@ -299,9 +307,12 @@ namespace webifc
 
 					if (flipWinding)
 					{
-						for (auto& face : geom.faces)
+						for (uint32_t i = 0; i < geom.numFaces; i++)
 						{
-							std::swap(face.i1, face.i2);
+							uint32_t temp = geom.indexData[i * 3 + 0];
+							temp = geom.indexData[i * 3 + 0];
+							geom.indexData[i * 3 + 0] = geom.indexData[i * 3 + 1];
+							geom.indexData[i * 3 + 1] = temp;
 						}
 					}
 
@@ -479,44 +490,25 @@ namespace webifc
 			{
 				auto c = bounds[0].curve;
 
-				size_t offset = geometry.points.size();
+				size_t offset = geometry.numPoints;
 
-				// triangle
-				geometry.points.push_back(c.points[0]);
-				geometry.points.push_back(c.points[1]);
-				geometry.points.push_back(c.points[2]);
-
-				Face f1;
-				f1.i0 = static_cast<uint32_t>(offset + 0);
-				f1.i1 = static_cast<uint32_t>(offset + 1);
-				f1.i2 = static_cast<uint32_t>(offset + 2);
-
-				geometry.faces.push_back(f1);
+				geometry.AddFace(c.points[0], c.points[1], c.points[2]);
 			}
 			else if (bounds.size() == 1 && bounds[0].curve.points.size() == 4)
 			{
 				auto c = bounds[0].curve;
 				
-				size_t offset = geometry.points.size();
+				glm::dvec3 normal = computeNormal(c.points[0], c.points[1], c.points[2]);
 
-				// quad, since the loop is genus 1 we can always triangulate this
-				geometry.points.push_back(c.points[0]);
-				geometry.points.push_back(c.points[1]);
-				geometry.points.push_back(c.points[2]);
-				geometry.points.push_back(c.points[3]);
+				uint32_t offset = geometry.numPoints;
 
-				Face f1;
-				f1.i0 = static_cast<uint32_t>(offset + 0);
-				f1.i1 = static_cast<uint32_t>(offset + 1);
-				f1.i2 = static_cast<uint32_t>(offset + 2);
+				geometry.AddPoint(c.points[0], normal);
+				geometry.AddPoint(c.points[1], normal);
+				geometry.AddPoint(c.points[2], normal);
+				geometry.AddPoint(c.points[3], normal);
 
-				Face f2;
-				f2.i0 = static_cast<uint32_t>(offset + 0);
-				f2.i1 = static_cast<uint32_t>(offset + 2);
-				f2.i2 = static_cast<uint32_t>(offset + 3);
-
-				geometry.faces.push_back(f1);
-				geometry.faces.push_back(f2);
+				geometry.AddFace(offset + 0, offset + 1, offset + 2);
+				geometry.AddFace(offset + 0, offset + 2, offset + 3);
 
 				/*
 				// TODO: assuming 0,1,2 NOT colinear!
@@ -575,7 +567,7 @@ namespace webifc
 				using Point = std::array<double, 2>;
 				std::vector<std::vector<Point>> polygon;
 
-				size_t offset = geometry.points.size();
+				uint32_t offset = geometry.numPoints;
 				
 				// TODO: assuming that outer bound is first!
 				// TODO: assuming 0,1,2 NOT colinear!
@@ -596,7 +588,7 @@ namespace webifc
 					for (int i = 0; i < bound.curve.points.size(); i++)
 					{
 						glm::dvec3 pt = bound.curve.points[i];
-						geometry.points.push_back(pt);
+						geometry.AddPoint(pt, n);
 
 						// project pt onto plane of curve to obtain 2d coords
 						glm::dvec3 pt2 = pt - v1;
@@ -618,12 +610,7 @@ namespace webifc
 
 				for (int i = 0; i < indices.size(); i += 3)
 				{
-					Face f2;
-					f2.i0 = static_cast<uint32_t>(offset + indices[i + 0]);
-					f2.i1 = static_cast<uint32_t>(offset + indices[i + 1]);
-					f2.i2 = static_cast<uint32_t>(offset + indices[i + 2]);
-
-					geometry.faces.push_back(f2);
+					geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
 				}
 			}
 		}
@@ -640,95 +627,93 @@ namespace webifc
 				{
 					profileSize--;
 				}
+
+				// TODO: this assumes non-colinearity!
+				glm::dvec4 a = placement * glm::dvec4(profile.curve.points[0], 0, 1);
+				glm::dvec4 b = placement * glm::dvec4(profile.curve.points[1], 0, 1);
+				glm::dvec4 c = placement * glm::dvec4(profile.curve.points[2], 0, 1);
+
+				glm::dvec3 normal = computeNormal(a, b, c);
+
 				// simplified convex fan triangulation
-				size_t offset = 0;
+				uint32_t offset = 0;
 				for (int i = 0; i < profileSize; i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 sb = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
-					geom.points.push_back(sb);
+					geom.AddPoint(sb, normal);
 
 					if (i > 1)
 					{
-						Face f1;
-						f1.i0 = static_cast<uint32_t>(offset + 0);
-						f1.i1 = static_cast<uint32_t>(offset + i);
-						f1.i2 = static_cast<uint32_t>(offset + i - 1);
+						geom.AddFace(offset + 0, offset + i, offset + i - 1);
 
-						geom.faces.push_back(f1);
-
-						CheckTriangle(f1, geom.points);
+						// CheckTriangle(f1, geom.points);
 					}
 				}
 
-				offset = geom.points.size();
+				normal = computeNormal(a, c, b);
+
+				offset = geom.numPoints;
 				for (int i = 0; i < profileSize; i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
-					geom.points.push_back(et);
+					geom.AddPoint(et, normal);
 
 					if (i > 1)
 					{
-						Face f2;
-						f2.i0 = static_cast<uint32_t>(offset + 0);
-						f2.i1 = static_cast<uint32_t>(offset + i - 1);
-						f2.i2 = static_cast<uint32_t>(offset + i);
+						geom.AddFace(offset + 0, offset + i - 1, offset + i);
 
-						geom.faces.push_back(f2);
-						CheckTriangle(f2, geom.points);
+						//CheckTriangle(f2, geom.points);
 					}
 				}
 			}
 			else
 			{
-				// TODO: triangulate concave profile and append to geom
 				using Point = std::array<double, 2>;
-				std::vector<std::vector<Point>> polygon;
-				polygon.resize(1);
+				std::vector<std::vector<Point>> polygon(1);
+
+				// TODO: this assumes non-colinearity!
+				glm::dvec4 a = placement * glm::dvec4(glm::dvec3(profile.curve.points[0], 0) + dir * distance, 1);
+				glm::dvec4 b = placement * glm::dvec4(glm::dvec3(profile.curve.points[1], 0) + dir * distance, 1);
+				glm::dvec4 c = placement * glm::dvec4(glm::dvec3(profile.curve.points[2], 0) + dir * distance, 1);
+
+				glm::dvec3 normal = computeNormal(a, b, c);
 
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
-					geom.points.push_back(et);
+					geom.AddPoint(et, normal);
 					polygon[0].push_back({ pt.x, pt.y });
 				}
 
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
-				size_t offset = 0;
+				uint32_t offset = 0;
 				for (int i = 0; i < indices.size(); i += 3)
 				{
-					Face f2;
-					f2.i0 = static_cast<uint32_t>(offset + indices[i + 0]);
-					f2.i1 = static_cast<uint32_t>(offset + indices[i + 1]);
-					f2.i2 = static_cast<uint32_t>(offset + indices[i + 2]);
-
-					geom.faces.push_back(f2);
-					CheckTriangle(f2, geom.points);
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+					// CheckTriangle(f2, geom.points);
 				}
 
-				offset += geom.points.size();
+				offset += geom.numPoints;
+
+				normal = computeNormal(a, c, b);
 
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
 
-					geom.points.push_back(et);
+					geom.AddPoint(et, normal);
 				}
 
 				for (int i = 0; i < indices.size(); i += 3)
 				{
-					Face f2;
-					f2.i0 = static_cast<uint32_t>(offset + indices[i + 0]);
-					f2.i1 = static_cast<uint32_t>(offset + indices[i + 2]);
-					f2.i2 = static_cast<uint32_t>(offset + indices[i + 1]);
-
-					geom.faces.push_back(f2);
-					CheckTriangle(f2, geom.points);
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+					// CheckTriangle(f2, geom.points);
 				}
 			}
 
@@ -744,12 +729,13 @@ namespace webifc
 				glm::dvec4 st = placement * glm::dvec4(glm::dvec3(start, 0) + dir * distance, 1);
 				glm::dvec4 et = placement * glm::dvec4(glm::dvec3(end, 0) + dir * distance, 1);
 
-				size_t offset = geom.points.size();
-				geom.points.push_back(sb);
-				geom.points.push_back(eb);
+				glm::dvec3 n = computeNormal(sb, eb, st);
 
-				geom.points.push_back(st);
-				geom.points.push_back(et);
+				uint32_t offset = geom.numPoints;
+				geom.AddPoint(sb, n);
+				geom.AddPoint(eb, n);
+				geom.AddPoint(st, n);
+				geom.AddPoint(et, n);
 
 				// sb st eb
 				Face f1;
@@ -763,10 +749,11 @@ namespace webifc
 				f2.i1 = static_cast<uint32_t>(offset + 1);
 				f2.i2 = static_cast<uint32_t>(offset + 3);
 
-				geom.faces.push_back(f1);
-				geom.faces.push_back(f2);
-				CheckTriangle(f1, geom.points);
-				CheckTriangle(f2, geom.points);
+				geom.AddFace(offset + 0, offset + 1, offset + 2);
+				geom.AddFace(offset + 2, offset + 1, offset + 3);
+				
+				// CheckTriangle(f1, geom.points);
+				// CheckTriangle(f2, geom.points);
 			}
 
 			return geom;
@@ -1268,7 +1255,7 @@ namespace webifc
 		}
 
 		IfcLoader& _loader;
-		std::vector<IfcGeometry> _geometry;
+		std::unordered_map<uint32_t, IfcGeometry> _geometryCache;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
 		bool _isRelVoidsMapPopulated = false;
 	};

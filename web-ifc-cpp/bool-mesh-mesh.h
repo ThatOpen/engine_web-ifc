@@ -9,12 +9,12 @@ namespace webifc
 {
     void clipMesh(IfcGeometry& source, IfcGeometry& target, IfcGeometry& result, bool invert, bool flip, bool keepBoundary)
     {
-        for (int i = 0; i < source.faces.size(); i++)
+        for (uint32_t i = 0; i < source.numFaces; i++)
         {
-            Face& tri = source.faces[i];
-            glm::dvec3 a = source.points[tri.i0];
-            glm::dvec3 b = source.points[tri.i1];
-            glm::dvec3 c = source.points[tri.i2];
+            Face tri = source.GetFace(i);
+            glm::dvec3 a = source.GetPoint(tri.i0);
+            glm::dvec3 b = source.GetPoint(tri.i1);
+            glm::dvec3 c = source.GetPoint(tri.i2);
 
             glm::dvec3 n = computeNormal(a, b, c);
 
@@ -27,11 +27,11 @@ namespace webifc
                 // emit triangle
                 if (flip)
                 {
-                    addTri(result, a, c, b);
+                    result.AddFace(a, c, b);
                 }
                 else
                 {
-                    addTri(result, a, b, c);
+                    result.AddFace(a, b, c);
                 }
             }
         }

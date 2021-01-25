@@ -44,3 +44,4 @@ ifcPrune.vcxproj.user
 output
 debug_output
 deps
+.bin

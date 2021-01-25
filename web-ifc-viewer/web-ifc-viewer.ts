@@ -15,9 +15,14 @@ async function LoadModel(data: Uint8Array)
     let modelID = API.OpenModel("example.ifc", data);
     let time = API.ms() - start;
     console.log(`Opening model took ${time} ms`);
-    return;
 
     let startGeomTime = API.ms();
+    API.LoadAllGeometry(modelID);
+    let endGeomTime = API.ms();
+    let totalGeomTime = endGeomTime - startGeomTime;
+    console.log(`Loading geometry took ${totalGeomTime} ms`);
+    return;
+
     IfcSchema.IfcElements.forEach((elementCode) => {
         let elementIDs = API.GetExpressIdsWithType(modelID, elementCode).expressIds();
         for (let i = 0; i < elementIDs.length; i++)
@@ -26,9 +31,6 @@ async function LoadModel(data: Uint8Array)
             AddDefaultGeometryForExpressID(modelID, elementID);
         }
     });
-    let endGeomTime = API.ms();
-    let totalGeomTime = endGeomTime - startGeomTime;
-    console.log(`Loading geometry took ${totalGeomTime} ms`);
 }
 
 function AddDefaultGeometryForExpressID(modelID: number, expressID: number)
@@ -143,10 +145,19 @@ function Update3DView()
 }
 
 //@ts-ignore
-window.InitWebIfcViewer = () =>
+window.InitWebIfcViewer = async () =>
 {
     //@ts-ignore
     API.SetModule(Module);
+    await API.WaitForModuleReady();
+    let time = API.ms();
+    for (let i = 0; i < 10000; i++)
+    {
+    //@ts-ignore
+    Module.getTest().tests.get(0);
+    }
+    let etime = API.ms();
+    console.log(etime - time);
     let fileInput = document.getElementById("finput");
 
     fileInput.addEventListener('change', fileInputChanged);

@@ -43,7 +43,13 @@ export function GetExpressIdsWithType(modelID: number, type: number): ExpressIDL
 {
     return new ExpressIDList(wasm_module, wasm_module._GetExpressIdsWithType(modelID, type));
 }
+
 export function GetFlattenedGeometry(modelID: number, expressID: number): GeometryBuffer
 {
     return new GeometryBuffer(wasm_module, wasm_module._GetFlattenedGeometry(modelID, expressID));
+}
+
+export function LoadAllGeometry(modelID: number): void
+{
+    wasm_module._LoadAllGeometry(modelID);
 }
