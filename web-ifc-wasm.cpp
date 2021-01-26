@@ -111,13 +111,29 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("z", &glm::dvec4::z)
         .field("a", &glm::dvec4::a)
         ;
-        
-    emscripten::value_object<glm::dmat4>("dmat4")
-        ;
+
+    emscripten::value_array<std::array<double, 16>>("array_double_16")
+            .element(emscripten::index<0>())
+            .element(emscripten::index<1>())
+            .element(emscripten::index<2>())
+            .element(emscripten::index<3>())
+            .element(emscripten::index<4>())
+            .element(emscripten::index<5>())
+            .element(emscripten::index<6>())
+            .element(emscripten::index<7>())
+            .element(emscripten::index<8>())
+            .element(emscripten::index<9>())
+            .element(emscripten::index<10>())
+            .element(emscripten::index<11>())
+            .element(emscripten::index<12>())
+            .element(emscripten::index<13>())
+            .element(emscripten::index<14>())
+            .element(emscripten::index<15>())
+            ;
 
     emscripten::value_object<webifc::IfcPlacedGeometry>("IfcPlacedGeometry")
         .field("color", &webifc::IfcPlacedGeometry::color)
-        .field("transformation", &webifc::IfcPlacedGeometry::transformation)
+        .field("transformation", &webifc::IfcPlacedGeometry::flatTransformation)
         .field("geometryExpressID", &webifc::IfcPlacedGeometry::geometryExpressID)
         ;
 

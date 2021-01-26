@@ -68,6 +68,7 @@ namespace webifc
 
 				geometry.color = newParentColor;
 				geometry.transformation = newMatrix;
+				geometry.SetFlatTransformation();
 				geometry.geometryExpressID = composedMesh.expressID;
 
 				flatMesh.geometries.push_back(geometry);
