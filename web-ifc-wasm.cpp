@@ -14,26 +14,10 @@
 std::vector<webifc::IfcLoader> loaders;
 std::vector<webifc::IfcGeometryLoader> geomLoaders;
 
-
-
-struct Test
-{
-    int a;
-    int b;
-};
-
-struct Mesh
-{
-    std::vector<Test> tests;
-};
-
-Test t { 5, 3};
-Mesh m;
 // use to construct API placeholders
 int main() {
     loaders.emplace_back();
     geomLoaders.emplace_back(loaders[0]);
-    m.tests.push_back(t);
 
     return 0;
 }
@@ -49,7 +33,7 @@ std::string ReadFile(const std::string& filename)
     return buffer;
 }
 
-extern "C" int OpenModel(std::string filename)
+int OpenModel(std::string filename)
 {
     std::cout << "Loading: " << filename << std::endl;
 
@@ -71,7 +55,7 @@ extern "C" int OpenModel(std::string filename)
     return modelID;
 }
 
-extern "C" void CloseModel(uint32_t modelID)
+void CloseModel(uint32_t modelID)
 {
     webifc::IfcLoader loader;
 
@@ -82,7 +66,7 @@ extern "C" void CloseModel(uint32_t modelID)
 std::vector<uint32_t> expressIds;
 ExpressIDList ExpressIDListMessage;
 
-extern "C" ExpressIDList* GetExpressIdsWithType(uint32_t modelID, uint32_t type)
+void* GetExpressIdsWithType(uint32_t modelID, uint32_t type)
 {
     expressIds = loaders[modelID].GetExpressIDsWithType(type);
     ExpressIDListMessage.expressIds_data = &expressIds[0];
@@ -91,50 +75,13 @@ extern "C" ExpressIDList* GetExpressIdsWithType(uint32_t modelID, uint32_t type)
     return &ExpressIDListMessage;
 }
 
-webifc::IfcGeometry flatGeometry;
-GeometryBuffer GeometryBufferMessage;
-std::vector<uint32_t> indexData;
-std::vector<float> vertexData;
-
-extern "C" GeometryBuffer* GetFlattenedGeometry(uint32_t modelID, uint64_t expressID)
-{
-    webifc::IfcGeometryLoader& geomLoader = geomLoaders[modelID];
-    
-    auto start = webifc::ms();
-    flatGeometry = geomLoader.GetFlattenedGeometry(expressID);
-    auto end = webifc::ms() - start;
-    // std::cout << "Geometry generation took " << end << " ms" << std::endl;
-
-    indexData.resize(flatGeometry.faces.size() * 3);
-    vertexData.resize(flatGeometry.points.size() * 3);
-
-    for (int i = 0; i < flatGeometry.points.size(); i++)
-    {
-        vertexData[i * 3 + 0] = flatGeometry.points[i].x;
-        vertexData[i * 3 + 1] = flatGeometry.points[i].y;
-        vertexData[i * 3 + 2] = flatGeometry.points[i].z;
-    }
-
-    for (int i = 0; i < flatGeometry.faces.size(); i++)
-    {
-        indexData[i * 3 + 0] = flatGeometry.faces[i].i0;
-        indexData[i * 3 + 1] = flatGeometry.faces[i].i1;
-        indexData[i * 3 + 2] = flatGeometry.faces[i].i2;
-    }
-
-    GeometryBufferMessage.indexData_data = &indexData[0];
-    GeometryBufferMessage.indexData_length = indexData.size();
-    
-    GeometryBufferMessage.vertexData_data = &vertexData[0];
-    GeometryBufferMessage.vertexData_length = vertexData.size();
-
-    return &GeometryBufferMessage;
-}
-
-extern "C" void LoadAllGeometry(uint32_t modelID)
+std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 {
     webifc::IfcLoader& loader = loaders[modelID];
     webifc::IfcGeometryLoader& geomLoader = geomLoaders[modelID];
+
+    std::vector<webifc::IfcFlatMesh> meshes;
+
     for (auto type : ifc2x4::IfcElements)
     {
         auto elements = loader.GetExpressIDsWithType(type);
@@ -144,9 +91,11 @@ extern "C" void LoadAllGeometry(uint32_t modelID)
 
         for (int i = 0; i < elements.size(); i++)
         {
-            auto mesh = geomLoader.GetMesh(elements[i]);
+            meshes.push_back(geomLoader.GetFlatMesh(elements[i]));
         }
     }
+
+    return meshes;
 }
 
 extern "C" bool IsModelOpen(uint32_t modelID)
@@ -154,20 +103,35 @@ extern "C" bool IsModelOpen(uint32_t modelID)
     return loaders[modelID].IsOpen();
 }
     
-Mesh getTest() {
-    return m;
-}
-
 EMSCRIPTEN_BINDINGS(my_module) {
-    emscripten::value_object<Test>("Test")
-        .field("a", &Test::a)
-        .field("b", &Test::b)
-        ;
-    emscripten::register_vector<Test>("VectorTest");
 
-    emscripten::value_object<Mesh>("Mesh")
-        .field("tests", &Mesh::tests)
+    emscripten::value_object<glm::dvec4>("dvec4")
+        .field("x", &glm::dvec4::x)
+        .field("y", &glm::dvec4::y)
+        .field("z", &glm::dvec4::z)
+        .field("a", &glm::dvec4::a)
+        ;
+        
+    emscripten::value_object<glm::dmat4>("dmat4")
         ;
 
-    emscripten::function("getTest", &getTest);
+    emscripten::value_object<webifc::IfcPlacedGeometry>("IfcPlacedGeometry")
+        .field("color", &webifc::IfcPlacedGeometry::color)
+        .field("transformation", &webifc::IfcPlacedGeometry::transformation)
+        .field("geometryExpressID", &webifc::IfcPlacedGeometry::geometryExpressID)
+        ;
+
+    emscripten::register_vector<webifc::IfcPlacedGeometry>("IfcPlacedGeometryVector");
+
+    emscripten::value_object<webifc::IfcFlatMesh>("IfcFlatMesh")
+        .field("geometries", &webifc::IfcFlatMesh::geometries)
+        ;
+
+    emscripten::register_vector<webifc::IfcFlatMesh>("IfcFlatMeshVector");
+
+    emscripten::function("LoadAllGeometry", &LoadAllGeometry);
+    emscripten::function("OpenModel", &OpenModel);
+    emscripten::function("CloseModel", &CloseModel);
+    emscripten::function("IsModelOpen", &IsModelOpen);
+
 }

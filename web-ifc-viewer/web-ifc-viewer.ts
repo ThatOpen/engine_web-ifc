@@ -17,8 +17,22 @@ async function LoadModel(data: Uint8Array)
     console.log(`Opening model took ${time} ms`);
 
     let startGeomTime = API.ms();
-    API.LoadAllGeometry(modelID);
+    let flatMeshes: any = API.LoadAllGeometry(modelID);
     let endGeomTime = API.ms();
+    let size = flatMeshes.size();
+    console.log(`Loaded ${size} flatMeshes`);
+    for (let i = 0; i < size; i++)
+    {
+        let mesh = flatMeshes.get(i);
+        let placedGeometries = mesh.geometries;
+        let numPlacedGeometries = placedGeometries.size();
+        for (let j = 0; j < numPlacedGeometries; j++)
+        {
+            let placedGeometry = placedGeometries.get(j);
+            console.log(placedGeometry);
+        }
+
+    }
     let totalGeomTime = endGeomTime - startGeomTime;
     console.log(`Loading geometry took ${totalGeomTime} ms`);
     return;
@@ -149,15 +163,9 @@ window.InitWebIfcViewer = async () =>
 {
     //@ts-ignore
     API.SetModule(Module);
-    await API.WaitForModuleReady();
-    let time = API.ms();
-    for (let i = 0; i < 10000; i++)
-    {
     //@ts-ignore
-    Module.getTest().tests.get(0);
-    }
-    let etime = API.ms();
-    console.log(etime - time);
+    console.log(Module);
+    await API.WaitForModuleReady();
     let fileInput = document.getElementById("finput");
 
     fileInput.addEventListener('change', fileInputChanged);

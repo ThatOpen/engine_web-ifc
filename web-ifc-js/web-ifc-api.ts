@@ -24,19 +24,19 @@ export function OpenModel(filename: string, data: string | Uint8Array): number
 {
     wasm_module['FS_createDataFile']('/', "filename", data, true, true, true);
     console.log("Wrote file");
-    let result = wasm_module._OpenModel(filename);
+    let result = wasm_module.OpenModel(filename);
     wasm_module['FS_unlink']("/filename");
     return result;
 }
 
 export function CloseModel(modelID: number)
 {
-    wasm_module._CloseModel(modelID);
+    wasm_module.CloseModel(modelID);
 }
 
 export function IsModelOpen(modelID: number): boolean
 {
-    return wasm_module._IsModelOpen(modelID);
+    return wasm_module.IsModelOpen(modelID);
 }
 
 export function GetExpressIdsWithType(modelID: number, type: number): ExpressIDList
@@ -46,10 +46,10 @@ export function GetExpressIdsWithType(modelID: number, type: number): ExpressIDL
 
 export function GetFlattenedGeometry(modelID: number, expressID: number): GeometryBuffer
 {
-    return new GeometryBuffer(wasm_module, wasm_module._GetFlattenedGeometry(modelID, expressID));
+    return new GeometryBuffer(wasm_module, wasm_module.GetFlattenedGeometry(modelID, expressID));
 }
 
 export function LoadAllGeometry(modelID: number): void
 {
-    wasm_module._LoadAllGeometry(modelID);
+    return wasm_module.LoadAllGeometry(modelID);
 }

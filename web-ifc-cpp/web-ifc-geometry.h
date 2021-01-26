@@ -189,6 +189,7 @@ namespace webifc
 				if (!relVoids.empty())
 				{
 					IfcComposedMesh resultMesh;
+					resultMesh.expressID = line.expressID;
 					resultMesh.transformation = glm::dmat4(1);
 
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry);
@@ -211,6 +212,7 @@ namespace webifc
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
+					resultMesh.hasGeometry = true;
 
 					_expressIDToMesh[line.expressID] = resultMesh;
 					return resultMesh;
@@ -268,6 +270,7 @@ namespace webifc
 						IfcComposedMesh temp;
 						temp.expressID = line.expressID;
 						_expressIDToGeometry[line.expressID] = GetBrep(shellRef);
+						temp.hasGeometry = true;
 						temp.transformation = glm::dmat4(1);
 						mesh.children.push_back(temp);
 					}
@@ -285,6 +288,7 @@ namespace webifc
 
 					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
+					mesh.hasGeometry = true;
 
 					return mesh;
 				}
@@ -374,8 +378,8 @@ namespace webifc
 					}
 
 					mesh.transformation = glm::dmat4(1);
+					mesh.hasGeometry = true;
 					_expressIDToGeometry[line.expressID] = geom;
-
 
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
