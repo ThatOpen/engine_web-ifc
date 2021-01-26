@@ -30,6 +30,10 @@ async function LoadModel(data: Uint8Array)
         {
             let placedGeometry = placedGeometries.get(j);
             console.log(placedGeometry);
+            //@ts-ignore
+            let ifcGeometry = Module.GetGeometry(modelID, placedGeometry.geometryExpressID);
+            console.log(ifcGeometry.GetVertexData());
+            console.log(ifcGeometry.GetVertexDataSize());
         }
 
     }

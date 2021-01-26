@@ -39,9 +39,9 @@ namespace webifc
 
 		}
 
-		IfcGeometry& GetCachedGeometry(uint32_t index)
+		IfcGeometry& GetCachedGeometry(uint32_t expressID)
 		{
-			return _expressIDToGeometry[index];
+			return _expressIDToGeometry[expressID];
 		}
 
 		IfcGeometry GetFlattenedGeometry(uint32_t expressID)

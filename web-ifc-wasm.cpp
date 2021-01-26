@@ -98,12 +98,25 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
     return meshes;
 }
 
+webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
+{
+    auto& geom = geomLoaders[modelID].GetCachedGeometry(expressID);
+    return geom;
+}
+
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
     return loaders[modelID].IsOpen();
 }
     
 EMSCRIPTEN_BINDINGS(my_module) {
+
+    emscripten::class_<webifc::IfcGeometry>("IfcGeometry")
+        .constructor<>()
+        .function("GetVertexData", &webifc::IfcGeometry::GetVertexData)
+        .function("GetVertexDataSize", &webifc::IfcGeometry::GetVertexDataSize)
+        ;
+
 
     emscripten::value_object<glm::dvec4>("dvec4")
         .field("x", &glm::dvec4::x)
@@ -149,5 +162,5 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
-
+    emscripten::function("GetGeometry", &GetGeometry);
 }

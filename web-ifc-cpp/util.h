@@ -124,24 +124,24 @@ namespace webifc
 			);
 		}
 
-		double* GetVertexData()
+		uint32_t GetVertexData()
 		{
-			return &vertexData[0];
+			return (uint32_t)&vertexData[0];
 		}
 
-		size_t GetVertexDataSize()
+		uint32_t GetVertexDataSize()
 		{
-			return vertexData.size();
+			return (uint32_t)vertexData.size();
 		}
 
-		uint32_t* GetIndexData()
+		uint32_t GetIndexData()
 		{
-			return &indexData[0];
+			return (uint32_t)&indexData[0];
 		}
 
-		size_t GetIndexDataSize()
+		uint32_t GetIndexDataSize()
 		{
-			return indexData.size();
+			return (uint32_t)indexData.size();
 		}
 	};
 
