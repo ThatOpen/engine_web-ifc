@@ -115,6 +115,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .constructor<>()
         .function("GetVertexData", &webifc::IfcGeometry::GetVertexData)
         .function("GetVertexDataSize", &webifc::IfcGeometry::GetVertexDataSize)
+        .function("GetIndexData", &webifc::IfcGeometry::GetIndexData)
+        .function("GetIndexDataSize", &webifc::IfcGeometry::GetIndexDataSize)
         ;
 
 
@@ -122,7 +124,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("x", &glm::dvec4::x)
         .field("y", &glm::dvec4::y)
         .field("z", &glm::dvec4::z)
-        .field("a", &glm::dvec4::a)
+        .field("w", &glm::dvec4::w)
         ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")

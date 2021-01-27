@@ -9,6 +9,48 @@ const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.inner
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 let controls;
 
+function GetSubArray(heap, startPtr, sizeBytes)
+{
+    return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes);
+}
+
+function IfcGeometryToBuffer(vertexData: Float32Array, indexData: Uint32Array): THREE.BufferGeometry
+{
+    const geometry = new THREE.BufferGeometry();
+
+    const interleavedBuffer32 = new THREE.InterleavedBuffer( vertexData, 6 );
+
+    geometry.setAttribute( 'position', new THREE.InterleavedBufferAttribute( interleavedBuffer32, 3, 0 ) );
+    geometry.setAttribute( 'normal', new THREE.InterleavedBufferAttribute( interleavedBuffer32, 3, 3 ) );
+    let index = [];
+    for (let i = 0; i < indexData.length; i++)
+    {
+        index[i] = indexData[i];
+    }
+
+    geometry.setIndex(index);
+
+    return geometry;
+}
+
+function AddPlacedGeometry(geometry: THREE.BufferGeometry, matrix: any, color: any)
+{
+    let col = new THREE.Color(color.x, color.y, color.z);
+    const material = new THREE.MeshPhongMaterial( { color: "white" } );
+    if (color.w !== 1)
+    {
+        //material.transparent = true;
+        //material.opacity = color.w;
+    }
+    let mesh = new THREE.Mesh( geometry, material );
+    const m = new THREE.Matrix4();
+    m.elements = matrix;
+    console.log(m);
+    mesh.matrixWorld = m;
+
+    scene.add( mesh );
+}
+
 async function LoadModel(data: Uint8Array)
 {
     let start = API.ms();
@@ -21,6 +63,8 @@ async function LoadModel(data: Uint8Array)
     let endGeomTime = API.ms();
     let size = flatMeshes.size();
     console.log(`Loaded ${size} flatMeshes`);
+    //@ts-ignore
+    let m: any = Module;
     for (let i = 0; i < size; i++)
     {
         let mesh = flatMeshes.get(i);
@@ -34,6 +78,10 @@ async function LoadModel(data: Uint8Array)
             let ifcGeometry = Module.GetGeometry(modelID, placedGeometry.geometryExpressID);
             console.log(ifcGeometry.GetVertexData());
             console.log(ifcGeometry.GetVertexDataSize());
+            let verts = GetSubArray(m.HEAPF32, ifcGeometry.GetVertexData(), ifcGeometry.GetVertexDataSize());
+            let indices = GetSubArray(m.HEAPU32, ifcGeometry.GetIndexData(), ifcGeometry.GetIndexDataSize());
+            let bufferGeometry = IfcGeometryToBuffer(verts, indices);
+            AddPlacedGeometry(bufferGeometry, placedGeometry.transformation, placedGeometry.color);
         }
 
     }

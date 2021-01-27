@@ -50,6 +50,7 @@ namespace webifc
 
 	struct IfcGeometry
 	{
+		std::vector<float> fvertexData;
 		std::vector<double> vertexData;
 		std::vector<uint32_t> indexData;
 
@@ -126,12 +127,28 @@ namespace webifc
 
 		uint32_t GetVertexData()
 		{
-			return (uint32_t)&vertexData[0];
+			// unfortunately webgl can't do doubles
+			if (fvertexData.size() != vertexData.size())
+			{
+				const double scale = 0.001;
+				fvertexData.resize(vertexData.size());
+				for (size_t i = 0; i < vertexData.size(); i += 6)
+				{
+					fvertexData[i + 0] = vertexData[i + 0] * scale;
+					fvertexData[i + 1] = vertexData[i + 1] * scale;
+					fvertexData[i + 2] = vertexData[i + 2] * scale;
+				
+					fvertexData[i + 3] = vertexData[i + 3];
+					fvertexData[i + 4] = vertexData[i + 4];
+					fvertexData[i + 5] = vertexData[i + 5];
+				}
+			}
+			return (uint32_t)&fvertexData[0];
 		}
 
 		uint32_t GetVertexDataSize()
 		{
-			return (uint32_t)vertexData.size();
+			return (uint32_t)fvertexData.size();
 		}
 
 		uint32_t GetIndexData()

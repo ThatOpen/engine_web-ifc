@@ -86,8 +86,7 @@ namespace webifc
 
 			IfcComposedMesh composedMesh = GetMesh(expressID);
 
-			AddComposedMeshToFlatMesh(flatMesh, composedMesh);
-
+			AddComposedMeshToFlatMesh(flatMesh, composedMesh, NormalizeIFC);
 
 			return flatMesh;
 		}
