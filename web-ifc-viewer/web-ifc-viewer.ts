@@ -44,9 +44,12 @@ function AddPlacedGeometry(geometry: THREE.BufferGeometry, matrix: any, color: a
     }
     let mesh = new THREE.Mesh( geometry, material );
     const m = new THREE.Matrix4();
-    m.elements = matrix;
-    console.log(m);
-    mesh.matrixWorld = m;
+    m.fromArray(matrix);
+    m.elements[15 - 3] *= 0.001;
+    m.elements[15 - 2] *= 0.001;
+    m.elements[15 - 1] *= 0.001;
+    mesh.matrix = m;
+    mesh.matrixAutoUpdate = false;
 
     scene.add( mesh );
 }
@@ -73,20 +76,21 @@ async function LoadModel(data: Uint8Array)
         for (let j = 0; j < numPlacedGeometries; j++)
         {
             let placedGeometry = placedGeometries.get(j);
-            console.log(placedGeometry);
             //@ts-ignore
             let ifcGeometry = Module.GetGeometry(modelID, placedGeometry.geometryExpressID);
-            console.log(ifcGeometry.GetVertexData());
-            console.log(ifcGeometry.GetVertexDataSize());
+            //console.log(ifcGeometry.GetVertexData());
+            //console.log(ifcGeometry.GetVertexDataSize());
             let verts = GetSubArray(m.HEAPF32, ifcGeometry.GetVertexData(), ifcGeometry.GetVertexDataSize());
             let indices = GetSubArray(m.HEAPU32, ifcGeometry.GetIndexData(), ifcGeometry.GetIndexDataSize());
             let bufferGeometry = IfcGeometryToBuffer(verts, indices);
-            AddPlacedGeometry(bufferGeometry, placedGeometry.transformation, placedGeometry.color);
+            AddPlacedGeometry(bufferGeometry, placedGeometry.flatTransformation, placedGeometry.color);
         }
 
     }
+    let endUploadTime = API.ms();
     let totalGeomTime = endGeomTime - startGeomTime;
     console.log(`Loading geometry took ${totalGeomTime} ms`);
+    console.log(`Uploading took ${endUploadTime - endGeomTime} ms`);
     return;
 
     IfcSchema.IfcElements.forEach((elementCode) => {
@@ -214,10 +218,16 @@ function Update3DView()
 window.InitWebIfcViewer = async () =>
 {
     //@ts-ignore
-    API.SetModule(Module);
+    let m: any = Module;
+
     //@ts-ignore
-    console.log(Module);
+    API.SetModule(m);
+    //@ts-ignore
+    console.log(m);
     await API.WaitForModuleReady();
+
+    console.log(m.GetMat());
+
     let fileInput = document.getElementById("finput");
 
     fileInput.addEventListener('change', fileInputChanged);

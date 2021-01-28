@@ -98,6 +98,25 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
     return meshes;
 }
 
+std::array<double, 16> GetMat()
+{
+    glm::dmat4 transformation(1);
+    transformation[0][0] = 4.5;
+
+
+    std::array<double, 16> flatTransformation;
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            flatTransformation[i * 4 + j] = transformation[i][j];
+        }
+    }
+
+    return flatTransformation;
+}
+
 webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
 {
     auto& geom = geomLoaders[modelID].GetCachedGeometry(expressID);
@@ -148,7 +167,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<webifc::IfcPlacedGeometry>("IfcPlacedGeometry")
         .field("color", &webifc::IfcPlacedGeometry::color)
-        .field("transformation", &webifc::IfcPlacedGeometry::flatTransformation)
+        .field("flatTransformation", &webifc::IfcPlacedGeometry::flatTransformation)
         .field("geometryExpressID", &webifc::IfcPlacedGeometry::geometryExpressID)
         ;
 
@@ -165,4 +184,5 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
+    emscripten::function("GetMat", &GetMat);
 }
