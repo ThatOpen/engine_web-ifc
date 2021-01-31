@@ -44,13 +44,18 @@ namespace webifc
 			return _expressIDToGeometry[expressID];
 		}
 
+		bool HasCachedGeometry(uint32_t expressID)
+		{
+			return _expressIDToGeometry.find(expressID) != _expressIDToGeometry.end();
+		}
+
 		IfcGeometry GetFlattenedGeometry(uint32_t expressID)
 		{
 			auto mesh = GetMesh(expressID);
             return flatten(mesh, _expressIDToGeometry, NormalizeIFC);
 		}
 
-		void AddComposedMeshToFlatMesh(IfcFlatMesh& flatMesh, const IfcComposedMesh& composedMesh, const glm::dmat4& parentMatrix = glm::dmat4(1), const glm::dvec4& color = glm::dvec4(1), bool hasColor = false)
+		void AddComposedMeshToFlatMesh(IfcFlatMesh& flatMesh, const IfcComposedMesh& composedMesh, const glm::dmat4& parentMatrix = glm::dmat4(1), const glm::dvec4& color = glm::dvec4(1, 0, 0, 1), bool hasColor = false)
 		{
 			glm::dvec4 newParentColor = color;
 			bool newHasColor = hasColor;
@@ -139,16 +144,72 @@ namespace webifc
 			PopulateRelVoidsMap();
 		}
 
+		void PopulateStyledItemMap()
+		{
+			auto styledItems = _loader.GetExpressIDsWithType(ifc2x4::IFCSTYLEDITEM);
+
+			for (uint32_t styledItemID : styledItems)
+			{
+				uint32_t lineID = _loader.ExpressIDToLineID(styledItemID);
+				auto& line = _loader.GetLine(lineID);
+
+				_loader.MoveToArgumentOffset(line, 0);
+
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					uint32_t representationItem = _loader.GetRefArgument();
+
+					auto styleAssignments = _loader.GetSetArgument();
+
+					for (auto& styleAssignment : styleAssignments)
+					{
+						uint32_t styleAssignmentID = _loader.GetRefArgument(styleAssignment);
+						_styledItems[representationItem].push_back(styleAssignmentID);
+					}
+				}
+			}
+
+			_isStyledItemMapPopulated = true;
+		}
+
+		void PopulateStyledItemMapIfNeeded()
+		{
+			if (_isStyledItemMapPopulated)
+			{
+				return;
+			}
+
+			PopulateStyledItemMap();
+		}
+
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
 			PopulateRelVoidsMapIfNeeded();
-
-
+			PopulateStyledItemMapIfNeeded();
+			
 			auto& line = _loader.GetLine(lineID);
 			auto it = _expressIDToMesh.find(line.expressID);
 			if (it != _expressIDToMesh.end())
 			{
-				return _expressIDToMesh[line.expressID];
+				//return _expressIDToMesh[line.expressID];
+			}
+
+			bool hasColor = false;
+			glm::dvec4 styledItemColor(1);
+			auto styledItem = _styledItems.find(line.expressID);
+			if (styledItem != _styledItems.end())
+			{
+				auto items = styledItem->second;
+				for (auto item : items)
+				{
+					bool success = GetColor(item, styledItemColor);
+					if (success)
+					{
+						hasColor = true;
+						break;
+					}
+				}
 			}
 
 			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
@@ -184,17 +245,16 @@ namespace webifc
 					mesh.children.push_back(GetMesh(ifcPresentation));
 				}
 
-				auto relVoids = _relVoids[line.expressID];
+				auto relVoidsIt = _relVoids.find(line.expressID);
 
-				if (!relVoids.empty())
+				if (relVoidsIt != _relVoids.end() && !relVoidsIt->second.empty())
 				{
 					IfcComposedMesh resultMesh;
-					resultMesh.expressID = line.expressID;
 					resultMesh.transformation = glm::dmat4(1);
 
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry);
 
-					for (auto relVoidExpressID : relVoids)
+					for (auto relVoidExpressID : relVoidsIt->second)
 					{
 						IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
 						auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry);
@@ -212,13 +272,18 @@ namespace webifc
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
+					resultMesh.expressID = line.expressID;
 					resultMesh.hasGeometry = true;
+					resultMesh.hasColor = true;
+					resultMesh.color = styledItemColor;
 
 					_expressIDToMesh[line.expressID] = resultMesh;
 					return resultMesh;
 				}
 				else
 				{
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
@@ -238,6 +303,8 @@ namespace webifc
 					mesh.transformation = GetLocalPlacement(localPlacement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
 
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
@@ -252,6 +319,8 @@ namespace webifc
 					mesh.transformation = GetLocalPlacement(axis2Placement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
 
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
@@ -268,27 +337,32 @@ namespace webifc
 					{
 						uint32_t shellRef = _loader.GetRefArgument(shell);
 						IfcComposedMesh temp;
-						temp.expressID = line.expressID;
 						_expressIDToGeometry[line.expressID] = GetBrep(shellRef);
+						temp.expressID = line.expressID;
 						temp.hasGeometry = true;
 						temp.transformation = glm::dmat4(1);
 						mesh.children.push_back(temp);
 					}
 
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCFACETEDBREP:
 				{
 					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
 
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
 
 					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
+					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
+					_expressIDToMesh[line.expressID] = mesh;
 
 					return mesh;
 				}
@@ -307,6 +381,8 @@ namespace webifc
 						mesh.children.push_back(GetMesh(repID));
 					}
 
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
@@ -333,13 +409,14 @@ namespace webifc
 						mesh.children.push_back(GetMesh(repID));
 					}
 
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCEXTRUDEDAREASOLID:
 				{
 					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
 
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t profileID = _loader.GetRefArgument();
@@ -378,9 +455,12 @@ namespace webifc
 					}
 
 					mesh.transformation = glm::dmat4(1);
-					mesh.hasGeometry = true;
 					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
 
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
@@ -434,6 +514,80 @@ namespace webifc
 			}
 
 			return IfcGeometry();
+		}
+
+		bool GetColor(uint32_t expressID, glm::dvec4& outputColor)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			switch (line.ifcType)
+			{
+			case ifc2x4::IFCPRESENTATIONSTYLEASSIGNMENT:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto ifcPresentationStyleSelects = _loader.GetSetArgument();
+
+				for (auto& styleSelect : ifcPresentationStyleSelects)
+				{
+					uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
+					glm::dvec4 color;
+					bool foundColor = GetColor(styleSelectID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+
+				return false;
+			}
+			case ifc2x4::IFCSURFACESTYLE:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto ifcSurfaceStyleElementSelects = _loader.GetSetArgument();
+
+				for (auto& styleElementSelect : ifcSurfaceStyleElementSelects)
+				{
+					uint32_t styleElementSelectID = _loader.GetRefArgument(styleElementSelect);
+					glm::dvec4 color;
+					bool foundColor = GetColor(styleElementSelectID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+			}
+			case ifc2x4::IFCSURFACESTYLERENDERING:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				GetColor(_loader.GetRefArgument(), outputColor);
+				_loader.MoveToArgumentOffset(line, 1);
+
+				if (_loader.GetTokenType() == IfcTokenType::REAL)
+				{
+					_loader.Reverse();
+					outputColor.a = 1 - _loader.GetDoubleArgument();
+				}
+
+				return true;
+			}
+			case ifc2x4::IFCCOLOURRGB:
+			{
+				_loader.MoveToArgumentOffset(line, 1);
+				outputColor.r = _loader.GetDoubleArgument();
+				outputColor.g = _loader.GetDoubleArgument();
+				outputColor.b = _loader.GetDoubleArgument();
+				outputColor.a = 1;
+
+				return true;
+			}
+			default:
+				std::cout << "Unexpected style type: " << line.ifcType << " at " << expressID << std::endl;
+				break;
+			}
+
+			return false;
 		}
 
 		void AddFaceToGeometry(uint32_t expressID, IfcGeometry& geometry)
@@ -1316,6 +1470,8 @@ namespace webifc
 		std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
 		std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
+		std::unordered_map<uint32_t, std::vector<uint32_t>> _styledItems;
 		bool _isRelVoidsMapPopulated = false;
+		bool _isStyledItemMapPopulated = false;
 	};
 }

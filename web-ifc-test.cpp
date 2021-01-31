@@ -42,8 +42,10 @@ void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geom
     std::cout << walls.size() << " elements" << std::endl;
 }
 
-void LoadAllTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
+std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
 {
+    std::vector<webifc::IfcFlatMesh> meshes;
+
     for (auto type : ifc2x4::IfcElements)
     {
         auto elements = loader.GetExpressIDsWithType(type);
@@ -51,8 +53,24 @@ void LoadAllTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryL
         for (int i = 0; i < elements.size(); i++)
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
+            /*
+            for (auto& geom : mesh.geometries)
+            {
+                if (!geometryLoader.HasCachedGeometry(geom.geometryExpressID))
+                {
+                    printf("asdf");
+                }
+                auto flatGeom = geometryLoader.GetCachedGeometry(geom.geometryExpressID);
+                flatGeom.GetVertexData();
+                std::cout << geom.geometryExpressID << std::endl;
+                std::cout << flatGeom.fvertexData.size() << std::endl;
+            }
+            */
+            meshes.push_back(mesh);
         }
     }
+
+    return meshes;
 }
 
 int main()
@@ -80,7 +98,7 @@ int main()
     start = webifc::ms();
 
     //SpecificLoadTest(loader, geometryLoader);
-    LoadAllTest(loader, geometryLoader);
+    auto meshes = LoadAllTest(loader, geometryLoader);
 
     time = webifc::ms() - start;
 

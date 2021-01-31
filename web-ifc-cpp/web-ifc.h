@@ -305,6 +305,7 @@ namespace webifc
 			_tape.Read<char>(); // string type
 			uint32_t start = _tape.Read<uint32_t>();
 			uint32_t end = _tape.Read<uint32_t>();
+
 			return std::string(&buf[start], end - start);
 		}
 

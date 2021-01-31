@@ -261,18 +261,23 @@ namespace webifc
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
-		auto& meshGeom = geometryMap[mesh.expressID];
+		auto geomIt = geometryMap.find(mesh.expressID);
 
-		if (meshGeom.numFaces)
+		if (geomIt != geometryMap.end())
 		{
-			for (uint32_t i = 0; i < meshGeom.numFaces; i ++)
-			{
-				Face f = meshGeom .GetFace(i);
-				glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
-				glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
-				glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
+			auto meshGeom = geomIt->second;
 
-				geom.AddFace(a, b, c);
+			if (meshGeom.numFaces)
+			{
+				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+				{
+					Face f = meshGeom.GetFace(i);
+					glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
+					glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
+					glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
+
+					geom.AddFace(a, b, c);
+				}
 			}
 		}
 

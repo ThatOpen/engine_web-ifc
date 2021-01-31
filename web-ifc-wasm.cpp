@@ -13,6 +13,8 @@
 
 std::vector<webifc::IfcLoader> loaders;
 std::vector<webifc::IfcGeometryLoader> geomLoaders;
+// @REFACTOR: USE STRING INTERNING OR PLACE STRINGS INSIDE TAPE!
+std::vector<std::string> fileContents;
 
 // use to construct API placeholders
 int main() {
@@ -37,16 +39,17 @@ int OpenModel(std::string filename)
 {
     std::cout << "Loading: " << filename << std::endl;
 
-    std::string content = ReadFile("filename");
+    uint32_t modelID = loaders.size();
+    fileContents[modelID] = ReadFile("filename");
     
     std::cout << "Read " << std::endl;
 
     webifc::IfcLoader loader;
-    uint32_t modelID = loaders.size();
     loaders.push_back(loader);
     std::cout << "Loading " << std::endl;
     auto start = webifc::ms();
-    loaders[modelID].LoadFile(content);
+    // !!!!!!!!!!! @REFACTOR: this call assumes the pointer stays alive until model is closed!!!
+    loaders[modelID].LoadFile(fileContents[modelID]);
     auto end = webifc::ms() - start;
     geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
 
@@ -61,6 +64,7 @@ void CloseModel(uint32_t modelID)
 
     // overwrite old loader, thereby destructing it
     loaders[modelID] = loader;
+    fileContents[modelID] = "";
 }
 
 std::vector<uint32_t> expressIds;
@@ -86,8 +90,10 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
     {
         auto elements = loader.GetExpressIDsWithType(type);
 
-        // std::cout << type << std::endl;
-        // std::cout << elements.size() << std::endl;
+        if (type == ifc2x4::IFCOPENINGELEMENT || type == ifc2x4::IFCSPACE || type == ifc2x4::IFCOPENINGSTANDARDCASE)
+        {
+            continue;
+        }
 
         for (int i = 0; i < elements.size(); i++)
         {
@@ -119,8 +125,7 @@ std::array<double, 16> GetMat()
 
 webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
 {
-    auto& geom = geomLoaders[modelID].GetCachedGeometry(expressID);
-    return geom;
+    return geomLoaders[modelID].GetCachedGeometry(expressID);
 }
 
 extern "C" bool IsModelOpen(uint32_t modelID)

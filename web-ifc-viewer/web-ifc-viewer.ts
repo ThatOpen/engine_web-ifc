@@ -36,7 +36,7 @@ function IfcGeometryToBuffer(vertexData: Float32Array, indexData: Uint32Array): 
 function AddPlacedGeometry(geometry: THREE.BufferGeometry, matrix: any, color: any)
 {
     let col = new THREE.Color(color.x, color.y, color.z);
-    const material = new THREE.MeshPhongMaterial( { color: "white" } );
+    const material = new THREE.MeshPhongMaterial( { color: col } );
     if (color.w !== 1)
     {
         //material.transparent = true;
@@ -54,7 +54,7 @@ function AddPlacedGeometry(geometry: THREE.BufferGeometry, matrix: any, color: a
     scene.add( mesh );
 }
 
-async function LoadModel(data: Uint8Array)
+function LoadModel(data: Uint8Array)
 {
     let start = API.ms();
     let modelID = API.OpenModel("example.ifc", data);
@@ -78,6 +78,9 @@ async function LoadModel(data: Uint8Array)
             let placedGeometry = placedGeometries.get(j);
             //@ts-ignore
             let ifcGeometry = Module.GetGeometry(modelID, placedGeometry.geometryExpressID);
+            //console.log(placedGeometry);
+            //console.log(ifcGeometry.GetVertexData());
+            //console.log(ifcGeometry.GetVertexDataSize());
             //console.log(ifcGeometry.GetVertexData());
             //console.log(ifcGeometry.GetVertexDataSize());
             let verts = GetSubArray(m.HEAPF32, ifcGeometry.GetVertexData(), ifcGeometry.GetVertexDataSize());
