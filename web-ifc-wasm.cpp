@@ -97,7 +97,13 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 
         for (int i = 0; i < elements.size(); i++)
         {
-            meshes.push_back(geomLoader.GetFlatMesh(elements[i]));
+            webifc::IfcFlatMesh mesh = geomLoader.GetFlatMesh(elements[i]);
+            for (auto& geom : mesh.geometries)
+            {
+                auto& flatGeom = geomLoader.GetCachedGeometry(geom.geometryExpressID);
+                flatGeom.GetVertexData();
+            }   
+            meshes.push_back(std::move(mesh));
         }
     }
 

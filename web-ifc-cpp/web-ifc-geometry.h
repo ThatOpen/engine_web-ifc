@@ -678,10 +678,18 @@ namespace webifc
 
 				curve.points.reserve(points.size());
 
+				uint32_t prevID = 0;
 				for (auto& token : points)
 				{
 					uint32_t pointId = _loader.GetRefArgument(token);
-					curve.points.push_back(GetCartesianPoint3D(pointId));
+					
+					// trim out consecutive equal points
+					if (pointId != prevID)
+					{
+						curve.points.push_back(GetCartesianPoint3D(pointId));
+					}
+
+					prevID = pointId;
 				}
 
 				return curve;
@@ -709,7 +717,8 @@ namespace webifc
 			else if (bounds.size() == 1 && bounds[0].curve.points.size() == 4)
 			{
 				auto c = bounds[0].curve;
-				
+
+				// TODO: assuming 0,1,2 NOT colinear!
 				glm::dvec3 normal = computeNormal(c.points[0], c.points[1], c.points[2]);
 
 				uint32_t offset = geometry.numPoints;
@@ -772,7 +781,7 @@ namespace webifc
 				indices.push_back(3);
 				*/
 			}
-			else
+			else if (bounds.size() > 0 && bounds[0].curve.points.size() >= 3)
 			{
 				// bound greater than 4 vertices or with holes, triangulate
 				// TODO: modify to use glm::dvec2 with custom accessors
@@ -782,10 +791,12 @@ namespace webifc
 				uint32_t offset = geometry.numPoints;
 				
 				// TODO: assuming that outer bound is first!
-				// TODO: assuming 0,1,2 NOT colinear!
-				glm::dvec3 v1 = bounds[0].curve.points[0];
-				glm::dvec3 v2 = bounds[0].curve.points[1];
-				glm::dvec3 v3 = bounds[0].curve.points[2];
+				glm::dvec3 v1, v2, v3;
+				if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
+				{
+					// these points are on a line
+					return;
+				}
 
 				glm::dvec3 v12(glm::normalize(v2 - v1));
 				glm::dvec3 v13(glm::normalize(v3 - v1));
@@ -824,6 +835,10 @@ namespace webifc
 				{
 					geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
 				}
+			}
+			else
+			{
+				std::cout << "Bad bound" << std::endl;
 			}
 		}
 

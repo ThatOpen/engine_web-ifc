@@ -11,7 +11,7 @@ let controls;
 
 function GetSubArray(heap, startPtr, sizeBytes)
 {
-    return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes);
+    return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes).slice(0);
 }
 
 function IfcGeometryToBuffer(vertexData: Float32Array, indexData: Uint32Array): THREE.BufferGeometry
@@ -39,8 +39,8 @@ function AddPlacedGeometry(geometry: THREE.BufferGeometry, matrix: any, color: a
     const material = new THREE.MeshPhongMaterial( { color: col } );
     if (color.w !== 1)
     {
-        //material.transparent = true;
-        //material.opacity = color.w;
+        material.transparent = true;
+        material.opacity = color.w;
     }
     let mesh = new THREE.Mesh( geometry, material );
     const m = new THREE.Matrix4();
@@ -88,7 +88,6 @@ function LoadModel(data: Uint8Array)
             let bufferGeometry = IfcGeometryToBuffer(verts, indices);
             AddPlacedGeometry(bufferGeometry, placedGeometry.flatTransformation, placedGeometry.color);
         }
-
     }
     let endUploadTime = API.ms();
     let totalGeomTime = endGeomTime - startGeomTime;

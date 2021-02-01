@@ -53,7 +53,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::
         for (int i = 0; i < elements.size(); i++)
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
-            /*
+
             for (auto& geom : mesh.geometries)
             {
                 if (!geometryLoader.HasCachedGeometry(geom.geometryExpressID))
@@ -65,7 +65,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::
                 std::cout << geom.geometryExpressID << std::endl;
                 std::cout << flatGeom.fvertexData.size() << std::endl;
             }
-            */
+
             meshes.push_back(mesh);
         }
     }
@@ -78,8 +78,8 @@ int main()
     std::cout << "Hello web IFC test!\n";
 
     //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
-    std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
-    //std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
+    std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\0912104-04slab_recess_tek_1.ifc";
 

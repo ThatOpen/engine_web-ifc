@@ -48,6 +48,26 @@ namespace webifc
 		return glm::normalize(norm);
 	}
 
+	// just follow the ifc spec, damn
+	bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3& normal)
+	{
+		glm::dvec3 v12(v2 - v1);
+		glm::dvec3 v13(v3 - v1);
+
+		glm::dvec3 norm = glm::cross(v12, v13);
+
+		double len = glm::length(norm);
+
+		if (len < EPS_SMALL)
+		{
+			return false;
+		}
+
+		normal = norm / len;
+
+		return true;
+	}
+
 	struct IfcGeometry
 	{
 		std::vector<float> fvertexData;
@@ -77,6 +97,16 @@ namespace webifc
 			vertexData.push_back(n.y);
 			vertexData.push_back(n.z);
 
+			if (std::isnan(pt.x) || std::isnan(pt.y) || std::isnan(pt.z))
+			{
+				printf("asdf");
+			}
+
+			if (std::isnan(n.x) || std::isnan(n.y) || std::isnan(n.z))
+			{
+				printf("asdf");
+			}
+
 			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
 			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
 			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
@@ -86,9 +116,15 @@ namespace webifc
 
 		inline void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 		{
+			glm::dvec3 normal;
+			if (!computeSafeNormal(a, b, c, normal))
+			{
+				// bail out, zero area triangle
+				return;
+			}
+
 			AddFace(numPoints + 0, numPoints + 1, numPoints + 2);
 
-			glm::dvec3 normal = computeNormal(a, b, c);
 			AddPoint(a, normal);
 			AddPoint(b, normal);
 			AddPoint(c, normal);
@@ -202,6 +238,32 @@ namespace webifc
 	{
 		std::vector<glm::dvec3> points;
 	};
+
+	bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3>& points, glm::dvec3& v1, glm::dvec3& v2, glm::dvec3& v3)
+	{
+		v1 = points[0];
+
+		for (auto& p : points)
+		{
+			if (v1 != p)
+			{
+				v2 = p;
+				break;
+			}
+		}
+
+		glm::dvec3 normal;
+		for (auto& p : points)
+		{
+			if (computeSafeNormal(v1, v2, p, normal))
+			{
+				v3 = p;
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	enum class IfcBoundType
 	{
