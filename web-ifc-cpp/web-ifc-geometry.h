@@ -160,6 +160,24 @@ namespace webifc
 					_loader.Reverse();
 					uint32_t representationItem = _loader.GetRefArgument();
 
+					auto lineID = _loader.ExpressIDToLineID(representationItem);
+					auto line = _loader.GetLine(lineID);
+
+					/*
+					if (!ifc2x4::IsIfcElement(line.ifcType))
+					{
+						bool printType = true;
+						printType = printType && line.ifcType != ifc2x4::IFCFACETEDBREP;
+						printType = printType && line.ifcType != ifc2x4::IFCEXTRUDEDAREASOLID;
+						printType = printType && line.ifcType != ifc2x4::IFCSHELLBASEDSURFACEMODEL;
+
+						if (printType)
+						{
+							std::cout << line.ifcType << std::endl;
+						}
+					}
+					*/
+
 					auto styleAssignments = _loader.GetSetArgument();
 
 					for (auto& styleAssignment : styleAssignments)
@@ -183,11 +201,71 @@ namespace webifc
 			PopulateStyledItemMap();
 		}
 
+		void PopulateRelMaterialsMap()
+		{
+			auto styledItems = _loader.GetExpressIDsWithType(ifc2x4::IFCRELASSOCIATESMATERIAL);
+
+			for (uint32_t styledItemID : styledItems)
+			{
+				uint32_t lineID = _loader.ExpressIDToLineID(styledItemID);
+				auto& line = _loader.GetLine(lineID);
+
+				_loader.MoveToArgumentOffset(line, 5);
+
+				uint32_t materialSelect = _loader.GetRefArgument();
+
+				_loader.MoveToArgumentOffset(line, 4);
+
+				auto RelatedObjects = _loader.GetSetArgument();
+
+				for (auto& ifcRoot : RelatedObjects)
+				{
+					uint32_t ifcRootID = _loader.GetRefArgument(ifcRoot);
+					_relMaterials[ifcRootID].push_back(materialSelect);
+				}
+			}
+
+			auto matDefs = _loader.GetExpressIDsWithType(ifc2x4::IFCMATERIALDEFINITIONREPRESENTATION);
+
+			for (uint32_t styledItemID : matDefs)
+			{
+				uint32_t lineID = _loader.ExpressIDToLineID(styledItemID);
+				auto& line = _loader.GetLine(lineID);
+
+				_loader.MoveToArgumentOffset(line, 2);
+
+				auto representations = _loader.GetSetArgument();
+
+				_loader.MoveToArgumentOffset(line, 3);
+
+				uint32_t material = _loader.GetRefArgument();
+
+				for (auto& representation : representations)
+				{
+					uint32_t representationID = _loader.GetRefArgument(representation);
+					_materialDefinitions[material].push_back(representationID);
+				}
+			}
+
+			_isRelMaterialsMapPopulated = true;
+		}
+
+		void PopulateRelMaterialsMapIfNeeded()
+		{
+			if (_isRelMaterialsMapPopulated)
+			{
+				return;
+			}
+
+			PopulateRelMaterialsMap();
+		}
+
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
 			PopulateRelVoidsMapIfNeeded();
 			PopulateStyledItemMapIfNeeded();
-			
+			PopulateRelMaterialsMapIfNeeded();
+
 			auto& line = _loader.GetLine(lineID);
 			auto it = _expressIDToMesh.find(line.expressID);
 			if (it != _expressIDToMesh.end())
@@ -208,6 +286,28 @@ namespace webifc
 					{
 						hasColor = true;
 						break;
+					}
+				}
+			}
+
+			auto material = _relMaterials.find(line.expressID);
+			if (material != _relMaterials.end())
+			{
+				auto& materials = material->second;
+				for (auto item : materials)
+				{
+					if (_materialDefinitions.count(item) != 0)
+					{
+						auto& defs = _materialDefinitions[item];
+						for (auto def : defs)
+						{
+							bool success = GetColor(def, styledItemColor);
+							if (success)
+							{
+								hasColor = true;
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -571,6 +671,40 @@ namespace webifc
 				}
 
 				return true;
+			}
+			case ifc2x4::IFCSTYLEDREPRESENTATION:
+			{
+				_loader.MoveToArgumentOffset(line, 3);
+				auto repItems = _loader.GetSetArgument();
+
+				for (auto& repItem : repItems)
+				{
+					uint32_t repItemID = _loader.GetRefArgument(repItem);
+					glm::dvec4 color;
+					bool foundColor = GetColor(repItemID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+			}
+			case ifc2x4::IFCSTYLEDITEM:
+			{
+				_loader.MoveToArgumentOffset(line, 1);
+				auto styledItems = _loader.GetSetArgument();
+
+				for (auto& styledItem : styledItems)
+				{
+					uint32_t styledItemID = _loader.GetRefArgument(styledItem);
+					glm::dvec4 color;
+					bool foundColor = GetColor(styledItemID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
 			}
 			case ifc2x4::IFCCOLOURRGB:
 			{
@@ -1486,7 +1620,10 @@ namespace webifc
 		std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _styledItems;
+		std::unordered_map<uint32_t, std::vector<uint32_t>> _relMaterials;
+		std::unordered_map<uint32_t, std::vector<uint32_t>> _materialDefinitions;
 		bool _isRelVoidsMapPopulated = false;
 		bool _isStyledItemMapPopulated = false;
+		bool _isRelMaterialsMapPopulated = false;
 	};
 }

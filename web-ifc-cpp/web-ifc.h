@@ -236,7 +236,7 @@ namespace webifc
 
 			int movedOver = -3; // first is express id, second is express type, third is set begin
 			bool insideSet = false; // assume no nested sets
-			while (movedOver != argumentIndex)
+			while (!(movedOver == argumentIndex && !insideSet))
 			{
 				if (!insideSet)
 				{
