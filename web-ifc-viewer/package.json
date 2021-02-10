@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "esbuild web-ifc-viewer.ts --bundle --platform=node --outfile=../web-ifc-js/wasm-lib/web-ifc-viewer.js",
+    "release": "esbuild web-ifc-viewer.ts --minify --bundle --platform=node --outfile=../web-ifc-js/wasm-lib/web-ifc-viewer.js",
     "watch": "npm-watch "
   },
   "author": "",

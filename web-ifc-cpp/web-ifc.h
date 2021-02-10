@@ -88,6 +88,84 @@ namespace webifc
 			}
 		}
 
+		void GetRefsForLine(std::vector<uint32_t>& refs)
+		{
+			bool first = true;
+			while (!_tape.AtEnd())
+			{
+				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
+
+				switch (t)
+				{
+				case IfcTokenType::LINE_END:
+				{
+					return;
+					break;
+				}
+				case IfcTokenType::UNKNOWN:
+				case IfcTokenType::EMPTY:
+				case IfcTokenType::SET_BEGIN:
+				case IfcTokenType::SET_END:
+					break;
+				case IfcTokenType::STRING:
+				case IfcTokenType::ENUM:
+				{
+					uint32_t start = _tape.Read<uint32_t>();
+					uint32_t end = _tape.Read<uint32_t>();
+
+					break;
+				}
+				case IfcTokenType::REF:
+				{
+					uint32_t ref = _tape.Read<uint32_t>();
+					if (!first)
+					{
+						refs.push_back(ref);
+					}
+					else
+					{
+						first = false;
+					}
+					break;
+				}
+				case IfcTokenType::REAL:
+				{
+					_tape.Read<double>();
+					break;
+				}
+				default:
+					break;
+				}
+			}
+		}
+
+		std::unordered_map<uint32_t, std::vector<uint32_t>> GetRefs()
+		{
+			std::unordered_map<uint32_t, std::vector<uint32_t>> refs;
+
+			for (auto& line : lines)
+			{
+				_tape.MoveTo(line.tapeOffset);
+				GetRefsForLine(refs[line.expressID]);
+			}
+
+			return refs;
+		}
+
+		void GetAllRefs(std::set<uint32_t>& refs, uint32_t start)
+		{
+			_tape.MoveTo(lines[expressIDToLine[start]].tapeOffset);
+
+			std::vector<uint32_t> r;
+			GetRefsForLine(r);
+
+			for (auto& ref : r)
+			{
+				refs.insert(ref);
+				GetAllRefs(refs, ref);
+			}
+		}
+
 		void LoadFile(const std::string& content)
 		{
 			makeCRCTable();
@@ -213,6 +291,15 @@ namespace webifc
 			});
 
 			return ret;
+		}
+
+		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t* dest)
+		{
+			uint32_t startOffset = lines[expressIDToLine[expressID]].tapeOffset;
+			// TODO: overflow?
+			uint32_t endOffset = lines[expressIDToLine[expressID + 1]].tapeOffset;
+
+			return _tape.Copy(startOffset, endOffset, dest);
 		}
 
 		uint32_t ExpressIDToLineID(uint32_t expressID)

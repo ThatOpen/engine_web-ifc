@@ -901,6 +901,32 @@ namespace webifc
 			}
 		}
 
+		uint32_t Copy(uint32_t offset, uint32_t endOffset, uint8_t* dest)
+		{
+			uint32_t chunkStart = offset / N;
+			uint32_t chunkStartPos = offset % N;
+
+			uint32_t chunkEnd = endOffset / N;
+			uint32_t chunkEndPos = endOffset % N;
+
+			if (chunkStart == chunkEnd)
+			{
+				memcpy(dest, &chunks[chunkStart][chunkStartPos], chunkEndPos - chunkStartPos);
+				
+				return chunkEndPos - chunkStartPos;
+			}
+			else
+			{
+				uint32_t startChunkSize = sizes[chunkStartPos];
+				uint32_t partOfStartchunk = startChunkSize - chunkStartPos;
+
+				memcpy(dest, &chunks[chunkStart][chunkStartPos], partOfStartchunk);
+				memcpy(dest + partOfStartchunk, &chunks[chunkEnd][0], chunkEndPos);
+
+				return partOfStartchunk + chunkEndPos;
+			}
+		}
+
 	private:
 
 		inline void AdvanceRead(unsigned long long size)

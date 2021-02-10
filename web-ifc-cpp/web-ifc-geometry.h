@@ -290,22 +290,25 @@ namespace webifc
 				}
 			}
 
-			auto material = _relMaterials.find(line.expressID);
-			if (material != _relMaterials.end())
+			if (!hasColor)
 			{
-				auto& materials = material->second;
-				for (auto item : materials)
+				auto material = _relMaterials.find(line.expressID);
+				if (material != _relMaterials.end())
 				{
-					if (_materialDefinitions.count(item) != 0)
+					auto& materials = material->second;
+					for (auto item : materials)
 					{
-						auto& defs = _materialDefinitions[item];
-						for (auto def : defs)
+						if (_materialDefinitions.count(item) != 0)
 						{
-							bool success = GetColor(def, styledItemColor);
-							if (success)
+							auto& defs = _materialDefinitions[item];
+							for (auto def : defs)
 							{
-								hasColor = true;
-								break;
+								bool success = GetColor(def, styledItemColor);
+								if (success)
+								{
+									hasColor = true;
+									break;
+								}
 							}
 						}
 					}

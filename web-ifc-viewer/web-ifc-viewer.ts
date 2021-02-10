@@ -22,13 +22,9 @@ function IfcGeometryToBuffer(vertexData: Float32Array, indexData: Uint32Array): 
 
     geometry.setAttribute( 'position', new THREE.InterleavedBufferAttribute( interleavedBuffer32, 3, 0 ) );
     geometry.setAttribute( 'normal', new THREE.InterleavedBufferAttribute( interleavedBuffer32, 3, 3 ) );
-    let index = [];
-    for (let i = 0; i < indexData.length; i++)
-    {
-        index[i] = indexData[i];
-    }
+   
+    geometry.setIndex(new THREE.BufferAttribute(indexData, 1));
 
-    geometry.setIndex(index);
 
     return geometry;
 }
@@ -43,6 +39,7 @@ function AddPlacedGeometry(geometry: THREE.BufferGeometry, matrix: any, color: a
         material.opacity = color.w;
     }
     let mesh = new THREE.Mesh( geometry, material );
+    mesh.frustumCulled = false;
     const m = new THREE.Matrix4();
     m.fromArray(matrix);
     m.elements[15 - 3] *= 0.001;
@@ -133,9 +130,13 @@ async function fileInputChanged()
     // await API.WaitForModuleReady();
     console.log("Done");
 
+    let startRead = API.ms();
     var fr = new FileReader();
     fr.onload = function() {
-        LoadModel(new Uint8Array(fr.result));
+        let data = new Uint8Array(fr.result);
+        let readTime = API.ms() - startRead;
+        console.log(`Reading took ${readTime} ms`);
+        LoadModel(data);
         fileInput.value = '';
     };
     fr.readAsArrayBuffer(file);

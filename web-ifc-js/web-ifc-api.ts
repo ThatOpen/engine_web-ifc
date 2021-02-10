@@ -20,6 +20,8 @@ export async function WaitForModuleReady()
     })
 }
 
+/**  Opens a model and returns a handle
+*/
 export function OpenModel(filename: string, data: string | Uint8Array): number
 {
     wasm_module['FS_createDataFile']('/', "filename", data, true, true, true);

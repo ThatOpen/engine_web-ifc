@@ -73,6 +73,24 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::
     return meshes;
 }
 
+void DumpRefs(std::unordered_map<uint32_t, std::vector<uint32_t>>& refs)
+{
+    std::ofstream of("refs.txt");
+
+    int32_t prev = 0;
+    for (auto& it : refs)
+    {
+        if (!it.second.empty())
+        {
+            for (auto& i : it.second)
+            {
+                of << (((int32_t)i) - (prev));
+                prev = i;
+            }
+        }
+    }
+}
+
 int main()
 {
     std::cout << "Hello web IFC test!\n";
@@ -92,6 +110,20 @@ int main()
     auto time = webifc::ms() - start;
 
     std::cout << "Reading took " << time << "ms" << std::endl;
+
+    auto refs = loader.GetRefs();
+
+    start = webifc::ms();
+    for (int i = 0; i < 100; i++)
+    {
+        std::set<uint32_t> allRefs;
+        loader.GetAllRefs(allRefs, 288765);
+    }
+    time = webifc::ms() - start;
+
+    std::cout << "Query took " << time << "ms" << std::endl;
+
+    DumpRefs(refs);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
