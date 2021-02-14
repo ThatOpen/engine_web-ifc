@@ -1,5 +1,3 @@
-import { ExpressIDList, GeometryBuffer } from "../web-ifc-interop/gen/Types";
-
 let wasm_module = undefined;
 
 export  function SetModule(module: any)
@@ -39,16 +37,6 @@ export function CloseModel(modelID: number)
 export function IsModelOpen(modelID: number): boolean
 {
     return wasm_module.IsModelOpen(modelID);
-}
-
-export function GetExpressIdsWithType(modelID: number, type: number): ExpressIDList
-{
-    return new ExpressIDList(wasm_module, wasm_module._GetExpressIdsWithType(modelID, type));
-}
-
-export function GetFlattenedGeometry(modelID: number, expressID: number): GeometryBuffer
-{
-    return new GeometryBuffer(wasm_module, wasm_module.GetFlattenedGeometry(modelID, expressID));
 }
 
 export function LoadAllGeometry(modelID: number): void

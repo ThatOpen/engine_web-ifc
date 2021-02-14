@@ -96,9 +96,9 @@ int main()
     std::cout << "Hello web IFC test!\n";
 
     //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
-    //std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
+    std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
-    std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\0912104-04slab_recess_tek_1.ifc";
 
     std::string content = ReadFile(filename);
@@ -117,7 +117,7 @@ int main()
     for (int i = 0; i < 100; i++)
     {
         std::set<uint32_t> allRefs;
-        loader.GetAllRefs(allRefs, 288765);
+        loader.GetAllRefs(allRefs, 67);
     }
     time = webifc::ms() - start;
 

@@ -51,13 +51,8 @@ function AddPlacedGeometry(geometry: THREE.BufferGeometry, matrix: any, color: a
     scene.add( mesh );
 }
 
-function LoadModel(data: Uint8Array)
+function LoadAllGeometry(modelID: number)
 {
-    let start = API.ms();
-    let modelID = API.OpenModel("example.ifc", data);
-    let time = API.ms() - start;
-    console.log(`Opening model took ${time} ms`);
-
     let startGeomTime = API.ms();
     let flatMeshes: any = API.LoadAllGeometry(modelID);
     let endGeomTime = API.ms();
@@ -90,27 +85,16 @@ function LoadModel(data: Uint8Array)
     let totalGeomTime = endGeomTime - startGeomTime;
     console.log(`Loading geometry took ${totalGeomTime} ms`);
     console.log(`Uploading took ${endUploadTime - endGeomTime} ms`);
-    return;
-
-    IfcSchema.IfcElements.forEach((elementCode) => {
-        let elementIDs = API.GetExpressIdsWithType(modelID, elementCode).expressIds();
-        for (let i = 0; i < elementIDs.length; i++)
-        {
-            let elementID = elementIDs[i];
-            AddDefaultGeometryForExpressID(modelID, elementID);
-        }
-    });
 }
 
-function AddDefaultGeometryForExpressID(modelID: number, expressID: number)
+function LoadModel(data: Uint8Array)
 {
-    let flatGeometry = API.GetFlattenedGeometry(modelID, expressID);
-    let threeGeometry = IfcGeometryToThreejs(flatGeometry);
-    threeGeometry.computeFaceNormals();
-    
-    const material = new THREE.MeshPhongMaterial( { color: 0xDDDDDD } );
-    let mesh = new THREE.Mesh( threeGeometry, material );
-    scene.add( mesh );
+    let start = API.ms();
+    let modelID = API.OpenModel("example.ifc", data);
+    let time = API.ms() - start;
+    console.log(`Opening model took ${time} ms`);
+
+    LoadAllGeometry(modelID);
 }
 
 async function fileInputChanged()
@@ -143,41 +127,6 @@ async function fileInputChanged()
 }
 
 let cube;
-
-function IfcGeometryToThreejs(buffer: GeometryBuffer): THREE.Geometry
-{
-    const geometry = new THREE.Geometry();
-
-    let vertices = buffer.vertexData();
-    let indices = buffer.indexData();
-
-    // TODO: remove this hack
-    let scale = 0.001;
-
-    for (let i = 0; i < vertices.length; i += 3)
-    {
-        geometry.vertices.push(
-            new THREE.Vector3(
-                vertices[i + 0] * scale,
-                vertices[i + 1] * scale,
-                vertices[i + 2] * scale
-            )
-        );
-    }
-
-    for (let i = 0; i < indices.length; i += 3)
-    {
-        geometry.faces.push( 
-            new THREE.Face3( 
-                indices[i + 0],
-                indices[i + 1],
-                indices[i + 2]
-            )
-        );
-    }
-
-    return geometry;
-}
 
 function Init3DView()
 {
@@ -217,6 +166,34 @@ function Update3DView()
     renderer.render( scene, camera );
 }
 
+async function HttpRequest(url: string): Promise<Uint8Array>
+{  
+    return new Promise((resolve, reject) => {
+        var oReq = new XMLHttpRequest();
+        oReq.responseType = "arraybuffer";
+        oReq.addEventListener("load", () => {
+            resolve(new Uint8Array(oReq.response));
+        });
+        oReq.open("GET", url);
+        oReq.send();
+    });
+}
+
+async function StreamIFCEntity(expressID: number)
+{
+    //@ts-ignore
+    let m: any = Module;
+
+    let data = await HttpRequest(`http://localhost:1234/expressID/${expressID}`);
+    console.log(`Received ${data.length} bytes`);
+    
+    let modelID = m.OpenModelFromTapeData(data);
+
+    LoadAllGeometry(modelID);
+
+    API.CloseModel(modelID);
+}
+
 //@ts-ignore
 window.InitWebIfcViewer = async () =>
 {
@@ -229,7 +206,7 @@ window.InitWebIfcViewer = async () =>
     console.log(m);
     await API.WaitForModuleReady();
 
-    console.log(m.GetMat());
+    await StreamIFCEntity(563782);
 
     let fileInput = document.getElementById("finput");
 

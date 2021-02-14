@@ -9,7 +9,6 @@
 
 #include "web-ifc-cpp/web-ifc.h"
 #include "web-ifc-cpp/web-ifc-geometry.h"
-#include "web-ifc-interop/gen/Types.h"
 
 std::vector<webifc::IfcLoader> loaders;
 std::vector<webifc::IfcGeometryLoader> geomLoaders;
@@ -67,16 +66,19 @@ void CloseModel(uint32_t modelID)
     fileContents[modelID] = "";
 }
 
-std::vector<uint32_t> expressIds;
-ExpressIDList ExpressIDListMessage;
-
-void* GetExpressIdsWithType(uint32_t modelID, uint32_t type)
+int OpenModelFromTapeData(std::string data)
 {
-    expressIds = loaders[modelID].GetExpressIDsWithType(type);
-    ExpressIDListMessage.expressIds_data = &expressIds[0];
-    ExpressIDListMessage.expressIds_length = expressIds.size();
+    uint32_t modelID = loaders.size();
 
-    return &ExpressIDListMessage;
+    std::cout << "Bytes: " << data.size() << std::endl;
+
+    webifc::IfcLoader loader;
+    loaders.push_back(loader);
+    loaders[modelID].PushDataToTape((void*)data.c_str(), data.size());
+    loaders[modelID].ParseTape(1000);
+    geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
+
+    return modelID;
 }
 
 std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
@@ -192,6 +194,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("OpenModel", &OpenModel);
+    emscripten::function("OpenModelFromTapeData", &OpenModelFromTapeData);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);

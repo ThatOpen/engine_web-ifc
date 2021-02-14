@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "web-ifc-cpp/web-ifc.h"
+#include "web-ifc-cpp/web-ifc-geometry.h"
 
 #include <httplib.h>
 
@@ -23,9 +24,9 @@ int main()
     std::cout << "IFC web server test!\n";
 
     //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
-    std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
-    //std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
+    std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\0912104-04slab_recess_tek_1.ifc";
 
     std::string content = ReadFile(filename);
@@ -73,9 +74,17 @@ int main()
             bufferOffset += loader.CopyTapeForExpressLine(ref, &buffer[bufferOffset]);
         }
 
+        webifc::IfcLoader loader;
+        loader.PushDataToTape((void*)buffer, bufferOffset);
+        loader.ParseTape(1000);
+        webifc::IfcGeometryLoader geomLoader(loader);            
+        webifc::IfcFlatMesh mesh = geomLoader.GetFlatMesh(expressID);
+
+
         std::cout << "Buffer size bytes: " << bufferOffset <<  std::endl;
 
-        res.set_content(std::string((char*)buffer, bufferOffset), "text/plain");
+        res.set_header("Access-Control-Allow-Origin", "*");
+        res.set_content(std::string((char*)buffer, bufferOffset), "application/octet-stream");
     });
 
     svr.Get("/stop", [&](const httplib::Request& req, httplib::Response& res) {

@@ -837,6 +837,11 @@ namespace webifc
 
 		uint64_t GetTotalSize()
 		{
+			return (chunks.size() - 1) * N + sizes.back();
+		}
+
+		uint64_t GetCapacity()
+		{
 			return chunks.size() * N;
 		}
 

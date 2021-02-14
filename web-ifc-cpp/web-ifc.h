@@ -73,6 +73,7 @@ namespace webifc
 		uint32_t ifcType;
 		uint32_t lineIndex;
 		uint32_t tapeOffset;
+		uint32_t tapeEnd;
 	};
 
 	class IfcLoader
@@ -110,8 +111,11 @@ namespace webifc
 				case IfcTokenType::STRING:
 				case IfcTokenType::ENUM:
 				{
-					uint32_t start = _tape.Read<uint32_t>();
-					uint32_t end = _tape.Read<uint32_t>();
+					char c = _tape.Read<char>();
+					while (c != '\0')
+					{
+						c = _tape.Read<char>();
+					}
 
 					break;
 				}
@@ -154,6 +158,7 @@ namespace webifc
 
 		void GetAllRefs(std::set<uint32_t>& refs, uint32_t start)
 		{
+			refs.insert(start);
 			_tape.MoveTo(lines[expressIDToLine[start]].tapeOffset);
 
 			std::vector<uint32_t> r;
@@ -161,26 +166,20 @@ namespace webifc
 
 			for (auto& ref : r)
 			{
-				refs.insert(ref);
 				GetAllRefs(refs, ref);
 			}
 		}
 
-		void LoadFile(const std::string& content)
+		void PushDataToTape(void* data, size_t size)
+		{
+			_tape.push(data, size);
+		}
+
+		void ParseTape(uint32_t numLines)
 		{
 			makeCRCTable();
 
-			buf = content.data();
-			pos = 0;
-			len = static_cast<uint32_t>(content.size());
-
-			uint32_t numLines = 0;
-			while (TokenizeLine())
-			{
-				numLines++;
-			}
-
-			std::cout << "Tape " << _tape.GetTotalSize() / 1024 / 1024 << std::endl;
+			std::cout << "Tape " << _tape.GetTotalSize() << std::endl;
 
 			uint32_t maxExpressId = 0;
 			uint32_t lineStart = 0;
@@ -201,6 +200,7 @@ namespace webifc
 					l.ifcType = currentIfcType;
 					l.lineIndex = static_cast<uint32_t>(lines.size());
 					l.tapeOffset = currentTapeOffset;
+					l.tapeEnd = _tape.GetReadOffset();
 
 					ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
 					maxExpressId = std::max(maxExpressId, l.expressID);
@@ -222,12 +222,12 @@ namespace webifc
 				case IfcTokenType::STRING:
 				case IfcTokenType::ENUM:
 				{
-					uint32_t start = _tape.Read<uint32_t>();
-					uint32_t end = _tape.Read<uint32_t>();
+					Reverse();
+					std::string s = GetStringArgument();
 
 					if (currentIfcType == 0)
 					{
-						currentIfcType = crc32Simple(&buf[start], end - start);
+						currentIfcType = crc32Simple(s.c_str(), s.size());
 					}
 
 					break;
@@ -253,6 +253,7 @@ namespace webifc
 			}
 
 			std::cout << "Lines normal " << lines.size() << std::endl;
+			std::cout << "Max express ID " << maxExpressId << std::endl;
 
 			expressIDToLine.resize(maxExpressId + 1);
 
@@ -261,9 +262,24 @@ namespace webifc
 				expressIDToLine[lines[i].expressID] = i;
 			}
 
-            _open = true;
+			_open = true;
 
 			// DumpToDisk();
+		}
+
+		void LoadFile(const std::string& content)
+		{
+			buf = content.data();
+			pos = 0;
+			len = static_cast<uint32_t>(content.size());
+
+			uint32_t numLines = 0;
+			while (TokenizeLine())
+			{
+				numLines++;
+			}
+
+			ParseTape(numLines);
 		}
 
 		void DumpToDisk()
@@ -296,8 +312,7 @@ namespace webifc
 		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t* dest)
 		{
 			uint32_t startOffset = lines[expressIDToLine[expressID]].tapeOffset;
-			// TODO: overflow?
-			uint32_t endOffset = lines[expressIDToLine[expressID + 1]].tapeOffset;
+			uint32_t endOffset = lines[expressIDToLine[expressID]].tapeEnd;
 
 			return _tape.Copy(startOffset, endOffset, dest);
 		}
@@ -351,9 +366,11 @@ namespace webifc
 				case IfcTokenType::STRING:
 				case IfcTokenType::ENUM:
 				{
-					uint32_t start = _tape.Read<uint32_t>();
-					uint32_t end = _tape.Read<uint32_t>();
-
+					char c = _tape.Read<char>();
+					while (c != '\0')
+					{
+						c = _tape.Read<char>();
+					}
 					break;
 				}
 				case IfcTokenType::REF:
@@ -390,10 +407,20 @@ namespace webifc
 		inline std::string GetStringArgument()
 		{
 			_tape.Read<char>(); // string type
-			uint32_t start = _tape.Read<uint32_t>();
-			uint32_t end = _tape.Read<uint32_t>();
+			std::vector<char> str; // TODO: not threadsafe
 
-			return std::string(&buf[start], end - start);
+			char c;
+			while (true)
+			{
+				c = _tape.Read<char>();
+				if (c == '\0')
+				{
+					break;
+				}
+				str.push_back(c);
+			}
+
+			return std::string(str.data(), str.size());
 		}
 
 		inline double GetDoubleArgument()
@@ -462,8 +489,11 @@ namespace webifc
 					}
 					else if (t == IfcTokenType::STRING)
 					{
-						_tape.Read<uint32_t>();
-						_tape.Read<uint32_t>();
+						char c = _tape.Read<char>();
+						while (c != '\0')
+						{
+							c = _tape.Read<char>();
+						}
 					}
 					else
 					{
@@ -541,8 +571,14 @@ namespace webifc
 					}
 
 					_tape.push(IfcTokenType::STRING);
-					_tape.push(&start, sizeof(uint32_t));
-					_tape.push(&pos, sizeof(uint32_t));
+					// push zero terminated string onto tape
+					for (uint32_t i = start; i < pos; i++)
+					{
+						char c = buf[i];
+						_tape.push(&c, sizeof(char));
+					}
+					char zero = '\0';
+					_tape.push(&zero, sizeof(char));
 				} 
 				else if (c == '#')
 				{
@@ -584,8 +620,14 @@ namespace webifc
 					}
 					
 					_tape.push(IfcTokenType::ENUM);
-					_tape.push(&start, sizeof(uint32_t));
-					_tape.push(&pos, sizeof(uint32_t));
+					// push zero terminated string onto tape
+					for (uint32_t i = start; i < pos; i++)
+					{
+						char c = buf[i];
+						_tape.push(&c, sizeof(char));
+					}
+					char zero = '\0';
+					_tape.push(&zero, sizeof(char));
 				}
 				else if (c >= 'A' && c <= 'Z')
 				{
@@ -596,8 +638,14 @@ namespace webifc
 					}
 
 					_tape.push(IfcTokenType::STRING);
-					_tape.push(&start, sizeof(uint32_t));
-					_tape.push(&pos, sizeof(uint32_t));
+					// push zero terminated string onto tape
+					for (uint32_t i = start; i < pos; i++)
+					{
+						char c = buf[i];
+						_tape.push(&c, sizeof(char));
+					}
+					char zero = '\0';
+					_tape.push(&zero, sizeof(char));
 
 					pos--;
 				}
