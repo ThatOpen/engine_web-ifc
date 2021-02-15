@@ -37,6 +37,19 @@ int main()
     loader.LoadFile(content);
     auto time = webifc::ms() - start;
 
+    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCWALL);
+    auto coverings = loader.GetExpressIDsWithType(ifc2x4::IFCCOVERING);
+
+    for (auto w : walls)
+    {
+        std::cout << w << "," << std::endl;
+    }
+
+    for (auto w : coverings)
+    {
+        std::cout << w << "," << std::endl;
+    }
+
     std::cout << "Reading took " << time << "ms" << std::endl;
 
     auto refs = loader.GetRefs();

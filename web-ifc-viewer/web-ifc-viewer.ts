@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GeometryBuffer } from "../web-ifc-interop/gen/Types";
 import * as IfcSchema from "../web-ifc-schema/ifc2x4";
+import { data } from "./data";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -186,12 +187,70 @@ async function StreamIFCEntity(expressID: number)
 
     let data = await HttpRequest(`http://localhost:1234/expressID/${expressID}`);
     console.log(`Received ${data.length} bytes`);
-    
+    addTotalBytesDownloaded(data.length);
+
     let modelID = m.OpenModelFromTapeData(data);
 
     LoadAllGeometry(modelID);
 
     API.CloseModel(modelID);
+}
+
+let totalBytes = 0;
+
+function addTotalBytesDownloaded(bytes)
+{
+    totalBytes += bytes;
+    document.getElementById("totalDownloaded").innerHTML = `${totalBytes} bytes`;
+}
+
+function AddElement(e)
+{
+    if (e.key === "Enter")
+    {
+        try {
+            let valueInt = parseInt(e.target.value);
+            if (!isNaN(valueInt))
+            {
+                console.log(valueInt);
+                StreamIFCEntity(valueInt);
+            }
+        }
+        catch(e)
+        {
+            console.log(e);
+        }
+        e.target.value = "";
+    }
+}
+
+let interval = false;
+
+async function sleep(ms)
+{
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms);
+    })
+}
+
+async function startStream()
+{
+    if (!interval)
+    {
+        let i = 0;
+        //@ts-ignore
+        for (let i = 0; i < data.length; i++)
+        {
+            await StreamIFCEntity(data[i]);
+            await sleep(10);
+        }
+    }
+    else
+    {
+        //@ts-ignore
+        clearInterval(interval);
+        interval = false;
+    }
 }
 
 //@ts-ignore
@@ -209,8 +268,12 @@ window.InitWebIfcViewer = async () =>
     await StreamIFCEntity(563782);
 
     let fileInput = document.getElementById("finput");
+    let textInput = document.getElementById("tinput");
+    let streamButton = document.getElementById("bstream");
 
     fileInput.addEventListener('change', fileInputChanged);
+    textInput.addEventListener('keydown', AddElement);
+    streamButton.addEventListener('click', startStream);
 
     Init3DView();
     Update3DView();

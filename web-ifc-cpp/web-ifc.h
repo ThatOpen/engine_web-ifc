@@ -158,11 +158,48 @@ namespace webifc
 
 		void GetAllRefs(std::set<uint32_t>& refs, uint32_t start)
 		{
-			refs.insert(start);
+			auto result = refs.insert(start);
+			if (!result.second)
+			{
+				return;
+			}
+
 			_tape.MoveTo(lines[expressIDToLine[start]].tapeOffset);
 
 			std::vector<uint32_t> r;
 			GetRefsForLine(r);
+
+			auto material = _relMaterials.find(start);
+			if (material != _relMaterials.end())
+			{
+				auto& materials = material->second;
+				for (auto item : materials)
+				{
+					if (item.first != start) GetAllRefs(refs, item.first);
+					GetAllRefs(refs, item.second);
+
+					if (_materialDefinitions.count(item.second) != 0)
+					{
+						auto& defs = _materialDefinitions[item.second];
+						for (auto def : defs)
+						{
+							if (def.first != start) GetAllRefs(refs, def.first);
+							GetAllRefs(refs, def.second);
+						}
+					}
+				}
+			}
+
+			auto styledItem = _styledItems.find(start);
+			if (styledItem != _styledItems.end())
+			{
+				auto items = styledItem->second;
+				for (auto item : items)
+				{
+					if (item.first != start) GetAllRefs(refs, item.first);
+					GetAllRefs(refs, item.second);
+				}
+			}
 
 			for (auto& ref : r)
 			{
@@ -262,9 +299,131 @@ namespace webifc
 				expressIDToLine[lines[i].expressID] = i;
 			}
 
-			_open = true;
+			PopulateRelVoidsMap();
+			PopulateStyledItemMap();
+			PopulateRelMaterialsMap();
 
-			// DumpToDisk();
+			_open = true;
+		}
+
+		// this is lazy
+		std::unordered_map<uint32_t, std::vector<uint32_t>>& GetRelVoids()
+		{
+			return _relVoids;
+		}
+
+		// this is lazy
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>& GetStyledItems()
+		{
+			return _styledItems;
+		}
+
+		// this is lazy
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>& GetRelMaterials()
+		{
+			return _relMaterials;
+		}
+
+		// this is lazy
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>& GetMaterialDefinitions()
+		{
+			return _materialDefinitions;
+		}
+
+		void PopulateRelVoidsMap()
+		{
+			auto relVoids = GetExpressIDsWithType(ifc2x4::IFCRELVOIDSELEMENT);
+
+			for (uint32_t relVoidID : relVoids)
+			{
+				uint32_t lineID = ExpressIDToLineID(relVoidID);
+				auto& line = GetLine(lineID);
+
+				MoveToArgumentOffset(line, 4);
+
+				uint32_t relatingBuildingElement = GetRefArgument();
+				uint32_t relatedOpeningElement = GetRefArgument();
+
+				_relVoids[relatingBuildingElement].push_back(relatedOpeningElement);
+			}
+		}
+
+
+		void PopulateStyledItemMap()
+		{
+			auto styledItems = GetExpressIDsWithType(ifc2x4::IFCSTYLEDITEM);
+
+			for (uint32_t styledItemID : styledItems)
+			{
+				uint32_t lineID = ExpressIDToLineID(styledItemID);
+				auto& line = GetLine(lineID);
+
+				MoveToArgumentOffset(line, 0);
+
+				if (GetTokenType() == IfcTokenType::REF)
+				{
+					Reverse();
+					uint32_t representationItem = GetRefArgument();
+
+					auto lineID = ExpressIDToLineID(representationItem);
+					auto line = GetLine(lineID);
+
+					auto styleAssignments = GetSetArgument();
+
+					for (auto& styleAssignment : styleAssignments)
+					{
+						uint32_t styleAssignmentID = GetRefArgument(styleAssignment);
+						_styledItems[representationItem].emplace_back(styledItemID, styleAssignmentID);
+					}
+				}
+			}
+		}
+
+		void PopulateRelMaterialsMap()
+		{
+			auto styledItems = GetExpressIDsWithType(ifc2x4::IFCRELASSOCIATESMATERIAL);
+
+			for (uint32_t styledItemID : styledItems)
+			{
+				uint32_t lineID = ExpressIDToLineID(styledItemID);
+				auto& line = GetLine(lineID);
+
+				MoveToArgumentOffset(line, 5);
+
+				uint32_t materialSelect = GetRefArgument();
+
+				MoveToArgumentOffset(line, 4);
+
+				auto RelatedObjects = GetSetArgument();
+
+				for (auto& ifcRoot : RelatedObjects)
+				{
+					uint32_t ifcRootID = GetRefArgument(ifcRoot);
+					_relMaterials[ifcRootID].emplace_back(styledItemID, materialSelect);
+				}
+			}
+
+			auto matDefs = GetExpressIDsWithType(ifc2x4::IFCMATERIALDEFINITIONREPRESENTATION);
+
+			for (uint32_t styledItemID : matDefs)
+			{
+				uint32_t lineID = ExpressIDToLineID(styledItemID);
+				auto& line = GetLine(lineID);
+
+				MoveToArgumentOffset(line, 2);
+
+				auto representations = GetSetArgument();
+
+				MoveToArgumentOffset(line, 3);
+
+				uint32_t material = GetRefArgument();
+
+				for (auto& representation : representations)
+				{
+					uint32_t representationID = GetRefArgument(representation);
+					_materialDefinitions[material].emplace_back(styledItemID, representationID);
+				}
+			}
 		}
 
 		void LoadFile(const std::string& content)
@@ -719,5 +878,9 @@ namespace webifc
 		std::vector<IfcLine> lines;
 		std::vector<uint32_t> expressIDToLine;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> ifcTypeToLineID;
+		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _relMaterials;
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _materialDefinitions;
 	};
 }

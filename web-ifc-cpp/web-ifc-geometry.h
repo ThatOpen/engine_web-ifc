@@ -33,8 +33,7 @@ namespace webifc
 	{
 	public:
 		IfcGeometryLoader(IfcLoader& l) :
-			_loader(l),
-			_isRelVoidsMapPopulated(false)
+			_loader(l)
 		{
 
 		}
@@ -114,158 +113,8 @@ namespace webifc
 
 	private:
 
-		void PopulateRelVoidsMap()
-		{
-			auto relVoids = _loader.GetExpressIDsWithType(ifc2x4::IFCRELVOIDSELEMENT);
-
-			for (uint32_t relVoidID : relVoids)
-			{
-				uint32_t lineID = _loader.ExpressIDToLineID(relVoidID);
-				auto& line = _loader.GetLine(lineID);
-
-				_loader.MoveToArgumentOffset(line, 4);
-
-				uint32_t relatingBuildingElement = _loader.GetRefArgument();
-				uint32_t relatedOpeningElement = _loader.GetRefArgument();
-
-				_relVoids[relatingBuildingElement].push_back(relatedOpeningElement);
-			}
-		
-			_isRelVoidsMapPopulated = true;
-		}
-
-		void PopulateRelVoidsMapIfNeeded()
-		{
-			if (_isRelVoidsMapPopulated)
-			{
-				return;
-			}
-
-			PopulateRelVoidsMap();
-		}
-
-		void PopulateStyledItemMap()
-		{
-			auto styledItems = _loader.GetExpressIDsWithType(ifc2x4::IFCSTYLEDITEM);
-
-			for (uint32_t styledItemID : styledItems)
-			{
-				uint32_t lineID = _loader.ExpressIDToLineID(styledItemID);
-				auto& line = _loader.GetLine(lineID);
-
-				_loader.MoveToArgumentOffset(line, 0);
-
-				if (_loader.GetTokenType() == IfcTokenType::REF)
-				{
-					_loader.Reverse();
-					uint32_t representationItem = _loader.GetRefArgument();
-
-					auto lineID = _loader.ExpressIDToLineID(representationItem);
-					auto line = _loader.GetLine(lineID);
-
-					/*
-					if (!ifc2x4::IsIfcElement(line.ifcType))
-					{
-						bool printType = true;
-						printType = printType && line.ifcType != ifc2x4::IFCFACETEDBREP;
-						printType = printType && line.ifcType != ifc2x4::IFCEXTRUDEDAREASOLID;
-						printType = printType && line.ifcType != ifc2x4::IFCSHELLBASEDSURFACEMODEL;
-
-						if (printType)
-						{
-							std::cout << line.ifcType << std::endl;
-						}
-					}
-					*/
-
-					auto styleAssignments = _loader.GetSetArgument();
-
-					for (auto& styleAssignment : styleAssignments)
-					{
-						uint32_t styleAssignmentID = _loader.GetRefArgument(styleAssignment);
-						_styledItems[representationItem].push_back(styleAssignmentID);
-					}
-				}
-			}
-
-			_isStyledItemMapPopulated = true;
-		}
-
-		void PopulateStyledItemMapIfNeeded()
-		{
-			if (_isStyledItemMapPopulated)
-			{
-				return;
-			}
-
-			PopulateStyledItemMap();
-		}
-
-		void PopulateRelMaterialsMap()
-		{
-			auto styledItems = _loader.GetExpressIDsWithType(ifc2x4::IFCRELASSOCIATESMATERIAL);
-
-			for (uint32_t styledItemID : styledItems)
-			{
-				uint32_t lineID = _loader.ExpressIDToLineID(styledItemID);
-				auto& line = _loader.GetLine(lineID);
-
-				_loader.MoveToArgumentOffset(line, 5);
-
-				uint32_t materialSelect = _loader.GetRefArgument();
-
-				_loader.MoveToArgumentOffset(line, 4);
-
-				auto RelatedObjects = _loader.GetSetArgument();
-
-				for (auto& ifcRoot : RelatedObjects)
-				{
-					uint32_t ifcRootID = _loader.GetRefArgument(ifcRoot);
-					_relMaterials[ifcRootID].push_back(materialSelect);
-				}
-			}
-
-			auto matDefs = _loader.GetExpressIDsWithType(ifc2x4::IFCMATERIALDEFINITIONREPRESENTATION);
-
-			for (uint32_t styledItemID : matDefs)
-			{
-				uint32_t lineID = _loader.ExpressIDToLineID(styledItemID);
-				auto& line = _loader.GetLine(lineID);
-
-				_loader.MoveToArgumentOffset(line, 2);
-
-				auto representations = _loader.GetSetArgument();
-
-				_loader.MoveToArgumentOffset(line, 3);
-
-				uint32_t material = _loader.GetRefArgument();
-
-				for (auto& representation : representations)
-				{
-					uint32_t representationID = _loader.GetRefArgument(representation);
-					_materialDefinitions[material].push_back(representationID);
-				}
-			}
-
-			_isRelMaterialsMapPopulated = true;
-		}
-
-		void PopulateRelMaterialsMapIfNeeded()
-		{
-			if (_isRelMaterialsMapPopulated)
-			{
-				return;
-			}
-
-			PopulateRelMaterialsMap();
-		}
-
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
-			PopulateRelVoidsMapIfNeeded();
-			PopulateStyledItemMapIfNeeded();
-			PopulateRelMaterialsMapIfNeeded();
-
 			auto& line = _loader.GetLine(lineID);
 			auto it = _expressIDToMesh.find(line.expressID);
 			if (it != _expressIDToMesh.end())
@@ -275,13 +124,18 @@ namespace webifc
 
 			bool hasColor = false;
 			glm::dvec4 styledItemColor(1);
-			auto styledItem = _styledItems.find(line.expressID);
-			if (styledItem != _styledItems.end())
+			auto& styledItems = _loader.GetStyledItems();
+			auto& relMaterials = _loader.GetRelMaterials();
+			auto& materialDefinitions = _loader.GetMaterialDefinitions();
+			auto& relVoids = _loader.GetRelVoids();
+
+			auto styledItem = styledItems.find(line.expressID);
+			if (styledItem != styledItems.end())
 			{
 				auto items = styledItem->second;
 				for (auto item : items)
 				{
-					bool success = GetColor(item, styledItemColor);
+					bool success = GetColor(item.second, styledItemColor);
 					if (success)
 					{
 						hasColor = true;
@@ -292,18 +146,18 @@ namespace webifc
 
 			if (!hasColor)
 			{
-				auto material = _relMaterials.find(line.expressID);
-				if (material != _relMaterials.end())
+				auto material = relMaterials.find(line.expressID);
+				if (material != relMaterials.end())
 				{
 					auto& materials = material->second;
 					for (auto item : materials)
 					{
-						if (_materialDefinitions.count(item) != 0)
+						if (materialDefinitions.count(item.second) != 0)
 						{
-							auto& defs = _materialDefinitions[item];
+							auto& defs = materialDefinitions[item.second];
 							for (auto def : defs)
 							{
-								bool success = GetColor(def, styledItemColor);
+								bool success = GetColor(def.second, styledItemColor);
 								if (success)
 								{
 									hasColor = true;
@@ -348,9 +202,9 @@ namespace webifc
 					mesh.children.push_back(GetMesh(ifcPresentation));
 				}
 
-				auto relVoidsIt = _relVoids.find(line.expressID);
+				auto relVoidsIt = relVoids.find(line.expressID);
 
-				if (relVoidsIt != _relVoids.end() && !relVoidsIt->second.empty())
+				if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
 				{
 					IfcComposedMesh resultMesh;
 					resultMesh.transformation = glm::dmat4(1);
@@ -1621,12 +1475,5 @@ namespace webifc
 		IfcLoader& _loader;
 		std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
 		std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
-		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
-		std::unordered_map<uint32_t, std::vector<uint32_t>> _styledItems;
-		std::unordered_map<uint32_t, std::vector<uint32_t>> _relMaterials;
-		std::unordered_map<uint32_t, std::vector<uint32_t>> _materialDefinitions;
-		bool _isRelVoidsMapPopulated = false;
-		bool _isStyledItemMapPopulated = false;
-		bool _isRelMaterialsMapPopulated = false;
 	};
 }

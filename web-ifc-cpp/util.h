@@ -922,7 +922,7 @@ namespace webifc
 			}
 			else
 			{
-				uint32_t startChunkSize = sizes[chunkStartPos];
+				uint32_t startChunkSize = sizes[chunkStart];
 				uint32_t partOfStartchunk = startChunkSize - chunkStartPos;
 
 				memcpy(dest, &chunks[chunkStart][chunkStartPos], partOfStartchunk);

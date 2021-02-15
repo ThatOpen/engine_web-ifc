@@ -19,6 +19,7 @@ std::vector<std::string> fileContents;
 int main() {
     loaders.emplace_back();
     geomLoaders.emplace_back(loaders[0]);
+    fileContents.emplace_back();
 
     return 0;
 }
@@ -63,7 +64,7 @@ void CloseModel(uint32_t modelID)
 
     // overwrite old loader, thereby destructing it
     loaders[modelID] = loader;
-    fileContents[modelID] = "";
+    //fileContents[modelID] = "";
 }
 
 int OpenModelFromTapeData(std::string data)
