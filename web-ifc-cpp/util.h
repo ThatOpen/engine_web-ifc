@@ -868,6 +868,14 @@ namespace webifc
 			return v;
 		}
 
+		void* GetReadPtr()
+		{
+			uint8_t* chunk = chunks[readChunkIndex];
+			uint8_t* valuePtr = &chunk[readPtr];
+
+			return (void*)valuePtr;
+		}
+
 		inline void Reverse()
 		{
 			if (readPtr > 0)
@@ -932,8 +940,6 @@ namespace webifc
 			}
 		}
 
-	private:
-
 		inline void AdvanceRead(unsigned long long size)
 		{
 			readPtr += static_cast<uint32_t>(size);
@@ -943,6 +949,8 @@ namespace webifc
 				readPtr = 0;
 			}
 		}
+
+	private:
 
 		uint32_t readPtr = 0;
 		uint32_t readChunkIndex = 0;

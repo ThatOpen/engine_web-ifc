@@ -14,6 +14,20 @@
 
 namespace webifc
 {
+	// for some reason std::string_view is not compiling...
+	struct StringView
+	{
+		StringView(char* d, uint32_t l) :
+			data(d),
+			len(l)
+		{
+
+		}
+
+		char* data;
+		uint32_t len;
+	};
+
 	long long ms()
 	{
 		using namespace std::chrono;
@@ -111,12 +125,8 @@ namespace webifc
 				case IfcTokenType::STRING:
 				case IfcTokenType::ENUM:
 				{
-					char c = _tape.Read<char>();
-					while (c != '\0')
-					{
-						c = _tape.Read<char>();
-					}
-
+					uint8_t length = _tape.Read<uint8_t>();
+					_tape.AdvanceRead(length);
 					break;
 				}
 				case IfcTokenType::REF:
@@ -260,11 +270,11 @@ namespace webifc
 				case IfcTokenType::ENUM:
 				{
 					Reverse();
-					std::string s = GetStringArgument();
+					StringView s = GetStringViewArgument();
 
 					if (currentIfcType == 0)
 					{
-						currentIfcType = crc32Simple(s.c_str(), s.size());
+						currentIfcType = crc32Simple(s.data, s.len);
 					}
 
 					break;
@@ -525,11 +535,8 @@ namespace webifc
 				case IfcTokenType::STRING:
 				case IfcTokenType::ENUM:
 				{
-					char c = _tape.Read<char>();
-					while (c != '\0')
-					{
-						c = _tape.Read<char>();
-					}
+					uint8_t length = _tape.Read<uint8_t>();
+					_tape.AdvanceRead(length);
 					break;
 				}
 				case IfcTokenType::REF:
@@ -566,20 +573,21 @@ namespace webifc
 		inline std::string GetStringArgument()
 		{
 			_tape.Read<char>(); // string type
-			std::vector<char> str; // TODO: not threadsafe
+			uint8_t length = _tape.Read<uint8_t>();
+			char* charPtr = (char*)_tape.GetReadPtr();
+			_tape.AdvanceRead(length);
 
-			char c;
-			while (true)
-			{
-				c = _tape.Read<char>();
-				if (c == '\0')
-				{
-					break;
-				}
-				str.push_back(c);
-			}
+			return std::string(charPtr, length);
+		}
 
-			return std::string(str.data(), str.size());
+		inline StringView GetStringViewArgument()
+		{
+			_tape.Read<char>(); // string type
+			uint8_t length = _tape.Read<uint8_t>();
+			char* charPtr = (char*)_tape.GetReadPtr();
+			_tape.AdvanceRead(length);
+
+			return StringView { charPtr, length };
 		}
 
 		inline double GetDoubleArgument()
@@ -648,11 +656,8 @@ namespace webifc
 					}
 					else if (t == IfcTokenType::STRING)
 					{
-						char c = _tape.Read<char>();
-						while (c != '\0')
-						{
-							c = _tape.Read<char>();
-						}
+						uint8_t length = _tape.Read<uint8_t>();
+						_tape.AdvanceRead(length);
 					}
 					else
 					{
@@ -671,7 +676,7 @@ namespace webifc
 
 	private:
         bool _open = false;
-		webifc::DynamicTape<1 << 20> _tape; // 1mb chunked tape
+		webifc::DynamicTape<1 << 24> _tape; // 1mb chunked tape
 
 		bool TokenizeLine()
 		{
@@ -730,14 +735,9 @@ namespace webifc
 					}
 
 					_tape.push(IfcTokenType::STRING);
-					// push zero terminated string onto tape
-					for (uint32_t i = start; i < pos; i++)
-					{
-						char c = buf[i];
-						_tape.push(&c, sizeof(char));
-					}
-					char zero = '\0';
-					_tape.push(&zero, sizeof(char));
+					uint8_t length = pos - start;
+					_tape.push(length);
+					_tape.push((void*)&buf[start], length);
 				} 
 				else if (c == '#')
 				{
@@ -779,14 +779,9 @@ namespace webifc
 					}
 					
 					_tape.push(IfcTokenType::ENUM);
-					// push zero terminated string onto tape
-					for (uint32_t i = start; i < pos; i++)
-					{
-						char c = buf[i];
-						_tape.push(&c, sizeof(char));
-					}
-					char zero = '\0';
-					_tape.push(&zero, sizeof(char));
+					uint8_t length = pos - start;
+					_tape.push(length);
+					_tape.push((void*)&buf[start], length);
 				}
 				else if (c >= 'A' && c <= 'Z')
 				{
@@ -797,14 +792,9 @@ namespace webifc
 					}
 
 					_tape.push(IfcTokenType::STRING);
-					// push zero terminated string onto tape
-					for (uint32_t i = start; i < pos; i++)
-					{
-						char c = buf[i];
-						_tape.push(&c, sizeof(char));
-					}
-					char zero = '\0';
-					_tape.push(&zero, sizeof(char));
+					uint8_t length = pos - start;
+					_tape.push(length);
+					_tape.push((void*)&buf[start], length);
 
 					pos--;
 				}

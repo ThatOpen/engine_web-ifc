@@ -265,7 +265,7 @@ window.InitWebIfcViewer = async () =>
     console.log(m);
     await API.WaitForModuleReady();
 
-    await StreamIFCEntity(563782);
+    //await StreamIFCEntity(563782);
 
     let fileInput = document.getElementById("finput");
     let textInput = document.getElementById("tinput");
