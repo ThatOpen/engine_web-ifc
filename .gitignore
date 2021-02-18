@@ -45,3 +45,4 @@ output
 debug_output
 deps
 .bin
+build
