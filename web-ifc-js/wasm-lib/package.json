@@ -1,0 +1,15 @@
+{
+    "name": "web-ifc",
+    "version": "0.0.1",
+    "description": "ifc loading on the web",
+    "main": "web-ifc.js",
+    "scripts": {
+      "release_publish": "npm publish"
+    },
+    "author": "tomvandig",
+    "files": [
+        "web-ifc.wasm",
+        "web-ifc.js"
+    ]
+  }
+  
