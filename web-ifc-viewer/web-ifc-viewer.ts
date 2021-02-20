@@ -167,92 +167,6 @@ function Update3DView()
     renderer.render( scene, camera );
 }
 
-async function HttpRequest(url: string): Promise<Uint8Array>
-{  
-    return new Promise((resolve, reject) => {
-        var oReq = new XMLHttpRequest();
-        oReq.responseType = "arraybuffer";
-        oReq.addEventListener("load", () => {
-            resolve(new Uint8Array(oReq.response));
-        });
-        oReq.open("GET", url);
-        oReq.send();
-    });
-}
-
-async function StreamIFCEntity(expressID: number)
-{
-    //@ts-ignore
-    let m: any = Module;
-
-    let data = await HttpRequest(`http://localhost:1234/expressID/${expressID}`);
-    console.log(`Received ${data.length} bytes`);
-    addTotalBytesDownloaded(data.length);
-
-    let modelID = m.OpenModelFromTapeData(data);
-
-    LoadAllGeometry(modelID);
-
-    API.CloseModel(modelID);
-}
-
-let totalBytes = 0;
-
-function addTotalBytesDownloaded(bytes)
-{
-    totalBytes += bytes;
-    document.getElementById("totalDownloaded").innerHTML = `${totalBytes} bytes`;
-}
-
-function AddElement(e)
-{
-    if (e.key === "Enter")
-    {
-        try {
-            let valueInt = parseInt(e.target.value);
-            if (!isNaN(valueInt))
-            {
-                console.log(valueInt);
-                StreamIFCEntity(valueInt);
-            }
-        }
-        catch(e)
-        {
-            console.log(e);
-        }
-        e.target.value = "";
-    }
-}
-
-let interval = false;
-
-async function sleep(ms)
-{
-    return new Promise((resolve, reject) => {
-        setTimeout(resolve, ms);
-    })
-}
-
-async function startStream()
-{
-    if (!interval)
-    {
-        let i = 0;
-        //@ts-ignore
-        for (let i = 0; i < data.length; i++)
-        {
-            await StreamIFCEntity(data[i]);
-            await sleep(10);
-        }
-    }
-    else
-    {
-        //@ts-ignore
-        clearInterval(interval);
-        interval = false;
-    }
-}
-
 //@ts-ignore
 window.InitWebIfcViewer = async () =>
 {
@@ -265,15 +179,11 @@ window.InitWebIfcViewer = async () =>
     console.log(m);
     await API.WaitForModuleReady();
 
-    //await StreamIFCEntity(563782);
-
     let fileInput = document.getElementById("finput");
     let textInput = document.getElementById("tinput");
     let streamButton = document.getElementById("bstream");
 
     fileInput.addEventListener('change', fileInputChanged);
-    textInput.addEventListener('keydown', AddElement);
-    streamButton.addEventListener('click', startStream);
 
     Init3DView();
     Update3DView();
