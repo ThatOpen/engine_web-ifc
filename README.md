@@ -14,7 +14,7 @@ The library is header only, the files in `web-ifc-cpp` can be trivially included
 
 ## Using the library
 
-...
+See `examples` for different ways to use web-ifc.
 
 ## Compiling the library
 

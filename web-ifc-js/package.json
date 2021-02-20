@@ -13,13 +13,15 @@
   },
   "scripts": {
     "start": "esbuild web-ifc-api.test.ts --bundle --platform=node --outfile=./wasm-lib/node-test-bundle.js && node ./wasm-lib/node-test-bundle.js",
-    "watch": "npm-watch "
+    "watch": "npm-watch",
+    "build-ts-api": "tsc --emitDeclarationOnly && esbuild web-ifc-api.ts --bundle --platform=node --outfile=./wasm-lib/web-ifc-api.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/jest": "^26.0.14",
     "npm-watch": "^0.7.0",
+    "typescript": "^4.1.5",
     "watch": "^1.0.2"
   },
   "devDependencies": {

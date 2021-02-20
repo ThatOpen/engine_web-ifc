@@ -1,0 +1,19 @@
+{
+  "name": "web-ifc-browser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild --bundle index.js --outfile=./dist/bundle.js && cpy index.html dist && cpy node_modules/web-ifc/web-ifc.wasm dist && cpy node_modules/web-ifc/web-ifc.js dist && cpy ../example.ifc dist",
+    "start": "serve dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cpy": "^8.1.1",
+    "cpy-cli": "^3.1.1",
+    "esbuild": "^0.8.49",
+    "serve": "^11.3.2",
+    "web-ifc": "0.0.3"
+  }
+}

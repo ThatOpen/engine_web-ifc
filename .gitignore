@@ -46,3 +46,4 @@ debug_output
 deps
 .bin
 build
+*.log

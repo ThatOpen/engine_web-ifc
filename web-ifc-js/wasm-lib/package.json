@@ -1,6 +1,6 @@
 {
     "name": "web-ifc",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "description": "ifc loading on the web",
     "main": "web-ifc.js",
     "scripts": {
@@ -9,7 +9,9 @@
     "author": "tomvandig",
     "files": [
         "web-ifc.wasm",
-        "web-ifc.js"
+        "web-ifc.js",
+        "web-ifc-api.js",
+        "web-ifc-api.d.ts"
     ]
   }
   

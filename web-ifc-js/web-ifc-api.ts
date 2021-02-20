@@ -1,6 +1,6 @@
 let wasm_module = undefined;
 
-export  function SetModule(module: any)
+export function SetModule(module: any)
 {
     wasm_module = module;
 }
@@ -9,9 +9,9 @@ export function ms() {
     return new Date().getTime();
 }
 
-export async function WaitForModuleReady()
+export function WaitForModuleReady()
 {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         wasm_module["onRuntimeInitialized"] = () => {
             resolve();
         };

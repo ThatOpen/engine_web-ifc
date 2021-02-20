@@ -676,7 +676,7 @@ namespace webifc
 
 	private:
         bool _open = false;
-		webifc::DynamicTape<1 << 24> _tape; // 1mb chunked tape
+		webifc::DynamicTape<1 << 24> _tape; // 16mb chunked tape
 
 		bool TokenizeLine()
 		{
