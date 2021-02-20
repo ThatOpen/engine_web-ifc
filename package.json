@@ -3,6 +3,14 @@
   "version": "0.0.5",
   "description": "ifc loading on the web",
   "main": "web-ifc-api.js",
+  "watch": {
+    "build-viewer": {
+      "patterns": [
+        "./viewer"
+      ],
+      "extensions": "ts"
+    }
+  },
   "scripts": {
     "gen-schema": "cd schema && node gen.js",
     "setup-env": "emsdk_env && npm run gen-schema",
@@ -11,7 +19,10 @@
     "build-ts-api": "tsc --emitDeclarationOnly && esbuild lib/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api.js",
     "copy-to-dist": "cpy lib/*.wasm dist && cpy lib/*.map dist && cpy lib/*.js dist && cpy README.md dist && cpy package.json dist",
     "build-release": "npm run build-wasm-release && npm run build-ts-api && npm run copy-to-dist",
-    "release_publish": "npm run build-release && cd dist && npm publish"
+    "release_publish": "npm run build-release && cd dist && npm publish",
+    "build-viewer": "esbuild viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./dist/web-ifc-viewer.js && cpy viewer/index.html dist",
+    "serve-viewer": "serve dist",
+    "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\""
   },
   "author": "tomvandig",
   "files": [
@@ -21,8 +32,11 @@
     "web-ifc-api.d.ts"
   ],
   "dependencies": {
+    "concurrently": "^6.0.0",
     "cpy-cli": "^3.1.1",
     "esbuild": "^0.8.49",
+    "npm-watch": "^0.7.0",
+    "serve": "^11.3.2",
     "typescript": "^4.1.5"
   }
 }

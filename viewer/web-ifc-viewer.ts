@@ -1,9 +1,8 @@
-import * as API from "../web-ifc-js/web-ifc-api";
+import * as API from "../lib/web-ifc-api";
+import * as IfcSchema from "../lib/ifc2x4";
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GeometryBuffer } from "../web-ifc-interop/gen/Types";
-import * as IfcSchema from "../web-ifc-schema/ifc2x4";
-import { data } from "./data";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
