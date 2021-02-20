@@ -7,8 +7,8 @@
 
 #include <emscripten/bind.h>
 
-#include "web-ifc-cpp/web-ifc.h"
-#include "web-ifc-cpp/web-ifc-geometry.h"
+#include "include/web-ifc.h"
+#include "include/web-ifc-geometry.h"
 
 std::vector<webifc::IfcLoader> loaders;
 std::vector<webifc::IfcGeometryLoader> geomLoaders;

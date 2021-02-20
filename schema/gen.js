@@ -82,5 +82,5 @@ tsHeader.push(Object.keys(elements).map(element => {
 tsHeader.push("];");
 
 
-fs.writeFileSync("ifc2x4.h", cppHeader.join("\n")); 
-fs.writeFileSync("ifc2x4.ts", tsHeader.join("\n")); 
+fs.writeFileSync("../wasm/include/ifc2x4.h", cppHeader.join("\n")); 
+fs.writeFileSync("../lib/ifc2x4.ts", tsHeader.join("\n")); 

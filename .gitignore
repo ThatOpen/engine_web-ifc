@@ -47,3 +47,4 @@ deps
 .bin
 build
 *.log
+node_modules

@@ -19,7 +19,7 @@
 #include "bool-mesh-mesh.h"
 
 
-#include "../web-ifc-schema/ifc2x4.h"
+#include "ifc2x4.h"
 #include "web-ifc.h"
 #include "util.h"
 

@@ -1,0 +1,28 @@
+{
+  "name": "web-ifc",
+  "version": "0.0.4",
+  "description": "ifc loading on the web",
+  "main": "web-ifc-api.js",
+  "scripts": {
+    "gen-schema": "cd schema && node gen.js",
+    "setup-env": "emsdk_env && npm run gen-schema",
+    "build-wasm-debug": "em++ --bind -O3 -g4 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -O3 -o lib/web-ifc.js",
+    "build-wasm-release": "em++ --bind -O3 -flto -fno-exceptions wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -O3 -o lib/web-ifc.js",
+    "build-ts-api": "tsc --emitDeclarationOnly && esbuild lib/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api.js",
+    "copy-to-dist": "cpy lib/*.wasm dist && cpy lib/*.map dist && cpy lib/*.js dist",
+    "build-release": "npm run build-wasm-release && npm run build-ts-api && npm run copy-to-dist",
+    "release_publish": "npm run build-release && npm publish"
+  },
+  "author": "tomvandig",
+  "files": [
+    "dist/web-ifc.wasm",
+    "dist/web-ifc.js",
+    "dist/web-ifc-api.js",
+    "dist/web-ifc-api.d.ts"
+  ],
+  "dependencies": {
+    "cpy-cli": "^3.1.1",
+    "esbuild": "^0.8.49",
+    "typescript": "^4.1.5"
+  }
+}

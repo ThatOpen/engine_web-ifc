@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <set>
 
-#include "../web-ifc-schema/ifc2x4.h"
+#include "ifc2x4.h"
 #include "util.h"
 #include "crack_atof.h"
 
