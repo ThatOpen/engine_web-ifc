@@ -18,10 +18,11 @@ async function HttpRequest(url)
 
 async function LoadFile(filename)
 {
-    let ifcData = await HttpRequest(filename);
-
     ifcapi.SetModule(Module);
     await ifcapi.WaitForModuleReady();
+
+    let ifcData = await HttpRequest(filename);
+    console.log("Got data!");
 
     let modelID = ifcapi.OpenModel(filename, ifcData);
 

@@ -10,7 +10,7 @@ https://www.npmjs.com/package/web-ifc
 
 ## Installing the library as a C++ dependency
 
-The library is header only, the files in `web-ifc-cpp` can be trivially included in any project. The library depends on [GLM](https://github.com/g-truc/glm) and [earcut](https://github.com/mapbox/earcut), which it expects in a folder `./deps` in the root of the project (pending change).
+The library is header only, the files in `web-ifc-cpp` can be trivially included in any project. The library depends on [GLM](https://github.com/g-truc/glm) and [earcut](https://github.com/mapbox/earcut.hpp), which it expects in a folder `./deps` in the root of the project (pending change).
 
 ## Using the library
 
