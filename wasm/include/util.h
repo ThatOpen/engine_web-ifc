@@ -219,6 +219,11 @@ namespace webifc
 		}
 	};
 
+	struct IfcSurface
+	{
+		glm::dmat4 transformation;
+	};
+
 	struct IfcTrimmingSelect
 	{
 		bool hasParam = false;

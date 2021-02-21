@@ -265,6 +265,102 @@ namespace webifc
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
+				case ifc2x4::IFCBOOLEANCLIPPINGRESULT:
+				{
+					IfcComposedMesh mesh;
+					mesh.transformation = glm::dmat4(1);
+
+					_loader.MoveToArgumentOffset(line, 1);
+					uint32_t firstOperandID = _loader.GetRefArgument();
+					uint32_t secondOperandID = _loader.GetRefArgument();
+
+					auto firstMesh = GetMesh(firstOperandID);
+					auto secondMesh = GetMesh(secondOperandID);
+
+					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
+					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
+
+					DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
+					DumpIfcGeometry(flatSecondMesh, L"void.obj");
+
+					IfcGeometry m1;
+					IfcGeometry m2;
+
+					intersectMeshMesh(flatFirstMesh, flatSecondMesh, m1, m2);
+
+					// TODO: assuming difference
+					auto resultMesh = boolSubtract(m1, m2);
+
+					DumpIfcGeometry(resultMesh, L"result.obj");
+
+					_expressIDToGeometry[line.expressID] = resultMesh;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+					mesh.hasColor = true;
+					mesh.color = styledItemColor;
+
+					_expressIDToMesh[line.expressID] = mesh;
+					return mesh;
+				}
+				case ifc2x4::IFCPOLYGONALBOUNDEDHALFSPACE:
+				{
+					IfcComposedMesh mesh;
+					mesh.transformation = glm::dmat4(1);
+
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t surfaceID = _loader.GetRefArgument();
+					std::string agreement = _loader.GetStringArgument();
+					uint32_t positionID = _loader.GetRefArgument();
+					uint32_t boundaryID = _loader.GetRefArgument();
+
+					IfcSurface surface = GetSurface(surfaceID);
+					glm::dmat4 position = GetLocalPlacement(positionID);
+					webifc::IfcCurve curve = GetCurve(boundaryID);
+
+					glm::dvec3 extrusionNormal = position[2];
+					glm::dvec3 planeNormal = surface.transformation[2];
+
+					if (planeNormal != extrusionNormal)
+					{
+						printf("unsupported IFCPOLYGONALBOUNDEDHALFSPACE plane normal!");
+					}
+
+					bool flipWinding = false;
+					if (agreement == "T")
+					{
+						extrusionNormal *= -1;
+						flipWinding = true;
+					}
+
+					IfcProfile profile;
+					profile.isConvex = false;
+					profile.curve = curve;
+					const double EXTRUSION_DISTANCE_HALFSPACE = 1500;
+
+					auto geom = Extrude(profile, position, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
+
+					// @Refactor: duplicate of extrudedareasolid
+					if (flipWinding)
+					{
+						for (uint32_t i = 0; i < geom.numFaces; i++)
+						{
+							uint32_t temp = geom.indexData[i * 3 + 0];
+							temp = geom.indexData[i * 3 + 0];
+							geom.indexData[i * 3 + 0] = geom.indexData[i * 3 + 1];
+							geom.indexData[i * 3 + 1] = temp;
+						}
+					}
+
+					// TODO: this is getting problematic.....
+					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+					mesh.hasColor = true;
+					mesh.color = styledItemColor;
+
+					_expressIDToMesh[line.expressID] = mesh;
+					return mesh;
+				}
 				case ifc2x4::IFCREPRESENTATIONMAP:
 				{
 					IfcComposedMesh mesh;
@@ -851,7 +947,7 @@ namespace webifc
 				glm::dvec4 b = placement * glm::dvec4(profile.curve.points[1], 0, 1);
 				glm::dvec4 c = placement * glm::dvec4(profile.curve.points[2], 0, 1);
 
-				glm::dvec3 normal = computeNormal(a, b, c);
+				glm::dvec3 normal = dir;
 
 				// simplified convex fan triangulation
 				uint32_t offset = 0;
@@ -869,7 +965,7 @@ namespace webifc
 					}
 				}
 
-				normal = computeNormal(a, c, b);
+				normal = -dir;
 
 				offset = geom.numPoints;
 				for (int i = 0; i < profileSize; i++)
@@ -896,7 +992,7 @@ namespace webifc
 				glm::dvec4 b = placement * glm::dvec4(glm::dvec3(profile.curve.points[1], 0) + dir * distance, 1);
 				glm::dvec4 c = placement * glm::dvec4(glm::dvec3(profile.curve.points[2], 0) + dir * distance, 1);
 
-				glm::dvec3 normal = computeNormal(a, b, c);
+				glm::dvec3 normal = dir;
 
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
@@ -918,7 +1014,7 @@ namespace webifc
 
 				offset += geom.numPoints;
 
-				normal = computeNormal(a, c, b);
+				normal = -dir;
 
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
@@ -947,7 +1043,7 @@ namespace webifc
 				glm::dvec4 st = placement * glm::dvec4(glm::dvec3(start, 0) + dir * distance, 1);
 				glm::dvec4 et = placement * glm::dvec4(glm::dvec3(end, 0) + dir * distance, 1);
 
-				glm::dvec3 n = computeNormal(sb, eb, st);
+				glm::dvec3 n = dir;
 
 				uint32_t offset = geom.numPoints;
 				geom.AddPoint(sb, n);
@@ -1089,6 +1185,30 @@ namespace webifc
 			}
 
 			return IfcProfile();
+		}
+
+		IfcSurface GetSurface(uint32_t expressID)
+		{
+			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+			switch (line.ifcType)
+			{
+			case ifc2x4::IFCPLANE:
+			{
+				IfcSurface surface;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t locationID = _loader.GetRefArgument();
+				surface.transformation = GetLocalPlacement(locationID);
+
+				return surface;
+			}
+			default:
+				std::cout << "Unexpected surface type: " << line.ifcType << " at " << line.expressID << std::endl;
+				break;
+			}
+
+			return IfcSurface();
 		}
 
 		glm::dmat3 GetAxis2Placement2D(uint32_t expressID)

@@ -4,7 +4,7 @@
 
 #include "include/web-ifc.h"
 #include "include/web-ifc-geometry.h"
-#include "../schema/ifc2x4.h"
+#include "include/ifc2x4.h"
 
 std::string ReadFile(std::wstring filename)
 {
@@ -54,6 +54,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
 
+            /*
             for (auto& geom : mesh.geometries)
             {
                 if (!geometryLoader.HasCachedGeometry(geom.geometryExpressID))
@@ -62,9 +63,8 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::
                 }
                 auto flatGeom = geometryLoader.GetCachedGeometry(geom.geometryExpressID);
                 flatGeom.GetVertexData();
-                std::cout << geom.geometryExpressID << std::endl;
-                std::cout << flatGeom.fvertexData.size() << std::endl;
             }
+            */
 
             meshes.push_back(mesh);
         }
@@ -96,9 +96,9 @@ int main()
     std::cout << "Hello web IFC test!\n";
 
     //std::wstring filename = L"B:\\ifcfiles\\UpTown.ifc";
-    //std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
+    std::wstring filename = L"B:\\ifcfiles\\02_BIMcollab_Example_STR_optimized.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\01_BIMcollab_Example_ARC_optimized.ifc";
-    std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
+    //std::wstring filename = L"B:\\ifcfiles\\IFC Schependomlaan.ifc";
     //std::wstring filename = L"B:\\ifcfiles\\0912104-04slab_recess_tek_1.ifc";
 
     std::string content = ReadFile(filename);
@@ -110,21 +110,6 @@ int main()
     auto time = webifc::ms() - start;
 
     std::cout << "Reading took " << time << "ms" << std::endl;
-    return 0;
-
-    auto refs = loader.GetRefs();
-
-    start = webifc::ms();
-    for (int i = 0; i < 100; i++)
-    {
-        std::set<uint32_t> allRefs;
-        loader.GetAllRefs(allRefs, 67);
-    }
-    time = webifc::ms() - start;
-
-    std::cout << "Query took " << time << "ms" << std::endl;
-
-    DumpRefs(refs);
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
