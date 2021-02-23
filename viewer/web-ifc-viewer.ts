@@ -4,8 +4,6 @@ import { Init3DView, scene } from './web-ifc-scene';
 
 //@ts-ignore
 window.InitWebIfcViewer = async () => {
-  //@ts-ignore
-  API.SetModule(Module);
   await API.WaitForModuleReady();
   const fileInput = document.getElementById('finput');
   fileInput.addEventListener('change', fileInputChanged);
@@ -78,11 +76,9 @@ function addPlacedGeometry(modelID: number, placedGeometry: any) {
 }
 
 function getBufferGeometry(modelID: number, placedGeometry: any) {
-  //@ts-ignore
-  const m: any = Module;
-  const geometry = m.GetGeometry(modelID, placedGeometry.geometryExpressID);
-  const verts = getSubArray(m.HEAPF32, geometry.GetVertexData(), geometry.GetVertexDataSize());
-  const indices = getSubArray(m.HEAPU32, geometry.GetIndexData(), geometry.GetIndexDataSize());
+  const geometry = API.GetGeometry(modelID, placedGeometry.geometryExpressID);
+  const verts = getSubArray(API.GetHEAPF32(), geometry.GetVertexData(), geometry.GetVertexDataSize());
+  const indices = getSubArray(API.GetHEAPU32(), geometry.GetIndexData(), geometry.GetIndexDataSize());
   const bufferGeometry = ifcGeometryToBuffer(verts, indices);
   return bufferGeometry;
 }

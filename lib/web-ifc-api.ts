@@ -1,21 +1,14 @@
 let wasm_module = undefined;
 
-export function SetModule(module: any)
-{
-    wasm_module = module;
-}
-
 export function ms() {
     return new Date().getTime();
 }
 
-export function WaitForModuleReady()
+export async function WaitForModuleReady()
 {
-    return new Promise<void>((resolve, reject) => {
-        wasm_module["onRuntimeInitialized"] = () => {
-            resolve();
-        };
-    })
+    //@ts-ignore
+    wasm_module = await WebIFCWasm({noInitialRun: true});
+    console.log(wasm_module);
 }
 
 /**  Opens a model and returns a handle
@@ -27,6 +20,21 @@ export function OpenModel(filename: string, data: string | Uint8Array): number
     let result = wasm_module.OpenModel(filename);
     wasm_module['FS_unlink']("/filename");
     return result;
+}
+
+export function GetGeometry(modelID: number, geometryExpressID: number): any
+{
+    return wasm_module.GetGeometry(modelID, geometryExpressID);
+}
+
+export function GetHEAPF32()
+{
+    return wasm_module.HEAPF32;
+}
+
+export function GetHEAPU32()
+{
+    return wasm_module.HEAPU32;
 }
 
 export function CloseModel(modelID: number)
