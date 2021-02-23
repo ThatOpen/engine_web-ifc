@@ -194,6 +194,8 @@ namespace webifc
                 const glm::dvec3& e = mesh2.GetPoint(t2.i1);
                 const glm::dvec3& f = mesh2.GetPoint(t2.i2);
 
+                glm::dvec3 n = computeNormal(a, b, c);
+
                 TriTriResult intersectionLine = intersect_triangle_triangle(a, b, c, d, e, f);
 
                 if (intersectionLine.hasIntersection)

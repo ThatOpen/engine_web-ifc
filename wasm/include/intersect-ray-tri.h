@@ -25,12 +25,14 @@ namespace webifc
         double v = det * glm::dot(E1, Q);
         t = det * glm::dot(ROV0, (N * -1.0));
 
-        if (t > 0.9999 && t < 1)
+        // TODO: this fuzz is quite serious
+        if (t > 0.9999 && t < 1 + EPS_SMALL)
         {
             t = 1;
         }
 
-        if (t < 0.0001 && t > 0)
+        // TODO: this fuzz is quite serious
+        if (t < 0.0001 && t > 0 - EPS_SMALL)
         {
             t = 0;
         }
@@ -91,10 +93,68 @@ namespace webifc
             return result;
         }
 
-        if (abc == 3 || def == 3)
+        // all three edges are hit, so two are hit in the same point
+        if (abc == 3)
         {
             TriTriResult result;
-            result.hasIntersection = false;
+            result.hasIntersection = true;
+
+            // I'm too tired to simplify this
+            if (equals(pab, pbc, EPS_MINISCULE))
+            {
+                // b is common point
+                result.start = pab;
+                result.end = pca;
+            }
+            else if (equals(pbc, pca, EPS_MINISCULE))
+            {
+                // c is common point
+                result.start = pbc;
+                result.end = pab;
+            }
+            else if (equals(pca, pab, EPS_MINISCULE))
+            {
+                // a is common point
+                result.start = pca;
+                result.end = pbc;
+            }
+            else
+            {
+                result.hasIntersection = false;
+            }
+
+            return result;
+        }
+
+        if (def == 3)
+        {
+            TriTriResult result;
+            result.hasIntersection = true;
+
+            // I'm too tired to simplify this
+            if (equals(pde, pef, EPS_MINISCULE))
+            {
+                // e is common point
+                result.start = pde;
+                result.end = pfd;
+            }
+            else if (equals(pef, pfd, EPS_MINISCULE))
+            {
+                // f is common point
+                result.start = pef;
+                result.end = pde;
+            }
+            else if (equals(pfd, pde, EPS_MINISCULE))
+            {
+                // d is common point
+                result.start = pfd;
+                result.end = pef;
+            }
+            else
+            {
+                result.hasIntersection = false;
+            }
+
             return result;
         }
 

@@ -25,6 +25,8 @@
 
 #define CONST_PI 3.141592653589793238462643383279502884L
 
+const double EXTRUSION_DISTANCE_HALFSPACE = 10000;
+
 const bool DEBUG_DUMP_SVG = false;
 
 namespace webifc
@@ -280,23 +282,69 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
-					DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					//DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
+					//DumpIfcGeometry(flatSecondMesh, L"void.obj");
 
 					IfcGeometry m1;
 					IfcGeometry m2;
 
 					intersectMeshMesh(flatFirstMesh, flatSecondMesh, m1, m2);
 
+					//DumpIfcGeometry(m1, L"substep1.obj");
+					//DumpIfcGeometry(m2, L"substep2.obj");
+
 					// TODO: assuming difference
 					auto resultMesh = boolSubtract(m1, m2);
 
-					DumpIfcGeometry(resultMesh, L"result.obj");
+					//DumpIfcGeometry(resultMesh, L"result.obj");
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
 					mesh.hasColor = true;
+					mesh.color = styledItemColor;
+
+					_expressIDToMesh[line.expressID] = mesh;
+					return mesh;
+				}
+				case ifc2x4::IFCHALFSPACESOLID:
+				{
+					IfcComposedMesh mesh;
+					mesh.transformation = glm::dmat4(1);
+
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t surfaceID = _loader.GetRefArgument();
+					std::string agreement = _loader.GetStringArgument();
+
+					IfcSurface surface = GetSurface(surfaceID);
+
+					glm::dvec3 extrusionNormal = glm::dvec3(0, 0, 1);
+
+					bool flipWinding = false;
+					if (agreement == "T")
+					{
+						extrusionNormal *= -1;
+						flipWinding = true;
+					}
+
+					double d = EXTRUSION_DISTANCE_HALFSPACE;
+					IfcCurve c;
+					c.Add(glm::dvec2(-d, -d));
+					c.Add(glm::dvec2(d, -d));
+					c.Add(glm::dvec2(d, d));
+					c.Add(glm::dvec2(-d, d));
+					c.Add(glm::dvec2(-d, -d));
+
+					IfcProfile profile;
+					profile.isConvex = false;
+					profile.curve = c;
+
+					auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
+
+					// TODO: this is getting problematic.....
+					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
 					mesh.color = styledItemColor;
 
 					_expressIDToMesh[line.expressID] = mesh;
@@ -317,27 +365,24 @@ namespace webifc
 					glm::dmat4 position = GetLocalPlacement(positionID);
 					webifc::IfcCurve curve = GetCurve(boundaryID);
 
-					glm::dvec3 extrusionNormal = position[2];
+					glm::dvec3 extrusionNormal = glm::dvec3(0, 0, 1);
 					glm::dvec3 planeNormal = surface.transformation[2];
-
-					if (planeNormal != extrusionNormal)
-					{
-						printf("unsupported IFCPOLYGONALBOUNDEDHALFSPACE plane normal!");
-					}
+					glm::dvec3 planePosition = surface.transformation[3];
 
 					bool flipWinding = false;
 					if (agreement == "T")
 					{
-						extrusionNormal *= -1;
-						flipWinding = true;
+						//extrusionNormal *= -1;
+						//planeNormal *= -1;
+						//flipWinding = true;
 					}
 
 					IfcProfile profile;
 					profile.isConvex = false;
 					profile.curve = curve;
-					const double EXTRUSION_DISTANCE_HALFSPACE = 1500;
 
-					auto geom = Extrude(profile, position, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
+					auto geom = Extrude(profile, position, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE, planeNormal, planePosition);
+					//auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
 
 					// @Refactor: duplicate of extrudedareasolid
 					if (flipWinding)
@@ -355,7 +400,6 @@ namespace webifc
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.hasColor = true;
 					mesh.color = styledItemColor;
 
 					_expressIDToMesh[line.expressID] = mesh;
@@ -929,68 +973,15 @@ namespace webifc
 			}
 		}
 
-		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance)
+		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
 		{
 			// TODO: This code generates much more vertices than needed!
 			IfcGeometry geom;
 
-			if (false && profile.isConvex)
-			{
-				size_t profileSize = profile.curve.points.size();
-				if (equals2d(profile.curve.points[0], profile.curve.points[profileSize - 1]))
-				{
-					profileSize--;
-				}
-
-				// TODO: this assumes non-colinearity!
-				glm::dvec4 a = placement * glm::dvec4(profile.curve.points[0], 0, 1);
-				glm::dvec4 b = placement * glm::dvec4(profile.curve.points[1], 0, 1);
-				glm::dvec4 c = placement * glm::dvec4(profile.curve.points[2], 0, 1);
-
-				glm::dvec3 normal = dir;
-
-				// simplified convex fan triangulation
-				uint32_t offset = 0;
-				for (int i = 0; i < profileSize; i++)
-				{
-					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 sb = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
-					geom.AddPoint(sb, normal);
-
-					if (i > 1)
-					{
-						geom.AddFace(offset + 0, offset + i, offset + i - 1);
-
-						// CheckTriangle(f1, geom.points);
-					}
-				}
-
-				normal = -dir;
-
-				offset = geom.numPoints;
-				for (int i = 0; i < profileSize; i++)
-				{
-					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
-					geom.AddPoint(et, normal);
-
-					if (i > 1)
-					{
-						geom.AddFace(offset + 0, offset + i - 1, offset + i);
-
-						//CheckTriangle(f2, geom.points);
-					}
-				}
-			}
-			else
+			// build the caps
 			{
 				using Point = std::array<double, 2>;
 				std::vector<std::vector<Point>> polygon(1);
-
-				// TODO: this assumes non-colinearity!
-				glm::dvec4 a = placement * glm::dvec4(glm::dvec3(profile.curve.points[0], 0) + dir * distance, 1);
-				glm::dvec4 b = placement * glm::dvec4(glm::dvec3(profile.curve.points[1], 0) + dir * distance, 1);
-				glm::dvec4 c = placement * glm::dvec4(glm::dvec3(profile.curve.points[2], 0) + dir * distance, 1);
 
 				glm::dvec3 normal = dir;
 
@@ -1021,6 +1012,26 @@ namespace webifc
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
 
+					if (cuttingPlaneNormal != glm::dvec3(0))
+					{
+						et = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
+						glm::dvec3 transDir = placement * glm::dvec4(dir, 0);
+
+						// project {et} onto the plane, following the extrusion normal						
+						double ldotn = glm::dot(transDir, cuttingPlaneNormal);
+						if (ldotn == 0)
+						{
+							printf("0 direction in extrude\n");
+						}
+						else
+						{
+							glm::dvec3 dpos = cuttingPlanePos - glm::dvec3(et);
+							double dist = glm::dot(dpos, cuttingPlaneNormal) / ldotn;
+							// we want to apply dist, even when negative
+							et = et + glm::dvec4(dist * transDir, 1);
+						}
+					}
+
 					geom.AddPoint(et, normal);
 				}
 
@@ -1031,43 +1042,21 @@ namespace webifc
 				}
 			}
 
-			// for each line
-			for (int i = 1; i < profile.curve.points.size(); i++)
+			uint32_t capSize = profile.curve.points.size();
+			for (int i = 1; i < capSize; i++)
 			{
-				auto& start = profile.curve.points[i - 1];
-				auto& end = profile.curve.points[i];
+				uint32_t bl = i - 1;
+				uint32_t br = i - 0;
 
-				glm::dvec4 sb = placement * glm::dvec4(start, 0, 1);
-				glm::dvec4 eb = placement * glm::dvec4(end, 0, 1);
+				uint32_t tl = capSize + i - 1;
+				uint32_t tr = capSize + i - 0;
 
-				glm::dvec4 st = placement * glm::dvec4(glm::dvec3(start, 0) + dir * distance, 1);
-				glm::dvec4 et = placement * glm::dvec4(glm::dvec3(end, 0) + dir * distance, 1);
-
-				glm::dvec3 n = dir;
-
-				uint32_t offset = geom.numPoints;
-				geom.AddPoint(sb, n);
-				geom.AddPoint(eb, n);
-				geom.AddPoint(st, n);
-				geom.AddPoint(et, n);
-
-				// sb st eb
-				Face f1;
-				f1.i0 = static_cast<uint32_t>(offset + 0);
-				f1.i1 = static_cast<uint32_t>(offset + 1);
-				f1.i2 = static_cast<uint32_t>(offset + 2);
-
-				// st et eb
-				Face f2;
-				f2.i0 = static_cast<uint32_t>(offset + 2);
-				f2.i1 = static_cast<uint32_t>(offset + 1);
-				f2.i2 = static_cast<uint32_t>(offset + 3);
-
-				geom.AddFace(offset + 0, offset + 1, offset + 2);
-				geom.AddFace(offset + 2, offset + 1, offset + 3);
+				// top    1 2 3 4
+				// bottom 5 6 7 8
+				// first face: 1 6 5, 1 2 6
 				
-				// CheckTriangle(f1, geom.points);
-				// CheckTriangle(f2, geom.points);
+				geom.AddFace(tl, br, bl);
+				geom.AddFace(tl, tr, br);
 			}
 
 			return geom;
