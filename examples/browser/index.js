@@ -1,5 +1,7 @@
 
-const ifcapi = require("web-ifc/web-ifc-api.js");
+const WebIFC = require("web-ifc/web-ifc-api.js");
+
+const ifcapi = new WebIFC.IfcAPI();
 
 console.log("Hello web-ifc-browser!");
 
@@ -18,7 +20,6 @@ async function HttpRequest(url)
 
 async function LoadFile(filename)
 {
-    ifcapi.SetModule(Module);
     await ifcapi.WaitForModuleReady();
 
     let ifcData = await HttpRequest(filename);

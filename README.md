@@ -1,5 +1,7 @@
 # web-ifc
 
+# Warning: this is pre-alpha software, an experimental backend for IFC.js
+
 Web ifc is a WASM-based ifc parser & geometry generator. This repository contains the c++/typescript source code.
 
 https://www.npmjs.com/package/web-ifc
