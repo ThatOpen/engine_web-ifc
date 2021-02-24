@@ -1,53 +1,91 @@
-let wasm_module = undefined;
+
+export interface Vector<T> {
+    get(index: number): T;
+    size(): number;
+}
+
+export interface Color {
+    x: number;
+    y: number;
+    z: number;
+    w: number;
+}
+
+export interface PlacedGeometry {
+    color: Color;
+    geometryExpressID: number;
+    flatTransformation: Array<number>;
+}
+
+export interface FlatMesh {
+    geometries: Vector<PlacedGeometry>;   
+}
+
+export interface IfcGeometry
+{
+    GetVertexData(): number;
+    GetVertexDataSize(): number;
+    GetIndexData(): number;
+    GetIndexDataSize(): number;
+}
 
 export function ms() {
     return new Date().getTime();
 }
 
-export async function WaitForModuleReady()
+export class IfcAPI
 {
-    //@ts-ignore
-    wasm_module = await WebIFCWasm({noInitialRun: true});
-    console.log(wasm_module);
-}
+    wasmModule = undefined;
 
-/**  Opens a model and returns a handle
-*/
-export function OpenModel(filename: string, data: string | Uint8Array): number
-{
-    wasm_module['FS_createDataFile']('/', "filename", data, true, true, true);
-    console.log("Wrote file");
-    let result = wasm_module.OpenModel(filename);
-    wasm_module['FS_unlink']("/filename");
-    return result;
-}
+    async WaitForModuleReady()
+    {
+        //@ts-ignore
+        this.wasmModule = await WebIFCWasm({noInitialRun: true});
+        console.log(this.wasmModule);
+    }
 
-export function GetGeometry(modelID: number, geometryExpressID: number): any
-{
-    return wasm_module.GetGeometry(modelID, geometryExpressID);
-}
+    /**  Opens a model and returns a handle
+    */
+    OpenModel(filename: string, data: string | Uint8Array): number
+    {
+        this.wasmModule['FS_createDataFile']('/', "filename", data, true, true, true);
+        console.log("Wrote file");
+        let result = this.wasmModule.OpenModel(filename);
+        this.wasmModule['FS_unlink']("/filename");
+        return result;
+    }
 
-export function GetHEAPF32()
-{
-    return wasm_module.HEAPF32;
-}
+    GetGeometry(modelID: number, geometryExpressID: number): IfcGeometry
+    {
+        return this.wasmModule.GetGeometry(modelID, geometryExpressID);
+    }
 
-export function GetHEAPU32()
-{
-    return wasm_module.HEAPU32;
-}
+    GetVertexArray(ptr: number, size: number)
+    {
+        return this.getSubArray(this.wasmModule.HEAPF32, ptr, size);
+    }
 
-export function CloseModel(modelID: number)
-{
-    wasm_module.CloseModel(modelID);
-}
+    GetIndexArray(ptr: number, size: number)
+    {
+        return this.getSubArray(this.wasmModule.HEAPU32, ptr, size);
+    }
 
-export function IsModelOpen(modelID: number): boolean
-{
-    return wasm_module.IsModelOpen(modelID);
-}
+    getSubArray(heap, startPtr, sizeBytes) {
+    return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes).slice(0);
+    }
 
-export function LoadAllGeometry(modelID: number): void
-{
-    return wasm_module.LoadAllGeometry(modelID);
+    CloseModel(modelID: number)
+    {
+        this.wasmModule.CloseModel(modelID);
+    }
+
+    IsModelOpen(modelID: number): boolean
+    {
+        return this.wasmModule.IsModelOpen(modelID);
+    }
+
+    LoadAllGeometry(modelID: number): Vector<FlatMesh>
+    {
+        return this.wasmModule.LoadAllGeometry(modelID);
+    }
 }

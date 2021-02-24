@@ -6,6 +6,7 @@
     "declaration": true
   },
   "files": [
-    "./lib/web-ifc-api.ts"
+    "./lib/web-ifc-api.ts",
+    "./lib/web-ifc-three.ts"
   ]
 }

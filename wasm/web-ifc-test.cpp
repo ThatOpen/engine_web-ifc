@@ -116,8 +116,8 @@ int main()
 
     start = webifc::ms();
 
-    SpecificLoadTest(loader, geometryLoader);
-    //auto meshes = LoadAllTest(loader, geometryLoader);
+    //SpecificLoadTest(loader, geometryLoader);
+    auto meshes = LoadAllTest(loader, geometryLoader);
 
     time = webifc::ms() - start;
 
