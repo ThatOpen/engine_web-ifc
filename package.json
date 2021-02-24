@@ -1,6 +1,6 @@
 {
   "name": "web-ifc",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "description": "ifc loading on the web",
   "main": "web-ifc-api.js",
   "watch": {
@@ -35,16 +35,14 @@
     "web-ifc-three.js",
     "web-ifc-three.d.ts"
   ],
-  "dependencies": {
+  "devDependencies": {
+    "@types/three": "^0.125.3",
+    "three": "^0.126.0",
     "concurrently": "^6.0.0",
     "cpy-cli": "^3.1.1",
     "esbuild": "^0.8.49",
     "npm-watch": "^0.7.0",
     "serve": "^11.3.2",
     "typescript": "^4.1.5"
-  },
-  "devDependencies": {
-    "@types/three": "^0.125.3",
-    "three": "^0.126.0"
   }
 }

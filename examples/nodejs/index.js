@@ -11,6 +11,7 @@ async function LoadFile(filename)
 {
     // load model data as a string
     const ifcData = fs.readFileSync(filename).toString();
+    
     await ifcapi.InjectWasmModule(WebIFCWasm);
 
     let modelID = ifcapi.OpenModel("example.ifc", ifcData);

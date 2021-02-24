@@ -18,6 +18,28 @@ The library is header only, the files in `web-ifc-cpp` can be trivially included
 
 See `examples` for different ways to use web-ifc.
 
+For a short intro, this is how to use the library from javascript:
+
+```JavaScript
+const WebIFCWasm = require("web-ifc/web-ifc.js");
+const WebIFC = require("web-ifc/web-ifc-api.js");
+
+// initialize the API
+const ifcApi = new WebIFC.IfcAPI();
+
+// load model data as a string
+await ifcApi.InjectWasmModule(WebIFCWasm);
+
+// open a model from data
+let modelID = ifcApi.OpenModel(/* placeholder filename */, /* IFC data as a string or UInt8Array */);
+
+// the model is now loaded! use modelID to fetch geometry
+
+// close the model, all memory is freed
+ifcApi.CloseModel(modelID);
+
+```
+
 ## Compiling the library
 
 ### C++ executable

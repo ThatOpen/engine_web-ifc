@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "web-ifc": "0.0.9"
+    "web-ifc": "0.0.10"
   }
 }

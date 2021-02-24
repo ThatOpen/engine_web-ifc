@@ -45,7 +45,6 @@ int OpenModel(std::string filename)
     loaders.push_back(loader);
     std::cout << "Loading " << std::endl;
     auto start = webifc::ms();
-    // !!!!!!!!!!! @REFACTOR: this call assumes the pointer stays alive until model is closed!!!
     loaders[modelID].LoadFile(contents);
     auto end = webifc::ms() - start;
     geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
