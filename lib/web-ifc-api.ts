@@ -37,14 +37,19 @@ export class IfcAPI
 {
     wasmModule = undefined;
 
-    async WaitForModuleReady()
+    /**
+     * Initializes the WASM module (WebIFCWasm), required before using any other functionality
+    */
+    async InjectWasmModule(WebIFCWasm: any)
     {
         //@ts-ignore
         this.wasmModule = await WebIFCWasm({noInitialRun: true});
-        console.log(this.wasmModule);
     }
 
-    /**  Opens a model and returns a handle
+    /**  
+     * Opens a model and returns a modelID number
+     * @filename Is for debuggin purposes
+     * @data Buffer containing IFC data (bytes)
     */
     OpenModel(filename: string, data: string | Uint8Array): number
     {
@@ -55,6 +60,11 @@ export class IfcAPI
         return result;
     }
 
+    /**  
+     * Opens a model and returns a modelID number
+     * @modelID Model handle retrieved by OpenModel, model must not be closed
+     * @data Buffer containing IFC data (bytes)
+    */
     GetGeometry(modelID: number, geometryExpressID: number): IfcGeometry
     {
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
@@ -71,19 +81,31 @@ export class IfcAPI
     }
 
     getSubArray(heap, startPtr, sizeBytes) {
-    return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes).slice(0);
+        return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes).slice(0);
     }
 
+    /**  
+     * Closes a model and frees all related memory
+     * @modelID Model handle retrieved by OpenModel, model must not be closed
+    */
     CloseModel(modelID: number)
     {
         this.wasmModule.CloseModel(modelID);
     }
 
+    /**  
+     * Checks if a specific model ID is open or closed
+     * @modelID Model handle retrieved by OpenModel
+    */
     IsModelOpen(modelID: number): boolean
     {
         return this.wasmModule.IsModelOpen(modelID);
     }
 
+    /**  
+     * Load all geometry in a model
+     * @modelID Model handle retrieved by OpenModel
+    */
     LoadAllGeometry(modelID: number): Vector<FlatMesh>
     {
         return this.wasmModule.LoadAllGeometry(modelID);

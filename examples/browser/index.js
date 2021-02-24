@@ -1,9 +1,10 @@
 
+const WebIFCWasm = require("web-ifc/web-ifc.js");
 const WebIFC = require("web-ifc/web-ifc-api.js");
 
-const ifcapi = new WebIFC.IfcAPI();
-
 console.log("Hello web-ifc-browser!");
+
+const ifcapi = new WebIFC.IfcAPI();
 
 async function HttpRequest(url)
 {  
@@ -20,7 +21,7 @@ async function HttpRequest(url)
 
 async function LoadFile(filename)
 {
-    await ifcapi.WaitForModuleReady();
+    await ifcapi.InjectWasmModule(WebIFCWasm);
 
     let ifcData = await HttpRequest(filename);
     console.log("Got data!");

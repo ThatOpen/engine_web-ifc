@@ -12,14 +12,11 @@
 
 std::vector<webifc::IfcLoader> loaders;
 std::vector<webifc::IfcGeometryLoader> geomLoaders;
-// @REFACTOR: USE STRING INTERNING OR PLACE STRINGS INSIDE TAPE!
-std::vector<std::string> fileContents;
 
 // use to construct API placeholders
 int main() {
     loaders.emplace_back();
     geomLoaders.emplace_back(loaders[0]);
-    fileContents.emplace_back();
 
     return 0;
 }
@@ -40,7 +37,7 @@ int OpenModel(std::string filename)
     std::cout << "Loading: " << filename << std::endl;
 
     uint32_t modelID = loaders.size();
-    fileContents[modelID] = ReadFile("filename");
+    std::string contents = ReadFile("filename");
     
     std::cout << "Read " << std::endl;
 
@@ -49,7 +46,7 @@ int OpenModel(std::string filename)
     std::cout << "Loading " << std::endl;
     auto start = webifc::ms();
     // !!!!!!!!!!! @REFACTOR: this call assumes the pointer stays alive until model is closed!!!
-    loaders[modelID].LoadFile(fileContents[modelID]);
+    loaders[modelID].LoadFile(contents);
     auto end = webifc::ms() - start;
     geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
 
@@ -60,11 +57,11 @@ int OpenModel(std::string filename)
 
 void CloseModel(uint32_t modelID)
 {
-    webifc::IfcLoader loader;
+    // TODO: use a list or something else...
 
-    // overwrite old loader, thereby destructing it
-    loaders[modelID] = loader;
-    //fileContents[modelID] = "";
+    // overwrite old loaders, thereby destructing them
+    loaders[modelID] = webifc::IfcLoader();
+    // geomLoaders[modelID] = webifc::IfcGeometryLoader(loaders[modelID]);
 }
 
 int OpenModelFromTapeData(std::string data)

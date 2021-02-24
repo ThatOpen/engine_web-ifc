@@ -3,13 +3,21 @@ import { IfcAPI, ms, PlacedGeometry, Color } from "./web-ifc-api";
   
 export class IfcThree
 {
-    ifcAPI: IfcAPI;
+    private ifcAPI: IfcAPI;
 
+    /**
+        Creates an instance of IfcThree, requires a valid instance of IfcAPI
+    */
     constructor(ifcAPI: IfcAPI)
     {
         this.ifcAPI = ifcAPI;
     }
 
+    /**
+     * Loads all geometry for the model with id "modelID" into the supplied scene
+     * @scene Threejs Scene object
+     * @modelID Model handle retrieved by OpenModel, model must not be closed
+    */
     public LoadAllGeometry(scene: THREE.Scene, modelID: number) {
         const flatMeshes = this.getFlatMeshes(modelID);
         const startUploadingTime = ms();
