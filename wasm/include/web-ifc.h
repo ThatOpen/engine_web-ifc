@@ -718,17 +718,25 @@ namespace webifc
 					pos++;
 					bool prevSlash = false;
 					uint32_t start = pos;
-					// apparently string escaping is not allowed in IFC ???
-					// example from uptown: #114143= IFCPROPERTYSINGLEVALUE('Type Comments',$,IFCTEXT('Type G5 - 800kg/m\X2\00B2\X0\'),$);
-					while (!(buf[pos] == '\'' /*&& !prevSlash*/))
+					// apparently I dont fully understand strings in IFC yet
+					// this example from uptown shows that escaping is not used: 'Type G5 - 800kg/m\X2\00B2\X0\';
+					// this example from revit shows that double quotes are used as one quote: 'RPC Tree - Deciduous:Scarlet Oak - 42'':946835'
+					// we do seem to parse the average IFC quite well, so why are these edge cases present?
+					while (true)
 					{
-						if (buf[pos] == '\\')
+						// if its a quote, maybe its the end of the string
+						if (buf[pos] == '\'')
 						{
-							prevSlash = !prevSlash;
-						}
-						else
-						{
-							prevSlash = false;
+							// if there's another quote behind it, its not
+							if (buf[pos + 1] == '\'')
+							{
+								// we also bump pos, otherwise we still break next loop...
+								pos++;
+							}
+							else
+							{
+								break;
+							}
 						}
 
 						pos++;
