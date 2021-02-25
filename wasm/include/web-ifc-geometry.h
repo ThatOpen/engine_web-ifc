@@ -421,6 +421,7 @@ namespace webifc
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
+				case ifc2x4::IFCFACEBASEDSURFACEMODEL:
 				case ifc2x4::IFCSHELLBASEDSURFACEMODEL:
 				{
 					IfcComposedMesh mesh;
@@ -577,20 +578,8 @@ namespace webifc
 			auto& line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
+			case ifc2x4::IFCCONNECTEDFACESET:
 			case ifc2x4::IFCCLOSEDSHELL:
-			{
-				_loader.MoveToArgumentOffset(line, 0);
-				auto faces = _loader.GetSetArgument();
-
-				IfcGeometry geometry;
-				for (auto& faceToken : faces)
-				{
-					uint32_t faceID = _loader.GetRefArgument(faceToken);
-					AddFaceToGeometry(faceID, geometry);
-				}
-
-				return geometry;
-			}
 			case ifc2x4::IFCOPENSHELL:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
