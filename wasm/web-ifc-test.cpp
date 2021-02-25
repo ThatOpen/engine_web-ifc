@@ -23,7 +23,7 @@ void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geom
     auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCSLAB);
 
     bool writeFiles = true;
-    auto mesh = geometryLoader.GetMesh(491106);
+    auto mesh = geometryLoader.GetMesh(216424);
     if (writeFiles)
     {
         geometryLoader.DumpMesh(mesh, L"TEST.obj");

@@ -121,7 +121,7 @@ namespace webifc
 			auto it = _expressIDToMesh.find(line.expressID);
 			if (it != _expressIDToMesh.end())
 			{
-				return _expressIDToMesh[line.expressID];
+				//return _expressIDToMesh[line.expressID];
 			}
 
 			bool hasColor = false;
@@ -435,8 +435,8 @@ namespace webifc
 					{
 						uint32_t shellRef = _loader.GetRefArgument(shell);
 						IfcComposedMesh temp;
-						_expressIDToGeometry[line.expressID] = GetBrep(shellRef);
-						temp.expressID = line.expressID;
+						_expressIDToGeometry[shellRef] = GetBrep(shellRef);
+						temp.expressID = shellRef;
 						temp.hasGeometry = true;
 						temp.transformation = glm::dmat4(1);
 						mesh.children.push_back(temp);
