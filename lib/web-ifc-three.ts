@@ -58,7 +58,7 @@ export class IfcThree
     
     private getMeshMaterial(color: Color) {
         const col = new THREE.Color(color.x, color.y, color.z);
-        const material = new THREE.MeshPhongMaterial({ color: col });
+        const material = new THREE.MeshPhongMaterial({ color: col, side: THREE.DoubleSide });
         material.transparent = color.w !== 1;
         if (material.transparent) material.opacity = color.w;
         return material;
