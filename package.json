@@ -13,7 +13,8 @@
   },
   "scripts": {
     "gen-schema": "cd schema && node gen.js",
-    "setup-env": "emsdk_env && npm run gen-schema",
+    "setup-env": "emsdk_env",
+    "init-repo": "git clone https://github.com/g-truc/glm ./wasm/deps/glm && git clone https://github.com/mapbox/earcut.hpp ./wasm/deps/earcut && npm run gen-schema",
     "build-wasm-debug": "em++ --bind -O3 -g4 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o lib/web-ifc.js",
     "build-wasm-release": "em++ --bind -O3 -flto -fno-exceptions wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o lib/web-ifc.js",
     "build-web-ifc-api": "esbuild lib/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api.js",

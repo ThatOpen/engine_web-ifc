@@ -12,7 +12,7 @@ https://www.npmjs.com/package/web-ifc
 
 ## Installing the library as a C++ dependency
 
-The library is header only, the files in `web-ifc-cpp` can be trivially included in any project. The library depends on [GLM](https://github.com/g-truc/glm) and [earcut](https://github.com/mapbox/earcut.hpp), which it expects in a folder `./deps` in the root of the project (pending change).
+The library is header only, the files in `web-ifc-cpp` can be trivially included in any project. The library depends on [GLM](https://github.com/g-truc/glm) and [earcut](https://github.com/mapbox/earcut.hpp).
 
 ## Using the library
 
@@ -40,13 +40,23 @@ ifcApi.CloseModel(modelID);
 
 ```
 
-## Compiling the library
+## Building the library
 
-### C++ executable
+### Setting up emscripten
 
-Compiling the library to a standalone executable requires use of CMAKE. For visual studio code, the easiest way is by installing [cmake-tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools).
+The WASM library is built through emscripten, please see [the emscripten installation guide](https://emscripten.org/docs/getting_started/downloads.html) for information on how to set up emscripten. Afterwards both `setup-env` and `em++` need to be in your path.
 
 ### WASM library
 
-The WASM library is built through emscripten, please see [the emscripten installation guide](https://emscripten.org/docs/getting_started/downloads.html) for information on how to set up emscripten. Afterwards the library can be built by using:
-`.\wasm_setup_env.bat` and `.\wasm_compile.ps1`.
+Run `npm run init-repo` to download both dependencies of the project (glm and earcut.hpp) to the correct location. This only needs to happen once.
+
+Run `npm run setup-env` whenever you open a new terminal, this will set up the required emscripten environment variables for you to compile code.
+
+Run `npm run build-release` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
+
+Run `npm run dev` to launch a development server with a basic ifc file viewer.
+
+
+### Stand alone C++ executable
+
+Compiling the library to a standalone executable requires use of CMAKE. For visual studio code, the easiest way is by installing [cmake-tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools).

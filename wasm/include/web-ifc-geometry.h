@@ -13,7 +13,7 @@
 
 #include "../deps/glm/glm/glm.hpp"
 #include "../deps/glm/glm/gtx/transform.hpp"
-#include "../deps/earcut.hpp"
+#include "../deps/earcut/include/mapbox/earcut.hpp"
 
 #include "intersect-mesh-mesh.h"
 #include "bool-mesh-mesh.h"
