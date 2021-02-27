@@ -26,6 +26,20 @@ namespace webifc
     #endif
     }
 
+	// for some reason std::string_view is not compiling...
+	struct StringView
+	{
+		StringView(char* d, uint32_t l) :
+			data(d),
+			len(l)
+		{
+
+		}
+
+		char* data;
+		uint32_t len;
+	};
+
 	struct Face
 	{
 		int i0;
@@ -885,6 +899,15 @@ namespace webifc
 
 			return (void*)valuePtr;
 		}
+
+        StringView ReadStringView()
+        {
+			uint8_t length = Read<uint8_t>();
+			char* charPtr = (char*)GetReadPtr();
+			AdvanceRead(length);
+
+			return StringView { charPtr, length };
+        }
 
 		inline void Reverse()
 		{

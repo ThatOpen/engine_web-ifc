@@ -4,10 +4,10 @@
  
 #pragma once
 
-#include "../deps/glm/glm/glm.hpp"
+#include "../../deps/glm/glm/glm.hpp"
 
-#include "util.h"
-#include "is-inside-mesh.h"
+#include "../util.h"
+#include "./is-inside-mesh.h"
 
 namespace webifc
 {

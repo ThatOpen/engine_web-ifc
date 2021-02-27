@@ -5,9 +5,9 @@
  #pragma once
 
 #include <map>
-#include "../deps/glm/glm/glm.hpp"
+#include "../../deps/glm/glm/glm.hpp"
 
-#include "util.h"
+#include "../util.h"
 #include "line-segment-intersect.h"
 
 namespace webifc

@@ -4,7 +4,7 @@
  
  #pragma once
 
-#include "../deps/glm/glm/glm.hpp"
+#include "../../deps/glm/glm/glm.hpp"
 
 namespace webifc
 {

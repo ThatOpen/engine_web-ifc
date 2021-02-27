@@ -19,8 +19,8 @@
 #include "../deps/glm/glm/gtx/transform.hpp"
 #include "../deps/earcut/include/mapbox/earcut.hpp"
 
-#include "intersect-mesh-mesh.h"
-#include "bool-mesh-mesh.h"
+#include "math/intersect-mesh-mesh.h"
+#include "math/bool-mesh-mesh.h"
 
 
 #include "ifc2x4.h"

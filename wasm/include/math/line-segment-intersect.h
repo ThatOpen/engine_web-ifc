@@ -4,9 +4,9 @@
  
  #pragma once
 
-#include "../deps/glm/glm/glm.hpp"
+#include "../../deps/glm/glm/glm.hpp"
 
-#include "util.h"
+#include "../util.h"
 
 namespace webifc
 {

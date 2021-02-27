@@ -66,21 +66,6 @@ void CloseModel(uint32_t modelID)
     // geomLoaders[modelID] = webifc::IfcGeometryLoader(loaders[modelID]);
 }
 
-int OpenModelFromTapeData(std::string data)
-{
-    uint32_t modelID = loaders.size();
-
-    std::cout << "Bytes: " << data.size() << std::endl;
-
-    webifc::IfcLoader loader;
-    loaders.push_back(loader);
-    loaders[modelID].PushDataToTape((void*)data.c_str(), data.size());
-    loaders[modelID].ParseTape(1000);
-    geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
-
-    return modelID;
-}
-
 std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 {
     webifc::IfcLoader& loader = loaders[modelID];
@@ -194,7 +179,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("OpenModel", &OpenModel);
-    emscripten::function("OpenModelFromTapeData", &OpenModelFromTapeData);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);

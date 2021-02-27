@@ -4,11 +4,11 @@
  
  #pragma once
 
-#include "../deps/glm/glm/glm.hpp"
+#include "../../deps/glm/glm/glm.hpp"
 #include <iostream>
 
 #include "intersect-ray-tri.h"
-#include "util.h"
+#include "../util.h"
 
 namespace webifc
 {

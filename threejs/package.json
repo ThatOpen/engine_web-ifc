@@ -4,7 +4,8 @@
   "description": "Threejs wrapper for web-ifc",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --emitDeclarationOnly && esbuild web-ifc-three.ts --bundle --platform=node --outfile=./web-ifc-three.js --external:three --external:web-ifc"
+    "build": "tsc --emitDeclarationOnly && esbuild web-ifc-three.ts --bundle --platform=node --outfile=./web-ifc-three.js --external:three --external:web-ifc",
+    "release_publish": "npm publish"
   },
   "peerDependencies": {
     "three": "0.126.0"
