@@ -1,6 +1,8 @@
 Mozilla Public License Version 2.0
 ==================================
 
+Copyright (c) 2020-2021 web-ifc contributors
+
 1. Definitions
 --------------
 
