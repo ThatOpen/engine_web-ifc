@@ -1,0 +1,25 @@
+{
+  "name": "web-ifc-three",
+  "version": "0.0.1",
+  "description": "Threejs wrapper for web-ifc",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --emitDeclarationOnly && esbuild web-ifc-three.ts --bundle --platform=node --outfile=./web-ifc-three.js --external:three --external:web-ifc"
+  },
+  "peerDependencies": {
+    "three": "0.126.0"
+  },
+  "author": "tomvandig",
+  "files": [
+    "web-ifc-three.js",
+    "web-ifc-three.d.ts"
+  ],
+  "license": "",
+  "devDependencies": {
+    "esbuild": "^0.8.53",
+    "typescript": "^4.2.2"
+  },
+  "dependencies": {
+    "web-ifc": "0.0.11"
+  }
+}

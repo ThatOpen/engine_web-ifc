@@ -1,6 +1,6 @@
 {
   "name": "web-ifc",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "ifc loading on the web",
   "main": "web-ifc-api.js",
   "watch": {
@@ -18,7 +18,6 @@
     "build-wasm-debug": "em++ --bind -O3 -g4 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o lib/web-ifc.js",
     "build-wasm-release": "em++ --bind -O3 -flto -fno-exceptions wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o lib/web-ifc.js",
     "build-web-ifc-api": "esbuild lib/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api.js",
-    "build-three-api": "esbuild lib/web-ifc-three.ts --bundle --platform=node --outfile=./dist/web-ifc-three.js --external:three",
     "build-ts-api": "tsc --emitDeclarationOnly && npm run build-web-ifc-api && npm run build-three-api",
     "copy-to-dist": "cpy lib/*.wasm dist && cpy lib/*.map dist && cpy lib/*.js dist && cpy README.md dist && cpy package.json dist",
     "build-release": "npm run build-wasm-release && npm run build-ts-api && npm run copy-to-dist",
@@ -32,9 +31,7 @@
     "web-ifc.wasm",
     "web-ifc.js",
     "web-ifc-api.js",
-    "web-ifc-api.d.ts",
-    "web-ifc-three.js",
-    "web-ifc-three.d.ts"
+    "web-ifc-api.d.ts"
   ],
   "devDependencies": {
     "@types/three": "^0.125.3",

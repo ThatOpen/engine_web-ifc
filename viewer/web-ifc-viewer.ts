@@ -1,6 +1,6 @@
 const WebIFCWasm = require("../lib/web-ifc");
 import { IfcAPI, ms } from '../lib/web-ifc-api';
-import { IfcThree } from '../lib/web-ifc-three';
+import { IfcThree } from '../threejs/web-ifc-three';
 import { Init3DView, scene } from './web-ifc-scene';
 
 let ifcAPI = new IfcAPI();
