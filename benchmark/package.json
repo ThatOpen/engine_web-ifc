@@ -1,0 +1,16 @@
+{
+  "name": "web-ifc-bench",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node benchmark.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.1.0",
+    "ts-node": "^9.1.1",
+    "web-ifc": "0.0.12"
+  }
+}
