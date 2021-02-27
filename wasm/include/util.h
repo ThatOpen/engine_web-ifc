@@ -291,6 +291,7 @@ namespace webifc
 	{
 		std::string type;
 		IfcCurve curve;
+		std::vector<IfcCurve> holes;
 		bool isConvex;
 	};
 
