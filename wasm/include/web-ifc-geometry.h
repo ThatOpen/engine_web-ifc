@@ -970,7 +970,8 @@ namespace webifc
 			// build the caps
 			{
 				using Point = std::array<double, 2>;
-				std::vector<std::vector<Point>> polygon(1);
+				int polygonCount = 1 + profile.holes.size(); //Main profile + holes
+				std::vector<std::vector<Point>> polygon(polygonCount);
 
 				glm::dvec3 normal = dir;
 
@@ -983,7 +984,27 @@ namespace webifc
 					polygon[0].push_back({ pt.x, pt.y });
 				}
 
+				IfcCurve allPoints;
+				allPoints.points = profile.curve.points;
+
+				for (int i = 0; i < profile.holes.size(); i++)
+				{
+					IfcCurve hole = profile.holes[i];
+
+					for (int j = 0; j < hole.points.size(); j++)
+					{
+						glm::dvec2 pt = hole.points[j];
+						glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
+
+						allPoints.Add(pt);
+						geom.AddPoint(et, normal);
+						polygon[i + 1].push_back({ pt.x, pt.y }); //Index 0 is main profile; see earcut reference
+					}
+				}
+
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
+
+				profile.curve = allPoints;
 
 				uint32_t offset = 0;
 				for (int i = 0; i < indices.size(); i += 3)
@@ -1083,6 +1104,27 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 2);
 				profile.curve = GetCurve(_loader.GetRefArgument());
 				profile.isConvex = IsCurveConvex(profile.curve);
+
+				return profile;
+			}
+			case ifc2x4::IFCARBITRARYPROFILEDEFWITHVOIDS:
+			{
+				IfcProfile profile;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
+				_loader.MoveToArgumentOffset(line, 2);
+				profile.curve = GetCurve(_loader.GetRefArgument());
+				profile.isConvex = IsCurveConvex(profile.curve);
+
+				_loader.MoveToArgumentOffset(line, 3);
+				auto holes = _loader.GetSetArgument();
+				
+				for (auto& hole : holes)
+				{
+					IfcCurve holeCurve = GetCurve(_loader.GetRefArgument(hole));
+					profile.holes.push_back(holeCurve);
+				}
 
 				return profile;
 			}
