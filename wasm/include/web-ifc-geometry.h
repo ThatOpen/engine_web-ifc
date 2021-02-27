@@ -1048,8 +1048,13 @@ namespace webifc
 				// bottom 5 6 7 8
 				// first face: 1 6 5, 1 2 6
 				
-				geom.AddFace(tl, br, bl);
-				geom.AddFace(tl, tr, br);
+				geom.AddFace(geom.GetPoint(tl),
+							 geom.GetPoint(br),
+							 geom.GetPoint(bl));
+
+				geom.AddFace(geom.GetPoint(tl),
+							 geom.GetPoint(tr),
+							 geom.GetPoint(br));
 			}
 
 			return geom;
