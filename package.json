@@ -1,6 +1,6 @@
 {
   "name": "web-ifc",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "ifc loading on the web",
   "main": "web-ifc-api.js",
   "watch": {

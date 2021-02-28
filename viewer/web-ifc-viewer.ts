@@ -1,4 +1,3 @@
-const WebIFCWasm = require("../lib/web-ifc");
 import { IfcAPI, ms } from '../lib/web-ifc-api';
 import { IfcThree } from '../threejs/web-ifc-three';
 import { Init3DView, scene } from './web-ifc-scene';
@@ -8,7 +7,7 @@ let ifcThree = new IfcThree(ifcAPI);
 
 //@ts-ignore
 window.InitWebIfcViewer = async () => {
-  await ifcAPI.InjectWasmModule(WebIFCWasm);
+  await ifcAPI.Init();
   const fileInput = document.getElementById('finput');
   fileInput.addEventListener('change', fileInputChanged);
   Init3DView();

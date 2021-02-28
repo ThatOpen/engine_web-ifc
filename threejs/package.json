@@ -1,6 +1,6 @@
 {
   "name": "web-ifc-three",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Threejs wrapper for web-ifc",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,6 @@
     "typescript": "^4.2.2"
   },
   "dependencies": {
-    "web-ifc": "0.0.11"
+    "web-ifc": "0.0.13"
   }
 }

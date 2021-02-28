@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+const WebIFCWasm = require("./web-ifc");
  
 export interface Vector<T> {
     get(index: number): T;
@@ -43,10 +45,17 @@ export class IfcAPI
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality
     */
-    async InjectWasmModule(WebIFCWasm: any)
+    async Init()
     {
-        //@ts-ignore
-        this.wasmModule = await WebIFCWasm({noInitialRun: true});
+        if (WebIFCWasm)
+        {
+            //@ts-ignore
+            this.wasmModule = await WebIFCWasm({noInitialRun: true});
+        }
+        else
+        {
+            console.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
+        }
     }
 
     /**  

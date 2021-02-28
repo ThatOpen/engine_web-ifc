@@ -3,11 +3,9 @@ import * as path from "path";
 
 const BENCHMARK_FILES_DIR = "./ifcfiles";
 
-const NewWebIFCWasm = require("../dist/web-ifc");
 import * as NewWebIFC from '../dist/web-ifc-api';
 import { ms } from '../dist/web-ifc-api';
 
-const oldWebIFCWasm = require("web-ifc/web-ifc");
 import * as OldWebIFC from 'web-ifc/web-ifc-api';
 
 let newIfcAPI = new NewWebIFC.IfcAPI();
@@ -45,9 +43,9 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     return result;
 }
 
-async function BenchmarkWebIFC(module: any, wasmModule: any, files: string[]): Promise<BenchMarkResult>
+async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkResult>
 {
-    await module.InjectWasmModule(wasmModule);
+    await module.Init();
 
     let result = new BenchMarkResult();
     result.results = new Map<string, FileResult>();
@@ -79,14 +77,14 @@ function combine(oldResult: BenchMarkResult, newResult: BenchMarkResult)
 
 async function GetBenchmarkFiles(): Promise<string[]>
 {
-    return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => f.endsWith(".ifc")).map((f) => path.join(BENCHMARK_FILES_DIR, f)).slice(0, 3);
+    return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => f.endsWith(".ifc")).map((f) => path.join(BENCHMARK_FILES_DIR, f)).slice(0, 8);
 }
 
 async function RunBenchmark()
 {
     let files = await GetBenchmarkFiles();
-    let oldResult = await BenchmarkWebIFC(oldIfcAPI, oldWebIFCWasm, files);
-    let newResult = await BenchmarkWebIFC(newIfcAPI, NewWebIFCWasm, files);
+    let oldResult = await BenchmarkWebIFC(oldIfcAPI, files);
+    let newResult = await BenchmarkWebIFC(newIfcAPI, files);
 
     combine(oldResult, newResult);
 }

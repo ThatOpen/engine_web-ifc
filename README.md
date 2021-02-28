@@ -10,10 +10,6 @@ https://www.npmjs.com/package/web-ifc
 
 `npm install web-ifc`
 
-## Installing the library as a C++ dependency
-
-The library is header only, the files in `web-ifc-cpp` can be trivially included in any project. The library depends on [GLM](https://github.com/g-truc/glm) and [earcut](https://github.com/mapbox/earcut.hpp).
-
 ## Using the library
 
 See `examples` for different ways to use web-ifc.
@@ -21,14 +17,13 @@ See `examples` for different ways to use web-ifc.
 For a short intro, this is how to use the library from javascript:
 
 ```JavaScript
-const WebIFCWasm = require("web-ifc/web-ifc.js");
 const WebIFC = require("web-ifc/web-ifc-api.js");
 
 // initialize the API
 const ifcApi = new WebIFC.IfcAPI();
 
-// load model data as a string
-await ifcApi.InjectWasmModule(WebIFCWasm);
+// initialize the library
+await ifcApi.Init();
 
 // open a model from data
 let modelID = ifcApi.OpenModel(/* placeholder filename */, /* IFC data as a string or UInt8Array */);
@@ -60,3 +55,7 @@ Run `npm run dev` to launch a development server with a basic ifc file viewer.
 ### Stand alone C++ executable
 
 Compiling the library to a standalone executable requires use of CMAKE. For visual studio code, the easiest way is by installing [cmake-tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools).
+
+## Using the library as a C++ dependency
+
+The library is header only, the files in `web-ifc-cpp` can be trivially included in any project. The library depends on [GLM](https://github.com/g-truc/glm) and [earcut](https://github.com/mapbox/earcut.hpp).

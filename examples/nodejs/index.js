@@ -1,5 +1,4 @@
 
-const WebIFCWasm = require("web-ifc/web-ifc.js");
 const WebIFC = require("web-ifc/web-ifc-api.js");
 const fs = require("fs");
 
@@ -12,7 +11,7 @@ async function LoadFile(filename)
     // load model data as a string
     const ifcData = fs.readFileSync(filename).toString();
     
-    await ifcapi.InjectWasmModule(WebIFCWasm);
+    await ifcapi.Init();
 
     let modelID = ifcapi.OpenModel("example.ifc", ifcData);
 
