@@ -96,7 +96,9 @@ namespace webifc
 
 			IfcComposedMesh composedMesh = GetMesh(expressID);
 
-			AddComposedMeshToFlatMesh(flatMesh, composedMesh, NormalizeIFC);
+			glm::dmat4 mat = glm::scale(glm::dvec3(_loader.GetLinearScalingFactor()));
+
+			AddComposedMeshToFlatMesh(flatMesh, composedMesh, NormalizeIFC * mat);
 
 			return flatMesh;
 		}

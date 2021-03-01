@@ -71,9 +71,6 @@ export class IfcThree
     private getMeshMatrix(matrix: Array<number>) {
         const mat = new THREE.Matrix4();
         mat.fromArray(matrix);
-        mat.elements[15 - 3] *= 0.001;
-        mat.elements[15 - 2] *= 0.001;
-        mat.elements[15 - 1] *= 0.001;
         return mat;
     }
     

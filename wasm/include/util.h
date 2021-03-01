@@ -184,13 +184,12 @@ namespace webifc
 			// unfortunately webgl can't do doubles
 			if (fvertexData.size() != vertexData.size())
 			{
-				const double scale = 0.001;
 				fvertexData.resize(vertexData.size());
 				for (size_t i = 0; i < vertexData.size(); i += 6)
 				{
-					fvertexData[i + 0] = vertexData[i + 0] * scale;
-					fvertexData[i + 1] = vertexData[i + 1] * scale;
-					fvertexData[i + 2] = vertexData[i + 2] * scale;
+					fvertexData[i + 0] = vertexData[i + 0];
+					fvertexData[i + 1] = vertexData[i + 1];
+					fvertexData[i + 2] = vertexData[i + 2];
 				
 					fvertexData[i + 3] = vertexData[i + 3];
 					fvertexData[i + 4] = vertexData[i + 4];

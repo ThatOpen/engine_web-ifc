@@ -89,8 +89,139 @@ namespace webifc
 			PopulateRelVoidsMap();
 			PopulateStyledItemMap();
 			PopulateRelMaterialsMap();
+			ReadLinearScalingFactor();
 		}
-        
+
+		double ConvertPrefix(const std::string& prefix)
+		{
+			if (prefix == "")
+			{
+				return 1;
+			}
+			else if (prefix == "EXA")
+			{
+				return 1e18;
+			}
+			else if (prefix == "PETA")
+			{
+				return 1e15;
+			}
+			else if (prefix == "TERA")
+			{
+				return 1e12;
+			}
+			else if (prefix == "GIGA")
+			{
+				return 1e9;
+			}
+			else if (prefix == "MEGA")
+			{
+				return 1e6;
+			}
+			else if (prefix == "KILO")
+			{
+				return 1e3;
+			}
+			else if (prefix == "HECTO")
+			{
+				return 1e2;
+			}
+			else if (prefix == "DECA")
+			{
+				return 10;
+			}
+			else if (prefix == "DECI")
+			{
+				return 1e-1;
+			}
+			else if (prefix == "CENTI")
+			{
+				return 1e-2;
+			}
+			else if (prefix == "MILLI")
+			{
+				return 1e-3;
+			}
+			else if (prefix == "MICRO")
+			{
+				return 1e-6;
+			}
+			else if (prefix == "NANO")
+			{
+				return 1e-9;
+			}
+			else if (prefix == "PICO")
+			{
+				return 1e-12;
+			}
+			else if (prefix == "FEMTO")
+			{
+				return 1e-15;
+			}
+			else if (prefix == "ATTO")
+			{
+				return 1e-18;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+
+		void ReadLinearScalingFactor()
+		{
+			auto projects = GetExpressIDsWithType(ifc2x4::IFCPROJECT);
+
+			if (projects.size() != 1)
+			{
+				std::cout << "Unexpected empty IFCPROJECT: " << projects.size() << std::endl;
+				return;
+			}
+
+			auto projectEID = projects[0];
+
+			auto& line = GetLine(ExpressIDToLineID(projectEID));
+			MoveToArgumentOffset(line, 8);
+
+			auto unitsID = GetRefArgument();
+
+			auto& unitsLine = GetLine(ExpressIDToLineID(unitsID));
+			MoveToArgumentOffset(unitsLine, 0);
+
+			auto unitIds = GetSetArgument();
+
+			for (auto& unitID : unitIds)
+			{
+				auto unitRef = GetRefArgument(unitID);
+
+				auto& line = GetLine(ExpressIDToLineID(unitRef));
+
+				if (line.ifcType == ifc2x4::IFCSIUNIT)
+				{
+					MoveToArgumentOffset(line, 1);
+					std::string unitType = GetStringArgument();
+
+					std::string unitPrefix;
+
+					MoveToArgumentOffset(line, 2);
+					if (GetTokenType() == IfcTokenType::ENUM)
+					{
+						Reverse();
+						unitPrefix = GetStringArgument();
+					}
+
+					MoveToArgumentOffset(line, 3);
+					std::string unitName = GetStringArgument();
+
+					if (unitType == "LENGTHUNIT" && unitName == "METRE")
+					{
+						double prefix = ConvertPrefix(unitPrefix);
+						_metaData.linearScalingFactor = prefix;
+					}
+				}
+			}
+		}
+
 		void PopulateRelVoidsMap()
 		{
 			auto relVoids = GetExpressIDsWithType(ifc2x4::IFCRELVOIDSELEMENT);
@@ -218,6 +349,11 @@ namespace webifc
 		IfcLine& GetLine(uint32_t lineID)
 		{
 			return _metaData.lines[lineID];
+		}
+
+		double GetLinearScalingFactor()
+		{
+			return _metaData.linearScalingFactor;
 		}
 
         bool IsOpen()

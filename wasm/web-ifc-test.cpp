@@ -98,7 +98,7 @@ int main()
 {
     std::cout << "Hello web IFC test!\n";
 
-    std::string content = ReadFile(L"filename.ifc");
+    std::string content = ReadFile(L"D:\\web-ifc\\benchmark\\ifcfiles\\20191002Mechanical Piping.ifc");
 
     webifc::IfcLoader loader;
 
@@ -112,8 +112,8 @@ int main()
 
     start = webifc::ms();
 
-    SpecificLoadTest(loader, geometryLoader);
-    //auto meshes = LoadAllTest(loader, geometryLoader);
+    //SpecificLoadTest(loader, geometryLoader);
+    auto meshes = LoadAllTest(loader, geometryLoader);
 
     time = webifc::ms() - start;
 
