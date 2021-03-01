@@ -34473,9 +34473,6 @@ var IfcThree = class {
   getMeshMatrix(matrix) {
     const mat = new THREE.Matrix4();
     mat.fromArray(matrix);
-    mat.elements[15 - 3] *= 1e-3;
-    mat.elements[15 - 2] *= 1e-3;
-    mat.elements[15 - 1] *= 1e-3;
     return mat;
   }
   ifcGeometryToBuffer(vertexData, indexData) {
