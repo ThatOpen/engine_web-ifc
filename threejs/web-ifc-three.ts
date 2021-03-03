@@ -23,6 +23,15 @@ export class IfcThree
      * @modelID Model handle retrieved by OpenModel, model must not be closed
     */
     public LoadAllGeometry(scene: THREE.Scene, modelID: number) {
+        let mat = new THREE.Matrix4();
+        mat.elements = [
+            1, 0, 0, 0,
+            0, 0, 1, 0,
+            0, 1, 0, 0,
+            0 ,0, 0, 1
+        ]
+        console.log(mat);
+        this.ifcAPI.SetGeometryTransformation(modelID, mat.elements);
         const flatMeshes = this.getFlatMeshes(modelID);
         const startUploadingTime = ms();
         for (let i = 0; i < flatMeshes.size(); i++) {

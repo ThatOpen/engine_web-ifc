@@ -39,7 +39,8 @@ namespace webifc
 	{
 	public:
 		IfcGeometryLoader(IfcLoader& l) :
-			_loader(l)
+			_loader(l),
+			_transformation(1)
 		{
 
 		}
@@ -98,7 +99,7 @@ namespace webifc
 
 			glm::dmat4 mat = glm::scale(glm::dvec3(_loader.GetLinearScalingFactor()));
 
-			AddComposedMeshToFlatMesh(flatMesh, composedMesh, NormalizeIFC * mat);
+			AddComposedMeshToFlatMesh(flatMesh, composedMesh, _transformation * NormalizeIFC * mat);
 
 			return flatMesh;
 		}
@@ -119,7 +120,13 @@ namespace webifc
             writeFile(filename, ToObj(mesh, _expressIDToGeometry, offset, NormalizeIFC));
 		}
 
+        void SetTransformation(const glm::dmat4& val)
+        {
+            _transformation = val;
+        }
+
 	private:
+        glm::dmat4 _transformation;
 
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{

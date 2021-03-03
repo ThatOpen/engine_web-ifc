@@ -121,6 +121,22 @@ webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
     return geomLoaders[modelID].GetCachedGeometry(expressID);
 }
 
+void SetGeometryTransformation(uint32_t modelID, std::array<double, 16> m)
+{
+    glm::dmat4 transformation;
+    glm::dvec4 v1(m[0], m[1], m[2], m[3]);
+    glm::dvec4 v2(m[4], m[5], m[6], m[7]);
+    glm::dvec4 v3(m[8], m[9], m[10], m[11]);
+    glm::dvec4 v4(m[12], m[13], m[14], m[15]);
+
+    transformation[0] = v1;
+    transformation[1] = v2;
+    transformation[2] = v3;
+    transformation[3] = v4;
+
+    geomLoaders[modelID].SetTransformation(transformation);
+}
+
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
     return loaders[modelID].IsOpen();
@@ -182,5 +198,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
+    emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
     emscripten::function("GetMat", &GetMat);
 }

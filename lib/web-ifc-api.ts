@@ -82,6 +82,16 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
+    SetGeometryTransformation(modelID: number, transformationMatrix: Array<number>)
+    {
+        if (transformationMatrix.length != 16)
+        {
+            console.log(`Bad transformation matrix size: ${transformationMatrix.length}`);
+            return;
+        }
+        this.wasmModule.SetGeometryTransformation(modelID, transformationMatrix);
+    }
+
     GetVertexArray(ptr: number, size: number)
     {
         return this.getSubArray(this.wasmModule.HEAPF32, ptr, size);
