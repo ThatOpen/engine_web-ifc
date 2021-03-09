@@ -1,4 +1,4 @@
-import { IfcAPI, ms } from '../lib/web-ifc-api';
+import { IfcAPI, ms } from '../dist/web-ifc-api';
 import { IfcThree } from './web-ifc-three';
 import { Init3DView, scene } from './web-ifc-scene';
 
