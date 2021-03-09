@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-const BENCHMARK_FILES_DIR = "./ifcfiles";
+const BENCHMARK_FILES_DIR = "./test-ifc-files/Revit";
 
 import * as NewWebIFC from '../dist/web-ifc-api';
 import { ms } from '../dist/web-ifc-api';

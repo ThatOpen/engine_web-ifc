@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "get-ifc-files": "git clone https://github.com/agviegas/test-ifc-files",
     "start": "ts-node benchmark.ts"
   },
   "author": "",
