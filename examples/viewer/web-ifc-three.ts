@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 import * as THREE from "three";
-import { IfcAPI, ms, PlacedGeometry, Color } from "../dist/web-ifc-api";
+import { IfcAPI, ms, PlacedGeometry, Color } from "../../dist/web-ifc-api";
   
 export class IfcThree
 {

@@ -12,11 +12,6 @@ function Init3DView() {
 
   controls = new OrbitControls(camera, renderer.domElement);
 
-  const geometry = new THREE.BoxGeometry();
-  const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
-
   const directionalLight1 = new THREE.DirectionalLight(0xffeeff, 0.8);
   directionalLight1.position.set(1, 1, 1);
   scene.add(directionalLight1);

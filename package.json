@@ -6,7 +6,7 @@
   "watch": {
     "build-viewer": {
       "patterns": [
-        "./viewer"
+        "./examples/viewer"
       ],
       "extensions": "ts"
     },
@@ -28,7 +28,7 @@
     "copy-to-dist": "cpy README.md dist && cpy package.json dist",
     "build-release": "npm run build-wasm-release && npm run build-ts-api && npm run copy-to-dist",
     "release_publish": "npm run build-release && cd dist && npm publish",
-    "build-viewer": "esbuild viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./dist/web-ifc-viewer.js && cpy viewer/index.html dist",
+    "build-viewer": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./dist/web-ifc-viewer.js && cpy ./examples/viewer/index.html dist",
     "deploy-viewer": "npm run build-viewer && cpy dist/*.js pages/viewer && cpy dist/*.wasm pages/viewer && cpy dist/index.html pages/viewer",
     "serve-viewer": "serve dist",
     "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\""
