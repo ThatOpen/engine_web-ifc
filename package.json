@@ -21,7 +21,7 @@
 
     "build-api": "npm run build-ts-api && npm run build-web-ifc-api",
     "build-ts-api": "tsc --emitDeclarationOnly",
-    "build-web-ifc-api": "npm run build-web-ifc-api-cjs && npm run build-web-ifc-api-jsm",
+    "build-web-ifc-api": "npm run build-web-ifc-api-iife && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node",
     "build-web-ifc-api-iife": "esbuild lib/web-ifc-api.ts --bundle --format=iife --external:path --external:fs --outfile=./lib/iife/web-ifc-api.js",
     "build-web-ifc-api-mjs": "esbuild lib/web-ifc-api.ts --bundle --format=esm --external:path --external:fs --outfile=./lib/jsm/web-ifc-api.js",
     "build-web-ifc-api-node": "esbuild lib/web-ifc-api.ts --bundle --platform=node --outfile=./lib/node/web-ifc-api.js",
