@@ -15,10 +15,17 @@
     "gen-schema": "cd schema && node gen.js",
     "setup-env": "emsdk_env",
     "init-repo": "git clone https://github.com/g-truc/glm ./wasm/deps/glm && git clone https://github.com/mapbox/earcut.hpp ./wasm/deps/earcut && npm run gen-schema",
+
     "build-wasm-debug": "em++ --bind -O3 -g4 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o lib/web-ifc.js",
     "build-wasm-release": "em++ --bind -O3 -flto -fno-exceptions wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o lib/web-ifc.js",
-    "build-web-ifc-api": "esbuild lib/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api.js",
-    "build-ts-api": "tsc --emitDeclarationOnly && npm run build-web-ifc-api",
+
+    "build-api": "npm run build-ts-api && npm run build-web-ifc-api",
+    "build-ts-api": "tsc --emitDeclarationOnly",
+    "build-web-ifc-api": "npm run build-web-ifc-api-cjs && npm run build-web-ifc-api-jsm",
+    "build-web-ifc-api-iife": "esbuild lib/web-ifc-api.ts --bundle --format=iife --external:path --external:fs --outfile=./lib/iife/web-ifc-api.js",
+    "build-web-ifc-api-mjs": "esbuild lib/web-ifc-api.ts --bundle --format=esm --external:path --external:fs --outfile=./lib/jsm/web-ifc-api.js",
+    "build-web-ifc-api-node": "esbuild lib/web-ifc-api.ts --bundle --platform=node --outfile=./lib/node/web-ifc-api.js",
+    
     "copy-to-dist": "cpy lib/*.wasm dist && cpy lib/*.map dist && cpy lib/*.js dist && cpy README.md dist && cpy package.json dist",
     "build-release": "npm run build-wasm-release && npm run build-ts-api && npm run copy-to-dist",
     "release_publish": "npm run build-release && cd dist && npm publish",
