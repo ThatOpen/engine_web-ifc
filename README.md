@@ -45,6 +45,8 @@ The WASM library is built through emscripten, please see [the emscripten install
 
 ### WASM library
 
+Run `npm install` to install all dependencies.
+
 Run `npm run init-repo` to download both dependencies of the project (glm and earcut.hpp) to the correct location. This only needs to happen once.
 
 Run `npm run setup-env` whenever you open a new terminal, this will set up the required emscripten environment variables for you to compile code.

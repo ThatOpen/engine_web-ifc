@@ -48,4 +48,3 @@ deps
 build
 *.log
 node_modules
-dist

@@ -11,11 +11,11 @@
       "extensions": "ts"
     },
     "build-web-ifc-api": {
-        "patterns": [
-          "./src"
-        ],
-        "extensions": "ts"
-      }
+      "patterns": [
+        "./src"
+      ],
+      "extensions": "ts"
+    }
   },
   "scripts": {
     "gen-schema": "cd src/schema && node gen.js",
