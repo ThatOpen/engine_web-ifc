@@ -694,6 +694,8 @@ namespace webifc
 						return true;
 					}
 				}
+
+				return false;
 			}
 			case ifc2x4::IFCSURFACESTYLERENDERING:
 			{
@@ -706,6 +708,13 @@ namespace webifc
 					_loader.Reverse();
 					outputColor.a = 1 - _loader.GetDoubleArgument();
 				}
+
+				return true;
+			}
+			case ifc2x4::IFCSURFACESTYLESHADING:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				GetColor(_loader.GetRefArgument(), outputColor);
 
 				return true;
 			}
@@ -725,6 +734,8 @@ namespace webifc
 						return true;
 					}
 				}
+
+				return false;
 			}
 			case ifc2x4::IFCSTYLEDITEM:
 			{
@@ -742,6 +753,8 @@ namespace webifc
 						return true;
 					}
 				}
+
+				return false;
 			}
 			case ifc2x4::IFCCOLOURRGB:
 			{
@@ -867,7 +880,7 @@ namespace webifc
 			}
 
 			default:
-				std::cout << "Unexpected curve type: " << line.ifcType << " at " << expressID << std::endl;
+				std::cout << "Unexpected loop type: " << line.ifcType << " at " << expressID << std::endl;
 				break;
 			}
 
@@ -1525,6 +1538,16 @@ namespace webifc
 					printf("Unsupported IfcTrimmingSelect type: IfcCartesianPoint");
 				}
 			}
+			else if (tapeOffsets.size() == 1)
+			{
+				_loader.MoveTo(tapeOffsets[0]);
+				uint32_t cartesianPointRef = _loader.GetRefArgument();
+
+				ts.hasPos = true;
+				// TODO: assuming cartesian point
+				ts.pos = GetCartesianPoint2D(cartesianPointRef);
+			}
+
 
 			return ts;
 		}
@@ -1533,7 +1556,7 @@ namespace webifc
 		IfcCurve<DIM> GetCurve(uint32_t expressID)
 		{
 			IfcCurve<DIM> curve;
-			ComputeCurve(expressID, curve);
+			ComputeCurve<DIM>(expressID, curve);
 			return curve;
 		}
 
@@ -1573,14 +1596,15 @@ namespace webifc
 				{
 					if (DEBUG_DUMP_SVG)
 					{
-#if DIM==2
-						DumpSVGCurve(curve.points, L"partial_curve.html");
-#endif
+						if constexpr (DIM == 2)
+						{
+							DumpSVGCurve(curve.points, L"partial_curve.html");
+						}
 					}
 
 					uint32_t segmentId = _loader.GetRefArgument(token);
 
-					ComputeCurve(segmentId, curve);
+					ComputeCurve<DIM>(segmentId, curve);
 				}
 
 				break;
@@ -1592,7 +1616,28 @@ namespace webifc
 				auto sameSense = _loader.GetStringArgument();
 				auto parentID = _loader.GetRefArgument();
 
-				ComputeCurve(parentID, curve);
+				ComputeCurve<DIM>(parentID, curve);
+
+				break;
+			}
+			case ifc2x4::IFCLINE:
+			{
+				if constexpr (DIM == 2)
+				{
+					if (trim.start.hasPos && trim.end.hasPos)
+					{
+						curve.Add(trim.start.pos);
+						curve.Add(trim.end.pos);
+					}
+					else
+					{
+						std::cout << "Unsupported trimmingselect IFCLINE" << std::endl;
+					}
+				}
+				else
+				{
+					std::cout << "Unsupported 3D curve IFCLINE" << std::endl;
+				}
 
 				break;
 			}
@@ -1613,7 +1658,7 @@ namespace webifc
 				trim.start = trim1;
 				trim.end = trim2;
 
-				ComputeCurve(basisCurveID, curve, trim);
+				ComputeCurve<DIM>(basisCurveID, curve, trim);
 
 				break;
 			}
@@ -1623,11 +1668,15 @@ namespace webifc
 				auto positionID = _loader.GetRefArgument();
 				double radius = _loader.GetDoubleArgument();
 
-#if DIM==2
-				glm::dmat3 placement = GetAxis2Placement2D(positionID);
-#else
-				glm::dmat4 placement = GetLocalPlacement(positionID);
-#endif
+				glm::mat<DIM + 1, DIM + 1, glm::f64, glm::defaultp> placement;
+				if constexpr (DIM == 2)
+				{
+					placement = GetAxis2Placement2D(positionID);
+				}
+				else
+				{
+					placement = GetLocalPlacement(positionID);
+				}
 
 				const int CIRCLE_SEGMENTS = 10;
 
@@ -1657,17 +1706,22 @@ namespace webifc
 				{
 					double ratio = static_cast<double>(i) / ( CIRCLE_SEGMENTS - 1);
 					double angle = startRad + ratio * lengthRad;
-#if DIM==2
-					glm::dvec2 vec(0);
-					vec[0] = radius * std::cos(angle);
-					vec[1] = -radius * std::sin(angle);
-					glm::dvec2 pos = placement * glm::dvec3(vec, 1);
-#else
-					glm::dvec3 vec(0);
-					vec[0] = radius * std::cos(angle);
-					vec[1] = radius * std::sin(angle); // negative or not???
-					glm::dvec3 pos = placement * glm::dvec4(glm::dvec3(vec), 1);
-#endif
+
+					glm::vec<DIM, glm::f64> pos;
+					if constexpr (DIM == 2)
+					{
+						glm::dvec2 vec(0);
+						vec[0] = radius * std::cos(angle);
+						vec[1] = -radius * std::sin(angle);
+						pos = placement * glm::dvec3(vec, 1);
+					}
+					else
+					{
+						glm::dvec3 vec(0);
+						vec[0] = radius * std::cos(angle);
+						vec[1] = radius * std::sin(angle); // negative or not???
+						pos = placement * glm::dvec4(glm::dvec3(vec), 1);
+					}
 					//glm::vec<DIM, glm::f64> pos = placement * glm::vec<DIM + 1, glm::f64>(vec, 1);
 					curve.Add(pos);
 				}
