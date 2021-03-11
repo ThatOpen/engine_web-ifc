@@ -8,8 +8,11 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include <unordered_map>
 
 #include "../deps/glm/glm/glm.hpp"
+
+#define CONST_PI 3.141592653589793238462643383279502884L
 
 namespace webifc
 {
@@ -220,16 +223,17 @@ namespace webifc
 		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps;
 	}
 
+	template<uint32_t DIM>
 	struct IfcCurve
 	{
-		std::vector<glm::dvec2> points;
-		inline void Add(const glm::dvec2& pt)
+		std::vector<glm::vec<DIM, glm::f64>> points;
+		inline void Add(const glm::vec<DIM, glm::f64>& pt)
 		{
 			if (points.empty())
 			{
 				points.push_back(pt);
 			}
-			else if (!equals2d(pt, points.back()))
+			else if (pt != points.back())
 			{
 				points.push_back(pt);
 			}
@@ -260,6 +264,43 @@ namespace webifc
 	{
 		std::vector<glm::dvec3> points;
 	};
+
+	IfcCurve<2> GetCircleCurve(float radius, int numSegments, glm::dmat3 placement = glm::dmat3(1))
+	{
+		IfcCurve<2> c;
+
+		for (int i = 0; i < numSegments; i++)
+		{
+			double ratio = static_cast<double>(i) / numSegments;
+			double angle = ratio * CONST_PI * 2;
+			glm::dvec2 circleCoordinate(
+				radius * std::sin(angle),
+				radius * std::cos(angle)
+			);
+			glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
+			c.points.push_back(pos);
+		}
+		c.points.push_back(c.points[0]);
+
+		return c;
+	}
+	
+	glm::dvec3 projectOntoPlane(const glm::dvec3& origin, const glm::dvec3& normal, const glm::dvec3& point, const glm::dvec3& dir)
+	{
+		// project {et} onto the plane, following the extrusion normal						
+		double ldotn = glm::dot(dir, normal);
+		if (ldotn == 0)
+		{
+			printf("0 direction in extrude\n");
+			return glm::dvec3(0);
+		}
+		else
+		{
+			glm::dvec3 dpos = origin - glm::dvec3(point);
+			double dist = glm::dot(dpos, normal) / ldotn;
+			return point + dist * dir;
+		}
+	}
 
 	bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3>& points, glm::dvec3& v1, glm::dvec3& v2, glm::dvec3& v3)
 	{
@@ -303,8 +344,8 @@ namespace webifc
 	struct IfcProfile
 	{
 		std::string type;
-		IfcCurve curve;
-		std::vector<IfcCurve> holes;
+		IfcCurve<2> curve;
+		std::vector<IfcCurve<2>> holes;
 		bool isConvex;
 	};
 
@@ -457,6 +498,16 @@ namespace webifc
 	void DumpSVGCurve(std::vector<glm::dvec2> points, std::wstring filename, std::vector<uint32_t> indices = {})
 	{
         writeFile(filename, makeSVGLines(points, indices));
+	}
+
+	void DumpSVGCurve(std::vector<glm::dvec3> points, glm::vec3 dir, std::wstring filename, std::vector<uint32_t> indices = {})
+	{
+		std::vector<glm::dvec2> points2D;
+		for (auto& pt : points)
+		{
+			points2D.emplace_back(pt.x, pt.z);
+		}
+		DumpSVGCurve(points2D, filename, indices);
 	}
 
     struct Point
