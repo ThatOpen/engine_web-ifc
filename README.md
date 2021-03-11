@@ -6,7 +6,7 @@ Web ifc is a WASM-based ifc parser & geometry generator. This repository contain
 
 https://www.npmjs.com/package/web-ifc
 
-[Example viewer application using ThreeJS](https://tomvandig.github.io/web-ifc/pages/viewer/index.html)
+[Example viewer application using ThreeJS](https://tomvandig.github.io/web-ifc/examples/viewer/index.html)
 
 ## Installing the library as an npm dependency
 
