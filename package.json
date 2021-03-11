@@ -25,7 +25,7 @@
     "release_publish": "npm run build-release && cd dist && npm publish",
       
     "build-wasm-debug": "em++ --bind -O3 -g4 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o dist/web-ifc.js",
-    "build-wasm-release": "em++ --bind -O3 -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o src/web-ifc.js",
+    "build-wasm-release": "em++ --bind -O3 -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o dist/web-ifc.js",
 
     "build-api": "cpy src/web-ifc-api.ts dist && npm run build-ts-api && npm run build-web-ifc-api-iife && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node && npm run copy-to-dist",
     "build-ts-api": "tsc --emitDeclarationOnly",
