@@ -3,10 +3,10 @@ import * as path from "path";
 
 const BENCHMARK_FILES_DIR = "./ifcfiles";
 
-import * as NewWebIFC from '../dist/web-ifc-api';
-import { ms } from '../dist/web-ifc-api';
+import * as NewWebIFC from '../dist/web-ifc-api-node';
+import { ms } from '../dist/web-ifc-api-node';
 
-import * as OldWebIFC from 'web-ifc/web-ifc-api';
+import * as OldWebIFC from 'web-ifc/web-ifc-api-node';
 
 let newIfcAPI = new NewWebIFC.IfcAPI();
 let oldIfcAPI = new OldWebIFC.IfcAPI();
@@ -45,6 +45,7 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
 
 async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkResult>
 {
+    console.log(module);
     await module.Init();
 
     let result = new BenchMarkResult();

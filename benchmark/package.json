@@ -11,6 +11,6 @@
   "dependencies": {
     "fs-extra": "^9.1.0",
     "ts-node": "^9.1.1",
-    "web-ifc": "0.0.12"
+    "web-ifc": "0.0.15"
   }
 }
