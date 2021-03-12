@@ -26,7 +26,7 @@ void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geom
     auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCSLAB);
 
     bool writeFiles = true;
-    auto mesh = geometryLoader.GetMesh(216424);
+    auto mesh = geometryLoader.GetMesh(123181);
     if (writeFiles)
     {
         geometryLoader.DumpMesh(mesh, L"TEST.obj");
@@ -98,7 +98,7 @@ int main()
 {
     std::cout << "Hello web IFC test!\n";
 
-    std::string content = ReadFile(L"D:\\web-ifc\\benchmark\\ifcfiles\\20191002Mechanical Piping.ifc");
+    std::string content = ReadFile(L"A:/down/crash.ifc");
 
     webifc::IfcLoader loader;
 
