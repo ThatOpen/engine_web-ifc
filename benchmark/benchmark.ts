@@ -27,11 +27,11 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     let result = new FileResult();
     result.filename = filename;
 
-    let data = fs.readFileSync(filename).toString();
+    let data = fs.readFileSync(filename);
 
     let startTime = ms();
 
-    let modelID = module.OpenModel("example.ifc", data);
+    let modelID = module.OpenModel("example.ifc", new Uint8Array(data));
 
     module.CloseModel(modelID);
 
@@ -45,7 +45,6 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
 
 async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkResult>
 {
-    console.log(module);
     await module.Init();
 
     let result = new BenchMarkResult();
@@ -84,7 +83,16 @@ async function GetBenchmarkFiles(): Promise<string[]>
 async function RunBenchmark()
 {
     let files = await GetBenchmarkFiles();
+
+    console.log(`Previous version...`);
+    console.log(``);
+
     let oldResult = await BenchmarkWebIFC(oldIfcAPI, files);
+
+    console.log(``);
+    console.log(`New version...`);
+    console.log(``);
+
     let newResult = await BenchmarkWebIFC(newIfcAPI, files);
 
     combine(oldResult, newResult);

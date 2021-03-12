@@ -4,6 +4,7 @@
  
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
 #include "include/web-ifc.h"
 #include "include/web-ifc-geometry.h"
@@ -94,11 +95,76 @@ void DumpRefs(std::unordered_map<uint32_t, std::vector<uint32_t>>& refs)
     }
 }
 
+struct BenchMarkResult
+{
+    std::string file;
+    long long timeMS;
+    long long sizeBytes;
+};
+
+void Benchmark()
+{
+    std::vector<BenchMarkResult> results;
+    std::string path = "../../../benchmark/ifcfiles";
+    for (const auto& entry : std::filesystem::directory_iterator(path))
+    {
+        if (entry.path().extension().string() != ".ifc")
+        {
+            continue;
+        }
+        
+        std::wstring filePath = entry.path().wstring();
+        std::string filename = entry.path().filename().string();
+
+        std::string content = ReadFile(filePath);
+
+        webifc::IfcLoader loader;
+        auto start = webifc::ms();
+        {
+            loader.LoadFile(content);
+        }
+        auto time = webifc::ms() - start;
+
+        BenchMarkResult result;
+        result.file = filename;
+        result.timeMS = time;
+        result.sizeBytes = entry.file_size();
+        results.push_back(result);
+        
+        std::cout << "Reading " << result.file << " took " << time << "ms" << std::endl;
+    }
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << "Results:" << std::endl;
+    
+    double avgMBsec = 0;
+    for (auto& result : results)
+    {
+        double MBsec = result.sizeBytes / 1000.0 / result.timeMS;
+        avgMBsec += MBsec;
+        std::cout << result.file << ": " << MBsec << " MB/sec" << std::endl;
+    }
+
+    avgMBsec /= results.size();
+
+    std::cout << std::endl;
+    std::cout << "Average: " << avgMBsec << " MB/sec" << std::endl;
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+
+}
+
 int main()
 {
     std::cout << "Hello web IFC test!\n";
 
-    std::string content = ReadFile(L"A:/down/crash.ifc");
+    Benchmark();
+
+    return 0;
+
+    std::string content = ReadFile(L"");
 
     webifc::IfcLoader loader;
 

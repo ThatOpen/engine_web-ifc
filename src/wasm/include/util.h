@@ -880,9 +880,8 @@ namespace webifc
 
 		inline void AddChunk()
 		{
-			frontChunk = new uint8_t[N];
-			memset(frontChunk, 0, N);
-			chunks.push_back(frontChunk);
+			chunks.emplace_back();
+			memset(chunks.back().data(), 0, N);
 			sizes.push_back(0);
 			writePtr++;
 		}
@@ -898,14 +897,14 @@ namespace webifc
 		inline void push(char v)
 		{
 			CheckChunk(1);
-			frontChunk[sizes[writePtr]] = v;
+			chunks.back().data()[sizes[writePtr]] = v;
 			sizes[writePtr] += 1;
 		}
 
 		inline void push(void* v, unsigned long long size)
 		{
 			CheckChunk(size);
-			memcpy(frontChunk + sizes[writePtr], v, size);
+			memcpy(chunks.back().data() + sizes[writePtr], v, size);
 			sizes[writePtr] += size;
 		}
 
@@ -928,7 +927,7 @@ namespace webifc
 		template <typename T>
 		inline T Read()
 		{
-			uint8_t* chunk = chunks[readChunkIndex];
+			std::array<uint8_t, N>& chunk = chunks[readChunkIndex];
 			uint8_t* valuePtr = &chunk[readPtr];
 
 			//T v = *(T*)(valuePtr);
@@ -944,7 +943,7 @@ namespace webifc
 
 		void* GetReadPtr()
 		{
-			uint8_t* chunk = chunks[readChunkIndex];
+			std::array<uint8_t, N>& chunk = chunks[readChunkIndex];
 			uint8_t* valuePtr = &chunk[readPtr];
 
 			return (void*)valuePtr;
@@ -993,7 +992,8 @@ namespace webifc
 			std::ofstream file("tape.bin");
 			for (int i = 0; i < chunks.size(); i++)
 			{
-				file.write((char*)(chunks[i]), sizes[i]);
+				std::array<uint8_t, N>& ch = chunks[i];
+				file.write((char*)ch.data(), sizes[i]);
 			}
 		}
 
@@ -1038,8 +1038,7 @@ namespace webifc
 		uint32_t readPtr = 0;
 		uint32_t readChunkIndex = 0;
 		uint32_t writePtr = -1;
-		uint8_t* frontChunk = nullptr;
-		std::vector<uint8_t*> chunks;
+		std::vector<std::array<uint8_t, N>> chunks;
 		std::vector<size_t> sizes;
 	};
 
