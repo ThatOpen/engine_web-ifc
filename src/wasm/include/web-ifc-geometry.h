@@ -27,7 +27,7 @@
 #include "web-ifc.h"
 #include "util.h"
 
-const double EXTRUSION_DISTANCE_HALFSPACE = 10000;
+const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
 
 const bool DEBUG_DUMP_SVG = false;
 
@@ -232,13 +232,8 @@ namespace webifc
 						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
 						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
 
-						IfcGeometry m1;
-						IfcGeometry m2;
-
-						intersectMeshMesh(flatElementMesh, flatVoidMesh, m1, m2);
-
 						// TODO: this is inefficient, better make one-to-many subtraction in bool logic
-						flatElementMesh = boolSubtract(m1, m2);
+						flatElementMesh = boolSubtract_CSGJSCPP(flatElementMesh, flatVoidMesh);
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
@@ -293,21 +288,22 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					//DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
-					//DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					// DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
+					// DumpIfcGeometry(flatSecondMesh, L"void.obj");
 
-					IfcGeometry m1;
-					IfcGeometry m2;
+					if (flatFirstMesh.numFaces == 0)
+					{
+						// bail out because we will get strange meshes
+						// if this happens, probably there's an issue parsing the first mesh
+						return mesh;
+					}
 
-					intersectMeshMesh(flatFirstMesh, flatSecondMesh, m1, m2);
+					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
+					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
 
-					//DumpIfcGeometry(m1, L"substep1.obj");
-					//DumpIfcGeometry(m2, L"substep2.obj");
+					auto resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
 
-					// TODO: assuming difference
-					auto resultMesh = boolSubtract(m1, m2);
-
-					//DumpIfcGeometry(resultMesh, L"result.obj");
+					// DumpIfcGeometry(resultMesh, L"result.obj");
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.expressID = line.expressID;
@@ -338,7 +334,7 @@ namespace webifc
 						flipWinding = true;
 					}
 
-					double d = EXTRUSION_DISTANCE_HALFSPACE;
+					double d = EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor();
 					IfcCurve<2> c;
 					c.Add(glm::dvec2(-d, -d));
 					c.Add(glm::dvec2(d, -d));
@@ -350,7 +346,19 @@ namespace webifc
 					profile.isConvex = false;
 					profile.curve = c;
 
-					auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
+					auto geom = Extrude(profile, surface.transformation, extrusionNormal, d);
+
+					// @Refactor: duplicate of extrudedareasolid
+					if (flipWinding)
+					{
+						for (uint32_t i = 0; i < geom.numFaces; i++)
+						{
+							uint32_t temp = geom.indexData[i * 3 + 0];
+							temp = geom.indexData[i * 3 + 0];
+							geom.indexData[i * 3 + 0] = geom.indexData[i * 3 + 1];
+							geom.indexData[i * 3 + 1] = temp;
+						}
+					}
 
 					// TODO: this is getting problematic.....
 					_expressIDToGeometry[line.expressID] = geom;
@@ -392,7 +400,7 @@ namespace webifc
 					profile.isConvex = false;
 					profile.curve = curve;
 
-					auto geom = Extrude(profile, position, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE, planeNormal, planePosition);
+					auto geom = Extrude(profile, position, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor(), planeNormal, planePosition);
 					//auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
 
 					// @Refactor: duplicate of extrudedareasolid
@@ -898,23 +906,6 @@ namespace webifc
 
 				geometry.AddFace(c.points[0], c.points[1], c.points[2]);
 			}
-			else if (bounds.size() == 1 && bounds[0].curve.points.size() == 4)
-			{
-				auto c = bounds[0].curve;
-
-				// TODO: assuming 0,1,2 NOT colinear!
-				glm::dvec3 normal = computeNormal(c.points[0], c.points[1], c.points[2]);
-
-				uint32_t offset = geometry.numPoints;
-
-				geometry.AddPoint(c.points[0], normal);
-				geometry.AddPoint(c.points[1], normal);
-				geometry.AddPoint(c.points[2], normal);
-				geometry.AddPoint(c.points[3], normal);
-
-				geometry.AddFace(offset + 0, offset + 1, offset + 2);
-				geometry.AddFace(offset + 0, offset + 2, offset + 3);
-			}
 			else if (bounds.size() > 0 && bounds[0].curve.points.size() >= 3)
 			{
 				// bound greater than 4 vertices or with holes, triangulate
@@ -1014,6 +1005,8 @@ namespace webifc
 				}
 				else // middle
 				{
+					// TODO: sometimes outliers cause the perp to become NaN! 
+					// possibly the directrix is bad
 					glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
 					glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
 					glm::dvec3 p = glm::normalize(glm::cross(n1, n2));

@@ -8,6 +8,9 @@
 
 #include "../util.h"
 #include "./is-inside-mesh.h"
+#define CSGJSCPP_REAL double
+#define CSGJSCPP_IMPLEMENTATION
+#include "../../deps/scgjs-cpp/csgjs.h"
 
 namespace webifc
 {
@@ -72,13 +75,58 @@ namespace webifc
         return resultingMesh;
     }
 
-    IfcGeometry boolSubtract(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    csgjscpp::Model IfcGeometryToCSGModel(IfcGeometry& mesh1)
     {
-        IfcGeometry resultingMesh;
+        std::vector<csgjscpp::Polygon> polygons1;
 
-        clipMesh(mesh1, mesh2, resultingMesh, true, false, false);
-        clipMesh(mesh2, mesh1, resultingMesh, false, true, false);
+        for (uint32_t i = 0; i < mesh1.numFaces; i++)
+        {
+            Face f = mesh1.GetFace(i);
+            std::vector<csgjscpp::Vertex> verts;
 
-        return resultingMesh;
+            glm::dvec3 a = mesh1.GetPoint(f.i0);
+            glm::dvec3 b = mesh1.GetPoint(f.i1);
+            glm::dvec3 c = mesh1.GetPoint(f.i2);
+
+            glm::dvec3 n = computeNormal(a, b, c);
+
+
+            verts.push_back(csgjscpp::Vertex{ csgjscpp::Vector(a.x, a.y, a.z), csgjscpp::Vector(n.x, n.y, n.z), 0 });
+            verts.push_back(csgjscpp::Vertex{ csgjscpp::Vector(b.x, b.y, b.z), csgjscpp::Vector(n.x, n.y, n.z), 0 });
+            verts.push_back(csgjscpp::Vertex{ csgjscpp::Vector(c.x, c.y, c.z), csgjscpp::Vector(n.x, n.y, n.z), 0 });
+
+            polygons1.push_back(csgjscpp::Polygon(verts));
+        }
+
+        return csgjscpp::modelfrompolygons(polygons1);
+    }
+
+    IfcGeometry boolSubtract_CSGJSCPP(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    {
+        auto model1 = IfcGeometryToCSGModel(mesh1);
+        auto model2 = IfcGeometryToCSGModel(mesh2);
+
+        auto m = csgjscpp::csgsubtract(model1, model2);
+
+        IfcGeometry result;
+
+        for (uint32_t i = 0; i < m.indices.size(); i += 3)
+        {
+            uint32_t i0 = m.indices[i + 0];
+            uint32_t i1 = m.indices[i + 1];
+            uint32_t i2 = m.indices[i + 2];
+
+            csgjscpp::Vertex va = m.vertices[i0];
+            csgjscpp::Vertex vb = m.vertices[i1];
+            csgjscpp::Vertex vc = m.vertices[i2];
+
+            glm::dvec3 a(va.pos.x, va.pos.y, va.pos.z);
+            glm::dvec3 b(vb.pos.x, vb.pos.y, vb.pos.z);
+            glm::dvec3 c(vc.pos.x, vc.pos.y, vc.pos.z);
+
+            result.AddFace(a, b, c);
+        }
+
+        return result;
     }
 }

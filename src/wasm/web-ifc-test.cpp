@@ -13,13 +13,9 @@
 std::string ReadFile(std::wstring filename)
 {
     std::ifstream t(filename);
-    t.seekg(0, std::ios::end);
-    size_t size = t.tellg();
-    std::string buffer(size, ' ');
-    t.seekg(0);
-    t.read(&buffer[0], size);
-
-    return buffer;
+    std::stringstream buffer;
+    buffer << t.rdbuf();
+    return buffer.str();
 }
 
 void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
@@ -27,7 +23,7 @@ void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geom
     auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCSLAB);
 
     bool writeFiles = true;
-    auto mesh = geometryLoader.GetMesh(123181);
+    auto mesh = geometryLoader.GetMesh(65156);
     if (writeFiles)
     {
         geometryLoader.DumpMesh(mesh, L"TEST.obj");
@@ -160,11 +156,12 @@ int main()
 {
     std::cout << "Hello web IFC test!\n";
 
-    Benchmark();
+    //Benchmark();
 
-    return 0;
+    //return 0;
 
-    std::string content = ReadFile(L"");
+    std::string content = ReadFile(L"D:/web-ifc/benchmark/ifcfiles/rst_basic_sample_project.ifc");
+
 
     webifc::IfcLoader loader;
 
