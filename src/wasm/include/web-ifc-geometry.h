@@ -1190,8 +1190,11 @@ namespace webifc
 			uint32_t capSize = profile.curve.points.size();
 			for (int i = 1; i < capSize; i++)
 			{
+				//Quadratic search: this might get slow if there are many holes
 				if (std::count(holesIndices.begin(), holesIndices.end(), i))
+				{
 					continue;
+				}
 
 				uint32_t bl = i - 1;
 				uint32_t br = i - 0;
