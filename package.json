@@ -22,6 +22,7 @@
     "setup-env": "emsdk_env",
     "init-repo": "git clone https://github.com/g-truc/glm ./src/wasm/deps/glm && git clone https://github.com/mapbox/earcut.hpp ./src/wasm/deps/earcut && git clone https://github.com/executionunit/csgjs-cpp ./src/wasm/deps/scgjs-cpp && npm run gen-schema",
     "build-release": "npm run build-wasm-release && npm run build-api",
+    "build-debug": "npm run build-wasm-debug && npm run build-api",
     "release_publish": "npm run build-release && cd dist && npm publish",
       
     "build-wasm-debug": "em++ --bind -O3 -g4 -std=c++17 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o dist/web-ifc.js",
@@ -31,7 +32,7 @@
     "build-ts-api": "tsc --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts dist --rename=web-ifc-api-node.d.ts",
     "build-web-ifc-api-mjs": "esbuild dist/web-ifc-api.ts --bundle --format=esm --external:path --external:fs --outfile=./dist/web-ifc-api.js",
     "build-web-ifc-api-node": "esbuild dist/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api-node.js",
-    "copy-to-dist": "cpy README.md dist && cpy package.json dist",
+    "copy-to-dist": "cpy README.md dist && cpy package.json dist && cpy src/ifc2x4.ts dist",
 
     "build-viewer": "npm run bundle-viewer && npm run copy-wasm-viewer",
     "bundle-viewer": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./examples/viewer/web-ifc-viewer.js",

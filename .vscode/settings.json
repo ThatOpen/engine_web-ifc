@@ -79,7 +79,9 @@
         "cwctype": "cpp",
         "queue": "cpp",
         "random": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "filesystem": "cpp",
+        "stack": "cpp"
     },
     "cmake.configureOnOpen": true,
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",

@@ -82,6 +82,16 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
+    GetLine(modelID: number, expressID: number)
+    {
+        return this.wasmModule.GetLine(modelID, expressID);
+    }
+
+    GetLineIDsWithType(modelID: number, type: number): Vector<number>
+    {
+        return this.wasmModule.GetLineIDsWithType(modelID, type);
+    }
+
     SetGeometryTransformation(modelID: number, transformationMatrix: Array<number>)
     {
         if (transformationMatrix.length != 16)

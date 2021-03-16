@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <stack>
 
 #include <emscripten/bind.h>
 
@@ -118,6 +119,125 @@ void SetGeometryTransformation(uint32_t modelID, std::array<double, 16> m)
     geomLoaders[modelID].SetTransformation(transformation);
 }
 
+std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+    auto lineIDs = loader.GetLineIDsWithType(type);
+    std::vector<uint32_t> expressIDs;
+    for (auto lineID : lineIDs)
+    {
+        expressIDs.push_back(loader.GetLine(lineID).expressID);
+    }
+    return expressIDs;
+}
+
+emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+
+    auto& line = loader.GetLine(loader.ExpressIDToLineID(expressID));
+    auto& _tape = loader.GetTape();
+
+    loader.MoveToArgumentOffset(line, 0);
+
+    std::stack<emscripten::val> valueStack;
+    std::stack<int> valuePosition;
+
+    auto arguments = emscripten::val::array();
+
+    valueStack.push(arguments);
+    valuePosition.push(0);
+
+    bool endOfLine = false;
+    while (!_tape.AtEnd() && !endOfLine)
+    {
+        webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+
+        auto& topValue = valueStack.top();
+        auto& topPosition = valuePosition.top();
+
+        switch (t)
+        {
+        case webifc::IfcTokenType::LINE_END:
+        {
+            endOfLine = true;
+            break;
+        }
+        case webifc::IfcTokenType::UNKNOWN:
+        case webifc::IfcTokenType::EMPTY:
+        {
+            topValue.set(topPosition++, emscripten::val::null());
+            
+            break;
+        }
+        case webifc::IfcTokenType::SET_BEGIN:
+        {
+            auto newValue = emscripten::val::array();
+
+            valueStack.push(newValue);
+            valuePosition.push(0);
+
+            break;
+        }
+        case webifc::IfcTokenType::SET_END:
+        {
+            if (valueStack.size() == 1)
+            {
+                // this is a pop just before endline, so ignore
+                endOfLine = true;
+            }
+            else
+            {
+                auto topCopy = valueStack.top();
+
+                valueStack.pop();
+                valuePosition.pop();
+                auto& parent = valueStack.top();
+                int& parentCount = valuePosition.top();
+                parent.set(parentCount++, topCopy);
+            }
+
+            break;
+        }
+        case webifc::IfcTokenType::STRING:
+        case webifc::IfcTokenType::ENUM:
+        {
+            webifc::StringView view = _tape.ReadStringView();
+            std::string copy(view.data, view.len);
+
+            topValue.set(topPosition++, emscripten::val(copy));
+
+            break;
+        }
+        case webifc::IfcTokenType::REF:
+        {
+            uint32_t ref = _tape.Read<uint32_t>();
+            
+            topValue.set(topPosition++, emscripten::val(ref));
+
+            break;
+        }
+        case webifc::IfcTokenType::REAL:
+        {
+            double d = _tape.Read<double>();
+
+            topValue.set(topPosition++, emscripten::val(d));
+
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    auto retVal = emscripten::val::object();
+    retVal.set(emscripten::val("ID"), line.expressID);
+    retVal.set(emscripten::val("type"), line.ifcType);
+    retVal.set(emscripten::val("arguments"), arguments);
+
+    return retVal;
+}
+
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
     return loaders[modelID].IsOpen();
@@ -173,11 +293,14 @@ EMSCRIPTEN_BINDINGS(my_module) {
         ;
 
     emscripten::register_vector<webifc::IfcFlatMesh>("IfcFlatMeshVector");
+    emscripten::register_vector<uint32_t>("UintVector");
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
+    emscripten::function("GetLine", &GetLine);
+    emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
 }

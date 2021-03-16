@@ -351,6 +351,11 @@ namespace webifc
 			return _metaData.lines[lineID];
 		}
 
+		webifc::DynamicTape<TAPE_SIZE>& GetTape()
+		{
+			return _tape;
+		}
+
 		double GetLinearScalingFactor()
 		{
 			return _metaData.linearScalingFactor;
