@@ -1099,7 +1099,7 @@ namespace webifc
 		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
 		{
 			IfcGeometry geom;
-			std::vector<int> holesIndices;
+			std::vector<bool> holesIndicesHash;
 
 			// build the caps
 			{
@@ -1118,18 +1118,20 @@ namespace webifc
 					polygon[0].push_back({ pt.x, pt.y });
 				}
 
-				int counter = profile.curve.points.size();
-				holesIndices.push_back(counter);
+				for(int i = 0; i < profile.curve.points.size(); i++)
+				{
+					holesIndicesHash.push_back(false);
+				}
 
 				for (int i = 0; i < profile.holes.size(); i++)
 				{
 					IfcCurve<2> hole = profile.holes[i];
 					int pointCount = hole.points.size();
-					counter += pointCount;
-					holesIndices.push_back(counter);
 
 					for (int j = 0; j < pointCount; j++)
 					{
+						holesIndicesHash.push_back(j == 0);
+
 						glm::dvec2 pt = hole.points[j];
 						glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
@@ -1190,8 +1192,8 @@ namespace webifc
 			uint32_t capSize = profile.curve.points.size();
 			for (int i = 1; i < capSize; i++)
 			{
-				//Quadratic search: this might get slow if there are many holes
-				if (std::count(holesIndices.begin(), holesIndices.end(), i))
+				//https://github.com/tomvandig/web-ifc/issues/5
+				if (holesIndicesHash[i])
 				{
 					continue;
 				}
