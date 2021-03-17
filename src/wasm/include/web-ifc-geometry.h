@@ -59,7 +59,7 @@ namespace webifc
             return flatten(mesh, _expressIDToGeometry, NormalizeIFC);
 		}
 
-		void AddComposedMeshToFlatMesh(IfcFlatMesh& flatMesh, const IfcComposedMesh& composedMesh, const glm::dmat4& parentMatrix = glm::dmat4(1), const glm::dvec4& color = glm::dvec4(1, 0, 0, 1), bool hasColor = false)
+		void AddComposedMeshToFlatMesh(IfcFlatMesh& flatMesh, const IfcComposedMesh& composedMesh, const glm::dmat4& parentMatrix = glm::dmat4(1), const glm::dvec4& color = glm::dvec4(1, 1, 1, 1), bool hasColor = false)
 		{
 			glm::dvec4 newParentColor = color;
 			bool newHasColor = hasColor;
@@ -531,6 +531,52 @@ namespace webifc
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
+				case ifc2x4::IFCPOLYGONALFACESET:
+				{
+					IfcComposedMesh mesh;
+					mesh.expressID = line.expressID;
+
+					_loader.MoveToArgumentOffset(line, 0);
+
+					auto coordinatesRef = _loader.GetRefArgument();
+					auto points = ReadIfcCartesianPointList3D(coordinatesRef);
+
+					// second optional argument "closed" is ignored for now
+
+					_loader.MoveToArgumentOffset(line, 2);
+					auto faces = _loader.GetSetArgument();
+
+					IfcGeometry geom;
+
+					std::vector<IfcBound3D> bounds;
+					for (auto& face : faces)
+					{
+						uint32_t faceID = _loader.GetRefArgument(face);
+						ReadIndexedPolygonalFace(faceID, bounds, points);
+
+						TriangulateBounds(geom, bounds);
+
+						bounds.clear();
+					}
+
+					_loader.MoveToArgumentOffset(line, 3);
+					if (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
+					{
+						std::cout << "Unsupported IFCPOLYGONALFACESET with PnIndex!" << std::endl;
+					}
+
+					DumpIfcGeometry(geom, L"test.obj");
+
+					mesh.transformation = glm::dmat4(1);
+					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
+					_expressIDToMesh[line.expressID] = mesh;
+					return mesh;
+				}
 				case ifc2x4::IFCSWEPTDISKSOLID:
 				{
 					IfcComposedMesh mesh;
@@ -629,6 +675,63 @@ namespace webifc
 			}
 
 			return IfcComposedMesh();
+		}
+
+		std::vector<glm::dvec3> ReadIfcCartesianPointList3D(uint32_t expressID)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+
+			_loader.MoveToArgumentOffset(line, 0);
+
+			std::vector<glm::dvec3> result;
+
+			IfcTokenType t = _loader.GetTokenType();
+
+			// while we have point set begin
+			while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
+			{
+				// because these calls cannot be reordered we have to use intermediate variables
+				double x = _loader.GetDoubleArgument();
+				double y = _loader.GetDoubleArgument();
+				double z = _loader.GetDoubleArgument();
+				result.emplace_back(x, y, z);
+
+				// read point set end
+				_loader.GetTokenType();
+			}
+
+			return result;
+		}
+
+		void ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D>& bounds, const std::vector<glm::dvec3>& points)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+
+			bounds.emplace_back();
+
+			switch (line.ifcType)
+			{
+			case ifc2x4::IFCINDEXEDPOLYGONALFACE:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto indexIDs = _loader.GetSetArgument();
+
+				IfcGeometry geometry;
+				for (auto& indexID : indexIDs)
+				{
+					uint32_t index = static_cast<uint32_t>(_loader.GetDoubleArgument(indexID));
+					glm::dvec3 point = points[index - 1]; // indices are 1-based
+					bounds.back().curve.points.push_back(point);
+				}
+
+				break;
+			}
+			default:
+				std::cout << "Unexpected indexedface type: " << line.ifcType << " at " << expressID << std::endl;
+				break;
+			}
 		}
 
 		IfcGeometry GetBrep(uint32_t expressID)
