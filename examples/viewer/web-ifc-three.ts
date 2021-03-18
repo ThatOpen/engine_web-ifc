@@ -26,6 +26,7 @@ export class IfcThree
         const flatMeshes = this.getFlatMeshes(modelID);
         const startUploadingTime = ms();
         for (let i = 0; i < flatMeshes.size(); i++) {
+            // console.log(flatMeshes.get(i).expressID);
             const placedGeometries = flatMeshes.get(i).geometries;
             for (let j = 0; j < placedGeometries.size(); j++)
                 scene.add(this.getPlacedGeometry(modelID, placedGeometries.get(j)));

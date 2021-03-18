@@ -290,6 +290,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<webifc::IfcFlatMesh>("IfcFlatMesh")
         .field("geometries", &webifc::IfcFlatMesh::geometries)
+        .field("expressID", &webifc::IfcFlatMesh::expressID)
         ;
 
     emscripten::register_vector<webifc::IfcFlatMesh>("IfcFlatMeshVector");

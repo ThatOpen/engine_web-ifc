@@ -371,6 +371,7 @@ namespace webifc
 	struct IfcFlatMesh
 	{
 		std::vector<IfcPlacedGeometry> geometries;
+		uint32_t expressID;
 	};
 
 	struct IfcComposedMesh
@@ -825,7 +826,7 @@ namespace webifc
 	{
 		std::stringstream obj;
 
-		double scale = 0.001;
+		double scale = 1;
 
 		for (uint32_t i = 0; i < geom.numPoints; i++)
 		{

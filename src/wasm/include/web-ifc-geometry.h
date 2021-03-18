@@ -92,6 +92,7 @@ namespace webifc
 		IfcFlatMesh GetFlatMesh(uint32_t expressID)
 		{
 			IfcFlatMesh flatMesh;
+			flatMesh.expressID = expressID;
 
 			IfcComposedMesh composedMesh = GetMesh(expressID);
 

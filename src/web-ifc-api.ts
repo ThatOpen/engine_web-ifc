@@ -23,7 +23,8 @@ export interface PlacedGeometry {
 }
 
 export interface FlatMesh {
-    geometries: Vector<PlacedGeometry>;   
+    geometries: Vector<PlacedGeometry>;
+    expressID: number;
 }
 
 export interface IfcGeometry

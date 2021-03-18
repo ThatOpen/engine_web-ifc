@@ -4624,7 +4624,7 @@ var require_web_ifc = __commonJS((exports2, module2) => {
       __ATINIT__.push({func: function() {
         ___wasm_call_ctors();
       }});
-      var asmLibraryArg = {t: ___assert_fail, I: ___sys_ioctl, J: ___sys_open, N: __embind_finalize_value_array, r: __embind_finalize_value_object, L: __embind_register_bool, n: __embind_register_class, o: __embind_register_class_constructor, d: __embind_register_class_function, K: __embind_register_emval, w: __embind_register_float, k: __embind_register_function, h: __embind_register_integer, g: __embind_register_memory_view, x: __embind_register_std_string, q: __embind_register_std_wstring, O: __embind_register_value_array, e: __embind_register_value_array_element, s: __embind_register_value_object, l: __embind_register_value_object_field, M: __embind_register_void, c: __emval_decref, j: __emval_incref, y: __emval_new_array, p: __emval_new_cstring, z: __emval_new_object, i: __emval_set_property, f: __emval_take_value, b: _abort, G: _clock_gettime, C: _emscripten_memcpy_big, m: _emscripten_resize_heap, E: _environ_get, F: _environ_sizes_get, v: _fd_close, H: _fd_read, A: _fd_seek, u: _fd_write, a: wasmMemory, B: _setTempRet0, D: _strftime_l};
+      var asmLibraryArg = {t: ___assert_fail, I: ___sys_ioctl, J: ___sys_open, N: __embind_finalize_value_array, r: __embind_finalize_value_object, L: __embind_register_bool, n: __embind_register_class, o: __embind_register_class_constructor, d: __embind_register_class_function, K: __embind_register_emval, w: __embind_register_float, l: __embind_register_function, h: __embind_register_integer, g: __embind_register_memory_view, x: __embind_register_std_string, q: __embind_register_std_wstring, O: __embind_register_value_array, e: __embind_register_value_array_element, s: __embind_register_value_object, i: __embind_register_value_object_field, M: __embind_register_void, c: __emval_decref, k: __emval_incref, y: __emval_new_array, p: __emval_new_cstring, z: __emval_new_object, j: __emval_set_property, f: __emval_take_value, b: _abort, G: _clock_gettime, C: _emscripten_memcpy_big, m: _emscripten_resize_heap, E: _environ_get, F: _environ_sizes_get, v: _fd_close, H: _fd_read, A: _fd_seek, u: _fd_write, a: wasmMemory, B: _setTempRet0, D: _strftime_l};
       var asm = createWasm();
       var ___wasm_call_ctors = Module["___wasm_call_ctors"] = function() {
         return (___wasm_call_ctors = Module["___wasm_call_ctors"] = Module["asm"]["Q"]).apply(null, arguments);
@@ -34421,6 +34421,7 @@ var IfcThree = class {
     const flatMeshes = this.getFlatMeshes(modelID);
     const startUploadingTime = ms();
     for (let i = 0; i < flatMeshes.size(); i++) {
+      console.log(flatMeshes.get(i).expressID);
       const placedGeometries = flatMeshes.get(i).geometries;
       for (let j = 0; j < placedGeometries.size(); j++)
         scene2.add(this.getPlacedGeometry(modelID, placedGeometries.get(j)));
