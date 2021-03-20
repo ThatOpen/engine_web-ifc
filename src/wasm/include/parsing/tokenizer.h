@@ -125,10 +125,14 @@ namespace webifc
 
 					_tape.push(IfcTokenType::REF);
 					_tape.push(&num, sizeof(uint32_t));
-				} 
-				else if (c == '$' || c == '*')
+				}
+				else if (c == '$')
 				{
 					_tape.push(IfcTokenType::EMPTY);
+				}
+				else if (c == '*')
+				{
+					_tape.push(IfcTokenType::UNKNOWN);
 				}
 				else if (c == '(')
 				{

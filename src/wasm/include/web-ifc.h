@@ -11,6 +11,7 @@
 #include <chrono>
 #include <algorithm>
 #include <set>
+#include <iomanip>
 
 #include "ifc2x4.h"
 #include "util.h"
@@ -540,9 +541,142 @@ namespace webifc
 			return tapeOffsets;
 		}
 
+		void DumpToDiskAsIFC()
+		{
+			std::ofstream file("export.ifc");
+			file << std::setprecision(std::numeric_limits<double>::digits10 + 1);
+
+			std::string description = "no description";
+			std::string name = "no name";
+
+			file << "ISO-10303-21;" << std::endl;
+			file << "HEADER;" << std::endl;
+			file << "FILE_DESCRIPTION(('" << description << "), '2;1');" << std::endl;
+			file << "FILE_NAME('" << name << "', '', (''), (''), 'web-ifc-export');" << std::endl;
+			file << "FILE_SCHEMA(('IFC2X3'));" << std::endl;
+			file << "ENDSEC;" << std::endl;
+			file << "DATA;" << std::endl;
+
+			_tape.MoveTo(0);
+			bool newLine = true;
+			bool insideSet = false;
+			IfcTokenType prev = IfcTokenType::EMPTY;
+			while (!_tape.AtEnd())
+			{
+				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
+
+				if (t != IfcTokenType::SET_END && t != IfcTokenType::LINE_END)
+				{
+					if (insideSet && prev != IfcTokenType::SET_BEGIN && prev != IfcTokenType::LABEL && prev != IfcTokenType::LINE_END)
+					{
+						file << ",";
+					}
+				}
+
+				switch (t)
+				{
+				case IfcTokenType::LINE_END:
+				{
+					file << ";" << std::endl;
+					break;
+				}
+				case IfcTokenType::UNKNOWN:
+				{
+					file << "*";
+
+					break;
+				}
+				case IfcTokenType::EMPTY:
+				{
+					file << "$";
+
+					break;
+				}
+				case IfcTokenType::SET_BEGIN:
+				{
+					file << "(";
+
+					insideSet = true;
+
+					break;
+				}
+				case IfcTokenType::SET_END:
+				{
+					file << ")";
+
+					break;
+				}
+				case IfcTokenType::STRING:
+				{
+					StringView view = _tape.ReadStringView();
+					std::string copy(view.data, view.len);
+
+					file << "'" << copy << "'";
+
+					break;
+				}
+				case IfcTokenType::ENUM:
+				{
+					StringView view = _tape.ReadStringView();
+					std::string copy(view.data, view.len);
+
+					file << "." << copy << ".";
+
+					break;
+				}
+				case IfcTokenType::LABEL:
+				{
+					StringView view = _tape.ReadStringView();
+					std::string copy(view.data, view.len);
+					
+					file << copy;
+
+					break;
+				}
+				case IfcTokenType::REF:
+				{
+					uint32_t ref = _tape.Read<uint32_t>();
+
+					file << "#" << ref;
+
+					if (newLine)
+					{
+						file << "=";
+					}
+
+					break;
+				}
+				case IfcTokenType::REAL:
+				{
+					double d = _tape.Read<double>();
+
+					file << d;
+
+					break;
+				}
+				default:
+					break;
+				}
+
+				if (t == IfcTokenType::LINE_END)
+				{
+					newLine = true;
+					insideSet = false;
+				}
+				else
+				{
+					newLine = false;
+				}
+
+				prev = t;
+			}
+
+			file << "ENDSEC;" << std::endl << "END-ISO-10303-21;";
+		}
+
 	private:
         bool _open = false;
-		webifc::DynamicTape<TAPE_SIZE> _tape; // 16mb chunked tape
+		DynamicTape<TAPE_SIZE> _tape; // 16mb chunked tape
 
         IfcMetaData _metaData;
 	};
