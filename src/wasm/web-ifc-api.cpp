@@ -209,6 +209,24 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 
             break;
         }
+        case webifc::IfcTokenType::LABEL:
+        {
+            webifc::StringView view = _tape.ReadStringView();
+            std::string copy(view.data, view.len);
+
+            topValue.set(topPosition++, emscripten::val(copy));
+
+            // if a set follows a label, we parse the value in the set
+            if (loader.GetTokenType() == IfcTokenType::SET_BEGIN)
+            {
+                localPlacement = _loader.GetRefArgument();
+                
+                _tape.Read<char>(); // set end
+            }
+
+
+            break;
+        }
         case webifc::IfcTokenType::REF:
         {
             uint32_t ref = _tape.Read<uint32_t>();

@@ -399,6 +399,7 @@ namespace webifc
 					break;
 				case IfcTokenType::STRING:
 				case IfcTokenType::ENUM:
+				case IfcTokenType::LABEL:
 				{
 					uint8_t length = _tape.Read<uint8_t>();
 					_tape.AdvanceRead(length);
@@ -515,6 +516,11 @@ namespace webifc
 						_tape.Read<uint32_t>();
 					}
 					else if (t == IfcTokenType::STRING)
+					{
+						uint8_t length = _tape.Read<uint8_t>();
+						_tape.AdvanceRead(length);
+					}
+					else if (t == IfcTokenType::LABEL)
 					{
 						uint8_t length = _tape.Read<uint8_t>();
 						_tape.AdvanceRead(length);

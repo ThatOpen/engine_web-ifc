@@ -13,6 +13,7 @@ namespace webifc
 	{
 		UNKNOWN,
 		STRING,
+        LABEL,
 		ENUM,
 		REAL,
 		REF,
@@ -168,7 +169,7 @@ namespace webifc
 						pos++;
 					}
 
-					_tape.push(IfcTokenType::STRING);
+					_tape.push(IfcTokenType::LABEL);
 					uint8_t length = pos - start;
 					_tape.push(length);
 					_tape.push((void*)&buf[start], length);

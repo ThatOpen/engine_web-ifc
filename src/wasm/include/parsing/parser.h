@@ -95,6 +95,12 @@ namespace webifc
 				{
 					StringView s = _tape.ReadStringView();
 
+					break;
+				}
+				case IfcTokenType::LABEL:
+				{
+					StringView s = _tape.ReadStringView();
+
 					if (currentIfcType == 0)
 					{
 						currentIfcType = crc32Simple(s.data, s.len);
