@@ -909,6 +909,11 @@ namespace webifc
 			sizes[writePtr] += size;
 		}
 
+		inline void SetWriteAtEnd()
+		{
+			writePtr = chunks.size() - 1;
+		}
+
 		uint64_t GetTotalSize()
 		{
 			return (chunks.size() - 1) * N + sizes.back();

@@ -36,6 +36,12 @@ std::string ReadFile(const std::string& filename)
     return buffer;
 }
 
+void WriteFile(const std::string& filename, const std::string& contents)
+{
+    std::ofstream t("/" + filename);
+    t << contents;
+}
+
 int OpenModel(std::string filename)
 {
     std::cout << "Loading: " << filename << std::endl;
@@ -131,6 +137,56 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
     return expressIDs;
 }
 
+void ExportFileAsIFC(uint32_t modelID)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+    std::string exportData = loader.DumpAsIFC();
+    WriteFile("export.ifc", exportData);
+    std::cout << "Exported" << std::endl;
+}
+
+void WriteValue(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
+{
+
+    if (val.isArray())
+    {
+        _tape.push(webifc::IfcTokenType::SET_BEGIN);
+
+        uint32_t size = val["length"].as<uint32_t>();
+        for (int i = 0; i < size; i++)
+        {
+            emscripten::val child = val[i];
+            WriteValue(_tape, child);
+        }
+
+        _tape.push(webifc::IfcTokenType::SET_END);
+    }
+}
+
+void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+    auto& _tape = loader.GetTape();
+
+    _tape.SetWriteAtEnd();
+
+    // line ID
+    _tape.push(webifc::IfcTokenType::REF);
+    _tape.push(&expressID, sizeof(uint32_t));
+
+    // line TYPE
+    const char* ifcName = GetReadableNameFromTypeCode(type);
+    _tape.push(webifc::IfcTokenType::LABEL);
+    uint8_t length = strlen(ifcName);
+    _tape.push(length);
+    _tape.push((void*)ifcName, length);
+
+    WriteValue(_tape, parameters);
+
+    // end line
+    _tape.push(webifc::IfcTokenType::LINE_END);
+}
+
 emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 {
     webifc::IfcLoader& loader = loaders[modelID];
@@ -215,15 +271,6 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
             std::string copy(view.data, view.len);
 
             topValue.set(topPosition++, emscripten::val(copy));
-
-            // if a set follows a label, we parse the value in the set
-            if (loader.GetTokenType() == IfcTokenType::SET_BEGIN)
-            {
-                localPlacement = _loader.GetRefArgument();
-                
-                _tape.Read<char>(); // set end
-            }
-
 
             break;
         }
@@ -320,6 +367,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetLine", &GetLine);
+    emscripten::function("WriteLine", &WriteLine);
+    emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
 }

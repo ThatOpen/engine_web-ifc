@@ -25,6 +25,10 @@ async function LoadFile(filename)
 
     console.log(`Loaded model ${filename} to modelID ${modelID}`);
 
+    ifcapi.WriteLine(modelID, 123, 3650150729, [[]]);
+
+    fs.writeFileSync("exported.ifc", ifcapi.ExportFileAsIFC(modelID));
+
     ifcapi.CloseModel(modelID);
 }
 

@@ -42,6 +42,7 @@ export function ms() {
 export class IfcAPI
 {
     wasmModule = undefined;
+    fs = undefined;
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality
@@ -52,6 +53,7 @@ export class IfcAPI
         {
             //@ts-ignore
             this.wasmModule = await WebIFCWasm({noInitialRun: true});
+            this.fs = this.wasmModule.FS;
         }
         else
         {
@@ -72,6 +74,22 @@ export class IfcAPI
         this.wasmModule['FS_unlink']("/filename");
         return result;
     }
+
+    ExportFileAsIFC(modelID: number): Uint8Array
+    {
+        this.wasmModule.ExportFileAsIFC(modelID);
+        console.log("Exported file");
+        //@ts-ignore
+        let result = this.fs.readFile("/export.ifc");
+        this.wasmModule['FS_unlink']("/export.ifc");
+        return result;
+    }
+
+    WriteLine(modelID: number, expressID: number, type: number, parameters: any)
+    {
+        return this.wasmModule.WriteLine(modelID, expressID, type, parameters);
+    }
+
 
     /**  
      * Opens a model and returns a modelID number

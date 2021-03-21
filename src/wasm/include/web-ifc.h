@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <set>
 #include <iomanip>
+#include <sstream>
 
 #include "ifc2x4.h"
 #include "util.h"
@@ -541,9 +542,9 @@ namespace webifc
 			return tapeOffsets;
 		}
 
-		void DumpToDiskAsIFC()
+		std::string DumpAsIFC()
 		{
-			std::ofstream file("export.ifc");
+            std::stringstream file;
 			file << std::setprecision(std::numeric_limits<double>::digits10 + 1);
 
 			std::string description = "no description";
@@ -672,6 +673,8 @@ namespace webifc
 			}
 
 			file << "ENDSEC;" << std::endl << "END-ISO-10303-21;";
+
+            return file.str();
 		}
 
 	private:
