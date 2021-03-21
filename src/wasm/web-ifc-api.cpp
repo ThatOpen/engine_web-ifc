@@ -145,22 +145,72 @@ void ExportFileAsIFC(uint32_t modelID)
     std::cout << "Exported" << std::endl;
 }
 
-void WriteValue(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
+void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
 {
+    _tape.push(webifc::IfcTokenType::SET_BEGIN);
 
-    if (val.isArray())
+    uint32_t size = val["length"].as<uint32_t>();
+    int index = 0;
+    while (true && index < size)
     {
-        _tape.push(webifc::IfcTokenType::SET_BEGIN);
-
-        uint32_t size = val["length"].as<uint32_t>();
-        for (int i = 0; i < size; i++)
+        emscripten::val child = val[std::to_string(index)];
+        if (child.isArray())
         {
-            emscripten::val child = val[i];
-            WriteValue(_tape, child);
+            WriteSet(_tape, child);
+        }
+        else
+        {
+            webifc::IfcTokenType type = static_cast<webifc::IfcTokenType>(child.as<uint32_t>());
+            _tape.push(type);
+            switch(type)
+            {
+                case webifc::IfcTokenType::LINE_END:
+                case webifc::IfcTokenType::UNKNOWN:
+                case webifc::IfcTokenType::EMPTY:
+                case webifc::IfcTokenType::SET_BEGIN:
+                case webifc::IfcTokenType::SET_END:
+                {
+                    // ignore
+                    break;
+                }
+                case webifc::IfcTokenType::STRING:
+                case webifc::IfcTokenType::ENUM:
+                case webifc::IfcTokenType::LABEL:
+                {
+                    child = val[++index];
+                    std::string copy = child.as<std::string>();
+
+                    uint8_t length = copy.size();
+					_tape.push(length);
+                    _tape.push((void*)copy.c_str(), copy.size());
+
+                    break;
+                }
+                case webifc::IfcTokenType::REF:
+                {
+                    child = val[++index];
+                    uint32_t val = child.as<uint32_t>();
+					_tape.push(&val, sizeof(uint32_t));
+
+                    break;
+                }
+                case webifc::IfcTokenType::REAL:
+                {
+                    child = val[++index];
+                    double val = child.as<double>();
+                    _tape.push(&val, sizeof(double));
+
+                    break;
+                }
+                default:
+                    break;
+            }
         }
 
-        _tape.push(webifc::IfcTokenType::SET_END);
+        index++;
     }
+
+    _tape.push(webifc::IfcTokenType::SET_END);
 }
 
 void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
@@ -181,7 +231,7 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     _tape.push(length);
     _tape.push((void*)ifcName, length);
 
-    WriteValue(_tape, parameters);
+    WriteSet(_tape, parameters);
 
     // end line
     _tape.push(webifc::IfcTokenType::LINE_END);

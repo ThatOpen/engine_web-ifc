@@ -11,7 +11,7 @@ namespace webifc
 {
 	enum IfcTokenType : char
 	{
-		UNKNOWN,
+		UNKNOWN = 0,
 		STRING,
         LABEL,
 		ENUM,

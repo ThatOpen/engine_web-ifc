@@ -3,6 +3,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 const WebIFCWasm = require("./web-ifc");
+export * from "./ifc2x4";
+
+export const UNKNOWN = 0;
+export const STRING = 1;
+export const LABEL = 2;
+export const ENUM = 3;
+export const REAL = 4;
+export const REF = 5;
+export const EMPTY = 6;
+export const SET_BEGIN = 7;
+export const SET_END = 8;
+export const LINE_END = 9;
  
 export interface Vector<T> {
     get(index: number): T;
