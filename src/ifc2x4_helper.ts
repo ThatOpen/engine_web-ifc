@@ -1,133 +1,135 @@
-export class IfcAbsorbedDoseMeasure extends number {};
-export class IfcAccelerationMeasure extends number {};
-export class IfcAmountOfSubstanceMeasure extends number {};
-export class IfcAngularVelocityMeasure extends number {};
-export class IfcArcIndex extends Array<IfcPositiveInteger> {};
-export class IfcAreaDensityMeasure extends number {};
-export class IfcAreaMeasure extends number {};
-export class IfcBinary extends number {};
-export class IfcBoolean extends boolean {};
-export class IfcBoxAlignment extends IfcLabel {};
-export class IfcCardinalPointReference extends number {};
-export class IfcComplexNumber extends Array<number> {};
-export class IfcCompoundPlaneAngleMeasure extends Array<number> {};
-export class IfcContextDependentMeasure extends number {};
-export class IfcCountMeasure extends number {};
-export class IfcCurvatureMeasure extends number {};
-export class IfcDate extends string {};
-export class IfcDateTime extends string {};
-export class IfcDayInMonthNumber extends number {};
-export class IfcDayInWeekNumber extends number {};
-export class IfcDescriptiveMeasure extends string {};
-export class IfcDimensionCount extends number {};
-export class IfcDoseEquivalentMeasure extends number {};
-export class IfcDuration extends string {};
-export class IfcDynamicViscosityMeasure extends number {};
-export class IfcElectricCapacitanceMeasure extends number {};
-export class IfcElectricChargeMeasure extends number {};
-export class IfcElectricConductanceMeasure extends number {};
-export class IfcElectricCurrentMeasure extends number {};
-export class IfcElectricResistanceMeasure extends number {};
-export class IfcElectricVoltageMeasure extends number {};
-export class IfcEnergyMeasure extends number {};
-export class IfcFontStyle extends string {};
-export class IfcFontVariant extends string {};
-export class IfcFontWeight extends string {};
-export class IfcForceMeasure extends number {};
-export class IfcFrequencyMeasure extends number {};
-export class IfcGloballyUniqueId extends string {};
-export class IfcHeatFluxDensityMeasure extends number {};
-export class IfcHeatingValueMeasure extends number {};
-export class IfcIdentifier extends string {};
-export class IfcIlluminanceMeasure extends number {};
-export class IfcInductanceMeasure extends number {};
-export class IfcInteger extends number {};
-export class IfcIntegerCountRateMeasure extends number {};
-export class IfcIonConcentrationMeasure extends number {};
-export class IfcIsothermalMoistureCapacityMeasure extends number {};
-export class IfcKinematicViscosityMeasure extends number {};
-export class IfcLabel extends string {};
-export class IfcLanguageId extends IfcIdentifier {};
-export class IfcLengthMeasure extends number {};
-export class IfcLineIndex extends Array<IfcPositiveInteger> {};
-export class IfcLinearForceMeasure extends number {};
-export class IfcLinearMomentMeasure extends number {};
-export class IfcLinearStiffnessMeasure extends number {};
-export class IfcLinearVelocityMeasure extends number {};
-export class IfcLogical extends boolean {};
-export class IfcLuminousFluxMeasure extends number {};
-export class IfcLuminousIntensityDistributionMeasure extends number {};
-export class IfcLuminousIntensityMeasure extends number {};
-export class IfcMagneticFluxDensityMeasure extends number {};
-export class IfcMagneticFluxMeasure extends number {};
-export class IfcMassDensityMeasure extends number {};
-export class IfcMassFlowRateMeasure extends number {};
-export class IfcMassMeasure extends number {};
-export class IfcMassPerLengthMeasure extends number {};
-export class IfcModulusOfElasticityMeasure extends number {};
-export class IfcModulusOfLinearSubgradeReactionMeasure extends number {};
-export class IfcModulusOfRotationalSubgradeReactionMeasure extends number {};
-export class IfcModulusOfSubgradeReactionMeasure extends number {};
-export class IfcMoistureDiffusivityMeasure extends number {};
-export class IfcMolecularWeightMeasure extends number {};
-export class IfcMomentOfInertiaMeasure extends number {};
-export class IfcMonetaryMeasure extends number {};
-export class IfcMonthInYearNumber extends number {};
-export class IfcNonNegativeLengthMeasure extends IfcLengthMeasure {};
-export class IfcNormalisedRatioMeasure extends IfcRatioMeasure {};
-export class IfcNumericMeasure extends number {};
-export class IfcPHMeasure extends number {};
-export class IfcParameterValue extends number {};
-export class IfcPlanarForceMeasure extends number {};
-export class IfcPlaneAngleMeasure extends number {};
-export class IfcPositiveInteger extends IfcInteger {};
-export class IfcPositiveLengthMeasure extends IfcLengthMeasure {};
-export class IfcPositivePlaneAngleMeasure extends IfcPlaneAngleMeasure {};
-export class IfcPositiveRatioMeasure extends IfcRatioMeasure {};
-export class IfcPowerMeasure extends number {};
-export class IfcPresentableText extends string {};
-export class IfcPressureMeasure extends number {};
-export class IfcPropertySetDefinitionSet extends Array<IfcPropertySetDefinition> {};
-export class IfcRadioActivityMeasure extends number {};
-export class IfcRatioMeasure extends number {};
-export class IfcReal extends number {};
-export class IfcRotationalFrequencyMeasure extends number {};
-export class IfcRotationalMassMeasure extends number {};
-export class IfcRotationalStiffnessMeasure extends number {};
-export class IfcSectionModulusMeasure extends number {};
-export class IfcSectionalAreaIntegralMeasure extends number {};
-export class IfcShearModulusMeasure extends number {};
-export class IfcSolidAngleMeasure extends number {};
-export class IfcSoundPowerLevelMeasure extends number {};
-export class IfcSoundPowerMeasure extends number {};
-export class IfcSoundPressureLevelMeasure extends number {};
-export class IfcSoundPressureMeasure extends number {};
-export class IfcSpecificHeatCapacityMeasure extends number {};
-export class IfcSpecularExponent extends number {};
-export class IfcSpecularRoughness extends number {};
-export class IfcTemperatureGradientMeasure extends number {};
-export class IfcTemperatureRateOfChangeMeasure extends number {};
-export class IfcText extends string {};
-export class IfcTextAlignment extends string {};
-export class IfcTextDecoration extends string {};
-export class IfcTextFontName extends string {};
-export class IfcTextTransformation extends string {};
-export class IfcThermalAdmittanceMeasure extends number {};
-export class IfcThermalConductivityMeasure extends number {};
-export class IfcThermalExpansionCoefficientMeasure extends number {};
-export class IfcThermalResistanceMeasure extends number {};
-export class IfcThermalTransmittanceMeasure extends number {};
-export class IfcThermodynamicTemperatureMeasure extends number {};
-export class IfcTime extends string {};
-export class IfcTimeMeasure extends number {};
-export class IfcTimeStamp extends number {};
-export class IfcTorqueMeasure extends number {};
-export class IfcURIReference extends string {};
-export class IfcVaporPermeabilityMeasure extends number {};
-export class IfcVolumeMeasure extends number {};
-export class IfcVolumetricFlowRateMeasure extends number {};
-export class IfcWarpingConstantMeasure extends number {};
-export class IfcWarpingMomentMeasure extends number {};
+// This is a generated file, please see: gen_functional_types.js
+export interface Handle<T> { expressID: number; }
+export type IfcAbsorbedDoseMeasure = number;
+export type IfcAccelerationMeasure = number;
+export type IfcAmountOfSubstanceMeasure = number;
+export type IfcAngularVelocityMeasure = number;
+export type IfcArcIndex = Array<IfcPositiveInteger>;
+export type IfcAreaDensityMeasure = number;
+export type IfcAreaMeasure = number;
+export type IfcBinary = number;
+export type IfcBoolean = boolean;
+export type IfcBoxAlignment = IfcLabel;
+export type IfcCardinalPointReference = number;
+export type IfcComplexNumber = Array<number>;
+export type IfcCompoundPlaneAngleMeasure = Array<number>;
+export type IfcContextDependentMeasure = number;
+export type IfcCountMeasure = number;
+export type IfcCurvatureMeasure = number;
+export type IfcDate = string;
+export type IfcDateTime = string;
+export type IfcDayInMonthNumber = number;
+export type IfcDayInWeekNumber = number;
+export type IfcDescriptiveMeasure = string;
+export type IfcDimensionCount = number;
+export type IfcDoseEquivalentMeasure = number;
+export type IfcDuration = string;
+export type IfcDynamicViscosityMeasure = number;
+export type IfcElectricCapacitanceMeasure = number;
+export type IfcElectricChargeMeasure = number;
+export type IfcElectricConductanceMeasure = number;
+export type IfcElectricCurrentMeasure = number;
+export type IfcElectricResistanceMeasure = number;
+export type IfcElectricVoltageMeasure = number;
+export type IfcEnergyMeasure = number;
+export type IfcFontStyle = string;
+export type IfcFontVariant = string;
+export type IfcFontWeight = string;
+export type IfcForceMeasure = number;
+export type IfcFrequencyMeasure = number;
+export type IfcGloballyUniqueId = string;
+export type IfcHeatFluxDensityMeasure = number;
+export type IfcHeatingValueMeasure = number;
+export type IfcIdentifier = string;
+export type IfcIlluminanceMeasure = number;
+export type IfcInductanceMeasure = number;
+export type IfcInteger = number;
+export type IfcIntegerCountRateMeasure = number;
+export type IfcIonConcentrationMeasure = number;
+export type IfcIsothermalMoistureCapacityMeasure = number;
+export type IfcKinematicViscosityMeasure = number;
+export type IfcLabel = string;
+export type IfcLanguageId = IfcIdentifier;
+export type IfcLengthMeasure = number;
+export type IfcLineIndex = Array<IfcPositiveInteger>;
+export type IfcLinearForceMeasure = number;
+export type IfcLinearMomentMeasure = number;
+export type IfcLinearStiffnessMeasure = number;
+export type IfcLinearVelocityMeasure = number;
+export type IfcLogical = boolean;
+export type IfcLuminousFluxMeasure = number;
+export type IfcLuminousIntensityDistributionMeasure = number;
+export type IfcLuminousIntensityMeasure = number;
+export type IfcMagneticFluxDensityMeasure = number;
+export type IfcMagneticFluxMeasure = number;
+export type IfcMassDensityMeasure = number;
+export type IfcMassFlowRateMeasure = number;
+export type IfcMassMeasure = number;
+export type IfcMassPerLengthMeasure = number;
+export type IfcModulusOfElasticityMeasure = number;
+export type IfcModulusOfLinearSubgradeReactionMeasure = number;
+export type IfcModulusOfRotationalSubgradeReactionMeasure = number;
+export type IfcModulusOfSubgradeReactionMeasure = number;
+export type IfcMoistureDiffusivityMeasure = number;
+export type IfcMolecularWeightMeasure = number;
+export type IfcMomentOfInertiaMeasure = number;
+export type IfcMonetaryMeasure = number;
+export type IfcMonthInYearNumber = number;
+export type IfcNonNegativeLengthMeasure = IfcLengthMeasure;
+export type IfcNormalisedRatioMeasure = IfcRatioMeasure;
+export type IfcNumericMeasure = number;
+export type IfcPHMeasure = number;
+export type IfcParameterValue = number;
+export type IfcPlanarForceMeasure = number;
+export type IfcPlaneAngleMeasure = number;
+export type IfcPositiveInteger = IfcInteger;
+export type IfcPositiveLengthMeasure = IfcLengthMeasure;
+export type IfcPositivePlaneAngleMeasure = IfcPlaneAngleMeasure;
+export type IfcPositiveRatioMeasure = IfcRatioMeasure;
+export type IfcPowerMeasure = number;
+export type IfcPresentableText = string;
+export type IfcPressureMeasure = number;
+export type IfcPropertySetDefinitionSet = Array<IfcPropertySetDefinition>;
+export type IfcRadioActivityMeasure = number;
+export type IfcRatioMeasure = number;
+export type IfcReal = number;
+export type IfcRotationalFrequencyMeasure = number;
+export type IfcRotationalMassMeasure = number;
+export type IfcRotationalStiffnessMeasure = number;
+export type IfcSectionModulusMeasure = number;
+export type IfcSectionalAreaIntegralMeasure = number;
+export type IfcShearModulusMeasure = number;
+export type IfcSolidAngleMeasure = number;
+export type IfcSoundPowerLevelMeasure = number;
+export type IfcSoundPowerMeasure = number;
+export type IfcSoundPressureLevelMeasure = number;
+export type IfcSoundPressureMeasure = number;
+export type IfcSpecificHeatCapacityMeasure = number;
+export type IfcSpecularExponent = number;
+export type IfcSpecularRoughness = number;
+export type IfcTemperatureGradientMeasure = number;
+export type IfcTemperatureRateOfChangeMeasure = number;
+export type IfcText = string;
+export type IfcTextAlignment = string;
+export type IfcTextDecoration = string;
+export type IfcTextFontName = string;
+export type IfcTextTransformation = string;
+export type IfcThermalAdmittanceMeasure = number;
+export type IfcThermalConductivityMeasure = number;
+export type IfcThermalExpansionCoefficientMeasure = number;
+export type IfcThermalResistanceMeasure = number;
+export type IfcThermalTransmittanceMeasure = number;
+export type IfcThermodynamicTemperatureMeasure = number;
+export type IfcTime = string;
+export type IfcTimeMeasure = number;
+export type IfcTimeStamp = number;
+export type IfcTorqueMeasure = number;
+export type IfcURIReference = string;
+export type IfcVaporPermeabilityMeasure = number;
+export type IfcVolumeMeasure = number;
+export type IfcVolumetricFlowRateMeasure = number;
+export type IfcWarpingConstantMeasure = number;
+export type IfcWarpingMomentMeasure = number;
 export enum IfcActionRequestTypeEnum {
 	EMAIL,
 	FAX,
@@ -2698,3266 +2700,3266 @@ export type IfcWarpingStiffnessSelect =
 |IfcWarpingMomentMeasure
 ;
 export class IfcActionRequest {};
-export function CreateIfcActionRequest(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,PredefinedType: IfcActionRequestTypeEnum,Status: IfcLabel,LongDescription: IfcText): IfcActionRequest {
-	return {};
+export function CreateIfcActionRequest(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, PredefinedType: IfcActionRequestTypeEnum | null, Status: IfcLabel | null, LongDescription: IfcText | null): Handle<IfcActionRequest> {
+	return { expressID: 0 };
 }
 export class IfcActor {};
-export function CreateIfcActor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,TheActor: IfcActorSelect): IfcActor {
-	return {};
+export function CreateIfcActor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, TheActor: IfcActorSelect ): Handle<IfcActor> {
+	return { expressID: 0 };
 }
 export class IfcActorRole {};
-export function CreateIfcActorRole(Role: IfcRoleEnum,UserDefinedRole: IfcLabel,Description: IfcText): IfcActorRole {
-	return {};
+export function CreateIfcActorRole(Role: IfcRoleEnum , UserDefinedRole: IfcLabel | null, Description: IfcText | null): Handle<IfcActorRole> {
+	return { expressID: 0 };
 }
 export class IfcActuator {};
-export function CreateIfcActuator(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcActuatorTypeEnum): IfcActuator {
-	return {};
+export function CreateIfcActuator(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcActuatorTypeEnum | null): Handle<IfcActuator> {
+	return { expressID: 0 };
 }
 export class IfcActuatorType {};
-export function CreateIfcActuatorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcActuatorTypeEnum): IfcActuatorType {
-	return {};
+export function CreateIfcActuatorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcActuatorTypeEnum ): Handle<IfcActuatorType> {
+	return { expressID: 0 };
 }
 export class IfcAddress {};
-export function CreateIfcAddress(Purpose: IfcAddressTypeEnum,Description: IfcText,UserDefinedPurpose: IfcLabel): IfcAddress {
-	return {};
+export function CreateIfcAddress(Purpose: IfcAddressTypeEnum | null, Description: IfcText | null, UserDefinedPurpose: IfcLabel | null): Handle<IfcAddress> {
+	return { expressID: 0 };
 }
 export class IfcAdvancedBrep {};
-export function CreateIfcAdvancedBrep(Outer: IfcClosedShell): IfcAdvancedBrep {
-	return {};
+export function CreateIfcAdvancedBrep(Outer: Handle<IfcClosedShell> ): Handle<IfcAdvancedBrep> {
+	return { expressID: 0 };
 }
 export class IfcAdvancedBrepWithVoids {};
-export function CreateIfcAdvancedBrepWithVoids(Outer: IfcClosedShell,Voids: IfcClosedShell): IfcAdvancedBrepWithVoids {
-	return {};
+export function CreateIfcAdvancedBrepWithVoids(Outer: Handle<IfcClosedShell> , Voids: Handle<IfcClosedShell>[] ): Handle<IfcAdvancedBrepWithVoids> {
+	return { expressID: 0 };
 }
 export class IfcAdvancedFace {};
-export function CreateIfcAdvancedFace(Bounds: IfcFaceBound,FaceSurface: IfcSurface,SameSense: IfcBoolean): IfcAdvancedFace {
-	return {};
+export function CreateIfcAdvancedFace(Bounds: Handle<IfcFaceBound>[] , FaceSurface: Handle<IfcSurface> , SameSense: IfcBoolean ): Handle<IfcAdvancedFace> {
+	return { expressID: 0 };
 }
 export class IfcAirTerminal {};
-export function CreateIfcAirTerminal(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcAirTerminalTypeEnum): IfcAirTerminal {
-	return {};
+export function CreateIfcAirTerminal(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcAirTerminalTypeEnum | null): Handle<IfcAirTerminal> {
+	return { expressID: 0 };
 }
 export class IfcAirTerminalBox {};
-export function CreateIfcAirTerminalBox(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcAirTerminalBoxTypeEnum): IfcAirTerminalBox {
-	return {};
+export function CreateIfcAirTerminalBox(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcAirTerminalBoxTypeEnum | null): Handle<IfcAirTerminalBox> {
+	return { expressID: 0 };
 }
 export class IfcAirTerminalBoxType {};
-export function CreateIfcAirTerminalBoxType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcAirTerminalBoxTypeEnum): IfcAirTerminalBoxType {
-	return {};
+export function CreateIfcAirTerminalBoxType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcAirTerminalBoxTypeEnum ): Handle<IfcAirTerminalBoxType> {
+	return { expressID: 0 };
 }
 export class IfcAirTerminalType {};
-export function CreateIfcAirTerminalType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcAirTerminalTypeEnum): IfcAirTerminalType {
-	return {};
+export function CreateIfcAirTerminalType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcAirTerminalTypeEnum ): Handle<IfcAirTerminalType> {
+	return { expressID: 0 };
 }
 export class IfcAirToAirHeatRecovery {};
-export function CreateIfcAirToAirHeatRecovery(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcAirToAirHeatRecoveryTypeEnum): IfcAirToAirHeatRecovery {
-	return {};
+export function CreateIfcAirToAirHeatRecovery(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcAirToAirHeatRecoveryTypeEnum | null): Handle<IfcAirToAirHeatRecovery> {
+	return { expressID: 0 };
 }
 export class IfcAirToAirHeatRecoveryType {};
-export function CreateIfcAirToAirHeatRecoveryType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcAirToAirHeatRecoveryTypeEnum): IfcAirToAirHeatRecoveryType {
-	return {};
+export function CreateIfcAirToAirHeatRecoveryType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcAirToAirHeatRecoveryTypeEnum ): Handle<IfcAirToAirHeatRecoveryType> {
+	return { expressID: 0 };
 }
 export class IfcAlarm {};
-export function CreateIfcAlarm(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcAlarmTypeEnum): IfcAlarm {
-	return {};
+export function CreateIfcAlarm(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcAlarmTypeEnum | null): Handle<IfcAlarm> {
+	return { expressID: 0 };
 }
 export class IfcAlarmType {};
-export function CreateIfcAlarmType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcAlarmTypeEnum): IfcAlarmType {
-	return {};
+export function CreateIfcAlarmType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcAlarmTypeEnum ): Handle<IfcAlarmType> {
+	return { expressID: 0 };
 }
 export class IfcAlignment {};
-export function CreateIfcAlignment(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Axis: IfcCurve,PredefinedType: IfcAlignmentTypeEnum): IfcAlignment {
-	return {};
+export function CreateIfcAlignment(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Axis: Handle<IfcCurve> , PredefinedType: IfcAlignmentTypeEnum | null): Handle<IfcAlignment> {
+	return { expressID: 0 };
 }
 export class IfcAlignment2DHorizontal {};
-export function CreateIfcAlignment2DHorizontal(StartDistAlong: IfcLengthMeasure,Segments: IfcAlignment2DHorizontalSegment): IfcAlignment2DHorizontal {
-	return {};
+export function CreateIfcAlignment2DHorizontal(StartDistAlong: IfcLengthMeasure | null, Segments: Handle<IfcAlignment2DHorizontalSegment> ): Handle<IfcAlignment2DHorizontal> {
+	return { expressID: 0 };
 }
 export class IfcAlignment2DHorizontalSegment {};
-export function CreateIfcAlignment2DHorizontalSegment(TangentialContinuity: IfcBoolean,StartTag: IfcLabel,EndTag: IfcLabel,CurveGeometry: IfcCurveSegment2D): IfcAlignment2DHorizontalSegment {
-	return {};
+export function CreateIfcAlignment2DHorizontalSegment(TangentialContinuity: IfcBoolean | null, StartTag: IfcLabel | null, EndTag: IfcLabel | null, CurveGeometry: Handle<IfcCurveSegment2D> ): Handle<IfcAlignment2DHorizontalSegment> {
+	return { expressID: 0 };
 }
 export class IfcAlignment2DSegment {};
-export function CreateIfcAlignment2DSegment(TangentialContinuity: IfcBoolean,StartTag: IfcLabel,EndTag: IfcLabel): IfcAlignment2DSegment {
-	return {};
+export function CreateIfcAlignment2DSegment(TangentialContinuity: IfcBoolean | null, StartTag: IfcLabel | null, EndTag: IfcLabel | null): Handle<IfcAlignment2DSegment> {
+	return { expressID: 0 };
 }
 export class IfcAlignment2DVerSegCircularArc {};
-export function CreateIfcAlignment2DVerSegCircularArc(TangentialContinuity: IfcBoolean,StartTag: IfcLabel,EndTag: IfcLabel,StartDistAlong: IfcLengthMeasure,HorizontalLength: IfcPositiveLengthMeasure,StartHeight: IfcLengthMeasure,StartGradient: IfcRatioMeasure,Radius: IfcPositiveLengthMeasure,IsConvex: IfcBoolean): IfcAlignment2DVerSegCircularArc {
-	return {};
+export function CreateIfcAlignment2DVerSegCircularArc(TangentialContinuity: IfcBoolean | null, StartTag: IfcLabel | null, EndTag: IfcLabel | null, StartDistAlong: IfcLengthMeasure , HorizontalLength: IfcPositiveLengthMeasure , StartHeight: IfcLengthMeasure , StartGradient: IfcRatioMeasure , Radius: IfcPositiveLengthMeasure , IsConvex: IfcBoolean ): Handle<IfcAlignment2DVerSegCircularArc> {
+	return { expressID: 0 };
 }
 export class IfcAlignment2DVerSegLine {};
-export function CreateIfcAlignment2DVerSegLine(TangentialContinuity: IfcBoolean,StartTag: IfcLabel,EndTag: IfcLabel,StartDistAlong: IfcLengthMeasure,HorizontalLength: IfcPositiveLengthMeasure,StartHeight: IfcLengthMeasure,StartGradient: IfcRatioMeasure): IfcAlignment2DVerSegLine {
-	return {};
+export function CreateIfcAlignment2DVerSegLine(TangentialContinuity: IfcBoolean | null, StartTag: IfcLabel | null, EndTag: IfcLabel | null, StartDistAlong: IfcLengthMeasure , HorizontalLength: IfcPositiveLengthMeasure , StartHeight: IfcLengthMeasure , StartGradient: IfcRatioMeasure ): Handle<IfcAlignment2DVerSegLine> {
+	return { expressID: 0 };
 }
 export class IfcAlignment2DVerSegParabolicArc {};
-export function CreateIfcAlignment2DVerSegParabolicArc(TangentialContinuity: IfcBoolean,StartTag: IfcLabel,EndTag: IfcLabel,StartDistAlong: IfcLengthMeasure,HorizontalLength: IfcPositiveLengthMeasure,StartHeight: IfcLengthMeasure,StartGradient: IfcRatioMeasure,ParabolaConstant: IfcPositiveLengthMeasure,IsConvex: IfcBoolean): IfcAlignment2DVerSegParabolicArc {
-	return {};
+export function CreateIfcAlignment2DVerSegParabolicArc(TangentialContinuity: IfcBoolean | null, StartTag: IfcLabel | null, EndTag: IfcLabel | null, StartDistAlong: IfcLengthMeasure , HorizontalLength: IfcPositiveLengthMeasure , StartHeight: IfcLengthMeasure , StartGradient: IfcRatioMeasure , ParabolaConstant: IfcPositiveLengthMeasure , IsConvex: IfcBoolean ): Handle<IfcAlignment2DVerSegParabolicArc> {
+	return { expressID: 0 };
 }
 export class IfcAlignment2DVertical {};
-export function CreateIfcAlignment2DVertical(Segments: IfcAlignment2DVerticalSegment): IfcAlignment2DVertical {
-	return {};
+export function CreateIfcAlignment2DVertical(Segments: Handle<IfcAlignment2DVerticalSegment> ): Handle<IfcAlignment2DVertical> {
+	return { expressID: 0 };
 }
 export class IfcAlignment2DVerticalSegment {};
-export function CreateIfcAlignment2DVerticalSegment(TangentialContinuity: IfcBoolean,StartTag: IfcLabel,EndTag: IfcLabel,StartDistAlong: IfcLengthMeasure,HorizontalLength: IfcPositiveLengthMeasure,StartHeight: IfcLengthMeasure,StartGradient: IfcRatioMeasure): IfcAlignment2DVerticalSegment {
-	return {};
+export function CreateIfcAlignment2DVerticalSegment(TangentialContinuity: IfcBoolean | null, StartTag: IfcLabel | null, EndTag: IfcLabel | null, StartDistAlong: IfcLengthMeasure , HorizontalLength: IfcPositiveLengthMeasure , StartHeight: IfcLengthMeasure , StartGradient: IfcRatioMeasure ): Handle<IfcAlignment2DVerticalSegment> {
+	return { expressID: 0 };
 }
 export class IfcAlignmentCurve {};
-export function CreateIfcAlignmentCurve(Horizontal: IfcAlignment2DHorizontal,Vertical: IfcAlignment2DVertical,Tag: IfcLabel): IfcAlignmentCurve {
-	return {};
+export function CreateIfcAlignmentCurve(Horizontal: Handle<IfcAlignment2DHorizontal> , Vertical: Handle<IfcAlignment2DVertical> | null, Tag: IfcLabel | null): Handle<IfcAlignmentCurve> {
+	return { expressID: 0 };
 }
 export class IfcAnnotation {};
-export function CreateIfcAnnotation(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation): IfcAnnotation {
-	return {};
+export function CreateIfcAnnotation(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null): Handle<IfcAnnotation> {
+	return { expressID: 0 };
 }
 export class IfcAnnotationFillArea {};
-export function CreateIfcAnnotationFillArea(OuterBoundary: IfcCurve,InnerBoundaries: IfcCurve): IfcAnnotationFillArea {
-	return {};
+export function CreateIfcAnnotationFillArea(OuterBoundary: Handle<IfcCurve> , InnerBoundaries: Handle<IfcCurve>[] | null): Handle<IfcAnnotationFillArea> {
+	return { expressID: 0 };
 }
 export class IfcApplication {};
-export function CreateIfcApplication(ApplicationDeveloper: IfcOrganization,Version: IfcLabel,ApplicationFullName: IfcLabel,ApplicationIdentifier: IfcIdentifier): IfcApplication {
-	return {};
+export function CreateIfcApplication(ApplicationDeveloper: Handle<IfcOrganization> , Version: IfcLabel , ApplicationFullName: IfcLabel , ApplicationIdentifier: IfcIdentifier ): Handle<IfcApplication> {
+	return { expressID: 0 };
 }
 export class IfcAppliedValue {};
-export function CreateIfcAppliedValue(Name: IfcLabel,Description: IfcText,AppliedValue: IfcAppliedValueSelect,UnitBasis: IfcMeasureWithUnit,ApplicableDate: IfcDate,FixedUntilDate: IfcDate,Category: IfcLabel,Condition: IfcLabel,ArithmeticOperator: IfcArithmeticOperatorEnum,Components: IfcAppliedValue): IfcAppliedValue {
-	return {};
+export function CreateIfcAppliedValue(Name: IfcLabel | null, Description: IfcText | null, AppliedValue: IfcAppliedValueSelect | null, UnitBasis: Handle<IfcMeasureWithUnit> | null, ApplicableDate: IfcDate | null, FixedUntilDate: IfcDate | null, Category: IfcLabel | null, Condition: IfcLabel | null, ArithmeticOperator: IfcArithmeticOperatorEnum | null, Components: Handle<IfcAppliedValue> | null): Handle<IfcAppliedValue> {
+	return { expressID: 0 };
 }
 export class IfcApproval {};
-export function CreateIfcApproval(Identifier: IfcIdentifier,Name: IfcLabel,Description: IfcText,TimeOfApproval: IfcDateTime,Status: IfcLabel,Level: IfcLabel,Qualifier: IfcText,RequestingApproval: IfcActorSelect,GivingApproval: IfcActorSelect): IfcApproval {
-	return {};
+export function CreateIfcApproval(Identifier: IfcIdentifier | null, Name: IfcLabel | null, Description: IfcText | null, TimeOfApproval: IfcDateTime | null, Status: IfcLabel | null, Level: IfcLabel | null, Qualifier: IfcText | null, RequestingApproval: IfcActorSelect | null, GivingApproval: IfcActorSelect | null): Handle<IfcApproval> {
+	return { expressID: 0 };
 }
 export class IfcApprovalRelationship {};
-export function CreateIfcApprovalRelationship(Name: IfcLabel,Description: IfcText,RelatingApproval: IfcApproval,RelatedApprovals: IfcApproval): IfcApprovalRelationship {
-	return {};
+export function CreateIfcApprovalRelationship(Name: IfcLabel | null, Description: IfcText | null, RelatingApproval: Handle<IfcApproval> , RelatedApprovals: Handle<IfcApproval>[] ): Handle<IfcApprovalRelationship> {
+	return { expressID: 0 };
 }
 export class IfcArbitraryClosedProfileDef {};
-export function CreateIfcArbitraryClosedProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,OuterCurve: IfcCurve): IfcArbitraryClosedProfileDef {
-	return {};
+export function CreateIfcArbitraryClosedProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, OuterCurve: Handle<IfcCurve> ): Handle<IfcArbitraryClosedProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcArbitraryOpenProfileDef {};
-export function CreateIfcArbitraryOpenProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Curve: IfcBoundedCurve): IfcArbitraryOpenProfileDef {
-	return {};
+export function CreateIfcArbitraryOpenProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Curve: Handle<IfcBoundedCurve> ): Handle<IfcArbitraryOpenProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcArbitraryProfileDefWithVoids {};
-export function CreateIfcArbitraryProfileDefWithVoids(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,OuterCurve: IfcCurve,InnerCurves: IfcCurve): IfcArbitraryProfileDefWithVoids {
-	return {};
+export function CreateIfcArbitraryProfileDefWithVoids(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, OuterCurve: Handle<IfcCurve> , InnerCurves: Handle<IfcCurve>[] ): Handle<IfcArbitraryProfileDefWithVoids> {
+	return { expressID: 0 };
 }
 export class IfcAsset {};
-export function CreateIfcAsset(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,OriginalValue: IfcCostValue,CurrentValue: IfcCostValue,TotalReplacementCost: IfcCostValue,Owner: IfcActorSelect,User: IfcActorSelect,ResponsiblePerson: IfcPerson,IncorporationDate: IfcDate,DepreciatedValue: IfcCostValue): IfcAsset {
-	return {};
+export function CreateIfcAsset(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, OriginalValue: Handle<IfcCostValue> | null, CurrentValue: Handle<IfcCostValue> | null, TotalReplacementCost: Handle<IfcCostValue> | null, Owner: IfcActorSelect | null, User: IfcActorSelect | null, ResponsiblePerson: Handle<IfcPerson> | null, IncorporationDate: IfcDate | null, DepreciatedValue: Handle<IfcCostValue> | null): Handle<IfcAsset> {
+	return { expressID: 0 };
 }
 export class IfcAsymmetricIShapeProfileDef {};
-export function CreateIfcAsymmetricIShapeProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,BottomFlangeWidth: IfcPositiveLengthMeasure,OverallDepth: IfcPositiveLengthMeasure,WebThickness: IfcPositiveLengthMeasure,BottomFlangeThickness: IfcPositiveLengthMeasure,BottomFlangeFilletRadius: IfcNonNegativeLengthMeasure,TopFlangeWidth: IfcPositiveLengthMeasure,TopFlangeThickness: IfcPositiveLengthMeasure,TopFlangeFilletRadius: IfcNonNegativeLengthMeasure,BottomFlangeEdgeRadius: IfcNonNegativeLengthMeasure,BottomFlangeSlope: IfcPlaneAngleMeasure,TopFlangeEdgeRadius: IfcNonNegativeLengthMeasure,TopFlangeSlope: IfcPlaneAngleMeasure): IfcAsymmetricIShapeProfileDef {
-	return {};
+export function CreateIfcAsymmetricIShapeProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, BottomFlangeWidth: IfcPositiveLengthMeasure , OverallDepth: IfcPositiveLengthMeasure , WebThickness: IfcPositiveLengthMeasure , BottomFlangeThickness: IfcPositiveLengthMeasure , BottomFlangeFilletRadius: IfcNonNegativeLengthMeasure | null, TopFlangeWidth: IfcPositiveLengthMeasure , TopFlangeThickness: IfcPositiveLengthMeasure | null, TopFlangeFilletRadius: IfcNonNegativeLengthMeasure | null, BottomFlangeEdgeRadius: IfcNonNegativeLengthMeasure | null, BottomFlangeSlope: IfcPlaneAngleMeasure | null, TopFlangeEdgeRadius: IfcNonNegativeLengthMeasure | null, TopFlangeSlope: IfcPlaneAngleMeasure | null): Handle<IfcAsymmetricIShapeProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcAudioVisualAppliance {};
-export function CreateIfcAudioVisualAppliance(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcAudioVisualApplianceTypeEnum): IfcAudioVisualAppliance {
-	return {};
+export function CreateIfcAudioVisualAppliance(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcAudioVisualApplianceTypeEnum | null): Handle<IfcAudioVisualAppliance> {
+	return { expressID: 0 };
 }
 export class IfcAudioVisualApplianceType {};
-export function CreateIfcAudioVisualApplianceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcAudioVisualApplianceTypeEnum): IfcAudioVisualApplianceType {
-	return {};
+export function CreateIfcAudioVisualApplianceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcAudioVisualApplianceTypeEnum ): Handle<IfcAudioVisualApplianceType> {
+	return { expressID: 0 };
 }
 export class IfcAxis1Placement {};
-export function CreateIfcAxis1Placement(Location: IfcCartesianPoint,Axis: IfcDirection): IfcAxis1Placement {
-	return {};
+export function CreateIfcAxis1Placement(Location: Handle<IfcCartesianPoint> , Axis: Handle<IfcDirection> | null): Handle<IfcAxis1Placement> {
+	return { expressID: 0 };
 }
 export class IfcAxis2Placement2D {};
-export function CreateIfcAxis2Placement2D(Location: IfcCartesianPoint,RefDirection: IfcDirection): IfcAxis2Placement2D {
-	return {};
+export function CreateIfcAxis2Placement2D(Location: Handle<IfcCartesianPoint> , RefDirection: Handle<IfcDirection> | null): Handle<IfcAxis2Placement2D> {
+	return { expressID: 0 };
 }
 export class IfcAxis2Placement3D {};
-export function CreateIfcAxis2Placement3D(Location: IfcCartesianPoint,Axis: IfcDirection,RefDirection: IfcDirection): IfcAxis2Placement3D {
-	return {};
+export function CreateIfcAxis2Placement3D(Location: Handle<IfcCartesianPoint> , Axis: Handle<IfcDirection> | null, RefDirection: Handle<IfcDirection> | null): Handle<IfcAxis2Placement3D> {
+	return { expressID: 0 };
 }
 export class IfcBSplineCurve {};
-export function CreateIfcBSplineCurve(Degree: IfcInteger,ControlPointsList: IfcCartesianPoint,CurveForm: IfcBSplineCurveForm,ClosedCurve: IfcLogical,SelfIntersect: IfcLogical): IfcBSplineCurve {
-	return {};
+export function CreateIfcBSplineCurve(Degree: IfcInteger , ControlPointsList: Handle<IfcCartesianPoint> , CurveForm: IfcBSplineCurveForm , ClosedCurve: IfcLogical , SelfIntersect: IfcLogical ): Handle<IfcBSplineCurve> {
+	return { expressID: 0 };
 }
 export class IfcBSplineCurveWithKnots {};
-export function CreateIfcBSplineCurveWithKnots(Degree: IfcInteger,ControlPointsList: IfcCartesianPoint,CurveForm: IfcBSplineCurveForm,ClosedCurve: IfcLogical,SelfIntersect: IfcLogical,KnotMultiplicities: IfcInteger,Knots: IfcParameterValue,KnotSpec: IfcKnotType): IfcBSplineCurveWithKnots {
-	return {};
+export function CreateIfcBSplineCurveWithKnots(Degree: IfcInteger , ControlPointsList: Handle<IfcCartesianPoint> , CurveForm: IfcBSplineCurveForm , ClosedCurve: IfcLogical , SelfIntersect: IfcLogical , KnotMultiplicities: IfcInteger , Knots: IfcParameterValue , KnotSpec: IfcKnotType ): Handle<IfcBSplineCurveWithKnots> {
+	return { expressID: 0 };
 }
 export class IfcBSplineSurface {};
-export function CreateIfcBSplineSurface(UDegree: IfcInteger,VDegree: IfcInteger,ControlPointsList: IfcCartesianPoint,SurfaceForm: IfcBSplineSurfaceForm,UClosed: IfcLogical,VClosed: IfcLogical,SelfIntersect: IfcLogical): IfcBSplineSurface {
-	return {};
+export function CreateIfcBSplineSurface(UDegree: IfcInteger , VDegree: IfcInteger , ControlPointsList: Handle<IfcCartesianPoint> , SurfaceForm: IfcBSplineSurfaceForm , UClosed: IfcLogical , VClosed: IfcLogical , SelfIntersect: IfcLogical ): Handle<IfcBSplineSurface> {
+	return { expressID: 0 };
 }
 export class IfcBSplineSurfaceWithKnots {};
-export function CreateIfcBSplineSurfaceWithKnots(UDegree: IfcInteger,VDegree: IfcInteger,ControlPointsList: IfcCartesianPoint,SurfaceForm: IfcBSplineSurfaceForm,UClosed: IfcLogical,VClosed: IfcLogical,SelfIntersect: IfcLogical,UMultiplicities: IfcInteger,VMultiplicities: IfcInteger,UKnots: IfcParameterValue,VKnots: IfcParameterValue,KnotSpec: IfcKnotType): IfcBSplineSurfaceWithKnots {
-	return {};
+export function CreateIfcBSplineSurfaceWithKnots(UDegree: IfcInteger , VDegree: IfcInteger , ControlPointsList: Handle<IfcCartesianPoint> , SurfaceForm: IfcBSplineSurfaceForm , UClosed: IfcLogical , VClosed: IfcLogical , SelfIntersect: IfcLogical , UMultiplicities: IfcInteger , VMultiplicities: IfcInteger , UKnots: IfcParameterValue , VKnots: IfcParameterValue , KnotSpec: IfcKnotType ): Handle<IfcBSplineSurfaceWithKnots> {
+	return { expressID: 0 };
 }
 export class IfcBeam {};
-export function CreateIfcBeam(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcBeamTypeEnum): IfcBeam {
-	return {};
+export function CreateIfcBeam(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcBeamTypeEnum | null): Handle<IfcBeam> {
+	return { expressID: 0 };
 }
 export class IfcBeamStandardCase {};
-export function CreateIfcBeamStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcBeamTypeEnum): IfcBeamStandardCase {
-	return {};
+export function CreateIfcBeamStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcBeamTypeEnum | null): Handle<IfcBeamStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcBeamType {};
-export function CreateIfcBeamType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcBeamTypeEnum): IfcBeamType {
-	return {};
+export function CreateIfcBeamType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcBeamTypeEnum ): Handle<IfcBeamType> {
+	return { expressID: 0 };
 }
 export class IfcBearing {};
-export function CreateIfcBearing(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcBearingTypeEnum): IfcBearing {
-	return {};
+export function CreateIfcBearing(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcBearingTypeEnum | null): Handle<IfcBearing> {
+	return { expressID: 0 };
 }
 export class IfcBearingType {};
-export function CreateIfcBearingType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcBearingTypeEnum): IfcBearingType {
-	return {};
+export function CreateIfcBearingType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcBearingTypeEnum ): Handle<IfcBearingType> {
+	return { expressID: 0 };
 }
 export class IfcBlobTexture {};
-export function CreateIfcBlobTexture(RepeatS: IfcBoolean,RepeatT: IfcBoolean,Mode: IfcIdentifier,TextureTransform: IfcCartesianTransformationOperator2D,Parameter: IfcIdentifier,RasterFormat: IfcIdentifier,RasterCode: IfcBinary): IfcBlobTexture {
-	return {};
+export function CreateIfcBlobTexture(RepeatS: IfcBoolean , RepeatT: IfcBoolean , Mode: IfcIdentifier | null, TextureTransform: Handle<IfcCartesianTransformationOperator2D> | null, Parameter: IfcIdentifier | null, RasterFormat: IfcIdentifier , RasterCode: IfcBinary ): Handle<IfcBlobTexture> {
+	return { expressID: 0 };
 }
 export class IfcBlock {};
-export function CreateIfcBlock(Position: IfcAxis2Placement3D,XLength: IfcPositiveLengthMeasure,YLength: IfcPositiveLengthMeasure,ZLength: IfcPositiveLengthMeasure): IfcBlock {
-	return {};
+export function CreateIfcBlock(Position: Handle<IfcAxis2Placement3D> , XLength: IfcPositiveLengthMeasure , YLength: IfcPositiveLengthMeasure , ZLength: IfcPositiveLengthMeasure ): Handle<IfcBlock> {
+	return { expressID: 0 };
 }
 export class IfcBoiler {};
-export function CreateIfcBoiler(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcBoilerTypeEnum): IfcBoiler {
-	return {};
+export function CreateIfcBoiler(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcBoilerTypeEnum | null): Handle<IfcBoiler> {
+	return { expressID: 0 };
 }
 export class IfcBoilerType {};
-export function CreateIfcBoilerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcBoilerTypeEnum): IfcBoilerType {
-	return {};
+export function CreateIfcBoilerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcBoilerTypeEnum ): Handle<IfcBoilerType> {
+	return { expressID: 0 };
 }
 export class IfcBooleanClippingResult {};
-export function CreateIfcBooleanClippingResult(Operator: IfcBooleanOperator,FirstOperand: IfcBooleanOperand,SecondOperand: IfcBooleanOperand): IfcBooleanClippingResult {
-	return {};
+export function CreateIfcBooleanClippingResult(Operator: IfcBooleanOperator , FirstOperand: IfcBooleanOperand , SecondOperand: IfcBooleanOperand ): Handle<IfcBooleanClippingResult> {
+	return { expressID: 0 };
 }
 export class IfcBooleanResult {};
-export function CreateIfcBooleanResult(Operator: IfcBooleanOperator,FirstOperand: IfcBooleanOperand,SecondOperand: IfcBooleanOperand): IfcBooleanResult {
-	return {};
+export function CreateIfcBooleanResult(Operator: IfcBooleanOperator , FirstOperand: IfcBooleanOperand , SecondOperand: IfcBooleanOperand ): Handle<IfcBooleanResult> {
+	return { expressID: 0 };
 }
 export class IfcBoundaryCondition {};
-export function CreateIfcBoundaryCondition(Name: IfcLabel): IfcBoundaryCondition {
-	return {};
+export function CreateIfcBoundaryCondition(Name: IfcLabel | null): Handle<IfcBoundaryCondition> {
+	return { expressID: 0 };
 }
 export class IfcBoundaryCurve {};
-export function CreateIfcBoundaryCurve(Segments: IfcCompositeCurveSegment,SelfIntersect: IfcLogical): IfcBoundaryCurve {
-	return {};
+export function CreateIfcBoundaryCurve(Segments: Handle<IfcCompositeCurveSegment> , SelfIntersect: IfcLogical ): Handle<IfcBoundaryCurve> {
+	return { expressID: 0 };
 }
 export class IfcBoundaryEdgeCondition {};
-export function CreateIfcBoundaryEdgeCondition(Name: IfcLabel,TranslationalStiffnessByLengthX: IfcModulusOfTranslationalSubgradeReactionSelect,TranslationalStiffnessByLengthY: IfcModulusOfTranslationalSubgradeReactionSelect,TranslationalStiffnessByLengthZ: IfcModulusOfTranslationalSubgradeReactionSelect,RotationalStiffnessByLengthX: IfcModulusOfRotationalSubgradeReactionSelect,RotationalStiffnessByLengthY: IfcModulusOfRotationalSubgradeReactionSelect,RotationalStiffnessByLengthZ: IfcModulusOfRotationalSubgradeReactionSelect): IfcBoundaryEdgeCondition {
-	return {};
+export function CreateIfcBoundaryEdgeCondition(Name: IfcLabel | null, TranslationalStiffnessByLengthX: IfcModulusOfTranslationalSubgradeReactionSelect | null, TranslationalStiffnessByLengthY: IfcModulusOfTranslationalSubgradeReactionSelect | null, TranslationalStiffnessByLengthZ: IfcModulusOfTranslationalSubgradeReactionSelect | null, RotationalStiffnessByLengthX: IfcModulusOfRotationalSubgradeReactionSelect | null, RotationalStiffnessByLengthY: IfcModulusOfRotationalSubgradeReactionSelect | null, RotationalStiffnessByLengthZ: IfcModulusOfRotationalSubgradeReactionSelect | null): Handle<IfcBoundaryEdgeCondition> {
+	return { expressID: 0 };
 }
 export class IfcBoundaryFaceCondition {};
-export function CreateIfcBoundaryFaceCondition(Name: IfcLabel,TranslationalStiffnessByAreaX: IfcModulusOfSubgradeReactionSelect,TranslationalStiffnessByAreaY: IfcModulusOfSubgradeReactionSelect,TranslationalStiffnessByAreaZ: IfcModulusOfSubgradeReactionSelect): IfcBoundaryFaceCondition {
-	return {};
+export function CreateIfcBoundaryFaceCondition(Name: IfcLabel | null, TranslationalStiffnessByAreaX: IfcModulusOfSubgradeReactionSelect | null, TranslationalStiffnessByAreaY: IfcModulusOfSubgradeReactionSelect | null, TranslationalStiffnessByAreaZ: IfcModulusOfSubgradeReactionSelect | null): Handle<IfcBoundaryFaceCondition> {
+	return { expressID: 0 };
 }
 export class IfcBoundaryNodeCondition {};
-export function CreateIfcBoundaryNodeCondition(Name: IfcLabel,TranslationalStiffnessX: IfcTranslationalStiffnessSelect,TranslationalStiffnessY: IfcTranslationalStiffnessSelect,TranslationalStiffnessZ: IfcTranslationalStiffnessSelect,RotationalStiffnessX: IfcRotationalStiffnessSelect,RotationalStiffnessY: IfcRotationalStiffnessSelect,RotationalStiffnessZ: IfcRotationalStiffnessSelect): IfcBoundaryNodeCondition {
-	return {};
+export function CreateIfcBoundaryNodeCondition(Name: IfcLabel | null, TranslationalStiffnessX: IfcTranslationalStiffnessSelect | null, TranslationalStiffnessY: IfcTranslationalStiffnessSelect | null, TranslationalStiffnessZ: IfcTranslationalStiffnessSelect | null, RotationalStiffnessX: IfcRotationalStiffnessSelect | null, RotationalStiffnessY: IfcRotationalStiffnessSelect | null, RotationalStiffnessZ: IfcRotationalStiffnessSelect | null): Handle<IfcBoundaryNodeCondition> {
+	return { expressID: 0 };
 }
 export class IfcBoundaryNodeConditionWarping {};
-export function CreateIfcBoundaryNodeConditionWarping(Name: IfcLabel,TranslationalStiffnessX: IfcTranslationalStiffnessSelect,TranslationalStiffnessY: IfcTranslationalStiffnessSelect,TranslationalStiffnessZ: IfcTranslationalStiffnessSelect,RotationalStiffnessX: IfcRotationalStiffnessSelect,RotationalStiffnessY: IfcRotationalStiffnessSelect,RotationalStiffnessZ: IfcRotationalStiffnessSelect,WarpingStiffness: IfcWarpingStiffnessSelect): IfcBoundaryNodeConditionWarping {
-	return {};
+export function CreateIfcBoundaryNodeConditionWarping(Name: IfcLabel | null, TranslationalStiffnessX: IfcTranslationalStiffnessSelect | null, TranslationalStiffnessY: IfcTranslationalStiffnessSelect | null, TranslationalStiffnessZ: IfcTranslationalStiffnessSelect | null, RotationalStiffnessX: IfcRotationalStiffnessSelect | null, RotationalStiffnessY: IfcRotationalStiffnessSelect | null, RotationalStiffnessZ: IfcRotationalStiffnessSelect | null, WarpingStiffness: IfcWarpingStiffnessSelect | null): Handle<IfcBoundaryNodeConditionWarping> {
+	return { expressID: 0 };
 }
 export class IfcBoundedCurve {};
-export function CreateIfcBoundedCurve(): IfcBoundedCurve {
-	return {};
+export function CreateIfcBoundedCurve(): Handle<IfcBoundedCurve> {
+	return { expressID: 0 };
 }
 export class IfcBoundedSurface {};
-export function CreateIfcBoundedSurface(): IfcBoundedSurface {
-	return {};
+export function CreateIfcBoundedSurface(): Handle<IfcBoundedSurface> {
+	return { expressID: 0 };
 }
 export class IfcBoundingBox {};
-export function CreateIfcBoundingBox(Corner: IfcCartesianPoint,XDim: IfcPositiveLengthMeasure,YDim: IfcPositiveLengthMeasure,ZDim: IfcPositiveLengthMeasure): IfcBoundingBox {
-	return {};
+export function CreateIfcBoundingBox(Corner: Handle<IfcCartesianPoint> , XDim: IfcPositiveLengthMeasure , YDim: IfcPositiveLengthMeasure , ZDim: IfcPositiveLengthMeasure ): Handle<IfcBoundingBox> {
+	return { expressID: 0 };
 }
 export class IfcBoxedHalfSpace {};
-export function CreateIfcBoxedHalfSpace(BaseSurface: IfcSurface,AgreementFlag: IfcBoolean,Enclosure: IfcBoundingBox): IfcBoxedHalfSpace {
-	return {};
+export function CreateIfcBoxedHalfSpace(BaseSurface: Handle<IfcSurface> , AgreementFlag: IfcBoolean , Enclosure: Handle<IfcBoundingBox> ): Handle<IfcBoxedHalfSpace> {
+	return { expressID: 0 };
 }
 export class IfcBridge {};
-export function CreateIfcBridge(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum,PredefinedType: IfcBridgeTypeEnum): IfcBridge {
-	return {};
+export function CreateIfcBridge(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null, PredefinedType: IfcBridgeTypeEnum | null): Handle<IfcBridge> {
+	return { expressID: 0 };
 }
 export class IfcBridgePart {};
-export function CreateIfcBridgePart(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum,PredefinedType: IfcBridgePartTypeEnum): IfcBridgePart {
-	return {};
+export function CreateIfcBridgePart(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null, PredefinedType: IfcBridgePartTypeEnum | null): Handle<IfcBridgePart> {
+	return { expressID: 0 };
 }
 export class IfcBuilding {};
-export function CreateIfcBuilding(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum,ElevationOfRefHeight: IfcLengthMeasure,ElevationOfTerrain: IfcLengthMeasure,BuildingAddress: IfcPostalAddress): IfcBuilding {
-	return {};
+export function CreateIfcBuilding(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null, ElevationOfRefHeight: IfcLengthMeasure | null, ElevationOfTerrain: IfcLengthMeasure | null, BuildingAddress: Handle<IfcPostalAddress> | null): Handle<IfcBuilding> {
+	return { expressID: 0 };
 }
 export class IfcBuildingElement {};
-export function CreateIfcBuildingElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcBuildingElement {
-	return {};
+export function CreateIfcBuildingElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcBuildingElement> {
+	return { expressID: 0 };
 }
 export class IfcBuildingElementPart {};
-export function CreateIfcBuildingElementPart(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcBuildingElementPartTypeEnum): IfcBuildingElementPart {
-	return {};
+export function CreateIfcBuildingElementPart(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcBuildingElementPartTypeEnum | null): Handle<IfcBuildingElementPart> {
+	return { expressID: 0 };
 }
 export class IfcBuildingElementPartType {};
-export function CreateIfcBuildingElementPartType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcBuildingElementPartTypeEnum): IfcBuildingElementPartType {
-	return {};
+export function CreateIfcBuildingElementPartType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcBuildingElementPartTypeEnum ): Handle<IfcBuildingElementPartType> {
+	return { expressID: 0 };
 }
 export class IfcBuildingElementProxy {};
-export function CreateIfcBuildingElementProxy(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcBuildingElementProxyTypeEnum): IfcBuildingElementProxy {
-	return {};
+export function CreateIfcBuildingElementProxy(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcBuildingElementProxyTypeEnum | null): Handle<IfcBuildingElementProxy> {
+	return { expressID: 0 };
 }
 export class IfcBuildingElementProxyType {};
-export function CreateIfcBuildingElementProxyType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcBuildingElementProxyTypeEnum): IfcBuildingElementProxyType {
-	return {};
+export function CreateIfcBuildingElementProxyType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcBuildingElementProxyTypeEnum ): Handle<IfcBuildingElementProxyType> {
+	return { expressID: 0 };
 }
 export class IfcBuildingElementType {};
-export function CreateIfcBuildingElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcBuildingElementType {
-	return {};
+export function CreateIfcBuildingElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcBuildingElementType> {
+	return { expressID: 0 };
 }
 export class IfcBuildingStorey {};
-export function CreateIfcBuildingStorey(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum,Elevation: IfcLengthMeasure): IfcBuildingStorey {
-	return {};
+export function CreateIfcBuildingStorey(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null, Elevation: IfcLengthMeasure | null): Handle<IfcBuildingStorey> {
+	return { expressID: 0 };
 }
 export class IfcBuildingSystem {};
-export function CreateIfcBuildingSystem(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,PredefinedType: IfcBuildingSystemTypeEnum,LongName: IfcLabel): IfcBuildingSystem {
-	return {};
+export function CreateIfcBuildingSystem(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, PredefinedType: IfcBuildingSystemTypeEnum | null, LongName: IfcLabel | null): Handle<IfcBuildingSystem> {
+	return { expressID: 0 };
 }
 export class IfcBurner {};
-export function CreateIfcBurner(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcBurnerTypeEnum): IfcBurner {
-	return {};
+export function CreateIfcBurner(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcBurnerTypeEnum | null): Handle<IfcBurner> {
+	return { expressID: 0 };
 }
 export class IfcBurnerType {};
-export function CreateIfcBurnerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcBurnerTypeEnum): IfcBurnerType {
-	return {};
+export function CreateIfcBurnerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcBurnerTypeEnum ): Handle<IfcBurnerType> {
+	return { expressID: 0 };
 }
 export class IfcCShapeProfileDef {};
-export function CreateIfcCShapeProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,Depth: IfcPositiveLengthMeasure,Width: IfcPositiveLengthMeasure,WallThickness: IfcPositiveLengthMeasure,Girth: IfcPositiveLengthMeasure,InternalFilletRadius: IfcNonNegativeLengthMeasure): IfcCShapeProfileDef {
-	return {};
+export function CreateIfcCShapeProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, Depth: IfcPositiveLengthMeasure , Width: IfcPositiveLengthMeasure , WallThickness: IfcPositiveLengthMeasure , Girth: IfcPositiveLengthMeasure , InternalFilletRadius: IfcNonNegativeLengthMeasure | null): Handle<IfcCShapeProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcCableCarrierFitting {};
-export function CreateIfcCableCarrierFitting(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCableCarrierFittingTypeEnum): IfcCableCarrierFitting {
-	return {};
+export function CreateIfcCableCarrierFitting(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCableCarrierFittingTypeEnum | null): Handle<IfcCableCarrierFitting> {
+	return { expressID: 0 };
 }
 export class IfcCableCarrierFittingType {};
-export function CreateIfcCableCarrierFittingType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCableCarrierFittingTypeEnum): IfcCableCarrierFittingType {
-	return {};
+export function CreateIfcCableCarrierFittingType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCableCarrierFittingTypeEnum ): Handle<IfcCableCarrierFittingType> {
+	return { expressID: 0 };
 }
 export class IfcCableCarrierSegment {};
-export function CreateIfcCableCarrierSegment(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCableCarrierSegmentTypeEnum): IfcCableCarrierSegment {
-	return {};
+export function CreateIfcCableCarrierSegment(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCableCarrierSegmentTypeEnum | null): Handle<IfcCableCarrierSegment> {
+	return { expressID: 0 };
 }
 export class IfcCableCarrierSegmentType {};
-export function CreateIfcCableCarrierSegmentType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCableCarrierSegmentTypeEnum): IfcCableCarrierSegmentType {
-	return {};
+export function CreateIfcCableCarrierSegmentType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCableCarrierSegmentTypeEnum ): Handle<IfcCableCarrierSegmentType> {
+	return { expressID: 0 };
 }
 export class IfcCableFitting {};
-export function CreateIfcCableFitting(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCableFittingTypeEnum): IfcCableFitting {
-	return {};
+export function CreateIfcCableFitting(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCableFittingTypeEnum | null): Handle<IfcCableFitting> {
+	return { expressID: 0 };
 }
 export class IfcCableFittingType {};
-export function CreateIfcCableFittingType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCableFittingTypeEnum): IfcCableFittingType {
-	return {};
+export function CreateIfcCableFittingType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCableFittingTypeEnum ): Handle<IfcCableFittingType> {
+	return { expressID: 0 };
 }
 export class IfcCableSegment {};
-export function CreateIfcCableSegment(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCableSegmentTypeEnum): IfcCableSegment {
-	return {};
+export function CreateIfcCableSegment(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCableSegmentTypeEnum | null): Handle<IfcCableSegment> {
+	return { expressID: 0 };
 }
 export class IfcCableSegmentType {};
-export function CreateIfcCableSegmentType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCableSegmentTypeEnum): IfcCableSegmentType {
-	return {};
+export function CreateIfcCableSegmentType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCableSegmentTypeEnum ): Handle<IfcCableSegmentType> {
+	return { expressID: 0 };
 }
 export class IfcCaissonFoundation {};
-export function CreateIfcCaissonFoundation(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCaissonFoundationTypeEnum): IfcCaissonFoundation {
-	return {};
+export function CreateIfcCaissonFoundation(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCaissonFoundationTypeEnum | null): Handle<IfcCaissonFoundation> {
+	return { expressID: 0 };
 }
 export class IfcCaissonFoundationType {};
-export function CreateIfcCaissonFoundationType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCaissonFoundationTypeEnum): IfcCaissonFoundationType {
-	return {};
+export function CreateIfcCaissonFoundationType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCaissonFoundationTypeEnum ): Handle<IfcCaissonFoundationType> {
+	return { expressID: 0 };
 }
 export class IfcCartesianPoint {};
-export function CreateIfcCartesianPoint(Coordinates: IfcLengthMeasure): IfcCartesianPoint {
-	return {};
+export function CreateIfcCartesianPoint(Coordinates: IfcLengthMeasure ): Handle<IfcCartesianPoint> {
+	return { expressID: 0 };
 }
 export class IfcCartesianPointList {};
-export function CreateIfcCartesianPointList(): IfcCartesianPointList {
-	return {};
+export function CreateIfcCartesianPointList(): Handle<IfcCartesianPointList> {
+	return { expressID: 0 };
 }
 export class IfcCartesianPointList2D {};
-export function CreateIfcCartesianPointList2D(CoordList: IfcLengthMeasure,TagList: IfcLabel): IfcCartesianPointList2D {
-	return {};
+export function CreateIfcCartesianPointList2D(CoordList: IfcLengthMeasure , TagList: IfcLabel | null): Handle<IfcCartesianPointList2D> {
+	return { expressID: 0 };
 }
 export class IfcCartesianPointList3D {};
-export function CreateIfcCartesianPointList3D(CoordList: IfcLengthMeasure,TagList: IfcLabel): IfcCartesianPointList3D {
-	return {};
+export function CreateIfcCartesianPointList3D(CoordList: IfcLengthMeasure , TagList: IfcLabel | null): Handle<IfcCartesianPointList3D> {
+	return { expressID: 0 };
 }
 export class IfcCartesianTransformationOperator {};
-export function CreateIfcCartesianTransformationOperator(Axis1: IfcDirection,Axis2: IfcDirection,LocalOrigin: IfcCartesianPoint,Scale: IfcReal): IfcCartesianTransformationOperator {
-	return {};
+export function CreateIfcCartesianTransformationOperator(Axis1: Handle<IfcDirection> | null, Axis2: Handle<IfcDirection> | null, LocalOrigin: Handle<IfcCartesianPoint> , Scale: IfcReal | null): Handle<IfcCartesianTransformationOperator> {
+	return { expressID: 0 };
 }
 export class IfcCartesianTransformationOperator2D {};
-export function CreateIfcCartesianTransformationOperator2D(Axis1: IfcDirection,Axis2: IfcDirection,LocalOrigin: IfcCartesianPoint,Scale: IfcReal): IfcCartesianTransformationOperator2D {
-	return {};
+export function CreateIfcCartesianTransformationOperator2D(Axis1: Handle<IfcDirection> | null, Axis2: Handle<IfcDirection> | null, LocalOrigin: Handle<IfcCartesianPoint> , Scale: IfcReal | null): Handle<IfcCartesianTransformationOperator2D> {
+	return { expressID: 0 };
 }
 export class IfcCartesianTransformationOperator2DnonUniform {};
-export function CreateIfcCartesianTransformationOperator2DnonUniform(Axis1: IfcDirection,Axis2: IfcDirection,LocalOrigin: IfcCartesianPoint,Scale: IfcReal,Scale2: IfcReal): IfcCartesianTransformationOperator2DnonUniform {
-	return {};
+export function CreateIfcCartesianTransformationOperator2DnonUniform(Axis1: Handle<IfcDirection> | null, Axis2: Handle<IfcDirection> | null, LocalOrigin: Handle<IfcCartesianPoint> , Scale: IfcReal | null, Scale2: IfcReal | null): Handle<IfcCartesianTransformationOperator2DnonUniform> {
+	return { expressID: 0 };
 }
 export class IfcCartesianTransformationOperator3D {};
-export function CreateIfcCartesianTransformationOperator3D(Axis1: IfcDirection,Axis2: IfcDirection,LocalOrigin: IfcCartesianPoint,Scale: IfcReal,Axis3: IfcDirection): IfcCartesianTransformationOperator3D {
-	return {};
+export function CreateIfcCartesianTransformationOperator3D(Axis1: Handle<IfcDirection> | null, Axis2: Handle<IfcDirection> | null, LocalOrigin: Handle<IfcCartesianPoint> , Scale: IfcReal | null, Axis3: Handle<IfcDirection> | null): Handle<IfcCartesianTransformationOperator3D> {
+	return { expressID: 0 };
 }
 export class IfcCartesianTransformationOperator3DnonUniform {};
-export function CreateIfcCartesianTransformationOperator3DnonUniform(Axis1: IfcDirection,Axis2: IfcDirection,LocalOrigin: IfcCartesianPoint,Scale: IfcReal,Axis3: IfcDirection,Scale2: IfcReal,Scale3: IfcReal): IfcCartesianTransformationOperator3DnonUniform {
-	return {};
+export function CreateIfcCartesianTransformationOperator3DnonUniform(Axis1: Handle<IfcDirection> | null, Axis2: Handle<IfcDirection> | null, LocalOrigin: Handle<IfcCartesianPoint> , Scale: IfcReal | null, Axis3: Handle<IfcDirection> | null, Scale2: IfcReal | null, Scale3: IfcReal | null): Handle<IfcCartesianTransformationOperator3DnonUniform> {
+	return { expressID: 0 };
 }
 export class IfcCenterLineProfileDef {};
-export function CreateIfcCenterLineProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Curve: IfcBoundedCurve,Thickness: IfcPositiveLengthMeasure): IfcCenterLineProfileDef {
-	return {};
+export function CreateIfcCenterLineProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Curve: Handle<IfcBoundedCurve> , Thickness: IfcPositiveLengthMeasure ): Handle<IfcCenterLineProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcChiller {};
-export function CreateIfcChiller(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcChillerTypeEnum): IfcChiller {
-	return {};
+export function CreateIfcChiller(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcChillerTypeEnum | null): Handle<IfcChiller> {
+	return { expressID: 0 };
 }
 export class IfcChillerType {};
-export function CreateIfcChillerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcChillerTypeEnum): IfcChillerType {
-	return {};
+export function CreateIfcChillerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcChillerTypeEnum ): Handle<IfcChillerType> {
+	return { expressID: 0 };
 }
 export class IfcChimney {};
-export function CreateIfcChimney(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcChimneyTypeEnum): IfcChimney {
-	return {};
+export function CreateIfcChimney(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcChimneyTypeEnum | null): Handle<IfcChimney> {
+	return { expressID: 0 };
 }
 export class IfcChimneyType {};
-export function CreateIfcChimneyType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcChimneyTypeEnum): IfcChimneyType {
-	return {};
+export function CreateIfcChimneyType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcChimneyTypeEnum ): Handle<IfcChimneyType> {
+	return { expressID: 0 };
 }
 export class IfcCircle {};
-export function CreateIfcCircle(Position: IfcAxis2Placement,Radius: IfcPositiveLengthMeasure): IfcCircle {
-	return {};
+export function CreateIfcCircle(Position: IfcAxis2Placement , Radius: IfcPositiveLengthMeasure ): Handle<IfcCircle> {
+	return { expressID: 0 };
 }
 export class IfcCircleHollowProfileDef {};
-export function CreateIfcCircleHollowProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,Radius: IfcPositiveLengthMeasure,WallThickness: IfcPositiveLengthMeasure): IfcCircleHollowProfileDef {
-	return {};
+export function CreateIfcCircleHollowProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, Radius: IfcPositiveLengthMeasure , WallThickness: IfcPositiveLengthMeasure ): Handle<IfcCircleHollowProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcCircleProfileDef {};
-export function CreateIfcCircleProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,Radius: IfcPositiveLengthMeasure): IfcCircleProfileDef {
-	return {};
+export function CreateIfcCircleProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, Radius: IfcPositiveLengthMeasure ): Handle<IfcCircleProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcCircularArcSegment2D {};
-export function CreateIfcCircularArcSegment2D(StartPoint: IfcCartesianPoint,StartDirection: IfcPlaneAngleMeasure,SegmentLength: IfcPositiveLengthMeasure,Radius: IfcPositiveLengthMeasure,IsCCW: IfcBoolean): IfcCircularArcSegment2D {
-	return {};
+export function CreateIfcCircularArcSegment2D(StartPoint: Handle<IfcCartesianPoint> , StartDirection: IfcPlaneAngleMeasure , SegmentLength: IfcPositiveLengthMeasure , Radius: IfcPositiveLengthMeasure , IsCCW: IfcBoolean ): Handle<IfcCircularArcSegment2D> {
+	return { expressID: 0 };
 }
 export class IfcCivilElement {};
-export function CreateIfcCivilElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcCivilElement {
-	return {};
+export function CreateIfcCivilElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcCivilElement> {
+	return { expressID: 0 };
 }
 export class IfcCivilElementType {};
-export function CreateIfcCivilElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcCivilElementType {
-	return {};
+export function CreateIfcCivilElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcCivilElementType> {
+	return { expressID: 0 };
 }
 export class IfcClassification {};
-export function CreateIfcClassification(Source: IfcLabel,Edition: IfcLabel,EditionDate: IfcDate,Name: IfcLabel,Description: IfcText,Location: IfcURIReference,ReferenceTokens: IfcIdentifier): IfcClassification {
-	return {};
+export function CreateIfcClassification(Source: IfcLabel | null, Edition: IfcLabel | null, EditionDate: IfcDate | null, Name: IfcLabel , Description: IfcText | null, Location: IfcURIReference | null, ReferenceTokens: IfcIdentifier | null): Handle<IfcClassification> {
+	return { expressID: 0 };
 }
 export class IfcClassificationReference {};
-export function CreateIfcClassificationReference(Location: IfcURIReference,Identification: IfcIdentifier,Name: IfcLabel,ReferencedSource: IfcClassificationReferenceSelect,Description: IfcText,Sort: IfcIdentifier): IfcClassificationReference {
-	return {};
+export function CreateIfcClassificationReference(Location: IfcURIReference | null, Identification: IfcIdentifier | null, Name: IfcLabel | null, ReferencedSource: IfcClassificationReferenceSelect | null, Description: IfcText | null, Sort: IfcIdentifier | null): Handle<IfcClassificationReference> {
+	return { expressID: 0 };
 }
 export class IfcClosedShell {};
-export function CreateIfcClosedShell(CfsFaces: IfcFace): IfcClosedShell {
-	return {};
+export function CreateIfcClosedShell(CfsFaces: Handle<IfcFace>[] ): Handle<IfcClosedShell> {
+	return { expressID: 0 };
 }
 export class IfcCoil {};
-export function CreateIfcCoil(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCoilTypeEnum): IfcCoil {
-	return {};
+export function CreateIfcCoil(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCoilTypeEnum | null): Handle<IfcCoil> {
+	return { expressID: 0 };
 }
 export class IfcCoilType {};
-export function CreateIfcCoilType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCoilTypeEnum): IfcCoilType {
-	return {};
+export function CreateIfcCoilType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCoilTypeEnum ): Handle<IfcCoilType> {
+	return { expressID: 0 };
 }
 export class IfcColourRgb {};
-export function CreateIfcColourRgb(Name: IfcLabel,Red: IfcNormalisedRatioMeasure,Green: IfcNormalisedRatioMeasure,Blue: IfcNormalisedRatioMeasure): IfcColourRgb {
-	return {};
+export function CreateIfcColourRgb(Name: IfcLabel | null, Red: IfcNormalisedRatioMeasure , Green: IfcNormalisedRatioMeasure , Blue: IfcNormalisedRatioMeasure ): Handle<IfcColourRgb> {
+	return { expressID: 0 };
 }
 export class IfcColourRgbList {};
-export function CreateIfcColourRgbList(ColourList: IfcNormalisedRatioMeasure): IfcColourRgbList {
-	return {};
+export function CreateIfcColourRgbList(ColourList: IfcNormalisedRatioMeasure ): Handle<IfcColourRgbList> {
+	return { expressID: 0 };
 }
 export class IfcColourSpecification {};
-export function CreateIfcColourSpecification(Name: IfcLabel): IfcColourSpecification {
-	return {};
+export function CreateIfcColourSpecification(Name: IfcLabel | null): Handle<IfcColourSpecification> {
+	return { expressID: 0 };
 }
 export class IfcColumn {};
-export function CreateIfcColumn(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcColumnTypeEnum): IfcColumn {
-	return {};
+export function CreateIfcColumn(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcColumnTypeEnum | null): Handle<IfcColumn> {
+	return { expressID: 0 };
 }
 export class IfcColumnStandardCase {};
-export function CreateIfcColumnStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcColumnTypeEnum): IfcColumnStandardCase {
-	return {};
+export function CreateIfcColumnStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcColumnTypeEnum | null): Handle<IfcColumnStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcColumnType {};
-export function CreateIfcColumnType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcColumnTypeEnum): IfcColumnType {
-	return {};
+export function CreateIfcColumnType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcColumnTypeEnum ): Handle<IfcColumnType> {
+	return { expressID: 0 };
 }
 export class IfcCommunicationsAppliance {};
-export function CreateIfcCommunicationsAppliance(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCommunicationsApplianceTypeEnum): IfcCommunicationsAppliance {
-	return {};
+export function CreateIfcCommunicationsAppliance(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCommunicationsApplianceTypeEnum | null): Handle<IfcCommunicationsAppliance> {
+	return { expressID: 0 };
 }
 export class IfcCommunicationsApplianceType {};
-export function CreateIfcCommunicationsApplianceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCommunicationsApplianceTypeEnum): IfcCommunicationsApplianceType {
-	return {};
+export function CreateIfcCommunicationsApplianceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCommunicationsApplianceTypeEnum ): Handle<IfcCommunicationsApplianceType> {
+	return { expressID: 0 };
 }
 export class IfcComplexProperty {};
-export function CreateIfcComplexProperty(Name: IfcIdentifier,Description: IfcText,UsageName: IfcIdentifier,HasProperties: IfcProperty): IfcComplexProperty {
-	return {};
+export function CreateIfcComplexProperty(Name: IfcIdentifier , Description: IfcText | null, UsageName: IfcIdentifier , HasProperties: Handle<IfcProperty>[] ): Handle<IfcComplexProperty> {
+	return { expressID: 0 };
 }
 export class IfcComplexPropertyTemplate {};
-export function CreateIfcComplexPropertyTemplate(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,UsageName: IfcLabel,TemplateType: IfcComplexPropertyTemplateTypeEnum,HasPropertyTemplates: IfcPropertyTemplate): IfcComplexPropertyTemplate {
-	return {};
+export function CreateIfcComplexPropertyTemplate(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, UsageName: IfcLabel | null, TemplateType: IfcComplexPropertyTemplateTypeEnum | null, HasPropertyTemplates: Handle<IfcPropertyTemplate>[] | null): Handle<IfcComplexPropertyTemplate> {
+	return { expressID: 0 };
 }
 export class IfcCompositeCurve {};
-export function CreateIfcCompositeCurve(Segments: IfcCompositeCurveSegment,SelfIntersect: IfcLogical): IfcCompositeCurve {
-	return {};
+export function CreateIfcCompositeCurve(Segments: Handle<IfcCompositeCurveSegment> , SelfIntersect: IfcLogical ): Handle<IfcCompositeCurve> {
+	return { expressID: 0 };
 }
 export class IfcCompositeCurveOnSurface {};
-export function CreateIfcCompositeCurveOnSurface(Segments: IfcCompositeCurveSegment,SelfIntersect: IfcLogical): IfcCompositeCurveOnSurface {
-	return {};
+export function CreateIfcCompositeCurveOnSurface(Segments: Handle<IfcCompositeCurveSegment> , SelfIntersect: IfcLogical ): Handle<IfcCompositeCurveOnSurface> {
+	return { expressID: 0 };
 }
 export class IfcCompositeCurveSegment {};
-export function CreateIfcCompositeCurveSegment(Transition: IfcTransitionCode,SameSense: IfcBoolean,ParentCurve: IfcCurve): IfcCompositeCurveSegment {
-	return {};
+export function CreateIfcCompositeCurveSegment(Transition: IfcTransitionCode , SameSense: IfcBoolean , ParentCurve: Handle<IfcCurve> ): Handle<IfcCompositeCurveSegment> {
+	return { expressID: 0 };
 }
 export class IfcCompositeProfileDef {};
-export function CreateIfcCompositeProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Profiles: IfcProfileDef,Label: IfcLabel): IfcCompositeProfileDef {
-	return {};
+export function CreateIfcCompositeProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Profiles: Handle<IfcProfileDef>[] , Label: IfcLabel | null): Handle<IfcCompositeProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcCompressor {};
-export function CreateIfcCompressor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCompressorTypeEnum): IfcCompressor {
-	return {};
+export function CreateIfcCompressor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCompressorTypeEnum | null): Handle<IfcCompressor> {
+	return { expressID: 0 };
 }
 export class IfcCompressorType {};
-export function CreateIfcCompressorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCompressorTypeEnum): IfcCompressorType {
-	return {};
+export function CreateIfcCompressorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCompressorTypeEnum ): Handle<IfcCompressorType> {
+	return { expressID: 0 };
 }
 export class IfcCondenser {};
-export function CreateIfcCondenser(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCondenserTypeEnum): IfcCondenser {
-	return {};
+export function CreateIfcCondenser(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCondenserTypeEnum | null): Handle<IfcCondenser> {
+	return { expressID: 0 };
 }
 export class IfcCondenserType {};
-export function CreateIfcCondenserType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCondenserTypeEnum): IfcCondenserType {
-	return {};
+export function CreateIfcCondenserType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCondenserTypeEnum ): Handle<IfcCondenserType> {
+	return { expressID: 0 };
 }
 export class IfcConic {};
-export function CreateIfcConic(Position: IfcAxis2Placement): IfcConic {
-	return {};
+export function CreateIfcConic(Position: IfcAxis2Placement ): Handle<IfcConic> {
+	return { expressID: 0 };
 }
 export class IfcConnectedFaceSet {};
-export function CreateIfcConnectedFaceSet(CfsFaces: IfcFace): IfcConnectedFaceSet {
-	return {};
+export function CreateIfcConnectedFaceSet(CfsFaces: Handle<IfcFace>[] ): Handle<IfcConnectedFaceSet> {
+	return { expressID: 0 };
 }
 export class IfcConnectionCurveGeometry {};
-export function CreateIfcConnectionCurveGeometry(CurveOnRelatingElement: IfcCurveOrEdgeCurve,CurveOnRelatedElement: IfcCurveOrEdgeCurve): IfcConnectionCurveGeometry {
-	return {};
+export function CreateIfcConnectionCurveGeometry(CurveOnRelatingElement: IfcCurveOrEdgeCurve , CurveOnRelatedElement: IfcCurveOrEdgeCurve | null): Handle<IfcConnectionCurveGeometry> {
+	return { expressID: 0 };
 }
 export class IfcConnectionGeometry {};
-export function CreateIfcConnectionGeometry(): IfcConnectionGeometry {
-	return {};
+export function CreateIfcConnectionGeometry(): Handle<IfcConnectionGeometry> {
+	return { expressID: 0 };
 }
 export class IfcConnectionPointEccentricity {};
-export function CreateIfcConnectionPointEccentricity(PointOnRelatingElement: IfcPointOrVertexPoint,PointOnRelatedElement: IfcPointOrVertexPoint,EccentricityInX: IfcLengthMeasure,EccentricityInY: IfcLengthMeasure,EccentricityInZ: IfcLengthMeasure): IfcConnectionPointEccentricity {
-	return {};
+export function CreateIfcConnectionPointEccentricity(PointOnRelatingElement: IfcPointOrVertexPoint , PointOnRelatedElement: IfcPointOrVertexPoint | null, EccentricityInX: IfcLengthMeasure | null, EccentricityInY: IfcLengthMeasure | null, EccentricityInZ: IfcLengthMeasure | null): Handle<IfcConnectionPointEccentricity> {
+	return { expressID: 0 };
 }
 export class IfcConnectionPointGeometry {};
-export function CreateIfcConnectionPointGeometry(PointOnRelatingElement: IfcPointOrVertexPoint,PointOnRelatedElement: IfcPointOrVertexPoint): IfcConnectionPointGeometry {
-	return {};
+export function CreateIfcConnectionPointGeometry(PointOnRelatingElement: IfcPointOrVertexPoint , PointOnRelatedElement: IfcPointOrVertexPoint | null): Handle<IfcConnectionPointGeometry> {
+	return { expressID: 0 };
 }
 export class IfcConnectionSurfaceGeometry {};
-export function CreateIfcConnectionSurfaceGeometry(SurfaceOnRelatingElement: IfcSurfaceOrFaceSurface,SurfaceOnRelatedElement: IfcSurfaceOrFaceSurface): IfcConnectionSurfaceGeometry {
-	return {};
+export function CreateIfcConnectionSurfaceGeometry(SurfaceOnRelatingElement: IfcSurfaceOrFaceSurface , SurfaceOnRelatedElement: IfcSurfaceOrFaceSurface | null): Handle<IfcConnectionSurfaceGeometry> {
+	return { expressID: 0 };
 }
 export class IfcConnectionVolumeGeometry {};
-export function CreateIfcConnectionVolumeGeometry(VolumeOnRelatingElement: IfcSolidOrShell,VolumeOnRelatedElement: IfcSolidOrShell): IfcConnectionVolumeGeometry {
-	return {};
+export function CreateIfcConnectionVolumeGeometry(VolumeOnRelatingElement: IfcSolidOrShell , VolumeOnRelatedElement: IfcSolidOrShell | null): Handle<IfcConnectionVolumeGeometry> {
+	return { expressID: 0 };
 }
 export class IfcConstraint {};
-export function CreateIfcConstraint(Name: IfcLabel,Description: IfcText,ConstraintGrade: IfcConstraintEnum,ConstraintSource: IfcLabel,CreatingActor: IfcActorSelect,CreationTime: IfcDateTime,UserDefinedGrade: IfcLabel): IfcConstraint {
-	return {};
+export function CreateIfcConstraint(Name: IfcLabel , Description: IfcText | null, ConstraintGrade: IfcConstraintEnum , ConstraintSource: IfcLabel | null, CreatingActor: IfcActorSelect | null, CreationTime: IfcDateTime | null, UserDefinedGrade: IfcLabel | null): Handle<IfcConstraint> {
+	return { expressID: 0 };
 }
 export class IfcConstructionEquipmentResource {};
-export function CreateIfcConstructionEquipmentResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,Usage: IfcResourceTime,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcConstructionEquipmentResourceTypeEnum): IfcConstructionEquipmentResource {
-	return {};
+export function CreateIfcConstructionEquipmentResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, Usage: Handle<IfcResourceTime> | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcConstructionEquipmentResourceTypeEnum | null): Handle<IfcConstructionEquipmentResource> {
+	return { expressID: 0 };
 }
 export class IfcConstructionEquipmentResourceType {};
-export function CreateIfcConstructionEquipmentResourceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ResourceType: IfcLabel,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcConstructionEquipmentResourceTypeEnum): IfcConstructionEquipmentResourceType {
-	return {};
+export function CreateIfcConstructionEquipmentResourceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ResourceType: IfcLabel | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcConstructionEquipmentResourceTypeEnum ): Handle<IfcConstructionEquipmentResourceType> {
+	return { expressID: 0 };
 }
 export class IfcConstructionMaterialResource {};
-export function CreateIfcConstructionMaterialResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,Usage: IfcResourceTime,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcConstructionMaterialResourceTypeEnum): IfcConstructionMaterialResource {
-	return {};
+export function CreateIfcConstructionMaterialResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, Usage: Handle<IfcResourceTime> | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcConstructionMaterialResourceTypeEnum | null): Handle<IfcConstructionMaterialResource> {
+	return { expressID: 0 };
 }
 export class IfcConstructionMaterialResourceType {};
-export function CreateIfcConstructionMaterialResourceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ResourceType: IfcLabel,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcConstructionMaterialResourceTypeEnum): IfcConstructionMaterialResourceType {
-	return {};
+export function CreateIfcConstructionMaterialResourceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ResourceType: IfcLabel | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcConstructionMaterialResourceTypeEnum ): Handle<IfcConstructionMaterialResourceType> {
+	return { expressID: 0 };
 }
 export class IfcConstructionProductResource {};
-export function CreateIfcConstructionProductResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,Usage: IfcResourceTime,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcConstructionProductResourceTypeEnum): IfcConstructionProductResource {
-	return {};
+export function CreateIfcConstructionProductResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, Usage: Handle<IfcResourceTime> | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcConstructionProductResourceTypeEnum | null): Handle<IfcConstructionProductResource> {
+	return { expressID: 0 };
 }
 export class IfcConstructionProductResourceType {};
-export function CreateIfcConstructionProductResourceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ResourceType: IfcLabel,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcConstructionProductResourceTypeEnum): IfcConstructionProductResourceType {
-	return {};
+export function CreateIfcConstructionProductResourceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ResourceType: IfcLabel | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcConstructionProductResourceTypeEnum ): Handle<IfcConstructionProductResourceType> {
+	return { expressID: 0 };
 }
 export class IfcConstructionResource {};
-export function CreateIfcConstructionResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,Usage: IfcResourceTime,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity): IfcConstructionResource {
-	return {};
+export function CreateIfcConstructionResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, Usage: Handle<IfcResourceTime> | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null): Handle<IfcConstructionResource> {
+	return { expressID: 0 };
 }
 export class IfcConstructionResourceType {};
-export function CreateIfcConstructionResourceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ResourceType: IfcLabel,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity): IfcConstructionResourceType {
-	return {};
+export function CreateIfcConstructionResourceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ResourceType: IfcLabel | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null): Handle<IfcConstructionResourceType> {
+	return { expressID: 0 };
 }
 export class IfcContext {};
-export function CreateIfcContext(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,LongName: IfcLabel,Phase: IfcLabel,RepresentationContexts: IfcRepresentationContext,UnitsInContext: IfcUnitAssignment): IfcContext {
-	return {};
+export function CreateIfcContext(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, LongName: IfcLabel | null, Phase: IfcLabel | null, RepresentationContexts: Handle<IfcRepresentationContext>[] | null, UnitsInContext: Handle<IfcUnitAssignment> | null): Handle<IfcContext> {
+	return { expressID: 0 };
 }
 export class IfcContextDependentUnit {};
-export function CreateIfcContextDependentUnit(Dimensions: IfcDimensionalExponents,UnitType: IfcUnitEnum,Name: IfcLabel): IfcContextDependentUnit {
-	return {};
+export function CreateIfcContextDependentUnit(Dimensions: Handle<IfcDimensionalExponents> , UnitType: IfcUnitEnum , Name: IfcLabel ): Handle<IfcContextDependentUnit> {
+	return { expressID: 0 };
 }
 export class IfcControl {};
-export function CreateIfcControl(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier): IfcControl {
-	return {};
+export function CreateIfcControl(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null): Handle<IfcControl> {
+	return { expressID: 0 };
 }
 export class IfcController {};
-export function CreateIfcController(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcControllerTypeEnum): IfcController {
-	return {};
+export function CreateIfcController(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcControllerTypeEnum | null): Handle<IfcController> {
+	return { expressID: 0 };
 }
 export class IfcControllerType {};
-export function CreateIfcControllerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcControllerTypeEnum): IfcControllerType {
-	return {};
+export function CreateIfcControllerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcControllerTypeEnum ): Handle<IfcControllerType> {
+	return { expressID: 0 };
 }
 export class IfcConversionBasedUnit {};
-export function CreateIfcConversionBasedUnit(Dimensions: IfcDimensionalExponents,UnitType: IfcUnitEnum,Name: IfcLabel,ConversionFactor: IfcMeasureWithUnit): IfcConversionBasedUnit {
-	return {};
+export function CreateIfcConversionBasedUnit(Dimensions: Handle<IfcDimensionalExponents> , UnitType: IfcUnitEnum , Name: IfcLabel , ConversionFactor: Handle<IfcMeasureWithUnit> ): Handle<IfcConversionBasedUnit> {
+	return { expressID: 0 };
 }
 export class IfcConversionBasedUnitWithOffset {};
-export function CreateIfcConversionBasedUnitWithOffset(Dimensions: IfcDimensionalExponents,UnitType: IfcUnitEnum,Name: IfcLabel,ConversionFactor: IfcMeasureWithUnit,ConversionOffset: IfcReal): IfcConversionBasedUnitWithOffset {
-	return {};
+export function CreateIfcConversionBasedUnitWithOffset(Dimensions: Handle<IfcDimensionalExponents> , UnitType: IfcUnitEnum , Name: IfcLabel , ConversionFactor: Handle<IfcMeasureWithUnit> , ConversionOffset: IfcReal ): Handle<IfcConversionBasedUnitWithOffset> {
+	return { expressID: 0 };
 }
 export class IfcCooledBeam {};
-export function CreateIfcCooledBeam(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCooledBeamTypeEnum): IfcCooledBeam {
-	return {};
+export function CreateIfcCooledBeam(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCooledBeamTypeEnum | null): Handle<IfcCooledBeam> {
+	return { expressID: 0 };
 }
 export class IfcCooledBeamType {};
-export function CreateIfcCooledBeamType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCooledBeamTypeEnum): IfcCooledBeamType {
-	return {};
+export function CreateIfcCooledBeamType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCooledBeamTypeEnum ): Handle<IfcCooledBeamType> {
+	return { expressID: 0 };
 }
 export class IfcCoolingTower {};
-export function CreateIfcCoolingTower(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCoolingTowerTypeEnum): IfcCoolingTower {
-	return {};
+export function CreateIfcCoolingTower(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCoolingTowerTypeEnum | null): Handle<IfcCoolingTower> {
+	return { expressID: 0 };
 }
 export class IfcCoolingTowerType {};
-export function CreateIfcCoolingTowerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCoolingTowerTypeEnum): IfcCoolingTowerType {
-	return {};
+export function CreateIfcCoolingTowerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCoolingTowerTypeEnum ): Handle<IfcCoolingTowerType> {
+	return { expressID: 0 };
 }
 export class IfcCoordinateOperation {};
-export function CreateIfcCoordinateOperation(SourceCRS: IfcCoordinateReferenceSystemSelect,TargetCRS: IfcCoordinateReferenceSystem): IfcCoordinateOperation {
-	return {};
+export function CreateIfcCoordinateOperation(SourceCRS: IfcCoordinateReferenceSystemSelect , TargetCRS: Handle<IfcCoordinateReferenceSystem> ): Handle<IfcCoordinateOperation> {
+	return { expressID: 0 };
 }
 export class IfcCoordinateReferenceSystem {};
-export function CreateIfcCoordinateReferenceSystem(Name: IfcLabel,Description: IfcText,GeodeticDatum: IfcIdentifier,VerticalDatum: IfcIdentifier): IfcCoordinateReferenceSystem {
-	return {};
+export function CreateIfcCoordinateReferenceSystem(Name: IfcLabel , Description: IfcText | null, GeodeticDatum: IfcIdentifier | null, VerticalDatum: IfcIdentifier | null): Handle<IfcCoordinateReferenceSystem> {
+	return { expressID: 0 };
 }
 export class IfcCostItem {};
-export function CreateIfcCostItem(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,PredefinedType: IfcCostItemTypeEnum,CostValues: IfcCostValue,CostQuantities: IfcPhysicalQuantity): IfcCostItem {
-	return {};
+export function CreateIfcCostItem(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, PredefinedType: IfcCostItemTypeEnum | null, CostValues: Handle<IfcCostValue> | null, CostQuantities: Handle<IfcPhysicalQuantity> | null): Handle<IfcCostItem> {
+	return { expressID: 0 };
 }
 export class IfcCostSchedule {};
-export function CreateIfcCostSchedule(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,PredefinedType: IfcCostScheduleTypeEnum,Status: IfcLabel,SubmittedOn: IfcDateTime,UpdateDate: IfcDateTime): IfcCostSchedule {
-	return {};
+export function CreateIfcCostSchedule(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, PredefinedType: IfcCostScheduleTypeEnum | null, Status: IfcLabel | null, SubmittedOn: IfcDateTime | null, UpdateDate: IfcDateTime | null): Handle<IfcCostSchedule> {
+	return { expressID: 0 };
 }
 export class IfcCostValue {};
-export function CreateIfcCostValue(Name: IfcLabel,Description: IfcText,AppliedValue: IfcAppliedValueSelect,UnitBasis: IfcMeasureWithUnit,ApplicableDate: IfcDate,FixedUntilDate: IfcDate,Category: IfcLabel,Condition: IfcLabel,ArithmeticOperator: IfcArithmeticOperatorEnum,Components: IfcAppliedValue): IfcCostValue {
-	return {};
+export function CreateIfcCostValue(Name: IfcLabel | null, Description: IfcText | null, AppliedValue: IfcAppliedValueSelect | null, UnitBasis: Handle<IfcMeasureWithUnit> | null, ApplicableDate: IfcDate | null, FixedUntilDate: IfcDate | null, Category: IfcLabel | null, Condition: IfcLabel | null, ArithmeticOperator: IfcArithmeticOperatorEnum | null, Components: Handle<IfcAppliedValue> | null): Handle<IfcCostValue> {
+	return { expressID: 0 };
 }
 export class IfcCovering {};
-export function CreateIfcCovering(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCoveringTypeEnum): IfcCovering {
-	return {};
+export function CreateIfcCovering(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCoveringTypeEnum | null): Handle<IfcCovering> {
+	return { expressID: 0 };
 }
 export class IfcCoveringType {};
-export function CreateIfcCoveringType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCoveringTypeEnum): IfcCoveringType {
-	return {};
+export function CreateIfcCoveringType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCoveringTypeEnum ): Handle<IfcCoveringType> {
+	return { expressID: 0 };
 }
 export class IfcCrewResource {};
-export function CreateIfcCrewResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,Usage: IfcResourceTime,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcCrewResourceTypeEnum): IfcCrewResource {
-	return {};
+export function CreateIfcCrewResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, Usage: Handle<IfcResourceTime> | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcCrewResourceTypeEnum | null): Handle<IfcCrewResource> {
+	return { expressID: 0 };
 }
 export class IfcCrewResourceType {};
-export function CreateIfcCrewResourceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ResourceType: IfcLabel,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcCrewResourceTypeEnum): IfcCrewResourceType {
-	return {};
+export function CreateIfcCrewResourceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ResourceType: IfcLabel | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcCrewResourceTypeEnum ): Handle<IfcCrewResourceType> {
+	return { expressID: 0 };
 }
 export class IfcCsgPrimitive3D {};
-export function CreateIfcCsgPrimitive3D(Position: IfcAxis2Placement3D): IfcCsgPrimitive3D {
-	return {};
+export function CreateIfcCsgPrimitive3D(Position: Handle<IfcAxis2Placement3D> ): Handle<IfcCsgPrimitive3D> {
+	return { expressID: 0 };
 }
 export class IfcCsgSolid {};
-export function CreateIfcCsgSolid(TreeRootExpression: IfcCsgSelect): IfcCsgSolid {
-	return {};
+export function CreateIfcCsgSolid(TreeRootExpression: IfcCsgSelect ): Handle<IfcCsgSolid> {
+	return { expressID: 0 };
 }
 export class IfcCurrencyRelationship {};
-export function CreateIfcCurrencyRelationship(Name: IfcLabel,Description: IfcText,RelatingMonetaryUnit: IfcMonetaryUnit,RelatedMonetaryUnit: IfcMonetaryUnit,ExchangeRate: IfcPositiveRatioMeasure,RateDateTime: IfcDateTime,RateSource: IfcLibraryInformation): IfcCurrencyRelationship {
-	return {};
+export function CreateIfcCurrencyRelationship(Name: IfcLabel | null, Description: IfcText | null, RelatingMonetaryUnit: Handle<IfcMonetaryUnit> , RelatedMonetaryUnit: Handle<IfcMonetaryUnit> , ExchangeRate: IfcPositiveRatioMeasure , RateDateTime: IfcDateTime | null, RateSource: Handle<IfcLibraryInformation> | null): Handle<IfcCurrencyRelationship> {
+	return { expressID: 0 };
 }
 export class IfcCurtainWall {};
-export function CreateIfcCurtainWall(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcCurtainWallTypeEnum): IfcCurtainWall {
-	return {};
+export function CreateIfcCurtainWall(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcCurtainWallTypeEnum | null): Handle<IfcCurtainWall> {
+	return { expressID: 0 };
 }
 export class IfcCurtainWallType {};
-export function CreateIfcCurtainWallType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcCurtainWallTypeEnum): IfcCurtainWallType {
-	return {};
+export function CreateIfcCurtainWallType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcCurtainWallTypeEnum ): Handle<IfcCurtainWallType> {
+	return { expressID: 0 };
 }
 export class IfcCurve {};
-export function CreateIfcCurve(): IfcCurve {
-	return {};
+export function CreateIfcCurve(): Handle<IfcCurve> {
+	return { expressID: 0 };
 }
 export class IfcCurveBoundedPlane {};
-export function CreateIfcCurveBoundedPlane(BasisSurface: IfcPlane,OuterBoundary: IfcCurve,InnerBoundaries: IfcCurve): IfcCurveBoundedPlane {
-	return {};
+export function CreateIfcCurveBoundedPlane(BasisSurface: Handle<IfcPlane> , OuterBoundary: Handle<IfcCurve> , InnerBoundaries: Handle<IfcCurve>[] ): Handle<IfcCurveBoundedPlane> {
+	return { expressID: 0 };
 }
 export class IfcCurveBoundedSurface {};
-export function CreateIfcCurveBoundedSurface(BasisSurface: IfcSurface,Boundaries: IfcBoundaryCurve,ImplicitOuter: IfcBoolean): IfcCurveBoundedSurface {
-	return {};
+export function CreateIfcCurveBoundedSurface(BasisSurface: Handle<IfcSurface> , Boundaries: Handle<IfcBoundaryCurve>[] , ImplicitOuter: IfcBoolean ): Handle<IfcCurveBoundedSurface> {
+	return { expressID: 0 };
 }
 export class IfcCurveSegment2D {};
-export function CreateIfcCurveSegment2D(StartPoint: IfcCartesianPoint,StartDirection: IfcPlaneAngleMeasure,SegmentLength: IfcPositiveLengthMeasure): IfcCurveSegment2D {
-	return {};
+export function CreateIfcCurveSegment2D(StartPoint: Handle<IfcCartesianPoint> , StartDirection: IfcPlaneAngleMeasure , SegmentLength: IfcPositiveLengthMeasure ): Handle<IfcCurveSegment2D> {
+	return { expressID: 0 };
 }
 export class IfcCurveStyle {};
-export function CreateIfcCurveStyle(Name: IfcLabel,CurveFont: IfcCurveFontOrScaledCurveFontSelect,CurveWidth: IfcSizeSelect,CurveColour: IfcColour,ModelOrDraughting: IfcBoolean): IfcCurveStyle {
-	return {};
+export function CreateIfcCurveStyle(Name: IfcLabel | null, CurveFont: IfcCurveFontOrScaledCurveFontSelect | null, CurveWidth: IfcSizeSelect | null, CurveColour: IfcColour | null, ModelOrDraughting: IfcBoolean | null): Handle<IfcCurveStyle> {
+	return { expressID: 0 };
 }
 export class IfcCurveStyleFont {};
-export function CreateIfcCurveStyleFont(Name: IfcLabel,PatternList: IfcCurveStyleFontPattern): IfcCurveStyleFont {
-	return {};
+export function CreateIfcCurveStyleFont(Name: IfcLabel | null, PatternList: Handle<IfcCurveStyleFontPattern> ): Handle<IfcCurveStyleFont> {
+	return { expressID: 0 };
 }
 export class IfcCurveStyleFontAndScaling {};
-export function CreateIfcCurveStyleFontAndScaling(Name: IfcLabel,CurveFont: IfcCurveStyleFontSelect,CurveFontScaling: IfcPositiveRatioMeasure): IfcCurveStyleFontAndScaling {
-	return {};
+export function CreateIfcCurveStyleFontAndScaling(Name: IfcLabel | null, CurveFont: IfcCurveStyleFontSelect , CurveFontScaling: IfcPositiveRatioMeasure ): Handle<IfcCurveStyleFontAndScaling> {
+	return { expressID: 0 };
 }
 export class IfcCurveStyleFontPattern {};
-export function CreateIfcCurveStyleFontPattern(VisibleSegmentLength: IfcLengthMeasure,InvisibleSegmentLength: IfcPositiveLengthMeasure): IfcCurveStyleFontPattern {
-	return {};
+export function CreateIfcCurveStyleFontPattern(VisibleSegmentLength: IfcLengthMeasure , InvisibleSegmentLength: IfcPositiveLengthMeasure ): Handle<IfcCurveStyleFontPattern> {
+	return { expressID: 0 };
 }
 export class IfcCylindricalSurface {};
-export function CreateIfcCylindricalSurface(Position: IfcAxis2Placement3D,Radius: IfcPositiveLengthMeasure): IfcCylindricalSurface {
-	return {};
+export function CreateIfcCylindricalSurface(Position: Handle<IfcAxis2Placement3D> , Radius: IfcPositiveLengthMeasure ): Handle<IfcCylindricalSurface> {
+	return { expressID: 0 };
 }
 export class IfcDamper {};
-export function CreateIfcDamper(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcDamperTypeEnum): IfcDamper {
-	return {};
+export function CreateIfcDamper(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcDamperTypeEnum | null): Handle<IfcDamper> {
+	return { expressID: 0 };
 }
 export class IfcDamperType {};
-export function CreateIfcDamperType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcDamperTypeEnum): IfcDamperType {
-	return {};
+export function CreateIfcDamperType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcDamperTypeEnum ): Handle<IfcDamperType> {
+	return { expressID: 0 };
 }
 export class IfcDeepFoundation {};
-export function CreateIfcDeepFoundation(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcDeepFoundation {
-	return {};
+export function CreateIfcDeepFoundation(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcDeepFoundation> {
+	return { expressID: 0 };
 }
 export class IfcDeepFoundationType {};
-export function CreateIfcDeepFoundationType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcDeepFoundationType {
-	return {};
+export function CreateIfcDeepFoundationType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcDeepFoundationType> {
+	return { expressID: 0 };
 }
 export class IfcDerivedProfileDef {};
-export function CreateIfcDerivedProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,ParentProfile: IfcProfileDef,Operator: IfcCartesianTransformationOperator2D,Label: IfcLabel): IfcDerivedProfileDef {
-	return {};
+export function CreateIfcDerivedProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, ParentProfile: Handle<IfcProfileDef> , Operator: Handle<IfcCartesianTransformationOperator2D> , Label: IfcLabel | null): Handle<IfcDerivedProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcDerivedUnit {};
-export function CreateIfcDerivedUnit(Elements: IfcDerivedUnitElement,UnitType: IfcDerivedUnitEnum,UserDefinedType: IfcLabel): IfcDerivedUnit {
-	return {};
+export function CreateIfcDerivedUnit(Elements: Handle<IfcDerivedUnitElement>[] , UnitType: IfcDerivedUnitEnum , UserDefinedType: IfcLabel | null): Handle<IfcDerivedUnit> {
+	return { expressID: 0 };
 }
 export class IfcDerivedUnitElement {};
-export function CreateIfcDerivedUnitElement(Unit: IfcNamedUnit,Exponent: INTEGER): IfcDerivedUnitElement {
-	return {};
+export function CreateIfcDerivedUnitElement(Unit: Handle<IfcNamedUnit> , Exponent: Handle<number> ): Handle<IfcDerivedUnitElement> {
+	return { expressID: 0 };
 }
 export class IfcDimensionalExponents {};
-export function CreateIfcDimensionalExponents(LengthExponent: INTEGER,MassExponent: INTEGER,TimeExponent: INTEGER,ElectricCurrentExponent: INTEGER,ThermodynamicTemperatureExponent: INTEGER,AmountOfSubstanceExponent: INTEGER,LuminousIntensityExponent: INTEGER): IfcDimensionalExponents {
-	return {};
+export function CreateIfcDimensionalExponents(LengthExponent: Handle<number> , MassExponent: Handle<number> , TimeExponent: Handle<number> , ElectricCurrentExponent: Handle<number> , ThermodynamicTemperatureExponent: Handle<number> , AmountOfSubstanceExponent: Handle<number> , LuminousIntensityExponent: Handle<number> ): Handle<IfcDimensionalExponents> {
+	return { expressID: 0 };
 }
 export class IfcDirection {};
-export function CreateIfcDirection(DirectionRatios: IfcReal): IfcDirection {
-	return {};
+export function CreateIfcDirection(DirectionRatios: IfcReal ): Handle<IfcDirection> {
+	return { expressID: 0 };
 }
 export class IfcDiscreteAccessory {};
-export function CreateIfcDiscreteAccessory(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcDiscreteAccessoryTypeEnum): IfcDiscreteAccessory {
-	return {};
+export function CreateIfcDiscreteAccessory(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcDiscreteAccessoryTypeEnum | null): Handle<IfcDiscreteAccessory> {
+	return { expressID: 0 };
 }
 export class IfcDiscreteAccessoryType {};
-export function CreateIfcDiscreteAccessoryType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcDiscreteAccessoryTypeEnum): IfcDiscreteAccessoryType {
-	return {};
+export function CreateIfcDiscreteAccessoryType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcDiscreteAccessoryTypeEnum ): Handle<IfcDiscreteAccessoryType> {
+	return { expressID: 0 };
 }
 export class IfcDistanceExpression {};
-export function CreateIfcDistanceExpression(DistanceAlong: IfcLengthMeasure,OffsetLateral: IfcLengthMeasure,OffsetVertical: IfcLengthMeasure,OffsetLongitudinal: IfcLengthMeasure,AlongHorizontal: IfcBoolean): IfcDistanceExpression {
-	return {};
+export function CreateIfcDistanceExpression(DistanceAlong: IfcLengthMeasure , OffsetLateral: IfcLengthMeasure | null, OffsetVertical: IfcLengthMeasure | null, OffsetLongitudinal: IfcLengthMeasure | null, AlongHorizontal: IfcBoolean | null): Handle<IfcDistanceExpression> {
+	return { expressID: 0 };
 }
 export class IfcDistributionChamberElement {};
-export function CreateIfcDistributionChamberElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcDistributionChamberElementTypeEnum): IfcDistributionChamberElement {
-	return {};
+export function CreateIfcDistributionChamberElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcDistributionChamberElementTypeEnum | null): Handle<IfcDistributionChamberElement> {
+	return { expressID: 0 };
 }
 export class IfcDistributionChamberElementType {};
-export function CreateIfcDistributionChamberElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcDistributionChamberElementTypeEnum): IfcDistributionChamberElementType {
-	return {};
+export function CreateIfcDistributionChamberElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcDistributionChamberElementTypeEnum ): Handle<IfcDistributionChamberElementType> {
+	return { expressID: 0 };
 }
 export class IfcDistributionCircuit {};
-export function CreateIfcDistributionCircuit(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,LongName: IfcLabel,PredefinedType: IfcDistributionSystemEnum): IfcDistributionCircuit {
-	return {};
+export function CreateIfcDistributionCircuit(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, LongName: IfcLabel | null, PredefinedType: IfcDistributionSystemEnum | null): Handle<IfcDistributionCircuit> {
+	return { expressID: 0 };
 }
 export class IfcDistributionControlElement {};
-export function CreateIfcDistributionControlElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcDistributionControlElement {
-	return {};
+export function CreateIfcDistributionControlElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcDistributionControlElement> {
+	return { expressID: 0 };
 }
 export class IfcDistributionControlElementType {};
-export function CreateIfcDistributionControlElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcDistributionControlElementType {
-	return {};
+export function CreateIfcDistributionControlElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcDistributionControlElementType> {
+	return { expressID: 0 };
 }
 export class IfcDistributionElement {};
-export function CreateIfcDistributionElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcDistributionElement {
-	return {};
+export function CreateIfcDistributionElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcDistributionElement> {
+	return { expressID: 0 };
 }
 export class IfcDistributionElementType {};
-export function CreateIfcDistributionElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcDistributionElementType {
-	return {};
+export function CreateIfcDistributionElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcDistributionElementType> {
+	return { expressID: 0 };
 }
 export class IfcDistributionFlowElement {};
-export function CreateIfcDistributionFlowElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcDistributionFlowElement {
-	return {};
+export function CreateIfcDistributionFlowElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcDistributionFlowElement> {
+	return { expressID: 0 };
 }
 export class IfcDistributionFlowElementType {};
-export function CreateIfcDistributionFlowElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcDistributionFlowElementType {
-	return {};
+export function CreateIfcDistributionFlowElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcDistributionFlowElementType> {
+	return { expressID: 0 };
 }
 export class IfcDistributionPort {};
-export function CreateIfcDistributionPort(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,FlowDirection: IfcFlowDirectionEnum,PredefinedType: IfcDistributionPortTypeEnum,SystemType: IfcDistributionSystemEnum): IfcDistributionPort {
-	return {};
+export function CreateIfcDistributionPort(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, FlowDirection: IfcFlowDirectionEnum | null, PredefinedType: IfcDistributionPortTypeEnum | null, SystemType: IfcDistributionSystemEnum | null): Handle<IfcDistributionPort> {
+	return { expressID: 0 };
 }
 export class IfcDistributionSystem {};
-export function CreateIfcDistributionSystem(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,LongName: IfcLabel,PredefinedType: IfcDistributionSystemEnum): IfcDistributionSystem {
-	return {};
+export function CreateIfcDistributionSystem(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, LongName: IfcLabel | null, PredefinedType: IfcDistributionSystemEnum | null): Handle<IfcDistributionSystem> {
+	return { expressID: 0 };
 }
 export class IfcDocumentInformation {};
-export function CreateIfcDocumentInformation(Identification: IfcIdentifier,Name: IfcLabel,Description: IfcText,Location: IfcURIReference,Purpose: IfcText,IntendedUse: IfcText,Scope: IfcText,Revision: IfcLabel,DocumentOwner: IfcActorSelect,Editors: IfcActorSelect,CreationTime: IfcDateTime,LastRevisionTime: IfcDateTime,ElectronicFormat: IfcIdentifier,ValidFrom: IfcDate,ValidUntil: IfcDate,Confidentiality: IfcDocumentConfidentialityEnum,Status: IfcDocumentStatusEnum): IfcDocumentInformation {
-	return {};
+export function CreateIfcDocumentInformation(Identification: IfcIdentifier , Name: IfcLabel , Description: IfcText | null, Location: IfcURIReference | null, Purpose: IfcText | null, IntendedUse: IfcText | null, Scope: IfcText | null, Revision: IfcLabel | null, DocumentOwner: IfcActorSelect | null, Editors: IfcActorSelect[] | null, CreationTime: IfcDateTime | null, LastRevisionTime: IfcDateTime | null, ElectronicFormat: IfcIdentifier | null, ValidFrom: IfcDate | null, ValidUntil: IfcDate | null, Confidentiality: IfcDocumentConfidentialityEnum | null, Status: IfcDocumentStatusEnum | null): Handle<IfcDocumentInformation> {
+	return { expressID: 0 };
 }
 export class IfcDocumentInformationRelationship {};
-export function CreateIfcDocumentInformationRelationship(Name: IfcLabel,Description: IfcText,RelatingDocument: IfcDocumentInformation,RelatedDocuments: IfcDocumentInformation,RelationshipType: IfcLabel): IfcDocumentInformationRelationship {
-	return {};
+export function CreateIfcDocumentInformationRelationship(Name: IfcLabel | null, Description: IfcText | null, RelatingDocument: Handle<IfcDocumentInformation> , RelatedDocuments: Handle<IfcDocumentInformation>[] , RelationshipType: IfcLabel | null): Handle<IfcDocumentInformationRelationship> {
+	return { expressID: 0 };
 }
 export class IfcDocumentReference {};
-export function CreateIfcDocumentReference(Location: IfcURIReference,Identification: IfcIdentifier,Name: IfcLabel,Description: IfcText,ReferencedDocument: IfcDocumentInformation): IfcDocumentReference {
-	return {};
+export function CreateIfcDocumentReference(Location: IfcURIReference | null, Identification: IfcIdentifier | null, Name: IfcLabel | null, Description: IfcText | null, ReferencedDocument: Handle<IfcDocumentInformation> | null): Handle<IfcDocumentReference> {
+	return { expressID: 0 };
 }
 export class IfcDoor {};
-export function CreateIfcDoor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,OverallHeight: IfcPositiveLengthMeasure,OverallWidth: IfcPositiveLengthMeasure,PredefinedType: IfcDoorTypeEnum,OperationType: IfcDoorTypeOperationEnum,UserDefinedOperationType: IfcLabel): IfcDoor {
-	return {};
+export function CreateIfcDoor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, OverallHeight: IfcPositiveLengthMeasure | null, OverallWidth: IfcPositiveLengthMeasure | null, PredefinedType: IfcDoorTypeEnum | null, OperationType: IfcDoorTypeOperationEnum | null, UserDefinedOperationType: IfcLabel | null): Handle<IfcDoor> {
+	return { expressID: 0 };
 }
 export class IfcDoorLiningProperties {};
-export function CreateIfcDoorLiningProperties(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,LiningDepth: IfcPositiveLengthMeasure,LiningThickness: IfcNonNegativeLengthMeasure,ThresholdDepth: IfcPositiveLengthMeasure,ThresholdThickness: IfcNonNegativeLengthMeasure,TransomThickness: IfcNonNegativeLengthMeasure,TransomOffset: IfcLengthMeasure,LiningOffset: IfcLengthMeasure,ThresholdOffset: IfcLengthMeasure,CasingThickness: IfcPositiveLengthMeasure,CasingDepth: IfcPositiveLengthMeasure,ShapeAspectStyle: IfcShapeAspect,LiningToPanelOffsetX: IfcLengthMeasure,LiningToPanelOffsetY: IfcLengthMeasure): IfcDoorLiningProperties {
-	return {};
+export function CreateIfcDoorLiningProperties(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, LiningDepth: IfcPositiveLengthMeasure | null, LiningThickness: IfcNonNegativeLengthMeasure | null, ThresholdDepth: IfcPositiveLengthMeasure | null, ThresholdThickness: IfcNonNegativeLengthMeasure | null, TransomThickness: IfcNonNegativeLengthMeasure | null, TransomOffset: IfcLengthMeasure | null, LiningOffset: IfcLengthMeasure | null, ThresholdOffset: IfcLengthMeasure | null, CasingThickness: IfcPositiveLengthMeasure | null, CasingDepth: IfcPositiveLengthMeasure | null, ShapeAspectStyle: Handle<IfcShapeAspect> | null, LiningToPanelOffsetX: IfcLengthMeasure | null, LiningToPanelOffsetY: IfcLengthMeasure | null): Handle<IfcDoorLiningProperties> {
+	return { expressID: 0 };
 }
 export class IfcDoorPanelProperties {};
-export function CreateIfcDoorPanelProperties(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,PanelDepth: IfcPositiveLengthMeasure,PanelOperation: IfcDoorPanelOperationEnum,PanelWidth: IfcNormalisedRatioMeasure,PanelPosition: IfcDoorPanelPositionEnum,ShapeAspectStyle: IfcShapeAspect): IfcDoorPanelProperties {
-	return {};
+export function CreateIfcDoorPanelProperties(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, PanelDepth: IfcPositiveLengthMeasure | null, PanelOperation: IfcDoorPanelOperationEnum , PanelWidth: IfcNormalisedRatioMeasure | null, PanelPosition: IfcDoorPanelPositionEnum , ShapeAspectStyle: Handle<IfcShapeAspect> | null): Handle<IfcDoorPanelProperties> {
+	return { expressID: 0 };
 }
 export class IfcDoorStandardCase {};
-export function CreateIfcDoorStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,OverallHeight: IfcPositiveLengthMeasure,OverallWidth: IfcPositiveLengthMeasure,PredefinedType: IfcDoorTypeEnum,OperationType: IfcDoorTypeOperationEnum,UserDefinedOperationType: IfcLabel): IfcDoorStandardCase {
-	return {};
+export function CreateIfcDoorStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, OverallHeight: IfcPositiveLengthMeasure | null, OverallWidth: IfcPositiveLengthMeasure | null, PredefinedType: IfcDoorTypeEnum | null, OperationType: IfcDoorTypeOperationEnum | null, UserDefinedOperationType: IfcLabel | null): Handle<IfcDoorStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcDoorStyle {};
-export function CreateIfcDoorStyle(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,OperationType: IfcDoorStyleOperationEnum,ConstructionType: IfcDoorStyleConstructionEnum,ParameterTakesPrecedence: IfcBoolean,Sizeable: IfcBoolean): IfcDoorStyle {
-	return {};
+export function CreateIfcDoorStyle(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, OperationType: IfcDoorStyleOperationEnum , ConstructionType: IfcDoorStyleConstructionEnum , ParameterTakesPrecedence: IfcBoolean , Sizeable: IfcBoolean ): Handle<IfcDoorStyle> {
+	return { expressID: 0 };
 }
 export class IfcDoorType {};
-export function CreateIfcDoorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcDoorTypeEnum,OperationType: IfcDoorTypeOperationEnum,ParameterTakesPrecedence: IfcBoolean,UserDefinedOperationType: IfcLabel): IfcDoorType {
-	return {};
+export function CreateIfcDoorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcDoorTypeEnum , OperationType: IfcDoorTypeOperationEnum , ParameterTakesPrecedence: IfcBoolean | null, UserDefinedOperationType: IfcLabel | null): Handle<IfcDoorType> {
+	return { expressID: 0 };
 }
 export class IfcDraughtingPreDefinedColour {};
-export function CreateIfcDraughtingPreDefinedColour(Name: IfcLabel): IfcDraughtingPreDefinedColour {
-	return {};
+export function CreateIfcDraughtingPreDefinedColour(Name: IfcLabel ): Handle<IfcDraughtingPreDefinedColour> {
+	return { expressID: 0 };
 }
 export class IfcDraughtingPreDefinedCurveFont {};
-export function CreateIfcDraughtingPreDefinedCurveFont(Name: IfcLabel): IfcDraughtingPreDefinedCurveFont {
-	return {};
+export function CreateIfcDraughtingPreDefinedCurveFont(Name: IfcLabel ): Handle<IfcDraughtingPreDefinedCurveFont> {
+	return { expressID: 0 };
 }
 export class IfcDuctFitting {};
-export function CreateIfcDuctFitting(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcDuctFittingTypeEnum): IfcDuctFitting {
-	return {};
+export function CreateIfcDuctFitting(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcDuctFittingTypeEnum | null): Handle<IfcDuctFitting> {
+	return { expressID: 0 };
 }
 export class IfcDuctFittingType {};
-export function CreateIfcDuctFittingType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcDuctFittingTypeEnum): IfcDuctFittingType {
-	return {};
+export function CreateIfcDuctFittingType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcDuctFittingTypeEnum ): Handle<IfcDuctFittingType> {
+	return { expressID: 0 };
 }
 export class IfcDuctSegment {};
-export function CreateIfcDuctSegment(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcDuctSegmentTypeEnum): IfcDuctSegment {
-	return {};
+export function CreateIfcDuctSegment(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcDuctSegmentTypeEnum | null): Handle<IfcDuctSegment> {
+	return { expressID: 0 };
 }
 export class IfcDuctSegmentType {};
-export function CreateIfcDuctSegmentType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcDuctSegmentTypeEnum): IfcDuctSegmentType {
-	return {};
+export function CreateIfcDuctSegmentType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcDuctSegmentTypeEnum ): Handle<IfcDuctSegmentType> {
+	return { expressID: 0 };
 }
 export class IfcDuctSilencer {};
-export function CreateIfcDuctSilencer(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcDuctSilencerTypeEnum): IfcDuctSilencer {
-	return {};
+export function CreateIfcDuctSilencer(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcDuctSilencerTypeEnum | null): Handle<IfcDuctSilencer> {
+	return { expressID: 0 };
 }
 export class IfcDuctSilencerType {};
-export function CreateIfcDuctSilencerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcDuctSilencerTypeEnum): IfcDuctSilencerType {
-	return {};
+export function CreateIfcDuctSilencerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcDuctSilencerTypeEnum ): Handle<IfcDuctSilencerType> {
+	return { expressID: 0 };
 }
 export class IfcEdge {};
-export function CreateIfcEdge(EdgeStart: IfcVertex,EdgeEnd: IfcVertex): IfcEdge {
-	return {};
+export function CreateIfcEdge(EdgeStart: Handle<IfcVertex> , EdgeEnd: Handle<IfcVertex> ): Handle<IfcEdge> {
+	return { expressID: 0 };
 }
 export class IfcEdgeCurve {};
-export function CreateIfcEdgeCurve(EdgeStart: IfcVertex,EdgeEnd: IfcVertex,EdgeGeometry: IfcCurve,SameSense: IfcBoolean): IfcEdgeCurve {
-	return {};
+export function CreateIfcEdgeCurve(EdgeStart: Handle<IfcVertex> , EdgeEnd: Handle<IfcVertex> , EdgeGeometry: Handle<IfcCurve> , SameSense: IfcBoolean ): Handle<IfcEdgeCurve> {
+	return { expressID: 0 };
 }
 export class IfcEdgeLoop {};
-export function CreateIfcEdgeLoop(EdgeList: IfcOrientedEdge): IfcEdgeLoop {
-	return {};
+export function CreateIfcEdgeLoop(EdgeList: Handle<IfcOrientedEdge> ): Handle<IfcEdgeLoop> {
+	return { expressID: 0 };
 }
 export class IfcElectricAppliance {};
-export function CreateIfcElectricAppliance(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcElectricApplianceTypeEnum): IfcElectricAppliance {
-	return {};
+export function CreateIfcElectricAppliance(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcElectricApplianceTypeEnum | null): Handle<IfcElectricAppliance> {
+	return { expressID: 0 };
 }
 export class IfcElectricApplianceType {};
-export function CreateIfcElectricApplianceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcElectricApplianceTypeEnum): IfcElectricApplianceType {
-	return {};
+export function CreateIfcElectricApplianceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcElectricApplianceTypeEnum ): Handle<IfcElectricApplianceType> {
+	return { expressID: 0 };
 }
 export class IfcElectricDistributionBoard {};
-export function CreateIfcElectricDistributionBoard(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcElectricDistributionBoardTypeEnum): IfcElectricDistributionBoard {
-	return {};
+export function CreateIfcElectricDistributionBoard(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcElectricDistributionBoardTypeEnum | null): Handle<IfcElectricDistributionBoard> {
+	return { expressID: 0 };
 }
 export class IfcElectricDistributionBoardType {};
-export function CreateIfcElectricDistributionBoardType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcElectricDistributionBoardTypeEnum): IfcElectricDistributionBoardType {
-	return {};
+export function CreateIfcElectricDistributionBoardType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcElectricDistributionBoardTypeEnum ): Handle<IfcElectricDistributionBoardType> {
+	return { expressID: 0 };
 }
 export class IfcElectricFlowStorageDevice {};
-export function CreateIfcElectricFlowStorageDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcElectricFlowStorageDeviceTypeEnum): IfcElectricFlowStorageDevice {
-	return {};
+export function CreateIfcElectricFlowStorageDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcElectricFlowStorageDeviceTypeEnum | null): Handle<IfcElectricFlowStorageDevice> {
+	return { expressID: 0 };
 }
 export class IfcElectricFlowStorageDeviceType {};
-export function CreateIfcElectricFlowStorageDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcElectricFlowStorageDeviceTypeEnum): IfcElectricFlowStorageDeviceType {
-	return {};
+export function CreateIfcElectricFlowStorageDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcElectricFlowStorageDeviceTypeEnum ): Handle<IfcElectricFlowStorageDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcElectricGenerator {};
-export function CreateIfcElectricGenerator(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcElectricGeneratorTypeEnum): IfcElectricGenerator {
-	return {};
+export function CreateIfcElectricGenerator(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcElectricGeneratorTypeEnum | null): Handle<IfcElectricGenerator> {
+	return { expressID: 0 };
 }
 export class IfcElectricGeneratorType {};
-export function CreateIfcElectricGeneratorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcElectricGeneratorTypeEnum): IfcElectricGeneratorType {
-	return {};
+export function CreateIfcElectricGeneratorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcElectricGeneratorTypeEnum ): Handle<IfcElectricGeneratorType> {
+	return { expressID: 0 };
 }
 export class IfcElectricMotor {};
-export function CreateIfcElectricMotor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcElectricMotorTypeEnum): IfcElectricMotor {
-	return {};
+export function CreateIfcElectricMotor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcElectricMotorTypeEnum | null): Handle<IfcElectricMotor> {
+	return { expressID: 0 };
 }
 export class IfcElectricMotorType {};
-export function CreateIfcElectricMotorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcElectricMotorTypeEnum): IfcElectricMotorType {
-	return {};
+export function CreateIfcElectricMotorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcElectricMotorTypeEnum ): Handle<IfcElectricMotorType> {
+	return { expressID: 0 };
 }
 export class IfcElectricTimeControl {};
-export function CreateIfcElectricTimeControl(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcElectricTimeControlTypeEnum): IfcElectricTimeControl {
-	return {};
+export function CreateIfcElectricTimeControl(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcElectricTimeControlTypeEnum | null): Handle<IfcElectricTimeControl> {
+	return { expressID: 0 };
 }
 export class IfcElectricTimeControlType {};
-export function CreateIfcElectricTimeControlType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcElectricTimeControlTypeEnum): IfcElectricTimeControlType {
-	return {};
+export function CreateIfcElectricTimeControlType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcElectricTimeControlTypeEnum ): Handle<IfcElectricTimeControlType> {
+	return { expressID: 0 };
 }
 export class IfcElement {};
-export function CreateIfcElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcElement {
-	return {};
+export function CreateIfcElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcElement> {
+	return { expressID: 0 };
 }
 export class IfcElementAssembly {};
-export function CreateIfcElementAssembly(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,AssemblyPlace: IfcAssemblyPlaceEnum,PredefinedType: IfcElementAssemblyTypeEnum): IfcElementAssembly {
-	return {};
+export function CreateIfcElementAssembly(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, AssemblyPlace: IfcAssemblyPlaceEnum | null, PredefinedType: IfcElementAssemblyTypeEnum | null): Handle<IfcElementAssembly> {
+	return { expressID: 0 };
 }
 export class IfcElementAssemblyType {};
-export function CreateIfcElementAssemblyType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcElementAssemblyTypeEnum): IfcElementAssemblyType {
-	return {};
+export function CreateIfcElementAssemblyType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcElementAssemblyTypeEnum ): Handle<IfcElementAssemblyType> {
+	return { expressID: 0 };
 }
 export class IfcElementComponent {};
-export function CreateIfcElementComponent(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcElementComponent {
-	return {};
+export function CreateIfcElementComponent(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcElementComponent> {
+	return { expressID: 0 };
 }
 export class IfcElementComponentType {};
-export function CreateIfcElementComponentType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcElementComponentType {
-	return {};
+export function CreateIfcElementComponentType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcElementComponentType> {
+	return { expressID: 0 };
 }
 export class IfcElementQuantity {};
-export function CreateIfcElementQuantity(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,MethodOfMeasurement: IfcLabel,Quantities: IfcPhysicalQuantity): IfcElementQuantity {
-	return {};
+export function CreateIfcElementQuantity(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, MethodOfMeasurement: IfcLabel | null, Quantities: Handle<IfcPhysicalQuantity>[] ): Handle<IfcElementQuantity> {
+	return { expressID: 0 };
 }
 export class IfcElementType {};
-export function CreateIfcElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcElementType {
-	return {};
+export function CreateIfcElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcElementType> {
+	return { expressID: 0 };
 }
 export class IfcElementarySurface {};
-export function CreateIfcElementarySurface(Position: IfcAxis2Placement3D): IfcElementarySurface {
-	return {};
+export function CreateIfcElementarySurface(Position: Handle<IfcAxis2Placement3D> ): Handle<IfcElementarySurface> {
+	return { expressID: 0 };
 }
 export class IfcEllipse {};
-export function CreateIfcEllipse(Position: IfcAxis2Placement,SemiAxis1: IfcPositiveLengthMeasure,SemiAxis2: IfcPositiveLengthMeasure): IfcEllipse {
-	return {};
+export function CreateIfcEllipse(Position: IfcAxis2Placement , SemiAxis1: IfcPositiveLengthMeasure , SemiAxis2: IfcPositiveLengthMeasure ): Handle<IfcEllipse> {
+	return { expressID: 0 };
 }
 export class IfcEllipseProfileDef {};
-export function CreateIfcEllipseProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,SemiAxis1: IfcPositiveLengthMeasure,SemiAxis2: IfcPositiveLengthMeasure): IfcEllipseProfileDef {
-	return {};
+export function CreateIfcEllipseProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, SemiAxis1: IfcPositiveLengthMeasure , SemiAxis2: IfcPositiveLengthMeasure ): Handle<IfcEllipseProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcEnergyConversionDevice {};
-export function CreateIfcEnergyConversionDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcEnergyConversionDevice {
-	return {};
+export function CreateIfcEnergyConversionDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcEnergyConversionDevice> {
+	return { expressID: 0 };
 }
 export class IfcEnergyConversionDeviceType {};
-export function CreateIfcEnergyConversionDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcEnergyConversionDeviceType {
-	return {};
+export function CreateIfcEnergyConversionDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcEnergyConversionDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcEngine {};
-export function CreateIfcEngine(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcEngineTypeEnum): IfcEngine {
-	return {};
+export function CreateIfcEngine(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcEngineTypeEnum | null): Handle<IfcEngine> {
+	return { expressID: 0 };
 }
 export class IfcEngineType {};
-export function CreateIfcEngineType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcEngineTypeEnum): IfcEngineType {
-	return {};
+export function CreateIfcEngineType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcEngineTypeEnum ): Handle<IfcEngineType> {
+	return { expressID: 0 };
 }
 export class IfcEvaporativeCooler {};
-export function CreateIfcEvaporativeCooler(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcEvaporativeCoolerTypeEnum): IfcEvaporativeCooler {
-	return {};
+export function CreateIfcEvaporativeCooler(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcEvaporativeCoolerTypeEnum | null): Handle<IfcEvaporativeCooler> {
+	return { expressID: 0 };
 }
 export class IfcEvaporativeCoolerType {};
-export function CreateIfcEvaporativeCoolerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcEvaporativeCoolerTypeEnum): IfcEvaporativeCoolerType {
-	return {};
+export function CreateIfcEvaporativeCoolerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcEvaporativeCoolerTypeEnum ): Handle<IfcEvaporativeCoolerType> {
+	return { expressID: 0 };
 }
 export class IfcEvaporator {};
-export function CreateIfcEvaporator(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcEvaporatorTypeEnum): IfcEvaporator {
-	return {};
+export function CreateIfcEvaporator(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcEvaporatorTypeEnum | null): Handle<IfcEvaporator> {
+	return { expressID: 0 };
 }
 export class IfcEvaporatorType {};
-export function CreateIfcEvaporatorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcEvaporatorTypeEnum): IfcEvaporatorType {
-	return {};
+export function CreateIfcEvaporatorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcEvaporatorTypeEnum ): Handle<IfcEvaporatorType> {
+	return { expressID: 0 };
 }
 export class IfcEvent {};
-export function CreateIfcEvent(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,PredefinedType: IfcEventTypeEnum,EventTriggerType: IfcEventTriggerTypeEnum,UserDefinedEventTriggerType: IfcLabel,EventOccurenceTime: IfcEventTime): IfcEvent {
-	return {};
+export function CreateIfcEvent(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, PredefinedType: IfcEventTypeEnum | null, EventTriggerType: IfcEventTriggerTypeEnum | null, UserDefinedEventTriggerType: IfcLabel | null, EventOccurenceTime: Handle<IfcEventTime> | null): Handle<IfcEvent> {
+	return { expressID: 0 };
 }
 export class IfcEventTime {};
-export function CreateIfcEventTime(Name: IfcLabel,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,ActualDate: IfcDateTime,EarlyDate: IfcDateTime,LateDate: IfcDateTime,ScheduleDate: IfcDateTime): IfcEventTime {
-	return {};
+export function CreateIfcEventTime(Name: IfcLabel | null, DataOrigin: IfcDataOriginEnum | null, UserDefinedDataOrigin: IfcLabel | null, ActualDate: IfcDateTime | null, EarlyDate: IfcDateTime | null, LateDate: IfcDateTime | null, ScheduleDate: IfcDateTime | null): Handle<IfcEventTime> {
+	return { expressID: 0 };
 }
 export class IfcEventType {};
-export function CreateIfcEventType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ProcessType: IfcLabel,PredefinedType: IfcEventTypeEnum,EventTriggerType: IfcEventTriggerTypeEnum,UserDefinedEventTriggerType: IfcLabel): IfcEventType {
-	return {};
+export function CreateIfcEventType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ProcessType: IfcLabel | null, PredefinedType: IfcEventTypeEnum , EventTriggerType: IfcEventTriggerTypeEnum , UserDefinedEventTriggerType: IfcLabel | null): Handle<IfcEventType> {
+	return { expressID: 0 };
 }
 export class IfcExtendedProperties {};
-export function CreateIfcExtendedProperties(Name: IfcIdentifier,Description: IfcText,Properties: IfcProperty): IfcExtendedProperties {
-	return {};
+export function CreateIfcExtendedProperties(Name: IfcIdentifier | null, Description: IfcText | null, Properties: Handle<IfcProperty>[] ): Handle<IfcExtendedProperties> {
+	return { expressID: 0 };
 }
 export class IfcExternalInformation {};
-export function CreateIfcExternalInformation(): IfcExternalInformation {
-	return {};
+export function CreateIfcExternalInformation(): Handle<IfcExternalInformation> {
+	return { expressID: 0 };
 }
 export class IfcExternalReference {};
-export function CreateIfcExternalReference(Location: IfcURIReference,Identification: IfcIdentifier,Name: IfcLabel): IfcExternalReference {
-	return {};
+export function CreateIfcExternalReference(Location: IfcURIReference | null, Identification: IfcIdentifier | null, Name: IfcLabel | null): Handle<IfcExternalReference> {
+	return { expressID: 0 };
 }
 export class IfcExternalReferenceRelationship {};
-export function CreateIfcExternalReferenceRelationship(Name: IfcLabel,Description: IfcText,RelatingReference: IfcExternalReference,RelatedResourceObjects: IfcResourceObjectSelect): IfcExternalReferenceRelationship {
-	return {};
+export function CreateIfcExternalReferenceRelationship(Name: IfcLabel | null, Description: IfcText | null, RelatingReference: Handle<IfcExternalReference> , RelatedResourceObjects: IfcResourceObjectSelect[] ): Handle<IfcExternalReferenceRelationship> {
+	return { expressID: 0 };
 }
 export class IfcExternalSpatialElement {};
-export function CreateIfcExternalSpatialElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,PredefinedType: IfcExternalSpatialElementTypeEnum): IfcExternalSpatialElement {
-	return {};
+export function CreateIfcExternalSpatialElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, PredefinedType: IfcExternalSpatialElementTypeEnum | null): Handle<IfcExternalSpatialElement> {
+	return { expressID: 0 };
 }
 export class IfcExternalSpatialStructureElement {};
-export function CreateIfcExternalSpatialStructureElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel): IfcExternalSpatialStructureElement {
-	return {};
+export function CreateIfcExternalSpatialStructureElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null): Handle<IfcExternalSpatialStructureElement> {
+	return { expressID: 0 };
 }
 export class IfcExternallyDefinedHatchStyle {};
-export function CreateIfcExternallyDefinedHatchStyle(Location: IfcURIReference,Identification: IfcIdentifier,Name: IfcLabel): IfcExternallyDefinedHatchStyle {
-	return {};
+export function CreateIfcExternallyDefinedHatchStyle(Location: IfcURIReference | null, Identification: IfcIdentifier | null, Name: IfcLabel | null): Handle<IfcExternallyDefinedHatchStyle> {
+	return { expressID: 0 };
 }
 export class IfcExternallyDefinedSurfaceStyle {};
-export function CreateIfcExternallyDefinedSurfaceStyle(Location: IfcURIReference,Identification: IfcIdentifier,Name: IfcLabel): IfcExternallyDefinedSurfaceStyle {
-	return {};
+export function CreateIfcExternallyDefinedSurfaceStyle(Location: IfcURIReference | null, Identification: IfcIdentifier | null, Name: IfcLabel | null): Handle<IfcExternallyDefinedSurfaceStyle> {
+	return { expressID: 0 };
 }
 export class IfcExternallyDefinedTextFont {};
-export function CreateIfcExternallyDefinedTextFont(Location: IfcURIReference,Identification: IfcIdentifier,Name: IfcLabel): IfcExternallyDefinedTextFont {
-	return {};
+export function CreateIfcExternallyDefinedTextFont(Location: IfcURIReference | null, Identification: IfcIdentifier | null, Name: IfcLabel | null): Handle<IfcExternallyDefinedTextFont> {
+	return { expressID: 0 };
 }
 export class IfcExtrudedAreaSolid {};
-export function CreateIfcExtrudedAreaSolid(SweptArea: IfcProfileDef,Position: IfcAxis2Placement3D,ExtrudedDirection: IfcDirection,Depth: IfcPositiveLengthMeasure): IfcExtrudedAreaSolid {
-	return {};
+export function CreateIfcExtrudedAreaSolid(SweptArea: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null, ExtrudedDirection: Handle<IfcDirection> , Depth: IfcPositiveLengthMeasure ): Handle<IfcExtrudedAreaSolid> {
+	return { expressID: 0 };
 }
 export class IfcExtrudedAreaSolidTapered {};
-export function CreateIfcExtrudedAreaSolidTapered(SweptArea: IfcProfileDef,Position: IfcAxis2Placement3D,ExtrudedDirection: IfcDirection,Depth: IfcPositiveLengthMeasure,EndSweptArea: IfcProfileDef): IfcExtrudedAreaSolidTapered {
-	return {};
+export function CreateIfcExtrudedAreaSolidTapered(SweptArea: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null, ExtrudedDirection: Handle<IfcDirection> , Depth: IfcPositiveLengthMeasure , EndSweptArea: Handle<IfcProfileDef> ): Handle<IfcExtrudedAreaSolidTapered> {
+	return { expressID: 0 };
 }
 export class IfcFace {};
-export function CreateIfcFace(Bounds: IfcFaceBound): IfcFace {
-	return {};
+export function CreateIfcFace(Bounds: Handle<IfcFaceBound>[] ): Handle<IfcFace> {
+	return { expressID: 0 };
 }
 export class IfcFaceBasedSurfaceModel {};
-export function CreateIfcFaceBasedSurfaceModel(FbsmFaces: IfcConnectedFaceSet): IfcFaceBasedSurfaceModel {
-	return {};
+export function CreateIfcFaceBasedSurfaceModel(FbsmFaces: Handle<IfcConnectedFaceSet>[] ): Handle<IfcFaceBasedSurfaceModel> {
+	return { expressID: 0 };
 }
 export class IfcFaceBound {};
-export function CreateIfcFaceBound(Bound: IfcLoop,Orientation: IfcBoolean): IfcFaceBound {
-	return {};
+export function CreateIfcFaceBound(Bound: Handle<IfcLoop> , Orientation: IfcBoolean ): Handle<IfcFaceBound> {
+	return { expressID: 0 };
 }
 export class IfcFaceOuterBound {};
-export function CreateIfcFaceOuterBound(Bound: IfcLoop,Orientation: IfcBoolean): IfcFaceOuterBound {
-	return {};
+export function CreateIfcFaceOuterBound(Bound: Handle<IfcLoop> , Orientation: IfcBoolean ): Handle<IfcFaceOuterBound> {
+	return { expressID: 0 };
 }
 export class IfcFaceSurface {};
-export function CreateIfcFaceSurface(Bounds: IfcFaceBound,FaceSurface: IfcSurface,SameSense: IfcBoolean): IfcFaceSurface {
-	return {};
+export function CreateIfcFaceSurface(Bounds: Handle<IfcFaceBound>[] , FaceSurface: Handle<IfcSurface> , SameSense: IfcBoolean ): Handle<IfcFaceSurface> {
+	return { expressID: 0 };
 }
 export class IfcFacetedBrep {};
-export function CreateIfcFacetedBrep(Outer: IfcClosedShell): IfcFacetedBrep {
-	return {};
+export function CreateIfcFacetedBrep(Outer: Handle<IfcClosedShell> ): Handle<IfcFacetedBrep> {
+	return { expressID: 0 };
 }
 export class IfcFacetedBrepWithVoids {};
-export function CreateIfcFacetedBrepWithVoids(Outer: IfcClosedShell,Voids: IfcClosedShell): IfcFacetedBrepWithVoids {
-	return {};
+export function CreateIfcFacetedBrepWithVoids(Outer: Handle<IfcClosedShell> , Voids: Handle<IfcClosedShell>[] ): Handle<IfcFacetedBrepWithVoids> {
+	return { expressID: 0 };
 }
 export class IfcFacility {};
-export function CreateIfcFacility(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum): IfcFacility {
-	return {};
+export function CreateIfcFacility(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null): Handle<IfcFacility> {
+	return { expressID: 0 };
 }
 export class IfcFacilityPart {};
-export function CreateIfcFacilityPart(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum): IfcFacilityPart {
-	return {};
+export function CreateIfcFacilityPart(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null): Handle<IfcFacilityPart> {
+	return { expressID: 0 };
 }
 export class IfcFailureConnectionCondition {};
-export function CreateIfcFailureConnectionCondition(Name: IfcLabel,TensionFailureX: IfcForceMeasure,TensionFailureY: IfcForceMeasure,TensionFailureZ: IfcForceMeasure,CompressionFailureX: IfcForceMeasure,CompressionFailureY: IfcForceMeasure,CompressionFailureZ: IfcForceMeasure): IfcFailureConnectionCondition {
-	return {};
+export function CreateIfcFailureConnectionCondition(Name: IfcLabel | null, TensionFailureX: IfcForceMeasure | null, TensionFailureY: IfcForceMeasure | null, TensionFailureZ: IfcForceMeasure | null, CompressionFailureX: IfcForceMeasure | null, CompressionFailureY: IfcForceMeasure | null, CompressionFailureZ: IfcForceMeasure | null): Handle<IfcFailureConnectionCondition> {
+	return { expressID: 0 };
 }
 export class IfcFan {};
-export function CreateIfcFan(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcFanTypeEnum): IfcFan {
-	return {};
+export function CreateIfcFan(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcFanTypeEnum | null): Handle<IfcFan> {
+	return { expressID: 0 };
 }
 export class IfcFanType {};
-export function CreateIfcFanType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcFanTypeEnum): IfcFanType {
-	return {};
+export function CreateIfcFanType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcFanTypeEnum ): Handle<IfcFanType> {
+	return { expressID: 0 };
 }
 export class IfcFastener {};
-export function CreateIfcFastener(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcFastenerTypeEnum): IfcFastener {
-	return {};
+export function CreateIfcFastener(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcFastenerTypeEnum | null): Handle<IfcFastener> {
+	return { expressID: 0 };
 }
 export class IfcFastenerType {};
-export function CreateIfcFastenerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcFastenerTypeEnum): IfcFastenerType {
-	return {};
+export function CreateIfcFastenerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcFastenerTypeEnum ): Handle<IfcFastenerType> {
+	return { expressID: 0 };
 }
 export class IfcFeatureElement {};
-export function CreateIfcFeatureElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFeatureElement {
-	return {};
+export function CreateIfcFeatureElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFeatureElement> {
+	return { expressID: 0 };
 }
 export class IfcFeatureElementAddition {};
-export function CreateIfcFeatureElementAddition(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFeatureElementAddition {
-	return {};
+export function CreateIfcFeatureElementAddition(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFeatureElementAddition> {
+	return { expressID: 0 };
 }
 export class IfcFeatureElementSubtraction {};
-export function CreateIfcFeatureElementSubtraction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFeatureElementSubtraction {
-	return {};
+export function CreateIfcFeatureElementSubtraction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFeatureElementSubtraction> {
+	return { expressID: 0 };
 }
 export class IfcFillAreaStyle {};
-export function CreateIfcFillAreaStyle(Name: IfcLabel,FillStyles: IfcFillStyleSelect,ModelorDraughting: IfcBoolean): IfcFillAreaStyle {
-	return {};
+export function CreateIfcFillAreaStyle(Name: IfcLabel | null, FillStyles: IfcFillStyleSelect[] , ModelorDraughting: IfcBoolean | null): Handle<IfcFillAreaStyle> {
+	return { expressID: 0 };
 }
 export class IfcFillAreaStyleHatching {};
-export function CreateIfcFillAreaStyleHatching(HatchLineAppearance: IfcCurveStyle,StartOfNextHatchLine: IfcHatchLineDistanceSelect,PointOfReferenceHatchLine: IfcCartesianPoint,PatternStart: IfcCartesianPoint,HatchLineAngle: IfcPlaneAngleMeasure): IfcFillAreaStyleHatching {
-	return {};
+export function CreateIfcFillAreaStyleHatching(HatchLineAppearance: Handle<IfcCurveStyle> , StartOfNextHatchLine: IfcHatchLineDistanceSelect , PointOfReferenceHatchLine: Handle<IfcCartesianPoint> | null, PatternStart: Handle<IfcCartesianPoint> | null, HatchLineAngle: IfcPlaneAngleMeasure ): Handle<IfcFillAreaStyleHatching> {
+	return { expressID: 0 };
 }
 export class IfcFillAreaStyleTiles {};
-export function CreateIfcFillAreaStyleTiles(TilingPattern: IfcVector,Tiles: IfcStyledItem,TilingScale: IfcPositiveRatioMeasure): IfcFillAreaStyleTiles {
-	return {};
+export function CreateIfcFillAreaStyleTiles(TilingPattern: Handle<IfcVector> , Tiles: Handle<IfcStyledItem>[] , TilingScale: IfcPositiveRatioMeasure ): Handle<IfcFillAreaStyleTiles> {
+	return { expressID: 0 };
 }
 export class IfcFilter {};
-export function CreateIfcFilter(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcFilterTypeEnum): IfcFilter {
-	return {};
+export function CreateIfcFilter(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcFilterTypeEnum | null): Handle<IfcFilter> {
+	return { expressID: 0 };
 }
 export class IfcFilterType {};
-export function CreateIfcFilterType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcFilterTypeEnum): IfcFilterType {
-	return {};
+export function CreateIfcFilterType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcFilterTypeEnum ): Handle<IfcFilterType> {
+	return { expressID: 0 };
 }
 export class IfcFireSuppressionTerminal {};
-export function CreateIfcFireSuppressionTerminal(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcFireSuppressionTerminalTypeEnum): IfcFireSuppressionTerminal {
-	return {};
+export function CreateIfcFireSuppressionTerminal(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcFireSuppressionTerminalTypeEnum | null): Handle<IfcFireSuppressionTerminal> {
+	return { expressID: 0 };
 }
 export class IfcFireSuppressionTerminalType {};
-export function CreateIfcFireSuppressionTerminalType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcFireSuppressionTerminalTypeEnum): IfcFireSuppressionTerminalType {
-	return {};
+export function CreateIfcFireSuppressionTerminalType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcFireSuppressionTerminalTypeEnum ): Handle<IfcFireSuppressionTerminalType> {
+	return { expressID: 0 };
 }
 export class IfcFixedReferenceSweptAreaSolid {};
-export function CreateIfcFixedReferenceSweptAreaSolid(SweptArea: IfcProfileDef,Position: IfcAxis2Placement3D,Directrix: IfcCurve,StartParam: IfcParameterValue,EndParam: IfcParameterValue,FixedReference: IfcDirection): IfcFixedReferenceSweptAreaSolid {
-	return {};
+export function CreateIfcFixedReferenceSweptAreaSolid(SweptArea: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null, Directrix: Handle<IfcCurve> , StartParam: IfcParameterValue | null, EndParam: IfcParameterValue | null, FixedReference: Handle<IfcDirection> ): Handle<IfcFixedReferenceSweptAreaSolid> {
+	return { expressID: 0 };
 }
 export class IfcFlowController {};
-export function CreateIfcFlowController(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFlowController {
-	return {};
+export function CreateIfcFlowController(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFlowController> {
+	return { expressID: 0 };
 }
 export class IfcFlowControllerType {};
-export function CreateIfcFlowControllerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcFlowControllerType {
-	return {};
+export function CreateIfcFlowControllerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcFlowControllerType> {
+	return { expressID: 0 };
 }
 export class IfcFlowFitting {};
-export function CreateIfcFlowFitting(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFlowFitting {
-	return {};
+export function CreateIfcFlowFitting(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFlowFitting> {
+	return { expressID: 0 };
 }
 export class IfcFlowFittingType {};
-export function CreateIfcFlowFittingType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcFlowFittingType {
-	return {};
+export function CreateIfcFlowFittingType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcFlowFittingType> {
+	return { expressID: 0 };
 }
 export class IfcFlowInstrument {};
-export function CreateIfcFlowInstrument(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcFlowInstrumentTypeEnum): IfcFlowInstrument {
-	return {};
+export function CreateIfcFlowInstrument(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcFlowInstrumentTypeEnum | null): Handle<IfcFlowInstrument> {
+	return { expressID: 0 };
 }
 export class IfcFlowInstrumentType {};
-export function CreateIfcFlowInstrumentType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcFlowInstrumentTypeEnum): IfcFlowInstrumentType {
-	return {};
+export function CreateIfcFlowInstrumentType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcFlowInstrumentTypeEnum ): Handle<IfcFlowInstrumentType> {
+	return { expressID: 0 };
 }
 export class IfcFlowMeter {};
-export function CreateIfcFlowMeter(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcFlowMeterTypeEnum): IfcFlowMeter {
-	return {};
+export function CreateIfcFlowMeter(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcFlowMeterTypeEnum | null): Handle<IfcFlowMeter> {
+	return { expressID: 0 };
 }
 export class IfcFlowMeterType {};
-export function CreateIfcFlowMeterType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcFlowMeterTypeEnum): IfcFlowMeterType {
-	return {};
+export function CreateIfcFlowMeterType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcFlowMeterTypeEnum ): Handle<IfcFlowMeterType> {
+	return { expressID: 0 };
 }
 export class IfcFlowMovingDevice {};
-export function CreateIfcFlowMovingDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFlowMovingDevice {
-	return {};
+export function CreateIfcFlowMovingDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFlowMovingDevice> {
+	return { expressID: 0 };
 }
 export class IfcFlowMovingDeviceType {};
-export function CreateIfcFlowMovingDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcFlowMovingDeviceType {
-	return {};
+export function CreateIfcFlowMovingDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcFlowMovingDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcFlowSegment {};
-export function CreateIfcFlowSegment(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFlowSegment {
-	return {};
+export function CreateIfcFlowSegment(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFlowSegment> {
+	return { expressID: 0 };
 }
 export class IfcFlowSegmentType {};
-export function CreateIfcFlowSegmentType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcFlowSegmentType {
-	return {};
+export function CreateIfcFlowSegmentType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcFlowSegmentType> {
+	return { expressID: 0 };
 }
 export class IfcFlowStorageDevice {};
-export function CreateIfcFlowStorageDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFlowStorageDevice {
-	return {};
+export function CreateIfcFlowStorageDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFlowStorageDevice> {
+	return { expressID: 0 };
 }
 export class IfcFlowStorageDeviceType {};
-export function CreateIfcFlowStorageDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcFlowStorageDeviceType {
-	return {};
+export function CreateIfcFlowStorageDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcFlowStorageDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcFlowTerminal {};
-export function CreateIfcFlowTerminal(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFlowTerminal {
-	return {};
+export function CreateIfcFlowTerminal(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFlowTerminal> {
+	return { expressID: 0 };
 }
 export class IfcFlowTerminalType {};
-export function CreateIfcFlowTerminalType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcFlowTerminalType {
-	return {};
+export function CreateIfcFlowTerminalType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcFlowTerminalType> {
+	return { expressID: 0 };
 }
 export class IfcFlowTreatmentDevice {};
-export function CreateIfcFlowTreatmentDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFlowTreatmentDevice {
-	return {};
+export function CreateIfcFlowTreatmentDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFlowTreatmentDevice> {
+	return { expressID: 0 };
 }
 export class IfcFlowTreatmentDeviceType {};
-export function CreateIfcFlowTreatmentDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcFlowTreatmentDeviceType {
-	return {};
+export function CreateIfcFlowTreatmentDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcFlowTreatmentDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcFooting {};
-export function CreateIfcFooting(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcFootingTypeEnum): IfcFooting {
-	return {};
+export function CreateIfcFooting(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcFootingTypeEnum | null): Handle<IfcFooting> {
+	return { expressID: 0 };
 }
 export class IfcFootingType {};
-export function CreateIfcFootingType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcFootingTypeEnum): IfcFootingType {
-	return {};
+export function CreateIfcFootingType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcFootingTypeEnum ): Handle<IfcFootingType> {
+	return { expressID: 0 };
 }
 export class IfcFurnishingElement {};
-export function CreateIfcFurnishingElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcFurnishingElement {
-	return {};
+export function CreateIfcFurnishingElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcFurnishingElement> {
+	return { expressID: 0 };
 }
 export class IfcFurnishingElementType {};
-export function CreateIfcFurnishingElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcFurnishingElementType {
-	return {};
+export function CreateIfcFurnishingElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcFurnishingElementType> {
+	return { expressID: 0 };
 }
 export class IfcFurniture {};
-export function CreateIfcFurniture(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcFurnitureTypeEnum): IfcFurniture {
-	return {};
+export function CreateIfcFurniture(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcFurnitureTypeEnum | null): Handle<IfcFurniture> {
+	return { expressID: 0 };
 }
 export class IfcFurnitureType {};
-export function CreateIfcFurnitureType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,AssemblyPlace: IfcAssemblyPlaceEnum,PredefinedType: IfcFurnitureTypeEnum): IfcFurnitureType {
-	return {};
+export function CreateIfcFurnitureType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, AssemblyPlace: IfcAssemblyPlaceEnum , PredefinedType: IfcFurnitureTypeEnum | null): Handle<IfcFurnitureType> {
+	return { expressID: 0 };
 }
 export class IfcGeographicElement {};
-export function CreateIfcGeographicElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcGeographicElementTypeEnum): IfcGeographicElement {
-	return {};
+export function CreateIfcGeographicElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcGeographicElementTypeEnum | null): Handle<IfcGeographicElement> {
+	return { expressID: 0 };
 }
 export class IfcGeographicElementType {};
-export function CreateIfcGeographicElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcGeographicElementTypeEnum): IfcGeographicElementType {
-	return {};
+export function CreateIfcGeographicElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcGeographicElementTypeEnum ): Handle<IfcGeographicElementType> {
+	return { expressID: 0 };
 }
 export class IfcGeometricCurveSet {};
-export function CreateIfcGeometricCurveSet(Elements: IfcGeometricSetSelect): IfcGeometricCurveSet {
-	return {};
+export function CreateIfcGeometricCurveSet(Elements: IfcGeometricSetSelect[] ): Handle<IfcGeometricCurveSet> {
+	return { expressID: 0 };
 }
 export class IfcGeometricRepresentationContext {};
-export function CreateIfcGeometricRepresentationContext(ContextIdentifier: IfcLabel,ContextType: IfcLabel,CoordinateSpaceDimension: IfcDimensionCount,Precision: IfcReal,WorldCoordinateSystem: IfcAxis2Placement,TrueNorth: IfcDirection): IfcGeometricRepresentationContext {
-	return {};
+export function CreateIfcGeometricRepresentationContext(ContextIdentifier: IfcLabel | null, ContextType: IfcLabel | null, CoordinateSpaceDimension: IfcDimensionCount , Precision: IfcReal | null, WorldCoordinateSystem: IfcAxis2Placement , TrueNorth: Handle<IfcDirection> | null): Handle<IfcGeometricRepresentationContext> {
+	return { expressID: 0 };
 }
 export class IfcGeometricRepresentationItem {};
-export function CreateIfcGeometricRepresentationItem(): IfcGeometricRepresentationItem {
-	return {};
+export function CreateIfcGeometricRepresentationItem(): Handle<IfcGeometricRepresentationItem> {
+	return { expressID: 0 };
 }
 export class IfcGeometricRepresentationSubContext {};
-export function CreateIfcGeometricRepresentationSubContext(ContextIdentifier: IfcLabel,ContextType: IfcLabel,CoordinateSpaceDimension: IfcDimensionCount,Precision: IfcReal,WorldCoordinateSystem: IfcAxis2Placement,TrueNorth: IfcDirection,ParentContext: IfcGeometricRepresentationContext,TargetScale: IfcPositiveRatioMeasure,TargetView: IfcGeometricProjectionEnum,UserDefinedTargetView: IfcLabel): IfcGeometricRepresentationSubContext {
-	return {};
+export function CreateIfcGeometricRepresentationSubContext(ContextIdentifier: IfcLabel | null, ContextType: IfcLabel | null, CoordinateSpaceDimension: IfcDimensionCount , Precision: IfcReal | null, WorldCoordinateSystem: IfcAxis2Placement , TrueNorth: Handle<IfcDirection> | null, ParentContext: Handle<IfcGeometricRepresentationContext> , TargetScale: IfcPositiveRatioMeasure | null, TargetView: IfcGeometricProjectionEnum , UserDefinedTargetView: IfcLabel | null): Handle<IfcGeometricRepresentationSubContext> {
+	return { expressID: 0 };
 }
 export class IfcGeometricSet {};
-export function CreateIfcGeometricSet(Elements: IfcGeometricSetSelect): IfcGeometricSet {
-	return {};
+export function CreateIfcGeometricSet(Elements: IfcGeometricSetSelect[] ): Handle<IfcGeometricSet> {
+	return { expressID: 0 };
 }
 export class IfcGrid {};
-export function CreateIfcGrid(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,UAxes: IfcGridAxis,VAxes: IfcGridAxis,WAxes: IfcGridAxis,PredefinedType: IfcGridTypeEnum): IfcGrid {
-	return {};
+export function CreateIfcGrid(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, UAxes: Handle<IfcGridAxis> , VAxes: Handle<IfcGridAxis> , WAxes: Handle<IfcGridAxis> | null, PredefinedType: IfcGridTypeEnum | null): Handle<IfcGrid> {
+	return { expressID: 0 };
 }
 export class IfcGridAxis {};
-export function CreateIfcGridAxis(AxisTag: IfcLabel,AxisCurve: IfcCurve,SameSense: IfcBoolean): IfcGridAxis {
-	return {};
+export function CreateIfcGridAxis(AxisTag: IfcLabel | null, AxisCurve: Handle<IfcCurve> , SameSense: IfcBoolean ): Handle<IfcGridAxis> {
+	return { expressID: 0 };
 }
 export class IfcGridPlacement {};
-export function CreateIfcGridPlacement(PlacementRelTo: IfcObjectPlacement,PlacementLocation: IfcVirtualGridIntersection,PlacementRefDirection: IfcGridPlacementDirectionSelect): IfcGridPlacement {
-	return {};
+export function CreateIfcGridPlacement(PlacementRelTo: Handle<IfcObjectPlacement> | null, PlacementLocation: Handle<IfcVirtualGridIntersection> , PlacementRefDirection: IfcGridPlacementDirectionSelect | null): Handle<IfcGridPlacement> {
+	return { expressID: 0 };
 }
 export class IfcGroup {};
-export function CreateIfcGroup(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel): IfcGroup {
-	return {};
+export function CreateIfcGroup(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null): Handle<IfcGroup> {
+	return { expressID: 0 };
 }
 export class IfcHalfSpaceSolid {};
-export function CreateIfcHalfSpaceSolid(BaseSurface: IfcSurface,AgreementFlag: IfcBoolean): IfcHalfSpaceSolid {
-	return {};
+export function CreateIfcHalfSpaceSolid(BaseSurface: Handle<IfcSurface> , AgreementFlag: IfcBoolean ): Handle<IfcHalfSpaceSolid> {
+	return { expressID: 0 };
 }
 export class IfcHeatExchanger {};
-export function CreateIfcHeatExchanger(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcHeatExchangerTypeEnum): IfcHeatExchanger {
-	return {};
+export function CreateIfcHeatExchanger(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcHeatExchangerTypeEnum | null): Handle<IfcHeatExchanger> {
+	return { expressID: 0 };
 }
 export class IfcHeatExchangerType {};
-export function CreateIfcHeatExchangerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcHeatExchangerTypeEnum): IfcHeatExchangerType {
-	return {};
+export function CreateIfcHeatExchangerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcHeatExchangerTypeEnum ): Handle<IfcHeatExchangerType> {
+	return { expressID: 0 };
 }
 export class IfcHumidifier {};
-export function CreateIfcHumidifier(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcHumidifierTypeEnum): IfcHumidifier {
-	return {};
+export function CreateIfcHumidifier(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcHumidifierTypeEnum | null): Handle<IfcHumidifier> {
+	return { expressID: 0 };
 }
 export class IfcHumidifierType {};
-export function CreateIfcHumidifierType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcHumidifierTypeEnum): IfcHumidifierType {
-	return {};
+export function CreateIfcHumidifierType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcHumidifierTypeEnum ): Handle<IfcHumidifierType> {
+	return { expressID: 0 };
 }
 export class IfcIShapeProfileDef {};
-export function CreateIfcIShapeProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,OverallWidth: IfcPositiveLengthMeasure,OverallDepth: IfcPositiveLengthMeasure,WebThickness: IfcPositiveLengthMeasure,FlangeThickness: IfcPositiveLengthMeasure,FilletRadius: IfcNonNegativeLengthMeasure,FlangeEdgeRadius: IfcNonNegativeLengthMeasure,FlangeSlope: IfcPlaneAngleMeasure): IfcIShapeProfileDef {
-	return {};
+export function CreateIfcIShapeProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, OverallWidth: IfcPositiveLengthMeasure , OverallDepth: IfcPositiveLengthMeasure , WebThickness: IfcPositiveLengthMeasure , FlangeThickness: IfcPositiveLengthMeasure , FilletRadius: IfcNonNegativeLengthMeasure | null, FlangeEdgeRadius: IfcNonNegativeLengthMeasure | null, FlangeSlope: IfcPlaneAngleMeasure | null): Handle<IfcIShapeProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcImageTexture {};
-export function CreateIfcImageTexture(RepeatS: IfcBoolean,RepeatT: IfcBoolean,Mode: IfcIdentifier,TextureTransform: IfcCartesianTransformationOperator2D,Parameter: IfcIdentifier,URLReference: IfcURIReference): IfcImageTexture {
-	return {};
+export function CreateIfcImageTexture(RepeatS: IfcBoolean , RepeatT: IfcBoolean , Mode: IfcIdentifier | null, TextureTransform: Handle<IfcCartesianTransformationOperator2D> | null, Parameter: IfcIdentifier | null, URLReference: IfcURIReference ): Handle<IfcImageTexture> {
+	return { expressID: 0 };
 }
 export class IfcIndexedColourMap {};
-export function CreateIfcIndexedColourMap(MappedTo: IfcTessellatedFaceSet,Opacity: IfcNormalisedRatioMeasure,Colours: IfcColourRgbList,ColourIndex: IfcPositiveInteger): IfcIndexedColourMap {
-	return {};
+export function CreateIfcIndexedColourMap(MappedTo: Handle<IfcTessellatedFaceSet> , Opacity: IfcNormalisedRatioMeasure | null, Colours: Handle<IfcColourRgbList> , ColourIndex: IfcPositiveInteger ): Handle<IfcIndexedColourMap> {
+	return { expressID: 0 };
 }
 export class IfcIndexedPolyCurve {};
-export function CreateIfcIndexedPolyCurve(Points: IfcCartesianPointList,Segments: IfcSegmentIndexSelect,SelfIntersect: IfcBoolean): IfcIndexedPolyCurve {
-	return {};
+export function CreateIfcIndexedPolyCurve(Points: Handle<IfcCartesianPointList> , Segments: IfcSegmentIndexSelect | null, SelfIntersect: IfcBoolean | null): Handle<IfcIndexedPolyCurve> {
+	return { expressID: 0 };
 }
 export class IfcIndexedPolygonalFace {};
-export function CreateIfcIndexedPolygonalFace(CoordIndex: IfcPositiveInteger): IfcIndexedPolygonalFace {
-	return {};
+export function CreateIfcIndexedPolygonalFace(CoordIndex: IfcPositiveInteger ): Handle<IfcIndexedPolygonalFace> {
+	return { expressID: 0 };
 }
 export class IfcIndexedPolygonalFaceWithVoids {};
-export function CreateIfcIndexedPolygonalFaceWithVoids(CoordIndex: IfcPositiveInteger,InnerCoordIndices: IfcPositiveInteger): IfcIndexedPolygonalFaceWithVoids {
-	return {};
+export function CreateIfcIndexedPolygonalFaceWithVoids(CoordIndex: IfcPositiveInteger , InnerCoordIndices: IfcPositiveInteger ): Handle<IfcIndexedPolygonalFaceWithVoids> {
+	return { expressID: 0 };
 }
 export class IfcIndexedTextureMap {};
-export function CreateIfcIndexedTextureMap(Maps: IfcSurfaceTexture,MappedTo: IfcTessellatedFaceSet,TexCoords: IfcTextureVertexList): IfcIndexedTextureMap {
-	return {};
+export function CreateIfcIndexedTextureMap(Maps: Handle<IfcSurfaceTexture> , MappedTo: Handle<IfcTessellatedFaceSet> , TexCoords: Handle<IfcTextureVertexList> ): Handle<IfcIndexedTextureMap> {
+	return { expressID: 0 };
 }
 export class IfcIndexedTriangleTextureMap {};
-export function CreateIfcIndexedTriangleTextureMap(Maps: IfcSurfaceTexture,MappedTo: IfcTessellatedFaceSet,TexCoords: IfcTextureVertexList,TexCoordIndex: IfcPositiveInteger): IfcIndexedTriangleTextureMap {
-	return {};
+export function CreateIfcIndexedTriangleTextureMap(Maps: Handle<IfcSurfaceTexture> , MappedTo: Handle<IfcTessellatedFaceSet> , TexCoords: Handle<IfcTextureVertexList> , TexCoordIndex: IfcPositiveInteger | null): Handle<IfcIndexedTriangleTextureMap> {
+	return { expressID: 0 };
 }
 export class IfcInterceptor {};
-export function CreateIfcInterceptor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcInterceptorTypeEnum): IfcInterceptor {
-	return {};
+export function CreateIfcInterceptor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcInterceptorTypeEnum | null): Handle<IfcInterceptor> {
+	return { expressID: 0 };
 }
 export class IfcInterceptorType {};
-export function CreateIfcInterceptorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcInterceptorTypeEnum): IfcInterceptorType {
-	return {};
+export function CreateIfcInterceptorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcInterceptorTypeEnum ): Handle<IfcInterceptorType> {
+	return { expressID: 0 };
 }
 export class IfcIntersectionCurve {};
-export function CreateIfcIntersectionCurve(Curve3D: IfcCurve,AssociatedGeometry: IfcPcurve,MasterRepresentation: IfcPreferredSurfaceCurveRepresentation): IfcIntersectionCurve {
-	return {};
+export function CreateIfcIntersectionCurve(Curve3D: Handle<IfcCurve> , AssociatedGeometry: Handle<IfcPcurve> , MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ): Handle<IfcIntersectionCurve> {
+	return { expressID: 0 };
 }
 export class IfcInventory {};
-export function CreateIfcInventory(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,PredefinedType: IfcInventoryTypeEnum,Jurisdiction: IfcActorSelect,ResponsiblePersons: IfcPerson,LastUpdateDate: IfcDate,CurrentValue: IfcCostValue,OriginalValue: IfcCostValue): IfcInventory {
-	return {};
+export function CreateIfcInventory(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, PredefinedType: IfcInventoryTypeEnum | null, Jurisdiction: IfcActorSelect | null, ResponsiblePersons: Handle<IfcPerson>[] | null, LastUpdateDate: IfcDate | null, CurrentValue: Handle<IfcCostValue> | null, OriginalValue: Handle<IfcCostValue> | null): Handle<IfcInventory> {
+	return { expressID: 0 };
 }
 export class IfcIrregularTimeSeries {};
-export function CreateIfcIrregularTimeSeries(Name: IfcLabel,Description: IfcText,StartTime: IfcDateTime,EndTime: IfcDateTime,TimeSeriesDataType: IfcTimeSeriesDataTypeEnum,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,Unit: IfcUnit,Values: IfcIrregularTimeSeriesValue): IfcIrregularTimeSeries {
-	return {};
+export function CreateIfcIrregularTimeSeries(Name: IfcLabel , Description: IfcText | null, StartTime: IfcDateTime , EndTime: IfcDateTime , TimeSeriesDataType: IfcTimeSeriesDataTypeEnum , DataOrigin: IfcDataOriginEnum , UserDefinedDataOrigin: IfcLabel | null, Unit: IfcUnit | null, Values: Handle<IfcIrregularTimeSeriesValue> ): Handle<IfcIrregularTimeSeries> {
+	return { expressID: 0 };
 }
 export class IfcIrregularTimeSeriesValue {};
-export function CreateIfcIrregularTimeSeriesValue(TimeStamp: IfcDateTime,ListValues: IfcValue): IfcIrregularTimeSeriesValue {
-	return {};
+export function CreateIfcIrregularTimeSeriesValue(TimeStamp: IfcDateTime , ListValues: IfcValue ): Handle<IfcIrregularTimeSeriesValue> {
+	return { expressID: 0 };
 }
 export class IfcJunctionBox {};
-export function CreateIfcJunctionBox(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcJunctionBoxTypeEnum): IfcJunctionBox {
-	return {};
+export function CreateIfcJunctionBox(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcJunctionBoxTypeEnum | null): Handle<IfcJunctionBox> {
+	return { expressID: 0 };
 }
 export class IfcJunctionBoxType {};
-export function CreateIfcJunctionBoxType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcJunctionBoxTypeEnum): IfcJunctionBoxType {
-	return {};
+export function CreateIfcJunctionBoxType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcJunctionBoxTypeEnum ): Handle<IfcJunctionBoxType> {
+	return { expressID: 0 };
 }
 export class IfcLShapeProfileDef {};
-export function CreateIfcLShapeProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,Depth: IfcPositiveLengthMeasure,Width: IfcPositiveLengthMeasure,Thickness: IfcPositiveLengthMeasure,FilletRadius: IfcNonNegativeLengthMeasure,EdgeRadius: IfcNonNegativeLengthMeasure,LegSlope: IfcPlaneAngleMeasure): IfcLShapeProfileDef {
-	return {};
+export function CreateIfcLShapeProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, Depth: IfcPositiveLengthMeasure , Width: IfcPositiveLengthMeasure | null, Thickness: IfcPositiveLengthMeasure , FilletRadius: IfcNonNegativeLengthMeasure | null, EdgeRadius: IfcNonNegativeLengthMeasure | null, LegSlope: IfcPlaneAngleMeasure | null): Handle<IfcLShapeProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcLaborResource {};
-export function CreateIfcLaborResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,Usage: IfcResourceTime,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcLaborResourceTypeEnum): IfcLaborResource {
-	return {};
+export function CreateIfcLaborResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, Usage: Handle<IfcResourceTime> | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcLaborResourceTypeEnum | null): Handle<IfcLaborResource> {
+	return { expressID: 0 };
 }
 export class IfcLaborResourceType {};
-export function CreateIfcLaborResourceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ResourceType: IfcLabel,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcLaborResourceTypeEnum): IfcLaborResourceType {
-	return {};
+export function CreateIfcLaborResourceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ResourceType: IfcLabel | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcLaborResourceTypeEnum ): Handle<IfcLaborResourceType> {
+	return { expressID: 0 };
 }
 export class IfcLagTime {};
-export function CreateIfcLagTime(Name: IfcLabel,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,LagValue: IfcTimeOrRatioSelect,DurationType: IfcTaskDurationEnum): IfcLagTime {
-	return {};
+export function CreateIfcLagTime(Name: IfcLabel | null, DataOrigin: IfcDataOriginEnum | null, UserDefinedDataOrigin: IfcLabel | null, LagValue: IfcTimeOrRatioSelect , DurationType: IfcTaskDurationEnum ): Handle<IfcLagTime> {
+	return { expressID: 0 };
 }
 export class IfcLamp {};
-export function CreateIfcLamp(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcLampTypeEnum): IfcLamp {
-	return {};
+export function CreateIfcLamp(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcLampTypeEnum | null): Handle<IfcLamp> {
+	return { expressID: 0 };
 }
 export class IfcLampType {};
-export function CreateIfcLampType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcLampTypeEnum): IfcLampType {
-	return {};
+export function CreateIfcLampType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcLampTypeEnum ): Handle<IfcLampType> {
+	return { expressID: 0 };
 }
 export class IfcLibraryInformation {};
-export function CreateIfcLibraryInformation(Name: IfcLabel,Version: IfcLabel,Publisher: IfcActorSelect,VersionDate: IfcDateTime,Location: IfcURIReference,Description: IfcText): IfcLibraryInformation {
-	return {};
+export function CreateIfcLibraryInformation(Name: IfcLabel , Version: IfcLabel | null, Publisher: IfcActorSelect | null, VersionDate: IfcDateTime | null, Location: IfcURIReference | null, Description: IfcText | null): Handle<IfcLibraryInformation> {
+	return { expressID: 0 };
 }
 export class IfcLibraryReference {};
-export function CreateIfcLibraryReference(Location: IfcURIReference,Identification: IfcIdentifier,Name: IfcLabel,Description: IfcText,Language: IfcLanguageId,ReferencedLibrary: IfcLibraryInformation): IfcLibraryReference {
-	return {};
+export function CreateIfcLibraryReference(Location: IfcURIReference | null, Identification: IfcIdentifier | null, Name: IfcLabel | null, Description: IfcText | null, Language: IfcLanguageId | null, ReferencedLibrary: Handle<IfcLibraryInformation> | null): Handle<IfcLibraryReference> {
+	return { expressID: 0 };
 }
 export class IfcLightDistributionData {};
-export function CreateIfcLightDistributionData(MainPlaneAngle: IfcPlaneAngleMeasure,SecondaryPlaneAngle: IfcPlaneAngleMeasure,LuminousIntensity: IfcLuminousIntensityDistributionMeasure): IfcLightDistributionData {
-	return {};
+export function CreateIfcLightDistributionData(MainPlaneAngle: IfcPlaneAngleMeasure , SecondaryPlaneAngle: IfcPlaneAngleMeasure , LuminousIntensity: IfcLuminousIntensityDistributionMeasure ): Handle<IfcLightDistributionData> {
+	return { expressID: 0 };
 }
 export class IfcLightFixture {};
-export function CreateIfcLightFixture(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcLightFixtureTypeEnum): IfcLightFixture {
-	return {};
+export function CreateIfcLightFixture(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcLightFixtureTypeEnum | null): Handle<IfcLightFixture> {
+	return { expressID: 0 };
 }
 export class IfcLightFixtureType {};
-export function CreateIfcLightFixtureType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcLightFixtureTypeEnum): IfcLightFixtureType {
-	return {};
+export function CreateIfcLightFixtureType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcLightFixtureTypeEnum ): Handle<IfcLightFixtureType> {
+	return { expressID: 0 };
 }
 export class IfcLightIntensityDistribution {};
-export function CreateIfcLightIntensityDistribution(LightDistributionCurve: IfcLightDistributionCurveEnum,DistributionData: IfcLightDistributionData): IfcLightIntensityDistribution {
-	return {};
+export function CreateIfcLightIntensityDistribution(LightDistributionCurve: IfcLightDistributionCurveEnum , DistributionData: Handle<IfcLightDistributionData> ): Handle<IfcLightIntensityDistribution> {
+	return { expressID: 0 };
 }
 export class IfcLightSource {};
-export function CreateIfcLightSource(Name: IfcLabel,LightColour: IfcColourRgb,AmbientIntensity: IfcNormalisedRatioMeasure,Intensity: IfcNormalisedRatioMeasure): IfcLightSource {
-	return {};
+export function CreateIfcLightSource(Name: IfcLabel | null, LightColour: Handle<IfcColourRgb> , AmbientIntensity: IfcNormalisedRatioMeasure | null, Intensity: IfcNormalisedRatioMeasure | null): Handle<IfcLightSource> {
+	return { expressID: 0 };
 }
 export class IfcLightSourceAmbient {};
-export function CreateIfcLightSourceAmbient(Name: IfcLabel,LightColour: IfcColourRgb,AmbientIntensity: IfcNormalisedRatioMeasure,Intensity: IfcNormalisedRatioMeasure): IfcLightSourceAmbient {
-	return {};
+export function CreateIfcLightSourceAmbient(Name: IfcLabel | null, LightColour: Handle<IfcColourRgb> , AmbientIntensity: IfcNormalisedRatioMeasure | null, Intensity: IfcNormalisedRatioMeasure | null): Handle<IfcLightSourceAmbient> {
+	return { expressID: 0 };
 }
 export class IfcLightSourceDirectional {};
-export function CreateIfcLightSourceDirectional(Name: IfcLabel,LightColour: IfcColourRgb,AmbientIntensity: IfcNormalisedRatioMeasure,Intensity: IfcNormalisedRatioMeasure,Orientation: IfcDirection): IfcLightSourceDirectional {
-	return {};
+export function CreateIfcLightSourceDirectional(Name: IfcLabel | null, LightColour: Handle<IfcColourRgb> , AmbientIntensity: IfcNormalisedRatioMeasure | null, Intensity: IfcNormalisedRatioMeasure | null, Orientation: Handle<IfcDirection> ): Handle<IfcLightSourceDirectional> {
+	return { expressID: 0 };
 }
 export class IfcLightSourceGoniometric {};
-export function CreateIfcLightSourceGoniometric(Name: IfcLabel,LightColour: IfcColourRgb,AmbientIntensity: IfcNormalisedRatioMeasure,Intensity: IfcNormalisedRatioMeasure,Position: IfcAxis2Placement3D,ColourAppearance: IfcColourRgb,ColourTemperature: IfcThermodynamicTemperatureMeasure,LuminousFlux: IfcLuminousFluxMeasure,LightEmissionSource: IfcLightEmissionSourceEnum,LightDistributionDataSource: IfcLightDistributionDataSourceSelect): IfcLightSourceGoniometric {
-	return {};
+export function CreateIfcLightSourceGoniometric(Name: IfcLabel | null, LightColour: Handle<IfcColourRgb> , AmbientIntensity: IfcNormalisedRatioMeasure | null, Intensity: IfcNormalisedRatioMeasure | null, Position: Handle<IfcAxis2Placement3D> , ColourAppearance: Handle<IfcColourRgb> | null, ColourTemperature: IfcThermodynamicTemperatureMeasure , LuminousFlux: IfcLuminousFluxMeasure , LightEmissionSource: IfcLightEmissionSourceEnum , LightDistributionDataSource: IfcLightDistributionDataSourceSelect ): Handle<IfcLightSourceGoniometric> {
+	return { expressID: 0 };
 }
 export class IfcLightSourcePositional {};
-export function CreateIfcLightSourcePositional(Name: IfcLabel,LightColour: IfcColourRgb,AmbientIntensity: IfcNormalisedRatioMeasure,Intensity: IfcNormalisedRatioMeasure,Position: IfcCartesianPoint,Radius: IfcPositiveLengthMeasure,ConstantAttenuation: IfcReal,DistanceAttenuation: IfcReal,QuadricAttenuation: IfcReal): IfcLightSourcePositional {
-	return {};
+export function CreateIfcLightSourcePositional(Name: IfcLabel | null, LightColour: Handle<IfcColourRgb> , AmbientIntensity: IfcNormalisedRatioMeasure | null, Intensity: IfcNormalisedRatioMeasure | null, Position: Handle<IfcCartesianPoint> , Radius: IfcPositiveLengthMeasure , ConstantAttenuation: IfcReal , DistanceAttenuation: IfcReal , QuadricAttenuation: IfcReal ): Handle<IfcLightSourcePositional> {
+	return { expressID: 0 };
 }
 export class IfcLightSourceSpot {};
-export function CreateIfcLightSourceSpot(Name: IfcLabel,LightColour: IfcColourRgb,AmbientIntensity: IfcNormalisedRatioMeasure,Intensity: IfcNormalisedRatioMeasure,Position: IfcCartesianPoint,Radius: IfcPositiveLengthMeasure,ConstantAttenuation: IfcReal,DistanceAttenuation: IfcReal,QuadricAttenuation: IfcReal,Orientation: IfcDirection,ConcentrationExponent: IfcReal,SpreadAngle: IfcPositivePlaneAngleMeasure,BeamWidthAngle: IfcPositivePlaneAngleMeasure): IfcLightSourceSpot {
-	return {};
+export function CreateIfcLightSourceSpot(Name: IfcLabel | null, LightColour: Handle<IfcColourRgb> , AmbientIntensity: IfcNormalisedRatioMeasure | null, Intensity: IfcNormalisedRatioMeasure | null, Position: Handle<IfcCartesianPoint> , Radius: IfcPositiveLengthMeasure , ConstantAttenuation: IfcReal , DistanceAttenuation: IfcReal , QuadricAttenuation: IfcReal , Orientation: Handle<IfcDirection> , ConcentrationExponent: IfcReal | null, SpreadAngle: IfcPositivePlaneAngleMeasure , BeamWidthAngle: IfcPositivePlaneAngleMeasure ): Handle<IfcLightSourceSpot> {
+	return { expressID: 0 };
 }
 export class IfcLine {};
-export function CreateIfcLine(Pnt: IfcCartesianPoint,Dir: IfcVector): IfcLine {
-	return {};
+export function CreateIfcLine(Pnt: Handle<IfcCartesianPoint> , Dir: Handle<IfcVector> ): Handle<IfcLine> {
+	return { expressID: 0 };
 }
 export class IfcLineSegment2D {};
-export function CreateIfcLineSegment2D(StartPoint: IfcCartesianPoint,StartDirection: IfcPlaneAngleMeasure,SegmentLength: IfcPositiveLengthMeasure): IfcLineSegment2D {
-	return {};
+export function CreateIfcLineSegment2D(StartPoint: Handle<IfcCartesianPoint> , StartDirection: IfcPlaneAngleMeasure , SegmentLength: IfcPositiveLengthMeasure ): Handle<IfcLineSegment2D> {
+	return { expressID: 0 };
 }
 export class IfcLinearPlacement {};
-export function CreateIfcLinearPlacement(PlacementRelTo: IfcObjectPlacement,PlacementMeasuredAlong: IfcCurve,Distance: IfcDistanceExpression,Orientation: IfcOrientationExpression,CartesianPosition: IfcAxis2Placement3D): IfcLinearPlacement {
-	return {};
+export function CreateIfcLinearPlacement(PlacementRelTo: Handle<IfcObjectPlacement> | null, PlacementMeasuredAlong: Handle<IfcCurve> , Distance: Handle<IfcDistanceExpression> , Orientation: Handle<IfcOrientationExpression> | null, CartesianPosition: Handle<IfcAxis2Placement3D> | null): Handle<IfcLinearPlacement> {
+	return { expressID: 0 };
 }
 export class IfcLinearPositioningElement {};
-export function CreateIfcLinearPositioningElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Axis: IfcCurve): IfcLinearPositioningElement {
-	return {};
+export function CreateIfcLinearPositioningElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Axis: Handle<IfcCurve> ): Handle<IfcLinearPositioningElement> {
+	return { expressID: 0 };
 }
 export class IfcLocalPlacement {};
-export function CreateIfcLocalPlacement(PlacementRelTo: IfcObjectPlacement,RelativePlacement: IfcAxis2Placement): IfcLocalPlacement {
-	return {};
+export function CreateIfcLocalPlacement(PlacementRelTo: Handle<IfcObjectPlacement> | null, RelativePlacement: IfcAxis2Placement ): Handle<IfcLocalPlacement> {
+	return { expressID: 0 };
 }
 export class IfcLoop {};
-export function CreateIfcLoop(): IfcLoop {
-	return {};
+export function CreateIfcLoop(): Handle<IfcLoop> {
+	return { expressID: 0 };
 }
 export class IfcManifoldSolidBrep {};
-export function CreateIfcManifoldSolidBrep(Outer: IfcClosedShell): IfcManifoldSolidBrep {
-	return {};
+export function CreateIfcManifoldSolidBrep(Outer: Handle<IfcClosedShell> ): Handle<IfcManifoldSolidBrep> {
+	return { expressID: 0 };
 }
 export class IfcMapConversion {};
-export function CreateIfcMapConversion(SourceCRS: IfcCoordinateReferenceSystemSelect,TargetCRS: IfcCoordinateReferenceSystem,Eastings: IfcLengthMeasure,Northings: IfcLengthMeasure,OrthogonalHeight: IfcLengthMeasure,XAxisAbscissa: IfcReal,XAxisOrdinate: IfcReal,Scale: IfcReal): IfcMapConversion {
-	return {};
+export function CreateIfcMapConversion(SourceCRS: IfcCoordinateReferenceSystemSelect , TargetCRS: Handle<IfcCoordinateReferenceSystem> , Eastings: IfcLengthMeasure , Northings: IfcLengthMeasure , OrthogonalHeight: IfcLengthMeasure , XAxisAbscissa: IfcReal | null, XAxisOrdinate: IfcReal | null, Scale: IfcReal | null): Handle<IfcMapConversion> {
+	return { expressID: 0 };
 }
 export class IfcMappedItem {};
-export function CreateIfcMappedItem(MappingSource: IfcRepresentationMap,MappingTarget: IfcCartesianTransformationOperator): IfcMappedItem {
-	return {};
+export function CreateIfcMappedItem(MappingSource: Handle<IfcRepresentationMap> , MappingTarget: Handle<IfcCartesianTransformationOperator> ): Handle<IfcMappedItem> {
+	return { expressID: 0 };
 }
 export class IfcMaterial {};
-export function CreateIfcMaterial(Name: IfcLabel,Description: IfcText,Category: IfcLabel): IfcMaterial {
-	return {};
+export function CreateIfcMaterial(Name: IfcLabel , Description: IfcText | null, Category: IfcLabel | null): Handle<IfcMaterial> {
+	return { expressID: 0 };
 }
 export class IfcMaterialClassificationRelationship {};
-export function CreateIfcMaterialClassificationRelationship(MaterialClassifications: IfcClassificationSelect,ClassifiedMaterial: IfcMaterial): IfcMaterialClassificationRelationship {
-	return {};
+export function CreateIfcMaterialClassificationRelationship(MaterialClassifications: IfcClassificationSelect[] , ClassifiedMaterial: Handle<IfcMaterial> ): Handle<IfcMaterialClassificationRelationship> {
+	return { expressID: 0 };
 }
 export class IfcMaterialConstituent {};
-export function CreateIfcMaterialConstituent(Name: IfcLabel,Description: IfcText,Material: IfcMaterial,Fraction: IfcNormalisedRatioMeasure,Category: IfcLabel): IfcMaterialConstituent {
-	return {};
+export function CreateIfcMaterialConstituent(Name: IfcLabel | null, Description: IfcText | null, Material: Handle<IfcMaterial> , Fraction: IfcNormalisedRatioMeasure | null, Category: IfcLabel | null): Handle<IfcMaterialConstituent> {
+	return { expressID: 0 };
 }
 export class IfcMaterialConstituentSet {};
-export function CreateIfcMaterialConstituentSet(Name: IfcLabel,Description: IfcText,MaterialConstituents: IfcMaterialConstituent): IfcMaterialConstituentSet {
-	return {};
+export function CreateIfcMaterialConstituentSet(Name: IfcLabel | null, Description: IfcText | null, MaterialConstituents: Handle<IfcMaterialConstituent>[] | null): Handle<IfcMaterialConstituentSet> {
+	return { expressID: 0 };
 }
 export class IfcMaterialDefinition {};
-export function CreateIfcMaterialDefinition(): IfcMaterialDefinition {
-	return {};
+export function CreateIfcMaterialDefinition(): Handle<IfcMaterialDefinition> {
+	return { expressID: 0 };
 }
 export class IfcMaterialDefinitionRepresentation {};
-export function CreateIfcMaterialDefinitionRepresentation(Name: IfcLabel,Description: IfcText,Representations: IfcRepresentation,RepresentedMaterial: IfcMaterial): IfcMaterialDefinitionRepresentation {
-	return {};
+export function CreateIfcMaterialDefinitionRepresentation(Name: IfcLabel | null, Description: IfcText | null, Representations: Handle<IfcRepresentation> , RepresentedMaterial: Handle<IfcMaterial> ): Handle<IfcMaterialDefinitionRepresentation> {
+	return { expressID: 0 };
 }
 export class IfcMaterialLayer {};
-export function CreateIfcMaterialLayer(Material: IfcMaterial,LayerThickness: IfcNonNegativeLengthMeasure,IsVentilated: IfcLogical,Name: IfcLabel,Description: IfcText,Category: IfcLabel,Priority: IfcInteger): IfcMaterialLayer {
-	return {};
+export function CreateIfcMaterialLayer(Material: Handle<IfcMaterial> | null, LayerThickness: IfcNonNegativeLengthMeasure , IsVentilated: IfcLogical | null, Name: IfcLabel | null, Description: IfcText | null, Category: IfcLabel | null, Priority: IfcInteger | null): Handle<IfcMaterialLayer> {
+	return { expressID: 0 };
 }
 export class IfcMaterialLayerSet {};
-export function CreateIfcMaterialLayerSet(MaterialLayers: IfcMaterialLayer,LayerSetName: IfcLabel,Description: IfcText): IfcMaterialLayerSet {
-	return {};
+export function CreateIfcMaterialLayerSet(MaterialLayers: Handle<IfcMaterialLayer> , LayerSetName: IfcLabel | null, Description: IfcText | null): Handle<IfcMaterialLayerSet> {
+	return { expressID: 0 };
 }
 export class IfcMaterialLayerSetUsage {};
-export function CreateIfcMaterialLayerSetUsage(ForLayerSet: IfcMaterialLayerSet,LayerSetDirection: IfcLayerSetDirectionEnum,DirectionSense: IfcDirectionSenseEnum,OffsetFromReferenceLine: IfcLengthMeasure,ReferenceExtent: IfcPositiveLengthMeasure): IfcMaterialLayerSetUsage {
-	return {};
+export function CreateIfcMaterialLayerSetUsage(ForLayerSet: Handle<IfcMaterialLayerSet> , LayerSetDirection: IfcLayerSetDirectionEnum , DirectionSense: IfcDirectionSenseEnum , OffsetFromReferenceLine: IfcLengthMeasure , ReferenceExtent: IfcPositiveLengthMeasure | null): Handle<IfcMaterialLayerSetUsage> {
+	return { expressID: 0 };
 }
 export class IfcMaterialLayerWithOffsets {};
-export function CreateIfcMaterialLayerWithOffsets(Material: IfcMaterial,LayerThickness: IfcNonNegativeLengthMeasure,IsVentilated: IfcLogical,Name: IfcLabel,Description: IfcText,Category: IfcLabel,Priority: IfcInteger,OffsetDirection: IfcLayerSetDirectionEnum,OffsetValues: IfcLengthMeasure): IfcMaterialLayerWithOffsets {
-	return {};
+export function CreateIfcMaterialLayerWithOffsets(Material: Handle<IfcMaterial> | null, LayerThickness: IfcNonNegativeLengthMeasure , IsVentilated: IfcLogical | null, Name: IfcLabel | null, Description: IfcText | null, Category: IfcLabel | null, Priority: IfcInteger | null, OffsetDirection: IfcLayerSetDirectionEnum , OffsetValues: IfcLengthMeasure ): Handle<IfcMaterialLayerWithOffsets> {
+	return { expressID: 0 };
 }
 export class IfcMaterialList {};
-export function CreateIfcMaterialList(Materials: IfcMaterial): IfcMaterialList {
-	return {};
+export function CreateIfcMaterialList(Materials: Handle<IfcMaterial> ): Handle<IfcMaterialList> {
+	return { expressID: 0 };
 }
 export class IfcMaterialProfile {};
-export function CreateIfcMaterialProfile(Name: IfcLabel,Description: IfcText,Material: IfcMaterial,Profile: IfcProfileDef,Priority: IfcInteger,Category: IfcLabel): IfcMaterialProfile {
-	return {};
+export function CreateIfcMaterialProfile(Name: IfcLabel | null, Description: IfcText | null, Material: Handle<IfcMaterial> | null, Profile: Handle<IfcProfileDef> , Priority: IfcInteger | null, Category: IfcLabel | null): Handle<IfcMaterialProfile> {
+	return { expressID: 0 };
 }
 export class IfcMaterialProfileSet {};
-export function CreateIfcMaterialProfileSet(Name: IfcLabel,Description: IfcText,MaterialProfiles: IfcMaterialProfile,CompositeProfile: IfcCompositeProfileDef): IfcMaterialProfileSet {
-	return {};
+export function CreateIfcMaterialProfileSet(Name: IfcLabel | null, Description: IfcText | null, MaterialProfiles: Handle<IfcMaterialProfile> , CompositeProfile: Handle<IfcCompositeProfileDef> | null): Handle<IfcMaterialProfileSet> {
+	return { expressID: 0 };
 }
 export class IfcMaterialProfileSetUsage {};
-export function CreateIfcMaterialProfileSetUsage(ForProfileSet: IfcMaterialProfileSet,CardinalPoint: IfcCardinalPointReference,ReferenceExtent: IfcPositiveLengthMeasure): IfcMaterialProfileSetUsage {
-	return {};
+export function CreateIfcMaterialProfileSetUsage(ForProfileSet: Handle<IfcMaterialProfileSet> , CardinalPoint: IfcCardinalPointReference | null, ReferenceExtent: IfcPositiveLengthMeasure | null): Handle<IfcMaterialProfileSetUsage> {
+	return { expressID: 0 };
 }
 export class IfcMaterialProfileSetUsageTapering {};
-export function CreateIfcMaterialProfileSetUsageTapering(ForProfileSet: IfcMaterialProfileSet,CardinalPoint: IfcCardinalPointReference,ReferenceExtent: IfcPositiveLengthMeasure,ForProfileEndSet: IfcMaterialProfileSet,CardinalEndPoint: IfcCardinalPointReference): IfcMaterialProfileSetUsageTapering {
-	return {};
+export function CreateIfcMaterialProfileSetUsageTapering(ForProfileSet: Handle<IfcMaterialProfileSet> , CardinalPoint: IfcCardinalPointReference | null, ReferenceExtent: IfcPositiveLengthMeasure | null, ForProfileEndSet: Handle<IfcMaterialProfileSet> , CardinalEndPoint: IfcCardinalPointReference | null): Handle<IfcMaterialProfileSetUsageTapering> {
+	return { expressID: 0 };
 }
 export class IfcMaterialProfileWithOffsets {};
-export function CreateIfcMaterialProfileWithOffsets(Name: IfcLabel,Description: IfcText,Material: IfcMaterial,Profile: IfcProfileDef,Priority: IfcInteger,Category: IfcLabel,OffsetValues: IfcLengthMeasure): IfcMaterialProfileWithOffsets {
-	return {};
+export function CreateIfcMaterialProfileWithOffsets(Name: IfcLabel | null, Description: IfcText | null, Material: Handle<IfcMaterial> | null, Profile: Handle<IfcProfileDef> , Priority: IfcInteger | null, Category: IfcLabel | null, OffsetValues: IfcLengthMeasure ): Handle<IfcMaterialProfileWithOffsets> {
+	return { expressID: 0 };
 }
 export class IfcMaterialProperties {};
-export function CreateIfcMaterialProperties(Name: IfcIdentifier,Description: IfcText,Properties: IfcProperty,Material: IfcMaterialDefinition): IfcMaterialProperties {
-	return {};
+export function CreateIfcMaterialProperties(Name: IfcIdentifier | null, Description: IfcText | null, Properties: Handle<IfcProperty>[] , Material: Handle<IfcMaterialDefinition> ): Handle<IfcMaterialProperties> {
+	return { expressID: 0 };
 }
 export class IfcMaterialRelationship {};
-export function CreateIfcMaterialRelationship(Name: IfcLabel,Description: IfcText,RelatingMaterial: IfcMaterial,RelatedMaterials: IfcMaterial,Expression: IfcLabel): IfcMaterialRelationship {
-	return {};
+export function CreateIfcMaterialRelationship(Name: IfcLabel | null, Description: IfcText | null, RelatingMaterial: Handle<IfcMaterial> , RelatedMaterials: Handle<IfcMaterial>[] , Expression: IfcLabel | null): Handle<IfcMaterialRelationship> {
+	return { expressID: 0 };
 }
 export class IfcMaterialUsageDefinition {};
-export function CreateIfcMaterialUsageDefinition(): IfcMaterialUsageDefinition {
-	return {};
+export function CreateIfcMaterialUsageDefinition(): Handle<IfcMaterialUsageDefinition> {
+	return { expressID: 0 };
 }
 export class IfcMeasureWithUnit {};
-export function CreateIfcMeasureWithUnit(ValueComponent: IfcValue,UnitComponent: IfcUnit): IfcMeasureWithUnit {
-	return {};
+export function CreateIfcMeasureWithUnit(ValueComponent: IfcValue , UnitComponent: IfcUnit ): Handle<IfcMeasureWithUnit> {
+	return { expressID: 0 };
 }
 export class IfcMechanicalFastener {};
-export function CreateIfcMechanicalFastener(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,NominalDiameter: IfcPositiveLengthMeasure,NominalLength: IfcPositiveLengthMeasure,PredefinedType: IfcMechanicalFastenerTypeEnum): IfcMechanicalFastener {
-	return {};
+export function CreateIfcMechanicalFastener(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, NominalDiameter: IfcPositiveLengthMeasure | null, NominalLength: IfcPositiveLengthMeasure | null, PredefinedType: IfcMechanicalFastenerTypeEnum | null): Handle<IfcMechanicalFastener> {
+	return { expressID: 0 };
 }
 export class IfcMechanicalFastenerType {};
-export function CreateIfcMechanicalFastenerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcMechanicalFastenerTypeEnum,NominalDiameter: IfcPositiveLengthMeasure,NominalLength: IfcPositiveLengthMeasure): IfcMechanicalFastenerType {
-	return {};
+export function CreateIfcMechanicalFastenerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcMechanicalFastenerTypeEnum , NominalDiameter: IfcPositiveLengthMeasure | null, NominalLength: IfcPositiveLengthMeasure | null): Handle<IfcMechanicalFastenerType> {
+	return { expressID: 0 };
 }
 export class IfcMedicalDevice {};
-export function CreateIfcMedicalDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcMedicalDeviceTypeEnum): IfcMedicalDevice {
-	return {};
+export function CreateIfcMedicalDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcMedicalDeviceTypeEnum | null): Handle<IfcMedicalDevice> {
+	return { expressID: 0 };
 }
 export class IfcMedicalDeviceType {};
-export function CreateIfcMedicalDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcMedicalDeviceTypeEnum): IfcMedicalDeviceType {
-	return {};
+export function CreateIfcMedicalDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcMedicalDeviceTypeEnum ): Handle<IfcMedicalDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcMember {};
-export function CreateIfcMember(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcMemberTypeEnum): IfcMember {
-	return {};
+export function CreateIfcMember(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcMemberTypeEnum | null): Handle<IfcMember> {
+	return { expressID: 0 };
 }
 export class IfcMemberStandardCase {};
-export function CreateIfcMemberStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcMemberTypeEnum): IfcMemberStandardCase {
-	return {};
+export function CreateIfcMemberStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcMemberTypeEnum | null): Handle<IfcMemberStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcMemberType {};
-export function CreateIfcMemberType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcMemberTypeEnum): IfcMemberType {
-	return {};
+export function CreateIfcMemberType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcMemberTypeEnum ): Handle<IfcMemberType> {
+	return { expressID: 0 };
 }
 export class IfcMetric {};
-export function CreateIfcMetric(Name: IfcLabel,Description: IfcText,ConstraintGrade: IfcConstraintEnum,ConstraintSource: IfcLabel,CreatingActor: IfcActorSelect,CreationTime: IfcDateTime,UserDefinedGrade: IfcLabel,Benchmark: IfcBenchmarkEnum,ValueSource: IfcLabel,DataValue: IfcMetricValueSelect,ReferencePath: IfcReference): IfcMetric {
-	return {};
+export function CreateIfcMetric(Name: IfcLabel , Description: IfcText | null, ConstraintGrade: IfcConstraintEnum , ConstraintSource: IfcLabel | null, CreatingActor: IfcActorSelect | null, CreationTime: IfcDateTime | null, UserDefinedGrade: IfcLabel | null, Benchmark: IfcBenchmarkEnum , ValueSource: IfcLabel | null, DataValue: IfcMetricValueSelect | null, ReferencePath: Handle<IfcReference> | null): Handle<IfcMetric> {
+	return { expressID: 0 };
 }
 export class IfcMirroredProfileDef {};
-export function CreateIfcMirroredProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,ParentProfile: IfcProfileDef,Operator: IfcCartesianTransformationOperator2D,Label: IfcLabel): IfcMirroredProfileDef {
-	return {};
+export function CreateIfcMirroredProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, ParentProfile: Handle<IfcProfileDef> , Operator: Handle<IfcCartesianTransformationOperator2D> , Label: IfcLabel | null): Handle<IfcMirroredProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcMonetaryUnit {};
-export function CreateIfcMonetaryUnit(Currency: IfcLabel): IfcMonetaryUnit {
-	return {};
+export function CreateIfcMonetaryUnit(Currency: IfcLabel ): Handle<IfcMonetaryUnit> {
+	return { expressID: 0 };
 }
 export class IfcMotorConnection {};
-export function CreateIfcMotorConnection(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcMotorConnectionTypeEnum): IfcMotorConnection {
-	return {};
+export function CreateIfcMotorConnection(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcMotorConnectionTypeEnum | null): Handle<IfcMotorConnection> {
+	return { expressID: 0 };
 }
 export class IfcMotorConnectionType {};
-export function CreateIfcMotorConnectionType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcMotorConnectionTypeEnum): IfcMotorConnectionType {
-	return {};
+export function CreateIfcMotorConnectionType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcMotorConnectionTypeEnum ): Handle<IfcMotorConnectionType> {
+	return { expressID: 0 };
 }
 export class IfcNamedUnit {};
-export function CreateIfcNamedUnit(Dimensions: IfcDimensionalExponents,UnitType: IfcUnitEnum): IfcNamedUnit {
-	return {};
+export function CreateIfcNamedUnit(Dimensions: Handle<IfcDimensionalExponents> , UnitType: IfcUnitEnum ): Handle<IfcNamedUnit> {
+	return { expressID: 0 };
 }
 export class IfcObject {};
-export function CreateIfcObject(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel): IfcObject {
-	return {};
+export function CreateIfcObject(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null): Handle<IfcObject> {
+	return { expressID: 0 };
 }
 export class IfcObjectDefinition {};
-export function CreateIfcObjectDefinition(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcObjectDefinition {
-	return {};
+export function CreateIfcObjectDefinition(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcObjectDefinition> {
+	return { expressID: 0 };
 }
 export class IfcObjectPlacement {};
-export function CreateIfcObjectPlacement(PlacementRelTo: IfcObjectPlacement): IfcObjectPlacement {
-	return {};
+export function CreateIfcObjectPlacement(PlacementRelTo: Handle<IfcObjectPlacement> | null): Handle<IfcObjectPlacement> {
+	return { expressID: 0 };
 }
 export class IfcObjective {};
-export function CreateIfcObjective(Name: IfcLabel,Description: IfcText,ConstraintGrade: IfcConstraintEnum,ConstraintSource: IfcLabel,CreatingActor: IfcActorSelect,CreationTime: IfcDateTime,UserDefinedGrade: IfcLabel,BenchmarkValues: IfcConstraint,LogicalAggregator: IfcLogicalOperatorEnum,ObjectiveQualifier: IfcObjectiveEnum,UserDefinedQualifier: IfcLabel): IfcObjective {
-	return {};
+export function CreateIfcObjective(Name: IfcLabel , Description: IfcText | null, ConstraintGrade: IfcConstraintEnum , ConstraintSource: IfcLabel | null, CreatingActor: IfcActorSelect | null, CreationTime: IfcDateTime | null, UserDefinedGrade: IfcLabel | null, BenchmarkValues: Handle<IfcConstraint> | null, LogicalAggregator: IfcLogicalOperatorEnum | null, ObjectiveQualifier: IfcObjectiveEnum , UserDefinedQualifier: IfcLabel | null): Handle<IfcObjective> {
+	return { expressID: 0 };
 }
 export class IfcOccupant {};
-export function CreateIfcOccupant(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,TheActor: IfcActorSelect,PredefinedType: IfcOccupantTypeEnum): IfcOccupant {
-	return {};
+export function CreateIfcOccupant(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, TheActor: IfcActorSelect , PredefinedType: IfcOccupantTypeEnum | null): Handle<IfcOccupant> {
+	return { expressID: 0 };
 }
 export class IfcOffsetCurve {};
-export function CreateIfcOffsetCurve(BasisCurve: IfcCurve): IfcOffsetCurve {
-	return {};
+export function CreateIfcOffsetCurve(BasisCurve: Handle<IfcCurve> ): Handle<IfcOffsetCurve> {
+	return { expressID: 0 };
 }
 export class IfcOffsetCurve2D {};
-export function CreateIfcOffsetCurve2D(BasisCurve: IfcCurve,Distance: IfcLengthMeasure,SelfIntersect: IfcLogical): IfcOffsetCurve2D {
-	return {};
+export function CreateIfcOffsetCurve2D(BasisCurve: Handle<IfcCurve> , Distance: IfcLengthMeasure , SelfIntersect: IfcLogical ): Handle<IfcOffsetCurve2D> {
+	return { expressID: 0 };
 }
 export class IfcOffsetCurve3D {};
-export function CreateIfcOffsetCurve3D(BasisCurve: IfcCurve,Distance: IfcLengthMeasure,SelfIntersect: IfcLogical,RefDirection: IfcDirection): IfcOffsetCurve3D {
-	return {};
+export function CreateIfcOffsetCurve3D(BasisCurve: Handle<IfcCurve> , Distance: IfcLengthMeasure , SelfIntersect: IfcLogical , RefDirection: Handle<IfcDirection> ): Handle<IfcOffsetCurve3D> {
+	return { expressID: 0 };
 }
 export class IfcOffsetCurveByDistances {};
-export function CreateIfcOffsetCurveByDistances(BasisCurve: IfcCurve,OffsetValues: IfcDistanceExpression,Tag: IfcLabel): IfcOffsetCurveByDistances {
-	return {};
+export function CreateIfcOffsetCurveByDistances(BasisCurve: Handle<IfcCurve> , OffsetValues: Handle<IfcDistanceExpression> , Tag: IfcLabel | null): Handle<IfcOffsetCurveByDistances> {
+	return { expressID: 0 };
 }
 export class IfcOpenShell {};
-export function CreateIfcOpenShell(CfsFaces: IfcFace): IfcOpenShell {
-	return {};
+export function CreateIfcOpenShell(CfsFaces: Handle<IfcFace>[] ): Handle<IfcOpenShell> {
+	return { expressID: 0 };
 }
 export class IfcOpeningElement {};
-export function CreateIfcOpeningElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcOpeningElementTypeEnum): IfcOpeningElement {
-	return {};
+export function CreateIfcOpeningElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcOpeningElementTypeEnum | null): Handle<IfcOpeningElement> {
+	return { expressID: 0 };
 }
 export class IfcOpeningStandardCase {};
-export function CreateIfcOpeningStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcOpeningElementTypeEnum): IfcOpeningStandardCase {
-	return {};
+export function CreateIfcOpeningStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcOpeningElementTypeEnum | null): Handle<IfcOpeningStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcOrganization {};
-export function CreateIfcOrganization(Identification: IfcIdentifier,Name: IfcLabel,Description: IfcText,Roles: IfcActorRole,Addresses: IfcAddress): IfcOrganization {
-	return {};
+export function CreateIfcOrganization(Identification: IfcIdentifier | null, Name: IfcLabel , Description: IfcText | null, Roles: Handle<IfcActorRole> | null, Addresses: Handle<IfcAddress> | null): Handle<IfcOrganization> {
+	return { expressID: 0 };
 }
 export class IfcOrganizationRelationship {};
-export function CreateIfcOrganizationRelationship(Name: IfcLabel,Description: IfcText,RelatingOrganization: IfcOrganization,RelatedOrganizations: IfcOrganization): IfcOrganizationRelationship {
-	return {};
+export function CreateIfcOrganizationRelationship(Name: IfcLabel | null, Description: IfcText | null, RelatingOrganization: Handle<IfcOrganization> , RelatedOrganizations: Handle<IfcOrganization>[] ): Handle<IfcOrganizationRelationship> {
+	return { expressID: 0 };
 }
 export class IfcOrientationExpression {};
-export function CreateIfcOrientationExpression(LateralAxisDirection: IfcDirection,VerticalAxisDirection: IfcDirection): IfcOrientationExpression {
-	return {};
+export function CreateIfcOrientationExpression(LateralAxisDirection: Handle<IfcDirection> , VerticalAxisDirection: Handle<IfcDirection> ): Handle<IfcOrientationExpression> {
+	return { expressID: 0 };
 }
 export class IfcOrientedEdge {};
-export function CreateIfcOrientedEdge(EdgeStart: IfcVertex,EdgeEnd: IfcVertex,EdgeElement: IfcEdge,Orientation: IfcBoolean): IfcOrientedEdge {
-	return {};
+export function CreateIfcOrientedEdge(EdgeStart: Handle<IfcVertex> , EdgeEnd: Handle<IfcVertex> , EdgeElement: Handle<IfcEdge> , Orientation: IfcBoolean ): Handle<IfcOrientedEdge> {
+	return { expressID: 0 };
 }
 export class IfcOuterBoundaryCurve {};
-export function CreateIfcOuterBoundaryCurve(Segments: IfcCompositeCurveSegment,SelfIntersect: IfcLogical): IfcOuterBoundaryCurve {
-	return {};
+export function CreateIfcOuterBoundaryCurve(Segments: Handle<IfcCompositeCurveSegment> , SelfIntersect: IfcLogical ): Handle<IfcOuterBoundaryCurve> {
+	return { expressID: 0 };
 }
 export class IfcOutlet {};
-export function CreateIfcOutlet(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcOutletTypeEnum): IfcOutlet {
-	return {};
+export function CreateIfcOutlet(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcOutletTypeEnum | null): Handle<IfcOutlet> {
+	return { expressID: 0 };
 }
 export class IfcOutletType {};
-export function CreateIfcOutletType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcOutletTypeEnum): IfcOutletType {
-	return {};
+export function CreateIfcOutletType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcOutletTypeEnum ): Handle<IfcOutletType> {
+	return { expressID: 0 };
 }
 export class IfcOwnerHistory {};
-export function CreateIfcOwnerHistory(OwningUser: IfcPersonAndOrganization,OwningApplication: IfcApplication,State: IfcStateEnum,ChangeAction: IfcChangeActionEnum,LastModifiedDate: IfcTimeStamp,LastModifyingUser: IfcPersonAndOrganization,LastModifyingApplication: IfcApplication,CreationDate: IfcTimeStamp): IfcOwnerHistory {
-	return {};
+export function CreateIfcOwnerHistory(OwningUser: Handle<IfcPersonAndOrganization> , OwningApplication: Handle<IfcApplication> , State: IfcStateEnum | null, ChangeAction: IfcChangeActionEnum | null, LastModifiedDate: IfcTimeStamp | null, LastModifyingUser: Handle<IfcPersonAndOrganization> | null, LastModifyingApplication: Handle<IfcApplication> | null, CreationDate: IfcTimeStamp ): Handle<IfcOwnerHistory> {
+	return { expressID: 0 };
 }
 export class IfcParameterizedProfileDef {};
-export function CreateIfcParameterizedProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D): IfcParameterizedProfileDef {
-	return {};
+export function CreateIfcParameterizedProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null): Handle<IfcParameterizedProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcPath {};
-export function CreateIfcPath(EdgeList: IfcOrientedEdge): IfcPath {
-	return {};
+export function CreateIfcPath(EdgeList: Handle<IfcOrientedEdge> ): Handle<IfcPath> {
+	return { expressID: 0 };
 }
 export class IfcPcurve {};
-export function CreateIfcPcurve(BasisSurface: IfcSurface,ReferenceCurve: IfcCurve): IfcPcurve {
-	return {};
+export function CreateIfcPcurve(BasisSurface: Handle<IfcSurface> , ReferenceCurve: Handle<IfcCurve> ): Handle<IfcPcurve> {
+	return { expressID: 0 };
 }
 export class IfcPerformanceHistory {};
-export function CreateIfcPerformanceHistory(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LifeCyclePhase: IfcLabel,PredefinedType: IfcPerformanceHistoryTypeEnum): IfcPerformanceHistory {
-	return {};
+export function CreateIfcPerformanceHistory(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LifeCyclePhase: IfcLabel , PredefinedType: IfcPerformanceHistoryTypeEnum | null): Handle<IfcPerformanceHistory> {
+	return { expressID: 0 };
 }
 export class IfcPermeableCoveringProperties {};
-export function CreateIfcPermeableCoveringProperties(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,OperationType: IfcPermeableCoveringOperationEnum,PanelPosition: IfcWindowPanelPositionEnum,FrameDepth: IfcPositiveLengthMeasure,FrameThickness: IfcPositiveLengthMeasure,ShapeAspectStyle: IfcShapeAspect): IfcPermeableCoveringProperties {
-	return {};
+export function CreateIfcPermeableCoveringProperties(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, OperationType: IfcPermeableCoveringOperationEnum , PanelPosition: IfcWindowPanelPositionEnum , FrameDepth: IfcPositiveLengthMeasure | null, FrameThickness: IfcPositiveLengthMeasure | null, ShapeAspectStyle: Handle<IfcShapeAspect> | null): Handle<IfcPermeableCoveringProperties> {
+	return { expressID: 0 };
 }
 export class IfcPermit {};
-export function CreateIfcPermit(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,PredefinedType: IfcPermitTypeEnum,Status: IfcLabel,LongDescription: IfcText): IfcPermit {
-	return {};
+export function CreateIfcPermit(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, PredefinedType: IfcPermitTypeEnum | null, Status: IfcLabel | null, LongDescription: IfcText | null): Handle<IfcPermit> {
+	return { expressID: 0 };
 }
 export class IfcPerson {};
-export function CreateIfcPerson(Identification: IfcIdentifier,FamilyName: IfcLabel,GivenName: IfcLabel,MiddleNames: IfcLabel,PrefixTitles: IfcLabel,SuffixTitles: IfcLabel,Roles: IfcActorRole,Addresses: IfcAddress): IfcPerson {
-	return {};
+export function CreateIfcPerson(Identification: IfcIdentifier | null, FamilyName: IfcLabel | null, GivenName: IfcLabel | null, MiddleNames: IfcLabel | null, PrefixTitles: IfcLabel | null, SuffixTitles: IfcLabel | null, Roles: Handle<IfcActorRole> | null, Addresses: Handle<IfcAddress> | null): Handle<IfcPerson> {
+	return { expressID: 0 };
 }
 export class IfcPersonAndOrganization {};
-export function CreateIfcPersonAndOrganization(ThePerson: IfcPerson,TheOrganization: IfcOrganization,Roles: IfcActorRole): IfcPersonAndOrganization {
-	return {};
+export function CreateIfcPersonAndOrganization(ThePerson: Handle<IfcPerson> , TheOrganization: Handle<IfcOrganization> , Roles: Handle<IfcActorRole> | null): Handle<IfcPersonAndOrganization> {
+	return { expressID: 0 };
 }
 export class IfcPhysicalComplexQuantity {};
-export function CreateIfcPhysicalComplexQuantity(Name: IfcLabel,Description: IfcText,HasQuantities: IfcPhysicalQuantity,Discrimination: IfcLabel,Quality: IfcLabel,Usage: IfcLabel): IfcPhysicalComplexQuantity {
-	return {};
+export function CreateIfcPhysicalComplexQuantity(Name: IfcLabel , Description: IfcText | null, HasQuantities: Handle<IfcPhysicalQuantity>[] , Discrimination: IfcLabel , Quality: IfcLabel | null, Usage: IfcLabel | null): Handle<IfcPhysicalComplexQuantity> {
+	return { expressID: 0 };
 }
 export class IfcPhysicalQuantity {};
-export function CreateIfcPhysicalQuantity(Name: IfcLabel,Description: IfcText): IfcPhysicalQuantity {
-	return {};
+export function CreateIfcPhysicalQuantity(Name: IfcLabel , Description: IfcText | null): Handle<IfcPhysicalQuantity> {
+	return { expressID: 0 };
 }
 export class IfcPhysicalSimpleQuantity {};
-export function CreateIfcPhysicalSimpleQuantity(Name: IfcLabel,Description: IfcText,Unit: IfcNamedUnit): IfcPhysicalSimpleQuantity {
-	return {};
+export function CreateIfcPhysicalSimpleQuantity(Name: IfcLabel , Description: IfcText | null, Unit: Handle<IfcNamedUnit> | null): Handle<IfcPhysicalSimpleQuantity> {
+	return { expressID: 0 };
 }
 export class IfcPile {};
-export function CreateIfcPile(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcPileTypeEnum,ConstructionType: IfcPileConstructionEnum): IfcPile {
-	return {};
+export function CreateIfcPile(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcPileTypeEnum | null, ConstructionType: IfcPileConstructionEnum | null): Handle<IfcPile> {
+	return { expressID: 0 };
 }
 export class IfcPileType {};
-export function CreateIfcPileType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcPileTypeEnum): IfcPileType {
-	return {};
+export function CreateIfcPileType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcPileTypeEnum ): Handle<IfcPileType> {
+	return { expressID: 0 };
 }
 export class IfcPipeFitting {};
-export function CreateIfcPipeFitting(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcPipeFittingTypeEnum): IfcPipeFitting {
-	return {};
+export function CreateIfcPipeFitting(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcPipeFittingTypeEnum | null): Handle<IfcPipeFitting> {
+	return { expressID: 0 };
 }
 export class IfcPipeFittingType {};
-export function CreateIfcPipeFittingType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcPipeFittingTypeEnum): IfcPipeFittingType {
-	return {};
+export function CreateIfcPipeFittingType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcPipeFittingTypeEnum ): Handle<IfcPipeFittingType> {
+	return { expressID: 0 };
 }
 export class IfcPipeSegment {};
-export function CreateIfcPipeSegment(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcPipeSegmentTypeEnum): IfcPipeSegment {
-	return {};
+export function CreateIfcPipeSegment(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcPipeSegmentTypeEnum | null): Handle<IfcPipeSegment> {
+	return { expressID: 0 };
 }
 export class IfcPipeSegmentType {};
-export function CreateIfcPipeSegmentType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcPipeSegmentTypeEnum): IfcPipeSegmentType {
-	return {};
+export function CreateIfcPipeSegmentType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcPipeSegmentTypeEnum ): Handle<IfcPipeSegmentType> {
+	return { expressID: 0 };
 }
 export class IfcPixelTexture {};
-export function CreateIfcPixelTexture(RepeatS: IfcBoolean,RepeatT: IfcBoolean,Mode: IfcIdentifier,TextureTransform: IfcCartesianTransformationOperator2D,Parameter: IfcIdentifier,Width: IfcInteger,Height: IfcInteger,ColourComponents: IfcInteger,Pixel: IfcBinary): IfcPixelTexture {
-	return {};
+export function CreateIfcPixelTexture(RepeatS: IfcBoolean , RepeatT: IfcBoolean , Mode: IfcIdentifier | null, TextureTransform: Handle<IfcCartesianTransformationOperator2D> | null, Parameter: IfcIdentifier | null, Width: IfcInteger , Height: IfcInteger , ColourComponents: IfcInteger , Pixel: IfcBinary ): Handle<IfcPixelTexture> {
+	return { expressID: 0 };
 }
 export class IfcPlacement {};
-export function CreateIfcPlacement(Location: IfcCartesianPoint): IfcPlacement {
-	return {};
+export function CreateIfcPlacement(Location: Handle<IfcCartesianPoint> ): Handle<IfcPlacement> {
+	return { expressID: 0 };
 }
 export class IfcPlanarBox {};
-export function CreateIfcPlanarBox(SizeInX: IfcLengthMeasure,SizeInY: IfcLengthMeasure,Placement: IfcAxis2Placement): IfcPlanarBox {
-	return {};
+export function CreateIfcPlanarBox(SizeInX: IfcLengthMeasure , SizeInY: IfcLengthMeasure , Placement: IfcAxis2Placement ): Handle<IfcPlanarBox> {
+	return { expressID: 0 };
 }
 export class IfcPlanarExtent {};
-export function CreateIfcPlanarExtent(SizeInX: IfcLengthMeasure,SizeInY: IfcLengthMeasure): IfcPlanarExtent {
-	return {};
+export function CreateIfcPlanarExtent(SizeInX: IfcLengthMeasure , SizeInY: IfcLengthMeasure ): Handle<IfcPlanarExtent> {
+	return { expressID: 0 };
 }
 export class IfcPlane {};
-export function CreateIfcPlane(Position: IfcAxis2Placement3D): IfcPlane {
-	return {};
+export function CreateIfcPlane(Position: Handle<IfcAxis2Placement3D> ): Handle<IfcPlane> {
+	return { expressID: 0 };
 }
 export class IfcPlate {};
-export function CreateIfcPlate(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcPlateTypeEnum): IfcPlate {
-	return {};
+export function CreateIfcPlate(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcPlateTypeEnum | null): Handle<IfcPlate> {
+	return { expressID: 0 };
 }
 export class IfcPlateStandardCase {};
-export function CreateIfcPlateStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcPlateTypeEnum): IfcPlateStandardCase {
-	return {};
+export function CreateIfcPlateStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcPlateTypeEnum | null): Handle<IfcPlateStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcPlateType {};
-export function CreateIfcPlateType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcPlateTypeEnum): IfcPlateType {
-	return {};
+export function CreateIfcPlateType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcPlateTypeEnum ): Handle<IfcPlateType> {
+	return { expressID: 0 };
 }
 export class IfcPoint {};
-export function CreateIfcPoint(): IfcPoint {
-	return {};
+export function CreateIfcPoint(): Handle<IfcPoint> {
+	return { expressID: 0 };
 }
 export class IfcPointOnCurve {};
-export function CreateIfcPointOnCurve(BasisCurve: IfcCurve,PointParameter: IfcParameterValue): IfcPointOnCurve {
-	return {};
+export function CreateIfcPointOnCurve(BasisCurve: Handle<IfcCurve> , PointParameter: IfcParameterValue ): Handle<IfcPointOnCurve> {
+	return { expressID: 0 };
 }
 export class IfcPointOnSurface {};
-export function CreateIfcPointOnSurface(BasisSurface: IfcSurface,PointParameterU: IfcParameterValue,PointParameterV: IfcParameterValue): IfcPointOnSurface {
-	return {};
+export function CreateIfcPointOnSurface(BasisSurface: Handle<IfcSurface> , PointParameterU: IfcParameterValue , PointParameterV: IfcParameterValue ): Handle<IfcPointOnSurface> {
+	return { expressID: 0 };
 }
 export class IfcPolyLoop {};
-export function CreateIfcPolyLoop(Polygon: IfcCartesianPoint): IfcPolyLoop {
-	return {};
+export function CreateIfcPolyLoop(Polygon: Handle<IfcCartesianPoint> ): Handle<IfcPolyLoop> {
+	return { expressID: 0 };
 }
 export class IfcPolygonalBoundedHalfSpace {};
-export function CreateIfcPolygonalBoundedHalfSpace(BaseSurface: IfcSurface,AgreementFlag: IfcBoolean,Position: IfcAxis2Placement3D,PolygonalBoundary: IfcBoundedCurve): IfcPolygonalBoundedHalfSpace {
-	return {};
+export function CreateIfcPolygonalBoundedHalfSpace(BaseSurface: Handle<IfcSurface> , AgreementFlag: IfcBoolean , Position: Handle<IfcAxis2Placement3D> , PolygonalBoundary: Handle<IfcBoundedCurve> ): Handle<IfcPolygonalBoundedHalfSpace> {
+	return { expressID: 0 };
 }
 export class IfcPolygonalFaceSet {};
-export function CreateIfcPolygonalFaceSet(Coordinates: IfcCartesianPointList3D,Closed: IfcBoolean,Faces: IfcIndexedPolygonalFace,PnIndex: IfcPositiveInteger): IfcPolygonalFaceSet {
-	return {};
+export function CreateIfcPolygonalFaceSet(Coordinates: Handle<IfcCartesianPointList3D> , Closed: IfcBoolean | null, Faces: Handle<IfcIndexedPolygonalFace> , PnIndex: IfcPositiveInteger | null): Handle<IfcPolygonalFaceSet> {
+	return { expressID: 0 };
 }
 export class IfcPolyline {};
-export function CreateIfcPolyline(Points: IfcCartesianPoint): IfcPolyline {
-	return {};
+export function CreateIfcPolyline(Points: Handle<IfcCartesianPoint> ): Handle<IfcPolyline> {
+	return { expressID: 0 };
 }
 export class IfcPort {};
-export function CreateIfcPort(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation): IfcPort {
-	return {};
+export function CreateIfcPort(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null): Handle<IfcPort> {
+	return { expressID: 0 };
 }
 export class IfcPositioningElement {};
-export function CreateIfcPositioningElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation): IfcPositioningElement {
-	return {};
+export function CreateIfcPositioningElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null): Handle<IfcPositioningElement> {
+	return { expressID: 0 };
 }
 export class IfcPostalAddress {};
-export function CreateIfcPostalAddress(Purpose: IfcAddressTypeEnum,Description: IfcText,UserDefinedPurpose: IfcLabel,InternalLocation: IfcLabel,AddressLines: IfcLabel,PostalBox: IfcLabel,Town: IfcLabel,Region: IfcLabel,PostalCode: IfcLabel,Country: IfcLabel): IfcPostalAddress {
-	return {};
+export function CreateIfcPostalAddress(Purpose: IfcAddressTypeEnum | null, Description: IfcText | null, UserDefinedPurpose: IfcLabel | null, InternalLocation: IfcLabel | null, AddressLines: IfcLabel | null, PostalBox: IfcLabel | null, Town: IfcLabel | null, Region: IfcLabel | null, PostalCode: IfcLabel | null, Country: IfcLabel | null): Handle<IfcPostalAddress> {
+	return { expressID: 0 };
 }
 export class IfcPreDefinedColour {};
-export function CreateIfcPreDefinedColour(Name: IfcLabel): IfcPreDefinedColour {
-	return {};
+export function CreateIfcPreDefinedColour(Name: IfcLabel ): Handle<IfcPreDefinedColour> {
+	return { expressID: 0 };
 }
 export class IfcPreDefinedCurveFont {};
-export function CreateIfcPreDefinedCurveFont(Name: IfcLabel): IfcPreDefinedCurveFont {
-	return {};
+export function CreateIfcPreDefinedCurveFont(Name: IfcLabel ): Handle<IfcPreDefinedCurveFont> {
+	return { expressID: 0 };
 }
 export class IfcPreDefinedItem {};
-export function CreateIfcPreDefinedItem(Name: IfcLabel): IfcPreDefinedItem {
-	return {};
+export function CreateIfcPreDefinedItem(Name: IfcLabel ): Handle<IfcPreDefinedItem> {
+	return { expressID: 0 };
 }
 export class IfcPreDefinedProperties {};
-export function CreateIfcPreDefinedProperties(): IfcPreDefinedProperties {
-	return {};
+export function CreateIfcPreDefinedProperties(): Handle<IfcPreDefinedProperties> {
+	return { expressID: 0 };
 }
 export class IfcPreDefinedPropertySet {};
-export function CreateIfcPreDefinedPropertySet(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcPreDefinedPropertySet {
-	return {};
+export function CreateIfcPreDefinedPropertySet(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcPreDefinedPropertySet> {
+	return { expressID: 0 };
 }
 export class IfcPreDefinedTextFont {};
-export function CreateIfcPreDefinedTextFont(Name: IfcLabel): IfcPreDefinedTextFont {
-	return {};
+export function CreateIfcPreDefinedTextFont(Name: IfcLabel ): Handle<IfcPreDefinedTextFont> {
+	return { expressID: 0 };
 }
 export class IfcPresentationItem {};
-export function CreateIfcPresentationItem(): IfcPresentationItem {
-	return {};
+export function CreateIfcPresentationItem(): Handle<IfcPresentationItem> {
+	return { expressID: 0 };
 }
 export class IfcPresentationLayerAssignment {};
-export function CreateIfcPresentationLayerAssignment(Name: IfcLabel,Description: IfcText,AssignedItems: IfcLayeredItem,Identifier: IfcIdentifier): IfcPresentationLayerAssignment {
-	return {};
+export function CreateIfcPresentationLayerAssignment(Name: IfcLabel , Description: IfcText | null, AssignedItems: IfcLayeredItem[] , Identifier: IfcIdentifier | null): Handle<IfcPresentationLayerAssignment> {
+	return { expressID: 0 };
 }
 export class IfcPresentationLayerWithStyle {};
-export function CreateIfcPresentationLayerWithStyle(Name: IfcLabel,Description: IfcText,AssignedItems: IfcLayeredItem,Identifier: IfcIdentifier,LayerOn: IfcLogical,LayerFrozen: IfcLogical,LayerBlocked: IfcLogical,LayerStyles: IfcPresentationStyle): IfcPresentationLayerWithStyle {
-	return {};
+export function CreateIfcPresentationLayerWithStyle(Name: IfcLabel , Description: IfcText | null, AssignedItems: IfcLayeredItem[] , Identifier: IfcIdentifier | null, LayerOn: IfcLogical , LayerFrozen: IfcLogical , LayerBlocked: IfcLogical , LayerStyles: Handle<IfcPresentationStyle>[] ): Handle<IfcPresentationLayerWithStyle> {
+	return { expressID: 0 };
 }
 export class IfcPresentationStyle {};
-export function CreateIfcPresentationStyle(Name: IfcLabel): IfcPresentationStyle {
-	return {};
+export function CreateIfcPresentationStyle(Name: IfcLabel | null): Handle<IfcPresentationStyle> {
+	return { expressID: 0 };
 }
 export class IfcPresentationStyleAssignment {};
-export function CreateIfcPresentationStyleAssignment(Styles: IfcPresentationStyleSelect): IfcPresentationStyleAssignment {
-	return {};
+export function CreateIfcPresentationStyleAssignment(Styles: IfcPresentationStyleSelect[] ): Handle<IfcPresentationStyleAssignment> {
+	return { expressID: 0 };
 }
 export class IfcProcedure {};
-export function CreateIfcProcedure(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,PredefinedType: IfcProcedureTypeEnum): IfcProcedure {
-	return {};
+export function CreateIfcProcedure(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, PredefinedType: IfcProcedureTypeEnum | null): Handle<IfcProcedure> {
+	return { expressID: 0 };
 }
 export class IfcProcedureType {};
-export function CreateIfcProcedureType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ProcessType: IfcLabel,PredefinedType: IfcProcedureTypeEnum): IfcProcedureType {
-	return {};
+export function CreateIfcProcedureType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ProcessType: IfcLabel | null, PredefinedType: IfcProcedureTypeEnum ): Handle<IfcProcedureType> {
+	return { expressID: 0 };
 }
 export class IfcProcess {};
-export function CreateIfcProcess(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText): IfcProcess {
-	return {};
+export function CreateIfcProcess(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null): Handle<IfcProcess> {
+	return { expressID: 0 };
 }
 export class IfcProduct {};
-export function CreateIfcProduct(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation): IfcProduct {
-	return {};
+export function CreateIfcProduct(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null): Handle<IfcProduct> {
+	return { expressID: 0 };
 }
 export class IfcProductDefinitionShape {};
-export function CreateIfcProductDefinitionShape(Name: IfcLabel,Description: IfcText,Representations: IfcRepresentation): IfcProductDefinitionShape {
-	return {};
+export function CreateIfcProductDefinitionShape(Name: IfcLabel | null, Description: IfcText | null, Representations: Handle<IfcRepresentation> ): Handle<IfcProductDefinitionShape> {
+	return { expressID: 0 };
 }
 export class IfcProductRepresentation {};
-export function CreateIfcProductRepresentation(Name: IfcLabel,Description: IfcText,Representations: IfcRepresentation): IfcProductRepresentation {
-	return {};
+export function CreateIfcProductRepresentation(Name: IfcLabel | null, Description: IfcText | null, Representations: Handle<IfcRepresentation> ): Handle<IfcProductRepresentation> {
+	return { expressID: 0 };
 }
 export class IfcProfileDef {};
-export function CreateIfcProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel): IfcProfileDef {
-	return {};
+export function CreateIfcProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null): Handle<IfcProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcProfileProperties {};
-export function CreateIfcProfileProperties(Name: IfcIdentifier,Description: IfcText,Properties: IfcProperty,ProfileDefinition: IfcProfileDef): IfcProfileProperties {
-	return {};
+export function CreateIfcProfileProperties(Name: IfcIdentifier | null, Description: IfcText | null, Properties: Handle<IfcProperty>[] , ProfileDefinition: Handle<IfcProfileDef> ): Handle<IfcProfileProperties> {
+	return { expressID: 0 };
 }
 export class IfcProject {};
-export function CreateIfcProject(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,LongName: IfcLabel,Phase: IfcLabel,RepresentationContexts: IfcRepresentationContext,UnitsInContext: IfcUnitAssignment): IfcProject {
-	return {};
+export function CreateIfcProject(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, LongName: IfcLabel | null, Phase: IfcLabel | null, RepresentationContexts: Handle<IfcRepresentationContext>[] | null, UnitsInContext: Handle<IfcUnitAssignment> | null): Handle<IfcProject> {
+	return { expressID: 0 };
 }
 export class IfcProjectLibrary {};
-export function CreateIfcProjectLibrary(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,LongName: IfcLabel,Phase: IfcLabel,RepresentationContexts: IfcRepresentationContext,UnitsInContext: IfcUnitAssignment): IfcProjectLibrary {
-	return {};
+export function CreateIfcProjectLibrary(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, LongName: IfcLabel | null, Phase: IfcLabel | null, RepresentationContexts: Handle<IfcRepresentationContext>[] | null, UnitsInContext: Handle<IfcUnitAssignment> | null): Handle<IfcProjectLibrary> {
+	return { expressID: 0 };
 }
 export class IfcProjectOrder {};
-export function CreateIfcProjectOrder(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,PredefinedType: IfcProjectOrderTypeEnum,Status: IfcLabel,LongDescription: IfcText): IfcProjectOrder {
-	return {};
+export function CreateIfcProjectOrder(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, PredefinedType: IfcProjectOrderTypeEnum | null, Status: IfcLabel | null, LongDescription: IfcText | null): Handle<IfcProjectOrder> {
+	return { expressID: 0 };
 }
 export class IfcProjectedCRS {};
-export function CreateIfcProjectedCRS(Name: IfcLabel,Description: IfcText,GeodeticDatum: IfcIdentifier,VerticalDatum: IfcIdentifier,MapProjection: IfcIdentifier,MapZone: IfcIdentifier,MapUnit: IfcNamedUnit): IfcProjectedCRS {
-	return {};
+export function CreateIfcProjectedCRS(Name: IfcLabel , Description: IfcText | null, GeodeticDatum: IfcIdentifier | null, VerticalDatum: IfcIdentifier | null, MapProjection: IfcIdentifier | null, MapZone: IfcIdentifier | null, MapUnit: Handle<IfcNamedUnit> | null): Handle<IfcProjectedCRS> {
+	return { expressID: 0 };
 }
 export class IfcProjectionElement {};
-export function CreateIfcProjectionElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcProjectionElementTypeEnum): IfcProjectionElement {
-	return {};
+export function CreateIfcProjectionElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcProjectionElementTypeEnum | null): Handle<IfcProjectionElement> {
+	return { expressID: 0 };
 }
 export class IfcProperty {};
-export function CreateIfcProperty(Name: IfcIdentifier,Description: IfcText): IfcProperty {
-	return {};
+export function CreateIfcProperty(Name: IfcIdentifier , Description: IfcText | null): Handle<IfcProperty> {
+	return { expressID: 0 };
 }
 export class IfcPropertyAbstraction {};
-export function CreateIfcPropertyAbstraction(): IfcPropertyAbstraction {
-	return {};
+export function CreateIfcPropertyAbstraction(): Handle<IfcPropertyAbstraction> {
+	return { expressID: 0 };
 }
 export class IfcPropertyBoundedValue {};
-export function CreateIfcPropertyBoundedValue(Name: IfcIdentifier,Description: IfcText,UpperBoundValue: IfcValue,LowerBoundValue: IfcValue,Unit: IfcUnit,SetPointValue: IfcValue): IfcPropertyBoundedValue {
-	return {};
+export function CreateIfcPropertyBoundedValue(Name: IfcIdentifier , Description: IfcText | null, UpperBoundValue: IfcValue | null, LowerBoundValue: IfcValue | null, Unit: IfcUnit | null, SetPointValue: IfcValue | null): Handle<IfcPropertyBoundedValue> {
+	return { expressID: 0 };
 }
 export class IfcPropertyDefinition {};
-export function CreateIfcPropertyDefinition(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcPropertyDefinition {
-	return {};
+export function CreateIfcPropertyDefinition(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcPropertyDefinition> {
+	return { expressID: 0 };
 }
 export class IfcPropertyDependencyRelationship {};
-export function CreateIfcPropertyDependencyRelationship(Name: IfcLabel,Description: IfcText,DependingProperty: IfcProperty,DependantProperty: IfcProperty,Expression: IfcText): IfcPropertyDependencyRelationship {
-	return {};
+export function CreateIfcPropertyDependencyRelationship(Name: IfcLabel | null, Description: IfcText | null, DependingProperty: Handle<IfcProperty> , DependantProperty: Handle<IfcProperty> , Expression: IfcText | null): Handle<IfcPropertyDependencyRelationship> {
+	return { expressID: 0 };
 }
 export class IfcPropertyEnumeratedValue {};
-export function CreateIfcPropertyEnumeratedValue(Name: IfcIdentifier,Description: IfcText,EnumerationValues: IfcValue,EnumerationReference: IfcPropertyEnumeration): IfcPropertyEnumeratedValue {
-	return {};
+export function CreateIfcPropertyEnumeratedValue(Name: IfcIdentifier , Description: IfcText | null, EnumerationValues: IfcValue | null, EnumerationReference: Handle<IfcPropertyEnumeration> | null): Handle<IfcPropertyEnumeratedValue> {
+	return { expressID: 0 };
 }
 export class IfcPropertyEnumeration {};
-export function CreateIfcPropertyEnumeration(Name: IfcLabel,EnumerationValues: IfcValue,Unit: IfcUnit): IfcPropertyEnumeration {
-	return {};
+export function CreateIfcPropertyEnumeration(Name: IfcLabel , EnumerationValues: IfcValue , Unit: IfcUnit | null): Handle<IfcPropertyEnumeration> {
+	return { expressID: 0 };
 }
 export class IfcPropertyListValue {};
-export function CreateIfcPropertyListValue(Name: IfcIdentifier,Description: IfcText,ListValues: IfcValue,Unit: IfcUnit): IfcPropertyListValue {
-	return {};
+export function CreateIfcPropertyListValue(Name: IfcIdentifier , Description: IfcText | null, ListValues: IfcValue | null, Unit: IfcUnit | null): Handle<IfcPropertyListValue> {
+	return { expressID: 0 };
 }
 export class IfcPropertyReferenceValue {};
-export function CreateIfcPropertyReferenceValue(Name: IfcIdentifier,Description: IfcText,UsageName: IfcText,PropertyReference: IfcObjectReferenceSelect): IfcPropertyReferenceValue {
-	return {};
+export function CreateIfcPropertyReferenceValue(Name: IfcIdentifier , Description: IfcText | null, UsageName: IfcText | null, PropertyReference: IfcObjectReferenceSelect | null): Handle<IfcPropertyReferenceValue> {
+	return { expressID: 0 };
 }
 export class IfcPropertySet {};
-export function CreateIfcPropertySet(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,HasProperties: IfcProperty): IfcPropertySet {
-	return {};
+export function CreateIfcPropertySet(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, HasProperties: Handle<IfcProperty>[] ): Handle<IfcPropertySet> {
+	return { expressID: 0 };
 }
 export class IfcPropertySetDefinition {};
-export function CreateIfcPropertySetDefinition(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcPropertySetDefinition {
-	return {};
+export function CreateIfcPropertySetDefinition(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcPropertySetDefinition> {
+	return { expressID: 0 };
 }
 export class IfcPropertySetTemplate {};
-export function CreateIfcPropertySetTemplate(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,TemplateType: IfcPropertySetTemplateTypeEnum,ApplicableEntity: IfcIdentifier,HasPropertyTemplates: IfcPropertyTemplate): IfcPropertySetTemplate {
-	return {};
+export function CreateIfcPropertySetTemplate(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, TemplateType: IfcPropertySetTemplateTypeEnum | null, ApplicableEntity: IfcIdentifier | null, HasPropertyTemplates: Handle<IfcPropertyTemplate>[] ): Handle<IfcPropertySetTemplate> {
+	return { expressID: 0 };
 }
 export class IfcPropertySingleValue {};
-export function CreateIfcPropertySingleValue(Name: IfcIdentifier,Description: IfcText,NominalValue: IfcValue,Unit: IfcUnit): IfcPropertySingleValue {
-	return {};
+export function CreateIfcPropertySingleValue(Name: IfcIdentifier , Description: IfcText | null, NominalValue: IfcValue | null, Unit: IfcUnit | null): Handle<IfcPropertySingleValue> {
+	return { expressID: 0 };
 }
 export class IfcPropertyTableValue {};
-export function CreateIfcPropertyTableValue(Name: IfcIdentifier,Description: IfcText,DefiningValues: IfcValue,DefinedValues: IfcValue,Expression: IfcText,DefiningUnit: IfcUnit,DefinedUnit: IfcUnit,CurveInterpolation: IfcCurveInterpolationEnum): IfcPropertyTableValue {
-	return {};
+export function CreateIfcPropertyTableValue(Name: IfcIdentifier , Description: IfcText | null, DefiningValues: IfcValue | null, DefinedValues: IfcValue | null, Expression: IfcText | null, DefiningUnit: IfcUnit | null, DefinedUnit: IfcUnit | null, CurveInterpolation: IfcCurveInterpolationEnum | null): Handle<IfcPropertyTableValue> {
+	return { expressID: 0 };
 }
 export class IfcPropertyTemplate {};
-export function CreateIfcPropertyTemplate(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcPropertyTemplate {
-	return {};
+export function CreateIfcPropertyTemplate(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcPropertyTemplate> {
+	return { expressID: 0 };
 }
 export class IfcPropertyTemplateDefinition {};
-export function CreateIfcPropertyTemplateDefinition(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcPropertyTemplateDefinition {
-	return {};
+export function CreateIfcPropertyTemplateDefinition(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcPropertyTemplateDefinition> {
+	return { expressID: 0 };
 }
 export class IfcProtectiveDevice {};
-export function CreateIfcProtectiveDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcProtectiveDeviceTypeEnum): IfcProtectiveDevice {
-	return {};
+export function CreateIfcProtectiveDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcProtectiveDeviceTypeEnum | null): Handle<IfcProtectiveDevice> {
+	return { expressID: 0 };
 }
 export class IfcProtectiveDeviceTrippingUnit {};
-export function CreateIfcProtectiveDeviceTrippingUnit(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcProtectiveDeviceTrippingUnitTypeEnum): IfcProtectiveDeviceTrippingUnit {
-	return {};
+export function CreateIfcProtectiveDeviceTrippingUnit(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcProtectiveDeviceTrippingUnitTypeEnum | null): Handle<IfcProtectiveDeviceTrippingUnit> {
+	return { expressID: 0 };
 }
 export class IfcProtectiveDeviceTrippingUnitType {};
-export function CreateIfcProtectiveDeviceTrippingUnitType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcProtectiveDeviceTrippingUnitTypeEnum): IfcProtectiveDeviceTrippingUnitType {
-	return {};
+export function CreateIfcProtectiveDeviceTrippingUnitType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcProtectiveDeviceTrippingUnitTypeEnum ): Handle<IfcProtectiveDeviceTrippingUnitType> {
+	return { expressID: 0 };
 }
 export class IfcProtectiveDeviceType {};
-export function CreateIfcProtectiveDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcProtectiveDeviceTypeEnum): IfcProtectiveDeviceType {
-	return {};
+export function CreateIfcProtectiveDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcProtectiveDeviceTypeEnum ): Handle<IfcProtectiveDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcProxy {};
-export function CreateIfcProxy(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,ProxyType: IfcObjectTypeEnum,Tag: IfcLabel): IfcProxy {
-	return {};
+export function CreateIfcProxy(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, ProxyType: IfcObjectTypeEnum , Tag: IfcLabel | null): Handle<IfcProxy> {
+	return { expressID: 0 };
 }
 export class IfcPump {};
-export function CreateIfcPump(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcPumpTypeEnum): IfcPump {
-	return {};
+export function CreateIfcPump(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcPumpTypeEnum | null): Handle<IfcPump> {
+	return { expressID: 0 };
 }
 export class IfcPumpType {};
-export function CreateIfcPumpType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcPumpTypeEnum): IfcPumpType {
-	return {};
+export function CreateIfcPumpType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcPumpTypeEnum ): Handle<IfcPumpType> {
+	return { expressID: 0 };
 }
 export class IfcQuantityArea {};
-export function CreateIfcQuantityArea(Name: IfcLabel,Description: IfcText,Unit: IfcNamedUnit,AreaValue: IfcAreaMeasure,Formula: IfcLabel): IfcQuantityArea {
-	return {};
+export function CreateIfcQuantityArea(Name: IfcLabel , Description: IfcText | null, Unit: Handle<IfcNamedUnit> | null, AreaValue: IfcAreaMeasure , Formula: IfcLabel | null): Handle<IfcQuantityArea> {
+	return { expressID: 0 };
 }
 export class IfcQuantityCount {};
-export function CreateIfcQuantityCount(Name: IfcLabel,Description: IfcText,Unit: IfcNamedUnit,CountValue: IfcCountMeasure,Formula: IfcLabel): IfcQuantityCount {
-	return {};
+export function CreateIfcQuantityCount(Name: IfcLabel , Description: IfcText | null, Unit: Handle<IfcNamedUnit> | null, CountValue: IfcCountMeasure , Formula: IfcLabel | null): Handle<IfcQuantityCount> {
+	return { expressID: 0 };
 }
 export class IfcQuantityLength {};
-export function CreateIfcQuantityLength(Name: IfcLabel,Description: IfcText,Unit: IfcNamedUnit,LengthValue: IfcLengthMeasure,Formula: IfcLabel): IfcQuantityLength {
-	return {};
+export function CreateIfcQuantityLength(Name: IfcLabel , Description: IfcText | null, Unit: Handle<IfcNamedUnit> | null, LengthValue: IfcLengthMeasure , Formula: IfcLabel | null): Handle<IfcQuantityLength> {
+	return { expressID: 0 };
 }
 export class IfcQuantitySet {};
-export function CreateIfcQuantitySet(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcQuantitySet {
-	return {};
+export function CreateIfcQuantitySet(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcQuantitySet> {
+	return { expressID: 0 };
 }
 export class IfcQuantityTime {};
-export function CreateIfcQuantityTime(Name: IfcLabel,Description: IfcText,Unit: IfcNamedUnit,TimeValue: IfcTimeMeasure,Formula: IfcLabel): IfcQuantityTime {
-	return {};
+export function CreateIfcQuantityTime(Name: IfcLabel , Description: IfcText | null, Unit: Handle<IfcNamedUnit> | null, TimeValue: IfcTimeMeasure , Formula: IfcLabel | null): Handle<IfcQuantityTime> {
+	return { expressID: 0 };
 }
 export class IfcQuantityVolume {};
-export function CreateIfcQuantityVolume(Name: IfcLabel,Description: IfcText,Unit: IfcNamedUnit,VolumeValue: IfcVolumeMeasure,Formula: IfcLabel): IfcQuantityVolume {
-	return {};
+export function CreateIfcQuantityVolume(Name: IfcLabel , Description: IfcText | null, Unit: Handle<IfcNamedUnit> | null, VolumeValue: IfcVolumeMeasure , Formula: IfcLabel | null): Handle<IfcQuantityVolume> {
+	return { expressID: 0 };
 }
 export class IfcQuantityWeight {};
-export function CreateIfcQuantityWeight(Name: IfcLabel,Description: IfcText,Unit: IfcNamedUnit,WeightValue: IfcMassMeasure,Formula: IfcLabel): IfcQuantityWeight {
-	return {};
+export function CreateIfcQuantityWeight(Name: IfcLabel , Description: IfcText | null, Unit: Handle<IfcNamedUnit> | null, WeightValue: IfcMassMeasure , Formula: IfcLabel | null): Handle<IfcQuantityWeight> {
+	return { expressID: 0 };
 }
 export class IfcRailing {};
-export function CreateIfcRailing(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcRailingTypeEnum): IfcRailing {
-	return {};
+export function CreateIfcRailing(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcRailingTypeEnum | null): Handle<IfcRailing> {
+	return { expressID: 0 };
 }
 export class IfcRailingType {};
-export function CreateIfcRailingType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcRailingTypeEnum): IfcRailingType {
-	return {};
+export function CreateIfcRailingType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcRailingTypeEnum ): Handle<IfcRailingType> {
+	return { expressID: 0 };
 }
 export class IfcRamp {};
-export function CreateIfcRamp(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcRampTypeEnum): IfcRamp {
-	return {};
+export function CreateIfcRamp(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcRampTypeEnum | null): Handle<IfcRamp> {
+	return { expressID: 0 };
 }
 export class IfcRampFlight {};
-export function CreateIfcRampFlight(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcRampFlightTypeEnum): IfcRampFlight {
-	return {};
+export function CreateIfcRampFlight(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcRampFlightTypeEnum | null): Handle<IfcRampFlight> {
+	return { expressID: 0 };
 }
 export class IfcRampFlightType {};
-export function CreateIfcRampFlightType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcRampFlightTypeEnum): IfcRampFlightType {
-	return {};
+export function CreateIfcRampFlightType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcRampFlightTypeEnum ): Handle<IfcRampFlightType> {
+	return { expressID: 0 };
 }
 export class IfcRampType {};
-export function CreateIfcRampType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcRampTypeEnum): IfcRampType {
-	return {};
+export function CreateIfcRampType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcRampTypeEnum ): Handle<IfcRampType> {
+	return { expressID: 0 };
 }
 export class IfcRationalBSplineCurveWithKnots {};
-export function CreateIfcRationalBSplineCurveWithKnots(Degree: IfcInteger,ControlPointsList: IfcCartesianPoint,CurveForm: IfcBSplineCurveForm,ClosedCurve: IfcLogical,SelfIntersect: IfcLogical,KnotMultiplicities: IfcInteger,Knots: IfcParameterValue,KnotSpec: IfcKnotType,WeightsData: IfcReal): IfcRationalBSplineCurveWithKnots {
-	return {};
+export function CreateIfcRationalBSplineCurveWithKnots(Degree: IfcInteger , ControlPointsList: Handle<IfcCartesianPoint> , CurveForm: IfcBSplineCurveForm , ClosedCurve: IfcLogical , SelfIntersect: IfcLogical , KnotMultiplicities: IfcInteger , Knots: IfcParameterValue , KnotSpec: IfcKnotType , WeightsData: IfcReal ): Handle<IfcRationalBSplineCurveWithKnots> {
+	return { expressID: 0 };
 }
 export class IfcRationalBSplineSurfaceWithKnots {};
-export function CreateIfcRationalBSplineSurfaceWithKnots(UDegree: IfcInteger,VDegree: IfcInteger,ControlPointsList: IfcCartesianPoint,SurfaceForm: IfcBSplineSurfaceForm,UClosed: IfcLogical,VClosed: IfcLogical,SelfIntersect: IfcLogical,UMultiplicities: IfcInteger,VMultiplicities: IfcInteger,UKnots: IfcParameterValue,VKnots: IfcParameterValue,KnotSpec: IfcKnotType,WeightsData: IfcReal): IfcRationalBSplineSurfaceWithKnots {
-	return {};
+export function CreateIfcRationalBSplineSurfaceWithKnots(UDegree: IfcInteger , VDegree: IfcInteger , ControlPointsList: Handle<IfcCartesianPoint> , SurfaceForm: IfcBSplineSurfaceForm , UClosed: IfcLogical , VClosed: IfcLogical , SelfIntersect: IfcLogical , UMultiplicities: IfcInteger , VMultiplicities: IfcInteger , UKnots: IfcParameterValue , VKnots: IfcParameterValue , KnotSpec: IfcKnotType , WeightsData: IfcReal ): Handle<IfcRationalBSplineSurfaceWithKnots> {
+	return { expressID: 0 };
 }
 export class IfcRectangleHollowProfileDef {};
-export function CreateIfcRectangleHollowProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,XDim: IfcPositiveLengthMeasure,YDim: IfcPositiveLengthMeasure,WallThickness: IfcPositiveLengthMeasure,InnerFilletRadius: IfcNonNegativeLengthMeasure,OuterFilletRadius: IfcNonNegativeLengthMeasure): IfcRectangleHollowProfileDef {
-	return {};
+export function CreateIfcRectangleHollowProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, XDim: IfcPositiveLengthMeasure , YDim: IfcPositiveLengthMeasure , WallThickness: IfcPositiveLengthMeasure , InnerFilletRadius: IfcNonNegativeLengthMeasure | null, OuterFilletRadius: IfcNonNegativeLengthMeasure | null): Handle<IfcRectangleHollowProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcRectangleProfileDef {};
-export function CreateIfcRectangleProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,XDim: IfcPositiveLengthMeasure,YDim: IfcPositiveLengthMeasure): IfcRectangleProfileDef {
-	return {};
+export function CreateIfcRectangleProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, XDim: IfcPositiveLengthMeasure , YDim: IfcPositiveLengthMeasure ): Handle<IfcRectangleProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcRectangularPyramid {};
-export function CreateIfcRectangularPyramid(Position: IfcAxis2Placement3D,XLength: IfcPositiveLengthMeasure,YLength: IfcPositiveLengthMeasure,Height: IfcPositiveLengthMeasure): IfcRectangularPyramid {
-	return {};
+export function CreateIfcRectangularPyramid(Position: Handle<IfcAxis2Placement3D> , XLength: IfcPositiveLengthMeasure , YLength: IfcPositiveLengthMeasure , Height: IfcPositiveLengthMeasure ): Handle<IfcRectangularPyramid> {
+	return { expressID: 0 };
 }
 export class IfcRectangularTrimmedSurface {};
-export function CreateIfcRectangularTrimmedSurface(BasisSurface: IfcSurface,U1: IfcParameterValue,V1: IfcParameterValue,U2: IfcParameterValue,V2: IfcParameterValue,Usense: IfcBoolean,Vsense: IfcBoolean): IfcRectangularTrimmedSurface {
-	return {};
+export function CreateIfcRectangularTrimmedSurface(BasisSurface: Handle<IfcSurface> , U1: IfcParameterValue , V1: IfcParameterValue , U2: IfcParameterValue , V2: IfcParameterValue , Usense: IfcBoolean , Vsense: IfcBoolean ): Handle<IfcRectangularTrimmedSurface> {
+	return { expressID: 0 };
 }
 export class IfcRecurrencePattern {};
-export function CreateIfcRecurrencePattern(RecurrenceType: IfcRecurrenceTypeEnum,DayComponent: IfcDayInMonthNumber,WeekdayComponent: IfcDayInWeekNumber,MonthComponent: IfcMonthInYearNumber,Position: IfcInteger,Interval: IfcInteger,Occurrences: IfcInteger,TimePeriods: IfcTimePeriod): IfcRecurrencePattern {
-	return {};
+export function CreateIfcRecurrencePattern(RecurrenceType: IfcRecurrenceTypeEnum , DayComponent: IfcDayInMonthNumber[] | null, WeekdayComponent: IfcDayInWeekNumber[] | null, MonthComponent: IfcMonthInYearNumber[] | null, Position: IfcInteger | null, Interval: IfcInteger | null, Occurrences: IfcInteger | null, TimePeriods: Handle<IfcTimePeriod> | null): Handle<IfcRecurrencePattern> {
+	return { expressID: 0 };
 }
 export class IfcReference {};
-export function CreateIfcReference(TypeIdentifier: IfcIdentifier,AttributeIdentifier: IfcIdentifier,InstanceName: IfcLabel,ListPositions: IfcInteger,InnerReference: IfcReference): IfcReference {
-	return {};
+export function CreateIfcReference(TypeIdentifier: IfcIdentifier | null, AttributeIdentifier: IfcIdentifier | null, InstanceName: IfcLabel | null, ListPositions: IfcInteger | null, InnerReference: Handle<IfcReference> | null): Handle<IfcReference> {
+	return { expressID: 0 };
 }
 export class IfcReferent {};
-export function CreateIfcReferent(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,PredefinedType: IfcReferentTypeEnum,RestartDistance: IfcLengthMeasure): IfcReferent {
-	return {};
+export function CreateIfcReferent(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, PredefinedType: IfcReferentTypeEnum | null, RestartDistance: IfcLengthMeasure | null): Handle<IfcReferent> {
+	return { expressID: 0 };
 }
 export class IfcRegularTimeSeries {};
-export function CreateIfcRegularTimeSeries(Name: IfcLabel,Description: IfcText,StartTime: IfcDateTime,EndTime: IfcDateTime,TimeSeriesDataType: IfcTimeSeriesDataTypeEnum,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,Unit: IfcUnit,TimeStep: IfcTimeMeasure,Values: IfcTimeSeriesValue): IfcRegularTimeSeries {
-	return {};
+export function CreateIfcRegularTimeSeries(Name: IfcLabel , Description: IfcText | null, StartTime: IfcDateTime , EndTime: IfcDateTime , TimeSeriesDataType: IfcTimeSeriesDataTypeEnum , DataOrigin: IfcDataOriginEnum , UserDefinedDataOrigin: IfcLabel | null, Unit: IfcUnit | null, TimeStep: IfcTimeMeasure , Values: Handle<IfcTimeSeriesValue> ): Handle<IfcRegularTimeSeries> {
+	return { expressID: 0 };
 }
 export class IfcReinforcementBarProperties {};
-export function CreateIfcReinforcementBarProperties(TotalCrossSectionArea: IfcAreaMeasure,SteelGrade: IfcLabel,BarSurface: IfcReinforcingBarSurfaceEnum,EffectiveDepth: IfcLengthMeasure,NominalBarDiameter: IfcPositiveLengthMeasure,BarCount: IfcCountMeasure): IfcReinforcementBarProperties {
-	return {};
+export function CreateIfcReinforcementBarProperties(TotalCrossSectionArea: IfcAreaMeasure , SteelGrade: IfcLabel , BarSurface: IfcReinforcingBarSurfaceEnum | null, EffectiveDepth: IfcLengthMeasure | null, NominalBarDiameter: IfcPositiveLengthMeasure | null, BarCount: IfcCountMeasure | null): Handle<IfcReinforcementBarProperties> {
+	return { expressID: 0 };
 }
 export class IfcReinforcementDefinitionProperties {};
-export function CreateIfcReinforcementDefinitionProperties(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,DefinitionType: IfcLabel,ReinforcementSectionDefinitions: IfcSectionReinforcementProperties): IfcReinforcementDefinitionProperties {
-	return {};
+export function CreateIfcReinforcementDefinitionProperties(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, DefinitionType: IfcLabel | null, ReinforcementSectionDefinitions: Handle<IfcSectionReinforcementProperties> ): Handle<IfcReinforcementDefinitionProperties> {
+	return { expressID: 0 };
 }
 export class IfcReinforcingBar {};
-export function CreateIfcReinforcingBar(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,SteelGrade: IfcLabel,NominalDiameter: IfcPositiveLengthMeasure,CrossSectionArea: IfcAreaMeasure,BarLength: IfcPositiveLengthMeasure,PredefinedType: IfcReinforcingBarTypeEnum,BarSurface: IfcReinforcingBarSurfaceEnum): IfcReinforcingBar {
-	return {};
+export function CreateIfcReinforcingBar(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, SteelGrade: IfcLabel | null, NominalDiameter: IfcPositiveLengthMeasure | null, CrossSectionArea: IfcAreaMeasure | null, BarLength: IfcPositiveLengthMeasure | null, PredefinedType: IfcReinforcingBarTypeEnum | null, BarSurface: IfcReinforcingBarSurfaceEnum | null): Handle<IfcReinforcingBar> {
+	return { expressID: 0 };
 }
 export class IfcReinforcingBarType {};
-export function CreateIfcReinforcingBarType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcReinforcingBarTypeEnum,NominalDiameter: IfcPositiveLengthMeasure,CrossSectionArea: IfcAreaMeasure,BarLength: IfcPositiveLengthMeasure,BarSurface: IfcReinforcingBarSurfaceEnum,BendingShapeCode: IfcLabel,BendingParameters: IfcBendingParameterSelect): IfcReinforcingBarType {
-	return {};
+export function CreateIfcReinforcingBarType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcReinforcingBarTypeEnum , NominalDiameter: IfcPositiveLengthMeasure | null, CrossSectionArea: IfcAreaMeasure | null, BarLength: IfcPositiveLengthMeasure | null, BarSurface: IfcReinforcingBarSurfaceEnum | null, BendingShapeCode: IfcLabel | null, BendingParameters: IfcBendingParameterSelect | null): Handle<IfcReinforcingBarType> {
+	return { expressID: 0 };
 }
 export class IfcReinforcingElement {};
-export function CreateIfcReinforcingElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,SteelGrade: IfcLabel): IfcReinforcingElement {
-	return {};
+export function CreateIfcReinforcingElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, SteelGrade: IfcLabel | null): Handle<IfcReinforcingElement> {
+	return { expressID: 0 };
 }
 export class IfcReinforcingElementType {};
-export function CreateIfcReinforcingElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcReinforcingElementType {
-	return {};
+export function CreateIfcReinforcingElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcReinforcingElementType> {
+	return { expressID: 0 };
 }
 export class IfcReinforcingMesh {};
-export function CreateIfcReinforcingMesh(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,SteelGrade: IfcLabel,MeshLength: IfcPositiveLengthMeasure,MeshWidth: IfcPositiveLengthMeasure,LongitudinalBarNominalDiameter: IfcPositiveLengthMeasure,TransverseBarNominalDiameter: IfcPositiveLengthMeasure,LongitudinalBarCrossSectionArea: IfcAreaMeasure,TransverseBarCrossSectionArea: IfcAreaMeasure,LongitudinalBarSpacing: IfcPositiveLengthMeasure,TransverseBarSpacing: IfcPositiveLengthMeasure,PredefinedType: IfcReinforcingMeshTypeEnum): IfcReinforcingMesh {
-	return {};
+export function CreateIfcReinforcingMesh(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, SteelGrade: IfcLabel | null, MeshLength: IfcPositiveLengthMeasure | null, MeshWidth: IfcPositiveLengthMeasure | null, LongitudinalBarNominalDiameter: IfcPositiveLengthMeasure | null, TransverseBarNominalDiameter: IfcPositiveLengthMeasure | null, LongitudinalBarCrossSectionArea: IfcAreaMeasure | null, TransverseBarCrossSectionArea: IfcAreaMeasure | null, LongitudinalBarSpacing: IfcPositiveLengthMeasure | null, TransverseBarSpacing: IfcPositiveLengthMeasure | null, PredefinedType: IfcReinforcingMeshTypeEnum | null): Handle<IfcReinforcingMesh> {
+	return { expressID: 0 };
 }
 export class IfcReinforcingMeshType {};
-export function CreateIfcReinforcingMeshType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcReinforcingMeshTypeEnum,MeshLength: IfcPositiveLengthMeasure,MeshWidth: IfcPositiveLengthMeasure,LongitudinalBarNominalDiameter: IfcPositiveLengthMeasure,TransverseBarNominalDiameter: IfcPositiveLengthMeasure,LongitudinalBarCrossSectionArea: IfcAreaMeasure,TransverseBarCrossSectionArea: IfcAreaMeasure,LongitudinalBarSpacing: IfcPositiveLengthMeasure,TransverseBarSpacing: IfcPositiveLengthMeasure,BendingShapeCode: IfcLabel,BendingParameters: IfcBendingParameterSelect): IfcReinforcingMeshType {
-	return {};
+export function CreateIfcReinforcingMeshType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcReinforcingMeshTypeEnum , MeshLength: IfcPositiveLengthMeasure | null, MeshWidth: IfcPositiveLengthMeasure | null, LongitudinalBarNominalDiameter: IfcPositiveLengthMeasure | null, TransverseBarNominalDiameter: IfcPositiveLengthMeasure | null, LongitudinalBarCrossSectionArea: IfcAreaMeasure | null, TransverseBarCrossSectionArea: IfcAreaMeasure | null, LongitudinalBarSpacing: IfcPositiveLengthMeasure | null, TransverseBarSpacing: IfcPositiveLengthMeasure | null, BendingShapeCode: IfcLabel | null, BendingParameters: IfcBendingParameterSelect | null): Handle<IfcReinforcingMeshType> {
+	return { expressID: 0 };
 }
 export class IfcRelAggregates {};
-export function CreateIfcRelAggregates(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingObject: IfcObjectDefinition,RelatedObjects: IfcObjectDefinition): IfcRelAggregates {
-	return {};
+export function CreateIfcRelAggregates(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingObject: Handle<IfcObjectDefinition> , RelatedObjects: Handle<IfcObjectDefinition>[] ): Handle<IfcRelAggregates> {
+	return { expressID: 0 };
 }
 export class IfcRelAssigns {};
-export function CreateIfcRelAssigns(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatedObjectsType: IfcObjectTypeEnum): IfcRelAssigns {
-	return {};
+export function CreateIfcRelAssigns(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatedObjectsType: IfcObjectTypeEnum | null): Handle<IfcRelAssigns> {
+	return { expressID: 0 };
 }
 export class IfcRelAssignsToActor {};
-export function CreateIfcRelAssignsToActor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatedObjectsType: IfcObjectTypeEnum,RelatingActor: IfcActor,ActingRole: IfcActorRole): IfcRelAssignsToActor {
-	return {};
+export function CreateIfcRelAssignsToActor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatedObjectsType: IfcObjectTypeEnum | null, RelatingActor: Handle<IfcActor> , ActingRole: Handle<IfcActorRole> | null): Handle<IfcRelAssignsToActor> {
+	return { expressID: 0 };
 }
 export class IfcRelAssignsToControl {};
-export function CreateIfcRelAssignsToControl(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatedObjectsType: IfcObjectTypeEnum,RelatingControl: IfcControl): IfcRelAssignsToControl {
-	return {};
+export function CreateIfcRelAssignsToControl(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatedObjectsType: IfcObjectTypeEnum | null, RelatingControl: Handle<IfcControl> ): Handle<IfcRelAssignsToControl> {
+	return { expressID: 0 };
 }
 export class IfcRelAssignsToGroup {};
-export function CreateIfcRelAssignsToGroup(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatedObjectsType: IfcObjectTypeEnum,RelatingGroup: IfcGroup): IfcRelAssignsToGroup {
-	return {};
+export function CreateIfcRelAssignsToGroup(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatedObjectsType: IfcObjectTypeEnum | null, RelatingGroup: Handle<IfcGroup> ): Handle<IfcRelAssignsToGroup> {
+	return { expressID: 0 };
 }
 export class IfcRelAssignsToGroupByFactor {};
-export function CreateIfcRelAssignsToGroupByFactor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatedObjectsType: IfcObjectTypeEnum,RelatingGroup: IfcGroup,Factor: IfcRatioMeasure): IfcRelAssignsToGroupByFactor {
-	return {};
+export function CreateIfcRelAssignsToGroupByFactor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatedObjectsType: IfcObjectTypeEnum | null, RelatingGroup: Handle<IfcGroup> , Factor: IfcRatioMeasure ): Handle<IfcRelAssignsToGroupByFactor> {
+	return { expressID: 0 };
 }
 export class IfcRelAssignsToProcess {};
-export function CreateIfcRelAssignsToProcess(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatedObjectsType: IfcObjectTypeEnum,RelatingProcess: IfcProcessSelect,QuantityInProcess: IfcMeasureWithUnit): IfcRelAssignsToProcess {
-	return {};
+export function CreateIfcRelAssignsToProcess(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatedObjectsType: IfcObjectTypeEnum | null, RelatingProcess: IfcProcessSelect , QuantityInProcess: Handle<IfcMeasureWithUnit> | null): Handle<IfcRelAssignsToProcess> {
+	return { expressID: 0 };
 }
 export class IfcRelAssignsToProduct {};
-export function CreateIfcRelAssignsToProduct(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatedObjectsType: IfcObjectTypeEnum,RelatingProduct: IfcProductSelect): IfcRelAssignsToProduct {
-	return {};
+export function CreateIfcRelAssignsToProduct(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatedObjectsType: IfcObjectTypeEnum | null, RelatingProduct: IfcProductSelect ): Handle<IfcRelAssignsToProduct> {
+	return { expressID: 0 };
 }
 export class IfcRelAssignsToResource {};
-export function CreateIfcRelAssignsToResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatedObjectsType: IfcObjectTypeEnum,RelatingResource: IfcResourceSelect): IfcRelAssignsToResource {
-	return {};
+export function CreateIfcRelAssignsToResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatedObjectsType: IfcObjectTypeEnum | null, RelatingResource: IfcResourceSelect ): Handle<IfcRelAssignsToResource> {
+	return { expressID: 0 };
 }
 export class IfcRelAssociates {};
-export function CreateIfcRelAssociates(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcDefinitionSelect): IfcRelAssociates {
-	return {};
+export function CreateIfcRelAssociates(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: IfcDefinitionSelect[] ): Handle<IfcRelAssociates> {
+	return { expressID: 0 };
 }
 export class IfcRelAssociatesApproval {};
-export function CreateIfcRelAssociatesApproval(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcDefinitionSelect,RelatingApproval: IfcApproval): IfcRelAssociatesApproval {
-	return {};
+export function CreateIfcRelAssociatesApproval(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: IfcDefinitionSelect[] , RelatingApproval: Handle<IfcApproval> ): Handle<IfcRelAssociatesApproval> {
+	return { expressID: 0 };
 }
 export class IfcRelAssociatesClassification {};
-export function CreateIfcRelAssociatesClassification(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcDefinitionSelect,RelatingClassification: IfcClassificationSelect): IfcRelAssociatesClassification {
-	return {};
+export function CreateIfcRelAssociatesClassification(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: IfcDefinitionSelect[] , RelatingClassification: IfcClassificationSelect ): Handle<IfcRelAssociatesClassification> {
+	return { expressID: 0 };
 }
 export class IfcRelAssociatesConstraint {};
-export function CreateIfcRelAssociatesConstraint(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcDefinitionSelect,Intent: IfcLabel,RelatingConstraint: IfcConstraint): IfcRelAssociatesConstraint {
-	return {};
+export function CreateIfcRelAssociatesConstraint(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: IfcDefinitionSelect[] , Intent: IfcLabel | null, RelatingConstraint: Handle<IfcConstraint> ): Handle<IfcRelAssociatesConstraint> {
+	return { expressID: 0 };
 }
 export class IfcRelAssociatesDocument {};
-export function CreateIfcRelAssociatesDocument(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcDefinitionSelect,RelatingDocument: IfcDocumentSelect): IfcRelAssociatesDocument {
-	return {};
+export function CreateIfcRelAssociatesDocument(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: IfcDefinitionSelect[] , RelatingDocument: IfcDocumentSelect ): Handle<IfcRelAssociatesDocument> {
+	return { expressID: 0 };
 }
 export class IfcRelAssociatesLibrary {};
-export function CreateIfcRelAssociatesLibrary(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcDefinitionSelect,RelatingLibrary: IfcLibrarySelect): IfcRelAssociatesLibrary {
-	return {};
+export function CreateIfcRelAssociatesLibrary(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: IfcDefinitionSelect[] , RelatingLibrary: IfcLibrarySelect ): Handle<IfcRelAssociatesLibrary> {
+	return { expressID: 0 };
 }
 export class IfcRelAssociatesMaterial {};
-export function CreateIfcRelAssociatesMaterial(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcDefinitionSelect,RelatingMaterial: IfcMaterialSelect): IfcRelAssociatesMaterial {
-	return {};
+export function CreateIfcRelAssociatesMaterial(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: IfcDefinitionSelect[] , RelatingMaterial: IfcMaterialSelect ): Handle<IfcRelAssociatesMaterial> {
+	return { expressID: 0 };
 }
 export class IfcRelConnects {};
-export function CreateIfcRelConnects(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcRelConnects {
-	return {};
+export function CreateIfcRelConnects(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcRelConnects> {
+	return { expressID: 0 };
 }
 export class IfcRelConnectsElements {};
-export function CreateIfcRelConnectsElements(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ConnectionGeometry: IfcConnectionGeometry,RelatingElement: IfcElement,RelatedElement: IfcElement): IfcRelConnectsElements {
-	return {};
+export function CreateIfcRelConnectsElements(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ConnectionGeometry: Handle<IfcConnectionGeometry> | null, RelatingElement: Handle<IfcElement> , RelatedElement: Handle<IfcElement> ): Handle<IfcRelConnectsElements> {
+	return { expressID: 0 };
 }
 export class IfcRelConnectsPathElements {};
-export function CreateIfcRelConnectsPathElements(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ConnectionGeometry: IfcConnectionGeometry,RelatingElement: IfcElement,RelatedElement: IfcElement,RelatingPriorities: IfcInteger,RelatedPriorities: IfcInteger,RelatedConnectionType: IfcConnectionTypeEnum,RelatingConnectionType: IfcConnectionTypeEnum): IfcRelConnectsPathElements {
-	return {};
+export function CreateIfcRelConnectsPathElements(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ConnectionGeometry: Handle<IfcConnectionGeometry> | null, RelatingElement: Handle<IfcElement> , RelatedElement: Handle<IfcElement> , RelatingPriorities: IfcInteger , RelatedPriorities: IfcInteger , RelatedConnectionType: IfcConnectionTypeEnum , RelatingConnectionType: IfcConnectionTypeEnum ): Handle<IfcRelConnectsPathElements> {
+	return { expressID: 0 };
 }
 export class IfcRelConnectsPortToElement {};
-export function CreateIfcRelConnectsPortToElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingPort: IfcPort,RelatedElement: IfcDistributionElement): IfcRelConnectsPortToElement {
-	return {};
+export function CreateIfcRelConnectsPortToElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingPort: Handle<IfcPort> , RelatedElement: Handle<IfcDistributionElement> ): Handle<IfcRelConnectsPortToElement> {
+	return { expressID: 0 };
 }
 export class IfcRelConnectsPorts {};
-export function CreateIfcRelConnectsPorts(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingPort: IfcPort,RelatedPort: IfcPort,RealizingElement: IfcElement): IfcRelConnectsPorts {
-	return {};
+export function CreateIfcRelConnectsPorts(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingPort: Handle<IfcPort> , RelatedPort: Handle<IfcPort> , RealizingElement: Handle<IfcElement> | null): Handle<IfcRelConnectsPorts> {
+	return { expressID: 0 };
 }
 export class IfcRelConnectsStructuralActivity {};
-export function CreateIfcRelConnectsStructuralActivity(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingElement: IfcStructuralActivityAssignmentSelect,RelatedStructuralActivity: IfcStructuralActivity): IfcRelConnectsStructuralActivity {
-	return {};
+export function CreateIfcRelConnectsStructuralActivity(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingElement: IfcStructuralActivityAssignmentSelect , RelatedStructuralActivity: Handle<IfcStructuralActivity> ): Handle<IfcRelConnectsStructuralActivity> {
+	return { expressID: 0 };
 }
 export class IfcRelConnectsStructuralMember {};
-export function CreateIfcRelConnectsStructuralMember(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingStructuralMember: IfcStructuralMember,RelatedStructuralConnection: IfcStructuralConnection,AppliedCondition: IfcBoundaryCondition,AdditionalConditions: IfcStructuralConnectionCondition,SupportedLength: IfcLengthMeasure,ConditionCoordinateSystem: IfcAxis2Placement3D): IfcRelConnectsStructuralMember {
-	return {};
+export function CreateIfcRelConnectsStructuralMember(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingStructuralMember: Handle<IfcStructuralMember> , RelatedStructuralConnection: Handle<IfcStructuralConnection> , AppliedCondition: Handle<IfcBoundaryCondition> | null, AdditionalConditions: Handle<IfcStructuralConnectionCondition> | null, SupportedLength: IfcLengthMeasure | null, ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null): Handle<IfcRelConnectsStructuralMember> {
+	return { expressID: 0 };
 }
 export class IfcRelConnectsWithEccentricity {};
-export function CreateIfcRelConnectsWithEccentricity(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingStructuralMember: IfcStructuralMember,RelatedStructuralConnection: IfcStructuralConnection,AppliedCondition: IfcBoundaryCondition,AdditionalConditions: IfcStructuralConnectionCondition,SupportedLength: IfcLengthMeasure,ConditionCoordinateSystem: IfcAxis2Placement3D,ConnectionConstraint: IfcConnectionGeometry): IfcRelConnectsWithEccentricity {
-	return {};
+export function CreateIfcRelConnectsWithEccentricity(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingStructuralMember: Handle<IfcStructuralMember> , RelatedStructuralConnection: Handle<IfcStructuralConnection> , AppliedCondition: Handle<IfcBoundaryCondition> | null, AdditionalConditions: Handle<IfcStructuralConnectionCondition> | null, SupportedLength: IfcLengthMeasure | null, ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null, ConnectionConstraint: Handle<IfcConnectionGeometry> ): Handle<IfcRelConnectsWithEccentricity> {
+	return { expressID: 0 };
 }
 export class IfcRelConnectsWithRealizingElements {};
-export function CreateIfcRelConnectsWithRealizingElements(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ConnectionGeometry: IfcConnectionGeometry,RelatingElement: IfcElement,RelatedElement: IfcElement,RealizingElements: IfcElement,ConnectionType: IfcLabel): IfcRelConnectsWithRealizingElements {
-	return {};
+export function CreateIfcRelConnectsWithRealizingElements(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ConnectionGeometry: Handle<IfcConnectionGeometry> | null, RelatingElement: Handle<IfcElement> , RelatedElement: Handle<IfcElement> , RealizingElements: Handle<IfcElement>[] , ConnectionType: IfcLabel | null): Handle<IfcRelConnectsWithRealizingElements> {
+	return { expressID: 0 };
 }
 export class IfcRelContainedInSpatialStructure {};
-export function CreateIfcRelContainedInSpatialStructure(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedElements: IfcProduct,RelatingStructure: IfcSpatialElement): IfcRelContainedInSpatialStructure {
-	return {};
+export function CreateIfcRelContainedInSpatialStructure(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedElements: Handle<IfcProduct>[] , RelatingStructure: Handle<IfcSpatialElement> ): Handle<IfcRelContainedInSpatialStructure> {
+	return { expressID: 0 };
 }
 export class IfcRelCoversBldgElements {};
-export function CreateIfcRelCoversBldgElements(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingBuildingElement: IfcElement,RelatedCoverings: IfcCovering): IfcRelCoversBldgElements {
-	return {};
+export function CreateIfcRelCoversBldgElements(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingBuildingElement: Handle<IfcElement> , RelatedCoverings: Handle<IfcCovering>[] ): Handle<IfcRelCoversBldgElements> {
+	return { expressID: 0 };
 }
 export class IfcRelCoversSpaces {};
-export function CreateIfcRelCoversSpaces(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingSpace: IfcSpace,RelatedCoverings: IfcCovering): IfcRelCoversSpaces {
-	return {};
+export function CreateIfcRelCoversSpaces(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingSpace: Handle<IfcSpace> , RelatedCoverings: Handle<IfcCovering>[] ): Handle<IfcRelCoversSpaces> {
+	return { expressID: 0 };
 }
 export class IfcRelDeclares {};
-export function CreateIfcRelDeclares(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingContext: IfcContext,RelatedDefinitions: IfcDefinitionSelect): IfcRelDeclares {
-	return {};
+export function CreateIfcRelDeclares(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingContext: Handle<IfcContext> , RelatedDefinitions: IfcDefinitionSelect[] ): Handle<IfcRelDeclares> {
+	return { expressID: 0 };
 }
 export class IfcRelDecomposes {};
-export function CreateIfcRelDecomposes(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcRelDecomposes {
-	return {};
+export function CreateIfcRelDecomposes(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcRelDecomposes> {
+	return { expressID: 0 };
 }
 export class IfcRelDefines {};
-export function CreateIfcRelDefines(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcRelDefines {
-	return {};
+export function CreateIfcRelDefines(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcRelDefines> {
+	return { expressID: 0 };
 }
 export class IfcRelDefinesByObject {};
-export function CreateIfcRelDefinesByObject(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObject,RelatingObject: IfcObject): IfcRelDefinesByObject {
-	return {};
+export function CreateIfcRelDefinesByObject(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObject>[] , RelatingObject: Handle<IfcObject> ): Handle<IfcRelDefinesByObject> {
+	return { expressID: 0 };
 }
 export class IfcRelDefinesByProperties {};
-export function CreateIfcRelDefinesByProperties(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObjectDefinition,RelatingPropertyDefinition: IfcPropertySetDefinitionSelect): IfcRelDefinesByProperties {
-	return {};
+export function CreateIfcRelDefinesByProperties(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObjectDefinition>[] , RelatingPropertyDefinition: IfcPropertySetDefinitionSelect ): Handle<IfcRelDefinesByProperties> {
+	return { expressID: 0 };
 }
 export class IfcRelDefinesByTemplate {};
-export function CreateIfcRelDefinesByTemplate(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedPropertySets: IfcPropertySetDefinition,RelatingTemplate: IfcPropertySetTemplate): IfcRelDefinesByTemplate {
-	return {};
+export function CreateIfcRelDefinesByTemplate(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedPropertySets: Handle<IfcPropertySetDefinition>[] , RelatingTemplate: Handle<IfcPropertySetTemplate> ): Handle<IfcRelDefinesByTemplate> {
+	return { expressID: 0 };
 }
 export class IfcRelDefinesByType {};
-export function CreateIfcRelDefinesByType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedObjects: IfcObject,RelatingType: IfcTypeObject): IfcRelDefinesByType {
-	return {};
+export function CreateIfcRelDefinesByType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedObjects: Handle<IfcObject>[] , RelatingType: Handle<IfcTypeObject> ): Handle<IfcRelDefinesByType> {
+	return { expressID: 0 };
 }
 export class IfcRelFillsElement {};
-export function CreateIfcRelFillsElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingOpeningElement: IfcOpeningElement,RelatedBuildingElement: IfcElement): IfcRelFillsElement {
-	return {};
+export function CreateIfcRelFillsElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingOpeningElement: Handle<IfcOpeningElement> , RelatedBuildingElement: Handle<IfcElement> ): Handle<IfcRelFillsElement> {
+	return { expressID: 0 };
 }
 export class IfcRelFlowControlElements {};
-export function CreateIfcRelFlowControlElements(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedControlElements: IfcDistributionControlElement,RelatingFlowElement: IfcDistributionFlowElement): IfcRelFlowControlElements {
-	return {};
+export function CreateIfcRelFlowControlElements(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedControlElements: Handle<IfcDistributionControlElement>[] , RelatingFlowElement: Handle<IfcDistributionFlowElement> ): Handle<IfcRelFlowControlElements> {
+	return { expressID: 0 };
 }
 export class IfcRelInterferesElements {};
-export function CreateIfcRelInterferesElements(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingElement: IfcElement,RelatedElement: IfcElement,InterferenceGeometry: IfcConnectionGeometry,InterferenceType: IfcIdentifier,ImpliedOrder: LOGICAL): IfcRelInterferesElements {
-	return {};
+export function CreateIfcRelInterferesElements(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingElement: Handle<IfcElement> , RelatedElement: Handle<IfcElement> , InterferenceGeometry: Handle<IfcConnectionGeometry> | null, InterferenceType: IfcIdentifier | null, ImpliedOrder: Handle<boolean> ): Handle<IfcRelInterferesElements> {
+	return { expressID: 0 };
 }
 export class IfcRelNests {};
-export function CreateIfcRelNests(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingObject: IfcObjectDefinition,RelatedObjects: IfcObjectDefinition): IfcRelNests {
-	return {};
+export function CreateIfcRelNests(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingObject: Handle<IfcObjectDefinition> , RelatedObjects: Handle<IfcObjectDefinition> ): Handle<IfcRelNests> {
+	return { expressID: 0 };
 }
 export class IfcRelPositions {};
-export function CreateIfcRelPositions(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingPositioningElement: IfcPositioningElement,RelatedProducts: IfcProduct): IfcRelPositions {
-	return {};
+export function CreateIfcRelPositions(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingPositioningElement: Handle<IfcPositioningElement> , RelatedProducts: Handle<IfcProduct>[] ): Handle<IfcRelPositions> {
+	return { expressID: 0 };
 }
 export class IfcRelProjectsElement {};
-export function CreateIfcRelProjectsElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingElement: IfcElement,RelatedFeatureElement: IfcFeatureElementAddition): IfcRelProjectsElement {
-	return {};
+export function CreateIfcRelProjectsElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingElement: Handle<IfcElement> , RelatedFeatureElement: Handle<IfcFeatureElementAddition> ): Handle<IfcRelProjectsElement> {
+	return { expressID: 0 };
 }
 export class IfcRelReferencedInSpatialStructure {};
-export function CreateIfcRelReferencedInSpatialStructure(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatedElements: IfcProduct,RelatingStructure: IfcSpatialElement): IfcRelReferencedInSpatialStructure {
-	return {};
+export function CreateIfcRelReferencedInSpatialStructure(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatedElements: Handle<IfcProduct>[] , RelatingStructure: Handle<IfcSpatialElement> ): Handle<IfcRelReferencedInSpatialStructure> {
+	return { expressID: 0 };
 }
 export class IfcRelSequence {};
-export function CreateIfcRelSequence(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingProcess: IfcProcess,RelatedProcess: IfcProcess,TimeLag: IfcLagTime,SequenceType: IfcSequenceEnum,UserDefinedSequenceType: IfcLabel): IfcRelSequence {
-	return {};
+export function CreateIfcRelSequence(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingProcess: Handle<IfcProcess> , RelatedProcess: Handle<IfcProcess> , TimeLag: Handle<IfcLagTime> | null, SequenceType: IfcSequenceEnum | null, UserDefinedSequenceType: IfcLabel | null): Handle<IfcRelSequence> {
+	return { expressID: 0 };
 }
 export class IfcRelServicesBuildings {};
-export function CreateIfcRelServicesBuildings(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingSystem: IfcSystem,RelatedBuildings: IfcSpatialElement): IfcRelServicesBuildings {
-	return {};
+export function CreateIfcRelServicesBuildings(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingSystem: Handle<IfcSystem> , RelatedBuildings: Handle<IfcSpatialElement>[] ): Handle<IfcRelServicesBuildings> {
+	return { expressID: 0 };
 }
 export class IfcRelSpaceBoundary {};
-export function CreateIfcRelSpaceBoundary(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingSpace: IfcSpaceBoundarySelect,RelatedBuildingElement: IfcElement,ConnectionGeometry: IfcConnectionGeometry,PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum,InternalOrExternalBoundary: IfcInternalOrExternalEnum): IfcRelSpaceBoundary {
-	return {};
+export function CreateIfcRelSpaceBoundary(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingSpace: IfcSpaceBoundarySelect , RelatedBuildingElement: Handle<IfcElement> , ConnectionGeometry: Handle<IfcConnectionGeometry> | null, PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum , InternalOrExternalBoundary: IfcInternalOrExternalEnum ): Handle<IfcRelSpaceBoundary> {
+	return { expressID: 0 };
 }
 export class IfcRelSpaceBoundary1stLevel {};
-export function CreateIfcRelSpaceBoundary1stLevel(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingSpace: IfcSpaceBoundarySelect,RelatedBuildingElement: IfcElement,ConnectionGeometry: IfcConnectionGeometry,PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum,InternalOrExternalBoundary: IfcInternalOrExternalEnum,ParentBoundary: IfcRelSpaceBoundary1stLevel): IfcRelSpaceBoundary1stLevel {
-	return {};
+export function CreateIfcRelSpaceBoundary1stLevel(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingSpace: IfcSpaceBoundarySelect , RelatedBuildingElement: Handle<IfcElement> , ConnectionGeometry: Handle<IfcConnectionGeometry> | null, PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum , InternalOrExternalBoundary: IfcInternalOrExternalEnum , ParentBoundary: Handle<IfcRelSpaceBoundary1stLevel> | null): Handle<IfcRelSpaceBoundary1stLevel> {
+	return { expressID: 0 };
 }
 export class IfcRelSpaceBoundary2ndLevel {};
-export function CreateIfcRelSpaceBoundary2ndLevel(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingSpace: IfcSpaceBoundarySelect,RelatedBuildingElement: IfcElement,ConnectionGeometry: IfcConnectionGeometry,PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum,InternalOrExternalBoundary: IfcInternalOrExternalEnum,ParentBoundary: IfcRelSpaceBoundary1stLevel,CorrespondingBoundary: IfcRelSpaceBoundary2ndLevel): IfcRelSpaceBoundary2ndLevel {
-	return {};
+export function CreateIfcRelSpaceBoundary2ndLevel(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingSpace: IfcSpaceBoundarySelect , RelatedBuildingElement: Handle<IfcElement> , ConnectionGeometry: Handle<IfcConnectionGeometry> | null, PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum , InternalOrExternalBoundary: IfcInternalOrExternalEnum , ParentBoundary: Handle<IfcRelSpaceBoundary1stLevel> | null, CorrespondingBoundary: Handle<IfcRelSpaceBoundary2ndLevel> | null): Handle<IfcRelSpaceBoundary2ndLevel> {
+	return { expressID: 0 };
 }
 export class IfcRelVoidsElement {};
-export function CreateIfcRelVoidsElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,RelatingBuildingElement: IfcElement,RelatedOpeningElement: IfcFeatureElementSubtraction): IfcRelVoidsElement {
-	return {};
+export function CreateIfcRelVoidsElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, RelatingBuildingElement: Handle<IfcElement> , RelatedOpeningElement: Handle<IfcFeatureElementSubtraction> ): Handle<IfcRelVoidsElement> {
+	return { expressID: 0 };
 }
 export class IfcRelationship {};
-export function CreateIfcRelationship(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcRelationship {
-	return {};
+export function CreateIfcRelationship(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcRelationship> {
+	return { expressID: 0 };
 }
 export class IfcReparametrisedCompositeCurveSegment {};
-export function CreateIfcReparametrisedCompositeCurveSegment(Transition: IfcTransitionCode,SameSense: IfcBoolean,ParentCurve: IfcCurve,ParamLength: IfcParameterValue): IfcReparametrisedCompositeCurveSegment {
-	return {};
+export function CreateIfcReparametrisedCompositeCurveSegment(Transition: IfcTransitionCode , SameSense: IfcBoolean , ParentCurve: Handle<IfcCurve> , ParamLength: IfcParameterValue ): Handle<IfcReparametrisedCompositeCurveSegment> {
+	return { expressID: 0 };
 }
 export class IfcRepresentation {};
-export function CreateIfcRepresentation(ContextOfItems: IfcRepresentationContext,RepresentationIdentifier: IfcLabel,RepresentationType: IfcLabel,Items: IfcRepresentationItem): IfcRepresentation {
-	return {};
+export function CreateIfcRepresentation(ContextOfItems: Handle<IfcRepresentationContext> , RepresentationIdentifier: IfcLabel | null, RepresentationType: IfcLabel | null, Items: Handle<IfcRepresentationItem>[] ): Handle<IfcRepresentation> {
+	return { expressID: 0 };
 }
 export class IfcRepresentationContext {};
-export function CreateIfcRepresentationContext(ContextIdentifier: IfcLabel,ContextType: IfcLabel): IfcRepresentationContext {
-	return {};
+export function CreateIfcRepresentationContext(ContextIdentifier: IfcLabel | null, ContextType: IfcLabel | null): Handle<IfcRepresentationContext> {
+	return { expressID: 0 };
 }
 export class IfcRepresentationItem {};
-export function CreateIfcRepresentationItem(): IfcRepresentationItem {
-	return {};
+export function CreateIfcRepresentationItem(): Handle<IfcRepresentationItem> {
+	return { expressID: 0 };
 }
 export class IfcRepresentationMap {};
-export function CreateIfcRepresentationMap(MappingOrigin: IfcAxis2Placement,MappedRepresentation: IfcRepresentation): IfcRepresentationMap {
-	return {};
+export function CreateIfcRepresentationMap(MappingOrigin: IfcAxis2Placement , MappedRepresentation: Handle<IfcRepresentation> ): Handle<IfcRepresentationMap> {
+	return { expressID: 0 };
 }
 export class IfcResource {};
-export function CreateIfcResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText): IfcResource {
-	return {};
+export function CreateIfcResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null): Handle<IfcResource> {
+	return { expressID: 0 };
 }
 export class IfcResourceApprovalRelationship {};
-export function CreateIfcResourceApprovalRelationship(Name: IfcLabel,Description: IfcText,RelatedResourceObjects: IfcResourceObjectSelect,RelatingApproval: IfcApproval): IfcResourceApprovalRelationship {
-	return {};
+export function CreateIfcResourceApprovalRelationship(Name: IfcLabel | null, Description: IfcText | null, RelatedResourceObjects: IfcResourceObjectSelect[] , RelatingApproval: Handle<IfcApproval> ): Handle<IfcResourceApprovalRelationship> {
+	return { expressID: 0 };
 }
 export class IfcResourceConstraintRelationship {};
-export function CreateIfcResourceConstraintRelationship(Name: IfcLabel,Description: IfcText,RelatingConstraint: IfcConstraint,RelatedResourceObjects: IfcResourceObjectSelect): IfcResourceConstraintRelationship {
-	return {};
+export function CreateIfcResourceConstraintRelationship(Name: IfcLabel | null, Description: IfcText | null, RelatingConstraint: Handle<IfcConstraint> , RelatedResourceObjects: IfcResourceObjectSelect[] ): Handle<IfcResourceConstraintRelationship> {
+	return { expressID: 0 };
 }
 export class IfcResourceLevelRelationship {};
-export function CreateIfcResourceLevelRelationship(Name: IfcLabel,Description: IfcText): IfcResourceLevelRelationship {
-	return {};
+export function CreateIfcResourceLevelRelationship(Name: IfcLabel | null, Description: IfcText | null): Handle<IfcResourceLevelRelationship> {
+	return { expressID: 0 };
 }
 export class IfcResourceTime {};
-export function CreateIfcResourceTime(Name: IfcLabel,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,ScheduleWork: IfcDuration,ScheduleUsage: IfcPositiveRatioMeasure,ScheduleStart: IfcDateTime,ScheduleFinish: IfcDateTime,ScheduleContour: IfcLabel,LevelingDelay: IfcDuration,IsOverAllocated: IfcBoolean,StatusTime: IfcDateTime,ActualWork: IfcDuration,ActualUsage: IfcPositiveRatioMeasure,ActualStart: IfcDateTime,ActualFinish: IfcDateTime,RemainingWork: IfcDuration,RemainingUsage: IfcPositiveRatioMeasure,Completion: IfcPositiveRatioMeasure): IfcResourceTime {
-	return {};
+export function CreateIfcResourceTime(Name: IfcLabel | null, DataOrigin: IfcDataOriginEnum | null, UserDefinedDataOrigin: IfcLabel | null, ScheduleWork: IfcDuration | null, ScheduleUsage: IfcPositiveRatioMeasure | null, ScheduleStart: IfcDateTime | null, ScheduleFinish: IfcDateTime | null, ScheduleContour: IfcLabel | null, LevelingDelay: IfcDuration | null, IsOverAllocated: IfcBoolean | null, StatusTime: IfcDateTime | null, ActualWork: IfcDuration | null, ActualUsage: IfcPositiveRatioMeasure | null, ActualStart: IfcDateTime | null, ActualFinish: IfcDateTime | null, RemainingWork: IfcDuration | null, RemainingUsage: IfcPositiveRatioMeasure | null, Completion: IfcPositiveRatioMeasure | null): Handle<IfcResourceTime> {
+	return { expressID: 0 };
 }
 export class IfcRevolvedAreaSolid {};
-export function CreateIfcRevolvedAreaSolid(SweptArea: IfcProfileDef,Position: IfcAxis2Placement3D,Axis: IfcAxis1Placement,Angle: IfcPlaneAngleMeasure): IfcRevolvedAreaSolid {
-	return {};
+export function CreateIfcRevolvedAreaSolid(SweptArea: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null, Axis: Handle<IfcAxis1Placement> , Angle: IfcPlaneAngleMeasure ): Handle<IfcRevolvedAreaSolid> {
+	return { expressID: 0 };
 }
 export class IfcRevolvedAreaSolidTapered {};
-export function CreateIfcRevolvedAreaSolidTapered(SweptArea: IfcProfileDef,Position: IfcAxis2Placement3D,Axis: IfcAxis1Placement,Angle: IfcPlaneAngleMeasure,EndSweptArea: IfcProfileDef): IfcRevolvedAreaSolidTapered {
-	return {};
+export function CreateIfcRevolvedAreaSolidTapered(SweptArea: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null, Axis: Handle<IfcAxis1Placement> , Angle: IfcPlaneAngleMeasure , EndSweptArea: Handle<IfcProfileDef> ): Handle<IfcRevolvedAreaSolidTapered> {
+	return { expressID: 0 };
 }
 export class IfcRightCircularCone {};
-export function CreateIfcRightCircularCone(Position: IfcAxis2Placement3D,Height: IfcPositiveLengthMeasure,BottomRadius: IfcPositiveLengthMeasure): IfcRightCircularCone {
-	return {};
+export function CreateIfcRightCircularCone(Position: Handle<IfcAxis2Placement3D> , Height: IfcPositiveLengthMeasure , BottomRadius: IfcPositiveLengthMeasure ): Handle<IfcRightCircularCone> {
+	return { expressID: 0 };
 }
 export class IfcRightCircularCylinder {};
-export function CreateIfcRightCircularCylinder(Position: IfcAxis2Placement3D,Height: IfcPositiveLengthMeasure,Radius: IfcPositiveLengthMeasure): IfcRightCircularCylinder {
-	return {};
+export function CreateIfcRightCircularCylinder(Position: Handle<IfcAxis2Placement3D> , Height: IfcPositiveLengthMeasure , Radius: IfcPositiveLengthMeasure ): Handle<IfcRightCircularCylinder> {
+	return { expressID: 0 };
 }
 export class IfcRoof {};
-export function CreateIfcRoof(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcRoofTypeEnum): IfcRoof {
-	return {};
+export function CreateIfcRoof(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcRoofTypeEnum | null): Handle<IfcRoof> {
+	return { expressID: 0 };
 }
 export class IfcRoofType {};
-export function CreateIfcRoofType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcRoofTypeEnum): IfcRoofType {
-	return {};
+export function CreateIfcRoofType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcRoofTypeEnum ): Handle<IfcRoofType> {
+	return { expressID: 0 };
 }
 export class IfcRoot {};
-export function CreateIfcRoot(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText): IfcRoot {
-	return {};
+export function CreateIfcRoot(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null): Handle<IfcRoot> {
+	return { expressID: 0 };
 }
 export class IfcRoundedRectangleProfileDef {};
-export function CreateIfcRoundedRectangleProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,XDim: IfcPositiveLengthMeasure,YDim: IfcPositiveLengthMeasure,RoundingRadius: IfcPositiveLengthMeasure): IfcRoundedRectangleProfileDef {
-	return {};
+export function CreateIfcRoundedRectangleProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, XDim: IfcPositiveLengthMeasure , YDim: IfcPositiveLengthMeasure , RoundingRadius: IfcPositiveLengthMeasure ): Handle<IfcRoundedRectangleProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcSIUnit {};
-export function CreateIfcSIUnit(Dimensions: IfcDimensionalExponents,UnitType: IfcUnitEnum,Prefix: IfcSIPrefix,Name: IfcSIUnitName): IfcSIUnit {
-	return {};
+export function CreateIfcSIUnit(Dimensions: Handle<IfcDimensionalExponents> , UnitType: IfcUnitEnum , Prefix: IfcSIPrefix | null, Name: IfcSIUnitName ): Handle<IfcSIUnit> {
+	return { expressID: 0 };
 }
 export class IfcSanitaryTerminal {};
-export function CreateIfcSanitaryTerminal(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSanitaryTerminalTypeEnum): IfcSanitaryTerminal {
-	return {};
+export function CreateIfcSanitaryTerminal(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSanitaryTerminalTypeEnum | null): Handle<IfcSanitaryTerminal> {
+	return { expressID: 0 };
 }
 export class IfcSanitaryTerminalType {};
-export function CreateIfcSanitaryTerminalType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSanitaryTerminalTypeEnum): IfcSanitaryTerminalType {
-	return {};
+export function CreateIfcSanitaryTerminalType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSanitaryTerminalTypeEnum ): Handle<IfcSanitaryTerminalType> {
+	return { expressID: 0 };
 }
 export class IfcSchedulingTime {};
-export function CreateIfcSchedulingTime(Name: IfcLabel,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel): IfcSchedulingTime {
-	return {};
+export function CreateIfcSchedulingTime(Name: IfcLabel | null, DataOrigin: IfcDataOriginEnum | null, UserDefinedDataOrigin: IfcLabel | null): Handle<IfcSchedulingTime> {
+	return { expressID: 0 };
 }
 export class IfcSeamCurve {};
-export function CreateIfcSeamCurve(Curve3D: IfcCurve,AssociatedGeometry: IfcPcurve,MasterRepresentation: IfcPreferredSurfaceCurveRepresentation): IfcSeamCurve {
-	return {};
+export function CreateIfcSeamCurve(Curve3D: Handle<IfcCurve> , AssociatedGeometry: Handle<IfcPcurve> , MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ): Handle<IfcSeamCurve> {
+	return { expressID: 0 };
 }
 export class IfcSectionProperties {};
-export function CreateIfcSectionProperties(SectionType: IfcSectionTypeEnum,StartProfile: IfcProfileDef,EndProfile: IfcProfileDef): IfcSectionProperties {
-	return {};
+export function CreateIfcSectionProperties(SectionType: IfcSectionTypeEnum , StartProfile: Handle<IfcProfileDef> , EndProfile: Handle<IfcProfileDef> | null): Handle<IfcSectionProperties> {
+	return { expressID: 0 };
 }
 export class IfcSectionReinforcementProperties {};
-export function CreateIfcSectionReinforcementProperties(LongitudinalStartPosition: IfcLengthMeasure,LongitudinalEndPosition: IfcLengthMeasure,TransversePosition: IfcLengthMeasure,ReinforcementRole: IfcReinforcingBarRoleEnum,SectionDefinition: IfcSectionProperties,CrossSectionReinforcementDefinitions: IfcReinforcementBarProperties): IfcSectionReinforcementProperties {
-	return {};
+export function CreateIfcSectionReinforcementProperties(LongitudinalStartPosition: IfcLengthMeasure , LongitudinalEndPosition: IfcLengthMeasure , TransversePosition: IfcLengthMeasure | null, ReinforcementRole: IfcReinforcingBarRoleEnum , SectionDefinition: Handle<IfcSectionProperties> , CrossSectionReinforcementDefinitions: Handle<IfcReinforcementBarProperties>[] ): Handle<IfcSectionReinforcementProperties> {
+	return { expressID: 0 };
 }
 export class IfcSectionedSolid {};
-export function CreateIfcSectionedSolid(Directrix: IfcCurve,CrossSections: IfcProfileDef): IfcSectionedSolid {
-	return {};
+export function CreateIfcSectionedSolid(Directrix: Handle<IfcCurve> , CrossSections: Handle<IfcProfileDef> ): Handle<IfcSectionedSolid> {
+	return { expressID: 0 };
 }
 export class IfcSectionedSolidHorizontal {};
-export function CreateIfcSectionedSolidHorizontal(Directrix: IfcCurve,CrossSections: IfcProfileDef,CrossSectionPositions: IfcDistanceExpression,FixedAxisVertical: IfcBoolean): IfcSectionedSolidHorizontal {
-	return {};
+export function CreateIfcSectionedSolidHorizontal(Directrix: Handle<IfcCurve> , CrossSections: Handle<IfcProfileDef> , CrossSectionPositions: Handle<IfcDistanceExpression> , FixedAxisVertical: IfcBoolean ): Handle<IfcSectionedSolidHorizontal> {
+	return { expressID: 0 };
 }
 export class IfcSectionedSpine {};
-export function CreateIfcSectionedSpine(SpineCurve: IfcCompositeCurve,CrossSections: IfcProfileDef,CrossSectionPositions: IfcAxis2Placement3D): IfcSectionedSpine {
-	return {};
+export function CreateIfcSectionedSpine(SpineCurve: Handle<IfcCompositeCurve> , CrossSections: Handle<IfcProfileDef> , CrossSectionPositions: Handle<IfcAxis2Placement3D> ): Handle<IfcSectionedSpine> {
+	return { expressID: 0 };
 }
 export class IfcSensor {};
-export function CreateIfcSensor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSensorTypeEnum): IfcSensor {
-	return {};
+export function CreateIfcSensor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSensorTypeEnum | null): Handle<IfcSensor> {
+	return { expressID: 0 };
 }
 export class IfcSensorType {};
-export function CreateIfcSensorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSensorTypeEnum): IfcSensorType {
-	return {};
+export function CreateIfcSensorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSensorTypeEnum ): Handle<IfcSensorType> {
+	return { expressID: 0 };
 }
 export class IfcShadingDevice {};
-export function CreateIfcShadingDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcShadingDeviceTypeEnum): IfcShadingDevice {
-	return {};
+export function CreateIfcShadingDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcShadingDeviceTypeEnum | null): Handle<IfcShadingDevice> {
+	return { expressID: 0 };
 }
 export class IfcShadingDeviceType {};
-export function CreateIfcShadingDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcShadingDeviceTypeEnum): IfcShadingDeviceType {
-	return {};
+export function CreateIfcShadingDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcShadingDeviceTypeEnum ): Handle<IfcShadingDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcShapeAspect {};
-export function CreateIfcShapeAspect(ShapeRepresentations: IfcShapeModel,Name: IfcLabel,Description: IfcText,ProductDefinitional: IfcLogical,PartOfProductDefinitionShape: IfcProductRepresentationSelect): IfcShapeAspect {
-	return {};
+export function CreateIfcShapeAspect(ShapeRepresentations: Handle<IfcShapeModel> , Name: IfcLabel | null, Description: IfcText | null, ProductDefinitional: IfcLogical , PartOfProductDefinitionShape: IfcProductRepresentationSelect | null): Handle<IfcShapeAspect> {
+	return { expressID: 0 };
 }
 export class IfcShapeModel {};
-export function CreateIfcShapeModel(ContextOfItems: IfcRepresentationContext,RepresentationIdentifier: IfcLabel,RepresentationType: IfcLabel,Items: IfcRepresentationItem): IfcShapeModel {
-	return {};
+export function CreateIfcShapeModel(ContextOfItems: Handle<IfcRepresentationContext> , RepresentationIdentifier: IfcLabel | null, RepresentationType: IfcLabel | null, Items: Handle<IfcRepresentationItem>[] ): Handle<IfcShapeModel> {
+	return { expressID: 0 };
 }
 export class IfcShapeRepresentation {};
-export function CreateIfcShapeRepresentation(ContextOfItems: IfcRepresentationContext,RepresentationIdentifier: IfcLabel,RepresentationType: IfcLabel,Items: IfcRepresentationItem): IfcShapeRepresentation {
-	return {};
+export function CreateIfcShapeRepresentation(ContextOfItems: Handle<IfcRepresentationContext> , RepresentationIdentifier: IfcLabel | null, RepresentationType: IfcLabel | null, Items: Handle<IfcRepresentationItem>[] ): Handle<IfcShapeRepresentation> {
+	return { expressID: 0 };
 }
 export class IfcShellBasedSurfaceModel {};
-export function CreateIfcShellBasedSurfaceModel(SbsmBoundary: IfcShell): IfcShellBasedSurfaceModel {
-	return {};
+export function CreateIfcShellBasedSurfaceModel(SbsmBoundary: IfcShell[] ): Handle<IfcShellBasedSurfaceModel> {
+	return { expressID: 0 };
 }
 export class IfcSimpleProperty {};
-export function CreateIfcSimpleProperty(Name: IfcIdentifier,Description: IfcText): IfcSimpleProperty {
-	return {};
+export function CreateIfcSimpleProperty(Name: IfcIdentifier , Description: IfcText | null): Handle<IfcSimpleProperty> {
+	return { expressID: 0 };
 }
 export class IfcSimplePropertyTemplate {};
-export function CreateIfcSimplePropertyTemplate(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,TemplateType: IfcSimplePropertyTemplateTypeEnum,PrimaryMeasureType: IfcLabel,SecondaryMeasureType: IfcLabel,Enumerators: IfcPropertyEnumeration,PrimaryUnit: IfcUnit,SecondaryUnit: IfcUnit,Expression: IfcLabel,AccessState: IfcStateEnum): IfcSimplePropertyTemplate {
-	return {};
+export function CreateIfcSimplePropertyTemplate(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, TemplateType: IfcSimplePropertyTemplateTypeEnum | null, PrimaryMeasureType: IfcLabel | null, SecondaryMeasureType: IfcLabel | null, Enumerators: Handle<IfcPropertyEnumeration> | null, PrimaryUnit: IfcUnit | null, SecondaryUnit: IfcUnit | null, Expression: IfcLabel | null, AccessState: IfcStateEnum | null): Handle<IfcSimplePropertyTemplate> {
+	return { expressID: 0 };
 }
 export class IfcSite {};
-export function CreateIfcSite(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum,RefLatitude: IfcCompoundPlaneAngleMeasure,RefLongitude: IfcCompoundPlaneAngleMeasure,RefElevation: IfcLengthMeasure,LandTitleNumber: IfcLabel,SiteAddress: IfcPostalAddress): IfcSite {
-	return {};
+export function CreateIfcSite(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null, RefLatitude: IfcCompoundPlaneAngleMeasure | null, RefLongitude: IfcCompoundPlaneAngleMeasure | null, RefElevation: IfcLengthMeasure | null, LandTitleNumber: IfcLabel | null, SiteAddress: Handle<IfcPostalAddress> | null): Handle<IfcSite> {
+	return { expressID: 0 };
 }
 export class IfcSlab {};
-export function CreateIfcSlab(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSlabTypeEnum): IfcSlab {
-	return {};
+export function CreateIfcSlab(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSlabTypeEnum | null): Handle<IfcSlab> {
+	return { expressID: 0 };
 }
 export class IfcSlabElementedCase {};
-export function CreateIfcSlabElementedCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSlabTypeEnum): IfcSlabElementedCase {
-	return {};
+export function CreateIfcSlabElementedCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSlabTypeEnum | null): Handle<IfcSlabElementedCase> {
+	return { expressID: 0 };
 }
 export class IfcSlabStandardCase {};
-export function CreateIfcSlabStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSlabTypeEnum): IfcSlabStandardCase {
-	return {};
+export function CreateIfcSlabStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSlabTypeEnum | null): Handle<IfcSlabStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcSlabType {};
-export function CreateIfcSlabType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSlabTypeEnum): IfcSlabType {
-	return {};
+export function CreateIfcSlabType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSlabTypeEnum ): Handle<IfcSlabType> {
+	return { expressID: 0 };
 }
 export class IfcSlippageConnectionCondition {};
-export function CreateIfcSlippageConnectionCondition(Name: IfcLabel,SlippageX: IfcLengthMeasure,SlippageY: IfcLengthMeasure,SlippageZ: IfcLengthMeasure): IfcSlippageConnectionCondition {
-	return {};
+export function CreateIfcSlippageConnectionCondition(Name: IfcLabel | null, SlippageX: IfcLengthMeasure | null, SlippageY: IfcLengthMeasure | null, SlippageZ: IfcLengthMeasure | null): Handle<IfcSlippageConnectionCondition> {
+	return { expressID: 0 };
 }
 export class IfcSolarDevice {};
-export function CreateIfcSolarDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSolarDeviceTypeEnum): IfcSolarDevice {
-	return {};
+export function CreateIfcSolarDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSolarDeviceTypeEnum | null): Handle<IfcSolarDevice> {
+	return { expressID: 0 };
 }
 export class IfcSolarDeviceType {};
-export function CreateIfcSolarDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSolarDeviceTypeEnum): IfcSolarDeviceType {
-	return {};
+export function CreateIfcSolarDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSolarDeviceTypeEnum ): Handle<IfcSolarDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcSolidModel {};
-export function CreateIfcSolidModel(): IfcSolidModel {
-	return {};
+export function CreateIfcSolidModel(): Handle<IfcSolidModel> {
+	return { expressID: 0 };
 }
 export class IfcSpace {};
-export function CreateIfcSpace(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum,PredefinedType: IfcSpaceTypeEnum,ElevationWithFlooring: IfcLengthMeasure): IfcSpace {
-	return {};
+export function CreateIfcSpace(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null, PredefinedType: IfcSpaceTypeEnum | null, ElevationWithFlooring: IfcLengthMeasure | null): Handle<IfcSpace> {
+	return { expressID: 0 };
 }
 export class IfcSpaceHeater {};
-export function CreateIfcSpaceHeater(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSpaceHeaterTypeEnum): IfcSpaceHeater {
-	return {};
+export function CreateIfcSpaceHeater(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSpaceHeaterTypeEnum | null): Handle<IfcSpaceHeater> {
+	return { expressID: 0 };
 }
 export class IfcSpaceHeaterType {};
-export function CreateIfcSpaceHeaterType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSpaceHeaterTypeEnum): IfcSpaceHeaterType {
-	return {};
+export function CreateIfcSpaceHeaterType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSpaceHeaterTypeEnum ): Handle<IfcSpaceHeaterType> {
+	return { expressID: 0 };
 }
 export class IfcSpaceType {};
-export function CreateIfcSpaceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSpaceTypeEnum,LongName: IfcLabel): IfcSpaceType {
-	return {};
+export function CreateIfcSpaceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSpaceTypeEnum , LongName: IfcLabel | null): Handle<IfcSpaceType> {
+	return { expressID: 0 };
 }
 export class IfcSpatialElement {};
-export function CreateIfcSpatialElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel): IfcSpatialElement {
-	return {};
+export function CreateIfcSpatialElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null): Handle<IfcSpatialElement> {
+	return { expressID: 0 };
 }
 export class IfcSpatialElementType {};
-export function CreateIfcSpatialElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcSpatialElementType {
-	return {};
+export function CreateIfcSpatialElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcSpatialElementType> {
+	return { expressID: 0 };
 }
 export class IfcSpatialStructureElement {};
-export function CreateIfcSpatialStructureElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,CompositionType: IfcElementCompositionEnum): IfcSpatialStructureElement {
-	return {};
+export function CreateIfcSpatialStructureElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, CompositionType: IfcElementCompositionEnum | null): Handle<IfcSpatialStructureElement> {
+	return { expressID: 0 };
 }
 export class IfcSpatialStructureElementType {};
-export function CreateIfcSpatialStructureElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel): IfcSpatialStructureElementType {
-	return {};
+export function CreateIfcSpatialStructureElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null): Handle<IfcSpatialStructureElementType> {
+	return { expressID: 0 };
 }
 export class IfcSpatialZone {};
-export function CreateIfcSpatialZone(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,LongName: IfcLabel,PredefinedType: IfcSpatialZoneTypeEnum): IfcSpatialZone {
-	return {};
+export function CreateIfcSpatialZone(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, LongName: IfcLabel | null, PredefinedType: IfcSpatialZoneTypeEnum | null): Handle<IfcSpatialZone> {
+	return { expressID: 0 };
 }
 export class IfcSpatialZoneType {};
-export function CreateIfcSpatialZoneType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSpatialZoneTypeEnum,LongName: IfcLabel): IfcSpatialZoneType {
-	return {};
+export function CreateIfcSpatialZoneType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSpatialZoneTypeEnum , LongName: IfcLabel | null): Handle<IfcSpatialZoneType> {
+	return { expressID: 0 };
 }
 export class IfcSphere {};
-export function CreateIfcSphere(Position: IfcAxis2Placement3D,Radius: IfcPositiveLengthMeasure): IfcSphere {
-	return {};
+export function CreateIfcSphere(Position: Handle<IfcAxis2Placement3D> , Radius: IfcPositiveLengthMeasure ): Handle<IfcSphere> {
+	return { expressID: 0 };
 }
 export class IfcSphericalSurface {};
-export function CreateIfcSphericalSurface(Position: IfcAxis2Placement3D,Radius: IfcPositiveLengthMeasure): IfcSphericalSurface {
-	return {};
+export function CreateIfcSphericalSurface(Position: Handle<IfcAxis2Placement3D> , Radius: IfcPositiveLengthMeasure ): Handle<IfcSphericalSurface> {
+	return { expressID: 0 };
 }
 export class IfcStackTerminal {};
-export function CreateIfcStackTerminal(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcStackTerminalTypeEnum): IfcStackTerminal {
-	return {};
+export function CreateIfcStackTerminal(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcStackTerminalTypeEnum | null): Handle<IfcStackTerminal> {
+	return { expressID: 0 };
 }
 export class IfcStackTerminalType {};
-export function CreateIfcStackTerminalType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcStackTerminalTypeEnum): IfcStackTerminalType {
-	return {};
+export function CreateIfcStackTerminalType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcStackTerminalTypeEnum ): Handle<IfcStackTerminalType> {
+	return { expressID: 0 };
 }
 export class IfcStair {};
-export function CreateIfcStair(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcStairTypeEnum): IfcStair {
-	return {};
+export function CreateIfcStair(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcStairTypeEnum | null): Handle<IfcStair> {
+	return { expressID: 0 };
 }
 export class IfcStairFlight {};
-export function CreateIfcStairFlight(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,NumberOfRisers: IfcInteger,NumberOfTreads: IfcInteger,RiserHeight: IfcPositiveLengthMeasure,TreadLength: IfcPositiveLengthMeasure,PredefinedType: IfcStairFlightTypeEnum): IfcStairFlight {
-	return {};
+export function CreateIfcStairFlight(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, NumberOfRisers: IfcInteger | null, NumberOfTreads: IfcInteger | null, RiserHeight: IfcPositiveLengthMeasure | null, TreadLength: IfcPositiveLengthMeasure | null, PredefinedType: IfcStairFlightTypeEnum | null): Handle<IfcStairFlight> {
+	return { expressID: 0 };
 }
 export class IfcStairFlightType {};
-export function CreateIfcStairFlightType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcStairFlightTypeEnum): IfcStairFlightType {
-	return {};
+export function CreateIfcStairFlightType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcStairFlightTypeEnum ): Handle<IfcStairFlightType> {
+	return { expressID: 0 };
 }
 export class IfcStairType {};
-export function CreateIfcStairType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcStairTypeEnum): IfcStairType {
-	return {};
+export function CreateIfcStairType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcStairTypeEnum ): Handle<IfcStairType> {
+	return { expressID: 0 };
 }
 export class IfcStructuralAction {};
-export function CreateIfcStructuralAction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum,DestabilizingLoad: IfcBoolean): IfcStructuralAction {
-	return {};
+export function CreateIfcStructuralAction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum , DestabilizingLoad: IfcBoolean | null): Handle<IfcStructuralAction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralActivity {};
-export function CreateIfcStructuralActivity(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum): IfcStructuralActivity {
-	return {};
+export function CreateIfcStructuralActivity(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum ): Handle<IfcStructuralActivity> {
+	return { expressID: 0 };
 }
 export class IfcStructuralAnalysisModel {};
-export function CreateIfcStructuralAnalysisModel(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,PredefinedType: IfcAnalysisModelTypeEnum,OrientationOf2DPlane: IfcAxis2Placement3D,LoadedBy: IfcStructuralLoadGroup,HasResults: IfcStructuralResultGroup,SharedPlacement: IfcObjectPlacement): IfcStructuralAnalysisModel {
-	return {};
+export function CreateIfcStructuralAnalysisModel(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, PredefinedType: IfcAnalysisModelTypeEnum , OrientationOf2DPlane: Handle<IfcAxis2Placement3D> | null, LoadedBy: Handle<IfcStructuralLoadGroup>[] | null, HasResults: Handle<IfcStructuralResultGroup>[] | null, SharedPlacement: Handle<IfcObjectPlacement> | null): Handle<IfcStructuralAnalysisModel> {
+	return { expressID: 0 };
 }
 export class IfcStructuralConnection {};
-export function CreateIfcStructuralConnection(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedCondition: IfcBoundaryCondition): IfcStructuralConnection {
-	return {};
+export function CreateIfcStructuralConnection(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedCondition: Handle<IfcBoundaryCondition> | null): Handle<IfcStructuralConnection> {
+	return { expressID: 0 };
 }
 export class IfcStructuralConnectionCondition {};
-export function CreateIfcStructuralConnectionCondition(Name: IfcLabel): IfcStructuralConnectionCondition {
-	return {};
+export function CreateIfcStructuralConnectionCondition(Name: IfcLabel | null): Handle<IfcStructuralConnectionCondition> {
+	return { expressID: 0 };
 }
 export class IfcStructuralCurveAction {};
-export function CreateIfcStructuralCurveAction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum,DestabilizingLoad: IfcBoolean,ProjectedOrTrue: IfcProjectedOrTrueLengthEnum,PredefinedType: IfcStructuralCurveActivityTypeEnum): IfcStructuralCurveAction {
-	return {};
+export function CreateIfcStructuralCurveAction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum , DestabilizingLoad: IfcBoolean | null, ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null, PredefinedType: IfcStructuralCurveActivityTypeEnum ): Handle<IfcStructuralCurveAction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralCurveConnection {};
-export function CreateIfcStructuralCurveConnection(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedCondition: IfcBoundaryCondition,Axis: IfcDirection): IfcStructuralCurveConnection {
-	return {};
+export function CreateIfcStructuralCurveConnection(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedCondition: Handle<IfcBoundaryCondition> | null, Axis: Handle<IfcDirection> ): Handle<IfcStructuralCurveConnection> {
+	return { expressID: 0 };
 }
 export class IfcStructuralCurveMember {};
-export function CreateIfcStructuralCurveMember(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,PredefinedType: IfcStructuralCurveMemberTypeEnum,Axis: IfcDirection): IfcStructuralCurveMember {
-	return {};
+export function CreateIfcStructuralCurveMember(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, PredefinedType: IfcStructuralCurveMemberTypeEnum , Axis: Handle<IfcDirection> ): Handle<IfcStructuralCurveMember> {
+	return { expressID: 0 };
 }
 export class IfcStructuralCurveMemberVarying {};
-export function CreateIfcStructuralCurveMemberVarying(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,PredefinedType: IfcStructuralCurveMemberTypeEnum,Axis: IfcDirection): IfcStructuralCurveMemberVarying {
-	return {};
+export function CreateIfcStructuralCurveMemberVarying(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, PredefinedType: IfcStructuralCurveMemberTypeEnum , Axis: Handle<IfcDirection> ): Handle<IfcStructuralCurveMemberVarying> {
+	return { expressID: 0 };
 }
 export class IfcStructuralCurveReaction {};
-export function CreateIfcStructuralCurveReaction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum,PredefinedType: IfcStructuralCurveActivityTypeEnum): IfcStructuralCurveReaction {
-	return {};
+export function CreateIfcStructuralCurveReaction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum , PredefinedType: IfcStructuralCurveActivityTypeEnum ): Handle<IfcStructuralCurveReaction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralItem {};
-export function CreateIfcStructuralItem(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation): IfcStructuralItem {
-	return {};
+export function CreateIfcStructuralItem(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null): Handle<IfcStructuralItem> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLinearAction {};
-export function CreateIfcStructuralLinearAction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum,DestabilizingLoad: IfcBoolean,ProjectedOrTrue: IfcProjectedOrTrueLengthEnum,PredefinedType: IfcStructuralCurveActivityTypeEnum): IfcStructuralLinearAction {
-	return {};
+export function CreateIfcStructuralLinearAction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum , DestabilizingLoad: IfcBoolean | null, ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null, PredefinedType: IfcStructuralCurveActivityTypeEnum ): Handle<IfcStructuralLinearAction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoad {};
-export function CreateIfcStructuralLoad(Name: IfcLabel): IfcStructuralLoad {
-	return {};
+export function CreateIfcStructuralLoad(Name: IfcLabel | null): Handle<IfcStructuralLoad> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadCase {};
-export function CreateIfcStructuralLoadCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,PredefinedType: IfcLoadGroupTypeEnum,ActionType: IfcActionTypeEnum,ActionSource: IfcActionSourceTypeEnum,Coefficient: IfcRatioMeasure,Purpose: IfcLabel,SelfWeightCoefficients: IfcRatioMeasure): IfcStructuralLoadCase {
-	return {};
+export function CreateIfcStructuralLoadCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, PredefinedType: IfcLoadGroupTypeEnum , ActionType: IfcActionTypeEnum , ActionSource: IfcActionSourceTypeEnum , Coefficient: IfcRatioMeasure | null, Purpose: IfcLabel | null, SelfWeightCoefficients: IfcRatioMeasure | null): Handle<IfcStructuralLoadCase> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadConfiguration {};
-export function CreateIfcStructuralLoadConfiguration(Name: IfcLabel,Values: IfcStructuralLoadOrResult,Locations: IfcLengthMeasure): IfcStructuralLoadConfiguration {
-	return {};
+export function CreateIfcStructuralLoadConfiguration(Name: IfcLabel | null, Values: Handle<IfcStructuralLoadOrResult> , Locations: IfcLengthMeasure | null): Handle<IfcStructuralLoadConfiguration> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadGroup {};
-export function CreateIfcStructuralLoadGroup(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,PredefinedType: IfcLoadGroupTypeEnum,ActionType: IfcActionTypeEnum,ActionSource: IfcActionSourceTypeEnum,Coefficient: IfcRatioMeasure,Purpose: IfcLabel): IfcStructuralLoadGroup {
-	return {};
+export function CreateIfcStructuralLoadGroup(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, PredefinedType: IfcLoadGroupTypeEnum , ActionType: IfcActionTypeEnum , ActionSource: IfcActionSourceTypeEnum , Coefficient: IfcRatioMeasure | null, Purpose: IfcLabel | null): Handle<IfcStructuralLoadGroup> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadLinearForce {};
-export function CreateIfcStructuralLoadLinearForce(Name: IfcLabel,LinearForceX: IfcLinearForceMeasure,LinearForceY: IfcLinearForceMeasure,LinearForceZ: IfcLinearForceMeasure,LinearMomentX: IfcLinearMomentMeasure,LinearMomentY: IfcLinearMomentMeasure,LinearMomentZ: IfcLinearMomentMeasure): IfcStructuralLoadLinearForce {
-	return {};
+export function CreateIfcStructuralLoadLinearForce(Name: IfcLabel | null, LinearForceX: IfcLinearForceMeasure | null, LinearForceY: IfcLinearForceMeasure | null, LinearForceZ: IfcLinearForceMeasure | null, LinearMomentX: IfcLinearMomentMeasure | null, LinearMomentY: IfcLinearMomentMeasure | null, LinearMomentZ: IfcLinearMomentMeasure | null): Handle<IfcStructuralLoadLinearForce> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadOrResult {};
-export function CreateIfcStructuralLoadOrResult(Name: IfcLabel): IfcStructuralLoadOrResult {
-	return {};
+export function CreateIfcStructuralLoadOrResult(Name: IfcLabel | null): Handle<IfcStructuralLoadOrResult> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadPlanarForce {};
-export function CreateIfcStructuralLoadPlanarForce(Name: IfcLabel,PlanarForceX: IfcPlanarForceMeasure,PlanarForceY: IfcPlanarForceMeasure,PlanarForceZ: IfcPlanarForceMeasure): IfcStructuralLoadPlanarForce {
-	return {};
+export function CreateIfcStructuralLoadPlanarForce(Name: IfcLabel | null, PlanarForceX: IfcPlanarForceMeasure | null, PlanarForceY: IfcPlanarForceMeasure | null, PlanarForceZ: IfcPlanarForceMeasure | null): Handle<IfcStructuralLoadPlanarForce> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadSingleDisplacement {};
-export function CreateIfcStructuralLoadSingleDisplacement(Name: IfcLabel,DisplacementX: IfcLengthMeasure,DisplacementY: IfcLengthMeasure,DisplacementZ: IfcLengthMeasure,RotationalDisplacementRX: IfcPlaneAngleMeasure,RotationalDisplacementRY: IfcPlaneAngleMeasure,RotationalDisplacementRZ: IfcPlaneAngleMeasure): IfcStructuralLoadSingleDisplacement {
-	return {};
+export function CreateIfcStructuralLoadSingleDisplacement(Name: IfcLabel | null, DisplacementX: IfcLengthMeasure | null, DisplacementY: IfcLengthMeasure | null, DisplacementZ: IfcLengthMeasure | null, RotationalDisplacementRX: IfcPlaneAngleMeasure | null, RotationalDisplacementRY: IfcPlaneAngleMeasure | null, RotationalDisplacementRZ: IfcPlaneAngleMeasure | null): Handle<IfcStructuralLoadSingleDisplacement> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadSingleDisplacementDistortion {};
-export function CreateIfcStructuralLoadSingleDisplacementDistortion(Name: IfcLabel,DisplacementX: IfcLengthMeasure,DisplacementY: IfcLengthMeasure,DisplacementZ: IfcLengthMeasure,RotationalDisplacementRX: IfcPlaneAngleMeasure,RotationalDisplacementRY: IfcPlaneAngleMeasure,RotationalDisplacementRZ: IfcPlaneAngleMeasure,Distortion: IfcCurvatureMeasure): IfcStructuralLoadSingleDisplacementDistortion {
-	return {};
+export function CreateIfcStructuralLoadSingleDisplacementDistortion(Name: IfcLabel | null, DisplacementX: IfcLengthMeasure | null, DisplacementY: IfcLengthMeasure | null, DisplacementZ: IfcLengthMeasure | null, RotationalDisplacementRX: IfcPlaneAngleMeasure | null, RotationalDisplacementRY: IfcPlaneAngleMeasure | null, RotationalDisplacementRZ: IfcPlaneAngleMeasure | null, Distortion: IfcCurvatureMeasure | null): Handle<IfcStructuralLoadSingleDisplacementDistortion> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadSingleForce {};
-export function CreateIfcStructuralLoadSingleForce(Name: IfcLabel,ForceX: IfcForceMeasure,ForceY: IfcForceMeasure,ForceZ: IfcForceMeasure,MomentX: IfcTorqueMeasure,MomentY: IfcTorqueMeasure,MomentZ: IfcTorqueMeasure): IfcStructuralLoadSingleForce {
-	return {};
+export function CreateIfcStructuralLoadSingleForce(Name: IfcLabel | null, ForceX: IfcForceMeasure | null, ForceY: IfcForceMeasure | null, ForceZ: IfcForceMeasure | null, MomentX: IfcTorqueMeasure | null, MomentY: IfcTorqueMeasure | null, MomentZ: IfcTorqueMeasure | null): Handle<IfcStructuralLoadSingleForce> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadSingleForceWarping {};
-export function CreateIfcStructuralLoadSingleForceWarping(Name: IfcLabel,ForceX: IfcForceMeasure,ForceY: IfcForceMeasure,ForceZ: IfcForceMeasure,MomentX: IfcTorqueMeasure,MomentY: IfcTorqueMeasure,MomentZ: IfcTorqueMeasure,WarpingMoment: IfcWarpingMomentMeasure): IfcStructuralLoadSingleForceWarping {
-	return {};
+export function CreateIfcStructuralLoadSingleForceWarping(Name: IfcLabel | null, ForceX: IfcForceMeasure | null, ForceY: IfcForceMeasure | null, ForceZ: IfcForceMeasure | null, MomentX: IfcTorqueMeasure | null, MomentY: IfcTorqueMeasure | null, MomentZ: IfcTorqueMeasure | null, WarpingMoment: IfcWarpingMomentMeasure | null): Handle<IfcStructuralLoadSingleForceWarping> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadStatic {};
-export function CreateIfcStructuralLoadStatic(Name: IfcLabel): IfcStructuralLoadStatic {
-	return {};
+export function CreateIfcStructuralLoadStatic(Name: IfcLabel | null): Handle<IfcStructuralLoadStatic> {
+	return { expressID: 0 };
 }
 export class IfcStructuralLoadTemperature {};
-export function CreateIfcStructuralLoadTemperature(Name: IfcLabel,DeltaTConstant: IfcThermodynamicTemperatureMeasure,DeltaTY: IfcThermodynamicTemperatureMeasure,DeltaTZ: IfcThermodynamicTemperatureMeasure): IfcStructuralLoadTemperature {
-	return {};
+export function CreateIfcStructuralLoadTemperature(Name: IfcLabel | null, DeltaTConstant: IfcThermodynamicTemperatureMeasure | null, DeltaTY: IfcThermodynamicTemperatureMeasure | null, DeltaTZ: IfcThermodynamicTemperatureMeasure | null): Handle<IfcStructuralLoadTemperature> {
+	return { expressID: 0 };
 }
 export class IfcStructuralMember {};
-export function CreateIfcStructuralMember(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation): IfcStructuralMember {
-	return {};
+export function CreateIfcStructuralMember(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null): Handle<IfcStructuralMember> {
+	return { expressID: 0 };
 }
 export class IfcStructuralPlanarAction {};
-export function CreateIfcStructuralPlanarAction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum,DestabilizingLoad: IfcBoolean,ProjectedOrTrue: IfcProjectedOrTrueLengthEnum,PredefinedType: IfcStructuralSurfaceActivityTypeEnum): IfcStructuralPlanarAction {
-	return {};
+export function CreateIfcStructuralPlanarAction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum , DestabilizingLoad: IfcBoolean | null, ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null, PredefinedType: IfcStructuralSurfaceActivityTypeEnum ): Handle<IfcStructuralPlanarAction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralPointAction {};
-export function CreateIfcStructuralPointAction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum,DestabilizingLoad: IfcBoolean): IfcStructuralPointAction {
-	return {};
+export function CreateIfcStructuralPointAction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum , DestabilizingLoad: IfcBoolean | null): Handle<IfcStructuralPointAction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralPointConnection {};
-export function CreateIfcStructuralPointConnection(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedCondition: IfcBoundaryCondition,ConditionCoordinateSystem: IfcAxis2Placement3D): IfcStructuralPointConnection {
-	return {};
+export function CreateIfcStructuralPointConnection(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedCondition: Handle<IfcBoundaryCondition> | null, ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null): Handle<IfcStructuralPointConnection> {
+	return { expressID: 0 };
 }
 export class IfcStructuralPointReaction {};
-export function CreateIfcStructuralPointReaction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum): IfcStructuralPointReaction {
-	return {};
+export function CreateIfcStructuralPointReaction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum ): Handle<IfcStructuralPointReaction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralReaction {};
-export function CreateIfcStructuralReaction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum): IfcStructuralReaction {
-	return {};
+export function CreateIfcStructuralReaction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum ): Handle<IfcStructuralReaction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralResultGroup {};
-export function CreateIfcStructuralResultGroup(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,TheoryType: IfcAnalysisTheoryTypeEnum,ResultForLoadGroup: IfcStructuralLoadGroup,IsLinear: IfcBoolean): IfcStructuralResultGroup {
-	return {};
+export function CreateIfcStructuralResultGroup(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, TheoryType: IfcAnalysisTheoryTypeEnum , ResultForLoadGroup: Handle<IfcStructuralLoadGroup> | null, IsLinear: IfcBoolean ): Handle<IfcStructuralResultGroup> {
+	return { expressID: 0 };
 }
 export class IfcStructuralSurfaceAction {};
-export function CreateIfcStructuralSurfaceAction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum,DestabilizingLoad: IfcBoolean,ProjectedOrTrue: IfcProjectedOrTrueLengthEnum,PredefinedType: IfcStructuralSurfaceActivityTypeEnum): IfcStructuralSurfaceAction {
-	return {};
+export function CreateIfcStructuralSurfaceAction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum , DestabilizingLoad: IfcBoolean | null, ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null, PredefinedType: IfcStructuralSurfaceActivityTypeEnum ): Handle<IfcStructuralSurfaceAction> {
+	return { expressID: 0 };
 }
 export class IfcStructuralSurfaceConnection {};
-export function CreateIfcStructuralSurfaceConnection(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedCondition: IfcBoundaryCondition): IfcStructuralSurfaceConnection {
-	return {};
+export function CreateIfcStructuralSurfaceConnection(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedCondition: Handle<IfcBoundaryCondition> | null): Handle<IfcStructuralSurfaceConnection> {
+	return { expressID: 0 };
 }
 export class IfcStructuralSurfaceMember {};
-export function CreateIfcStructuralSurfaceMember(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,PredefinedType: IfcStructuralSurfaceMemberTypeEnum,Thickness: IfcPositiveLengthMeasure): IfcStructuralSurfaceMember {
-	return {};
+export function CreateIfcStructuralSurfaceMember(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, PredefinedType: IfcStructuralSurfaceMemberTypeEnum , Thickness: IfcPositiveLengthMeasure | null): Handle<IfcStructuralSurfaceMember> {
+	return { expressID: 0 };
 }
 export class IfcStructuralSurfaceMemberVarying {};
-export function CreateIfcStructuralSurfaceMemberVarying(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,PredefinedType: IfcStructuralSurfaceMemberTypeEnum,Thickness: IfcPositiveLengthMeasure): IfcStructuralSurfaceMemberVarying {
-	return {};
+export function CreateIfcStructuralSurfaceMemberVarying(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, PredefinedType: IfcStructuralSurfaceMemberTypeEnum , Thickness: IfcPositiveLengthMeasure | null): Handle<IfcStructuralSurfaceMemberVarying> {
+	return { expressID: 0 };
 }
 export class IfcStructuralSurfaceReaction {};
-export function CreateIfcStructuralSurfaceReaction(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,AppliedLoad: IfcStructuralLoad,GlobalOrLocal: IfcGlobalOrLocalEnum,PredefinedType: IfcStructuralSurfaceActivityTypeEnum): IfcStructuralSurfaceReaction {
-	return {};
+export function CreateIfcStructuralSurfaceReaction(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, AppliedLoad: Handle<IfcStructuralLoad> , GlobalOrLocal: IfcGlobalOrLocalEnum , PredefinedType: IfcStructuralSurfaceActivityTypeEnum ): Handle<IfcStructuralSurfaceReaction> {
+	return { expressID: 0 };
 }
 export class IfcStyleModel {};
-export function CreateIfcStyleModel(ContextOfItems: IfcRepresentationContext,RepresentationIdentifier: IfcLabel,RepresentationType: IfcLabel,Items: IfcRepresentationItem): IfcStyleModel {
-	return {};
+export function CreateIfcStyleModel(ContextOfItems: Handle<IfcRepresentationContext> , RepresentationIdentifier: IfcLabel | null, RepresentationType: IfcLabel | null, Items: Handle<IfcRepresentationItem>[] ): Handle<IfcStyleModel> {
+	return { expressID: 0 };
 }
 export class IfcStyledItem {};
-export function CreateIfcStyledItem(Item: IfcRepresentationItem,Styles: IfcStyleAssignmentSelect,Name: IfcLabel): IfcStyledItem {
-	return {};
+export function CreateIfcStyledItem(Item: Handle<IfcRepresentationItem> | null, Styles: IfcStyleAssignmentSelect[] , Name: IfcLabel | null): Handle<IfcStyledItem> {
+	return { expressID: 0 };
 }
 export class IfcStyledRepresentation {};
-export function CreateIfcStyledRepresentation(ContextOfItems: IfcRepresentationContext,RepresentationIdentifier: IfcLabel,RepresentationType: IfcLabel,Items: IfcRepresentationItem): IfcStyledRepresentation {
-	return {};
+export function CreateIfcStyledRepresentation(ContextOfItems: Handle<IfcRepresentationContext> , RepresentationIdentifier: IfcLabel | null, RepresentationType: IfcLabel | null, Items: Handle<IfcRepresentationItem>[] ): Handle<IfcStyledRepresentation> {
+	return { expressID: 0 };
 }
 export class IfcSubContractResource {};
-export function CreateIfcSubContractResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,Usage: IfcResourceTime,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcSubContractResourceTypeEnum): IfcSubContractResource {
-	return {};
+export function CreateIfcSubContractResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, Usage: Handle<IfcResourceTime> | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcSubContractResourceTypeEnum | null): Handle<IfcSubContractResource> {
+	return { expressID: 0 };
 }
 export class IfcSubContractResourceType {};
-export function CreateIfcSubContractResourceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ResourceType: IfcLabel,BaseCosts: IfcAppliedValue,BaseQuantity: IfcPhysicalQuantity,PredefinedType: IfcSubContractResourceTypeEnum): IfcSubContractResourceType {
-	return {};
+export function CreateIfcSubContractResourceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ResourceType: IfcLabel | null, BaseCosts: Handle<IfcAppliedValue> | null, BaseQuantity: Handle<IfcPhysicalQuantity> | null, PredefinedType: IfcSubContractResourceTypeEnum ): Handle<IfcSubContractResourceType> {
+	return { expressID: 0 };
 }
 export class IfcSubedge {};
-export function CreateIfcSubedge(EdgeStart: IfcVertex,EdgeEnd: IfcVertex,ParentEdge: IfcEdge): IfcSubedge {
-	return {};
+export function CreateIfcSubedge(EdgeStart: Handle<IfcVertex> , EdgeEnd: Handle<IfcVertex> , ParentEdge: Handle<IfcEdge> ): Handle<IfcSubedge> {
+	return { expressID: 0 };
 }
 export class IfcSurface {};
-export function CreateIfcSurface(): IfcSurface {
-	return {};
+export function CreateIfcSurface(): Handle<IfcSurface> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceCurve {};
-export function CreateIfcSurfaceCurve(Curve3D: IfcCurve,AssociatedGeometry: IfcPcurve,MasterRepresentation: IfcPreferredSurfaceCurveRepresentation): IfcSurfaceCurve {
-	return {};
+export function CreateIfcSurfaceCurve(Curve3D: Handle<IfcCurve> , AssociatedGeometry: Handle<IfcPcurve> , MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ): Handle<IfcSurfaceCurve> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceCurveSweptAreaSolid {};
-export function CreateIfcSurfaceCurveSweptAreaSolid(SweptArea: IfcProfileDef,Position: IfcAxis2Placement3D,Directrix: IfcCurve,StartParam: IfcParameterValue,EndParam: IfcParameterValue,ReferenceSurface: IfcSurface): IfcSurfaceCurveSweptAreaSolid {
-	return {};
+export function CreateIfcSurfaceCurveSweptAreaSolid(SweptArea: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null, Directrix: Handle<IfcCurve> , StartParam: IfcParameterValue | null, EndParam: IfcParameterValue | null, ReferenceSurface: Handle<IfcSurface> ): Handle<IfcSurfaceCurveSweptAreaSolid> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceFeature {};
-export function CreateIfcSurfaceFeature(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSurfaceFeatureTypeEnum): IfcSurfaceFeature {
-	return {};
+export function CreateIfcSurfaceFeature(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSurfaceFeatureTypeEnum | null): Handle<IfcSurfaceFeature> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceOfLinearExtrusion {};
-export function CreateIfcSurfaceOfLinearExtrusion(SweptCurve: IfcProfileDef,Position: IfcAxis2Placement3D,ExtrudedDirection: IfcDirection,Depth: IfcLengthMeasure): IfcSurfaceOfLinearExtrusion {
-	return {};
+export function CreateIfcSurfaceOfLinearExtrusion(SweptCurve: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null, ExtrudedDirection: Handle<IfcDirection> , Depth: IfcLengthMeasure ): Handle<IfcSurfaceOfLinearExtrusion> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceOfRevolution {};
-export function CreateIfcSurfaceOfRevolution(SweptCurve: IfcProfileDef,Position: IfcAxis2Placement3D,AxisPosition: IfcAxis1Placement): IfcSurfaceOfRevolution {
-	return {};
+export function CreateIfcSurfaceOfRevolution(SweptCurve: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null, AxisPosition: Handle<IfcAxis1Placement> ): Handle<IfcSurfaceOfRevolution> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceReinforcementArea {};
-export function CreateIfcSurfaceReinforcementArea(Name: IfcLabel,SurfaceReinforcement1: IfcLengthMeasure,SurfaceReinforcement2: IfcLengthMeasure,ShearReinforcement: IfcRatioMeasure): IfcSurfaceReinforcementArea {
-	return {};
+export function CreateIfcSurfaceReinforcementArea(Name: IfcLabel | null, SurfaceReinforcement1: IfcLengthMeasure | null, SurfaceReinforcement2: IfcLengthMeasure | null, ShearReinforcement: IfcRatioMeasure | null): Handle<IfcSurfaceReinforcementArea> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceStyle {};
-export function CreateIfcSurfaceStyle(Name: IfcLabel,Side: IfcSurfaceSide,Styles: IfcSurfaceStyleElementSelect): IfcSurfaceStyle {
-	return {};
+export function CreateIfcSurfaceStyle(Name: IfcLabel | null, Side: IfcSurfaceSide , Styles: IfcSurfaceStyleElementSelect[] ): Handle<IfcSurfaceStyle> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceStyleLighting {};
-export function CreateIfcSurfaceStyleLighting(DiffuseTransmissionColour: IfcColourRgb,DiffuseReflectionColour: IfcColourRgb,TransmissionColour: IfcColourRgb,ReflectanceColour: IfcColourRgb): IfcSurfaceStyleLighting {
-	return {};
+export function CreateIfcSurfaceStyleLighting(DiffuseTransmissionColour: Handle<IfcColourRgb> , DiffuseReflectionColour: Handle<IfcColourRgb> , TransmissionColour: Handle<IfcColourRgb> , ReflectanceColour: Handle<IfcColourRgb> ): Handle<IfcSurfaceStyleLighting> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceStyleRefraction {};
-export function CreateIfcSurfaceStyleRefraction(RefractionIndex: IfcReal,DispersionFactor: IfcReal): IfcSurfaceStyleRefraction {
-	return {};
+export function CreateIfcSurfaceStyleRefraction(RefractionIndex: IfcReal | null, DispersionFactor: IfcReal | null): Handle<IfcSurfaceStyleRefraction> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceStyleRendering {};
-export function CreateIfcSurfaceStyleRendering(SurfaceColour: IfcColourRgb,Transparency: IfcNormalisedRatioMeasure,DiffuseColour: IfcColourOrFactor,TransmissionColour: IfcColourOrFactor,DiffuseTransmissionColour: IfcColourOrFactor,ReflectionColour: IfcColourOrFactor,SpecularColour: IfcColourOrFactor,SpecularHighlight: IfcSpecularHighlightSelect,ReflectanceMethod: IfcReflectanceMethodEnum): IfcSurfaceStyleRendering {
-	return {};
+export function CreateIfcSurfaceStyleRendering(SurfaceColour: Handle<IfcColourRgb> , Transparency: IfcNormalisedRatioMeasure | null, DiffuseColour: IfcColourOrFactor | null, TransmissionColour: IfcColourOrFactor | null, DiffuseTransmissionColour: IfcColourOrFactor | null, ReflectionColour: IfcColourOrFactor | null, SpecularColour: IfcColourOrFactor | null, SpecularHighlight: IfcSpecularHighlightSelect | null, ReflectanceMethod: IfcReflectanceMethodEnum ): Handle<IfcSurfaceStyleRendering> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceStyleShading {};
-export function CreateIfcSurfaceStyleShading(SurfaceColour: IfcColourRgb,Transparency: IfcNormalisedRatioMeasure): IfcSurfaceStyleShading {
-	return {};
+export function CreateIfcSurfaceStyleShading(SurfaceColour: Handle<IfcColourRgb> , Transparency: IfcNormalisedRatioMeasure | null): Handle<IfcSurfaceStyleShading> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceStyleWithTextures {};
-export function CreateIfcSurfaceStyleWithTextures(Textures: IfcSurfaceTexture): IfcSurfaceStyleWithTextures {
-	return {};
+export function CreateIfcSurfaceStyleWithTextures(Textures: Handle<IfcSurfaceTexture> ): Handle<IfcSurfaceStyleWithTextures> {
+	return { expressID: 0 };
 }
 export class IfcSurfaceTexture {};
-export function CreateIfcSurfaceTexture(RepeatS: IfcBoolean,RepeatT: IfcBoolean,Mode: IfcIdentifier,TextureTransform: IfcCartesianTransformationOperator2D,Parameter: IfcIdentifier): IfcSurfaceTexture {
-	return {};
+export function CreateIfcSurfaceTexture(RepeatS: IfcBoolean , RepeatT: IfcBoolean , Mode: IfcIdentifier | null, TextureTransform: Handle<IfcCartesianTransformationOperator2D> | null, Parameter: IfcIdentifier | null): Handle<IfcSurfaceTexture> {
+	return { expressID: 0 };
 }
 export class IfcSweptAreaSolid {};
-export function CreateIfcSweptAreaSolid(SweptArea: IfcProfileDef,Position: IfcAxis2Placement3D): IfcSweptAreaSolid {
-	return {};
+export function CreateIfcSweptAreaSolid(SweptArea: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null): Handle<IfcSweptAreaSolid> {
+	return { expressID: 0 };
 }
 export class IfcSweptDiskSolid {};
-export function CreateIfcSweptDiskSolid(Directrix: IfcCurve,Radius: IfcPositiveLengthMeasure,InnerRadius: IfcPositiveLengthMeasure,StartParam: IfcParameterValue,EndParam: IfcParameterValue): IfcSweptDiskSolid {
-	return {};
+export function CreateIfcSweptDiskSolid(Directrix: Handle<IfcCurve> , Radius: IfcPositiveLengthMeasure , InnerRadius: IfcPositiveLengthMeasure | null, StartParam: IfcParameterValue | null, EndParam: IfcParameterValue | null): Handle<IfcSweptDiskSolid> {
+	return { expressID: 0 };
 }
 export class IfcSweptDiskSolidPolygonal {};
-export function CreateIfcSweptDiskSolidPolygonal(Directrix: IfcCurve,Radius: IfcPositiveLengthMeasure,InnerRadius: IfcPositiveLengthMeasure,StartParam: IfcParameterValue,EndParam: IfcParameterValue,FilletRadius: IfcPositiveLengthMeasure): IfcSweptDiskSolidPolygonal {
-	return {};
+export function CreateIfcSweptDiskSolidPolygonal(Directrix: Handle<IfcCurve> , Radius: IfcPositiveLengthMeasure , InnerRadius: IfcPositiveLengthMeasure | null, StartParam: IfcParameterValue | null, EndParam: IfcParameterValue | null, FilletRadius: IfcPositiveLengthMeasure | null): Handle<IfcSweptDiskSolidPolygonal> {
+	return { expressID: 0 };
 }
 export class IfcSweptSurface {};
-export function CreateIfcSweptSurface(SweptCurve: IfcProfileDef,Position: IfcAxis2Placement3D): IfcSweptSurface {
-	return {};
+export function CreateIfcSweptSurface(SweptCurve: Handle<IfcProfileDef> , Position: Handle<IfcAxis2Placement3D> | null): Handle<IfcSweptSurface> {
+	return { expressID: 0 };
 }
 export class IfcSwitchingDevice {};
-export function CreateIfcSwitchingDevice(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSwitchingDeviceTypeEnum): IfcSwitchingDevice {
-	return {};
+export function CreateIfcSwitchingDevice(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSwitchingDeviceTypeEnum | null): Handle<IfcSwitchingDevice> {
+	return { expressID: 0 };
 }
 export class IfcSwitchingDeviceType {};
-export function CreateIfcSwitchingDeviceType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSwitchingDeviceTypeEnum): IfcSwitchingDeviceType {
-	return {};
+export function CreateIfcSwitchingDeviceType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSwitchingDeviceTypeEnum ): Handle<IfcSwitchingDeviceType> {
+	return { expressID: 0 };
 }
 export class IfcSystem {};
-export function CreateIfcSystem(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel): IfcSystem {
-	return {};
+export function CreateIfcSystem(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null): Handle<IfcSystem> {
+	return { expressID: 0 };
 }
 export class IfcSystemFurnitureElement {};
-export function CreateIfcSystemFurnitureElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcSystemFurnitureElementTypeEnum): IfcSystemFurnitureElement {
-	return {};
+export function CreateIfcSystemFurnitureElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcSystemFurnitureElementTypeEnum | null): Handle<IfcSystemFurnitureElement> {
+	return { expressID: 0 };
 }
 export class IfcSystemFurnitureElementType {};
-export function CreateIfcSystemFurnitureElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcSystemFurnitureElementTypeEnum): IfcSystemFurnitureElementType {
-	return {};
+export function CreateIfcSystemFurnitureElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcSystemFurnitureElementTypeEnum | null): Handle<IfcSystemFurnitureElementType> {
+	return { expressID: 0 };
 }
 export class IfcTShapeProfileDef {};
-export function CreateIfcTShapeProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,Depth: IfcPositiveLengthMeasure,FlangeWidth: IfcPositiveLengthMeasure,WebThickness: IfcPositiveLengthMeasure,FlangeThickness: IfcPositiveLengthMeasure,FilletRadius: IfcNonNegativeLengthMeasure,FlangeEdgeRadius: IfcNonNegativeLengthMeasure,WebEdgeRadius: IfcNonNegativeLengthMeasure,WebSlope: IfcPlaneAngleMeasure,FlangeSlope: IfcPlaneAngleMeasure): IfcTShapeProfileDef {
-	return {};
+export function CreateIfcTShapeProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, Depth: IfcPositiveLengthMeasure , FlangeWidth: IfcPositiveLengthMeasure , WebThickness: IfcPositiveLengthMeasure , FlangeThickness: IfcPositiveLengthMeasure , FilletRadius: IfcNonNegativeLengthMeasure | null, FlangeEdgeRadius: IfcNonNegativeLengthMeasure | null, WebEdgeRadius: IfcNonNegativeLengthMeasure | null, WebSlope: IfcPlaneAngleMeasure | null, FlangeSlope: IfcPlaneAngleMeasure | null): Handle<IfcTShapeProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcTable {};
-export function CreateIfcTable(Name: IfcLabel,Rows: IfcTableRow,Columns: IfcTableColumn): IfcTable {
-	return {};
+export function CreateIfcTable(Name: IfcLabel | null, Rows: Handle<IfcTableRow> | null, Columns: Handle<IfcTableColumn> | null): Handle<IfcTable> {
+	return { expressID: 0 };
 }
 export class IfcTableColumn {};
-export function CreateIfcTableColumn(Identifier: IfcIdentifier,Name: IfcLabel,Description: IfcText,Unit: IfcUnit,ReferencePath: IfcReference): IfcTableColumn {
-	return {};
+export function CreateIfcTableColumn(Identifier: IfcIdentifier | null, Name: IfcLabel | null, Description: IfcText | null, Unit: IfcUnit | null, ReferencePath: Handle<IfcReference> | null): Handle<IfcTableColumn> {
+	return { expressID: 0 };
 }
 export class IfcTableRow {};
-export function CreateIfcTableRow(RowCells: IfcValue,IsHeading: IfcBoolean): IfcTableRow {
-	return {};
+export function CreateIfcTableRow(RowCells: IfcValue | null, IsHeading: IfcBoolean | null): Handle<IfcTableRow> {
+	return { expressID: 0 };
 }
 export class IfcTank {};
-export function CreateIfcTank(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcTankTypeEnum): IfcTank {
-	return {};
+export function CreateIfcTank(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcTankTypeEnum | null): Handle<IfcTank> {
+	return { expressID: 0 };
 }
 export class IfcTankType {};
-export function CreateIfcTankType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcTankTypeEnum): IfcTankType {
-	return {};
+export function CreateIfcTankType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcTankTypeEnum ): Handle<IfcTankType> {
+	return { expressID: 0 };
 }
 export class IfcTask {};
-export function CreateIfcTask(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,LongDescription: IfcText,Status: IfcLabel,WorkMethod: IfcLabel,IsMilestone: IfcBoolean,Priority: IfcInteger,TaskTime: IfcTaskTime,PredefinedType: IfcTaskTypeEnum): IfcTask {
-	return {};
+export function CreateIfcTask(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, Status: IfcLabel | null, WorkMethod: IfcLabel | null, IsMilestone: IfcBoolean , Priority: IfcInteger | null, TaskTime: Handle<IfcTaskTime> | null, PredefinedType: IfcTaskTypeEnum | null): Handle<IfcTask> {
+	return { expressID: 0 };
 }
 export class IfcTaskTime {};
-export function CreateIfcTaskTime(Name: IfcLabel,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,DurationType: IfcTaskDurationEnum,ScheduleDuration: IfcDuration,ScheduleStart: IfcDateTime,ScheduleFinish: IfcDateTime,EarlyStart: IfcDateTime,EarlyFinish: IfcDateTime,LateStart: IfcDateTime,LateFinish: IfcDateTime,FreeFloat: IfcDuration,TotalFloat: IfcDuration,IsCritical: IfcBoolean,StatusTime: IfcDateTime,ActualDuration: IfcDuration,ActualStart: IfcDateTime,ActualFinish: IfcDateTime,RemainingTime: IfcDuration,Completion: IfcPositiveRatioMeasure): IfcTaskTime {
-	return {};
+export function CreateIfcTaskTime(Name: IfcLabel | null, DataOrigin: IfcDataOriginEnum | null, UserDefinedDataOrigin: IfcLabel | null, DurationType: IfcTaskDurationEnum | null, ScheduleDuration: IfcDuration | null, ScheduleStart: IfcDateTime | null, ScheduleFinish: IfcDateTime | null, EarlyStart: IfcDateTime | null, EarlyFinish: IfcDateTime | null, LateStart: IfcDateTime | null, LateFinish: IfcDateTime | null, FreeFloat: IfcDuration | null, TotalFloat: IfcDuration | null, IsCritical: IfcBoolean | null, StatusTime: IfcDateTime | null, ActualDuration: IfcDuration | null, ActualStart: IfcDateTime | null, ActualFinish: IfcDateTime | null, RemainingTime: IfcDuration | null, Completion: IfcPositiveRatioMeasure | null): Handle<IfcTaskTime> {
+	return { expressID: 0 };
 }
 export class IfcTaskTimeRecurring {};
-export function CreateIfcTaskTimeRecurring(Name: IfcLabel,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,DurationType: IfcTaskDurationEnum,ScheduleDuration: IfcDuration,ScheduleStart: IfcDateTime,ScheduleFinish: IfcDateTime,EarlyStart: IfcDateTime,EarlyFinish: IfcDateTime,LateStart: IfcDateTime,LateFinish: IfcDateTime,FreeFloat: IfcDuration,TotalFloat: IfcDuration,IsCritical: IfcBoolean,StatusTime: IfcDateTime,ActualDuration: IfcDuration,ActualStart: IfcDateTime,ActualFinish: IfcDateTime,RemainingTime: IfcDuration,Completion: IfcPositiveRatioMeasure,Recurrence: IfcRecurrencePattern): IfcTaskTimeRecurring {
-	return {};
+export function CreateIfcTaskTimeRecurring(Name: IfcLabel | null, DataOrigin: IfcDataOriginEnum | null, UserDefinedDataOrigin: IfcLabel | null, DurationType: IfcTaskDurationEnum | null, ScheduleDuration: IfcDuration | null, ScheduleStart: IfcDateTime | null, ScheduleFinish: IfcDateTime | null, EarlyStart: IfcDateTime | null, EarlyFinish: IfcDateTime | null, LateStart: IfcDateTime | null, LateFinish: IfcDateTime | null, FreeFloat: IfcDuration | null, TotalFloat: IfcDuration | null, IsCritical: IfcBoolean | null, StatusTime: IfcDateTime | null, ActualDuration: IfcDuration | null, ActualStart: IfcDateTime | null, ActualFinish: IfcDateTime | null, RemainingTime: IfcDuration | null, Completion: IfcPositiveRatioMeasure | null, Recurrence: Handle<IfcRecurrencePattern> ): Handle<IfcTaskTimeRecurring> {
+	return { expressID: 0 };
 }
 export class IfcTaskType {};
-export function CreateIfcTaskType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ProcessType: IfcLabel,PredefinedType: IfcTaskTypeEnum,WorkMethod: IfcLabel): IfcTaskType {
-	return {};
+export function CreateIfcTaskType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ProcessType: IfcLabel | null, PredefinedType: IfcTaskTypeEnum , WorkMethod: IfcLabel | null): Handle<IfcTaskType> {
+	return { expressID: 0 };
 }
 export class IfcTelecomAddress {};
-export function CreateIfcTelecomAddress(Purpose: IfcAddressTypeEnum,Description: IfcText,UserDefinedPurpose: IfcLabel,TelephoneNumbers: IfcLabel,FacsimileNumbers: IfcLabel,PagerNumber: IfcLabel,ElectronicMailAddresses: IfcLabel,WWWHomePageURL: IfcURIReference,MessagingIDs: IfcURIReference): IfcTelecomAddress {
-	return {};
+export function CreateIfcTelecomAddress(Purpose: IfcAddressTypeEnum | null, Description: IfcText | null, UserDefinedPurpose: IfcLabel | null, TelephoneNumbers: IfcLabel | null, FacsimileNumbers: IfcLabel | null, PagerNumber: IfcLabel | null, ElectronicMailAddresses: IfcLabel | null, WWWHomePageURL: IfcURIReference | null, MessagingIDs: IfcURIReference | null): Handle<IfcTelecomAddress> {
+	return { expressID: 0 };
 }
 export class IfcTendon {};
-export function CreateIfcTendon(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,SteelGrade: IfcLabel,PredefinedType: IfcTendonTypeEnum,NominalDiameter: IfcPositiveLengthMeasure,CrossSectionArea: IfcAreaMeasure,TensionForce: IfcForceMeasure,PreStress: IfcPressureMeasure,FrictionCoefficient: IfcNormalisedRatioMeasure,AnchorageSlip: IfcPositiveLengthMeasure,MinCurvatureRadius: IfcPositiveLengthMeasure): IfcTendon {
-	return {};
+export function CreateIfcTendon(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, SteelGrade: IfcLabel | null, PredefinedType: IfcTendonTypeEnum | null, NominalDiameter: IfcPositiveLengthMeasure | null, CrossSectionArea: IfcAreaMeasure | null, TensionForce: IfcForceMeasure | null, PreStress: IfcPressureMeasure | null, FrictionCoefficient: IfcNormalisedRatioMeasure | null, AnchorageSlip: IfcPositiveLengthMeasure | null, MinCurvatureRadius: IfcPositiveLengthMeasure | null): Handle<IfcTendon> {
+	return { expressID: 0 };
 }
 export class IfcTendonAnchor {};
-export function CreateIfcTendonAnchor(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,SteelGrade: IfcLabel,PredefinedType: IfcTendonAnchorTypeEnum): IfcTendonAnchor {
-	return {};
+export function CreateIfcTendonAnchor(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, SteelGrade: IfcLabel | null, PredefinedType: IfcTendonAnchorTypeEnum | null): Handle<IfcTendonAnchor> {
+	return { expressID: 0 };
 }
 export class IfcTendonAnchorType {};
-export function CreateIfcTendonAnchorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcTendonAnchorTypeEnum): IfcTendonAnchorType {
-	return {};
+export function CreateIfcTendonAnchorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcTendonAnchorTypeEnum ): Handle<IfcTendonAnchorType> {
+	return { expressID: 0 };
 }
 export class IfcTendonConduit {};
-export function CreateIfcTendonConduit(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,SteelGrade: IfcLabel,PredefinedType: IfcTendonConduitTypeEnum): IfcTendonConduit {
-	return {};
+export function CreateIfcTendonConduit(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, SteelGrade: IfcLabel | null, PredefinedType: IfcTendonConduitTypeEnum ): Handle<IfcTendonConduit> {
+	return { expressID: 0 };
 }
 export class IfcTendonConduitType {};
-export function CreateIfcTendonConduitType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcTendonConduitTypeEnum): IfcTendonConduitType {
-	return {};
+export function CreateIfcTendonConduitType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcTendonConduitTypeEnum ): Handle<IfcTendonConduitType> {
+	return { expressID: 0 };
 }
 export class IfcTendonType {};
-export function CreateIfcTendonType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcTendonTypeEnum,NominalDiameter: IfcPositiveLengthMeasure,CrossSectionArea: IfcAreaMeasure,SheathDiameter: IfcPositiveLengthMeasure): IfcTendonType {
-	return {};
+export function CreateIfcTendonType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcTendonTypeEnum , NominalDiameter: IfcPositiveLengthMeasure | null, CrossSectionArea: IfcAreaMeasure | null, SheathDiameter: IfcPositiveLengthMeasure | null): Handle<IfcTendonType> {
+	return { expressID: 0 };
 }
 export class IfcTessellatedFaceSet {};
-export function CreateIfcTessellatedFaceSet(Coordinates: IfcCartesianPointList3D): IfcTessellatedFaceSet {
-	return {};
+export function CreateIfcTessellatedFaceSet(Coordinates: Handle<IfcCartesianPointList3D> ): Handle<IfcTessellatedFaceSet> {
+	return { expressID: 0 };
 }
 export class IfcTessellatedItem {};
-export function CreateIfcTessellatedItem(): IfcTessellatedItem {
-	return {};
+export function CreateIfcTessellatedItem(): Handle<IfcTessellatedItem> {
+	return { expressID: 0 };
 }
 export class IfcTextLiteral {};
-export function CreateIfcTextLiteral(Literal: IfcPresentableText,Placement: IfcAxis2Placement,Path: IfcTextPath): IfcTextLiteral {
-	return {};
+export function CreateIfcTextLiteral(Literal: IfcPresentableText , Placement: IfcAxis2Placement , Path: IfcTextPath ): Handle<IfcTextLiteral> {
+	return { expressID: 0 };
 }
 export class IfcTextLiteralWithExtent {};
-export function CreateIfcTextLiteralWithExtent(Literal: IfcPresentableText,Placement: IfcAxis2Placement,Path: IfcTextPath,Extent: IfcPlanarExtent,BoxAlignment: IfcBoxAlignment): IfcTextLiteralWithExtent {
-	return {};
+export function CreateIfcTextLiteralWithExtent(Literal: IfcPresentableText , Placement: IfcAxis2Placement , Path: IfcTextPath , Extent: Handle<IfcPlanarExtent> , BoxAlignment: IfcBoxAlignment ): Handle<IfcTextLiteralWithExtent> {
+	return { expressID: 0 };
 }
 export class IfcTextStyle {};
-export function CreateIfcTextStyle(Name: IfcLabel,TextCharacterAppearance: IfcTextStyleForDefinedFont,TextStyle: IfcTextStyleTextModel,TextFontStyle: IfcTextFontSelect,ModelOrDraughting: IfcBoolean): IfcTextStyle {
-	return {};
+export function CreateIfcTextStyle(Name: IfcLabel | null, TextCharacterAppearance: Handle<IfcTextStyleForDefinedFont> | null, TextStyle: Handle<IfcTextStyleTextModel> | null, TextFontStyle: IfcTextFontSelect , ModelOrDraughting: IfcBoolean | null): Handle<IfcTextStyle> {
+	return { expressID: 0 };
 }
 export class IfcTextStyleFontModel {};
-export function CreateIfcTextStyleFontModel(Name: IfcLabel,FontFamily: IfcTextFontName,FontStyle: IfcFontStyle,FontVariant: IfcFontVariant,FontWeight: IfcFontWeight,FontSize: IfcSizeSelect): IfcTextStyleFontModel {
-	return {};
+export function CreateIfcTextStyleFontModel(Name: IfcLabel , FontFamily: IfcTextFontName , FontStyle: IfcFontStyle | null, FontVariant: IfcFontVariant | null, FontWeight: IfcFontWeight | null, FontSize: IfcSizeSelect ): Handle<IfcTextStyleFontModel> {
+	return { expressID: 0 };
 }
 export class IfcTextStyleForDefinedFont {};
-export function CreateIfcTextStyleForDefinedFont(Colour: IfcColour,BackgroundColour: IfcColour): IfcTextStyleForDefinedFont {
-	return {};
+export function CreateIfcTextStyleForDefinedFont(Colour: IfcColour , BackgroundColour: IfcColour | null): Handle<IfcTextStyleForDefinedFont> {
+	return { expressID: 0 };
 }
 export class IfcTextStyleTextModel {};
-export function CreateIfcTextStyleTextModel(TextIndent: IfcSizeSelect,TextAlign: IfcTextAlignment,TextDecoration: IfcTextDecoration,LetterSpacing: IfcSizeSelect,WordSpacing: IfcSizeSelect,TextTransform: IfcTextTransformation,LineHeight: IfcSizeSelect): IfcTextStyleTextModel {
-	return {};
+export function CreateIfcTextStyleTextModel(TextIndent: IfcSizeSelect | null, TextAlign: IfcTextAlignment | null, TextDecoration: IfcTextDecoration | null, LetterSpacing: IfcSizeSelect | null, WordSpacing: IfcSizeSelect | null, TextTransform: IfcTextTransformation | null, LineHeight: IfcSizeSelect | null): Handle<IfcTextStyleTextModel> {
+	return { expressID: 0 };
 }
 export class IfcTextureCoordinate {};
-export function CreateIfcTextureCoordinate(Maps: IfcSurfaceTexture): IfcTextureCoordinate {
-	return {};
+export function CreateIfcTextureCoordinate(Maps: Handle<IfcSurfaceTexture> ): Handle<IfcTextureCoordinate> {
+	return { expressID: 0 };
 }
 export class IfcTextureCoordinateGenerator {};
-export function CreateIfcTextureCoordinateGenerator(Maps: IfcSurfaceTexture,Mode: IfcLabel,Parameter: IfcReal): IfcTextureCoordinateGenerator {
-	return {};
+export function CreateIfcTextureCoordinateGenerator(Maps: Handle<IfcSurfaceTexture> , Mode: IfcLabel , Parameter: IfcReal | null): Handle<IfcTextureCoordinateGenerator> {
+	return { expressID: 0 };
 }
 export class IfcTextureMap {};
-export function CreateIfcTextureMap(Maps: IfcSurfaceTexture,Vertices: IfcTextureVertex,MappedTo: IfcFace): IfcTextureMap {
-	return {};
+export function CreateIfcTextureMap(Maps: Handle<IfcSurfaceTexture> , Vertices: Handle<IfcTextureVertex> , MappedTo: Handle<IfcFace> ): Handle<IfcTextureMap> {
+	return { expressID: 0 };
 }
 export class IfcTextureVertex {};
-export function CreateIfcTextureVertex(Coordinates: IfcParameterValue): IfcTextureVertex {
-	return {};
+export function CreateIfcTextureVertex(Coordinates: IfcParameterValue ): Handle<IfcTextureVertex> {
+	return { expressID: 0 };
 }
 export class IfcTextureVertexList {};
-export function CreateIfcTextureVertexList(TexCoordsList: IfcParameterValue): IfcTextureVertexList {
-	return {};
+export function CreateIfcTextureVertexList(TexCoordsList: IfcParameterValue ): Handle<IfcTextureVertexList> {
+	return { expressID: 0 };
 }
 export class IfcTimePeriod {};
-export function CreateIfcTimePeriod(StartTime: IfcTime,EndTime: IfcTime): IfcTimePeriod {
-	return {};
+export function CreateIfcTimePeriod(StartTime: IfcTime , EndTime: IfcTime ): Handle<IfcTimePeriod> {
+	return { expressID: 0 };
 }
 export class IfcTimeSeries {};
-export function CreateIfcTimeSeries(Name: IfcLabel,Description: IfcText,StartTime: IfcDateTime,EndTime: IfcDateTime,TimeSeriesDataType: IfcTimeSeriesDataTypeEnum,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,Unit: IfcUnit): IfcTimeSeries {
-	return {};
+export function CreateIfcTimeSeries(Name: IfcLabel , Description: IfcText | null, StartTime: IfcDateTime , EndTime: IfcDateTime , TimeSeriesDataType: IfcTimeSeriesDataTypeEnum , DataOrigin: IfcDataOriginEnum , UserDefinedDataOrigin: IfcLabel | null, Unit: IfcUnit | null): Handle<IfcTimeSeries> {
+	return { expressID: 0 };
 }
 export class IfcTimeSeriesValue {};
-export function CreateIfcTimeSeriesValue(ListValues: IfcValue): IfcTimeSeriesValue {
-	return {};
+export function CreateIfcTimeSeriesValue(ListValues: IfcValue ): Handle<IfcTimeSeriesValue> {
+	return { expressID: 0 };
 }
 export class IfcTopologicalRepresentationItem {};
-export function CreateIfcTopologicalRepresentationItem(): IfcTopologicalRepresentationItem {
-	return {};
+export function CreateIfcTopologicalRepresentationItem(): Handle<IfcTopologicalRepresentationItem> {
+	return { expressID: 0 };
 }
 export class IfcTopologyRepresentation {};
-export function CreateIfcTopologyRepresentation(ContextOfItems: IfcRepresentationContext,RepresentationIdentifier: IfcLabel,RepresentationType: IfcLabel,Items: IfcRepresentationItem): IfcTopologyRepresentation {
-	return {};
+export function CreateIfcTopologyRepresentation(ContextOfItems: Handle<IfcRepresentationContext> , RepresentationIdentifier: IfcLabel | null, RepresentationType: IfcLabel | null, Items: Handle<IfcRepresentationItem>[] ): Handle<IfcTopologyRepresentation> {
+	return { expressID: 0 };
 }
 export class IfcToroidalSurface {};
-export function CreateIfcToroidalSurface(Position: IfcAxis2Placement3D,MajorRadius: IfcPositiveLengthMeasure,MinorRadius: IfcPositiveLengthMeasure): IfcToroidalSurface {
-	return {};
+export function CreateIfcToroidalSurface(Position: Handle<IfcAxis2Placement3D> , MajorRadius: IfcPositiveLengthMeasure , MinorRadius: IfcPositiveLengthMeasure ): Handle<IfcToroidalSurface> {
+	return { expressID: 0 };
 }
 export class IfcTransformer {};
-export function CreateIfcTransformer(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcTransformerTypeEnum): IfcTransformer {
-	return {};
+export function CreateIfcTransformer(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcTransformerTypeEnum | null): Handle<IfcTransformer> {
+	return { expressID: 0 };
 }
 export class IfcTransformerType {};
-export function CreateIfcTransformerType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcTransformerTypeEnum): IfcTransformerType {
-	return {};
+export function CreateIfcTransformerType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcTransformerTypeEnum ): Handle<IfcTransformerType> {
+	return { expressID: 0 };
 }
 export class IfcTransitionCurveSegment2D {};
-export function CreateIfcTransitionCurveSegment2D(StartPoint: IfcCartesianPoint,StartDirection: IfcPlaneAngleMeasure,SegmentLength: IfcPositiveLengthMeasure,StartRadius: IfcPositiveLengthMeasure,EndRadius: IfcPositiveLengthMeasure,IsStartRadiusCCW: IfcBoolean,IsEndRadiusCCW: IfcBoolean,TransitionCurveType: IfcTransitionCurveType): IfcTransitionCurveSegment2D {
-	return {};
+export function CreateIfcTransitionCurveSegment2D(StartPoint: Handle<IfcCartesianPoint> , StartDirection: IfcPlaneAngleMeasure , SegmentLength: IfcPositiveLengthMeasure , StartRadius: IfcPositiveLengthMeasure | null, EndRadius: IfcPositiveLengthMeasure | null, IsStartRadiusCCW: IfcBoolean , IsEndRadiusCCW: IfcBoolean , TransitionCurveType: IfcTransitionCurveType ): Handle<IfcTransitionCurveSegment2D> {
+	return { expressID: 0 };
 }
 export class IfcTransportElement {};
-export function CreateIfcTransportElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcTransportElementTypeEnum): IfcTransportElement {
-	return {};
+export function CreateIfcTransportElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcTransportElementTypeEnum | null): Handle<IfcTransportElement> {
+	return { expressID: 0 };
 }
 export class IfcTransportElementType {};
-export function CreateIfcTransportElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcTransportElementTypeEnum): IfcTransportElementType {
-	return {};
+export function CreateIfcTransportElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcTransportElementTypeEnum ): Handle<IfcTransportElementType> {
+	return { expressID: 0 };
 }
 export class IfcTrapeziumProfileDef {};
-export function CreateIfcTrapeziumProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,BottomXDim: IfcPositiveLengthMeasure,TopXDim: IfcPositiveLengthMeasure,YDim: IfcPositiveLengthMeasure,TopXOffset: IfcLengthMeasure): IfcTrapeziumProfileDef {
-	return {};
+export function CreateIfcTrapeziumProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, BottomXDim: IfcPositiveLengthMeasure , TopXDim: IfcPositiveLengthMeasure , YDim: IfcPositiveLengthMeasure , TopXOffset: IfcLengthMeasure ): Handle<IfcTrapeziumProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcTriangulatedFaceSet {};
-export function CreateIfcTriangulatedFaceSet(Coordinates: IfcCartesianPointList3D,Normals: IfcParameterValue,Closed: IfcBoolean,CoordIndex: IfcPositiveInteger,PnIndex: IfcPositiveInteger): IfcTriangulatedFaceSet {
-	return {};
+export function CreateIfcTriangulatedFaceSet(Coordinates: Handle<IfcCartesianPointList3D> , Normals: IfcParameterValue | null, Closed: IfcBoolean | null, CoordIndex: IfcPositiveInteger , PnIndex: IfcPositiveInteger | null): Handle<IfcTriangulatedFaceSet> {
+	return { expressID: 0 };
 }
 export class IfcTriangulatedIrregularNetwork {};
-export function CreateIfcTriangulatedIrregularNetwork(Coordinates: IfcCartesianPointList3D,Normals: IfcParameterValue,Closed: IfcBoolean,CoordIndex: IfcPositiveInteger,PnIndex: IfcPositiveInteger,Flags: IfcInteger): IfcTriangulatedIrregularNetwork {
-	return {};
+export function CreateIfcTriangulatedIrregularNetwork(Coordinates: Handle<IfcCartesianPointList3D> , Normals: IfcParameterValue | null, Closed: IfcBoolean | null, CoordIndex: IfcPositiveInteger , PnIndex: IfcPositiveInteger | null, Flags: IfcInteger ): Handle<IfcTriangulatedIrregularNetwork> {
+	return { expressID: 0 };
 }
 export class IfcTrimmedCurve {};
-export function CreateIfcTrimmedCurve(BasisCurve: IfcCurve,Trim1: IfcTrimmingSelect,Trim2: IfcTrimmingSelect,SenseAgreement: IfcBoolean,MasterRepresentation: IfcTrimmingPreference): IfcTrimmedCurve {
-	return {};
+export function CreateIfcTrimmedCurve(BasisCurve: Handle<IfcCurve> , Trim1: IfcTrimmingSelect[] , Trim2: IfcTrimmingSelect[] , SenseAgreement: IfcBoolean , MasterRepresentation: IfcTrimmingPreference ): Handle<IfcTrimmedCurve> {
+	return { expressID: 0 };
 }
 export class IfcTubeBundle {};
-export function CreateIfcTubeBundle(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcTubeBundleTypeEnum): IfcTubeBundle {
-	return {};
+export function CreateIfcTubeBundle(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcTubeBundleTypeEnum | null): Handle<IfcTubeBundle> {
+	return { expressID: 0 };
 }
 export class IfcTubeBundleType {};
-export function CreateIfcTubeBundleType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcTubeBundleTypeEnum): IfcTubeBundleType {
-	return {};
+export function CreateIfcTubeBundleType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcTubeBundleTypeEnum ): Handle<IfcTubeBundleType> {
+	return { expressID: 0 };
 }
 export class IfcTypeObject {};
-export function CreateIfcTypeObject(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition): IfcTypeObject {
-	return {};
+export function CreateIfcTypeObject(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null): Handle<IfcTypeObject> {
+	return { expressID: 0 };
 }
 export class IfcTypeProcess {};
-export function CreateIfcTypeProcess(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ProcessType: IfcLabel): IfcTypeProcess {
-	return {};
+export function CreateIfcTypeProcess(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ProcessType: IfcLabel | null): Handle<IfcTypeProcess> {
+	return { expressID: 0 };
 }
 export class IfcTypeProduct {};
-export function CreateIfcTypeProduct(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel): IfcTypeProduct {
-	return {};
+export function CreateIfcTypeProduct(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null): Handle<IfcTypeProduct> {
+	return { expressID: 0 };
 }
 export class IfcTypeResource {};
-export function CreateIfcTypeResource(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,Identification: IfcIdentifier,LongDescription: IfcText,ResourceType: IfcLabel): IfcTypeResource {
-	return {};
+export function CreateIfcTypeResource(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, Identification: IfcIdentifier | null, LongDescription: IfcText | null, ResourceType: IfcLabel | null): Handle<IfcTypeResource> {
+	return { expressID: 0 };
 }
 export class IfcUShapeProfileDef {};
-export function CreateIfcUShapeProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,Depth: IfcPositiveLengthMeasure,FlangeWidth: IfcPositiveLengthMeasure,WebThickness: IfcPositiveLengthMeasure,FlangeThickness: IfcPositiveLengthMeasure,FilletRadius: IfcNonNegativeLengthMeasure,EdgeRadius: IfcNonNegativeLengthMeasure,FlangeSlope: IfcPlaneAngleMeasure): IfcUShapeProfileDef {
-	return {};
+export function CreateIfcUShapeProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, Depth: IfcPositiveLengthMeasure , FlangeWidth: IfcPositiveLengthMeasure , WebThickness: IfcPositiveLengthMeasure , FlangeThickness: IfcPositiveLengthMeasure , FilletRadius: IfcNonNegativeLengthMeasure | null, EdgeRadius: IfcNonNegativeLengthMeasure | null, FlangeSlope: IfcPlaneAngleMeasure | null): Handle<IfcUShapeProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcUnitAssignment {};
-export function CreateIfcUnitAssignment(Units: IfcUnit): IfcUnitAssignment {
-	return {};
+export function CreateIfcUnitAssignment(Units: IfcUnit[] ): Handle<IfcUnitAssignment> {
+	return { expressID: 0 };
 }
 export class IfcUnitaryControlElement {};
-export function CreateIfcUnitaryControlElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcUnitaryControlElementTypeEnum): IfcUnitaryControlElement {
-	return {};
+export function CreateIfcUnitaryControlElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcUnitaryControlElementTypeEnum | null): Handle<IfcUnitaryControlElement> {
+	return { expressID: 0 };
 }
 export class IfcUnitaryControlElementType {};
-export function CreateIfcUnitaryControlElementType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcUnitaryControlElementTypeEnum): IfcUnitaryControlElementType {
-	return {};
+export function CreateIfcUnitaryControlElementType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcUnitaryControlElementTypeEnum ): Handle<IfcUnitaryControlElementType> {
+	return { expressID: 0 };
 }
 export class IfcUnitaryEquipment {};
-export function CreateIfcUnitaryEquipment(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcUnitaryEquipmentTypeEnum): IfcUnitaryEquipment {
-	return {};
+export function CreateIfcUnitaryEquipment(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcUnitaryEquipmentTypeEnum | null): Handle<IfcUnitaryEquipment> {
+	return { expressID: 0 };
 }
 export class IfcUnitaryEquipmentType {};
-export function CreateIfcUnitaryEquipmentType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcUnitaryEquipmentTypeEnum): IfcUnitaryEquipmentType {
-	return {};
+export function CreateIfcUnitaryEquipmentType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcUnitaryEquipmentTypeEnum ): Handle<IfcUnitaryEquipmentType> {
+	return { expressID: 0 };
 }
 export class IfcValve {};
-export function CreateIfcValve(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcValveTypeEnum): IfcValve {
-	return {};
+export function CreateIfcValve(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcValveTypeEnum | null): Handle<IfcValve> {
+	return { expressID: 0 };
 }
 export class IfcValveType {};
-export function CreateIfcValveType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcValveTypeEnum): IfcValveType {
-	return {};
+export function CreateIfcValveType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcValveTypeEnum ): Handle<IfcValveType> {
+	return { expressID: 0 };
 }
 export class IfcVector {};
-export function CreateIfcVector(Orientation: IfcDirection,Magnitude: IfcLengthMeasure): IfcVector {
-	return {};
+export function CreateIfcVector(Orientation: Handle<IfcDirection> , Magnitude: IfcLengthMeasure ): Handle<IfcVector> {
+	return { expressID: 0 };
 }
 export class IfcVertex {};
-export function CreateIfcVertex(): IfcVertex {
-	return {};
+export function CreateIfcVertex(): Handle<IfcVertex> {
+	return { expressID: 0 };
 }
 export class IfcVertexLoop {};
-export function CreateIfcVertexLoop(LoopVertex: IfcVertex): IfcVertexLoop {
-	return {};
+export function CreateIfcVertexLoop(LoopVertex: Handle<IfcVertex> ): Handle<IfcVertexLoop> {
+	return { expressID: 0 };
 }
 export class IfcVertexPoint {};
-export function CreateIfcVertexPoint(VertexGeometry: IfcPoint): IfcVertexPoint {
-	return {};
+export function CreateIfcVertexPoint(VertexGeometry: Handle<IfcPoint> ): Handle<IfcVertexPoint> {
+	return { expressID: 0 };
 }
 export class IfcVibrationDamper {};
-export function CreateIfcVibrationDamper(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcVibrationDamperTypeEnum): IfcVibrationDamper {
-	return {};
+export function CreateIfcVibrationDamper(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcVibrationDamperTypeEnum | null): Handle<IfcVibrationDamper> {
+	return { expressID: 0 };
 }
 export class IfcVibrationDamperType {};
-export function CreateIfcVibrationDamperType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcVibrationDamperTypeEnum): IfcVibrationDamperType {
-	return {};
+export function CreateIfcVibrationDamperType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcVibrationDamperTypeEnum | null): Handle<IfcVibrationDamperType> {
+	return { expressID: 0 };
 }
 export class IfcVibrationIsolator {};
-export function CreateIfcVibrationIsolator(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcVibrationIsolatorTypeEnum): IfcVibrationIsolator {
-	return {};
+export function CreateIfcVibrationIsolator(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcVibrationIsolatorTypeEnum | null): Handle<IfcVibrationIsolator> {
+	return { expressID: 0 };
 }
 export class IfcVibrationIsolatorType {};
-export function CreateIfcVibrationIsolatorType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcVibrationIsolatorTypeEnum): IfcVibrationIsolatorType {
-	return {};
+export function CreateIfcVibrationIsolatorType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcVibrationIsolatorTypeEnum ): Handle<IfcVibrationIsolatorType> {
+	return { expressID: 0 };
 }
 export class IfcVirtualElement {};
-export function CreateIfcVirtualElement(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier): IfcVirtualElement {
-	return {};
+export function CreateIfcVirtualElement(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null): Handle<IfcVirtualElement> {
+	return { expressID: 0 };
 }
 export class IfcVirtualGridIntersection {};
-export function CreateIfcVirtualGridIntersection(IntersectingAxes: IfcGridAxis,OffsetDistances: IfcLengthMeasure): IfcVirtualGridIntersection {
-	return {};
+export function CreateIfcVirtualGridIntersection(IntersectingAxes: Handle<IfcGridAxis> , OffsetDistances: IfcLengthMeasure ): Handle<IfcVirtualGridIntersection> {
+	return { expressID: 0 };
 }
 export class IfcVoidingFeature {};
-export function CreateIfcVoidingFeature(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcVoidingFeatureTypeEnum): IfcVoidingFeature {
-	return {};
+export function CreateIfcVoidingFeature(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcVoidingFeatureTypeEnum | null): Handle<IfcVoidingFeature> {
+	return { expressID: 0 };
 }
 export class IfcWall {};
-export function CreateIfcWall(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcWallTypeEnum): IfcWall {
-	return {};
+export function CreateIfcWall(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcWallTypeEnum | null): Handle<IfcWall> {
+	return { expressID: 0 };
 }
 export class IfcWallElementedCase {};
-export function CreateIfcWallElementedCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcWallTypeEnum): IfcWallElementedCase {
-	return {};
+export function CreateIfcWallElementedCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcWallTypeEnum | null): Handle<IfcWallElementedCase> {
+	return { expressID: 0 };
 }
 export class IfcWallStandardCase {};
-export function CreateIfcWallStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcWallTypeEnum): IfcWallStandardCase {
-	return {};
+export function CreateIfcWallStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcWallTypeEnum | null): Handle<IfcWallStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcWallType {};
-export function CreateIfcWallType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcWallTypeEnum): IfcWallType {
-	return {};
+export function CreateIfcWallType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcWallTypeEnum ): Handle<IfcWallType> {
+	return { expressID: 0 };
 }
 export class IfcWasteTerminal {};
-export function CreateIfcWasteTerminal(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,PredefinedType: IfcWasteTerminalTypeEnum): IfcWasteTerminal {
-	return {};
+export function CreateIfcWasteTerminal(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, PredefinedType: IfcWasteTerminalTypeEnum | null): Handle<IfcWasteTerminal> {
+	return { expressID: 0 };
 }
 export class IfcWasteTerminalType {};
-export function CreateIfcWasteTerminalType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcWasteTerminalTypeEnum): IfcWasteTerminalType {
-	return {};
+export function CreateIfcWasteTerminalType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcWasteTerminalTypeEnum ): Handle<IfcWasteTerminalType> {
+	return { expressID: 0 };
 }
 export class IfcWindow {};
-export function CreateIfcWindow(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,OverallHeight: IfcPositiveLengthMeasure,OverallWidth: IfcPositiveLengthMeasure,PredefinedType: IfcWindowTypeEnum,PartitioningType: IfcWindowTypePartitioningEnum,UserDefinedPartitioningType: IfcLabel): IfcWindow {
-	return {};
+export function CreateIfcWindow(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, OverallHeight: IfcPositiveLengthMeasure | null, OverallWidth: IfcPositiveLengthMeasure | null, PredefinedType: IfcWindowTypeEnum | null, PartitioningType: IfcWindowTypePartitioningEnum | null, UserDefinedPartitioningType: IfcLabel | null): Handle<IfcWindow> {
+	return { expressID: 0 };
 }
 export class IfcWindowLiningProperties {};
-export function CreateIfcWindowLiningProperties(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,LiningDepth: IfcPositiveLengthMeasure,LiningThickness: IfcNonNegativeLengthMeasure,TransomThickness: IfcNonNegativeLengthMeasure,MullionThickness: IfcNonNegativeLengthMeasure,FirstTransomOffset: IfcNormalisedRatioMeasure,SecondTransomOffset: IfcNormalisedRatioMeasure,FirstMullionOffset: IfcNormalisedRatioMeasure,SecondMullionOffset: IfcNormalisedRatioMeasure,ShapeAspectStyle: IfcShapeAspect,LiningOffset: IfcLengthMeasure,LiningToPanelOffsetX: IfcLengthMeasure,LiningToPanelOffsetY: IfcLengthMeasure): IfcWindowLiningProperties {
-	return {};
+export function CreateIfcWindowLiningProperties(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, LiningDepth: IfcPositiveLengthMeasure | null, LiningThickness: IfcNonNegativeLengthMeasure | null, TransomThickness: IfcNonNegativeLengthMeasure | null, MullionThickness: IfcNonNegativeLengthMeasure | null, FirstTransomOffset: IfcNormalisedRatioMeasure | null, SecondTransomOffset: IfcNormalisedRatioMeasure | null, FirstMullionOffset: IfcNormalisedRatioMeasure | null, SecondMullionOffset: IfcNormalisedRatioMeasure | null, ShapeAspectStyle: Handle<IfcShapeAspect> | null, LiningOffset: IfcLengthMeasure | null, LiningToPanelOffsetX: IfcLengthMeasure | null, LiningToPanelOffsetY: IfcLengthMeasure | null): Handle<IfcWindowLiningProperties> {
+	return { expressID: 0 };
 }
 export class IfcWindowPanelProperties {};
-export function CreateIfcWindowPanelProperties(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,OperationType: IfcWindowPanelOperationEnum,PanelPosition: IfcWindowPanelPositionEnum,FrameDepth: IfcPositiveLengthMeasure,FrameThickness: IfcPositiveLengthMeasure,ShapeAspectStyle: IfcShapeAspect): IfcWindowPanelProperties {
-	return {};
+export function CreateIfcWindowPanelProperties(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, OperationType: IfcWindowPanelOperationEnum , PanelPosition: IfcWindowPanelPositionEnum , FrameDepth: IfcPositiveLengthMeasure | null, FrameThickness: IfcPositiveLengthMeasure | null, ShapeAspectStyle: Handle<IfcShapeAspect> | null): Handle<IfcWindowPanelProperties> {
+	return { expressID: 0 };
 }
 export class IfcWindowStandardCase {};
-export function CreateIfcWindowStandardCase(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,ObjectPlacement: IfcObjectPlacement,Representation: IfcProductRepresentation,Tag: IfcIdentifier,OverallHeight: IfcPositiveLengthMeasure,OverallWidth: IfcPositiveLengthMeasure,PredefinedType: IfcWindowTypeEnum,PartitioningType: IfcWindowTypePartitioningEnum,UserDefinedPartitioningType: IfcLabel): IfcWindowStandardCase {
-	return {};
+export function CreateIfcWindowStandardCase(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, ObjectPlacement: Handle<IfcObjectPlacement> | null, Representation: Handle<IfcProductRepresentation> | null, Tag: IfcIdentifier | null, OverallHeight: IfcPositiveLengthMeasure | null, OverallWidth: IfcPositiveLengthMeasure | null, PredefinedType: IfcWindowTypeEnum | null, PartitioningType: IfcWindowTypePartitioningEnum | null, UserDefinedPartitioningType: IfcLabel | null): Handle<IfcWindowStandardCase> {
+	return { expressID: 0 };
 }
 export class IfcWindowStyle {};
-export function CreateIfcWindowStyle(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ConstructionType: IfcWindowStyleConstructionEnum,OperationType: IfcWindowStyleOperationEnum,ParameterTakesPrecedence: IfcBoolean,Sizeable: IfcBoolean): IfcWindowStyle {
-	return {};
+export function CreateIfcWindowStyle(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ConstructionType: IfcWindowStyleConstructionEnum , OperationType: IfcWindowStyleOperationEnum , ParameterTakesPrecedence: IfcBoolean , Sizeable: IfcBoolean ): Handle<IfcWindowStyle> {
+	return { expressID: 0 };
 }
 export class IfcWindowType {};
-export function CreateIfcWindowType(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ApplicableOccurrence: IfcIdentifier,HasPropertySets: IfcPropertySetDefinition,RepresentationMaps: IfcRepresentationMap,Tag: IfcLabel,ElementType: IfcLabel,PredefinedType: IfcWindowTypeEnum,PartitioningType: IfcWindowTypePartitioningEnum,ParameterTakesPrecedence: IfcBoolean,UserDefinedPartitioningType: IfcLabel): IfcWindowType {
-	return {};
+export function CreateIfcWindowType(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ApplicableOccurrence: IfcIdentifier | null, HasPropertySets: Handle<IfcPropertySetDefinition>[] | null, RepresentationMaps: Handle<IfcRepresentationMap> | null, Tag: IfcLabel | null, ElementType: IfcLabel | null, PredefinedType: IfcWindowTypeEnum , PartitioningType: IfcWindowTypePartitioningEnum , ParameterTakesPrecedence: IfcBoolean | null, UserDefinedPartitioningType: IfcLabel | null): Handle<IfcWindowType> {
+	return { expressID: 0 };
 }
 export class IfcWorkCalendar {};
-export function CreateIfcWorkCalendar(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,WorkingTimes: IfcWorkTime,ExceptionTimes: IfcWorkTime,PredefinedType: IfcWorkCalendarTypeEnum): IfcWorkCalendar {
-	return {};
+export function CreateIfcWorkCalendar(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, WorkingTimes: Handle<IfcWorkTime>[] | null, ExceptionTimes: Handle<IfcWorkTime>[] | null, PredefinedType: IfcWorkCalendarTypeEnum | null): Handle<IfcWorkCalendar> {
+	return { expressID: 0 };
 }
 export class IfcWorkControl {};
-export function CreateIfcWorkControl(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,CreationDate: IfcDateTime,Creators: IfcPerson,Purpose: IfcLabel,Duration: IfcDuration,TotalFloat: IfcDuration,StartTime: IfcDateTime,FinishTime: IfcDateTime): IfcWorkControl {
-	return {};
+export function CreateIfcWorkControl(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, CreationDate: IfcDateTime , Creators: Handle<IfcPerson>[] | null, Purpose: IfcLabel | null, Duration: IfcDuration | null, TotalFloat: IfcDuration | null, StartTime: IfcDateTime , FinishTime: IfcDateTime | null): Handle<IfcWorkControl> {
+	return { expressID: 0 };
 }
 export class IfcWorkPlan {};
-export function CreateIfcWorkPlan(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,CreationDate: IfcDateTime,Creators: IfcPerson,Purpose: IfcLabel,Duration: IfcDuration,TotalFloat: IfcDuration,StartTime: IfcDateTime,FinishTime: IfcDateTime,PredefinedType: IfcWorkPlanTypeEnum): IfcWorkPlan {
-	return {};
+export function CreateIfcWorkPlan(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, CreationDate: IfcDateTime , Creators: Handle<IfcPerson>[] | null, Purpose: IfcLabel | null, Duration: IfcDuration | null, TotalFloat: IfcDuration | null, StartTime: IfcDateTime , FinishTime: IfcDateTime | null, PredefinedType: IfcWorkPlanTypeEnum | null): Handle<IfcWorkPlan> {
+	return { expressID: 0 };
 }
 export class IfcWorkSchedule {};
-export function CreateIfcWorkSchedule(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,Identification: IfcIdentifier,CreationDate: IfcDateTime,Creators: IfcPerson,Purpose: IfcLabel,Duration: IfcDuration,TotalFloat: IfcDuration,StartTime: IfcDateTime,FinishTime: IfcDateTime,PredefinedType: IfcWorkScheduleTypeEnum): IfcWorkSchedule {
-	return {};
+export function CreateIfcWorkSchedule(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, Identification: IfcIdentifier | null, CreationDate: IfcDateTime , Creators: Handle<IfcPerson>[] | null, Purpose: IfcLabel | null, Duration: IfcDuration | null, TotalFloat: IfcDuration | null, StartTime: IfcDateTime , FinishTime: IfcDateTime | null, PredefinedType: IfcWorkScheduleTypeEnum | null): Handle<IfcWorkSchedule> {
+	return { expressID: 0 };
 }
 export class IfcWorkTime {};
-export function CreateIfcWorkTime(Name: IfcLabel,DataOrigin: IfcDataOriginEnum,UserDefinedDataOrigin: IfcLabel,RecurrencePattern: IfcRecurrencePattern,Start: IfcDate,Finish: IfcDate): IfcWorkTime {
-	return {};
+export function CreateIfcWorkTime(Name: IfcLabel | null, DataOrigin: IfcDataOriginEnum | null, UserDefinedDataOrigin: IfcLabel | null, RecurrencePattern: Handle<IfcRecurrencePattern> | null, Start: IfcDate | null, Finish: IfcDate | null): Handle<IfcWorkTime> {
+	return { expressID: 0 };
 }
 export class IfcZShapeProfileDef {};
-export function CreateIfcZShapeProfileDef(ProfileType: IfcProfileTypeEnum,ProfileName: IfcLabel,Position: IfcAxis2Placement2D,Depth: IfcPositiveLengthMeasure,FlangeWidth: IfcPositiveLengthMeasure,WebThickness: IfcPositiveLengthMeasure,FlangeThickness: IfcPositiveLengthMeasure,FilletRadius: IfcNonNegativeLengthMeasure,EdgeRadius: IfcNonNegativeLengthMeasure): IfcZShapeProfileDef {
-	return {};
+export function CreateIfcZShapeProfileDef(ProfileType: IfcProfileTypeEnum , ProfileName: IfcLabel | null, Position: Handle<IfcAxis2Placement2D> | null, Depth: IfcPositiveLengthMeasure , FlangeWidth: IfcPositiveLengthMeasure , WebThickness: IfcPositiveLengthMeasure , FlangeThickness: IfcPositiveLengthMeasure , FilletRadius: IfcNonNegativeLengthMeasure | null, EdgeRadius: IfcNonNegativeLengthMeasure | null): Handle<IfcZShapeProfileDef> {
+	return { expressID: 0 };
 }
 export class IfcZone {};
-export function CreateIfcZone(GlobalId: IfcGloballyUniqueId,OwnerHistory: IfcOwnerHistory,Name: IfcLabel,Description: IfcText,ObjectType: IfcLabel,LongName: IfcLabel): IfcZone {
-	return {};
+export function CreateIfcZone(GlobalId: IfcGloballyUniqueId , OwnerHistory: Handle<IfcOwnerHistory> | null, Name: IfcLabel | null, Description: IfcText | null, ObjectType: IfcLabel | null, LongName: IfcLabel | null): Handle<IfcZone> {
+	return { expressID: 0 };
 }

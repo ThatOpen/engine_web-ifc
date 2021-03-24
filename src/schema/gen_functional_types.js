@@ -6,6 +6,33 @@ let ifc4x2 = fs.readFileSync("./IFC4x2.exp").toString();
 
 console.log("Read def file");
 
+function expTypeToTSType(expTypeName)
+{
+    let tsType = expTypeName;
+    if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER")
+    {
+        tsType = "number";
+    }
+    else if (expTypeName == "STRING")
+    {
+        tsType = "string";
+    }
+    else if (expTypeName == "BOOLEAN")
+    {
+        tsType = "boolean";
+    }
+    else if (expTypeName == "BINARY")
+    {
+        tsType = "number";
+    }
+    else if (expTypeName == "LOGICAL")
+    {
+        tsType = "boolean";
+    }
+
+    return tsType;
+}
+
 function ParseElements(data)
 {
     let lines = data.split(";");
@@ -97,26 +124,7 @@ function ParseElements(data)
                 typeName = typeName.substr(0, firstBracket);
             }
 
-            if (typeName == "REAL" || typeName == "INTEGER" || typeName == "NUMBER")
-            {
-                typeName = "number";
-            }
-            else if (typeName == "STRING")
-            {
-                typeName = "string";
-            }
-            else if (typeName == "BOOLEAN")
-            {
-                typeName = "boolean";
-            }
-            else if (typeName == "BINARY")
-            {
-                typeName = "number";
-            }
-            else if (typeName == "LOGICAL")
-            {
-                typeName = "boolean";
-            }
+            typeName = expTypeToTSType(typeName);
             
             type = {
                 name,
@@ -140,6 +148,7 @@ function ParseElements(data)
             let optional = split.indexOf("OPTIONAL") != -1;
             let set = split.indexOf("SET") != -1;
             let type = split[split.length - 1].replace(";", "");
+            type = expTypeToTSType(type);
             entity.props.push({
                 name,
                 type,
@@ -205,10 +214,16 @@ const TS_OUTPUT_FILE = "../ifc2x4_helper.ts";
 
 let buffer = [];
 
+buffer.push();
+buffer.push(`// This is a generated file, please see: gen_functional_types.js`);
+buffer.push();
+
+buffer.push(`export interface Handle<T> { expressID: number; }`);
+
 types.forEach((type) => {
     if (type.isList)
     {
-        buffer.push(`export class ${type.name} extends Array<${type.typeName}> {};`);
+        buffer.push(`export type ${type.name} = Array<${type.typeName}>;`);
     }
     else if (type.isEnum)
     {
@@ -224,7 +239,7 @@ types.forEach((type) => {
     }
     else
     {
-        buffer.push(`export class ${type.name} extends ${type.typeName} {};`);
+        buffer.push(`export type ${type.name} = ${type.typeName};`);
     }
 });
 
@@ -232,10 +247,12 @@ elements.forEach((entity) => {
     buffer.push(`export class ${entity.name} {};`);
     let params = [];
     entity.derivedProps.forEach((prop) => {
-        params.push(`${prop.name}: ${prop.type}`)
+        let isType = tmap[prop.type];
+        let propType = `${isType ? prop.type : "Handle<" + prop.type + ">" }${prop.set ? "[]" : ""} ${prop.optional ? "| null" : ""}`;
+        params.push(`${prop.name}: ${propType}`)
     });
-    buffer.push(`export function Create${entity.name}(${params.join(",")}): ${entity.name} {`);
-    buffer.push(`\treturn {};`)
+    buffer.push(`export function Create${entity.name}(${params.join(", ")}): Handle<${entity.name}> {`);
+    buffer.push(`\treturn { expressID: 0 };`)
     buffer.push(`}`)
 });
 
