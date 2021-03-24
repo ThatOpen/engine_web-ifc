@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { type } = require("os");
 
 console.log("Starting...");
 
@@ -221,6 +222,17 @@ buffer.push();
 buffer.push(`export interface Handle<T> { expressID: number; }`);
 buffer.push(`export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }`);
 
+buffer.push(`const UNKNOWN = 0;`);
+buffer.push(`const STRING = 1;`);
+buffer.push(`const LABEL = 2;`);
+buffer.push(`const ENUM = 3;`);
+buffer.push(`const REAL = 4;`);
+buffer.push(`const REF = 5;`);
+buffer.push(`const EMPTY = 6;`);
+buffer.push(`const SET_BEGIN = 7;`);
+buffer.push(`const SET_END = 8;`);
+buffer.push(`const LINE_END = 9;`);
+
 types.forEach((type) => {
     if (type.isList)
     {
@@ -249,7 +261,7 @@ elements.forEach((entity) => {
     entity.derivedProps.forEach((prop) => {
         let isType = tmap[prop.type];
         let propType = `${isType ? prop.type : "Handle<" + prop.type + ">" }${prop.set ? "[]" : ""} ${prop.optional ? "| null" : ""}`;
-        params.push({ name: prop.name, type: propType });
+        params.push({ name: prop.name, type: propType, prop, isType });
     });
 
     buffer.push(`export class ${entity.name} {`);
@@ -262,12 +274,52 @@ elements.forEach((entity) => {
     params.forEach((param) => {
         buffer.push(`\t${param.name}: ${param.type};`)
     })
-    buffer.push(`\tFromTape(tapeData: [])`)
+    buffer.push(`\tFromTape(tapeData: any[])`)
     buffer.push(`\t{`)
     buffer.push(`\t}`)
-    buffer.push(`\tToTape(): []`)
+    buffer.push(`\tToTape(): any[]`)
     buffer.push(`\t{`)
-    buffer.push(`\t\treturn [];`)
+    buffer.push(`\t\tlet args: any[] = [];`)
+    params.forEach((param) => {
+        if (param.prop.optional)
+        {
+            buffer.push(`\t\tif(this.${param.name}){`);
+        }
+        if (param.isType)
+        {
+            let type = tmap[param.prop.type];
+            if (type.typeName === "number")
+            {
+                buffer.push(`\t\targs.push(REAL)`);
+                buffer.push(`\t\targs.push(this.${param.name})`);
+            }
+            else if (type.typeName === "string")
+            {
+                buffer.push(`\t\targs.push(STRING)`);
+                buffer.push(`\t\targs.push(this.${param.name})`);
+            }
+        }
+        else
+        {
+            if (param.prop.set)
+            {
+                buffer.push(`\t\targs.push(SET_BEGIN)`);
+                buffer.push(`\t\tthis.${param.name}.forEach((e) => { args.push(REF); args.push(e.expressID); });`);
+                buffer.push(`\t\targs.push(SET_END)`);
+            }
+            else
+            {
+                buffer.push(`\t\targs.push(REF)`);
+                buffer.push(`\t\targs.push(this.${param.name}.expressID)`);
+            }
+        }
+        if (param.prop.optional)
+        {
+            buffer.push(`\t\t}`);
+            buffer.push(`\t\telse{ args.push(EMPTY); }`);
+        }
+    });
+    buffer.push(`\t\treturn args;`)
     buffer.push(`\t}`)
     buffer.push(`};`);
 });

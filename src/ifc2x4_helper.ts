@@ -1,6 +1,16 @@
 // This is a generated file, please see: gen_functional_types.js
 export interface Handle<T> { expressID: number; }
 export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }
+const UNKNOWN = 0;
+const STRING = 1;
+const LABEL = 2;
+const ENUM = 3;
+const REAL = 4;
+const REF = 5;
+const EMPTY = 6;
+const SET_BEGIN = 7;
+const SET_END = 8;
+const LINE_END = 9;
 export type IfcAbsorbedDoseMeasure = number;
 export type IfcAccelerationMeasure = number;
 export type IfcAmountOfSubstanceMeasure = number;
@@ -2722,12 +2732,53 @@ export class IfcActionRequest {
 	PredefinedType: IfcActionRequestTypeEnum | null;
 	Status: IfcLabel | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Status){
+		args.push(STRING)
+		args.push(this.Status)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcActor {
@@ -2746,12 +2797,35 @@ export class IfcActor {
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
 	TheActor: IfcActorSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcActorRole {
@@ -2764,12 +2838,23 @@ export class IfcActorRole {
 	Role: IfcRoleEnum ;
 	UserDefinedRole: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.UserDefinedRole){
+		args.push(STRING)
+		args.push(this.UserDefinedRole)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcActuator {
@@ -2794,12 +2879,53 @@ export class IfcActuator {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcActuatorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcActuatorType {
@@ -2826,12 +2952,56 @@ export class IfcActuatorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcActuatorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAddress {
@@ -2844,12 +3014,26 @@ export class IfcAddress {
 	Purpose: IfcAddressTypeEnum | null;
 	Description: IfcText | null;
 	UserDefinedPurpose: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Purpose){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedPurpose){
+		args.push(STRING)
+		args.push(this.UserDefinedPurpose)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAdvancedBrep {
@@ -2858,12 +3042,15 @@ export class IfcAdvancedBrep {
 		this.Outer = Outer;
 	}
 	Outer: Handle<IfcClosedShell> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Outer.expressID)
+		return args;
 	}
 };
 export class IfcAdvancedBrepWithVoids {
@@ -2874,12 +3061,18 @@ export class IfcAdvancedBrepWithVoids {
 	}
 	Outer: Handle<IfcClosedShell> ;
 	Voids: Handle<IfcClosedShell>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Outer.expressID)
+		args.push(SET_BEGIN)
+		this.Voids.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcAdvancedFace {
@@ -2892,12 +3085,18 @@ export class IfcAdvancedFace {
 	Bounds: Handle<IfcFaceBound>[] ;
 	FaceSurface: Handle<IfcSurface> ;
 	SameSense: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(SET_BEGIN)
+		this.Bounds.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.FaceSurface.expressID)
+		return args;
 	}
 };
 export class IfcAirTerminal {
@@ -2922,12 +3121,53 @@ export class IfcAirTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAirTerminalTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAirTerminalBox {
@@ -2952,12 +3192,53 @@ export class IfcAirTerminalBox {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAirTerminalBoxTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAirTerminalBoxType {
@@ -2984,12 +3265,56 @@ export class IfcAirTerminalBoxType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAirTerminalBoxTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAirTerminalType {
@@ -3016,12 +3341,56 @@ export class IfcAirTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAirTerminalTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAirToAirHeatRecovery {
@@ -3046,12 +3415,53 @@ export class IfcAirToAirHeatRecovery {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAirToAirHeatRecoveryTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAirToAirHeatRecoveryType {
@@ -3078,12 +3488,56 @@ export class IfcAirToAirHeatRecoveryType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAirToAirHeatRecoveryTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAlarm {
@@ -3108,12 +3562,53 @@ export class IfcAlarm {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAlarmTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAlarmType {
@@ -3140,12 +3635,56 @@ export class IfcAlarmType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAlarmTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAlignment {
@@ -3170,12 +3709,50 @@ export class IfcAlignment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Axis: Handle<IfcCurve> ;
 	PredefinedType: IfcAlignmentTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAlignment2DHorizontal {
@@ -3186,12 +3763,20 @@ export class IfcAlignment2DHorizontal {
 	}
 	StartDistAlong: IfcLengthMeasure | null;
 	Segments: Handle<IfcAlignment2DHorizontalSegment> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.StartDistAlong){
+		args.push(REAL)
+		args.push(this.StartDistAlong)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Segments.expressID)
+		return args;
 	}
 };
 export class IfcAlignment2DHorizontalSegment {
@@ -3206,12 +3791,28 @@ export class IfcAlignment2DHorizontalSegment {
 	StartTag: IfcLabel | null;
 	EndTag: IfcLabel | null;
 	CurveGeometry: Handle<IfcCurveSegment2D> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.TangentialContinuity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StartTag){
+		args.push(STRING)
+		args.push(this.StartTag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndTag){
+		args.push(STRING)
+		args.push(this.EndTag)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.CurveGeometry.expressID)
+		return args;
 	}
 };
 export class IfcAlignment2DSegment {
@@ -3224,12 +3825,26 @@ export class IfcAlignment2DSegment {
 	TangentialContinuity: IfcBoolean | null;
 	StartTag: IfcLabel | null;
 	EndTag: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.TangentialContinuity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StartTag){
+		args.push(STRING)
+		args.push(this.StartTag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndTag){
+		args.push(STRING)
+		args.push(this.EndTag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAlignment2DVerSegCircularArc {
@@ -3254,12 +3869,32 @@ export class IfcAlignment2DVerSegCircularArc {
 	StartGradient: IfcRatioMeasure ;
 	Radius: IfcPositiveLengthMeasure ;
 	IsConvex: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.TangentialContinuity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StartTag){
+		args.push(STRING)
+		args.push(this.StartTag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndTag){
+		args.push(STRING)
+		args.push(this.EndTag)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.StartDistAlong)
+		args.push(REAL)
+		args.push(this.StartHeight)
+		args.push(REAL)
+		args.push(this.StartGradient)
+		return args;
 	}
 };
 export class IfcAlignment2DVerSegLine {
@@ -3280,12 +3915,32 @@ export class IfcAlignment2DVerSegLine {
 	HorizontalLength: IfcPositiveLengthMeasure ;
 	StartHeight: IfcLengthMeasure ;
 	StartGradient: IfcRatioMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.TangentialContinuity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StartTag){
+		args.push(STRING)
+		args.push(this.StartTag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndTag){
+		args.push(STRING)
+		args.push(this.EndTag)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.StartDistAlong)
+		args.push(REAL)
+		args.push(this.StartHeight)
+		args.push(REAL)
+		args.push(this.StartGradient)
+		return args;
 	}
 };
 export class IfcAlignment2DVerSegParabolicArc {
@@ -3310,12 +3965,32 @@ export class IfcAlignment2DVerSegParabolicArc {
 	StartGradient: IfcRatioMeasure ;
 	ParabolaConstant: IfcPositiveLengthMeasure ;
 	IsConvex: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.TangentialContinuity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StartTag){
+		args.push(STRING)
+		args.push(this.StartTag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndTag){
+		args.push(STRING)
+		args.push(this.EndTag)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.StartDistAlong)
+		args.push(REAL)
+		args.push(this.StartHeight)
+		args.push(REAL)
+		args.push(this.StartGradient)
+		return args;
 	}
 };
 export class IfcAlignment2DVertical {
@@ -3324,12 +3999,15 @@ export class IfcAlignment2DVertical {
 		this.Segments = Segments;
 	}
 	Segments: Handle<IfcAlignment2DVerticalSegment> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Segments.expressID)
+		return args;
 	}
 };
 export class IfcAlignment2DVerticalSegment {
@@ -3350,12 +4028,32 @@ export class IfcAlignment2DVerticalSegment {
 	HorizontalLength: IfcPositiveLengthMeasure ;
 	StartHeight: IfcLengthMeasure ;
 	StartGradient: IfcRatioMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.TangentialContinuity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StartTag){
+		args.push(STRING)
+		args.push(this.StartTag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndTag){
+		args.push(STRING)
+		args.push(this.EndTag)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.StartDistAlong)
+		args.push(REAL)
+		args.push(this.StartHeight)
+		args.push(REAL)
+		args.push(this.StartGradient)
+		return args;
 	}
 };
 export class IfcAlignmentCurve {
@@ -3368,12 +4066,25 @@ export class IfcAlignmentCurve {
 	Horizontal: Handle<IfcAlignment2DHorizontal> ;
 	Vertical: Handle<IfcAlignment2DVertical> | null;
 	Tag: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Horizontal.expressID)
+		if(this.Vertical){
+		args.push(REF)
+		args.push(this.Vertical.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAnnotation {
@@ -3394,12 +4105,45 @@ export class IfcAnnotation {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAnnotationFillArea {
@@ -3410,12 +4154,21 @@ export class IfcAnnotationFillArea {
 	}
 	OuterBoundary: Handle<IfcCurve> ;
 	InnerBoundaries: Handle<IfcCurve>[] | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.OuterBoundary.expressID)
+		if(this.InnerBoundaries){
+		args.push(SET_BEGIN)
+		this.InnerBoundaries.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcApplication {
@@ -3430,12 +4183,21 @@ export class IfcApplication {
 	Version: IfcLabel ;
 	ApplicationFullName: IfcLabel ;
 	ApplicationIdentifier: IfcIdentifier ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ApplicationDeveloper.expressID)
+		args.push(STRING)
+		args.push(this.Version)
+		args.push(STRING)
+		args.push(this.ApplicationFullName)
+		args.push(STRING)
+		args.push(this.ApplicationIdentifier)
+		return args;
 	}
 };
 export class IfcAppliedValue {
@@ -3462,12 +4224,59 @@ export class IfcAppliedValue {
 	Condition: IfcLabel | null;
 	ArithmeticOperator: IfcArithmeticOperatorEnum | null;
 	Components: Handle<IfcAppliedValue> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AppliedValue){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UnitBasis){
+		args.push(REF)
+		args.push(this.UnitBasis.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableDate){
+		args.push(STRING)
+		args.push(this.ApplicableDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FixedUntilDate){
+		args.push(STRING)
+		args.push(this.FixedUntilDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Category){
+		args.push(STRING)
+		args.push(this.Category)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Condition){
+		args.push(STRING)
+		args.push(this.Condition)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ArithmeticOperator){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Components){
+		args.push(REF)
+		args.push(this.Components.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcApproval {
@@ -3492,12 +4301,54 @@ export class IfcApproval {
 	Qualifier: IfcText | null;
 	RequestingApproval: IfcActorSelect | null;
 	GivingApproval: IfcActorSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Identifier){
+		args.push(STRING)
+		args.push(this.Identifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TimeOfApproval){
+		args.push(STRING)
+		args.push(this.TimeOfApproval)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Status){
+		args.push(STRING)
+		args.push(this.Status)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Level){
+		args.push(STRING)
+		args.push(this.Level)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Qualifier){
+		args.push(STRING)
+		args.push(this.Qualifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RequestingApproval){
+		}
+		else{ args.push(EMPTY); }
+		if(this.GivingApproval){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcApprovalRelationship {
@@ -3512,12 +4363,28 @@ export class IfcApprovalRelationship {
 	Description: IfcText | null;
 	RelatingApproval: Handle<IfcApproval> ;
 	RelatedApprovals: Handle<IfcApproval>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingApproval.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedApprovals.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcArbitraryClosedProfileDef {
@@ -3530,12 +4397,20 @@ export class IfcArbitraryClosedProfileDef {
 	ProfileType: IfcProfileTypeEnum ;
 	ProfileName: IfcLabel | null;
 	OuterCurve: Handle<IfcCurve> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.OuterCurve.expressID)
+		return args;
 	}
 };
 export class IfcArbitraryOpenProfileDef {
@@ -3548,12 +4423,20 @@ export class IfcArbitraryOpenProfileDef {
 	ProfileType: IfcProfileTypeEnum ;
 	ProfileName: IfcLabel | null;
 	Curve: Handle<IfcBoundedCurve> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Curve.expressID)
+		return args;
 	}
 };
 export class IfcArbitraryProfileDefWithVoids {
@@ -3568,12 +4451,23 @@ export class IfcArbitraryProfileDefWithVoids {
 	ProfileName: IfcLabel | null;
 	OuterCurve: Handle<IfcCurve> ;
 	InnerCurves: Handle<IfcCurve>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.OuterCurve.expressID)
+		args.push(SET_BEGIN)
+		this.InnerCurves.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcAsset {
@@ -3608,12 +4502,76 @@ export class IfcAsset {
 	ResponsiblePerson: Handle<IfcPerson> | null;
 	IncorporationDate: IfcDate | null;
 	DepreciatedValue: Handle<IfcCostValue> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OriginalValue){
+		args.push(REF)
+		args.push(this.OriginalValue.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CurrentValue){
+		args.push(REF)
+		args.push(this.CurrentValue.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TotalReplacementCost){
+		args.push(REF)
+		args.push(this.TotalReplacementCost.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Owner){
+		}
+		else{ args.push(EMPTY); }
+		if(this.User){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResponsiblePerson){
+		args.push(REF)
+		args.push(this.ResponsiblePerson.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.IncorporationDate){
+		args.push(STRING)
+		args.push(this.IncorporationDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DepreciatedValue){
+		args.push(REF)
+		args.push(this.DepreciatedValue.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAsymmetricIShapeProfileDef {
@@ -3650,12 +4608,48 @@ export class IfcAsymmetricIShapeProfileDef {
 	BottomFlangeSlope: IfcPlaneAngleMeasure | null;
 	TopFlangeEdgeRadius: IfcNonNegativeLengthMeasure | null;
 	TopFlangeSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BottomFlangeFilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TopFlangeThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TopFlangeFilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.BottomFlangeEdgeRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.BottomFlangeSlope){
+		args.push(REAL)
+		args.push(this.BottomFlangeSlope)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TopFlangeEdgeRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TopFlangeSlope){
+		args.push(REAL)
+		args.push(this.TopFlangeSlope)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAudioVisualAppliance {
@@ -3680,12 +4674,53 @@ export class IfcAudioVisualAppliance {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAudioVisualApplianceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAudioVisualApplianceType {
@@ -3712,12 +4747,56 @@ export class IfcAudioVisualApplianceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAudioVisualApplianceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAxis1Placement {
@@ -3728,12 +4807,20 @@ export class IfcAxis1Placement {
 	}
 	Location: Handle<IfcCartesianPoint> ;
 	Axis: Handle<IfcDirection> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Location.expressID)
+		if(this.Axis){
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAxis2Placement2D {
@@ -3744,12 +4831,20 @@ export class IfcAxis2Placement2D {
 	}
 	Location: Handle<IfcCartesianPoint> ;
 	RefDirection: Handle<IfcDirection> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Location.expressID)
+		if(this.RefDirection){
+		args.push(REF)
+		args.push(this.RefDirection.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcAxis2Placement3D {
@@ -3762,12 +4857,25 @@ export class IfcAxis2Placement3D {
 	Location: Handle<IfcCartesianPoint> ;
 	Axis: Handle<IfcDirection> | null;
 	RefDirection: Handle<IfcDirection> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Location.expressID)
+		if(this.Axis){
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RefDirection){
+		args.push(REF)
+		args.push(this.RefDirection.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBSplineCurve {
@@ -3784,12 +4892,17 @@ export class IfcBSplineCurve {
 	CurveForm: IfcBSplineCurveForm ;
 	ClosedCurve: IfcLogical ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.Degree)
+		args.push(REF)
+		args.push(this.ControlPointsList.expressID)
+		return args;
 	}
 };
 export class IfcBSplineCurveWithKnots {
@@ -3812,12 +4925,21 @@ export class IfcBSplineCurveWithKnots {
 	KnotMultiplicities: IfcInteger ;
 	Knots: IfcParameterValue ;
 	KnotSpec: IfcKnotType ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.Degree)
+		args.push(REF)
+		args.push(this.ControlPointsList.expressID)
+		args.push(REAL)
+		args.push(this.KnotMultiplicities)
+		args.push(REAL)
+		args.push(this.Knots)
+		return args;
 	}
 };
 export class IfcBSplineSurface {
@@ -3838,12 +4960,19 @@ export class IfcBSplineSurface {
 	UClosed: IfcLogical ;
 	VClosed: IfcLogical ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.UDegree)
+		args.push(REAL)
+		args.push(this.VDegree)
+		args.push(REF)
+		args.push(this.ControlPointsList.expressID)
+		return args;
 	}
 };
 export class IfcBSplineSurfaceWithKnots {
@@ -3874,12 +5003,27 @@ export class IfcBSplineSurfaceWithKnots {
 	UKnots: IfcParameterValue ;
 	VKnots: IfcParameterValue ;
 	KnotSpec: IfcKnotType ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.UDegree)
+		args.push(REAL)
+		args.push(this.VDegree)
+		args.push(REF)
+		args.push(this.ControlPointsList.expressID)
+		args.push(REAL)
+		args.push(this.UMultiplicities)
+		args.push(REAL)
+		args.push(this.VMultiplicities)
+		args.push(REAL)
+		args.push(this.UKnots)
+		args.push(REAL)
+		args.push(this.VKnots)
+		return args;
 	}
 };
 export class IfcBeam {
@@ -3904,12 +5048,53 @@ export class IfcBeam {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBeamTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBeamStandardCase {
@@ -3934,12 +5119,53 @@ export class IfcBeamStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBeamTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBeamType {
@@ -3966,12 +5192,56 @@ export class IfcBeamType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBeamTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBearing {
@@ -3996,12 +5266,53 @@ export class IfcBearing {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBearingTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBearingType {
@@ -4028,12 +5339,56 @@ export class IfcBearingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBearingTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBlobTexture {
@@ -4054,12 +5409,32 @@ export class IfcBlobTexture {
 	Parameter: IfcIdentifier | null;
 	RasterFormat: IfcIdentifier ;
 	RasterCode: IfcBinary ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Mode){
+		args.push(STRING)
+		args.push(this.Mode)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextureTransform){
+		args.push(REF)
+		args.push(this.TextureTransform.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Parameter){
+		args.push(STRING)
+		args.push(this.Parameter)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.RasterFormat)
+		args.push(REAL)
+		args.push(this.RasterCode)
+		return args;
 	}
 };
 export class IfcBlock {
@@ -4074,12 +5449,15 @@ export class IfcBlock {
 	XLength: IfcPositiveLengthMeasure ;
 	YLength: IfcPositiveLengthMeasure ;
 	ZLength: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcBoiler {
@@ -4104,12 +5482,53 @@ export class IfcBoiler {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBoilerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBoilerType {
@@ -4136,12 +5555,56 @@ export class IfcBoilerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBoilerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBooleanClippingResult {
@@ -4154,12 +5617,13 @@ export class IfcBooleanClippingResult {
 	Operator: IfcBooleanOperator ;
 	FirstOperand: IfcBooleanOperand ;
 	SecondOperand: IfcBooleanOperand ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcBooleanResult {
@@ -4172,12 +5636,13 @@ export class IfcBooleanResult {
 	Operator: IfcBooleanOperator ;
 	FirstOperand: IfcBooleanOperand ;
 	SecondOperand: IfcBooleanOperand ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcBoundaryCondition {
@@ -4186,12 +5651,18 @@ export class IfcBoundaryCondition {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBoundaryCurve {
@@ -4202,12 +5673,15 @@ export class IfcBoundaryCurve {
 	}
 	Segments: Handle<IfcCompositeCurveSegment> ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Segments.expressID)
+		return args;
 	}
 };
 export class IfcBoundaryEdgeCondition {
@@ -4228,12 +5702,36 @@ export class IfcBoundaryEdgeCondition {
 	RotationalStiffnessByLengthX: IfcModulusOfRotationalSubgradeReactionSelect | null;
 	RotationalStiffnessByLengthY: IfcModulusOfRotationalSubgradeReactionSelect | null;
 	RotationalStiffnessByLengthZ: IfcModulusOfRotationalSubgradeReactionSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessByLengthX){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessByLengthY){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessByLengthZ){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessByLengthX){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessByLengthY){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessByLengthZ){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBoundaryFaceCondition {
@@ -4248,12 +5746,27 @@ export class IfcBoundaryFaceCondition {
 	TranslationalStiffnessByAreaX: IfcModulusOfSubgradeReactionSelect | null;
 	TranslationalStiffnessByAreaY: IfcModulusOfSubgradeReactionSelect | null;
 	TranslationalStiffnessByAreaZ: IfcModulusOfSubgradeReactionSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessByAreaX){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessByAreaY){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessByAreaZ){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBoundaryNodeCondition {
@@ -4274,12 +5787,36 @@ export class IfcBoundaryNodeCondition {
 	RotationalStiffnessX: IfcRotationalStiffnessSelect | null;
 	RotationalStiffnessY: IfcRotationalStiffnessSelect | null;
 	RotationalStiffnessZ: IfcRotationalStiffnessSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessX){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessY){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessZ){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessX){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessY){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessZ){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBoundaryNodeConditionWarping {
@@ -4302,36 +5839,65 @@ export class IfcBoundaryNodeConditionWarping {
 	RotationalStiffnessY: IfcRotationalStiffnessSelect | null;
 	RotationalStiffnessZ: IfcRotationalStiffnessSelect | null;
 	WarpingStiffness: IfcWarpingStiffnessSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessX){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessY){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TranslationalStiffnessZ){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessX){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessY){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalStiffnessZ){
+		}
+		else{ args.push(EMPTY); }
+		if(this.WarpingStiffness){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBoundedCurve {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcBoundedSurface {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcBoundingBox {
@@ -4346,12 +5912,15 @@ export class IfcBoundingBox {
 	XDim: IfcPositiveLengthMeasure ;
 	YDim: IfcPositiveLengthMeasure ;
 	ZDim: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Corner.expressID)
+		return args;
 	}
 };
 export class IfcBoxedHalfSpace {
@@ -4364,12 +5933,17 @@ export class IfcBoxedHalfSpace {
 	BaseSurface: Handle<IfcSurface> ;
 	AgreementFlag: IfcBoolean ;
 	Enclosure: Handle<IfcBoundingBox> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BaseSurface.expressID)
+		args.push(REF)
+		args.push(this.Enclosure.expressID)
+		return args;
 	}
 };
 export class IfcBridge {
@@ -4396,12 +5970,56 @@ export class IfcBridge {
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
 	PredefinedType: IfcBridgeTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBridgePart {
@@ -4428,12 +6046,56 @@ export class IfcBridgePart {
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
 	PredefinedType: IfcBridgePartTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuilding {
@@ -4464,12 +6126,68 @@ export class IfcBuilding {
 	ElevationOfRefHeight: IfcLengthMeasure | null;
 	ElevationOfTerrain: IfcLengthMeasure | null;
 	BuildingAddress: Handle<IfcPostalAddress> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElevationOfRefHeight){
+		args.push(REAL)
+		args.push(this.ElevationOfRefHeight)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElevationOfTerrain){
+		args.push(REAL)
+		args.push(this.ElevationOfTerrain)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BuildingAddress){
+		args.push(REF)
+		args.push(this.BuildingAddress.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuildingElement {
@@ -4492,12 +6210,50 @@ export class IfcBuildingElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuildingElementPart {
@@ -4522,12 +6278,53 @@ export class IfcBuildingElementPart {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBuildingElementPartTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuildingElementPartType {
@@ -4554,12 +6351,56 @@ export class IfcBuildingElementPartType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBuildingElementPartTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuildingElementProxy {
@@ -4584,12 +6425,53 @@ export class IfcBuildingElementProxy {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBuildingElementProxyTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuildingElementProxyType {
@@ -4616,12 +6498,56 @@ export class IfcBuildingElementProxyType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBuildingElementProxyTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuildingElementType {
@@ -4646,12 +6572,56 @@ export class IfcBuildingElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuildingStorey {
@@ -4678,12 +6648,58 @@ export class IfcBuildingStorey {
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
 	Elevation: IfcLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Elevation){
+		args.push(REAL)
+		args.push(this.Elevation)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBuildingSystem {
@@ -4704,12 +6720,43 @@ export class IfcBuildingSystem {
 	ObjectType: IfcLabel | null;
 	PredefinedType: IfcBuildingSystemTypeEnum | null;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBurner {
@@ -4734,12 +6781,53 @@ export class IfcBurner {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBurnerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcBurnerType {
@@ -4766,12 +6854,56 @@ export class IfcBurnerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBurnerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCShapeProfileDef {
@@ -4794,12 +6926,26 @@ export class IfcCShapeProfileDef {
 	WallThickness: IfcPositiveLengthMeasure ;
 	Girth: IfcPositiveLengthMeasure ;
 	InternalFilletRadius: IfcNonNegativeLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.InternalFilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCableCarrierFitting {
@@ -4824,12 +6970,53 @@ export class IfcCableCarrierFitting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCableCarrierFittingTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCableCarrierFittingType {
@@ -4856,12 +7043,56 @@ export class IfcCableCarrierFittingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCableCarrierFittingTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCableCarrierSegment {
@@ -4886,12 +7117,53 @@ export class IfcCableCarrierSegment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCableCarrierSegmentTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCableCarrierSegmentType {
@@ -4918,12 +7190,56 @@ export class IfcCableCarrierSegmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCableCarrierSegmentTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCableFitting {
@@ -4948,12 +7264,53 @@ export class IfcCableFitting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCableFittingTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCableFittingType {
@@ -4980,12 +7337,56 @@ export class IfcCableFittingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCableFittingTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCableSegment {
@@ -5010,12 +7411,53 @@ export class IfcCableSegment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCableSegmentTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCableSegmentType {
@@ -5042,12 +7484,56 @@ export class IfcCableSegmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCableSegmentTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCaissonFoundation {
@@ -5072,12 +7558,53 @@ export class IfcCaissonFoundation {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCaissonFoundationTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCaissonFoundationType {
@@ -5104,12 +7631,56 @@ export class IfcCaissonFoundationType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCaissonFoundationTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCartesianPoint {
@@ -5118,24 +7689,28 @@ export class IfcCartesianPoint {
 		this.Coordinates = Coordinates;
 	}
 	Coordinates: IfcLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.Coordinates)
+		return args;
 	}
 };
 export class IfcCartesianPointList {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcCartesianPointList2D {
@@ -5146,12 +7721,20 @@ export class IfcCartesianPointList2D {
 	}
 	CoordList: IfcLengthMeasure ;
 	TagList: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.CoordList)
+		if(this.TagList){
+		args.push(STRING)
+		args.push(this.TagList)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCartesianPointList3D {
@@ -5162,12 +7745,20 @@ export class IfcCartesianPointList3D {
 	}
 	CoordList: IfcLengthMeasure ;
 	TagList: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.CoordList)
+		if(this.TagList){
+		args.push(STRING)
+		args.push(this.TagList)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCartesianTransformationOperator {
@@ -5182,12 +7773,30 @@ export class IfcCartesianTransformationOperator {
 	Axis2: Handle<IfcDirection> | null;
 	LocalOrigin: Handle<IfcCartesianPoint> ;
 	Scale: IfcReal | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Axis1){
+		args.push(REF)
+		args.push(this.Axis1.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Axis2){
+		args.push(REF)
+		args.push(this.Axis2.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LocalOrigin.expressID)
+		if(this.Scale){
+		args.push(REAL)
+		args.push(this.Scale)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCartesianTransformationOperator2D {
@@ -5202,12 +7811,30 @@ export class IfcCartesianTransformationOperator2D {
 	Axis2: Handle<IfcDirection> | null;
 	LocalOrigin: Handle<IfcCartesianPoint> ;
 	Scale: IfcReal | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Axis1){
+		args.push(REF)
+		args.push(this.Axis1.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Axis2){
+		args.push(REF)
+		args.push(this.Axis2.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LocalOrigin.expressID)
+		if(this.Scale){
+		args.push(REAL)
+		args.push(this.Scale)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCartesianTransformationOperator2DnonUniform {
@@ -5224,12 +7851,35 @@ export class IfcCartesianTransformationOperator2DnonUniform {
 	LocalOrigin: Handle<IfcCartesianPoint> ;
 	Scale: IfcReal | null;
 	Scale2: IfcReal | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Axis1){
+		args.push(REF)
+		args.push(this.Axis1.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Axis2){
+		args.push(REF)
+		args.push(this.Axis2.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LocalOrigin.expressID)
+		if(this.Scale){
+		args.push(REAL)
+		args.push(this.Scale)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Scale2){
+		args.push(REAL)
+		args.push(this.Scale2)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCartesianTransformationOperator3D {
@@ -5246,12 +7896,35 @@ export class IfcCartesianTransformationOperator3D {
 	LocalOrigin: Handle<IfcCartesianPoint> ;
 	Scale: IfcReal | null;
 	Axis3: Handle<IfcDirection> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Axis1){
+		args.push(REF)
+		args.push(this.Axis1.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Axis2){
+		args.push(REF)
+		args.push(this.Axis2.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LocalOrigin.expressID)
+		if(this.Scale){
+		args.push(REAL)
+		args.push(this.Scale)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Axis3){
+		args.push(REF)
+		args.push(this.Axis3.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCartesianTransformationOperator3DnonUniform {
@@ -5272,12 +7945,45 @@ export class IfcCartesianTransformationOperator3DnonUniform {
 	Axis3: Handle<IfcDirection> | null;
 	Scale2: IfcReal | null;
 	Scale3: IfcReal | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Axis1){
+		args.push(REF)
+		args.push(this.Axis1.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Axis2){
+		args.push(REF)
+		args.push(this.Axis2.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LocalOrigin.expressID)
+		if(this.Scale){
+		args.push(REAL)
+		args.push(this.Scale)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Axis3){
+		args.push(REF)
+		args.push(this.Axis3.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Scale2){
+		args.push(REAL)
+		args.push(this.Scale2)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Scale3){
+		args.push(REAL)
+		args.push(this.Scale3)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCenterLineProfileDef {
@@ -5292,12 +7998,20 @@ export class IfcCenterLineProfileDef {
 	ProfileName: IfcLabel | null;
 	Curve: Handle<IfcBoundedCurve> ;
 	Thickness: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Curve.expressID)
+		return args;
 	}
 };
 export class IfcChiller {
@@ -5322,12 +8036,53 @@ export class IfcChiller {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcChillerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcChillerType {
@@ -5354,12 +8109,56 @@ export class IfcChillerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcChillerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcChimney {
@@ -5384,12 +8183,53 @@ export class IfcChimney {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcChimneyTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcChimneyType {
@@ -5416,12 +8256,56 @@ export class IfcChimneyType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcChimneyTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCircle {
@@ -5432,12 +8316,13 @@ export class IfcCircle {
 	}
 	Position: IfcAxis2Placement ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcCircleHollowProfileDef {
@@ -5454,12 +8339,23 @@ export class IfcCircleHollowProfileDef {
 	Position: Handle<IfcAxis2Placement2D> | null;
 	Radius: IfcPositiveLengthMeasure ;
 	WallThickness: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCircleProfileDef {
@@ -5474,12 +8370,23 @@ export class IfcCircleProfileDef {
 	ProfileName: IfcLabel | null;
 	Position: Handle<IfcAxis2Placement2D> | null;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCircularArcSegment2D {
@@ -5496,12 +8403,17 @@ export class IfcCircularArcSegment2D {
 	SegmentLength: IfcPositiveLengthMeasure ;
 	Radius: IfcPositiveLengthMeasure ;
 	IsCCW: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.StartPoint.expressID)
+		args.push(REAL)
+		args.push(this.StartDirection)
+		return args;
 	}
 };
 export class IfcCivilElement {
@@ -5524,12 +8436,50 @@ export class IfcCivilElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCivilElementType {
@@ -5554,12 +8504,56 @@ export class IfcCivilElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcClassification {
@@ -5580,12 +8574,45 @@ export class IfcClassification {
 	Description: IfcText | null;
 	Location: IfcURIReference | null;
 	ReferenceTokens: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Source){
+		args.push(STRING)
+		args.push(this.Source)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Edition){
+		args.push(STRING)
+		args.push(this.Edition)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EditionDate){
+		args.push(STRING)
+		args.push(this.EditionDate)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReferenceTokens){
+		args.push(STRING)
+		args.push(this.ReferenceTokens)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcClassificationReference {
@@ -5604,12 +8631,41 @@ export class IfcClassificationReference {
 	ReferencedSource: IfcClassificationReferenceSelect | null;
 	Description: IfcText | null;
 	Sort: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReferencedSource){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Sort){
+		args.push(STRING)
+		args.push(this.Sort)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcClosedShell {
@@ -5618,12 +8674,16 @@ export class IfcClosedShell {
 		this.CfsFaces = CfsFaces;
 	}
 	CfsFaces: Handle<IfcFace>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(SET_BEGIN)
+		this.CfsFaces.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcCoil {
@@ -5648,12 +8708,53 @@ export class IfcCoil {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCoilTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCoilType {
@@ -5680,12 +8781,56 @@ export class IfcCoilType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCoilTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcColourRgb {
@@ -5700,12 +8845,18 @@ export class IfcColourRgb {
 	Red: IfcNormalisedRatioMeasure ;
 	Green: IfcNormalisedRatioMeasure ;
 	Blue: IfcNormalisedRatioMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcColourRgbList {
@@ -5714,12 +8865,13 @@ export class IfcColourRgbList {
 		this.ColourList = ColourList;
 	}
 	ColourList: IfcNormalisedRatioMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcColourSpecification {
@@ -5728,12 +8880,18 @@ export class IfcColourSpecification {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcColumn {
@@ -5758,12 +8916,53 @@ export class IfcColumn {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcColumnTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcColumnStandardCase {
@@ -5788,12 +8987,53 @@ export class IfcColumnStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcColumnTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcColumnType {
@@ -5820,12 +9060,56 @@ export class IfcColumnType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcColumnTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCommunicationsAppliance {
@@ -5850,12 +9134,53 @@ export class IfcCommunicationsAppliance {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCommunicationsApplianceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCommunicationsApplianceType {
@@ -5882,12 +9207,56 @@ export class IfcCommunicationsApplianceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCommunicationsApplianceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcComplexProperty {
@@ -5902,12 +9271,25 @@ export class IfcComplexProperty {
 	Description: IfcText | null;
 	UsageName: IfcIdentifier ;
 	HasProperties: Handle<IfcProperty>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.UsageName)
+		args.push(SET_BEGIN)
+		this.HasProperties.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcComplexPropertyTemplate {
@@ -5928,12 +9310,44 @@ export class IfcComplexPropertyTemplate {
 	UsageName: IfcLabel | null;
 	TemplateType: IfcComplexPropertyTemplateTypeEnum | null;
 	HasPropertyTemplates: Handle<IfcPropertyTemplate>[] | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UsageName){
+		args.push(STRING)
+		args.push(this.UsageName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TemplateType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertyTemplates){
+		args.push(SET_BEGIN)
+		this.HasPropertyTemplates.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCompositeCurve {
@@ -5944,12 +9358,15 @@ export class IfcCompositeCurve {
 	}
 	Segments: Handle<IfcCompositeCurveSegment> ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Segments.expressID)
+		return args;
 	}
 };
 export class IfcCompositeCurveOnSurface {
@@ -5960,12 +9377,15 @@ export class IfcCompositeCurveOnSurface {
 	}
 	Segments: Handle<IfcCompositeCurveSegment> ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Segments.expressID)
+		return args;
 	}
 };
 export class IfcCompositeCurveSegment {
@@ -5978,12 +9398,15 @@ export class IfcCompositeCurveSegment {
 	Transition: IfcTransitionCode ;
 	SameSense: IfcBoolean ;
 	ParentCurve: Handle<IfcCurve> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ParentCurve.expressID)
+		return args;
 	}
 };
 export class IfcCompositeProfileDef {
@@ -5998,12 +9421,26 @@ export class IfcCompositeProfileDef {
 	ProfileName: IfcLabel | null;
 	Profiles: Handle<IfcProfileDef>[] ;
 	Label: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Profiles.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.Label){
+		args.push(STRING)
+		args.push(this.Label)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCompressor {
@@ -6028,12 +9465,53 @@ export class IfcCompressor {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCompressorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCompressorType {
@@ -6060,12 +9538,56 @@ export class IfcCompressorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCompressorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCondenser {
@@ -6090,12 +9612,53 @@ export class IfcCondenser {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCondenserTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCondenserType {
@@ -6122,12 +9685,56 @@ export class IfcCondenserType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCondenserTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConic {
@@ -6136,12 +9743,13 @@ export class IfcConic {
 		this.Position = Position;
 	}
 	Position: IfcAxis2Placement ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcConnectedFaceSet {
@@ -6150,12 +9758,16 @@ export class IfcConnectedFaceSet {
 		this.CfsFaces = CfsFaces;
 	}
 	CfsFaces: Handle<IfcFace>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(SET_BEGIN)
+		this.CfsFaces.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcConnectionCurveGeometry {
@@ -6166,24 +9778,29 @@ export class IfcConnectionCurveGeometry {
 	}
 	CurveOnRelatingElement: IfcCurveOrEdgeCurve ;
 	CurveOnRelatedElement: IfcCurveOrEdgeCurve | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.CurveOnRelatedElement){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConnectionGeometry {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcConnectionPointEccentricity {
@@ -6200,12 +9817,31 @@ export class IfcConnectionPointEccentricity {
 	EccentricityInX: IfcLengthMeasure | null;
 	EccentricityInY: IfcLengthMeasure | null;
 	EccentricityInZ: IfcLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.PointOnRelatedElement){
+		}
+		else{ args.push(EMPTY); }
+		if(this.EccentricityInX){
+		args.push(REAL)
+		args.push(this.EccentricityInX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EccentricityInY){
+		args.push(REAL)
+		args.push(this.EccentricityInY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EccentricityInZ){
+		args.push(REAL)
+		args.push(this.EccentricityInZ)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConnectionPointGeometry {
@@ -6216,12 +9852,16 @@ export class IfcConnectionPointGeometry {
 	}
 	PointOnRelatingElement: IfcPointOrVertexPoint ;
 	PointOnRelatedElement: IfcPointOrVertexPoint | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.PointOnRelatedElement){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConnectionSurfaceGeometry {
@@ -6232,12 +9872,16 @@ export class IfcConnectionSurfaceGeometry {
 	}
 	SurfaceOnRelatingElement: IfcSurfaceOrFaceSurface ;
 	SurfaceOnRelatedElement: IfcSurfaceOrFaceSurface | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.SurfaceOnRelatedElement){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConnectionVolumeGeometry {
@@ -6248,12 +9892,16 @@ export class IfcConnectionVolumeGeometry {
 	}
 	VolumeOnRelatingElement: IfcSolidOrShell ;
 	VolumeOnRelatedElement: IfcSolidOrShell | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.VolumeOnRelatedElement){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstraint {
@@ -6274,12 +9922,38 @@ export class IfcConstraint {
 	CreatingActor: IfcActorSelect | null;
 	CreationTime: IfcDateTime | null;
 	UserDefinedGrade: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConstraintSource){
+		args.push(STRING)
+		args.push(this.ConstraintSource)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CreatingActor){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CreationTime){
+		args.push(STRING)
+		args.push(this.CreationTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedGrade){
+		args.push(STRING)
+		args.push(this.UserDefinedGrade)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstructionEquipmentResource {
@@ -6308,12 +9982,63 @@ export class IfcConstructionEquipmentResource {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionEquipmentResourceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Usage){
+		args.push(REF)
+		args.push(this.Usage.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstructionEquipmentResourceType {
@@ -6344,12 +10069,66 @@ export class IfcConstructionEquipmentResourceType {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionEquipmentResourceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResourceType){
+		args.push(STRING)
+		args.push(this.ResourceType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstructionMaterialResource {
@@ -6378,12 +10157,63 @@ export class IfcConstructionMaterialResource {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionMaterialResourceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Usage){
+		args.push(REF)
+		args.push(this.Usage.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstructionMaterialResourceType {
@@ -6414,12 +10244,66 @@ export class IfcConstructionMaterialResourceType {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionMaterialResourceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResourceType){
+		args.push(STRING)
+		args.push(this.ResourceType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstructionProductResource {
@@ -6448,12 +10332,63 @@ export class IfcConstructionProductResource {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionProductResourceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Usage){
+		args.push(REF)
+		args.push(this.Usage.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstructionProductResourceType {
@@ -6484,12 +10419,66 @@ export class IfcConstructionProductResourceType {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionProductResourceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResourceType){
+		args.push(STRING)
+		args.push(this.ResourceType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstructionResource {
@@ -6516,12 +10505,60 @@ export class IfcConstructionResource {
 	Usage: Handle<IfcResourceTime> | null;
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Usage){
+		args.push(REF)
+		args.push(this.Usage.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConstructionResourceType {
@@ -6550,12 +10587,66 @@ export class IfcConstructionResourceType {
 	ResourceType: IfcLabel | null;
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResourceType){
+		args.push(STRING)
+		args.push(this.ResourceType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcContext {
@@ -6580,12 +10671,56 @@ export class IfcContext {
 	Phase: IfcLabel | null;
 	RepresentationContexts: Handle<IfcRepresentationContext>[] | null;
 	UnitsInContext: Handle<IfcUnitAssignment> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Phase){
+		args.push(STRING)
+		args.push(this.Phase)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationContexts){
+		args.push(SET_BEGIN)
+		this.RepresentationContexts.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UnitsInContext){
+		args.push(REF)
+		args.push(this.UnitsInContext.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcContextDependentUnit {
@@ -6598,12 +10733,17 @@ export class IfcContextDependentUnit {
 	Dimensions: Handle<IfcDimensionalExponents> ;
 	UnitType: IfcUnitEnum ;
 	Name: IfcLabel ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Dimensions.expressID)
+		args.push(STRING)
+		args.push(this.Name)
+		return args;
 	}
 };
 export class IfcControl {
@@ -6622,12 +10762,40 @@ export class IfcControl {
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
 	Identification: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcController {
@@ -6652,12 +10820,53 @@ export class IfcController {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcControllerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcControllerType {
@@ -6684,12 +10893,56 @@ export class IfcControllerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcControllerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcConversionBasedUnit {
@@ -6704,12 +10957,19 @@ export class IfcConversionBasedUnit {
 	UnitType: IfcUnitEnum ;
 	Name: IfcLabel ;
 	ConversionFactor: Handle<IfcMeasureWithUnit> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Dimensions.expressID)
+		args.push(STRING)
+		args.push(this.Name)
+		args.push(REF)
+		args.push(this.ConversionFactor.expressID)
+		return args;
 	}
 };
 export class IfcConversionBasedUnitWithOffset {
@@ -6726,12 +10986,21 @@ export class IfcConversionBasedUnitWithOffset {
 	Name: IfcLabel ;
 	ConversionFactor: Handle<IfcMeasureWithUnit> ;
 	ConversionOffset: IfcReal ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Dimensions.expressID)
+		args.push(STRING)
+		args.push(this.Name)
+		args.push(REF)
+		args.push(this.ConversionFactor.expressID)
+		args.push(REAL)
+		args.push(this.ConversionOffset)
+		return args;
 	}
 };
 export class IfcCooledBeam {
@@ -6756,12 +11025,53 @@ export class IfcCooledBeam {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCooledBeamTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCooledBeamType {
@@ -6788,12 +11098,56 @@ export class IfcCooledBeamType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCooledBeamTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCoolingTower {
@@ -6818,12 +11172,53 @@ export class IfcCoolingTower {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCoolingTowerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCoolingTowerType {
@@ -6850,12 +11245,56 @@ export class IfcCoolingTowerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCoolingTowerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCoordinateOperation {
@@ -6866,12 +11305,15 @@ export class IfcCoordinateOperation {
 	}
 	SourceCRS: IfcCoordinateReferenceSystemSelect ;
 	TargetCRS: Handle<IfcCoordinateReferenceSystem> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.TargetCRS.expressID)
+		return args;
 	}
 };
 export class IfcCoordinateReferenceSystem {
@@ -6886,12 +11328,30 @@ export class IfcCoordinateReferenceSystem {
 	Description: IfcText | null;
 	GeodeticDatum: IfcIdentifier | null;
 	VerticalDatum: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.GeodeticDatum){
+		args.push(STRING)
+		args.push(this.GeodeticDatum)
+		}
+		else{ args.push(EMPTY); }
+		if(this.VerticalDatum){
+		args.push(STRING)
+		args.push(this.VerticalDatum)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCostItem {
@@ -6916,12 +11376,53 @@ export class IfcCostItem {
 	PredefinedType: IfcCostItemTypeEnum | null;
 	CostValues: Handle<IfcCostValue> | null;
 	CostQuantities: Handle<IfcPhysicalQuantity> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CostValues){
+		args.push(REF)
+		args.push(this.CostValues.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CostQuantities){
+		args.push(REF)
+		args.push(this.CostQuantities.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCostSchedule {
@@ -6948,12 +11449,58 @@ export class IfcCostSchedule {
 	Status: IfcLabel | null;
 	SubmittedOn: IfcDateTime | null;
 	UpdateDate: IfcDateTime | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Status){
+		args.push(STRING)
+		args.push(this.Status)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SubmittedOn){
+		args.push(STRING)
+		args.push(this.SubmittedOn)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UpdateDate){
+		args.push(STRING)
+		args.push(this.UpdateDate)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCostValue {
@@ -6980,12 +11527,59 @@ export class IfcCostValue {
 	Condition: IfcLabel | null;
 	ArithmeticOperator: IfcArithmeticOperatorEnum | null;
 	Components: Handle<IfcAppliedValue> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AppliedValue){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UnitBasis){
+		args.push(REF)
+		args.push(this.UnitBasis.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableDate){
+		args.push(STRING)
+		args.push(this.ApplicableDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FixedUntilDate){
+		args.push(STRING)
+		args.push(this.FixedUntilDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Category){
+		args.push(STRING)
+		args.push(this.Category)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Condition){
+		args.push(STRING)
+		args.push(this.Condition)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ArithmeticOperator){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Components){
+		args.push(REF)
+		args.push(this.Components.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCovering {
@@ -7010,12 +11604,53 @@ export class IfcCovering {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCoveringTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCoveringType {
@@ -7042,12 +11677,56 @@ export class IfcCoveringType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCoveringTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCrewResource {
@@ -7076,12 +11755,63 @@ export class IfcCrewResource {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcCrewResourceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Usage){
+		args.push(REF)
+		args.push(this.Usage.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCrewResourceType {
@@ -7112,12 +11842,66 @@ export class IfcCrewResourceType {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcCrewResourceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResourceType){
+		args.push(STRING)
+		args.push(this.ResourceType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCsgPrimitive3D {
@@ -7126,12 +11910,15 @@ export class IfcCsgPrimitive3D {
 		this.Position = Position;
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcCsgSolid {
@@ -7140,12 +11927,13 @@ export class IfcCsgSolid {
 		this.TreeRootExpression = TreeRootExpression;
 	}
 	TreeRootExpression: IfcCsgSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcCurrencyRelationship {
@@ -7166,12 +11954,37 @@ export class IfcCurrencyRelationship {
 	ExchangeRate: IfcPositiveRatioMeasure ;
 	RateDateTime: IfcDateTime | null;
 	RateSource: Handle<IfcLibraryInformation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingMonetaryUnit.expressID)
+		args.push(REF)
+		args.push(this.RelatedMonetaryUnit.expressID)
+		if(this.RateDateTime){
+		args.push(STRING)
+		args.push(this.RateDateTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RateSource){
+		args.push(REF)
+		args.push(this.RateSource.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCurtainWall {
@@ -7196,12 +12009,53 @@ export class IfcCurtainWall {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCurtainWallTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCurtainWallType {
@@ -7228,24 +12082,69 @@ export class IfcCurtainWallType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCurtainWallTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCurve {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcCurveBoundedPlane {
@@ -7258,12 +12157,20 @@ export class IfcCurveBoundedPlane {
 	BasisSurface: Handle<IfcPlane> ;
 	OuterBoundary: Handle<IfcCurve> ;
 	InnerBoundaries: Handle<IfcCurve>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisSurface.expressID)
+		args.push(REF)
+		args.push(this.OuterBoundary.expressID)
+		args.push(SET_BEGIN)
+		this.InnerBoundaries.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcCurveBoundedSurface {
@@ -7276,12 +12183,18 @@ export class IfcCurveBoundedSurface {
 	BasisSurface: Handle<IfcSurface> ;
 	Boundaries: Handle<IfcBoundaryCurve>[] ;
 	ImplicitOuter: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisSurface.expressID)
+		args.push(SET_BEGIN)
+		this.Boundaries.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcCurveSegment2D {
@@ -7294,12 +12207,17 @@ export class IfcCurveSegment2D {
 	StartPoint: Handle<IfcCartesianPoint> ;
 	StartDirection: IfcPlaneAngleMeasure ;
 	SegmentLength: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.StartPoint.expressID)
+		args.push(REAL)
+		args.push(this.StartDirection)
+		return args;
 	}
 };
 export class IfcCurveStyle {
@@ -7316,12 +12234,30 @@ export class IfcCurveStyle {
 	CurveWidth: IfcSizeSelect | null;
 	CurveColour: IfcColour | null;
 	ModelOrDraughting: IfcBoolean | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CurveFont){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CurveWidth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CurveColour){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ModelOrDraughting){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCurveStyleFont {
@@ -7332,12 +12268,20 @@ export class IfcCurveStyleFont {
 	}
 	Name: IfcLabel | null;
 	PatternList: Handle<IfcCurveStyleFontPattern> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.PatternList.expressID)
+		return args;
 	}
 };
 export class IfcCurveStyleFontAndScaling {
@@ -7350,12 +12294,18 @@ export class IfcCurveStyleFontAndScaling {
 	Name: IfcLabel | null;
 	CurveFont: IfcCurveStyleFontSelect ;
 	CurveFontScaling: IfcPositiveRatioMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcCurveStyleFontPattern {
@@ -7366,12 +12316,15 @@ export class IfcCurveStyleFontPattern {
 	}
 	VisibleSegmentLength: IfcLengthMeasure ;
 	InvisibleSegmentLength: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.VisibleSegmentLength)
+		return args;
 	}
 };
 export class IfcCylindricalSurface {
@@ -7382,12 +12335,15 @@ export class IfcCylindricalSurface {
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcDamper {
@@ -7412,12 +12368,53 @@ export class IfcDamper {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDamperTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDamperType {
@@ -7444,12 +12441,56 @@ export class IfcDamperType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDamperTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDeepFoundation {
@@ -7472,12 +12513,50 @@ export class IfcDeepFoundation {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDeepFoundationType {
@@ -7502,12 +12581,56 @@ export class IfcDeepFoundationType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDerivedProfileDef {
@@ -7524,12 +12647,27 @@ export class IfcDerivedProfileDef {
 	ParentProfile: Handle<IfcProfileDef> ;
 	Operator: Handle<IfcCartesianTransformationOperator2D> ;
 	Label: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ParentProfile.expressID)
+		args.push(REF)
+		args.push(this.Operator.expressID)
+		if(this.Label){
+		args.push(STRING)
+		args.push(this.Label)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDerivedUnit {
@@ -7542,12 +12680,21 @@ export class IfcDerivedUnit {
 	Elements: Handle<IfcDerivedUnitElement>[] ;
 	UnitType: IfcDerivedUnitEnum ;
 	UserDefinedType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(SET_BEGIN)
+		this.Elements.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.UserDefinedType){
+		args.push(STRING)
+		args.push(this.UserDefinedType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDerivedUnitElement {
@@ -7558,12 +12705,17 @@ export class IfcDerivedUnitElement {
 	}
 	Unit: Handle<IfcNamedUnit> ;
 	Exponent: Handle<number> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Unit.expressID)
+		args.push(REF)
+		args.push(this.Exponent.expressID)
+		return args;
 	}
 };
 export class IfcDimensionalExponents {
@@ -7584,12 +12736,27 @@ export class IfcDimensionalExponents {
 	ThermodynamicTemperatureExponent: Handle<number> ;
 	AmountOfSubstanceExponent: Handle<number> ;
 	LuminousIntensityExponent: Handle<number> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.LengthExponent.expressID)
+		args.push(REF)
+		args.push(this.MassExponent.expressID)
+		args.push(REF)
+		args.push(this.TimeExponent.expressID)
+		args.push(REF)
+		args.push(this.ElectricCurrentExponent.expressID)
+		args.push(REF)
+		args.push(this.ThermodynamicTemperatureExponent.expressID)
+		args.push(REF)
+		args.push(this.AmountOfSubstanceExponent.expressID)
+		args.push(REF)
+		args.push(this.LuminousIntensityExponent.expressID)
+		return args;
 	}
 };
 export class IfcDirection {
@@ -7598,12 +12765,15 @@ export class IfcDirection {
 		this.DirectionRatios = DirectionRatios;
 	}
 	DirectionRatios: IfcReal ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.DirectionRatios)
+		return args;
 	}
 };
 export class IfcDiscreteAccessory {
@@ -7628,12 +12798,53 @@ export class IfcDiscreteAccessory {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDiscreteAccessoryTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDiscreteAccessoryType {
@@ -7660,12 +12871,56 @@ export class IfcDiscreteAccessoryType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDiscreteAccessoryTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistanceExpression {
@@ -7682,12 +12937,33 @@ export class IfcDistanceExpression {
 	OffsetVertical: IfcLengthMeasure | null;
 	OffsetLongitudinal: IfcLengthMeasure | null;
 	AlongHorizontal: IfcBoolean | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.DistanceAlong)
+		if(this.OffsetLateral){
+		args.push(REAL)
+		args.push(this.OffsetLateral)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OffsetVertical){
+		args.push(REAL)
+		args.push(this.OffsetVertical)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OffsetLongitudinal){
+		args.push(REAL)
+		args.push(this.OffsetLongitudinal)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AlongHorizontal){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionChamberElement {
@@ -7712,12 +12988,53 @@ export class IfcDistributionChamberElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDistributionChamberElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionChamberElementType {
@@ -7744,12 +13061,56 @@ export class IfcDistributionChamberElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDistributionChamberElementTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionCircuit {
@@ -7770,12 +13131,43 @@ export class IfcDistributionCircuit {
 	ObjectType: IfcLabel | null;
 	LongName: IfcLabel | null;
 	PredefinedType: IfcDistributionSystemEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionControlElement {
@@ -7798,12 +13190,50 @@ export class IfcDistributionControlElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionControlElementType {
@@ -7828,12 +13258,56 @@ export class IfcDistributionControlElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionElement {
@@ -7856,12 +13330,50 @@ export class IfcDistributionElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionElementType {
@@ -7886,12 +13398,56 @@ export class IfcDistributionElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionFlowElement {
@@ -7914,12 +13470,50 @@ export class IfcDistributionFlowElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionFlowElementType {
@@ -7944,12 +13538,56 @@ export class IfcDistributionFlowElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionPort {
@@ -7976,12 +13614,54 @@ export class IfcDistributionPort {
 	FlowDirection: IfcFlowDirectionEnum | null;
 	PredefinedType: IfcDistributionPortTypeEnum | null;
 	SystemType: IfcDistributionSystemEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FlowDirection){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.SystemType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDistributionSystem {
@@ -8002,12 +13682,43 @@ export class IfcDistributionSystem {
 	ObjectType: IfcLabel | null;
 	LongName: IfcLabel | null;
 	PredefinedType: IfcDistributionSystemEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDocumentInformation {
@@ -8048,12 +13759,84 @@ export class IfcDocumentInformation {
 	ValidUntil: IfcDate | null;
 	Confidentiality: IfcDocumentConfidentialityEnum | null;
 	Status: IfcDocumentStatusEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Identification)
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Purpose){
+		args.push(STRING)
+		args.push(this.Purpose)
+		}
+		else{ args.push(EMPTY); }
+		if(this.IntendedUse){
+		args.push(STRING)
+		args.push(this.IntendedUse)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Scope){
+		args.push(STRING)
+		args.push(this.Scope)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Revision){
+		args.push(STRING)
+		args.push(this.Revision)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DocumentOwner){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Editors){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CreationTime){
+		args.push(STRING)
+		args.push(this.CreationTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LastRevisionTime){
+		args.push(STRING)
+		args.push(this.LastRevisionTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElectronicFormat){
+		args.push(STRING)
+		args.push(this.ElectronicFormat)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ValidFrom){
+		args.push(STRING)
+		args.push(this.ValidFrom)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ValidUntil){
+		args.push(STRING)
+		args.push(this.ValidUntil)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Confidentiality){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Status){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDocumentInformationRelationship {
@@ -8070,12 +13853,33 @@ export class IfcDocumentInformationRelationship {
 	RelatingDocument: Handle<IfcDocumentInformation> ;
 	RelatedDocuments: Handle<IfcDocumentInformation>[] ;
 	RelationshipType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingDocument.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedDocuments.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelationshipType){
+		args.push(STRING)
+		args.push(this.RelationshipType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDocumentReference {
@@ -8092,12 +13896,38 @@ export class IfcDocumentReference {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	ReferencedDocument: Handle<IfcDocumentInformation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReferencedDocument){
+		args.push(REF)
+		args.push(this.ReferencedDocument.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDoor {
@@ -8130,12 +13960,67 @@ export class IfcDoor {
 	PredefinedType: IfcDoorTypeEnum | null;
 	OperationType: IfcDoorTypeOperationEnum | null;
 	UserDefinedOperationType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OverallHeight){
+		}
+		else{ args.push(EMPTY); }
+		if(this.OverallWidth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.OperationType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedOperationType){
+		args.push(STRING)
+		args.push(this.UserDefinedOperationType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDoorLiningProperties {
@@ -8176,12 +14061,81 @@ export class IfcDoorLiningProperties {
 	ShapeAspectStyle: Handle<IfcShapeAspect> | null;
 	LiningToPanelOffsetX: IfcLengthMeasure | null;
 	LiningToPanelOffsetY: IfcLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningDepth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ThresholdDepth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ThresholdThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransomThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransomOffset){
+		args.push(REAL)
+		args.push(this.TransomOffset)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningOffset){
+		args.push(REAL)
+		args.push(this.LiningOffset)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ThresholdOffset){
+		args.push(REAL)
+		args.push(this.ThresholdOffset)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CasingThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CasingDepth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ShapeAspectStyle){
+		args.push(REF)
+		args.push(this.ShapeAspectStyle.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningToPanelOffsetX){
+		args.push(REAL)
+		args.push(this.LiningToPanelOffsetX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningToPanelOffsetY){
+		args.push(REAL)
+		args.push(this.LiningToPanelOffsetY)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDoorPanelProperties {
@@ -8206,12 +14160,41 @@ export class IfcDoorPanelProperties {
 	PanelWidth: IfcNormalisedRatioMeasure | null;
 	PanelPosition: IfcDoorPanelPositionEnum ;
 	ShapeAspectStyle: Handle<IfcShapeAspect> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PanelDepth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PanelWidth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ShapeAspectStyle){
+		args.push(REF)
+		args.push(this.ShapeAspectStyle.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDoorStandardCase {
@@ -8244,12 +14227,67 @@ export class IfcDoorStandardCase {
 	PredefinedType: IfcDoorTypeEnum | null;
 	OperationType: IfcDoorTypeOperationEnum | null;
 	UserDefinedOperationType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OverallHeight){
+		}
+		else{ args.push(EMPTY); }
+		if(this.OverallWidth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.OperationType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedOperationType){
+		args.push(STRING)
+		args.push(this.UserDefinedOperationType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDoorStyle {
@@ -8280,12 +14318,51 @@ export class IfcDoorStyle {
 	ConstructionType: IfcDoorStyleConstructionEnum ;
 	ParameterTakesPrecedence: IfcBoolean ;
 	Sizeable: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDoorType {
@@ -8318,12 +14395,64 @@ export class IfcDoorType {
 	OperationType: IfcDoorTypeOperationEnum ;
 	ParameterTakesPrecedence: IfcBoolean | null;
 	UserDefinedOperationType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ParameterTakesPrecedence){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedOperationType){
+		args.push(STRING)
+		args.push(this.UserDefinedOperationType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDraughtingPreDefinedColour {
@@ -8332,12 +14461,15 @@ export class IfcDraughtingPreDefinedColour {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		return args;
 	}
 };
 export class IfcDraughtingPreDefinedCurveFont {
@@ -8346,12 +14478,15 @@ export class IfcDraughtingPreDefinedCurveFont {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		return args;
 	}
 };
 export class IfcDuctFitting {
@@ -8376,12 +14511,53 @@ export class IfcDuctFitting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDuctFittingTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDuctFittingType {
@@ -8408,12 +14584,56 @@ export class IfcDuctFittingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDuctFittingTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDuctSegment {
@@ -8438,12 +14658,53 @@ export class IfcDuctSegment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDuctSegmentTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDuctSegmentType {
@@ -8470,12 +14731,56 @@ export class IfcDuctSegmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDuctSegmentTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDuctSilencer {
@@ -8500,12 +14805,53 @@ export class IfcDuctSilencer {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDuctSilencerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcDuctSilencerType {
@@ -8532,12 +14878,56 @@ export class IfcDuctSilencerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDuctSilencerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEdge {
@@ -8548,12 +14938,17 @@ export class IfcEdge {
 	}
 	EdgeStart: Handle<IfcVertex> ;
 	EdgeEnd: Handle<IfcVertex> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.EdgeStart.expressID)
+		args.push(REF)
+		args.push(this.EdgeEnd.expressID)
+		return args;
 	}
 };
 export class IfcEdgeCurve {
@@ -8568,12 +14963,19 @@ export class IfcEdgeCurve {
 	EdgeEnd: Handle<IfcVertex> ;
 	EdgeGeometry: Handle<IfcCurve> ;
 	SameSense: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.EdgeStart.expressID)
+		args.push(REF)
+		args.push(this.EdgeEnd.expressID)
+		args.push(REF)
+		args.push(this.EdgeGeometry.expressID)
+		return args;
 	}
 };
 export class IfcEdgeLoop {
@@ -8582,12 +14984,15 @@ export class IfcEdgeLoop {
 		this.EdgeList = EdgeList;
 	}
 	EdgeList: Handle<IfcOrientedEdge> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.EdgeList.expressID)
+		return args;
 	}
 };
 export class IfcElectricAppliance {
@@ -8612,12 +15017,53 @@ export class IfcElectricAppliance {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricApplianceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricApplianceType {
@@ -8644,12 +15090,56 @@ export class IfcElectricApplianceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricApplianceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricDistributionBoard {
@@ -8674,12 +15164,53 @@ export class IfcElectricDistributionBoard {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricDistributionBoardTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricDistributionBoardType {
@@ -8706,12 +15237,56 @@ export class IfcElectricDistributionBoardType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricDistributionBoardTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricFlowStorageDevice {
@@ -8736,12 +15311,53 @@ export class IfcElectricFlowStorageDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricFlowStorageDeviceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricFlowStorageDeviceType {
@@ -8768,12 +15384,56 @@ export class IfcElectricFlowStorageDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricFlowStorageDeviceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricGenerator {
@@ -8798,12 +15458,53 @@ export class IfcElectricGenerator {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricGeneratorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricGeneratorType {
@@ -8830,12 +15531,56 @@ export class IfcElectricGeneratorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricGeneratorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricMotor {
@@ -8860,12 +15605,53 @@ export class IfcElectricMotor {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricMotorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricMotorType {
@@ -8892,12 +15678,56 @@ export class IfcElectricMotorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricMotorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricTimeControl {
@@ -8922,12 +15752,53 @@ export class IfcElectricTimeControl {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricTimeControlTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElectricTimeControlType {
@@ -8954,12 +15825,56 @@ export class IfcElectricTimeControlType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricTimeControlTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElement {
@@ -8982,12 +15897,50 @@ export class IfcElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElementAssembly {
@@ -9014,12 +15967,56 @@ export class IfcElementAssembly {
 	Tag: IfcIdentifier | null;
 	AssemblyPlace: IfcAssemblyPlaceEnum | null;
 	PredefinedType: IfcElementAssemblyTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AssemblyPlace){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElementAssemblyType {
@@ -9046,12 +16043,56 @@ export class IfcElementAssemblyType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElementAssemblyTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElementComponent {
@@ -9074,12 +16115,50 @@ export class IfcElementComponent {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElementComponentType {
@@ -9104,12 +16183,56 @@ export class IfcElementComponentType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElementQuantity {
@@ -9128,12 +16251,38 @@ export class IfcElementQuantity {
 	Description: IfcText | null;
 	MethodOfMeasurement: IfcLabel | null;
 	Quantities: Handle<IfcPhysicalQuantity>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MethodOfMeasurement){
+		args.push(STRING)
+		args.push(this.MethodOfMeasurement)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Quantities.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcElementType {
@@ -9158,12 +16307,56 @@ export class IfcElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcElementarySurface {
@@ -9172,12 +16365,15 @@ export class IfcElementarySurface {
 		this.Position = Position;
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcEllipse {
@@ -9190,12 +16386,13 @@ export class IfcEllipse {
 	Position: IfcAxis2Placement ;
 	SemiAxis1: IfcPositiveLengthMeasure ;
 	SemiAxis2: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcEllipseProfileDef {
@@ -9212,12 +16409,23 @@ export class IfcEllipseProfileDef {
 	Position: Handle<IfcAxis2Placement2D> | null;
 	SemiAxis1: IfcPositiveLengthMeasure ;
 	SemiAxis2: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEnergyConversionDevice {
@@ -9240,12 +16448,50 @@ export class IfcEnergyConversionDevice {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEnergyConversionDeviceType {
@@ -9270,12 +16516,56 @@ export class IfcEnergyConversionDeviceType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEngine {
@@ -9300,12 +16590,53 @@ export class IfcEngine {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcEngineTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEngineType {
@@ -9332,12 +16663,56 @@ export class IfcEngineType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcEngineTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEvaporativeCooler {
@@ -9362,12 +16737,53 @@ export class IfcEvaporativeCooler {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcEvaporativeCoolerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEvaporativeCoolerType {
@@ -9394,12 +16810,56 @@ export class IfcEvaporativeCoolerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcEvaporativeCoolerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEvaporator {
@@ -9424,12 +16884,53 @@ export class IfcEvaporator {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcEvaporatorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEvaporatorType {
@@ -9456,12 +16957,56 @@ export class IfcEvaporatorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcEvaporatorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEvent {
@@ -9490,12 +17035,61 @@ export class IfcEvent {
 	EventTriggerType: IfcEventTriggerTypeEnum | null;
 	UserDefinedEventTriggerType: IfcLabel | null;
 	EventOccurenceTime: Handle<IfcEventTime> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.EventTriggerType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedEventTriggerType){
+		args.push(STRING)
+		args.push(this.UserDefinedEventTriggerType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EventOccurenceTime){
+		args.push(REF)
+		args.push(this.EventOccurenceTime.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEventTime {
@@ -9516,12 +17110,46 @@ export class IfcEventTime {
 	EarlyDate: IfcDateTime | null;
 	LateDate: IfcDateTime | null;
 	ScheduleDate: IfcDateTime | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DataOrigin){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualDate){
+		args.push(STRING)
+		args.push(this.ActualDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EarlyDate){
+		args.push(STRING)
+		args.push(this.EarlyDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LateDate){
+		args.push(STRING)
+		args.push(this.LateDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleDate){
+		args.push(STRING)
+		args.push(this.ScheduleDate)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcEventType {
@@ -9552,12 +17180,61 @@ export class IfcEventType {
 	PredefinedType: IfcEventTypeEnum ;
 	EventTriggerType: IfcEventTriggerTypeEnum ;
 	UserDefinedEventTriggerType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ProcessType){
+		args.push(STRING)
+		args.push(this.ProcessType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedEventTriggerType){
+		args.push(STRING)
+		args.push(this.UserDefinedEventTriggerType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcExtendedProperties {
@@ -9570,24 +17247,39 @@ export class IfcExtendedProperties {
 	Name: IfcIdentifier | null;
 	Description: IfcText | null;
 	Properties: Handle<IfcProperty>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Properties.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcExternalInformation {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcExternalReference {
@@ -9600,12 +17292,28 @@ export class IfcExternalReference {
 	Location: IfcURIReference | null;
 	Identification: IfcIdentifier | null;
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcExternalReferenceRelationship {
@@ -9620,12 +17328,25 @@ export class IfcExternalReferenceRelationship {
 	Description: IfcText | null;
 	RelatingReference: Handle<IfcExternalReference> ;
 	RelatedResourceObjects: IfcResourceObjectSelect[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingReference.expressID)
+		return args;
 	}
 };
 export class IfcExternalSpatialElement {
@@ -9650,12 +17371,53 @@ export class IfcExternalSpatialElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	PredefinedType: IfcExternalSpatialElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcExternalSpatialStructureElement {
@@ -9678,12 +17440,50 @@ export class IfcExternalSpatialStructureElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcExternallyDefinedHatchStyle {
@@ -9696,12 +17496,28 @@ export class IfcExternallyDefinedHatchStyle {
 	Location: IfcURIReference | null;
 	Identification: IfcIdentifier | null;
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcExternallyDefinedSurfaceStyle {
@@ -9714,12 +17530,28 @@ export class IfcExternallyDefinedSurfaceStyle {
 	Location: IfcURIReference | null;
 	Identification: IfcIdentifier | null;
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcExternallyDefinedTextFont {
@@ -9732,12 +17564,28 @@ export class IfcExternallyDefinedTextFont {
 	Location: IfcURIReference | null;
 	Identification: IfcIdentifier | null;
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcExtrudedAreaSolid {
@@ -9752,12 +17600,22 @@ export class IfcExtrudedAreaSolid {
 	Position: Handle<IfcAxis2Placement3D> | null;
 	ExtrudedDirection: Handle<IfcDirection> ;
 	Depth: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptArea.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ExtrudedDirection.expressID)
+		return args;
 	}
 };
 export class IfcExtrudedAreaSolidTapered {
@@ -9774,12 +17632,24 @@ export class IfcExtrudedAreaSolidTapered {
 	ExtrudedDirection: Handle<IfcDirection> ;
 	Depth: IfcPositiveLengthMeasure ;
 	EndSweptArea: Handle<IfcProfileDef> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptArea.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ExtrudedDirection.expressID)
+		args.push(REF)
+		args.push(this.EndSweptArea.expressID)
+		return args;
 	}
 };
 export class IfcFace {
@@ -9788,12 +17658,16 @@ export class IfcFace {
 		this.Bounds = Bounds;
 	}
 	Bounds: Handle<IfcFaceBound>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(SET_BEGIN)
+		this.Bounds.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcFaceBasedSurfaceModel {
@@ -9802,12 +17676,16 @@ export class IfcFaceBasedSurfaceModel {
 		this.FbsmFaces = FbsmFaces;
 	}
 	FbsmFaces: Handle<IfcConnectedFaceSet>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(SET_BEGIN)
+		this.FbsmFaces.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcFaceBound {
@@ -9818,12 +17696,15 @@ export class IfcFaceBound {
 	}
 	Bound: Handle<IfcLoop> ;
 	Orientation: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Bound.expressID)
+		return args;
 	}
 };
 export class IfcFaceOuterBound {
@@ -9834,12 +17715,15 @@ export class IfcFaceOuterBound {
 	}
 	Bound: Handle<IfcLoop> ;
 	Orientation: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Bound.expressID)
+		return args;
 	}
 };
 export class IfcFaceSurface {
@@ -9852,12 +17736,18 @@ export class IfcFaceSurface {
 	Bounds: Handle<IfcFaceBound>[] ;
 	FaceSurface: Handle<IfcSurface> ;
 	SameSense: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(SET_BEGIN)
+		this.Bounds.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.FaceSurface.expressID)
+		return args;
 	}
 };
 export class IfcFacetedBrep {
@@ -9866,12 +17756,15 @@ export class IfcFacetedBrep {
 		this.Outer = Outer;
 	}
 	Outer: Handle<IfcClosedShell> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Outer.expressID)
+		return args;
 	}
 };
 export class IfcFacetedBrepWithVoids {
@@ -9882,12 +17775,18 @@ export class IfcFacetedBrepWithVoids {
 	}
 	Outer: Handle<IfcClosedShell> ;
 	Voids: Handle<IfcClosedShell>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Outer.expressID)
+		args.push(SET_BEGIN)
+		this.Voids.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcFacility {
@@ -9912,12 +17811,53 @@ export class IfcFacility {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFacilityPart {
@@ -9942,12 +17882,53 @@ export class IfcFacilityPart {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFailureConnectionCondition {
@@ -9968,12 +17949,48 @@ export class IfcFailureConnectionCondition {
 	CompressionFailureX: IfcForceMeasure | null;
 	CompressionFailureY: IfcForceMeasure | null;
 	CompressionFailureZ: IfcForceMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TensionFailureX){
+		args.push(REAL)
+		args.push(this.TensionFailureX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TensionFailureY){
+		args.push(REAL)
+		args.push(this.TensionFailureY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TensionFailureZ){
+		args.push(REAL)
+		args.push(this.TensionFailureZ)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompressionFailureX){
+		args.push(REAL)
+		args.push(this.CompressionFailureX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompressionFailureY){
+		args.push(REAL)
+		args.push(this.CompressionFailureY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompressionFailureZ){
+		args.push(REAL)
+		args.push(this.CompressionFailureZ)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFan {
@@ -9998,12 +18015,53 @@ export class IfcFan {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFanTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFanType {
@@ -10030,12 +18088,56 @@ export class IfcFanType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFanTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFastener {
@@ -10060,12 +18162,53 @@ export class IfcFastener {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFastenerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFastenerType {
@@ -10092,12 +18235,56 @@ export class IfcFastenerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFastenerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFeatureElement {
@@ -10120,12 +18307,50 @@ export class IfcFeatureElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFeatureElementAddition {
@@ -10148,12 +18373,50 @@ export class IfcFeatureElementAddition {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFeatureElementSubtraction {
@@ -10176,12 +18439,50 @@ export class IfcFeatureElementSubtraction {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFillAreaStyle {
@@ -10194,12 +18495,21 @@ export class IfcFillAreaStyle {
 	Name: IfcLabel | null;
 	FillStyles: IfcFillStyleSelect[] ;
 	ModelorDraughting: IfcBoolean | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ModelorDraughting){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFillAreaStyleHatching {
@@ -10216,12 +18526,27 @@ export class IfcFillAreaStyleHatching {
 	PointOfReferenceHatchLine: Handle<IfcCartesianPoint> | null;
 	PatternStart: Handle<IfcCartesianPoint> | null;
 	HatchLineAngle: IfcPlaneAngleMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.HatchLineAppearance.expressID)
+		if(this.PointOfReferenceHatchLine){
+		args.push(REF)
+		args.push(this.PointOfReferenceHatchLine.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PatternStart){
+		args.push(REF)
+		args.push(this.PatternStart.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.HatchLineAngle)
+		return args;
 	}
 };
 export class IfcFillAreaStyleTiles {
@@ -10234,12 +18559,18 @@ export class IfcFillAreaStyleTiles {
 	TilingPattern: Handle<IfcVector> ;
 	Tiles: Handle<IfcStyledItem>[] ;
 	TilingScale: IfcPositiveRatioMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.TilingPattern.expressID)
+		args.push(SET_BEGIN)
+		this.Tiles.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcFilter {
@@ -10264,12 +18595,53 @@ export class IfcFilter {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFilterTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFilterType {
@@ -10296,12 +18668,56 @@ export class IfcFilterType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFilterTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFireSuppressionTerminal {
@@ -10326,12 +18742,53 @@ export class IfcFireSuppressionTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFireSuppressionTerminalTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFireSuppressionTerminalType {
@@ -10358,12 +18815,56 @@ export class IfcFireSuppressionTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFireSuppressionTerminalTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFixedReferenceSweptAreaSolid {
@@ -10382,12 +18883,34 @@ export class IfcFixedReferenceSweptAreaSolid {
 	StartParam: IfcParameterValue | null;
 	EndParam: IfcParameterValue | null;
 	FixedReference: Handle<IfcDirection> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptArea.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Directrix.expressID)
+		if(this.StartParam){
+		args.push(REAL)
+		args.push(this.StartParam)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndParam){
+		args.push(REAL)
+		args.push(this.EndParam)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.FixedReference.expressID)
+		return args;
 	}
 };
 export class IfcFlowController {
@@ -10410,12 +18933,50 @@ export class IfcFlowController {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowControllerType {
@@ -10440,12 +19001,56 @@ export class IfcFlowControllerType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowFitting {
@@ -10468,12 +19073,50 @@ export class IfcFlowFitting {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowFittingType {
@@ -10498,12 +19141,56 @@ export class IfcFlowFittingType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowInstrument {
@@ -10528,12 +19215,53 @@ export class IfcFlowInstrument {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFlowInstrumentTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowInstrumentType {
@@ -10560,12 +19288,56 @@ export class IfcFlowInstrumentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFlowInstrumentTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowMeter {
@@ -10590,12 +19362,53 @@ export class IfcFlowMeter {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFlowMeterTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowMeterType {
@@ -10622,12 +19435,56 @@ export class IfcFlowMeterType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFlowMeterTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowMovingDevice {
@@ -10650,12 +19507,50 @@ export class IfcFlowMovingDevice {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowMovingDeviceType {
@@ -10680,12 +19575,56 @@ export class IfcFlowMovingDeviceType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowSegment {
@@ -10708,12 +19647,50 @@ export class IfcFlowSegment {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowSegmentType {
@@ -10738,12 +19715,56 @@ export class IfcFlowSegmentType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowStorageDevice {
@@ -10766,12 +19787,50 @@ export class IfcFlowStorageDevice {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowStorageDeviceType {
@@ -10796,12 +19855,56 @@ export class IfcFlowStorageDeviceType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowTerminal {
@@ -10824,12 +19927,50 @@ export class IfcFlowTerminal {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowTerminalType {
@@ -10854,12 +19995,56 @@ export class IfcFlowTerminalType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowTreatmentDevice {
@@ -10882,12 +20067,50 @@ export class IfcFlowTreatmentDevice {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFlowTreatmentDeviceType {
@@ -10912,12 +20135,56 @@ export class IfcFlowTreatmentDeviceType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFooting {
@@ -10942,12 +20209,53 @@ export class IfcFooting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFootingTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFootingType {
@@ -10974,12 +20282,56 @@ export class IfcFootingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFootingTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFurnishingElement {
@@ -11002,12 +20354,50 @@ export class IfcFurnishingElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFurnishingElementType {
@@ -11032,12 +20422,56 @@ export class IfcFurnishingElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFurniture {
@@ -11062,12 +20496,53 @@ export class IfcFurniture {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFurnitureTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcFurnitureType {
@@ -11096,12 +20571,59 @@ export class IfcFurnitureType {
 	ElementType: IfcLabel | null;
 	AssemblyPlace: IfcAssemblyPlaceEnum ;
 	PredefinedType: IfcFurnitureTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcGeographicElement {
@@ -11126,12 +20648,53 @@ export class IfcGeographicElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcGeographicElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcGeographicElementType {
@@ -11158,12 +20721,56 @@ export class IfcGeographicElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcGeographicElementTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcGeometricCurveSet {
@@ -11172,12 +20779,13 @@ export class IfcGeometricCurveSet {
 		this.Elements = Elements;
 	}
 	Elements: IfcGeometricSetSelect[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcGeometricRepresentationContext {
@@ -11196,24 +20804,48 @@ export class IfcGeometricRepresentationContext {
 	Precision: IfcReal | null;
 	WorldCoordinateSystem: IfcAxis2Placement ;
 	TrueNorth: Handle<IfcDirection> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ContextIdentifier){
+		args.push(STRING)
+		args.push(this.ContextIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ContextType){
+		args.push(STRING)
+		args.push(this.ContextType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.CoordinateSpaceDimension)
+		if(this.Precision){
+		args.push(REAL)
+		args.push(this.Precision)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TrueNorth){
+		args.push(REF)
+		args.push(this.TrueNorth.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcGeometricRepresentationItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcGeometricRepresentationSubContext {
@@ -11240,12 +20872,45 @@ export class IfcGeometricRepresentationSubContext {
 	TargetScale: IfcPositiveRatioMeasure | null;
 	TargetView: IfcGeometricProjectionEnum ;
 	UserDefinedTargetView: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ContextIdentifier){
+		args.push(STRING)
+		args.push(this.ContextIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ContextType){
+		args.push(STRING)
+		args.push(this.ContextType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.CoordinateSpaceDimension)
+		if(this.Precision){
+		args.push(REAL)
+		args.push(this.Precision)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TrueNorth){
+		args.push(REF)
+		args.push(this.TrueNorth.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ParentContext.expressID)
+		if(this.TargetScale){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedTargetView){
+		args.push(STRING)
+		args.push(this.UserDefinedTargetView)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcGeometricSet {
@@ -11254,12 +20919,13 @@ export class IfcGeometricSet {
 		this.Elements = Elements;
 	}
 	Elements: IfcGeometricSetSelect[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcGrid {
@@ -11288,12 +20954,57 @@ export class IfcGrid {
 	VAxes: Handle<IfcGridAxis> ;
 	WAxes: Handle<IfcGridAxis> | null;
 	PredefinedType: IfcGridTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.UAxes.expressID)
+		args.push(REF)
+		args.push(this.VAxes.expressID)
+		if(this.WAxes){
+		args.push(REF)
+		args.push(this.WAxes.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcGridAxis {
@@ -11306,12 +21017,20 @@ export class IfcGridAxis {
 	AxisTag: IfcLabel | null;
 	AxisCurve: Handle<IfcCurve> ;
 	SameSense: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.AxisTag){
+		args.push(STRING)
+		args.push(this.AxisTag)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AxisCurve.expressID)
+		return args;
 	}
 };
 export class IfcGridPlacement {
@@ -11324,12 +21043,23 @@ export class IfcGridPlacement {
 	PlacementRelTo: Handle<IfcObjectPlacement> | null;
 	PlacementLocation: Handle<IfcVirtualGridIntersection> ;
 	PlacementRefDirection: IfcGridPlacementDirectionSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.PlacementRelTo){
+		args.push(REF)
+		args.push(this.PlacementRelTo.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.PlacementLocation.expressID)
+		if(this.PlacementRefDirection){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcGroup {
@@ -11346,12 +21076,35 @@ export class IfcGroup {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcHalfSpaceSolid {
@@ -11362,12 +21115,15 @@ export class IfcHalfSpaceSolid {
 	}
 	BaseSurface: Handle<IfcSurface> ;
 	AgreementFlag: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BaseSurface.expressID)
+		return args;
 	}
 };
 export class IfcHeatExchanger {
@@ -11392,12 +21148,53 @@ export class IfcHeatExchanger {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcHeatExchangerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcHeatExchangerType {
@@ -11424,12 +21221,56 @@ export class IfcHeatExchangerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcHeatExchangerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcHumidifier {
@@ -11454,12 +21295,53 @@ export class IfcHumidifier {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcHumidifierTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcHumidifierType {
@@ -11486,12 +21368,56 @@ export class IfcHumidifierType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcHumidifierTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcIShapeProfileDef {
@@ -11518,12 +21444,34 @@ export class IfcIShapeProfileDef {
 	FilletRadius: IfcNonNegativeLengthMeasure | null;
 	FlangeEdgeRadius: IfcNonNegativeLengthMeasure | null;
 	FlangeSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FlangeEdgeRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FlangeSlope){
+		args.push(REAL)
+		args.push(this.FlangeSlope)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcImageTexture {
@@ -11542,12 +21490,30 @@ export class IfcImageTexture {
 	TextureTransform: Handle<IfcCartesianTransformationOperator2D> | null;
 	Parameter: IfcIdentifier | null;
 	URLReference: IfcURIReference ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Mode){
+		args.push(STRING)
+		args.push(this.Mode)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextureTransform){
+		args.push(REF)
+		args.push(this.TextureTransform.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Parameter){
+		args.push(STRING)
+		args.push(this.Parameter)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.URLReference)
+		return args;
 	}
 };
 export class IfcIndexedColourMap {
@@ -11562,12 +21528,20 @@ export class IfcIndexedColourMap {
 	Opacity: IfcNormalisedRatioMeasure | null;
 	Colours: Handle<IfcColourRgbList> ;
 	ColourIndex: IfcPositiveInteger ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.MappedTo.expressID)
+		if(this.Opacity){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Colours.expressID)
+		return args;
 	}
 };
 export class IfcIndexedPolyCurve {
@@ -11580,12 +21554,21 @@ export class IfcIndexedPolyCurve {
 	Points: Handle<IfcCartesianPointList> ;
 	Segments: IfcSegmentIndexSelect | null;
 	SelfIntersect: IfcBoolean | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Points.expressID)
+		if(this.Segments){
+		}
+		else{ args.push(EMPTY); }
+		if(this.SelfIntersect){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcIndexedPolygonalFace {
@@ -11594,12 +21577,13 @@ export class IfcIndexedPolygonalFace {
 		this.CoordIndex = CoordIndex;
 	}
 	CoordIndex: IfcPositiveInteger ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcIndexedPolygonalFaceWithVoids {
@@ -11610,12 +21594,13 @@ export class IfcIndexedPolygonalFaceWithVoids {
 	}
 	CoordIndex: IfcPositiveInteger ;
 	InnerCoordIndices: IfcPositiveInteger ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcIndexedTextureMap {
@@ -11628,12 +21613,19 @@ export class IfcIndexedTextureMap {
 	Maps: Handle<IfcSurfaceTexture> ;
 	MappedTo: Handle<IfcTessellatedFaceSet> ;
 	TexCoords: Handle<IfcTextureVertexList> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Maps.expressID)
+		args.push(REF)
+		args.push(this.MappedTo.expressID)
+		args.push(REF)
+		args.push(this.TexCoords.expressID)
+		return args;
 	}
 };
 export class IfcIndexedTriangleTextureMap {
@@ -11648,12 +21640,22 @@ export class IfcIndexedTriangleTextureMap {
 	MappedTo: Handle<IfcTessellatedFaceSet> ;
 	TexCoords: Handle<IfcTextureVertexList> ;
 	TexCoordIndex: IfcPositiveInteger | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Maps.expressID)
+		args.push(REF)
+		args.push(this.MappedTo.expressID)
+		args.push(REF)
+		args.push(this.TexCoords.expressID)
+		if(this.TexCoordIndex){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcInterceptor {
@@ -11678,12 +21680,53 @@ export class IfcInterceptor {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcInterceptorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcInterceptorType {
@@ -11710,12 +21753,56 @@ export class IfcInterceptorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcInterceptorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcIntersectionCurve {
@@ -11728,12 +21815,17 @@ export class IfcIntersectionCurve {
 	Curve3D: Handle<IfcCurve> ;
 	AssociatedGeometry: Handle<IfcPcurve> ;
 	MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Curve3D.expressID)
+		args.push(REF)
+		args.push(this.AssociatedGeometry.expressID)
+		return args;
 	}
 };
 export class IfcInventory {
@@ -11762,12 +21854,62 @@ export class IfcInventory {
 	LastUpdateDate: IfcDate | null;
 	CurrentValue: Handle<IfcCostValue> | null;
 	OriginalValue: Handle<IfcCostValue> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Jurisdiction){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResponsiblePersons){
+		args.push(SET_BEGIN)
+		this.ResponsiblePersons.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LastUpdateDate){
+		args.push(STRING)
+		args.push(this.LastUpdateDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CurrentValue){
+		args.push(REF)
+		args.push(this.CurrentValue.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OriginalValue){
+		args.push(REF)
+		args.push(this.OriginalValue.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcIrregularTimeSeries {
@@ -11792,12 +21934,34 @@ export class IfcIrregularTimeSeries {
 	UserDefinedDataOrigin: IfcLabel | null;
 	Unit: IfcUnit | null;
 	Values: Handle<IfcIrregularTimeSeriesValue> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.StartTime)
+		args.push(STRING)
+		args.push(this.EndTime)
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Values.expressID)
+		return args;
 	}
 };
 export class IfcIrregularTimeSeriesValue {
@@ -11808,12 +21972,15 @@ export class IfcIrregularTimeSeriesValue {
 	}
 	TimeStamp: IfcDateTime ;
 	ListValues: IfcValue ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.TimeStamp)
+		return args;
 	}
 };
 export class IfcJunctionBox {
@@ -11838,12 +22005,53 @@ export class IfcJunctionBox {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcJunctionBoxTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcJunctionBoxType {
@@ -11870,12 +22078,56 @@ export class IfcJunctionBoxType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcJunctionBoxTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLShapeProfileDef {
@@ -11900,12 +22152,37 @@ export class IfcLShapeProfileDef {
 	FilletRadius: IfcNonNegativeLengthMeasure | null;
 	EdgeRadius: IfcNonNegativeLengthMeasure | null;
 	LegSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Width){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.EdgeRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LegSlope){
+		args.push(REAL)
+		args.push(this.LegSlope)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLaborResource {
@@ -11934,12 +22211,63 @@ export class IfcLaborResource {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcLaborResourceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Usage){
+		args.push(REF)
+		args.push(this.Usage.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLaborResourceType {
@@ -11970,12 +22298,66 @@ export class IfcLaborResourceType {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcLaborResourceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResourceType){
+		args.push(STRING)
+		args.push(this.ResourceType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLagTime {
@@ -11992,12 +22374,26 @@ export class IfcLagTime {
 	UserDefinedDataOrigin: IfcLabel | null;
 	LagValue: IfcTimeOrRatioSelect ;
 	DurationType: IfcTaskDurationEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DataOrigin){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLamp {
@@ -12022,12 +22418,53 @@ export class IfcLamp {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcLampTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLampType {
@@ -12054,12 +22491,56 @@ export class IfcLampType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcLampTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLibraryInformation {
@@ -12078,12 +22559,38 @@ export class IfcLibraryInformation {
 	VersionDate: IfcDateTime | null;
 	Location: IfcURIReference | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Version){
+		args.push(STRING)
+		args.push(this.Version)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Publisher){
+		}
+		else{ args.push(EMPTY); }
+		if(this.VersionDate){
+		args.push(STRING)
+		args.push(this.VersionDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLibraryReference {
@@ -12102,12 +22609,41 @@ export class IfcLibraryReference {
 	Description: IfcText | null;
 	Language: IfcLanguageId | null;
 	ReferencedLibrary: Handle<IfcLibraryInformation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Location){
+		args.push(STRING)
+		args.push(this.Location)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Language){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReferencedLibrary){
+		args.push(REF)
+		args.push(this.ReferencedLibrary.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLightDistributionData {
@@ -12120,12 +22656,19 @@ export class IfcLightDistributionData {
 	MainPlaneAngle: IfcPlaneAngleMeasure ;
 	SecondaryPlaneAngle: IfcPlaneAngleMeasure ;
 	LuminousIntensity: IfcLuminousIntensityDistributionMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.MainPlaneAngle)
+		args.push(REAL)
+		args.push(this.SecondaryPlaneAngle)
+		args.push(REAL)
+		args.push(this.LuminousIntensity)
+		return args;
 	}
 };
 export class IfcLightFixture {
@@ -12150,12 +22693,53 @@ export class IfcLightFixture {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcLightFixtureTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLightFixtureType {
@@ -12182,12 +22766,56 @@ export class IfcLightFixtureType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcLightFixtureTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLightIntensityDistribution {
@@ -12198,12 +22826,15 @@ export class IfcLightIntensityDistribution {
 	}
 	LightDistributionCurve: IfcLightDistributionCurveEnum ;
 	DistributionData: Handle<IfcLightDistributionData> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.DistributionData.expressID)
+		return args;
 	}
 };
 export class IfcLightSource {
@@ -12218,12 +22849,26 @@ export class IfcLightSource {
 	LightColour: Handle<IfcColourRgb> ;
 	AmbientIntensity: IfcNormalisedRatioMeasure | null;
 	Intensity: IfcNormalisedRatioMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LightColour.expressID)
+		if(this.AmbientIntensity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Intensity){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLightSourceAmbient {
@@ -12238,12 +22883,26 @@ export class IfcLightSourceAmbient {
 	LightColour: Handle<IfcColourRgb> ;
 	AmbientIntensity: IfcNormalisedRatioMeasure | null;
 	Intensity: IfcNormalisedRatioMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LightColour.expressID)
+		if(this.AmbientIntensity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Intensity){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLightSourceDirectional {
@@ -12260,12 +22919,28 @@ export class IfcLightSourceDirectional {
 	AmbientIntensity: IfcNormalisedRatioMeasure | null;
 	Intensity: IfcNormalisedRatioMeasure | null;
 	Orientation: Handle<IfcDirection> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LightColour.expressID)
+		if(this.AmbientIntensity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Intensity){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Orientation.expressID)
+		return args;
 	}
 };
 export class IfcLightSourceGoniometric {
@@ -12292,12 +22967,37 @@ export class IfcLightSourceGoniometric {
 	LuminousFlux: IfcLuminousFluxMeasure ;
 	LightEmissionSource: IfcLightEmissionSourceEnum ;
 	LightDistributionDataSource: IfcLightDistributionDataSourceSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LightColour.expressID)
+		if(this.AmbientIntensity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Intensity){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Position.expressID)
+		if(this.ColourAppearance){
+		args.push(REF)
+		args.push(this.ColourAppearance.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.ColourTemperature)
+		args.push(REAL)
+		args.push(this.LuminousFlux)
+		return args;
 	}
 };
 export class IfcLightSourcePositional {
@@ -12322,12 +23022,34 @@ export class IfcLightSourcePositional {
 	ConstantAttenuation: IfcReal ;
 	DistanceAttenuation: IfcReal ;
 	QuadricAttenuation: IfcReal ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LightColour.expressID)
+		if(this.AmbientIntensity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Intensity){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Position.expressID)
+		args.push(REAL)
+		args.push(this.ConstantAttenuation)
+		args.push(REAL)
+		args.push(this.DistanceAttenuation)
+		args.push(REAL)
+		args.push(this.QuadricAttenuation)
+		return args;
 	}
 };
 export class IfcLightSourceSpot {
@@ -12360,12 +23082,41 @@ export class IfcLightSourceSpot {
 	ConcentrationExponent: IfcReal | null;
 	SpreadAngle: IfcPositivePlaneAngleMeasure ;
 	BeamWidthAngle: IfcPositivePlaneAngleMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.LightColour.expressID)
+		if(this.AmbientIntensity){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Intensity){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Position.expressID)
+		args.push(REAL)
+		args.push(this.ConstantAttenuation)
+		args.push(REAL)
+		args.push(this.DistanceAttenuation)
+		args.push(REAL)
+		args.push(this.QuadricAttenuation)
+		args.push(REF)
+		args.push(this.Orientation.expressID)
+		if(this.ConcentrationExponent){
+		args.push(REAL)
+		args.push(this.ConcentrationExponent)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLine {
@@ -12376,12 +23127,17 @@ export class IfcLine {
 	}
 	Pnt: Handle<IfcCartesianPoint> ;
 	Dir: Handle<IfcVector> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Pnt.expressID)
+		args.push(REF)
+		args.push(this.Dir.expressID)
+		return args;
 	}
 };
 export class IfcLineSegment2D {
@@ -12394,12 +23150,17 @@ export class IfcLineSegment2D {
 	StartPoint: Handle<IfcCartesianPoint> ;
 	StartDirection: IfcPlaneAngleMeasure ;
 	SegmentLength: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.StartPoint.expressID)
+		args.push(REAL)
+		args.push(this.StartDirection)
+		return args;
 	}
 };
 export class IfcLinearPlacement {
@@ -12416,12 +23177,32 @@ export class IfcLinearPlacement {
 	Distance: Handle<IfcDistanceExpression> ;
 	Orientation: Handle<IfcOrientationExpression> | null;
 	CartesianPosition: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.PlacementRelTo){
+		args.push(REF)
+		args.push(this.PlacementRelTo.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.PlacementMeasuredAlong.expressID)
+		args.push(REF)
+		args.push(this.Distance.expressID)
+		if(this.Orientation){
+		args.push(REF)
+		args.push(this.Orientation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CartesianPosition){
+		args.push(REF)
+		args.push(this.CartesianPosition.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLinearPositioningElement {
@@ -12444,12 +23225,47 @@ export class IfcLinearPositioningElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Axis: Handle<IfcCurve> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		return args;
 	}
 };
 export class IfcLocalPlacement {
@@ -12460,24 +23276,31 @@ export class IfcLocalPlacement {
 	}
 	PlacementRelTo: Handle<IfcObjectPlacement> | null;
 	RelativePlacement: IfcAxis2Placement ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.PlacementRelTo){
+		args.push(REF)
+		args.push(this.PlacementRelTo.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcLoop {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcManifoldSolidBrep {
@@ -12486,12 +23309,15 @@ export class IfcManifoldSolidBrep {
 		this.Outer = Outer;
 	}
 	Outer: Handle<IfcClosedShell> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Outer.expressID)
+		return args;
 	}
 };
 export class IfcMapConversion {
@@ -12514,12 +23340,36 @@ export class IfcMapConversion {
 	XAxisAbscissa: IfcReal | null;
 	XAxisOrdinate: IfcReal | null;
 	Scale: IfcReal | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.TargetCRS.expressID)
+		args.push(REAL)
+		args.push(this.Eastings)
+		args.push(REAL)
+		args.push(this.Northings)
+		args.push(REAL)
+		args.push(this.OrthogonalHeight)
+		if(this.XAxisAbscissa){
+		args.push(REAL)
+		args.push(this.XAxisAbscissa)
+		}
+		else{ args.push(EMPTY); }
+		if(this.XAxisOrdinate){
+		args.push(REAL)
+		args.push(this.XAxisOrdinate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Scale){
+		args.push(REAL)
+		args.push(this.Scale)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMappedItem {
@@ -12530,12 +23380,17 @@ export class IfcMappedItem {
 	}
 	MappingSource: Handle<IfcRepresentationMap> ;
 	MappingTarget: Handle<IfcCartesianTransformationOperator> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.MappingSource.expressID)
+		args.push(REF)
+		args.push(this.MappingTarget.expressID)
+		return args;
 	}
 };
 export class IfcMaterial {
@@ -12548,12 +23403,25 @@ export class IfcMaterial {
 	Name: IfcLabel ;
 	Description: IfcText | null;
 	Category: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Category){
+		args.push(STRING)
+		args.push(this.Category)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialClassificationRelationship {
@@ -12564,12 +23432,15 @@ export class IfcMaterialClassificationRelationship {
 	}
 	MaterialClassifications: IfcClassificationSelect[] ;
 	ClassifiedMaterial: Handle<IfcMaterial> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ClassifiedMaterial.expressID)
+		return args;
 	}
 };
 export class IfcMaterialConstituent {
@@ -12586,12 +23457,33 @@ export class IfcMaterialConstituent {
 	Material: Handle<IfcMaterial> ;
 	Fraction: IfcNormalisedRatioMeasure | null;
 	Category: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Material.expressID)
+		if(this.Fraction){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Category){
+		args.push(STRING)
+		args.push(this.Category)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialConstituentSet {
@@ -12604,24 +23496,42 @@ export class IfcMaterialConstituentSet {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	MaterialConstituents: Handle<IfcMaterialConstituent>[] | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MaterialConstituents){
+		args.push(SET_BEGIN)
+		this.MaterialConstituents.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialDefinition {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcMaterialDefinitionRepresentation {
@@ -12636,12 +23546,27 @@ export class IfcMaterialDefinitionRepresentation {
 	Description: IfcText | null;
 	Representations: Handle<IfcRepresentation> ;
 	RepresentedMaterial: Handle<IfcMaterial> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Representations.expressID)
+		args.push(REF)
+		args.push(this.RepresentedMaterial.expressID)
+		return args;
 	}
 };
 export class IfcMaterialLayer {
@@ -12662,12 +23587,41 @@ export class IfcMaterialLayer {
 	Description: IfcText | null;
 	Category: IfcLabel | null;
 	Priority: IfcInteger | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Material){
+		args.push(REF)
+		args.push(this.Material.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.IsVentilated){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Category){
+		args.push(STRING)
+		args.push(this.Category)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Priority){
+		args.push(REAL)
+		args.push(this.Priority)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialLayerSet {
@@ -12680,12 +23634,25 @@ export class IfcMaterialLayerSet {
 	MaterialLayers: Handle<IfcMaterialLayer> ;
 	LayerSetName: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.MaterialLayers.expressID)
+		if(this.LayerSetName){
+		args.push(STRING)
+		args.push(this.LayerSetName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialLayerSetUsage {
@@ -12702,12 +23669,20 @@ export class IfcMaterialLayerSetUsage {
 	DirectionSense: IfcDirectionSenseEnum ;
 	OffsetFromReferenceLine: IfcLengthMeasure ;
 	ReferenceExtent: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ForLayerSet.expressID)
+		args.push(REAL)
+		args.push(this.OffsetFromReferenceLine)
+		if(this.ReferenceExtent){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialLayerWithOffsets {
@@ -12732,12 +23707,43 @@ export class IfcMaterialLayerWithOffsets {
 	Priority: IfcInteger | null;
 	OffsetDirection: IfcLayerSetDirectionEnum ;
 	OffsetValues: IfcLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Material){
+		args.push(REF)
+		args.push(this.Material.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.IsVentilated){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Category){
+		args.push(STRING)
+		args.push(this.Category)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Priority){
+		args.push(REAL)
+		args.push(this.Priority)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.OffsetValues)
+		return args;
 	}
 };
 export class IfcMaterialList {
@@ -12746,12 +23752,15 @@ export class IfcMaterialList {
 		this.Materials = Materials;
 	}
 	Materials: Handle<IfcMaterial> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Materials.expressID)
+		return args;
 	}
 };
 export class IfcMaterialProfile {
@@ -12770,12 +23779,40 @@ export class IfcMaterialProfile {
 	Profile: Handle<IfcProfileDef> ;
 	Priority: IfcInteger | null;
 	Category: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Material){
+		args.push(REF)
+		args.push(this.Material.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Profile.expressID)
+		if(this.Priority){
+		args.push(REAL)
+		args.push(this.Priority)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Category){
+		args.push(STRING)
+		args.push(this.Category)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialProfileSet {
@@ -12790,12 +23827,30 @@ export class IfcMaterialProfileSet {
 	Description: IfcText | null;
 	MaterialProfiles: Handle<IfcMaterialProfile> ;
 	CompositeProfile: Handle<IfcCompositeProfileDef> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.MaterialProfiles.expressID)
+		if(this.CompositeProfile){
+		args.push(REF)
+		args.push(this.CompositeProfile.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialProfileSetUsage {
@@ -12808,12 +23863,23 @@ export class IfcMaterialProfileSetUsage {
 	ForProfileSet: Handle<IfcMaterialProfileSet> ;
 	CardinalPoint: IfcCardinalPointReference | null;
 	ReferenceExtent: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ForProfileSet.expressID)
+		if(this.CardinalPoint){
+		args.push(REAL)
+		args.push(this.CardinalPoint)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReferenceExtent){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialProfileSetUsageTapering {
@@ -12830,12 +23896,30 @@ export class IfcMaterialProfileSetUsageTapering {
 	ReferenceExtent: IfcPositiveLengthMeasure | null;
 	ForProfileEndSet: Handle<IfcMaterialProfileSet> ;
 	CardinalEndPoint: IfcCardinalPointReference | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ForProfileSet.expressID)
+		if(this.CardinalPoint){
+		args.push(REAL)
+		args.push(this.CardinalPoint)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReferenceExtent){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ForProfileEndSet.expressID)
+		if(this.CardinalEndPoint){
+		args.push(REAL)
+		args.push(this.CardinalEndPoint)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialProfileWithOffsets {
@@ -12856,12 +23940,42 @@ export class IfcMaterialProfileWithOffsets {
 	Priority: IfcInteger | null;
 	Category: IfcLabel | null;
 	OffsetValues: IfcLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Material){
+		args.push(REF)
+		args.push(this.Material.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Profile.expressID)
+		if(this.Priority){
+		args.push(REAL)
+		args.push(this.Priority)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Category){
+		args.push(STRING)
+		args.push(this.Category)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.OffsetValues)
+		return args;
 	}
 };
 export class IfcMaterialProperties {
@@ -12876,12 +23990,28 @@ export class IfcMaterialProperties {
 	Description: IfcText | null;
 	Properties: Handle<IfcProperty>[] ;
 	Material: Handle<IfcMaterialDefinition> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Properties.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.Material.expressID)
+		return args;
 	}
 };
 export class IfcMaterialRelationship {
@@ -12898,24 +24028,46 @@ export class IfcMaterialRelationship {
 	RelatingMaterial: Handle<IfcMaterial> ;
 	RelatedMaterials: Handle<IfcMaterial>[] ;
 	Expression: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingMaterial.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedMaterials.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.Expression){
+		args.push(STRING)
+		args.push(this.Expression)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMaterialUsageDefinition {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcMeasureWithUnit {
@@ -12926,12 +24078,13 @@ export class IfcMeasureWithUnit {
 	}
 	ValueComponent: IfcValue ;
 	UnitComponent: IfcUnit ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcMechanicalFastener {
@@ -12960,12 +24113,59 @@ export class IfcMechanicalFastener {
 	NominalDiameter: IfcPositiveLengthMeasure | null;
 	NominalLength: IfcPositiveLengthMeasure | null;
 	PredefinedType: IfcMechanicalFastenerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalLength){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMechanicalFastenerType {
@@ -12996,12 +24196,62 @@ export class IfcMechanicalFastenerType {
 	PredefinedType: IfcMechanicalFastenerTypeEnum ;
 	NominalDiameter: IfcPositiveLengthMeasure | null;
 	NominalLength: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalLength){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMedicalDevice {
@@ -13026,12 +24276,53 @@ export class IfcMedicalDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcMedicalDeviceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMedicalDeviceType {
@@ -13058,12 +24349,56 @@ export class IfcMedicalDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcMedicalDeviceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMember {
@@ -13088,12 +24423,53 @@ export class IfcMember {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcMemberTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMemberStandardCase {
@@ -13118,12 +24494,53 @@ export class IfcMemberStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcMemberTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMemberType {
@@ -13150,12 +24567,56 @@ export class IfcMemberType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcMemberTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMetric {
@@ -13184,12 +24645,51 @@ export class IfcMetric {
 	ValueSource: IfcLabel | null;
 	DataValue: IfcMetricValueSelect | null;
 	ReferencePath: Handle<IfcReference> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConstraintSource){
+		args.push(STRING)
+		args.push(this.ConstraintSource)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CreatingActor){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CreationTime){
+		args.push(STRING)
+		args.push(this.CreationTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedGrade){
+		args.push(STRING)
+		args.push(this.UserDefinedGrade)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ValueSource){
+		args.push(STRING)
+		args.push(this.ValueSource)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DataValue){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReferencePath){
+		args.push(REF)
+		args.push(this.ReferencePath.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMirroredProfileDef {
@@ -13206,12 +24706,27 @@ export class IfcMirroredProfileDef {
 	ParentProfile: Handle<IfcProfileDef> ;
 	Operator: Handle<IfcCartesianTransformationOperator2D> ;
 	Label: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ParentProfile.expressID)
+		args.push(REF)
+		args.push(this.Operator.expressID)
+		if(this.Label){
+		args.push(STRING)
+		args.push(this.Label)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMonetaryUnit {
@@ -13220,12 +24735,15 @@ export class IfcMonetaryUnit {
 		this.Currency = Currency;
 	}
 	Currency: IfcLabel ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Currency)
+		return args;
 	}
 };
 export class IfcMotorConnection {
@@ -13250,12 +24768,53 @@ export class IfcMotorConnection {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcMotorConnectionTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcMotorConnectionType {
@@ -13282,12 +24841,56 @@ export class IfcMotorConnectionType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcMotorConnectionTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcNamedUnit {
@@ -13298,12 +24901,15 @@ export class IfcNamedUnit {
 	}
 	Dimensions: Handle<IfcDimensionalExponents> ;
 	UnitType: IfcUnitEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Dimensions.expressID)
+		return args;
 	}
 };
 export class IfcObject {
@@ -13320,12 +24926,35 @@ export class IfcObject {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcObjectDefinition {
@@ -13340,12 +24969,30 @@ export class IfcObjectDefinition {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcObjectPlacement {
@@ -13354,12 +25001,18 @@ export class IfcObjectPlacement {
 		this.PlacementRelTo = PlacementRelTo;
 	}
 	PlacementRelTo: Handle<IfcObjectPlacement> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.PlacementRelTo){
+		args.push(REF)
+		args.push(this.PlacementRelTo.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcObjective {
@@ -13388,12 +25041,51 @@ export class IfcObjective {
 	LogicalAggregator: IfcLogicalOperatorEnum | null;
 	ObjectiveQualifier: IfcObjectiveEnum ;
 	UserDefinedQualifier: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConstraintSource){
+		args.push(STRING)
+		args.push(this.ConstraintSource)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CreatingActor){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CreationTime){
+		args.push(STRING)
+		args.push(this.CreationTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedGrade){
+		args.push(STRING)
+		args.push(this.UserDefinedGrade)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BenchmarkValues){
+		args.push(REF)
+		args.push(this.BenchmarkValues.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LogicalAggregator){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedQualifier){
+		args.push(STRING)
+		args.push(this.UserDefinedQualifier)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcOccupant {
@@ -13414,12 +25106,38 @@ export class IfcOccupant {
 	ObjectType: IfcLabel | null;
 	TheActor: IfcActorSelect ;
 	PredefinedType: IfcOccupantTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcOffsetCurve {
@@ -13428,12 +25146,15 @@ export class IfcOffsetCurve {
 		this.BasisCurve = BasisCurve;
 	}
 	BasisCurve: Handle<IfcCurve> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisCurve.expressID)
+		return args;
 	}
 };
 export class IfcOffsetCurve2D {
@@ -13446,12 +25167,17 @@ export class IfcOffsetCurve2D {
 	BasisCurve: Handle<IfcCurve> ;
 	Distance: IfcLengthMeasure ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisCurve.expressID)
+		args.push(REAL)
+		args.push(this.Distance)
+		return args;
 	}
 };
 export class IfcOffsetCurve3D {
@@ -13466,12 +25192,19 @@ export class IfcOffsetCurve3D {
 	Distance: IfcLengthMeasure ;
 	SelfIntersect: IfcLogical ;
 	RefDirection: Handle<IfcDirection> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisCurve.expressID)
+		args.push(REAL)
+		args.push(this.Distance)
+		args.push(REF)
+		args.push(this.RefDirection.expressID)
+		return args;
 	}
 };
 export class IfcOffsetCurveByDistances {
@@ -13484,12 +25217,22 @@ export class IfcOffsetCurveByDistances {
 	BasisCurve: Handle<IfcCurve> ;
 	OffsetValues: Handle<IfcDistanceExpression> ;
 	Tag: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisCurve.expressID)
+		args.push(REF)
+		args.push(this.OffsetValues.expressID)
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcOpenShell {
@@ -13498,12 +25241,16 @@ export class IfcOpenShell {
 		this.CfsFaces = CfsFaces;
 	}
 	CfsFaces: Handle<IfcFace>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(SET_BEGIN)
+		this.CfsFaces.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcOpeningElement {
@@ -13528,12 +25275,53 @@ export class IfcOpeningElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcOpeningElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcOpeningStandardCase {
@@ -13558,12 +25346,53 @@ export class IfcOpeningStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcOpeningElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcOrganization {
@@ -13580,12 +25409,35 @@ export class IfcOrganization {
 	Description: IfcText | null;
 	Roles: Handle<IfcActorRole> | null;
 	Addresses: Handle<IfcAddress> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Roles){
+		args.push(REF)
+		args.push(this.Roles.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Addresses){
+		args.push(REF)
+		args.push(this.Addresses.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcOrganizationRelationship {
@@ -13600,12 +25452,28 @@ export class IfcOrganizationRelationship {
 	Description: IfcText | null;
 	RelatingOrganization: Handle<IfcOrganization> ;
 	RelatedOrganizations: Handle<IfcOrganization>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingOrganization.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedOrganizations.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcOrientationExpression {
@@ -13616,12 +25484,17 @@ export class IfcOrientationExpression {
 	}
 	LateralAxisDirection: Handle<IfcDirection> ;
 	VerticalAxisDirection: Handle<IfcDirection> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.LateralAxisDirection.expressID)
+		args.push(REF)
+		args.push(this.VerticalAxisDirection.expressID)
+		return args;
 	}
 };
 export class IfcOrientedEdge {
@@ -13636,12 +25509,19 @@ export class IfcOrientedEdge {
 	EdgeEnd: Handle<IfcVertex> ;
 	EdgeElement: Handle<IfcEdge> ;
 	Orientation: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.EdgeStart.expressID)
+		args.push(REF)
+		args.push(this.EdgeEnd.expressID)
+		args.push(REF)
+		args.push(this.EdgeElement.expressID)
+		return args;
 	}
 };
 export class IfcOuterBoundaryCurve {
@@ -13652,12 +25532,15 @@ export class IfcOuterBoundaryCurve {
 	}
 	Segments: Handle<IfcCompositeCurveSegment> ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Segments.expressID)
+		return args;
 	}
 };
 export class IfcOutlet {
@@ -13682,12 +25565,53 @@ export class IfcOutlet {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcOutletTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcOutletType {
@@ -13714,12 +25638,56 @@ export class IfcOutletType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcOutletTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcOwnerHistory {
@@ -13742,12 +25710,40 @@ export class IfcOwnerHistory {
 	LastModifyingUser: Handle<IfcPersonAndOrganization> | null;
 	LastModifyingApplication: Handle<IfcApplication> | null;
 	CreationDate: IfcTimeStamp ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.OwningUser.expressID)
+		args.push(REF)
+		args.push(this.OwningApplication.expressID)
+		if(this.State){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ChangeAction){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LastModifiedDate){
+		args.push(REAL)
+		args.push(this.LastModifiedDate)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LastModifyingUser){
+		args.push(REF)
+		args.push(this.LastModifyingUser.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LastModifyingApplication){
+		args.push(REF)
+		args.push(this.LastModifyingApplication.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.CreationDate)
+		return args;
 	}
 };
 export class IfcParameterizedProfileDef {
@@ -13760,12 +25756,23 @@ export class IfcParameterizedProfileDef {
 	ProfileType: IfcProfileTypeEnum ;
 	ProfileName: IfcLabel | null;
 	Position: Handle<IfcAxis2Placement2D> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPath {
@@ -13774,12 +25781,15 @@ export class IfcPath {
 		this.EdgeList = EdgeList;
 	}
 	EdgeList: Handle<IfcOrientedEdge> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.EdgeList.expressID)
+		return args;
 	}
 };
 export class IfcPcurve {
@@ -13790,12 +25800,17 @@ export class IfcPcurve {
 	}
 	BasisSurface: Handle<IfcSurface> ;
 	ReferenceCurve: Handle<IfcCurve> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisSurface.expressID)
+		args.push(REF)
+		args.push(this.ReferenceCurve.expressID)
+		return args;
 	}
 };
 export class IfcPerformanceHistory {
@@ -13818,12 +25833,45 @@ export class IfcPerformanceHistory {
 	Identification: IfcIdentifier | null;
 	LifeCyclePhase: IfcLabel ;
 	PredefinedType: IfcPerformanceHistoryTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.LifeCyclePhase)
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPermeableCoveringProperties {
@@ -13848,12 +25896,41 @@ export class IfcPermeableCoveringProperties {
 	FrameDepth: IfcPositiveLengthMeasure | null;
 	FrameThickness: IfcPositiveLengthMeasure | null;
 	ShapeAspectStyle: Handle<IfcShapeAspect> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FrameDepth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FrameThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ShapeAspectStyle){
+		args.push(REF)
+		args.push(this.ShapeAspectStyle.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPermit {
@@ -13878,12 +25955,53 @@ export class IfcPermit {
 	PredefinedType: IfcPermitTypeEnum | null;
 	Status: IfcLabel | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Status){
+		args.push(STRING)
+		args.push(this.Status)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPerson {
@@ -13906,12 +26024,53 @@ export class IfcPerson {
 	SuffixTitles: IfcLabel | null;
 	Roles: Handle<IfcActorRole> | null;
 	Addresses: Handle<IfcAddress> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FamilyName){
+		args.push(STRING)
+		args.push(this.FamilyName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.GivenName){
+		args.push(STRING)
+		args.push(this.GivenName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MiddleNames){
+		args.push(STRING)
+		args.push(this.MiddleNames)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PrefixTitles){
+		args.push(STRING)
+		args.push(this.PrefixTitles)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SuffixTitles){
+		args.push(STRING)
+		args.push(this.SuffixTitles)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Roles){
+		args.push(REF)
+		args.push(this.Roles.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Addresses){
+		args.push(REF)
+		args.push(this.Addresses.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPersonAndOrganization {
@@ -13924,12 +26083,22 @@ export class IfcPersonAndOrganization {
 	ThePerson: Handle<IfcPerson> ;
 	TheOrganization: Handle<IfcOrganization> ;
 	Roles: Handle<IfcActorRole> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ThePerson.expressID)
+		args.push(REF)
+		args.push(this.TheOrganization.expressID)
+		if(this.Roles){
+		args.push(REF)
+		args.push(this.Roles.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPhysicalComplexQuantity {
@@ -13948,12 +26117,35 @@ export class IfcPhysicalComplexQuantity {
 	Discrimination: IfcLabel ;
 	Quality: IfcLabel | null;
 	Usage: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.HasQuantities.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(STRING)
+		args.push(this.Discrimination)
+		if(this.Quality){
+		args.push(STRING)
+		args.push(this.Quality)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Usage){
+		args.push(STRING)
+		args.push(this.Usage)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPhysicalQuantity {
@@ -13964,12 +26156,20 @@ export class IfcPhysicalQuantity {
 	}
 	Name: IfcLabel ;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPhysicalSimpleQuantity {
@@ -13982,12 +26182,25 @@ export class IfcPhysicalSimpleQuantity {
 	Name: IfcLabel ;
 	Description: IfcText | null;
 	Unit: Handle<IfcNamedUnit> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		args.push(REF)
+		args.push(this.Unit.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPile {
@@ -14014,12 +26227,56 @@ export class IfcPile {
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPileTypeEnum | null;
 	ConstructionType: IfcPileConstructionEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConstructionType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPileType {
@@ -14046,12 +26303,56 @@ export class IfcPileType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPileTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPipeFitting {
@@ -14076,12 +26377,53 @@ export class IfcPipeFitting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPipeFittingTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPipeFittingType {
@@ -14108,12 +26450,56 @@ export class IfcPipeFittingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPipeFittingTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPipeSegment {
@@ -14138,12 +26524,53 @@ export class IfcPipeSegment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPipeSegmentTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPipeSegmentType {
@@ -14170,12 +26597,56 @@ export class IfcPipeSegmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPipeSegmentTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPixelTexture {
@@ -14200,12 +26671,36 @@ export class IfcPixelTexture {
 	Height: IfcInteger ;
 	ColourComponents: IfcInteger ;
 	Pixel: IfcBinary ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Mode){
+		args.push(STRING)
+		args.push(this.Mode)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextureTransform){
+		args.push(REF)
+		args.push(this.TextureTransform.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Parameter){
+		args.push(STRING)
+		args.push(this.Parameter)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.Width)
+		args.push(REAL)
+		args.push(this.Height)
+		args.push(REAL)
+		args.push(this.ColourComponents)
+		args.push(REAL)
+		args.push(this.Pixel)
+		return args;
 	}
 };
 export class IfcPlacement {
@@ -14214,12 +26709,15 @@ export class IfcPlacement {
 		this.Location = Location;
 	}
 	Location: Handle<IfcCartesianPoint> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Location.expressID)
+		return args;
 	}
 };
 export class IfcPlanarBox {
@@ -14232,12 +26730,17 @@ export class IfcPlanarBox {
 	SizeInX: IfcLengthMeasure ;
 	SizeInY: IfcLengthMeasure ;
 	Placement: IfcAxis2Placement ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.SizeInX)
+		args.push(REAL)
+		args.push(this.SizeInY)
+		return args;
 	}
 };
 export class IfcPlanarExtent {
@@ -14248,12 +26751,17 @@ export class IfcPlanarExtent {
 	}
 	SizeInX: IfcLengthMeasure ;
 	SizeInY: IfcLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.SizeInX)
+		args.push(REAL)
+		args.push(this.SizeInY)
+		return args;
 	}
 };
 export class IfcPlane {
@@ -14262,12 +26770,15 @@ export class IfcPlane {
 		this.Position = Position;
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcPlate {
@@ -14292,12 +26803,53 @@ export class IfcPlate {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPlateTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPlateStandardCase {
@@ -14322,12 +26874,53 @@ export class IfcPlateStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPlateTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPlateType {
@@ -14354,24 +26947,69 @@ export class IfcPlateType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPlateTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPoint {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcPointOnCurve {
@@ -14382,12 +27020,17 @@ export class IfcPointOnCurve {
 	}
 	BasisCurve: Handle<IfcCurve> ;
 	PointParameter: IfcParameterValue ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisCurve.expressID)
+		args.push(REAL)
+		args.push(this.PointParameter)
+		return args;
 	}
 };
 export class IfcPointOnSurface {
@@ -14400,12 +27043,19 @@ export class IfcPointOnSurface {
 	BasisSurface: Handle<IfcSurface> ;
 	PointParameterU: IfcParameterValue ;
 	PointParameterV: IfcParameterValue ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisSurface.expressID)
+		args.push(REAL)
+		args.push(this.PointParameterU)
+		args.push(REAL)
+		args.push(this.PointParameterV)
+		return args;
 	}
 };
 export class IfcPolyLoop {
@@ -14414,12 +27064,15 @@ export class IfcPolyLoop {
 		this.Polygon = Polygon;
 	}
 	Polygon: Handle<IfcCartesianPoint> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Polygon.expressID)
+		return args;
 	}
 };
 export class IfcPolygonalBoundedHalfSpace {
@@ -14434,12 +27087,19 @@ export class IfcPolygonalBoundedHalfSpace {
 	AgreementFlag: IfcBoolean ;
 	Position: Handle<IfcAxis2Placement3D> ;
 	PolygonalBoundary: Handle<IfcBoundedCurve> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BaseSurface.expressID)
+		args.push(REF)
+		args.push(this.Position.expressID)
+		args.push(REF)
+		args.push(this.PolygonalBoundary.expressID)
+		return args;
 	}
 };
 export class IfcPolygonalFaceSet {
@@ -14454,12 +27114,23 @@ export class IfcPolygonalFaceSet {
 	Closed: IfcBoolean | null;
 	Faces: Handle<IfcIndexedPolygonalFace> ;
 	PnIndex: IfcPositiveInteger | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Coordinates.expressID)
+		if(this.Closed){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Faces.expressID)
+		if(this.PnIndex){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPolyline {
@@ -14468,12 +27139,15 @@ export class IfcPolyline {
 		this.Points = Points;
 	}
 	Points: Handle<IfcCartesianPoint> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Points.expressID)
+		return args;
 	}
 };
 export class IfcPort {
@@ -14494,12 +27168,45 @@ export class IfcPort {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPositioningElement {
@@ -14520,12 +27227,45 @@ export class IfcPositioningElement {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPostalAddress {
@@ -14552,12 +27292,61 @@ export class IfcPostalAddress {
 	Region: IfcLabel | null;
 	PostalCode: IfcLabel | null;
 	Country: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Purpose){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedPurpose){
+		args.push(STRING)
+		args.push(this.UserDefinedPurpose)
+		}
+		else{ args.push(EMPTY); }
+		if(this.InternalLocation){
+		args.push(STRING)
+		args.push(this.InternalLocation)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AddressLines){
+		args.push(STRING)
+		args.push(this.AddressLines)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PostalBox){
+		args.push(STRING)
+		args.push(this.PostalBox)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Town){
+		args.push(STRING)
+		args.push(this.Town)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Region){
+		args.push(STRING)
+		args.push(this.Region)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PostalCode){
+		args.push(STRING)
+		args.push(this.PostalCode)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Country){
+		args.push(STRING)
+		args.push(this.Country)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPreDefinedColour {
@@ -14566,12 +27355,15 @@ export class IfcPreDefinedColour {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		return args;
 	}
 };
 export class IfcPreDefinedCurveFont {
@@ -14580,12 +27372,15 @@ export class IfcPreDefinedCurveFont {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		return args;
 	}
 };
 export class IfcPreDefinedItem {
@@ -14594,24 +27389,28 @@ export class IfcPreDefinedItem {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		return args;
 	}
 };
 export class IfcPreDefinedProperties {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcPreDefinedPropertySet {
@@ -14626,12 +27425,30 @@ export class IfcPreDefinedPropertySet {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPreDefinedTextFont {
@@ -14640,24 +27457,28 @@ export class IfcPreDefinedTextFont {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		return args;
 	}
 };
 export class IfcPresentationItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcPresentationLayerAssignment {
@@ -14672,12 +27493,25 @@ export class IfcPresentationLayerAssignment {
 	Description: IfcText | null;
 	AssignedItems: IfcLayeredItem[] ;
 	Identifier: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identifier){
+		args.push(STRING)
+		args.push(this.Identifier)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPresentationLayerWithStyle {
@@ -14700,12 +27534,28 @@ export class IfcPresentationLayerWithStyle {
 	LayerFrozen: IfcLogical ;
 	LayerBlocked: IfcLogical ;
 	LayerStyles: Handle<IfcPresentationStyle>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identifier){
+		args.push(STRING)
+		args.push(this.Identifier)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.LayerStyles.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcPresentationStyle {
@@ -14714,12 +27564,18 @@ export class IfcPresentationStyle {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPresentationStyleAssignment {
@@ -14728,12 +27584,13 @@ export class IfcPresentationStyleAssignment {
 		this.Styles = Styles;
 	}
 	Styles: IfcPresentationStyleSelect[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcProcedure {
@@ -14756,12 +27613,48 @@ export class IfcProcedure {
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
 	PredefinedType: IfcProcedureTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProcedureType {
@@ -14788,12 +27681,56 @@ export class IfcProcedureType {
 	LongDescription: IfcText | null;
 	ProcessType: IfcLabel | null;
 	PredefinedType: IfcProcedureTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ProcessType){
+		args.push(STRING)
+		args.push(this.ProcessType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProcess {
@@ -14814,12 +27751,45 @@ export class IfcProcess {
 	ObjectType: IfcLabel | null;
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProduct {
@@ -14840,12 +27810,45 @@ export class IfcProduct {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProductDefinitionShape {
@@ -14858,12 +27861,25 @@ export class IfcProductDefinitionShape {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	Representations: Handle<IfcRepresentation> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Representations.expressID)
+		return args;
 	}
 };
 export class IfcProductRepresentation {
@@ -14876,12 +27892,25 @@ export class IfcProductRepresentation {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	Representations: Handle<IfcRepresentation> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Representations.expressID)
+		return args;
 	}
 };
 export class IfcProfileDef {
@@ -14892,12 +27921,18 @@ export class IfcProfileDef {
 	}
 	ProfileType: IfcProfileTypeEnum ;
 	ProfileName: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProfileProperties {
@@ -14912,12 +27947,28 @@ export class IfcProfileProperties {
 	Description: IfcText | null;
 	Properties: Handle<IfcProperty>[] ;
 	ProfileDefinition: Handle<IfcProfileDef> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Properties.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.ProfileDefinition.expressID)
+		return args;
 	}
 };
 export class IfcProject {
@@ -14942,12 +27993,56 @@ export class IfcProject {
 	Phase: IfcLabel | null;
 	RepresentationContexts: Handle<IfcRepresentationContext>[] | null;
 	UnitsInContext: Handle<IfcUnitAssignment> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Phase){
+		args.push(STRING)
+		args.push(this.Phase)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationContexts){
+		args.push(SET_BEGIN)
+		this.RepresentationContexts.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UnitsInContext){
+		args.push(REF)
+		args.push(this.UnitsInContext.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProjectLibrary {
@@ -14972,12 +28067,56 @@ export class IfcProjectLibrary {
 	Phase: IfcLabel | null;
 	RepresentationContexts: Handle<IfcRepresentationContext>[] | null;
 	UnitsInContext: Handle<IfcUnitAssignment> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Phase){
+		args.push(STRING)
+		args.push(this.Phase)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationContexts){
+		args.push(SET_BEGIN)
+		this.RepresentationContexts.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UnitsInContext){
+		args.push(REF)
+		args.push(this.UnitsInContext.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProjectOrder {
@@ -15002,12 +28141,53 @@ export class IfcProjectOrder {
 	PredefinedType: IfcProjectOrderTypeEnum | null;
 	Status: IfcLabel | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Status){
+		args.push(STRING)
+		args.push(this.Status)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProjectedCRS {
@@ -15028,12 +28208,45 @@ export class IfcProjectedCRS {
 	MapProjection: IfcIdentifier | null;
 	MapZone: IfcIdentifier | null;
 	MapUnit: Handle<IfcNamedUnit> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.GeodeticDatum){
+		args.push(STRING)
+		args.push(this.GeodeticDatum)
+		}
+		else{ args.push(EMPTY); }
+		if(this.VerticalDatum){
+		args.push(STRING)
+		args.push(this.VerticalDatum)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MapProjection){
+		args.push(STRING)
+		args.push(this.MapProjection)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MapZone){
+		args.push(STRING)
+		args.push(this.MapZone)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MapUnit){
+		args.push(REF)
+		args.push(this.MapUnit.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProjectionElement {
@@ -15058,12 +28271,53 @@ export class IfcProjectionElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcProjectionElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProperty {
@@ -15074,24 +28328,33 @@ export class IfcProperty {
 	}
 	Name: IfcIdentifier ;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyAbstraction {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcPropertyBoundedValue {
@@ -15110,12 +28373,32 @@ export class IfcPropertyBoundedValue {
 	LowerBoundValue: IfcValue | null;
 	Unit: IfcUnit | null;
 	SetPointValue: IfcValue | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UpperBoundValue){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LowerBoundValue){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		}
+		else{ args.push(EMPTY); }
+		if(this.SetPointValue){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyDefinition {
@@ -15130,12 +28413,30 @@ export class IfcPropertyDefinition {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyDependencyRelationship {
@@ -15152,12 +28453,32 @@ export class IfcPropertyDependencyRelationship {
 	DependingProperty: Handle<IfcProperty> ;
 	DependantProperty: Handle<IfcProperty> ;
 	Expression: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.DependingProperty.expressID)
+		args.push(REF)
+		args.push(this.DependantProperty.expressID)
+		if(this.Expression){
+		args.push(STRING)
+		args.push(this.Expression)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyEnumeratedValue {
@@ -15172,12 +28493,28 @@ export class IfcPropertyEnumeratedValue {
 	Description: IfcText | null;
 	EnumerationValues: IfcValue | null;
 	EnumerationReference: Handle<IfcPropertyEnumeration> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EnumerationValues){
+		}
+		else{ args.push(EMPTY); }
+		if(this.EnumerationReference){
+		args.push(REF)
+		args.push(this.EnumerationReference.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyEnumeration {
@@ -15190,12 +28527,18 @@ export class IfcPropertyEnumeration {
 	Name: IfcLabel ;
 	EnumerationValues: IfcValue ;
 	Unit: IfcUnit | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Unit){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyListValue {
@@ -15210,12 +28553,26 @@ export class IfcPropertyListValue {
 	Description: IfcText | null;
 	ListValues: IfcValue | null;
 	Unit: IfcUnit | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ListValues){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyReferenceValue {
@@ -15230,12 +28587,28 @@ export class IfcPropertyReferenceValue {
 	Description: IfcText | null;
 	UsageName: IfcText | null;
 	PropertyReference: IfcObjectReferenceSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UsageName){
+		args.push(STRING)
+		args.push(this.UsageName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PropertyReference){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertySet {
@@ -15252,12 +28625,33 @@ export class IfcPropertySet {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	HasProperties: Handle<IfcProperty>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.HasProperties.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcPropertySetDefinition {
@@ -15272,12 +28666,30 @@ export class IfcPropertySetDefinition {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertySetTemplate {
@@ -15298,12 +28710,41 @@ export class IfcPropertySetTemplate {
 	TemplateType: IfcPropertySetTemplateTypeEnum | null;
 	ApplicableEntity: IfcIdentifier | null;
 	HasPropertyTemplates: Handle<IfcPropertyTemplate>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TemplateType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableEntity){
+		args.push(STRING)
+		args.push(this.ApplicableEntity)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.HasPropertyTemplates.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcPropertySingleValue {
@@ -15318,12 +28759,26 @@ export class IfcPropertySingleValue {
 	Description: IfcText | null;
 	NominalValue: IfcValue | null;
 	Unit: IfcUnit | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalValue){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyTableValue {
@@ -15346,12 +28801,40 @@ export class IfcPropertyTableValue {
 	DefiningUnit: IfcUnit | null;
 	DefinedUnit: IfcUnit | null;
 	CurveInterpolation: IfcCurveInterpolationEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DefiningValues){
+		}
+		else{ args.push(EMPTY); }
+		if(this.DefinedValues){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Expression){
+		args.push(STRING)
+		args.push(this.Expression)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DefiningUnit){
+		}
+		else{ args.push(EMPTY); }
+		if(this.DefinedUnit){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CurveInterpolation){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyTemplate {
@@ -15366,12 +28849,30 @@ export class IfcPropertyTemplate {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPropertyTemplateDefinition {
@@ -15386,12 +28887,30 @@ export class IfcPropertyTemplateDefinition {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProtectiveDevice {
@@ -15416,12 +28935,53 @@ export class IfcProtectiveDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcProtectiveDeviceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProtectiveDeviceTrippingUnit {
@@ -15446,12 +29006,53 @@ export class IfcProtectiveDeviceTrippingUnit {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcProtectiveDeviceTrippingUnitTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProtectiveDeviceTrippingUnitType {
@@ -15478,12 +29079,56 @@ export class IfcProtectiveDeviceTrippingUnitType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcProtectiveDeviceTrippingUnitTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProtectiveDeviceType {
@@ -15510,12 +29155,56 @@ export class IfcProtectiveDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcProtectiveDeviceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcProxy {
@@ -15540,12 +29229,50 @@ export class IfcProxy {
 	Representation: Handle<IfcProductRepresentation> | null;
 	ProxyType: IfcObjectTypeEnum ;
 	Tag: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPump {
@@ -15570,12 +29297,53 @@ export class IfcPump {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPumpTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcPumpType {
@@ -15602,12 +29370,56 @@ export class IfcPumpType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPumpTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcQuantityArea {
@@ -15624,12 +29436,32 @@ export class IfcQuantityArea {
 	Unit: Handle<IfcNamedUnit> | null;
 	AreaValue: IfcAreaMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		args.push(REF)
+		args.push(this.Unit.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.AreaValue)
+		if(this.Formula){
+		args.push(STRING)
+		args.push(this.Formula)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcQuantityCount {
@@ -15646,12 +29478,32 @@ export class IfcQuantityCount {
 	Unit: Handle<IfcNamedUnit> | null;
 	CountValue: IfcCountMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		args.push(REF)
+		args.push(this.Unit.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.CountValue)
+		if(this.Formula){
+		args.push(STRING)
+		args.push(this.Formula)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcQuantityLength {
@@ -15668,12 +29520,32 @@ export class IfcQuantityLength {
 	Unit: Handle<IfcNamedUnit> | null;
 	LengthValue: IfcLengthMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		args.push(REF)
+		args.push(this.Unit.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.LengthValue)
+		if(this.Formula){
+		args.push(STRING)
+		args.push(this.Formula)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcQuantitySet {
@@ -15688,12 +29560,30 @@ export class IfcQuantitySet {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcQuantityTime {
@@ -15710,12 +29600,32 @@ export class IfcQuantityTime {
 	Unit: Handle<IfcNamedUnit> | null;
 	TimeValue: IfcTimeMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		args.push(REF)
+		args.push(this.Unit.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.TimeValue)
+		if(this.Formula){
+		args.push(STRING)
+		args.push(this.Formula)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcQuantityVolume {
@@ -15732,12 +29642,32 @@ export class IfcQuantityVolume {
 	Unit: Handle<IfcNamedUnit> | null;
 	VolumeValue: IfcVolumeMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		args.push(REF)
+		args.push(this.Unit.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.VolumeValue)
+		if(this.Formula){
+		args.push(STRING)
+		args.push(this.Formula)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcQuantityWeight {
@@ -15754,12 +29684,32 @@ export class IfcQuantityWeight {
 	Unit: Handle<IfcNamedUnit> | null;
 	WeightValue: IfcMassMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		args.push(REF)
+		args.push(this.Unit.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.WeightValue)
+		if(this.Formula){
+		args.push(STRING)
+		args.push(this.Formula)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRailing {
@@ -15784,12 +29734,53 @@ export class IfcRailing {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcRailingTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRailingType {
@@ -15816,12 +29807,56 @@ export class IfcRailingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcRailingTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRamp {
@@ -15846,12 +29881,53 @@ export class IfcRamp {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcRampTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRampFlight {
@@ -15876,12 +29952,53 @@ export class IfcRampFlight {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcRampFlightTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRampFlightType {
@@ -15908,12 +30025,56 @@ export class IfcRampFlightType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcRampFlightTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRampType {
@@ -15940,12 +30101,56 @@ export class IfcRampType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcRampTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRationalBSplineCurveWithKnots {
@@ -15970,12 +30175,23 @@ export class IfcRationalBSplineCurveWithKnots {
 	Knots: IfcParameterValue ;
 	KnotSpec: IfcKnotType ;
 	WeightsData: IfcReal ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.Degree)
+		args.push(REF)
+		args.push(this.ControlPointsList.expressID)
+		args.push(REAL)
+		args.push(this.KnotMultiplicities)
+		args.push(REAL)
+		args.push(this.Knots)
+		args.push(REAL)
+		args.push(this.WeightsData)
+		return args;
 	}
 };
 export class IfcRationalBSplineSurfaceWithKnots {
@@ -16008,12 +30224,29 @@ export class IfcRationalBSplineSurfaceWithKnots {
 	VKnots: IfcParameterValue ;
 	KnotSpec: IfcKnotType ;
 	WeightsData: IfcReal ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.UDegree)
+		args.push(REAL)
+		args.push(this.VDegree)
+		args.push(REF)
+		args.push(this.ControlPointsList.expressID)
+		args.push(REAL)
+		args.push(this.UMultiplicities)
+		args.push(REAL)
+		args.push(this.VMultiplicities)
+		args.push(REAL)
+		args.push(this.UKnots)
+		args.push(REAL)
+		args.push(this.VKnots)
+		args.push(REAL)
+		args.push(this.WeightsData)
+		return args;
 	}
 };
 export class IfcRectangleHollowProfileDef {
@@ -16036,12 +30269,29 @@ export class IfcRectangleHollowProfileDef {
 	WallThickness: IfcPositiveLengthMeasure ;
 	InnerFilletRadius: IfcNonNegativeLengthMeasure | null;
 	OuterFilletRadius: IfcNonNegativeLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.InnerFilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.OuterFilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRectangleProfileDef {
@@ -16058,12 +30308,23 @@ export class IfcRectangleProfileDef {
 	Position: Handle<IfcAxis2Placement2D> | null;
 	XDim: IfcPositiveLengthMeasure ;
 	YDim: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRectangularPyramid {
@@ -16078,12 +30339,15 @@ export class IfcRectangularPyramid {
 	XLength: IfcPositiveLengthMeasure ;
 	YLength: IfcPositiveLengthMeasure ;
 	Height: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcRectangularTrimmedSurface {
@@ -16104,12 +30368,23 @@ export class IfcRectangularTrimmedSurface {
 	V2: IfcParameterValue ;
 	Usense: IfcBoolean ;
 	Vsense: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisSurface.expressID)
+		args.push(REAL)
+		args.push(this.U1)
+		args.push(REAL)
+		args.push(this.V1)
+		args.push(REAL)
+		args.push(this.U2)
+		args.push(REAL)
+		args.push(this.V2)
+		return args;
 	}
 };
 export class IfcRecurrencePattern {
@@ -16132,12 +30407,48 @@ export class IfcRecurrencePattern {
 	Interval: IfcInteger | null;
 	Occurrences: IfcInteger | null;
 	TimePeriods: Handle<IfcTimePeriod> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.DayComponent){
+		args.push(REAL)
+		args.push(this.DayComponent)
+		}
+		else{ args.push(EMPTY); }
+		if(this.WeekdayComponent){
+		args.push(REAL)
+		args.push(this.WeekdayComponent)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MonthComponent){
+		args.push(REAL)
+		args.push(this.MonthComponent)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REAL)
+		args.push(this.Position)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Interval){
+		args.push(REAL)
+		args.push(this.Interval)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Occurrences){
+		args.push(REAL)
+		args.push(this.Occurrences)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TimePeriods){
+		args.push(REF)
+		args.push(this.TimePeriods.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReference {
@@ -16154,12 +30465,38 @@ export class IfcReference {
 	InstanceName: IfcLabel | null;
 	ListPositions: IfcInteger | null;
 	InnerReference: Handle<IfcReference> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.TypeIdentifier){
+		args.push(STRING)
+		args.push(this.TypeIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AttributeIdentifier){
+		args.push(STRING)
+		args.push(this.AttributeIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.InstanceName){
+		args.push(STRING)
+		args.push(this.InstanceName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ListPositions){
+		args.push(REAL)
+		args.push(this.ListPositions)
+		}
+		else{ args.push(EMPTY); }
+		if(this.InnerReference){
+		args.push(REF)
+		args.push(this.InnerReference.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReferent {
@@ -16184,12 +30521,53 @@ export class IfcReferent {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcReferentTypeEnum | null;
 	RestartDistance: IfcLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RestartDistance){
+		args.push(REAL)
+		args.push(this.RestartDistance)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRegularTimeSeries {
@@ -16216,12 +30594,36 @@ export class IfcRegularTimeSeries {
 	Unit: IfcUnit | null;
 	TimeStep: IfcTimeMeasure ;
 	Values: Handle<IfcTimeSeriesValue> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.StartTime)
+		args.push(STRING)
+		args.push(this.EndTime)
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.TimeStep)
+		args.push(REF)
+		args.push(this.Values.expressID)
+		return args;
 	}
 };
 export class IfcReinforcementBarProperties {
@@ -16240,12 +30642,33 @@ export class IfcReinforcementBarProperties {
 	EffectiveDepth: IfcLengthMeasure | null;
 	NominalBarDiameter: IfcPositiveLengthMeasure | null;
 	BarCount: IfcCountMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.TotalCrossSectionArea)
+		args.push(STRING)
+		args.push(this.SteelGrade)
+		if(this.BarSurface){
+		}
+		else{ args.push(EMPTY); }
+		if(this.EffectiveDepth){
+		args.push(REAL)
+		args.push(this.EffectiveDepth)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalBarDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.BarCount){
+		args.push(REAL)
+		args.push(this.BarCount)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReinforcementDefinitionProperties {
@@ -16264,12 +30687,37 @@ export class IfcReinforcementDefinitionProperties {
 	Description: IfcText | null;
 	DefinitionType: IfcLabel | null;
 	ReinforcementSectionDefinitions: Handle<IfcSectionReinforcementProperties> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DefinitionType){
+		args.push(STRING)
+		args.push(this.DefinitionType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ReinforcementSectionDefinitions.expressID)
+		return args;
 	}
 };
 export class IfcReinforcingBar {
@@ -16304,12 +30752,72 @@ export class IfcReinforcingBar {
 	BarLength: IfcPositiveLengthMeasure | null;
 	PredefinedType: IfcReinforcingBarTypeEnum | null;
 	BarSurface: IfcReinforcingBarSurfaceEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SteelGrade){
+		args.push(STRING)
+		args.push(this.SteelGrade)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CrossSectionArea){
+		args.push(REAL)
+		args.push(this.CrossSectionArea)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BarLength){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.BarSurface){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReinforcingBarType {
@@ -16348,12 +30856,78 @@ export class IfcReinforcingBarType {
 	BarSurface: IfcReinforcingBarSurfaceEnum | null;
 	BendingShapeCode: IfcLabel | null;
 	BendingParameters: IfcBendingParameterSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CrossSectionArea){
+		args.push(REAL)
+		args.push(this.CrossSectionArea)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BarLength){
+		}
+		else{ args.push(EMPTY); }
+		if(this.BarSurface){
+		}
+		else{ args.push(EMPTY); }
+		if(this.BendingShapeCode){
+		args.push(STRING)
+		args.push(this.BendingShapeCode)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BendingParameters){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReinforcingElement {
@@ -16378,12 +30952,55 @@ export class IfcReinforcingElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	SteelGrade: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SteelGrade){
+		args.push(STRING)
+		args.push(this.SteelGrade)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReinforcingElementType {
@@ -16408,12 +31025,56 @@ export class IfcReinforcingElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReinforcingMesh {
@@ -16456,12 +31117,86 @@ export class IfcReinforcingMesh {
 	LongitudinalBarSpacing: IfcPositiveLengthMeasure | null;
 	TransverseBarSpacing: IfcPositiveLengthMeasure | null;
 	PredefinedType: IfcReinforcingMeshTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SteelGrade){
+		args.push(STRING)
+		args.push(this.SteelGrade)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MeshLength){
+		}
+		else{ args.push(EMPTY); }
+		if(this.MeshWidth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongitudinalBarNominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransverseBarNominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongitudinalBarCrossSectionArea){
+		args.push(REAL)
+		args.push(this.LongitudinalBarCrossSectionArea)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransverseBarCrossSectionArea){
+		args.push(REAL)
+		args.push(this.TransverseBarCrossSectionArea)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongitudinalBarSpacing){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransverseBarSpacing){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReinforcingMeshType {
@@ -16508,12 +31243,92 @@ export class IfcReinforcingMeshType {
 	TransverseBarSpacing: IfcPositiveLengthMeasure | null;
 	BendingShapeCode: IfcLabel | null;
 	BendingParameters: IfcBendingParameterSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MeshLength){
+		}
+		else{ args.push(EMPTY); }
+		if(this.MeshWidth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongitudinalBarNominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransverseBarNominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongitudinalBarCrossSectionArea){
+		args.push(REAL)
+		args.push(this.LongitudinalBarCrossSectionArea)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransverseBarCrossSectionArea){
+		args.push(REAL)
+		args.push(this.TransverseBarCrossSectionArea)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongitudinalBarSpacing){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransverseBarSpacing){
+		}
+		else{ args.push(EMPTY); }
+		if(this.BendingShapeCode){
+		args.push(STRING)
+		args.push(this.BendingShapeCode)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BendingParameters){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAggregates {
@@ -16532,12 +31347,35 @@ export class IfcRelAggregates {
 	Description: IfcText | null;
 	RelatingObject: Handle<IfcObjectDefinition> ;
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingObject.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcRelAssigns {
@@ -16556,12 +31394,36 @@ export class IfcRelAssigns {
 	Description: IfcText | null;
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelatedObjectsType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssignsToActor {
@@ -16584,12 +31446,43 @@ export class IfcRelAssignsToActor {
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingActor: Handle<IfcActor> ;
 	ActingRole: Handle<IfcActorRole> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelatedObjectsType){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingActor.expressID)
+		if(this.ActingRole){
+		args.push(REF)
+		args.push(this.ActingRole.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssignsToControl {
@@ -16610,12 +31503,38 @@ export class IfcRelAssignsToControl {
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingControl: Handle<IfcControl> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelatedObjectsType){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingControl.expressID)
+		return args;
 	}
 };
 export class IfcRelAssignsToGroup {
@@ -16636,12 +31555,38 @@ export class IfcRelAssignsToGroup {
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingGroup: Handle<IfcGroup> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelatedObjectsType){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingGroup.expressID)
+		return args;
 	}
 };
 export class IfcRelAssignsToGroupByFactor {
@@ -16664,12 +31609,40 @@ export class IfcRelAssignsToGroupByFactor {
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingGroup: Handle<IfcGroup> ;
 	Factor: IfcRatioMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelatedObjectsType){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingGroup.expressID)
+		args.push(REAL)
+		args.push(this.Factor)
+		return args;
 	}
 };
 export class IfcRelAssignsToProcess {
@@ -16692,12 +31665,41 @@ export class IfcRelAssignsToProcess {
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingProcess: IfcProcessSelect ;
 	QuantityInProcess: Handle<IfcMeasureWithUnit> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelatedObjectsType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.QuantityInProcess){
+		args.push(REF)
+		args.push(this.QuantityInProcess.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssignsToProduct {
@@ -16718,12 +31720,36 @@ export class IfcRelAssignsToProduct {
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingProduct: IfcProductSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelatedObjectsType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssignsToResource {
@@ -16744,12 +31770,36 @@ export class IfcRelAssignsToResource {
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingResource: IfcResourceSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.RelatedObjectsType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssociates {
@@ -16766,12 +31816,30 @@ export class IfcRelAssociates {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssociatesApproval {
@@ -16790,12 +31858,32 @@ export class IfcRelAssociatesApproval {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingApproval: Handle<IfcApproval> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingApproval.expressID)
+		return args;
 	}
 };
 export class IfcRelAssociatesClassification {
@@ -16814,12 +31902,30 @@ export class IfcRelAssociatesClassification {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingClassification: IfcClassificationSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssociatesConstraint {
@@ -16840,12 +31946,37 @@ export class IfcRelAssociatesConstraint {
 	RelatedObjects: IfcDefinitionSelect[] ;
 	Intent: IfcLabel | null;
 	RelatingConstraint: Handle<IfcConstraint> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Intent){
+		args.push(STRING)
+		args.push(this.Intent)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingConstraint.expressID)
+		return args;
 	}
 };
 export class IfcRelAssociatesDocument {
@@ -16864,12 +31995,30 @@ export class IfcRelAssociatesDocument {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingDocument: IfcDocumentSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssociatesLibrary {
@@ -16888,12 +32037,30 @@ export class IfcRelAssociatesLibrary {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingLibrary: IfcLibrarySelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelAssociatesMaterial {
@@ -16912,12 +32079,30 @@ export class IfcRelAssociatesMaterial {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingMaterial: IfcMaterialSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelConnects {
@@ -16932,12 +32117,30 @@ export class IfcRelConnects {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelConnectsElements {
@@ -16958,12 +32161,39 @@ export class IfcRelConnectsElements {
 	ConnectionGeometry: Handle<IfcConnectionGeometry> | null;
 	RelatingElement: Handle<IfcElement> ;
 	RelatedElement: Handle<IfcElement> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConnectionGeometry){
+		args.push(REF)
+		args.push(this.ConnectionGeometry.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingElement.expressID)
+		args.push(REF)
+		args.push(this.RelatedElement.expressID)
+		return args;
 	}
 };
 export class IfcRelConnectsPathElements {
@@ -16992,12 +32222,43 @@ export class IfcRelConnectsPathElements {
 	RelatedPriorities: IfcInteger ;
 	RelatedConnectionType: IfcConnectionTypeEnum ;
 	RelatingConnectionType: IfcConnectionTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConnectionGeometry){
+		args.push(REF)
+		args.push(this.ConnectionGeometry.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingElement.expressID)
+		args.push(REF)
+		args.push(this.RelatedElement.expressID)
+		args.push(REAL)
+		args.push(this.RelatingPriorities)
+		args.push(REAL)
+		args.push(this.RelatedPriorities)
+		return args;
 	}
 };
 export class IfcRelConnectsPortToElement {
@@ -17016,12 +32277,34 @@ export class IfcRelConnectsPortToElement {
 	Description: IfcText | null;
 	RelatingPort: Handle<IfcPort> ;
 	RelatedElement: Handle<IfcDistributionElement> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingPort.expressID)
+		args.push(REF)
+		args.push(this.RelatedElement.expressID)
+		return args;
 	}
 };
 export class IfcRelConnectsPorts {
@@ -17042,12 +32325,39 @@ export class IfcRelConnectsPorts {
 	RelatingPort: Handle<IfcPort> ;
 	RelatedPort: Handle<IfcPort> ;
 	RealizingElement: Handle<IfcElement> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingPort.expressID)
+		args.push(REF)
+		args.push(this.RelatedPort.expressID)
+		if(this.RealizingElement){
+		args.push(REF)
+		args.push(this.RealizingElement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelConnectsStructuralActivity {
@@ -17066,12 +32376,32 @@ export class IfcRelConnectsStructuralActivity {
 	Description: IfcText | null;
 	RelatingElement: IfcStructuralActivityAssignmentSelect ;
 	RelatedStructuralActivity: Handle<IfcStructuralActivity> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatedStructuralActivity.expressID)
+		return args;
 	}
 };
 export class IfcRelConnectsStructuralMember {
@@ -17098,12 +32428,54 @@ export class IfcRelConnectsStructuralMember {
 	AdditionalConditions: Handle<IfcStructuralConnectionCondition> | null;
 	SupportedLength: IfcLengthMeasure | null;
 	ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingStructuralMember.expressID)
+		args.push(REF)
+		args.push(this.RelatedStructuralConnection.expressID)
+		if(this.AppliedCondition){
+		args.push(REF)
+		args.push(this.AppliedCondition.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AdditionalConditions){
+		args.push(REF)
+		args.push(this.AdditionalConditions.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SupportedLength){
+		args.push(REAL)
+		args.push(this.SupportedLength)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConditionCoordinateSystem){
+		args.push(REF)
+		args.push(this.ConditionCoordinateSystem.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelConnectsWithEccentricity {
@@ -17132,12 +32504,56 @@ export class IfcRelConnectsWithEccentricity {
 	SupportedLength: IfcLengthMeasure | null;
 	ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null;
 	ConnectionConstraint: Handle<IfcConnectionGeometry> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingStructuralMember.expressID)
+		args.push(REF)
+		args.push(this.RelatedStructuralConnection.expressID)
+		if(this.AppliedCondition){
+		args.push(REF)
+		args.push(this.AppliedCondition.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AdditionalConditions){
+		args.push(REF)
+		args.push(this.AdditionalConditions.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SupportedLength){
+		args.push(REAL)
+		args.push(this.SupportedLength)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConditionCoordinateSystem){
+		args.push(REF)
+		args.push(this.ConditionCoordinateSystem.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ConnectionConstraint.expressID)
+		return args;
 	}
 };
 export class IfcRelConnectsWithRealizingElements {
@@ -17162,12 +32578,47 @@ export class IfcRelConnectsWithRealizingElements {
 	RelatedElement: Handle<IfcElement> ;
 	RealizingElements: Handle<IfcElement>[] ;
 	ConnectionType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConnectionGeometry){
+		args.push(REF)
+		args.push(this.ConnectionGeometry.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingElement.expressID)
+		args.push(REF)
+		args.push(this.RelatedElement.expressID)
+		args.push(SET_BEGIN)
+		this.RealizingElements.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		if(this.ConnectionType){
+		args.push(STRING)
+		args.push(this.ConnectionType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelContainedInSpatialStructure {
@@ -17186,12 +32637,35 @@ export class IfcRelContainedInSpatialStructure {
 	Description: IfcText | null;
 	RelatedElements: Handle<IfcProduct>[] ;
 	RelatingStructure: Handle<IfcSpatialElement> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedElements.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.RelatingStructure.expressID)
+		return args;
 	}
 };
 export class IfcRelCoversBldgElements {
@@ -17210,12 +32684,35 @@ export class IfcRelCoversBldgElements {
 	Description: IfcText | null;
 	RelatingBuildingElement: Handle<IfcElement> ;
 	RelatedCoverings: Handle<IfcCovering>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingBuildingElement.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedCoverings.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcRelCoversSpaces {
@@ -17234,12 +32731,35 @@ export class IfcRelCoversSpaces {
 	Description: IfcText | null;
 	RelatingSpace: Handle<IfcSpace> ;
 	RelatedCoverings: Handle<IfcCovering>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingSpace.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedCoverings.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcRelDeclares {
@@ -17258,12 +32778,32 @@ export class IfcRelDeclares {
 	Description: IfcText | null;
 	RelatingContext: Handle<IfcContext> ;
 	RelatedDefinitions: IfcDefinitionSelect[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingContext.expressID)
+		return args;
 	}
 };
 export class IfcRelDecomposes {
@@ -17278,12 +32818,30 @@ export class IfcRelDecomposes {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelDefines {
@@ -17298,12 +32856,30 @@ export class IfcRelDefines {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelDefinesByObject {
@@ -17322,12 +32898,35 @@ export class IfcRelDefinesByObject {
 	Description: IfcText | null;
 	RelatedObjects: Handle<IfcObject>[] ;
 	RelatingObject: Handle<IfcObject> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.RelatingObject.expressID)
+		return args;
 	}
 };
 export class IfcRelDefinesByProperties {
@@ -17346,12 +32945,33 @@ export class IfcRelDefinesByProperties {
 	Description: IfcText | null;
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatingPropertyDefinition: IfcPropertySetDefinitionSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcRelDefinesByTemplate {
@@ -17370,12 +32990,35 @@ export class IfcRelDefinesByTemplate {
 	Description: IfcText | null;
 	RelatedPropertySets: Handle<IfcPropertySetDefinition>[] ;
 	RelatingTemplate: Handle<IfcPropertySetTemplate> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.RelatingTemplate.expressID)
+		return args;
 	}
 };
 export class IfcRelDefinesByType {
@@ -17394,12 +33037,35 @@ export class IfcRelDefinesByType {
 	Description: IfcText | null;
 	RelatedObjects: Handle<IfcObject>[] ;
 	RelatingType: Handle<IfcTypeObject> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedObjects.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.RelatingType.expressID)
+		return args;
 	}
 };
 export class IfcRelFillsElement {
@@ -17418,12 +33084,34 @@ export class IfcRelFillsElement {
 	Description: IfcText | null;
 	RelatingOpeningElement: Handle<IfcOpeningElement> ;
 	RelatedBuildingElement: Handle<IfcElement> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingOpeningElement.expressID)
+		args.push(REF)
+		args.push(this.RelatedBuildingElement.expressID)
+		return args;
 	}
 };
 export class IfcRelFlowControlElements {
@@ -17442,12 +33130,35 @@ export class IfcRelFlowControlElements {
 	Description: IfcText | null;
 	RelatedControlElements: Handle<IfcDistributionControlElement>[] ;
 	RelatingFlowElement: Handle<IfcDistributionFlowElement> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedControlElements.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.RelatingFlowElement.expressID)
+		return args;
 	}
 };
 export class IfcRelInterferesElements {
@@ -17472,12 +33183,46 @@ export class IfcRelInterferesElements {
 	InterferenceGeometry: Handle<IfcConnectionGeometry> | null;
 	InterferenceType: IfcIdentifier | null;
 	ImpliedOrder: Handle<boolean> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingElement.expressID)
+		args.push(REF)
+		args.push(this.RelatedElement.expressID)
+		if(this.InterferenceGeometry){
+		args.push(REF)
+		args.push(this.InterferenceGeometry.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.InterferenceType){
+		args.push(STRING)
+		args.push(this.InterferenceType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ImpliedOrder.expressID)
+		return args;
 	}
 };
 export class IfcRelNests {
@@ -17496,12 +33241,34 @@ export class IfcRelNests {
 	Description: IfcText | null;
 	RelatingObject: Handle<IfcObjectDefinition> ;
 	RelatedObjects: Handle<IfcObjectDefinition> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingObject.expressID)
+		args.push(REF)
+		args.push(this.RelatedObjects.expressID)
+		return args;
 	}
 };
 export class IfcRelPositions {
@@ -17520,12 +33287,35 @@ export class IfcRelPositions {
 	Description: IfcText | null;
 	RelatingPositioningElement: Handle<IfcPositioningElement> ;
 	RelatedProducts: Handle<IfcProduct>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingPositioningElement.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedProducts.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcRelProjectsElement {
@@ -17544,12 +33334,34 @@ export class IfcRelProjectsElement {
 	Description: IfcText | null;
 	RelatingElement: Handle<IfcElement> ;
 	RelatedFeatureElement: Handle<IfcFeatureElementAddition> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingElement.expressID)
+		args.push(REF)
+		args.push(this.RelatedFeatureElement.expressID)
+		return args;
 	}
 };
 export class IfcRelReferencedInSpatialStructure {
@@ -17568,12 +33380,35 @@ export class IfcRelReferencedInSpatialStructure {
 	Description: IfcText | null;
 	RelatedElements: Handle<IfcProduct>[] ;
 	RelatingStructure: Handle<IfcSpatialElement> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.RelatedElements.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		args.push(REF)
+		args.push(this.RelatingStructure.expressID)
+		return args;
 	}
 };
 export class IfcRelSequence {
@@ -17598,12 +33433,47 @@ export class IfcRelSequence {
 	TimeLag: Handle<IfcLagTime> | null;
 	SequenceType: IfcSequenceEnum | null;
 	UserDefinedSequenceType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingProcess.expressID)
+		args.push(REF)
+		args.push(this.RelatedProcess.expressID)
+		if(this.TimeLag){
+		args.push(REF)
+		args.push(this.TimeLag.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SequenceType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedSequenceType){
+		args.push(STRING)
+		args.push(this.UserDefinedSequenceType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelServicesBuildings {
@@ -17622,12 +33492,35 @@ export class IfcRelServicesBuildings {
 	Description: IfcText | null;
 	RelatingSystem: Handle<IfcSystem> ;
 	RelatedBuildings: Handle<IfcSpatialElement>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingSystem.expressID)
+		args.push(SET_BEGIN)
+		this.RelatedBuildings.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcRelSpaceBoundary {
@@ -17652,12 +33545,37 @@ export class IfcRelSpaceBoundary {
 	ConnectionGeometry: Handle<IfcConnectionGeometry> | null;
 	PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum ;
 	InternalOrExternalBoundary: IfcInternalOrExternalEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatedBuildingElement.expressID)
+		if(this.ConnectionGeometry){
+		args.push(REF)
+		args.push(this.ConnectionGeometry.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelSpaceBoundary1stLevel {
@@ -17684,12 +33602,42 @@ export class IfcRelSpaceBoundary1stLevel {
 	PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum ;
 	InternalOrExternalBoundary: IfcInternalOrExternalEnum ;
 	ParentBoundary: Handle<IfcRelSpaceBoundary1stLevel> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatedBuildingElement.expressID)
+		if(this.ConnectionGeometry){
+		args.push(REF)
+		args.push(this.ConnectionGeometry.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ParentBoundary){
+		args.push(REF)
+		args.push(this.ParentBoundary.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelSpaceBoundary2ndLevel {
@@ -17718,12 +33666,47 @@ export class IfcRelSpaceBoundary2ndLevel {
 	InternalOrExternalBoundary: IfcInternalOrExternalEnum ;
 	ParentBoundary: Handle<IfcRelSpaceBoundary1stLevel> | null;
 	CorrespondingBoundary: Handle<IfcRelSpaceBoundary2ndLevel> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatedBuildingElement.expressID)
+		if(this.ConnectionGeometry){
+		args.push(REF)
+		args.push(this.ConnectionGeometry.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ParentBoundary){
+		args.push(REF)
+		args.push(this.ParentBoundary.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CorrespondingBoundary){
+		args.push(REF)
+		args.push(this.CorrespondingBoundary.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRelVoidsElement {
@@ -17742,12 +33725,34 @@ export class IfcRelVoidsElement {
 	Description: IfcText | null;
 	RelatingBuildingElement: Handle<IfcElement> ;
 	RelatedOpeningElement: Handle<IfcFeatureElementSubtraction> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingBuildingElement.expressID)
+		args.push(REF)
+		args.push(this.RelatedOpeningElement.expressID)
+		return args;
 	}
 };
 export class IfcRelationship {
@@ -17762,12 +33767,30 @@ export class IfcRelationship {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcReparametrisedCompositeCurveSegment {
@@ -17782,12 +33805,17 @@ export class IfcReparametrisedCompositeCurveSegment {
 	SameSense: IfcBoolean ;
 	ParentCurve: Handle<IfcCurve> ;
 	ParamLength: IfcParameterValue ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ParentCurve.expressID)
+		args.push(REAL)
+		args.push(this.ParamLength)
+		return args;
 	}
 };
 export class IfcRepresentation {
@@ -17802,12 +33830,28 @@ export class IfcRepresentation {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ContextOfItems.expressID)
+		if(this.RepresentationIdentifier){
+		args.push(STRING)
+		args.push(this.RepresentationIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationType){
+		args.push(STRING)
+		args.push(this.RepresentationType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Items.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcRepresentationContext {
@@ -17818,24 +33862,36 @@ export class IfcRepresentationContext {
 	}
 	ContextIdentifier: IfcLabel | null;
 	ContextType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ContextIdentifier){
+		args.push(STRING)
+		args.push(this.ContextIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ContextType){
+		args.push(STRING)
+		args.push(this.ContextType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRepresentationItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcRepresentationMap {
@@ -17846,12 +33902,15 @@ export class IfcRepresentationMap {
 	}
 	MappingOrigin: IfcAxis2Placement ;
 	MappedRepresentation: Handle<IfcRepresentation> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.MappedRepresentation.expressID)
+		return args;
 	}
 };
 export class IfcResource {
@@ -17872,12 +33931,45 @@ export class IfcResource {
 	ObjectType: IfcLabel | null;
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcResourceApprovalRelationship {
@@ -17892,12 +33984,25 @@ export class IfcResourceApprovalRelationship {
 	Description: IfcText | null;
 	RelatedResourceObjects: IfcResourceObjectSelect[] ;
 	RelatingApproval: Handle<IfcApproval> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingApproval.expressID)
+		return args;
 	}
 };
 export class IfcResourceConstraintRelationship {
@@ -17912,12 +34017,25 @@ export class IfcResourceConstraintRelationship {
 	Description: IfcText | null;
 	RelatingConstraint: Handle<IfcConstraint> ;
 	RelatedResourceObjects: IfcResourceObjectSelect[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.RelatingConstraint.expressID)
+		return args;
 	}
 };
 export class IfcResourceLevelRelationship {
@@ -17928,12 +34046,23 @@ export class IfcResourceLevelRelationship {
 	}
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcResourceTime {
@@ -17976,12 +34105,91 @@ export class IfcResourceTime {
 	RemainingWork: IfcDuration | null;
 	RemainingUsage: IfcPositiveRatioMeasure | null;
 	Completion: IfcPositiveRatioMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DataOrigin){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleWork){
+		args.push(STRING)
+		args.push(this.ScheduleWork)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleUsage){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleStart){
+		args.push(STRING)
+		args.push(this.ScheduleStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleFinish){
+		args.push(STRING)
+		args.push(this.ScheduleFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleContour){
+		args.push(STRING)
+		args.push(this.ScheduleContour)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LevelingDelay){
+		args.push(STRING)
+		args.push(this.LevelingDelay)
+		}
+		else{ args.push(EMPTY); }
+		if(this.IsOverAllocated){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StatusTime){
+		args.push(STRING)
+		args.push(this.StatusTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualWork){
+		args.push(STRING)
+		args.push(this.ActualWork)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualUsage){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualStart){
+		args.push(STRING)
+		args.push(this.ActualStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualFinish){
+		args.push(STRING)
+		args.push(this.ActualFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RemainingWork){
+		args.push(STRING)
+		args.push(this.RemainingWork)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RemainingUsage){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Completion){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRevolvedAreaSolid {
@@ -17996,12 +34204,24 @@ export class IfcRevolvedAreaSolid {
 	Position: Handle<IfcAxis2Placement3D> | null;
 	Axis: Handle<IfcAxis1Placement> ;
 	Angle: IfcPlaneAngleMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptArea.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		args.push(REAL)
+		args.push(this.Angle)
+		return args;
 	}
 };
 export class IfcRevolvedAreaSolidTapered {
@@ -18018,12 +34238,26 @@ export class IfcRevolvedAreaSolidTapered {
 	Axis: Handle<IfcAxis1Placement> ;
 	Angle: IfcPlaneAngleMeasure ;
 	EndSweptArea: Handle<IfcProfileDef> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptArea.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		args.push(REAL)
+		args.push(this.Angle)
+		args.push(REF)
+		args.push(this.EndSweptArea.expressID)
+		return args;
 	}
 };
 export class IfcRightCircularCone {
@@ -18036,12 +34270,15 @@ export class IfcRightCircularCone {
 	Position: Handle<IfcAxis2Placement3D> ;
 	Height: IfcPositiveLengthMeasure ;
 	BottomRadius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcRightCircularCylinder {
@@ -18054,12 +34291,15 @@ export class IfcRightCircularCylinder {
 	Position: Handle<IfcAxis2Placement3D> ;
 	Height: IfcPositiveLengthMeasure ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcRoof {
@@ -18084,12 +34324,53 @@ export class IfcRoof {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcRoofTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRoofType {
@@ -18116,12 +34397,56 @@ export class IfcRoofType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcRoofTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRoot {
@@ -18136,12 +34461,30 @@ export class IfcRoot {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcRoundedRectangleProfileDef {
@@ -18160,12 +34503,23 @@ export class IfcRoundedRectangleProfileDef {
 	XDim: IfcPositiveLengthMeasure ;
 	YDim: IfcPositiveLengthMeasure ;
 	RoundingRadius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSIUnit {
@@ -18180,12 +34534,18 @@ export class IfcSIUnit {
 	UnitType: IfcUnitEnum ;
 	Prefix: IfcSIPrefix | null;
 	Name: IfcSIUnitName ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Dimensions.expressID)
+		if(this.Prefix){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSanitaryTerminal {
@@ -18210,12 +34570,53 @@ export class IfcSanitaryTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSanitaryTerminalTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSanitaryTerminalType {
@@ -18242,12 +34643,56 @@ export class IfcSanitaryTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSanitaryTerminalTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSchedulingTime {
@@ -18260,12 +34705,26 @@ export class IfcSchedulingTime {
 	Name: IfcLabel | null;
 	DataOrigin: IfcDataOriginEnum | null;
 	UserDefinedDataOrigin: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DataOrigin){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSeamCurve {
@@ -18278,12 +34737,17 @@ export class IfcSeamCurve {
 	Curve3D: Handle<IfcCurve> ;
 	AssociatedGeometry: Handle<IfcPcurve> ;
 	MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Curve3D.expressID)
+		args.push(REF)
+		args.push(this.AssociatedGeometry.expressID)
+		return args;
 	}
 };
 export class IfcSectionProperties {
@@ -18296,12 +34760,20 @@ export class IfcSectionProperties {
 	SectionType: IfcSectionTypeEnum ;
 	StartProfile: Handle<IfcProfileDef> ;
 	EndProfile: Handle<IfcProfileDef> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.StartProfile.expressID)
+		if(this.EndProfile){
+		args.push(REF)
+		args.push(this.EndProfile.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSectionReinforcementProperties {
@@ -18320,12 +34792,27 @@ export class IfcSectionReinforcementProperties {
 	ReinforcementRole: IfcReinforcingBarRoleEnum ;
 	SectionDefinition: Handle<IfcSectionProperties> ;
 	CrossSectionReinforcementDefinitions: Handle<IfcReinforcementBarProperties>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.LongitudinalStartPosition)
+		args.push(REAL)
+		args.push(this.LongitudinalEndPosition)
+		if(this.TransversePosition){
+		args.push(REAL)
+		args.push(this.TransversePosition)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.SectionDefinition.expressID)
+		args.push(SET_BEGIN)
+		this.CrossSectionReinforcementDefinitions.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcSectionedSolid {
@@ -18336,12 +34823,17 @@ export class IfcSectionedSolid {
 	}
 	Directrix: Handle<IfcCurve> ;
 	CrossSections: Handle<IfcProfileDef> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Directrix.expressID)
+		args.push(REF)
+		args.push(this.CrossSections.expressID)
+		return args;
 	}
 };
 export class IfcSectionedSolidHorizontal {
@@ -18356,12 +34848,19 @@ export class IfcSectionedSolidHorizontal {
 	CrossSections: Handle<IfcProfileDef> ;
 	CrossSectionPositions: Handle<IfcDistanceExpression> ;
 	FixedAxisVertical: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Directrix.expressID)
+		args.push(REF)
+		args.push(this.CrossSections.expressID)
+		args.push(REF)
+		args.push(this.CrossSectionPositions.expressID)
+		return args;
 	}
 };
 export class IfcSectionedSpine {
@@ -18374,12 +34873,19 @@ export class IfcSectionedSpine {
 	SpineCurve: Handle<IfcCompositeCurve> ;
 	CrossSections: Handle<IfcProfileDef> ;
 	CrossSectionPositions: Handle<IfcAxis2Placement3D> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SpineCurve.expressID)
+		args.push(REF)
+		args.push(this.CrossSections.expressID)
+		args.push(REF)
+		args.push(this.CrossSectionPositions.expressID)
+		return args;
 	}
 };
 export class IfcSensor {
@@ -18404,12 +34910,53 @@ export class IfcSensor {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSensorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSensorType {
@@ -18436,12 +34983,56 @@ export class IfcSensorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSensorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcShadingDevice {
@@ -18466,12 +35057,53 @@ export class IfcShadingDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcShadingDeviceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcShadingDeviceType {
@@ -18498,12 +35130,56 @@ export class IfcShadingDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcShadingDeviceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcShapeAspect {
@@ -18520,12 +35196,28 @@ export class IfcShapeAspect {
 	Description: IfcText | null;
 	ProductDefinitional: IfcLogical ;
 	PartOfProductDefinitionShape: IfcProductRepresentationSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ShapeRepresentations.expressID)
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PartOfProductDefinitionShape){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcShapeModel {
@@ -18540,12 +35232,28 @@ export class IfcShapeModel {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ContextOfItems.expressID)
+		if(this.RepresentationIdentifier){
+		args.push(STRING)
+		args.push(this.RepresentationIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationType){
+		args.push(STRING)
+		args.push(this.RepresentationType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Items.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcShapeRepresentation {
@@ -18560,12 +35268,28 @@ export class IfcShapeRepresentation {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ContextOfItems.expressID)
+		if(this.RepresentationIdentifier){
+		args.push(STRING)
+		args.push(this.RepresentationIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationType){
+		args.push(STRING)
+		args.push(this.RepresentationType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Items.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcShellBasedSurfaceModel {
@@ -18574,12 +35298,13 @@ export class IfcShellBasedSurfaceModel {
 		this.SbsmBoundary = SbsmBoundary;
 	}
 	SbsmBoundary: IfcShell[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcSimpleProperty {
@@ -18590,12 +35315,20 @@ export class IfcSimpleProperty {
 	}
 	Name: IfcIdentifier ;
 	Description: IfcText | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSimplePropertyTemplate {
@@ -18626,12 +35359,62 @@ export class IfcSimplePropertyTemplate {
 	SecondaryUnit: IfcUnit | null;
 	Expression: IfcLabel | null;
 	AccessState: IfcStateEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TemplateType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PrimaryMeasureType){
+		args.push(STRING)
+		args.push(this.PrimaryMeasureType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SecondaryMeasureType){
+		args.push(STRING)
+		args.push(this.SecondaryMeasureType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Enumerators){
+		args.push(REF)
+		args.push(this.Enumerators.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PrimaryUnit){
+		}
+		else{ args.push(EMPTY); }
+		if(this.SecondaryUnit){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Expression){
+		args.push(STRING)
+		args.push(this.Expression)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AccessState){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSite {
@@ -18666,12 +35449,78 @@ export class IfcSite {
 	RefElevation: IfcLengthMeasure | null;
 	LandTitleNumber: IfcLabel | null;
 	SiteAddress: Handle<IfcPostalAddress> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.RefLatitude){
+		args.push(REAL)
+		args.push(this.RefLatitude)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RefLongitude){
+		args.push(REAL)
+		args.push(this.RefLongitude)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RefElevation){
+		args.push(REAL)
+		args.push(this.RefElevation)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LandTitleNumber){
+		args.push(STRING)
+		args.push(this.LandTitleNumber)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SiteAddress){
+		args.push(REF)
+		args.push(this.SiteAddress.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSlab {
@@ -18696,12 +35545,53 @@ export class IfcSlab {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSlabTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSlabElementedCase {
@@ -18726,12 +35616,53 @@ export class IfcSlabElementedCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSlabTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSlabStandardCase {
@@ -18756,12 +35687,53 @@ export class IfcSlabStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSlabTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSlabType {
@@ -18788,12 +35760,56 @@ export class IfcSlabType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSlabTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSlippageConnectionCondition {
@@ -18808,12 +35824,33 @@ export class IfcSlippageConnectionCondition {
 	SlippageX: IfcLengthMeasure | null;
 	SlippageY: IfcLengthMeasure | null;
 	SlippageZ: IfcLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SlippageX){
+		args.push(REAL)
+		args.push(this.SlippageX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SlippageY){
+		args.push(REAL)
+		args.push(this.SlippageY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SlippageZ){
+		args.push(REAL)
+		args.push(this.SlippageZ)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSolarDevice {
@@ -18838,12 +35875,53 @@ export class IfcSolarDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSolarDeviceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSolarDeviceType {
@@ -18870,24 +35948,69 @@ export class IfcSolarDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSolarDeviceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSolidModel {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcSpace {
@@ -18916,12 +36039,61 @@ export class IfcSpace {
 	CompositionType: IfcElementCompositionEnum | null;
 	PredefinedType: IfcSpaceTypeEnum | null;
 	ElevationWithFlooring: IfcLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElevationWithFlooring){
+		args.push(REAL)
+		args.push(this.ElevationWithFlooring)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpaceHeater {
@@ -18946,12 +36118,53 @@ export class IfcSpaceHeater {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSpaceHeaterTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpaceHeaterType {
@@ -18978,12 +36191,56 @@ export class IfcSpaceHeaterType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSpaceHeaterTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpaceType {
@@ -19012,12 +36269,61 @@ export class IfcSpaceType {
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSpaceTypeEnum ;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpatialElement {
@@ -19040,12 +36346,50 @@ export class IfcSpatialElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpatialElementType {
@@ -19070,12 +36414,56 @@ export class IfcSpatialElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpatialStructureElement {
@@ -19100,12 +36488,53 @@ export class IfcSpatialStructureElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.CompositionType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpatialStructureElementType {
@@ -19130,12 +36559,56 @@ export class IfcSpatialStructureElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpatialZone {
@@ -19160,12 +36633,53 @@ export class IfcSpatialZone {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	PredefinedType: IfcSpatialZoneTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSpatialZoneType {
@@ -19194,12 +36708,61 @@ export class IfcSpatialZoneType {
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSpatialZoneTypeEnum ;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSphere {
@@ -19210,12 +36773,15 @@ export class IfcSphere {
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcSphericalSurface {
@@ -19226,12 +36792,15 @@ export class IfcSphericalSurface {
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcStackTerminal {
@@ -19256,12 +36825,53 @@ export class IfcStackTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcStackTerminalTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStackTerminalType {
@@ -19288,12 +36898,56 @@ export class IfcStackTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcStackTerminalTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStair {
@@ -19318,12 +36972,53 @@ export class IfcStair {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcStairTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStairFlight {
@@ -19356,12 +37051,69 @@ export class IfcStairFlight {
 	RiserHeight: IfcPositiveLengthMeasure | null;
 	TreadLength: IfcPositiveLengthMeasure | null;
 	PredefinedType: IfcStairFlightTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NumberOfRisers){
+		args.push(REAL)
+		args.push(this.NumberOfRisers)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NumberOfTreads){
+		args.push(REAL)
+		args.push(this.NumberOfTreads)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RiserHeight){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TreadLength){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStairFlightType {
@@ -19388,12 +37140,56 @@ export class IfcStairFlightType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcStairFlightTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStairType {
@@ -19420,12 +37216,56 @@ export class IfcStairType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcStairTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralAction {
@@ -19452,12 +37292,50 @@ export class IfcStructuralAction {
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
 	DestabilizingLoad: IfcBoolean | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		if(this.DestabilizingLoad){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralActivity {
@@ -19482,12 +37360,47 @@ export class IfcStructuralActivity {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		return args;
 	}
 };
 export class IfcStructuralAnalysisModel {
@@ -19514,12 +37427,57 @@ export class IfcStructuralAnalysisModel {
 	LoadedBy: Handle<IfcStructuralLoadGroup>[] | null;
 	HasResults: Handle<IfcStructuralResultGroup>[] | null;
 	SharedPlacement: Handle<IfcObjectPlacement> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OrientationOf2DPlane){
+		args.push(REF)
+		args.push(this.OrientationOf2DPlane.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LoadedBy){
+		args.push(SET_BEGIN)
+		this.LoadedBy.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasResults){
+		args.push(SET_BEGIN)
+		this.HasResults.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SharedPlacement){
+		args.push(REF)
+		args.push(this.SharedPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralConnection {
@@ -19542,12 +37500,50 @@ export class IfcStructuralConnection {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedCondition: Handle<IfcBoundaryCondition> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AppliedCondition){
+		args.push(REF)
+		args.push(this.AppliedCondition.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralConnectionCondition {
@@ -19556,12 +37552,18 @@ export class IfcStructuralConnectionCondition {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralCurveAction {
@@ -19592,12 +37594,53 @@ export class IfcStructuralCurveAction {
 	DestabilizingLoad: IfcBoolean | null;
 	ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null;
 	PredefinedType: IfcStructuralCurveActivityTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		if(this.DestabilizingLoad){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ProjectedOrTrue){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralCurveConnection {
@@ -19622,12 +37665,52 @@ export class IfcStructuralCurveConnection {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedCondition: Handle<IfcBoundaryCondition> | null;
 	Axis: Handle<IfcDirection> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AppliedCondition){
+		args.push(REF)
+		args.push(this.AppliedCondition.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		return args;
 	}
 };
 export class IfcStructuralCurveMember {
@@ -19652,12 +37735,47 @@ export class IfcStructuralCurveMember {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcStructuralCurveMemberTypeEnum ;
 	Axis: Handle<IfcDirection> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		return args;
 	}
 };
 export class IfcStructuralCurveMemberVarying {
@@ -19682,12 +37800,47 @@ export class IfcStructuralCurveMemberVarying {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcStructuralCurveMemberTypeEnum ;
 	Axis: Handle<IfcDirection> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Axis.expressID)
+		return args;
 	}
 };
 export class IfcStructuralCurveReaction {
@@ -19714,12 +37867,47 @@ export class IfcStructuralCurveReaction {
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
 	PredefinedType: IfcStructuralCurveActivityTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		return args;
 	}
 };
 export class IfcStructuralItem {
@@ -19740,12 +37928,45 @@ export class IfcStructuralItem {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLinearAction {
@@ -19776,12 +37997,53 @@ export class IfcStructuralLinearAction {
 	DestabilizingLoad: IfcBoolean | null;
 	ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null;
 	PredefinedType: IfcStructuralCurveActivityTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		if(this.DestabilizingLoad){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ProjectedOrTrue){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoad {
@@ -19790,12 +38052,18 @@ export class IfcStructuralLoad {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadCase {
@@ -19824,12 +38092,50 @@ export class IfcStructuralLoadCase {
 	Coefficient: IfcRatioMeasure | null;
 	Purpose: IfcLabel | null;
 	SelfWeightCoefficients: IfcRatioMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Coefficient){
+		args.push(REAL)
+		args.push(this.Coefficient)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Purpose){
+		args.push(STRING)
+		args.push(this.Purpose)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SelfWeightCoefficients){
+		args.push(REAL)
+		args.push(this.SelfWeightCoefficients)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadConfiguration {
@@ -19842,12 +38148,25 @@ export class IfcStructuralLoadConfiguration {
 	Name: IfcLabel | null;
 	Values: Handle<IfcStructuralLoadOrResult> ;
 	Locations: IfcLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Values.expressID)
+		if(this.Locations){
+		args.push(REAL)
+		args.push(this.Locations)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadGroup {
@@ -19874,12 +38193,45 @@ export class IfcStructuralLoadGroup {
 	ActionSource: IfcActionSourceTypeEnum ;
 	Coefficient: IfcRatioMeasure | null;
 	Purpose: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Coefficient){
+		args.push(REAL)
+		args.push(this.Coefficient)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Purpose){
+		args.push(STRING)
+		args.push(this.Purpose)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadLinearForce {
@@ -19900,12 +38252,48 @@ export class IfcStructuralLoadLinearForce {
 	LinearMomentX: IfcLinearMomentMeasure | null;
 	LinearMomentY: IfcLinearMomentMeasure | null;
 	LinearMomentZ: IfcLinearMomentMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LinearForceX){
+		args.push(REAL)
+		args.push(this.LinearForceX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LinearForceY){
+		args.push(REAL)
+		args.push(this.LinearForceY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LinearForceZ){
+		args.push(REAL)
+		args.push(this.LinearForceZ)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LinearMomentX){
+		args.push(REAL)
+		args.push(this.LinearMomentX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LinearMomentY){
+		args.push(REAL)
+		args.push(this.LinearMomentY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LinearMomentZ){
+		args.push(REAL)
+		args.push(this.LinearMomentZ)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadOrResult {
@@ -19914,12 +38302,18 @@ export class IfcStructuralLoadOrResult {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadPlanarForce {
@@ -19934,12 +38328,33 @@ export class IfcStructuralLoadPlanarForce {
 	PlanarForceX: IfcPlanarForceMeasure | null;
 	PlanarForceY: IfcPlanarForceMeasure | null;
 	PlanarForceZ: IfcPlanarForceMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PlanarForceX){
+		args.push(REAL)
+		args.push(this.PlanarForceX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PlanarForceY){
+		args.push(REAL)
+		args.push(this.PlanarForceY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PlanarForceZ){
+		args.push(REAL)
+		args.push(this.PlanarForceZ)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadSingleDisplacement {
@@ -19960,12 +38375,48 @@ export class IfcStructuralLoadSingleDisplacement {
 	RotationalDisplacementRX: IfcPlaneAngleMeasure | null;
 	RotationalDisplacementRY: IfcPlaneAngleMeasure | null;
 	RotationalDisplacementRZ: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DisplacementX){
+		args.push(REAL)
+		args.push(this.DisplacementX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DisplacementY){
+		args.push(REAL)
+		args.push(this.DisplacementY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DisplacementZ){
+		args.push(REAL)
+		args.push(this.DisplacementZ)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalDisplacementRX){
+		args.push(REAL)
+		args.push(this.RotationalDisplacementRX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalDisplacementRY){
+		args.push(REAL)
+		args.push(this.RotationalDisplacementRY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalDisplacementRZ){
+		args.push(REAL)
+		args.push(this.RotationalDisplacementRZ)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadSingleDisplacementDistortion {
@@ -19988,12 +38439,53 @@ export class IfcStructuralLoadSingleDisplacementDistortion {
 	RotationalDisplacementRY: IfcPlaneAngleMeasure | null;
 	RotationalDisplacementRZ: IfcPlaneAngleMeasure | null;
 	Distortion: IfcCurvatureMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DisplacementX){
+		args.push(REAL)
+		args.push(this.DisplacementX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DisplacementY){
+		args.push(REAL)
+		args.push(this.DisplacementY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DisplacementZ){
+		args.push(REAL)
+		args.push(this.DisplacementZ)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalDisplacementRX){
+		args.push(REAL)
+		args.push(this.RotationalDisplacementRX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalDisplacementRY){
+		args.push(REAL)
+		args.push(this.RotationalDisplacementRY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RotationalDisplacementRZ){
+		args.push(REAL)
+		args.push(this.RotationalDisplacementRZ)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Distortion){
+		args.push(REAL)
+		args.push(this.Distortion)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadSingleForce {
@@ -20014,12 +38506,48 @@ export class IfcStructuralLoadSingleForce {
 	MomentX: IfcTorqueMeasure | null;
 	MomentY: IfcTorqueMeasure | null;
 	MomentZ: IfcTorqueMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ForceX){
+		args.push(REAL)
+		args.push(this.ForceX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ForceY){
+		args.push(REAL)
+		args.push(this.ForceY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ForceZ){
+		args.push(REAL)
+		args.push(this.ForceZ)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MomentX){
+		args.push(REAL)
+		args.push(this.MomentX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MomentY){
+		args.push(REAL)
+		args.push(this.MomentY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MomentZ){
+		args.push(REAL)
+		args.push(this.MomentZ)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadSingleForceWarping {
@@ -20042,12 +38570,53 @@ export class IfcStructuralLoadSingleForceWarping {
 	MomentY: IfcTorqueMeasure | null;
 	MomentZ: IfcTorqueMeasure | null;
 	WarpingMoment: IfcWarpingMomentMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ForceX){
+		args.push(REAL)
+		args.push(this.ForceX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ForceY){
+		args.push(REAL)
+		args.push(this.ForceY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ForceZ){
+		args.push(REAL)
+		args.push(this.ForceZ)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MomentX){
+		args.push(REAL)
+		args.push(this.MomentX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MomentY){
+		args.push(REAL)
+		args.push(this.MomentY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MomentZ){
+		args.push(REAL)
+		args.push(this.MomentZ)
+		}
+		else{ args.push(EMPTY); }
+		if(this.WarpingMoment){
+		args.push(REAL)
+		args.push(this.WarpingMoment)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadStatic {
@@ -20056,12 +38625,18 @@ export class IfcStructuralLoadStatic {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralLoadTemperature {
@@ -20076,12 +38651,33 @@ export class IfcStructuralLoadTemperature {
 	DeltaTConstant: IfcThermodynamicTemperatureMeasure | null;
 	DeltaTY: IfcThermodynamicTemperatureMeasure | null;
 	DeltaTZ: IfcThermodynamicTemperatureMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DeltaTConstant){
+		args.push(REAL)
+		args.push(this.DeltaTConstant)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DeltaTY){
+		args.push(REAL)
+		args.push(this.DeltaTY)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DeltaTZ){
+		args.push(REAL)
+		args.push(this.DeltaTZ)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralMember {
@@ -20102,12 +38698,45 @@ export class IfcStructuralMember {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralPlanarAction {
@@ -20138,12 +38767,53 @@ export class IfcStructuralPlanarAction {
 	DestabilizingLoad: IfcBoolean | null;
 	ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null;
 	PredefinedType: IfcStructuralSurfaceActivityTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		if(this.DestabilizingLoad){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ProjectedOrTrue){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralPointAction {
@@ -20170,12 +38840,50 @@ export class IfcStructuralPointAction {
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
 	DestabilizingLoad: IfcBoolean | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		if(this.DestabilizingLoad){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralPointConnection {
@@ -20200,12 +38908,55 @@ export class IfcStructuralPointConnection {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedCondition: Handle<IfcBoundaryCondition> | null;
 	ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AppliedCondition){
+		args.push(REF)
+		args.push(this.AppliedCondition.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ConditionCoordinateSystem){
+		args.push(REF)
+		args.push(this.ConditionCoordinateSystem.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralPointReaction {
@@ -20230,12 +38981,47 @@ export class IfcStructuralPointReaction {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		return args;
 	}
 };
 export class IfcStructuralReaction {
@@ -20260,12 +39046,47 @@ export class IfcStructuralReaction {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		return args;
 	}
 };
 export class IfcStructuralResultGroup {
@@ -20288,12 +39109,40 @@ export class IfcStructuralResultGroup {
 	TheoryType: IfcAnalysisTheoryTypeEnum ;
 	ResultForLoadGroup: Handle<IfcStructuralLoadGroup> | null;
 	IsLinear: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResultForLoadGroup){
+		args.push(REF)
+		args.push(this.ResultForLoadGroup.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralSurfaceAction {
@@ -20324,12 +39173,53 @@ export class IfcStructuralSurfaceAction {
 	DestabilizingLoad: IfcBoolean | null;
 	ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null;
 	PredefinedType: IfcStructuralSurfaceActivityTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		if(this.DestabilizingLoad){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ProjectedOrTrue){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralSurfaceConnection {
@@ -20352,12 +39242,50 @@ export class IfcStructuralSurfaceConnection {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedCondition: Handle<IfcBoundaryCondition> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.AppliedCondition){
+		args.push(REF)
+		args.push(this.AppliedCondition.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralSurfaceMember {
@@ -20382,12 +39310,48 @@ export class IfcStructuralSurfaceMember {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcStructuralSurfaceMemberTypeEnum ;
 	Thickness: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Thickness){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralSurfaceMemberVarying {
@@ -20412,12 +39376,48 @@ export class IfcStructuralSurfaceMemberVarying {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcStructuralSurfaceMemberTypeEnum ;
 	Thickness: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Thickness){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStructuralSurfaceReaction {
@@ -20444,12 +39444,47 @@ export class IfcStructuralSurfaceReaction {
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
 	PredefinedType: IfcStructuralSurfaceActivityTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AppliedLoad.expressID)
+		return args;
 	}
 };
 export class IfcStyleModel {
@@ -20464,12 +39499,28 @@ export class IfcStyleModel {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ContextOfItems.expressID)
+		if(this.RepresentationIdentifier){
+		args.push(STRING)
+		args.push(this.RepresentationIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationType){
+		args.push(STRING)
+		args.push(this.RepresentationType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Items.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcStyledItem {
@@ -20482,12 +39533,23 @@ export class IfcStyledItem {
 	Item: Handle<IfcRepresentationItem> | null;
 	Styles: IfcStyleAssignmentSelect[] ;
 	Name: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Item){
+		args.push(REF)
+		args.push(this.Item.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcStyledRepresentation {
@@ -20502,12 +39564,28 @@ export class IfcStyledRepresentation {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ContextOfItems.expressID)
+		if(this.RepresentationIdentifier){
+		args.push(STRING)
+		args.push(this.RepresentationIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationType){
+		args.push(STRING)
+		args.push(this.RepresentationType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Items.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcSubContractResource {
@@ -20536,12 +39614,63 @@ export class IfcSubContractResource {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcSubContractResourceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Usage){
+		args.push(REF)
+		args.push(this.Usage.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSubContractResourceType {
@@ -20572,12 +39701,66 @@ export class IfcSubContractResourceType {
 	BaseCosts: Handle<IfcAppliedValue> | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcSubContractResourceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResourceType){
+		args.push(STRING)
+		args.push(this.ResourceType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseCosts){
+		args.push(REF)
+		args.push(this.BaseCosts.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.BaseQuantity){
+		args.push(REF)
+		args.push(this.BaseQuantity.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSubedge {
@@ -20590,24 +39773,32 @@ export class IfcSubedge {
 	EdgeStart: Handle<IfcVertex> ;
 	EdgeEnd: Handle<IfcVertex> ;
 	ParentEdge: Handle<IfcEdge> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.EdgeStart.expressID)
+		args.push(REF)
+		args.push(this.EdgeEnd.expressID)
+		args.push(REF)
+		args.push(this.ParentEdge.expressID)
+		return args;
 	}
 };
 export class IfcSurface {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcSurfaceCurve {
@@ -20620,12 +39811,17 @@ export class IfcSurfaceCurve {
 	Curve3D: Handle<IfcCurve> ;
 	AssociatedGeometry: Handle<IfcPcurve> ;
 	MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Curve3D.expressID)
+		args.push(REF)
+		args.push(this.AssociatedGeometry.expressID)
+		return args;
 	}
 };
 export class IfcSurfaceCurveSweptAreaSolid {
@@ -20644,12 +39840,34 @@ export class IfcSurfaceCurveSweptAreaSolid {
 	StartParam: IfcParameterValue | null;
 	EndParam: IfcParameterValue | null;
 	ReferenceSurface: Handle<IfcSurface> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptArea.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Directrix.expressID)
+		if(this.StartParam){
+		args.push(REAL)
+		args.push(this.StartParam)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndParam){
+		args.push(REAL)
+		args.push(this.EndParam)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ReferenceSurface.expressID)
+		return args;
 	}
 };
 export class IfcSurfaceFeature {
@@ -20674,12 +39892,53 @@ export class IfcSurfaceFeature {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSurfaceFeatureTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSurfaceOfLinearExtrusion {
@@ -20694,12 +39953,24 @@ export class IfcSurfaceOfLinearExtrusion {
 	Position: Handle<IfcAxis2Placement3D> | null;
 	ExtrudedDirection: Handle<IfcDirection> ;
 	Depth: IfcLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptCurve.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.ExtrudedDirection.expressID)
+		args.push(REAL)
+		args.push(this.Depth)
+		return args;
 	}
 };
 export class IfcSurfaceOfRevolution {
@@ -20712,12 +39983,22 @@ export class IfcSurfaceOfRevolution {
 	SweptCurve: Handle<IfcProfileDef> ;
 	Position: Handle<IfcAxis2Placement3D> | null;
 	AxisPosition: Handle<IfcAxis1Placement> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptCurve.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.AxisPosition.expressID)
+		return args;
 	}
 };
 export class IfcSurfaceReinforcementArea {
@@ -20732,12 +40013,33 @@ export class IfcSurfaceReinforcementArea {
 	SurfaceReinforcement1: IfcLengthMeasure | null;
 	SurfaceReinforcement2: IfcLengthMeasure | null;
 	ShearReinforcement: IfcRatioMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SurfaceReinforcement1){
+		args.push(REAL)
+		args.push(this.SurfaceReinforcement1)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SurfaceReinforcement2){
+		args.push(REAL)
+		args.push(this.SurfaceReinforcement2)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ShearReinforcement){
+		args.push(REAL)
+		args.push(this.ShearReinforcement)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSurfaceStyle {
@@ -20750,12 +40052,18 @@ export class IfcSurfaceStyle {
 	Name: IfcLabel | null;
 	Side: IfcSurfaceSide ;
 	Styles: IfcSurfaceStyleElementSelect[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSurfaceStyleLighting {
@@ -20770,12 +40078,21 @@ export class IfcSurfaceStyleLighting {
 	DiffuseReflectionColour: Handle<IfcColourRgb> ;
 	TransmissionColour: Handle<IfcColourRgb> ;
 	ReflectanceColour: Handle<IfcColourRgb> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.DiffuseTransmissionColour.expressID)
+		args.push(REF)
+		args.push(this.DiffuseReflectionColour.expressID)
+		args.push(REF)
+		args.push(this.TransmissionColour.expressID)
+		args.push(REF)
+		args.push(this.ReflectanceColour.expressID)
+		return args;
 	}
 };
 export class IfcSurfaceStyleRefraction {
@@ -20786,12 +40103,23 @@ export class IfcSurfaceStyleRefraction {
 	}
 	RefractionIndex: IfcReal | null;
 	DispersionFactor: IfcReal | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.RefractionIndex){
+		args.push(REAL)
+		args.push(this.RefractionIndex)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DispersionFactor){
+		args.push(REAL)
+		args.push(this.DispersionFactor)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSurfaceStyleRendering {
@@ -20816,12 +40144,36 @@ export class IfcSurfaceStyleRendering {
 	SpecularColour: IfcColourOrFactor | null;
 	SpecularHighlight: IfcSpecularHighlightSelect | null;
 	ReflectanceMethod: IfcReflectanceMethodEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SurfaceColour.expressID)
+		if(this.Transparency){
+		}
+		else{ args.push(EMPTY); }
+		if(this.DiffuseColour){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransmissionColour){
+		}
+		else{ args.push(EMPTY); }
+		if(this.DiffuseTransmissionColour){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReflectionColour){
+		}
+		else{ args.push(EMPTY); }
+		if(this.SpecularColour){
+		}
+		else{ args.push(EMPTY); }
+		if(this.SpecularHighlight){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSurfaceStyleShading {
@@ -20832,12 +40184,18 @@ export class IfcSurfaceStyleShading {
 	}
 	SurfaceColour: Handle<IfcColourRgb> ;
 	Transparency: IfcNormalisedRatioMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SurfaceColour.expressID)
+		if(this.Transparency){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSurfaceStyleWithTextures {
@@ -20846,12 +40204,15 @@ export class IfcSurfaceStyleWithTextures {
 		this.Textures = Textures;
 	}
 	Textures: Handle<IfcSurfaceTexture> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Textures.expressID)
+		return args;
 	}
 };
 export class IfcSurfaceTexture {
@@ -20868,12 +40229,28 @@ export class IfcSurfaceTexture {
 	Mode: IfcIdentifier | null;
 	TextureTransform: Handle<IfcCartesianTransformationOperator2D> | null;
 	Parameter: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Mode){
+		args.push(STRING)
+		args.push(this.Mode)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextureTransform){
+		args.push(REF)
+		args.push(this.TextureTransform.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Parameter){
+		args.push(STRING)
+		args.push(this.Parameter)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSweptAreaSolid {
@@ -20884,12 +40261,20 @@ export class IfcSweptAreaSolid {
 	}
 	SweptArea: Handle<IfcProfileDef> ;
 	Position: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptArea.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSweptDiskSolid {
@@ -20906,12 +40291,28 @@ export class IfcSweptDiskSolid {
 	InnerRadius: IfcPositiveLengthMeasure | null;
 	StartParam: IfcParameterValue | null;
 	EndParam: IfcParameterValue | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Directrix.expressID)
+		if(this.InnerRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StartParam){
+		args.push(REAL)
+		args.push(this.StartParam)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndParam){
+		args.push(REAL)
+		args.push(this.EndParam)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSweptDiskSolidPolygonal {
@@ -20930,12 +40331,31 @@ export class IfcSweptDiskSolidPolygonal {
 	StartParam: IfcParameterValue | null;
 	EndParam: IfcParameterValue | null;
 	FilletRadius: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Directrix.expressID)
+		if(this.InnerRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StartParam){
+		args.push(REAL)
+		args.push(this.StartParam)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndParam){
+		args.push(REAL)
+		args.push(this.EndParam)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSweptSurface {
@@ -20946,12 +40366,20 @@ export class IfcSweptSurface {
 	}
 	SweptCurve: Handle<IfcProfileDef> ;
 	Position: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.SweptCurve.expressID)
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSwitchingDevice {
@@ -20976,12 +40404,53 @@ export class IfcSwitchingDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSwitchingDeviceTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSwitchingDeviceType {
@@ -21008,12 +40477,56 @@ export class IfcSwitchingDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSwitchingDeviceTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSystem {
@@ -21030,12 +40543,35 @@ export class IfcSystem {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSystemFurnitureElement {
@@ -21060,12 +40596,53 @@ export class IfcSystemFurnitureElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSystemFurnitureElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcSystemFurnitureElementType {
@@ -21092,12 +40669,59 @@ export class IfcSystemFurnitureElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSystemFurnitureElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTShapeProfileDef {
@@ -21128,12 +40752,42 @@ export class IfcTShapeProfileDef {
 	WebEdgeRadius: IfcNonNegativeLengthMeasure | null;
 	WebSlope: IfcPlaneAngleMeasure | null;
 	FlangeSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FlangeEdgeRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.WebEdgeRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.WebSlope){
+		args.push(REAL)
+		args.push(this.WebSlope)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FlangeSlope){
+		args.push(REAL)
+		args.push(this.FlangeSlope)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTable {
@@ -21146,12 +40800,28 @@ export class IfcTable {
 	Name: IfcLabel | null;
 	Rows: Handle<IfcTableRow> | null;
 	Columns: Handle<IfcTableColumn> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Rows){
+		args.push(REF)
+		args.push(this.Rows.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Columns){
+		args.push(REF)
+		args.push(this.Columns.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTableColumn {
@@ -21168,12 +40838,36 @@ export class IfcTableColumn {
 	Description: IfcText | null;
 	Unit: IfcUnit | null;
 	ReferencePath: Handle<IfcReference> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Identifier){
+		args.push(STRING)
+		args.push(this.Identifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ReferencePath){
+		args.push(REF)
+		args.push(this.ReferencePath.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTableRow {
@@ -21184,12 +40878,19 @@ export class IfcTableRow {
 	}
 	RowCells: IfcValue | null;
 	IsHeading: IfcBoolean | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.RowCells){
+		}
+		else{ args.push(EMPTY); }
+		if(this.IsHeading){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTank {
@@ -21214,12 +40915,53 @@ export class IfcTank {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcTankTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTankType {
@@ -21246,12 +40988,56 @@ export class IfcTankType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTankTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTask {
@@ -21284,12 +41070,68 @@ export class IfcTask {
 	Priority: IfcInteger | null;
 	TaskTime: Handle<IfcTaskTime> | null;
 	PredefinedType: IfcTaskTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Status){
+		args.push(STRING)
+		args.push(this.Status)
+		}
+		else{ args.push(EMPTY); }
+		if(this.WorkMethod){
+		args.push(STRING)
+		args.push(this.WorkMethod)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Priority){
+		args.push(REAL)
+		args.push(this.Priority)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TaskTime){
+		args.push(REF)
+		args.push(this.TaskTime.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTaskTime {
@@ -21336,12 +41178,105 @@ export class IfcTaskTime {
 	ActualFinish: IfcDateTime | null;
 	RemainingTime: IfcDuration | null;
 	Completion: IfcPositiveRatioMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DataOrigin){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DurationType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleDuration){
+		args.push(STRING)
+		args.push(this.ScheduleDuration)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleStart){
+		args.push(STRING)
+		args.push(this.ScheduleStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleFinish){
+		args.push(STRING)
+		args.push(this.ScheduleFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EarlyStart){
+		args.push(STRING)
+		args.push(this.EarlyStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EarlyFinish){
+		args.push(STRING)
+		args.push(this.EarlyFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LateStart){
+		args.push(STRING)
+		args.push(this.LateStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LateFinish){
+		args.push(STRING)
+		args.push(this.LateFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FreeFloat){
+		args.push(STRING)
+		args.push(this.FreeFloat)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TotalFloat){
+		args.push(STRING)
+		args.push(this.TotalFloat)
+		}
+		else{ args.push(EMPTY); }
+		if(this.IsCritical){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StatusTime){
+		args.push(STRING)
+		args.push(this.StatusTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualDuration){
+		args.push(STRING)
+		args.push(this.ActualDuration)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualStart){
+		args.push(STRING)
+		args.push(this.ActualStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualFinish){
+		args.push(STRING)
+		args.push(this.ActualFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RemainingTime){
+		args.push(STRING)
+		args.push(this.RemainingTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Completion){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTaskTimeRecurring {
@@ -21390,12 +41325,107 @@ export class IfcTaskTimeRecurring {
 	RemainingTime: IfcDuration | null;
 	Completion: IfcPositiveRatioMeasure | null;
 	Recurrence: Handle<IfcRecurrencePattern> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DataOrigin){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DurationType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleDuration){
+		args.push(STRING)
+		args.push(this.ScheduleDuration)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleStart){
+		args.push(STRING)
+		args.push(this.ScheduleStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ScheduleFinish){
+		args.push(STRING)
+		args.push(this.ScheduleFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EarlyStart){
+		args.push(STRING)
+		args.push(this.EarlyStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.EarlyFinish){
+		args.push(STRING)
+		args.push(this.EarlyFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LateStart){
+		args.push(STRING)
+		args.push(this.LateStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LateFinish){
+		args.push(STRING)
+		args.push(this.LateFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FreeFloat){
+		args.push(STRING)
+		args.push(this.FreeFloat)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TotalFloat){
+		args.push(STRING)
+		args.push(this.TotalFloat)
+		}
+		else{ args.push(EMPTY); }
+		if(this.IsCritical){
+		}
+		else{ args.push(EMPTY); }
+		if(this.StatusTime){
+		args.push(STRING)
+		args.push(this.StatusTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualDuration){
+		args.push(STRING)
+		args.push(this.ActualDuration)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualStart){
+		args.push(STRING)
+		args.push(this.ActualStart)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ActualFinish){
+		args.push(STRING)
+		args.push(this.ActualFinish)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RemainingTime){
+		args.push(STRING)
+		args.push(this.RemainingTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Completion){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REF)
+		args.push(this.Recurrence.expressID)
+		return args;
 	}
 };
 export class IfcTaskType {
@@ -21424,12 +41454,61 @@ export class IfcTaskType {
 	ProcessType: IfcLabel | null;
 	PredefinedType: IfcTaskTypeEnum ;
 	WorkMethod: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ProcessType){
+		args.push(STRING)
+		args.push(this.ProcessType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.WorkMethod){
+		args.push(STRING)
+		args.push(this.WorkMethod)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTelecomAddress {
@@ -21454,12 +41533,56 @@ export class IfcTelecomAddress {
 	ElectronicMailAddresses: IfcLabel | null;
 	WWWHomePageURL: IfcURIReference | null;
 	MessagingIDs: IfcURIReference | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Purpose){
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedPurpose){
+		args.push(STRING)
+		args.push(this.UserDefinedPurpose)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TelephoneNumbers){
+		args.push(STRING)
+		args.push(this.TelephoneNumbers)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FacsimileNumbers){
+		args.push(STRING)
+		args.push(this.FacsimileNumbers)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PagerNumber){
+		args.push(STRING)
+		args.push(this.PagerNumber)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElectronicMailAddresses){
+		args.push(STRING)
+		args.push(this.ElectronicMailAddresses)
+		}
+		else{ args.push(EMPTY); }
+		if(this.WWWHomePageURL){
+		args.push(STRING)
+		args.push(this.WWWHomePageURL)
+		}
+		else{ args.push(EMPTY); }
+		if(this.MessagingIDs){
+		args.push(STRING)
+		args.push(this.MessagingIDs)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTendon {
@@ -21500,12 +41623,85 @@ export class IfcTendon {
 	FrictionCoefficient: IfcNormalisedRatioMeasure | null;
 	AnchorageSlip: IfcPositiveLengthMeasure | null;
 	MinCurvatureRadius: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SteelGrade){
+		args.push(STRING)
+		args.push(this.SteelGrade)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CrossSectionArea){
+		args.push(REAL)
+		args.push(this.CrossSectionArea)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TensionForce){
+		args.push(REAL)
+		args.push(this.TensionForce)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PreStress){
+		args.push(REAL)
+		args.push(this.PreStress)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FrictionCoefficient){
+		}
+		else{ args.push(EMPTY); }
+		if(this.AnchorageSlip){
+		}
+		else{ args.push(EMPTY); }
+		if(this.MinCurvatureRadius){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTendonAnchor {
@@ -21532,12 +41728,58 @@ export class IfcTendonAnchor {
 	Tag: IfcIdentifier | null;
 	SteelGrade: IfcLabel | null;
 	PredefinedType: IfcTendonAnchorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SteelGrade){
+		args.push(STRING)
+		args.push(this.SteelGrade)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTendonAnchorType {
@@ -21564,12 +41806,56 @@ export class IfcTendonAnchorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTendonAnchorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTendonConduit {
@@ -21596,12 +41882,55 @@ export class IfcTendonConduit {
 	Tag: IfcIdentifier | null;
 	SteelGrade: IfcLabel | null;
 	PredefinedType: IfcTendonConduitTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SteelGrade){
+		args.push(STRING)
+		args.push(this.SteelGrade)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTendonConduitType {
@@ -21628,12 +41957,56 @@ export class IfcTendonConduitType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTendonConduitTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTendonType {
@@ -21666,12 +42039,67 @@ export class IfcTendonType {
 	NominalDiameter: IfcPositiveLengthMeasure | null;
 	CrossSectionArea: IfcAreaMeasure | null;
 	SheathDiameter: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.NominalDiameter){
+		}
+		else{ args.push(EMPTY); }
+		if(this.CrossSectionArea){
+		args.push(REAL)
+		args.push(this.CrossSectionArea)
+		}
+		else{ args.push(EMPTY); }
+		if(this.SheathDiameter){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTessellatedFaceSet {
@@ -21680,24 +42108,28 @@ export class IfcTessellatedFaceSet {
 		this.Coordinates = Coordinates;
 	}
 	Coordinates: Handle<IfcCartesianPointList3D> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Coordinates.expressID)
+		return args;
 	}
 };
 export class IfcTessellatedItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcTextLiteral {
@@ -21710,12 +42142,15 @@ export class IfcTextLiteral {
 	Literal: IfcPresentableText ;
 	Placement: IfcAxis2Placement ;
 	Path: IfcTextPath ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Literal)
+		return args;
 	}
 };
 export class IfcTextLiteralWithExtent {
@@ -21732,12 +42167,17 @@ export class IfcTextLiteralWithExtent {
 	Path: IfcTextPath ;
 	Extent: Handle<IfcPlanarExtent> ;
 	BoxAlignment: IfcBoxAlignment ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Literal)
+		args.push(REF)
+		args.push(this.Extent.expressID)
+		return args;
 	}
 };
 export class IfcTextStyle {
@@ -21754,12 +42194,31 @@ export class IfcTextStyle {
 	TextStyle: Handle<IfcTextStyleTextModel> | null;
 	TextFontStyle: IfcTextFontSelect ;
 	ModelOrDraughting: IfcBoolean | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextCharacterAppearance){
+		args.push(REF)
+		args.push(this.TextCharacterAppearance.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextStyle){
+		args.push(REF)
+		args.push(this.TextStyle.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ModelOrDraughting){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTextStyleFontModel {
@@ -21778,12 +42237,32 @@ export class IfcTextStyleFontModel {
 	FontVariant: IfcFontVariant | null;
 	FontWeight: IfcFontWeight | null;
 	FontSize: IfcSizeSelect ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		args.push(STRING)
+		args.push(this.FontFamily)
+		if(this.FontStyle){
+		args.push(STRING)
+		args.push(this.FontStyle)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FontVariant){
+		args.push(STRING)
+		args.push(this.FontVariant)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FontWeight){
+		args.push(STRING)
+		args.push(this.FontWeight)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTextStyleForDefinedFont {
@@ -21794,12 +42273,16 @@ export class IfcTextStyleForDefinedFont {
 	}
 	Colour: IfcColour ;
 	BackgroundColour: IfcColour | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.BackgroundColour){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTextStyleTextModel {
@@ -21820,12 +42303,40 @@ export class IfcTextStyleTextModel {
 	WordSpacing: IfcSizeSelect | null;
 	TextTransform: IfcTextTransformation | null;
 	LineHeight: IfcSizeSelect | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.TextIndent){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextAlign){
+		args.push(STRING)
+		args.push(this.TextAlign)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextDecoration){
+		args.push(STRING)
+		args.push(this.TextDecoration)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LetterSpacing){
+		}
+		else{ args.push(EMPTY); }
+		if(this.WordSpacing){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TextTransform){
+		args.push(STRING)
+		args.push(this.TextTransform)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LineHeight){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTextureCoordinate {
@@ -21834,12 +42345,15 @@ export class IfcTextureCoordinate {
 		this.Maps = Maps;
 	}
 	Maps: Handle<IfcSurfaceTexture> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Maps.expressID)
+		return args;
 	}
 };
 export class IfcTextureCoordinateGenerator {
@@ -21852,12 +42366,22 @@ export class IfcTextureCoordinateGenerator {
 	Maps: Handle<IfcSurfaceTexture> ;
 	Mode: IfcLabel ;
 	Parameter: IfcReal | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Maps.expressID)
+		args.push(STRING)
+		args.push(this.Mode)
+		if(this.Parameter){
+		args.push(REAL)
+		args.push(this.Parameter)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTextureMap {
@@ -21870,12 +42394,19 @@ export class IfcTextureMap {
 	Maps: Handle<IfcSurfaceTexture> ;
 	Vertices: Handle<IfcTextureVertex> ;
 	MappedTo: Handle<IfcFace> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Maps.expressID)
+		args.push(REF)
+		args.push(this.Vertices.expressID)
+		args.push(REF)
+		args.push(this.MappedTo.expressID)
+		return args;
 	}
 };
 export class IfcTextureVertex {
@@ -21884,12 +42415,15 @@ export class IfcTextureVertex {
 		this.Coordinates = Coordinates;
 	}
 	Coordinates: IfcParameterValue ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.Coordinates)
+		return args;
 	}
 };
 export class IfcTextureVertexList {
@@ -21898,12 +42432,15 @@ export class IfcTextureVertexList {
 		this.TexCoordsList = TexCoordsList;
 	}
 	TexCoordsList: IfcParameterValue ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REAL)
+		args.push(this.TexCoordsList)
+		return args;
 	}
 };
 export class IfcTimePeriod {
@@ -21914,12 +42451,17 @@ export class IfcTimePeriod {
 	}
 	StartTime: IfcTime ;
 	EndTime: IfcTime ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.StartTime)
+		args.push(STRING)
+		args.push(this.EndTime)
+		return args;
 	}
 };
 export class IfcTimeSeries {
@@ -21942,12 +42484,32 @@ export class IfcTimeSeries {
 	DataOrigin: IfcDataOriginEnum ;
 	UserDefinedDataOrigin: IfcLabel | null;
 	Unit: IfcUnit | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.Name)
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.StartTime)
+		args.push(STRING)
+		args.push(this.EndTime)
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Unit){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTimeSeriesValue {
@@ -21956,24 +42518,26 @@ export class IfcTimeSeriesValue {
 		this.ListValues = ListValues;
 	}
 	ListValues: IfcValue ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcTopologicalRepresentationItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcTopologyRepresentation {
@@ -21988,12 +42552,28 @@ export class IfcTopologyRepresentation {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.ContextOfItems.expressID)
+		if(this.RepresentationIdentifier){
+		args.push(STRING)
+		args.push(this.RepresentationIdentifier)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationType){
+		args.push(STRING)
+		args.push(this.RepresentationType)
+		}
+		else{ args.push(EMPTY); }
+		args.push(SET_BEGIN)
+		this.Items.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		return args;
 	}
 };
 export class IfcToroidalSurface {
@@ -22006,12 +42586,15 @@ export class IfcToroidalSurface {
 	Position: Handle<IfcAxis2Placement3D> ;
 	MajorRadius: IfcPositiveLengthMeasure ;
 	MinorRadius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Position.expressID)
+		return args;
 	}
 };
 export class IfcTransformer {
@@ -22036,12 +42619,53 @@ export class IfcTransformer {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcTransformerTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTransformerType {
@@ -22068,12 +42692,56 @@ export class IfcTransformerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTransformerTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTransitionCurveSegment2D {
@@ -22096,12 +42764,23 @@ export class IfcTransitionCurveSegment2D {
 	IsStartRadiusCCW: IfcBoolean ;
 	IsEndRadiusCCW: IfcBoolean ;
 	TransitionCurveType: IfcTransitionCurveType ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.StartPoint.expressID)
+		args.push(REAL)
+		args.push(this.StartDirection)
+		if(this.StartRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.EndRadius){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTransportElement {
@@ -22126,12 +42805,53 @@ export class IfcTransportElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcTransportElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTransportElementType {
@@ -22158,12 +42878,56 @@ export class IfcTransportElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTransportElementTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTrapeziumProfileDef {
@@ -22184,12 +42948,25 @@ export class IfcTrapeziumProfileDef {
 	TopXDim: IfcPositiveLengthMeasure ;
 	YDim: IfcPositiveLengthMeasure ;
 	TopXOffset: IfcLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.TopXOffset)
+		return args;
 	}
 };
 export class IfcTriangulatedFaceSet {
@@ -22206,12 +42983,26 @@ export class IfcTriangulatedFaceSet {
 	Closed: IfcBoolean | null;
 	CoordIndex: IfcPositiveInteger ;
 	PnIndex: IfcPositiveInteger | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Coordinates.expressID)
+		if(this.Normals){
+		args.push(REAL)
+		args.push(this.Normals)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Closed){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PnIndex){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTriangulatedIrregularNetwork {
@@ -22230,12 +43021,28 @@ export class IfcTriangulatedIrregularNetwork {
 	CoordIndex: IfcPositiveInteger ;
 	PnIndex: IfcPositiveInteger | null;
 	Flags: IfcInteger ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Coordinates.expressID)
+		if(this.Normals){
+		args.push(REAL)
+		args.push(this.Normals)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Closed){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PnIndex){
+		}
+		else{ args.push(EMPTY); }
+		args.push(REAL)
+		args.push(this.Flags)
+		return args;
 	}
 };
 export class IfcTrimmedCurve {
@@ -22252,12 +43059,15 @@ export class IfcTrimmedCurve {
 	Trim2: IfcTrimmingSelect[] ;
 	SenseAgreement: IfcBoolean ;
 	MasterRepresentation: IfcTrimmingPreference ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.BasisCurve.expressID)
+		return args;
 	}
 };
 export class IfcTubeBundle {
@@ -22282,12 +43092,53 @@ export class IfcTubeBundle {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcTubeBundleTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTubeBundleType {
@@ -22314,12 +43165,56 @@ export class IfcTubeBundleType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTubeBundleTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTypeObject {
@@ -22338,12 +43233,41 @@ export class IfcTypeObject {
 	Description: IfcText | null;
 	ApplicableOccurrence: IfcIdentifier | null;
 	HasPropertySets: Handle<IfcPropertySetDefinition>[] | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTypeProcess {
@@ -22368,12 +43292,56 @@ export class IfcTypeProcess {
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
 	ProcessType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ProcessType){
+		args.push(STRING)
+		args.push(this.ProcessType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTypeProduct {
@@ -22396,12 +43364,51 @@ export class IfcTypeProduct {
 	HasPropertySets: Handle<IfcPropertySetDefinition>[] | null;
 	RepresentationMaps: Handle<IfcRepresentationMap> | null;
 	Tag: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcTypeResource {
@@ -22426,12 +43433,56 @@ export class IfcTypeResource {
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
 	ResourceType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongDescription){
+		args.push(STRING)
+		args.push(this.LongDescription)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ResourceType){
+		args.push(STRING)
+		args.push(this.ResourceType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcUShapeProfileDef {
@@ -22458,12 +43509,34 @@ export class IfcUShapeProfileDef {
 	FilletRadius: IfcNonNegativeLengthMeasure | null;
 	EdgeRadius: IfcNonNegativeLengthMeasure | null;
 	FlangeSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.EdgeRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FlangeSlope){
+		args.push(REAL)
+		args.push(this.FlangeSlope)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcUnitAssignment {
@@ -22472,12 +43545,13 @@ export class IfcUnitAssignment {
 		this.Units = Units;
 	}
 	Units: IfcUnit[] ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcUnitaryControlElement {
@@ -22502,12 +43576,53 @@ export class IfcUnitaryControlElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcUnitaryControlElementTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcUnitaryControlElementType {
@@ -22534,12 +43649,56 @@ export class IfcUnitaryControlElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcUnitaryControlElementTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcUnitaryEquipment {
@@ -22564,12 +43723,53 @@ export class IfcUnitaryEquipment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcUnitaryEquipmentTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcUnitaryEquipmentType {
@@ -22596,12 +43796,56 @@ export class IfcUnitaryEquipmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcUnitaryEquipmentTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcValve {
@@ -22626,12 +43870,53 @@ export class IfcValve {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcValveTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcValveType {
@@ -22658,12 +43943,56 @@ export class IfcValveType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcValveTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcVector {
@@ -22674,24 +44003,30 @@ export class IfcVector {
 	}
 	Orientation: Handle<IfcDirection> ;
 	Magnitude: IfcLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.Orientation.expressID)
+		args.push(REAL)
+		args.push(this.Magnitude)
+		return args;
 	}
 };
 export class IfcVertex {
 	constructor()
 	{
 	}
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		return args;
 	}
 };
 export class IfcVertexLoop {
@@ -22700,12 +44035,15 @@ export class IfcVertexLoop {
 		this.LoopVertex = LoopVertex;
 	}
 	LoopVertex: Handle<IfcVertex> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.LoopVertex.expressID)
+		return args;
 	}
 };
 export class IfcVertexPoint {
@@ -22714,12 +44052,15 @@ export class IfcVertexPoint {
 		this.VertexGeometry = VertexGeometry;
 	}
 	VertexGeometry: Handle<IfcPoint> ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.VertexGeometry.expressID)
+		return args;
 	}
 };
 export class IfcVibrationDamper {
@@ -22744,12 +44085,53 @@ export class IfcVibrationDamper {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcVibrationDamperTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcVibrationDamperType {
@@ -22776,12 +44158,59 @@ export class IfcVibrationDamperType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcVibrationDamperTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcVibrationIsolator {
@@ -22806,12 +44235,53 @@ export class IfcVibrationIsolator {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcVibrationIsolatorTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcVibrationIsolatorType {
@@ -22838,12 +44308,56 @@ export class IfcVibrationIsolatorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcVibrationIsolatorTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcVirtualElement {
@@ -22866,12 +44380,50 @@ export class IfcVirtualElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcVirtualGridIntersection {
@@ -22882,12 +44434,17 @@ export class IfcVirtualGridIntersection {
 	}
 	IntersectingAxes: Handle<IfcGridAxis> ;
 	OffsetDistances: IfcLengthMeasure ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(REF)
+		args.push(this.IntersectingAxes.expressID)
+		args.push(REAL)
+		args.push(this.OffsetDistances)
+		return args;
 	}
 };
 export class IfcVoidingFeature {
@@ -22912,12 +44469,53 @@ export class IfcVoidingFeature {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcVoidingFeatureTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWall {
@@ -22942,12 +44540,53 @@ export class IfcWall {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcWallTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWallElementedCase {
@@ -22972,12 +44611,53 @@ export class IfcWallElementedCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcWallTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWallStandardCase {
@@ -23002,12 +44682,53 @@ export class IfcWallStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcWallTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWallType {
@@ -23034,12 +44755,56 @@ export class IfcWallType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcWallTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWasteTerminal {
@@ -23064,12 +44829,53 @@ export class IfcWasteTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcWasteTerminalTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWasteTerminalType {
@@ -23096,12 +44902,56 @@ export class IfcWasteTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcWasteTerminalTypeEnum ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWindow {
@@ -23134,12 +44984,67 @@ export class IfcWindow {
 	PredefinedType: IfcWindowTypeEnum | null;
 	PartitioningType: IfcWindowTypePartitioningEnum | null;
 	UserDefinedPartitioningType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OverallHeight){
+		}
+		else{ args.push(EMPTY); }
+		if(this.OverallWidth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PartitioningType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedPartitioningType){
+		args.push(STRING)
+		args.push(this.UserDefinedPartitioningType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWindowLiningProperties {
@@ -23178,12 +45083,74 @@ export class IfcWindowLiningProperties {
 	LiningOffset: IfcLengthMeasure | null;
 	LiningToPanelOffsetX: IfcLengthMeasure | null;
 	LiningToPanelOffsetY: IfcLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningDepth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.TransomThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.MullionThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FirstTransomOffset){
+		}
+		else{ args.push(EMPTY); }
+		if(this.SecondTransomOffset){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FirstMullionOffset){
+		}
+		else{ args.push(EMPTY); }
+		if(this.SecondMullionOffset){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ShapeAspectStyle){
+		args.push(REF)
+		args.push(this.ShapeAspectStyle.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningOffset){
+		args.push(REAL)
+		args.push(this.LiningOffset)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningToPanelOffsetX){
+		args.push(REAL)
+		args.push(this.LiningToPanelOffsetX)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LiningToPanelOffsetY){
+		args.push(REAL)
+		args.push(this.LiningToPanelOffsetY)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWindowPanelProperties {
@@ -23208,12 +45175,41 @@ export class IfcWindowPanelProperties {
 	FrameDepth: IfcPositiveLengthMeasure | null;
 	FrameThickness: IfcPositiveLengthMeasure | null;
 	ShapeAspectStyle: Handle<IfcShapeAspect> | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FrameDepth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.FrameThickness){
+		}
+		else{ args.push(EMPTY); }
+		if(this.ShapeAspectStyle){
+		args.push(REF)
+		args.push(this.ShapeAspectStyle.expressID)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWindowStandardCase {
@@ -23246,12 +45242,67 @@ export class IfcWindowStandardCase {
 	PredefinedType: IfcWindowTypeEnum | null;
 	PartitioningType: IfcWindowTypePartitioningEnum | null;
 	UserDefinedPartitioningType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectPlacement){
+		args.push(REF)
+		args.push(this.ObjectPlacement.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Representation){
+		args.push(REF)
+		args.push(this.Representation.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.OverallHeight){
+		}
+		else{ args.push(EMPTY); }
+		if(this.OverallWidth){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.PartitioningType){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedPartitioningType){
+		args.push(STRING)
+		args.push(this.UserDefinedPartitioningType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWindowStyle {
@@ -23282,12 +45333,51 @@ export class IfcWindowStyle {
 	OperationType: IfcWindowStyleOperationEnum ;
 	ParameterTakesPrecedence: IfcBoolean ;
 	Sizeable: IfcBoolean ;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWindowType {
@@ -23320,12 +45410,64 @@ export class IfcWindowType {
 	PartitioningType: IfcWindowTypePartitioningEnum ;
 	ParameterTakesPrecedence: IfcBoolean | null;
 	UserDefinedPartitioningType: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ApplicableOccurrence){
+		args.push(STRING)
+		args.push(this.ApplicableOccurrence)
+		}
+		else{ args.push(EMPTY); }
+		if(this.HasPropertySets){
+		args.push(SET_BEGIN)
+		this.HasPropertySets.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RepresentationMaps){
+		args.push(REF)
+		args.push(this.RepresentationMaps.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Tag){
+		args.push(STRING)
+		args.push(this.Tag)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ElementType){
+		args.push(STRING)
+		args.push(this.ElementType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ParameterTakesPrecedence){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedPartitioningType){
+		args.push(STRING)
+		args.push(this.UserDefinedPartitioningType)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWorkCalendar {
@@ -23350,12 +45492,55 @@ export class IfcWorkCalendar {
 	WorkingTimes: Handle<IfcWorkTime>[] | null;
 	ExceptionTimes: Handle<IfcWorkTime>[] | null;
 	PredefinedType: IfcWorkCalendarTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		if(this.WorkingTimes){
+		args.push(SET_BEGIN)
+		this.WorkingTimes.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ExceptionTimes){
+		args.push(SET_BEGIN)
+		this.ExceptionTimes.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWorkControl {
@@ -23388,12 +45573,70 @@ export class IfcWorkControl {
 	TotalFloat: IfcDuration | null;
 	StartTime: IfcDateTime ;
 	FinishTime: IfcDateTime | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.CreationDate)
+		if(this.Creators){
+		args.push(SET_BEGIN)
+		this.Creators.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Purpose){
+		args.push(STRING)
+		args.push(this.Purpose)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Duration){
+		args.push(STRING)
+		args.push(this.Duration)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TotalFloat){
+		args.push(STRING)
+		args.push(this.TotalFloat)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.StartTime)
+		if(this.FinishTime){
+		args.push(STRING)
+		args.push(this.FinishTime)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWorkPlan {
@@ -23428,12 +45671,73 @@ export class IfcWorkPlan {
 	StartTime: IfcDateTime ;
 	FinishTime: IfcDateTime | null;
 	PredefinedType: IfcWorkPlanTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.CreationDate)
+		if(this.Creators){
+		args.push(SET_BEGIN)
+		this.Creators.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Purpose){
+		args.push(STRING)
+		args.push(this.Purpose)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Duration){
+		args.push(STRING)
+		args.push(this.Duration)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TotalFloat){
+		args.push(STRING)
+		args.push(this.TotalFloat)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.StartTime)
+		if(this.FinishTime){
+		args.push(STRING)
+		args.push(this.FinishTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWorkSchedule {
@@ -23468,12 +45772,73 @@ export class IfcWorkSchedule {
 	StartTime: IfcDateTime ;
 	FinishTime: IfcDateTime | null;
 	PredefinedType: IfcWorkScheduleTypeEnum | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Identification){
+		args.push(STRING)
+		args.push(this.Identification)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.CreationDate)
+		if(this.Creators){
+		args.push(SET_BEGIN)
+		this.Creators.forEach((e) => { args.push(REF); args.push(e.expressID); });
+		args.push(SET_END)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Purpose){
+		args.push(STRING)
+		args.push(this.Purpose)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Duration){
+		args.push(STRING)
+		args.push(this.Duration)
+		}
+		else{ args.push(EMPTY); }
+		if(this.TotalFloat){
+		args.push(STRING)
+		args.push(this.TotalFloat)
+		}
+		else{ args.push(EMPTY); }
+		args.push(STRING)
+		args.push(this.StartTime)
+		if(this.FinishTime){
+		args.push(STRING)
+		args.push(this.FinishTime)
+		}
+		else{ args.push(EMPTY); }
+		if(this.PredefinedType){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcWorkTime {
@@ -23492,12 +45857,41 @@ export class IfcWorkTime {
 	RecurrencePattern: Handle<IfcRecurrencePattern> | null;
 	Start: IfcDate | null;
 	Finish: IfcDate | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.DataOrigin){
+		}
+		else{ args.push(EMPTY); }
+		if(this.UserDefinedDataOrigin){
+		args.push(STRING)
+		args.push(this.UserDefinedDataOrigin)
+		}
+		else{ args.push(EMPTY); }
+		if(this.RecurrencePattern){
+		args.push(REF)
+		args.push(this.RecurrencePattern.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Start){
+		args.push(STRING)
+		args.push(this.Start)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Finish){
+		args.push(STRING)
+		args.push(this.Finish)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcZShapeProfileDef {
@@ -23522,12 +45916,29 @@ export class IfcZShapeProfileDef {
 	FlangeThickness: IfcPositiveLengthMeasure ;
 	FilletRadius: IfcNonNegativeLengthMeasure | null;
 	EdgeRadius: IfcNonNegativeLengthMeasure | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		if(this.ProfileName){
+		args.push(STRING)
+		args.push(this.ProfileName)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Position){
+		args.push(REF)
+		args.push(this.Position.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.FilletRadius){
+		}
+		else{ args.push(EMPTY); }
+		if(this.EdgeRadius){
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
 export class IfcZone {
@@ -23546,11 +45957,39 @@ export class IfcZone {
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: [])
+	FromTape(tapeData: any[])
 	{
 	}
-	ToTape(): []
+	ToTape(): any[]
 	{
-		return [];
+		let args: any[] = [];
+		args.push(STRING)
+		args.push(this.GlobalId)
+		if(this.OwnerHistory){
+		args.push(REF)
+		args.push(this.OwnerHistory.expressID)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Name){
+		args.push(STRING)
+		args.push(this.Name)
+		}
+		else{ args.push(EMPTY); }
+		if(this.Description){
+		args.push(STRING)
+		args.push(this.Description)
+		}
+		else{ args.push(EMPTY); }
+		if(this.ObjectType){
+		args.push(STRING)
+		args.push(this.ObjectType)
+		}
+		else{ args.push(EMPTY); }
+		if(this.LongName){
+		args.push(STRING)
+		args.push(this.LongName)
+		}
+		else{ args.push(EMPTY); }
+		return args;
 	}
 };
