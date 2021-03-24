@@ -219,6 +219,7 @@ buffer.push(`// This is a generated file, please see: gen_functional_types.js`);
 buffer.push();
 
 buffer.push(`export interface Handle<T> { expressID: number; }`);
+buffer.push(`export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }`);
 
 types.forEach((type) => {
     if (type.isList)
@@ -244,16 +245,31 @@ types.forEach((type) => {
 });
 
 elements.forEach((entity) => {
-    buffer.push(`export class ${entity.name} {};`);
     let params = [];
     entity.derivedProps.forEach((prop) => {
         let isType = tmap[prop.type];
         let propType = `${isType ? prop.type : "Handle<" + prop.type + ">" }${prop.set ? "[]" : ""} ${prop.optional ? "| null" : ""}`;
-        params.push(`${prop.name}: ${propType}`)
+        params.push({ name: prop.name, type: propType });
     });
-    buffer.push(`export function Create${entity.name}(${params.join(", ")}): Handle<${entity.name}> {`);
-    buffer.push(`\treturn { expressID: 0 };`)
-    buffer.push(`}`)
+
+    buffer.push(`export class ${entity.name} {`);
+    buffer.push(`\tconstructor(${params.map((p) => `${p.name}: ${p.type}`).join(", ")})`)
+    buffer.push(`\t{`)
+    params.forEach((param) => {
+        buffer.push(`\t\tthis.${param.name} = ${param.name};`)
+    })
+    buffer.push(`\t}`)
+    params.forEach((param) => {
+        buffer.push(`\t${param.name}: ${param.type};`)
+    })
+    buffer.push(`\tFromTape(tapeData: [])`)
+    buffer.push(`\t{`)
+    buffer.push(`\t}`)
+    buffer.push(`\tToTape(): []`)
+    buffer.push(`\t{`)
+    buffer.push(`\t\treturn [];`)
+    buffer.push(`\t}`)
+    buffer.push(`};`);
 });
 
 fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
