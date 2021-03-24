@@ -147,7 +147,7 @@ function ParseElements(data)
             let split = line.split(" ");
             let name = split[0];
             let optional = split.indexOf("OPTIONAL") != -1;
-            let set = split.indexOf("SET") != -1;
+            let set = split.indexOf("SET") != -1 || split.indexOf("LIST") != -1;
             let type = split[split.length - 1].replace(";", "");
             type = expTypeToTSType(type);
             entity.props.push({
@@ -221,6 +221,7 @@ buffer.push();
 
 buffer.push(`export interface Handle<T> { expressID: number; }`);
 buffer.push(`export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }`);
+buffer.push(`export function Value(type: string, value: any): any { return { t: type, v: value }; }`);
 
 buffer.push(`const UNKNOWN = 0;`);
 buffer.push(`const STRING = 1;`);
@@ -288,15 +289,50 @@ elements.forEach((entity) => {
         if (param.isType)
         {
             let type = tmap[param.prop.type];
+            let printValue = true;
             if (type.typeName === "number")
             {
                 buffer.push(`\t\targs.push(REAL)`);
-                buffer.push(`\t\targs.push(this.${param.name})`);
             }
             else if (type.typeName === "string")
             {
                 buffer.push(`\t\targs.push(STRING)`);
-                buffer.push(`\t\targs.push(this.${param.name})`);
+            }
+            else if (param.prop.type === "IfcValue")
+            {
+                if (param.prop.set)
+                {
+                }
+                else
+                {
+                    buffer.push(`\t\targs.push(LABEL)`);
+                    buffer.push(`\t\t//@ts-ignore`);
+                    buffer.push(`\t\targs.push(this.${param.name}.t)`);
+                    buffer.push(`\t\targs.push(SET_BEGIN)`);
+                    buffer.push(`\t\targs.push(STRING)`);
+                    buffer.push(`\t\t//@ts-ignore`);
+                    buffer.push(`\t\targs.push(this.${param.name}.v)`);
+                    buffer.push(`\t\targs.push(SET_END)`);
+                }
+
+                printValue = false;
+            }
+            else
+            {
+                // TODO: implement
+                printValue = false;
+            }
+
+            if (printValue)
+            {
+                if (param.prop.set)
+                {
+                    buffer.push(`\t\targs.push(...this.${param.name})`);
+                }
+                else
+                {
+                    buffer.push(`\t\targs.push(this.${param.name})`);
+                }
             }
         }
         else

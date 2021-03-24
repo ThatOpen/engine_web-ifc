@@ -25,11 +25,19 @@ async function LoadFile(filename)
 
     console.log(`Loaded model ${filename} to modelID ${modelID}`);
 
-    let property = new ifc2x4.IfcPropertySingleValue("Name", null, "val", null);
-    ifcapi.WriteLine(modelID, 123, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
+    let start = WebIFC.ms();
+    let size = 10000;
+    for (let i = 0; i < size; i++)
+    {
+        let property = new ifc2x4.IfcPropertySingleValue("Name", null, ifc2x4.Value("IFCLABEL", `Value${i}`), null);
+        ifcapi.WriteLine(modelID, i*2, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
 
-    let set = new ifc2x4.IfcPropertySet("Name", null, "Pset_name", null, [{expressID: 123}]);
-    ifcapi.WriteLine(modelID, 124, WebIFC.IFCPROPERTYSET, set.ToTape());
+        let set = new ifc2x4.IfcPropertySet("Name", null, "Pset_name", null, [{expressID: i*2}]);
+        ifcapi.WriteLine(modelID, i*2 + 1, WebIFC.IFCPROPERTYSET, set.ToTape());
+    }
+    let time = WebIFC.ms() - start;
+    console.log(`Writing ${size} lines took ${time} ms`);
+    console.log(`Writing ${Math.floor(size / (time / 1000))} lines per second`);
 
     fs.writeFileSync("exported.ifc", ifcapi.ExportFileAsIFC(modelID));
 
