@@ -27320,7 +27320,8 @@ export class IfcMeasureWithUnit {
 		//@ts-ignore
 		args.push(this.ValueComponent.t)
 		args.push(SET_BEGIN)
-		args.push(STRING)
+		//@ts-ignore
+		args.push(typeof this.ValueComponent.v == 'string' ? STRING : REAL)
 		//@ts-ignore
 		args.push(this.ValueComponent.v)
 		args.push(SET_END)
@@ -32271,7 +32272,8 @@ export class IfcPropertyBoundedValue {
 		//@ts-ignore
 		args.push(this.UpperBoundValue.t)
 		args.push(SET_BEGIN)
-		args.push(STRING)
+		//@ts-ignore
+		args.push(typeof this.UpperBoundValue.v == 'string' ? STRING : REAL)
 		//@ts-ignore
 		args.push(this.UpperBoundValue.v)
 		args.push(SET_END)
@@ -32282,7 +32284,8 @@ export class IfcPropertyBoundedValue {
 		//@ts-ignore
 		args.push(this.LowerBoundValue.t)
 		args.push(SET_BEGIN)
-		args.push(STRING)
+		//@ts-ignore
+		args.push(typeof this.LowerBoundValue.v == 'string' ? STRING : REAL)
 		//@ts-ignore
 		args.push(this.LowerBoundValue.v)
 		args.push(SET_END)
@@ -32296,7 +32299,8 @@ export class IfcPropertyBoundedValue {
 		//@ts-ignore
 		args.push(this.SetPointValue.t)
 		args.push(SET_BEGIN)
-		args.push(STRING)
+		//@ts-ignore
+		args.push(typeof this.SetPointValue.v == 'string' ? STRING : REAL)
 		//@ts-ignore
 		args.push(this.SetPointValue.v)
 		args.push(SET_END)
@@ -32735,7 +32739,8 @@ export class IfcPropertySingleValue {
 		//@ts-ignore
 		args.push(this.NominalValue.t)
 		args.push(SET_BEGIN)
-		args.push(STRING)
+		//@ts-ignore
+		args.push(typeof this.NominalValue.v == 'string' ? STRING : REAL)
 		//@ts-ignore
 		args.push(this.NominalValue.v)
 		args.push(SET_END)

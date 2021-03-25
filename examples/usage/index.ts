@@ -22,11 +22,15 @@ async function LoadFile(filename)
         let expressID = properties.get(i);
         let tape = ifcapi.GetLine(modelID, expressID);
         let prop = ifc2x4.IfcPropertySingleValue.FromTape(tape.arguments);
-        console.log(prop);
+        prop.Name = `${prop.Name}_EDITED`;
+        ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, prop.ToTape());
     }
 
     console.log(`Loaded model ${filename} to modelID ${modelID}`);
 
+    fs.writeFileSync("exported.ifc", ifcapi.ExportFileAsIFC(modelID));
+
+    ifcapi.CloseModel(modelID);
     /*
     let start = WebIFC.ms();
     let size = 10;

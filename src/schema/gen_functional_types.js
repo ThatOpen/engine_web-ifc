@@ -331,7 +331,8 @@ elements.forEach((entity) => {
                     buffer.push(`\t\t//@ts-ignore`);
                     buffer.push(`\t\targs.push(this.${param.name}.t)`);
                     buffer.push(`\t\targs.push(SET_BEGIN)`);
-                    buffer.push(`\t\targs.push(STRING)`);
+                    buffer.push(`\t\t//@ts-ignore`);
+                    buffer.push(`\t\targs.push(typeof this.${param.name}.v == 'string' ? STRING : REAL)`);
                     buffer.push(`\t\t//@ts-ignore`);
                     buffer.push(`\t\targs.push(this.${param.name}.v)`);
                     buffer.push(`\t\targs.push(SET_END)`);

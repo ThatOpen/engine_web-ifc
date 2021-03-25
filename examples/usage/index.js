@@ -57,9 +57,12 @@ function LoadFile(filename) {
                         expressID = properties.get(i);
                         tape = ifcapi.GetLine(modelID, expressID);
                         prop = ifc2x4.IfcPropertySingleValue.FromTape(tape.arguments);
-                        console.log(prop);
+                        prop.Name = prop.Name + "_EDITED";
+                        ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, prop.ToTape());
                     }
                     console.log("Loaded model " + filename + " to modelID " + modelID);
+                    fs.writeFileSync("exported.ifc", ifcapi.ExportFileAsIFC(modelID));
+                    ifcapi.CloseModel(modelID);
                     return [2 /*return*/];
             }
         });
