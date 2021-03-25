@@ -20,13 +20,16 @@ async function LoadFile(filename)
     for (let i = 0; i < properties.size(); i++)
     {
         let expressID = properties.get(i);
-        console.log(ifcapi.GetLine(modelID, expressID));
+        let tape = ifcapi.GetLine(modelID, expressID);
+        let prop = ifc2x4.IfcPropertySingleValue.FromTape(tape.arguments);
+        console.log(prop);
     }
 
     console.log(`Loaded model ${filename} to modelID ${modelID}`);
 
+    /*
     let start = WebIFC.ms();
-    let size = 10000;
+    let size = 10;
     for (let i = 0; i < size; i++)
     {
         let property = new ifc2x4.IfcPropertySingleValue("Name", null, ifc2x4.Value("IFCLABEL", `Value${i}`), null);
@@ -42,6 +45,7 @@ async function LoadFile(filename)
     fs.writeFileSync("exported.ifc", ifcapi.ExportFileAsIFC(modelID));
 
     ifcapi.CloseModel(modelID);
+    */
 }
 
 LoadFile("../example.ifc");

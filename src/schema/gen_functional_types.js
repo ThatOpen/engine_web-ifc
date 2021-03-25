@@ -275,8 +275,30 @@ elements.forEach((entity) => {
     params.forEach((param) => {
         buffer.push(`\t${param.name}: ${param.type};`)
     })
-    buffer.push(`\tFromTape(tapeData: any[])`)
+    buffer.push(`\tstatic FromTape(tape: any[]): ${entity.name}`)
     buffer.push(`\t{`)
+    let tapeIndex = 0;
+    for (let i = 0; i < params.length; i++)
+    {
+        let param = params[i];
+        if (param.prop.type === "IfcValue")
+        {
+            if (param.prop.optional)
+            {
+                buffer.push(`\t\tlet ${param.name} = tape[${tapeIndex}] ? { t: tape[${tapeIndex}], v: tape[${++tapeIndex}][0]} as any : null;`)
+            }
+            else
+            {
+                buffer.push(`\t\tlet ${param.name} = { t: tape[${tapeIndex}], v: tape[${++tapeIndex}][0]} as any;`)
+            }
+        }
+        else
+        {
+            buffer.push(`\t\tlet ${param.name} = tape[${tapeIndex}];`)
+        }
+        tapeIndex++;
+    }
+    buffer.push(`\t\treturn new ${entity.name}(${params.map((p) => p.name).join(", ")});`);
     buffer.push(`\t}`)
     buffer.push(`\tToTape(): any[]`)
     buffer.push(`\t{`)

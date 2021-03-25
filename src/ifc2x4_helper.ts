@@ -2733,8 +2733,18 @@ export class IfcActionRequest {
 	PredefinedType: IfcActionRequestTypeEnum | null;
 	Status: IfcLabel | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcActionRequest
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let PredefinedType = tape[6];
+		let Status = tape[7];
+		let LongDescription = tape[8];
+		return new IfcActionRequest(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, PredefinedType, Status, LongDescription);
 	}
 	ToTape(): any[]
 	{
@@ -2798,8 +2808,15 @@ export class IfcActor {
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
 	TheActor: IfcActorSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcActor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let TheActor = tape[5];
+		return new IfcActor(GlobalId, OwnerHistory, Name, Description, ObjectType, TheActor);
 	}
 	ToTape(): any[]
 	{
@@ -2839,8 +2856,12 @@ export class IfcActorRole {
 	Role: IfcRoleEnum ;
 	UserDefinedRole: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcActorRole
 	{
+		let Role = tape[0];
+		let UserDefinedRole = tape[1];
+		let Description = tape[2];
+		return new IfcActorRole(Role, UserDefinedRole, Description);
 	}
 	ToTape(): any[]
 	{
@@ -2880,8 +2901,18 @@ export class IfcActuator {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcActuatorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcActuator
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcActuator(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -2953,8 +2984,19 @@ export class IfcActuatorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcActuatorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcActuatorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcActuatorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3016,8 +3058,12 @@ export class IfcAddress {
 	Purpose: IfcAddressTypeEnum | null;
 	Description: IfcText | null;
 	UserDefinedPurpose: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAddress
 	{
+		let Purpose = tape[0];
+		let Description = tape[1];
+		let UserDefinedPurpose = tape[2];
+		return new IfcAddress(Purpose, Description, UserDefinedPurpose);
 	}
 	ToTape(): any[]
 	{
@@ -3044,8 +3090,10 @@ export class IfcAdvancedBrep {
 		this.Outer = Outer;
 	}
 	Outer: Handle<IfcClosedShell> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAdvancedBrep
 	{
+		let Outer = tape[0];
+		return new IfcAdvancedBrep(Outer);
 	}
 	ToTape(): any[]
 	{
@@ -3063,8 +3111,11 @@ export class IfcAdvancedBrepWithVoids {
 	}
 	Outer: Handle<IfcClosedShell> ;
 	Voids: Handle<IfcClosedShell>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAdvancedBrepWithVoids
 	{
+		let Outer = tape[0];
+		let Voids = tape[1];
+		return new IfcAdvancedBrepWithVoids(Outer, Voids);
 	}
 	ToTape(): any[]
 	{
@@ -3087,8 +3138,12 @@ export class IfcAdvancedFace {
 	Bounds: Handle<IfcFaceBound>[] ;
 	FaceSurface: Handle<IfcSurface> ;
 	SameSense: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAdvancedFace
 	{
+		let Bounds = tape[0];
+		let FaceSurface = tape[1];
+		let SameSense = tape[2];
+		return new IfcAdvancedFace(Bounds, FaceSurface, SameSense);
 	}
 	ToTape(): any[]
 	{
@@ -3123,8 +3178,18 @@ export class IfcAirTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAirTerminalTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAirTerminal
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcAirTerminal(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3194,8 +3259,18 @@ export class IfcAirTerminalBox {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAirTerminalBoxTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAirTerminalBox
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcAirTerminalBox(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3267,8 +3342,19 @@ export class IfcAirTerminalBoxType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAirTerminalBoxTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAirTerminalBoxType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcAirTerminalBoxType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3344,8 +3430,19 @@ export class IfcAirTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAirTerminalTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAirTerminalType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcAirTerminalType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3419,8 +3516,18 @@ export class IfcAirToAirHeatRecovery {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAirToAirHeatRecoveryTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAirToAirHeatRecovery
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcAirToAirHeatRecovery(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3492,8 +3599,19 @@ export class IfcAirToAirHeatRecoveryType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAirToAirHeatRecoveryTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAirToAirHeatRecoveryType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcAirToAirHeatRecoveryType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3567,8 +3685,18 @@ export class IfcAlarm {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAlarmTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlarm
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcAlarm(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3640,8 +3768,19 @@ export class IfcAlarmType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAlarmTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlarmType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcAlarmType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3715,8 +3854,18 @@ export class IfcAlignment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Axis: Handle<IfcCurve> ;
 	PredefinedType: IfcAlignmentTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Axis = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcAlignment(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Axis, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -3769,8 +3918,11 @@ export class IfcAlignment2DHorizontal {
 	}
 	StartDistAlong: IfcLengthMeasure | null;
 	Segments: Handle<IfcAlignment2DHorizontalSegment>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment2DHorizontal
 	{
+		let StartDistAlong = tape[0];
+		let Segments = tape[1];
+		return new IfcAlignment2DHorizontal(StartDistAlong, Segments);
 	}
 	ToTape(): any[]
 	{
@@ -3798,8 +3950,13 @@ export class IfcAlignment2DHorizontalSegment {
 	StartTag: IfcLabel | null;
 	EndTag: IfcLabel | null;
 	CurveGeometry: Handle<IfcCurveSegment2D> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment2DHorizontalSegment
 	{
+		let TangentialContinuity = tape[0];
+		let StartTag = tape[1];
+		let EndTag = tape[2];
+		let CurveGeometry = tape[3];
+		return new IfcAlignment2DHorizontalSegment(TangentialContinuity, StartTag, EndTag, CurveGeometry);
 	}
 	ToTape(): any[]
 	{
@@ -3832,8 +3989,12 @@ export class IfcAlignment2DSegment {
 	TangentialContinuity: IfcBoolean | null;
 	StartTag: IfcLabel | null;
 	EndTag: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment2DSegment
 	{
+		let TangentialContinuity = tape[0];
+		let StartTag = tape[1];
+		let EndTag = tape[2];
+		return new IfcAlignment2DSegment(TangentialContinuity, StartTag, EndTag);
 	}
 	ToTape(): any[]
 	{
@@ -3876,8 +4037,18 @@ export class IfcAlignment2DVerSegCircularArc {
 	StartGradient: IfcRatioMeasure ;
 	Radius: IfcPositiveLengthMeasure ;
 	IsConvex: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment2DVerSegCircularArc
 	{
+		let TangentialContinuity = tape[0];
+		let StartTag = tape[1];
+		let EndTag = tape[2];
+		let StartDistAlong = tape[3];
+		let HorizontalLength = tape[4];
+		let StartHeight = tape[5];
+		let StartGradient = tape[6];
+		let Radius = tape[7];
+		let IsConvex = tape[8];
+		return new IfcAlignment2DVerSegCircularArc(TangentialContinuity, StartTag, EndTag, StartDistAlong, HorizontalLength, StartHeight, StartGradient, Radius, IsConvex);
 	}
 	ToTape(): any[]
 	{
@@ -3922,8 +4093,16 @@ export class IfcAlignment2DVerSegLine {
 	HorizontalLength: IfcPositiveLengthMeasure ;
 	StartHeight: IfcLengthMeasure ;
 	StartGradient: IfcRatioMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment2DVerSegLine
 	{
+		let TangentialContinuity = tape[0];
+		let StartTag = tape[1];
+		let EndTag = tape[2];
+		let StartDistAlong = tape[3];
+		let HorizontalLength = tape[4];
+		let StartHeight = tape[5];
+		let StartGradient = tape[6];
+		return new IfcAlignment2DVerSegLine(TangentialContinuity, StartTag, EndTag, StartDistAlong, HorizontalLength, StartHeight, StartGradient);
 	}
 	ToTape(): any[]
 	{
@@ -3972,8 +4151,18 @@ export class IfcAlignment2DVerSegParabolicArc {
 	StartGradient: IfcRatioMeasure ;
 	ParabolaConstant: IfcPositiveLengthMeasure ;
 	IsConvex: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment2DVerSegParabolicArc
 	{
+		let TangentialContinuity = tape[0];
+		let StartTag = tape[1];
+		let EndTag = tape[2];
+		let StartDistAlong = tape[3];
+		let HorizontalLength = tape[4];
+		let StartHeight = tape[5];
+		let StartGradient = tape[6];
+		let ParabolaConstant = tape[7];
+		let IsConvex = tape[8];
+		return new IfcAlignment2DVerSegParabolicArc(TangentialContinuity, StartTag, EndTag, StartDistAlong, HorizontalLength, StartHeight, StartGradient, ParabolaConstant, IsConvex);
 	}
 	ToTape(): any[]
 	{
@@ -4006,8 +4195,10 @@ export class IfcAlignment2DVertical {
 		this.Segments = Segments;
 	}
 	Segments: Handle<IfcAlignment2DVerticalSegment>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment2DVertical
 	{
+		let Segments = tape[0];
+		return new IfcAlignment2DVertical(Segments);
 	}
 	ToTape(): any[]
 	{
@@ -4036,8 +4227,16 @@ export class IfcAlignment2DVerticalSegment {
 	HorizontalLength: IfcPositiveLengthMeasure ;
 	StartHeight: IfcLengthMeasure ;
 	StartGradient: IfcRatioMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignment2DVerticalSegment
 	{
+		let TangentialContinuity = tape[0];
+		let StartTag = tape[1];
+		let EndTag = tape[2];
+		let StartDistAlong = tape[3];
+		let HorizontalLength = tape[4];
+		let StartHeight = tape[5];
+		let StartGradient = tape[6];
+		return new IfcAlignment2DVerticalSegment(TangentialContinuity, StartTag, EndTag, StartDistAlong, HorizontalLength, StartHeight, StartGradient);
 	}
 	ToTape(): any[]
 	{
@@ -4074,8 +4273,12 @@ export class IfcAlignmentCurve {
 	Horizontal: Handle<IfcAlignment2DHorizontal> ;
 	Vertical: Handle<IfcAlignment2DVertical> | null;
 	Tag: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAlignmentCurve
 	{
+		let Horizontal = tape[0];
+		let Vertical = tape[1];
+		let Tag = tape[2];
+		return new IfcAlignmentCurve(Horizontal, Vertical, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -4113,8 +4316,16 @@ export class IfcAnnotation {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAnnotation
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		return new IfcAnnotation(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
 	ToTape(): any[]
 	{
@@ -4162,8 +4373,11 @@ export class IfcAnnotationFillArea {
 	}
 	OuterBoundary: Handle<IfcCurve> ;
 	InnerBoundaries: Handle<IfcCurve>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAnnotationFillArea
 	{
+		let OuterBoundary = tape[0];
+		let InnerBoundaries = tape[1];
+		return new IfcAnnotationFillArea(OuterBoundary, InnerBoundaries);
 	}
 	ToTape(): any[]
 	{
@@ -4191,8 +4405,13 @@ export class IfcApplication {
 	Version: IfcLabel ;
 	ApplicationFullName: IfcLabel ;
 	ApplicationIdentifier: IfcIdentifier ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcApplication
 	{
+		let ApplicationDeveloper = tape[0];
+		let Version = tape[1];
+		let ApplicationFullName = tape[2];
+		let ApplicationIdentifier = tape[3];
+		return new IfcApplication(ApplicationDeveloper, Version, ApplicationFullName, ApplicationIdentifier);
 	}
 	ToTape(): any[]
 	{
@@ -4232,8 +4451,19 @@ export class IfcAppliedValue {
 	Condition: IfcLabel | null;
 	ArithmeticOperator: IfcArithmeticOperatorEnum | null;
 	Components: Handle<IfcAppliedValue>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAppliedValue
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let AppliedValue = tape[2];
+		let UnitBasis = tape[3];
+		let ApplicableDate = tape[4];
+		let FixedUntilDate = tape[5];
+		let Category = tape[6];
+		let Condition = tape[7];
+		let ArithmeticOperator = tape[8];
+		let Components = tape[9];
+		return new IfcAppliedValue(Name, Description, AppliedValue, UnitBasis, ApplicableDate, FixedUntilDate, Category, Condition, ArithmeticOperator, Components);
 	}
 	ToTape(): any[]
 	{
@@ -4310,8 +4540,18 @@ export class IfcApproval {
 	Qualifier: IfcText | null;
 	RequestingApproval: IfcActorSelect | null;
 	GivingApproval: IfcActorSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcApproval
 	{
+		let Identifier = tape[0];
+		let Name = tape[1];
+		let Description = tape[2];
+		let TimeOfApproval = tape[3];
+		let Status = tape[4];
+		let Level = tape[5];
+		let Qualifier = tape[6];
+		let RequestingApproval = tape[7];
+		let GivingApproval = tape[8];
+		return new IfcApproval(Identifier, Name, Description, TimeOfApproval, Status, Level, Qualifier, RequestingApproval, GivingApproval);
 	}
 	ToTape(): any[]
 	{
@@ -4372,8 +4612,13 @@ export class IfcApprovalRelationship {
 	Description: IfcText | null;
 	RelatingApproval: Handle<IfcApproval> ;
 	RelatedApprovals: Handle<IfcApproval>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcApprovalRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let RelatingApproval = tape[2];
+		let RelatedApprovals = tape[3];
+		return new IfcApprovalRelationship(Name, Description, RelatingApproval, RelatedApprovals);
 	}
 	ToTape(): any[]
 	{
@@ -4406,8 +4651,12 @@ export class IfcArbitraryClosedProfileDef {
 	ProfileType: IfcProfileTypeEnum ;
 	ProfileName: IfcLabel | null;
 	OuterCurve: Handle<IfcCurve> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcArbitraryClosedProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let OuterCurve = tape[2];
+		return new IfcArbitraryClosedProfileDef(ProfileType, ProfileName, OuterCurve);
 	}
 	ToTape(): any[]
 	{
@@ -4432,8 +4681,12 @@ export class IfcArbitraryOpenProfileDef {
 	ProfileType: IfcProfileTypeEnum ;
 	ProfileName: IfcLabel | null;
 	Curve: Handle<IfcBoundedCurve> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcArbitraryOpenProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Curve = tape[2];
+		return new IfcArbitraryOpenProfileDef(ProfileType, ProfileName, Curve);
 	}
 	ToTape(): any[]
 	{
@@ -4460,8 +4713,13 @@ export class IfcArbitraryProfileDefWithVoids {
 	ProfileName: IfcLabel | null;
 	OuterCurve: Handle<IfcCurve> ;
 	InnerCurves: Handle<IfcCurve>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcArbitraryProfileDefWithVoids
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let OuterCurve = tape[2];
+		let InnerCurves = tape[3];
+		return new IfcArbitraryProfileDefWithVoids(ProfileType, ProfileName, OuterCurve, InnerCurves);
 	}
 	ToTape(): any[]
 	{
@@ -4511,8 +4769,23 @@ export class IfcAsset {
 	ResponsiblePerson: Handle<IfcPerson> | null;
 	IncorporationDate: IfcDate | null;
 	DepreciatedValue: Handle<IfcCostValue> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAsset
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let OriginalValue = tape[6];
+		let CurrentValue = tape[7];
+		let TotalReplacementCost = tape[8];
+		let Owner = tape[9];
+		let User = tape[10];
+		let ResponsiblePerson = tape[11];
+		let IncorporationDate = tape[12];
+		let DepreciatedValue = tape[13];
+		return new IfcAsset(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, OriginalValue, CurrentValue, TotalReplacementCost, Owner, User, ResponsiblePerson, IncorporationDate, DepreciatedValue);
 	}
 	ToTape(): any[]
 	{
@@ -4617,8 +4890,24 @@ export class IfcAsymmetricIShapeProfileDef {
 	BottomFlangeSlope: IfcPlaneAngleMeasure | null;
 	TopFlangeEdgeRadius: IfcNonNegativeLengthMeasure | null;
 	TopFlangeSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAsymmetricIShapeProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let BottomFlangeWidth = tape[3];
+		let OverallDepth = tape[4];
+		let WebThickness = tape[5];
+		let BottomFlangeThickness = tape[6];
+		let BottomFlangeFilletRadius = tape[7];
+		let TopFlangeWidth = tape[8];
+		let TopFlangeThickness = tape[9];
+		let TopFlangeFilletRadius = tape[10];
+		let BottomFlangeEdgeRadius = tape[11];
+		let BottomFlangeSlope = tape[12];
+		let TopFlangeEdgeRadius = tape[13];
+		let TopFlangeSlope = tape[14];
+		return new IfcAsymmetricIShapeProfileDef(ProfileType, ProfileName, Position, BottomFlangeWidth, OverallDepth, WebThickness, BottomFlangeThickness, BottomFlangeFilletRadius, TopFlangeWidth, TopFlangeThickness, TopFlangeFilletRadius, BottomFlangeEdgeRadius, BottomFlangeSlope, TopFlangeEdgeRadius, TopFlangeSlope);
 	}
 	ToTape(): any[]
 	{
@@ -4683,8 +4972,18 @@ export class IfcAudioVisualAppliance {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcAudioVisualApplianceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAudioVisualAppliance
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcAudioVisualAppliance(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -4756,8 +5055,19 @@ export class IfcAudioVisualApplianceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcAudioVisualApplianceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAudioVisualApplianceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcAudioVisualApplianceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -4817,8 +5127,11 @@ export class IfcAxis1Placement {
 	}
 	Location: Handle<IfcCartesianPoint> ;
 	Axis: Handle<IfcDirection> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAxis1Placement
 	{
+		let Location = tape[0];
+		let Axis = tape[1];
+		return new IfcAxis1Placement(Location, Axis);
 	}
 	ToTape(): any[]
 	{
@@ -4841,8 +5154,11 @@ export class IfcAxis2Placement2D {
 	}
 	Location: Handle<IfcCartesianPoint> ;
 	RefDirection: Handle<IfcDirection> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAxis2Placement2D
 	{
+		let Location = tape[0];
+		let RefDirection = tape[1];
+		return new IfcAxis2Placement2D(Location, RefDirection);
 	}
 	ToTape(): any[]
 	{
@@ -4867,8 +5183,12 @@ export class IfcAxis2Placement3D {
 	Location: Handle<IfcCartesianPoint> ;
 	Axis: Handle<IfcDirection> | null;
 	RefDirection: Handle<IfcDirection> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcAxis2Placement3D
 	{
+		let Location = tape[0];
+		let Axis = tape[1];
+		let RefDirection = tape[2];
+		return new IfcAxis2Placement3D(Location, Axis, RefDirection);
 	}
 	ToTape(): any[]
 	{
@@ -4902,8 +5222,14 @@ export class IfcBSplineCurve {
 	CurveForm: IfcBSplineCurveForm ;
 	ClosedCurve: IfcLogical ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBSplineCurve
 	{
+		let Degree = tape[0];
+		let ControlPointsList = tape[1];
+		let CurveForm = tape[2];
+		let ClosedCurve = tape[3];
+		let SelfIntersect = tape[4];
+		return new IfcBSplineCurve(Degree, ControlPointsList, CurveForm, ClosedCurve, SelfIntersect);
 	}
 	ToTape(): any[]
 	{
@@ -4936,8 +5262,17 @@ export class IfcBSplineCurveWithKnots {
 	KnotMultiplicities: IfcInteger[] ;
 	Knots: IfcParameterValue[] ;
 	KnotSpec: IfcKnotType ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBSplineCurveWithKnots
 	{
+		let Degree = tape[0];
+		let ControlPointsList = tape[1];
+		let CurveForm = tape[2];
+		let ClosedCurve = tape[3];
+		let SelfIntersect = tape[4];
+		let KnotMultiplicities = tape[5];
+		let Knots = tape[6];
+		let KnotSpec = tape[7];
+		return new IfcBSplineCurveWithKnots(Degree, ControlPointsList, CurveForm, ClosedCurve, SelfIntersect, KnotMultiplicities, Knots, KnotSpec);
 	}
 	ToTape(): any[]
 	{
@@ -4972,8 +5307,16 @@ export class IfcBSplineSurface {
 	UClosed: IfcLogical ;
 	VClosed: IfcLogical ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBSplineSurface
 	{
+		let UDegree = tape[0];
+		let VDegree = tape[1];
+		let ControlPointsList = tape[2];
+		let SurfaceForm = tape[3];
+		let UClosed = tape[4];
+		let VClosed = tape[5];
+		let SelfIntersect = tape[6];
+		return new IfcBSplineSurface(UDegree, VDegree, ControlPointsList, SurfaceForm, UClosed, VClosed, SelfIntersect);
 	}
 	ToTape(): any[]
 	{
@@ -5016,8 +5359,21 @@ export class IfcBSplineSurfaceWithKnots {
 	UKnots: IfcParameterValue[] ;
 	VKnots: IfcParameterValue[] ;
 	KnotSpec: IfcKnotType ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBSplineSurfaceWithKnots
 	{
+		let UDegree = tape[0];
+		let VDegree = tape[1];
+		let ControlPointsList = tape[2];
+		let SurfaceForm = tape[3];
+		let UClosed = tape[4];
+		let VClosed = tape[5];
+		let SelfIntersect = tape[6];
+		let UMultiplicities = tape[7];
+		let VMultiplicities = tape[8];
+		let UKnots = tape[9];
+		let VKnots = tape[10];
+		let KnotSpec = tape[11];
+		return new IfcBSplineSurfaceWithKnots(UDegree, VDegree, ControlPointsList, SurfaceForm, UClosed, VClosed, SelfIntersect, UMultiplicities, VMultiplicities, UKnots, VKnots, KnotSpec);
 	}
 	ToTape(): any[]
 	{
@@ -5062,8 +5418,18 @@ export class IfcBeam {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBeamTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBeam
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcBeam(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -5133,8 +5499,18 @@ export class IfcBeamStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBeamTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBeamStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcBeamStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -5206,8 +5582,19 @@ export class IfcBeamType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBeamTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBeamType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcBeamType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -5281,8 +5668,18 @@ export class IfcBearing {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBearingTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBearing
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcBearing(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -5354,8 +5751,19 @@ export class IfcBearingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBearingTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBearingType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcBearingType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -5425,8 +5833,16 @@ export class IfcBlobTexture {
 	Parameter: IfcIdentifier[] | null;
 	RasterFormat: IfcIdentifier ;
 	RasterCode: IfcBinary ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBlobTexture
 	{
+		let RepeatS = tape[0];
+		let RepeatT = tape[1];
+		let Mode = tape[2];
+		let TextureTransform = tape[3];
+		let Parameter = tape[4];
+		let RasterFormat = tape[5];
+		let RasterCode = tape[6];
+		return new IfcBlobTexture(RepeatS, RepeatT, Mode, TextureTransform, Parameter, RasterFormat, RasterCode);
 	}
 	ToTape(): any[]
 	{
@@ -5465,8 +5881,13 @@ export class IfcBlock {
 	XLength: IfcPositiveLengthMeasure ;
 	YLength: IfcPositiveLengthMeasure ;
 	ZLength: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBlock
 	{
+		let Position = tape[0];
+		let XLength = tape[1];
+		let YLength = tape[2];
+		let ZLength = tape[3];
+		return new IfcBlock(Position, XLength, YLength, ZLength);
 	}
 	ToTape(): any[]
 	{
@@ -5498,8 +5919,18 @@ export class IfcBoiler {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBoilerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoiler
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcBoiler(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -5571,8 +6002,19 @@ export class IfcBoilerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBoilerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoilerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcBoilerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -5634,8 +6076,12 @@ export class IfcBooleanClippingResult {
 	Operator: IfcBooleanOperator ;
 	FirstOperand: IfcBooleanOperand ;
 	SecondOperand: IfcBooleanOperand ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBooleanClippingResult
 	{
+		let Operator = tape[0];
+		let FirstOperand = tape[1];
+		let SecondOperand = tape[2];
+		return new IfcBooleanClippingResult(Operator, FirstOperand, SecondOperand);
 	}
 	ToTape(): any[]
 	{
@@ -5653,8 +6099,12 @@ export class IfcBooleanResult {
 	Operator: IfcBooleanOperator ;
 	FirstOperand: IfcBooleanOperand ;
 	SecondOperand: IfcBooleanOperand ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBooleanResult
 	{
+		let Operator = tape[0];
+		let FirstOperand = tape[1];
+		let SecondOperand = tape[2];
+		return new IfcBooleanResult(Operator, FirstOperand, SecondOperand);
 	}
 	ToTape(): any[]
 	{
@@ -5668,8 +6118,10 @@ export class IfcBoundaryCondition {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundaryCondition
 	{
+		let Name = tape[0];
+		return new IfcBoundaryCondition(Name);
 	}
 	ToTape(): any[]
 	{
@@ -5690,8 +6142,11 @@ export class IfcBoundaryCurve {
 	}
 	Segments: Handle<IfcCompositeCurveSegment>[] ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundaryCurve
 	{
+		let Segments = tape[0];
+		let SelfIntersect = tape[1];
+		return new IfcBoundaryCurve(Segments, SelfIntersect);
 	}
 	ToTape(): any[]
 	{
@@ -5720,8 +6175,16 @@ export class IfcBoundaryEdgeCondition {
 	RotationalStiffnessByLengthX: IfcModulusOfRotationalSubgradeReactionSelect | null;
 	RotationalStiffnessByLengthY: IfcModulusOfRotationalSubgradeReactionSelect | null;
 	RotationalStiffnessByLengthZ: IfcModulusOfRotationalSubgradeReactionSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundaryEdgeCondition
 	{
+		let Name = tape[0];
+		let TranslationalStiffnessByLengthX = tape[1];
+		let TranslationalStiffnessByLengthY = tape[2];
+		let TranslationalStiffnessByLengthZ = tape[3];
+		let RotationalStiffnessByLengthX = tape[4];
+		let RotationalStiffnessByLengthY = tape[5];
+		let RotationalStiffnessByLengthZ = tape[6];
+		return new IfcBoundaryEdgeCondition(Name, TranslationalStiffnessByLengthX, TranslationalStiffnessByLengthY, TranslationalStiffnessByLengthZ, RotationalStiffnessByLengthX, RotationalStiffnessByLengthY, RotationalStiffnessByLengthZ);
 	}
 	ToTape(): any[]
 	{
@@ -5764,8 +6227,13 @@ export class IfcBoundaryFaceCondition {
 	TranslationalStiffnessByAreaX: IfcModulusOfSubgradeReactionSelect | null;
 	TranslationalStiffnessByAreaY: IfcModulusOfSubgradeReactionSelect | null;
 	TranslationalStiffnessByAreaZ: IfcModulusOfSubgradeReactionSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundaryFaceCondition
 	{
+		let Name = tape[0];
+		let TranslationalStiffnessByAreaX = tape[1];
+		let TranslationalStiffnessByAreaY = tape[2];
+		let TranslationalStiffnessByAreaZ = tape[3];
+		return new IfcBoundaryFaceCondition(Name, TranslationalStiffnessByAreaX, TranslationalStiffnessByAreaY, TranslationalStiffnessByAreaZ);
 	}
 	ToTape(): any[]
 	{
@@ -5805,8 +6273,16 @@ export class IfcBoundaryNodeCondition {
 	RotationalStiffnessX: IfcRotationalStiffnessSelect | null;
 	RotationalStiffnessY: IfcRotationalStiffnessSelect | null;
 	RotationalStiffnessZ: IfcRotationalStiffnessSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundaryNodeCondition
 	{
+		let Name = tape[0];
+		let TranslationalStiffnessX = tape[1];
+		let TranslationalStiffnessY = tape[2];
+		let TranslationalStiffnessZ = tape[3];
+		let RotationalStiffnessX = tape[4];
+		let RotationalStiffnessY = tape[5];
+		let RotationalStiffnessZ = tape[6];
+		return new IfcBoundaryNodeCondition(Name, TranslationalStiffnessX, TranslationalStiffnessY, TranslationalStiffnessZ, RotationalStiffnessX, RotationalStiffnessY, RotationalStiffnessZ);
 	}
 	ToTape(): any[]
 	{
@@ -5857,8 +6333,17 @@ export class IfcBoundaryNodeConditionWarping {
 	RotationalStiffnessY: IfcRotationalStiffnessSelect | null;
 	RotationalStiffnessZ: IfcRotationalStiffnessSelect | null;
 	WarpingStiffness: IfcWarpingStiffnessSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundaryNodeConditionWarping
 	{
+		let Name = tape[0];
+		let TranslationalStiffnessX = tape[1];
+		let TranslationalStiffnessY = tape[2];
+		let TranslationalStiffnessZ = tape[3];
+		let RotationalStiffnessX = tape[4];
+		let RotationalStiffnessY = tape[5];
+		let RotationalStiffnessZ = tape[6];
+		let WarpingStiffness = tape[7];
+		return new IfcBoundaryNodeConditionWarping(Name, TranslationalStiffnessX, TranslationalStiffnessY, TranslationalStiffnessZ, RotationalStiffnessX, RotationalStiffnessY, RotationalStiffnessZ, WarpingStiffness);
 	}
 	ToTape(): any[]
 	{
@@ -5896,8 +6381,9 @@ export class IfcBoundedCurve {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundedCurve
 	{
+		return new IfcBoundedCurve();
 	}
 	ToTape(): any[]
 	{
@@ -5909,8 +6395,9 @@ export class IfcBoundedSurface {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundedSurface
 	{
+		return new IfcBoundedSurface();
 	}
 	ToTape(): any[]
 	{
@@ -5930,8 +6417,13 @@ export class IfcBoundingBox {
 	XDim: IfcPositiveLengthMeasure ;
 	YDim: IfcPositiveLengthMeasure ;
 	ZDim: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoundingBox
 	{
+		let Corner = tape[0];
+		let XDim = tape[1];
+		let YDim = tape[2];
+		let ZDim = tape[3];
+		return new IfcBoundingBox(Corner, XDim, YDim, ZDim);
 	}
 	ToTape(): any[]
 	{
@@ -5951,8 +6443,12 @@ export class IfcBoxedHalfSpace {
 	BaseSurface: Handle<IfcSurface> ;
 	AgreementFlag: IfcBoolean ;
 	Enclosure: Handle<IfcBoundingBox> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBoxedHalfSpace
 	{
+		let BaseSurface = tape[0];
+		let AgreementFlag = tape[1];
+		let Enclosure = tape[2];
+		return new IfcBoxedHalfSpace(BaseSurface, AgreementFlag, Enclosure);
 	}
 	ToTape(): any[]
 	{
@@ -5988,8 +6484,19 @@ export class IfcBridge {
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
 	PredefinedType: IfcBridgeTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBridge
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcBridge(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -6064,8 +6571,19 @@ export class IfcBridgePart {
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
 	PredefinedType: IfcBridgePartTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBridgePart
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcBridgePart(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -6144,8 +6662,21 @@ export class IfcBuilding {
 	ElevationOfRefHeight: IfcLengthMeasure | null;
 	ElevationOfTerrain: IfcLengthMeasure | null;
 	BuildingAddress: Handle<IfcPostalAddress> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuilding
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		let ElevationOfRefHeight = tape[9];
+		let ElevationOfTerrain = tape[10];
+		let BuildingAddress = tape[11];
+		return new IfcBuilding(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType, ElevationOfRefHeight, ElevationOfTerrain, BuildingAddress);
 	}
 	ToTape(): any[]
 	{
@@ -6228,8 +6759,17 @@ export class IfcBuildingElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuildingElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcBuildingElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -6296,8 +6836,18 @@ export class IfcBuildingElementPart {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBuildingElementPartTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuildingElementPart
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcBuildingElementPart(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -6369,8 +6919,19 @@ export class IfcBuildingElementPartType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBuildingElementPartTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuildingElementPartType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcBuildingElementPartType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -6444,8 +7005,18 @@ export class IfcBuildingElementProxy {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBuildingElementProxyTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuildingElementProxy
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcBuildingElementProxy(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -6517,8 +7088,19 @@ export class IfcBuildingElementProxyType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBuildingElementProxyTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuildingElementProxyType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcBuildingElementProxyType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -6592,8 +7174,18 @@ export class IfcBuildingElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuildingElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcBuildingElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -6669,8 +7261,19 @@ export class IfcBuildingStorey {
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
 	Elevation: IfcLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuildingStorey
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		let Elevation = tape[9];
+		return new IfcBuildingStorey(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType, Elevation);
 	}
 	ToTape(): any[]
 	{
@@ -6741,8 +7344,16 @@ export class IfcBuildingSystem {
 	ObjectType: IfcLabel | null;
 	PredefinedType: IfcBuildingSystemTypeEnum | null;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBuildingSystem
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let PredefinedType = tape[5];
+		let LongName = tape[6];
+		return new IfcBuildingSystem(GlobalId, OwnerHistory, Name, Description, ObjectType, PredefinedType, LongName);
 	}
 	ToTape(): any[]
 	{
@@ -6802,8 +7413,18 @@ export class IfcBurner {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcBurnerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBurner
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcBurner(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -6875,8 +7496,19 @@ export class IfcBurnerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcBurnerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcBurnerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcBurnerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -6948,8 +7580,17 @@ export class IfcCShapeProfileDef {
 	WallThickness: IfcPositiveLengthMeasure ;
 	Girth: IfcPositiveLengthMeasure ;
 	InternalFilletRadius: IfcNonNegativeLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCShapeProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let Depth = tape[3];
+		let Width = tape[4];
+		let WallThickness = tape[5];
+		let Girth = tape[6];
+		let InternalFilletRadius = tape[7];
+		return new IfcCShapeProfileDef(ProfileType, ProfileName, Position, Depth, Width, WallThickness, Girth, InternalFilletRadius);
 	}
 	ToTape(): any[]
 	{
@@ -6992,8 +7633,18 @@ export class IfcCableCarrierFitting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCableCarrierFittingTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCableCarrierFitting
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCableCarrierFitting(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7065,8 +7716,19 @@ export class IfcCableCarrierFittingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCableCarrierFittingTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCableCarrierFittingType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCableCarrierFittingType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7140,8 +7802,18 @@ export class IfcCableCarrierSegment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCableCarrierSegmentTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCableCarrierSegment
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCableCarrierSegment(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7213,8 +7885,19 @@ export class IfcCableCarrierSegmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCableCarrierSegmentTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCableCarrierSegmentType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCableCarrierSegmentType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7288,8 +7971,18 @@ export class IfcCableFitting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCableFittingTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCableFitting
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCableFitting(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7361,8 +8054,19 @@ export class IfcCableFittingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCableFittingTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCableFittingType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCableFittingType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7436,8 +8140,18 @@ export class IfcCableSegment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCableSegmentTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCableSegment
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCableSegment(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7509,8 +8223,19 @@ export class IfcCableSegmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCableSegmentTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCableSegmentType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCableSegmentType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7584,8 +8309,18 @@ export class IfcCaissonFoundation {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCaissonFoundationTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCaissonFoundation
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCaissonFoundation(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7657,8 +8392,19 @@ export class IfcCaissonFoundationType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCaissonFoundationTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCaissonFoundationType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCaissonFoundationType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -7716,8 +8462,10 @@ export class IfcCartesianPoint {
 		this.Coordinates = Coordinates;
 	}
 	Coordinates: IfcLengthMeasure[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianPoint
 	{
+		let Coordinates = tape[0];
+		return new IfcCartesianPoint(Coordinates);
 	}
 	ToTape(): any[]
 	{
@@ -7731,8 +8479,9 @@ export class IfcCartesianPointList {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianPointList
 	{
+		return new IfcCartesianPointList();
 	}
 	ToTape(): any[]
 	{
@@ -7748,8 +8497,11 @@ export class IfcCartesianPointList2D {
 	}
 	CoordList: IfcLengthMeasure[] ;
 	TagList: IfcLabel[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianPointList2D
 	{
+		let CoordList = tape[0];
+		let TagList = tape[1];
+		return new IfcCartesianPointList2D(CoordList, TagList);
 	}
 	ToTape(): any[]
 	{
@@ -7772,8 +8524,11 @@ export class IfcCartesianPointList3D {
 	}
 	CoordList: IfcLengthMeasure[] ;
 	TagList: IfcLabel[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianPointList3D
 	{
+		let CoordList = tape[0];
+		let TagList = tape[1];
+		return new IfcCartesianPointList3D(CoordList, TagList);
 	}
 	ToTape(): any[]
 	{
@@ -7800,8 +8555,13 @@ export class IfcCartesianTransformationOperator {
 	Axis2: Handle<IfcDirection> | null;
 	LocalOrigin: Handle<IfcCartesianPoint> ;
 	Scale: IfcReal | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianTransformationOperator
 	{
+		let Axis1 = tape[0];
+		let Axis2 = tape[1];
+		let LocalOrigin = tape[2];
+		let Scale = tape[3];
+		return new IfcCartesianTransformationOperator(Axis1, Axis2, LocalOrigin, Scale);
 	}
 	ToTape(): any[]
 	{
@@ -7838,8 +8598,13 @@ export class IfcCartesianTransformationOperator2D {
 	Axis2: Handle<IfcDirection> | null;
 	LocalOrigin: Handle<IfcCartesianPoint> ;
 	Scale: IfcReal | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianTransformationOperator2D
 	{
+		let Axis1 = tape[0];
+		let Axis2 = tape[1];
+		let LocalOrigin = tape[2];
+		let Scale = tape[3];
+		return new IfcCartesianTransformationOperator2D(Axis1, Axis2, LocalOrigin, Scale);
 	}
 	ToTape(): any[]
 	{
@@ -7878,8 +8643,14 @@ export class IfcCartesianTransformationOperator2DnonUniform {
 	LocalOrigin: Handle<IfcCartesianPoint> ;
 	Scale: IfcReal | null;
 	Scale2: IfcReal | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianTransformationOperator2DnonUniform
 	{
+		let Axis1 = tape[0];
+		let Axis2 = tape[1];
+		let LocalOrigin = tape[2];
+		let Scale = tape[3];
+		let Scale2 = tape[4];
+		return new IfcCartesianTransformationOperator2DnonUniform(Axis1, Axis2, LocalOrigin, Scale, Scale2);
 	}
 	ToTape(): any[]
 	{
@@ -7923,8 +8694,14 @@ export class IfcCartesianTransformationOperator3D {
 	LocalOrigin: Handle<IfcCartesianPoint> ;
 	Scale: IfcReal | null;
 	Axis3: Handle<IfcDirection> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianTransformationOperator3D
 	{
+		let Axis1 = tape[0];
+		let Axis2 = tape[1];
+		let LocalOrigin = tape[2];
+		let Scale = tape[3];
+		let Axis3 = tape[4];
+		return new IfcCartesianTransformationOperator3D(Axis1, Axis2, LocalOrigin, Scale, Axis3);
 	}
 	ToTape(): any[]
 	{
@@ -7972,8 +8749,16 @@ export class IfcCartesianTransformationOperator3DnonUniform {
 	Axis3: Handle<IfcDirection> | null;
 	Scale2: IfcReal | null;
 	Scale3: IfcReal | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCartesianTransformationOperator3DnonUniform
 	{
+		let Axis1 = tape[0];
+		let Axis2 = tape[1];
+		let LocalOrigin = tape[2];
+		let Scale = tape[3];
+		let Axis3 = tape[4];
+		let Scale2 = tape[5];
+		let Scale3 = tape[6];
+		return new IfcCartesianTransformationOperator3DnonUniform(Axis1, Axis2, LocalOrigin, Scale, Axis3, Scale2, Scale3);
 	}
 	ToTape(): any[]
 	{
@@ -8025,8 +8810,13 @@ export class IfcCenterLineProfileDef {
 	ProfileName: IfcLabel | null;
 	Curve: Handle<IfcBoundedCurve> ;
 	Thickness: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCenterLineProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Curve = tape[2];
+		let Thickness = tape[3];
+		return new IfcCenterLineProfileDef(ProfileType, ProfileName, Curve, Thickness);
 	}
 	ToTape(): any[]
 	{
@@ -8063,8 +8853,18 @@ export class IfcChiller {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcChillerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcChiller
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcChiller(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -8136,8 +8936,19 @@ export class IfcChillerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcChillerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcChillerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcChillerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -8211,8 +9022,18 @@ export class IfcChimney {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcChimneyTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcChimney
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcChimney(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -8284,8 +9105,19 @@ export class IfcChimneyType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcChimneyTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcChimneyType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcChimneyType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -8345,8 +9177,11 @@ export class IfcCircle {
 	}
 	Position: IfcAxis2Placement ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCircle
 	{
+		let Position = tape[0];
+		let Radius = tape[1];
+		return new IfcCircle(Position, Radius);
 	}
 	ToTape(): any[]
 	{
@@ -8368,8 +9203,14 @@ export class IfcCircleHollowProfileDef {
 	Position: Handle<IfcAxis2Placement2D> | null;
 	Radius: IfcPositiveLengthMeasure ;
 	WallThickness: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCircleHollowProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let Radius = tape[3];
+		let WallThickness = tape[4];
+		return new IfcCircleHollowProfileDef(ProfileType, ProfileName, Position, Radius, WallThickness);
 	}
 	ToTape(): any[]
 	{
@@ -8399,8 +9240,13 @@ export class IfcCircleProfileDef {
 	ProfileName: IfcLabel | null;
 	Position: Handle<IfcAxis2Placement2D> | null;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCircleProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let Radius = tape[3];
+		return new IfcCircleProfileDef(ProfileType, ProfileName, Position, Radius);
 	}
 	ToTape(): any[]
 	{
@@ -8432,8 +9278,14 @@ export class IfcCircularArcSegment2D {
 	SegmentLength: IfcPositiveLengthMeasure ;
 	Radius: IfcPositiveLengthMeasure ;
 	IsCCW: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCircularArcSegment2D
 	{
+		let StartPoint = tape[0];
+		let StartDirection = tape[1];
+		let SegmentLength = tape[2];
+		let Radius = tape[3];
+		let IsCCW = tape[4];
+		return new IfcCircularArcSegment2D(StartPoint, StartDirection, SegmentLength, Radius, IsCCW);
 	}
 	ToTape(): any[]
 	{
@@ -8465,8 +9317,17 @@ export class IfcCivilElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCivilElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcCivilElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -8533,8 +9394,18 @@ export class IfcCivilElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCivilElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcCivilElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -8604,8 +9475,16 @@ export class IfcClassification {
 	Description: IfcText | null;
 	Location: IfcURIReference | null;
 	ReferenceTokens: IfcIdentifier[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcClassification
 	{
+		let Source = tape[0];
+		let Edition = tape[1];
+		let EditionDate = tape[2];
+		let Name = tape[3];
+		let Description = tape[4];
+		let Location = tape[5];
+		let ReferenceTokens = tape[6];
+		return new IfcClassification(Source, Edition, EditionDate, Name, Description, Location, ReferenceTokens);
 	}
 	ToTape(): any[]
 	{
@@ -8661,8 +9540,15 @@ export class IfcClassificationReference {
 	ReferencedSource: IfcClassificationReferenceSelect | null;
 	Description: IfcText | null;
 	Sort: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcClassificationReference
 	{
+		let Location = tape[0];
+		let Identification = tape[1];
+		let Name = tape[2];
+		let ReferencedSource = tape[3];
+		let Description = tape[4];
+		let Sort = tape[5];
+		return new IfcClassificationReference(Location, Identification, Name, ReferencedSource, Description, Sort);
 	}
 	ToTape(): any[]
 	{
@@ -8704,8 +9590,10 @@ export class IfcClosedShell {
 		this.CfsFaces = CfsFaces;
 	}
 	CfsFaces: Handle<IfcFace>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcClosedShell
 	{
+		let CfsFaces = tape[0];
+		return new IfcClosedShell(CfsFaces);
 	}
 	ToTape(): any[]
 	{
@@ -8738,8 +9626,18 @@ export class IfcCoil {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCoilTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCoil
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCoil(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -8811,8 +9709,19 @@ export class IfcCoilType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCoilTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCoilType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCoilType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -8876,8 +9785,13 @@ export class IfcColourRgb {
 	Red: IfcNormalisedRatioMeasure ;
 	Green: IfcNormalisedRatioMeasure ;
 	Blue: IfcNormalisedRatioMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcColourRgb
 	{
+		let Name = tape[0];
+		let Red = tape[1];
+		let Green = tape[2];
+		let Blue = tape[3];
+		return new IfcColourRgb(Name, Red, Green, Blue);
 	}
 	ToTape(): any[]
 	{
@@ -8896,8 +9810,10 @@ export class IfcColourRgbList {
 		this.ColourList = ColourList;
 	}
 	ColourList: IfcNormalisedRatioMeasure[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcColourRgbList
 	{
+		let ColourList = tape[0];
+		return new IfcColourRgbList(ColourList);
 	}
 	ToTape(): any[]
 	{
@@ -8911,8 +9827,10 @@ export class IfcColourSpecification {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcColourSpecification
 	{
+		let Name = tape[0];
+		return new IfcColourSpecification(Name);
 	}
 	ToTape(): any[]
 	{
@@ -8947,8 +9865,18 @@ export class IfcColumn {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcColumnTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcColumn
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcColumn(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9018,8 +9946,18 @@ export class IfcColumnStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcColumnTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcColumnStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcColumnStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9091,8 +10029,19 @@ export class IfcColumnType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcColumnTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcColumnType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcColumnType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9166,8 +10115,18 @@ export class IfcCommunicationsAppliance {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCommunicationsApplianceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCommunicationsAppliance
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCommunicationsAppliance(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9239,8 +10198,19 @@ export class IfcCommunicationsApplianceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCommunicationsApplianceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCommunicationsApplianceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCommunicationsApplianceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9304,8 +10274,13 @@ export class IfcComplexProperty {
 	Description: IfcText | null;
 	UsageName: IfcIdentifier ;
 	HasProperties: Handle<IfcProperty>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcComplexProperty
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let UsageName = tape[2];
+		let HasProperties = tape[3];
+		return new IfcComplexProperty(Name, Description, UsageName, HasProperties);
 	}
 	ToTape(): any[]
 	{
@@ -9343,8 +10318,16 @@ export class IfcComplexPropertyTemplate {
 	UsageName: IfcLabel | null;
 	TemplateType: IfcComplexPropertyTemplateTypeEnum | null;
 	HasPropertyTemplates: Handle<IfcPropertyTemplate>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcComplexPropertyTemplate
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let UsageName = tape[4];
+		let TemplateType = tape[5];
+		let HasPropertyTemplates = tape[6];
+		return new IfcComplexPropertyTemplate(GlobalId, OwnerHistory, Name, Description, UsageName, TemplateType, HasPropertyTemplates);
 	}
 	ToTape(): any[]
 	{
@@ -9391,8 +10374,11 @@ export class IfcCompositeCurve {
 	}
 	Segments: Handle<IfcCompositeCurveSegment>[] ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCompositeCurve
 	{
+		let Segments = tape[0];
+		let SelfIntersect = tape[1];
+		return new IfcCompositeCurve(Segments, SelfIntersect);
 	}
 	ToTape(): any[]
 	{
@@ -9411,8 +10397,11 @@ export class IfcCompositeCurveOnSurface {
 	}
 	Segments: Handle<IfcCompositeCurveSegment>[] ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCompositeCurveOnSurface
 	{
+		let Segments = tape[0];
+		let SelfIntersect = tape[1];
+		return new IfcCompositeCurveOnSurface(Segments, SelfIntersect);
 	}
 	ToTape(): any[]
 	{
@@ -9433,8 +10422,12 @@ export class IfcCompositeCurveSegment {
 	Transition: IfcTransitionCode ;
 	SameSense: IfcBoolean ;
 	ParentCurve: Handle<IfcCurve> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCompositeCurveSegment
 	{
+		let Transition = tape[0];
+		let SameSense = tape[1];
+		let ParentCurve = tape[2];
+		return new IfcCompositeCurveSegment(Transition, SameSense, ParentCurve);
 	}
 	ToTape(): any[]
 	{
@@ -9456,8 +10449,13 @@ export class IfcCompositeProfileDef {
 	ProfileName: IfcLabel | null;
 	Profiles: Handle<IfcProfileDef>[] ;
 	Label: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCompositeProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Profiles = tape[2];
+		let Label = tape[3];
+		return new IfcCompositeProfileDef(ProfileType, ProfileName, Profiles, Label);
 	}
 	ToTape(): any[]
 	{
@@ -9500,8 +10498,18 @@ export class IfcCompressor {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCompressorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCompressor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCompressor(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9573,8 +10581,19 @@ export class IfcCompressorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCompressorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCompressorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCompressorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9648,8 +10667,18 @@ export class IfcCondenser {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCondenserTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCondenser
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCondenser(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9721,8 +10750,19 @@ export class IfcCondenserType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCondenserTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCondenserType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCondenserType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -9780,8 +10820,10 @@ export class IfcConic {
 		this.Position = Position;
 	}
 	Position: IfcAxis2Placement ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConic
 	{
+		let Position = tape[0];
+		return new IfcConic(Position);
 	}
 	ToTape(): any[]
 	{
@@ -9795,8 +10837,10 @@ export class IfcConnectedFaceSet {
 		this.CfsFaces = CfsFaces;
 	}
 	CfsFaces: Handle<IfcFace>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConnectedFaceSet
 	{
+		let CfsFaces = tape[0];
+		return new IfcConnectedFaceSet(CfsFaces);
 	}
 	ToTape(): any[]
 	{
@@ -9815,8 +10859,11 @@ export class IfcConnectionCurveGeometry {
 	}
 	CurveOnRelatingElement: IfcCurveOrEdgeCurve ;
 	CurveOnRelatedElement: IfcCurveOrEdgeCurve | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConnectionCurveGeometry
 	{
+		let CurveOnRelatingElement = tape[0];
+		let CurveOnRelatedElement = tape[1];
+		return new IfcConnectionCurveGeometry(CurveOnRelatingElement, CurveOnRelatedElement);
 	}
 	ToTape(): any[]
 	{
@@ -9831,8 +10878,9 @@ export class IfcConnectionGeometry {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConnectionGeometry
 	{
+		return new IfcConnectionGeometry();
 	}
 	ToTape(): any[]
 	{
@@ -9854,8 +10902,14 @@ export class IfcConnectionPointEccentricity {
 	EccentricityInX: IfcLengthMeasure | null;
 	EccentricityInY: IfcLengthMeasure | null;
 	EccentricityInZ: IfcLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConnectionPointEccentricity
 	{
+		let PointOnRelatingElement = tape[0];
+		let PointOnRelatedElement = tape[1];
+		let EccentricityInX = tape[2];
+		let EccentricityInY = tape[3];
+		let EccentricityInZ = tape[4];
+		return new IfcConnectionPointEccentricity(PointOnRelatingElement, PointOnRelatedElement, EccentricityInX, EccentricityInY, EccentricityInZ);
 	}
 	ToTape(): any[]
 	{
@@ -9889,8 +10943,11 @@ export class IfcConnectionPointGeometry {
 	}
 	PointOnRelatingElement: IfcPointOrVertexPoint ;
 	PointOnRelatedElement: IfcPointOrVertexPoint | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConnectionPointGeometry
 	{
+		let PointOnRelatingElement = tape[0];
+		let PointOnRelatedElement = tape[1];
+		return new IfcConnectionPointGeometry(PointOnRelatingElement, PointOnRelatedElement);
 	}
 	ToTape(): any[]
 	{
@@ -9909,8 +10966,11 @@ export class IfcConnectionSurfaceGeometry {
 	}
 	SurfaceOnRelatingElement: IfcSurfaceOrFaceSurface ;
 	SurfaceOnRelatedElement: IfcSurfaceOrFaceSurface | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConnectionSurfaceGeometry
 	{
+		let SurfaceOnRelatingElement = tape[0];
+		let SurfaceOnRelatedElement = tape[1];
+		return new IfcConnectionSurfaceGeometry(SurfaceOnRelatingElement, SurfaceOnRelatedElement);
 	}
 	ToTape(): any[]
 	{
@@ -9929,8 +10989,11 @@ export class IfcConnectionVolumeGeometry {
 	}
 	VolumeOnRelatingElement: IfcSolidOrShell ;
 	VolumeOnRelatedElement: IfcSolidOrShell | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConnectionVolumeGeometry
 	{
+		let VolumeOnRelatingElement = tape[0];
+		let VolumeOnRelatedElement = tape[1];
+		return new IfcConnectionVolumeGeometry(VolumeOnRelatingElement, VolumeOnRelatedElement);
 	}
 	ToTape(): any[]
 	{
@@ -9959,8 +11022,16 @@ export class IfcConstraint {
 	CreatingActor: IfcActorSelect | null;
 	CreationTime: IfcDateTime | null;
 	UserDefinedGrade: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstraint
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let ConstraintGrade = tape[2];
+		let ConstraintSource = tape[3];
+		let CreatingActor = tape[4];
+		let CreationTime = tape[5];
+		let UserDefinedGrade = tape[6];
+		return new IfcConstraint(Name, Description, ConstraintGrade, ConstraintSource, CreatingActor, CreationTime, UserDefinedGrade);
 	}
 	ToTape(): any[]
 	{
@@ -10019,8 +11090,20 @@ export class IfcConstructionEquipmentResource {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionEquipmentResourceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstructionEquipmentResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let Usage = tape[7];
+		let BaseCosts = tape[8];
+		let BaseQuantity = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcConstructionEquipmentResource(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -10107,8 +11190,21 @@ export class IfcConstructionEquipmentResourceType {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionEquipmentResourceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstructionEquipmentResourceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ResourceType = tape[8];
+		let BaseCosts = tape[9];
+		let BaseQuantity = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcConstructionEquipmentResourceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -10196,8 +11292,20 @@ export class IfcConstructionMaterialResource {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionMaterialResourceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstructionMaterialResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let Usage = tape[7];
+		let BaseCosts = tape[8];
+		let BaseQuantity = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcConstructionMaterialResource(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -10284,8 +11392,21 @@ export class IfcConstructionMaterialResourceType {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionMaterialResourceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstructionMaterialResourceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ResourceType = tape[8];
+		let BaseCosts = tape[9];
+		let BaseQuantity = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcConstructionMaterialResourceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -10373,8 +11494,20 @@ export class IfcConstructionProductResource {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionProductResourceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstructionProductResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let Usage = tape[7];
+		let BaseCosts = tape[8];
+		let BaseQuantity = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcConstructionProductResource(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -10461,8 +11594,21 @@ export class IfcConstructionProductResourceType {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcConstructionProductResourceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstructionProductResourceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ResourceType = tape[8];
+		let BaseCosts = tape[9];
+		let BaseQuantity = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcConstructionProductResourceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -10548,8 +11694,19 @@ export class IfcConstructionResource {
 	Usage: Handle<IfcResourceTime> | null;
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstructionResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let Usage = tape[7];
+		let BaseCosts = tape[8];
+		let BaseQuantity = tape[9];
+		return new IfcConstructionResource(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity);
 	}
 	ToTape(): any[]
 	{
@@ -10631,8 +11788,20 @@ export class IfcConstructionResourceType {
 	ResourceType: IfcLabel | null;
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConstructionResourceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ResourceType = tape[8];
+		let BaseCosts = tape[9];
+		let BaseQuantity = tape[10];
+		return new IfcConstructionResourceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity);
 	}
 	ToTape(): any[]
 	{
@@ -10716,8 +11885,18 @@ export class IfcContext {
 	Phase: IfcLabel | null;
 	RepresentationContexts: Handle<IfcRepresentationContext>[] | null;
 	UnitsInContext: Handle<IfcUnitAssignment> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcContext
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let LongName = tape[5];
+		let Phase = tape[6];
+		let RepresentationContexts = tape[7];
+		let UnitsInContext = tape[8];
+		return new IfcContext(GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, Phase, RepresentationContexts, UnitsInContext);
 	}
 	ToTape(): any[]
 	{
@@ -10778,8 +11957,12 @@ export class IfcContextDependentUnit {
 	Dimensions: Handle<IfcDimensionalExponents> ;
 	UnitType: IfcUnitEnum ;
 	Name: IfcLabel ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcContextDependentUnit
 	{
+		let Dimensions = tape[0];
+		let UnitType = tape[1];
+		let Name = tape[2];
+		return new IfcContextDependentUnit(Dimensions, UnitType, Name);
 	}
 	ToTape(): any[]
 	{
@@ -10807,8 +11990,15 @@ export class IfcControl {
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
 	Identification: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcControl
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		return new IfcControl(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification);
 	}
 	ToTape(): any[]
 	{
@@ -10865,8 +12055,18 @@ export class IfcController {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcControllerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcController
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcController(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -10938,8 +12138,19 @@ export class IfcControllerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcControllerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcControllerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcControllerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11003,8 +12214,13 @@ export class IfcConversionBasedUnit {
 	UnitType: IfcUnitEnum ;
 	Name: IfcLabel ;
 	ConversionFactor: Handle<IfcMeasureWithUnit> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConversionBasedUnit
 	{
+		let Dimensions = tape[0];
+		let UnitType = tape[1];
+		let Name = tape[2];
+		let ConversionFactor = tape[3];
+		return new IfcConversionBasedUnit(Dimensions, UnitType, Name, ConversionFactor);
 	}
 	ToTape(): any[]
 	{
@@ -11032,8 +12248,14 @@ export class IfcConversionBasedUnitWithOffset {
 	Name: IfcLabel ;
 	ConversionFactor: Handle<IfcMeasureWithUnit> ;
 	ConversionOffset: IfcReal ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcConversionBasedUnitWithOffset
 	{
+		let Dimensions = tape[0];
+		let UnitType = tape[1];
+		let Name = tape[2];
+		let ConversionFactor = tape[3];
+		let ConversionOffset = tape[4];
+		return new IfcConversionBasedUnitWithOffset(Dimensions, UnitType, Name, ConversionFactor, ConversionOffset);
 	}
 	ToTape(): any[]
 	{
@@ -11071,8 +12293,18 @@ export class IfcCooledBeam {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCooledBeamTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCooledBeam
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCooledBeam(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11144,8 +12376,19 @@ export class IfcCooledBeamType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCooledBeamTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCooledBeamType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCooledBeamType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11219,8 +12462,18 @@ export class IfcCoolingTower {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCoolingTowerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCoolingTower
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCoolingTower(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11292,8 +12545,19 @@ export class IfcCoolingTowerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCoolingTowerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCoolingTowerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCoolingTowerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11353,8 +12617,11 @@ export class IfcCoordinateOperation {
 	}
 	SourceCRS: IfcCoordinateReferenceSystemSelect ;
 	TargetCRS: Handle<IfcCoordinateReferenceSystem> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCoordinateOperation
 	{
+		let SourceCRS = tape[0];
+		let TargetCRS = tape[1];
+		return new IfcCoordinateOperation(SourceCRS, TargetCRS);
 	}
 	ToTape(): any[]
 	{
@@ -11376,8 +12643,13 @@ export class IfcCoordinateReferenceSystem {
 	Description: IfcText | null;
 	GeodeticDatum: IfcIdentifier | null;
 	VerticalDatum: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCoordinateReferenceSystem
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let GeodeticDatum = tape[2];
+		let VerticalDatum = tape[3];
+		return new IfcCoordinateReferenceSystem(Name, Description, GeodeticDatum, VerticalDatum);
 	}
 	ToTape(): any[]
 	{
@@ -11424,8 +12696,18 @@ export class IfcCostItem {
 	PredefinedType: IfcCostItemTypeEnum | null;
 	CostValues: Handle<IfcCostValue>[] | null;
 	CostQuantities: Handle<IfcPhysicalQuantity>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCostItem
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let PredefinedType = tape[6];
+		let CostValues = tape[7];
+		let CostQuantities = tape[8];
+		return new IfcCostItem(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, PredefinedType, CostValues, CostQuantities);
 	}
 	ToTape(): any[]
 	{
@@ -11499,8 +12781,19 @@ export class IfcCostSchedule {
 	Status: IfcLabel | null;
 	SubmittedOn: IfcDateTime | null;
 	UpdateDate: IfcDateTime | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCostSchedule
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let PredefinedType = tape[6];
+		let Status = tape[7];
+		let SubmittedOn = tape[8];
+		let UpdateDate = tape[9];
+		return new IfcCostSchedule(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, PredefinedType, Status, SubmittedOn, UpdateDate);
 	}
 	ToTape(): any[]
 	{
@@ -11577,8 +12870,19 @@ export class IfcCostValue {
 	Condition: IfcLabel | null;
 	ArithmeticOperator: IfcArithmeticOperatorEnum | null;
 	Components: Handle<IfcAppliedValue>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCostValue
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let AppliedValue = tape[2];
+		let UnitBasis = tape[3];
+		let ApplicableDate = tape[4];
+		let FixedUntilDate = tape[5];
+		let Category = tape[6];
+		let Condition = tape[7];
+		let ArithmeticOperator = tape[8];
+		let Components = tape[9];
+		return new IfcCostValue(Name, Description, AppliedValue, UnitBasis, ApplicableDate, FixedUntilDate, Category, Condition, ArithmeticOperator, Components);
 	}
 	ToTape(): any[]
 	{
@@ -11655,8 +12959,18 @@ export class IfcCovering {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCoveringTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCovering
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCovering(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11728,8 +13042,19 @@ export class IfcCoveringType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCoveringTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCoveringType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCoveringType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11807,8 +13132,20 @@ export class IfcCrewResource {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcCrewResourceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCrewResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let Usage = tape[7];
+		let BaseCosts = tape[8];
+		let BaseQuantity = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcCrewResource(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11895,8 +13232,21 @@ export class IfcCrewResourceType {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcCrewResourceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCrewResourceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ResourceType = tape[8];
+		let BaseCosts = tape[9];
+		let BaseQuantity = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcCrewResourceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -11964,8 +13314,10 @@ export class IfcCsgPrimitive3D {
 		this.Position = Position;
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCsgPrimitive3D
 	{
+		let Position = tape[0];
+		return new IfcCsgPrimitive3D(Position);
 	}
 	ToTape(): any[]
 	{
@@ -11981,8 +13333,10 @@ export class IfcCsgSolid {
 		this.TreeRootExpression = TreeRootExpression;
 	}
 	TreeRootExpression: IfcCsgSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCsgSolid
 	{
+		let TreeRootExpression = tape[0];
+		return new IfcCsgSolid(TreeRootExpression);
 	}
 	ToTape(): any[]
 	{
@@ -12008,8 +13362,16 @@ export class IfcCurrencyRelationship {
 	ExchangeRate: IfcPositiveRatioMeasure ;
 	RateDateTime: IfcDateTime | null;
 	RateSource: Handle<IfcLibraryInformation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurrencyRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let RelatingMonetaryUnit = tape[2];
+		let RelatedMonetaryUnit = tape[3];
+		let ExchangeRate = tape[4];
+		let RateDateTime = tape[5];
+		let RateSource = tape[6];
+		return new IfcCurrencyRelationship(Name, Description, RelatingMonetaryUnit, RelatedMonetaryUnit, ExchangeRate, RateDateTime, RateSource);
 	}
 	ToTape(): any[]
 	{
@@ -12063,8 +13425,18 @@ export class IfcCurtainWall {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcCurtainWallTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurtainWall
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcCurtainWall(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -12136,8 +13508,19 @@ export class IfcCurtainWallType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcCurtainWallTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurtainWallType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcCurtainWallType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -12193,8 +13576,9 @@ export class IfcCurve {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurve
 	{
+		return new IfcCurve();
 	}
 	ToTape(): any[]
 	{
@@ -12212,8 +13596,12 @@ export class IfcCurveBoundedPlane {
 	BasisSurface: Handle<IfcPlane> ;
 	OuterBoundary: Handle<IfcCurve> ;
 	InnerBoundaries: Handle<IfcCurve>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurveBoundedPlane
 	{
+		let BasisSurface = tape[0];
+		let OuterBoundary = tape[1];
+		let InnerBoundaries = tape[2];
+		return new IfcCurveBoundedPlane(BasisSurface, OuterBoundary, InnerBoundaries);
 	}
 	ToTape(): any[]
 	{
@@ -12238,8 +13626,12 @@ export class IfcCurveBoundedSurface {
 	BasisSurface: Handle<IfcSurface> ;
 	Boundaries: Handle<IfcBoundaryCurve>[] ;
 	ImplicitOuter: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurveBoundedSurface
 	{
+		let BasisSurface = tape[0];
+		let Boundaries = tape[1];
+		let ImplicitOuter = tape[2];
+		return new IfcCurveBoundedSurface(BasisSurface, Boundaries, ImplicitOuter);
 	}
 	ToTape(): any[]
 	{
@@ -12262,8 +13654,12 @@ export class IfcCurveSegment2D {
 	StartPoint: Handle<IfcCartesianPoint> ;
 	StartDirection: IfcPlaneAngleMeasure ;
 	SegmentLength: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurveSegment2D
 	{
+		let StartPoint = tape[0];
+		let StartDirection = tape[1];
+		let SegmentLength = tape[2];
+		return new IfcCurveSegment2D(StartPoint, StartDirection, SegmentLength);
 	}
 	ToTape(): any[]
 	{
@@ -12289,8 +13685,14 @@ export class IfcCurveStyle {
 	CurveWidth: IfcSizeSelect | null;
 	CurveColour: IfcColour | null;
 	ModelOrDraughting: IfcBoolean | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurveStyle
 	{
+		let Name = tape[0];
+		let CurveFont = tape[1];
+		let CurveWidth = tape[2];
+		let CurveColour = tape[3];
+		let ModelOrDraughting = tape[4];
+		return new IfcCurveStyle(Name, CurveFont, CurveWidth, CurveColour, ModelOrDraughting);
 	}
 	ToTape(): any[]
 	{
@@ -12323,8 +13725,11 @@ export class IfcCurveStyleFont {
 	}
 	Name: IfcLabel | null;
 	PatternList: Handle<IfcCurveStyleFontPattern>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurveStyleFont
 	{
+		let Name = tape[0];
+		let PatternList = tape[1];
+		return new IfcCurveStyleFont(Name, PatternList);
 	}
 	ToTape(): any[]
 	{
@@ -12350,8 +13755,12 @@ export class IfcCurveStyleFontAndScaling {
 	Name: IfcLabel | null;
 	CurveFont: IfcCurveStyleFontSelect ;
 	CurveFontScaling: IfcPositiveRatioMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurveStyleFontAndScaling
 	{
+		let Name = tape[0];
+		let CurveFont = tape[1];
+		let CurveFontScaling = tape[2];
+		return new IfcCurveStyleFontAndScaling(Name, CurveFont, CurveFontScaling);
 	}
 	ToTape(): any[]
 	{
@@ -12372,8 +13781,11 @@ export class IfcCurveStyleFontPattern {
 	}
 	VisibleSegmentLength: IfcLengthMeasure ;
 	InvisibleSegmentLength: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCurveStyleFontPattern
 	{
+		let VisibleSegmentLength = tape[0];
+		let InvisibleSegmentLength = tape[1];
+		return new IfcCurveStyleFontPattern(VisibleSegmentLength, InvisibleSegmentLength);
 	}
 	ToTape(): any[]
 	{
@@ -12391,8 +13803,11 @@ export class IfcCylindricalSurface {
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcCylindricalSurface
 	{
+		let Position = tape[0];
+		let Radius = tape[1];
+		return new IfcCylindricalSurface(Position, Radius);
 	}
 	ToTape(): any[]
 	{
@@ -12424,8 +13839,18 @@ export class IfcDamper {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDamperTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDamper
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcDamper(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -12497,8 +13922,19 @@ export class IfcDamperType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDamperTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDamperType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcDamperType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -12570,8 +14006,17 @@ export class IfcDeepFoundation {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDeepFoundation
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcDeepFoundation(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -12638,8 +14083,18 @@ export class IfcDeepFoundationType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDeepFoundationType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcDeepFoundationType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -12705,8 +14160,14 @@ export class IfcDerivedProfileDef {
 	ParentProfile: Handle<IfcProfileDef> ;
 	Operator: Handle<IfcCartesianTransformationOperator2D> ;
 	Label: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDerivedProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let ParentProfile = tape[2];
+		let Operator = tape[3];
+		let Label = tape[4];
+		return new IfcDerivedProfileDef(ProfileType, ProfileName, ParentProfile, Operator, Label);
 	}
 	ToTape(): any[]
 	{
@@ -12738,8 +14199,12 @@ export class IfcDerivedUnit {
 	Elements: Handle<IfcDerivedUnitElement>[] ;
 	UnitType: IfcDerivedUnitEnum ;
 	UserDefinedType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDerivedUnit
 	{
+		let Elements = tape[0];
+		let UnitType = tape[1];
+		let UserDefinedType = tape[2];
+		return new IfcDerivedUnit(Elements, UnitType, UserDefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -12763,8 +14228,11 @@ export class IfcDerivedUnitElement {
 	}
 	Unit: Handle<IfcNamedUnit> ;
 	Exponent: Handle<number> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDerivedUnitElement
 	{
+		let Unit = tape[0];
+		let Exponent = tape[1];
+		return new IfcDerivedUnitElement(Unit, Exponent);
 	}
 	ToTape(): any[]
 	{
@@ -12794,8 +14262,16 @@ export class IfcDimensionalExponents {
 	ThermodynamicTemperatureExponent: Handle<number> ;
 	AmountOfSubstanceExponent: Handle<number> ;
 	LuminousIntensityExponent: Handle<number> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDimensionalExponents
 	{
+		let LengthExponent = tape[0];
+		let MassExponent = tape[1];
+		let TimeExponent = tape[2];
+		let ElectricCurrentExponent = tape[3];
+		let ThermodynamicTemperatureExponent = tape[4];
+		let AmountOfSubstanceExponent = tape[5];
+		let LuminousIntensityExponent = tape[6];
+		return new IfcDimensionalExponents(LengthExponent, MassExponent, TimeExponent, ElectricCurrentExponent, ThermodynamicTemperatureExponent, AmountOfSubstanceExponent, LuminousIntensityExponent);
 	}
 	ToTape(): any[]
 	{
@@ -12823,8 +14299,10 @@ export class IfcDirection {
 		this.DirectionRatios = DirectionRatios;
 	}
 	DirectionRatios: IfcReal[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDirection
 	{
+		let DirectionRatios = tape[0];
+		return new IfcDirection(DirectionRatios);
 	}
 	ToTape(): any[]
 	{
@@ -12856,8 +14334,18 @@ export class IfcDiscreteAccessory {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDiscreteAccessoryTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDiscreteAccessory
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcDiscreteAccessory(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -12929,8 +14417,19 @@ export class IfcDiscreteAccessoryType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDiscreteAccessoryTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDiscreteAccessoryType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcDiscreteAccessoryType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -12996,8 +14495,14 @@ export class IfcDistanceExpression {
 	OffsetVertical: IfcLengthMeasure | null;
 	OffsetLongitudinal: IfcLengthMeasure | null;
 	AlongHorizontal: IfcBoolean | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistanceExpression
 	{
+		let DistanceAlong = tape[0];
+		let OffsetLateral = tape[1];
+		let OffsetVertical = tape[2];
+		let OffsetLongitudinal = tape[3];
+		let AlongHorizontal = tape[4];
+		return new IfcDistanceExpression(DistanceAlong, OffsetLateral, OffsetVertical, OffsetLongitudinal, AlongHorizontal);
 	}
 	ToTape(): any[]
 	{
@@ -13047,8 +14552,18 @@ export class IfcDistributionChamberElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDistributionChamberElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionChamberElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcDistributionChamberElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -13120,8 +14635,19 @@ export class IfcDistributionChamberElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDistributionChamberElementTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionChamberElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcDistributionChamberElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -13191,8 +14717,16 @@ export class IfcDistributionCircuit {
 	ObjectType: IfcLabel | null;
 	LongName: IfcLabel | null;
 	PredefinedType: IfcDistributionSystemEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionCircuit
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let LongName = tape[5];
+		let PredefinedType = tape[6];
+		return new IfcDistributionCircuit(GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -13250,8 +14784,17 @@ export class IfcDistributionControlElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionControlElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcDistributionControlElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -13318,8 +14861,18 @@ export class IfcDistributionControlElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionControlElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcDistributionControlElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -13391,8 +14944,17 @@ export class IfcDistributionElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcDistributionElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -13459,8 +15021,18 @@ export class IfcDistributionElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcDistributionElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -13532,8 +15104,17 @@ export class IfcDistributionFlowElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionFlowElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcDistributionFlowElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -13600,8 +15181,18 @@ export class IfcDistributionFlowElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionFlowElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcDistributionFlowElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -13677,8 +15268,19 @@ export class IfcDistributionPort {
 	FlowDirection: IfcFlowDirectionEnum | null;
 	PredefinedType: IfcDistributionPortTypeEnum | null;
 	SystemType: IfcDistributionSystemEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionPort
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let FlowDirection = tape[7];
+		let PredefinedType = tape[8];
+		let SystemType = tape[9];
+		return new IfcDistributionPort(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, FlowDirection, PredefinedType, SystemType);
 	}
 	ToTape(): any[]
 	{
@@ -13745,8 +15347,16 @@ export class IfcDistributionSystem {
 	ObjectType: IfcLabel | null;
 	LongName: IfcLabel | null;
 	PredefinedType: IfcDistributionSystemEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDistributionSystem
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let LongName = tape[5];
+		let PredefinedType = tape[6];
+		return new IfcDistributionSystem(GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -13822,8 +15432,26 @@ export class IfcDocumentInformation {
 	ValidUntil: IfcDate | null;
 	Confidentiality: IfcDocumentConfidentialityEnum | null;
 	Status: IfcDocumentStatusEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDocumentInformation
 	{
+		let Identification = tape[0];
+		let Name = tape[1];
+		let Description = tape[2];
+		let Location = tape[3];
+		let Purpose = tape[4];
+		let IntendedUse = tape[5];
+		let Scope = tape[6];
+		let Revision = tape[7];
+		let DocumentOwner = tape[8];
+		let Editors = tape[9];
+		let CreationTime = tape[10];
+		let LastRevisionTime = tape[11];
+		let ElectronicFormat = tape[12];
+		let ValidFrom = tape[13];
+		let ValidUntil = tape[14];
+		let Confidentiality = tape[15];
+		let Status = tape[16];
+		return new IfcDocumentInformation(Identification, Name, Description, Location, Purpose, IntendedUse, Scope, Revision, DocumentOwner, Editors, CreationTime, LastRevisionTime, ElectronicFormat, ValidFrom, ValidUntil, Confidentiality, Status);
 	}
 	ToTape(): any[]
 	{
@@ -13916,8 +15544,14 @@ export class IfcDocumentInformationRelationship {
 	RelatingDocument: Handle<IfcDocumentInformation> ;
 	RelatedDocuments: Handle<IfcDocumentInformation>[] ;
 	RelationshipType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDocumentInformationRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let RelatingDocument = tape[2];
+		let RelatedDocuments = tape[3];
+		let RelationshipType = tape[4];
+		return new IfcDocumentInformationRelationship(Name, Description, RelatingDocument, RelatedDocuments, RelationshipType);
 	}
 	ToTape(): any[]
 	{
@@ -13959,8 +15593,14 @@ export class IfcDocumentReference {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	ReferencedDocument: Handle<IfcDocumentInformation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDocumentReference
 	{
+		let Location = tape[0];
+		let Identification = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ReferencedDocument = tape[4];
+		return new IfcDocumentReference(Location, Identification, Name, Description, ReferencedDocument);
 	}
 	ToTape(): any[]
 	{
@@ -14023,8 +15663,22 @@ export class IfcDoor {
 	PredefinedType: IfcDoorTypeEnum | null;
 	OperationType: IfcDoorTypeOperationEnum | null;
 	UserDefinedOperationType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDoor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let OverallHeight = tape[8];
+		let OverallWidth = tape[9];
+		let PredefinedType = tape[10];
+		let OperationType = tape[11];
+		let UserDefinedOperationType = tape[12];
+		return new IfcDoor(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, OverallHeight, OverallWidth, PredefinedType, OperationType, UserDefinedOperationType);
 	}
 	ToTape(): any[]
 	{
@@ -14124,8 +15778,26 @@ export class IfcDoorLiningProperties {
 	ShapeAspectStyle: Handle<IfcShapeAspect> | null;
 	LiningToPanelOffsetX: IfcLengthMeasure | null;
 	LiningToPanelOffsetY: IfcLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDoorLiningProperties
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let LiningDepth = tape[4];
+		let LiningThickness = tape[5];
+		let ThresholdDepth = tape[6];
+		let ThresholdThickness = tape[7];
+		let TransomThickness = tape[8];
+		let TransomOffset = tape[9];
+		let LiningOffset = tape[10];
+		let ThresholdOffset = tape[11];
+		let CasingThickness = tape[12];
+		let CasingDepth = tape[13];
+		let ShapeAspectStyle = tape[14];
+		let LiningToPanelOffsetX = tape[15];
+		let LiningToPanelOffsetY = tape[16];
+		return new IfcDoorLiningProperties(GlobalId, OwnerHistory, Name, Description, LiningDepth, LiningThickness, ThresholdDepth, ThresholdThickness, TransomThickness, TransomOffset, LiningOffset, ThresholdOffset, CasingThickness, CasingDepth, ShapeAspectStyle, LiningToPanelOffsetX, LiningToPanelOffsetY);
 	}
 	ToTape(): any[]
 	{
@@ -14223,8 +15895,18 @@ export class IfcDoorPanelProperties {
 	PanelWidth: IfcNormalisedRatioMeasure | null;
 	PanelPosition: IfcDoorPanelPositionEnum ;
 	ShapeAspectStyle: Handle<IfcShapeAspect> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDoorPanelProperties
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let PanelDepth = tape[4];
+		let PanelOperation = tape[5];
+		let PanelWidth = tape[6];
+		let PanelPosition = tape[7];
+		let ShapeAspectStyle = tape[8];
+		return new IfcDoorPanelProperties(GlobalId, OwnerHistory, Name, Description, PanelDepth, PanelOperation, PanelWidth, PanelPosition, ShapeAspectStyle);
 	}
 	ToTape(): any[]
 	{
@@ -14290,8 +15972,22 @@ export class IfcDoorStandardCase {
 	PredefinedType: IfcDoorTypeEnum | null;
 	OperationType: IfcDoorTypeOperationEnum | null;
 	UserDefinedOperationType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDoorStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let OverallHeight = tape[8];
+		let OverallWidth = tape[9];
+		let PredefinedType = tape[10];
+		let OperationType = tape[11];
+		let UserDefinedOperationType = tape[12];
+		return new IfcDoorStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, OverallHeight, OverallWidth, PredefinedType, OperationType, UserDefinedOperationType);
 	}
 	ToTape(): any[]
 	{
@@ -14381,8 +16077,21 @@ export class IfcDoorStyle {
 	ConstructionType: IfcDoorStyleConstructionEnum ;
 	ParameterTakesPrecedence: IfcBoolean ;
 	Sizeable: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDoorStyle
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let OperationType = tape[8];
+		let ConstructionType = tape[9];
+		let ParameterTakesPrecedence = tape[10];
+		let Sizeable = tape[11];
+		return new IfcDoorStyle(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, OperationType, ConstructionType, ParameterTakesPrecedence, Sizeable);
 	}
 	ToTape(): any[]
 	{
@@ -14459,8 +16168,22 @@ export class IfcDoorType {
 	OperationType: IfcDoorTypeOperationEnum ;
 	ParameterTakesPrecedence: IfcBoolean | null;
 	UserDefinedOperationType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDoorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		let OperationType = tape[10];
+		let ParameterTakesPrecedence = tape[11];
+		let UserDefinedOperationType = tape[12];
+		return new IfcDoorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType, OperationType, ParameterTakesPrecedence, UserDefinedOperationType);
 	}
 	ToTape(): any[]
 	{
@@ -14526,8 +16249,10 @@ export class IfcDraughtingPreDefinedColour {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDraughtingPreDefinedColour
 	{
+		let Name = tape[0];
+		return new IfcDraughtingPreDefinedColour(Name);
 	}
 	ToTape(): any[]
 	{
@@ -14543,8 +16268,10 @@ export class IfcDraughtingPreDefinedCurveFont {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDraughtingPreDefinedCurveFont
 	{
+		let Name = tape[0];
+		return new IfcDraughtingPreDefinedCurveFont(Name);
 	}
 	ToTape(): any[]
 	{
@@ -14576,8 +16303,18 @@ export class IfcDuctFitting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDuctFittingTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDuctFitting
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcDuctFitting(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -14649,8 +16386,19 @@ export class IfcDuctFittingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDuctFittingTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDuctFittingType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcDuctFittingType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -14724,8 +16472,18 @@ export class IfcDuctSegment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDuctSegmentTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDuctSegment
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcDuctSegment(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -14797,8 +16555,19 @@ export class IfcDuctSegmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDuctSegmentTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDuctSegmentType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcDuctSegmentType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -14872,8 +16641,18 @@ export class IfcDuctSilencer {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcDuctSilencerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDuctSilencer
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcDuctSilencer(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -14945,8 +16724,19 @@ export class IfcDuctSilencerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcDuctSilencerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcDuctSilencerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcDuctSilencerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15006,8 +16796,11 @@ export class IfcEdge {
 	}
 	EdgeStart: Handle<IfcVertex> ;
 	EdgeEnd: Handle<IfcVertex> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEdge
 	{
+		let EdgeStart = tape[0];
+		let EdgeEnd = tape[1];
+		return new IfcEdge(EdgeStart, EdgeEnd);
 	}
 	ToTape(): any[]
 	{
@@ -15031,8 +16824,13 @@ export class IfcEdgeCurve {
 	EdgeEnd: Handle<IfcVertex> ;
 	EdgeGeometry: Handle<IfcCurve> ;
 	SameSense: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEdgeCurve
 	{
+		let EdgeStart = tape[0];
+		let EdgeEnd = tape[1];
+		let EdgeGeometry = tape[2];
+		let SameSense = tape[3];
+		return new IfcEdgeCurve(EdgeStart, EdgeEnd, EdgeGeometry, SameSense);
 	}
 	ToTape(): any[]
 	{
@@ -15052,8 +16850,10 @@ export class IfcEdgeLoop {
 		this.EdgeList = EdgeList;
 	}
 	EdgeList: Handle<IfcOrientedEdge>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEdgeLoop
 	{
+		let EdgeList = tape[0];
+		return new IfcEdgeLoop(EdgeList);
 	}
 	ToTape(): any[]
 	{
@@ -15086,8 +16886,18 @@ export class IfcElectricAppliance {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricApplianceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricAppliance
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcElectricAppliance(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15159,8 +16969,19 @@ export class IfcElectricApplianceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricApplianceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricApplianceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcElectricApplianceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15234,8 +17055,18 @@ export class IfcElectricDistributionBoard {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricDistributionBoardTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricDistributionBoard
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcElectricDistributionBoard(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15307,8 +17138,19 @@ export class IfcElectricDistributionBoardType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricDistributionBoardTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricDistributionBoardType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcElectricDistributionBoardType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15382,8 +17224,18 @@ export class IfcElectricFlowStorageDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricFlowStorageDeviceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricFlowStorageDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcElectricFlowStorageDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15455,8 +17307,19 @@ export class IfcElectricFlowStorageDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricFlowStorageDeviceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricFlowStorageDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcElectricFlowStorageDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15530,8 +17393,18 @@ export class IfcElectricGenerator {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricGeneratorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricGenerator
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcElectricGenerator(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15603,8 +17476,19 @@ export class IfcElectricGeneratorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricGeneratorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricGeneratorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcElectricGeneratorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15678,8 +17562,18 @@ export class IfcElectricMotor {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricMotorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricMotor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcElectricMotor(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15751,8 +17645,19 @@ export class IfcElectricMotorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricMotorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricMotorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcElectricMotorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15826,8 +17731,18 @@ export class IfcElectricTimeControl {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcElectricTimeControlTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricTimeControl
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcElectricTimeControl(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15899,8 +17814,19 @@ export class IfcElectricTimeControlType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElectricTimeControlTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElectricTimeControlType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcElectricTimeControlType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -15972,8 +17898,17 @@ export class IfcElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -16042,8 +17977,19 @@ export class IfcElementAssembly {
 	Tag: IfcIdentifier | null;
 	AssemblyPlace: IfcAssemblyPlaceEnum | null;
 	PredefinedType: IfcElementAssemblyTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElementAssembly
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let AssemblyPlace = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcElementAssembly(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, AssemblyPlace, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -16118,8 +18064,19 @@ export class IfcElementAssemblyType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcElementAssemblyTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElementAssemblyType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcElementAssemblyType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -16191,8 +18148,17 @@ export class IfcElementComponent {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElementComponent
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcElementComponent(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -16259,8 +18225,18 @@ export class IfcElementComponentType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElementComponentType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcElementComponentType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -16328,8 +18304,15 @@ export class IfcElementQuantity {
 	Description: IfcText | null;
 	MethodOfMeasurement: IfcLabel | null;
 	Quantities: Handle<IfcPhysicalQuantity>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElementQuantity
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let MethodOfMeasurement = tape[4];
+		let Quantities = tape[5];
+		return new IfcElementQuantity(GlobalId, OwnerHistory, Name, Description, MethodOfMeasurement, Quantities);
 	}
 	ToTape(): any[]
 	{
@@ -16384,8 +18367,18 @@ export class IfcElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -16443,8 +18436,10 @@ export class IfcElementarySurface {
 		this.Position = Position;
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcElementarySurface
 	{
+		let Position = tape[0];
+		return new IfcElementarySurface(Position);
 	}
 	ToTape(): any[]
 	{
@@ -16464,8 +18459,12 @@ export class IfcEllipse {
 	Position: IfcAxis2Placement ;
 	SemiAxis1: IfcPositiveLengthMeasure ;
 	SemiAxis2: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEllipse
 	{
+		let Position = tape[0];
+		let SemiAxis1 = tape[1];
+		let SemiAxis2 = tape[2];
+		return new IfcEllipse(Position, SemiAxis1, SemiAxis2);
 	}
 	ToTape(): any[]
 	{
@@ -16487,8 +18486,14 @@ export class IfcEllipseProfileDef {
 	Position: Handle<IfcAxis2Placement2D> | null;
 	SemiAxis1: IfcPositiveLengthMeasure ;
 	SemiAxis2: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEllipseProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let SemiAxis1 = tape[3];
+		let SemiAxis2 = tape[4];
+		return new IfcEllipseProfileDef(ProfileType, ProfileName, Position, SemiAxis1, SemiAxis2);
 	}
 	ToTape(): any[]
 	{
@@ -16526,8 +18531,17 @@ export class IfcEnergyConversionDevice {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEnergyConversionDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcEnergyConversionDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -16594,8 +18608,18 @@ export class IfcEnergyConversionDeviceType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEnergyConversionDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcEnergyConversionDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -16669,8 +18693,18 @@ export class IfcEngine {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcEngineTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEngine
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcEngine(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -16742,8 +18776,19 @@ export class IfcEngineType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcEngineTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEngineType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcEngineType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -16817,8 +18862,18 @@ export class IfcEvaporativeCooler {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcEvaporativeCoolerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEvaporativeCooler
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcEvaporativeCooler(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -16890,8 +18945,19 @@ export class IfcEvaporativeCoolerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcEvaporativeCoolerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEvaporativeCoolerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcEvaporativeCoolerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -16965,8 +19031,18 @@ export class IfcEvaporator {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcEvaporatorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEvaporator
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcEvaporator(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -17038,8 +19114,19 @@ export class IfcEvaporatorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcEvaporatorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEvaporatorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcEvaporatorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -17117,8 +19204,20 @@ export class IfcEvent {
 	EventTriggerType: IfcEventTriggerTypeEnum | null;
 	UserDefinedEventTriggerType: IfcLabel | null;
 	EventOccurenceTime: Handle<IfcEventTime> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEvent
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let PredefinedType = tape[7];
+		let EventTriggerType = tape[8];
+		let UserDefinedEventTriggerType = tape[9];
+		let EventOccurenceTime = tape[10];
+		return new IfcEvent(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, PredefinedType, EventTriggerType, UserDefinedEventTriggerType, EventOccurenceTime);
 	}
 	ToTape(): any[]
 	{
@@ -17192,8 +19291,16 @@ export class IfcEventTime {
 	EarlyDate: IfcDateTime | null;
 	LateDate: IfcDateTime | null;
 	ScheduleDate: IfcDateTime | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEventTime
 	{
+		let Name = tape[0];
+		let DataOrigin = tape[1];
+		let UserDefinedDataOrigin = tape[2];
+		let ActualDate = tape[3];
+		let EarlyDate = tape[4];
+		let LateDate = tape[5];
+		let ScheduleDate = tape[6];
+		return new IfcEventTime(Name, DataOrigin, UserDefinedDataOrigin, ActualDate, EarlyDate, LateDate, ScheduleDate);
 	}
 	ToTape(): any[]
 	{
@@ -17262,8 +19369,21 @@ export class IfcEventType {
 	PredefinedType: IfcEventTypeEnum ;
 	EventTriggerType: IfcEventTriggerTypeEnum ;
 	UserDefinedEventTriggerType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcEventType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ProcessType = tape[8];
+		let PredefinedType = tape[9];
+		let EventTriggerType = tape[10];
+		let UserDefinedEventTriggerType = tape[11];
+		return new IfcEventType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ProcessType, PredefinedType, EventTriggerType, UserDefinedEventTriggerType);
 	}
 	ToTape(): any[]
 	{
@@ -17329,8 +19449,12 @@ export class IfcExtendedProperties {
 	Name: IfcIdentifier | null;
 	Description: IfcText | null;
 	Properties: Handle<IfcProperty>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExtendedProperties
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Properties = tape[2];
+		return new IfcExtendedProperties(Name, Description, Properties);
 	}
 	ToTape(): any[]
 	{
@@ -17355,8 +19479,9 @@ export class IfcExternalInformation {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExternalInformation
 	{
+		return new IfcExternalInformation();
 	}
 	ToTape(): any[]
 	{
@@ -17374,8 +19499,12 @@ export class IfcExternalReference {
 	Location: IfcURIReference | null;
 	Identification: IfcIdentifier | null;
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExternalReference
 	{
+		let Location = tape[0];
+		let Identification = tape[1];
+		let Name = tape[2];
+		return new IfcExternalReference(Location, Identification, Name);
 	}
 	ToTape(): any[]
 	{
@@ -17410,8 +19539,13 @@ export class IfcExternalReferenceRelationship {
 	Description: IfcText | null;
 	RelatingReference: Handle<IfcExternalReference> ;
 	RelatedResourceObjects: IfcResourceObjectSelect[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExternalReferenceRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let RelatingReference = tape[2];
+		let RelatedResourceObjects = tape[3];
+		return new IfcExternalReferenceRelationship(Name, Description, RelatingReference, RelatedResourceObjects);
 	}
 	ToTape(): any[]
 	{
@@ -17453,8 +19587,18 @@ export class IfcExternalSpatialElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	PredefinedType: IfcExternalSpatialElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExternalSpatialElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcExternalSpatialElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -17522,8 +19666,17 @@ export class IfcExternalSpatialStructureElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExternalSpatialStructureElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		return new IfcExternalSpatialStructureElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName);
 	}
 	ToTape(): any[]
 	{
@@ -17578,8 +19731,12 @@ export class IfcExternallyDefinedHatchStyle {
 	Location: IfcURIReference | null;
 	Identification: IfcIdentifier | null;
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExternallyDefinedHatchStyle
 	{
+		let Location = tape[0];
+		let Identification = tape[1];
+		let Name = tape[2];
+		return new IfcExternallyDefinedHatchStyle(Location, Identification, Name);
 	}
 	ToTape(): any[]
 	{
@@ -17612,8 +19769,12 @@ export class IfcExternallyDefinedSurfaceStyle {
 	Location: IfcURIReference | null;
 	Identification: IfcIdentifier | null;
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExternallyDefinedSurfaceStyle
 	{
+		let Location = tape[0];
+		let Identification = tape[1];
+		let Name = tape[2];
+		return new IfcExternallyDefinedSurfaceStyle(Location, Identification, Name);
 	}
 	ToTape(): any[]
 	{
@@ -17646,8 +19807,12 @@ export class IfcExternallyDefinedTextFont {
 	Location: IfcURIReference | null;
 	Identification: IfcIdentifier | null;
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExternallyDefinedTextFont
 	{
+		let Location = tape[0];
+		let Identification = tape[1];
+		let Name = tape[2];
+		return new IfcExternallyDefinedTextFont(Location, Identification, Name);
 	}
 	ToTape(): any[]
 	{
@@ -17682,8 +19847,13 @@ export class IfcExtrudedAreaSolid {
 	Position: Handle<IfcAxis2Placement3D> | null;
 	ExtrudedDirection: Handle<IfcDirection> ;
 	Depth: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExtrudedAreaSolid
 	{
+		let SweptArea = tape[0];
+		let Position = tape[1];
+		let ExtrudedDirection = tape[2];
+		let Depth = tape[3];
+		return new IfcExtrudedAreaSolid(SweptArea, Position, ExtrudedDirection, Depth);
 	}
 	ToTape(): any[]
 	{
@@ -17714,8 +19884,14 @@ export class IfcExtrudedAreaSolidTapered {
 	ExtrudedDirection: Handle<IfcDirection> ;
 	Depth: IfcPositiveLengthMeasure ;
 	EndSweptArea: Handle<IfcProfileDef> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcExtrudedAreaSolidTapered
 	{
+		let SweptArea = tape[0];
+		let Position = tape[1];
+		let ExtrudedDirection = tape[2];
+		let Depth = tape[3];
+		let EndSweptArea = tape[4];
+		return new IfcExtrudedAreaSolidTapered(SweptArea, Position, ExtrudedDirection, Depth, EndSweptArea);
 	}
 	ToTape(): any[]
 	{
@@ -17740,8 +19916,10 @@ export class IfcFace {
 		this.Bounds = Bounds;
 	}
 	Bounds: Handle<IfcFaceBound>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFace
 	{
+		let Bounds = tape[0];
+		return new IfcFace(Bounds);
 	}
 	ToTape(): any[]
 	{
@@ -17758,8 +19936,10 @@ export class IfcFaceBasedSurfaceModel {
 		this.FbsmFaces = FbsmFaces;
 	}
 	FbsmFaces: Handle<IfcConnectedFaceSet>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFaceBasedSurfaceModel
 	{
+		let FbsmFaces = tape[0];
+		return new IfcFaceBasedSurfaceModel(FbsmFaces);
 	}
 	ToTape(): any[]
 	{
@@ -17778,8 +19958,11 @@ export class IfcFaceBound {
 	}
 	Bound: Handle<IfcLoop> ;
 	Orientation: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFaceBound
 	{
+		let Bound = tape[0];
+		let Orientation = tape[1];
+		return new IfcFaceBound(Bound, Orientation);
 	}
 	ToTape(): any[]
 	{
@@ -17797,8 +19980,11 @@ export class IfcFaceOuterBound {
 	}
 	Bound: Handle<IfcLoop> ;
 	Orientation: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFaceOuterBound
 	{
+		let Bound = tape[0];
+		let Orientation = tape[1];
+		return new IfcFaceOuterBound(Bound, Orientation);
 	}
 	ToTape(): any[]
 	{
@@ -17818,8 +20004,12 @@ export class IfcFaceSurface {
 	Bounds: Handle<IfcFaceBound>[] ;
 	FaceSurface: Handle<IfcSurface> ;
 	SameSense: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFaceSurface
 	{
+		let Bounds = tape[0];
+		let FaceSurface = tape[1];
+		let SameSense = tape[2];
+		return new IfcFaceSurface(Bounds, FaceSurface, SameSense);
 	}
 	ToTape(): any[]
 	{
@@ -17838,8 +20028,10 @@ export class IfcFacetedBrep {
 		this.Outer = Outer;
 	}
 	Outer: Handle<IfcClosedShell> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFacetedBrep
 	{
+		let Outer = tape[0];
+		return new IfcFacetedBrep(Outer);
 	}
 	ToTape(): any[]
 	{
@@ -17857,8 +20049,11 @@ export class IfcFacetedBrepWithVoids {
 	}
 	Outer: Handle<IfcClosedShell> ;
 	Voids: Handle<IfcClosedShell>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFacetedBrepWithVoids
 	{
+		let Outer = tape[0];
+		let Voids = tape[1];
+		return new IfcFacetedBrepWithVoids(Outer, Voids);
 	}
 	ToTape(): any[]
 	{
@@ -17893,8 +20088,18 @@ export class IfcFacility {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFacility
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		return new IfcFacility(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType);
 	}
 	ToTape(): any[]
 	{
@@ -17964,8 +20169,18 @@ export class IfcFacilityPart {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFacilityPart
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		return new IfcFacilityPart(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType);
 	}
 	ToTape(): any[]
 	{
@@ -18031,8 +20246,16 @@ export class IfcFailureConnectionCondition {
 	CompressionFailureX: IfcForceMeasure | null;
 	CompressionFailureY: IfcForceMeasure | null;
 	CompressionFailureZ: IfcForceMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFailureConnectionCondition
 	{
+		let Name = tape[0];
+		let TensionFailureX = tape[1];
+		let TensionFailureY = tape[2];
+		let TensionFailureZ = tape[3];
+		let CompressionFailureX = tape[4];
+		let CompressionFailureY = tape[5];
+		let CompressionFailureZ = tape[6];
+		return new IfcFailureConnectionCondition(Name, TensionFailureX, TensionFailureY, TensionFailureZ, CompressionFailureX, CompressionFailureY, CompressionFailureZ);
 	}
 	ToTape(): any[]
 	{
@@ -18097,8 +20320,18 @@ export class IfcFan {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFanTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFan
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcFan(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -18170,8 +20403,19 @@ export class IfcFanType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFanTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFanType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcFanType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -18245,8 +20489,18 @@ export class IfcFastener {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFastenerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFastener
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcFastener(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -18318,8 +20572,19 @@ export class IfcFastenerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFastenerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFastenerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcFastenerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -18391,8 +20656,17 @@ export class IfcFeatureElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFeatureElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFeatureElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -18457,8 +20731,17 @@ export class IfcFeatureElementAddition {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFeatureElementAddition
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFeatureElementAddition(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -18523,8 +20806,17 @@ export class IfcFeatureElementSubtraction {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFeatureElementSubtraction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFeatureElementSubtraction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -18579,8 +20871,12 @@ export class IfcFillAreaStyle {
 	Name: IfcLabel | null;
 	FillStyles: IfcFillStyleSelect[] ;
 	ModelorDraughting: IfcBoolean | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFillAreaStyle
 	{
+		let Name = tape[0];
+		let FillStyles = tape[1];
+		let ModelorDraughting = tape[2];
+		return new IfcFillAreaStyle(Name, FillStyles, ModelorDraughting);
 	}
 	ToTape(): any[]
 	{
@@ -18610,8 +20906,14 @@ export class IfcFillAreaStyleHatching {
 	PointOfReferenceHatchLine: Handle<IfcCartesianPoint> | null;
 	PatternStart: Handle<IfcCartesianPoint> | null;
 	HatchLineAngle: IfcPlaneAngleMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFillAreaStyleHatching
 	{
+		let HatchLineAppearance = tape[0];
+		let StartOfNextHatchLine = tape[1];
+		let PointOfReferenceHatchLine = tape[2];
+		let PatternStart = tape[3];
+		let HatchLineAngle = tape[4];
+		return new IfcFillAreaStyleHatching(HatchLineAppearance, StartOfNextHatchLine, PointOfReferenceHatchLine, PatternStart, HatchLineAngle);
 	}
 	ToTape(): any[]
 	{
@@ -18643,8 +20945,12 @@ export class IfcFillAreaStyleTiles {
 	TilingPattern: Handle<IfcVector>[] ;
 	Tiles: Handle<IfcStyledItem>[] ;
 	TilingScale: IfcPositiveRatioMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFillAreaStyleTiles
 	{
+		let TilingPattern = tape[0];
+		let Tiles = tape[1];
+		let TilingScale = tape[2];
+		return new IfcFillAreaStyleTiles(TilingPattern, Tiles, TilingScale);
 	}
 	ToTape(): any[]
 	{
@@ -18680,8 +20986,18 @@ export class IfcFilter {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFilterTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFilter
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcFilter(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -18753,8 +21069,19 @@ export class IfcFilterType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFilterTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFilterType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcFilterType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -18828,8 +21155,18 @@ export class IfcFireSuppressionTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFireSuppressionTerminalTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFireSuppressionTerminal
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcFireSuppressionTerminal(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -18901,8 +21238,19 @@ export class IfcFireSuppressionTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFireSuppressionTerminalTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFireSuppressionTerminalType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcFireSuppressionTerminalType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -18970,8 +21318,15 @@ export class IfcFixedReferenceSweptAreaSolid {
 	StartParam: IfcParameterValue | null;
 	EndParam: IfcParameterValue | null;
 	FixedReference: Handle<IfcDirection> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFixedReferenceSweptAreaSolid
 	{
+		let SweptArea = tape[0];
+		let Position = tape[1];
+		let Directrix = tape[2];
+		let StartParam = tape[3];
+		let EndParam = tape[4];
+		let FixedReference = tape[5];
+		return new IfcFixedReferenceSweptAreaSolid(SweptArea, Position, Directrix, StartParam, EndParam, FixedReference);
 	}
 	ToTape(): any[]
 	{
@@ -19020,8 +21375,17 @@ export class IfcFlowController {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowController
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFlowController(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -19088,8 +21452,18 @@ export class IfcFlowControllerType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowControllerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcFlowControllerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -19161,8 +21535,17 @@ export class IfcFlowFitting {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowFitting
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFlowFitting(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -19229,8 +21612,18 @@ export class IfcFlowFittingType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowFittingType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcFlowFittingType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -19304,8 +21697,18 @@ export class IfcFlowInstrument {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFlowInstrumentTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowInstrument
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcFlowInstrument(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -19377,8 +21780,19 @@ export class IfcFlowInstrumentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFlowInstrumentTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowInstrumentType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcFlowInstrumentType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -19452,8 +21866,18 @@ export class IfcFlowMeter {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFlowMeterTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowMeter
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcFlowMeter(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -19525,8 +21949,19 @@ export class IfcFlowMeterType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFlowMeterTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowMeterType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcFlowMeterType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -19598,8 +22033,17 @@ export class IfcFlowMovingDevice {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowMovingDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFlowMovingDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -19666,8 +22110,18 @@ export class IfcFlowMovingDeviceType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowMovingDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcFlowMovingDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -19739,8 +22193,17 @@ export class IfcFlowSegment {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowSegment
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFlowSegment(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -19807,8 +22270,18 @@ export class IfcFlowSegmentType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowSegmentType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcFlowSegmentType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -19880,8 +22353,17 @@ export class IfcFlowStorageDevice {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowStorageDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFlowStorageDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -19948,8 +22430,18 @@ export class IfcFlowStorageDeviceType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowStorageDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcFlowStorageDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -20021,8 +22513,17 @@ export class IfcFlowTerminal {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowTerminal
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFlowTerminal(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -20089,8 +22590,18 @@ export class IfcFlowTerminalType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowTerminalType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcFlowTerminalType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -20162,8 +22673,17 @@ export class IfcFlowTreatmentDevice {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowTreatmentDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFlowTreatmentDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -20230,8 +22750,18 @@ export class IfcFlowTreatmentDeviceType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFlowTreatmentDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcFlowTreatmentDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -20305,8 +22835,18 @@ export class IfcFooting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFootingTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFooting
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcFooting(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -20378,8 +22918,19 @@ export class IfcFootingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcFootingTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFootingType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcFootingType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -20451,8 +23002,17 @@ export class IfcFurnishingElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFurnishingElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcFurnishingElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -20519,8 +23079,18 @@ export class IfcFurnishingElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFurnishingElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcFurnishingElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -20594,8 +23164,18 @@ export class IfcFurniture {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcFurnitureTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFurniture
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcFurniture(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -20669,8 +23249,20 @@ export class IfcFurnitureType {
 	ElementType: IfcLabel | null;
 	AssemblyPlace: IfcAssemblyPlaceEnum ;
 	PredefinedType: IfcFurnitureTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcFurnitureType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let AssemblyPlace = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcFurnitureType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, AssemblyPlace, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -20747,8 +23339,18 @@ export class IfcGeographicElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcGeographicElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGeographicElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcGeographicElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -20820,8 +23422,19 @@ export class IfcGeographicElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcGeographicElementTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGeographicElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcGeographicElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -20879,8 +23492,10 @@ export class IfcGeometricCurveSet {
 		this.Elements = Elements;
 	}
 	Elements: IfcGeometricSetSelect[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGeometricCurveSet
 	{
+		let Elements = tape[0];
+		return new IfcGeometricCurveSet(Elements);
 	}
 	ToTape(): any[]
 	{
@@ -20904,8 +23519,15 @@ export class IfcGeometricRepresentationContext {
 	Precision: IfcReal | null;
 	WorldCoordinateSystem: IfcAxis2Placement ;
 	TrueNorth: Handle<IfcDirection> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGeometricRepresentationContext
 	{
+		let ContextIdentifier = tape[0];
+		let ContextType = tape[1];
+		let CoordinateSpaceDimension = tape[2];
+		let Precision = tape[3];
+		let WorldCoordinateSystem = tape[4];
+		let TrueNorth = tape[5];
+		return new IfcGeometricRepresentationContext(ContextIdentifier, ContextType, CoordinateSpaceDimension, Precision, WorldCoordinateSystem, TrueNorth);
 	}
 	ToTape(): any[]
 	{
@@ -20939,8 +23561,9 @@ export class IfcGeometricRepresentationItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGeometricRepresentationItem
 	{
+		return new IfcGeometricRepresentationItem();
 	}
 	ToTape(): any[]
 	{
@@ -20972,8 +23595,19 @@ export class IfcGeometricRepresentationSubContext {
 	TargetScale: IfcPositiveRatioMeasure | null;
 	TargetView: IfcGeometricProjectionEnum ;
 	UserDefinedTargetView: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGeometricRepresentationSubContext
 	{
+		let ContextIdentifier = tape[0];
+		let ContextType = tape[1];
+		let CoordinateSpaceDimension = tape[2];
+		let Precision = tape[3];
+		let WorldCoordinateSystem = tape[4];
+		let TrueNorth = tape[5];
+		let ParentContext = tape[6];
+		let TargetScale = tape[7];
+		let TargetView = tape[8];
+		let UserDefinedTargetView = tape[9];
+		return new IfcGeometricRepresentationSubContext(ContextIdentifier, ContextType, CoordinateSpaceDimension, Precision, WorldCoordinateSystem, TrueNorth, ParentContext, TargetScale, TargetView, UserDefinedTargetView);
 	}
 	ToTape(): any[]
 	{
@@ -21019,8 +23653,10 @@ export class IfcGeometricSet {
 		this.Elements = Elements;
 	}
 	Elements: IfcGeometricSetSelect[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGeometricSet
 	{
+		let Elements = tape[0];
+		return new IfcGeometricSet(Elements);
 	}
 	ToTape(): any[]
 	{
@@ -21054,8 +23690,20 @@ export class IfcGrid {
 	VAxes: Handle<IfcGridAxis>[] ;
 	WAxes: Handle<IfcGridAxis>[] | null;
 	PredefinedType: IfcGridTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGrid
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let UAxes = tape[7];
+		let VAxes = tape[8];
+		let WAxes = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcGrid(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, UAxes, VAxes, WAxes, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -21120,8 +23768,12 @@ export class IfcGridAxis {
 	AxisTag: IfcLabel | null;
 	AxisCurve: Handle<IfcCurve> ;
 	SameSense: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGridAxis
 	{
+		let AxisTag = tape[0];
+		let AxisCurve = tape[1];
+		let SameSense = tape[2];
+		return new IfcGridAxis(AxisTag, AxisCurve, SameSense);
 	}
 	ToTape(): any[]
 	{
@@ -21146,8 +23798,12 @@ export class IfcGridPlacement {
 	PlacementRelTo: Handle<IfcObjectPlacement> | null;
 	PlacementLocation: Handle<IfcVirtualGridIntersection> ;
 	PlacementRefDirection: IfcGridPlacementDirectionSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGridPlacement
 	{
+		let PlacementRelTo = tape[0];
+		let PlacementLocation = tape[1];
+		let PlacementRefDirection = tape[2];
+		return new IfcGridPlacement(PlacementRelTo, PlacementLocation, PlacementRefDirection);
 	}
 	ToTape(): any[]
 	{
@@ -21179,8 +23835,14 @@ export class IfcGroup {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcGroup
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		return new IfcGroup(GlobalId, OwnerHistory, Name, Description, ObjectType);
 	}
 	ToTape(): any[]
 	{
@@ -21218,8 +23880,11 @@ export class IfcHalfSpaceSolid {
 	}
 	BaseSurface: Handle<IfcSurface> ;
 	AgreementFlag: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcHalfSpaceSolid
 	{
+		let BaseSurface = tape[0];
+		let AgreementFlag = tape[1];
+		return new IfcHalfSpaceSolid(BaseSurface, AgreementFlag);
 	}
 	ToTape(): any[]
 	{
@@ -21251,8 +23916,18 @@ export class IfcHeatExchanger {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcHeatExchangerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcHeatExchanger
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcHeatExchanger(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -21324,8 +23999,19 @@ export class IfcHeatExchangerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcHeatExchangerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcHeatExchangerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcHeatExchangerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -21399,8 +24085,18 @@ export class IfcHumidifier {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcHumidifierTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcHumidifier
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcHumidifier(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -21472,8 +24168,19 @@ export class IfcHumidifierType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcHumidifierTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcHumidifierType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcHumidifierType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -21549,8 +24256,19 @@ export class IfcIShapeProfileDef {
 	FilletRadius: IfcNonNegativeLengthMeasure | null;
 	FlangeEdgeRadius: IfcNonNegativeLengthMeasure | null;
 	FlangeSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIShapeProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let OverallWidth = tape[3];
+		let OverallDepth = tape[4];
+		let WebThickness = tape[5];
+		let FlangeThickness = tape[6];
+		let FilletRadius = tape[7];
+		let FlangeEdgeRadius = tape[8];
+		let FlangeSlope = tape[9];
+		return new IfcIShapeProfileDef(ProfileType, ProfileName, Position, OverallWidth, OverallDepth, WebThickness, FlangeThickness, FilletRadius, FlangeEdgeRadius, FlangeSlope);
 	}
 	ToTape(): any[]
 	{
@@ -21595,8 +24313,15 @@ export class IfcImageTexture {
 	TextureTransform: Handle<IfcCartesianTransformationOperator2D> | null;
 	Parameter: IfcIdentifier[] | null;
 	URLReference: IfcURIReference ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcImageTexture
 	{
+		let RepeatS = tape[0];
+		let RepeatT = tape[1];
+		let Mode = tape[2];
+		let TextureTransform = tape[3];
+		let Parameter = tape[4];
+		let URLReference = tape[5];
+		return new IfcImageTexture(RepeatS, RepeatT, Mode, TextureTransform, Parameter, URLReference);
 	}
 	ToTape(): any[]
 	{
@@ -21633,8 +24358,13 @@ export class IfcIndexedColourMap {
 	Opacity: IfcNormalisedRatioMeasure | null;
 	Colours: Handle<IfcColourRgbList> ;
 	ColourIndex: IfcPositiveInteger[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIndexedColourMap
 	{
+		let MappedTo = tape[0];
+		let Opacity = tape[1];
+		let Colours = tape[2];
+		let ColourIndex = tape[3];
+		return new IfcIndexedColourMap(MappedTo, Opacity, Colours, ColourIndex);
 	}
 	ToTape(): any[]
 	{
@@ -21659,8 +24389,12 @@ export class IfcIndexedPolyCurve {
 	Points: Handle<IfcCartesianPointList> ;
 	Segments: IfcSegmentIndexSelect[] | null;
 	SelfIntersect: IfcBoolean | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIndexedPolyCurve
 	{
+		let Points = tape[0];
+		let Segments = tape[1];
+		let SelfIntersect = tape[2];
+		return new IfcIndexedPolyCurve(Points, Segments, SelfIntersect);
 	}
 	ToTape(): any[]
 	{
@@ -21682,8 +24416,10 @@ export class IfcIndexedPolygonalFace {
 		this.CoordIndex = CoordIndex;
 	}
 	CoordIndex: IfcPositiveInteger[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIndexedPolygonalFace
 	{
+		let CoordIndex = tape[0];
+		return new IfcIndexedPolygonalFace(CoordIndex);
 	}
 	ToTape(): any[]
 	{
@@ -21699,8 +24435,11 @@ export class IfcIndexedPolygonalFaceWithVoids {
 	}
 	CoordIndex: IfcPositiveInteger[] ;
 	InnerCoordIndices: IfcPositiveInteger[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIndexedPolygonalFaceWithVoids
 	{
+		let CoordIndex = tape[0];
+		let InnerCoordIndices = tape[1];
+		return new IfcIndexedPolygonalFaceWithVoids(CoordIndex, InnerCoordIndices);
 	}
 	ToTape(): any[]
 	{
@@ -21718,8 +24457,12 @@ export class IfcIndexedTextureMap {
 	Maps: Handle<IfcSurfaceTexture>[] ;
 	MappedTo: Handle<IfcTessellatedFaceSet> ;
 	TexCoords: Handle<IfcTextureVertexList> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIndexedTextureMap
 	{
+		let Maps = tape[0];
+		let MappedTo = tape[1];
+		let TexCoords = tape[2];
+		return new IfcIndexedTextureMap(Maps, MappedTo, TexCoords);
 	}
 	ToTape(): any[]
 	{
@@ -21746,8 +24489,13 @@ export class IfcIndexedTriangleTextureMap {
 	MappedTo: Handle<IfcTessellatedFaceSet> ;
 	TexCoords: Handle<IfcTextureVertexList> ;
 	TexCoordIndex: IfcPositiveInteger[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIndexedTriangleTextureMap
 	{
+		let Maps = tape[0];
+		let MappedTo = tape[1];
+		let TexCoords = tape[2];
+		let TexCoordIndex = tape[3];
+		return new IfcIndexedTriangleTextureMap(Maps, MappedTo, TexCoords, TexCoordIndex);
 	}
 	ToTape(): any[]
 	{
@@ -21787,8 +24535,18 @@ export class IfcInterceptor {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcInterceptorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcInterceptor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcInterceptor(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -21860,8 +24618,19 @@ export class IfcInterceptorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcInterceptorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcInterceptorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcInterceptorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -21923,8 +24692,12 @@ export class IfcIntersectionCurve {
 	Curve3D: Handle<IfcCurve> ;
 	AssociatedGeometry: Handle<IfcPcurve>[] ;
 	MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIntersectionCurve
 	{
+		let Curve3D = tape[0];
+		let AssociatedGeometry = tape[1];
+		let MasterRepresentation = tape[2];
+		return new IfcIntersectionCurve(Curve3D, AssociatedGeometry, MasterRepresentation);
 	}
 	ToTape(): any[]
 	{
@@ -21963,8 +24736,20 @@ export class IfcInventory {
 	LastUpdateDate: IfcDate | null;
 	CurrentValue: Handle<IfcCostValue> | null;
 	OriginalValue: Handle<IfcCostValue> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcInventory
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let PredefinedType = tape[5];
+		let Jurisdiction = tape[6];
+		let ResponsiblePersons = tape[7];
+		let LastUpdateDate = tape[8];
+		let CurrentValue = tape[9];
+		let OriginalValue = tape[10];
+		return new IfcInventory(GlobalId, OwnerHistory, Name, Description, ObjectType, PredefinedType, Jurisdiction, ResponsiblePersons, LastUpdateDate, CurrentValue, OriginalValue);
 	}
 	ToTape(): any[]
 	{
@@ -22043,8 +24828,18 @@ export class IfcIrregularTimeSeries {
 	UserDefinedDataOrigin: IfcLabel | null;
 	Unit: IfcUnit | null;
 	Values: Handle<IfcIrregularTimeSeriesValue>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIrregularTimeSeries
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let StartTime = tape[2];
+		let EndTime = tape[3];
+		let TimeSeriesDataType = tape[4];
+		let DataOrigin = tape[5];
+		let UserDefinedDataOrigin = tape[6];
+		let Unit = tape[7];
+		let Values = tape[8];
+		return new IfcIrregularTimeSeries(Name, Description, StartTime, EndTime, TimeSeriesDataType, DataOrigin, UserDefinedDataOrigin, Unit, Values);
 	}
 	ToTape(): any[]
 	{
@@ -22082,8 +24877,11 @@ export class IfcIrregularTimeSeriesValue {
 	}
 	TimeStamp: IfcDateTime ;
 	ListValues: IfcValue[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcIrregularTimeSeriesValue
 	{
+		let TimeStamp = tape[0];
+		let ListValues = { t: tape[1], v: tape[2][0]} as any;
+		return new IfcIrregularTimeSeriesValue(TimeStamp, ListValues);
 	}
 	ToTape(): any[]
 	{
@@ -22115,8 +24913,18 @@ export class IfcJunctionBox {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcJunctionBoxTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcJunctionBox
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcJunctionBox(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -22188,8 +24996,19 @@ export class IfcJunctionBoxType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcJunctionBoxTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcJunctionBoxType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcJunctionBoxType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -22263,8 +25082,18 @@ export class IfcLShapeProfileDef {
 	FilletRadius: IfcNonNegativeLengthMeasure | null;
 	EdgeRadius: IfcNonNegativeLengthMeasure | null;
 	LegSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLShapeProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let Depth = tape[3];
+		let Width = tape[4];
+		let Thickness = tape[5];
+		let FilletRadius = tape[6];
+		let EdgeRadius = tape[7];
+		let LegSlope = tape[8];
+		return new IfcLShapeProfileDef(ProfileType, ProfileName, Position, Depth, Width, Thickness, FilletRadius, EdgeRadius, LegSlope);
 	}
 	ToTape(): any[]
 	{
@@ -22322,8 +25151,20 @@ export class IfcLaborResource {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcLaborResourceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLaborResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let Usage = tape[7];
+		let BaseCosts = tape[8];
+		let BaseQuantity = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcLaborResource(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -22410,8 +25251,21 @@ export class IfcLaborResourceType {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcLaborResourceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLaborResourceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ResourceType = tape[8];
+		let BaseCosts = tape[9];
+		let BaseQuantity = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcLaborResourceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -22487,8 +25341,14 @@ export class IfcLagTime {
 	UserDefinedDataOrigin: IfcLabel | null;
 	LagValue: IfcTimeOrRatioSelect ;
 	DurationType: IfcTaskDurationEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLagTime
 	{
+		let Name = tape[0];
+		let DataOrigin = tape[1];
+		let UserDefinedDataOrigin = tape[2];
+		let LagValue = tape[3];
+		let DurationType = tape[4];
+		return new IfcLagTime(Name, DataOrigin, UserDefinedDataOrigin, LagValue, DurationType);
 	}
 	ToTape(): any[]
 	{
@@ -22531,8 +25391,18 @@ export class IfcLamp {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcLampTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLamp
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcLamp(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -22604,8 +25474,19 @@ export class IfcLampType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcLampTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLampType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcLampType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -22673,8 +25554,15 @@ export class IfcLibraryInformation {
 	VersionDate: IfcDateTime | null;
 	Location: IfcURIReference | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLibraryInformation
 	{
+		let Name = tape[0];
+		let Version = tape[1];
+		let Publisher = tape[2];
+		let VersionDate = tape[3];
+		let Location = tape[4];
+		let Description = tape[5];
+		return new IfcLibraryInformation(Name, Version, Publisher, VersionDate, Location, Description);
 	}
 	ToTape(): any[]
 	{
@@ -22723,8 +25611,15 @@ export class IfcLibraryReference {
 	Description: IfcText | null;
 	Language: IfcLanguageId | null;
 	ReferencedLibrary: Handle<IfcLibraryInformation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLibraryReference
 	{
+		let Location = tape[0];
+		let Identification = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let Language = tape[4];
+		let ReferencedLibrary = tape[5];
+		return new IfcLibraryReference(Location, Identification, Name, Description, Language, ReferencedLibrary);
 	}
 	ToTape(): any[]
 	{
@@ -22770,8 +25665,12 @@ export class IfcLightDistributionData {
 	MainPlaneAngle: IfcPlaneAngleMeasure ;
 	SecondaryPlaneAngle: IfcPlaneAngleMeasure[] ;
 	LuminousIntensity: IfcLuminousIntensityDistributionMeasure[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightDistributionData
 	{
+		let MainPlaneAngle = tape[0];
+		let SecondaryPlaneAngle = tape[1];
+		let LuminousIntensity = tape[2];
+		return new IfcLightDistributionData(MainPlaneAngle, SecondaryPlaneAngle, LuminousIntensity);
 	}
 	ToTape(): any[]
 	{
@@ -22807,8 +25706,18 @@ export class IfcLightFixture {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcLightFixtureTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightFixture
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcLightFixture(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -22880,8 +25789,19 @@ export class IfcLightFixtureType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcLightFixtureTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightFixtureType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcLightFixtureType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -22941,8 +25861,11 @@ export class IfcLightIntensityDistribution {
 	}
 	LightDistributionCurve: IfcLightDistributionCurveEnum ;
 	DistributionData: Handle<IfcLightDistributionData>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightIntensityDistribution
 	{
+		let LightDistributionCurve = tape[0];
+		let DistributionData = tape[1];
+		return new IfcLightIntensityDistribution(LightDistributionCurve, DistributionData);
 	}
 	ToTape(): any[]
 	{
@@ -22965,8 +25888,13 @@ export class IfcLightSource {
 	LightColour: Handle<IfcColourRgb> ;
 	AmbientIntensity: IfcNormalisedRatioMeasure | null;
 	Intensity: IfcNormalisedRatioMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightSource
 	{
+		let Name = tape[0];
+		let LightColour = tape[1];
+		let AmbientIntensity = tape[2];
+		let Intensity = tape[3];
+		return new IfcLightSource(Name, LightColour, AmbientIntensity, Intensity);
 	}
 	ToTape(): any[]
 	{
@@ -22999,8 +25927,13 @@ export class IfcLightSourceAmbient {
 	LightColour: Handle<IfcColourRgb> ;
 	AmbientIntensity: IfcNormalisedRatioMeasure | null;
 	Intensity: IfcNormalisedRatioMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightSourceAmbient
 	{
+		let Name = tape[0];
+		let LightColour = tape[1];
+		let AmbientIntensity = tape[2];
+		let Intensity = tape[3];
+		return new IfcLightSourceAmbient(Name, LightColour, AmbientIntensity, Intensity);
 	}
 	ToTape(): any[]
 	{
@@ -23035,8 +25968,14 @@ export class IfcLightSourceDirectional {
 	AmbientIntensity: IfcNormalisedRatioMeasure | null;
 	Intensity: IfcNormalisedRatioMeasure | null;
 	Orientation: Handle<IfcDirection> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightSourceDirectional
 	{
+		let Name = tape[0];
+		let LightColour = tape[1];
+		let AmbientIntensity = tape[2];
+		let Intensity = tape[3];
+		let Orientation = tape[4];
+		return new IfcLightSourceDirectional(Name, LightColour, AmbientIntensity, Intensity, Orientation);
 	}
 	ToTape(): any[]
 	{
@@ -23083,8 +26022,19 @@ export class IfcLightSourceGoniometric {
 	LuminousFlux: IfcLuminousFluxMeasure ;
 	LightEmissionSource: IfcLightEmissionSourceEnum ;
 	LightDistributionDataSource: IfcLightDistributionDataSourceSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightSourceGoniometric
 	{
+		let Name = tape[0];
+		let LightColour = tape[1];
+		let AmbientIntensity = tape[2];
+		let Intensity = tape[3];
+		let Position = tape[4];
+		let ColourAppearance = tape[5];
+		let ColourTemperature = tape[6];
+		let LuminousFlux = tape[7];
+		let LightEmissionSource = tape[8];
+		let LightDistributionDataSource = tape[9];
+		return new IfcLightSourceGoniometric(Name, LightColour, AmbientIntensity, Intensity, Position, ColourAppearance, ColourTemperature, LuminousFlux, LightEmissionSource, LightDistributionDataSource);
 	}
 	ToTape(): any[]
 	{
@@ -23138,8 +26088,18 @@ export class IfcLightSourcePositional {
 	ConstantAttenuation: IfcReal ;
 	DistanceAttenuation: IfcReal ;
 	QuadricAttenuation: IfcReal ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightSourcePositional
 	{
+		let Name = tape[0];
+		let LightColour = tape[1];
+		let AmbientIntensity = tape[2];
+		let Intensity = tape[3];
+		let Position = tape[4];
+		let Radius = tape[5];
+		let ConstantAttenuation = tape[6];
+		let DistanceAttenuation = tape[7];
+		let QuadricAttenuation = tape[8];
+		return new IfcLightSourcePositional(Name, LightColour, AmbientIntensity, Intensity, Position, Radius, ConstantAttenuation, DistanceAttenuation, QuadricAttenuation);
 	}
 	ToTape(): any[]
 	{
@@ -23198,8 +26158,22 @@ export class IfcLightSourceSpot {
 	ConcentrationExponent: IfcReal | null;
 	SpreadAngle: IfcPositivePlaneAngleMeasure ;
 	BeamWidthAngle: IfcPositivePlaneAngleMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLightSourceSpot
 	{
+		let Name = tape[0];
+		let LightColour = tape[1];
+		let AmbientIntensity = tape[2];
+		let Intensity = tape[3];
+		let Position = tape[4];
+		let Radius = tape[5];
+		let ConstantAttenuation = tape[6];
+		let DistanceAttenuation = tape[7];
+		let QuadricAttenuation = tape[8];
+		let Orientation = tape[9];
+		let ConcentrationExponent = tape[10];
+		let SpreadAngle = tape[11];
+		let BeamWidthAngle = tape[12];
+		return new IfcLightSourceSpot(Name, LightColour, AmbientIntensity, Intensity, Position, Radius, ConstantAttenuation, DistanceAttenuation, QuadricAttenuation, Orientation, ConcentrationExponent, SpreadAngle, BeamWidthAngle);
 	}
 	ToTape(): any[]
 	{
@@ -23243,8 +26217,11 @@ export class IfcLine {
 	}
 	Pnt: Handle<IfcCartesianPoint> ;
 	Dir: Handle<IfcVector> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLine
 	{
+		let Pnt = tape[0];
+		let Dir = tape[1];
+		return new IfcLine(Pnt, Dir);
 	}
 	ToTape(): any[]
 	{
@@ -23266,8 +26243,12 @@ export class IfcLineSegment2D {
 	StartPoint: Handle<IfcCartesianPoint> ;
 	StartDirection: IfcPlaneAngleMeasure ;
 	SegmentLength: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLineSegment2D
 	{
+		let StartPoint = tape[0];
+		let StartDirection = tape[1];
+		let SegmentLength = tape[2];
+		return new IfcLineSegment2D(StartPoint, StartDirection, SegmentLength);
 	}
 	ToTape(): any[]
 	{
@@ -23293,8 +26274,14 @@ export class IfcLinearPlacement {
 	Distance: Handle<IfcDistanceExpression> ;
 	Orientation: Handle<IfcOrientationExpression> | null;
 	CartesianPosition: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLinearPlacement
 	{
+		let PlacementRelTo = tape[0];
+		let PlacementMeasuredAlong = tape[1];
+		let Distance = tape[2];
+		let Orientation = tape[3];
+		let CartesianPosition = tape[4];
+		return new IfcLinearPlacement(PlacementRelTo, PlacementMeasuredAlong, Distance, Orientation, CartesianPosition);
 	}
 	ToTape(): any[]
 	{
@@ -23341,8 +26328,17 @@ export class IfcLinearPositioningElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Axis: Handle<IfcCurve> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLinearPositioningElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Axis = tape[7];
+		return new IfcLinearPositioningElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Axis);
 	}
 	ToTape(): any[]
 	{
@@ -23392,8 +26388,11 @@ export class IfcLocalPlacement {
 	}
 	PlacementRelTo: Handle<IfcObjectPlacement> | null;
 	RelativePlacement: IfcAxis2Placement ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLocalPlacement
 	{
+		let PlacementRelTo = tape[0];
+		let RelativePlacement = tape[1];
+		return new IfcLocalPlacement(PlacementRelTo, RelativePlacement);
 	}
 	ToTape(): any[]
 	{
@@ -23410,8 +26409,9 @@ export class IfcLoop {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcLoop
 	{
+		return new IfcLoop();
 	}
 	ToTape(): any[]
 	{
@@ -23425,8 +26425,10 @@ export class IfcManifoldSolidBrep {
 		this.Outer = Outer;
 	}
 	Outer: Handle<IfcClosedShell> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcManifoldSolidBrep
 	{
+		let Outer = tape[0];
+		return new IfcManifoldSolidBrep(Outer);
 	}
 	ToTape(): any[]
 	{
@@ -23456,8 +26458,17 @@ export class IfcMapConversion {
 	XAxisAbscissa: IfcReal | null;
 	XAxisOrdinate: IfcReal | null;
 	Scale: IfcReal | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMapConversion
 	{
+		let SourceCRS = tape[0];
+		let TargetCRS = tape[1];
+		let Eastings = tape[2];
+		let Northings = tape[3];
+		let OrthogonalHeight = tape[4];
+		let XAxisAbscissa = tape[5];
+		let XAxisOrdinate = tape[6];
+		let Scale = tape[7];
+		return new IfcMapConversion(SourceCRS, TargetCRS, Eastings, Northings, OrthogonalHeight, XAxisAbscissa, XAxisOrdinate, Scale);
 	}
 	ToTape(): any[]
 	{
@@ -23496,8 +26507,11 @@ export class IfcMappedItem {
 	}
 	MappingSource: Handle<IfcRepresentationMap> ;
 	MappingTarget: Handle<IfcCartesianTransformationOperator> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMappedItem
 	{
+		let MappingSource = tape[0];
+		let MappingTarget = tape[1];
+		return new IfcMappedItem(MappingSource, MappingTarget);
 	}
 	ToTape(): any[]
 	{
@@ -23519,8 +26533,12 @@ export class IfcMaterial {
 	Name: IfcLabel ;
 	Description: IfcText | null;
 	Category: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterial
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Category = tape[2];
+		return new IfcMaterial(Name, Description, Category);
 	}
 	ToTape(): any[]
 	{
@@ -23548,8 +26566,11 @@ export class IfcMaterialClassificationRelationship {
 	}
 	MaterialClassifications: IfcClassificationSelect[] ;
 	ClassifiedMaterial: Handle<IfcMaterial> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialClassificationRelationship
 	{
+		let MaterialClassifications = tape[0];
+		let ClassifiedMaterial = tape[1];
+		return new IfcMaterialClassificationRelationship(MaterialClassifications, ClassifiedMaterial);
 	}
 	ToTape(): any[]
 	{
@@ -23573,8 +26594,14 @@ export class IfcMaterialConstituent {
 	Material: Handle<IfcMaterial> ;
 	Fraction: IfcNormalisedRatioMeasure | null;
 	Category: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialConstituent
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Material = tape[2];
+		let Fraction = tape[3];
+		let Category = tape[4];
+		return new IfcMaterialConstituent(Name, Description, Material, Fraction, Category);
 	}
 	ToTape(): any[]
 	{
@@ -23612,8 +26639,12 @@ export class IfcMaterialConstituentSet {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	MaterialConstituents: Handle<IfcMaterialConstituent>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialConstituentSet
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let MaterialConstituents = tape[2];
+		return new IfcMaterialConstituentSet(Name, Description, MaterialConstituents);
 	}
 	ToTape(): any[]
 	{
@@ -23641,8 +26672,9 @@ export class IfcMaterialDefinition {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialDefinition
 	{
+		return new IfcMaterialDefinition();
 	}
 	ToTape(): any[]
 	{
@@ -23662,8 +26694,13 @@ export class IfcMaterialDefinitionRepresentation {
 	Description: IfcText | null;
 	Representations: Handle<IfcRepresentation>[] ;
 	RepresentedMaterial: Handle<IfcMaterial> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialDefinitionRepresentation
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Representations = tape[2];
+		let RepresentedMaterial = tape[3];
+		return new IfcMaterialDefinitionRepresentation(Name, Description, Representations, RepresentedMaterial);
 	}
 	ToTape(): any[]
 	{
@@ -23704,8 +26741,16 @@ export class IfcMaterialLayer {
 	Description: IfcText | null;
 	Category: IfcLabel | null;
 	Priority: IfcInteger | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialLayer
 	{
+		let Material = tape[0];
+		let LayerThickness = tape[1];
+		let IsVentilated = tape[2];
+		let Name = tape[3];
+		let Description = tape[4];
+		let Category = tape[5];
+		let Priority = tape[6];
+		return new IfcMaterialLayer(Material, LayerThickness, IsVentilated, Name, Description, Category, Priority);
 	}
 	ToTape(): any[]
 	{
@@ -23751,8 +26796,12 @@ export class IfcMaterialLayerSet {
 	MaterialLayers: Handle<IfcMaterialLayer>[] ;
 	LayerSetName: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialLayerSet
 	{
+		let MaterialLayers = tape[0];
+		let LayerSetName = tape[1];
+		let Description = tape[2];
+		return new IfcMaterialLayerSet(MaterialLayers, LayerSetName, Description);
 	}
 	ToTape(): any[]
 	{
@@ -23787,8 +26836,14 @@ export class IfcMaterialLayerSetUsage {
 	DirectionSense: IfcDirectionSenseEnum ;
 	OffsetFromReferenceLine: IfcLengthMeasure ;
 	ReferenceExtent: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialLayerSetUsage
 	{
+		let ForLayerSet = tape[0];
+		let LayerSetDirection = tape[1];
+		let DirectionSense = tape[2];
+		let OffsetFromReferenceLine = tape[3];
+		let ReferenceExtent = tape[4];
+		return new IfcMaterialLayerSetUsage(ForLayerSet, LayerSetDirection, DirectionSense, OffsetFromReferenceLine, ReferenceExtent);
 	}
 	ToTape(): any[]
 	{
@@ -23825,8 +26880,18 @@ export class IfcMaterialLayerWithOffsets {
 	Priority: IfcInteger | null;
 	OffsetDirection: IfcLayerSetDirectionEnum ;
 	OffsetValues: IfcLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialLayerWithOffsets
 	{
+		let Material = tape[0];
+		let LayerThickness = tape[1];
+		let IsVentilated = tape[2];
+		let Name = tape[3];
+		let Description = tape[4];
+		let Category = tape[5];
+		let Priority = tape[6];
+		let OffsetDirection = tape[7];
+		let OffsetValues = tape[8];
+		return new IfcMaterialLayerWithOffsets(Material, LayerThickness, IsVentilated, Name, Description, Category, Priority, OffsetDirection, OffsetValues);
 	}
 	ToTape(): any[]
 	{
@@ -23870,8 +26935,10 @@ export class IfcMaterialList {
 		this.Materials = Materials;
 	}
 	Materials: Handle<IfcMaterial>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialList
 	{
+		let Materials = tape[0];
+		return new IfcMaterialList(Materials);
 	}
 	ToTape(): any[]
 	{
@@ -23898,8 +26965,15 @@ export class IfcMaterialProfile {
 	Profile: Handle<IfcProfileDef> ;
 	Priority: IfcInteger | null;
 	Category: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialProfile
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Material = tape[2];
+		let Profile = tape[3];
+		let Priority = tape[4];
+		let Category = tape[5];
+		return new IfcMaterialProfile(Name, Description, Material, Profile, Priority, Category);
 	}
 	ToTape(): any[]
 	{
@@ -23946,8 +27020,13 @@ export class IfcMaterialProfileSet {
 	Description: IfcText | null;
 	MaterialProfiles: Handle<IfcMaterialProfile>[] ;
 	CompositeProfile: Handle<IfcCompositeProfileDef> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialProfileSet
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let MaterialProfiles = tape[2];
+		let CompositeProfile = tape[3];
+		return new IfcMaterialProfileSet(Name, Description, MaterialProfiles, CompositeProfile);
 	}
 	ToTape(): any[]
 	{
@@ -23983,8 +27062,12 @@ export class IfcMaterialProfileSetUsage {
 	ForProfileSet: Handle<IfcMaterialProfileSet> ;
 	CardinalPoint: IfcCardinalPointReference | null;
 	ReferenceExtent: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialProfileSetUsage
 	{
+		let ForProfileSet = tape[0];
+		let CardinalPoint = tape[1];
+		let ReferenceExtent = tape[2];
+		return new IfcMaterialProfileSetUsage(ForProfileSet, CardinalPoint, ReferenceExtent);
 	}
 	ToTape(): any[]
 	{
@@ -24016,8 +27099,14 @@ export class IfcMaterialProfileSetUsageTapering {
 	ReferenceExtent: IfcPositiveLengthMeasure | null;
 	ForProfileEndSet: Handle<IfcMaterialProfileSet> ;
 	CardinalEndPoint: IfcCardinalPointReference | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialProfileSetUsageTapering
 	{
+		let ForProfileSet = tape[0];
+		let CardinalPoint = tape[1];
+		let ReferenceExtent = tape[2];
+		let ForProfileEndSet = tape[3];
+		let CardinalEndPoint = tape[4];
+		return new IfcMaterialProfileSetUsageTapering(ForProfileSet, CardinalPoint, ReferenceExtent, ForProfileEndSet, CardinalEndPoint);
 	}
 	ToTape(): any[]
 	{
@@ -24060,8 +27149,16 @@ export class IfcMaterialProfileWithOffsets {
 	Priority: IfcInteger | null;
 	Category: IfcLabel | null;
 	OffsetValues: IfcLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialProfileWithOffsets
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Material = tape[2];
+		let Profile = tape[3];
+		let Priority = tape[4];
+		let Category = tape[5];
+		let OffsetValues = tape[6];
+		return new IfcMaterialProfileWithOffsets(Name, Description, Material, Profile, Priority, Category, OffsetValues);
 	}
 	ToTape(): any[]
 	{
@@ -24110,8 +27207,13 @@ export class IfcMaterialProperties {
 	Description: IfcText | null;
 	Properties: Handle<IfcProperty>[] ;
 	Material: Handle<IfcMaterialDefinition> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialProperties
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Properties = tape[2];
+		let Material = tape[3];
+		return new IfcMaterialProperties(Name, Description, Properties, Material);
 	}
 	ToTape(): any[]
 	{
@@ -24148,8 +27250,14 @@ export class IfcMaterialRelationship {
 	RelatingMaterial: Handle<IfcMaterial> ;
 	RelatedMaterials: Handle<IfcMaterial>[] ;
 	Expression: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let RelatingMaterial = tape[2];
+		let RelatedMaterials = tape[3];
+		let Expression = tape[4];
+		return new IfcMaterialRelationship(Name, Description, RelatingMaterial, RelatedMaterials, Expression);
 	}
 	ToTape(): any[]
 	{
@@ -24181,8 +27289,9 @@ export class IfcMaterialUsageDefinition {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMaterialUsageDefinition
 	{
+		return new IfcMaterialUsageDefinition();
 	}
 	ToTape(): any[]
 	{
@@ -24198,8 +27307,11 @@ export class IfcMeasureWithUnit {
 	}
 	ValueComponent: IfcValue ;
 	UnitComponent: IfcUnit ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMeasureWithUnit
 	{
+		let ValueComponent = { t: tape[0], v: tape[1][0]} as any;
+		let UnitComponent = tape[2];
+		return new IfcMeasureWithUnit(ValueComponent, UnitComponent);
 	}
 	ToTape(): any[]
 	{
@@ -24241,8 +27353,20 @@ export class IfcMechanicalFastener {
 	NominalDiameter: IfcPositiveLengthMeasure | null;
 	NominalLength: IfcPositiveLengthMeasure | null;
 	PredefinedType: IfcMechanicalFastenerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMechanicalFastener
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let NominalDiameter = tape[8];
+		let NominalLength = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcMechanicalFastener(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, NominalDiameter, NominalLength, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -24324,8 +27448,21 @@ export class IfcMechanicalFastenerType {
 	PredefinedType: IfcMechanicalFastenerTypeEnum ;
 	NominalDiameter: IfcPositiveLengthMeasure | null;
 	NominalLength: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMechanicalFastenerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		let NominalDiameter = tape[10];
+		let NominalLength = tape[11];
+		return new IfcMechanicalFastenerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType, NominalDiameter, NominalLength);
 	}
 	ToTape(): any[]
 	{
@@ -24405,8 +27542,18 @@ export class IfcMedicalDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcMedicalDeviceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMedicalDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcMedicalDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -24478,8 +27625,19 @@ export class IfcMedicalDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcMedicalDeviceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMedicalDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcMedicalDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -24553,8 +27711,18 @@ export class IfcMember {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcMemberTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMember
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcMember(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -24624,8 +27792,18 @@ export class IfcMemberStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcMemberTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMemberStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcMemberStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -24697,8 +27875,19 @@ export class IfcMemberType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcMemberTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMemberType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcMemberType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -24776,8 +27965,20 @@ export class IfcMetric {
 	ValueSource: IfcLabel | null;
 	DataValue: IfcMetricValueSelect | null;
 	ReferencePath: Handle<IfcReference> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMetric
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let ConstraintGrade = tape[2];
+		let ConstraintSource = tape[3];
+		let CreatingActor = tape[4];
+		let CreationTime = tape[5];
+		let UserDefinedGrade = tape[6];
+		let Benchmark = tape[7];
+		let ValueSource = tape[8];
+		let DataValue = tape[9];
+		let ReferencePath = tape[10];
+		return new IfcMetric(Name, Description, ConstraintGrade, ConstraintSource, CreatingActor, CreationTime, UserDefinedGrade, Benchmark, ValueSource, DataValue, ReferencePath);
 	}
 	ToTape(): any[]
 	{
@@ -24837,8 +28038,14 @@ export class IfcMirroredProfileDef {
 	ParentProfile: Handle<IfcProfileDef> ;
 	Operator: Handle<IfcCartesianTransformationOperator2D> ;
 	Label: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMirroredProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let ParentProfile = tape[2];
+		let Operator = tape[3];
+		let Label = tape[4];
+		return new IfcMirroredProfileDef(ProfileType, ProfileName, ParentProfile, Operator, Label);
 	}
 	ToTape(): any[]
 	{
@@ -24866,8 +28073,10 @@ export class IfcMonetaryUnit {
 		this.Currency = Currency;
 	}
 	Currency: IfcLabel ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMonetaryUnit
 	{
+		let Currency = tape[0];
+		return new IfcMonetaryUnit(Currency);
 	}
 	ToTape(): any[]
 	{
@@ -24899,8 +28108,18 @@ export class IfcMotorConnection {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcMotorConnectionTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMotorConnection
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcMotorConnection(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -24972,8 +28191,19 @@ export class IfcMotorConnectionType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcMotorConnectionTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcMotorConnectionType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcMotorConnectionType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -25033,8 +28263,11 @@ export class IfcNamedUnit {
 	}
 	Dimensions: Handle<IfcDimensionalExponents> ;
 	UnitType: IfcUnitEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcNamedUnit
 	{
+		let Dimensions = tape[0];
+		let UnitType = tape[1];
+		return new IfcNamedUnit(Dimensions, UnitType);
 	}
 	ToTape(): any[]
 	{
@@ -25058,8 +28291,14 @@ export class IfcObject {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcObject
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		return new IfcObject(GlobalId, OwnerHistory, Name, Description, ObjectType);
 	}
 	ToTape(): any[]
 	{
@@ -25101,8 +28340,13 @@ export class IfcObjectDefinition {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcObjectDefinition
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcObjectDefinition(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -25133,8 +28377,10 @@ export class IfcObjectPlacement {
 		this.PlacementRelTo = PlacementRelTo;
 	}
 	PlacementRelTo: Handle<IfcObjectPlacement> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcObjectPlacement
 	{
+		let PlacementRelTo = tape[0];
+		return new IfcObjectPlacement(PlacementRelTo);
 	}
 	ToTape(): any[]
 	{
@@ -25173,8 +28419,20 @@ export class IfcObjective {
 	LogicalAggregator: IfcLogicalOperatorEnum | null;
 	ObjectiveQualifier: IfcObjectiveEnum ;
 	UserDefinedQualifier: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcObjective
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let ConstraintGrade = tape[2];
+		let ConstraintSource = tape[3];
+		let CreatingActor = tape[4];
+		let CreationTime = tape[5];
+		let UserDefinedGrade = tape[6];
+		let BenchmarkValues = tape[7];
+		let LogicalAggregator = tape[8];
+		let ObjectiveQualifier = tape[9];
+		let UserDefinedQualifier = tape[10];
+		return new IfcObjective(Name, Description, ConstraintGrade, ConstraintSource, CreatingActor, CreationTime, UserDefinedGrade, BenchmarkValues, LogicalAggregator, ObjectiveQualifier, UserDefinedQualifier);
 	}
 	ToTape(): any[]
 	{
@@ -25239,8 +28497,16 @@ export class IfcOccupant {
 	ObjectType: IfcLabel | null;
 	TheActor: IfcActorSelect ;
 	PredefinedType: IfcOccupantTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOccupant
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let TheActor = tape[5];
+		let PredefinedType = tape[6];
+		return new IfcOccupant(GlobalId, OwnerHistory, Name, Description, ObjectType, TheActor, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -25279,8 +28545,10 @@ export class IfcOffsetCurve {
 		this.BasisCurve = BasisCurve;
 	}
 	BasisCurve: Handle<IfcCurve> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOffsetCurve
 	{
+		let BasisCurve = tape[0];
+		return new IfcOffsetCurve(BasisCurve);
 	}
 	ToTape(): any[]
 	{
@@ -25300,8 +28568,12 @@ export class IfcOffsetCurve2D {
 	BasisCurve: Handle<IfcCurve> ;
 	Distance: IfcLengthMeasure ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOffsetCurve2D
 	{
+		let BasisCurve = tape[0];
+		let Distance = tape[1];
+		let SelfIntersect = tape[2];
+		return new IfcOffsetCurve2D(BasisCurve, Distance, SelfIntersect);
 	}
 	ToTape(): any[]
 	{
@@ -25325,8 +28597,13 @@ export class IfcOffsetCurve3D {
 	Distance: IfcLengthMeasure ;
 	SelfIntersect: IfcLogical ;
 	RefDirection: Handle<IfcDirection> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOffsetCurve3D
 	{
+		let BasisCurve = tape[0];
+		let Distance = tape[1];
+		let SelfIntersect = tape[2];
+		let RefDirection = tape[3];
+		return new IfcOffsetCurve3D(BasisCurve, Distance, SelfIntersect, RefDirection);
 	}
 	ToTape(): any[]
 	{
@@ -25350,8 +28627,12 @@ export class IfcOffsetCurveByDistances {
 	BasisCurve: Handle<IfcCurve> ;
 	OffsetValues: Handle<IfcDistanceExpression>[] ;
 	Tag: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOffsetCurveByDistances
 	{
+		let BasisCurve = tape[0];
+		let OffsetValues = tape[1];
+		let Tag = tape[2];
+		return new IfcOffsetCurveByDistances(BasisCurve, OffsetValues, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -25375,8 +28656,10 @@ export class IfcOpenShell {
 		this.CfsFaces = CfsFaces;
 	}
 	CfsFaces: Handle<IfcFace>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOpenShell
 	{
+		let CfsFaces = tape[0];
+		return new IfcOpenShell(CfsFaces);
 	}
 	ToTape(): any[]
 	{
@@ -25409,8 +28692,18 @@ export class IfcOpeningElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcOpeningElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOpeningElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcOpeningElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -25480,8 +28773,18 @@ export class IfcOpeningStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcOpeningElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOpeningStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcOpeningStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -25543,8 +28846,14 @@ export class IfcOrganization {
 	Description: IfcText | null;
 	Roles: Handle<IfcActorRole>[] | null;
 	Addresses: Handle<IfcAddress>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOrganization
 	{
+		let Identification = tape[0];
+		let Name = tape[1];
+		let Description = tape[2];
+		let Roles = tape[3];
+		let Addresses = tape[4];
+		return new IfcOrganization(Identification, Name, Description, Roles, Addresses);
 	}
 	ToTape(): any[]
 	{
@@ -25588,8 +28897,13 @@ export class IfcOrganizationRelationship {
 	Description: IfcText | null;
 	RelatingOrganization: Handle<IfcOrganization> ;
 	RelatedOrganizations: Handle<IfcOrganization>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOrganizationRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let RelatingOrganization = tape[2];
+		let RelatedOrganizations = tape[3];
+		return new IfcOrganizationRelationship(Name, Description, RelatingOrganization, RelatedOrganizations);
 	}
 	ToTape(): any[]
 	{
@@ -25620,8 +28934,11 @@ export class IfcOrientationExpression {
 	}
 	LateralAxisDirection: Handle<IfcDirection> ;
 	VerticalAxisDirection: Handle<IfcDirection> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOrientationExpression
 	{
+		let LateralAxisDirection = tape[0];
+		let VerticalAxisDirection = tape[1];
+		return new IfcOrientationExpression(LateralAxisDirection, VerticalAxisDirection);
 	}
 	ToTape(): any[]
 	{
@@ -25645,8 +28962,13 @@ export class IfcOrientedEdge {
 	EdgeEnd: Handle<IfcVertex> ;
 	EdgeElement: Handle<IfcEdge> ;
 	Orientation: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOrientedEdge
 	{
+		let EdgeStart = tape[0];
+		let EdgeEnd = tape[1];
+		let EdgeElement = tape[2];
+		let Orientation = tape[3];
+		return new IfcOrientedEdge(EdgeStart, EdgeEnd, EdgeElement, Orientation);
 	}
 	ToTape(): any[]
 	{
@@ -25668,8 +28990,11 @@ export class IfcOuterBoundaryCurve {
 	}
 	Segments: Handle<IfcCompositeCurveSegment>[] ;
 	SelfIntersect: IfcLogical ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOuterBoundaryCurve
 	{
+		let Segments = tape[0];
+		let SelfIntersect = tape[1];
+		return new IfcOuterBoundaryCurve(Segments, SelfIntersect);
 	}
 	ToTape(): any[]
 	{
@@ -25702,8 +29027,18 @@ export class IfcOutlet {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcOutletTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOutlet
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcOutlet(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -25775,8 +29110,19 @@ export class IfcOutletType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcOutletTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOutletType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcOutletType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -25848,8 +29194,17 @@ export class IfcOwnerHistory {
 	LastModifyingUser: Handle<IfcPersonAndOrganization> | null;
 	LastModifyingApplication: Handle<IfcApplication> | null;
 	CreationDate: IfcTimeStamp ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcOwnerHistory
 	{
+		let OwningUser = tape[0];
+		let OwningApplication = tape[1];
+		let State = tape[2];
+		let ChangeAction = tape[3];
+		let LastModifiedDate = tape[4];
+		let LastModifyingUser = tape[5];
+		let LastModifyingApplication = tape[6];
+		let CreationDate = tape[7];
+		return new IfcOwnerHistory(OwningUser, OwningApplication, State, ChangeAction, LastModifiedDate, LastModifyingUser, LastModifyingApplication, CreationDate);
 	}
 	ToTape(): any[]
 	{
@@ -25894,8 +29249,12 @@ export class IfcParameterizedProfileDef {
 	ProfileType: IfcProfileTypeEnum ;
 	ProfileName: IfcLabel | null;
 	Position: Handle<IfcAxis2Placement2D> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcParameterizedProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		return new IfcParameterizedProfileDef(ProfileType, ProfileName, Position);
 	}
 	ToTape(): any[]
 	{
@@ -25919,8 +29278,10 @@ export class IfcPath {
 		this.EdgeList = EdgeList;
 	}
 	EdgeList: Handle<IfcOrientedEdge>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPath
 	{
+		let EdgeList = tape[0];
+		return new IfcPath(EdgeList);
 	}
 	ToTape(): any[]
 	{
@@ -25939,8 +29300,11 @@ export class IfcPcurve {
 	}
 	BasisSurface: Handle<IfcSurface> ;
 	ReferenceCurve: Handle<IfcCurve> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPcurve
 	{
+		let BasisSurface = tape[0];
+		let ReferenceCurve = tape[1];
+		return new IfcPcurve(BasisSurface, ReferenceCurve);
 	}
 	ToTape(): any[]
 	{
@@ -25972,8 +29336,17 @@ export class IfcPerformanceHistory {
 	Identification: IfcIdentifier | null;
 	LifeCyclePhase: IfcLabel ;
 	PredefinedType: IfcPerformanceHistoryTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPerformanceHistory
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LifeCyclePhase = tape[6];
+		let PredefinedType = tape[7];
+		return new IfcPerformanceHistory(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LifeCyclePhase, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -26035,8 +29408,18 @@ export class IfcPermeableCoveringProperties {
 	FrameDepth: IfcPositiveLengthMeasure | null;
 	FrameThickness: IfcPositiveLengthMeasure | null;
 	ShapeAspectStyle: Handle<IfcShapeAspect> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPermeableCoveringProperties
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let OperationType = tape[4];
+		let PanelPosition = tape[5];
+		let FrameDepth = tape[6];
+		let FrameThickness = tape[7];
+		let ShapeAspectStyle = tape[8];
+		return new IfcPermeableCoveringProperties(GlobalId, OwnerHistory, Name, Description, OperationType, PanelPosition, FrameDepth, FrameThickness, ShapeAspectStyle);
 	}
 	ToTape(): any[]
 	{
@@ -26094,8 +29477,18 @@ export class IfcPermit {
 	PredefinedType: IfcPermitTypeEnum | null;
 	Status: IfcLabel | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPermit
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let PredefinedType = tape[6];
+		let Status = tape[7];
+		let LongDescription = tape[8];
+		return new IfcPermit(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, PredefinedType, Status, LongDescription);
 	}
 	ToTape(): any[]
 	{
@@ -26163,8 +29556,17 @@ export class IfcPerson {
 	SuffixTitles: IfcLabel[] | null;
 	Roles: Handle<IfcActorRole>[] | null;
 	Addresses: Handle<IfcAddress>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPerson
 	{
+		let Identification = tape[0];
+		let FamilyName = tape[1];
+		let GivenName = tape[2];
+		let MiddleNames = tape[3];
+		let PrefixTitles = tape[4];
+		let SuffixTitles = tape[5];
+		let Roles = tape[6];
+		let Addresses = tape[7];
+		return new IfcPerson(Identification, FamilyName, GivenName, MiddleNames, PrefixTitles, SuffixTitles, Roles, Addresses);
 	}
 	ToTape(): any[]
 	{
@@ -26224,8 +29626,12 @@ export class IfcPersonAndOrganization {
 	ThePerson: Handle<IfcPerson> ;
 	TheOrganization: Handle<IfcOrganization> ;
 	Roles: Handle<IfcActorRole>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPersonAndOrganization
 	{
+		let ThePerson = tape[0];
+		let TheOrganization = tape[1];
+		let Roles = tape[2];
+		return new IfcPersonAndOrganization(ThePerson, TheOrganization, Roles);
 	}
 	ToTape(): any[]
 	{
@@ -26259,8 +29665,15 @@ export class IfcPhysicalComplexQuantity {
 	Discrimination: IfcLabel ;
 	Quality: IfcLabel | null;
 	Usage: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPhysicalComplexQuantity
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let HasQuantities = tape[2];
+		let Discrimination = tape[3];
+		let Quality = tape[4];
+		let Usage = tape[5];
+		return new IfcPhysicalComplexQuantity(Name, Description, HasQuantities, Discrimination, Quality, Usage);
 	}
 	ToTape(): any[]
 	{
@@ -26298,8 +29711,11 @@ export class IfcPhysicalQuantity {
 	}
 	Name: IfcLabel ;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPhysicalQuantity
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		return new IfcPhysicalQuantity(Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -26324,8 +29740,12 @@ export class IfcPhysicalSimpleQuantity {
 	Name: IfcLabel ;
 	Description: IfcText | null;
 	Unit: Handle<IfcNamedUnit> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPhysicalSimpleQuantity
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Unit = tape[2];
+		return new IfcPhysicalSimpleQuantity(Name, Description, Unit);
 	}
 	ToTape(): any[]
 	{
@@ -26369,8 +29789,19 @@ export class IfcPile {
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPileTypeEnum | null;
 	ConstructionType: IfcPileConstructionEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPile
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		let ConstructionType = tape[9];
+		return new IfcPile(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType, ConstructionType);
 	}
 	ToTape(): any[]
 	{
@@ -26445,8 +29876,19 @@ export class IfcPileType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPileTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPileType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcPileType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -26520,8 +29962,18 @@ export class IfcPipeFitting {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPipeFittingTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPipeFitting
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcPipeFitting(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -26593,8 +30045,19 @@ export class IfcPipeFittingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPipeFittingTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPipeFittingType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcPipeFittingType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -26668,8 +30131,18 @@ export class IfcPipeSegment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPipeSegmentTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPipeSegment
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcPipeSegment(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -26741,8 +30214,19 @@ export class IfcPipeSegmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPipeSegmentTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPipeSegmentType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcPipeSegmentType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -26816,8 +30300,18 @@ export class IfcPixelTexture {
 	Height: IfcInteger ;
 	ColourComponents: IfcInteger ;
 	Pixel: IfcBinary[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPixelTexture
 	{
+		let RepeatS = tape[0];
+		let RepeatT = tape[1];
+		let Mode = tape[2];
+		let TextureTransform = tape[3];
+		let Parameter = tape[4];
+		let Width = tape[5];
+		let Height = tape[6];
+		let ColourComponents = tape[7];
+		let Pixel = tape[8];
+		return new IfcPixelTexture(RepeatS, RepeatT, Mode, TextureTransform, Parameter, Width, Height, ColourComponents, Pixel);
 	}
 	ToTape(): any[]
 	{
@@ -26854,8 +30348,10 @@ export class IfcPlacement {
 		this.Location = Location;
 	}
 	Location: Handle<IfcCartesianPoint> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPlacement
 	{
+		let Location = tape[0];
+		return new IfcPlacement(Location);
 	}
 	ToTape(): any[]
 	{
@@ -26875,8 +30371,12 @@ export class IfcPlanarBox {
 	SizeInX: IfcLengthMeasure ;
 	SizeInY: IfcLengthMeasure ;
 	Placement: IfcAxis2Placement ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPlanarBox
 	{
+		let SizeInX = tape[0];
+		let SizeInY = tape[1];
+		let Placement = tape[2];
+		return new IfcPlanarBox(SizeInX, SizeInY, Placement);
 	}
 	ToTape(): any[]
 	{
@@ -26896,8 +30396,11 @@ export class IfcPlanarExtent {
 	}
 	SizeInX: IfcLengthMeasure ;
 	SizeInY: IfcLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPlanarExtent
 	{
+		let SizeInX = tape[0];
+		let SizeInY = tape[1];
+		return new IfcPlanarExtent(SizeInX, SizeInY);
 	}
 	ToTape(): any[]
 	{
@@ -26915,8 +30418,10 @@ export class IfcPlane {
 		this.Position = Position;
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPlane
 	{
+		let Position = tape[0];
+		return new IfcPlane(Position);
 	}
 	ToTape(): any[]
 	{
@@ -26948,8 +30453,18 @@ export class IfcPlate {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPlateTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPlate
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcPlate(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -27019,8 +30534,18 @@ export class IfcPlateStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPlateTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPlateStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcPlateStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -27092,8 +30617,19 @@ export class IfcPlateType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPlateTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPlateType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcPlateType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -27149,8 +30685,9 @@ export class IfcPoint {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPoint
 	{
+		return new IfcPoint();
 	}
 	ToTape(): any[]
 	{
@@ -27166,8 +30703,11 @@ export class IfcPointOnCurve {
 	}
 	BasisCurve: Handle<IfcCurve> ;
 	PointParameter: IfcParameterValue ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPointOnCurve
 	{
+		let BasisCurve = tape[0];
+		let PointParameter = tape[1];
+		return new IfcPointOnCurve(BasisCurve, PointParameter);
 	}
 	ToTape(): any[]
 	{
@@ -27189,8 +30729,12 @@ export class IfcPointOnSurface {
 	BasisSurface: Handle<IfcSurface> ;
 	PointParameterU: IfcParameterValue ;
 	PointParameterV: IfcParameterValue ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPointOnSurface
 	{
+		let BasisSurface = tape[0];
+		let PointParameterU = tape[1];
+		let PointParameterV = tape[2];
+		return new IfcPointOnSurface(BasisSurface, PointParameterU, PointParameterV);
 	}
 	ToTape(): any[]
 	{
@@ -27210,8 +30754,10 @@ export class IfcPolyLoop {
 		this.Polygon = Polygon;
 	}
 	Polygon: Handle<IfcCartesianPoint>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPolyLoop
 	{
+		let Polygon = tape[0];
+		return new IfcPolyLoop(Polygon);
 	}
 	ToTape(): any[]
 	{
@@ -27234,8 +30780,13 @@ export class IfcPolygonalBoundedHalfSpace {
 	AgreementFlag: IfcBoolean ;
 	Position: Handle<IfcAxis2Placement3D> ;
 	PolygonalBoundary: Handle<IfcBoundedCurve> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPolygonalBoundedHalfSpace
 	{
+		let BaseSurface = tape[0];
+		let AgreementFlag = tape[1];
+		let Position = tape[2];
+		let PolygonalBoundary = tape[3];
+		return new IfcPolygonalBoundedHalfSpace(BaseSurface, AgreementFlag, Position, PolygonalBoundary);
 	}
 	ToTape(): any[]
 	{
@@ -27261,8 +30812,13 @@ export class IfcPolygonalFaceSet {
 	Closed: IfcBoolean | null;
 	Faces: Handle<IfcIndexedPolygonalFace>[] ;
 	PnIndex: IfcPositiveInteger[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPolygonalFaceSet
 	{
+		let Coordinates = tape[0];
+		let Closed = tape[1];
+		let Faces = tape[2];
+		let PnIndex = tape[3];
+		return new IfcPolygonalFaceSet(Coordinates, Closed, Faces, PnIndex);
 	}
 	ToTape(): any[]
 	{
@@ -27287,8 +30843,10 @@ export class IfcPolyline {
 		this.Points = Points;
 	}
 	Points: Handle<IfcCartesianPoint>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPolyline
 	{
+		let Points = tape[0];
+		return new IfcPolyline(Points);
 	}
 	ToTape(): any[]
 	{
@@ -27317,8 +30875,16 @@ export class IfcPort {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPort
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		return new IfcPort(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
 	ToTape(): any[]
 	{
@@ -27376,8 +30942,16 @@ export class IfcPositioningElement {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPositioningElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		return new IfcPositioningElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
 	ToTape(): any[]
 	{
@@ -27441,8 +31015,19 @@ export class IfcPostalAddress {
 	Region: IfcLabel | null;
 	PostalCode: IfcLabel | null;
 	Country: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPostalAddress
 	{
+		let Purpose = tape[0];
+		let Description = tape[1];
+		let UserDefinedPurpose = tape[2];
+		let InternalLocation = tape[3];
+		let AddressLines = tape[4];
+		let PostalBox = tape[5];
+		let Town = tape[6];
+		let Region = tape[7];
+		let PostalCode = tape[8];
+		let Country = tape[9];
+		return new IfcPostalAddress(Purpose, Description, UserDefinedPurpose, InternalLocation, AddressLines, PostalBox, Town, Region, PostalCode, Country);
 	}
 	ToTape(): any[]
 	{
@@ -27504,8 +31089,10 @@ export class IfcPreDefinedColour {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPreDefinedColour
 	{
+		let Name = tape[0];
+		return new IfcPreDefinedColour(Name);
 	}
 	ToTape(): any[]
 	{
@@ -27521,8 +31108,10 @@ export class IfcPreDefinedCurveFont {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPreDefinedCurveFont
 	{
+		let Name = tape[0];
+		return new IfcPreDefinedCurveFont(Name);
 	}
 	ToTape(): any[]
 	{
@@ -27538,8 +31127,10 @@ export class IfcPreDefinedItem {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPreDefinedItem
 	{
+		let Name = tape[0];
+		return new IfcPreDefinedItem(Name);
 	}
 	ToTape(): any[]
 	{
@@ -27553,8 +31144,9 @@ export class IfcPreDefinedProperties {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPreDefinedProperties
 	{
+		return new IfcPreDefinedProperties();
 	}
 	ToTape(): any[]
 	{
@@ -27574,8 +31166,13 @@ export class IfcPreDefinedPropertySet {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPreDefinedPropertySet
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcPreDefinedPropertySet(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -27606,8 +31203,10 @@ export class IfcPreDefinedTextFont {
 		this.Name = Name;
 	}
 	Name: IfcLabel ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPreDefinedTextFont
 	{
+		let Name = tape[0];
+		return new IfcPreDefinedTextFont(Name);
 	}
 	ToTape(): any[]
 	{
@@ -27621,8 +31220,9 @@ export class IfcPresentationItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPresentationItem
 	{
+		return new IfcPresentationItem();
 	}
 	ToTape(): any[]
 	{
@@ -27642,8 +31242,13 @@ export class IfcPresentationLayerAssignment {
 	Description: IfcText | null;
 	AssignedItems: IfcLayeredItem[] ;
 	Identifier: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPresentationLayerAssignment
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let AssignedItems = tape[2];
+		let Identifier = tape[3];
+		return new IfcPresentationLayerAssignment(Name, Description, AssignedItems, Identifier);
 	}
 	ToTape(): any[]
 	{
@@ -27683,8 +31288,17 @@ export class IfcPresentationLayerWithStyle {
 	LayerFrozen: IfcLogical ;
 	LayerBlocked: IfcLogical ;
 	LayerStyles: Handle<IfcPresentationStyle>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPresentationLayerWithStyle
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let AssignedItems = tape[2];
+		let Identifier = tape[3];
+		let LayerOn = tape[4];
+		let LayerFrozen = tape[5];
+		let LayerBlocked = tape[6];
+		let LayerStyles = tape[7];
+		return new IfcPresentationLayerWithStyle(Name, Description, AssignedItems, Identifier, LayerOn, LayerFrozen, LayerBlocked, LayerStyles);
 	}
 	ToTape(): any[]
 	{
@@ -27713,8 +31327,10 @@ export class IfcPresentationStyle {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPresentationStyle
 	{
+		let Name = tape[0];
+		return new IfcPresentationStyle(Name);
 	}
 	ToTape(): any[]
 	{
@@ -27733,8 +31349,10 @@ export class IfcPresentationStyleAssignment {
 		this.Styles = Styles;
 	}
 	Styles: IfcPresentationStyleSelect[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPresentationStyleAssignment
 	{
+		let Styles = tape[0];
+		return new IfcPresentationStyleAssignment(Styles);
 	}
 	ToTape(): any[]
 	{
@@ -27762,8 +31380,17 @@ export class IfcProcedure {
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
 	PredefinedType: IfcProcedureTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProcedure
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let PredefinedType = tape[7];
+		return new IfcProcedure(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -27830,8 +31457,19 @@ export class IfcProcedureType {
 	LongDescription: IfcText | null;
 	ProcessType: IfcLabel | null;
 	PredefinedType: IfcProcedureTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProcedureType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ProcessType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcProcedureType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ProcessType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -27900,8 +31538,16 @@ export class IfcProcess {
 	ObjectType: IfcLabel | null;
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProcess
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		return new IfcProcess(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription);
 	}
 	ToTape(): any[]
 	{
@@ -27959,8 +31605,16 @@ export class IfcProduct {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProduct
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		return new IfcProduct(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
 	ToTape(): any[]
 	{
@@ -28010,8 +31664,12 @@ export class IfcProductDefinitionShape {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	Representations: Handle<IfcRepresentation>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProductDefinitionShape
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Representations = tape[2];
+		return new IfcProductDefinitionShape(Name, Description, Representations);
 	}
 	ToTape(): any[]
 	{
@@ -28042,8 +31700,12 @@ export class IfcProductRepresentation {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	Representations: Handle<IfcRepresentation>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProductRepresentation
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Representations = tape[2];
+		return new IfcProductRepresentation(Name, Description, Representations);
 	}
 	ToTape(): any[]
 	{
@@ -28072,8 +31734,11 @@ export class IfcProfileDef {
 	}
 	ProfileType: IfcProfileTypeEnum ;
 	ProfileName: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		return new IfcProfileDef(ProfileType, ProfileName);
 	}
 	ToTape(): any[]
 	{
@@ -28098,8 +31763,13 @@ export class IfcProfileProperties {
 	Description: IfcText | null;
 	Properties: Handle<IfcProperty>[] ;
 	ProfileDefinition: Handle<IfcProfileDef> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProfileProperties
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Properties = tape[2];
+		let ProfileDefinition = tape[3];
+		return new IfcProfileProperties(Name, Description, Properties, ProfileDefinition);
 	}
 	ToTape(): any[]
 	{
@@ -28144,8 +31814,18 @@ export class IfcProject {
 	Phase: IfcLabel | null;
 	RepresentationContexts: Handle<IfcRepresentationContext>[] | null;
 	UnitsInContext: Handle<IfcUnitAssignment> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProject
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let LongName = tape[5];
+		let Phase = tape[6];
+		let RepresentationContexts = tape[7];
+		let UnitsInContext = tape[8];
+		return new IfcProject(GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, Phase, RepresentationContexts, UnitsInContext);
 	}
 	ToTape(): any[]
 	{
@@ -28218,8 +31898,18 @@ export class IfcProjectLibrary {
 	Phase: IfcLabel | null;
 	RepresentationContexts: Handle<IfcRepresentationContext>[] | null;
 	UnitsInContext: Handle<IfcUnitAssignment> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProjectLibrary
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let LongName = tape[5];
+		let Phase = tape[6];
+		let RepresentationContexts = tape[7];
+		let UnitsInContext = tape[8];
+		return new IfcProjectLibrary(GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, Phase, RepresentationContexts, UnitsInContext);
 	}
 	ToTape(): any[]
 	{
@@ -28292,8 +31982,18 @@ export class IfcProjectOrder {
 	PredefinedType: IfcProjectOrderTypeEnum | null;
 	Status: IfcLabel | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProjectOrder
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let PredefinedType = tape[6];
+		let Status = tape[7];
+		let LongDescription = tape[8];
+		return new IfcProjectOrder(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, PredefinedType, Status, LongDescription);
 	}
 	ToTape(): any[]
 	{
@@ -28359,8 +32059,16 @@ export class IfcProjectedCRS {
 	MapProjection: IfcIdentifier | null;
 	MapZone: IfcIdentifier | null;
 	MapUnit: Handle<IfcNamedUnit> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProjectedCRS
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let GeodeticDatum = tape[2];
+		let VerticalDatum = tape[3];
+		let MapProjection = tape[4];
+		let MapZone = tape[5];
+		let MapUnit = tape[6];
+		return new IfcProjectedCRS(Name, Description, GeodeticDatum, VerticalDatum, MapProjection, MapZone, MapUnit);
 	}
 	ToTape(): any[]
 	{
@@ -28422,8 +32130,18 @@ export class IfcProjectionElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcProjectionElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProjectionElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcProjectionElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -28479,8 +32197,11 @@ export class IfcProperty {
 	}
 	Name: IfcIdentifier ;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProperty
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		return new IfcProperty(Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -28499,8 +32220,9 @@ export class IfcPropertyAbstraction {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyAbstraction
 	{
+		return new IfcPropertyAbstraction();
 	}
 	ToTape(): any[]
 	{
@@ -28524,8 +32246,15 @@ export class IfcPropertyBoundedValue {
 	LowerBoundValue: IfcValue | null;
 	Unit: IfcUnit | null;
 	SetPointValue: IfcValue | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyBoundedValue
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let UpperBoundValue = tape[2] ? { t: tape[2], v: tape[3][0]} as any : null;
+		let LowerBoundValue = tape[4] ? { t: tape[4], v: tape[5][0]} as any : null;
+		let Unit = tape[6];
+		let SetPointValue = tape[7] ? { t: tape[7], v: tape[8][0]} as any : null;
+		return new IfcPropertyBoundedValue(Name, Description, UpperBoundValue, LowerBoundValue, Unit, SetPointValue);
 	}
 	ToTape(): any[]
 	{
@@ -28588,8 +32317,13 @@ export class IfcPropertyDefinition {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyDefinition
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcPropertyDefinition(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -28628,8 +32362,14 @@ export class IfcPropertyDependencyRelationship {
 	DependingProperty: Handle<IfcProperty> ;
 	DependantProperty: Handle<IfcProperty> ;
 	Expression: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyDependencyRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let DependingProperty = tape[2];
+		let DependantProperty = tape[3];
+		let Expression = tape[4];
+		return new IfcPropertyDependencyRelationship(Name, Description, DependingProperty, DependantProperty, Expression);
 	}
 	ToTape(): any[]
 	{
@@ -28668,8 +32408,13 @@ export class IfcPropertyEnumeratedValue {
 	Description: IfcText | null;
 	EnumerationValues: IfcValue[] | null;
 	EnumerationReference: Handle<IfcPropertyEnumeration> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyEnumeratedValue
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let EnumerationValues = tape[2] ? { t: tape[2], v: tape[3][0]} as any : null;
+		let EnumerationReference = tape[4];
+		return new IfcPropertyEnumeratedValue(Name, Description, EnumerationValues, EnumerationReference);
 	}
 	ToTape(): any[]
 	{
@@ -28702,8 +32447,12 @@ export class IfcPropertyEnumeration {
 	Name: IfcLabel ;
 	EnumerationValues: IfcValue[] ;
 	Unit: IfcUnit | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyEnumeration
 	{
+		let Name = tape[0];
+		let EnumerationValues = { t: tape[1], v: tape[2][0]} as any;
+		let Unit = tape[3];
+		return new IfcPropertyEnumeration(Name, EnumerationValues, Unit);
 	}
 	ToTape(): any[]
 	{
@@ -28728,8 +32477,13 @@ export class IfcPropertyListValue {
 	Description: IfcText | null;
 	ListValues: IfcValue[] | null;
 	Unit: IfcUnit | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyListValue
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let ListValues = tape[2] ? { t: tape[2], v: tape[3][0]} as any : null;
+		let Unit = tape[4];
+		return new IfcPropertyListValue(Name, Description, ListValues, Unit);
 	}
 	ToTape(): any[]
 	{
@@ -28762,8 +32516,13 @@ export class IfcPropertyReferenceValue {
 	Description: IfcText | null;
 	UsageName: IfcText | null;
 	PropertyReference: IfcObjectReferenceSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyReferenceValue
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let UsageName = tape[2];
+		let PropertyReference = tape[3];
+		return new IfcPropertyReferenceValue(Name, Description, UsageName, PropertyReference);
 	}
 	ToTape(): any[]
 	{
@@ -28800,8 +32559,14 @@ export class IfcPropertySet {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	HasProperties: Handle<IfcProperty>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertySet
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let HasProperties = tape[4];
+		return new IfcPropertySet(GlobalId, OwnerHistory, Name, Description, HasProperties);
 	}
 	ToTape(): any[]
 	{
@@ -28841,8 +32606,13 @@ export class IfcPropertySetDefinition {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertySetDefinition
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcPropertySetDefinition(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -28885,8 +32655,16 @@ export class IfcPropertySetTemplate {
 	TemplateType: IfcPropertySetTemplateTypeEnum | null;
 	ApplicableEntity: IfcIdentifier | null;
 	HasPropertyTemplates: Handle<IfcPropertyTemplate>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertySetTemplate
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let TemplateType = tape[4];
+		let ApplicableEntity = tape[5];
+		let HasPropertyTemplates = tape[6];
+		return new IfcPropertySetTemplate(GlobalId, OwnerHistory, Name, Description, TemplateType, ApplicableEntity, HasPropertyTemplates);
 	}
 	ToTape(): any[]
 	{
@@ -28934,8 +32712,13 @@ export class IfcPropertySingleValue {
 	Description: IfcText | null;
 	NominalValue: IfcValue | null;
 	Unit: IfcUnit | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertySingleValue
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let NominalValue = tape[2] ? { t: tape[2], v: tape[3][0]} as any : null;
+		let Unit = tape[4];
+		return new IfcPropertySingleValue(Name, Description, NominalValue, Unit);
 	}
 	ToTape(): any[]
 	{
@@ -28984,8 +32767,17 @@ export class IfcPropertyTableValue {
 	DefiningUnit: IfcUnit | null;
 	DefinedUnit: IfcUnit | null;
 	CurveInterpolation: IfcCurveInterpolationEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyTableValue
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let DefiningValues = tape[2] ? { t: tape[2], v: tape[3][0]} as any : null;
+		let DefinedValues = tape[4] ? { t: tape[4], v: tape[5][0]} as any : null;
+		let Expression = tape[6];
+		let DefiningUnit = tape[7];
+		let DefinedUnit = tape[8];
+		let CurveInterpolation = tape[9];
+		return new IfcPropertyTableValue(Name, Description, DefiningValues, DefinedValues, Expression, DefiningUnit, DefinedUnit, CurveInterpolation);
 	}
 	ToTape(): any[]
 	{
@@ -29032,8 +32824,13 @@ export class IfcPropertyTemplate {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyTemplate
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcPropertyTemplate(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -29070,8 +32867,13 @@ export class IfcPropertyTemplateDefinition {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPropertyTemplateDefinition
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcPropertyTemplateDefinition(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -29118,8 +32920,18 @@ export class IfcProtectiveDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcProtectiveDeviceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProtectiveDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcProtectiveDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -29189,8 +33001,18 @@ export class IfcProtectiveDeviceTrippingUnit {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcProtectiveDeviceTrippingUnitTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProtectiveDeviceTrippingUnit
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcProtectiveDeviceTrippingUnit(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -29262,8 +33084,19 @@ export class IfcProtectiveDeviceTrippingUnitType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcProtectiveDeviceTrippingUnitTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProtectiveDeviceTrippingUnitType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcProtectiveDeviceTrippingUnitType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -29339,8 +33172,19 @@ export class IfcProtectiveDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcProtectiveDeviceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProtectiveDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcProtectiveDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -29414,8 +33258,18 @@ export class IfcProxy {
 	Representation: Handle<IfcProductRepresentation> | null;
 	ProxyType: IfcObjectTypeEnum ;
 	Tag: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcProxy
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let ProxyType = tape[7];
+		let Tag = tape[8];
+		return new IfcProxy(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, ProxyType, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -29482,8 +33336,18 @@ export class IfcPump {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcPumpTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPump
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcPump(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -29555,8 +33419,19 @@ export class IfcPumpType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcPumpTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcPumpType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcPumpType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -29622,8 +33497,14 @@ export class IfcQuantityArea {
 	Unit: Handle<IfcNamedUnit> | null;
 	AreaValue: IfcAreaMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcQuantityArea
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Unit = tape[2];
+		let AreaValue = tape[3];
+		let Formula = tape[4];
+		return new IfcQuantityArea(Name, Description, Unit, AreaValue, Formula);
 	}
 	ToTape(): any[]
 	{
@@ -29664,8 +33545,14 @@ export class IfcQuantityCount {
 	Unit: Handle<IfcNamedUnit> | null;
 	CountValue: IfcCountMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcQuantityCount
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Unit = tape[2];
+		let CountValue = tape[3];
+		let Formula = tape[4];
+		return new IfcQuantityCount(Name, Description, Unit, CountValue, Formula);
 	}
 	ToTape(): any[]
 	{
@@ -29706,8 +33593,14 @@ export class IfcQuantityLength {
 	Unit: Handle<IfcNamedUnit> | null;
 	LengthValue: IfcLengthMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcQuantityLength
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Unit = tape[2];
+		let LengthValue = tape[3];
+		let Formula = tape[4];
+		return new IfcQuantityLength(Name, Description, Unit, LengthValue, Formula);
 	}
 	ToTape(): any[]
 	{
@@ -29746,8 +33639,13 @@ export class IfcQuantitySet {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcQuantitySet
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcQuantitySet(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -29786,8 +33684,14 @@ export class IfcQuantityTime {
 	Unit: Handle<IfcNamedUnit> | null;
 	TimeValue: IfcTimeMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcQuantityTime
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Unit = tape[2];
+		let TimeValue = tape[3];
+		let Formula = tape[4];
+		return new IfcQuantityTime(Name, Description, Unit, TimeValue, Formula);
 	}
 	ToTape(): any[]
 	{
@@ -29828,8 +33732,14 @@ export class IfcQuantityVolume {
 	Unit: Handle<IfcNamedUnit> | null;
 	VolumeValue: IfcVolumeMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcQuantityVolume
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Unit = tape[2];
+		let VolumeValue = tape[3];
+		let Formula = tape[4];
+		return new IfcQuantityVolume(Name, Description, Unit, VolumeValue, Formula);
 	}
 	ToTape(): any[]
 	{
@@ -29870,8 +33780,14 @@ export class IfcQuantityWeight {
 	Unit: Handle<IfcNamedUnit> | null;
 	WeightValue: IfcMassMeasure ;
 	Formula: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcQuantityWeight
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let Unit = tape[2];
+		let WeightValue = tape[3];
+		let Formula = tape[4];
+		return new IfcQuantityWeight(Name, Description, Unit, WeightValue, Formula);
 	}
 	ToTape(): any[]
 	{
@@ -29920,8 +33836,18 @@ export class IfcRailing {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcRailingTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRailing
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcRailing(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -29993,8 +33919,19 @@ export class IfcRailingType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcRailingTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRailingType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcRailingType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -30068,8 +34005,18 @@ export class IfcRamp {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcRampTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRamp
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcRamp(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -30139,8 +34086,18 @@ export class IfcRampFlight {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcRampFlightTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRampFlight
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcRampFlight(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -30212,8 +34169,19 @@ export class IfcRampFlightType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcRampFlightTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRampFlightType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcRampFlightType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -30289,8 +34257,19 @@ export class IfcRampType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcRampTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRampType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcRampType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -30364,8 +34343,18 @@ export class IfcRationalBSplineCurveWithKnots {
 	Knots: IfcParameterValue[] ;
 	KnotSpec: IfcKnotType ;
 	WeightsData: IfcReal[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRationalBSplineCurveWithKnots
 	{
+		let Degree = tape[0];
+		let ControlPointsList = tape[1];
+		let CurveForm = tape[2];
+		let ClosedCurve = tape[3];
+		let SelfIntersect = tape[4];
+		let KnotMultiplicities = tape[5];
+		let Knots = tape[6];
+		let KnotSpec = tape[7];
+		let WeightsData = tape[8];
+		return new IfcRationalBSplineCurveWithKnots(Degree, ControlPointsList, CurveForm, ClosedCurve, SelfIntersect, KnotMultiplicities, Knots, KnotSpec, WeightsData);
 	}
 	ToTape(): any[]
 	{
@@ -30414,8 +34403,22 @@ export class IfcRationalBSplineSurfaceWithKnots {
 	VKnots: IfcParameterValue[] ;
 	KnotSpec: IfcKnotType ;
 	WeightsData: IfcReal[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRationalBSplineSurfaceWithKnots
 	{
+		let UDegree = tape[0];
+		let VDegree = tape[1];
+		let ControlPointsList = tape[2];
+		let SurfaceForm = tape[3];
+		let UClosed = tape[4];
+		let VClosed = tape[5];
+		let SelfIntersect = tape[6];
+		let UMultiplicities = tape[7];
+		let VMultiplicities = tape[8];
+		let UKnots = tape[9];
+		let VKnots = tape[10];
+		let KnotSpec = tape[11];
+		let WeightsData = tape[12];
+		return new IfcRationalBSplineSurfaceWithKnots(UDegree, VDegree, ControlPointsList, SurfaceForm, UClosed, VClosed, SelfIntersect, UMultiplicities, VMultiplicities, UKnots, VKnots, KnotSpec, WeightsData);
 	}
 	ToTape(): any[]
 	{
@@ -30460,8 +34463,17 @@ export class IfcRectangleHollowProfileDef {
 	WallThickness: IfcPositiveLengthMeasure ;
 	InnerFilletRadius: IfcNonNegativeLengthMeasure | null;
 	OuterFilletRadius: IfcNonNegativeLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRectangleHollowProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let XDim = tape[3];
+		let YDim = tape[4];
+		let WallThickness = tape[5];
+		let InnerFilletRadius = tape[6];
+		let OuterFilletRadius = tape[7];
+		return new IfcRectangleHollowProfileDef(ProfileType, ProfileName, Position, XDim, YDim, WallThickness, InnerFilletRadius, OuterFilletRadius);
 	}
 	ToTape(): any[]
 	{
@@ -30499,8 +34511,14 @@ export class IfcRectangleProfileDef {
 	Position: Handle<IfcAxis2Placement2D> | null;
 	XDim: IfcPositiveLengthMeasure ;
 	YDim: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRectangleProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let XDim = tape[3];
+		let YDim = tape[4];
+		return new IfcRectangleProfileDef(ProfileType, ProfileName, Position, XDim, YDim);
 	}
 	ToTape(): any[]
 	{
@@ -30530,8 +34548,13 @@ export class IfcRectangularPyramid {
 	XLength: IfcPositiveLengthMeasure ;
 	YLength: IfcPositiveLengthMeasure ;
 	Height: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRectangularPyramid
 	{
+		let Position = tape[0];
+		let XLength = tape[1];
+		let YLength = tape[2];
+		let Height = tape[3];
+		return new IfcRectangularPyramid(Position, XLength, YLength, Height);
 	}
 	ToTape(): any[]
 	{
@@ -30559,8 +34582,16 @@ export class IfcRectangularTrimmedSurface {
 	V2: IfcParameterValue ;
 	Usense: IfcBoolean ;
 	Vsense: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRectangularTrimmedSurface
 	{
+		let BasisSurface = tape[0];
+		let U1 = tape[1];
+		let V1 = tape[2];
+		let U2 = tape[3];
+		let V2 = tape[4];
+		let Usense = tape[5];
+		let Vsense = tape[6];
+		return new IfcRectangularTrimmedSurface(BasisSurface, U1, V1, U2, V2, Usense, Vsense);
 	}
 	ToTape(): any[]
 	{
@@ -30598,8 +34629,17 @@ export class IfcRecurrencePattern {
 	Interval: IfcInteger | null;
 	Occurrences: IfcInteger | null;
 	TimePeriods: Handle<IfcTimePeriod>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRecurrencePattern
 	{
+		let RecurrenceType = tape[0];
+		let DayComponent = tape[1];
+		let WeekdayComponent = tape[2];
+		let MonthComponent = tape[3];
+		let Position = tape[4];
+		let Interval = tape[5];
+		let Occurrences = tape[6];
+		let TimePeriods = tape[7];
+		return new IfcRecurrencePattern(RecurrenceType, DayComponent, WeekdayComponent, MonthComponent, Position, Interval, Occurrences, TimePeriods);
 	}
 	ToTape(): any[]
 	{
@@ -30657,8 +34697,14 @@ export class IfcReference {
 	InstanceName: IfcLabel | null;
 	ListPositions: IfcInteger[] | null;
 	InnerReference: Handle<IfcReference> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReference
 	{
+		let TypeIdentifier = tape[0];
+		let AttributeIdentifier = tape[1];
+		let InstanceName = tape[2];
+		let ListPositions = tape[3];
+		let InnerReference = tape[4];
+		return new IfcReference(TypeIdentifier, AttributeIdentifier, InstanceName, ListPositions, InnerReference);
 	}
 	ToTape(): any[]
 	{
@@ -30713,8 +34759,18 @@ export class IfcReferent {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcReferentTypeEnum | null;
 	RestartDistance: IfcLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReferent
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let PredefinedType = tape[7];
+		let RestartDistance = tape[8];
+		return new IfcReferent(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, RestartDistance);
 	}
 	ToTape(): any[]
 	{
@@ -30786,8 +34842,19 @@ export class IfcRegularTimeSeries {
 	Unit: IfcUnit | null;
 	TimeStep: IfcTimeMeasure ;
 	Values: Handle<IfcTimeSeriesValue>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRegularTimeSeries
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let StartTime = tape[2];
+		let EndTime = tape[3];
+		let TimeSeriesDataType = tape[4];
+		let DataOrigin = tape[5];
+		let UserDefinedDataOrigin = tape[6];
+		let Unit = tape[7];
+		let TimeStep = tape[8];
+		let Values = tape[9];
+		return new IfcRegularTimeSeries(Name, Description, StartTime, EndTime, TimeSeriesDataType, DataOrigin, UserDefinedDataOrigin, Unit, TimeStep, Values);
 	}
 	ToTape(): any[]
 	{
@@ -30835,8 +34902,15 @@ export class IfcReinforcementBarProperties {
 	EffectiveDepth: IfcLengthMeasure | null;
 	NominalBarDiameter: IfcPositiveLengthMeasure | null;
 	BarCount: IfcCountMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReinforcementBarProperties
 	{
+		let TotalCrossSectionArea = tape[0];
+		let SteelGrade = tape[1];
+		let BarSurface = tape[2];
+		let EffectiveDepth = tape[3];
+		let NominalBarDiameter = tape[4];
+		let BarCount = tape[5];
+		return new IfcReinforcementBarProperties(TotalCrossSectionArea, SteelGrade, BarSurface, EffectiveDepth, NominalBarDiameter, BarCount);
 	}
 	ToTape(): any[]
 	{
@@ -30880,8 +34954,15 @@ export class IfcReinforcementDefinitionProperties {
 	Description: IfcText | null;
 	DefinitionType: IfcLabel | null;
 	ReinforcementSectionDefinitions: Handle<IfcSectionReinforcementProperties>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReinforcementDefinitionProperties
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let DefinitionType = tape[4];
+		let ReinforcementSectionDefinitions = tape[5];
+		return new IfcReinforcementDefinitionProperties(GlobalId, OwnerHistory, Name, Description, DefinitionType, ReinforcementSectionDefinitions);
 	}
 	ToTape(): any[]
 	{
@@ -30946,8 +35027,23 @@ export class IfcReinforcingBar {
 	BarLength: IfcPositiveLengthMeasure | null;
 	PredefinedType: IfcReinforcingBarTypeEnum | null;
 	BarSurface: IfcReinforcingBarSurfaceEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReinforcingBar
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let SteelGrade = tape[8];
+		let NominalDiameter = tape[9];
+		let CrossSectionArea = tape[10];
+		let BarLength = tape[11];
+		let PredefinedType = tape[12];
+		let BarSurface = tape[13];
+		return new IfcReinforcingBar(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, SteelGrade, NominalDiameter, CrossSectionArea, BarLength, PredefinedType, BarSurface);
 	}
 	ToTape(): any[]
 	{
@@ -31050,8 +35146,25 @@ export class IfcReinforcingBarType {
 	BarSurface: IfcReinforcingBarSurfaceEnum | null;
 	BendingShapeCode: IfcLabel | null;
 	BendingParameters: IfcBendingParameterSelect[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReinforcingBarType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		let NominalDiameter = tape[10];
+		let CrossSectionArea = tape[11];
+		let BarLength = tape[12];
+		let BarSurface = tape[13];
+		let BendingShapeCode = tape[14];
+		let BendingParameters = tape[15];
+		return new IfcReinforcingBarType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType, NominalDiameter, CrossSectionArea, BarLength, BarSurface, BendingShapeCode, BendingParameters);
 	}
 	ToTape(): any[]
 	{
@@ -31147,8 +35260,18 @@ export class IfcReinforcingElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	SteelGrade: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReinforcingElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let SteelGrade = tape[8];
+		return new IfcReinforcingElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, SteelGrade);
 	}
 	ToTape(): any[]
 	{
@@ -31220,8 +35343,18 @@ export class IfcReinforcingElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReinforcingElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcReinforcingElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -31313,8 +35446,27 @@ export class IfcReinforcingMesh {
 	LongitudinalBarSpacing: IfcPositiveLengthMeasure | null;
 	TransverseBarSpacing: IfcPositiveLengthMeasure | null;
 	PredefinedType: IfcReinforcingMeshTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReinforcingMesh
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let SteelGrade = tape[8];
+		let MeshLength = tape[9];
+		let MeshWidth = tape[10];
+		let LongitudinalBarNominalDiameter = tape[11];
+		let TransverseBarNominalDiameter = tape[12];
+		let LongitudinalBarCrossSectionArea = tape[13];
+		let TransverseBarCrossSectionArea = tape[14];
+		let LongitudinalBarSpacing = tape[15];
+		let TransverseBarSpacing = tape[16];
+		let PredefinedType = tape[17];
+		return new IfcReinforcingMesh(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, SteelGrade, MeshLength, MeshWidth, LongitudinalBarNominalDiameter, TransverseBarNominalDiameter, LongitudinalBarCrossSectionArea, TransverseBarCrossSectionArea, LongitudinalBarSpacing, TransverseBarSpacing, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -31439,8 +35591,29 @@ export class IfcReinforcingMeshType {
 	TransverseBarSpacing: IfcPositiveLengthMeasure | null;
 	BendingShapeCode: IfcLabel | null;
 	BendingParameters: IfcBendingParameterSelect[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReinforcingMeshType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		let MeshLength = tape[10];
+		let MeshWidth = tape[11];
+		let LongitudinalBarNominalDiameter = tape[12];
+		let TransverseBarNominalDiameter = tape[13];
+		let LongitudinalBarCrossSectionArea = tape[14];
+		let TransverseBarCrossSectionArea = tape[15];
+		let LongitudinalBarSpacing = tape[16];
+		let TransverseBarSpacing = tape[17];
+		let BendingShapeCode = tape[18];
+		let BendingParameters = tape[19];
+		return new IfcReinforcingMeshType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType, MeshLength, MeshWidth, LongitudinalBarNominalDiameter, TransverseBarNominalDiameter, LongitudinalBarCrossSectionArea, TransverseBarCrossSectionArea, LongitudinalBarSpacing, TransverseBarSpacing, BendingShapeCode, BendingParameters);
 	}
 	ToTape(): any[]
 	{
@@ -31544,8 +35717,15 @@ export class IfcRelAggregates {
 	Description: IfcText | null;
 	RelatingObject: Handle<IfcObjectDefinition> ;
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAggregates
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingObject = tape[4];
+		let RelatedObjects = tape[5];
+		return new IfcRelAggregates(GlobalId, OwnerHistory, Name, Description, RelatingObject, RelatedObjects);
 	}
 	ToTape(): any[]
 	{
@@ -31591,8 +35771,15 @@ export class IfcRelAssigns {
 	Description: IfcText | null;
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssigns
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatedObjectsType = tape[5];
+		return new IfcRelAssigns(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 	}
 	ToTape(): any[]
 	{
@@ -31643,8 +35830,17 @@ export class IfcRelAssignsToActor {
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingActor: Handle<IfcActor> ;
 	ActingRole: Handle<IfcActorRole> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssignsToActor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatedObjectsType = tape[5];
+		let RelatingActor = tape[6];
+		let ActingRole = tape[7];
+		return new IfcRelAssignsToActor(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingActor, ActingRole);
 	}
 	ToTape(): any[]
 	{
@@ -31700,8 +35896,16 @@ export class IfcRelAssignsToControl {
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingControl: Handle<IfcControl> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssignsToControl
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatedObjectsType = tape[5];
+		let RelatingControl = tape[6];
+		return new IfcRelAssignsToControl(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingControl);
 	}
 	ToTape(): any[]
 	{
@@ -31752,8 +35956,16 @@ export class IfcRelAssignsToGroup {
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingGroup: Handle<IfcGroup> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssignsToGroup
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatedObjectsType = tape[5];
+		let RelatingGroup = tape[6];
+		return new IfcRelAssignsToGroup(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingGroup);
 	}
 	ToTape(): any[]
 	{
@@ -31806,8 +36018,17 @@ export class IfcRelAssignsToGroupByFactor {
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingGroup: Handle<IfcGroup> ;
 	Factor: IfcRatioMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssignsToGroupByFactor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatedObjectsType = tape[5];
+		let RelatingGroup = tape[6];
+		let Factor = tape[7];
+		return new IfcRelAssignsToGroupByFactor(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingGroup, Factor);
 	}
 	ToTape(): any[]
 	{
@@ -31862,8 +36083,17 @@ export class IfcRelAssignsToProcess {
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingProcess: IfcProcessSelect ;
 	QuantityInProcess: Handle<IfcMeasureWithUnit> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssignsToProcess
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatedObjectsType = tape[5];
+		let RelatingProcess = tape[6];
+		let QuantityInProcess = tape[7];
+		return new IfcRelAssignsToProcess(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingProcess, QuantityInProcess);
 	}
 	ToTape(): any[]
 	{
@@ -31917,8 +36147,16 @@ export class IfcRelAssignsToProduct {
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingProduct: IfcProductSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssignsToProduct
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatedObjectsType = tape[5];
+		let RelatingProduct = tape[6];
+		return new IfcRelAssignsToProduct(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingProduct);
 	}
 	ToTape(): any[]
 	{
@@ -31967,8 +36205,16 @@ export class IfcRelAssignsToResource {
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatedObjectsType: IfcObjectTypeEnum | null;
 	RelatingResource: IfcResourceSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssignsToResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatedObjectsType = tape[5];
+		let RelatingResource = tape[6];
+		return new IfcRelAssignsToResource(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingResource);
 	}
 	ToTape(): any[]
 	{
@@ -32013,8 +36259,14 @@ export class IfcRelAssociates {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssociates
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		return new IfcRelAssociates(GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 	}
 	ToTape(): any[]
 	{
@@ -32055,8 +36307,15 @@ export class IfcRelAssociatesApproval {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingApproval: Handle<IfcApproval> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssociatesApproval
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatingApproval = tape[5];
+		return new IfcRelAssociatesApproval(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingApproval);
 	}
 	ToTape(): any[]
 	{
@@ -32099,8 +36358,15 @@ export class IfcRelAssociatesClassification {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingClassification: IfcClassificationSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssociatesClassification
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatingClassification = tape[5];
+		return new IfcRelAssociatesClassification(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingClassification);
 	}
 	ToTape(): any[]
 	{
@@ -32143,8 +36409,16 @@ export class IfcRelAssociatesConstraint {
 	RelatedObjects: IfcDefinitionSelect[] ;
 	Intent: IfcLabel | null;
 	RelatingConstraint: Handle<IfcConstraint> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssociatesConstraint
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let Intent = tape[5];
+		let RelatingConstraint = tape[6];
+		return new IfcRelAssociatesConstraint(GlobalId, OwnerHistory, Name, Description, RelatedObjects, Intent, RelatingConstraint);
 	}
 	ToTape(): any[]
 	{
@@ -32192,8 +36466,15 @@ export class IfcRelAssociatesDocument {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingDocument: IfcDocumentSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssociatesDocument
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatingDocument = tape[5];
+		return new IfcRelAssociatesDocument(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingDocument);
 	}
 	ToTape(): any[]
 	{
@@ -32234,8 +36515,15 @@ export class IfcRelAssociatesLibrary {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingLibrary: IfcLibrarySelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssociatesLibrary
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatingLibrary = tape[5];
+		return new IfcRelAssociatesLibrary(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingLibrary);
 	}
 	ToTape(): any[]
 	{
@@ -32276,8 +36564,15 @@ export class IfcRelAssociatesMaterial {
 	Description: IfcText | null;
 	RelatedObjects: IfcDefinitionSelect[] ;
 	RelatingMaterial: IfcMaterialSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelAssociatesMaterial
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatingMaterial = tape[5];
+		return new IfcRelAssociatesMaterial(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingMaterial);
 	}
 	ToTape(): any[]
 	{
@@ -32314,8 +36609,13 @@ export class IfcRelConnects {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnects
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcRelConnects(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -32358,8 +36658,16 @@ export class IfcRelConnectsElements {
 	ConnectionGeometry: Handle<IfcConnectionGeometry> | null;
 	RelatingElement: Handle<IfcElement> ;
 	RelatedElement: Handle<IfcElement> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnectsElements
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ConnectionGeometry = tape[4];
+		let RelatingElement = tape[5];
+		let RelatedElement = tape[6];
+		return new IfcRelConnectsElements(GlobalId, OwnerHistory, Name, Description, ConnectionGeometry, RelatingElement, RelatedElement);
 	}
 	ToTape(): any[]
 	{
@@ -32419,8 +36727,20 @@ export class IfcRelConnectsPathElements {
 	RelatedPriorities: IfcInteger[] ;
 	RelatedConnectionType: IfcConnectionTypeEnum ;
 	RelatingConnectionType: IfcConnectionTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnectsPathElements
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ConnectionGeometry = tape[4];
+		let RelatingElement = tape[5];
+		let RelatedElement = tape[6];
+		let RelatingPriorities = tape[7];
+		let RelatedPriorities = tape[8];
+		let RelatedConnectionType = tape[9];
+		let RelatingConnectionType = tape[10];
+		return new IfcRelConnectsPathElements(GlobalId, OwnerHistory, Name, Description, ConnectionGeometry, RelatingElement, RelatedElement, RelatingPriorities, RelatedPriorities, RelatedConnectionType, RelatingConnectionType);
 	}
 	ToTape(): any[]
 	{
@@ -32474,8 +36794,15 @@ export class IfcRelConnectsPortToElement {
 	Description: IfcText | null;
 	RelatingPort: Handle<IfcPort> ;
 	RelatedElement: Handle<IfcDistributionElement> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnectsPortToElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingPort = tape[4];
+		let RelatedElement = tape[5];
+		return new IfcRelConnectsPortToElement(GlobalId, OwnerHistory, Name, Description, RelatingPort, RelatedElement);
 	}
 	ToTape(): any[]
 	{
@@ -32522,8 +36849,16 @@ export class IfcRelConnectsPorts {
 	RelatingPort: Handle<IfcPort> ;
 	RelatedPort: Handle<IfcPort> ;
 	RealizingElement: Handle<IfcElement> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnectsPorts
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingPort = tape[4];
+		let RelatedPort = tape[5];
+		let RealizingElement = tape[6];
+		return new IfcRelConnectsPorts(GlobalId, OwnerHistory, Name, Description, RelatingPort, RelatedPort, RealizingElement);
 	}
 	ToTape(): any[]
 	{
@@ -32573,8 +36908,15 @@ export class IfcRelConnectsStructuralActivity {
 	Description: IfcText | null;
 	RelatingElement: IfcStructuralActivityAssignmentSelect ;
 	RelatedStructuralActivity: Handle<IfcStructuralActivity> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnectsStructuralActivity
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingElement = tape[4];
+		let RelatedStructuralActivity = tape[5];
+		return new IfcRelConnectsStructuralActivity(GlobalId, OwnerHistory, Name, Description, RelatingElement, RelatedStructuralActivity);
 	}
 	ToTape(): any[]
 	{
@@ -32625,8 +36967,19 @@ export class IfcRelConnectsStructuralMember {
 	AdditionalConditions: Handle<IfcStructuralConnectionCondition> | null;
 	SupportedLength: IfcLengthMeasure | null;
 	ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnectsStructuralMember
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingStructuralMember = tape[4];
+		let RelatedStructuralConnection = tape[5];
+		let AppliedCondition = tape[6];
+		let AdditionalConditions = tape[7];
+		let SupportedLength = tape[8];
+		let ConditionCoordinateSystem = tape[9];
+		return new IfcRelConnectsStructuralMember(GlobalId, OwnerHistory, Name, Description, RelatingStructuralMember, RelatedStructuralConnection, AppliedCondition, AdditionalConditions, SupportedLength, ConditionCoordinateSystem);
 	}
 	ToTape(): any[]
 	{
@@ -32701,8 +37054,20 @@ export class IfcRelConnectsWithEccentricity {
 	SupportedLength: IfcLengthMeasure | null;
 	ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null;
 	ConnectionConstraint: Handle<IfcConnectionGeometry> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnectsWithEccentricity
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingStructuralMember = tape[4];
+		let RelatedStructuralConnection = tape[5];
+		let AppliedCondition = tape[6];
+		let AdditionalConditions = tape[7];
+		let SupportedLength = tape[8];
+		let ConditionCoordinateSystem = tape[9];
+		let ConnectionConstraint = tape[10];
+		return new IfcRelConnectsWithEccentricity(GlobalId, OwnerHistory, Name, Description, RelatingStructuralMember, RelatedStructuralConnection, AppliedCondition, AdditionalConditions, SupportedLength, ConditionCoordinateSystem, ConnectionConstraint);
 	}
 	ToTape(): any[]
 	{
@@ -32775,8 +37140,18 @@ export class IfcRelConnectsWithRealizingElements {
 	RelatedElement: Handle<IfcElement> ;
 	RealizingElements: Handle<IfcElement>[] ;
 	ConnectionType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelConnectsWithRealizingElements
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ConnectionGeometry = tape[4];
+		let RelatingElement = tape[5];
+		let RelatedElement = tape[6];
+		let RealizingElements = tape[7];
+		let ConnectionType = tape[8];
+		return new IfcRelConnectsWithRealizingElements(GlobalId, OwnerHistory, Name, Description, ConnectionGeometry, RelatingElement, RelatedElement, RealizingElements, ConnectionType);
 	}
 	ToTape(): any[]
 	{
@@ -32834,8 +37209,15 @@ export class IfcRelContainedInSpatialStructure {
 	Description: IfcText | null;
 	RelatedElements: Handle<IfcProduct>[] ;
 	RelatingStructure: Handle<IfcSpatialElement> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelContainedInSpatialStructure
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedElements = tape[4];
+		let RelatingStructure = tape[5];
+		return new IfcRelContainedInSpatialStructure(GlobalId, OwnerHistory, Name, Description, RelatedElements, RelatingStructure);
 	}
 	ToTape(): any[]
 	{
@@ -32881,8 +37263,15 @@ export class IfcRelCoversBldgElements {
 	Description: IfcText | null;
 	RelatingBuildingElement: Handle<IfcElement> ;
 	RelatedCoverings: Handle<IfcCovering>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelCoversBldgElements
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingBuildingElement = tape[4];
+		let RelatedCoverings = tape[5];
+		return new IfcRelCoversBldgElements(GlobalId, OwnerHistory, Name, Description, RelatingBuildingElement, RelatedCoverings);
 	}
 	ToTape(): any[]
 	{
@@ -32928,8 +37317,15 @@ export class IfcRelCoversSpaces {
 	Description: IfcText | null;
 	RelatingSpace: Handle<IfcSpace> ;
 	RelatedCoverings: Handle<IfcCovering>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelCoversSpaces
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingSpace = tape[4];
+		let RelatedCoverings = tape[5];
+		return new IfcRelCoversSpaces(GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedCoverings);
 	}
 	ToTape(): any[]
 	{
@@ -32975,8 +37371,15 @@ export class IfcRelDeclares {
 	Description: IfcText | null;
 	RelatingContext: Handle<IfcContext> ;
 	RelatedDefinitions: IfcDefinitionSelect[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelDeclares
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingContext = tape[4];
+		let RelatedDefinitions = tape[5];
+		return new IfcRelDeclares(GlobalId, OwnerHistory, Name, Description, RelatingContext, RelatedDefinitions);
 	}
 	ToTape(): any[]
 	{
@@ -33015,8 +37418,13 @@ export class IfcRelDecomposes {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelDecomposes
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcRelDecomposes(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -33053,8 +37461,13 @@ export class IfcRelDefines {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelDefines
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcRelDefines(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -33095,8 +37508,15 @@ export class IfcRelDefinesByObject {
 	Description: IfcText | null;
 	RelatedObjects: Handle<IfcObject>[] ;
 	RelatingObject: Handle<IfcObject> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelDefinesByObject
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatingObject = tape[5];
+		return new IfcRelDefinesByObject(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingObject);
 	}
 	ToTape(): any[]
 	{
@@ -33142,8 +37562,15 @@ export class IfcRelDefinesByProperties {
 	Description: IfcText | null;
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
 	RelatingPropertyDefinition: IfcPropertySetDefinitionSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelDefinesByProperties
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatingPropertyDefinition = tape[5];
+		return new IfcRelDefinesByProperties(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingPropertyDefinition);
 	}
 	ToTape(): any[]
 	{
@@ -33187,8 +37614,15 @@ export class IfcRelDefinesByTemplate {
 	Description: IfcText | null;
 	RelatedPropertySets: Handle<IfcPropertySetDefinition>[] ;
 	RelatingTemplate: Handle<IfcPropertySetTemplate> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelDefinesByTemplate
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedPropertySets = tape[4];
+		let RelatingTemplate = tape[5];
+		return new IfcRelDefinesByTemplate(GlobalId, OwnerHistory, Name, Description, RelatedPropertySets, RelatingTemplate);
 	}
 	ToTape(): any[]
 	{
@@ -33234,8 +37668,15 @@ export class IfcRelDefinesByType {
 	Description: IfcText | null;
 	RelatedObjects: Handle<IfcObject>[] ;
 	RelatingType: Handle<IfcTypeObject> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelDefinesByType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedObjects = tape[4];
+		let RelatingType = tape[5];
+		return new IfcRelDefinesByType(GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingType);
 	}
 	ToTape(): any[]
 	{
@@ -33281,8 +37722,15 @@ export class IfcRelFillsElement {
 	Description: IfcText | null;
 	RelatingOpeningElement: Handle<IfcOpeningElement> ;
 	RelatedBuildingElement: Handle<IfcElement> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelFillsElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingOpeningElement = tape[4];
+		let RelatedBuildingElement = tape[5];
+		return new IfcRelFillsElement(GlobalId, OwnerHistory, Name, Description, RelatingOpeningElement, RelatedBuildingElement);
 	}
 	ToTape(): any[]
 	{
@@ -33327,8 +37775,15 @@ export class IfcRelFlowControlElements {
 	Description: IfcText | null;
 	RelatedControlElements: Handle<IfcDistributionControlElement>[] ;
 	RelatingFlowElement: Handle<IfcDistributionFlowElement> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelFlowControlElements
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedControlElements = tape[4];
+		let RelatingFlowElement = tape[5];
+		return new IfcRelFlowControlElements(GlobalId, OwnerHistory, Name, Description, RelatedControlElements, RelatingFlowElement);
 	}
 	ToTape(): any[]
 	{
@@ -33380,8 +37835,18 @@ export class IfcRelInterferesElements {
 	InterferenceGeometry: Handle<IfcConnectionGeometry> | null;
 	InterferenceType: IfcIdentifier | null;
 	ImpliedOrder: Handle<boolean> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelInterferesElements
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingElement = tape[4];
+		let RelatedElement = tape[5];
+		let InterferenceGeometry = tape[6];
+		let InterferenceType = tape[7];
+		let ImpliedOrder = tape[8];
+		return new IfcRelInterferesElements(GlobalId, OwnerHistory, Name, Description, RelatingElement, RelatedElement, InterferenceGeometry, InterferenceType, ImpliedOrder);
 	}
 	ToTape(): any[]
 	{
@@ -33438,8 +37903,15 @@ export class IfcRelNests {
 	Description: IfcText | null;
 	RelatingObject: Handle<IfcObjectDefinition> ;
 	RelatedObjects: Handle<IfcObjectDefinition>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelNests
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingObject = tape[4];
+		let RelatedObjects = tape[5];
+		return new IfcRelNests(GlobalId, OwnerHistory, Name, Description, RelatingObject, RelatedObjects);
 	}
 	ToTape(): any[]
 	{
@@ -33485,8 +37957,15 @@ export class IfcRelPositions {
 	Description: IfcText | null;
 	RelatingPositioningElement: Handle<IfcPositioningElement> ;
 	RelatedProducts: Handle<IfcProduct>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelPositions
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingPositioningElement = tape[4];
+		let RelatedProducts = tape[5];
+		return new IfcRelPositions(GlobalId, OwnerHistory, Name, Description, RelatingPositioningElement, RelatedProducts);
 	}
 	ToTape(): any[]
 	{
@@ -33532,8 +38011,15 @@ export class IfcRelProjectsElement {
 	Description: IfcText | null;
 	RelatingElement: Handle<IfcElement> ;
 	RelatedFeatureElement: Handle<IfcFeatureElementAddition> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelProjectsElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingElement = tape[4];
+		let RelatedFeatureElement = tape[5];
+		return new IfcRelProjectsElement(GlobalId, OwnerHistory, Name, Description, RelatingElement, RelatedFeatureElement);
 	}
 	ToTape(): any[]
 	{
@@ -33578,8 +38064,15 @@ export class IfcRelReferencedInSpatialStructure {
 	Description: IfcText | null;
 	RelatedElements: Handle<IfcProduct>[] ;
 	RelatingStructure: Handle<IfcSpatialElement> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelReferencedInSpatialStructure
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatedElements = tape[4];
+		let RelatingStructure = tape[5];
+		return new IfcRelReferencedInSpatialStructure(GlobalId, OwnerHistory, Name, Description, RelatedElements, RelatingStructure);
 	}
 	ToTape(): any[]
 	{
@@ -33631,8 +38124,18 @@ export class IfcRelSequence {
 	TimeLag: Handle<IfcLagTime> | null;
 	SequenceType: IfcSequenceEnum | null;
 	UserDefinedSequenceType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelSequence
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingProcess = tape[4];
+		let RelatedProcess = tape[5];
+		let TimeLag = tape[6];
+		let SequenceType = tape[7];
+		let UserDefinedSequenceType = tape[8];
+		return new IfcRelSequence(GlobalId, OwnerHistory, Name, Description, RelatingProcess, RelatedProcess, TimeLag, SequenceType, UserDefinedSequenceType);
 	}
 	ToTape(): any[]
 	{
@@ -33690,8 +38193,15 @@ export class IfcRelServicesBuildings {
 	Description: IfcText | null;
 	RelatingSystem: Handle<IfcSystem> ;
 	RelatedBuildings: Handle<IfcSpatialElement>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelServicesBuildings
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingSystem = tape[4];
+		let RelatedBuildings = tape[5];
+		return new IfcRelServicesBuildings(GlobalId, OwnerHistory, Name, Description, RelatingSystem, RelatedBuildings);
 	}
 	ToTape(): any[]
 	{
@@ -33743,8 +38253,18 @@ export class IfcRelSpaceBoundary {
 	ConnectionGeometry: Handle<IfcConnectionGeometry> | null;
 	PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum ;
 	InternalOrExternalBoundary: IfcInternalOrExternalEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelSpaceBoundary
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingSpace = tape[4];
+		let RelatedBuildingElement = tape[5];
+		let ConnectionGeometry = tape[6];
+		let PhysicalOrVirtualBoundary = tape[7];
+		let InternalOrExternalBoundary = tape[8];
+		return new IfcRelSpaceBoundary(GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary);
 	}
 	ToTape(): any[]
 	{
@@ -33800,8 +38320,19 @@ export class IfcRelSpaceBoundary1stLevel {
 	PhysicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum ;
 	InternalOrExternalBoundary: IfcInternalOrExternalEnum ;
 	ParentBoundary: Handle<IfcRelSpaceBoundary1stLevel> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelSpaceBoundary1stLevel
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingSpace = tape[4];
+		let RelatedBuildingElement = tape[5];
+		let ConnectionGeometry = tape[6];
+		let PhysicalOrVirtualBoundary = tape[7];
+		let InternalOrExternalBoundary = tape[8];
+		let ParentBoundary = tape[9];
+		return new IfcRelSpaceBoundary1stLevel(GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary, ParentBoundary);
 	}
 	ToTape(): any[]
 	{
@@ -33864,8 +38395,20 @@ export class IfcRelSpaceBoundary2ndLevel {
 	InternalOrExternalBoundary: IfcInternalOrExternalEnum ;
 	ParentBoundary: Handle<IfcRelSpaceBoundary1stLevel> | null;
 	CorrespondingBoundary: Handle<IfcRelSpaceBoundary2ndLevel> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelSpaceBoundary2ndLevel
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingSpace = tape[4];
+		let RelatedBuildingElement = tape[5];
+		let ConnectionGeometry = tape[6];
+		let PhysicalOrVirtualBoundary = tape[7];
+		let InternalOrExternalBoundary = tape[8];
+		let ParentBoundary = tape[9];
+		let CorrespondingBoundary = tape[10];
+		return new IfcRelSpaceBoundary2ndLevel(GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary, ParentBoundary, CorrespondingBoundary);
 	}
 	ToTape(): any[]
 	{
@@ -33923,8 +38466,15 @@ export class IfcRelVoidsElement {
 	Description: IfcText | null;
 	RelatingBuildingElement: Handle<IfcElement> ;
 	RelatedOpeningElement: Handle<IfcFeatureElementSubtraction> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelVoidsElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let RelatingBuildingElement = tape[4];
+		let RelatedOpeningElement = tape[5];
+		return new IfcRelVoidsElement(GlobalId, OwnerHistory, Name, Description, RelatingBuildingElement, RelatedOpeningElement);
 	}
 	ToTape(): any[]
 	{
@@ -33965,8 +38515,13 @@ export class IfcRelationship {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRelationship
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcRelationship(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -34003,8 +38558,13 @@ export class IfcReparametrisedCompositeCurveSegment {
 	SameSense: IfcBoolean ;
 	ParentCurve: Handle<IfcCurve> ;
 	ParamLength: IfcParameterValue ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcReparametrisedCompositeCurveSegment
 	{
+		let Transition = tape[0];
+		let SameSense = tape[1];
+		let ParentCurve = tape[2];
+		let ParamLength = tape[3];
+		return new IfcReparametrisedCompositeCurveSegment(Transition, SameSense, ParentCurve, ParamLength);
 	}
 	ToTape(): any[]
 	{
@@ -34028,8 +38588,13 @@ export class IfcRepresentation {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRepresentation
 	{
+		let ContextOfItems = tape[0];
+		let RepresentationIdentifier = tape[1];
+		let RepresentationType = tape[2];
+		let Items = tape[3];
+		return new IfcRepresentation(ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 	}
 	ToTape(): any[]
 	{
@@ -34060,8 +38625,11 @@ export class IfcRepresentationContext {
 	}
 	ContextIdentifier: IfcLabel | null;
 	ContextType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRepresentationContext
 	{
+		let ContextIdentifier = tape[0];
+		let ContextType = tape[1];
+		return new IfcRepresentationContext(ContextIdentifier, ContextType);
 	}
 	ToTape(): any[]
 	{
@@ -34083,8 +38651,9 @@ export class IfcRepresentationItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRepresentationItem
 	{
+		return new IfcRepresentationItem();
 	}
 	ToTape(): any[]
 	{
@@ -34100,8 +38669,11 @@ export class IfcRepresentationMap {
 	}
 	MappingOrigin: IfcAxis2Placement ;
 	MappedRepresentation: Handle<IfcRepresentation> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRepresentationMap
 	{
+		let MappingOrigin = tape[0];
+		let MappedRepresentation = tape[1];
+		return new IfcRepresentationMap(MappingOrigin, MappedRepresentation);
 	}
 	ToTape(): any[]
 	{
@@ -34129,8 +38701,16 @@ export class IfcResource {
 	ObjectType: IfcLabel | null;
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		return new IfcResource(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription);
 	}
 	ToTape(): any[]
 	{
@@ -34182,8 +38762,13 @@ export class IfcResourceApprovalRelationship {
 	Description: IfcText | null;
 	RelatedResourceObjects: IfcResourceObjectSelect[] ;
 	RelatingApproval: Handle<IfcApproval> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcResourceApprovalRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let RelatedResourceObjects = tape[2];
+		let RelatingApproval = tape[3];
+		return new IfcResourceApprovalRelationship(Name, Description, RelatedResourceObjects, RelatingApproval);
 	}
 	ToTape(): any[]
 	{
@@ -34215,8 +38800,13 @@ export class IfcResourceConstraintRelationship {
 	Description: IfcText | null;
 	RelatingConstraint: Handle<IfcConstraint> ;
 	RelatedResourceObjects: IfcResourceObjectSelect[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcResourceConstraintRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let RelatingConstraint = tape[2];
+		let RelatedResourceObjects = tape[3];
+		return new IfcResourceConstraintRelationship(Name, Description, RelatingConstraint, RelatedResourceObjects);
 	}
 	ToTape(): any[]
 	{
@@ -34244,8 +38834,11 @@ export class IfcResourceLevelRelationship {
 	}
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcResourceLevelRelationship
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		return new IfcResourceLevelRelationship(Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -34303,8 +38896,27 @@ export class IfcResourceTime {
 	RemainingWork: IfcDuration | null;
 	RemainingUsage: IfcPositiveRatioMeasure | null;
 	Completion: IfcPositiveRatioMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcResourceTime
 	{
+		let Name = tape[0];
+		let DataOrigin = tape[1];
+		let UserDefinedDataOrigin = tape[2];
+		let ScheduleWork = tape[3];
+		let ScheduleUsage = tape[4];
+		let ScheduleStart = tape[5];
+		let ScheduleFinish = tape[6];
+		let ScheduleContour = tape[7];
+		let LevelingDelay = tape[8];
+		let IsOverAllocated = tape[9];
+		let StatusTime = tape[10];
+		let ActualWork = tape[11];
+		let ActualUsage = tape[12];
+		let ActualStart = tape[13];
+		let ActualFinish = tape[14];
+		let RemainingWork = tape[15];
+		let RemainingUsage = tape[16];
+		let Completion = tape[17];
+		return new IfcResourceTime(Name, DataOrigin, UserDefinedDataOrigin, ScheduleWork, ScheduleUsage, ScheduleStart, ScheduleFinish, ScheduleContour, LevelingDelay, IsOverAllocated, StatusTime, ActualWork, ActualUsage, ActualStart, ActualFinish, RemainingWork, RemainingUsage, Completion);
 	}
 	ToTape(): any[]
 	{
@@ -34402,8 +39014,13 @@ export class IfcRevolvedAreaSolid {
 	Position: Handle<IfcAxis2Placement3D> | null;
 	Axis: Handle<IfcAxis1Placement> ;
 	Angle: IfcPlaneAngleMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRevolvedAreaSolid
 	{
+		let SweptArea = tape[0];
+		let Position = tape[1];
+		let Axis = tape[2];
+		let Angle = tape[3];
+		return new IfcRevolvedAreaSolid(SweptArea, Position, Axis, Angle);
 	}
 	ToTape(): any[]
 	{
@@ -34436,8 +39053,14 @@ export class IfcRevolvedAreaSolidTapered {
 	Axis: Handle<IfcAxis1Placement> ;
 	Angle: IfcPlaneAngleMeasure ;
 	EndSweptArea: Handle<IfcProfileDef> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRevolvedAreaSolidTapered
 	{
+		let SweptArea = tape[0];
+		let Position = tape[1];
+		let Axis = tape[2];
+		let Angle = tape[3];
+		let EndSweptArea = tape[4];
+		return new IfcRevolvedAreaSolidTapered(SweptArea, Position, Axis, Angle, EndSweptArea);
 	}
 	ToTape(): any[]
 	{
@@ -34468,8 +39091,12 @@ export class IfcRightCircularCone {
 	Position: Handle<IfcAxis2Placement3D> ;
 	Height: IfcPositiveLengthMeasure ;
 	BottomRadius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRightCircularCone
 	{
+		let Position = tape[0];
+		let Height = tape[1];
+		let BottomRadius = tape[2];
+		return new IfcRightCircularCone(Position, Height, BottomRadius);
 	}
 	ToTape(): any[]
 	{
@@ -34489,8 +39116,12 @@ export class IfcRightCircularCylinder {
 	Position: Handle<IfcAxis2Placement3D> ;
 	Height: IfcPositiveLengthMeasure ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRightCircularCylinder
 	{
+		let Position = tape[0];
+		let Height = tape[1];
+		let Radius = tape[2];
+		return new IfcRightCircularCylinder(Position, Height, Radius);
 	}
 	ToTape(): any[]
 	{
@@ -34522,8 +39153,18 @@ export class IfcRoof {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcRoofTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRoof
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcRoof(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -34595,8 +39236,19 @@ export class IfcRoofType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcRoofTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRoofType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcRoofType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -34660,8 +39312,13 @@ export class IfcRoot {
 	OwnerHistory: Handle<IfcOwnerHistory> | null;
 	Name: IfcLabel | null;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRoot
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		return new IfcRoot(GlobalId, OwnerHistory, Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -34702,8 +39359,15 @@ export class IfcRoundedRectangleProfileDef {
 	XDim: IfcPositiveLengthMeasure ;
 	YDim: IfcPositiveLengthMeasure ;
 	RoundingRadius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcRoundedRectangleProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let XDim = tape[3];
+		let YDim = tape[4];
+		let RoundingRadius = tape[5];
+		return new IfcRoundedRectangleProfileDef(ProfileType, ProfileName, Position, XDim, YDim, RoundingRadius);
 	}
 	ToTape(): any[]
 	{
@@ -34733,8 +39397,13 @@ export class IfcSIUnit {
 	UnitType: IfcUnitEnum ;
 	Prefix: IfcSIPrefix | null;
 	Name: IfcSIUnitName ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSIUnit
 	{
+		let Dimensions = tape[0];
+		let UnitType = tape[1];
+		let Prefix = tape[2];
+		let Name = tape[3];
+		return new IfcSIUnit(Dimensions, UnitType, Prefix, Name);
 	}
 	ToTape(): any[]
 	{
@@ -34769,8 +39438,18 @@ export class IfcSanitaryTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSanitaryTerminalTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSanitaryTerminal
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSanitaryTerminal(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -34842,8 +39521,19 @@ export class IfcSanitaryTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSanitaryTerminalTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSanitaryTerminalType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcSanitaryTerminalType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -34905,8 +39595,12 @@ export class IfcSchedulingTime {
 	Name: IfcLabel | null;
 	DataOrigin: IfcDataOriginEnum | null;
 	UserDefinedDataOrigin: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSchedulingTime
 	{
+		let Name = tape[0];
+		let DataOrigin = tape[1];
+		let UserDefinedDataOrigin = tape[2];
+		return new IfcSchedulingTime(Name, DataOrigin, UserDefinedDataOrigin);
 	}
 	ToTape(): any[]
 	{
@@ -34937,8 +39631,12 @@ export class IfcSeamCurve {
 	Curve3D: Handle<IfcCurve> ;
 	AssociatedGeometry: Handle<IfcPcurve>[] ;
 	MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSeamCurve
 	{
+		let Curve3D = tape[0];
+		let AssociatedGeometry = tape[1];
+		let MasterRepresentation = tape[2];
+		return new IfcSeamCurve(Curve3D, AssociatedGeometry, MasterRepresentation);
 	}
 	ToTape(): any[]
 	{
@@ -34961,8 +39659,12 @@ export class IfcSectionProperties {
 	SectionType: IfcSectionTypeEnum ;
 	StartProfile: Handle<IfcProfileDef> ;
 	EndProfile: Handle<IfcProfileDef> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSectionProperties
 	{
+		let SectionType = tape[0];
+		let StartProfile = tape[1];
+		let EndProfile = tape[2];
+		return new IfcSectionProperties(SectionType, StartProfile, EndProfile);
 	}
 	ToTape(): any[]
 	{
@@ -34993,8 +39695,15 @@ export class IfcSectionReinforcementProperties {
 	ReinforcementRole: IfcReinforcingBarRoleEnum ;
 	SectionDefinition: Handle<IfcSectionProperties> ;
 	CrossSectionReinforcementDefinitions: Handle<IfcReinforcementBarProperties>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSectionReinforcementProperties
 	{
+		let LongitudinalStartPosition = tape[0];
+		let LongitudinalEndPosition = tape[1];
+		let TransversePosition = tape[2];
+		let ReinforcementRole = tape[3];
+		let SectionDefinition = tape[4];
+		let CrossSectionReinforcementDefinitions = tape[5];
+		return new IfcSectionReinforcementProperties(LongitudinalStartPosition, LongitudinalEndPosition, TransversePosition, ReinforcementRole, SectionDefinition, CrossSectionReinforcementDefinitions);
 	}
 	ToTape(): any[]
 	{
@@ -35024,8 +39733,11 @@ export class IfcSectionedSolid {
 	}
 	Directrix: Handle<IfcCurve> ;
 	CrossSections: Handle<IfcProfileDef>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSectionedSolid
 	{
+		let Directrix = tape[0];
+		let CrossSections = tape[1];
+		return new IfcSectionedSolid(Directrix, CrossSections);
 	}
 	ToTape(): any[]
 	{
@@ -35050,8 +39762,13 @@ export class IfcSectionedSolidHorizontal {
 	CrossSections: Handle<IfcProfileDef>[] ;
 	CrossSectionPositions: Handle<IfcDistanceExpression>[] ;
 	FixedAxisVertical: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSectionedSolidHorizontal
 	{
+		let Directrix = tape[0];
+		let CrossSections = tape[1];
+		let CrossSectionPositions = tape[2];
+		let FixedAxisVertical = tape[3];
+		return new IfcSectionedSolidHorizontal(Directrix, CrossSections, CrossSectionPositions, FixedAxisVertical);
 	}
 	ToTape(): any[]
 	{
@@ -35077,8 +39794,12 @@ export class IfcSectionedSpine {
 	SpineCurve: Handle<IfcCompositeCurve> ;
 	CrossSections: Handle<IfcProfileDef>[] ;
 	CrossSectionPositions: Handle<IfcAxis2Placement3D>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSectionedSpine
 	{
+		let SpineCurve = tape[0];
+		let CrossSections = tape[1];
+		let CrossSectionPositions = tape[2];
+		return new IfcSectionedSpine(SpineCurve, CrossSections, CrossSectionPositions);
 	}
 	ToTape(): any[]
 	{
@@ -35116,8 +39837,18 @@ export class IfcSensor {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSensorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSensor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSensor(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -35189,8 +39920,19 @@ export class IfcSensorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSensorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSensorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcSensorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -35264,8 +40006,18 @@ export class IfcShadingDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcShadingDeviceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcShadingDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcShadingDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -35337,8 +40089,19 @@ export class IfcShadingDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcShadingDeviceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcShadingDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcShadingDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -35404,8 +40167,14 @@ export class IfcShapeAspect {
 	Description: IfcText | null;
 	ProductDefinitional: IfcLogical ;
 	PartOfProductDefinitionShape: IfcProductRepresentationSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcShapeAspect
 	{
+		let ShapeRepresentations = tape[0];
+		let Name = tape[1];
+		let Description = tape[2];
+		let ProductDefinitional = tape[3];
+		let PartOfProductDefinitionShape = tape[4];
+		return new IfcShapeAspect(ShapeRepresentations, Name, Description, ProductDefinitional, PartOfProductDefinitionShape);
 	}
 	ToTape(): any[]
 	{
@@ -35441,8 +40210,13 @@ export class IfcShapeModel {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcShapeModel
 	{
+		let ContextOfItems = tape[0];
+		let RepresentationIdentifier = tape[1];
+		let RepresentationType = tape[2];
+		let Items = tape[3];
+		return new IfcShapeModel(ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 	}
 	ToTape(): any[]
 	{
@@ -35477,8 +40251,13 @@ export class IfcShapeRepresentation {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcShapeRepresentation
 	{
+		let ContextOfItems = tape[0];
+		let RepresentationIdentifier = tape[1];
+		let RepresentationType = tape[2];
+		let Items = tape[3];
+		return new IfcShapeRepresentation(ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 	}
 	ToTape(): any[]
 	{
@@ -35507,8 +40286,10 @@ export class IfcShellBasedSurfaceModel {
 		this.SbsmBoundary = SbsmBoundary;
 	}
 	SbsmBoundary: IfcShell[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcShellBasedSurfaceModel
 	{
+		let SbsmBoundary = tape[0];
+		return new IfcShellBasedSurfaceModel(SbsmBoundary);
 	}
 	ToTape(): any[]
 	{
@@ -35524,8 +40305,11 @@ export class IfcSimpleProperty {
 	}
 	Name: IfcIdentifier ;
 	Description: IfcText | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSimpleProperty
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		return new IfcSimpleProperty(Name, Description);
 	}
 	ToTape(): any[]
 	{
@@ -35568,8 +40352,21 @@ export class IfcSimplePropertyTemplate {
 	SecondaryUnit: IfcUnit | null;
 	Expression: IfcLabel | null;
 	AccessState: IfcStateEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSimplePropertyTemplate
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let TemplateType = tape[4];
+		let PrimaryMeasureType = tape[5];
+		let SecondaryMeasureType = tape[6];
+		let Enumerators = tape[7];
+		let PrimaryUnit = tape[8];
+		let SecondaryUnit = tape[9];
+		let Expression = tape[10];
+		let AccessState = tape[11];
+		return new IfcSimplePropertyTemplate(GlobalId, OwnerHistory, Name, Description, TemplateType, PrimaryMeasureType, SecondaryMeasureType, Enumerators, PrimaryUnit, SecondaryUnit, Expression, AccessState);
 	}
 	ToTape(): any[]
 	{
@@ -35658,8 +40455,23 @@ export class IfcSite {
 	RefElevation: IfcLengthMeasure | null;
 	LandTitleNumber: IfcLabel | null;
 	SiteAddress: Handle<IfcPostalAddress> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSite
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		let RefLatitude = tape[9];
+		let RefLongitude = tape[10];
+		let RefElevation = tape[11];
+		let LandTitleNumber = tape[12];
+		let SiteAddress = tape[13];
+		return new IfcSite(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType, RefLatitude, RefLongitude, RefElevation, LandTitleNumber, SiteAddress);
 	}
 	ToTape(): any[]
 	{
@@ -35754,8 +40566,18 @@ export class IfcSlab {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSlabTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSlab
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSlab(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -35825,8 +40647,18 @@ export class IfcSlabElementedCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSlabTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSlabElementedCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSlabElementedCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -35896,8 +40728,18 @@ export class IfcSlabStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSlabTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSlabStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSlabStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -35969,8 +40811,19 @@ export class IfcSlabType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSlabTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSlabType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcSlabType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -36034,8 +40887,13 @@ export class IfcSlippageConnectionCondition {
 	SlippageX: IfcLengthMeasure | null;
 	SlippageY: IfcLengthMeasure | null;
 	SlippageZ: IfcLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSlippageConnectionCondition
 	{
+		let Name = tape[0];
+		let SlippageX = tape[1];
+		let SlippageY = tape[2];
+		let SlippageZ = tape[3];
+		return new IfcSlippageConnectionCondition(Name, SlippageX, SlippageY, SlippageZ);
 	}
 	ToTape(): any[]
 	{
@@ -36085,8 +40943,18 @@ export class IfcSolarDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSolarDeviceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSolarDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSolarDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -36158,8 +41026,19 @@ export class IfcSolarDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSolarDeviceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSolarDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcSolarDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -36215,8 +41094,9 @@ export class IfcSolidModel {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSolidModel
 	{
+		return new IfcSolidModel();
 	}
 	ToTape(): any[]
 	{
@@ -36250,8 +41130,20 @@ export class IfcSpace {
 	CompositionType: IfcElementCompositionEnum | null;
 	PredefinedType: IfcSpaceTypeEnum | null;
 	ElevationWithFlooring: IfcLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpace
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		let PredefinedType = tape[9];
+		let ElevationWithFlooring = tape[10];
+		return new IfcSpace(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType, PredefinedType, ElevationWithFlooring);
 	}
 	ToTape(): any[]
 	{
@@ -36329,8 +41221,18 @@ export class IfcSpaceHeater {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSpaceHeaterTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpaceHeater
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSpaceHeater(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -36402,8 +41304,19 @@ export class IfcSpaceHeaterType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSpaceHeaterTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpaceHeaterType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcSpaceHeaterType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -36481,8 +41394,20 @@ export class IfcSpaceType {
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSpaceTypeEnum ;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpaceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		let LongName = tape[10];
+		return new IfcSpaceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType, LongName);
 	}
 	ToTape(): any[]
 	{
@@ -36559,8 +41484,17 @@ export class IfcSpatialElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpatialElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		return new IfcSpatialElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName);
 	}
 	ToTape(): any[]
 	{
@@ -36627,8 +41561,18 @@ export class IfcSpatialElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpatialElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcSpatialElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -36702,8 +41646,18 @@ export class IfcSpatialStructureElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	CompositionType: IfcElementCompositionEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpatialStructureElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let CompositionType = tape[8];
+		return new IfcSpatialStructureElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType);
 	}
 	ToTape(): any[]
 	{
@@ -36773,8 +41727,18 @@ export class IfcSpatialStructureElementType {
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpatialStructureElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		return new IfcSpatialStructureElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 	}
 	ToTape(): any[]
 	{
@@ -36848,8 +41812,18 @@ export class IfcSpatialZone {
 	Representation: Handle<IfcProductRepresentation> | null;
 	LongName: IfcLabel | null;
 	PredefinedType: IfcSpatialZoneTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpatialZone
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let LongName = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSpatialZone(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -36923,8 +41897,20 @@ export class IfcSpatialZoneType {
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSpatialZoneTypeEnum ;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSpatialZoneType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		let LongName = tape[10];
+		return new IfcSpatialZoneType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType, LongName);
 	}
 	ToTape(): any[]
 	{
@@ -36989,8 +41975,11 @@ export class IfcSphere {
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSphere
 	{
+		let Position = tape[0];
+		let Radius = tape[1];
+		return new IfcSphere(Position, Radius);
 	}
 	ToTape(): any[]
 	{
@@ -37008,8 +41997,11 @@ export class IfcSphericalSurface {
 	}
 	Position: Handle<IfcAxis2Placement3D> ;
 	Radius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSphericalSurface
 	{
+		let Position = tape[0];
+		let Radius = tape[1];
+		return new IfcSphericalSurface(Position, Radius);
 	}
 	ToTape(): any[]
 	{
@@ -37041,8 +42033,18 @@ export class IfcStackTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcStackTerminalTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStackTerminal
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcStackTerminal(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -37114,8 +42116,19 @@ export class IfcStackTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcStackTerminalTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStackTerminalType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcStackTerminalType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -37189,8 +42202,18 @@ export class IfcStair {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcStairTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStair
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcStair(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -37268,8 +42291,22 @@ export class IfcStairFlight {
 	RiserHeight: IfcPositiveLengthMeasure | null;
 	TreadLength: IfcPositiveLengthMeasure | null;
 	PredefinedType: IfcStairFlightTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStairFlight
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let NumberOfRisers = tape[8];
+		let NumberOfTreads = tape[9];
+		let RiserHeight = tape[10];
+		let TreadLength = tape[11];
+		let PredefinedType = tape[12];
+		return new IfcStairFlight(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, NumberOfRisers, NumberOfTreads, RiserHeight, TreadLength, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -37357,8 +42394,19 @@ export class IfcStairFlightType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcStairFlightTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStairFlightType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcStairFlightType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -37434,8 +42482,19 @@ export class IfcStairType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcStairTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStairType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcStairType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -37511,8 +42570,19 @@ export class IfcStructuralAction {
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
 	DestabilizingLoad: IfcBoolean | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralAction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		let DestabilizingLoad = tape[9];
+		return new IfcStructuralAction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad);
 	}
 	ToTape(): any[]
 	{
@@ -37579,8 +42649,18 @@ export class IfcStructuralActivity {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralActivity
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		return new IfcStructuralActivity(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 	}
 	ToTape(): any[]
 	{
@@ -37646,8 +42726,19 @@ export class IfcStructuralAnalysisModel {
 	LoadedBy: Handle<IfcStructuralLoadGroup>[] | null;
 	HasResults: Handle<IfcStructuralResultGroup>[] | null;
 	SharedPlacement: Handle<IfcObjectPlacement> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralAnalysisModel
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let PredefinedType = tape[5];
+		let OrientationOf2DPlane = tape[6];
+		let LoadedBy = tape[7];
+		let HasResults = tape[8];
+		let SharedPlacement = tape[9];
+		return new IfcStructuralAnalysisModel(GlobalId, OwnerHistory, Name, Description, ObjectType, PredefinedType, OrientationOf2DPlane, LoadedBy, HasResults, SharedPlacement);
 	}
 	ToTape(): any[]
 	{
@@ -37719,8 +42810,17 @@ export class IfcStructuralConnection {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedCondition: Handle<IfcBoundaryCondition> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralConnection
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedCondition = tape[7];
+		return new IfcStructuralConnection(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 	}
 	ToTape(): any[]
 	{
@@ -37771,8 +42871,10 @@ export class IfcStructuralConnectionCondition {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralConnectionCondition
 	{
+		let Name = tape[0];
+		return new IfcStructuralConnectionCondition(Name);
 	}
 	ToTape(): any[]
 	{
@@ -37813,8 +42915,21 @@ export class IfcStructuralCurveAction {
 	DestabilizingLoad: IfcBoolean | null;
 	ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null;
 	PredefinedType: IfcStructuralCurveActivityTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralCurveAction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		let DestabilizingLoad = tape[9];
+		let ProjectedOrTrue = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcStructuralCurveAction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, ProjectedOrTrue, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -37884,8 +42999,18 @@ export class IfcStructuralCurveConnection {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedCondition: Handle<IfcBoundaryCondition> | null;
 	Axis: Handle<IfcDirection> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralCurveConnection
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedCondition = tape[7];
+		let Axis = tape[8];
+		return new IfcStructuralCurveConnection(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition, Axis);
 	}
 	ToTape(): any[]
 	{
@@ -37954,8 +43079,18 @@ export class IfcStructuralCurveMember {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcStructuralCurveMemberTypeEnum ;
 	Axis: Handle<IfcDirection> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralCurveMember
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let PredefinedType = tape[7];
+		let Axis = tape[8];
+		return new IfcStructuralCurveMember(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, Axis);
 	}
 	ToTape(): any[]
 	{
@@ -38019,8 +43154,18 @@ export class IfcStructuralCurveMemberVarying {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcStructuralCurveMemberTypeEnum ;
 	Axis: Handle<IfcDirection> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralCurveMemberVarying
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let PredefinedType = tape[7];
+		let Axis = tape[8];
+		return new IfcStructuralCurveMemberVarying(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, Axis);
 	}
 	ToTape(): any[]
 	{
@@ -38086,8 +43231,19 @@ export class IfcStructuralCurveReaction {
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
 	PredefinedType: IfcStructuralCurveActivityTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralCurveReaction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcStructuralCurveReaction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -38147,8 +43303,16 @@ export class IfcStructuralItem {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralItem
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		return new IfcStructuralItem(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
 	ToTape(): any[]
 	{
@@ -38216,8 +43380,21 @@ export class IfcStructuralLinearAction {
 	DestabilizingLoad: IfcBoolean | null;
 	ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null;
 	PredefinedType: IfcStructuralCurveActivityTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLinearAction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		let DestabilizingLoad = tape[9];
+		let ProjectedOrTrue = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcStructuralLinearAction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, ProjectedOrTrue, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -38271,8 +43448,10 @@ export class IfcStructuralLoad {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoad
 	{
+		let Name = tape[0];
+		return new IfcStructuralLoad(Name);
 	}
 	ToTape(): any[]
 	{
@@ -38311,8 +43490,20 @@ export class IfcStructuralLoadCase {
 	Coefficient: IfcRatioMeasure | null;
 	Purpose: IfcLabel | null;
 	SelfWeightCoefficients: IfcRatioMeasure[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let PredefinedType = tape[5];
+		let ActionType = tape[6];
+		let ActionSource = tape[7];
+		let Coefficient = tape[8];
+		let Purpose = tape[9];
+		let SelfWeightCoefficients = tape[10];
+		return new IfcStructuralLoadCase(GlobalId, OwnerHistory, Name, Description, ObjectType, PredefinedType, ActionType, ActionSource, Coefficient, Purpose, SelfWeightCoefficients);
 	}
 	ToTape(): any[]
 	{
@@ -38367,8 +43558,12 @@ export class IfcStructuralLoadConfiguration {
 	Name: IfcLabel | null;
 	Values: Handle<IfcStructuralLoadOrResult>[] ;
 	Locations: IfcLengthMeasure[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadConfiguration
 	{
+		let Name = tape[0];
+		let Values = tape[1];
+		let Locations = tape[2];
+		return new IfcStructuralLoadConfiguration(Name, Values, Locations);
 	}
 	ToTape(): any[]
 	{
@@ -38413,8 +43608,19 @@ export class IfcStructuralLoadGroup {
 	ActionSource: IfcActionSourceTypeEnum ;
 	Coefficient: IfcRatioMeasure | null;
 	Purpose: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadGroup
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let PredefinedType = tape[5];
+		let ActionType = tape[6];
+		let ActionSource = tape[7];
+		let Coefficient = tape[8];
+		let Purpose = tape[9];
+		return new IfcStructuralLoadGroup(GlobalId, OwnerHistory, Name, Description, ObjectType, PredefinedType, ActionType, ActionSource, Coefficient, Purpose);
 	}
 	ToTape(): any[]
 	{
@@ -38472,8 +43678,16 @@ export class IfcStructuralLoadLinearForce {
 	LinearMomentX: IfcLinearMomentMeasure | null;
 	LinearMomentY: IfcLinearMomentMeasure | null;
 	LinearMomentZ: IfcLinearMomentMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadLinearForce
 	{
+		let Name = tape[0];
+		let LinearForceX = tape[1];
+		let LinearForceY = tape[2];
+		let LinearForceZ = tape[3];
+		let LinearMomentX = tape[4];
+		let LinearMomentY = tape[5];
+		let LinearMomentZ = tape[6];
+		return new IfcStructuralLoadLinearForce(Name, LinearForceX, LinearForceY, LinearForceZ, LinearMomentX, LinearMomentY, LinearMomentZ);
 	}
 	ToTape(): any[]
 	{
@@ -38522,8 +43736,10 @@ export class IfcStructuralLoadOrResult {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadOrResult
 	{
+		let Name = tape[0];
+		return new IfcStructuralLoadOrResult(Name);
 	}
 	ToTape(): any[]
 	{
@@ -38548,8 +43764,13 @@ export class IfcStructuralLoadPlanarForce {
 	PlanarForceX: IfcPlanarForceMeasure | null;
 	PlanarForceY: IfcPlanarForceMeasure | null;
 	PlanarForceZ: IfcPlanarForceMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadPlanarForce
 	{
+		let Name = tape[0];
+		let PlanarForceX = tape[1];
+		let PlanarForceY = tape[2];
+		let PlanarForceZ = tape[3];
+		return new IfcStructuralLoadPlanarForce(Name, PlanarForceX, PlanarForceY, PlanarForceZ);
 	}
 	ToTape(): any[]
 	{
@@ -38595,8 +43816,16 @@ export class IfcStructuralLoadSingleDisplacement {
 	RotationalDisplacementRX: IfcPlaneAngleMeasure | null;
 	RotationalDisplacementRY: IfcPlaneAngleMeasure | null;
 	RotationalDisplacementRZ: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadSingleDisplacement
 	{
+		let Name = tape[0];
+		let DisplacementX = tape[1];
+		let DisplacementY = tape[2];
+		let DisplacementZ = tape[3];
+		let RotationalDisplacementRX = tape[4];
+		let RotationalDisplacementRY = tape[5];
+		let RotationalDisplacementRZ = tape[6];
+		return new IfcStructuralLoadSingleDisplacement(Name, DisplacementX, DisplacementY, DisplacementZ, RotationalDisplacementRX, RotationalDisplacementRY, RotationalDisplacementRZ);
 	}
 	ToTape(): any[]
 	{
@@ -38659,8 +43888,17 @@ export class IfcStructuralLoadSingleDisplacementDistortion {
 	RotationalDisplacementRY: IfcPlaneAngleMeasure | null;
 	RotationalDisplacementRZ: IfcPlaneAngleMeasure | null;
 	Distortion: IfcCurvatureMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadSingleDisplacementDistortion
 	{
+		let Name = tape[0];
+		let DisplacementX = tape[1];
+		let DisplacementY = tape[2];
+		let DisplacementZ = tape[3];
+		let RotationalDisplacementRX = tape[4];
+		let RotationalDisplacementRY = tape[5];
+		let RotationalDisplacementRZ = tape[6];
+		let Distortion = tape[7];
+		return new IfcStructuralLoadSingleDisplacementDistortion(Name, DisplacementX, DisplacementY, DisplacementZ, RotationalDisplacementRX, RotationalDisplacementRY, RotationalDisplacementRZ, Distortion);
 	}
 	ToTape(): any[]
 	{
@@ -38726,8 +43964,16 @@ export class IfcStructuralLoadSingleForce {
 	MomentX: IfcTorqueMeasure | null;
 	MomentY: IfcTorqueMeasure | null;
 	MomentZ: IfcTorqueMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadSingleForce
 	{
+		let Name = tape[0];
+		let ForceX = tape[1];
+		let ForceY = tape[2];
+		let ForceZ = tape[3];
+		let MomentX = tape[4];
+		let MomentY = tape[5];
+		let MomentZ = tape[6];
+		return new IfcStructuralLoadSingleForce(Name, ForceX, ForceY, ForceZ, MomentX, MomentY, MomentZ);
 	}
 	ToTape(): any[]
 	{
@@ -38790,8 +44036,17 @@ export class IfcStructuralLoadSingleForceWarping {
 	MomentY: IfcTorqueMeasure | null;
 	MomentZ: IfcTorqueMeasure | null;
 	WarpingMoment: IfcWarpingMomentMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadSingleForceWarping
 	{
+		let Name = tape[0];
+		let ForceX = tape[1];
+		let ForceY = tape[2];
+		let ForceZ = tape[3];
+		let MomentX = tape[4];
+		let MomentY = tape[5];
+		let MomentZ = tape[6];
+		let WarpingMoment = tape[7];
+		return new IfcStructuralLoadSingleForceWarping(Name, ForceX, ForceY, ForceZ, MomentX, MomentY, MomentZ, WarpingMoment);
 	}
 	ToTape(): any[]
 	{
@@ -38845,8 +44100,10 @@ export class IfcStructuralLoadStatic {
 		this.Name = Name;
 	}
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadStatic
 	{
+		let Name = tape[0];
+		return new IfcStructuralLoadStatic(Name);
 	}
 	ToTape(): any[]
 	{
@@ -38871,8 +44128,13 @@ export class IfcStructuralLoadTemperature {
 	DeltaTConstant: IfcThermodynamicTemperatureMeasure | null;
 	DeltaTY: IfcThermodynamicTemperatureMeasure | null;
 	DeltaTZ: IfcThermodynamicTemperatureMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralLoadTemperature
 	{
+		let Name = tape[0];
+		let DeltaTConstant = tape[1];
+		let DeltaTY = tape[2];
+		let DeltaTZ = tape[3];
+		return new IfcStructuralLoadTemperature(Name, DeltaTConstant, DeltaTY, DeltaTZ);
 	}
 	ToTape(): any[]
 	{
@@ -38918,8 +44180,16 @@ export class IfcStructuralMember {
 	ObjectType: IfcLabel | null;
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralMember
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		return new IfcStructuralMember(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
 	ToTape(): any[]
 	{
@@ -38987,8 +44257,21 @@ export class IfcStructuralPlanarAction {
 	DestabilizingLoad: IfcBoolean | null;
 	ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null;
 	PredefinedType: IfcStructuralSurfaceActivityTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralPlanarAction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		let DestabilizingLoad = tape[9];
+		let ProjectedOrTrue = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcStructuralPlanarAction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, ProjectedOrTrue, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -39060,8 +44343,19 @@ export class IfcStructuralPointAction {
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
 	DestabilizingLoad: IfcBoolean | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralPointAction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		let DestabilizingLoad = tape[9];
+		return new IfcStructuralPointAction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad);
 	}
 	ToTape(): any[]
 	{
@@ -39128,8 +44422,18 @@ export class IfcStructuralPointConnection {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedCondition: Handle<IfcBoundaryCondition> | null;
 	ConditionCoordinateSystem: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralPointConnection
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedCondition = tape[7];
+		let ConditionCoordinateSystem = tape[8];
+		return new IfcStructuralPointConnection(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition, ConditionCoordinateSystem);
 	}
 	ToTape(): any[]
 	{
@@ -39201,8 +44505,18 @@ export class IfcStructuralPointReaction {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralPointReaction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		return new IfcStructuralPointReaction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 	}
 	ToTape(): any[]
 	{
@@ -39266,8 +44580,18 @@ export class IfcStructuralReaction {
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralReaction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		return new IfcStructuralReaction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 	}
 	ToTape(): any[]
 	{
@@ -39329,8 +44653,17 @@ export class IfcStructuralResultGroup {
 	TheoryType: IfcAnalysisTheoryTypeEnum ;
 	ResultForLoadGroup: Handle<IfcStructuralLoadGroup> | null;
 	IsLinear: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralResultGroup
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let TheoryType = tape[5];
+		let ResultForLoadGroup = tape[6];
+		let IsLinear = tape[7];
+		return new IfcStructuralResultGroup(GlobalId, OwnerHistory, Name, Description, ObjectType, TheoryType, ResultForLoadGroup, IsLinear);
 	}
 	ToTape(): any[]
 	{
@@ -39393,8 +44726,21 @@ export class IfcStructuralSurfaceAction {
 	DestabilizingLoad: IfcBoolean | null;
 	ProjectedOrTrue: IfcProjectedOrTrueLengthEnum | null;
 	PredefinedType: IfcStructuralSurfaceActivityTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralSurfaceAction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		let DestabilizingLoad = tape[9];
+		let ProjectedOrTrue = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcStructuralSurfaceAction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, ProjectedOrTrue, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -39462,8 +44808,17 @@ export class IfcStructuralSurfaceConnection {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	AppliedCondition: Handle<IfcBoundaryCondition> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralSurfaceConnection
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedCondition = tape[7];
+		return new IfcStructuralSurfaceConnection(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 	}
 	ToTape(): any[]
 	{
@@ -39530,8 +44885,18 @@ export class IfcStructuralSurfaceMember {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcStructuralSurfaceMemberTypeEnum ;
 	Thickness: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralSurfaceMember
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let PredefinedType = tape[7];
+		let Thickness = tape[8];
+		return new IfcStructuralSurfaceMember(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, Thickness);
 	}
 	ToTape(): any[]
 	{
@@ -39596,8 +44961,18 @@ export class IfcStructuralSurfaceMemberVarying {
 	Representation: Handle<IfcProductRepresentation> | null;
 	PredefinedType: IfcStructuralSurfaceMemberTypeEnum ;
 	Thickness: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralSurfaceMemberVarying
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let PredefinedType = tape[7];
+		let Thickness = tape[8];
+		return new IfcStructuralSurfaceMemberVarying(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, Thickness);
 	}
 	ToTape(): any[]
 	{
@@ -39664,8 +45039,19 @@ export class IfcStructuralSurfaceReaction {
 	AppliedLoad: Handle<IfcStructuralLoad> ;
 	GlobalOrLocal: IfcGlobalOrLocalEnum ;
 	PredefinedType: IfcStructuralSurfaceActivityTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStructuralSurfaceReaction
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let AppliedLoad = tape[7];
+		let GlobalOrLocal = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcStructuralSurfaceReaction(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -39719,8 +45105,13 @@ export class IfcStyleModel {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStyleModel
 	{
+		let ContextOfItems = tape[0];
+		let RepresentationIdentifier = tape[1];
+		let RepresentationType = tape[2];
+		let Items = tape[3];
+		return new IfcStyleModel(ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 	}
 	ToTape(): any[]
 	{
@@ -39753,8 +45144,12 @@ export class IfcStyledItem {
 	Item: Handle<IfcRepresentationItem> | null;
 	Styles: IfcStyleAssignmentSelect[] ;
 	Name: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStyledItem
 	{
+		let Item = tape[0];
+		let Styles = tape[1];
+		let Name = tape[2];
+		return new IfcStyledItem(Item, Styles, Name);
 	}
 	ToTape(): any[]
 	{
@@ -39784,8 +45179,13 @@ export class IfcStyledRepresentation {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcStyledRepresentation
 	{
+		let ContextOfItems = tape[0];
+		let RepresentationIdentifier = tape[1];
+		let RepresentationType = tape[2];
+		let Items = tape[3];
+		return new IfcStyledRepresentation(ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 	}
 	ToTape(): any[]
 	{
@@ -39834,8 +45234,20 @@ export class IfcSubContractResource {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcSubContractResourceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSubContractResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let Usage = tape[7];
+		let BaseCosts = tape[8];
+		let BaseQuantity = tape[9];
+		let PredefinedType = tape[10];
+		return new IfcSubContractResource(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -39922,8 +45334,21 @@ export class IfcSubContractResourceType {
 	BaseCosts: Handle<IfcAppliedValue>[] | null;
 	BaseQuantity: Handle<IfcPhysicalQuantity> | null;
 	PredefinedType: IfcSubContractResourceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSubContractResourceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ResourceType = tape[8];
+		let BaseCosts = tape[9];
+		let BaseQuantity = tape[10];
+		let PredefinedType = tape[11];
+		return new IfcSubContractResourceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -39995,8 +45420,12 @@ export class IfcSubedge {
 	EdgeStart: Handle<IfcVertex> ;
 	EdgeEnd: Handle<IfcVertex> ;
 	ParentEdge: Handle<IfcEdge> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSubedge
 	{
+		let EdgeStart = tape[0];
+		let EdgeEnd = tape[1];
+		let ParentEdge = tape[2];
+		return new IfcSubedge(EdgeStart, EdgeEnd, ParentEdge);
 	}
 	ToTape(): any[]
 	{
@@ -40014,8 +45443,9 @@ export class IfcSurface {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurface
 	{
+		return new IfcSurface();
 	}
 	ToTape(): any[]
 	{
@@ -40033,8 +45463,12 @@ export class IfcSurfaceCurve {
 	Curve3D: Handle<IfcCurve> ;
 	AssociatedGeometry: Handle<IfcPcurve>[] ;
 	MasterRepresentation: IfcPreferredSurfaceCurveRepresentation ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceCurve
 	{
+		let Curve3D = tape[0];
+		let AssociatedGeometry = tape[1];
+		let MasterRepresentation = tape[2];
+		return new IfcSurfaceCurve(Curve3D, AssociatedGeometry, MasterRepresentation);
 	}
 	ToTape(): any[]
 	{
@@ -40063,8 +45497,15 @@ export class IfcSurfaceCurveSweptAreaSolid {
 	StartParam: IfcParameterValue | null;
 	EndParam: IfcParameterValue | null;
 	ReferenceSurface: Handle<IfcSurface> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceCurveSweptAreaSolid
 	{
+		let SweptArea = tape[0];
+		let Position = tape[1];
+		let Directrix = tape[2];
+		let StartParam = tape[3];
+		let EndParam = tape[4];
+		let ReferenceSurface = tape[5];
+		return new IfcSurfaceCurveSweptAreaSolid(SweptArea, Position, Directrix, StartParam, EndParam, ReferenceSurface);
 	}
 	ToTape(): any[]
 	{
@@ -40115,8 +45556,18 @@ export class IfcSurfaceFeature {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSurfaceFeatureTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceFeature
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSurfaceFeature(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -40176,8 +45627,13 @@ export class IfcSurfaceOfLinearExtrusion {
 	Position: Handle<IfcAxis2Placement3D> | null;
 	ExtrudedDirection: Handle<IfcDirection> ;
 	Depth: IfcLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceOfLinearExtrusion
 	{
+		let SweptCurve = tape[0];
+		let Position = tape[1];
+		let ExtrudedDirection = tape[2];
+		let Depth = tape[3];
+		return new IfcSurfaceOfLinearExtrusion(SweptCurve, Position, ExtrudedDirection, Depth);
 	}
 	ToTape(): any[]
 	{
@@ -40206,8 +45662,12 @@ export class IfcSurfaceOfRevolution {
 	SweptCurve: Handle<IfcProfileDef> ;
 	Position: Handle<IfcAxis2Placement3D> | null;
 	AxisPosition: Handle<IfcAxis1Placement> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceOfRevolution
 	{
+		let SweptCurve = tape[0];
+		let Position = tape[1];
+		let AxisPosition = tape[2];
+		return new IfcSurfaceOfRevolution(SweptCurve, Position, AxisPosition);
 	}
 	ToTape(): any[]
 	{
@@ -40236,8 +45696,13 @@ export class IfcSurfaceReinforcementArea {
 	SurfaceReinforcement1: IfcLengthMeasure[] | null;
 	SurfaceReinforcement2: IfcLengthMeasure[] | null;
 	ShearReinforcement: IfcRatioMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceReinforcementArea
 	{
+		let Name = tape[0];
+		let SurfaceReinforcement1 = tape[1];
+		let SurfaceReinforcement2 = tape[2];
+		let ShearReinforcement = tape[3];
+		return new IfcSurfaceReinforcementArea(Name, SurfaceReinforcement1, SurfaceReinforcement2, ShearReinforcement);
 	}
 	ToTape(): any[]
 	{
@@ -40275,8 +45740,12 @@ export class IfcSurfaceStyle {
 	Name: IfcLabel | null;
 	Side: IfcSurfaceSide ;
 	Styles: IfcSurfaceStyleElementSelect[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceStyle
 	{
+		let Name = tape[0];
+		let Side = tape[1];
+		let Styles = tape[2];
+		return new IfcSurfaceStyle(Name, Side, Styles);
 	}
 	ToTape(): any[]
 	{
@@ -40301,8 +45770,13 @@ export class IfcSurfaceStyleLighting {
 	DiffuseReflectionColour: Handle<IfcColourRgb> ;
 	TransmissionColour: Handle<IfcColourRgb> ;
 	ReflectanceColour: Handle<IfcColourRgb> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceStyleLighting
 	{
+		let DiffuseTransmissionColour = tape[0];
+		let DiffuseReflectionColour = tape[1];
+		let TransmissionColour = tape[2];
+		let ReflectanceColour = tape[3];
+		return new IfcSurfaceStyleLighting(DiffuseTransmissionColour, DiffuseReflectionColour, TransmissionColour, ReflectanceColour);
 	}
 	ToTape(): any[]
 	{
@@ -40326,8 +45800,11 @@ export class IfcSurfaceStyleRefraction {
 	}
 	RefractionIndex: IfcReal | null;
 	DispersionFactor: IfcReal | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceStyleRefraction
 	{
+		let RefractionIndex = tape[0];
+		let DispersionFactor = tape[1];
+		return new IfcSurfaceStyleRefraction(RefractionIndex, DispersionFactor);
 	}
 	ToTape(): any[]
 	{
@@ -40367,8 +45844,18 @@ export class IfcSurfaceStyleRendering {
 	SpecularColour: IfcColourOrFactor | null;
 	SpecularHighlight: IfcSpecularHighlightSelect | null;
 	ReflectanceMethod: IfcReflectanceMethodEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceStyleRendering
 	{
+		let SurfaceColour = tape[0];
+		let Transparency = tape[1];
+		let DiffuseColour = tape[2];
+		let TransmissionColour = tape[3];
+		let DiffuseTransmissionColour = tape[4];
+		let ReflectionColour = tape[5];
+		let SpecularColour = tape[6];
+		let SpecularHighlight = tape[7];
+		let ReflectanceMethod = tape[8];
+		return new IfcSurfaceStyleRendering(SurfaceColour, Transparency, DiffuseColour, TransmissionColour, DiffuseTransmissionColour, ReflectionColour, SpecularColour, SpecularHighlight, ReflectanceMethod);
 	}
 	ToTape(): any[]
 	{
@@ -40407,8 +45894,11 @@ export class IfcSurfaceStyleShading {
 	}
 	SurfaceColour: Handle<IfcColourRgb> ;
 	Transparency: IfcNormalisedRatioMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceStyleShading
 	{
+		let SurfaceColour = tape[0];
+		let Transparency = tape[1];
+		return new IfcSurfaceStyleShading(SurfaceColour, Transparency);
 	}
 	ToTape(): any[]
 	{
@@ -40427,8 +45917,10 @@ export class IfcSurfaceStyleWithTextures {
 		this.Textures = Textures;
 	}
 	Textures: Handle<IfcSurfaceTexture>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceStyleWithTextures
 	{
+		let Textures = tape[0];
+		return new IfcSurfaceStyleWithTextures(Textures);
 	}
 	ToTape(): any[]
 	{
@@ -40453,8 +45945,14 @@ export class IfcSurfaceTexture {
 	Mode: IfcIdentifier | null;
 	TextureTransform: Handle<IfcCartesianTransformationOperator2D> | null;
 	Parameter: IfcIdentifier[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSurfaceTexture
 	{
+		let RepeatS = tape[0];
+		let RepeatT = tape[1];
+		let Mode = tape[2];
+		let TextureTransform = tape[3];
+		let Parameter = tape[4];
+		return new IfcSurfaceTexture(RepeatS, RepeatT, Mode, TextureTransform, Parameter);
 	}
 	ToTape(): any[]
 	{
@@ -40485,8 +45983,11 @@ export class IfcSweptAreaSolid {
 	}
 	SweptArea: Handle<IfcProfileDef> ;
 	Position: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSweptAreaSolid
 	{
+		let SweptArea = tape[0];
+		let Position = tape[1];
+		return new IfcSweptAreaSolid(SweptArea, Position);
 	}
 	ToTape(): any[]
 	{
@@ -40515,8 +46016,14 @@ export class IfcSweptDiskSolid {
 	InnerRadius: IfcPositiveLengthMeasure | null;
 	StartParam: IfcParameterValue | null;
 	EndParam: IfcParameterValue | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSweptDiskSolid
 	{
+		let Directrix = tape[0];
+		let Radius = tape[1];
+		let InnerRadius = tape[2];
+		let StartParam = tape[3];
+		let EndParam = tape[4];
+		return new IfcSweptDiskSolid(Directrix, Radius, InnerRadius, StartParam, EndParam);
 	}
 	ToTape(): any[]
 	{
@@ -40555,8 +46062,15 @@ export class IfcSweptDiskSolidPolygonal {
 	StartParam: IfcParameterValue | null;
 	EndParam: IfcParameterValue | null;
 	FilletRadius: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSweptDiskSolidPolygonal
 	{
+		let Directrix = tape[0];
+		let Radius = tape[1];
+		let InnerRadius = tape[2];
+		let StartParam = tape[3];
+		let EndParam = tape[4];
+		let FilletRadius = tape[5];
+		return new IfcSweptDiskSolidPolygonal(Directrix, Radius, InnerRadius, StartParam, EndParam, FilletRadius);
 	}
 	ToTape(): any[]
 	{
@@ -40590,8 +46104,11 @@ export class IfcSweptSurface {
 	}
 	SweptCurve: Handle<IfcProfileDef> ;
 	Position: Handle<IfcAxis2Placement3D> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSweptSurface
 	{
+		let SweptCurve = tape[0];
+		let Position = tape[1];
+		return new IfcSweptSurface(SweptCurve, Position);
 	}
 	ToTape(): any[]
 	{
@@ -40628,8 +46145,18 @@ export class IfcSwitchingDevice {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSwitchingDeviceTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSwitchingDevice
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSwitchingDevice(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -40701,8 +46228,19 @@ export class IfcSwitchingDeviceType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSwitchingDeviceTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSwitchingDeviceType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcSwitchingDeviceType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -40768,8 +46306,14 @@ export class IfcSystem {
 	Name: IfcLabel | null;
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSystem
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		return new IfcSystem(GlobalId, OwnerHistory, Name, Description, ObjectType);
 	}
 	ToTape(): any[]
 	{
@@ -40821,8 +46365,18 @@ export class IfcSystemFurnitureElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcSystemFurnitureElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSystemFurnitureElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcSystemFurnitureElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -40894,8 +46448,19 @@ export class IfcSystemFurnitureElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcSystemFurnitureElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcSystemFurnitureElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcSystemFurnitureElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -40978,8 +46543,21 @@ export class IfcTShapeProfileDef {
 	WebEdgeRadius: IfcNonNegativeLengthMeasure | null;
 	WebSlope: IfcPlaneAngleMeasure | null;
 	FlangeSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTShapeProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let Depth = tape[3];
+		let FlangeWidth = tape[4];
+		let WebThickness = tape[5];
+		let FlangeThickness = tape[6];
+		let FilletRadius = tape[7];
+		let FlangeEdgeRadius = tape[8];
+		let WebEdgeRadius = tape[9];
+		let WebSlope = tape[10];
+		let FlangeSlope = tape[11];
+		return new IfcTShapeProfileDef(ProfileType, ProfileName, Position, Depth, FlangeWidth, WebThickness, FlangeThickness, FilletRadius, FlangeEdgeRadius, WebEdgeRadius, WebSlope, FlangeSlope);
 	}
 	ToTape(): any[]
 	{
@@ -41026,8 +46604,12 @@ export class IfcTable {
 	Name: IfcLabel | null;
 	Rows: Handle<IfcTableRow>[] | null;
 	Columns: Handle<IfcTableColumn>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTable
 	{
+		let Name = tape[0];
+		let Rows = tape[1];
+		let Columns = tape[2];
+		return new IfcTable(Name, Rows, Columns);
 	}
 	ToTape(): any[]
 	{
@@ -41066,8 +46648,14 @@ export class IfcTableColumn {
 	Description: IfcText | null;
 	Unit: IfcUnit | null;
 	ReferencePath: Handle<IfcReference> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTableColumn
 	{
+		let Identifier = tape[0];
+		let Name = tape[1];
+		let Description = tape[2];
+		let Unit = tape[3];
+		let ReferencePath = tape[4];
+		return new IfcTableColumn(Identifier, Name, Description, Unit, ReferencePath);
 	}
 	ToTape(): any[]
 	{
@@ -41106,8 +46694,11 @@ export class IfcTableRow {
 	}
 	RowCells: IfcValue[] | null;
 	IsHeading: IfcBoolean | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTableRow
 	{
+		let RowCells = tape[0] ? { t: tape[0], v: tape[1][0]} as any : null;
+		let IsHeading = tape[2];
+		return new IfcTableRow(RowCells, IsHeading);
 	}
 	ToTape(): any[]
 	{
@@ -41143,8 +46734,18 @@ export class IfcTank {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcTankTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTank
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcTank(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -41216,8 +46817,19 @@ export class IfcTankType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTankTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTankType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcTankType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -41299,8 +46911,22 @@ export class IfcTask {
 	Priority: IfcInteger | null;
 	TaskTime: Handle<IfcTaskTime> | null;
 	PredefinedType: IfcTaskTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTask
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let LongDescription = tape[6];
+		let Status = tape[7];
+		let WorkMethod = tape[8];
+		let IsMilestone = tape[9];
+		let Priority = tape[10];
+		let TaskTime = tape[11];
+		let PredefinedType = tape[12];
+		return new IfcTask(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Status, WorkMethod, IsMilestone, Priority, TaskTime, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -41407,8 +47033,29 @@ export class IfcTaskTime {
 	ActualFinish: IfcDateTime | null;
 	RemainingTime: IfcDuration | null;
 	Completion: IfcPositiveRatioMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTaskTime
 	{
+		let Name = tape[0];
+		let DataOrigin = tape[1];
+		let UserDefinedDataOrigin = tape[2];
+		let DurationType = tape[3];
+		let ScheduleDuration = tape[4];
+		let ScheduleStart = tape[5];
+		let ScheduleFinish = tape[6];
+		let EarlyStart = tape[7];
+		let EarlyFinish = tape[8];
+		let LateStart = tape[9];
+		let LateFinish = tape[10];
+		let FreeFloat = tape[11];
+		let TotalFloat = tape[12];
+		let IsCritical = tape[13];
+		let StatusTime = tape[14];
+		let ActualDuration = tape[15];
+		let ActualStart = tape[16];
+		let ActualFinish = tape[17];
+		let RemainingTime = tape[18];
+		let Completion = tape[19];
+		return new IfcTaskTime(Name, DataOrigin, UserDefinedDataOrigin, DurationType, ScheduleDuration, ScheduleStart, ScheduleFinish, EarlyStart, EarlyFinish, LateStart, LateFinish, FreeFloat, TotalFloat, IsCritical, StatusTime, ActualDuration, ActualStart, ActualFinish, RemainingTime, Completion);
 	}
 	ToTape(): any[]
 	{
@@ -41554,8 +47201,30 @@ export class IfcTaskTimeRecurring {
 	RemainingTime: IfcDuration | null;
 	Completion: IfcPositiveRatioMeasure | null;
 	Recurrence: Handle<IfcRecurrencePattern> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTaskTimeRecurring
 	{
+		let Name = tape[0];
+		let DataOrigin = tape[1];
+		let UserDefinedDataOrigin = tape[2];
+		let DurationType = tape[3];
+		let ScheduleDuration = tape[4];
+		let ScheduleStart = tape[5];
+		let ScheduleFinish = tape[6];
+		let EarlyStart = tape[7];
+		let EarlyFinish = tape[8];
+		let LateStart = tape[9];
+		let LateFinish = tape[10];
+		let FreeFloat = tape[11];
+		let TotalFloat = tape[12];
+		let IsCritical = tape[13];
+		let StatusTime = tape[14];
+		let ActualDuration = tape[15];
+		let ActualStart = tape[16];
+		let ActualFinish = tape[17];
+		let RemainingTime = tape[18];
+		let Completion = tape[19];
+		let Recurrence = tape[20];
+		return new IfcTaskTimeRecurring(Name, DataOrigin, UserDefinedDataOrigin, DurationType, ScheduleDuration, ScheduleStart, ScheduleFinish, EarlyStart, EarlyFinish, LateStart, LateFinish, FreeFloat, TotalFloat, IsCritical, StatusTime, ActualDuration, ActualStart, ActualFinish, RemainingTime, Completion, Recurrence);
 	}
 	ToTape(): any[]
 	{
@@ -41683,8 +47352,20 @@ export class IfcTaskType {
 	ProcessType: IfcLabel | null;
 	PredefinedType: IfcTaskTypeEnum ;
 	WorkMethod: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTaskType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ProcessType = tape[8];
+		let PredefinedType = tape[9];
+		let WorkMethod = tape[10];
+		return new IfcTaskType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ProcessType, PredefinedType, WorkMethod);
 	}
 	ToTape(): any[]
 	{
@@ -41762,8 +47443,18 @@ export class IfcTelecomAddress {
 	ElectronicMailAddresses: IfcLabel[] | null;
 	WWWHomePageURL: IfcURIReference | null;
 	MessagingIDs: IfcURIReference[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTelecomAddress
 	{
+		let Purpose = tape[0];
+		let Description = tape[1];
+		let UserDefinedPurpose = tape[2];
+		let TelephoneNumbers = tape[3];
+		let FacsimileNumbers = tape[4];
+		let PagerNumber = tape[5];
+		let ElectronicMailAddresses = tape[6];
+		let WWWHomePageURL = tape[7];
+		let MessagingIDs = tape[8];
+		return new IfcTelecomAddress(Purpose, Description, UserDefinedPurpose, TelephoneNumbers, FacsimileNumbers, PagerNumber, ElectronicMailAddresses, WWWHomePageURL, MessagingIDs);
 	}
 	ToTape(): any[]
 	{
@@ -41852,8 +47543,26 @@ export class IfcTendon {
 	FrictionCoefficient: IfcNormalisedRatioMeasure | null;
 	AnchorageSlip: IfcPositiveLengthMeasure | null;
 	MinCurvatureRadius: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTendon
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let SteelGrade = tape[8];
+		let PredefinedType = tape[9];
+		let NominalDiameter = tape[10];
+		let CrossSectionArea = tape[11];
+		let TensionForce = tape[12];
+		let PreStress = tape[13];
+		let FrictionCoefficient = tape[14];
+		let AnchorageSlip = tape[15];
+		let MinCurvatureRadius = tape[16];
+		return new IfcTendon(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, SteelGrade, PredefinedType, NominalDiameter, CrossSectionArea, TensionForce, PreStress, FrictionCoefficient, AnchorageSlip, MinCurvatureRadius);
 	}
 	ToTape(): any[]
 	{
@@ -41957,8 +47666,19 @@ export class IfcTendonAnchor {
 	Tag: IfcIdentifier | null;
 	SteelGrade: IfcLabel | null;
 	PredefinedType: IfcTendonAnchorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTendonAnchor
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let SteelGrade = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcTendonAnchor(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, SteelGrade, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -42035,8 +47755,19 @@ export class IfcTendonAnchorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTendonAnchorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTendonAnchorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcTendonAnchorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -42112,8 +47843,19 @@ export class IfcTendonConduit {
 	Tag: IfcIdentifier | null;
 	SteelGrade: IfcLabel | null;
 	PredefinedType: IfcTendonConduitTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTendonConduit
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let SteelGrade = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcTendonConduit(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, SteelGrade, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -42187,8 +47929,19 @@ export class IfcTendonConduitType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTendonConduitTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTendonConduitType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcTendonConduitType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -42270,8 +48023,22 @@ export class IfcTendonType {
 	NominalDiameter: IfcPositiveLengthMeasure | null;
 	CrossSectionArea: IfcAreaMeasure | null;
 	SheathDiameter: IfcPositiveLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTendonType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		let NominalDiameter = tape[10];
+		let CrossSectionArea = tape[11];
+		let SheathDiameter = tape[12];
+		return new IfcTendonType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType, NominalDiameter, CrossSectionArea, SheathDiameter);
 	}
 	ToTape(): any[]
 	{
@@ -42340,8 +48107,10 @@ export class IfcTessellatedFaceSet {
 		this.Coordinates = Coordinates;
 	}
 	Coordinates: Handle<IfcCartesianPointList3D> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTessellatedFaceSet
 	{
+		let Coordinates = tape[0];
+		return new IfcTessellatedFaceSet(Coordinates);
 	}
 	ToTape(): any[]
 	{
@@ -42355,8 +48124,9 @@ export class IfcTessellatedItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTessellatedItem
 	{
+		return new IfcTessellatedItem();
 	}
 	ToTape(): any[]
 	{
@@ -42374,8 +48144,12 @@ export class IfcTextLiteral {
 	Literal: IfcPresentableText ;
 	Placement: IfcAxis2Placement ;
 	Path: IfcTextPath ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextLiteral
 	{
+		let Literal = tape[0];
+		let Placement = tape[1];
+		let Path = tape[2];
+		return new IfcTextLiteral(Literal, Placement, Path);
 	}
 	ToTape(): any[]
 	{
@@ -42399,8 +48173,14 @@ export class IfcTextLiteralWithExtent {
 	Path: IfcTextPath ;
 	Extent: Handle<IfcPlanarExtent> ;
 	BoxAlignment: IfcBoxAlignment ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextLiteralWithExtent
 	{
+		let Literal = tape[0];
+		let Placement = tape[1];
+		let Path = tape[2];
+		let Extent = tape[3];
+		let BoxAlignment = tape[4];
+		return new IfcTextLiteralWithExtent(Literal, Placement, Path, Extent, BoxAlignment);
 	}
 	ToTape(): any[]
 	{
@@ -42426,8 +48206,14 @@ export class IfcTextStyle {
 	TextStyle: Handle<IfcTextStyleTextModel> | null;
 	TextFontStyle: IfcTextFontSelect ;
 	ModelOrDraughting: IfcBoolean | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextStyle
 	{
+		let Name = tape[0];
+		let TextCharacterAppearance = tape[1];
+		let TextStyle = tape[2];
+		let TextFontStyle = tape[3];
+		let ModelOrDraughting = tape[4];
+		return new IfcTextStyle(Name, TextCharacterAppearance, TextStyle, TextFontStyle, ModelOrDraughting);
 	}
 	ToTape(): any[]
 	{
@@ -42469,8 +48255,15 @@ export class IfcTextStyleFontModel {
 	FontVariant: IfcFontVariant | null;
 	FontWeight: IfcFontWeight | null;
 	FontSize: IfcSizeSelect ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextStyleFontModel
 	{
+		let Name = tape[0];
+		let FontFamily = tape[1];
+		let FontStyle = tape[2];
+		let FontVariant = tape[3];
+		let FontWeight = tape[4];
+		let FontSize = tape[5];
+		return new IfcTextStyleFontModel(Name, FontFamily, FontStyle, FontVariant, FontWeight, FontSize);
 	}
 	ToTape(): any[]
 	{
@@ -42505,8 +48298,11 @@ export class IfcTextStyleForDefinedFont {
 	}
 	Colour: IfcColour ;
 	BackgroundColour: IfcColour | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextStyleForDefinedFont
 	{
+		let Colour = tape[0];
+		let BackgroundColour = tape[1];
+		return new IfcTextStyleForDefinedFont(Colour, BackgroundColour);
 	}
 	ToTape(): any[]
 	{
@@ -42535,8 +48331,16 @@ export class IfcTextStyleTextModel {
 	WordSpacing: IfcSizeSelect | null;
 	TextTransform: IfcTextTransformation | null;
 	LineHeight: IfcSizeSelect | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextStyleTextModel
 	{
+		let TextIndent = tape[0];
+		let TextAlign = tape[1];
+		let TextDecoration = tape[2];
+		let LetterSpacing = tape[3];
+		let WordSpacing = tape[4];
+		let TextTransform = tape[5];
+		let LineHeight = tape[6];
+		return new IfcTextStyleTextModel(TextIndent, TextAlign, TextDecoration, LetterSpacing, WordSpacing, TextTransform, LineHeight);
 	}
 	ToTape(): any[]
 	{
@@ -42577,8 +48381,10 @@ export class IfcTextureCoordinate {
 		this.Maps = Maps;
 	}
 	Maps: Handle<IfcSurfaceTexture>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextureCoordinate
 	{
+		let Maps = tape[0];
+		return new IfcTextureCoordinate(Maps);
 	}
 	ToTape(): any[]
 	{
@@ -42599,8 +48405,12 @@ export class IfcTextureCoordinateGenerator {
 	Maps: Handle<IfcSurfaceTexture>[] ;
 	Mode: IfcLabel ;
 	Parameter: IfcReal[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextureCoordinateGenerator
 	{
+		let Maps = tape[0];
+		let Mode = tape[1];
+		let Parameter = tape[2];
+		return new IfcTextureCoordinateGenerator(Maps, Mode, Parameter);
 	}
 	ToTape(): any[]
 	{
@@ -42628,8 +48438,12 @@ export class IfcTextureMap {
 	Maps: Handle<IfcSurfaceTexture>[] ;
 	Vertices: Handle<IfcTextureVertex>[] ;
 	MappedTo: Handle<IfcFace> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextureMap
 	{
+		let Maps = tape[0];
+		let Vertices = tape[1];
+		let MappedTo = tape[2];
+		return new IfcTextureMap(Maps, Vertices, MappedTo);
 	}
 	ToTape(): any[]
 	{
@@ -42651,8 +48465,10 @@ export class IfcTextureVertex {
 		this.Coordinates = Coordinates;
 	}
 	Coordinates: IfcParameterValue[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextureVertex
 	{
+		let Coordinates = tape[0];
+		return new IfcTextureVertex(Coordinates);
 	}
 	ToTape(): any[]
 	{
@@ -42668,8 +48484,10 @@ export class IfcTextureVertexList {
 		this.TexCoordsList = TexCoordsList;
 	}
 	TexCoordsList: IfcParameterValue[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTextureVertexList
 	{
+		let TexCoordsList = tape[0];
+		return new IfcTextureVertexList(TexCoordsList);
 	}
 	ToTape(): any[]
 	{
@@ -42687,8 +48505,11 @@ export class IfcTimePeriod {
 	}
 	StartTime: IfcTime ;
 	EndTime: IfcTime ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTimePeriod
 	{
+		let StartTime = tape[0];
+		let EndTime = tape[1];
+		return new IfcTimePeriod(StartTime, EndTime);
 	}
 	ToTape(): any[]
 	{
@@ -42720,8 +48541,17 @@ export class IfcTimeSeries {
 	DataOrigin: IfcDataOriginEnum ;
 	UserDefinedDataOrigin: IfcLabel | null;
 	Unit: IfcUnit | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTimeSeries
 	{
+		let Name = tape[0];
+		let Description = tape[1];
+		let StartTime = tape[2];
+		let EndTime = tape[3];
+		let TimeSeriesDataType = tape[4];
+		let DataOrigin = tape[5];
+		let UserDefinedDataOrigin = tape[6];
+		let Unit = tape[7];
+		return new IfcTimeSeries(Name, Description, StartTime, EndTime, TimeSeriesDataType, DataOrigin, UserDefinedDataOrigin, Unit);
 	}
 	ToTape(): any[]
 	{
@@ -42754,8 +48584,10 @@ export class IfcTimeSeriesValue {
 		this.ListValues = ListValues;
 	}
 	ListValues: IfcValue[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTimeSeriesValue
 	{
+		let ListValues = { t: tape[0], v: tape[1][0]} as any;
+		return new IfcTimeSeriesValue(ListValues);
 	}
 	ToTape(): any[]
 	{
@@ -42767,8 +48599,9 @@ export class IfcTopologicalRepresentationItem {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTopologicalRepresentationItem
 	{
+		return new IfcTopologicalRepresentationItem();
 	}
 	ToTape(): any[]
 	{
@@ -42788,8 +48621,13 @@ export class IfcTopologyRepresentation {
 	RepresentationIdentifier: IfcLabel | null;
 	RepresentationType: IfcLabel | null;
 	Items: Handle<IfcRepresentationItem>[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTopologyRepresentation
 	{
+		let ContextOfItems = tape[0];
+		let RepresentationIdentifier = tape[1];
+		let RepresentationType = tape[2];
+		let Items = tape[3];
+		return new IfcTopologyRepresentation(ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 	}
 	ToTape(): any[]
 	{
@@ -42822,8 +48660,12 @@ export class IfcToroidalSurface {
 	Position: Handle<IfcAxis2Placement3D> ;
 	MajorRadius: IfcPositiveLengthMeasure ;
 	MinorRadius: IfcPositiveLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcToroidalSurface
 	{
+		let Position = tape[0];
+		let MajorRadius = tape[1];
+		let MinorRadius = tape[2];
+		return new IfcToroidalSurface(Position, MajorRadius, MinorRadius);
 	}
 	ToTape(): any[]
 	{
@@ -42855,8 +48697,18 @@ export class IfcTransformer {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcTransformerTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTransformer
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcTransformer(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -42928,8 +48780,19 @@ export class IfcTransformerType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTransformerTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTransformerType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcTransformerType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -43001,8 +48864,17 @@ export class IfcTransitionCurveSegment2D {
 	IsStartRadiusCCW: IfcBoolean ;
 	IsEndRadiusCCW: IfcBoolean ;
 	TransitionCurveType: IfcTransitionCurveType ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTransitionCurveSegment2D
 	{
+		let StartPoint = tape[0];
+		let StartDirection = tape[1];
+		let SegmentLength = tape[2];
+		let StartRadius = tape[3];
+		let EndRadius = tape[4];
+		let IsStartRadiusCCW = tape[5];
+		let IsEndRadiusCCW = tape[6];
+		let TransitionCurveType = tape[7];
+		return new IfcTransitionCurveSegment2D(StartPoint, StartDirection, SegmentLength, StartRadius, EndRadius, IsStartRadiusCCW, IsEndRadiusCCW, TransitionCurveType);
 	}
 	ToTape(): any[]
 	{
@@ -43042,8 +48914,18 @@ export class IfcTransportElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcTransportElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTransportElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcTransportElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -43115,8 +48997,19 @@ export class IfcTransportElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTransportElementTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTransportElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcTransportElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -43186,8 +49079,16 @@ export class IfcTrapeziumProfileDef {
 	TopXDim: IfcPositiveLengthMeasure ;
 	YDim: IfcPositiveLengthMeasure ;
 	TopXOffset: IfcLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTrapeziumProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let BottomXDim = tape[3];
+		let TopXDim = tape[4];
+		let YDim = tape[5];
+		let TopXOffset = tape[6];
+		return new IfcTrapeziumProfileDef(ProfileType, ProfileName, Position, BottomXDim, TopXDim, YDim, TopXOffset);
 	}
 	ToTape(): any[]
 	{
@@ -43221,8 +49122,14 @@ export class IfcTriangulatedFaceSet {
 	Closed: IfcBoolean | null;
 	CoordIndex: IfcPositiveInteger[] ;
 	PnIndex: IfcPositiveInteger[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTriangulatedFaceSet
 	{
+		let Coordinates = tape[0];
+		let Normals = tape[1];
+		let Closed = tape[2];
+		let CoordIndex = tape[3];
+		let PnIndex = tape[4];
+		return new IfcTriangulatedFaceSet(Coordinates, Normals, Closed, CoordIndex, PnIndex);
 	}
 	ToTape(): any[]
 	{
@@ -43259,8 +49166,15 @@ export class IfcTriangulatedIrregularNetwork {
 	CoordIndex: IfcPositiveInteger[] ;
 	PnIndex: IfcPositiveInteger[] | null;
 	Flags: IfcInteger[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTriangulatedIrregularNetwork
 	{
+		let Coordinates = tape[0];
+		let Normals = tape[1];
+		let Closed = tape[2];
+		let CoordIndex = tape[3];
+		let PnIndex = tape[4];
+		let Flags = tape[5];
+		return new IfcTriangulatedIrregularNetwork(Coordinates, Normals, Closed, CoordIndex, PnIndex, Flags);
 	}
 	ToTape(): any[]
 	{
@@ -43297,8 +49211,14 @@ export class IfcTrimmedCurve {
 	Trim2: IfcTrimmingSelect[] ;
 	SenseAgreement: IfcBoolean ;
 	MasterRepresentation: IfcTrimmingPreference ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTrimmedCurve
 	{
+		let BasisCurve = tape[0];
+		let Trim1 = tape[1];
+		let Trim2 = tape[2];
+		let SenseAgreement = tape[3];
+		let MasterRepresentation = tape[4];
+		return new IfcTrimmedCurve(BasisCurve, Trim1, Trim2, SenseAgreement, MasterRepresentation);
 	}
 	ToTape(): any[]
 	{
@@ -43330,8 +49250,18 @@ export class IfcTubeBundle {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcTubeBundleTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTubeBundle
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcTubeBundle(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -43403,8 +49333,19 @@ export class IfcTubeBundleType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcTubeBundleTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTubeBundleType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcTubeBundleType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -43472,8 +49413,15 @@ export class IfcTypeObject {
 	Description: IfcText | null;
 	ApplicableOccurrence: IfcIdentifier | null;
 	HasPropertySets: Handle<IfcPropertySetDefinition>[] | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTypeObject
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		return new IfcTypeObject(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets);
 	}
 	ToTape(): any[]
 	{
@@ -43531,8 +49479,18 @@ export class IfcTypeProcess {
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
 	ProcessType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTypeProcess
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ProcessType = tape[8];
+		return new IfcTypeProcess(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ProcessType);
 	}
 	ToTape(): any[]
 	{
@@ -43603,8 +49561,17 @@ export class IfcTypeProduct {
 	HasPropertySets: Handle<IfcPropertySetDefinition>[] | null;
 	RepresentationMaps: Handle<IfcRepresentationMap>[] | null;
 	Tag: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTypeProduct
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		return new IfcTypeProduct(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -43673,8 +49640,18 @@ export class IfcTypeResource {
 	Identification: IfcIdentifier | null;
 	LongDescription: IfcText | null;
 	ResourceType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcTypeResource
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let Identification = tape[6];
+		let LongDescription = tape[7];
+		let ResourceType = tape[8];
+		return new IfcTypeResource(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType);
 	}
 	ToTape(): any[]
 	{
@@ -43749,8 +49726,19 @@ export class IfcUShapeProfileDef {
 	FilletRadius: IfcNonNegativeLengthMeasure | null;
 	EdgeRadius: IfcNonNegativeLengthMeasure | null;
 	FlangeSlope: IfcPlaneAngleMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcUShapeProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let Depth = tape[3];
+		let FlangeWidth = tape[4];
+		let WebThickness = tape[5];
+		let FlangeThickness = tape[6];
+		let FilletRadius = tape[7];
+		let EdgeRadius = tape[8];
+		let FlangeSlope = tape[9];
+		return new IfcUShapeProfileDef(ProfileType, ProfileName, Position, Depth, FlangeWidth, WebThickness, FlangeThickness, FilletRadius, EdgeRadius, FlangeSlope);
 	}
 	ToTape(): any[]
 	{
@@ -43785,8 +49773,10 @@ export class IfcUnitAssignment {
 		this.Units = Units;
 	}
 	Units: IfcUnit[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcUnitAssignment
 	{
+		let Units = tape[0];
+		return new IfcUnitAssignment(Units);
 	}
 	ToTape(): any[]
 	{
@@ -43816,8 +49806,18 @@ export class IfcUnitaryControlElement {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcUnitaryControlElementTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcUnitaryControlElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcUnitaryControlElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -43889,8 +49889,19 @@ export class IfcUnitaryControlElementType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcUnitaryControlElementTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcUnitaryControlElementType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcUnitaryControlElementType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -43964,8 +49975,18 @@ export class IfcUnitaryEquipment {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcUnitaryEquipmentTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcUnitaryEquipment
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcUnitaryEquipment(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44037,8 +50058,19 @@ export class IfcUnitaryEquipmentType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcUnitaryEquipmentTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcUnitaryEquipmentType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcUnitaryEquipmentType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44112,8 +50144,18 @@ export class IfcValve {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcValveTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcValve
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcValve(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44185,8 +50227,19 @@ export class IfcValveType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcValveTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcValveType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcValveType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44246,8 +50299,11 @@ export class IfcVector {
 	}
 	Orientation: Handle<IfcDirection> ;
 	Magnitude: IfcLengthMeasure ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVector
 	{
+		let Orientation = tape[0];
+		let Magnitude = tape[1];
+		return new IfcVector(Orientation, Magnitude);
 	}
 	ToTape(): any[]
 	{
@@ -44263,8 +50319,9 @@ export class IfcVertex {
 	constructor()
 	{
 	}
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVertex
 	{
+		return new IfcVertex();
 	}
 	ToTape(): any[]
 	{
@@ -44278,8 +50335,10 @@ export class IfcVertexLoop {
 		this.LoopVertex = LoopVertex;
 	}
 	LoopVertex: Handle<IfcVertex> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVertexLoop
 	{
+		let LoopVertex = tape[0];
+		return new IfcVertexLoop(LoopVertex);
 	}
 	ToTape(): any[]
 	{
@@ -44295,8 +50354,10 @@ export class IfcVertexPoint {
 		this.VertexGeometry = VertexGeometry;
 	}
 	VertexGeometry: Handle<IfcPoint> ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVertexPoint
 	{
+		let VertexGeometry = tape[0];
+		return new IfcVertexPoint(VertexGeometry);
 	}
 	ToTape(): any[]
 	{
@@ -44328,8 +50389,18 @@ export class IfcVibrationDamper {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcVibrationDamperTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVibrationDamper
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcVibrationDamper(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44401,8 +50472,19 @@ export class IfcVibrationDamperType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcVibrationDamperTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVibrationDamperType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcVibrationDamperType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44479,8 +50561,18 @@ export class IfcVibrationIsolator {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcVibrationIsolatorTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVibrationIsolator
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcVibrationIsolator(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44552,8 +50644,19 @@ export class IfcVibrationIsolatorType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcVibrationIsolatorTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVibrationIsolatorType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcVibrationIsolatorType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44625,8 +50728,17 @@ export class IfcVirtualElement {
 	ObjectPlacement: Handle<IfcObjectPlacement> | null;
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVirtualElement
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		return new IfcVirtualElement(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 	}
 	ToTape(): any[]
 	{
@@ -44679,8 +50791,11 @@ export class IfcVirtualGridIntersection {
 	}
 	IntersectingAxes: Handle<IfcGridAxis>[] ;
 	OffsetDistances: IfcLengthMeasure[] ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVirtualGridIntersection
 	{
+		let IntersectingAxes = tape[0];
+		let OffsetDistances = tape[1];
+		return new IfcVirtualGridIntersection(IntersectingAxes, OffsetDistances);
 	}
 	ToTape(): any[]
 	{
@@ -44715,8 +50830,18 @@ export class IfcVoidingFeature {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcVoidingFeatureTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcVoidingFeature
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcVoidingFeature(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44786,8 +50911,18 @@ export class IfcWall {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcWallTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWall
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcWall(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44857,8 +50992,18 @@ export class IfcWallElementedCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcWallTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWallElementedCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcWallElementedCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -44928,8 +51073,18 @@ export class IfcWallStandardCase {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcWallTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWallStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcWallStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -45001,8 +51156,19 @@ export class IfcWallType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcWallTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWallType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcWallType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -45076,8 +51242,18 @@ export class IfcWasteTerminal {
 	Representation: Handle<IfcProductRepresentation> | null;
 	Tag: IfcIdentifier | null;
 	PredefinedType: IfcWasteTerminalTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWasteTerminal
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcWasteTerminal(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -45149,8 +51325,19 @@ export class IfcWasteTerminalType {
 	Tag: IfcLabel | null;
 	ElementType: IfcLabel | null;
 	PredefinedType: IfcWasteTerminalTypeEnum ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWasteTerminalType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		return new IfcWasteTerminalType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -45232,8 +51419,22 @@ export class IfcWindow {
 	PredefinedType: IfcWindowTypeEnum | null;
 	PartitioningType: IfcWindowTypePartitioningEnum | null;
 	UserDefinedPartitioningType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWindow
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let OverallHeight = tape[8];
+		let OverallWidth = tape[9];
+		let PredefinedType = tape[10];
+		let PartitioningType = tape[11];
+		let UserDefinedPartitioningType = tape[12];
+		return new IfcWindow(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, OverallHeight, OverallWidth, PredefinedType, PartitioningType, UserDefinedPartitioningType);
 	}
 	ToTape(): any[]
 	{
@@ -45331,8 +51532,25 @@ export class IfcWindowLiningProperties {
 	LiningOffset: IfcLengthMeasure | null;
 	LiningToPanelOffsetX: IfcLengthMeasure | null;
 	LiningToPanelOffsetY: IfcLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWindowLiningProperties
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let LiningDepth = tape[4];
+		let LiningThickness = tape[5];
+		let TransomThickness = tape[6];
+		let MullionThickness = tape[7];
+		let FirstTransomOffset = tape[8];
+		let SecondTransomOffset = tape[9];
+		let FirstMullionOffset = tape[10];
+		let SecondMullionOffset = tape[11];
+		let ShapeAspectStyle = tape[12];
+		let LiningOffset = tape[13];
+		let LiningToPanelOffsetX = tape[14];
+		let LiningToPanelOffsetY = tape[15];
+		return new IfcWindowLiningProperties(GlobalId, OwnerHistory, Name, Description, LiningDepth, LiningThickness, TransomThickness, MullionThickness, FirstTransomOffset, SecondTransomOffset, FirstMullionOffset, SecondMullionOffset, ShapeAspectStyle, LiningOffset, LiningToPanelOffsetX, LiningToPanelOffsetY);
 	}
 	ToTape(): any[]
 	{
@@ -45423,8 +51641,18 @@ export class IfcWindowPanelProperties {
 	FrameDepth: IfcPositiveLengthMeasure | null;
 	FrameThickness: IfcPositiveLengthMeasure | null;
 	ShapeAspectStyle: Handle<IfcShapeAspect> | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWindowPanelProperties
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let OperationType = tape[4];
+		let PanelPosition = tape[5];
+		let FrameDepth = tape[6];
+		let FrameThickness = tape[7];
+		let ShapeAspectStyle = tape[8];
+		return new IfcWindowPanelProperties(GlobalId, OwnerHistory, Name, Description, OperationType, PanelPosition, FrameDepth, FrameThickness, ShapeAspectStyle);
 	}
 	ToTape(): any[]
 	{
@@ -45490,8 +51718,22 @@ export class IfcWindowStandardCase {
 	PredefinedType: IfcWindowTypeEnum | null;
 	PartitioningType: IfcWindowTypePartitioningEnum | null;
 	UserDefinedPartitioningType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWindowStandardCase
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let ObjectPlacement = tape[5];
+		let Representation = tape[6];
+		let Tag = tape[7];
+		let OverallHeight = tape[8];
+		let OverallWidth = tape[9];
+		let PredefinedType = tape[10];
+		let PartitioningType = tape[11];
+		let UserDefinedPartitioningType = tape[12];
+		return new IfcWindowStandardCase(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, OverallHeight, OverallWidth, PredefinedType, PartitioningType, UserDefinedPartitioningType);
 	}
 	ToTape(): any[]
 	{
@@ -45581,8 +51823,21 @@ export class IfcWindowStyle {
 	OperationType: IfcWindowStyleOperationEnum ;
 	ParameterTakesPrecedence: IfcBoolean ;
 	Sizeable: IfcBoolean ;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWindowStyle
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ConstructionType = tape[8];
+		let OperationType = tape[9];
+		let ParameterTakesPrecedence = tape[10];
+		let Sizeable = tape[11];
+		return new IfcWindowStyle(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ConstructionType, OperationType, ParameterTakesPrecedence, Sizeable);
 	}
 	ToTape(): any[]
 	{
@@ -45659,8 +51914,22 @@ export class IfcWindowType {
 	PartitioningType: IfcWindowTypePartitioningEnum ;
 	ParameterTakesPrecedence: IfcBoolean | null;
 	UserDefinedPartitioningType: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWindowType
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ApplicableOccurrence = tape[4];
+		let HasPropertySets = tape[5];
+		let RepresentationMaps = tape[6];
+		let Tag = tape[7];
+		let ElementType = tape[8];
+		let PredefinedType = tape[9];
+		let PartitioningType = tape[10];
+		let ParameterTakesPrecedence = tape[11];
+		let UserDefinedPartitioningType = tape[12];
+		return new IfcWindowType(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType, PredefinedType, PartitioningType, ParameterTakesPrecedence, UserDefinedPartitioningType);
 	}
 	ToTape(): any[]
 	{
@@ -45742,8 +52011,18 @@ export class IfcWorkCalendar {
 	WorkingTimes: Handle<IfcWorkTime>[] | null;
 	ExceptionTimes: Handle<IfcWorkTime>[] | null;
 	PredefinedType: IfcWorkCalendarTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWorkCalendar
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let WorkingTimes = tape[6];
+		let ExceptionTimes = tape[7];
+		let PredefinedType = tape[8];
+		return new IfcWorkCalendar(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, WorkingTimes, ExceptionTimes, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -45823,8 +52102,22 @@ export class IfcWorkControl {
 	TotalFloat: IfcDuration | null;
 	StartTime: IfcDateTime ;
 	FinishTime: IfcDateTime | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWorkControl
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let CreationDate = tape[6];
+		let Creators = tape[7];
+		let Purpose = tape[8];
+		let Duration = tape[9];
+		let TotalFloat = tape[10];
+		let StartTime = tape[11];
+		let FinishTime = tape[12];
+		return new IfcWorkControl(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, CreationDate, Creators, Purpose, Duration, TotalFloat, StartTime, FinishTime);
 	}
 	ToTape(): any[]
 	{
@@ -45921,8 +52214,23 @@ export class IfcWorkPlan {
 	StartTime: IfcDateTime ;
 	FinishTime: IfcDateTime | null;
 	PredefinedType: IfcWorkPlanTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWorkPlan
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let CreationDate = tape[6];
+		let Creators = tape[7];
+		let Purpose = tape[8];
+		let Duration = tape[9];
+		let TotalFloat = tape[10];
+		let StartTime = tape[11];
+		let FinishTime = tape[12];
+		let PredefinedType = tape[13];
+		return new IfcWorkPlan(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, CreationDate, Creators, Purpose, Duration, TotalFloat, StartTime, FinishTime, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -46022,8 +52330,23 @@ export class IfcWorkSchedule {
 	StartTime: IfcDateTime ;
 	FinishTime: IfcDateTime | null;
 	PredefinedType: IfcWorkScheduleTypeEnum | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWorkSchedule
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let Identification = tape[5];
+		let CreationDate = tape[6];
+		let Creators = tape[7];
+		let Purpose = tape[8];
+		let Duration = tape[9];
+		let TotalFloat = tape[10];
+		let StartTime = tape[11];
+		let FinishTime = tape[12];
+		let PredefinedType = tape[13];
+		return new IfcWorkSchedule(GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, CreationDate, Creators, Purpose, Duration, TotalFloat, StartTime, FinishTime, PredefinedType);
 	}
 	ToTape(): any[]
 	{
@@ -46107,8 +52430,15 @@ export class IfcWorkTime {
 	RecurrencePattern: Handle<IfcRecurrencePattern> | null;
 	Start: IfcDate | null;
 	Finish: IfcDate | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcWorkTime
 	{
+		let Name = tape[0];
+		let DataOrigin = tape[1];
+		let UserDefinedDataOrigin = tape[2];
+		let RecurrencePattern = tape[3];
+		let Start = tape[4];
+		let Finish = tape[5];
+		return new IfcWorkTime(Name, DataOrigin, UserDefinedDataOrigin, RecurrencePattern, Start, Finish);
 	}
 	ToTape(): any[]
 	{
@@ -46166,8 +52496,18 @@ export class IfcZShapeProfileDef {
 	FlangeThickness: IfcPositiveLengthMeasure ;
 	FilletRadius: IfcNonNegativeLengthMeasure | null;
 	EdgeRadius: IfcNonNegativeLengthMeasure | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcZShapeProfileDef
 	{
+		let ProfileType = tape[0];
+		let ProfileName = tape[1];
+		let Position = tape[2];
+		let Depth = tape[3];
+		let FlangeWidth = tape[4];
+		let WebThickness = tape[5];
+		let FlangeThickness = tape[6];
+		let FilletRadius = tape[7];
+		let EdgeRadius = tape[8];
+		return new IfcZShapeProfileDef(ProfileType, ProfileName, Position, Depth, FlangeWidth, WebThickness, FlangeThickness, FilletRadius, EdgeRadius);
 	}
 	ToTape(): any[]
 	{
@@ -46207,8 +52547,15 @@ export class IfcZone {
 	Description: IfcText | null;
 	ObjectType: IfcLabel | null;
 	LongName: IfcLabel | null;
-	FromTape(tapeData: any[])
+	static FromTape(tape: any[]): IfcZone
 	{
+		let GlobalId = tape[0];
+		let OwnerHistory = tape[1];
+		let Name = tape[2];
+		let Description = tape[3];
+		let ObjectType = tape[4];
+		let LongName = tape[5];
+		return new IfcZone(GlobalId, OwnerHistory, Name, Description, ObjectType, LongName);
 	}
 	ToTape(): any[]
 	{

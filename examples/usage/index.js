@@ -43,7 +43,7 @@ console.log("Hello web-ifc-node!");
 var ifcapi = new WebIFC.IfcAPI();
 function LoadFile(filename) {
     return __awaiter(this, void 0, void 0, function () {
-        var ifcData, modelID, properties, i, expressID, start, size, i, property, set, time;
+        var ifcData, modelID, properties, i, expressID, tape, prop;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -55,22 +55,11 @@ function LoadFile(filename) {
                     properties = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCPROPERTYSINGLEVALUE);
                     for (i = 0; i < properties.size(); i++) {
                         expressID = properties.get(i);
-                        console.log(ifcapi.GetLine(modelID, expressID));
+                        tape = ifcapi.GetLine(modelID, expressID);
+                        prop = ifc2x4.IfcPropertySingleValue.FromTape(tape.arguments);
+                        console.log(prop);
                     }
                     console.log("Loaded model " + filename + " to modelID " + modelID);
-                    start = WebIFC.ms();
-                    size = 10000;
-                    for (i = 0; i < size; i++) {
-                        property = new ifc2x4.IfcPropertySingleValue("Name", null, ifc2x4.Value("IFCLABEL", "Value" + i), null);
-                        ifcapi.WriteLine(modelID, i * 2, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
-                        set = new ifc2x4.IfcPropertySet("Name", null, "Pset_name", null, [{ expressID: i * 2 }]);
-                        ifcapi.WriteLine(modelID, i * 2 + 1, WebIFC.IFCPROPERTYSET, set.ToTape());
-                    }
-                    time = WebIFC.ms() - start;
-                    console.log("Writing " + size + " lines took " + time + " ms");
-                    console.log("Writing " + Math.floor(size / (time / 1000)) + " lines per second");
-                    fs.writeFileSync("exported.ifc", ifcapi.ExportFileAsIFC(modelID));
-                    ifcapi.CloseModel(modelID);
                     return [2 /*return*/];
             }
         });
