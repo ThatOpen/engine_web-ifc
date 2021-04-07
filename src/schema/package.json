@@ -16,11 +16,13 @@
   },
   "scripts": {
     "start": "node gen.js",
-    "watch": "npm-watch "
+    "watch": "npm-watch ",
+    "gen": "esbuild gen_functional_types.ts --bundle --platform=node --outfile=gen_functional_types.js && node gen_functional_types.js "
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "esbuild": "^0.11.6",
     "npm-watch": "^0.7.0",
     "watch": "^1.0.2"
   },
