@@ -15,12 +15,19 @@ async function LoadFile(filename)
 
     let modelID = ifcapi.OpenModel("example.ifc", new Uint8Array(ifcData));
 
-    let properties = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCTRIMMEDCURVE)
-    for (let i = 0; i < properties.size(); i++)
+    let linesJson = [];
+    let lines = ifcapi.GetAllLines(modelID)
+    for (let i = 0; i < lines.size(); i++)
     {
-        let expressID = properties.get(i);
-        let line = ifcapi.GetLine(modelID, expressID) as WebIFC.IfcTrimmedCurve;
-        console.log(line.MasterRepresentation);
+        let expressID = lines.get(i);
+        console.log(expressID);
+        if (expressID !== 0)
+        {
+            //console.log(ifcapi.GetRawLineData(modelID, expressID));
+            let line = ifcapi.GetLine(modelID, expressID);
+            //console.log(line);
+            linesJson.push(line);
+        }
         /*
         let property = new ifc2x4.IfcPropertySingleValue("Name", null, ifc2x4.Value("IFCLABEL", `Value${i}`), null);
         let property = new ifc2x4.IfcPropertySingleValue("Name", null, new ifc2x4.IfcLabel(`Value${i}`), null);
@@ -28,6 +35,8 @@ async function LoadFile(filename)
         */
         //ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
     }
+
+    fs.writeFileSync("output.json", JSON.stringify(linesJson, null, 4));
 
     // API as simple as possible, traversing references is up to the client
     // change GetLine into GetRawLineData, and GetLine returns full object

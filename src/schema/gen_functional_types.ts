@@ -355,36 +355,37 @@ elements.forEach((entity) => {
         buffer.push(`\t${param.name}: ${param.type};`)
     })
     buffer.push(`\tstatic FromTape(expressID: number, type: number, tape: any[]): ${entity.name}`)
-    buffer.push(`\t{`)
+    buffer.push(`\t{`);
+    buffer.push(`\t\tlet ptr = 0;`);
     let tapeIndex = 0;
     for (let i = 0; i < params.length; i++)
     {
         let param = params[i];
         buffer.push(`\t\tlet ${param.name};`)
-        if (param.prop.optional)
+        if (true)
         {
-            buffer.push(`\t\tif (tape[${tapeIndex}]) {`);
+            buffer.push(`\t\tif (tape[ptr]) {`);
         }
         {
-            let parseElement = (index) => {
+            let parseElement = (val) => {
                 if (param.isType && param.isType.isSelect)
                 {
-                    return `ParseType(tape[${index}], tape[${index + 1}][0])`;
+                    return `typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0])`;
                 }
                 else if (param.isType && param.isType.isEnum)
                 {
-                    return `new ${param.isType.name}(tape[${index}])`;
+                    return `new ${param.isType.name}(tape[ptr++])`;
                 }
                 else
                 {
-                    return `tape[${index}]`;
+                    return `tape[ptr++]`;
                 }
             };
 
             let parseElementSet = (arrayName, indexVarName) => {
                 if (param.isType && param.isType.isSelect)
                 {
-                    return `ParseType(${arrayName}[${indexVarName}++], ${arrayName}[${indexVarName}++][0])`;
+                    return `typeof ${arrayName}[${indexVarName}] == "number" ? ${arrayName}[${indexVarName}++] : ParseType(${arrayName}[${indexVarName}++], ${arrayName}[${indexVarName}++][0])`;
                 }
                 else if (param.isType && param.isType.isEnum)
                 {
@@ -401,18 +402,19 @@ elements.forEach((entity) => {
                 buffer.push(`\t\t${param.name} = [];`);
                 let indexVarName = `${param.name}_index`;
                 buffer.push(`\t\tlet ${indexVarName} = 0;`);
-                buffer.push(`\t\twhile (${indexVarName} < tape[${tapeIndex}].length) {`);
-                buffer.push(`\t\t\t${param.name}.push(${parseElementSet(`tape[${tapeIndex}]`, indexVarName)});`);
+                buffer.push(`\t\twhile (${indexVarName} < tape[ptr].length) {`);
+                buffer.push(`\t\t\t${param.name}.push(${parseElementSet(`tape[ptr]`, indexVarName)});`);
                 buffer.push(`\t\t}`);
+                buffer.push(`\tptr++;`);
             }
             else
             {
                 buffer.push(`\t\t${param.name} = ${parseElement(tapeIndex)};`);
             }
         }
-        if (param.prop.optional)
+        if (true)
         {
-            buffer.push(`\t\t} else { ${param.name} = null; }`);
+            buffer.push(`\t\t} else { ${param.name} = null; ptr++; }`);
         }
 
         tapeIndex++;

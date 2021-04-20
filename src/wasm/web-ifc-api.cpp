@@ -137,6 +137,18 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
     return expressIDs;
 }
 
+std::vector<uint32_t> GetAllLines(uint32_t modelID)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+    std::vector<uint32_t> expressIDs;
+    auto numLines = loader.GetNumLines();
+    for (int i = 0; i < numLines; i++)
+    {
+        expressIDs.push_back(loader.GetLine(i).expressID);
+    }
+    return expressIDs;
+}
+
 void ExportFileAsIFC(uint32_t modelID)
 {
     webifc::IfcLoader& loader = loaders[modelID];
@@ -420,5 +432,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
+    emscripten::function("GetAllLines", &GetAllLines);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
 }
