@@ -4,6 +4,8 @@
 
 const WebIFCWasm = require("./web-ifc");
 export * from "./ifc2x4";
+import * as ifc2x4helper from "./ifc2x4_helper";
+export * from "./ifc2x4_helper";
 
 export const UNKNOWN = 0;
 export const STRING = 1;
@@ -39,6 +41,12 @@ export interface FlatMesh {
     expressID: number;
 }
 
+export interface RawLineData {
+    ID: number;
+    type: number;
+    arguments: any[];
+}
+
 export interface IfcGeometry
 {
     GetVertexData(): number;
@@ -53,8 +61,8 @@ export function ms() {
 
 export class IfcAPI
 {
-    wasmModule = undefined;
-    fs = undefined;
+    wasmModule: undefined | any = undefined;
+    fs: undefined | any = undefined;
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality
@@ -115,7 +123,13 @@ export class IfcAPI
 
     GetLine(modelID: number, expressID: number)
     {
-        return this.wasmModule.GetLine(modelID, expressID);
+        let rawLineData = this.GetRawLineData(modelID, expressID);
+        return ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+    }
+
+    GetRawLineData(modelID: number, expressID: number): RawLineData
+    {
+        return this.wasmModule.GetLine(modelID, expressID) as RawLineData;
     }
 
     GetLineIDsWithType(modelID: number, type: number): Vector<number>

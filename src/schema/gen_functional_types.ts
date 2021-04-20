@@ -1,3 +1,4 @@
+import { FromRawLineData } from "../ifc2x4_helper";
 
 const fs = require("fs");
 const { type } = require("os");
@@ -248,6 +249,18 @@ let buffer = [];
 buffer.push();
 buffer.push(`// This is a generated file, please see: gen_functional_types.js`);
 buffer.push();
+buffer.push();
+buffer.push(`import * as ifc2x4 from "./ifc2x4";`);
+buffer.push();
+
+buffer.push(`export let FromRawLineData = {};`);
+elements.forEach((entity) => {
+    buffer.push(`FromRawLineData[ifc2x4.${entity.name.toUpperCase()}] = (d) => {`);
+    buffer.push(`\treturn ${entity.name}.FromTape(d.ID, d.type, d.arguments);`);
+    buffer.push(`};`);
+});
+
+
 
 buffer.push(`export interface Handle<T> { expressID: number; }`);
 buffer.push(`export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }`);
@@ -328,16 +341,20 @@ elements.forEach((entity) => {
     });
 
     buffer.push(`export class ${entity.name} {`);
-    buffer.push(`\tconstructor(${params.map((p) => `${p.name}: ${p.type}`).join(", ")})`)
+    buffer.push(`\tconstructor(expressID: number, type: number, ${params.map((p) => `${p.name}: ${p.type}`).join(", ")})`)
     buffer.push(`\t{`)
+    buffer.push(`\t\tthis.expressID = expressID;`)
+    buffer.push(`\t\tthis.type = type;`)
     params.forEach((param) => {
         buffer.push(`\t\tthis.${param.name} = ${param.name};`)
     })
     buffer.push(`\t}`)
+    buffer.push(`\texpressID: number;`);
+    buffer.push(`\ttype: number;`);
     params.forEach((param) => {
         buffer.push(`\t${param.name}: ${param.type};`)
     })
-    buffer.push(`\tstatic FromTape(tape: any[]): ${entity.name}`)
+    buffer.push(`\tstatic FromTape(expressID: number, type: number, tape: any[]): ${entity.name}`)
     buffer.push(`\t{`)
     let tapeIndex = 0;
     for (let i = 0; i < params.length; i++)
@@ -400,7 +417,7 @@ elements.forEach((entity) => {
 
         tapeIndex++;
     }
-    buffer.push(`\t\treturn new ${entity.name}(${params.map((p) => p.name).join(", ")});`);
+    buffer.push(`\t\treturn new ${entity.name}(expressID, type, ${params.map((p) => p.name).join(", ")});`);
     buffer.push(`\t}`)
     buffer.push(`\tToTape(): any[]`)
     buffer.push(`\t{`)
@@ -410,75 +427,77 @@ elements.forEach((entity) => {
         {
             buffer.push(`\t\tif(this.${param.name}){`);
         }
-        if (param.isType)
         {
-            let type = tmap[param.prop.type];
-            let printValue = true;
-            if (type.typeName === "number")
+            if (param.isType)
             {
-                buffer.push(`\t\targs.push(REAL)`);
-            }
-            else if (type.typeName === "string")
-            {
-                buffer.push(`\t\targs.push(STRING)`);
-            }
-            else if (param.prop.type === "IfcValue")
-            {
-                if (param.prop.set)
+                let type = tmap[param.prop.type];
+                let printValue = true;
+                if (type.typeName === "number")
                 {
+                    buffer.push(`\t\targs.push(REAL)`);
+                }
+                else if (type.typeName === "string")
+                {
+                    buffer.push(`\t\targs.push(STRING)`);
+                }
+                else if (param.prop.type === "IfcValue")
+                {
+                    if (param.prop.set)
+                    {
+                    }
+                    else
+                    {
+                        buffer.push(`\t\targs.push(LABEL)`);
+                        buffer.push(`\t\t//@ts-ignore`);
+                        buffer.push(`\t\targs.push(this.${param.name}.t)`);
+                        buffer.push(`\t\targs.push(SET_BEGIN)`);
+                        buffer.push(`\t\t//@ts-ignore`);
+                        buffer.push(`\t\targs.push(typeof this.${param.name}.v == 'string' ? STRING : REAL)`);
+                        buffer.push(`\t\t//@ts-ignore`);
+                        buffer.push(`\t\targs.push(this.${param.name}.v)`);
+                        buffer.push(`\t\targs.push(SET_END)`);
+                    }
+
+                    printValue = false;
+                }
+                else if (param.isType.isEnum)
+                {
+                    buffer.push(`\t\targs.push(ENUM);`);
+                    buffer.push(`\t\targs.push(this.${param.name}.value)`);
+                    
+                    printValue = false;
                 }
                 else
                 {
-                    buffer.push(`\t\targs.push(LABEL)`);
-                    buffer.push(`\t\t//@ts-ignore`);
-                    buffer.push(`\t\targs.push(this.${param.name}.t)`);
+                    // TODO: implement
+                    printValue = false;
+                }
+
+                if (printValue)
+                {
+                    if (param.prop.set)
+                    {
+                        buffer.push(`\t\targs.push(...this.${param.name})`);
+                    }
+                    else
+                    {
+                        buffer.push(`\t\targs.push(this.${param.name})`);
+                    }
+                }
+            }
+            else
+            {
+                if (param.prop.set)
+                {
                     buffer.push(`\t\targs.push(SET_BEGIN)`);
-                    buffer.push(`\t\t//@ts-ignore`);
-                    buffer.push(`\t\targs.push(typeof this.${param.name}.v == 'string' ? STRING : REAL)`);
-                    buffer.push(`\t\t//@ts-ignore`);
-                    buffer.push(`\t\targs.push(this.${param.name}.v)`);
+                    buffer.push(`\t\tthis.${param.name}.forEach((e) => { args.push(REF); args.push(e); });`);
                     buffer.push(`\t\targs.push(SET_END)`);
                 }
-
-                printValue = false;
-            }
-            else if (param.isType.isEnum)
-            {
-                buffer.push(`\t\targs.push(ENUM);`);
-                buffer.push(`\t\targs.push(this.${param.name}.value)`);
-                
-                printValue = false;
-            }
-            else
-            {
-                // TODO: implement
-                printValue = false;
-            }
-
-            if (printValue)
-            {
-                if (param.prop.set)
-                {
-                    buffer.push(`\t\targs.push(...this.${param.name})`);
-                }
                 else
                 {
+                    buffer.push(`\t\targs.push(REF)`);
                     buffer.push(`\t\targs.push(this.${param.name})`);
                 }
-            }
-        }
-        else
-        {
-            if (param.prop.set)
-            {
-                buffer.push(`\t\targs.push(SET_BEGIN)`);
-                buffer.push(`\t\tthis.${param.name}.forEach((e) => { args.push(REF); args.push(e); });`);
-                buffer.push(`\t\targs.push(SET_END)`);
-            }
-            else
-            {
-                buffer.push(`\t\targs.push(REF)`);
-                buffer.push(`\t\targs.push(this.${param.name})`);
             }
         }
         if (param.prop.optional)
@@ -493,3 +512,107 @@ elements.forEach((entity) => {
 });
 
 fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
+
+/////////////////////////////////////////////////////////////
+//////////// CRC32 GEN //////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+{
+    let ifcElements = JSON.parse(fs.readFileSync("./ifc4-elements.json").toString());
+
+    var makeCRCTable = function(){
+        var c;
+        var crcTable = [];
+        for(var n =0; n < 256; n++){
+            c = n;
+            for(var k =0; k < 8; k++){
+                c = ((c&1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+            }
+            crcTable[n] = c;
+        }
+        return crcTable;
+    }
+
+    let crcTable = false;
+
+    var crc32 = function(str) {
+        var crcTable = crcTable || (crcTable = makeCRCTable());
+        var crc = 0 ^ (-1);
+
+        for (var i = 0; i < str.length; i++ ) {
+            crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF];
+        }
+
+        return (crc ^ (-1)) >>> 0;
+    };
+
+    let tsHeader = [];
+    let cppHeader = [];
+    cppHeader.push("#pragma once");
+    cppHeader.push("");
+    cppHeader.push("#include <vector>");
+    cppHeader.push("");
+    cppHeader.push("// unique list of crc32 codes for ifc classes");
+    cppHeader.push("");
+    cppHeader.push("namespace ifc2x4 {");
+
+    elements.forEach(element => {
+        let name = element.name.toUpperCase();
+        let code = crc32(name);
+        cppHeader.push(`\tstatic const unsigned int ${name} = ${code};`);
+        tsHeader.push(`export const ${name} = ${code};`);
+    });
+
+    cppHeader.push("\tbool IsIfcElement(unsigned int ifcCode) {");
+    cppHeader.push("\t\tswitch(ifcCode) {");
+
+    Object.keys(ifcElements).forEach(element => {
+        let name = element.toUpperCase();
+        let code = crc32(name);
+        cppHeader.push(`\t\t\tcase ${code}: return true;`);
+    });
+
+    cppHeader.push(`\t\t\tdefault: return false;`);
+
+    cppHeader.push("\t\t}");
+    cppHeader.push("\t}");
+
+    cppHeader.push("\tstd::vector<unsigned int> IfcElements { ");
+    cppHeader.push(Object.keys(ifcElements).map(element => {
+        let name = element.toUpperCase();
+        let code = crc32(name);
+        return `\t\t${code}`;
+    }).join(",\n"));
+    cppHeader.push("\t};");
+
+    cppHeader.push("};");
+
+    cppHeader.push("\tconst char* GetReadableNameFromTypeCode(unsigned int ifcCode) {");
+    cppHeader.push("\t\tswitch(ifcCode) {");
+
+    elements.forEach(element => {
+        let name = element.name.toUpperCase();
+        let code = crc32(name);
+        cppHeader.push(`\t\t\tcase ${code}: return "${name}";`);
+    });
+
+    cppHeader.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
+
+    cppHeader.push("\t\t}");
+    cppHeader.push("\t}");
+
+    tsHeader.push("");
+    tsHeader.push("export const IfcElements = [");
+    tsHeader.push(Object.keys(ifcElements).map(element => {
+        let name = element.toUpperCase();
+        let code = crc32(name);
+        return `\t${code}`;
+    }).join(",\n"));
+    tsHeader.push("];");
+
+
+    fs.writeFileSync("../wasm/include/ifc2x4.h", cppHeader.join("\n")); 
+    fs.writeFileSync("../ifc2x4.ts", tsHeader.join("\n")); 
+
+    console.log(`Done!`);
+}

@@ -1,6 +1,5 @@
 
-const WebIFC = require("../../dist/web-ifc-api-node.js");
-import * as ifc2x4 from "../../src/ifc2x4_helper";
+import * as WebIFC from "../../dist/web-ifc-api-node.js";
 const fs = require("fs");
 
 console.log("Hello web-ifc-node!");
@@ -16,15 +15,24 @@ async function LoadFile(filename)
 
     let modelID = ifcapi.OpenModel("example.ifc", new Uint8Array(ifcData));
 
-    let properties = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCPROPERTYSINGLEVALUE)
+    let properties = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCTRIMMEDCURVE)
     for (let i = 0; i < properties.size(); i++)
     {
         let expressID = properties.get(i);
-        let tape = ifcapi.GetLine(modelID, expressID);
-        let prop = ifc2x4.IfcPropertySingleValue.FromTape(tape.arguments);
-        prop.Name = `${prop.Name}_EDITED`;
-        ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, prop.ToTape());
+        let line = ifcapi.GetLine(modelID, expressID) as WebIFC.IfcTrimmedCurve;
+        console.log(line.MasterRepresentation);
+        /*
+        let property = new ifc2x4.IfcPropertySingleValue("Name", null, ifc2x4.Value("IFCLABEL", `Value${i}`), null);
+        let property = new ifc2x4.IfcPropertySingleValue("Name", null, new ifc2x4.IfcLabel(`Value${i}`), null);
+        let property = new ifc2x4.IfcPropertySingleValue("Name", null, new ifc2x4.IfcInteger(5), null);
+        */
+        //ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
     }
+
+    // API as simple as possible, traversing references is up to the client
+    // change GetLine into GetRawLineData, and GetLine returns full object
+    //ifc2x4.QueryPath(`$.IFCPRODUCT[expressID: 123].properties`);
+
 
     console.log(`Loaded model ${filename} to modelID ${modelID}`);
 
