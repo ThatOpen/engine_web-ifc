@@ -2449,7 +2449,7 @@ FromRawLineData[ifc2x4.IFCZSHAPEPROFILEDEF] = (d) => {
 FromRawLineData[ifc2x4.IFCZONE] = (d) => {
 	return IfcZone.FromTape(d.ID, d.type, d.arguments);
 };
-export interface Handle<T> { expressID: number; }
+export class Handle<T> { expressID: number; constructor(id: number) { this.expressID = id; } }
 export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }
 export function Value(type: string, value: any): any { return { t: type, v: value }; }
 const UNKNOWN = 0;
@@ -5970,349 +5970,351 @@ export type IfcWarpingStiffnessSelect =
 |IfcBoolean
 |IfcWarpingMomentMeasure
 ;
-function ParseType(name: string, value: any): any {
-	if (name === "IFCABSORBEDDOSEMEASURE") { return new IfcAbsorbedDoseMeasure(value); }
-	if (name === "IFCACCELERATIONMEASURE") { return new IfcAccelerationMeasure(value); }
-	if (name === "IFCAMOUNTOFSUBSTANCEMEASURE") { return new IfcAmountOfSubstanceMeasure(value); }
-	if (name === "IFCANGULARVELOCITYMEASURE") { return new IfcAngularVelocityMeasure(value); }
-	if (name === "IFCAREADENSITYMEASURE") { return new IfcAreaDensityMeasure(value); }
-	if (name === "IFCAREAMEASURE") { return new IfcAreaMeasure(value); }
-	if (name === "IFCBINARY") { return new IfcBinary(value); }
-	if (name === "IFCBOOLEAN") { return new IfcBoolean(value); }
-	if (name === "IFCBOXALIGNMENT") { return new IfcBoxAlignment(value); }
-	if (name === "IFCCARDINALPOINTREFERENCE") { return new IfcCardinalPointReference(value); }
-	if (name === "IFCCONTEXTDEPENDENTMEASURE") { return new IfcContextDependentMeasure(value); }
-	if (name === "IFCCOUNTMEASURE") { return new IfcCountMeasure(value); }
-	if (name === "IFCCURVATUREMEASURE") { return new IfcCurvatureMeasure(value); }
-	if (name === "IFCDATE") { return new IfcDate(value); }
-	if (name === "IFCDATETIME") { return new IfcDateTime(value); }
-	if (name === "IFCDAYINMONTHNUMBER") { return new IfcDayInMonthNumber(value); }
-	if (name === "IFCDAYINWEEKNUMBER") { return new IfcDayInWeekNumber(value); }
-	if (name === "IFCDESCRIPTIVEMEASURE") { return new IfcDescriptiveMeasure(value); }
-	if (name === "IFCDIMENSIONCOUNT") { return new IfcDimensionCount(value); }
-	if (name === "IFCDOSEEQUIVALENTMEASURE") { return new IfcDoseEquivalentMeasure(value); }
-	if (name === "IFCDURATION") { return new IfcDuration(value); }
-	if (name === "IFCDYNAMICVISCOSITYMEASURE") { return new IfcDynamicViscosityMeasure(value); }
-	if (name === "IFCELECTRICCAPACITANCEMEASURE") { return new IfcElectricCapacitanceMeasure(value); }
-	if (name === "IFCELECTRICCHARGEMEASURE") { return new IfcElectricChargeMeasure(value); }
-	if (name === "IFCELECTRICCONDUCTANCEMEASURE") { return new IfcElectricConductanceMeasure(value); }
-	if (name === "IFCELECTRICCURRENTMEASURE") { return new IfcElectricCurrentMeasure(value); }
-	if (name === "IFCELECTRICRESISTANCEMEASURE") { return new IfcElectricResistanceMeasure(value); }
-	if (name === "IFCELECTRICVOLTAGEMEASURE") { return new IfcElectricVoltageMeasure(value); }
-	if (name === "IFCENERGYMEASURE") { return new IfcEnergyMeasure(value); }
-	if (name === "IFCFONTSTYLE") { return new IfcFontStyle(value); }
-	if (name === "IFCFONTVARIANT") { return new IfcFontVariant(value); }
-	if (name === "IFCFONTWEIGHT") { return new IfcFontWeight(value); }
-	if (name === "IFCFORCEMEASURE") { return new IfcForceMeasure(value); }
-	if (name === "IFCFREQUENCYMEASURE") { return new IfcFrequencyMeasure(value); }
-	if (name === "IFCGLOBALLYUNIQUEID") { return new IfcGloballyUniqueId(value); }
-	if (name === "IFCHEATFLUXDENSITYMEASURE") { return new IfcHeatFluxDensityMeasure(value); }
-	if (name === "IFCHEATINGVALUEMEASURE") { return new IfcHeatingValueMeasure(value); }
-	if (name === "IFCIDENTIFIER") { return new IfcIdentifier(value); }
-	if (name === "IFCILLUMINANCEMEASURE") { return new IfcIlluminanceMeasure(value); }
-	if (name === "IFCINDUCTANCEMEASURE") { return new IfcInductanceMeasure(value); }
-	if (name === "IFCINTEGER") { return new IfcInteger(value); }
-	if (name === "IFCINTEGERCOUNTRATEMEASURE") { return new IfcIntegerCountRateMeasure(value); }
-	if (name === "IFCIONCONCENTRATIONMEASURE") { return new IfcIonConcentrationMeasure(value); }
-	if (name === "IFCISOTHERMALMOISTURECAPACITYMEASURE") { return new IfcIsothermalMoistureCapacityMeasure(value); }
-	if (name === "IFCKINEMATICVISCOSITYMEASURE") { return new IfcKinematicViscosityMeasure(value); }
-	if (name === "IFCLABEL") { return new IfcLabel(value); }
-	if (name === "IFCLANGUAGEID") { return new IfcLanguageId(value); }
-	if (name === "IFCLENGTHMEASURE") { return new IfcLengthMeasure(value); }
-	if (name === "IFCLINEARFORCEMEASURE") { return new IfcLinearForceMeasure(value); }
-	if (name === "IFCLINEARMOMENTMEASURE") { return new IfcLinearMomentMeasure(value); }
-	if (name === "IFCLINEARSTIFFNESSMEASURE") { return new IfcLinearStiffnessMeasure(value); }
-	if (name === "IFCLINEARVELOCITYMEASURE") { return new IfcLinearVelocityMeasure(value); }
-	if (name === "IFCLOGICAL") { return new IfcLogical(value); }
-	if (name === "IFCLUMINOUSFLUXMEASURE") { return new IfcLuminousFluxMeasure(value); }
-	if (name === "IFCLUMINOUSINTENSITYDISTRIBUTIONMEASURE") { return new IfcLuminousIntensityDistributionMeasure(value); }
-	if (name === "IFCLUMINOUSINTENSITYMEASURE") { return new IfcLuminousIntensityMeasure(value); }
-	if (name === "IFCMAGNETICFLUXDENSITYMEASURE") { return new IfcMagneticFluxDensityMeasure(value); }
-	if (name === "IFCMAGNETICFLUXMEASURE") { return new IfcMagneticFluxMeasure(value); }
-	if (name === "IFCMASSDENSITYMEASURE") { return new IfcMassDensityMeasure(value); }
-	if (name === "IFCMASSFLOWRATEMEASURE") { return new IfcMassFlowRateMeasure(value); }
-	if (name === "IFCMASSMEASURE") { return new IfcMassMeasure(value); }
-	if (name === "IFCMASSPERLENGTHMEASURE") { return new IfcMassPerLengthMeasure(value); }
-	if (name === "IFCMODULUSOFELASTICITYMEASURE") { return new IfcModulusOfElasticityMeasure(value); }
-	if (name === "IFCMODULUSOFLINEARSUBGRADEREACTIONMEASURE") { return new IfcModulusOfLinearSubgradeReactionMeasure(value); }
-	if (name === "IFCMODULUSOFROTATIONALSUBGRADEREACTIONMEASURE") { return new IfcModulusOfRotationalSubgradeReactionMeasure(value); }
-	if (name === "IFCMODULUSOFSUBGRADEREACTIONMEASURE") { return new IfcModulusOfSubgradeReactionMeasure(value); }
-	if (name === "IFCMOISTUREDIFFUSIVITYMEASURE") { return new IfcMoistureDiffusivityMeasure(value); }
-	if (name === "IFCMOLECULARWEIGHTMEASURE") { return new IfcMolecularWeightMeasure(value); }
-	if (name === "IFCMOMENTOFINERTIAMEASURE") { return new IfcMomentOfInertiaMeasure(value); }
-	if (name === "IFCMONETARYMEASURE") { return new IfcMonetaryMeasure(value); }
-	if (name === "IFCMONTHINYEARNUMBER") { return new IfcMonthInYearNumber(value); }
-	if (name === "IFCNONNEGATIVELENGTHMEASURE") { return new IfcNonNegativeLengthMeasure(value); }
-	if (name === "IFCNORMALISEDRATIOMEASURE") { return new IfcNormalisedRatioMeasure(value); }
-	if (name === "IFCNUMERICMEASURE") { return new IfcNumericMeasure(value); }
-	if (name === "IFCPHMEASURE") { return new IfcPHMeasure(value); }
-	if (name === "IFCPARAMETERVALUE") { return new IfcParameterValue(value); }
-	if (name === "IFCPLANARFORCEMEASURE") { return new IfcPlanarForceMeasure(value); }
-	if (name === "IFCPLANEANGLEMEASURE") { return new IfcPlaneAngleMeasure(value); }
-	if (name === "IFCPOSITIVEINTEGER") { return new IfcPositiveInteger(value); }
-	if (name === "IFCPOSITIVELENGTHMEASURE") { return new IfcPositiveLengthMeasure(value); }
-	if (name === "IFCPOSITIVEPLANEANGLEMEASURE") { return new IfcPositivePlaneAngleMeasure(value); }
-	if (name === "IFCPOSITIVERATIOMEASURE") { return new IfcPositiveRatioMeasure(value); }
-	if (name === "IFCPOWERMEASURE") { return new IfcPowerMeasure(value); }
-	if (name === "IFCPRESENTABLETEXT") { return new IfcPresentableText(value); }
-	if (name === "IFCPRESSUREMEASURE") { return new IfcPressureMeasure(value); }
-	if (name === "IFCRADIOACTIVITYMEASURE") { return new IfcRadioActivityMeasure(value); }
-	if (name === "IFCRATIOMEASURE") { return new IfcRatioMeasure(value); }
-	if (name === "IFCREAL") { return new IfcReal(value); }
-	if (name === "IFCROTATIONALFREQUENCYMEASURE") { return new IfcRotationalFrequencyMeasure(value); }
-	if (name === "IFCROTATIONALMASSMEASURE") { return new IfcRotationalMassMeasure(value); }
-	if (name === "IFCROTATIONALSTIFFNESSMEASURE") { return new IfcRotationalStiffnessMeasure(value); }
-	if (name === "IFCSECTIONMODULUSMEASURE") { return new IfcSectionModulusMeasure(value); }
-	if (name === "IFCSECTIONALAREAINTEGRALMEASURE") { return new IfcSectionalAreaIntegralMeasure(value); }
-	if (name === "IFCSHEARMODULUSMEASURE") { return new IfcShearModulusMeasure(value); }
-	if (name === "IFCSOLIDANGLEMEASURE") { return new IfcSolidAngleMeasure(value); }
-	if (name === "IFCSOUNDPOWERLEVELMEASURE") { return new IfcSoundPowerLevelMeasure(value); }
-	if (name === "IFCSOUNDPOWERMEASURE") { return new IfcSoundPowerMeasure(value); }
-	if (name === "IFCSOUNDPRESSURELEVELMEASURE") { return new IfcSoundPressureLevelMeasure(value); }
-	if (name === "IFCSOUNDPRESSUREMEASURE") { return new IfcSoundPressureMeasure(value); }
-	if (name === "IFCSPECIFICHEATCAPACITYMEASURE") { return new IfcSpecificHeatCapacityMeasure(value); }
-	if (name === "IFCSPECULAREXPONENT") { return new IfcSpecularExponent(value); }
-	if (name === "IFCSPECULARROUGHNESS") { return new IfcSpecularRoughness(value); }
-	if (name === "IFCTEMPERATUREGRADIENTMEASURE") { return new IfcTemperatureGradientMeasure(value); }
-	if (name === "IFCTEMPERATURERATEOFCHANGEMEASURE") { return new IfcTemperatureRateOfChangeMeasure(value); }
-	if (name === "IFCTEXT") { return new IfcText(value); }
-	if (name === "IFCTEXTALIGNMENT") { return new IfcTextAlignment(value); }
-	if (name === "IFCTEXTDECORATION") { return new IfcTextDecoration(value); }
-	if (name === "IFCTEXTFONTNAME") { return new IfcTextFontName(value); }
-	if (name === "IFCTEXTTRANSFORMATION") { return new IfcTextTransformation(value); }
-	if (name === "IFCTHERMALADMITTANCEMEASURE") { return new IfcThermalAdmittanceMeasure(value); }
-	if (name === "IFCTHERMALCONDUCTIVITYMEASURE") { return new IfcThermalConductivityMeasure(value); }
-	if (name === "IFCTHERMALEXPANSIONCOEFFICIENTMEASURE") { return new IfcThermalExpansionCoefficientMeasure(value); }
-	if (name === "IFCTHERMALRESISTANCEMEASURE") { return new IfcThermalResistanceMeasure(value); }
-	if (name === "IFCTHERMALTRANSMITTANCEMEASURE") { return new IfcThermalTransmittanceMeasure(value); }
-	if (name === "IFCTHERMODYNAMICTEMPERATUREMEASURE") { return new IfcThermodynamicTemperatureMeasure(value); }
-	if (name === "IFCTIME") { return new IfcTime(value); }
-	if (name === "IFCTIMEMEASURE") { return new IfcTimeMeasure(value); }
-	if (name === "IFCTIMESTAMP") { return new IfcTimeStamp(value); }
-	if (name === "IFCTORQUEMEASURE") { return new IfcTorqueMeasure(value); }
-	if (name === "IFCURIREFERENCE") { return new IfcURIReference(value); }
-	if (name === "IFCVAPORPERMEABILITYMEASURE") { return new IfcVaporPermeabilityMeasure(value); }
-	if (name === "IFCVOLUMEMEASURE") { return new IfcVolumeMeasure(value); }
-	if (name === "IFCVOLUMETRICFLOWRATEMEASURE") { return new IfcVolumetricFlowRateMeasure(value); }
-	if (name === "IFCWARPINGCONSTANTMEASURE") { return new IfcWarpingConstantMeasure(value); }
-	if (name === "IFCWARPINGMOMENTMEASURE") { return new IfcWarpingMomentMeasure(value); }
-	if (name === "IFCACTIONREQUESTTYPEENUM") { return new IfcActionRequestTypeEnum(value); }
-	if (name === "IFCACTIONSOURCETYPEENUM") { return new IfcActionSourceTypeEnum(value); }
-	if (name === "IFCACTIONTYPEENUM") { return new IfcActionTypeEnum(value); }
-	if (name === "IFCACTUATORTYPEENUM") { return new IfcActuatorTypeEnum(value); }
-	if (name === "IFCADDRESSTYPEENUM") { return new IfcAddressTypeEnum(value); }
-	if (name === "IFCAIRTERMINALBOXTYPEENUM") { return new IfcAirTerminalBoxTypeEnum(value); }
-	if (name === "IFCAIRTERMINALTYPEENUM") { return new IfcAirTerminalTypeEnum(value); }
-	if (name === "IFCAIRTOAIRHEATRECOVERYTYPEENUM") { return new IfcAirToAirHeatRecoveryTypeEnum(value); }
-	if (name === "IFCALARMTYPEENUM") { return new IfcAlarmTypeEnum(value); }
-	if (name === "IFCALIGNMENTTYPEENUM") { return new IfcAlignmentTypeEnum(value); }
-	if (name === "IFCANALYSISMODELTYPEENUM") { return new IfcAnalysisModelTypeEnum(value); }
-	if (name === "IFCANALYSISTHEORYTYPEENUM") { return new IfcAnalysisTheoryTypeEnum(value); }
-	if (name === "IFCARITHMETICOPERATORENUM") { return new IfcArithmeticOperatorEnum(value); }
-	if (name === "IFCASSEMBLYPLACEENUM") { return new IfcAssemblyPlaceEnum(value); }
-	if (name === "IFCAUDIOVISUALAPPLIANCETYPEENUM") { return new IfcAudioVisualApplianceTypeEnum(value); }
-	if (name === "IFCBSPLINECURVEFORM") { return new IfcBSplineCurveForm(value); }
-	if (name === "IFCBSPLINESURFACEFORM") { return new IfcBSplineSurfaceForm(value); }
-	if (name === "IFCBEAMTYPEENUM") { return new IfcBeamTypeEnum(value); }
-	if (name === "IFCBEARINGTYPEDISPLACEMENTENUM") { return new IfcBearingTypeDisplacementEnum(value); }
-	if (name === "IFCBEARINGTYPEENUM") { return new IfcBearingTypeEnum(value); }
-	if (name === "IFCBENCHMARKENUM") { return new IfcBenchmarkEnum(value); }
-	if (name === "IFCBOILERTYPEENUM") { return new IfcBoilerTypeEnum(value); }
-	if (name === "IFCBOOLEANOPERATOR") { return new IfcBooleanOperator(value); }
-	if (name === "IFCBRIDGEPARTTYPEENUM") { return new IfcBridgePartTypeEnum(value); }
-	if (name === "IFCBRIDGETYPEENUM") { return new IfcBridgeTypeEnum(value); }
-	if (name === "IFCBUILDINGELEMENTPARTTYPEENUM") { return new IfcBuildingElementPartTypeEnum(value); }
-	if (name === "IFCBUILDINGELEMENTPROXYTYPEENUM") { return new IfcBuildingElementProxyTypeEnum(value); }
-	if (name === "IFCBUILDINGSYSTEMTYPEENUM") { return new IfcBuildingSystemTypeEnum(value); }
-	if (name === "IFCBURNERTYPEENUM") { return new IfcBurnerTypeEnum(value); }
-	if (name === "IFCCABLECARRIERFITTINGTYPEENUM") { return new IfcCableCarrierFittingTypeEnum(value); }
-	if (name === "IFCCABLECARRIERSEGMENTTYPEENUM") { return new IfcCableCarrierSegmentTypeEnum(value); }
-	if (name === "IFCCABLEFITTINGTYPEENUM") { return new IfcCableFittingTypeEnum(value); }
-	if (name === "IFCCABLESEGMENTTYPEENUM") { return new IfcCableSegmentTypeEnum(value); }
-	if (name === "IFCCAISSONFOUNDATIONTYPEENUM") { return new IfcCaissonFoundationTypeEnum(value); }
-	if (name === "IFCCHANGEACTIONENUM") { return new IfcChangeActionEnum(value); }
-	if (name === "IFCCHILLERTYPEENUM") { return new IfcChillerTypeEnum(value); }
-	if (name === "IFCCHIMNEYTYPEENUM") { return new IfcChimneyTypeEnum(value); }
-	if (name === "IFCCOILTYPEENUM") { return new IfcCoilTypeEnum(value); }
-	if (name === "IFCCOLUMNTYPEENUM") { return new IfcColumnTypeEnum(value); }
-	if (name === "IFCCOMMUNICATIONSAPPLIANCETYPEENUM") { return new IfcCommunicationsApplianceTypeEnum(value); }
-	if (name === "IFCCOMPLEXPROPERTYTEMPLATETYPEENUM") { return new IfcComplexPropertyTemplateTypeEnum(value); }
-	if (name === "IFCCOMPRESSORTYPEENUM") { return new IfcCompressorTypeEnum(value); }
-	if (name === "IFCCONDENSERTYPEENUM") { return new IfcCondenserTypeEnum(value); }
-	if (name === "IFCCONNECTIONTYPEENUM") { return new IfcConnectionTypeEnum(value); }
-	if (name === "IFCCONSTRAINTENUM") { return new IfcConstraintEnum(value); }
-	if (name === "IFCCONSTRUCTIONEQUIPMENTRESOURCETYPEENUM") { return new IfcConstructionEquipmentResourceTypeEnum(value); }
-	if (name === "IFCCONSTRUCTIONMATERIALRESOURCETYPEENUM") { return new IfcConstructionMaterialResourceTypeEnum(value); }
-	if (name === "IFCCONSTRUCTIONPRODUCTRESOURCETYPEENUM") { return new IfcConstructionProductResourceTypeEnum(value); }
-	if (name === "IFCCONTROLLERTYPEENUM") { return new IfcControllerTypeEnum(value); }
-	if (name === "IFCCOOLEDBEAMTYPEENUM") { return new IfcCooledBeamTypeEnum(value); }
-	if (name === "IFCCOOLINGTOWERTYPEENUM") { return new IfcCoolingTowerTypeEnum(value); }
-	if (name === "IFCCOSTITEMTYPEENUM") { return new IfcCostItemTypeEnum(value); }
-	if (name === "IFCCOSTSCHEDULETYPEENUM") { return new IfcCostScheduleTypeEnum(value); }
-	if (name === "IFCCOVERINGTYPEENUM") { return new IfcCoveringTypeEnum(value); }
-	if (name === "IFCCREWRESOURCETYPEENUM") { return new IfcCrewResourceTypeEnum(value); }
-	if (name === "IFCCURTAINWALLTYPEENUM") { return new IfcCurtainWallTypeEnum(value); }
-	if (name === "IFCCURVEINTERPOLATIONENUM") { return new IfcCurveInterpolationEnum(value); }
-	if (name === "IFCDAMPERTYPEENUM") { return new IfcDamperTypeEnum(value); }
-	if (name === "IFCDATAORIGINENUM") { return new IfcDataOriginEnum(value); }
-	if (name === "IFCDERIVEDUNITENUM") { return new IfcDerivedUnitEnum(value); }
-	if (name === "IFCDIRECTIONSENSEENUM") { return new IfcDirectionSenseEnum(value); }
-	if (name === "IFCDISCRETEACCESSORYTYPEENUM") { return new IfcDiscreteAccessoryTypeEnum(value); }
-	if (name === "IFCDISTRIBUTIONCHAMBERELEMENTTYPEENUM") { return new IfcDistributionChamberElementTypeEnum(value); }
-	if (name === "IFCDISTRIBUTIONPORTTYPEENUM") { return new IfcDistributionPortTypeEnum(value); }
-	if (name === "IFCDISTRIBUTIONSYSTEMENUM") { return new IfcDistributionSystemEnum(value); }
-	if (name === "IFCDOCUMENTCONFIDENTIALITYENUM") { return new IfcDocumentConfidentialityEnum(value); }
-	if (name === "IFCDOCUMENTSTATUSENUM") { return new IfcDocumentStatusEnum(value); }
-	if (name === "IFCDOORPANELOPERATIONENUM") { return new IfcDoorPanelOperationEnum(value); }
-	if (name === "IFCDOORPANELPOSITIONENUM") { return new IfcDoorPanelPositionEnum(value); }
-	if (name === "IFCDOORSTYLECONSTRUCTIONENUM") { return new IfcDoorStyleConstructionEnum(value); }
-	if (name === "IFCDOORSTYLEOPERATIONENUM") { return new IfcDoorStyleOperationEnum(value); }
-	if (name === "IFCDOORTYPEENUM") { return new IfcDoorTypeEnum(value); }
-	if (name === "IFCDOORTYPEOPERATIONENUM") { return new IfcDoorTypeOperationEnum(value); }
-	if (name === "IFCDUCTFITTINGTYPEENUM") { return new IfcDuctFittingTypeEnum(value); }
-	if (name === "IFCDUCTSEGMENTTYPEENUM") { return new IfcDuctSegmentTypeEnum(value); }
-	if (name === "IFCDUCTSILENCERTYPEENUM") { return new IfcDuctSilencerTypeEnum(value); }
-	if (name === "IFCELECTRICAPPLIANCETYPEENUM") { return new IfcElectricApplianceTypeEnum(value); }
-	if (name === "IFCELECTRICDISTRIBUTIONBOARDTYPEENUM") { return new IfcElectricDistributionBoardTypeEnum(value); }
-	if (name === "IFCELECTRICFLOWSTORAGEDEVICETYPEENUM") { return new IfcElectricFlowStorageDeviceTypeEnum(value); }
-	if (name === "IFCELECTRICGENERATORTYPEENUM") { return new IfcElectricGeneratorTypeEnum(value); }
-	if (name === "IFCELECTRICMOTORTYPEENUM") { return new IfcElectricMotorTypeEnum(value); }
-	if (name === "IFCELECTRICTIMECONTROLTYPEENUM") { return new IfcElectricTimeControlTypeEnum(value); }
-	if (name === "IFCELEMENTASSEMBLYTYPEENUM") { return new IfcElementAssemblyTypeEnum(value); }
-	if (name === "IFCELEMENTCOMPOSITIONENUM") { return new IfcElementCompositionEnum(value); }
-	if (name === "IFCENGINETYPEENUM") { return new IfcEngineTypeEnum(value); }
-	if (name === "IFCEVAPORATIVECOOLERTYPEENUM") { return new IfcEvaporativeCoolerTypeEnum(value); }
-	if (name === "IFCEVAPORATORTYPEENUM") { return new IfcEvaporatorTypeEnum(value); }
-	if (name === "IFCEVENTTRIGGERTYPEENUM") { return new IfcEventTriggerTypeEnum(value); }
-	if (name === "IFCEVENTTYPEENUM") { return new IfcEventTypeEnum(value); }
-	if (name === "IFCEXTERNALSPATIALELEMENTTYPEENUM") { return new IfcExternalSpatialElementTypeEnum(value); }
-	if (name === "IFCFANTYPEENUM") { return new IfcFanTypeEnum(value); }
-	if (name === "IFCFASTENERTYPEENUM") { return new IfcFastenerTypeEnum(value); }
-	if (name === "IFCFILTERTYPEENUM") { return new IfcFilterTypeEnum(value); }
-	if (name === "IFCFIRESUPPRESSIONTERMINALTYPEENUM") { return new IfcFireSuppressionTerminalTypeEnum(value); }
-	if (name === "IFCFLOWDIRECTIONENUM") { return new IfcFlowDirectionEnum(value); }
-	if (name === "IFCFLOWINSTRUMENTTYPEENUM") { return new IfcFlowInstrumentTypeEnum(value); }
-	if (name === "IFCFLOWMETERTYPEENUM") { return new IfcFlowMeterTypeEnum(value); }
-	if (name === "IFCFOOTINGTYPEENUM") { return new IfcFootingTypeEnum(value); }
-	if (name === "IFCFURNITURETYPEENUM") { return new IfcFurnitureTypeEnum(value); }
-	if (name === "IFCGEOGRAPHICELEMENTTYPEENUM") { return new IfcGeographicElementTypeEnum(value); }
-	if (name === "IFCGEOMETRICPROJECTIONENUM") { return new IfcGeometricProjectionEnum(value); }
-	if (name === "IFCGLOBALORLOCALENUM") { return new IfcGlobalOrLocalEnum(value); }
-	if (name === "IFCGRIDTYPEENUM") { return new IfcGridTypeEnum(value); }
-	if (name === "IFCHEATEXCHANGERTYPEENUM") { return new IfcHeatExchangerTypeEnum(value); }
-	if (name === "IFCHUMIDIFIERTYPEENUM") { return new IfcHumidifierTypeEnum(value); }
-	if (name === "IFCINTERCEPTORTYPEENUM") { return new IfcInterceptorTypeEnum(value); }
-	if (name === "IFCINTERNALOREXTERNALENUM") { return new IfcInternalOrExternalEnum(value); }
-	if (name === "IFCINVENTORYTYPEENUM") { return new IfcInventoryTypeEnum(value); }
-	if (name === "IFCJUNCTIONBOXTYPEENUM") { return new IfcJunctionBoxTypeEnum(value); }
-	if (name === "IFCKNOTTYPE") { return new IfcKnotType(value); }
-	if (name === "IFCLABORRESOURCETYPEENUM") { return new IfcLaborResourceTypeEnum(value); }
-	if (name === "IFCLAMPTYPEENUM") { return new IfcLampTypeEnum(value); }
-	if (name === "IFCLAYERSETDIRECTIONENUM") { return new IfcLayerSetDirectionEnum(value); }
-	if (name === "IFCLIGHTDISTRIBUTIONCURVEENUM") { return new IfcLightDistributionCurveEnum(value); }
-	if (name === "IFCLIGHTEMISSIONSOURCEENUM") { return new IfcLightEmissionSourceEnum(value); }
-	if (name === "IFCLIGHTFIXTURETYPEENUM") { return new IfcLightFixtureTypeEnum(value); }
-	if (name === "IFCLOADGROUPTYPEENUM") { return new IfcLoadGroupTypeEnum(value); }
-	if (name === "IFCLOGICALOPERATORENUM") { return new IfcLogicalOperatorEnum(value); }
-	if (name === "IFCMECHANICALFASTENERTYPEENUM") { return new IfcMechanicalFastenerTypeEnum(value); }
-	if (name === "IFCMEDICALDEVICETYPEENUM") { return new IfcMedicalDeviceTypeEnum(value); }
-	if (name === "IFCMEMBERTYPEENUM") { return new IfcMemberTypeEnum(value); }
-	if (name === "IFCMOTORCONNECTIONTYPEENUM") { return new IfcMotorConnectionTypeEnum(value); }
-	if (name === "IFCNULLSTYLE") { return new IfcNullStyle(value); }
-	if (name === "IFCOBJECTTYPEENUM") { return new IfcObjectTypeEnum(value); }
-	if (name === "IFCOBJECTIVEENUM") { return new IfcObjectiveEnum(value); }
-	if (name === "IFCOCCUPANTTYPEENUM") { return new IfcOccupantTypeEnum(value); }
-	if (name === "IFCOPENINGELEMENTTYPEENUM") { return new IfcOpeningElementTypeEnum(value); }
-	if (name === "IFCOUTLETTYPEENUM") { return new IfcOutletTypeEnum(value); }
-	if (name === "IFCPERFORMANCEHISTORYTYPEENUM") { return new IfcPerformanceHistoryTypeEnum(value); }
-	if (name === "IFCPERMEABLECOVERINGOPERATIONENUM") { return new IfcPermeableCoveringOperationEnum(value); }
-	if (name === "IFCPERMITTYPEENUM") { return new IfcPermitTypeEnum(value); }
-	if (name === "IFCPHYSICALORVIRTUALENUM") { return new IfcPhysicalOrVirtualEnum(value); }
-	if (name === "IFCPILECONSTRUCTIONENUM") { return new IfcPileConstructionEnum(value); }
-	if (name === "IFCPILETYPEENUM") { return new IfcPileTypeEnum(value); }
-	if (name === "IFCPIPEFITTINGTYPEENUM") { return new IfcPipeFittingTypeEnum(value); }
-	if (name === "IFCPIPESEGMENTTYPEENUM") { return new IfcPipeSegmentTypeEnum(value); }
-	if (name === "IFCPLATETYPEENUM") { return new IfcPlateTypeEnum(value); }
-	if (name === "IFCPREFERREDSURFACECURVEREPRESENTATION") { return new IfcPreferredSurfaceCurveRepresentation(value); }
-	if (name === "IFCPROCEDURETYPEENUM") { return new IfcProcedureTypeEnum(value); }
-	if (name === "IFCPROFILETYPEENUM") { return new IfcProfileTypeEnum(value); }
-	if (name === "IFCPROJECTORDERTYPEENUM") { return new IfcProjectOrderTypeEnum(value); }
-	if (name === "IFCPROJECTEDORTRUELENGTHENUM") { return new IfcProjectedOrTrueLengthEnum(value); }
-	if (name === "IFCPROJECTIONELEMENTTYPEENUM") { return new IfcProjectionElementTypeEnum(value); }
-	if (name === "IFCPROPERTYSETTEMPLATETYPEENUM") { return new IfcPropertySetTemplateTypeEnum(value); }
-	if (name === "IFCPROTECTIVEDEVICETRIPPINGUNITTYPEENUM") { return new IfcProtectiveDeviceTrippingUnitTypeEnum(value); }
-	if (name === "IFCPROTECTIVEDEVICETYPEENUM") { return new IfcProtectiveDeviceTypeEnum(value); }
-	if (name === "IFCPUMPTYPEENUM") { return new IfcPumpTypeEnum(value); }
-	if (name === "IFCRAILINGTYPEENUM") { return new IfcRailingTypeEnum(value); }
-	if (name === "IFCRAMPFLIGHTTYPEENUM") { return new IfcRampFlightTypeEnum(value); }
-	if (name === "IFCRAMPTYPEENUM") { return new IfcRampTypeEnum(value); }
-	if (name === "IFCRECURRENCETYPEENUM") { return new IfcRecurrenceTypeEnum(value); }
-	if (name === "IFCREFERENTTYPEENUM") { return new IfcReferentTypeEnum(value); }
-	if (name === "IFCREFLECTANCEMETHODENUM") { return new IfcReflectanceMethodEnum(value); }
-	if (name === "IFCREINFORCINGBARROLEENUM") { return new IfcReinforcingBarRoleEnum(value); }
-	if (name === "IFCREINFORCINGBARSURFACEENUM") { return new IfcReinforcingBarSurfaceEnum(value); }
-	if (name === "IFCREINFORCINGBARTYPEENUM") { return new IfcReinforcingBarTypeEnum(value); }
-	if (name === "IFCREINFORCINGMESHTYPEENUM") { return new IfcReinforcingMeshTypeEnum(value); }
-	if (name === "IFCROLEENUM") { return new IfcRoleEnum(value); }
-	if (name === "IFCROOFTYPEENUM") { return new IfcRoofTypeEnum(value); }
-	if (name === "IFCSIPREFIX") { return new IfcSIPrefix(value); }
-	if (name === "IFCSIUNITNAME") { return new IfcSIUnitName(value); }
-	if (name === "IFCSANITARYTERMINALTYPEENUM") { return new IfcSanitaryTerminalTypeEnum(value); }
-	if (name === "IFCSECTIONTYPEENUM") { return new IfcSectionTypeEnum(value); }
-	if (name === "IFCSENSORTYPEENUM") { return new IfcSensorTypeEnum(value); }
-	if (name === "IFCSEQUENCEENUM") { return new IfcSequenceEnum(value); }
-	if (name === "IFCSHADINGDEVICETYPEENUM") { return new IfcShadingDeviceTypeEnum(value); }
-	if (name === "IFCSIMPLEPROPERTYTEMPLATETYPEENUM") { return new IfcSimplePropertyTemplateTypeEnum(value); }
-	if (name === "IFCSLABTYPEENUM") { return new IfcSlabTypeEnum(value); }
-	if (name === "IFCSOLARDEVICETYPEENUM") { return new IfcSolarDeviceTypeEnum(value); }
-	if (name === "IFCSPACEHEATERTYPEENUM") { return new IfcSpaceHeaterTypeEnum(value); }
-	if (name === "IFCSPACETYPEENUM") { return new IfcSpaceTypeEnum(value); }
-	if (name === "IFCSPATIALZONETYPEENUM") { return new IfcSpatialZoneTypeEnum(value); }
-	if (name === "IFCSTACKTERMINALTYPEENUM") { return new IfcStackTerminalTypeEnum(value); }
-	if (name === "IFCSTAIRFLIGHTTYPEENUM") { return new IfcStairFlightTypeEnum(value); }
-	if (name === "IFCSTAIRTYPEENUM") { return new IfcStairTypeEnum(value); }
-	if (name === "IFCSTATEENUM") { return new IfcStateEnum(value); }
-	if (name === "IFCSTRUCTURALCURVEACTIVITYTYPEENUM") { return new IfcStructuralCurveActivityTypeEnum(value); }
-	if (name === "IFCSTRUCTURALCURVEMEMBERTYPEENUM") { return new IfcStructuralCurveMemberTypeEnum(value); }
-	if (name === "IFCSTRUCTURALSURFACEACTIVITYTYPEENUM") { return new IfcStructuralSurfaceActivityTypeEnum(value); }
-	if (name === "IFCSTRUCTURALSURFACEMEMBERTYPEENUM") { return new IfcStructuralSurfaceMemberTypeEnum(value); }
-	if (name === "IFCSUBCONTRACTRESOURCETYPEENUM") { return new IfcSubContractResourceTypeEnum(value); }
-	if (name === "IFCSURFACEFEATURETYPEENUM") { return new IfcSurfaceFeatureTypeEnum(value); }
-	if (name === "IFCSURFACESIDE") { return new IfcSurfaceSide(value); }
-	if (name === "IFCSWITCHINGDEVICETYPEENUM") { return new IfcSwitchingDeviceTypeEnum(value); }
-	if (name === "IFCSYSTEMFURNITUREELEMENTTYPEENUM") { return new IfcSystemFurnitureElementTypeEnum(value); }
-	if (name === "IFCTANKTYPEENUM") { return new IfcTankTypeEnum(value); }
-	if (name === "IFCTASKDURATIONENUM") { return new IfcTaskDurationEnum(value); }
-	if (name === "IFCTASKTYPEENUM") { return new IfcTaskTypeEnum(value); }
-	if (name === "IFCTENDONANCHORTYPEENUM") { return new IfcTendonAnchorTypeEnum(value); }
-	if (name === "IFCTENDONCONDUITTYPEENUM") { return new IfcTendonConduitTypeEnum(value); }
-	if (name === "IFCTENDONTYPEENUM") { return new IfcTendonTypeEnum(value); }
-	if (name === "IFCTEXTPATH") { return new IfcTextPath(value); }
-	if (name === "IFCTIMESERIESDATATYPEENUM") { return new IfcTimeSeriesDataTypeEnum(value); }
-	if (name === "IFCTRANSFORMERTYPEENUM") { return new IfcTransformerTypeEnum(value); }
-	if (name === "IFCTRANSITIONCODE") { return new IfcTransitionCode(value); }
-	if (name === "IFCTRANSITIONCURVETYPE") { return new IfcTransitionCurveType(value); }
-	if (name === "IFCTRANSPORTELEMENTTYPEENUM") { return new IfcTransportElementTypeEnum(value); }
-	if (name === "IFCTRIMMINGPREFERENCE") { return new IfcTrimmingPreference(value); }
-	if (name === "IFCTUBEBUNDLETYPEENUM") { return new IfcTubeBundleTypeEnum(value); }
-	if (name === "IFCUNITENUM") { return new IfcUnitEnum(value); }
-	if (name === "IFCUNITARYCONTROLELEMENTTYPEENUM") { return new IfcUnitaryControlElementTypeEnum(value); }
-	if (name === "IFCUNITARYEQUIPMENTTYPEENUM") { return new IfcUnitaryEquipmentTypeEnum(value); }
-	if (name === "IFCVALVETYPEENUM") { return new IfcValveTypeEnum(value); }
-	if (name === "IFCVIBRATIONDAMPERTYPEENUM") { return new IfcVibrationDamperTypeEnum(value); }
-	if (name === "IFCVIBRATIONISOLATORTYPEENUM") { return new IfcVibrationIsolatorTypeEnum(value); }
-	if (name === "IFCVOIDINGFEATURETYPEENUM") { return new IfcVoidingFeatureTypeEnum(value); }
-	if (name === "IFCWALLTYPEENUM") { return new IfcWallTypeEnum(value); }
-	if (name === "IFCWASTETERMINALTYPEENUM") { return new IfcWasteTerminalTypeEnum(value); }
-	if (name === "IFCWINDOWPANELOPERATIONENUM") { return new IfcWindowPanelOperationEnum(value); }
-	if (name === "IFCWINDOWPANELPOSITIONENUM") { return new IfcWindowPanelPositionEnum(value); }
-	if (name === "IFCWINDOWSTYLECONSTRUCTIONENUM") { return new IfcWindowStyleConstructionEnum(value); }
-	if (name === "IFCWINDOWSTYLEOPERATIONENUM") { return new IfcWindowStyleOperationEnum(value); }
-	if (name === "IFCWINDOWTYPEENUM") { return new IfcWindowTypeEnum(value); }
-	if (name === "IFCWINDOWTYPEPARTITIONINGENUM") { return new IfcWindowTypePartitioningEnum(value); }
-	if (name === "IFCWORKCALENDARTYPEENUM") { return new IfcWorkCalendarTypeEnum(value); }
-	if (name === "IFCWORKPLANTYPEENUM") { return new IfcWorkPlanTypeEnum(value); }
-	if (name === "IFCWORKSCHEDULETYPEENUM") { return new IfcWorkScheduleTypeEnum(value); }
+function ParseType(obj: any): any {
+	if (obj.type === 5) { return new Handle<any>(obj.expressID); }
+	if (obj.type !== 2) { return obj; }
+	if (obj.label === "IFCABSORBEDDOSEMEASURE") { return new IfcAbsorbedDoseMeasure(obj.value); }
+	if (obj.label === "IFCACCELERATIONMEASURE") { return new IfcAccelerationMeasure(obj.value); }
+	if (obj.label === "IFCAMOUNTOFSUBSTANCEMEASURE") { return new IfcAmountOfSubstanceMeasure(obj.value); }
+	if (obj.label === "IFCANGULARVELOCITYMEASURE") { return new IfcAngularVelocityMeasure(obj.value); }
+	if (obj.label === "IFCAREADENSITYMEASURE") { return new IfcAreaDensityMeasure(obj.value); }
+	if (obj.label === "IFCAREAMEASURE") { return new IfcAreaMeasure(obj.value); }
+	if (obj.label === "IFCBINARY") { return new IfcBinary(obj.value); }
+	if (obj.label === "IFCBOOLEAN") { return new IfcBoolean(obj.value); }
+	if (obj.label === "IFCBOXALIGNMENT") { return new IfcBoxAlignment(obj.value); }
+	if (obj.label === "IFCCARDINALPOINTREFERENCE") { return new IfcCardinalPointReference(obj.value); }
+	if (obj.label === "IFCCONTEXTDEPENDENTMEASURE") { return new IfcContextDependentMeasure(obj.value); }
+	if (obj.label === "IFCCOUNTMEASURE") { return new IfcCountMeasure(obj.value); }
+	if (obj.label === "IFCCURVATUREMEASURE") { return new IfcCurvatureMeasure(obj.value); }
+	if (obj.label === "IFCDATE") { return new IfcDate(obj.value); }
+	if (obj.label === "IFCDATETIME") { return new IfcDateTime(obj.value); }
+	if (obj.label === "IFCDAYINMONTHNUMBER") { return new IfcDayInMonthNumber(obj.value); }
+	if (obj.label === "IFCDAYINWEEKNUMBER") { return new IfcDayInWeekNumber(obj.value); }
+	if (obj.label === "IFCDESCRIPTIVEMEASURE") { return new IfcDescriptiveMeasure(obj.value); }
+	if (obj.label === "IFCDIMENSIONCOUNT") { return new IfcDimensionCount(obj.value); }
+	if (obj.label === "IFCDOSEEQUIVALENTMEASURE") { return new IfcDoseEquivalentMeasure(obj.value); }
+	if (obj.label === "IFCDURATION") { return new IfcDuration(obj.value); }
+	if (obj.label === "IFCDYNAMICVISCOSITYMEASURE") { return new IfcDynamicViscosityMeasure(obj.value); }
+	if (obj.label === "IFCELECTRICCAPACITANCEMEASURE") { return new IfcElectricCapacitanceMeasure(obj.value); }
+	if (obj.label === "IFCELECTRICCHARGEMEASURE") { return new IfcElectricChargeMeasure(obj.value); }
+	if (obj.label === "IFCELECTRICCONDUCTANCEMEASURE") { return new IfcElectricConductanceMeasure(obj.value); }
+	if (obj.label === "IFCELECTRICCURRENTMEASURE") { return new IfcElectricCurrentMeasure(obj.value); }
+	if (obj.label === "IFCELECTRICRESISTANCEMEASURE") { return new IfcElectricResistanceMeasure(obj.value); }
+	if (obj.label === "IFCELECTRICVOLTAGEMEASURE") { return new IfcElectricVoltageMeasure(obj.value); }
+	if (obj.label === "IFCENERGYMEASURE") { return new IfcEnergyMeasure(obj.value); }
+	if (obj.label === "IFCFONTSTYLE") { return new IfcFontStyle(obj.value); }
+	if (obj.label === "IFCFONTVARIANT") { return new IfcFontVariant(obj.value); }
+	if (obj.label === "IFCFONTWEIGHT") { return new IfcFontWeight(obj.value); }
+	if (obj.label === "IFCFORCEMEASURE") { return new IfcForceMeasure(obj.value); }
+	if (obj.label === "IFCFREQUENCYMEASURE") { return new IfcFrequencyMeasure(obj.value); }
+	if (obj.label === "IFCGLOBALLYUNIQUEID") { return new IfcGloballyUniqueId(obj.value); }
+	if (obj.label === "IFCHEATFLUXDENSITYMEASURE") { return new IfcHeatFluxDensityMeasure(obj.value); }
+	if (obj.label === "IFCHEATINGVALUEMEASURE") { return new IfcHeatingValueMeasure(obj.value); }
+	if (obj.label === "IFCIDENTIFIER") { return new IfcIdentifier(obj.value); }
+	if (obj.label === "IFCILLUMINANCEMEASURE") { return new IfcIlluminanceMeasure(obj.value); }
+	if (obj.label === "IFCINDUCTANCEMEASURE") { return new IfcInductanceMeasure(obj.value); }
+	if (obj.label === "IFCINTEGER") { return new IfcInteger(obj.value); }
+	if (obj.label === "IFCINTEGERCOUNTRATEMEASURE") { return new IfcIntegerCountRateMeasure(obj.value); }
+	if (obj.label === "IFCIONCONCENTRATIONMEASURE") { return new IfcIonConcentrationMeasure(obj.value); }
+	if (obj.label === "IFCISOTHERMALMOISTURECAPACITYMEASURE") { return new IfcIsothermalMoistureCapacityMeasure(obj.value); }
+	if (obj.label === "IFCKINEMATICVISCOSITYMEASURE") { return new IfcKinematicViscosityMeasure(obj.value); }
+	if (obj.label === "IFCLABEL") { return new IfcLabel(obj.value); }
+	if (obj.label === "IFCLANGUAGEID") { return new IfcLanguageId(obj.value); }
+	if (obj.label === "IFCLENGTHMEASURE") { return new IfcLengthMeasure(obj.value); }
+	if (obj.label === "IFCLINEARFORCEMEASURE") { return new IfcLinearForceMeasure(obj.value); }
+	if (obj.label === "IFCLINEARMOMENTMEASURE") { return new IfcLinearMomentMeasure(obj.value); }
+	if (obj.label === "IFCLINEARSTIFFNESSMEASURE") { return new IfcLinearStiffnessMeasure(obj.value); }
+	if (obj.label === "IFCLINEARVELOCITYMEASURE") { return new IfcLinearVelocityMeasure(obj.value); }
+	if (obj.label === "IFCLOGICAL") { return new IfcLogical(obj.value); }
+	if (obj.label === "IFCLUMINOUSFLUXMEASURE") { return new IfcLuminousFluxMeasure(obj.value); }
+	if (obj.label === "IFCLUMINOUSINTENSITYDISTRIBUTIONMEASURE") { return new IfcLuminousIntensityDistributionMeasure(obj.value); }
+	if (obj.label === "IFCLUMINOUSINTENSITYMEASURE") { return new IfcLuminousIntensityMeasure(obj.value); }
+	if (obj.label === "IFCMAGNETICFLUXDENSITYMEASURE") { return new IfcMagneticFluxDensityMeasure(obj.value); }
+	if (obj.label === "IFCMAGNETICFLUXMEASURE") { return new IfcMagneticFluxMeasure(obj.value); }
+	if (obj.label === "IFCMASSDENSITYMEASURE") { return new IfcMassDensityMeasure(obj.value); }
+	if (obj.label === "IFCMASSFLOWRATEMEASURE") { return new IfcMassFlowRateMeasure(obj.value); }
+	if (obj.label === "IFCMASSMEASURE") { return new IfcMassMeasure(obj.value); }
+	if (obj.label === "IFCMASSPERLENGTHMEASURE") { return new IfcMassPerLengthMeasure(obj.value); }
+	if (obj.label === "IFCMODULUSOFELASTICITYMEASURE") { return new IfcModulusOfElasticityMeasure(obj.value); }
+	if (obj.label === "IFCMODULUSOFLINEARSUBGRADEREACTIONMEASURE") { return new IfcModulusOfLinearSubgradeReactionMeasure(obj.value); }
+	if (obj.label === "IFCMODULUSOFROTATIONALSUBGRADEREACTIONMEASURE") { return new IfcModulusOfRotationalSubgradeReactionMeasure(obj.value); }
+	if (obj.label === "IFCMODULUSOFSUBGRADEREACTIONMEASURE") { return new IfcModulusOfSubgradeReactionMeasure(obj.value); }
+	if (obj.label === "IFCMOISTUREDIFFUSIVITYMEASURE") { return new IfcMoistureDiffusivityMeasure(obj.value); }
+	if (obj.label === "IFCMOLECULARWEIGHTMEASURE") { return new IfcMolecularWeightMeasure(obj.value); }
+	if (obj.label === "IFCMOMENTOFINERTIAMEASURE") { return new IfcMomentOfInertiaMeasure(obj.value); }
+	if (obj.label === "IFCMONETARYMEASURE") { return new IfcMonetaryMeasure(obj.value); }
+	if (obj.label === "IFCMONTHINYEARNUMBER") { return new IfcMonthInYearNumber(obj.value); }
+	if (obj.label === "IFCNONNEGATIVELENGTHMEASURE") { return new IfcNonNegativeLengthMeasure(obj.value); }
+	if (obj.label === "IFCNORMALISEDRATIOMEASURE") { return new IfcNormalisedRatioMeasure(obj.value); }
+	if (obj.label === "IFCNUMERICMEASURE") { return new IfcNumericMeasure(obj.value); }
+	if (obj.label === "IFCPHMEASURE") { return new IfcPHMeasure(obj.value); }
+	if (obj.label === "IFCPARAMETERVALUE") { return new IfcParameterValue(obj.value); }
+	if (obj.label === "IFCPLANARFORCEMEASURE") { return new IfcPlanarForceMeasure(obj.value); }
+	if (obj.label === "IFCPLANEANGLEMEASURE") { return new IfcPlaneAngleMeasure(obj.value); }
+	if (obj.label === "IFCPOSITIVEINTEGER") { return new IfcPositiveInteger(obj.value); }
+	if (obj.label === "IFCPOSITIVELENGTHMEASURE") { return new IfcPositiveLengthMeasure(obj.value); }
+	if (obj.label === "IFCPOSITIVEPLANEANGLEMEASURE") { return new IfcPositivePlaneAngleMeasure(obj.value); }
+	if (obj.label === "IFCPOSITIVERATIOMEASURE") { return new IfcPositiveRatioMeasure(obj.value); }
+	if (obj.label === "IFCPOWERMEASURE") { return new IfcPowerMeasure(obj.value); }
+	if (obj.label === "IFCPRESENTABLETEXT") { return new IfcPresentableText(obj.value); }
+	if (obj.label === "IFCPRESSUREMEASURE") { return new IfcPressureMeasure(obj.value); }
+	if (obj.label === "IFCRADIOACTIVITYMEASURE") { return new IfcRadioActivityMeasure(obj.value); }
+	if (obj.label === "IFCRATIOMEASURE") { return new IfcRatioMeasure(obj.value); }
+	if (obj.label === "IFCREAL") { return new IfcReal(obj.value); }
+	if (obj.label === "IFCROTATIONALFREQUENCYMEASURE") { return new IfcRotationalFrequencyMeasure(obj.value); }
+	if (obj.label === "IFCROTATIONALMASSMEASURE") { return new IfcRotationalMassMeasure(obj.value); }
+	if (obj.label === "IFCROTATIONALSTIFFNESSMEASURE") { return new IfcRotationalStiffnessMeasure(obj.value); }
+	if (obj.label === "IFCSECTIONMODULUSMEASURE") { return new IfcSectionModulusMeasure(obj.value); }
+	if (obj.label === "IFCSECTIONALAREAINTEGRALMEASURE") { return new IfcSectionalAreaIntegralMeasure(obj.value); }
+	if (obj.label === "IFCSHEARMODULUSMEASURE") { return new IfcShearModulusMeasure(obj.value); }
+	if (obj.label === "IFCSOLIDANGLEMEASURE") { return new IfcSolidAngleMeasure(obj.value); }
+	if (obj.label === "IFCSOUNDPOWERLEVELMEASURE") { return new IfcSoundPowerLevelMeasure(obj.value); }
+	if (obj.label === "IFCSOUNDPOWERMEASURE") { return new IfcSoundPowerMeasure(obj.value); }
+	if (obj.label === "IFCSOUNDPRESSURELEVELMEASURE") { return new IfcSoundPressureLevelMeasure(obj.value); }
+	if (obj.label === "IFCSOUNDPRESSUREMEASURE") { return new IfcSoundPressureMeasure(obj.value); }
+	if (obj.label === "IFCSPECIFICHEATCAPACITYMEASURE") { return new IfcSpecificHeatCapacityMeasure(obj.value); }
+	if (obj.label === "IFCSPECULAREXPONENT") { return new IfcSpecularExponent(obj.value); }
+	if (obj.label === "IFCSPECULARROUGHNESS") { return new IfcSpecularRoughness(obj.value); }
+	if (obj.label === "IFCTEMPERATUREGRADIENTMEASURE") { return new IfcTemperatureGradientMeasure(obj.value); }
+	if (obj.label === "IFCTEMPERATURERATEOFCHANGEMEASURE") { return new IfcTemperatureRateOfChangeMeasure(obj.value); }
+	if (obj.label === "IFCTEXT") { return new IfcText(obj.value); }
+	if (obj.label === "IFCTEXTALIGNMENT") { return new IfcTextAlignment(obj.value); }
+	if (obj.label === "IFCTEXTDECORATION") { return new IfcTextDecoration(obj.value); }
+	if (obj.label === "IFCTEXTFONTNAME") { return new IfcTextFontName(obj.value); }
+	if (obj.label === "IFCTEXTTRANSFORMATION") { return new IfcTextTransformation(obj.value); }
+	if (obj.label === "IFCTHERMALADMITTANCEMEASURE") { return new IfcThermalAdmittanceMeasure(obj.value); }
+	if (obj.label === "IFCTHERMALCONDUCTIVITYMEASURE") { return new IfcThermalConductivityMeasure(obj.value); }
+	if (obj.label === "IFCTHERMALEXPANSIONCOEFFICIENTMEASURE") { return new IfcThermalExpansionCoefficientMeasure(obj.value); }
+	if (obj.label === "IFCTHERMALRESISTANCEMEASURE") { return new IfcThermalResistanceMeasure(obj.value); }
+	if (obj.label === "IFCTHERMALTRANSMITTANCEMEASURE") { return new IfcThermalTransmittanceMeasure(obj.value); }
+	if (obj.label === "IFCTHERMODYNAMICTEMPERATUREMEASURE") { return new IfcThermodynamicTemperatureMeasure(obj.value); }
+	if (obj.label === "IFCTIME") { return new IfcTime(obj.value); }
+	if (obj.label === "IFCTIMEMEASURE") { return new IfcTimeMeasure(obj.value); }
+	if (obj.label === "IFCTIMESTAMP") { return new IfcTimeStamp(obj.value); }
+	if (obj.label === "IFCTORQUEMEASURE") { return new IfcTorqueMeasure(obj.value); }
+	if (obj.label === "IFCURIREFERENCE") { return new IfcURIReference(obj.value); }
+	if (obj.label === "IFCVAPORPERMEABILITYMEASURE") { return new IfcVaporPermeabilityMeasure(obj.value); }
+	if (obj.label === "IFCVOLUMEMEASURE") { return new IfcVolumeMeasure(obj.value); }
+	if (obj.label === "IFCVOLUMETRICFLOWRATEMEASURE") { return new IfcVolumetricFlowRateMeasure(obj.value); }
+	if (obj.label === "IFCWARPINGCONSTANTMEASURE") { return new IfcWarpingConstantMeasure(obj.value); }
+	if (obj.label === "IFCWARPINGMOMENTMEASURE") { return new IfcWarpingMomentMeasure(obj.value); }
+	if (obj.label === "IFCACTIONREQUESTTYPEENUM") { return new IfcActionRequestTypeEnum(obj.value); }
+	if (obj.label === "IFCACTIONSOURCETYPEENUM") { return new IfcActionSourceTypeEnum(obj.value); }
+	if (obj.label === "IFCACTIONTYPEENUM") { return new IfcActionTypeEnum(obj.value); }
+	if (obj.label === "IFCACTUATORTYPEENUM") { return new IfcActuatorTypeEnum(obj.value); }
+	if (obj.label === "IFCADDRESSTYPEENUM") { return new IfcAddressTypeEnum(obj.value); }
+	if (obj.label === "IFCAIRTERMINALBOXTYPEENUM") { return new IfcAirTerminalBoxTypeEnum(obj.value); }
+	if (obj.label === "IFCAIRTERMINALTYPEENUM") { return new IfcAirTerminalTypeEnum(obj.value); }
+	if (obj.label === "IFCAIRTOAIRHEATRECOVERYTYPEENUM") { return new IfcAirToAirHeatRecoveryTypeEnum(obj.value); }
+	if (obj.label === "IFCALARMTYPEENUM") { return new IfcAlarmTypeEnum(obj.value); }
+	if (obj.label === "IFCALIGNMENTTYPEENUM") { return new IfcAlignmentTypeEnum(obj.value); }
+	if (obj.label === "IFCANALYSISMODELTYPEENUM") { return new IfcAnalysisModelTypeEnum(obj.value); }
+	if (obj.label === "IFCANALYSISTHEORYTYPEENUM") { return new IfcAnalysisTheoryTypeEnum(obj.value); }
+	if (obj.label === "IFCARITHMETICOPERATORENUM") { return new IfcArithmeticOperatorEnum(obj.value); }
+	if (obj.label === "IFCASSEMBLYPLACEENUM") { return new IfcAssemblyPlaceEnum(obj.value); }
+	if (obj.label === "IFCAUDIOVISUALAPPLIANCETYPEENUM") { return new IfcAudioVisualApplianceTypeEnum(obj.value); }
+	if (obj.label === "IFCBSPLINECURVEFORM") { return new IfcBSplineCurveForm(obj.value); }
+	if (obj.label === "IFCBSPLINESURFACEFORM") { return new IfcBSplineSurfaceForm(obj.value); }
+	if (obj.label === "IFCBEAMTYPEENUM") { return new IfcBeamTypeEnum(obj.value); }
+	if (obj.label === "IFCBEARINGTYPEDISPLACEMENTENUM") { return new IfcBearingTypeDisplacementEnum(obj.value); }
+	if (obj.label === "IFCBEARINGTYPEENUM") { return new IfcBearingTypeEnum(obj.value); }
+	if (obj.label === "IFCBENCHMARKENUM") { return new IfcBenchmarkEnum(obj.value); }
+	if (obj.label === "IFCBOILERTYPEENUM") { return new IfcBoilerTypeEnum(obj.value); }
+	if (obj.label === "IFCBOOLEANOPERATOR") { return new IfcBooleanOperator(obj.value); }
+	if (obj.label === "IFCBRIDGEPARTTYPEENUM") { return new IfcBridgePartTypeEnum(obj.value); }
+	if (obj.label === "IFCBRIDGETYPEENUM") { return new IfcBridgeTypeEnum(obj.value); }
+	if (obj.label === "IFCBUILDINGELEMENTPARTTYPEENUM") { return new IfcBuildingElementPartTypeEnum(obj.value); }
+	if (obj.label === "IFCBUILDINGELEMENTPROXYTYPEENUM") { return new IfcBuildingElementProxyTypeEnum(obj.value); }
+	if (obj.label === "IFCBUILDINGSYSTEMTYPEENUM") { return new IfcBuildingSystemTypeEnum(obj.value); }
+	if (obj.label === "IFCBURNERTYPEENUM") { return new IfcBurnerTypeEnum(obj.value); }
+	if (obj.label === "IFCCABLECARRIERFITTINGTYPEENUM") { return new IfcCableCarrierFittingTypeEnum(obj.value); }
+	if (obj.label === "IFCCABLECARRIERSEGMENTTYPEENUM") { return new IfcCableCarrierSegmentTypeEnum(obj.value); }
+	if (obj.label === "IFCCABLEFITTINGTYPEENUM") { return new IfcCableFittingTypeEnum(obj.value); }
+	if (obj.label === "IFCCABLESEGMENTTYPEENUM") { return new IfcCableSegmentTypeEnum(obj.value); }
+	if (obj.label === "IFCCAISSONFOUNDATIONTYPEENUM") { return new IfcCaissonFoundationTypeEnum(obj.value); }
+	if (obj.label === "IFCCHANGEACTIONENUM") { return new IfcChangeActionEnum(obj.value); }
+	if (obj.label === "IFCCHILLERTYPEENUM") { return new IfcChillerTypeEnum(obj.value); }
+	if (obj.label === "IFCCHIMNEYTYPEENUM") { return new IfcChimneyTypeEnum(obj.value); }
+	if (obj.label === "IFCCOILTYPEENUM") { return new IfcCoilTypeEnum(obj.value); }
+	if (obj.label === "IFCCOLUMNTYPEENUM") { return new IfcColumnTypeEnum(obj.value); }
+	if (obj.label === "IFCCOMMUNICATIONSAPPLIANCETYPEENUM") { return new IfcCommunicationsApplianceTypeEnum(obj.value); }
+	if (obj.label === "IFCCOMPLEXPROPERTYTEMPLATETYPEENUM") { return new IfcComplexPropertyTemplateTypeEnum(obj.value); }
+	if (obj.label === "IFCCOMPRESSORTYPEENUM") { return new IfcCompressorTypeEnum(obj.value); }
+	if (obj.label === "IFCCONDENSERTYPEENUM") { return new IfcCondenserTypeEnum(obj.value); }
+	if (obj.label === "IFCCONNECTIONTYPEENUM") { return new IfcConnectionTypeEnum(obj.value); }
+	if (obj.label === "IFCCONSTRAINTENUM") { return new IfcConstraintEnum(obj.value); }
+	if (obj.label === "IFCCONSTRUCTIONEQUIPMENTRESOURCETYPEENUM") { return new IfcConstructionEquipmentResourceTypeEnum(obj.value); }
+	if (obj.label === "IFCCONSTRUCTIONMATERIALRESOURCETYPEENUM") { return new IfcConstructionMaterialResourceTypeEnum(obj.value); }
+	if (obj.label === "IFCCONSTRUCTIONPRODUCTRESOURCETYPEENUM") { return new IfcConstructionProductResourceTypeEnum(obj.value); }
+	if (obj.label === "IFCCONTROLLERTYPEENUM") { return new IfcControllerTypeEnum(obj.value); }
+	if (obj.label === "IFCCOOLEDBEAMTYPEENUM") { return new IfcCooledBeamTypeEnum(obj.value); }
+	if (obj.label === "IFCCOOLINGTOWERTYPEENUM") { return new IfcCoolingTowerTypeEnum(obj.value); }
+	if (obj.label === "IFCCOSTITEMTYPEENUM") { return new IfcCostItemTypeEnum(obj.value); }
+	if (obj.label === "IFCCOSTSCHEDULETYPEENUM") { return new IfcCostScheduleTypeEnum(obj.value); }
+	if (obj.label === "IFCCOVERINGTYPEENUM") { return new IfcCoveringTypeEnum(obj.value); }
+	if (obj.label === "IFCCREWRESOURCETYPEENUM") { return new IfcCrewResourceTypeEnum(obj.value); }
+	if (obj.label === "IFCCURTAINWALLTYPEENUM") { return new IfcCurtainWallTypeEnum(obj.value); }
+	if (obj.label === "IFCCURVEINTERPOLATIONENUM") { return new IfcCurveInterpolationEnum(obj.value); }
+	if (obj.label === "IFCDAMPERTYPEENUM") { return new IfcDamperTypeEnum(obj.value); }
+	if (obj.label === "IFCDATAORIGINENUM") { return new IfcDataOriginEnum(obj.value); }
+	if (obj.label === "IFCDERIVEDUNITENUM") { return new IfcDerivedUnitEnum(obj.value); }
+	if (obj.label === "IFCDIRECTIONSENSEENUM") { return new IfcDirectionSenseEnum(obj.value); }
+	if (obj.label === "IFCDISCRETEACCESSORYTYPEENUM") { return new IfcDiscreteAccessoryTypeEnum(obj.value); }
+	if (obj.label === "IFCDISTRIBUTIONCHAMBERELEMENTTYPEENUM") { return new IfcDistributionChamberElementTypeEnum(obj.value); }
+	if (obj.label === "IFCDISTRIBUTIONPORTTYPEENUM") { return new IfcDistributionPortTypeEnum(obj.value); }
+	if (obj.label === "IFCDISTRIBUTIONSYSTEMENUM") { return new IfcDistributionSystemEnum(obj.value); }
+	if (obj.label === "IFCDOCUMENTCONFIDENTIALITYENUM") { return new IfcDocumentConfidentialityEnum(obj.value); }
+	if (obj.label === "IFCDOCUMENTSTATUSENUM") { return new IfcDocumentStatusEnum(obj.value); }
+	if (obj.label === "IFCDOORPANELOPERATIONENUM") { return new IfcDoorPanelOperationEnum(obj.value); }
+	if (obj.label === "IFCDOORPANELPOSITIONENUM") { return new IfcDoorPanelPositionEnum(obj.value); }
+	if (obj.label === "IFCDOORSTYLECONSTRUCTIONENUM") { return new IfcDoorStyleConstructionEnum(obj.value); }
+	if (obj.label === "IFCDOORSTYLEOPERATIONENUM") { return new IfcDoorStyleOperationEnum(obj.value); }
+	if (obj.label === "IFCDOORTYPEENUM") { return new IfcDoorTypeEnum(obj.value); }
+	if (obj.label === "IFCDOORTYPEOPERATIONENUM") { return new IfcDoorTypeOperationEnum(obj.value); }
+	if (obj.label === "IFCDUCTFITTINGTYPEENUM") { return new IfcDuctFittingTypeEnum(obj.value); }
+	if (obj.label === "IFCDUCTSEGMENTTYPEENUM") { return new IfcDuctSegmentTypeEnum(obj.value); }
+	if (obj.label === "IFCDUCTSILENCERTYPEENUM") { return new IfcDuctSilencerTypeEnum(obj.value); }
+	if (obj.label === "IFCELECTRICAPPLIANCETYPEENUM") { return new IfcElectricApplianceTypeEnum(obj.value); }
+	if (obj.label === "IFCELECTRICDISTRIBUTIONBOARDTYPEENUM") { return new IfcElectricDistributionBoardTypeEnum(obj.value); }
+	if (obj.label === "IFCELECTRICFLOWSTORAGEDEVICETYPEENUM") { return new IfcElectricFlowStorageDeviceTypeEnum(obj.value); }
+	if (obj.label === "IFCELECTRICGENERATORTYPEENUM") { return new IfcElectricGeneratorTypeEnum(obj.value); }
+	if (obj.label === "IFCELECTRICMOTORTYPEENUM") { return new IfcElectricMotorTypeEnum(obj.value); }
+	if (obj.label === "IFCELECTRICTIMECONTROLTYPEENUM") { return new IfcElectricTimeControlTypeEnum(obj.value); }
+	if (obj.label === "IFCELEMENTASSEMBLYTYPEENUM") { return new IfcElementAssemblyTypeEnum(obj.value); }
+	if (obj.label === "IFCELEMENTCOMPOSITIONENUM") { return new IfcElementCompositionEnum(obj.value); }
+	if (obj.label === "IFCENGINETYPEENUM") { return new IfcEngineTypeEnum(obj.value); }
+	if (obj.label === "IFCEVAPORATIVECOOLERTYPEENUM") { return new IfcEvaporativeCoolerTypeEnum(obj.value); }
+	if (obj.label === "IFCEVAPORATORTYPEENUM") { return new IfcEvaporatorTypeEnum(obj.value); }
+	if (obj.label === "IFCEVENTTRIGGERTYPEENUM") { return new IfcEventTriggerTypeEnum(obj.value); }
+	if (obj.label === "IFCEVENTTYPEENUM") { return new IfcEventTypeEnum(obj.value); }
+	if (obj.label === "IFCEXTERNALSPATIALELEMENTTYPEENUM") { return new IfcExternalSpatialElementTypeEnum(obj.value); }
+	if (obj.label === "IFCFANTYPEENUM") { return new IfcFanTypeEnum(obj.value); }
+	if (obj.label === "IFCFASTENERTYPEENUM") { return new IfcFastenerTypeEnum(obj.value); }
+	if (obj.label === "IFCFILTERTYPEENUM") { return new IfcFilterTypeEnum(obj.value); }
+	if (obj.label === "IFCFIRESUPPRESSIONTERMINALTYPEENUM") { return new IfcFireSuppressionTerminalTypeEnum(obj.value); }
+	if (obj.label === "IFCFLOWDIRECTIONENUM") { return new IfcFlowDirectionEnum(obj.value); }
+	if (obj.label === "IFCFLOWINSTRUMENTTYPEENUM") { return new IfcFlowInstrumentTypeEnum(obj.value); }
+	if (obj.label === "IFCFLOWMETERTYPEENUM") { return new IfcFlowMeterTypeEnum(obj.value); }
+	if (obj.label === "IFCFOOTINGTYPEENUM") { return new IfcFootingTypeEnum(obj.value); }
+	if (obj.label === "IFCFURNITURETYPEENUM") { return new IfcFurnitureTypeEnum(obj.value); }
+	if (obj.label === "IFCGEOGRAPHICELEMENTTYPEENUM") { return new IfcGeographicElementTypeEnum(obj.value); }
+	if (obj.label === "IFCGEOMETRICPROJECTIONENUM") { return new IfcGeometricProjectionEnum(obj.value); }
+	if (obj.label === "IFCGLOBALORLOCALENUM") { return new IfcGlobalOrLocalEnum(obj.value); }
+	if (obj.label === "IFCGRIDTYPEENUM") { return new IfcGridTypeEnum(obj.value); }
+	if (obj.label === "IFCHEATEXCHANGERTYPEENUM") { return new IfcHeatExchangerTypeEnum(obj.value); }
+	if (obj.label === "IFCHUMIDIFIERTYPEENUM") { return new IfcHumidifierTypeEnum(obj.value); }
+	if (obj.label === "IFCINTERCEPTORTYPEENUM") { return new IfcInterceptorTypeEnum(obj.value); }
+	if (obj.label === "IFCINTERNALOREXTERNALENUM") { return new IfcInternalOrExternalEnum(obj.value); }
+	if (obj.label === "IFCINVENTORYTYPEENUM") { return new IfcInventoryTypeEnum(obj.value); }
+	if (obj.label === "IFCJUNCTIONBOXTYPEENUM") { return new IfcJunctionBoxTypeEnum(obj.value); }
+	if (obj.label === "IFCKNOTTYPE") { return new IfcKnotType(obj.value); }
+	if (obj.label === "IFCLABORRESOURCETYPEENUM") { return new IfcLaborResourceTypeEnum(obj.value); }
+	if (obj.label === "IFCLAMPTYPEENUM") { return new IfcLampTypeEnum(obj.value); }
+	if (obj.label === "IFCLAYERSETDIRECTIONENUM") { return new IfcLayerSetDirectionEnum(obj.value); }
+	if (obj.label === "IFCLIGHTDISTRIBUTIONCURVEENUM") { return new IfcLightDistributionCurveEnum(obj.value); }
+	if (obj.label === "IFCLIGHTEMISSIONSOURCEENUM") { return new IfcLightEmissionSourceEnum(obj.value); }
+	if (obj.label === "IFCLIGHTFIXTURETYPEENUM") { return new IfcLightFixtureTypeEnum(obj.value); }
+	if (obj.label === "IFCLOADGROUPTYPEENUM") { return new IfcLoadGroupTypeEnum(obj.value); }
+	if (obj.label === "IFCLOGICALOPERATORENUM") { return new IfcLogicalOperatorEnum(obj.value); }
+	if (obj.label === "IFCMECHANICALFASTENERTYPEENUM") { return new IfcMechanicalFastenerTypeEnum(obj.value); }
+	if (obj.label === "IFCMEDICALDEVICETYPEENUM") { return new IfcMedicalDeviceTypeEnum(obj.value); }
+	if (obj.label === "IFCMEMBERTYPEENUM") { return new IfcMemberTypeEnum(obj.value); }
+	if (obj.label === "IFCMOTORCONNECTIONTYPEENUM") { return new IfcMotorConnectionTypeEnum(obj.value); }
+	if (obj.label === "IFCNULLSTYLE") { return new IfcNullStyle(obj.value); }
+	if (obj.label === "IFCOBJECTTYPEENUM") { return new IfcObjectTypeEnum(obj.value); }
+	if (obj.label === "IFCOBJECTIVEENUM") { return new IfcObjectiveEnum(obj.value); }
+	if (obj.label === "IFCOCCUPANTTYPEENUM") { return new IfcOccupantTypeEnum(obj.value); }
+	if (obj.label === "IFCOPENINGELEMENTTYPEENUM") { return new IfcOpeningElementTypeEnum(obj.value); }
+	if (obj.label === "IFCOUTLETTYPEENUM") { return new IfcOutletTypeEnum(obj.value); }
+	if (obj.label === "IFCPERFORMANCEHISTORYTYPEENUM") { return new IfcPerformanceHistoryTypeEnum(obj.value); }
+	if (obj.label === "IFCPERMEABLECOVERINGOPERATIONENUM") { return new IfcPermeableCoveringOperationEnum(obj.value); }
+	if (obj.label === "IFCPERMITTYPEENUM") { return new IfcPermitTypeEnum(obj.value); }
+	if (obj.label === "IFCPHYSICALORVIRTUALENUM") { return new IfcPhysicalOrVirtualEnum(obj.value); }
+	if (obj.label === "IFCPILECONSTRUCTIONENUM") { return new IfcPileConstructionEnum(obj.value); }
+	if (obj.label === "IFCPILETYPEENUM") { return new IfcPileTypeEnum(obj.value); }
+	if (obj.label === "IFCPIPEFITTINGTYPEENUM") { return new IfcPipeFittingTypeEnum(obj.value); }
+	if (obj.label === "IFCPIPESEGMENTTYPEENUM") { return new IfcPipeSegmentTypeEnum(obj.value); }
+	if (obj.label === "IFCPLATETYPEENUM") { return new IfcPlateTypeEnum(obj.value); }
+	if (obj.label === "IFCPREFERREDSURFACECURVEREPRESENTATION") { return new IfcPreferredSurfaceCurveRepresentation(obj.value); }
+	if (obj.label === "IFCPROCEDURETYPEENUM") { return new IfcProcedureTypeEnum(obj.value); }
+	if (obj.label === "IFCPROFILETYPEENUM") { return new IfcProfileTypeEnum(obj.value); }
+	if (obj.label === "IFCPROJECTORDERTYPEENUM") { return new IfcProjectOrderTypeEnum(obj.value); }
+	if (obj.label === "IFCPROJECTEDORTRUELENGTHENUM") { return new IfcProjectedOrTrueLengthEnum(obj.value); }
+	if (obj.label === "IFCPROJECTIONELEMENTTYPEENUM") { return new IfcProjectionElementTypeEnum(obj.value); }
+	if (obj.label === "IFCPROPERTYSETTEMPLATETYPEENUM") { return new IfcPropertySetTemplateTypeEnum(obj.value); }
+	if (obj.label === "IFCPROTECTIVEDEVICETRIPPINGUNITTYPEENUM") { return new IfcProtectiveDeviceTrippingUnitTypeEnum(obj.value); }
+	if (obj.label === "IFCPROTECTIVEDEVICETYPEENUM") { return new IfcProtectiveDeviceTypeEnum(obj.value); }
+	if (obj.label === "IFCPUMPTYPEENUM") { return new IfcPumpTypeEnum(obj.value); }
+	if (obj.label === "IFCRAILINGTYPEENUM") { return new IfcRailingTypeEnum(obj.value); }
+	if (obj.label === "IFCRAMPFLIGHTTYPEENUM") { return new IfcRampFlightTypeEnum(obj.value); }
+	if (obj.label === "IFCRAMPTYPEENUM") { return new IfcRampTypeEnum(obj.value); }
+	if (obj.label === "IFCRECURRENCETYPEENUM") { return new IfcRecurrenceTypeEnum(obj.value); }
+	if (obj.label === "IFCREFERENTTYPEENUM") { return new IfcReferentTypeEnum(obj.value); }
+	if (obj.label === "IFCREFLECTANCEMETHODENUM") { return new IfcReflectanceMethodEnum(obj.value); }
+	if (obj.label === "IFCREINFORCINGBARROLEENUM") { return new IfcReinforcingBarRoleEnum(obj.value); }
+	if (obj.label === "IFCREINFORCINGBARSURFACEENUM") { return new IfcReinforcingBarSurfaceEnum(obj.value); }
+	if (obj.label === "IFCREINFORCINGBARTYPEENUM") { return new IfcReinforcingBarTypeEnum(obj.value); }
+	if (obj.label === "IFCREINFORCINGMESHTYPEENUM") { return new IfcReinforcingMeshTypeEnum(obj.value); }
+	if (obj.label === "IFCROLEENUM") { return new IfcRoleEnum(obj.value); }
+	if (obj.label === "IFCROOFTYPEENUM") { return new IfcRoofTypeEnum(obj.value); }
+	if (obj.label === "IFCSIPREFIX") { return new IfcSIPrefix(obj.value); }
+	if (obj.label === "IFCSIUNITNAME") { return new IfcSIUnitName(obj.value); }
+	if (obj.label === "IFCSANITARYTERMINALTYPEENUM") { return new IfcSanitaryTerminalTypeEnum(obj.value); }
+	if (obj.label === "IFCSECTIONTYPEENUM") { return new IfcSectionTypeEnum(obj.value); }
+	if (obj.label === "IFCSENSORTYPEENUM") { return new IfcSensorTypeEnum(obj.value); }
+	if (obj.label === "IFCSEQUENCEENUM") { return new IfcSequenceEnum(obj.value); }
+	if (obj.label === "IFCSHADINGDEVICETYPEENUM") { return new IfcShadingDeviceTypeEnum(obj.value); }
+	if (obj.label === "IFCSIMPLEPROPERTYTEMPLATETYPEENUM") { return new IfcSimplePropertyTemplateTypeEnum(obj.value); }
+	if (obj.label === "IFCSLABTYPEENUM") { return new IfcSlabTypeEnum(obj.value); }
+	if (obj.label === "IFCSOLARDEVICETYPEENUM") { return new IfcSolarDeviceTypeEnum(obj.value); }
+	if (obj.label === "IFCSPACEHEATERTYPEENUM") { return new IfcSpaceHeaterTypeEnum(obj.value); }
+	if (obj.label === "IFCSPACETYPEENUM") { return new IfcSpaceTypeEnum(obj.value); }
+	if (obj.label === "IFCSPATIALZONETYPEENUM") { return new IfcSpatialZoneTypeEnum(obj.value); }
+	if (obj.label === "IFCSTACKTERMINALTYPEENUM") { return new IfcStackTerminalTypeEnum(obj.value); }
+	if (obj.label === "IFCSTAIRFLIGHTTYPEENUM") { return new IfcStairFlightTypeEnum(obj.value); }
+	if (obj.label === "IFCSTAIRTYPEENUM") { return new IfcStairTypeEnum(obj.value); }
+	if (obj.label === "IFCSTATEENUM") { return new IfcStateEnum(obj.value); }
+	if (obj.label === "IFCSTRUCTURALCURVEACTIVITYTYPEENUM") { return new IfcStructuralCurveActivityTypeEnum(obj.value); }
+	if (obj.label === "IFCSTRUCTURALCURVEMEMBERTYPEENUM") { return new IfcStructuralCurveMemberTypeEnum(obj.value); }
+	if (obj.label === "IFCSTRUCTURALSURFACEACTIVITYTYPEENUM") { return new IfcStructuralSurfaceActivityTypeEnum(obj.value); }
+	if (obj.label === "IFCSTRUCTURALSURFACEMEMBERTYPEENUM") { return new IfcStructuralSurfaceMemberTypeEnum(obj.value); }
+	if (obj.label === "IFCSUBCONTRACTRESOURCETYPEENUM") { return new IfcSubContractResourceTypeEnum(obj.value); }
+	if (obj.label === "IFCSURFACEFEATURETYPEENUM") { return new IfcSurfaceFeatureTypeEnum(obj.value); }
+	if (obj.label === "IFCSURFACESIDE") { return new IfcSurfaceSide(obj.value); }
+	if (obj.label === "IFCSWITCHINGDEVICETYPEENUM") { return new IfcSwitchingDeviceTypeEnum(obj.value); }
+	if (obj.label === "IFCSYSTEMFURNITUREELEMENTTYPEENUM") { return new IfcSystemFurnitureElementTypeEnum(obj.value); }
+	if (obj.label === "IFCTANKTYPEENUM") { return new IfcTankTypeEnum(obj.value); }
+	if (obj.label === "IFCTASKDURATIONENUM") { return new IfcTaskDurationEnum(obj.value); }
+	if (obj.label === "IFCTASKTYPEENUM") { return new IfcTaskTypeEnum(obj.value); }
+	if (obj.label === "IFCTENDONANCHORTYPEENUM") { return new IfcTendonAnchorTypeEnum(obj.value); }
+	if (obj.label === "IFCTENDONCONDUITTYPEENUM") { return new IfcTendonConduitTypeEnum(obj.value); }
+	if (obj.label === "IFCTENDONTYPEENUM") { return new IfcTendonTypeEnum(obj.value); }
+	if (obj.label === "IFCTEXTPATH") { return new IfcTextPath(obj.value); }
+	if (obj.label === "IFCTIMESERIESDATATYPEENUM") { return new IfcTimeSeriesDataTypeEnum(obj.value); }
+	if (obj.label === "IFCTRANSFORMERTYPEENUM") { return new IfcTransformerTypeEnum(obj.value); }
+	if (obj.label === "IFCTRANSITIONCODE") { return new IfcTransitionCode(obj.value); }
+	if (obj.label === "IFCTRANSITIONCURVETYPE") { return new IfcTransitionCurveType(obj.value); }
+	if (obj.label === "IFCTRANSPORTELEMENTTYPEENUM") { return new IfcTransportElementTypeEnum(obj.value); }
+	if (obj.label === "IFCTRIMMINGPREFERENCE") { return new IfcTrimmingPreference(obj.value); }
+	if (obj.label === "IFCTUBEBUNDLETYPEENUM") { return new IfcTubeBundleTypeEnum(obj.value); }
+	if (obj.label === "IFCUNITENUM") { return new IfcUnitEnum(obj.value); }
+	if (obj.label === "IFCUNITARYCONTROLELEMENTTYPEENUM") { return new IfcUnitaryControlElementTypeEnum(obj.value); }
+	if (obj.label === "IFCUNITARYEQUIPMENTTYPEENUM") { return new IfcUnitaryEquipmentTypeEnum(obj.value); }
+	if (obj.label === "IFCVALVETYPEENUM") { return new IfcValveTypeEnum(obj.value); }
+	if (obj.label === "IFCVIBRATIONDAMPERTYPEENUM") { return new IfcVibrationDamperTypeEnum(obj.value); }
+	if (obj.label === "IFCVIBRATIONISOLATORTYPEENUM") { return new IfcVibrationIsolatorTypeEnum(obj.value); }
+	if (obj.label === "IFCVOIDINGFEATURETYPEENUM") { return new IfcVoidingFeatureTypeEnum(obj.value); }
+	if (obj.label === "IFCWALLTYPEENUM") { return new IfcWallTypeEnum(obj.value); }
+	if (obj.label === "IFCWASTETERMINALTYPEENUM") { return new IfcWasteTerminalTypeEnum(obj.value); }
+	if (obj.label === "IFCWINDOWPANELOPERATIONENUM") { return new IfcWindowPanelOperationEnum(obj.value); }
+	if (obj.label === "IFCWINDOWPANELPOSITIONENUM") { return new IfcWindowPanelPositionEnum(obj.value); }
+	if (obj.label === "IFCWINDOWSTYLECONSTRUCTIONENUM") { return new IfcWindowStyleConstructionEnum(obj.value); }
+	if (obj.label === "IFCWINDOWSTYLEOPERATIONENUM") { return new IfcWindowStyleOperationEnum(obj.value); }
+	if (obj.label === "IFCWINDOWTYPEENUM") { return new IfcWindowTypeEnum(obj.value); }
+	if (obj.label === "IFCWINDOWTYPEPARTITIONINGENUM") { return new IfcWindowTypePartitioningEnum(obj.value); }
+	if (obj.label === "IFCWORKCALENDARTYPEENUM") { return new IfcWorkCalendarTypeEnum(obj.value); }
+	if (obj.label === "IFCWORKPLANTYPEENUM") { return new IfcWorkPlanTypeEnum(obj.value); }
+	if (obj.label === "IFCWORKSCHEDULETYPEENUM") { return new IfcWorkScheduleTypeEnum(obj.value); }
 	console.log("Unknown type: " + name);
 };
 export class IfcActionRequest {
@@ -6350,7 +6352,7 @@ export class IfcActionRequest {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -6459,7 +6461,7 @@ export class IfcActor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -6475,7 +6477,7 @@ export class IfcActor {
 		} else { ObjectType = null; ptr++; }
 		let TheActor;
 		if (tape[ptr]) {
-		TheActor = tape[ptr++];
+		TheActor = ParseType(tape[ptr++]);
 		} else { TheActor = null; ptr++; }
 		return new IfcActor(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, TheActor);
 	}
@@ -6591,7 +6593,7 @@ export class IfcActuator {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -6607,11 +6609,11 @@ export class IfcActuator {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -6708,7 +6710,7 @@ export class IfcActuatorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -6727,7 +6729,7 @@ export class IfcActuatorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -6736,7 +6738,7 @@ export class IfcActuatorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -6873,7 +6875,7 @@ export class IfcAdvancedBrep {
 		let ptr = 0;
 		let Outer;
 		if (tape[ptr]) {
-		Outer = tape[ptr++];
+		Outer = new Handle<IfcClosedShell>(tape[ptr++].expressID);
 		} else { Outer = null; ptr++; }
 		return new IfcAdvancedBrep(expressID, type, Outer);
 	}
@@ -6902,14 +6904,14 @@ export class IfcAdvancedBrepWithVoids {
 		let ptr = 0;
 		let Outer;
 		if (tape[ptr]) {
-		Outer = tape[ptr++];
+		Outer = new Handle<IfcClosedShell>(tape[ptr++].expressID);
 		} else { Outer = null; ptr++; }
 		let Voids;
 		if (tape[ptr]) {
 		Voids = [];
 		let Voids_index = 0;
 		while (Voids_index < tape[ptr].length) {
-			Voids.push(tape[ptr][Voids_index++]);
+			Voids.push(new Handle<IfcClosedShell>(tape[ptr][Voids_index++].expressID));
 		}
 	ptr++;
 		} else { Voids = null; ptr++; }
@@ -6948,13 +6950,13 @@ export class IfcAdvancedFace {
 		Bounds = [];
 		let Bounds_index = 0;
 		while (Bounds_index < tape[ptr].length) {
-			Bounds.push(tape[ptr][Bounds_index++]);
+			Bounds.push(new Handle<IfcFaceBound>(tape[ptr][Bounds_index++].expressID));
 		}
 	ptr++;
 		} else { Bounds = null; ptr++; }
 		let FaceSurface;
 		if (tape[ptr]) {
-		FaceSurface = tape[ptr++];
+		FaceSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { FaceSurface = null; ptr++; }
 		let SameSense;
 		if (tape[ptr]) {
@@ -7008,7 +7010,7 @@ export class IfcAirTerminal {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -7024,11 +7026,11 @@ export class IfcAirTerminal {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -7123,7 +7125,7 @@ export class IfcAirTerminalBox {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -7139,11 +7141,11 @@ export class IfcAirTerminalBox {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -7240,7 +7242,7 @@ export class IfcAirTerminalBoxType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -7259,7 +7261,7 @@ export class IfcAirTerminalBoxType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -7268,7 +7270,7 @@ export class IfcAirTerminalBoxType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -7375,7 +7377,7 @@ export class IfcAirTerminalType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -7394,7 +7396,7 @@ export class IfcAirTerminalType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -7403,7 +7405,7 @@ export class IfcAirTerminalType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -7508,7 +7510,7 @@ export class IfcAirToAirHeatRecovery {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -7524,11 +7526,11 @@ export class IfcAirToAirHeatRecovery {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -7625,7 +7627,7 @@ export class IfcAirToAirHeatRecoveryType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -7644,7 +7646,7 @@ export class IfcAirToAirHeatRecoveryType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -7653,7 +7655,7 @@ export class IfcAirToAirHeatRecoveryType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -7758,7 +7760,7 @@ export class IfcAlarm {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -7774,11 +7776,11 @@ export class IfcAlarm {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -7875,7 +7877,7 @@ export class IfcAlarmType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -7894,7 +7896,7 @@ export class IfcAlarmType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -7903,7 +7905,7 @@ export class IfcAlarmType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -8008,7 +8010,7 @@ export class IfcAlignment {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -8024,15 +8026,15 @@ export class IfcAlignment {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -8109,7 +8111,7 @@ export class IfcAlignment2DHorizontal {
 		Segments = [];
 		let Segments_index = 0;
 		while (Segments_index < tape[ptr].length) {
-			Segments.push(tape[ptr][Segments_index++]);
+			Segments.push(new Handle<IfcAlignment2DHorizontalSegment>(tape[ptr][Segments_index++].expressID));
 		}
 	ptr++;
 		} else { Segments = null; ptr++; }
@@ -8162,7 +8164,7 @@ export class IfcAlignment2DHorizontalSegment {
 		} else { EndTag = null; ptr++; }
 		let CurveGeometry;
 		if (tape[ptr]) {
-		CurveGeometry = tape[ptr++];
+		CurveGeometry = new Handle<IfcCurveSegment2D>(tape[ptr++].expressID);
 		} else { CurveGeometry = null; ptr++; }
 		return new IfcAlignment2DHorizontalSegment(expressID, type, TangentialContinuity, StartTag, EndTag, CurveGeometry);
 	}
@@ -8519,7 +8521,7 @@ export class IfcAlignment2DVertical {
 		Segments = [];
 		let Segments_index = 0;
 		while (Segments_index < tape[ptr].length) {
-			Segments.push(tape[ptr][Segments_index++]);
+			Segments.push(new Handle<IfcAlignment2DVerticalSegment>(tape[ptr][Segments_index++].expressID));
 		}
 	ptr++;
 		} else { Segments = null; ptr++; }
@@ -8633,11 +8635,11 @@ export class IfcAlignmentCurve {
 		let ptr = 0;
 		let Horizontal;
 		if (tape[ptr]) {
-		Horizontal = tape[ptr++];
+		Horizontal = new Handle<IfcAlignment2DHorizontal>(tape[ptr++].expressID);
 		} else { Horizontal = null; ptr++; }
 		let Vertical;
 		if (tape[ptr]) {
-		Vertical = tape[ptr++];
+		Vertical = new Handle<IfcAlignment2DVertical>(tape[ptr++].expressID);
 		} else { Vertical = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -8694,7 +8696,7 @@ export class IfcAnnotation {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -8710,11 +8712,11 @@ export class IfcAnnotation {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		return new IfcAnnotation(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
@@ -8773,14 +8775,14 @@ export class IfcAnnotationFillArea {
 		let ptr = 0;
 		let OuterBoundary;
 		if (tape[ptr]) {
-		OuterBoundary = tape[ptr++];
+		OuterBoundary = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { OuterBoundary = null; ptr++; }
 		let InnerBoundaries;
 		if (tape[ptr]) {
 		InnerBoundaries = [];
 		let InnerBoundaries_index = 0;
 		while (InnerBoundaries_index < tape[ptr].length) {
-			InnerBoundaries.push(tape[ptr][InnerBoundaries_index++]);
+			InnerBoundaries.push(new Handle<IfcCurve>(tape[ptr][InnerBoundaries_index++].expressID));
 		}
 	ptr++;
 		} else { InnerBoundaries = null; ptr++; }
@@ -8821,7 +8823,7 @@ export class IfcApplication {
 		let ptr = 0;
 		let ApplicationDeveloper;
 		if (tape[ptr]) {
-		ApplicationDeveloper = tape[ptr++];
+		ApplicationDeveloper = new Handle<IfcOrganization>(tape[ptr++].expressID);
 		} else { ApplicationDeveloper = null; ptr++; }
 		let Version;
 		if (tape[ptr]) {
@@ -8892,11 +8894,11 @@ export class IfcAppliedValue {
 		} else { Description = null; ptr++; }
 		let AppliedValue;
 		if (tape[ptr]) {
-		AppliedValue = tape[ptr++];
+		AppliedValue = ParseType(tape[ptr++]);
 		} else { AppliedValue = null; ptr++; }
 		let UnitBasis;
 		if (tape[ptr]) {
-		UnitBasis = tape[ptr++];
+		UnitBasis = new Handle<IfcMeasureWithUnit>(tape[ptr++].expressID);
 		} else { UnitBasis = null; ptr++; }
 		let ApplicableDate;
 		if (tape[ptr]) {
@@ -8923,7 +8925,7 @@ export class IfcAppliedValue {
 		Components = [];
 		let Components_index = 0;
 		while (Components_index < tape[ptr].length) {
-			Components.push(tape[ptr][Components_index++]);
+			Components.push(new Handle<IfcAppliedValue>(tape[ptr][Components_index++].expressID));
 		}
 	ptr++;
 		} else { Components = null; ptr++; }
@@ -9043,11 +9045,11 @@ export class IfcApproval {
 		} else { Qualifier = null; ptr++; }
 		let RequestingApproval;
 		if (tape[ptr]) {
-		RequestingApproval = tape[ptr++];
+		RequestingApproval = ParseType(tape[ptr++]);
 		} else { RequestingApproval = null; ptr++; }
 		let GivingApproval;
 		if (tape[ptr]) {
-		GivingApproval = tape[ptr++];
+		GivingApproval = ParseType(tape[ptr++]);
 		} else { GivingApproval = null; ptr++; }
 		return new IfcApproval(expressID, type, Identifier, Name, Description, TimeOfApproval, Status, Level, Qualifier, RequestingApproval, GivingApproval);
 	}
@@ -9127,14 +9129,14 @@ export class IfcApprovalRelationship {
 		} else { Description = null; ptr++; }
 		let RelatingApproval;
 		if (tape[ptr]) {
-		RelatingApproval = tape[ptr++];
+		RelatingApproval = new Handle<IfcApproval>(tape[ptr++].expressID);
 		} else { RelatingApproval = null; ptr++; }
 		let RelatedApprovals;
 		if (tape[ptr]) {
 		RelatedApprovals = [];
 		let RelatedApprovals_index = 0;
 		while (RelatedApprovals_index < tape[ptr].length) {
-			RelatedApprovals.push(tape[ptr][RelatedApprovals_index++]);
+			RelatedApprovals.push(new Handle<IfcApproval>(tape[ptr][RelatedApprovals_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedApprovals = null; ptr++; }
@@ -9188,7 +9190,7 @@ export class IfcArbitraryClosedProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let OuterCurve;
 		if (tape[ptr]) {
-		OuterCurve = tape[ptr++];
+		OuterCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { OuterCurve = null; ptr++; }
 		return new IfcArbitraryClosedProfileDef(expressID, type, ProfileType, ProfileName, OuterCurve);
 	}
@@ -9234,7 +9236,7 @@ export class IfcArbitraryOpenProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Curve;
 		if (tape[ptr]) {
-		Curve = tape[ptr++];
+		Curve = new Handle<IfcBoundedCurve>(tape[ptr++].expressID);
 		} else { Curve = null; ptr++; }
 		return new IfcArbitraryOpenProfileDef(expressID, type, ProfileType, ProfileName, Curve);
 	}
@@ -9282,14 +9284,14 @@ export class IfcArbitraryProfileDefWithVoids {
 		} else { ProfileName = null; ptr++; }
 		let OuterCurve;
 		if (tape[ptr]) {
-		OuterCurve = tape[ptr++];
+		OuterCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { OuterCurve = null; ptr++; }
 		let InnerCurves;
 		if (tape[ptr]) {
 		InnerCurves = [];
 		let InnerCurves_index = 0;
 		while (InnerCurves_index < tape[ptr].length) {
-			InnerCurves.push(tape[ptr][InnerCurves_index++]);
+			InnerCurves.push(new Handle<IfcCurve>(tape[ptr][InnerCurves_index++].expressID));
 		}
 	ptr++;
 		} else { InnerCurves = null; ptr++; }
@@ -9358,7 +9360,7 @@ export class IfcAsset {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -9378,27 +9380,27 @@ export class IfcAsset {
 		} else { Identification = null; ptr++; }
 		let OriginalValue;
 		if (tape[ptr]) {
-		OriginalValue = tape[ptr++];
+		OriginalValue = new Handle<IfcCostValue>(tape[ptr++].expressID);
 		} else { OriginalValue = null; ptr++; }
 		let CurrentValue;
 		if (tape[ptr]) {
-		CurrentValue = tape[ptr++];
+		CurrentValue = new Handle<IfcCostValue>(tape[ptr++].expressID);
 		} else { CurrentValue = null; ptr++; }
 		let TotalReplacementCost;
 		if (tape[ptr]) {
-		TotalReplacementCost = tape[ptr++];
+		TotalReplacementCost = new Handle<IfcCostValue>(tape[ptr++].expressID);
 		} else { TotalReplacementCost = null; ptr++; }
 		let Owner;
 		if (tape[ptr]) {
-		Owner = tape[ptr++];
+		Owner = ParseType(tape[ptr++]);
 		} else { Owner = null; ptr++; }
 		let User;
 		if (tape[ptr]) {
-		User = tape[ptr++];
+		User = ParseType(tape[ptr++]);
 		} else { User = null; ptr++; }
 		let ResponsiblePerson;
 		if (tape[ptr]) {
-		ResponsiblePerson = tape[ptr++];
+		ResponsiblePerson = new Handle<IfcPerson>(tape[ptr++].expressID);
 		} else { ResponsiblePerson = null; ptr++; }
 		let IncorporationDate;
 		if (tape[ptr]) {
@@ -9406,7 +9408,7 @@ export class IfcAsset {
 		} else { IncorporationDate = null; ptr++; }
 		let DepreciatedValue;
 		if (tape[ptr]) {
-		DepreciatedValue = tape[ptr++];
+		DepreciatedValue = new Handle<IfcCostValue>(tape[ptr++].expressID);
 		} else { DepreciatedValue = null; ptr++; }
 		return new IfcAsset(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, OriginalValue, CurrentValue, TotalReplacementCost, Owner, User, ResponsiblePerson, IncorporationDate, DepreciatedValue);
 	}
@@ -9530,7 +9532,7 @@ export class IfcAsymmetricIShapeProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let BottomFlangeWidth;
 		if (tape[ptr]) {
@@ -9660,7 +9662,7 @@ export class IfcAudioVisualAppliance {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -9676,11 +9678,11 @@ export class IfcAudioVisualAppliance {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -9777,7 +9779,7 @@ export class IfcAudioVisualApplianceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -9796,7 +9798,7 @@ export class IfcAudioVisualApplianceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -9805,7 +9807,7 @@ export class IfcAudioVisualApplianceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -9892,11 +9894,11 @@ export class IfcAxis1Placement {
 		let ptr = 0;
 		let Location;
 		if (tape[ptr]) {
-		Location = tape[ptr++];
+		Location = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { Location = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		return new IfcAxis1Placement(expressID, type, Location, Axis);
 	}
@@ -9930,11 +9932,11 @@ export class IfcAxis2Placement2D {
 		let ptr = 0;
 		let Location;
 		if (tape[ptr]) {
-		Location = tape[ptr++];
+		Location = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { Location = null; ptr++; }
 		let RefDirection;
 		if (tape[ptr]) {
-		RefDirection = tape[ptr++];
+		RefDirection = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { RefDirection = null; ptr++; }
 		return new IfcAxis2Placement2D(expressID, type, Location, RefDirection);
 	}
@@ -9970,15 +9972,15 @@ export class IfcAxis2Placement3D {
 		let ptr = 0;
 		let Location;
 		if (tape[ptr]) {
-		Location = tape[ptr++];
+		Location = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { Location = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		let RefDirection;
 		if (tape[ptr]) {
-		RefDirection = tape[ptr++];
+		RefDirection = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { RefDirection = null; ptr++; }
 		return new IfcAxis2Placement3D(expressID, type, Location, Axis, RefDirection);
 	}
@@ -10030,7 +10032,7 @@ export class IfcBSplineCurve {
 		ControlPointsList = [];
 		let ControlPointsList_index = 0;
 		while (ControlPointsList_index < tape[ptr].length) {
-			ControlPointsList.push(tape[ptr][ControlPointsList_index++]);
+			ControlPointsList.push(new Handle<IfcCartesianPoint>(tape[ptr][ControlPointsList_index++].expressID));
 		}
 	ptr++;
 		} else { ControlPointsList = null; ptr++; }
@@ -10097,7 +10099,7 @@ export class IfcBSplineCurveWithKnots {
 		ControlPointsList = [];
 		let ControlPointsList_index = 0;
 		while (ControlPointsList_index < tape[ptr].length) {
-			ControlPointsList.push(tape[ptr][ControlPointsList_index++]);
+			ControlPointsList.push(new Handle<IfcCartesianPoint>(tape[ptr][ControlPointsList_index++].expressID));
 		}
 	ptr++;
 		} else { ControlPointsList = null; ptr++; }
@@ -10194,7 +10196,7 @@ export class IfcBSplineSurface {
 		ControlPointsList = [];
 		let ControlPointsList_index = 0;
 		while (ControlPointsList_index < tape[ptr].length) {
-			ControlPointsList.push(tape[ptr][ControlPointsList_index++]);
+			ControlPointsList.push(new Handle<IfcCartesianPoint>(tape[ptr][ControlPointsList_index++].expressID));
 		}
 	ptr++;
 		} else { ControlPointsList = null; ptr++; }
@@ -10279,7 +10281,7 @@ export class IfcBSplineSurfaceWithKnots {
 		ControlPointsList = [];
 		let ControlPointsList_index = 0;
 		while (ControlPointsList_index < tape[ptr].length) {
-			ControlPointsList.push(tape[ptr][ControlPointsList_index++]);
+			ControlPointsList.push(new Handle<IfcCartesianPoint>(tape[ptr][ControlPointsList_index++].expressID));
 		}
 	ptr++;
 		} else { ControlPointsList = null; ptr++; }
@@ -10401,7 +10403,7 @@ export class IfcBeam {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -10417,11 +10419,11 @@ export class IfcBeam {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -10516,7 +10518,7 @@ export class IfcBeamStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -10532,11 +10534,11 @@ export class IfcBeamStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -10633,7 +10635,7 @@ export class IfcBeamType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -10652,7 +10654,7 @@ export class IfcBeamType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -10661,7 +10663,7 @@ export class IfcBeamType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -10766,7 +10768,7 @@ export class IfcBearing {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -10782,11 +10784,11 @@ export class IfcBearing {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -10883,7 +10885,7 @@ export class IfcBearingType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -10902,7 +10904,7 @@ export class IfcBearingType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -10911,7 +10913,7 @@ export class IfcBearingType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -11020,7 +11022,7 @@ export class IfcBlobTexture {
 		} else { Mode = null; ptr++; }
 		let TextureTransform;
 		if (tape[ptr]) {
-		TextureTransform = tape[ptr++];
+		TextureTransform = new Handle<IfcCartesianTransformationOperator2D>(tape[ptr++].expressID);
 		} else { TextureTransform = null; ptr++; }
 		let Parameter;
 		if (tape[ptr]) {
@@ -11087,7 +11089,7 @@ export class IfcBlock {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let XLength;
 		if (tape[ptr]) {
@@ -11146,7 +11148,7 @@ export class IfcBoiler {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -11162,11 +11164,11 @@ export class IfcBoiler {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -11263,7 +11265,7 @@ export class IfcBoilerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -11282,7 +11284,7 @@ export class IfcBoilerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -11291,7 +11293,7 @@ export class IfcBoilerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -11384,11 +11386,11 @@ export class IfcBooleanClippingResult {
 		} else { Operator = null; ptr++; }
 		let FirstOperand;
 		if (tape[ptr]) {
-		FirstOperand = tape[ptr++];
+		FirstOperand = ParseType(tape[ptr++]);
 		} else { FirstOperand = null; ptr++; }
 		let SecondOperand;
 		if (tape[ptr]) {
-		SecondOperand = tape[ptr++];
+		SecondOperand = ParseType(tape[ptr++]);
 		} else { SecondOperand = null; ptr++; }
 		return new IfcBooleanClippingResult(expressID, type, Operator, FirstOperand, SecondOperand);
 	}
@@ -11423,11 +11425,11 @@ export class IfcBooleanResult {
 		} else { Operator = null; ptr++; }
 		let FirstOperand;
 		if (tape[ptr]) {
-		FirstOperand = tape[ptr++];
+		FirstOperand = ParseType(tape[ptr++]);
 		} else { FirstOperand = null; ptr++; }
 		let SecondOperand;
 		if (tape[ptr]) {
-		SecondOperand = tape[ptr++];
+		SecondOperand = ParseType(tape[ptr++]);
 		} else { SecondOperand = null; ptr++; }
 		return new IfcBooleanResult(expressID, type, Operator, FirstOperand, SecondOperand);
 	}
@@ -11489,7 +11491,7 @@ export class IfcBoundaryCurve {
 		Segments = [];
 		let Segments_index = 0;
 		while (Segments_index < tape[ptr].length) {
-			Segments.push(tape[ptr][Segments_index++]);
+			Segments.push(new Handle<IfcCompositeCurveSegment>(tape[ptr][Segments_index++].expressID));
 		}
 	ptr++;
 		} else { Segments = null; ptr++; }
@@ -11539,27 +11541,27 @@ export class IfcBoundaryEdgeCondition {
 		} else { Name = null; ptr++; }
 		let TranslationalStiffnessByLengthX;
 		if (tape[ptr]) {
-		TranslationalStiffnessByLengthX = tape[ptr++];
+		TranslationalStiffnessByLengthX = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessByLengthX = null; ptr++; }
 		let TranslationalStiffnessByLengthY;
 		if (tape[ptr]) {
-		TranslationalStiffnessByLengthY = tape[ptr++];
+		TranslationalStiffnessByLengthY = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessByLengthY = null; ptr++; }
 		let TranslationalStiffnessByLengthZ;
 		if (tape[ptr]) {
-		TranslationalStiffnessByLengthZ = tape[ptr++];
+		TranslationalStiffnessByLengthZ = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessByLengthZ = null; ptr++; }
 		let RotationalStiffnessByLengthX;
 		if (tape[ptr]) {
-		RotationalStiffnessByLengthX = tape[ptr++];
+		RotationalStiffnessByLengthX = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessByLengthX = null; ptr++; }
 		let RotationalStiffnessByLengthY;
 		if (tape[ptr]) {
-		RotationalStiffnessByLengthY = tape[ptr++];
+		RotationalStiffnessByLengthY = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessByLengthY = null; ptr++; }
 		let RotationalStiffnessByLengthZ;
 		if (tape[ptr]) {
-		RotationalStiffnessByLengthZ = tape[ptr++];
+		RotationalStiffnessByLengthZ = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessByLengthZ = null; ptr++; }
 		return new IfcBoundaryEdgeCondition(expressID, type, Name, TranslationalStiffnessByLengthX, TranslationalStiffnessByLengthY, TranslationalStiffnessByLengthZ, RotationalStiffnessByLengthX, RotationalStiffnessByLengthY, RotationalStiffnessByLengthZ);
 	}
@@ -11617,15 +11619,15 @@ export class IfcBoundaryFaceCondition {
 		} else { Name = null; ptr++; }
 		let TranslationalStiffnessByAreaX;
 		if (tape[ptr]) {
-		TranslationalStiffnessByAreaX = tape[ptr++];
+		TranslationalStiffnessByAreaX = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessByAreaX = null; ptr++; }
 		let TranslationalStiffnessByAreaY;
 		if (tape[ptr]) {
-		TranslationalStiffnessByAreaY = tape[ptr++];
+		TranslationalStiffnessByAreaY = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessByAreaY = null; ptr++; }
 		let TranslationalStiffnessByAreaZ;
 		if (tape[ptr]) {
-		TranslationalStiffnessByAreaZ = tape[ptr++];
+		TranslationalStiffnessByAreaZ = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessByAreaZ = null; ptr++; }
 		return new IfcBoundaryFaceCondition(expressID, type, Name, TranslationalStiffnessByAreaX, TranslationalStiffnessByAreaY, TranslationalStiffnessByAreaZ);
 	}
@@ -11680,27 +11682,27 @@ export class IfcBoundaryNodeCondition {
 		} else { Name = null; ptr++; }
 		let TranslationalStiffnessX;
 		if (tape[ptr]) {
-		TranslationalStiffnessX = tape[ptr++];
+		TranslationalStiffnessX = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessX = null; ptr++; }
 		let TranslationalStiffnessY;
 		if (tape[ptr]) {
-		TranslationalStiffnessY = tape[ptr++];
+		TranslationalStiffnessY = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessY = null; ptr++; }
 		let TranslationalStiffnessZ;
 		if (tape[ptr]) {
-		TranslationalStiffnessZ = tape[ptr++];
+		TranslationalStiffnessZ = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessZ = null; ptr++; }
 		let RotationalStiffnessX;
 		if (tape[ptr]) {
-		RotationalStiffnessX = tape[ptr++];
+		RotationalStiffnessX = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessX = null; ptr++; }
 		let RotationalStiffnessY;
 		if (tape[ptr]) {
-		RotationalStiffnessY = tape[ptr++];
+		RotationalStiffnessY = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessY = null; ptr++; }
 		let RotationalStiffnessZ;
 		if (tape[ptr]) {
-		RotationalStiffnessZ = tape[ptr++];
+		RotationalStiffnessZ = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessZ = null; ptr++; }
 		return new IfcBoundaryNodeCondition(expressID, type, Name, TranslationalStiffnessX, TranslationalStiffnessY, TranslationalStiffnessZ, RotationalStiffnessX, RotationalStiffnessY, RotationalStiffnessZ);
 	}
@@ -11766,31 +11768,31 @@ export class IfcBoundaryNodeConditionWarping {
 		} else { Name = null; ptr++; }
 		let TranslationalStiffnessX;
 		if (tape[ptr]) {
-		TranslationalStiffnessX = tape[ptr++];
+		TranslationalStiffnessX = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessX = null; ptr++; }
 		let TranslationalStiffnessY;
 		if (tape[ptr]) {
-		TranslationalStiffnessY = tape[ptr++];
+		TranslationalStiffnessY = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessY = null; ptr++; }
 		let TranslationalStiffnessZ;
 		if (tape[ptr]) {
-		TranslationalStiffnessZ = tape[ptr++];
+		TranslationalStiffnessZ = ParseType(tape[ptr++]);
 		} else { TranslationalStiffnessZ = null; ptr++; }
 		let RotationalStiffnessX;
 		if (tape[ptr]) {
-		RotationalStiffnessX = tape[ptr++];
+		RotationalStiffnessX = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessX = null; ptr++; }
 		let RotationalStiffnessY;
 		if (tape[ptr]) {
-		RotationalStiffnessY = tape[ptr++];
+		RotationalStiffnessY = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessY = null; ptr++; }
 		let RotationalStiffnessZ;
 		if (tape[ptr]) {
-		RotationalStiffnessZ = tape[ptr++];
+		RotationalStiffnessZ = ParseType(tape[ptr++]);
 		} else { RotationalStiffnessZ = null; ptr++; }
 		let WarpingStiffness;
 		if (tape[ptr]) {
-		WarpingStiffness = tape[ptr++];
+		WarpingStiffness = ParseType(tape[ptr++]);
 		} else { WarpingStiffness = null; ptr++; }
 		return new IfcBoundaryNodeConditionWarping(expressID, type, Name, TranslationalStiffnessX, TranslationalStiffnessY, TranslationalStiffnessZ, RotationalStiffnessX, RotationalStiffnessY, RotationalStiffnessZ, WarpingStiffness);
 	}
@@ -11885,7 +11887,7 @@ export class IfcBoundingBox {
 		let ptr = 0;
 		let Corner;
 		if (tape[ptr]) {
-		Corner = tape[ptr++];
+		Corner = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { Corner = null; ptr++; }
 		let XDim;
 		if (tape[ptr]) {
@@ -11928,7 +11930,7 @@ export class IfcBoxedHalfSpace {
 		let ptr = 0;
 		let BaseSurface;
 		if (tape[ptr]) {
-		BaseSurface = tape[ptr++];
+		BaseSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { BaseSurface = null; ptr++; }
 		let AgreementFlag;
 		if (tape[ptr]) {
@@ -11936,7 +11938,7 @@ export class IfcBoxedHalfSpace {
 		} else { AgreementFlag = null; ptr++; }
 		let Enclosure;
 		if (tape[ptr]) {
-		Enclosure = tape[ptr++];
+		Enclosure = new Handle<IfcBoundingBox>(tape[ptr++].expressID);
 		} else { Enclosure = null; ptr++; }
 		return new IfcBoxedHalfSpace(expressID, type, BaseSurface, AgreementFlag, Enclosure);
 	}
@@ -11987,7 +11989,7 @@ export class IfcBridge {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -12003,11 +12005,11 @@ export class IfcBridge {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -12113,7 +12115,7 @@ export class IfcBridgePart {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -12129,11 +12131,11 @@ export class IfcBridgePart {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -12243,7 +12245,7 @@ export class IfcBuilding {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -12259,11 +12261,11 @@ export class IfcBuilding {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -12283,7 +12285,7 @@ export class IfcBuilding {
 		} else { ElevationOfTerrain = null; ptr++; }
 		let BuildingAddress;
 		if (tape[ptr]) {
-		BuildingAddress = tape[ptr++];
+		BuildingAddress = new Handle<IfcPostalAddress>(tape[ptr++].expressID);
 		} else { BuildingAddress = null; ptr++; }
 		return new IfcBuilding(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType, ElevationOfRefHeight, ElevationOfTerrain, BuildingAddress);
 	}
@@ -12383,7 +12385,7 @@ export class IfcBuildingElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -12399,11 +12401,11 @@ export class IfcBuildingElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -12489,7 +12491,7 @@ export class IfcBuildingElementPart {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -12505,11 +12507,11 @@ export class IfcBuildingElementPart {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -12606,7 +12608,7 @@ export class IfcBuildingElementPartType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -12625,7 +12627,7 @@ export class IfcBuildingElementPartType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -12634,7 +12636,7 @@ export class IfcBuildingElementPartType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -12739,7 +12741,7 @@ export class IfcBuildingElementProxy {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -12755,11 +12757,11 @@ export class IfcBuildingElementProxy {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -12856,7 +12858,7 @@ export class IfcBuildingElementProxyType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -12875,7 +12877,7 @@ export class IfcBuildingElementProxyType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -12884,7 +12886,7 @@ export class IfcBuildingElementProxyType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -12989,7 +12991,7 @@ export class IfcBuildingElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -13008,7 +13010,7 @@ export class IfcBuildingElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -13017,7 +13019,7 @@ export class IfcBuildingElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -13118,7 +13120,7 @@ export class IfcBuildingStorey {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -13134,11 +13136,11 @@ export class IfcBuildingStorey {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -13238,7 +13240,7 @@ export class IfcBuildingSystem {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -13335,7 +13337,7 @@ export class IfcBurner {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -13351,11 +13353,11 @@ export class IfcBurner {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -13452,7 +13454,7 @@ export class IfcBurnerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -13471,7 +13473,7 @@ export class IfcBurnerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -13480,7 +13482,7 @@ export class IfcBurnerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -13587,7 +13589,7 @@ export class IfcCShapeProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Depth;
 		if (tape[ptr]) {
@@ -13667,7 +13669,7 @@ export class IfcCableCarrierFitting {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -13683,11 +13685,11 @@ export class IfcCableCarrierFitting {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -13784,7 +13786,7 @@ export class IfcCableCarrierFittingType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -13803,7 +13805,7 @@ export class IfcCableCarrierFittingType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -13812,7 +13814,7 @@ export class IfcCableCarrierFittingType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -13917,7 +13919,7 @@ export class IfcCableCarrierSegment {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -13933,11 +13935,11 @@ export class IfcCableCarrierSegment {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -14034,7 +14036,7 @@ export class IfcCableCarrierSegmentType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -14053,7 +14055,7 @@ export class IfcCableCarrierSegmentType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -14062,7 +14064,7 @@ export class IfcCableCarrierSegmentType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -14167,7 +14169,7 @@ export class IfcCableFitting {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -14183,11 +14185,11 @@ export class IfcCableFitting {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -14284,7 +14286,7 @@ export class IfcCableFittingType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -14303,7 +14305,7 @@ export class IfcCableFittingType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -14312,7 +14314,7 @@ export class IfcCableFittingType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -14417,7 +14419,7 @@ export class IfcCableSegment {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -14433,11 +14435,11 @@ export class IfcCableSegment {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -14534,7 +14536,7 @@ export class IfcCableSegmentType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -14553,7 +14555,7 @@ export class IfcCableSegmentType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -14562,7 +14564,7 @@ export class IfcCableSegmentType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -14667,7 +14669,7 @@ export class IfcCaissonFoundation {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -14683,11 +14685,11 @@ export class IfcCaissonFoundation {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -14784,7 +14786,7 @@ export class IfcCaissonFoundationType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -14803,7 +14805,7 @@ export class IfcCaissonFoundationType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -14812,7 +14814,7 @@ export class IfcCaissonFoundationType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -15050,15 +15052,15 @@ export class IfcCartesianTransformationOperator {
 		let ptr = 0;
 		let Axis1;
 		if (tape[ptr]) {
-		Axis1 = tape[ptr++];
+		Axis1 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis1 = null; ptr++; }
 		let Axis2;
 		if (tape[ptr]) {
-		Axis2 = tape[ptr++];
+		Axis2 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis2 = null; ptr++; }
 		let LocalOrigin;
 		if (tape[ptr]) {
-		LocalOrigin = tape[ptr++];
+		LocalOrigin = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { LocalOrigin = null; ptr++; }
 		let Scale;
 		if (tape[ptr]) {
@@ -15110,15 +15112,15 @@ export class IfcCartesianTransformationOperator2D {
 		let ptr = 0;
 		let Axis1;
 		if (tape[ptr]) {
-		Axis1 = tape[ptr++];
+		Axis1 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis1 = null; ptr++; }
 		let Axis2;
 		if (tape[ptr]) {
-		Axis2 = tape[ptr++];
+		Axis2 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis2 = null; ptr++; }
 		let LocalOrigin;
 		if (tape[ptr]) {
-		LocalOrigin = tape[ptr++];
+		LocalOrigin = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { LocalOrigin = null; ptr++; }
 		let Scale;
 		if (tape[ptr]) {
@@ -15172,15 +15174,15 @@ export class IfcCartesianTransformationOperator2DnonUniform {
 		let ptr = 0;
 		let Axis1;
 		if (tape[ptr]) {
-		Axis1 = tape[ptr++];
+		Axis1 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis1 = null; ptr++; }
 		let Axis2;
 		if (tape[ptr]) {
-		Axis2 = tape[ptr++];
+		Axis2 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis2 = null; ptr++; }
 		let LocalOrigin;
 		if (tape[ptr]) {
-		LocalOrigin = tape[ptr++];
+		LocalOrigin = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { LocalOrigin = null; ptr++; }
 		let Scale;
 		if (tape[ptr]) {
@@ -15243,15 +15245,15 @@ export class IfcCartesianTransformationOperator3D {
 		let ptr = 0;
 		let Axis1;
 		if (tape[ptr]) {
-		Axis1 = tape[ptr++];
+		Axis1 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis1 = null; ptr++; }
 		let Axis2;
 		if (tape[ptr]) {
-		Axis2 = tape[ptr++];
+		Axis2 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis2 = null; ptr++; }
 		let LocalOrigin;
 		if (tape[ptr]) {
-		LocalOrigin = tape[ptr++];
+		LocalOrigin = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { LocalOrigin = null; ptr++; }
 		let Scale;
 		if (tape[ptr]) {
@@ -15259,7 +15261,7 @@ export class IfcCartesianTransformationOperator3D {
 		} else { Scale = null; ptr++; }
 		let Axis3;
 		if (tape[ptr]) {
-		Axis3 = tape[ptr++];
+		Axis3 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis3 = null; ptr++; }
 		return new IfcCartesianTransformationOperator3D(expressID, type, Axis1, Axis2, LocalOrigin, Scale, Axis3);
 	}
@@ -15318,15 +15320,15 @@ export class IfcCartesianTransformationOperator3DnonUniform {
 		let ptr = 0;
 		let Axis1;
 		if (tape[ptr]) {
-		Axis1 = tape[ptr++];
+		Axis1 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis1 = null; ptr++; }
 		let Axis2;
 		if (tape[ptr]) {
-		Axis2 = tape[ptr++];
+		Axis2 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis2 = null; ptr++; }
 		let LocalOrigin;
 		if (tape[ptr]) {
-		LocalOrigin = tape[ptr++];
+		LocalOrigin = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { LocalOrigin = null; ptr++; }
 		let Scale;
 		if (tape[ptr]) {
@@ -15334,7 +15336,7 @@ export class IfcCartesianTransformationOperator3DnonUniform {
 		} else { Scale = null; ptr++; }
 		let Axis3;
 		if (tape[ptr]) {
-		Axis3 = tape[ptr++];
+		Axis3 = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis3 = null; ptr++; }
 		let Scale2;
 		if (tape[ptr]) {
@@ -15413,7 +15415,7 @@ export class IfcCenterLineProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Curve;
 		if (tape[ptr]) {
-		Curve = tape[ptr++];
+		Curve = new Handle<IfcBoundedCurve>(tape[ptr++].expressID);
 		} else { Curve = null; ptr++; }
 		let Thickness;
 		if (tape[ptr]) {
@@ -15471,7 +15473,7 @@ export class IfcChiller {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -15487,11 +15489,11 @@ export class IfcChiller {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -15588,7 +15590,7 @@ export class IfcChillerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -15607,7 +15609,7 @@ export class IfcChillerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -15616,7 +15618,7 @@ export class IfcChillerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -15721,7 +15723,7 @@ export class IfcChimney {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -15737,11 +15739,11 @@ export class IfcChimney {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -15838,7 +15840,7 @@ export class IfcChimneyType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -15857,7 +15859,7 @@ export class IfcChimneyType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -15866,7 +15868,7 @@ export class IfcChimneyType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -15953,7 +15955,7 @@ export class IfcCircle {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = ParseType(tape[ptr++]);
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -15998,7 +16000,7 @@ export class IfcCircleHollowProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -16057,7 +16059,7 @@ export class IfcCircleProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -16106,7 +16108,7 @@ export class IfcCircularArcSegment2D {
 		let ptr = 0;
 		let StartPoint;
 		if (tape[ptr]) {
-		StartPoint = tape[ptr++];
+		StartPoint = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { StartPoint = null; ptr++; }
 		let StartDirection;
 		if (tape[ptr]) {
@@ -16169,7 +16171,7 @@ export class IfcCivilElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -16185,11 +16187,11 @@ export class IfcCivilElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -16275,7 +16277,7 @@ export class IfcCivilElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -16294,7 +16296,7 @@ export class IfcCivilElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -16303,7 +16305,7 @@ export class IfcCivilElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -16502,7 +16504,7 @@ export class IfcClassificationReference {
 		} else { Name = null; ptr++; }
 		let ReferencedSource;
 		if (tape[ptr]) {
-		ReferencedSource = tape[ptr++];
+		ReferencedSource = ParseType(tape[ptr++]);
 		} else { ReferencedSource = null; ptr++; }
 		let Description;
 		if (tape[ptr]) {
@@ -16566,7 +16568,7 @@ export class IfcClosedShell {
 		CfsFaces = [];
 		let CfsFaces_index = 0;
 		while (CfsFaces_index < tape[ptr].length) {
-			CfsFaces.push(tape[ptr][CfsFaces_index++]);
+			CfsFaces.push(new Handle<IfcFace>(tape[ptr][CfsFaces_index++].expressID));
 		}
 	ptr++;
 		} else { CfsFaces = null; ptr++; }
@@ -16616,7 +16618,7 @@ export class IfcCoil {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -16632,11 +16634,11 @@ export class IfcCoil {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -16733,7 +16735,7 @@ export class IfcCoilType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -16752,7 +16754,7 @@ export class IfcCoilType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -16761,7 +16763,7 @@ export class IfcCoilType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -16974,7 +16976,7 @@ export class IfcColumn {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -16990,11 +16992,11 @@ export class IfcColumn {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -17089,7 +17091,7 @@ export class IfcColumnStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -17105,11 +17107,11 @@ export class IfcColumnStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -17206,7 +17208,7 @@ export class IfcColumnType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -17225,7 +17227,7 @@ export class IfcColumnType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -17234,7 +17236,7 @@ export class IfcColumnType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -17339,7 +17341,7 @@ export class IfcCommunicationsAppliance {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -17355,11 +17357,11 @@ export class IfcCommunicationsAppliance {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -17456,7 +17458,7 @@ export class IfcCommunicationsApplianceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -17475,7 +17477,7 @@ export class IfcCommunicationsApplianceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -17484,7 +17486,7 @@ export class IfcCommunicationsApplianceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -17590,7 +17592,7 @@ export class IfcComplexProperty {
 		HasProperties = [];
 		let HasProperties_index = 0;
 		while (HasProperties_index < tape[ptr].length) {
-			HasProperties.push(tape[ptr][HasProperties_index++]);
+			HasProperties.push(new Handle<IfcProperty>(tape[ptr][HasProperties_index++].expressID));
 		}
 	ptr++;
 		} else { HasProperties = null; ptr++; }
@@ -17645,7 +17647,7 @@ export class IfcComplexPropertyTemplate {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -17668,7 +17670,7 @@ export class IfcComplexPropertyTemplate {
 		HasPropertyTemplates = [];
 		let HasPropertyTemplates_index = 0;
 		while (HasPropertyTemplates_index < tape[ptr].length) {
-			HasPropertyTemplates.push(tape[ptr][HasPropertyTemplates_index++]);
+			HasPropertyTemplates.push(new Handle<IfcPropertyTemplate>(tape[ptr][HasPropertyTemplates_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertyTemplates = null; ptr++; }
@@ -17733,7 +17735,7 @@ export class IfcCompositeCurve {
 		Segments = [];
 		let Segments_index = 0;
 		while (Segments_index < tape[ptr].length) {
-			Segments.push(tape[ptr][Segments_index++]);
+			Segments.push(new Handle<IfcCompositeCurveSegment>(tape[ptr][Segments_index++].expressID));
 		}
 	ptr++;
 		} else { Segments = null; ptr++; }
@@ -17772,7 +17774,7 @@ export class IfcCompositeCurveOnSurface {
 		Segments = [];
 		let Segments_index = 0;
 		while (Segments_index < tape[ptr].length) {
-			Segments.push(tape[ptr][Segments_index++]);
+			Segments.push(new Handle<IfcCompositeCurveSegment>(tape[ptr][Segments_index++].expressID));
 		}
 	ptr++;
 		} else { Segments = null; ptr++; }
@@ -17818,7 +17820,7 @@ export class IfcCompositeCurveSegment {
 		} else { SameSense = null; ptr++; }
 		let ParentCurve;
 		if (tape[ptr]) {
-		ParentCurve = tape[ptr++];
+		ParentCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { ParentCurve = null; ptr++; }
 		return new IfcCompositeCurveSegment(expressID, type, Transition, SameSense, ParentCurve);
 	}
@@ -17864,7 +17866,7 @@ export class IfcCompositeProfileDef {
 		Profiles = [];
 		let Profiles_index = 0;
 		while (Profiles_index < tape[ptr].length) {
-			Profiles.push(tape[ptr][Profiles_index++]);
+			Profiles.push(new Handle<IfcProfileDef>(tape[ptr][Profiles_index++].expressID));
 		}
 	ptr++;
 		} else { Profiles = null; ptr++; }
@@ -17930,7 +17932,7 @@ export class IfcCompressor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -17946,11 +17948,11 @@ export class IfcCompressor {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -18047,7 +18049,7 @@ export class IfcCompressorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -18066,7 +18068,7 @@ export class IfcCompressorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -18075,7 +18077,7 @@ export class IfcCompressorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -18180,7 +18182,7 @@ export class IfcCondenser {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -18196,11 +18198,11 @@ export class IfcCondenser {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -18297,7 +18299,7 @@ export class IfcCondenserType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -18316,7 +18318,7 @@ export class IfcCondenserType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -18325,7 +18327,7 @@ export class IfcCondenserType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -18410,7 +18412,7 @@ export class IfcConic {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = ParseType(tape[ptr++]);
 		} else { Position = null; ptr++; }
 		return new IfcConic(expressID, type, Position);
 	}
@@ -18438,7 +18440,7 @@ export class IfcConnectedFaceSet {
 		CfsFaces = [];
 		let CfsFaces_index = 0;
 		while (CfsFaces_index < tape[ptr].length) {
-			CfsFaces.push(tape[ptr][CfsFaces_index++]);
+			CfsFaces.push(new Handle<IfcFace>(tape[ptr][CfsFaces_index++].expressID));
 		}
 	ptr++;
 		} else { CfsFaces = null; ptr++; }
@@ -18470,11 +18472,11 @@ export class IfcConnectionCurveGeometry {
 		let ptr = 0;
 		let CurveOnRelatingElement;
 		if (tape[ptr]) {
-		CurveOnRelatingElement = tape[ptr++];
+		CurveOnRelatingElement = ParseType(tape[ptr++]);
 		} else { CurveOnRelatingElement = null; ptr++; }
 		let CurveOnRelatedElement;
 		if (tape[ptr]) {
-		CurveOnRelatedElement = tape[ptr++];
+		CurveOnRelatedElement = ParseType(tape[ptr++]);
 		} else { CurveOnRelatedElement = null; ptr++; }
 		return new IfcConnectionCurveGeometry(expressID, type, CurveOnRelatingElement, CurveOnRelatedElement);
 	}
@@ -18529,11 +18531,11 @@ export class IfcConnectionPointEccentricity {
 		let ptr = 0;
 		let PointOnRelatingElement;
 		if (tape[ptr]) {
-		PointOnRelatingElement = tape[ptr++];
+		PointOnRelatingElement = ParseType(tape[ptr++]);
 		} else { PointOnRelatingElement = null; ptr++; }
 		let PointOnRelatedElement;
 		if (tape[ptr]) {
-		PointOnRelatedElement = tape[ptr++];
+		PointOnRelatedElement = ParseType(tape[ptr++]);
 		} else { PointOnRelatedElement = null; ptr++; }
 		let EccentricityInX;
 		if (tape[ptr]) {
@@ -18590,11 +18592,11 @@ export class IfcConnectionPointGeometry {
 		let ptr = 0;
 		let PointOnRelatingElement;
 		if (tape[ptr]) {
-		PointOnRelatingElement = tape[ptr++];
+		PointOnRelatingElement = ParseType(tape[ptr++]);
 		} else { PointOnRelatingElement = null; ptr++; }
 		let PointOnRelatedElement;
 		if (tape[ptr]) {
-		PointOnRelatedElement = tape[ptr++];
+		PointOnRelatedElement = ParseType(tape[ptr++]);
 		} else { PointOnRelatedElement = null; ptr++; }
 		return new IfcConnectionPointGeometry(expressID, type, PointOnRelatingElement, PointOnRelatedElement);
 	}
@@ -18624,11 +18626,11 @@ export class IfcConnectionSurfaceGeometry {
 		let ptr = 0;
 		let SurfaceOnRelatingElement;
 		if (tape[ptr]) {
-		SurfaceOnRelatingElement = tape[ptr++];
+		SurfaceOnRelatingElement = ParseType(tape[ptr++]);
 		} else { SurfaceOnRelatingElement = null; ptr++; }
 		let SurfaceOnRelatedElement;
 		if (tape[ptr]) {
-		SurfaceOnRelatedElement = tape[ptr++];
+		SurfaceOnRelatedElement = ParseType(tape[ptr++]);
 		} else { SurfaceOnRelatedElement = null; ptr++; }
 		return new IfcConnectionSurfaceGeometry(expressID, type, SurfaceOnRelatingElement, SurfaceOnRelatedElement);
 	}
@@ -18658,11 +18660,11 @@ export class IfcConnectionVolumeGeometry {
 		let ptr = 0;
 		let VolumeOnRelatingElement;
 		if (tape[ptr]) {
-		VolumeOnRelatingElement = tape[ptr++];
+		VolumeOnRelatingElement = ParseType(tape[ptr++]);
 		} else { VolumeOnRelatingElement = null; ptr++; }
 		let VolumeOnRelatedElement;
 		if (tape[ptr]) {
-		VolumeOnRelatedElement = tape[ptr++];
+		VolumeOnRelatedElement = ParseType(tape[ptr++]);
 		} else { VolumeOnRelatedElement = null; ptr++; }
 		return new IfcConnectionVolumeGeometry(expressID, type, VolumeOnRelatingElement, VolumeOnRelatedElement);
 	}
@@ -18718,7 +18720,7 @@ export class IfcConstraint {
 		} else { ConstraintSource = null; ptr++; }
 		let CreatingActor;
 		if (tape[ptr]) {
-		CreatingActor = tape[ptr++];
+		CreatingActor = ParseType(tape[ptr++]);
 		} else { CreatingActor = null; ptr++; }
 		let CreationTime;
 		if (tape[ptr]) {
@@ -18802,7 +18804,7 @@ export class IfcConstructionEquipmentResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -18826,20 +18828,20 @@ export class IfcConstructionEquipmentResource {
 		} else { LongDescription = null; ptr++; }
 		let Usage;
 		if (tape[ptr]) {
-		Usage = tape[ptr++];
+		Usage = new Handle<IfcResourceTime>(tape[ptr++].expressID);
 		} else { Usage = null; ptr++; }
 		let BaseCosts;
 		if (tape[ptr]) {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -18947,7 +18949,7 @@ export class IfcConstructionEquipmentResourceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -18966,7 +18968,7 @@ export class IfcConstructionEquipmentResourceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -18987,13 +18989,13 @@ export class IfcConstructionEquipmentResourceType {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -19102,7 +19104,7 @@ export class IfcConstructionMaterialResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -19126,20 +19128,20 @@ export class IfcConstructionMaterialResource {
 		} else { LongDescription = null; ptr++; }
 		let Usage;
 		if (tape[ptr]) {
-		Usage = tape[ptr++];
+		Usage = new Handle<IfcResourceTime>(tape[ptr++].expressID);
 		} else { Usage = null; ptr++; }
 		let BaseCosts;
 		if (tape[ptr]) {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -19247,7 +19249,7 @@ export class IfcConstructionMaterialResourceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -19266,7 +19268,7 @@ export class IfcConstructionMaterialResourceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -19287,13 +19289,13 @@ export class IfcConstructionMaterialResourceType {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -19402,7 +19404,7 @@ export class IfcConstructionProductResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -19426,20 +19428,20 @@ export class IfcConstructionProductResource {
 		} else { LongDescription = null; ptr++; }
 		let Usage;
 		if (tape[ptr]) {
-		Usage = tape[ptr++];
+		Usage = new Handle<IfcResourceTime>(tape[ptr++].expressID);
 		} else { Usage = null; ptr++; }
 		let BaseCosts;
 		if (tape[ptr]) {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -19547,7 +19549,7 @@ export class IfcConstructionProductResourceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -19566,7 +19568,7 @@ export class IfcConstructionProductResourceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -19587,13 +19589,13 @@ export class IfcConstructionProductResourceType {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -19700,7 +19702,7 @@ export class IfcConstructionResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -19724,20 +19726,20 @@ export class IfcConstructionResource {
 		} else { LongDescription = null; ptr++; }
 		let Usage;
 		if (tape[ptr]) {
-		Usage = tape[ptr++];
+		Usage = new Handle<IfcResourceTime>(tape[ptr++].expressID);
 		} else { Usage = null; ptr++; }
 		let BaseCosts;
 		if (tape[ptr]) {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		return new IfcConstructionResource(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity);
 	}
@@ -19834,7 +19836,7 @@ export class IfcConstructionResourceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -19853,7 +19855,7 @@ export class IfcConstructionResourceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -19874,13 +19876,13 @@ export class IfcConstructionResourceType {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		return new IfcConstructionResourceType(expressID, type, GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity);
 	}
@@ -19979,7 +19981,7 @@ export class IfcContext {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -20006,13 +20008,13 @@ export class IfcContext {
 		RepresentationContexts = [];
 		let RepresentationContexts_index = 0;
 		while (RepresentationContexts_index < tape[ptr].length) {
-			RepresentationContexts.push(tape[ptr][RepresentationContexts_index++]);
+			RepresentationContexts.push(new Handle<IfcRepresentationContext>(tape[ptr][RepresentationContexts_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationContexts = null; ptr++; }
 		let UnitsInContext;
 		if (tape[ptr]) {
-		UnitsInContext = tape[ptr++];
+		UnitsInContext = new Handle<IfcUnitAssignment>(tape[ptr++].expressID);
 		} else { UnitsInContext = null; ptr++; }
 		return new IfcContext(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, Phase, RepresentationContexts, UnitsInContext);
 	}
@@ -20084,7 +20086,7 @@ export class IfcContextDependentUnit {
 		let ptr = 0;
 		let Dimensions;
 		if (tape[ptr]) {
-		Dimensions = tape[ptr++];
+		Dimensions = new Handle<IfcDimensionalExponents>(tape[ptr++].expressID);
 		} else { Dimensions = null; ptr++; }
 		let UnitType;
 		if (tape[ptr]) {
@@ -20137,7 +20139,7 @@ export class IfcControl {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -20225,7 +20227,7 @@ export class IfcController {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -20241,11 +20243,11 @@ export class IfcController {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -20342,7 +20344,7 @@ export class IfcControllerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -20361,7 +20363,7 @@ export class IfcControllerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -20370,7 +20372,7 @@ export class IfcControllerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -20461,7 +20463,7 @@ export class IfcConversionBasedUnit {
 		let ptr = 0;
 		let Dimensions;
 		if (tape[ptr]) {
-		Dimensions = tape[ptr++];
+		Dimensions = new Handle<IfcDimensionalExponents>(tape[ptr++].expressID);
 		} else { Dimensions = null; ptr++; }
 		let UnitType;
 		if (tape[ptr]) {
@@ -20473,7 +20475,7 @@ export class IfcConversionBasedUnit {
 		} else { Name = null; ptr++; }
 		let ConversionFactor;
 		if (tape[ptr]) {
-		ConversionFactor = tape[ptr++];
+		ConversionFactor = new Handle<IfcMeasureWithUnit>(tape[ptr++].expressID);
 		} else { ConversionFactor = null; ptr++; }
 		return new IfcConversionBasedUnit(expressID, type, Dimensions, UnitType, Name, ConversionFactor);
 	}
@@ -20514,7 +20516,7 @@ export class IfcConversionBasedUnitWithOffset {
 		let ptr = 0;
 		let Dimensions;
 		if (tape[ptr]) {
-		Dimensions = tape[ptr++];
+		Dimensions = new Handle<IfcDimensionalExponents>(tape[ptr++].expressID);
 		} else { Dimensions = null; ptr++; }
 		let UnitType;
 		if (tape[ptr]) {
@@ -20526,7 +20528,7 @@ export class IfcConversionBasedUnitWithOffset {
 		} else { Name = null; ptr++; }
 		let ConversionFactor;
 		if (tape[ptr]) {
-		ConversionFactor = tape[ptr++];
+		ConversionFactor = new Handle<IfcMeasureWithUnit>(tape[ptr++].expressID);
 		} else { ConversionFactor = null; ptr++; }
 		let ConversionOffset;
 		if (tape[ptr]) {
@@ -20585,7 +20587,7 @@ export class IfcCooledBeam {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -20601,11 +20603,11 @@ export class IfcCooledBeam {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -20702,7 +20704,7 @@ export class IfcCooledBeamType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -20721,7 +20723,7 @@ export class IfcCooledBeamType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -20730,7 +20732,7 @@ export class IfcCooledBeamType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -20835,7 +20837,7 @@ export class IfcCoolingTower {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -20851,11 +20853,11 @@ export class IfcCoolingTower {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -20952,7 +20954,7 @@ export class IfcCoolingTowerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -20971,7 +20973,7 @@ export class IfcCoolingTowerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -20980,7 +20982,7 @@ export class IfcCoolingTowerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -21067,11 +21069,11 @@ export class IfcCoordinateOperation {
 		let ptr = 0;
 		let SourceCRS;
 		if (tape[ptr]) {
-		SourceCRS = tape[ptr++];
+		SourceCRS = ParseType(tape[ptr++]);
 		} else { SourceCRS = null; ptr++; }
 		let TargetCRS;
 		if (tape[ptr]) {
-		TargetCRS = tape[ptr++];
+		TargetCRS = new Handle<IfcCoordinateReferenceSystem>(tape[ptr++].expressID);
 		} else { TargetCRS = null; ptr++; }
 		return new IfcCoordinateOperation(expressID, type, SourceCRS, TargetCRS);
 	}
@@ -21178,7 +21180,7 @@ export class IfcCostItem {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -21205,7 +21207,7 @@ export class IfcCostItem {
 		CostValues = [];
 		let CostValues_index = 0;
 		while (CostValues_index < tape[ptr].length) {
-			CostValues.push(tape[ptr][CostValues_index++]);
+			CostValues.push(new Handle<IfcCostValue>(tape[ptr][CostValues_index++].expressID));
 		}
 	ptr++;
 		} else { CostValues = null; ptr++; }
@@ -21214,7 +21216,7 @@ export class IfcCostItem {
 		CostQuantities = [];
 		let CostQuantities_index = 0;
 		while (CostQuantities_index < tape[ptr].length) {
-			CostQuantities.push(tape[ptr][CostQuantities_index++]);
+			CostQuantities.push(new Handle<IfcPhysicalQuantity>(tape[ptr][CostQuantities_index++].expressID));
 		}
 	ptr++;
 		} else { CostQuantities = null; ptr++; }
@@ -21307,7 +21309,7 @@ export class IfcCostSchedule {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -21437,11 +21439,11 @@ export class IfcCostValue {
 		} else { Description = null; ptr++; }
 		let AppliedValue;
 		if (tape[ptr]) {
-		AppliedValue = tape[ptr++];
+		AppliedValue = ParseType(tape[ptr++]);
 		} else { AppliedValue = null; ptr++; }
 		let UnitBasis;
 		if (tape[ptr]) {
-		UnitBasis = tape[ptr++];
+		UnitBasis = new Handle<IfcMeasureWithUnit>(tape[ptr++].expressID);
 		} else { UnitBasis = null; ptr++; }
 		let ApplicableDate;
 		if (tape[ptr]) {
@@ -21468,7 +21470,7 @@ export class IfcCostValue {
 		Components = [];
 		let Components_index = 0;
 		while (Components_index < tape[ptr].length) {
-			Components.push(tape[ptr][Components_index++]);
+			Components.push(new Handle<IfcAppliedValue>(tape[ptr][Components_index++].expressID));
 		}
 	ptr++;
 		} else { Components = null; ptr++; }
@@ -21564,7 +21566,7 @@ export class IfcCovering {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -21580,11 +21582,11 @@ export class IfcCovering {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -21681,7 +21683,7 @@ export class IfcCoveringType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -21700,7 +21702,7 @@ export class IfcCoveringType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -21709,7 +21711,7 @@ export class IfcCoveringType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -21818,7 +21820,7 @@ export class IfcCrewResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -21842,20 +21844,20 @@ export class IfcCrewResource {
 		} else { LongDescription = null; ptr++; }
 		let Usage;
 		if (tape[ptr]) {
-		Usage = tape[ptr++];
+		Usage = new Handle<IfcResourceTime>(tape[ptr++].expressID);
 		} else { Usage = null; ptr++; }
 		let BaseCosts;
 		if (tape[ptr]) {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -21963,7 +21965,7 @@ export class IfcCrewResourceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -21982,7 +21984,7 @@ export class IfcCrewResourceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -22003,13 +22005,13 @@ export class IfcCrewResourceType {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -22094,7 +22096,7 @@ export class IfcCsgPrimitive3D {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		return new IfcCsgPrimitive3D(expressID, type, Position);
 	}
@@ -22121,7 +22123,7 @@ export class IfcCsgSolid {
 		let ptr = 0;
 		let TreeRootExpression;
 		if (tape[ptr]) {
-		TreeRootExpression = tape[ptr++];
+		TreeRootExpression = ParseType(tape[ptr++]);
 		} else { TreeRootExpression = null; ptr++; }
 		return new IfcCsgSolid(expressID, type, TreeRootExpression);
 	}
@@ -22166,11 +22168,11 @@ export class IfcCurrencyRelationship {
 		} else { Description = null; ptr++; }
 		let RelatingMonetaryUnit;
 		if (tape[ptr]) {
-		RelatingMonetaryUnit = tape[ptr++];
+		RelatingMonetaryUnit = new Handle<IfcMonetaryUnit>(tape[ptr++].expressID);
 		} else { RelatingMonetaryUnit = null; ptr++; }
 		let RelatedMonetaryUnit;
 		if (tape[ptr]) {
-		RelatedMonetaryUnit = tape[ptr++];
+		RelatedMonetaryUnit = new Handle<IfcMonetaryUnit>(tape[ptr++].expressID);
 		} else { RelatedMonetaryUnit = null; ptr++; }
 		let ExchangeRate;
 		if (tape[ptr]) {
@@ -22182,7 +22184,7 @@ export class IfcCurrencyRelationship {
 		} else { RateDateTime = null; ptr++; }
 		let RateSource;
 		if (tape[ptr]) {
-		RateSource = tape[ptr++];
+		RateSource = new Handle<IfcLibraryInformation>(tape[ptr++].expressID);
 		} else { RateSource = null; ptr++; }
 		return new IfcCurrencyRelationship(expressID, type, Name, Description, RelatingMonetaryUnit, RelatedMonetaryUnit, ExchangeRate, RateDateTime, RateSource);
 	}
@@ -22251,7 +22253,7 @@ export class IfcCurtainWall {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -22267,11 +22269,11 @@ export class IfcCurtainWall {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -22368,7 +22370,7 @@ export class IfcCurtainWallType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -22387,7 +22389,7 @@ export class IfcCurtainWallType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -22396,7 +22398,7 @@ export class IfcCurtainWallType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -22504,18 +22506,18 @@ export class IfcCurveBoundedPlane {
 		let ptr = 0;
 		let BasisSurface;
 		if (tape[ptr]) {
-		BasisSurface = tape[ptr++];
+		BasisSurface = new Handle<IfcPlane>(tape[ptr++].expressID);
 		} else { BasisSurface = null; ptr++; }
 		let OuterBoundary;
 		if (tape[ptr]) {
-		OuterBoundary = tape[ptr++];
+		OuterBoundary = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { OuterBoundary = null; ptr++; }
 		let InnerBoundaries;
 		if (tape[ptr]) {
 		InnerBoundaries = [];
 		let InnerBoundaries_index = 0;
 		while (InnerBoundaries_index < tape[ptr].length) {
-			InnerBoundaries.push(tape[ptr][InnerBoundaries_index++]);
+			InnerBoundaries.push(new Handle<IfcCurve>(tape[ptr][InnerBoundaries_index++].expressID));
 		}
 	ptr++;
 		} else { InnerBoundaries = null; ptr++; }
@@ -22553,14 +22555,14 @@ export class IfcCurveBoundedSurface {
 		let ptr = 0;
 		let BasisSurface;
 		if (tape[ptr]) {
-		BasisSurface = tape[ptr++];
+		BasisSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { BasisSurface = null; ptr++; }
 		let Boundaries;
 		if (tape[ptr]) {
 		Boundaries = [];
 		let Boundaries_index = 0;
 		while (Boundaries_index < tape[ptr].length) {
-			Boundaries.push(tape[ptr][Boundaries_index++]);
+			Boundaries.push(new Handle<IfcBoundaryCurve>(tape[ptr][Boundaries_index++].expressID));
 		}
 	ptr++;
 		} else { Boundaries = null; ptr++; }
@@ -22600,7 +22602,7 @@ export class IfcCurveSegment2D {
 		let ptr = 0;
 		let StartPoint;
 		if (tape[ptr]) {
-		StartPoint = tape[ptr++];
+		StartPoint = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { StartPoint = null; ptr++; }
 		let StartDirection;
 		if (tape[ptr]) {
@@ -22649,15 +22651,15 @@ export class IfcCurveStyle {
 		} else { Name = null; ptr++; }
 		let CurveFont;
 		if (tape[ptr]) {
-		CurveFont = tape[ptr++];
+		CurveFont = ParseType(tape[ptr++]);
 		} else { CurveFont = null; ptr++; }
 		let CurveWidth;
 		if (tape[ptr]) {
-		CurveWidth = tape[ptr++];
+		CurveWidth = ParseType(tape[ptr++]);
 		} else { CurveWidth = null; ptr++; }
 		let CurveColour;
 		if (tape[ptr]) {
-		CurveColour = tape[ptr++];
+		CurveColour = ParseType(tape[ptr++]);
 		} else { CurveColour = null; ptr++; }
 		let ModelOrDraughting;
 		if (tape[ptr]) {
@@ -22712,7 +22714,7 @@ export class IfcCurveStyleFont {
 		PatternList = [];
 		let PatternList_index = 0;
 		while (PatternList_index < tape[ptr].length) {
-			PatternList.push(tape[ptr][PatternList_index++]);
+			PatternList.push(new Handle<IfcCurveStyleFontPattern>(tape[ptr][PatternList_index++].expressID));
 		}
 	ptr++;
 		} else { PatternList = null; ptr++; }
@@ -22755,7 +22757,7 @@ export class IfcCurveStyleFontAndScaling {
 		} else { Name = null; ptr++; }
 		let CurveFont;
 		if (tape[ptr]) {
-		CurveFont = tape[ptr++];
+		CurveFont = ParseType(tape[ptr++]);
 		} else { CurveFont = null; ptr++; }
 		let CurveFontScaling;
 		if (tape[ptr]) {
@@ -22824,7 +22826,7 @@ export class IfcCylindricalSurface {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -22875,7 +22877,7 @@ export class IfcDamper {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -22891,11 +22893,11 @@ export class IfcDamper {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -22992,7 +22994,7 @@ export class IfcDamperType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -23011,7 +23013,7 @@ export class IfcDamperType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -23020,7 +23022,7 @@ export class IfcDamperType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -23123,7 +23125,7 @@ export class IfcDeepFoundation {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -23139,11 +23141,11 @@ export class IfcDeepFoundation {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -23229,7 +23231,7 @@ export class IfcDeepFoundationType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -23248,7 +23250,7 @@ export class IfcDeepFoundationType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -23257,7 +23259,7 @@ export class IfcDeepFoundationType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -23352,11 +23354,11 @@ export class IfcDerivedProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let ParentProfile;
 		if (tape[ptr]) {
-		ParentProfile = tape[ptr++];
+		ParentProfile = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { ParentProfile = null; ptr++; }
 		let Operator;
 		if (tape[ptr]) {
-		Operator = tape[ptr++];
+		Operator = new Handle<IfcCartesianTransformationOperator2D>(tape[ptr++].expressID);
 		} else { Operator = null; ptr++; }
 		let Label;
 		if (tape[ptr]) {
@@ -23408,7 +23410,7 @@ export class IfcDerivedUnit {
 		Elements = [];
 		let Elements_index = 0;
 		while (Elements_index < tape[ptr].length) {
-			Elements.push(tape[ptr][Elements_index++]);
+			Elements.push(new Handle<IfcDerivedUnitElement>(tape[ptr][Elements_index++].expressID));
 		}
 	ptr++;
 		} else { Elements = null; ptr++; }
@@ -23455,11 +23457,11 @@ export class IfcDerivedUnitElement {
 		let ptr = 0;
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { Unit = null; ptr++; }
 		let Exponent;
 		if (tape[ptr]) {
-		Exponent = tape[ptr++];
+		Exponent = new Handle<number>(tape[ptr++].expressID);
 		} else { Exponent = null; ptr++; }
 		return new IfcDerivedUnitElement(expressID, type, Unit, Exponent);
 	}
@@ -23500,31 +23502,31 @@ export class IfcDimensionalExponents {
 		let ptr = 0;
 		let LengthExponent;
 		if (tape[ptr]) {
-		LengthExponent = tape[ptr++];
+		LengthExponent = new Handle<number>(tape[ptr++].expressID);
 		} else { LengthExponent = null; ptr++; }
 		let MassExponent;
 		if (tape[ptr]) {
-		MassExponent = tape[ptr++];
+		MassExponent = new Handle<number>(tape[ptr++].expressID);
 		} else { MassExponent = null; ptr++; }
 		let TimeExponent;
 		if (tape[ptr]) {
-		TimeExponent = tape[ptr++];
+		TimeExponent = new Handle<number>(tape[ptr++].expressID);
 		} else { TimeExponent = null; ptr++; }
 		let ElectricCurrentExponent;
 		if (tape[ptr]) {
-		ElectricCurrentExponent = tape[ptr++];
+		ElectricCurrentExponent = new Handle<number>(tape[ptr++].expressID);
 		} else { ElectricCurrentExponent = null; ptr++; }
 		let ThermodynamicTemperatureExponent;
 		if (tape[ptr]) {
-		ThermodynamicTemperatureExponent = tape[ptr++];
+		ThermodynamicTemperatureExponent = new Handle<number>(tape[ptr++].expressID);
 		} else { ThermodynamicTemperatureExponent = null; ptr++; }
 		let AmountOfSubstanceExponent;
 		if (tape[ptr]) {
-		AmountOfSubstanceExponent = tape[ptr++];
+		AmountOfSubstanceExponent = new Handle<number>(tape[ptr++].expressID);
 		} else { AmountOfSubstanceExponent = null; ptr++; }
 		let LuminousIntensityExponent;
 		if (tape[ptr]) {
-		LuminousIntensityExponent = tape[ptr++];
+		LuminousIntensityExponent = new Handle<number>(tape[ptr++].expressID);
 		} else { LuminousIntensityExponent = null; ptr++; }
 		return new IfcDimensionalExponents(expressID, type, LengthExponent, MassExponent, TimeExponent, ElectricCurrentExponent, ThermodynamicTemperatureExponent, AmountOfSubstanceExponent, LuminousIntensityExponent);
 	}
@@ -23615,7 +23617,7 @@ export class IfcDiscreteAccessory {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -23631,11 +23633,11 @@ export class IfcDiscreteAccessory {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -23732,7 +23734,7 @@ export class IfcDiscreteAccessoryType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -23751,7 +23753,7 @@ export class IfcDiscreteAccessoryType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -23760,7 +23762,7 @@ export class IfcDiscreteAccessoryType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -23934,7 +23936,7 @@ export class IfcDistributionChamberElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -23950,11 +23952,11 @@ export class IfcDistributionChamberElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -24051,7 +24053,7 @@ export class IfcDistributionChamberElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24070,7 +24072,7 @@ export class IfcDistributionChamberElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -24079,7 +24081,7 @@ export class IfcDistributionChamberElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -24180,7 +24182,7 @@ export class IfcDistributionCircuit {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24275,7 +24277,7 @@ export class IfcDistributionControlElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24291,11 +24293,11 @@ export class IfcDistributionControlElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -24381,7 +24383,7 @@ export class IfcDistributionControlElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24400,7 +24402,7 @@ export class IfcDistributionControlElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -24409,7 +24411,7 @@ export class IfcDistributionControlElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -24506,7 +24508,7 @@ export class IfcDistributionElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24522,11 +24524,11 @@ export class IfcDistributionElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -24612,7 +24614,7 @@ export class IfcDistributionElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24631,7 +24633,7 @@ export class IfcDistributionElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -24640,7 +24642,7 @@ export class IfcDistributionElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -24737,7 +24739,7 @@ export class IfcDistributionFlowElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24753,11 +24755,11 @@ export class IfcDistributionFlowElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -24843,7 +24845,7 @@ export class IfcDistributionFlowElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24862,7 +24864,7 @@ export class IfcDistributionFlowElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -24871,7 +24873,7 @@ export class IfcDistributionFlowElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -24972,7 +24974,7 @@ export class IfcDistributionPort {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -24988,11 +24990,11 @@ export class IfcDistributionPort {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let FlowDirection;
 		if (tape[ptr]) {
@@ -25092,7 +25094,7 @@ export class IfcDistributionSystem {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -25233,14 +25235,14 @@ export class IfcDocumentInformation {
 		} else { Revision = null; ptr++; }
 		let DocumentOwner;
 		if (tape[ptr]) {
-		DocumentOwner = tape[ptr++];
+		DocumentOwner = ParseType(tape[ptr++]);
 		} else { DocumentOwner = null; ptr++; }
 		let Editors;
 		if (tape[ptr]) {
 		Editors = [];
 		let Editors_index = 0;
 		while (Editors_index < tape[ptr].length) {
-			Editors.push(tape[ptr][Editors_index++]);
+			Editors.push(ParseType(tape[ptr][Editors_index++]));
 		}
 	ptr++;
 		} else { Editors = null; ptr++; }
@@ -25386,14 +25388,14 @@ export class IfcDocumentInformationRelationship {
 		} else { Description = null; ptr++; }
 		let RelatingDocument;
 		if (tape[ptr]) {
-		RelatingDocument = tape[ptr++];
+		RelatingDocument = new Handle<IfcDocumentInformation>(tape[ptr++].expressID);
 		} else { RelatingDocument = null; ptr++; }
 		let RelatedDocuments;
 		if (tape[ptr]) {
 		RelatedDocuments = [];
 		let RelatedDocuments_index = 0;
 		while (RelatedDocuments_index < tape[ptr].length) {
-			RelatedDocuments.push(tape[ptr][RelatedDocuments_index++]);
+			RelatedDocuments.push(new Handle<IfcDocumentInformation>(tape[ptr][RelatedDocuments_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedDocuments = null; ptr++; }
@@ -25468,7 +25470,7 @@ export class IfcDocumentReference {
 		} else { Description = null; ptr++; }
 		let ReferencedDocument;
 		if (tape[ptr]) {
-		ReferencedDocument = tape[ptr++];
+		ReferencedDocument = new Handle<IfcDocumentInformation>(tape[ptr++].expressID);
 		} else { ReferencedDocument = null; ptr++; }
 		return new IfcDocumentReference(expressID, type, Location, Identification, Name, Description, ReferencedDocument);
 	}
@@ -25546,7 +25548,7 @@ export class IfcDoor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -25562,11 +25564,11 @@ export class IfcDoor {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -25709,7 +25711,7 @@ export class IfcDoorLiningProperties {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -25761,7 +25763,7 @@ export class IfcDoorLiningProperties {
 		} else { CasingDepth = null; ptr++; }
 		let ShapeAspectStyle;
 		if (tape[ptr]) {
-		ShapeAspectStyle = tape[ptr++];
+		ShapeAspectStyle = new Handle<IfcShapeAspect>(tape[ptr++].expressID);
 		} else { ShapeAspectStyle = null; ptr++; }
 		let LiningToPanelOffsetX;
 		if (tape[ptr]) {
@@ -25882,7 +25884,7 @@ export class IfcDoorPanelProperties {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -25910,7 +25912,7 @@ export class IfcDoorPanelProperties {
 		} else { PanelPosition = null; ptr++; }
 		let ShapeAspectStyle;
 		if (tape[ptr]) {
-		ShapeAspectStyle = tape[ptr++];
+		ShapeAspectStyle = new Handle<IfcShapeAspect>(tape[ptr++].expressID);
 		} else { ShapeAspectStyle = null; ptr++; }
 		return new IfcDoorPanelProperties(expressID, type, GlobalId, OwnerHistory, Name, Description, PanelDepth, PanelOperation, PanelWidth, PanelPosition, ShapeAspectStyle);
 	}
@@ -25995,7 +25997,7 @@ export class IfcDoorStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -26011,11 +26013,11 @@ export class IfcDoorStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -26148,7 +26150,7 @@ export class IfcDoorStyle {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -26167,7 +26169,7 @@ export class IfcDoorStyle {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -26176,7 +26178,7 @@ export class IfcDoorStyle {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -26294,7 +26296,7 @@ export class IfcDoorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -26313,7 +26315,7 @@ export class IfcDoorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -26322,7 +26324,7 @@ export class IfcDoorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -26503,7 +26505,7 @@ export class IfcDuctFitting {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -26519,11 +26521,11 @@ export class IfcDuctFitting {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -26620,7 +26622,7 @@ export class IfcDuctFittingType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -26639,7 +26641,7 @@ export class IfcDuctFittingType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -26648,7 +26650,7 @@ export class IfcDuctFittingType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -26753,7 +26755,7 @@ export class IfcDuctSegment {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -26769,11 +26771,11 @@ export class IfcDuctSegment {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -26870,7 +26872,7 @@ export class IfcDuctSegmentType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -26889,7 +26891,7 @@ export class IfcDuctSegmentType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -26898,7 +26900,7 @@ export class IfcDuctSegmentType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -27003,7 +27005,7 @@ export class IfcDuctSilencer {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -27019,11 +27021,11 @@ export class IfcDuctSilencer {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -27120,7 +27122,7 @@ export class IfcDuctSilencerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -27139,7 +27141,7 @@ export class IfcDuctSilencerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -27148,7 +27150,7 @@ export class IfcDuctSilencerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -27235,11 +27237,11 @@ export class IfcEdge {
 		let ptr = 0;
 		let EdgeStart;
 		if (tape[ptr]) {
-		EdgeStart = tape[ptr++];
+		EdgeStart = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { EdgeStart = null; ptr++; }
 		let EdgeEnd;
 		if (tape[ptr]) {
-		EdgeEnd = tape[ptr++];
+		EdgeEnd = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { EdgeEnd = null; ptr++; }
 		return new IfcEdge(expressID, type, EdgeStart, EdgeEnd);
 	}
@@ -27274,15 +27276,15 @@ export class IfcEdgeCurve {
 		let ptr = 0;
 		let EdgeStart;
 		if (tape[ptr]) {
-		EdgeStart = tape[ptr++];
+		EdgeStart = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { EdgeStart = null; ptr++; }
 		let EdgeEnd;
 		if (tape[ptr]) {
-		EdgeEnd = tape[ptr++];
+		EdgeEnd = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { EdgeEnd = null; ptr++; }
 		let EdgeGeometry;
 		if (tape[ptr]) {
-		EdgeGeometry = tape[ptr++];
+		EdgeGeometry = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { EdgeGeometry = null; ptr++; }
 		let SameSense;
 		if (tape[ptr]) {
@@ -27320,7 +27322,7 @@ export class IfcEdgeLoop {
 		EdgeList = [];
 		let EdgeList_index = 0;
 		while (EdgeList_index < tape[ptr].length) {
-			EdgeList.push(tape[ptr][EdgeList_index++]);
+			EdgeList.push(new Handle<IfcOrientedEdge>(tape[ptr][EdgeList_index++].expressID));
 		}
 	ptr++;
 		} else { EdgeList = null; ptr++; }
@@ -27370,7 +27372,7 @@ export class IfcElectricAppliance {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -27386,11 +27388,11 @@ export class IfcElectricAppliance {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -27487,7 +27489,7 @@ export class IfcElectricApplianceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -27506,7 +27508,7 @@ export class IfcElectricApplianceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -27515,7 +27517,7 @@ export class IfcElectricApplianceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -27620,7 +27622,7 @@ export class IfcElectricDistributionBoard {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -27636,11 +27638,11 @@ export class IfcElectricDistributionBoard {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -27737,7 +27739,7 @@ export class IfcElectricDistributionBoardType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -27756,7 +27758,7 @@ export class IfcElectricDistributionBoardType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -27765,7 +27767,7 @@ export class IfcElectricDistributionBoardType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -27870,7 +27872,7 @@ export class IfcElectricFlowStorageDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -27886,11 +27888,11 @@ export class IfcElectricFlowStorageDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -27987,7 +27989,7 @@ export class IfcElectricFlowStorageDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28006,7 +28008,7 @@ export class IfcElectricFlowStorageDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -28015,7 +28017,7 @@ export class IfcElectricFlowStorageDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -28120,7 +28122,7 @@ export class IfcElectricGenerator {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28136,11 +28138,11 @@ export class IfcElectricGenerator {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -28237,7 +28239,7 @@ export class IfcElectricGeneratorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28256,7 +28258,7 @@ export class IfcElectricGeneratorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -28265,7 +28267,7 @@ export class IfcElectricGeneratorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -28370,7 +28372,7 @@ export class IfcElectricMotor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28386,11 +28388,11 @@ export class IfcElectricMotor {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -28487,7 +28489,7 @@ export class IfcElectricMotorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28506,7 +28508,7 @@ export class IfcElectricMotorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -28515,7 +28517,7 @@ export class IfcElectricMotorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -28620,7 +28622,7 @@ export class IfcElectricTimeControl {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28636,11 +28638,11 @@ export class IfcElectricTimeControl {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -28737,7 +28739,7 @@ export class IfcElectricTimeControlType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28756,7 +28758,7 @@ export class IfcElectricTimeControlType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -28765,7 +28767,7 @@ export class IfcElectricTimeControlType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -28868,7 +28870,7 @@ export class IfcElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28884,11 +28886,11 @@ export class IfcElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -28976,7 +28978,7 @@ export class IfcElementAssembly {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -28992,11 +28994,11 @@ export class IfcElementAssembly {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -29102,7 +29104,7 @@ export class IfcElementAssemblyType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -29121,7 +29123,7 @@ export class IfcElementAssemblyType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -29130,7 +29132,7 @@ export class IfcElementAssemblyType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -29233,7 +29235,7 @@ export class IfcElementComponent {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -29249,11 +29251,11 @@ export class IfcElementComponent {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -29339,7 +29341,7 @@ export class IfcElementComponentType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -29358,7 +29360,7 @@ export class IfcElementComponentType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -29367,7 +29369,7 @@ export class IfcElementComponentType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -29460,7 +29462,7 @@ export class IfcElementQuantity {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -29479,7 +29481,7 @@ export class IfcElementQuantity {
 		Quantities = [];
 		let Quantities_index = 0;
 		while (Quantities_index < tape[ptr].length) {
-			Quantities.push(tape[ptr][Quantities_index++]);
+			Quantities.push(new Handle<IfcPhysicalQuantity>(tape[ptr][Quantities_index++].expressID));
 		}
 	ptr++;
 		} else { Quantities = null; ptr++; }
@@ -29551,7 +29553,7 @@ export class IfcElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -29570,7 +29572,7 @@ export class IfcElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -29579,7 +29581,7 @@ export class IfcElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -29658,7 +29660,7 @@ export class IfcElementarySurface {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		return new IfcElementarySurface(expressID, type, Position);
 	}
@@ -29689,7 +29691,7 @@ export class IfcEllipse {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = ParseType(tape[ptr++]);
 		} else { Position = null; ptr++; }
 		let SemiAxis1;
 		if (tape[ptr]) {
@@ -29738,7 +29740,7 @@ export class IfcEllipseProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let SemiAxis1;
 		if (tape[ptr]) {
@@ -29801,7 +29803,7 @@ export class IfcEnergyConversionDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -29817,11 +29819,11 @@ export class IfcEnergyConversionDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -29907,7 +29909,7 @@ export class IfcEnergyConversionDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -29926,7 +29928,7 @@ export class IfcEnergyConversionDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -29935,7 +29937,7 @@ export class IfcEnergyConversionDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -30034,7 +30036,7 @@ export class IfcEngine {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -30050,11 +30052,11 @@ export class IfcEngine {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -30151,7 +30153,7 @@ export class IfcEngineType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -30170,7 +30172,7 @@ export class IfcEngineType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -30179,7 +30181,7 @@ export class IfcEngineType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -30284,7 +30286,7 @@ export class IfcEvaporativeCooler {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -30300,11 +30302,11 @@ export class IfcEvaporativeCooler {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -30401,7 +30403,7 @@ export class IfcEvaporativeCoolerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -30420,7 +30422,7 @@ export class IfcEvaporativeCoolerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -30429,7 +30431,7 @@ export class IfcEvaporativeCoolerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -30534,7 +30536,7 @@ export class IfcEvaporator {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -30550,11 +30552,11 @@ export class IfcEvaporator {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -30651,7 +30653,7 @@ export class IfcEvaporatorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -30670,7 +30672,7 @@ export class IfcEvaporatorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -30679,7 +30681,7 @@ export class IfcEvaporatorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -30788,7 +30790,7 @@ export class IfcEvent {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -30824,7 +30826,7 @@ export class IfcEvent {
 		} else { UserDefinedEventTriggerType = null; ptr++; }
 		let EventOccurenceTime;
 		if (tape[ptr]) {
-		EventOccurenceTime = tape[ptr++];
+		EventOccurenceTime = new Handle<IfcEventTime>(tape[ptr++].expressID);
 		} else { EventOccurenceTime = null; ptr++; }
 		return new IfcEvent(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, PredefinedType, EventTriggerType, UserDefinedEventTriggerType, EventOccurenceTime);
 	}
@@ -31023,7 +31025,7 @@ export class IfcEventType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -31042,7 +31044,7 @@ export class IfcEventType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -31160,7 +31162,7 @@ export class IfcExtendedProperties {
 		Properties = [];
 		let Properties_index = 0;
 		while (Properties_index < tape[ptr].length) {
-			Properties.push(tape[ptr][Properties_index++]);
+			Properties.push(new Handle<IfcProperty>(tape[ptr][Properties_index++].expressID));
 		}
 	ptr++;
 		} else { Properties = null; ptr++; }
@@ -31285,14 +31287,14 @@ export class IfcExternalReferenceRelationship {
 		} else { Description = null; ptr++; }
 		let RelatingReference;
 		if (tape[ptr]) {
-		RelatingReference = tape[ptr++];
+		RelatingReference = new Handle<IfcExternalReference>(tape[ptr++].expressID);
 		} else { RelatingReference = null; ptr++; }
 		let RelatedResourceObjects;
 		if (tape[ptr]) {
 		RelatedResourceObjects = [];
 		let RelatedResourceObjects_index = 0;
 		while (RelatedResourceObjects_index < tape[ptr].length) {
-			RelatedResourceObjects.push(tape[ptr][RelatedResourceObjects_index++]);
+			RelatedResourceObjects.push(ParseType(tape[ptr][RelatedResourceObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedResourceObjects = null; ptr++; }
@@ -31351,7 +31353,7 @@ export class IfcExternalSpatialElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -31367,11 +31369,11 @@ export class IfcExternalSpatialElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -31464,7 +31466,7 @@ export class IfcExternalSpatialStructureElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -31480,11 +31482,11 @@ export class IfcExternalSpatialStructureElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -31712,15 +31714,15 @@ export class IfcExtrudedAreaSolid {
 		let ptr = 0;
 		let SweptArea;
 		if (tape[ptr]) {
-		SweptArea = tape[ptr++];
+		SweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptArea = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let ExtrudedDirection;
 		if (tape[ptr]) {
-		ExtrudedDirection = tape[ptr++];
+		ExtrudedDirection = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { ExtrudedDirection = null; ptr++; }
 		let Depth;
 		if (tape[ptr]) {
@@ -31766,15 +31768,15 @@ export class IfcExtrudedAreaSolidTapered {
 		let ptr = 0;
 		let SweptArea;
 		if (tape[ptr]) {
-		SweptArea = tape[ptr++];
+		SweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptArea = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let ExtrudedDirection;
 		if (tape[ptr]) {
-		ExtrudedDirection = tape[ptr++];
+		ExtrudedDirection = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { ExtrudedDirection = null; ptr++; }
 		let Depth;
 		if (tape[ptr]) {
@@ -31782,7 +31784,7 @@ export class IfcExtrudedAreaSolidTapered {
 		} else { Depth = null; ptr++; }
 		let EndSweptArea;
 		if (tape[ptr]) {
-		EndSweptArea = tape[ptr++];
+		EndSweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { EndSweptArea = null; ptr++; }
 		return new IfcExtrudedAreaSolidTapered(expressID, type, SweptArea, Position, ExtrudedDirection, Depth, EndSweptArea);
 	}
@@ -31821,7 +31823,7 @@ export class IfcFace {
 		Bounds = [];
 		let Bounds_index = 0;
 		while (Bounds_index < tape[ptr].length) {
-			Bounds.push(tape[ptr][Bounds_index++]);
+			Bounds.push(new Handle<IfcFaceBound>(tape[ptr][Bounds_index++].expressID));
 		}
 	ptr++;
 		} else { Bounds = null; ptr++; }
@@ -31854,7 +31856,7 @@ export class IfcFaceBasedSurfaceModel {
 		FbsmFaces = [];
 		let FbsmFaces_index = 0;
 		while (FbsmFaces_index < tape[ptr].length) {
-			FbsmFaces.push(tape[ptr][FbsmFaces_index++]);
+			FbsmFaces.push(new Handle<IfcConnectedFaceSet>(tape[ptr][FbsmFaces_index++].expressID));
 		}
 	ptr++;
 		} else { FbsmFaces = null; ptr++; }
@@ -31886,7 +31888,7 @@ export class IfcFaceBound {
 		let ptr = 0;
 		let Bound;
 		if (tape[ptr]) {
-		Bound = tape[ptr++];
+		Bound = new Handle<IfcLoop>(tape[ptr++].expressID);
 		} else { Bound = null; ptr++; }
 		let Orientation;
 		if (tape[ptr]) {
@@ -31919,7 +31921,7 @@ export class IfcFaceOuterBound {
 		let ptr = 0;
 		let Bound;
 		if (tape[ptr]) {
-		Bound = tape[ptr++];
+		Bound = new Handle<IfcLoop>(tape[ptr++].expressID);
 		} else { Bound = null; ptr++; }
 		let Orientation;
 		if (tape[ptr]) {
@@ -31957,13 +31959,13 @@ export class IfcFaceSurface {
 		Bounds = [];
 		let Bounds_index = 0;
 		while (Bounds_index < tape[ptr].length) {
-			Bounds.push(tape[ptr][Bounds_index++]);
+			Bounds.push(new Handle<IfcFaceBound>(tape[ptr][Bounds_index++].expressID));
 		}
 	ptr++;
 		} else { Bounds = null; ptr++; }
 		let FaceSurface;
 		if (tape[ptr]) {
-		FaceSurface = tape[ptr++];
+		FaceSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { FaceSurface = null; ptr++; }
 		let SameSense;
 		if (tape[ptr]) {
@@ -31997,7 +31999,7 @@ export class IfcFacetedBrep {
 		let ptr = 0;
 		let Outer;
 		if (tape[ptr]) {
-		Outer = tape[ptr++];
+		Outer = new Handle<IfcClosedShell>(tape[ptr++].expressID);
 		} else { Outer = null; ptr++; }
 		return new IfcFacetedBrep(expressID, type, Outer);
 	}
@@ -32026,14 +32028,14 @@ export class IfcFacetedBrepWithVoids {
 		let ptr = 0;
 		let Outer;
 		if (tape[ptr]) {
-		Outer = tape[ptr++];
+		Outer = new Handle<IfcClosedShell>(tape[ptr++].expressID);
 		} else { Outer = null; ptr++; }
 		let Voids;
 		if (tape[ptr]) {
 		Voids = [];
 		let Voids_index = 0;
 		while (Voids_index < tape[ptr].length) {
-			Voids.push(tape[ptr][Voids_index++]);
+			Voids.push(new Handle<IfcClosedShell>(tape[ptr][Voids_index++].expressID));
 		}
 	ptr++;
 		} else { Voids = null; ptr++; }
@@ -32085,7 +32087,7 @@ export class IfcFacility {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -32101,11 +32103,11 @@ export class IfcFacility {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -32200,7 +32202,7 @@ export class IfcFacilityPart {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -32216,11 +32218,11 @@ export class IfcFacilityPart {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -32411,7 +32413,7 @@ export class IfcFan {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -32427,11 +32429,11 @@ export class IfcFan {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -32528,7 +32530,7 @@ export class IfcFanType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -32547,7 +32549,7 @@ export class IfcFanType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -32556,7 +32558,7 @@ export class IfcFanType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -32661,7 +32663,7 @@ export class IfcFastener {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -32677,11 +32679,11 @@ export class IfcFastener {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -32778,7 +32780,7 @@ export class IfcFastenerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -32797,7 +32799,7 @@ export class IfcFastenerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -32806,7 +32808,7 @@ export class IfcFastenerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -32909,7 +32911,7 @@ export class IfcFeatureElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -32925,11 +32927,11 @@ export class IfcFeatureElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -33013,7 +33015,7 @@ export class IfcFeatureElementAddition {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -33029,11 +33031,11 @@ export class IfcFeatureElementAddition {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -33117,7 +33119,7 @@ export class IfcFeatureElementSubtraction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -33133,11 +33135,11 @@ export class IfcFeatureElementSubtraction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -33214,7 +33216,7 @@ export class IfcFillAreaStyle {
 		FillStyles = [];
 		let FillStyles_index = 0;
 		while (FillStyles_index < tape[ptr].length) {
-			FillStyles.push(tape[ptr][FillStyles_index++]);
+			FillStyles.push(ParseType(tape[ptr][FillStyles_index++]));
 		}
 	ptr++;
 		} else { FillStyles = null; ptr++; }
@@ -33261,19 +33263,19 @@ export class IfcFillAreaStyleHatching {
 		let ptr = 0;
 		let HatchLineAppearance;
 		if (tape[ptr]) {
-		HatchLineAppearance = tape[ptr++];
+		HatchLineAppearance = new Handle<IfcCurveStyle>(tape[ptr++].expressID);
 		} else { HatchLineAppearance = null; ptr++; }
 		let StartOfNextHatchLine;
 		if (tape[ptr]) {
-		StartOfNextHatchLine = tape[ptr++];
+		StartOfNextHatchLine = ParseType(tape[ptr++]);
 		} else { StartOfNextHatchLine = null; ptr++; }
 		let PointOfReferenceHatchLine;
 		if (tape[ptr]) {
-		PointOfReferenceHatchLine = tape[ptr++];
+		PointOfReferenceHatchLine = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { PointOfReferenceHatchLine = null; ptr++; }
 		let PatternStart;
 		if (tape[ptr]) {
-		PatternStart = tape[ptr++];
+		PatternStart = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { PatternStart = null; ptr++; }
 		let HatchLineAngle;
 		if (tape[ptr]) {
@@ -33323,7 +33325,7 @@ export class IfcFillAreaStyleTiles {
 		TilingPattern = [];
 		let TilingPattern_index = 0;
 		while (TilingPattern_index < tape[ptr].length) {
-			TilingPattern.push(tape[ptr][TilingPattern_index++]);
+			TilingPattern.push(new Handle<IfcVector>(tape[ptr][TilingPattern_index++].expressID));
 		}
 	ptr++;
 		} else { TilingPattern = null; ptr++; }
@@ -33332,7 +33334,7 @@ export class IfcFillAreaStyleTiles {
 		Tiles = [];
 		let Tiles_index = 0;
 		while (Tiles_index < tape[ptr].length) {
-			Tiles.push(tape[ptr][Tiles_index++]);
+			Tiles.push(new Handle<IfcStyledItem>(tape[ptr][Tiles_index++].expressID));
 		}
 	ptr++;
 		} else { Tiles = null; ptr++; }
@@ -33389,7 +33391,7 @@ export class IfcFilter {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -33405,11 +33407,11 @@ export class IfcFilter {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -33506,7 +33508,7 @@ export class IfcFilterType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -33525,7 +33527,7 @@ export class IfcFilterType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -33534,7 +33536,7 @@ export class IfcFilterType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -33639,7 +33641,7 @@ export class IfcFireSuppressionTerminal {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -33655,11 +33657,11 @@ export class IfcFireSuppressionTerminal {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -33756,7 +33758,7 @@ export class IfcFireSuppressionTerminalType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -33775,7 +33777,7 @@ export class IfcFireSuppressionTerminalType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -33784,7 +33786,7 @@ export class IfcFireSuppressionTerminalType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -33879,15 +33881,15 @@ export class IfcFixedReferenceSweptAreaSolid {
 		let ptr = 0;
 		let SweptArea;
 		if (tape[ptr]) {
-		SweptArea = tape[ptr++];
+		SweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptArea = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Directrix;
 		if (tape[ptr]) {
-		Directrix = tape[ptr++];
+		Directrix = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Directrix = null; ptr++; }
 		let StartParam;
 		if (tape[ptr]) {
@@ -33899,7 +33901,7 @@ export class IfcFixedReferenceSweptAreaSolid {
 		} else { EndParam = null; ptr++; }
 		let FixedReference;
 		if (tape[ptr]) {
-		FixedReference = tape[ptr++];
+		FixedReference = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { FixedReference = null; ptr++; }
 		return new IfcFixedReferenceSweptAreaSolid(expressID, type, SweptArea, Position, Directrix, StartParam, EndParam, FixedReference);
 	}
@@ -33963,7 +33965,7 @@ export class IfcFlowController {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -33979,11 +33981,11 @@ export class IfcFlowController {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -34069,7 +34071,7 @@ export class IfcFlowControllerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -34088,7 +34090,7 @@ export class IfcFlowControllerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -34097,7 +34099,7 @@ export class IfcFlowControllerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -34194,7 +34196,7 @@ export class IfcFlowFitting {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -34210,11 +34212,11 @@ export class IfcFlowFitting {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -34300,7 +34302,7 @@ export class IfcFlowFittingType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -34319,7 +34321,7 @@ export class IfcFlowFittingType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -34328,7 +34330,7 @@ export class IfcFlowFittingType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -34427,7 +34429,7 @@ export class IfcFlowInstrument {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -34443,11 +34445,11 @@ export class IfcFlowInstrument {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -34544,7 +34546,7 @@ export class IfcFlowInstrumentType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -34563,7 +34565,7 @@ export class IfcFlowInstrumentType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -34572,7 +34574,7 @@ export class IfcFlowInstrumentType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -34677,7 +34679,7 @@ export class IfcFlowMeter {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -34693,11 +34695,11 @@ export class IfcFlowMeter {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -34794,7 +34796,7 @@ export class IfcFlowMeterType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -34813,7 +34815,7 @@ export class IfcFlowMeterType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -34822,7 +34824,7 @@ export class IfcFlowMeterType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -34925,7 +34927,7 @@ export class IfcFlowMovingDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -34941,11 +34943,11 @@ export class IfcFlowMovingDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -35031,7 +35033,7 @@ export class IfcFlowMovingDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35050,7 +35052,7 @@ export class IfcFlowMovingDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -35059,7 +35061,7 @@ export class IfcFlowMovingDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -35156,7 +35158,7 @@ export class IfcFlowSegment {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35172,11 +35174,11 @@ export class IfcFlowSegment {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -35262,7 +35264,7 @@ export class IfcFlowSegmentType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35281,7 +35283,7 @@ export class IfcFlowSegmentType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -35290,7 +35292,7 @@ export class IfcFlowSegmentType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -35387,7 +35389,7 @@ export class IfcFlowStorageDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35403,11 +35405,11 @@ export class IfcFlowStorageDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -35493,7 +35495,7 @@ export class IfcFlowStorageDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35512,7 +35514,7 @@ export class IfcFlowStorageDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -35521,7 +35523,7 @@ export class IfcFlowStorageDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -35618,7 +35620,7 @@ export class IfcFlowTerminal {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35634,11 +35636,11 @@ export class IfcFlowTerminal {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -35724,7 +35726,7 @@ export class IfcFlowTerminalType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35743,7 +35745,7 @@ export class IfcFlowTerminalType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -35752,7 +35754,7 @@ export class IfcFlowTerminalType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -35849,7 +35851,7 @@ export class IfcFlowTreatmentDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35865,11 +35867,11 @@ export class IfcFlowTreatmentDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -35955,7 +35957,7 @@ export class IfcFlowTreatmentDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -35974,7 +35976,7 @@ export class IfcFlowTreatmentDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -35983,7 +35985,7 @@ export class IfcFlowTreatmentDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -36082,7 +36084,7 @@ export class IfcFooting {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -36098,11 +36100,11 @@ export class IfcFooting {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -36199,7 +36201,7 @@ export class IfcFootingType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -36218,7 +36220,7 @@ export class IfcFootingType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -36227,7 +36229,7 @@ export class IfcFootingType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -36330,7 +36332,7 @@ export class IfcFurnishingElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -36346,11 +36348,11 @@ export class IfcFurnishingElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -36436,7 +36438,7 @@ export class IfcFurnishingElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -36455,7 +36457,7 @@ export class IfcFurnishingElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -36464,7 +36466,7 @@ export class IfcFurnishingElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -36563,7 +36565,7 @@ export class IfcFurniture {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -36579,11 +36581,11 @@ export class IfcFurniture {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -36682,7 +36684,7 @@ export class IfcFurnitureType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -36701,7 +36703,7 @@ export class IfcFurnitureType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -36710,7 +36712,7 @@ export class IfcFurnitureType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -36824,7 +36826,7 @@ export class IfcGeographicElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -36840,11 +36842,11 @@ export class IfcGeographicElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -36941,7 +36943,7 @@ export class IfcGeographicElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -36960,7 +36962,7 @@ export class IfcGeographicElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -36969,7 +36971,7 @@ export class IfcGeographicElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -37057,7 +37059,7 @@ export class IfcGeometricCurveSet {
 		Elements = [];
 		let Elements_index = 0;
 		while (Elements_index < tape[ptr].length) {
-			Elements.push(tape[ptr][Elements_index++]);
+			Elements.push(ParseType(tape[ptr][Elements_index++]));
 		}
 	ptr++;
 		} else { Elements = null; ptr++; }
@@ -37110,11 +37112,11 @@ export class IfcGeometricRepresentationContext {
 		} else { Precision = null; ptr++; }
 		let WorldCoordinateSystem;
 		if (tape[ptr]) {
-		WorldCoordinateSystem = tape[ptr++];
+		WorldCoordinateSystem = ParseType(tape[ptr++]);
 		} else { WorldCoordinateSystem = null; ptr++; }
 		let TrueNorth;
 		if (tape[ptr]) {
-		TrueNorth = tape[ptr++];
+		TrueNorth = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { TrueNorth = null; ptr++; }
 		return new IfcGeometricRepresentationContext(expressID, type, ContextIdentifier, ContextType, CoordinateSpaceDimension, Precision, WorldCoordinateSystem, TrueNorth);
 	}
@@ -37214,15 +37216,15 @@ export class IfcGeometricRepresentationSubContext {
 		} else { Precision = null; ptr++; }
 		let WorldCoordinateSystem;
 		if (tape[ptr]) {
-		WorldCoordinateSystem = tape[ptr++];
+		WorldCoordinateSystem = ParseType(tape[ptr++]);
 		} else { WorldCoordinateSystem = null; ptr++; }
 		let TrueNorth;
 		if (tape[ptr]) {
-		TrueNorth = tape[ptr++];
+		TrueNorth = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { TrueNorth = null; ptr++; }
 		let ParentContext;
 		if (tape[ptr]) {
-		ParentContext = tape[ptr++];
+		ParentContext = new Handle<IfcGeometricRepresentationContext>(tape[ptr++].expressID);
 		} else { ParentContext = null; ptr++; }
 		let TargetScale;
 		if (tape[ptr]) {
@@ -37296,7 +37298,7 @@ export class IfcGeometricSet {
 		Elements = [];
 		let Elements_index = 0;
 		while (Elements_index < tape[ptr].length) {
-			Elements.push(tape[ptr][Elements_index++]);
+			Elements.push(ParseType(tape[ptr][Elements_index++]));
 		}
 	ptr++;
 		} else { Elements = null; ptr++; }
@@ -37347,7 +37349,7 @@ export class IfcGrid {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -37363,18 +37365,18 @@ export class IfcGrid {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let UAxes;
 		if (tape[ptr]) {
 		UAxes = [];
 		let UAxes_index = 0;
 		while (UAxes_index < tape[ptr].length) {
-			UAxes.push(tape[ptr][UAxes_index++]);
+			UAxes.push(new Handle<IfcGridAxis>(tape[ptr][UAxes_index++].expressID));
 		}
 	ptr++;
 		} else { UAxes = null; ptr++; }
@@ -37383,7 +37385,7 @@ export class IfcGrid {
 		VAxes = [];
 		let VAxes_index = 0;
 		while (VAxes_index < tape[ptr].length) {
-			VAxes.push(tape[ptr][VAxes_index++]);
+			VAxes.push(new Handle<IfcGridAxis>(tape[ptr][VAxes_index++].expressID));
 		}
 	ptr++;
 		} else { VAxes = null; ptr++; }
@@ -37392,7 +37394,7 @@ export class IfcGrid {
 		WAxes = [];
 		let WAxes_index = 0;
 		while (WAxes_index < tape[ptr].length) {
-			WAxes.push(tape[ptr][WAxes_index++]);
+			WAxes.push(new Handle<IfcGridAxis>(tape[ptr][WAxes_index++].expressID));
 		}
 	ptr++;
 		} else { WAxes = null; ptr++; }
@@ -37480,7 +37482,7 @@ export class IfcGridAxis {
 		} else { AxisTag = null; ptr++; }
 		let AxisCurve;
 		if (tape[ptr]) {
-		AxisCurve = tape[ptr++];
+		AxisCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { AxisCurve = null; ptr++; }
 		let SameSense;
 		if (tape[ptr]) {
@@ -37520,15 +37522,15 @@ export class IfcGridPlacement {
 		let ptr = 0;
 		let PlacementRelTo;
 		if (tape[ptr]) {
-		PlacementRelTo = tape[ptr++];
+		PlacementRelTo = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { PlacementRelTo = null; ptr++; }
 		let PlacementLocation;
 		if (tape[ptr]) {
-		PlacementLocation = tape[ptr++];
+		PlacementLocation = new Handle<IfcVirtualGridIntersection>(tape[ptr++].expressID);
 		} else { PlacementLocation = null; ptr++; }
 		let PlacementRefDirection;
 		if (tape[ptr]) {
-		PlacementRefDirection = tape[ptr++];
+		PlacementRefDirection = ParseType(tape[ptr++]);
 		} else { PlacementRefDirection = null; ptr++; }
 		return new IfcGridPlacement(expressID, type, PlacementRelTo, PlacementLocation, PlacementRefDirection);
 	}
@@ -37575,7 +37577,7 @@ export class IfcGroup {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -37636,7 +37638,7 @@ export class IfcHalfSpaceSolid {
 		let ptr = 0;
 		let BaseSurface;
 		if (tape[ptr]) {
-		BaseSurface = tape[ptr++];
+		BaseSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { BaseSurface = null; ptr++; }
 		let AgreementFlag;
 		if (tape[ptr]) {
@@ -37687,7 +37689,7 @@ export class IfcHeatExchanger {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -37703,11 +37705,11 @@ export class IfcHeatExchanger {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -37804,7 +37806,7 @@ export class IfcHeatExchangerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -37823,7 +37825,7 @@ export class IfcHeatExchangerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -37832,7 +37834,7 @@ export class IfcHeatExchangerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -37937,7 +37939,7 @@ export class IfcHumidifier {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -37953,11 +37955,11 @@ export class IfcHumidifier {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -38054,7 +38056,7 @@ export class IfcHumidifierType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -38073,7 +38075,7 @@ export class IfcHumidifierType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -38082,7 +38084,7 @@ export class IfcHumidifierType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -38193,7 +38195,7 @@ export class IfcIShapeProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let OverallWidth;
 		if (tape[ptr]) {
@@ -38291,7 +38293,7 @@ export class IfcImageTexture {
 		} else { Mode = null; ptr++; }
 		let TextureTransform;
 		if (tape[ptr]) {
-		TextureTransform = tape[ptr++];
+		TextureTransform = new Handle<IfcCartesianTransformationOperator2D>(tape[ptr++].expressID);
 		} else { TextureTransform = null; ptr++; }
 		let Parameter;
 		if (tape[ptr]) {
@@ -38352,7 +38354,7 @@ export class IfcIndexedColourMap {
 		let ptr = 0;
 		let MappedTo;
 		if (tape[ptr]) {
-		MappedTo = tape[ptr++];
+		MappedTo = new Handle<IfcTessellatedFaceSet>(tape[ptr++].expressID);
 		} else { MappedTo = null; ptr++; }
 		let Opacity;
 		if (tape[ptr]) {
@@ -38360,7 +38362,7 @@ export class IfcIndexedColourMap {
 		} else { Opacity = null; ptr++; }
 		let Colours;
 		if (tape[ptr]) {
-		Colours = tape[ptr++];
+		Colours = new Handle<IfcColourRgbList>(tape[ptr++].expressID);
 		} else { Colours = null; ptr++; }
 		let ColourIndex;
 		if (tape[ptr]) {
@@ -38405,14 +38407,14 @@ export class IfcIndexedPolyCurve {
 		let ptr = 0;
 		let Points;
 		if (tape[ptr]) {
-		Points = tape[ptr++];
+		Points = new Handle<IfcCartesianPointList>(tape[ptr++].expressID);
 		} else { Points = null; ptr++; }
 		let Segments;
 		if (tape[ptr]) {
 		Segments = [];
 		let Segments_index = 0;
 		while (Segments_index < tape[ptr].length) {
-			Segments.push(tape[ptr][Segments_index++]);
+			Segments.push(ParseType(tape[ptr][Segments_index++]));
 		}
 	ptr++;
 		} else { Segments = null; ptr++; }
@@ -38529,17 +38531,17 @@ export class IfcIndexedTextureMap {
 		Maps = [];
 		let Maps_index = 0;
 		while (Maps_index < tape[ptr].length) {
-			Maps.push(tape[ptr][Maps_index++]);
+			Maps.push(new Handle<IfcSurfaceTexture>(tape[ptr][Maps_index++].expressID));
 		}
 	ptr++;
 		} else { Maps = null; ptr++; }
 		let MappedTo;
 		if (tape[ptr]) {
-		MappedTo = tape[ptr++];
+		MappedTo = new Handle<IfcTessellatedFaceSet>(tape[ptr++].expressID);
 		} else { MappedTo = null; ptr++; }
 		let TexCoords;
 		if (tape[ptr]) {
-		TexCoords = tape[ptr++];
+		TexCoords = new Handle<IfcTextureVertexList>(tape[ptr++].expressID);
 		} else { TexCoords = null; ptr++; }
 		return new IfcIndexedTextureMap(expressID, type, Maps, MappedTo, TexCoords);
 	}
@@ -38580,17 +38582,17 @@ export class IfcIndexedTriangleTextureMap {
 		Maps = [];
 		let Maps_index = 0;
 		while (Maps_index < tape[ptr].length) {
-			Maps.push(tape[ptr][Maps_index++]);
+			Maps.push(new Handle<IfcSurfaceTexture>(tape[ptr][Maps_index++].expressID));
 		}
 	ptr++;
 		} else { Maps = null; ptr++; }
 		let MappedTo;
 		if (tape[ptr]) {
-		MappedTo = tape[ptr++];
+		MappedTo = new Handle<IfcTessellatedFaceSet>(tape[ptr++].expressID);
 		} else { MappedTo = null; ptr++; }
 		let TexCoords;
 		if (tape[ptr]) {
-		TexCoords = tape[ptr++];
+		TexCoords = new Handle<IfcTextureVertexList>(tape[ptr++].expressID);
 		} else { TexCoords = null; ptr++; }
 		let TexCoordIndex;
 		if (tape[ptr]) {
@@ -38654,7 +38656,7 @@ export class IfcInterceptor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -38670,11 +38672,11 @@ export class IfcInterceptor {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -38771,7 +38773,7 @@ export class IfcInterceptorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -38790,7 +38792,7 @@ export class IfcInterceptorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -38799,7 +38801,7 @@ export class IfcInterceptorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -38888,14 +38890,14 @@ export class IfcIntersectionCurve {
 		let ptr = 0;
 		let Curve3D;
 		if (tape[ptr]) {
-		Curve3D = tape[ptr++];
+		Curve3D = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Curve3D = null; ptr++; }
 		let AssociatedGeometry;
 		if (tape[ptr]) {
 		AssociatedGeometry = [];
 		let AssociatedGeometry_index = 0;
 		while (AssociatedGeometry_index < tape[ptr].length) {
-			AssociatedGeometry.push(tape[ptr][AssociatedGeometry_index++]);
+			AssociatedGeometry.push(new Handle<IfcPcurve>(tape[ptr][AssociatedGeometry_index++].expressID));
 		}
 	ptr++;
 		} else { AssociatedGeometry = null; ptr++; }
@@ -38957,7 +38959,7 @@ export class IfcInventory {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -38977,14 +38979,14 @@ export class IfcInventory {
 		} else { PredefinedType = null; ptr++; }
 		let Jurisdiction;
 		if (tape[ptr]) {
-		Jurisdiction = tape[ptr++];
+		Jurisdiction = ParseType(tape[ptr++]);
 		} else { Jurisdiction = null; ptr++; }
 		let ResponsiblePersons;
 		if (tape[ptr]) {
 		ResponsiblePersons = [];
 		let ResponsiblePersons_index = 0;
 		while (ResponsiblePersons_index < tape[ptr].length) {
-			ResponsiblePersons.push(tape[ptr][ResponsiblePersons_index++]);
+			ResponsiblePersons.push(new Handle<IfcPerson>(tape[ptr][ResponsiblePersons_index++].expressID));
 		}
 	ptr++;
 		} else { ResponsiblePersons = null; ptr++; }
@@ -38994,11 +38996,11 @@ export class IfcInventory {
 		} else { LastUpdateDate = null; ptr++; }
 		let CurrentValue;
 		if (tape[ptr]) {
-		CurrentValue = tape[ptr++];
+		CurrentValue = new Handle<IfcCostValue>(tape[ptr++].expressID);
 		} else { CurrentValue = null; ptr++; }
 		let OriginalValue;
 		if (tape[ptr]) {
-		OriginalValue = tape[ptr++];
+		OriginalValue = new Handle<IfcCostValue>(tape[ptr++].expressID);
 		} else { OriginalValue = null; ptr++; }
 		return new IfcInventory(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, PredefinedType, Jurisdiction, ResponsiblePersons, LastUpdateDate, CurrentValue, OriginalValue);
 	}
@@ -39118,14 +39120,14 @@ export class IfcIrregularTimeSeries {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = ParseType(tape[ptr++]);
 		} else { Unit = null; ptr++; }
 		let Values;
 		if (tape[ptr]) {
 		Values = [];
 		let Values_index = 0;
 		while (Values_index < tape[ptr].length) {
-			Values.push(tape[ptr][Values_index++]);
+			Values.push(new Handle<IfcIrregularTimeSeriesValue>(tape[ptr][Values_index++].expressID));
 		}
 	ptr++;
 		} else { Values = null; ptr++; }
@@ -39187,7 +39189,7 @@ export class IfcIrregularTimeSeriesValue {
 		ListValues = [];
 		let ListValues_index = 0;
 		while (ListValues_index < tape[ptr].length) {
-			ListValues.push(tape[ptr][ListValues_index++]);
+			ListValues.push(ParseType(tape[ptr][ListValues_index++]));
 		}
 	ptr++;
 		} else { ListValues = null; ptr++; }
@@ -39236,7 +39238,7 @@ export class IfcJunctionBox {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -39252,11 +39254,11 @@ export class IfcJunctionBox {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -39353,7 +39355,7 @@ export class IfcJunctionBoxType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -39372,7 +39374,7 @@ export class IfcJunctionBoxType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -39381,7 +39383,7 @@ export class IfcJunctionBoxType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -39490,7 +39492,7 @@ export class IfcLShapeProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Depth;
 		if (tape[ptr]) {
@@ -39589,7 +39591,7 @@ export class IfcLaborResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -39613,20 +39615,20 @@ export class IfcLaborResource {
 		} else { LongDescription = null; ptr++; }
 		let Usage;
 		if (tape[ptr]) {
-		Usage = tape[ptr++];
+		Usage = new Handle<IfcResourceTime>(tape[ptr++].expressID);
 		} else { Usage = null; ptr++; }
 		let BaseCosts;
 		if (tape[ptr]) {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -39734,7 +39736,7 @@ export class IfcLaborResourceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -39753,7 +39755,7 @@ export class IfcLaborResourceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -39774,13 +39776,13 @@ export class IfcLaborResourceType {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -39885,7 +39887,7 @@ export class IfcLagTime {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let LagValue;
 		if (tape[ptr]) {
-		LagValue = tape[ptr++];
+		LagValue = ParseType(tape[ptr++]);
 		} else { LagValue = null; ptr++; }
 		let DurationType;
 		if (tape[ptr]) {
@@ -39951,7 +39953,7 @@ export class IfcLamp {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -39967,11 +39969,11 @@ export class IfcLamp {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -40068,7 +40070,7 @@ export class IfcLampType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -40087,7 +40089,7 @@ export class IfcLampType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -40096,7 +40098,7 @@ export class IfcLampType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -40199,7 +40201,7 @@ export class IfcLibraryInformation {
 		} else { Version = null; ptr++; }
 		let Publisher;
 		if (tape[ptr]) {
-		Publisher = tape[ptr++];
+		Publisher = ParseType(tape[ptr++]);
 		} else { Publisher = null; ptr++; }
 		let VersionDate;
 		if (tape[ptr]) {
@@ -40291,7 +40293,7 @@ export class IfcLibraryReference {
 		} else { Language = null; ptr++; }
 		let ReferencedLibrary;
 		if (tape[ptr]) {
-		ReferencedLibrary = tape[ptr++];
+		ReferencedLibrary = new Handle<IfcLibraryInformation>(tape[ptr++].expressID);
 		} else { ReferencedLibrary = null; ptr++; }
 		return new IfcLibraryReference(expressID, type, Location, Identification, Name, Description, Language, ReferencedLibrary);
 	}
@@ -40417,7 +40419,7 @@ export class IfcLightFixture {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -40433,11 +40435,11 @@ export class IfcLightFixture {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -40534,7 +40536,7 @@ export class IfcLightFixtureType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -40553,7 +40555,7 @@ export class IfcLightFixtureType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -40562,7 +40564,7 @@ export class IfcLightFixtureType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -40656,7 +40658,7 @@ export class IfcLightIntensityDistribution {
 		DistributionData = [];
 		let DistributionData_index = 0;
 		while (DistributionData_index < tape[ptr].length) {
-			DistributionData.push(tape[ptr][DistributionData_index++]);
+			DistributionData.push(new Handle<IfcLightDistributionData>(tape[ptr][DistributionData_index++].expressID));
 		}
 	ptr++;
 		} else { DistributionData = null; ptr++; }
@@ -40698,7 +40700,7 @@ export class IfcLightSource {
 		} else { Name = null; ptr++; }
 		let LightColour;
 		if (tape[ptr]) {
-		LightColour = tape[ptr++];
+		LightColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { LightColour = null; ptr++; }
 		let AmbientIntensity;
 		if (tape[ptr]) {
@@ -40754,7 +40756,7 @@ export class IfcLightSourceAmbient {
 		} else { Name = null; ptr++; }
 		let LightColour;
 		if (tape[ptr]) {
-		LightColour = tape[ptr++];
+		LightColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { LightColour = null; ptr++; }
 		let AmbientIntensity;
 		if (tape[ptr]) {
@@ -40812,7 +40814,7 @@ export class IfcLightSourceDirectional {
 		} else { Name = null; ptr++; }
 		let LightColour;
 		if (tape[ptr]) {
-		LightColour = tape[ptr++];
+		LightColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { LightColour = null; ptr++; }
 		let AmbientIntensity;
 		if (tape[ptr]) {
@@ -40824,7 +40826,7 @@ export class IfcLightSourceDirectional {
 		} else { Intensity = null; ptr++; }
 		let Orientation;
 		if (tape[ptr]) {
-		Orientation = tape[ptr++];
+		Orientation = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Orientation = null; ptr++; }
 		return new IfcLightSourceDirectional(expressID, type, Name, LightColour, AmbientIntensity, Intensity, Orientation);
 	}
@@ -40886,7 +40888,7 @@ export class IfcLightSourceGoniometric {
 		} else { Name = null; ptr++; }
 		let LightColour;
 		if (tape[ptr]) {
-		LightColour = tape[ptr++];
+		LightColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { LightColour = null; ptr++; }
 		let AmbientIntensity;
 		if (tape[ptr]) {
@@ -40898,11 +40900,11 @@ export class IfcLightSourceGoniometric {
 		} else { Intensity = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let ColourAppearance;
 		if (tape[ptr]) {
-		ColourAppearance = tape[ptr++];
+		ColourAppearance = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { ColourAppearance = null; ptr++; }
 		let ColourTemperature;
 		if (tape[ptr]) {
@@ -40918,7 +40920,7 @@ export class IfcLightSourceGoniometric {
 		} else { LightEmissionSource = null; ptr++; }
 		let LightDistributionDataSource;
 		if (tape[ptr]) {
-		LightDistributionDataSource = tape[ptr++];
+		LightDistributionDataSource = ParseType(tape[ptr++]);
 		} else { LightDistributionDataSource = null; ptr++; }
 		return new IfcLightSourceGoniometric(expressID, type, Name, LightColour, AmbientIntensity, Intensity, Position, ColourAppearance, ColourTemperature, LuminousFlux, LightEmissionSource, LightDistributionDataSource);
 	}
@@ -40989,7 +40991,7 @@ export class IfcLightSourcePositional {
 		} else { Name = null; ptr++; }
 		let LightColour;
 		if (tape[ptr]) {
-		LightColour = tape[ptr++];
+		LightColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { LightColour = null; ptr++; }
 		let AmbientIntensity;
 		if (tape[ptr]) {
@@ -41001,7 +41003,7 @@ export class IfcLightSourcePositional {
 		} else { Intensity = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -41091,7 +41093,7 @@ export class IfcLightSourceSpot {
 		} else { Name = null; ptr++; }
 		let LightColour;
 		if (tape[ptr]) {
-		LightColour = tape[ptr++];
+		LightColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { LightColour = null; ptr++; }
 		let AmbientIntensity;
 		if (tape[ptr]) {
@@ -41103,7 +41105,7 @@ export class IfcLightSourceSpot {
 		} else { Intensity = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -41123,7 +41125,7 @@ export class IfcLightSourceSpot {
 		} else { QuadricAttenuation = null; ptr++; }
 		let Orientation;
 		if (tape[ptr]) {
-		Orientation = tape[ptr++];
+		Orientation = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Orientation = null; ptr++; }
 		let ConcentrationExponent;
 		if (tape[ptr]) {
@@ -41190,11 +41192,11 @@ export class IfcLine {
 		let ptr = 0;
 		let Pnt;
 		if (tape[ptr]) {
-		Pnt = tape[ptr++];
+		Pnt = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { Pnt = null; ptr++; }
 		let Dir;
 		if (tape[ptr]) {
-		Dir = tape[ptr++];
+		Dir = new Handle<IfcVector>(tape[ptr++].expressID);
 		} else { Dir = null; ptr++; }
 		return new IfcLine(expressID, type, Pnt, Dir);
 	}
@@ -41227,7 +41229,7 @@ export class IfcLineSegment2D {
 		let ptr = 0;
 		let StartPoint;
 		if (tape[ptr]) {
-		StartPoint = tape[ptr++];
+		StartPoint = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { StartPoint = null; ptr++; }
 		let StartDirection;
 		if (tape[ptr]) {
@@ -41272,23 +41274,23 @@ export class IfcLinearPlacement {
 		let ptr = 0;
 		let PlacementRelTo;
 		if (tape[ptr]) {
-		PlacementRelTo = tape[ptr++];
+		PlacementRelTo = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { PlacementRelTo = null; ptr++; }
 		let PlacementMeasuredAlong;
 		if (tape[ptr]) {
-		PlacementMeasuredAlong = tape[ptr++];
+		PlacementMeasuredAlong = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { PlacementMeasuredAlong = null; ptr++; }
 		let Distance;
 		if (tape[ptr]) {
-		Distance = tape[ptr++];
+		Distance = new Handle<IfcDistanceExpression>(tape[ptr++].expressID);
 		} else { Distance = null; ptr++; }
 		let Orientation;
 		if (tape[ptr]) {
-		Orientation = tape[ptr++];
+		Orientation = new Handle<IfcOrientationExpression>(tape[ptr++].expressID);
 		} else { Orientation = null; ptr++; }
 		let CartesianPosition;
 		if (tape[ptr]) {
-		CartesianPosition = tape[ptr++];
+		CartesianPosition = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { CartesianPosition = null; ptr++; }
 		return new IfcLinearPlacement(expressID, type, PlacementRelTo, PlacementMeasuredAlong, Distance, Orientation, CartesianPosition);
 	}
@@ -41350,7 +41352,7 @@ export class IfcLinearPositioningElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -41366,15 +41368,15 @@ export class IfcLinearPositioningElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		return new IfcLinearPositioningElement(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Axis);
 	}
@@ -41435,11 +41437,11 @@ export class IfcLocalPlacement {
 		let ptr = 0;
 		let PlacementRelTo;
 		if (tape[ptr]) {
-		PlacementRelTo = tape[ptr++];
+		PlacementRelTo = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { PlacementRelTo = null; ptr++; }
 		let RelativePlacement;
 		if (tape[ptr]) {
-		RelativePlacement = tape[ptr++];
+		RelativePlacement = ParseType(tape[ptr++]);
 		} else { RelativePlacement = null; ptr++; }
 		return new IfcLocalPlacement(expressID, type, PlacementRelTo, RelativePlacement);
 	}
@@ -41488,7 +41490,7 @@ export class IfcManifoldSolidBrep {
 		let ptr = 0;
 		let Outer;
 		if (tape[ptr]) {
-		Outer = tape[ptr++];
+		Outer = new Handle<IfcClosedShell>(tape[ptr++].expressID);
 		} else { Outer = null; ptr++; }
 		return new IfcManifoldSolidBrep(expressID, type, Outer);
 	}
@@ -41529,11 +41531,11 @@ export class IfcMapConversion {
 		let ptr = 0;
 		let SourceCRS;
 		if (tape[ptr]) {
-		SourceCRS = tape[ptr++];
+		SourceCRS = ParseType(tape[ptr++]);
 		} else { SourceCRS = null; ptr++; }
 		let TargetCRS;
 		if (tape[ptr]) {
-		TargetCRS = tape[ptr++];
+		TargetCRS = new Handle<IfcCoordinateReferenceSystem>(tape[ptr++].expressID);
 		} else { TargetCRS = null; ptr++; }
 		let Eastings;
 		if (tape[ptr]) {
@@ -41607,11 +41609,11 @@ export class IfcMappedItem {
 		let ptr = 0;
 		let MappingSource;
 		if (tape[ptr]) {
-		MappingSource = tape[ptr++];
+		MappingSource = new Handle<IfcRepresentationMap>(tape[ptr++].expressID);
 		} else { MappingSource = null; ptr++; }
 		let MappingTarget;
 		if (tape[ptr]) {
-		MappingTarget = tape[ptr++];
+		MappingTarget = new Handle<IfcCartesianTransformationOperator>(tape[ptr++].expressID);
 		} else { MappingTarget = null; ptr++; }
 		return new IfcMappedItem(expressID, type, MappingSource, MappingTarget);
 	}
@@ -41694,13 +41696,13 @@ export class IfcMaterialClassificationRelationship {
 		MaterialClassifications = [];
 		let MaterialClassifications_index = 0;
 		while (MaterialClassifications_index < tape[ptr].length) {
-			MaterialClassifications.push(tape[ptr][MaterialClassifications_index++]);
+			MaterialClassifications.push(ParseType(tape[ptr][MaterialClassifications_index++]));
 		}
 	ptr++;
 		} else { MaterialClassifications = null; ptr++; }
 		let ClassifiedMaterial;
 		if (tape[ptr]) {
-		ClassifiedMaterial = tape[ptr++];
+		ClassifiedMaterial = new Handle<IfcMaterial>(tape[ptr++].expressID);
 		} else { ClassifiedMaterial = null; ptr++; }
 		return new IfcMaterialClassificationRelationship(expressID, type, MaterialClassifications, ClassifiedMaterial);
 	}
@@ -41743,7 +41745,7 @@ export class IfcMaterialConstituent {
 		} else { Description = null; ptr++; }
 		let Material;
 		if (tape[ptr]) {
-		Material = tape[ptr++];
+		Material = new Handle<IfcMaterial>(tape[ptr++].expressID);
 		} else { Material = null; ptr++; }
 		let Fraction;
 		if (tape[ptr]) {
@@ -41811,7 +41813,7 @@ export class IfcMaterialConstituentSet {
 		MaterialConstituents = [];
 		let MaterialConstituents_index = 0;
 		while (MaterialConstituents_index < tape[ptr].length) {
-			MaterialConstituents.push(tape[ptr][MaterialConstituents_index++]);
+			MaterialConstituents.push(new Handle<IfcMaterialConstituent>(tape[ptr][MaterialConstituents_index++].expressID));
 		}
 	ptr++;
 		} else { MaterialConstituents = null; ptr++; }
@@ -41890,13 +41892,13 @@ export class IfcMaterialDefinitionRepresentation {
 		Representations = [];
 		let Representations_index = 0;
 		while (Representations_index < tape[ptr].length) {
-			Representations.push(tape[ptr][Representations_index++]);
+			Representations.push(new Handle<IfcRepresentation>(tape[ptr][Representations_index++].expressID));
 		}
 	ptr++;
 		} else { Representations = null; ptr++; }
 		let RepresentedMaterial;
 		if (tape[ptr]) {
-		RepresentedMaterial = tape[ptr++];
+		RepresentedMaterial = new Handle<IfcMaterial>(tape[ptr++].expressID);
 		} else { RepresentedMaterial = null; ptr++; }
 		return new IfcMaterialDefinitionRepresentation(expressID, type, Name, Description, Representations, RepresentedMaterial);
 	}
@@ -41948,7 +41950,7 @@ export class IfcMaterialLayer {
 		let ptr = 0;
 		let Material;
 		if (tape[ptr]) {
-		Material = tape[ptr++];
+		Material = new Handle<IfcMaterial>(tape[ptr++].expressID);
 		} else { Material = null; ptr++; }
 		let LayerThickness;
 		if (tape[ptr]) {
@@ -42032,7 +42034,7 @@ export class IfcMaterialLayerSet {
 		MaterialLayers = [];
 		let MaterialLayers_index = 0;
 		while (MaterialLayers_index < tape[ptr].length) {
-			MaterialLayers.push(tape[ptr][MaterialLayers_index++]);
+			MaterialLayers.push(new Handle<IfcMaterialLayer>(tape[ptr][MaterialLayers_index++].expressID));
 		}
 	ptr++;
 		} else { MaterialLayers = null; ptr++; }
@@ -42088,7 +42090,7 @@ export class IfcMaterialLayerSetUsage {
 		let ptr = 0;
 		let ForLayerSet;
 		if (tape[ptr]) {
-		ForLayerSet = tape[ptr++];
+		ForLayerSet = new Handle<IfcMaterialLayerSet>(tape[ptr++].expressID);
 		} else { ForLayerSet = null; ptr++; }
 		let LayerSetDirection;
 		if (tape[ptr]) {
@@ -42156,7 +42158,7 @@ export class IfcMaterialLayerWithOffsets {
 		let ptr = 0;
 		let Material;
 		if (tape[ptr]) {
-		Material = tape[ptr++];
+		Material = new Handle<IfcMaterial>(tape[ptr++].expressID);
 		} else { Material = null; ptr++; }
 		let LayerThickness;
 		if (tape[ptr]) {
@@ -42248,7 +42250,7 @@ export class IfcMaterialList {
 		Materials = [];
 		let Materials_index = 0;
 		while (Materials_index < tape[ptr].length) {
-			Materials.push(tape[ptr][Materials_index++]);
+			Materials.push(new Handle<IfcMaterial>(tape[ptr][Materials_index++].expressID));
 		}
 	ptr++;
 		} else { Materials = null; ptr++; }
@@ -42296,11 +42298,11 @@ export class IfcMaterialProfile {
 		} else { Description = null; ptr++; }
 		let Material;
 		if (tape[ptr]) {
-		Material = tape[ptr++];
+		Material = new Handle<IfcMaterial>(tape[ptr++].expressID);
 		} else { Material = null; ptr++; }
 		let Profile;
 		if (tape[ptr]) {
-		Profile = tape[ptr++];
+		Profile = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { Profile = null; ptr++; }
 		let Priority;
 		if (tape[ptr]) {
@@ -42377,13 +42379,13 @@ export class IfcMaterialProfileSet {
 		MaterialProfiles = [];
 		let MaterialProfiles_index = 0;
 		while (MaterialProfiles_index < tape[ptr].length) {
-			MaterialProfiles.push(tape[ptr][MaterialProfiles_index++]);
+			MaterialProfiles.push(new Handle<IfcMaterialProfile>(tape[ptr][MaterialProfiles_index++].expressID));
 		}
 	ptr++;
 		} else { MaterialProfiles = null; ptr++; }
 		let CompositeProfile;
 		if (tape[ptr]) {
-		CompositeProfile = tape[ptr++];
+		CompositeProfile = new Handle<IfcCompositeProfileDef>(tape[ptr++].expressID);
 		} else { CompositeProfile = null; ptr++; }
 		return new IfcMaterialProfileSet(expressID, type, Name, Description, MaterialProfiles, CompositeProfile);
 	}
@@ -42430,7 +42432,7 @@ export class IfcMaterialProfileSetUsage {
 		let ptr = 0;
 		let ForProfileSet;
 		if (tape[ptr]) {
-		ForProfileSet = tape[ptr++];
+		ForProfileSet = new Handle<IfcMaterialProfileSet>(tape[ptr++].expressID);
 		} else { ForProfileSet = null; ptr++; }
 		let CardinalPoint;
 		if (tape[ptr]) {
@@ -42481,7 +42483,7 @@ export class IfcMaterialProfileSetUsageTapering {
 		let ptr = 0;
 		let ForProfileSet;
 		if (tape[ptr]) {
-		ForProfileSet = tape[ptr++];
+		ForProfileSet = new Handle<IfcMaterialProfileSet>(tape[ptr++].expressID);
 		} else { ForProfileSet = null; ptr++; }
 		let CardinalPoint;
 		if (tape[ptr]) {
@@ -42493,7 +42495,7 @@ export class IfcMaterialProfileSetUsageTapering {
 		} else { ReferenceExtent = null; ptr++; }
 		let ForProfileEndSet;
 		if (tape[ptr]) {
-		ForProfileEndSet = tape[ptr++];
+		ForProfileEndSet = new Handle<IfcMaterialProfileSet>(tape[ptr++].expressID);
 		} else { ForProfileEndSet = null; ptr++; }
 		let CardinalEndPoint;
 		if (tape[ptr]) {
@@ -42559,11 +42561,11 @@ export class IfcMaterialProfileWithOffsets {
 		} else { Description = null; ptr++; }
 		let Material;
 		if (tape[ptr]) {
-		Material = tape[ptr++];
+		Material = new Handle<IfcMaterial>(tape[ptr++].expressID);
 		} else { Material = null; ptr++; }
 		let Profile;
 		if (tape[ptr]) {
-		Profile = tape[ptr++];
+		Profile = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { Profile = null; ptr++; }
 		let Priority;
 		if (tape[ptr]) {
@@ -42646,13 +42648,13 @@ export class IfcMaterialProperties {
 		Properties = [];
 		let Properties_index = 0;
 		while (Properties_index < tape[ptr].length) {
-			Properties.push(tape[ptr][Properties_index++]);
+			Properties.push(new Handle<IfcProperty>(tape[ptr][Properties_index++].expressID));
 		}
 	ptr++;
 		} else { Properties = null; ptr++; }
 		let Material;
 		if (tape[ptr]) {
-		Material = tape[ptr++];
+		Material = new Handle<IfcMaterialDefinition>(tape[ptr++].expressID);
 		} else { Material = null; ptr++; }
 		return new IfcMaterialProperties(expressID, type, Name, Description, Properties, Material);
 	}
@@ -42708,14 +42710,14 @@ export class IfcMaterialRelationship {
 		} else { Description = null; ptr++; }
 		let RelatingMaterial;
 		if (tape[ptr]) {
-		RelatingMaterial = tape[ptr++];
+		RelatingMaterial = new Handle<IfcMaterial>(tape[ptr++].expressID);
 		} else { RelatingMaterial = null; ptr++; }
 		let RelatedMaterials;
 		if (tape[ptr]) {
 		RelatedMaterials = [];
 		let RelatedMaterials_index = 0;
 		while (RelatedMaterials_index < tape[ptr].length) {
-			RelatedMaterials.push(tape[ptr][RelatedMaterials_index++]);
+			RelatedMaterials.push(new Handle<IfcMaterial>(tape[ptr][RelatedMaterials_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedMaterials = null; ptr++; }
@@ -42787,11 +42789,11 @@ export class IfcMeasureWithUnit {
 		let ptr = 0;
 		let ValueComponent;
 		if (tape[ptr]) {
-		ValueComponent = tape[ptr++];
+		ValueComponent = ParseType(tape[ptr++]);
 		} else { ValueComponent = null; ptr++; }
 		let UnitComponent;
 		if (tape[ptr]) {
-		UnitComponent = tape[ptr++];
+		UnitComponent = ParseType(tape[ptr++]);
 		} else { UnitComponent = null; ptr++; }
 		return new IfcMeasureWithUnit(expressID, type, ValueComponent, UnitComponent);
 	}
@@ -42849,7 +42851,7 @@ export class IfcMechanicalFastener {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -42865,11 +42867,11 @@ export class IfcMechanicalFastener {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -42984,7 +42986,7 @@ export class IfcMechanicalFastenerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -43003,7 +43005,7 @@ export class IfcMechanicalFastenerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -43012,7 +43014,7 @@ export class IfcMechanicalFastenerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -43131,7 +43133,7 @@ export class IfcMedicalDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -43147,11 +43149,11 @@ export class IfcMedicalDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -43248,7 +43250,7 @@ export class IfcMedicalDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -43267,7 +43269,7 @@ export class IfcMedicalDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -43276,7 +43278,7 @@ export class IfcMedicalDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -43381,7 +43383,7 @@ export class IfcMember {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -43397,11 +43399,11 @@ export class IfcMember {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -43496,7 +43498,7 @@ export class IfcMemberStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -43512,11 +43514,11 @@ export class IfcMemberStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -43613,7 +43615,7 @@ export class IfcMemberType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -43632,7 +43634,7 @@ export class IfcMemberType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -43641,7 +43643,7 @@ export class IfcMemberType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -43762,7 +43764,7 @@ export class IfcMetric {
 		} else { ConstraintSource = null; ptr++; }
 		let CreatingActor;
 		if (tape[ptr]) {
-		CreatingActor = tape[ptr++];
+		CreatingActor = ParseType(tape[ptr++]);
 		} else { CreatingActor = null; ptr++; }
 		let CreationTime;
 		if (tape[ptr]) {
@@ -43782,11 +43784,11 @@ export class IfcMetric {
 		} else { ValueSource = null; ptr++; }
 		let DataValue;
 		if (tape[ptr]) {
-		DataValue = tape[ptr++];
+		DataValue = ParseType(tape[ptr++]);
 		} else { DataValue = null; ptr++; }
 		let ReferencePath;
 		if (tape[ptr]) {
-		ReferencePath = tape[ptr++];
+		ReferencePath = new Handle<IfcReference>(tape[ptr++].expressID);
 		} else { ReferencePath = null; ptr++; }
 		return new IfcMetric(expressID, type, Name, Description, ConstraintGrade, ConstraintSource, CreatingActor, CreationTime, UserDefinedGrade, Benchmark, ValueSource, DataValue, ReferencePath);
 	}
@@ -43869,11 +43871,11 @@ export class IfcMirroredProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let ParentProfile;
 		if (tape[ptr]) {
-		ParentProfile = tape[ptr++];
+		ParentProfile = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { ParentProfile = null; ptr++; }
 		let Operator;
 		if (tape[ptr]) {
-		Operator = tape[ptr++];
+		Operator = new Handle<IfcCartesianTransformationOperator2D>(tape[ptr++].expressID);
 		} else { Operator = null; ptr++; }
 		let Label;
 		if (tape[ptr]) {
@@ -43965,7 +43967,7 @@ export class IfcMotorConnection {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -43981,11 +43983,11 @@ export class IfcMotorConnection {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -44082,7 +44084,7 @@ export class IfcMotorConnectionType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -44101,7 +44103,7 @@ export class IfcMotorConnectionType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -44110,7 +44112,7 @@ export class IfcMotorConnectionType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -44197,7 +44199,7 @@ export class IfcNamedUnit {
 		let ptr = 0;
 		let Dimensions;
 		if (tape[ptr]) {
-		Dimensions = tape[ptr++];
+		Dimensions = new Handle<IfcDimensionalExponents>(tape[ptr++].expressID);
 		} else { Dimensions = null; ptr++; }
 		let UnitType;
 		if (tape[ptr]) {
@@ -44242,7 +44244,7 @@ export class IfcObject {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -44311,7 +44313,7 @@ export class IfcObjectDefinition {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -44361,7 +44363,7 @@ export class IfcObjectPlacement {
 		let ptr = 0;
 		let PlacementRelTo;
 		if (tape[ptr]) {
-		PlacementRelTo = tape[ptr++];
+		PlacementRelTo = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { PlacementRelTo = null; ptr++; }
 		return new IfcObjectPlacement(expressID, type, PlacementRelTo);
 	}
@@ -44427,7 +44429,7 @@ export class IfcObjective {
 		} else { ConstraintSource = null; ptr++; }
 		let CreatingActor;
 		if (tape[ptr]) {
-		CreatingActor = tape[ptr++];
+		CreatingActor = ParseType(tape[ptr++]);
 		} else { CreatingActor = null; ptr++; }
 		let CreationTime;
 		if (tape[ptr]) {
@@ -44442,7 +44444,7 @@ export class IfcObjective {
 		BenchmarkValues = [];
 		let BenchmarkValues_index = 0;
 		while (BenchmarkValues_index < tape[ptr].length) {
-			BenchmarkValues.push(tape[ptr][BenchmarkValues_index++]);
+			BenchmarkValues.push(new Handle<IfcConstraint>(tape[ptr][BenchmarkValues_index++].expressID));
 		}
 	ptr++;
 		} else { BenchmarkValues = null; ptr++; }
@@ -44542,7 +44544,7 @@ export class IfcOccupant {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -44558,7 +44560,7 @@ export class IfcOccupant {
 		} else { ObjectType = null; ptr++; }
 		let TheActor;
 		if (tape[ptr]) {
-		TheActor = tape[ptr++];
+		TheActor = ParseType(tape[ptr++]);
 		} else { TheActor = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -44614,7 +44616,7 @@ export class IfcOffsetCurve {
 		let ptr = 0;
 		let BasisCurve;
 		if (tape[ptr]) {
-		BasisCurve = tape[ptr++];
+		BasisCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { BasisCurve = null; ptr++; }
 		return new IfcOffsetCurve(expressID, type, BasisCurve);
 	}
@@ -44645,7 +44647,7 @@ export class IfcOffsetCurve2D {
 		let ptr = 0;
 		let BasisCurve;
 		if (tape[ptr]) {
-		BasisCurve = tape[ptr++];
+		BasisCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { BasisCurve = null; ptr++; }
 		let Distance;
 		if (tape[ptr]) {
@@ -44688,7 +44690,7 @@ export class IfcOffsetCurve3D {
 		let ptr = 0;
 		let BasisCurve;
 		if (tape[ptr]) {
-		BasisCurve = tape[ptr++];
+		BasisCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { BasisCurve = null; ptr++; }
 		let Distance;
 		if (tape[ptr]) {
@@ -44700,7 +44702,7 @@ export class IfcOffsetCurve3D {
 		} else { SelfIntersect = null; ptr++; }
 		let RefDirection;
 		if (tape[ptr]) {
-		RefDirection = tape[ptr++];
+		RefDirection = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { RefDirection = null; ptr++; }
 		return new IfcOffsetCurve3D(expressID, type, BasisCurve, Distance, SelfIntersect, RefDirection);
 	}
@@ -44735,14 +44737,14 @@ export class IfcOffsetCurveByDistances {
 		let ptr = 0;
 		let BasisCurve;
 		if (tape[ptr]) {
-		BasisCurve = tape[ptr++];
+		BasisCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { BasisCurve = null; ptr++; }
 		let OffsetValues;
 		if (tape[ptr]) {
 		OffsetValues = [];
 		let OffsetValues_index = 0;
 		while (OffsetValues_index < tape[ptr].length) {
-			OffsetValues.push(tape[ptr][OffsetValues_index++]);
+			OffsetValues.push(new Handle<IfcDistanceExpression>(tape[ptr][OffsetValues_index++].expressID));
 		}
 	ptr++;
 		} else { OffsetValues = null; ptr++; }
@@ -44786,7 +44788,7 @@ export class IfcOpenShell {
 		CfsFaces = [];
 		let CfsFaces_index = 0;
 		while (CfsFaces_index < tape[ptr].length) {
-			CfsFaces.push(tape[ptr][CfsFaces_index++]);
+			CfsFaces.push(new Handle<IfcFace>(tape[ptr][CfsFaces_index++].expressID));
 		}
 	ptr++;
 		} else { CfsFaces = null; ptr++; }
@@ -44836,7 +44838,7 @@ export class IfcOpeningElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -44852,11 +44854,11 @@ export class IfcOpeningElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -44951,7 +44953,7 @@ export class IfcOpeningStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -44967,11 +44969,11 @@ export class IfcOpeningStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -45069,7 +45071,7 @@ export class IfcOrganization {
 		Roles = [];
 		let Roles_index = 0;
 		while (Roles_index < tape[ptr].length) {
-			Roles.push(tape[ptr][Roles_index++]);
+			Roles.push(new Handle<IfcActorRole>(tape[ptr][Roles_index++].expressID));
 		}
 	ptr++;
 		} else { Roles = null; ptr++; }
@@ -45078,7 +45080,7 @@ export class IfcOrganization {
 		Addresses = [];
 		let Addresses_index = 0;
 		while (Addresses_index < tape[ptr].length) {
-			Addresses.push(tape[ptr][Addresses_index++]);
+			Addresses.push(new Handle<IfcAddress>(tape[ptr][Addresses_index++].expressID));
 		}
 	ptr++;
 		} else { Addresses = null; ptr++; }
@@ -45143,14 +45145,14 @@ export class IfcOrganizationRelationship {
 		} else { Description = null; ptr++; }
 		let RelatingOrganization;
 		if (tape[ptr]) {
-		RelatingOrganization = tape[ptr++];
+		RelatingOrganization = new Handle<IfcOrganization>(tape[ptr++].expressID);
 		} else { RelatingOrganization = null; ptr++; }
 		let RelatedOrganizations;
 		if (tape[ptr]) {
 		RelatedOrganizations = [];
 		let RelatedOrganizations_index = 0;
 		while (RelatedOrganizations_index < tape[ptr].length) {
-			RelatedOrganizations.push(tape[ptr][RelatedOrganizations_index++]);
+			RelatedOrganizations.push(new Handle<IfcOrganization>(tape[ptr][RelatedOrganizations_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedOrganizations = null; ptr++; }
@@ -45194,11 +45196,11 @@ export class IfcOrientationExpression {
 		let ptr = 0;
 		let LateralAxisDirection;
 		if (tape[ptr]) {
-		LateralAxisDirection = tape[ptr++];
+		LateralAxisDirection = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { LateralAxisDirection = null; ptr++; }
 		let VerticalAxisDirection;
 		if (tape[ptr]) {
-		VerticalAxisDirection = tape[ptr++];
+		VerticalAxisDirection = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { VerticalAxisDirection = null; ptr++; }
 		return new IfcOrientationExpression(expressID, type, LateralAxisDirection, VerticalAxisDirection);
 	}
@@ -45233,15 +45235,15 @@ export class IfcOrientedEdge {
 		let ptr = 0;
 		let EdgeStart;
 		if (tape[ptr]) {
-		EdgeStart = tape[ptr++];
+		EdgeStart = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { EdgeStart = null; ptr++; }
 		let EdgeEnd;
 		if (tape[ptr]) {
-		EdgeEnd = tape[ptr++];
+		EdgeEnd = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { EdgeEnd = null; ptr++; }
 		let EdgeElement;
 		if (tape[ptr]) {
-		EdgeElement = tape[ptr++];
+		EdgeElement = new Handle<IfcEdge>(tape[ptr++].expressID);
 		} else { EdgeElement = null; ptr++; }
 		let Orientation;
 		if (tape[ptr]) {
@@ -45281,7 +45283,7 @@ export class IfcOuterBoundaryCurve {
 		Segments = [];
 		let Segments_index = 0;
 		while (Segments_index < tape[ptr].length) {
-			Segments.push(tape[ptr][Segments_index++]);
+			Segments.push(new Handle<IfcCompositeCurveSegment>(tape[ptr][Segments_index++].expressID));
 		}
 	ptr++;
 		} else { Segments = null; ptr++; }
@@ -45335,7 +45337,7 @@ export class IfcOutlet {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -45351,11 +45353,11 @@ export class IfcOutlet {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -45452,7 +45454,7 @@ export class IfcOutletType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -45471,7 +45473,7 @@ export class IfcOutletType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -45480,7 +45482,7 @@ export class IfcOutletType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -45579,11 +45581,11 @@ export class IfcOwnerHistory {
 		let ptr = 0;
 		let OwningUser;
 		if (tape[ptr]) {
-		OwningUser = tape[ptr++];
+		OwningUser = new Handle<IfcPersonAndOrganization>(tape[ptr++].expressID);
 		} else { OwningUser = null; ptr++; }
 		let OwningApplication;
 		if (tape[ptr]) {
-		OwningApplication = tape[ptr++];
+		OwningApplication = new Handle<IfcApplication>(tape[ptr++].expressID);
 		} else { OwningApplication = null; ptr++; }
 		let State;
 		if (tape[ptr]) {
@@ -45599,11 +45601,11 @@ export class IfcOwnerHistory {
 		} else { LastModifiedDate = null; ptr++; }
 		let LastModifyingUser;
 		if (tape[ptr]) {
-		LastModifyingUser = tape[ptr++];
+		LastModifyingUser = new Handle<IfcPersonAndOrganization>(tape[ptr++].expressID);
 		} else { LastModifyingUser = null; ptr++; }
 		let LastModifyingApplication;
 		if (tape[ptr]) {
-		LastModifyingApplication = tape[ptr++];
+		LastModifyingApplication = new Handle<IfcApplication>(tape[ptr++].expressID);
 		} else { LastModifyingApplication = null; ptr++; }
 		let CreationDate;
 		if (tape[ptr]) {
@@ -45675,7 +45677,7 @@ export class IfcParameterizedProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		return new IfcParameterizedProfileDef(expressID, type, ProfileType, ProfileName, Position);
 	}
@@ -45715,7 +45717,7 @@ export class IfcPath {
 		EdgeList = [];
 		let EdgeList_index = 0;
 		while (EdgeList_index < tape[ptr].length) {
-			EdgeList.push(tape[ptr][EdgeList_index++]);
+			EdgeList.push(new Handle<IfcOrientedEdge>(tape[ptr][EdgeList_index++].expressID));
 		}
 	ptr++;
 		} else { EdgeList = null; ptr++; }
@@ -45747,11 +45749,11 @@ export class IfcPcurve {
 		let ptr = 0;
 		let BasisSurface;
 		if (tape[ptr]) {
-		BasisSurface = tape[ptr++];
+		BasisSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { BasisSurface = null; ptr++; }
 		let ReferenceCurve;
 		if (tape[ptr]) {
-		ReferenceCurve = tape[ptr++];
+		ReferenceCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { ReferenceCurve = null; ptr++; }
 		return new IfcPcurve(expressID, type, BasisSurface, ReferenceCurve);
 	}
@@ -45798,7 +45800,7 @@ export class IfcPerformanceHistory {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -45901,7 +45903,7 @@ export class IfcPermeableCoveringProperties {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -45929,7 +45931,7 @@ export class IfcPermeableCoveringProperties {
 		} else { FrameThickness = null; ptr++; }
 		let ShapeAspectStyle;
 		if (tape[ptr]) {
-		ShapeAspectStyle = tape[ptr++];
+		ShapeAspectStyle = new Handle<IfcShapeAspect>(tape[ptr++].expressID);
 		} else { ShapeAspectStyle = null; ptr++; }
 		return new IfcPermeableCoveringProperties(expressID, type, GlobalId, OwnerHistory, Name, Description, OperationType, PanelPosition, FrameDepth, FrameThickness, ShapeAspectStyle);
 	}
@@ -46006,7 +46008,7 @@ export class IfcPermit {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -46157,7 +46159,7 @@ export class IfcPerson {
 		Roles = [];
 		let Roles_index = 0;
 		while (Roles_index < tape[ptr].length) {
-			Roles.push(tape[ptr][Roles_index++]);
+			Roles.push(new Handle<IfcActorRole>(tape[ptr][Roles_index++].expressID));
 		}
 	ptr++;
 		} else { Roles = null; ptr++; }
@@ -46166,7 +46168,7 @@ export class IfcPerson {
 		Addresses = [];
 		let Addresses_index = 0;
 		while (Addresses_index < tape[ptr].length) {
-			Addresses.push(tape[ptr][Addresses_index++]);
+			Addresses.push(new Handle<IfcAddress>(tape[ptr][Addresses_index++].expressID));
 		}
 	ptr++;
 		} else { Addresses = null; ptr++; }
@@ -46239,18 +46241,18 @@ export class IfcPersonAndOrganization {
 		let ptr = 0;
 		let ThePerson;
 		if (tape[ptr]) {
-		ThePerson = tape[ptr++];
+		ThePerson = new Handle<IfcPerson>(tape[ptr++].expressID);
 		} else { ThePerson = null; ptr++; }
 		let TheOrganization;
 		if (tape[ptr]) {
-		TheOrganization = tape[ptr++];
+		TheOrganization = new Handle<IfcOrganization>(tape[ptr++].expressID);
 		} else { TheOrganization = null; ptr++; }
 		let Roles;
 		if (tape[ptr]) {
 		Roles = [];
 		let Roles_index = 0;
 		while (Roles_index < tape[ptr].length) {
-			Roles.push(tape[ptr][Roles_index++]);
+			Roles.push(new Handle<IfcActorRole>(tape[ptr][Roles_index++].expressID));
 		}
 	ptr++;
 		} else { Roles = null; ptr++; }
@@ -46308,7 +46310,7 @@ export class IfcPhysicalComplexQuantity {
 		HasQuantities = [];
 		let HasQuantities_index = 0;
 		while (HasQuantities_index < tape[ptr].length) {
-			HasQuantities.push(tape[ptr][HasQuantities_index++]);
+			HasQuantities.push(new Handle<IfcPhysicalQuantity>(tape[ptr][HasQuantities_index++].expressID));
 		}
 	ptr++;
 		} else { HasQuantities = null; ptr++; }
@@ -46419,7 +46421,7 @@ export class IfcPhysicalSimpleQuantity {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { Unit = null; ptr++; }
 		return new IfcPhysicalSimpleQuantity(expressID, type, Name, Description, Unit);
 	}
@@ -46478,7 +46480,7 @@ export class IfcPile {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -46494,11 +46496,11 @@ export class IfcPile {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -46604,7 +46606,7 @@ export class IfcPileType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -46623,7 +46625,7 @@ export class IfcPileType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -46632,7 +46634,7 @@ export class IfcPileType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -46737,7 +46739,7 @@ export class IfcPipeFitting {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -46753,11 +46755,11 @@ export class IfcPipeFitting {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -46854,7 +46856,7 @@ export class IfcPipeFittingType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -46873,7 +46875,7 @@ export class IfcPipeFittingType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -46882,7 +46884,7 @@ export class IfcPipeFittingType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -46987,7 +46989,7 @@ export class IfcPipeSegment {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -47003,11 +47005,11 @@ export class IfcPipeSegment {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -47104,7 +47106,7 @@ export class IfcPipeSegmentType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -47123,7 +47125,7 @@ export class IfcPipeSegmentType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -47132,7 +47134,7 @@ export class IfcPipeSegmentType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -47245,7 +47247,7 @@ export class IfcPixelTexture {
 		} else { Mode = null; ptr++; }
 		let TextureTransform;
 		if (tape[ptr]) {
-		TextureTransform = tape[ptr++];
+		TextureTransform = new Handle<IfcCartesianTransformationOperator2D>(tape[ptr++].expressID);
 		} else { TextureTransform = null; ptr++; }
 		let Parameter;
 		if (tape[ptr]) {
@@ -47323,7 +47325,7 @@ export class IfcPlacement {
 		let ptr = 0;
 		let Location;
 		if (tape[ptr]) {
-		Location = tape[ptr++];
+		Location = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { Location = null; ptr++; }
 		return new IfcPlacement(expressID, type, Location);
 	}
@@ -47362,7 +47364,7 @@ export class IfcPlanarBox {
 		} else { SizeInY = null; ptr++; }
 		let Placement;
 		if (tape[ptr]) {
-		Placement = tape[ptr++];
+		Placement = ParseType(tape[ptr++]);
 		} else { Placement = null; ptr++; }
 		return new IfcPlanarBox(expressID, type, SizeInX, SizeInY, Placement);
 	}
@@ -47426,7 +47428,7 @@ export class IfcPlane {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		return new IfcPlane(expressID, type, Position);
 	}
@@ -47473,7 +47475,7 @@ export class IfcPlate {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -47489,11 +47491,11 @@ export class IfcPlate {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -47588,7 +47590,7 @@ export class IfcPlateStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -47604,11 +47606,11 @@ export class IfcPlateStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -47705,7 +47707,7 @@ export class IfcPlateType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -47724,7 +47726,7 @@ export class IfcPlateType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -47733,7 +47735,7 @@ export class IfcPlateType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -47839,7 +47841,7 @@ export class IfcPointOnCurve {
 		let ptr = 0;
 		let BasisCurve;
 		if (tape[ptr]) {
-		BasisCurve = tape[ptr++];
+		BasisCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { BasisCurve = null; ptr++; }
 		let PointParameter;
 		if (tape[ptr]) {
@@ -47876,7 +47878,7 @@ export class IfcPointOnSurface {
 		let ptr = 0;
 		let BasisSurface;
 		if (tape[ptr]) {
-		BasisSurface = tape[ptr++];
+		BasisSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { BasisSurface = null; ptr++; }
 		let PointParameterU;
 		if (tape[ptr]) {
@@ -47918,7 +47920,7 @@ export class IfcPolyLoop {
 		Polygon = [];
 		let Polygon_index = 0;
 		while (Polygon_index < tape[ptr].length) {
-			Polygon.push(tape[ptr][Polygon_index++]);
+			Polygon.push(new Handle<IfcCartesianPoint>(tape[ptr][Polygon_index++].expressID));
 		}
 	ptr++;
 		} else { Polygon = null; ptr++; }
@@ -47954,7 +47956,7 @@ export class IfcPolygonalBoundedHalfSpace {
 		let ptr = 0;
 		let BaseSurface;
 		if (tape[ptr]) {
-		BaseSurface = tape[ptr++];
+		BaseSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { BaseSurface = null; ptr++; }
 		let AgreementFlag;
 		if (tape[ptr]) {
@@ -47962,11 +47964,11 @@ export class IfcPolygonalBoundedHalfSpace {
 		} else { AgreementFlag = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let PolygonalBoundary;
 		if (tape[ptr]) {
-		PolygonalBoundary = tape[ptr++];
+		PolygonalBoundary = new Handle<IfcBoundedCurve>(tape[ptr++].expressID);
 		} else { PolygonalBoundary = null; ptr++; }
 		return new IfcPolygonalBoundedHalfSpace(expressID, type, BaseSurface, AgreementFlag, Position, PolygonalBoundary);
 	}
@@ -48003,7 +48005,7 @@ export class IfcPolygonalFaceSet {
 		let ptr = 0;
 		let Coordinates;
 		if (tape[ptr]) {
-		Coordinates = tape[ptr++];
+		Coordinates = new Handle<IfcCartesianPointList3D>(tape[ptr++].expressID);
 		} else { Coordinates = null; ptr++; }
 		let Closed;
 		if (tape[ptr]) {
@@ -48014,7 +48016,7 @@ export class IfcPolygonalFaceSet {
 		Faces = [];
 		let Faces_index = 0;
 		while (Faces_index < tape[ptr].length) {
-			Faces.push(tape[ptr][Faces_index++]);
+			Faces.push(new Handle<IfcIndexedPolygonalFace>(tape[ptr][Faces_index++].expressID));
 		}
 	ptr++;
 		} else { Faces = null; ptr++; }
@@ -48064,7 +48066,7 @@ export class IfcPolyline {
 		Points = [];
 		let Points_index = 0;
 		while (Points_index < tape[ptr].length) {
-			Points.push(tape[ptr][Points_index++]);
+			Points.push(new Handle<IfcCartesianPoint>(tape[ptr][Points_index++].expressID));
 		}
 	ptr++;
 		} else { Points = null; ptr++; }
@@ -48110,7 +48112,7 @@ export class IfcPort {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -48126,11 +48128,11 @@ export class IfcPort {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		return new IfcPort(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
@@ -48203,7 +48205,7 @@ export class IfcPositioningElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -48219,11 +48221,11 @@ export class IfcPositioningElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		return new IfcPositioningElement(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
@@ -48524,7 +48526,7 @@ export class IfcPreDefinedPropertySet {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -48637,7 +48639,7 @@ export class IfcPresentationLayerAssignment {
 		AssignedItems = [];
 		let AssignedItems_index = 0;
 		while (AssignedItems_index < tape[ptr].length) {
-			AssignedItems.push(tape[ptr][AssignedItems_index++]);
+			AssignedItems.push(ParseType(tape[ptr][AssignedItems_index++]));
 		}
 	ptr++;
 		} else { AssignedItems = null; ptr++; }
@@ -48705,7 +48707,7 @@ export class IfcPresentationLayerWithStyle {
 		AssignedItems = [];
 		let AssignedItems_index = 0;
 		while (AssignedItems_index < tape[ptr].length) {
-			AssignedItems.push(tape[ptr][AssignedItems_index++]);
+			AssignedItems.push(ParseType(tape[ptr][AssignedItems_index++]));
 		}
 	ptr++;
 		} else { AssignedItems = null; ptr++; }
@@ -48730,7 +48732,7 @@ export class IfcPresentationLayerWithStyle {
 		LayerStyles = [];
 		let LayerStyles_index = 0;
 		while (LayerStyles_index < tape[ptr].length) {
-			LayerStyles.push(tape[ptr][LayerStyles_index++]);
+			LayerStyles.push(new Handle<IfcPresentationStyle>(tape[ptr][LayerStyles_index++].expressID));
 		}
 	ptr++;
 		} else { LayerStyles = null; ptr++; }
@@ -48805,7 +48807,7 @@ export class IfcPresentationStyleAssignment {
 		Styles = [];
 		let Styles_index = 0;
 		while (Styles_index < tape[ptr].length) {
-			Styles.push(tape[ptr][Styles_index++]);
+			Styles.push(ParseType(tape[ptr][Styles_index++]));
 		}
 	ptr++;
 		} else { Styles = null; ptr++; }
@@ -48850,7 +48852,7 @@ export class IfcProcedure {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -48958,7 +48960,7 @@ export class IfcProcedureType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -48977,7 +48979,7 @@ export class IfcProcedureType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -49081,7 +49083,7 @@ export class IfcProcess {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -49174,7 +49176,7 @@ export class IfcProduct {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -49190,11 +49192,11 @@ export class IfcProduct {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		return new IfcProduct(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
@@ -49266,7 +49268,7 @@ export class IfcProductDefinitionShape {
 		Representations = [];
 		let Representations_index = 0;
 		while (Representations_index < tape[ptr].length) {
-			Representations.push(tape[ptr][Representations_index++]);
+			Representations.push(new Handle<IfcRepresentation>(tape[ptr][Representations_index++].expressID));
 		}
 	ptr++;
 		} else { Representations = null; ptr++; }
@@ -49321,7 +49323,7 @@ export class IfcProductRepresentation {
 		Representations = [];
 		let Representations_index = 0;
 		while (Representations_index < tape[ptr].length) {
-			Representations.push(tape[ptr][Representations_index++]);
+			Representations.push(new Handle<IfcRepresentation>(tape[ptr][Representations_index++].expressID));
 		}
 	ptr++;
 		} else { Representations = null; ptr++; }
@@ -49416,13 +49418,13 @@ export class IfcProfileProperties {
 		Properties = [];
 		let Properties_index = 0;
 		while (Properties_index < tape[ptr].length) {
-			Properties.push(tape[ptr][Properties_index++]);
+			Properties.push(new Handle<IfcProperty>(tape[ptr][Properties_index++].expressID));
 		}
 	ptr++;
 		} else { Properties = null; ptr++; }
 		let ProfileDefinition;
 		if (tape[ptr]) {
-		ProfileDefinition = tape[ptr++];
+		ProfileDefinition = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { ProfileDefinition = null; ptr++; }
 		return new IfcProfileProperties(expressID, type, Name, Description, Properties, ProfileDefinition);
 	}
@@ -49482,7 +49484,7 @@ export class IfcProject {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -49509,13 +49511,13 @@ export class IfcProject {
 		RepresentationContexts = [];
 		let RepresentationContexts_index = 0;
 		while (RepresentationContexts_index < tape[ptr].length) {
-			RepresentationContexts.push(tape[ptr][RepresentationContexts_index++]);
+			RepresentationContexts.push(new Handle<IfcRepresentationContext>(tape[ptr][RepresentationContexts_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationContexts = null; ptr++; }
 		let UnitsInContext;
 		if (tape[ptr]) {
-		UnitsInContext = tape[ptr++];
+		UnitsInContext = new Handle<IfcUnitAssignment>(tape[ptr++].expressID);
 		} else { UnitsInContext = null; ptr++; }
 		return new IfcProject(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, Phase, RepresentationContexts, UnitsInContext);
 	}
@@ -49603,7 +49605,7 @@ export class IfcProjectLibrary {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -49630,13 +49632,13 @@ export class IfcProjectLibrary {
 		RepresentationContexts = [];
 		let RepresentationContexts_index = 0;
 		while (RepresentationContexts_index < tape[ptr].length) {
-			RepresentationContexts.push(tape[ptr][RepresentationContexts_index++]);
+			RepresentationContexts.push(new Handle<IfcRepresentationContext>(tape[ptr][RepresentationContexts_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationContexts = null; ptr++; }
 		let UnitsInContext;
 		if (tape[ptr]) {
-		UnitsInContext = tape[ptr++];
+		UnitsInContext = new Handle<IfcUnitAssignment>(tape[ptr++].expressID);
 		} else { UnitsInContext = null; ptr++; }
 		return new IfcProjectLibrary(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, Phase, RepresentationContexts, UnitsInContext);
 	}
@@ -49724,7 +49726,7 @@ export class IfcProjectOrder {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -49855,7 +49857,7 @@ export class IfcProjectedCRS {
 		} else { MapZone = null; ptr++; }
 		let MapUnit;
 		if (tape[ptr]) {
-		MapUnit = tape[ptr++];
+		MapUnit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { MapUnit = null; ptr++; }
 		return new IfcProjectedCRS(expressID, type, Name, Description, GeodeticDatum, VerticalDatum, MapProjection, MapZone, MapUnit);
 	}
@@ -49932,7 +49934,7 @@ export class IfcProjectionElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -49948,11 +49950,11 @@ export class IfcProjectionElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -50102,19 +50104,19 @@ export class IfcPropertyBoundedValue {
 		} else { Description = null; ptr++; }
 		let UpperBoundValue;
 		if (tape[ptr]) {
-		UpperBoundValue = tape[ptr++];
+		UpperBoundValue = ParseType(tape[ptr++]);
 		} else { UpperBoundValue = null; ptr++; }
 		let LowerBoundValue;
 		if (tape[ptr]) {
-		LowerBoundValue = tape[ptr++];
+		LowerBoundValue = ParseType(tape[ptr++]);
 		} else { LowerBoundValue = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = ParseType(tape[ptr++]);
 		} else { Unit = null; ptr++; }
 		let SetPointValue;
 		if (tape[ptr]) {
-		SetPointValue = tape[ptr++];
+		SetPointValue = ParseType(tape[ptr++]);
 		} else { SetPointValue = null; ptr++; }
 		return new IfcPropertyBoundedValue(expressID, type, Name, Description, UpperBoundValue, LowerBoundValue, Unit, SetPointValue);
 	}
@@ -50195,7 +50197,7 @@ export class IfcPropertyDefinition {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -50261,11 +50263,11 @@ export class IfcPropertyDependencyRelationship {
 		} else { Description = null; ptr++; }
 		let DependingProperty;
 		if (tape[ptr]) {
-		DependingProperty = tape[ptr++];
+		DependingProperty = new Handle<IfcProperty>(tape[ptr++].expressID);
 		} else { DependingProperty = null; ptr++; }
 		let DependantProperty;
 		if (tape[ptr]) {
-		DependantProperty = tape[ptr++];
+		DependantProperty = new Handle<IfcProperty>(tape[ptr++].expressID);
 		} else { DependantProperty = null; ptr++; }
 		let Expression;
 		if (tape[ptr]) {
@@ -50330,13 +50332,13 @@ export class IfcPropertyEnumeratedValue {
 		EnumerationValues = [];
 		let EnumerationValues_index = 0;
 		while (EnumerationValues_index < tape[ptr].length) {
-			EnumerationValues.push(tape[ptr][EnumerationValues_index++]);
+			EnumerationValues.push(ParseType(tape[ptr][EnumerationValues_index++]));
 		}
 	ptr++;
 		} else { EnumerationValues = null; ptr++; }
 		let EnumerationReference;
 		if (tape[ptr]) {
-		EnumerationReference = tape[ptr++];
+		EnumerationReference = new Handle<IfcPropertyEnumeration>(tape[ptr++].expressID);
 		} else { EnumerationReference = null; ptr++; }
 		return new IfcPropertyEnumeratedValue(expressID, type, Name, Description, EnumerationValues, EnumerationReference);
 	}
@@ -50387,13 +50389,13 @@ export class IfcPropertyEnumeration {
 		EnumerationValues = [];
 		let EnumerationValues_index = 0;
 		while (EnumerationValues_index < tape[ptr].length) {
-			EnumerationValues.push(tape[ptr][EnumerationValues_index++]);
+			EnumerationValues.push(ParseType(tape[ptr][EnumerationValues_index++]));
 		}
 	ptr++;
 		} else { EnumerationValues = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = ParseType(tape[ptr++]);
 		} else { Unit = null; ptr++; }
 		return new IfcPropertyEnumeration(expressID, type, Name, EnumerationValues, Unit);
 	}
@@ -50440,13 +50442,13 @@ export class IfcPropertyListValue {
 		ListValues = [];
 		let ListValues_index = 0;
 		while (ListValues_index < tape[ptr].length) {
-			ListValues.push(tape[ptr][ListValues_index++]);
+			ListValues.push(ParseType(tape[ptr][ListValues_index++]));
 		}
 	ptr++;
 		} else { ListValues = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = ParseType(tape[ptr++]);
 		} else { Unit = null; ptr++; }
 		return new IfcPropertyListValue(expressID, type, Name, Description, ListValues, Unit);
 	}
@@ -50502,7 +50504,7 @@ export class IfcPropertyReferenceValue {
 		} else { UsageName = null; ptr++; }
 		let PropertyReference;
 		if (tape[ptr]) {
-		PropertyReference = tape[ptr++];
+		PropertyReference = ParseType(tape[ptr++]);
 		} else { PropertyReference = null; ptr++; }
 		return new IfcPropertyReferenceValue(expressID, type, Name, Description, UsageName, PropertyReference);
 	}
@@ -50554,7 +50556,7 @@ export class IfcPropertySet {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -50569,7 +50571,7 @@ export class IfcPropertySet {
 		HasProperties = [];
 		let HasProperties_index = 0;
 		while (HasProperties_index < tape[ptr].length) {
-			HasProperties.push(tape[ptr][HasProperties_index++]);
+			HasProperties.push(new Handle<IfcProperty>(tape[ptr][HasProperties_index++].expressID));
 		}
 	ptr++;
 		} else { HasProperties = null; ptr++; }
@@ -50626,7 +50628,7 @@ export class IfcPropertySetDefinition {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -50692,7 +50694,7 @@ export class IfcPropertySetTemplate {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -50715,7 +50717,7 @@ export class IfcPropertySetTemplate {
 		HasPropertyTemplates = [];
 		let HasPropertyTemplates_index = 0;
 		while (HasPropertyTemplates_index < tape[ptr].length) {
-			HasPropertyTemplates.push(tape[ptr][HasPropertyTemplates_index++]);
+			HasPropertyTemplates.push(new Handle<IfcPropertyTemplate>(tape[ptr][HasPropertyTemplates_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertyTemplates = null; ptr++; }
@@ -50786,11 +50788,11 @@ export class IfcPropertySingleValue {
 		} else { Description = null; ptr++; }
 		let NominalValue;
 		if (tape[ptr]) {
-		NominalValue = tape[ptr++];
+		NominalValue = ParseType(tape[ptr++]);
 		} else { NominalValue = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = ParseType(tape[ptr++]);
 		} else { Unit = null; ptr++; }
 		return new IfcPropertySingleValue(expressID, type, Name, Description, NominalValue, Unit);
 	}
@@ -50862,7 +50864,7 @@ export class IfcPropertyTableValue {
 		DefiningValues = [];
 		let DefiningValues_index = 0;
 		while (DefiningValues_index < tape[ptr].length) {
-			DefiningValues.push(tape[ptr][DefiningValues_index++]);
+			DefiningValues.push(ParseType(tape[ptr][DefiningValues_index++]));
 		}
 	ptr++;
 		} else { DefiningValues = null; ptr++; }
@@ -50871,7 +50873,7 @@ export class IfcPropertyTableValue {
 		DefinedValues = [];
 		let DefinedValues_index = 0;
 		while (DefinedValues_index < tape[ptr].length) {
-			DefinedValues.push(tape[ptr][DefinedValues_index++]);
+			DefinedValues.push(ParseType(tape[ptr][DefinedValues_index++]));
 		}
 	ptr++;
 		} else { DefinedValues = null; ptr++; }
@@ -50881,11 +50883,11 @@ export class IfcPropertyTableValue {
 		} else { Expression = null; ptr++; }
 		let DefiningUnit;
 		if (tape[ptr]) {
-		DefiningUnit = tape[ptr++];
+		DefiningUnit = ParseType(tape[ptr++]);
 		} else { DefiningUnit = null; ptr++; }
 		let DefinedUnit;
 		if (tape[ptr]) {
-		DefinedUnit = tape[ptr++];
+		DefinedUnit = ParseType(tape[ptr++]);
 		} else { DefinedUnit = null; ptr++; }
 		let CurveInterpolation;
 		if (tape[ptr]) {
@@ -50953,7 +50955,7 @@ export class IfcPropertyTemplate {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51013,7 +51015,7 @@ export class IfcPropertyTemplateDefinition {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51083,7 +51085,7 @@ export class IfcProtectiveDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51099,11 +51101,11 @@ export class IfcProtectiveDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -51198,7 +51200,7 @@ export class IfcProtectiveDeviceTrippingUnit {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51214,11 +51216,11 @@ export class IfcProtectiveDeviceTrippingUnit {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -51315,7 +51317,7 @@ export class IfcProtectiveDeviceTrippingUnitType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51334,7 +51336,7 @@ export class IfcProtectiveDeviceTrippingUnitType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -51343,7 +51345,7 @@ export class IfcProtectiveDeviceTrippingUnitType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -51450,7 +51452,7 @@ export class IfcProtectiveDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51469,7 +51471,7 @@ export class IfcProtectiveDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -51478,7 +51480,7 @@ export class IfcProtectiveDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -51583,7 +51585,7 @@ export class IfcProxy {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51599,11 +51601,11 @@ export class IfcProxy {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let ProxyType;
 		if (tape[ptr]) {
@@ -51695,7 +51697,7 @@ export class IfcPump {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51711,11 +51713,11 @@ export class IfcPump {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -51812,7 +51814,7 @@ export class IfcPumpType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -51831,7 +51833,7 @@ export class IfcPumpType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -51840,7 +51842,7 @@ export class IfcPumpType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -51941,7 +51943,7 @@ export class IfcQuantityArea {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { Unit = null; ptr++; }
 		let AreaValue;
 		if (tape[ptr]) {
@@ -52009,7 +52011,7 @@ export class IfcQuantityCount {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { Unit = null; ptr++; }
 		let CountValue;
 		if (tape[ptr]) {
@@ -52077,7 +52079,7 @@ export class IfcQuantityLength {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { Unit = null; ptr++; }
 		let LengthValue;
 		if (tape[ptr]) {
@@ -52139,7 +52141,7 @@ export class IfcQuantitySet {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -52205,7 +52207,7 @@ export class IfcQuantityTime {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { Unit = null; ptr++; }
 		let TimeValue;
 		if (tape[ptr]) {
@@ -52273,7 +52275,7 @@ export class IfcQuantityVolume {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { Unit = null; ptr++; }
 		let VolumeValue;
 		if (tape[ptr]) {
@@ -52341,7 +52343,7 @@ export class IfcQuantityWeight {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = new Handle<IfcNamedUnit>(tape[ptr++].expressID);
 		} else { Unit = null; ptr++; }
 		let WeightValue;
 		if (tape[ptr]) {
@@ -52413,7 +52415,7 @@ export class IfcRailing {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -52429,11 +52431,11 @@ export class IfcRailing {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -52530,7 +52532,7 @@ export class IfcRailingType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -52549,7 +52551,7 @@ export class IfcRailingType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -52558,7 +52560,7 @@ export class IfcRailingType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -52663,7 +52665,7 @@ export class IfcRamp {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -52679,11 +52681,11 @@ export class IfcRamp {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -52778,7 +52780,7 @@ export class IfcRampFlight {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -52794,11 +52796,11 @@ export class IfcRampFlight {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -52895,7 +52897,7 @@ export class IfcRampFlightType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -52914,7 +52916,7 @@ export class IfcRampFlightType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -52923,7 +52925,7 @@ export class IfcRampFlightType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -53030,7 +53032,7 @@ export class IfcRampType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -53049,7 +53051,7 @@ export class IfcRampType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -53058,7 +53060,7 @@ export class IfcRampType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -53166,7 +53168,7 @@ export class IfcRationalBSplineCurveWithKnots {
 		ControlPointsList = [];
 		let ControlPointsList_index = 0;
 		while (ControlPointsList_index < tape[ptr].length) {
-			ControlPointsList.push(tape[ptr][ControlPointsList_index++]);
+			ControlPointsList.push(new Handle<IfcCartesianPoint>(tape[ptr][ControlPointsList_index++].expressID));
 		}
 	ptr++;
 		} else { ControlPointsList = null; ptr++; }
@@ -53286,7 +53288,7 @@ export class IfcRationalBSplineSurfaceWithKnots {
 		ControlPointsList = [];
 		let ControlPointsList_index = 0;
 		while (ControlPointsList_index < tape[ptr].length) {
-			ControlPointsList.push(tape[ptr][ControlPointsList_index++]);
+			ControlPointsList.push(new Handle<IfcCartesianPoint>(tape[ptr][ControlPointsList_index++].expressID));
 		}
 	ptr++;
 		} else { ControlPointsList = null; ptr++; }
@@ -53421,7 +53423,7 @@ export class IfcRectangleHollowProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let XDim;
 		if (tape[ptr]) {
@@ -53500,7 +53502,7 @@ export class IfcRectangleProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let XDim;
 		if (tape[ptr]) {
@@ -53551,7 +53553,7 @@ export class IfcRectangularPyramid {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let XLength;
 		if (tape[ptr]) {
@@ -53602,7 +53604,7 @@ export class IfcRectangularTrimmedSurface {
 		let ptr = 0;
 		let BasisSurface;
 		if (tape[ptr]) {
-		BasisSurface = tape[ptr++];
+		BasisSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { BasisSurface = null; ptr++; }
 		let U1;
 		if (tape[ptr]) {
@@ -53721,7 +53723,7 @@ export class IfcRecurrencePattern {
 		TimePeriods = [];
 		let TimePeriods_index = 0;
 		while (TimePeriods_index < tape[ptr].length) {
-			TimePeriods.push(tape[ptr][TimePeriods_index++]);
+			TimePeriods.push(new Handle<IfcTimePeriod>(tape[ptr][TimePeriods_index++].expressID));
 		}
 	ptr++;
 		} else { TimePeriods = null; ptr++; }
@@ -53815,7 +53817,7 @@ export class IfcReference {
 		} else { ListPositions = null; ptr++; }
 		let InnerReference;
 		if (tape[ptr]) {
-		InnerReference = tape[ptr++];
+		InnerReference = new Handle<IfcReference>(tape[ptr++].expressID);
 		} else { InnerReference = null; ptr++; }
 		return new IfcReference(expressID, type, TypeIdentifier, AttributeIdentifier, InstanceName, ListPositions, InnerReference);
 	}
@@ -53885,7 +53887,7 @@ export class IfcReferent {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -53901,11 +53903,11 @@ export class IfcReferent {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -54026,7 +54028,7 @@ export class IfcRegularTimeSeries {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = ParseType(tape[ptr++]);
 		} else { Unit = null; ptr++; }
 		let TimeStep;
 		if (tape[ptr]) {
@@ -54037,7 +54039,7 @@ export class IfcRegularTimeSeries {
 		Values = [];
 		let Values_index = 0;
 		while (Values_index < tape[ptr].length) {
-			Values.push(tape[ptr][Values_index++]);
+			Values.push(new Handle<IfcTimeSeriesValue>(tape[ptr][Values_index++].expressID));
 		}
 	ptr++;
 		} else { Values = null; ptr++; }
@@ -54183,7 +54185,7 @@ export class IfcReinforcementDefinitionProperties {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -54202,7 +54204,7 @@ export class IfcReinforcementDefinitionProperties {
 		ReinforcementSectionDefinitions = [];
 		let ReinforcementSectionDefinitions_index = 0;
 		while (ReinforcementSectionDefinitions_index < tape[ptr].length) {
-			ReinforcementSectionDefinitions.push(tape[ptr][ReinforcementSectionDefinitions_index++]);
+			ReinforcementSectionDefinitions.push(new Handle<IfcSectionReinforcementProperties>(tape[ptr][ReinforcementSectionDefinitions_index++].expressID));
 		}
 	ptr++;
 		} else { ReinforcementSectionDefinitions = null; ptr++; }
@@ -54284,7 +54286,7 @@ export class IfcReinforcingBar {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -54300,11 +54302,11 @@ export class IfcReinforcingBar {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -54454,7 +54456,7 @@ export class IfcReinforcingBarType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -54473,7 +54475,7 @@ export class IfcReinforcingBarType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -54482,7 +54484,7 @@ export class IfcReinforcingBarType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -54523,7 +54525,7 @@ export class IfcReinforcingBarType {
 		BendingParameters = [];
 		let BendingParameters_index = 0;
 		while (BendingParameters_index < tape[ptr].length) {
-			BendingParameters.push(tape[ptr][BendingParameters_index++]);
+			BendingParameters.push(ParseType(tape[ptr][BendingParameters_index++]));
 		}
 	ptr++;
 		} else { BendingParameters = null; ptr++; }
@@ -54640,7 +54642,7 @@ export class IfcReinforcingElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -54656,11 +54658,11 @@ export class IfcReinforcingElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -54755,7 +54757,7 @@ export class IfcReinforcingElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -54774,7 +54776,7 @@ export class IfcReinforcingElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -54783,7 +54785,7 @@ export class IfcReinforcingElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -54900,7 +54902,7 @@ export class IfcReinforcingMesh {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -54916,11 +54918,11 @@ export class IfcReinforcingMesh {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -55106,7 +55108,7 @@ export class IfcReinforcingMeshType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55125,7 +55127,7 @@ export class IfcReinforcingMeshType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -55134,7 +55136,7 @@ export class IfcReinforcingMeshType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -55191,7 +55193,7 @@ export class IfcReinforcingMeshType {
 		BendingParameters = [];
 		let BendingParameters_index = 0;
 		while (BendingParameters_index < tape[ptr].length) {
-			BendingParameters.push(tape[ptr][BendingParameters_index++]);
+			BendingParameters.push(ParseType(tape[ptr][BendingParameters_index++]));
 		}
 	ptr++;
 		} else { BendingParameters = null; ptr++; }
@@ -55314,7 +55316,7 @@ export class IfcRelAggregates {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55326,14 +55328,14 @@ export class IfcRelAggregates {
 		} else { Description = null; ptr++; }
 		let RelatingObject;
 		if (tape[ptr]) {
-		RelatingObject = tape[ptr++];
+		RelatingObject = new Handle<IfcObjectDefinition>(tape[ptr++].expressID);
 		} else { RelatingObject = null; ptr++; }
 		let RelatedObjects;
 		if (tape[ptr]) {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -55396,7 +55398,7 @@ export class IfcRelAssigns {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55411,7 +55413,7 @@ export class IfcRelAssigns {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -55485,7 +55487,7 @@ export class IfcRelAssignsToActor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55500,7 +55502,7 @@ export class IfcRelAssignsToActor {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -55510,11 +55512,11 @@ export class IfcRelAssignsToActor {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingActor;
 		if (tape[ptr]) {
-		RelatingActor = tape[ptr++];
+		RelatingActor = new Handle<IfcActor>(tape[ptr++].expressID);
 		} else { RelatingActor = null; ptr++; }
 		let ActingRole;
 		if (tape[ptr]) {
-		ActingRole = tape[ptr++];
+		ActingRole = new Handle<IfcActorRole>(tape[ptr++].expressID);
 		} else { ActingRole = null; ptr++; }
 		return new IfcRelAssignsToActor(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingActor, ActingRole);
 	}
@@ -55587,7 +55589,7 @@ export class IfcRelAssignsToControl {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55602,7 +55604,7 @@ export class IfcRelAssignsToControl {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -55612,7 +55614,7 @@ export class IfcRelAssignsToControl {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingControl;
 		if (tape[ptr]) {
-		RelatingControl = tape[ptr++];
+		RelatingControl = new Handle<IfcControl>(tape[ptr++].expressID);
 		} else { RelatingControl = null; ptr++; }
 		return new IfcRelAssignsToControl(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingControl);
 	}
@@ -55680,7 +55682,7 @@ export class IfcRelAssignsToGroup {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55695,7 +55697,7 @@ export class IfcRelAssignsToGroup {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -55705,7 +55707,7 @@ export class IfcRelAssignsToGroup {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingGroup;
 		if (tape[ptr]) {
-		RelatingGroup = tape[ptr++];
+		RelatingGroup = new Handle<IfcGroup>(tape[ptr++].expressID);
 		} else { RelatingGroup = null; ptr++; }
 		return new IfcRelAssignsToGroup(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingGroup);
 	}
@@ -55775,7 +55777,7 @@ export class IfcRelAssignsToGroupByFactor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55790,7 +55792,7 @@ export class IfcRelAssignsToGroupByFactor {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -55800,7 +55802,7 @@ export class IfcRelAssignsToGroupByFactor {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingGroup;
 		if (tape[ptr]) {
-		RelatingGroup = tape[ptr++];
+		RelatingGroup = new Handle<IfcGroup>(tape[ptr++].expressID);
 		} else { RelatingGroup = null; ptr++; }
 		let Factor;
 		if (tape[ptr]) {
@@ -55876,7 +55878,7 @@ export class IfcRelAssignsToProcess {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55891,7 +55893,7 @@ export class IfcRelAssignsToProcess {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -55901,11 +55903,11 @@ export class IfcRelAssignsToProcess {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingProcess;
 		if (tape[ptr]) {
-		RelatingProcess = tape[ptr++];
+		RelatingProcess = ParseType(tape[ptr++]);
 		} else { RelatingProcess = null; ptr++; }
 		let QuantityInProcess;
 		if (tape[ptr]) {
-		QuantityInProcess = tape[ptr++];
+		QuantityInProcess = new Handle<IfcMeasureWithUnit>(tape[ptr++].expressID);
 		} else { QuantityInProcess = null; ptr++; }
 		return new IfcRelAssignsToProcess(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingProcess, QuantityInProcess);
 	}
@@ -55976,7 +55978,7 @@ export class IfcRelAssignsToProduct {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -55991,7 +55993,7 @@ export class IfcRelAssignsToProduct {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -56001,7 +56003,7 @@ export class IfcRelAssignsToProduct {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingProduct;
 		if (tape[ptr]) {
-		RelatingProduct = tape[ptr++];
+		RelatingProduct = ParseType(tape[ptr++]);
 		} else { RelatingProduct = null; ptr++; }
 		return new IfcRelAssignsToProduct(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingProduct);
 	}
@@ -56067,7 +56069,7 @@ export class IfcRelAssignsToResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56082,7 +56084,7 @@ export class IfcRelAssignsToResource {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -56092,7 +56094,7 @@ export class IfcRelAssignsToResource {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingResource;
 		if (tape[ptr]) {
-		RelatingResource = tape[ptr++];
+		RelatingResource = ParseType(tape[ptr++]);
 		} else { RelatingResource = null; ptr++; }
 		return new IfcRelAssignsToResource(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingResource);
 	}
@@ -56154,7 +56156,7 @@ export class IfcRelAssociates {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56169,7 +56171,7 @@ export class IfcRelAssociates {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(ParseType(tape[ptr][RelatedObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -56227,7 +56229,7 @@ export class IfcRelAssociatesApproval {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56242,13 +56244,13 @@ export class IfcRelAssociatesApproval {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(ParseType(tape[ptr][RelatedObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingApproval;
 		if (tape[ptr]) {
-		RelatingApproval = tape[ptr++];
+		RelatingApproval = new Handle<IfcApproval>(tape[ptr++].expressID);
 		} else { RelatingApproval = null; ptr++; }
 		return new IfcRelAssociatesApproval(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingApproval);
 	}
@@ -56306,7 +56308,7 @@ export class IfcRelAssociatesClassification {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56321,13 +56323,13 @@ export class IfcRelAssociatesClassification {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(ParseType(tape[ptr][RelatedObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingClassification;
 		if (tape[ptr]) {
-		RelatingClassification = tape[ptr++];
+		RelatingClassification = ParseType(tape[ptr++]);
 		} else { RelatingClassification = null; ptr++; }
 		return new IfcRelAssociatesClassification(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingClassification);
 	}
@@ -56385,7 +56387,7 @@ export class IfcRelAssociatesConstraint {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56400,7 +56402,7 @@ export class IfcRelAssociatesConstraint {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(ParseType(tape[ptr][RelatedObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -56410,7 +56412,7 @@ export class IfcRelAssociatesConstraint {
 		} else { Intent = null; ptr++; }
 		let RelatingConstraint;
 		if (tape[ptr]) {
-		RelatingConstraint = tape[ptr++];
+		RelatingConstraint = new Handle<IfcConstraint>(tape[ptr++].expressID);
 		} else { RelatingConstraint = null; ptr++; }
 		return new IfcRelAssociatesConstraint(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, Intent, RelatingConstraint);
 	}
@@ -56473,7 +56475,7 @@ export class IfcRelAssociatesDocument {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56488,13 +56490,13 @@ export class IfcRelAssociatesDocument {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(ParseType(tape[ptr][RelatedObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingDocument;
 		if (tape[ptr]) {
-		RelatingDocument = tape[ptr++];
+		RelatingDocument = ParseType(tape[ptr++]);
 		} else { RelatingDocument = null; ptr++; }
 		return new IfcRelAssociatesDocument(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingDocument);
 	}
@@ -56550,7 +56552,7 @@ export class IfcRelAssociatesLibrary {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56565,13 +56567,13 @@ export class IfcRelAssociatesLibrary {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(ParseType(tape[ptr][RelatedObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingLibrary;
 		if (tape[ptr]) {
-		RelatingLibrary = tape[ptr++];
+		RelatingLibrary = ParseType(tape[ptr++]);
 		} else { RelatingLibrary = null; ptr++; }
 		return new IfcRelAssociatesLibrary(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingLibrary);
 	}
@@ -56627,7 +56629,7 @@ export class IfcRelAssociatesMaterial {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56642,13 +56644,13 @@ export class IfcRelAssociatesMaterial {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(ParseType(tape[ptr][RelatedObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingMaterial;
 		if (tape[ptr]) {
-		RelatingMaterial = tape[ptr++];
+		RelatingMaterial = ParseType(tape[ptr++]);
 		} else { RelatingMaterial = null; ptr++; }
 		return new IfcRelAssociatesMaterial(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingMaterial);
 	}
@@ -56700,7 +56702,7 @@ export class IfcRelConnects {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56766,7 +56768,7 @@ export class IfcRelConnectsElements {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56778,15 +56780,15 @@ export class IfcRelConnectsElements {
 		} else { Description = null; ptr++; }
 		let ConnectionGeometry;
 		if (tape[ptr]) {
-		ConnectionGeometry = tape[ptr++];
+		ConnectionGeometry = new Handle<IfcConnectionGeometry>(tape[ptr++].expressID);
 		} else { ConnectionGeometry = null; ptr++; }
 		let RelatingElement;
 		if (tape[ptr]) {
-		RelatingElement = tape[ptr++];
+		RelatingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatingElement = null; ptr++; }
 		let RelatedElement;
 		if (tape[ptr]) {
-		RelatedElement = tape[ptr++];
+		RelatedElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatedElement = null; ptr++; }
 		return new IfcRelConnectsElements(expressID, type, GlobalId, OwnerHistory, Name, Description, ConnectionGeometry, RelatingElement, RelatedElement);
 	}
@@ -56861,7 +56863,7 @@ export class IfcRelConnectsPathElements {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56873,15 +56875,15 @@ export class IfcRelConnectsPathElements {
 		} else { Description = null; ptr++; }
 		let ConnectionGeometry;
 		if (tape[ptr]) {
-		ConnectionGeometry = tape[ptr++];
+		ConnectionGeometry = new Handle<IfcConnectionGeometry>(tape[ptr++].expressID);
 		} else { ConnectionGeometry = null; ptr++; }
 		let RelatingElement;
 		if (tape[ptr]) {
-		RelatingElement = tape[ptr++];
+		RelatingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatingElement = null; ptr++; }
 		let RelatedElement;
 		if (tape[ptr]) {
-		RelatedElement = tape[ptr++];
+		RelatedElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatedElement = null; ptr++; }
 		let RelatingPriorities;
 		if (tape[ptr]) {
@@ -56980,7 +56982,7 @@ export class IfcRelConnectsPortToElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -56992,11 +56994,11 @@ export class IfcRelConnectsPortToElement {
 		} else { Description = null; ptr++; }
 		let RelatingPort;
 		if (tape[ptr]) {
-		RelatingPort = tape[ptr++];
+		RelatingPort = new Handle<IfcPort>(tape[ptr++].expressID);
 		} else { RelatingPort = null; ptr++; }
 		let RelatedElement;
 		if (tape[ptr]) {
-		RelatedElement = tape[ptr++];
+		RelatedElement = new Handle<IfcDistributionElement>(tape[ptr++].expressID);
 		} else { RelatedElement = null; ptr++; }
 		return new IfcRelConnectsPortToElement(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingPort, RelatedElement);
 	}
@@ -57058,7 +57060,7 @@ export class IfcRelConnectsPorts {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57070,15 +57072,15 @@ export class IfcRelConnectsPorts {
 		} else { Description = null; ptr++; }
 		let RelatingPort;
 		if (tape[ptr]) {
-		RelatingPort = tape[ptr++];
+		RelatingPort = new Handle<IfcPort>(tape[ptr++].expressID);
 		} else { RelatingPort = null; ptr++; }
 		let RelatedPort;
 		if (tape[ptr]) {
-		RelatedPort = tape[ptr++];
+		RelatedPort = new Handle<IfcPort>(tape[ptr++].expressID);
 		} else { RelatedPort = null; ptr++; }
 		let RealizingElement;
 		if (tape[ptr]) {
-		RealizingElement = tape[ptr++];
+		RealizingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RealizingElement = null; ptr++; }
 		return new IfcRelConnectsPorts(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingPort, RelatedPort, RealizingElement);
 	}
@@ -57143,7 +57145,7 @@ export class IfcRelConnectsStructuralActivity {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57155,11 +57157,11 @@ export class IfcRelConnectsStructuralActivity {
 		} else { Description = null; ptr++; }
 		let RelatingElement;
 		if (tape[ptr]) {
-		RelatingElement = tape[ptr++];
+		RelatingElement = ParseType(tape[ptr++]);
 		} else { RelatingElement = null; ptr++; }
 		let RelatedStructuralActivity;
 		if (tape[ptr]) {
-		RelatedStructuralActivity = tape[ptr++];
+		RelatedStructuralActivity = new Handle<IfcStructuralActivity>(tape[ptr++].expressID);
 		} else { RelatedStructuralActivity = null; ptr++; }
 		return new IfcRelConnectsStructuralActivity(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingElement, RelatedStructuralActivity);
 	}
@@ -57225,7 +57227,7 @@ export class IfcRelConnectsStructuralMember {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57237,19 +57239,19 @@ export class IfcRelConnectsStructuralMember {
 		} else { Description = null; ptr++; }
 		let RelatingStructuralMember;
 		if (tape[ptr]) {
-		RelatingStructuralMember = tape[ptr++];
+		RelatingStructuralMember = new Handle<IfcStructuralMember>(tape[ptr++].expressID);
 		} else { RelatingStructuralMember = null; ptr++; }
 		let RelatedStructuralConnection;
 		if (tape[ptr]) {
-		RelatedStructuralConnection = tape[ptr++];
+		RelatedStructuralConnection = new Handle<IfcStructuralConnection>(tape[ptr++].expressID);
 		} else { RelatedStructuralConnection = null; ptr++; }
 		let AppliedCondition;
 		if (tape[ptr]) {
-		AppliedCondition = tape[ptr++];
+		AppliedCondition = new Handle<IfcBoundaryCondition>(tape[ptr++].expressID);
 		} else { AppliedCondition = null; ptr++; }
 		let AdditionalConditions;
 		if (tape[ptr]) {
-		AdditionalConditions = tape[ptr++];
+		AdditionalConditions = new Handle<IfcStructuralConnectionCondition>(tape[ptr++].expressID);
 		} else { AdditionalConditions = null; ptr++; }
 		let SupportedLength;
 		if (tape[ptr]) {
@@ -57257,7 +57259,7 @@ export class IfcRelConnectsStructuralMember {
 		} else { SupportedLength = null; ptr++; }
 		let ConditionCoordinateSystem;
 		if (tape[ptr]) {
-		ConditionCoordinateSystem = tape[ptr++];
+		ConditionCoordinateSystem = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { ConditionCoordinateSystem = null; ptr++; }
 		return new IfcRelConnectsStructuralMember(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingStructuralMember, RelatedStructuralConnection, AppliedCondition, AdditionalConditions, SupportedLength, ConditionCoordinateSystem);
 	}
@@ -57347,7 +57349,7 @@ export class IfcRelConnectsWithEccentricity {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57359,19 +57361,19 @@ export class IfcRelConnectsWithEccentricity {
 		} else { Description = null; ptr++; }
 		let RelatingStructuralMember;
 		if (tape[ptr]) {
-		RelatingStructuralMember = tape[ptr++];
+		RelatingStructuralMember = new Handle<IfcStructuralMember>(tape[ptr++].expressID);
 		} else { RelatingStructuralMember = null; ptr++; }
 		let RelatedStructuralConnection;
 		if (tape[ptr]) {
-		RelatedStructuralConnection = tape[ptr++];
+		RelatedStructuralConnection = new Handle<IfcStructuralConnection>(tape[ptr++].expressID);
 		} else { RelatedStructuralConnection = null; ptr++; }
 		let AppliedCondition;
 		if (tape[ptr]) {
-		AppliedCondition = tape[ptr++];
+		AppliedCondition = new Handle<IfcBoundaryCondition>(tape[ptr++].expressID);
 		} else { AppliedCondition = null; ptr++; }
 		let AdditionalConditions;
 		if (tape[ptr]) {
-		AdditionalConditions = tape[ptr++];
+		AdditionalConditions = new Handle<IfcStructuralConnectionCondition>(tape[ptr++].expressID);
 		} else { AdditionalConditions = null; ptr++; }
 		let SupportedLength;
 		if (tape[ptr]) {
@@ -57379,11 +57381,11 @@ export class IfcRelConnectsWithEccentricity {
 		} else { SupportedLength = null; ptr++; }
 		let ConditionCoordinateSystem;
 		if (tape[ptr]) {
-		ConditionCoordinateSystem = tape[ptr++];
+		ConditionCoordinateSystem = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { ConditionCoordinateSystem = null; ptr++; }
 		let ConnectionConstraint;
 		if (tape[ptr]) {
-		ConnectionConstraint = tape[ptr++];
+		ConnectionConstraint = new Handle<IfcConnectionGeometry>(tape[ptr++].expressID);
 		} else { ConnectionConstraint = null; ptr++; }
 		return new IfcRelConnectsWithEccentricity(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingStructuralMember, RelatedStructuralConnection, AppliedCondition, AdditionalConditions, SupportedLength, ConditionCoordinateSystem, ConnectionConstraint);
 	}
@@ -57471,7 +57473,7 @@ export class IfcRelConnectsWithRealizingElements {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57483,22 +57485,22 @@ export class IfcRelConnectsWithRealizingElements {
 		} else { Description = null; ptr++; }
 		let ConnectionGeometry;
 		if (tape[ptr]) {
-		ConnectionGeometry = tape[ptr++];
+		ConnectionGeometry = new Handle<IfcConnectionGeometry>(tape[ptr++].expressID);
 		} else { ConnectionGeometry = null; ptr++; }
 		let RelatingElement;
 		if (tape[ptr]) {
-		RelatingElement = tape[ptr++];
+		RelatingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatingElement = null; ptr++; }
 		let RelatedElement;
 		if (tape[ptr]) {
-		RelatedElement = tape[ptr++];
+		RelatedElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatedElement = null; ptr++; }
 		let RealizingElements;
 		if (tape[ptr]) {
 		RealizingElements = [];
 		let RealizingElements_index = 0;
 		while (RealizingElements_index < tape[ptr].length) {
-			RealizingElements.push(tape[ptr][RealizingElements_index++]);
+			RealizingElements.push(new Handle<IfcElement>(tape[ptr][RealizingElements_index++].expressID));
 		}
 	ptr++;
 		} else { RealizingElements = null; ptr++; }
@@ -57577,7 +57579,7 @@ export class IfcRelContainedInSpatialStructure {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57592,13 +57594,13 @@ export class IfcRelContainedInSpatialStructure {
 		RelatedElements = [];
 		let RelatedElements_index = 0;
 		while (RelatedElements_index < tape[ptr].length) {
-			RelatedElements.push(tape[ptr][RelatedElements_index++]);
+			RelatedElements.push(new Handle<IfcProduct>(tape[ptr][RelatedElements_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedElements = null; ptr++; }
 		let RelatingStructure;
 		if (tape[ptr]) {
-		RelatingStructure = tape[ptr++];
+		RelatingStructure = new Handle<IfcSpatialElement>(tape[ptr++].expressID);
 		} else { RelatingStructure = null; ptr++; }
 		return new IfcRelContainedInSpatialStructure(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedElements, RelatingStructure);
 	}
@@ -57659,7 +57661,7 @@ export class IfcRelCoversBldgElements {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57671,14 +57673,14 @@ export class IfcRelCoversBldgElements {
 		} else { Description = null; ptr++; }
 		let RelatingBuildingElement;
 		if (tape[ptr]) {
-		RelatingBuildingElement = tape[ptr++];
+		RelatingBuildingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatingBuildingElement = null; ptr++; }
 		let RelatedCoverings;
 		if (tape[ptr]) {
 		RelatedCoverings = [];
 		let RelatedCoverings_index = 0;
 		while (RelatedCoverings_index < tape[ptr].length) {
-			RelatedCoverings.push(tape[ptr][RelatedCoverings_index++]);
+			RelatedCoverings.push(new Handle<IfcCovering>(tape[ptr][RelatedCoverings_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedCoverings = null; ptr++; }
@@ -57741,7 +57743,7 @@ export class IfcRelCoversSpaces {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57753,14 +57755,14 @@ export class IfcRelCoversSpaces {
 		} else { Description = null; ptr++; }
 		let RelatingSpace;
 		if (tape[ptr]) {
-		RelatingSpace = tape[ptr++];
+		RelatingSpace = new Handle<IfcSpace>(tape[ptr++].expressID);
 		} else { RelatingSpace = null; ptr++; }
 		let RelatedCoverings;
 		if (tape[ptr]) {
 		RelatedCoverings = [];
 		let RelatedCoverings_index = 0;
 		while (RelatedCoverings_index < tape[ptr].length) {
-			RelatedCoverings.push(tape[ptr][RelatedCoverings_index++]);
+			RelatedCoverings.push(new Handle<IfcCovering>(tape[ptr][RelatedCoverings_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedCoverings = null; ptr++; }
@@ -57823,7 +57825,7 @@ export class IfcRelDeclares {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57835,14 +57837,14 @@ export class IfcRelDeclares {
 		} else { Description = null; ptr++; }
 		let RelatingContext;
 		if (tape[ptr]) {
-		RelatingContext = tape[ptr++];
+		RelatingContext = new Handle<IfcContext>(tape[ptr++].expressID);
 		} else { RelatingContext = null; ptr++; }
 		let RelatedDefinitions;
 		if (tape[ptr]) {
 		RelatedDefinitions = [];
 		let RelatedDefinitions_index = 0;
 		while (RelatedDefinitions_index < tape[ptr].length) {
-			RelatedDefinitions.push(tape[ptr][RelatedDefinitions_index++]);
+			RelatedDefinitions.push(ParseType(tape[ptr][RelatedDefinitions_index++]));
 		}
 	ptr++;
 		} else { RelatedDefinitions = null; ptr++; }
@@ -57898,7 +57900,7 @@ export class IfcRelDecomposes {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -57958,7 +57960,7 @@ export class IfcRelDefines {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58022,7 +58024,7 @@ export class IfcRelDefinesByObject {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58037,13 +58039,13 @@ export class IfcRelDefinesByObject {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObject>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingObject;
 		if (tape[ptr]) {
-		RelatingObject = tape[ptr++];
+		RelatingObject = new Handle<IfcObject>(tape[ptr++].expressID);
 		} else { RelatingObject = null; ptr++; }
 		return new IfcRelDefinesByObject(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingObject);
 	}
@@ -58104,7 +58106,7 @@ export class IfcRelDefinesByProperties {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58119,13 +58121,13 @@ export class IfcRelDefinesByProperties {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingPropertyDefinition;
 		if (tape[ptr]) {
-		RelatingPropertyDefinition = tape[ptr++];
+		RelatingPropertyDefinition = ParseType(tape[ptr++]);
 		} else { RelatingPropertyDefinition = null; ptr++; }
 		return new IfcRelDefinesByProperties(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingPropertyDefinition);
 	}
@@ -58184,7 +58186,7 @@ export class IfcRelDefinesByTemplate {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58199,13 +58201,13 @@ export class IfcRelDefinesByTemplate {
 		RelatedPropertySets = [];
 		let RelatedPropertySets_index = 0;
 		while (RelatedPropertySets_index < tape[ptr].length) {
-			RelatedPropertySets.push(tape[ptr][RelatedPropertySets_index++]);
+			RelatedPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][RelatedPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedPropertySets = null; ptr++; }
 		let RelatingTemplate;
 		if (tape[ptr]) {
-		RelatingTemplate = tape[ptr++];
+		RelatingTemplate = new Handle<IfcPropertySetTemplate>(tape[ptr++].expressID);
 		} else { RelatingTemplate = null; ptr++; }
 		return new IfcRelDefinesByTemplate(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedPropertySets, RelatingTemplate);
 	}
@@ -58266,7 +58268,7 @@ export class IfcRelDefinesByType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58281,13 +58283,13 @@ export class IfcRelDefinesByType {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObject>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingType;
 		if (tape[ptr]) {
-		RelatingType = tape[ptr++];
+		RelatingType = new Handle<IfcTypeObject>(tape[ptr++].expressID);
 		} else { RelatingType = null; ptr++; }
 		return new IfcRelDefinesByType(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingType);
 	}
@@ -58348,7 +58350,7 @@ export class IfcRelFillsElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58360,11 +58362,11 @@ export class IfcRelFillsElement {
 		} else { Description = null; ptr++; }
 		let RelatingOpeningElement;
 		if (tape[ptr]) {
-		RelatingOpeningElement = tape[ptr++];
+		RelatingOpeningElement = new Handle<IfcOpeningElement>(tape[ptr++].expressID);
 		} else { RelatingOpeningElement = null; ptr++; }
 		let RelatedBuildingElement;
 		if (tape[ptr]) {
-		RelatedBuildingElement = tape[ptr++];
+		RelatedBuildingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatedBuildingElement = null; ptr++; }
 		return new IfcRelFillsElement(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingOpeningElement, RelatedBuildingElement);
 	}
@@ -58424,7 +58426,7 @@ export class IfcRelFlowControlElements {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58439,13 +58441,13 @@ export class IfcRelFlowControlElements {
 		RelatedControlElements = [];
 		let RelatedControlElements_index = 0;
 		while (RelatedControlElements_index < tape[ptr].length) {
-			RelatedControlElements.push(tape[ptr][RelatedControlElements_index++]);
+			RelatedControlElements.push(new Handle<IfcDistributionControlElement>(tape[ptr][RelatedControlElements_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedControlElements = null; ptr++; }
 		let RelatingFlowElement;
 		if (tape[ptr]) {
-		RelatingFlowElement = tape[ptr++];
+		RelatingFlowElement = new Handle<IfcDistributionFlowElement>(tape[ptr++].expressID);
 		} else { RelatingFlowElement = null; ptr++; }
 		return new IfcRelFlowControlElements(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedControlElements, RelatingFlowElement);
 	}
@@ -58512,7 +58514,7 @@ export class IfcRelInterferesElements {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58524,15 +58526,15 @@ export class IfcRelInterferesElements {
 		} else { Description = null; ptr++; }
 		let RelatingElement;
 		if (tape[ptr]) {
-		RelatingElement = tape[ptr++];
+		RelatingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatingElement = null; ptr++; }
 		let RelatedElement;
 		if (tape[ptr]) {
-		RelatedElement = tape[ptr++];
+		RelatedElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatedElement = null; ptr++; }
 		let InterferenceGeometry;
 		if (tape[ptr]) {
-		InterferenceGeometry = tape[ptr++];
+		InterferenceGeometry = new Handle<IfcConnectionGeometry>(tape[ptr++].expressID);
 		} else { InterferenceGeometry = null; ptr++; }
 		let InterferenceType;
 		if (tape[ptr]) {
@@ -58540,7 +58542,7 @@ export class IfcRelInterferesElements {
 		} else { InterferenceType = null; ptr++; }
 		let ImpliedOrder;
 		if (tape[ptr]) {
-		ImpliedOrder = tape[ptr++];
+		ImpliedOrder = new Handle<boolean>(tape[ptr++].expressID);
 		} else { ImpliedOrder = null; ptr++; }
 		return new IfcRelInterferesElements(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingElement, RelatedElement, InterferenceGeometry, InterferenceType, ImpliedOrder);
 	}
@@ -58612,7 +58614,7 @@ export class IfcRelNests {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58624,14 +58626,14 @@ export class IfcRelNests {
 		} else { Description = null; ptr++; }
 		let RelatingObject;
 		if (tape[ptr]) {
-		RelatingObject = tape[ptr++];
+		RelatingObject = new Handle<IfcObjectDefinition>(tape[ptr++].expressID);
 		} else { RelatingObject = null; ptr++; }
 		let RelatedObjects;
 		if (tape[ptr]) {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
+			RelatedObjects.push(new Handle<IfcObjectDefinition>(tape[ptr][RelatedObjects_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -58694,7 +58696,7 @@ export class IfcRelPositions {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58706,14 +58708,14 @@ export class IfcRelPositions {
 		} else { Description = null; ptr++; }
 		let RelatingPositioningElement;
 		if (tape[ptr]) {
-		RelatingPositioningElement = tape[ptr++];
+		RelatingPositioningElement = new Handle<IfcPositioningElement>(tape[ptr++].expressID);
 		} else { RelatingPositioningElement = null; ptr++; }
 		let RelatedProducts;
 		if (tape[ptr]) {
 		RelatedProducts = [];
 		let RelatedProducts_index = 0;
 		while (RelatedProducts_index < tape[ptr].length) {
-			RelatedProducts.push(tape[ptr][RelatedProducts_index++]);
+			RelatedProducts.push(new Handle<IfcProduct>(tape[ptr][RelatedProducts_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedProducts = null; ptr++; }
@@ -58776,7 +58778,7 @@ export class IfcRelProjectsElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58788,11 +58790,11 @@ export class IfcRelProjectsElement {
 		} else { Description = null; ptr++; }
 		let RelatingElement;
 		if (tape[ptr]) {
-		RelatingElement = tape[ptr++];
+		RelatingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatingElement = null; ptr++; }
 		let RelatedFeatureElement;
 		if (tape[ptr]) {
-		RelatedFeatureElement = tape[ptr++];
+		RelatedFeatureElement = new Handle<IfcFeatureElementAddition>(tape[ptr++].expressID);
 		} else { RelatedFeatureElement = null; ptr++; }
 		return new IfcRelProjectsElement(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingElement, RelatedFeatureElement);
 	}
@@ -58852,7 +58854,7 @@ export class IfcRelReferencedInSpatialStructure {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58867,13 +58869,13 @@ export class IfcRelReferencedInSpatialStructure {
 		RelatedElements = [];
 		let RelatedElements_index = 0;
 		while (RelatedElements_index < tape[ptr].length) {
-			RelatedElements.push(tape[ptr][RelatedElements_index++]);
+			RelatedElements.push(new Handle<IfcProduct>(tape[ptr][RelatedElements_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedElements = null; ptr++; }
 		let RelatingStructure;
 		if (tape[ptr]) {
-		RelatingStructure = tape[ptr++];
+		RelatingStructure = new Handle<IfcSpatialElement>(tape[ptr++].expressID);
 		} else { RelatingStructure = null; ptr++; }
 		return new IfcRelReferencedInSpatialStructure(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedElements, RelatingStructure);
 	}
@@ -58940,7 +58942,7 @@ export class IfcRelSequence {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -58952,15 +58954,15 @@ export class IfcRelSequence {
 		} else { Description = null; ptr++; }
 		let RelatingProcess;
 		if (tape[ptr]) {
-		RelatingProcess = tape[ptr++];
+		RelatingProcess = new Handle<IfcProcess>(tape[ptr++].expressID);
 		} else { RelatingProcess = null; ptr++; }
 		let RelatedProcess;
 		if (tape[ptr]) {
-		RelatedProcess = tape[ptr++];
+		RelatedProcess = new Handle<IfcProcess>(tape[ptr++].expressID);
 		} else { RelatedProcess = null; ptr++; }
 		let TimeLag;
 		if (tape[ptr]) {
-		TimeLag = tape[ptr++];
+		TimeLag = new Handle<IfcLagTime>(tape[ptr++].expressID);
 		} else { TimeLag = null; ptr++; }
 		let SequenceType;
 		if (tape[ptr]) {
@@ -59043,7 +59045,7 @@ export class IfcRelServicesBuildings {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -59055,14 +59057,14 @@ export class IfcRelServicesBuildings {
 		} else { Description = null; ptr++; }
 		let RelatingSystem;
 		if (tape[ptr]) {
-		RelatingSystem = tape[ptr++];
+		RelatingSystem = new Handle<IfcSystem>(tape[ptr++].expressID);
 		} else { RelatingSystem = null; ptr++; }
 		let RelatedBuildings;
 		if (tape[ptr]) {
 		RelatedBuildings = [];
 		let RelatedBuildings_index = 0;
 		while (RelatedBuildings_index < tape[ptr].length) {
-			RelatedBuildings.push(tape[ptr][RelatedBuildings_index++]);
+			RelatedBuildings.push(new Handle<IfcSpatialElement>(tape[ptr][RelatedBuildings_index++].expressID));
 		}
 	ptr++;
 		} else { RelatedBuildings = null; ptr++; }
@@ -59131,7 +59133,7 @@ export class IfcRelSpaceBoundary {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -59143,15 +59145,15 @@ export class IfcRelSpaceBoundary {
 		} else { Description = null; ptr++; }
 		let RelatingSpace;
 		if (tape[ptr]) {
-		RelatingSpace = tape[ptr++];
+		RelatingSpace = ParseType(tape[ptr++]);
 		} else { RelatingSpace = null; ptr++; }
 		let RelatedBuildingElement;
 		if (tape[ptr]) {
-		RelatedBuildingElement = tape[ptr++];
+		RelatedBuildingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatedBuildingElement = null; ptr++; }
 		let ConnectionGeometry;
 		if (tape[ptr]) {
-		ConnectionGeometry = tape[ptr++];
+		ConnectionGeometry = new Handle<IfcConnectionGeometry>(tape[ptr++].expressID);
 		} else { ConnectionGeometry = null; ptr++; }
 		let PhysicalOrVirtualBoundary;
 		if (tape[ptr]) {
@@ -59234,7 +59236,7 @@ export class IfcRelSpaceBoundary1stLevel {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -59246,15 +59248,15 @@ export class IfcRelSpaceBoundary1stLevel {
 		} else { Description = null; ptr++; }
 		let RelatingSpace;
 		if (tape[ptr]) {
-		RelatingSpace = tape[ptr++];
+		RelatingSpace = ParseType(tape[ptr++]);
 		} else { RelatingSpace = null; ptr++; }
 		let RelatedBuildingElement;
 		if (tape[ptr]) {
-		RelatedBuildingElement = tape[ptr++];
+		RelatedBuildingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatedBuildingElement = null; ptr++; }
 		let ConnectionGeometry;
 		if (tape[ptr]) {
-		ConnectionGeometry = tape[ptr++];
+		ConnectionGeometry = new Handle<IfcConnectionGeometry>(tape[ptr++].expressID);
 		} else { ConnectionGeometry = null; ptr++; }
 		let PhysicalOrVirtualBoundary;
 		if (tape[ptr]) {
@@ -59266,7 +59268,7 @@ export class IfcRelSpaceBoundary1stLevel {
 		} else { InternalOrExternalBoundary = null; ptr++; }
 		let ParentBoundary;
 		if (tape[ptr]) {
-		ParentBoundary = tape[ptr++];
+		ParentBoundary = new Handle<IfcRelSpaceBoundary1stLevel>(tape[ptr++].expressID);
 		} else { ParentBoundary = null; ptr++; }
 		return new IfcRelSpaceBoundary1stLevel(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary, ParentBoundary);
 	}
@@ -59348,7 +59350,7 @@ export class IfcRelSpaceBoundary2ndLevel {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -59360,15 +59362,15 @@ export class IfcRelSpaceBoundary2ndLevel {
 		} else { Description = null; ptr++; }
 		let RelatingSpace;
 		if (tape[ptr]) {
-		RelatingSpace = tape[ptr++];
+		RelatingSpace = ParseType(tape[ptr++]);
 		} else { RelatingSpace = null; ptr++; }
 		let RelatedBuildingElement;
 		if (tape[ptr]) {
-		RelatedBuildingElement = tape[ptr++];
+		RelatedBuildingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatedBuildingElement = null; ptr++; }
 		let ConnectionGeometry;
 		if (tape[ptr]) {
-		ConnectionGeometry = tape[ptr++];
+		ConnectionGeometry = new Handle<IfcConnectionGeometry>(tape[ptr++].expressID);
 		} else { ConnectionGeometry = null; ptr++; }
 		let PhysicalOrVirtualBoundary;
 		if (tape[ptr]) {
@@ -59380,11 +59382,11 @@ export class IfcRelSpaceBoundary2ndLevel {
 		} else { InternalOrExternalBoundary = null; ptr++; }
 		let ParentBoundary;
 		if (tape[ptr]) {
-		ParentBoundary = tape[ptr++];
+		ParentBoundary = new Handle<IfcRelSpaceBoundary1stLevel>(tape[ptr++].expressID);
 		} else { ParentBoundary = null; ptr++; }
 		let CorrespondingBoundary;
 		if (tape[ptr]) {
-		CorrespondingBoundary = tape[ptr++];
+		CorrespondingBoundary = new Handle<IfcRelSpaceBoundary2ndLevel>(tape[ptr++].expressID);
 		} else { CorrespondingBoundary = null; ptr++; }
 		return new IfcRelSpaceBoundary2ndLevel(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary, ParentBoundary, CorrespondingBoundary);
 	}
@@ -59461,7 +59463,7 @@ export class IfcRelVoidsElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -59473,11 +59475,11 @@ export class IfcRelVoidsElement {
 		} else { Description = null; ptr++; }
 		let RelatingBuildingElement;
 		if (tape[ptr]) {
-		RelatingBuildingElement = tape[ptr++];
+		RelatingBuildingElement = new Handle<IfcElement>(tape[ptr++].expressID);
 		} else { RelatingBuildingElement = null; ptr++; }
 		let RelatedOpeningElement;
 		if (tape[ptr]) {
-		RelatedOpeningElement = tape[ptr++];
+		RelatedOpeningElement = new Handle<IfcFeatureElementSubtraction>(tape[ptr++].expressID);
 		} else { RelatedOpeningElement = null; ptr++; }
 		return new IfcRelVoidsElement(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatingBuildingElement, RelatedOpeningElement);
 	}
@@ -59533,7 +59535,7 @@ export class IfcRelationship {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -59597,7 +59599,7 @@ export class IfcReparametrisedCompositeCurveSegment {
 		} else { SameSense = null; ptr++; }
 		let ParentCurve;
 		if (tape[ptr]) {
-		ParentCurve = tape[ptr++];
+		ParentCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { ParentCurve = null; ptr++; }
 		let ParamLength;
 		if (tape[ptr]) {
@@ -59638,7 +59640,7 @@ export class IfcRepresentation {
 		let ptr = 0;
 		let ContextOfItems;
 		if (tape[ptr]) {
-		ContextOfItems = tape[ptr++];
+		ContextOfItems = new Handle<IfcRepresentationContext>(tape[ptr++].expressID);
 		} else { ContextOfItems = null; ptr++; }
 		let RepresentationIdentifier;
 		if (tape[ptr]) {
@@ -59653,7 +59655,7 @@ export class IfcRepresentation {
 		Items = [];
 		let Items_index = 0;
 		while (Items_index < tape[ptr].length) {
-			Items.push(tape[ptr][Items_index++]);
+			Items.push(new Handle<IfcRepresentationItem>(tape[ptr][Items_index++].expressID));
 		}
 	ptr++;
 		} else { Items = null; ptr++; }
@@ -59757,11 +59759,11 @@ export class IfcRepresentationMap {
 		let ptr = 0;
 		let MappingOrigin;
 		if (tape[ptr]) {
-		MappingOrigin = tape[ptr++];
+		MappingOrigin = ParseType(tape[ptr++]);
 		} else { MappingOrigin = null; ptr++; }
 		let MappedRepresentation;
 		if (tape[ptr]) {
-		MappedRepresentation = tape[ptr++];
+		MappedRepresentation = new Handle<IfcRepresentation>(tape[ptr++].expressID);
 		} else { MappedRepresentation = null; ptr++; }
 		return new IfcRepresentationMap(expressID, type, MappingOrigin, MappedRepresentation);
 	}
@@ -59804,7 +59806,7 @@ export class IfcResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -59898,13 +59900,13 @@ export class IfcResourceApprovalRelationship {
 		RelatedResourceObjects = [];
 		let RelatedResourceObjects_index = 0;
 		while (RelatedResourceObjects_index < tape[ptr].length) {
-			RelatedResourceObjects.push(tape[ptr][RelatedResourceObjects_index++]);
+			RelatedResourceObjects.push(ParseType(tape[ptr][RelatedResourceObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedResourceObjects = null; ptr++; }
 		let RelatingApproval;
 		if (tape[ptr]) {
-		RelatingApproval = tape[ptr++];
+		RelatingApproval = new Handle<IfcApproval>(tape[ptr++].expressID);
 		} else { RelatingApproval = null; ptr++; }
 		return new IfcResourceApprovalRelationship(expressID, type, Name, Description, RelatedResourceObjects, RelatingApproval);
 	}
@@ -59955,14 +59957,14 @@ export class IfcResourceConstraintRelationship {
 		} else { Description = null; ptr++; }
 		let RelatingConstraint;
 		if (tape[ptr]) {
-		RelatingConstraint = tape[ptr++];
+		RelatingConstraint = new Handle<IfcConstraint>(tape[ptr++].expressID);
 		} else { RelatingConstraint = null; ptr++; }
 		let RelatedResourceObjects;
 		if (tape[ptr]) {
 		RelatedResourceObjects = [];
 		let RelatedResourceObjects_index = 0;
 		while (RelatedResourceObjects_index < tape[ptr].length) {
-			RelatedResourceObjects.push(tape[ptr][RelatedResourceObjects_index++]);
+			RelatedResourceObjects.push(ParseType(tape[ptr][RelatedResourceObjects_index++]));
 		}
 	ptr++;
 		} else { RelatedResourceObjects = null; ptr++; }
@@ -60255,15 +60257,15 @@ export class IfcRevolvedAreaSolid {
 		let ptr = 0;
 		let SweptArea;
 		if (tape[ptr]) {
-		SweptArea = tape[ptr++];
+		SweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptArea = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcAxis1Placement>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		let Angle;
 		if (tape[ptr]) {
@@ -60311,15 +60313,15 @@ export class IfcRevolvedAreaSolidTapered {
 		let ptr = 0;
 		let SweptArea;
 		if (tape[ptr]) {
-		SweptArea = tape[ptr++];
+		SweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptArea = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcAxis1Placement>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		let Angle;
 		if (tape[ptr]) {
@@ -60327,7 +60329,7 @@ export class IfcRevolvedAreaSolidTapered {
 		} else { Angle = null; ptr++; }
 		let EndSweptArea;
 		if (tape[ptr]) {
-		EndSweptArea = tape[ptr++];
+		EndSweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { EndSweptArea = null; ptr++; }
 		return new IfcRevolvedAreaSolidTapered(expressID, type, SweptArea, Position, Axis, Angle, EndSweptArea);
 	}
@@ -60369,7 +60371,7 @@ export class IfcRightCircularCone {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Height;
 		if (tape[ptr]) {
@@ -60408,7 +60410,7 @@ export class IfcRightCircularCylinder {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Height;
 		if (tape[ptr]) {
@@ -60463,7 +60465,7 @@ export class IfcRoof {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -60479,11 +60481,11 @@ export class IfcRoof {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -60580,7 +60582,7 @@ export class IfcRoofType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -60599,7 +60601,7 @@ export class IfcRoofType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -60608,7 +60610,7 @@ export class IfcRoofType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -60703,7 +60705,7 @@ export class IfcRoot {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -60771,7 +60773,7 @@ export class IfcRoundedRectangleProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let XDim;
 		if (tape[ptr]) {
@@ -60826,7 +60828,7 @@ export class IfcSIUnit {
 		let ptr = 0;
 		let Dimensions;
 		if (tape[ptr]) {
-		Dimensions = tape[ptr++];
+		Dimensions = new Handle<IfcDimensionalExponents>(tape[ptr++].expressID);
 		} else { Dimensions = null; ptr++; }
 		let UnitType;
 		if (tape[ptr]) {
@@ -60894,7 +60896,7 @@ export class IfcSanitaryTerminal {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -60910,11 +60912,11 @@ export class IfcSanitaryTerminal {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -61011,7 +61013,7 @@ export class IfcSanitaryTerminalType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -61030,7 +61032,7 @@ export class IfcSanitaryTerminalType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -61039,7 +61041,7 @@ export class IfcSanitaryTerminalType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -61180,14 +61182,14 @@ export class IfcSeamCurve {
 		let ptr = 0;
 		let Curve3D;
 		if (tape[ptr]) {
-		Curve3D = tape[ptr++];
+		Curve3D = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Curve3D = null; ptr++; }
 		let AssociatedGeometry;
 		if (tape[ptr]) {
 		AssociatedGeometry = [];
 		let AssociatedGeometry_index = 0;
 		while (AssociatedGeometry_index < tape[ptr].length) {
-			AssociatedGeometry.push(tape[ptr][AssociatedGeometry_index++]);
+			AssociatedGeometry.push(new Handle<IfcPcurve>(tape[ptr][AssociatedGeometry_index++].expressID));
 		}
 	ptr++;
 		} else { AssociatedGeometry = null; ptr++; }
@@ -61233,11 +61235,11 @@ export class IfcSectionProperties {
 		} else { SectionType = null; ptr++; }
 		let StartProfile;
 		if (tape[ptr]) {
-		StartProfile = tape[ptr++];
+		StartProfile = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { StartProfile = null; ptr++; }
 		let EndProfile;
 		if (tape[ptr]) {
-		EndProfile = tape[ptr++];
+		EndProfile = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { EndProfile = null; ptr++; }
 		return new IfcSectionProperties(expressID, type, SectionType, StartProfile, EndProfile);
 	}
@@ -61297,14 +61299,14 @@ export class IfcSectionReinforcementProperties {
 		} else { ReinforcementRole = null; ptr++; }
 		let SectionDefinition;
 		if (tape[ptr]) {
-		SectionDefinition = tape[ptr++];
+		SectionDefinition = new Handle<IfcSectionProperties>(tape[ptr++].expressID);
 		} else { SectionDefinition = null; ptr++; }
 		let CrossSectionReinforcementDefinitions;
 		if (tape[ptr]) {
 		CrossSectionReinforcementDefinitions = [];
 		let CrossSectionReinforcementDefinitions_index = 0;
 		while (CrossSectionReinforcementDefinitions_index < tape[ptr].length) {
-			CrossSectionReinforcementDefinitions.push(tape[ptr][CrossSectionReinforcementDefinitions_index++]);
+			CrossSectionReinforcementDefinitions.push(new Handle<IfcReinforcementBarProperties>(tape[ptr][CrossSectionReinforcementDefinitions_index++].expressID));
 		}
 	ptr++;
 		} else { CrossSectionReinforcementDefinitions = null; ptr++; }
@@ -61349,14 +61351,14 @@ export class IfcSectionedSolid {
 		let ptr = 0;
 		let Directrix;
 		if (tape[ptr]) {
-		Directrix = tape[ptr++];
+		Directrix = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Directrix = null; ptr++; }
 		let CrossSections;
 		if (tape[ptr]) {
 		CrossSections = [];
 		let CrossSections_index = 0;
 		while (CrossSections_index < tape[ptr].length) {
-			CrossSections.push(tape[ptr][CrossSections_index++]);
+			CrossSections.push(new Handle<IfcProfileDef>(tape[ptr][CrossSections_index++].expressID));
 		}
 	ptr++;
 		} else { CrossSections = null; ptr++; }
@@ -61394,14 +61396,14 @@ export class IfcSectionedSolidHorizontal {
 		let ptr = 0;
 		let Directrix;
 		if (tape[ptr]) {
-		Directrix = tape[ptr++];
+		Directrix = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Directrix = null; ptr++; }
 		let CrossSections;
 		if (tape[ptr]) {
 		CrossSections = [];
 		let CrossSections_index = 0;
 		while (CrossSections_index < tape[ptr].length) {
-			CrossSections.push(tape[ptr][CrossSections_index++]);
+			CrossSections.push(new Handle<IfcProfileDef>(tape[ptr][CrossSections_index++].expressID));
 		}
 	ptr++;
 		} else { CrossSections = null; ptr++; }
@@ -61410,7 +61412,7 @@ export class IfcSectionedSolidHorizontal {
 		CrossSectionPositions = [];
 		let CrossSectionPositions_index = 0;
 		while (CrossSectionPositions_index < tape[ptr].length) {
-			CrossSectionPositions.push(tape[ptr][CrossSectionPositions_index++]);
+			CrossSectionPositions.push(new Handle<IfcDistanceExpression>(tape[ptr][CrossSectionPositions_index++].expressID));
 		}
 	ptr++;
 		} else { CrossSectionPositions = null; ptr++; }
@@ -61453,14 +61455,14 @@ export class IfcSectionedSpine {
 		let ptr = 0;
 		let SpineCurve;
 		if (tape[ptr]) {
-		SpineCurve = tape[ptr++];
+		SpineCurve = new Handle<IfcCompositeCurve>(tape[ptr++].expressID);
 		} else { SpineCurve = null; ptr++; }
 		let CrossSections;
 		if (tape[ptr]) {
 		CrossSections = [];
 		let CrossSections_index = 0;
 		while (CrossSections_index < tape[ptr].length) {
-			CrossSections.push(tape[ptr][CrossSections_index++]);
+			CrossSections.push(new Handle<IfcProfileDef>(tape[ptr][CrossSections_index++].expressID));
 		}
 	ptr++;
 		} else { CrossSections = null; ptr++; }
@@ -61469,7 +61471,7 @@ export class IfcSectionedSpine {
 		CrossSectionPositions = [];
 		let CrossSectionPositions_index = 0;
 		while (CrossSectionPositions_index < tape[ptr].length) {
-			CrossSectionPositions.push(tape[ptr][CrossSectionPositions_index++]);
+			CrossSectionPositions.push(new Handle<IfcAxis2Placement3D>(tape[ptr][CrossSectionPositions_index++].expressID));
 		}
 	ptr++;
 		} else { CrossSectionPositions = null; ptr++; }
@@ -61524,7 +61526,7 @@ export class IfcSensor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -61540,11 +61542,11 @@ export class IfcSensor {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -61641,7 +61643,7 @@ export class IfcSensorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -61660,7 +61662,7 @@ export class IfcSensorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -61669,7 +61671,7 @@ export class IfcSensorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -61774,7 +61776,7 @@ export class IfcShadingDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -61790,11 +61792,11 @@ export class IfcShadingDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -61891,7 +61893,7 @@ export class IfcShadingDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -61910,7 +61912,7 @@ export class IfcShadingDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -61919,7 +61921,7 @@ export class IfcShadingDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -62015,7 +62017,7 @@ export class IfcShapeAspect {
 		ShapeRepresentations = [];
 		let ShapeRepresentations_index = 0;
 		while (ShapeRepresentations_index < tape[ptr].length) {
-			ShapeRepresentations.push(tape[ptr][ShapeRepresentations_index++]);
+			ShapeRepresentations.push(new Handle<IfcShapeModel>(tape[ptr][ShapeRepresentations_index++].expressID));
 		}
 	ptr++;
 		} else { ShapeRepresentations = null; ptr++; }
@@ -62033,7 +62035,7 @@ export class IfcShapeAspect {
 		} else { ProductDefinitional = null; ptr++; }
 		let PartOfProductDefinitionShape;
 		if (tape[ptr]) {
-		PartOfProductDefinitionShape = tape[ptr++];
+		PartOfProductDefinitionShape = ParseType(tape[ptr++]);
 		} else { PartOfProductDefinitionShape = null; ptr++; }
 		return new IfcShapeAspect(expressID, type, ShapeRepresentations, Name, Description, ProductDefinitional, PartOfProductDefinitionShape);
 	}
@@ -62080,7 +62082,7 @@ export class IfcShapeModel {
 		let ptr = 0;
 		let ContextOfItems;
 		if (tape[ptr]) {
-		ContextOfItems = tape[ptr++];
+		ContextOfItems = new Handle<IfcRepresentationContext>(tape[ptr++].expressID);
 		} else { ContextOfItems = null; ptr++; }
 		let RepresentationIdentifier;
 		if (tape[ptr]) {
@@ -62095,7 +62097,7 @@ export class IfcShapeModel {
 		Items = [];
 		let Items_index = 0;
 		while (Items_index < tape[ptr].length) {
-			Items.push(tape[ptr][Items_index++]);
+			Items.push(new Handle<IfcRepresentationItem>(tape[ptr][Items_index++].expressID));
 		}
 	ptr++;
 		} else { Items = null; ptr++; }
@@ -62143,7 +62145,7 @@ export class IfcShapeRepresentation {
 		let ptr = 0;
 		let ContextOfItems;
 		if (tape[ptr]) {
-		ContextOfItems = tape[ptr++];
+		ContextOfItems = new Handle<IfcRepresentationContext>(tape[ptr++].expressID);
 		} else { ContextOfItems = null; ptr++; }
 		let RepresentationIdentifier;
 		if (tape[ptr]) {
@@ -62158,7 +62160,7 @@ export class IfcShapeRepresentation {
 		Items = [];
 		let Items_index = 0;
 		while (Items_index < tape[ptr].length) {
-			Items.push(tape[ptr][Items_index++]);
+			Items.push(new Handle<IfcRepresentationItem>(tape[ptr][Items_index++].expressID));
 		}
 	ptr++;
 		} else { Items = null; ptr++; }
@@ -62203,7 +62205,7 @@ export class IfcShellBasedSurfaceModel {
 		SbsmBoundary = [];
 		let SbsmBoundary_index = 0;
 		while (SbsmBoundary_index < tape[ptr].length) {
-			SbsmBoundary.push(tape[ptr][SbsmBoundary_index++]);
+			SbsmBoundary.push(ParseType(tape[ptr][SbsmBoundary_index++]));
 		}
 	ptr++;
 		} else { SbsmBoundary = null; ptr++; }
@@ -62294,7 +62296,7 @@ export class IfcSimplePropertyTemplate {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -62318,15 +62320,15 @@ export class IfcSimplePropertyTemplate {
 		} else { SecondaryMeasureType = null; ptr++; }
 		let Enumerators;
 		if (tape[ptr]) {
-		Enumerators = tape[ptr++];
+		Enumerators = new Handle<IfcPropertyEnumeration>(tape[ptr++].expressID);
 		} else { Enumerators = null; ptr++; }
 		let PrimaryUnit;
 		if (tape[ptr]) {
-		PrimaryUnit = tape[ptr++];
+		PrimaryUnit = ParseType(tape[ptr++]);
 		} else { PrimaryUnit = null; ptr++; }
 		let SecondaryUnit;
 		if (tape[ptr]) {
-		SecondaryUnit = tape[ptr++];
+		SecondaryUnit = ParseType(tape[ptr++]);
 		} else { SecondaryUnit = null; ptr++; }
 		let Expression;
 		if (tape[ptr]) {
@@ -62442,7 +62444,7 @@ export class IfcSite {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -62458,11 +62460,11 @@ export class IfcSite {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -62490,7 +62492,7 @@ export class IfcSite {
 		} else { LandTitleNumber = null; ptr++; }
 		let SiteAddress;
 		if (tape[ptr]) {
-		SiteAddress = tape[ptr++];
+		SiteAddress = new Handle<IfcPostalAddress>(tape[ptr++].expressID);
 		} else { SiteAddress = null; ptr++; }
 		return new IfcSite(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType, RefLatitude, RefLongitude, RefElevation, LandTitleNumber, SiteAddress);
 	}
@@ -62602,7 +62604,7 @@ export class IfcSlab {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -62618,11 +62620,11 @@ export class IfcSlab {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -62717,7 +62719,7 @@ export class IfcSlabElementedCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -62733,11 +62735,11 @@ export class IfcSlabElementedCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -62832,7 +62834,7 @@ export class IfcSlabStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -62848,11 +62850,11 @@ export class IfcSlabStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -62949,7 +62951,7 @@ export class IfcSlabType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -62968,7 +62970,7 @@ export class IfcSlabType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -62977,7 +62979,7 @@ export class IfcSlabType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -63145,7 +63147,7 @@ export class IfcSolarDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -63161,11 +63163,11 @@ export class IfcSolarDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -63262,7 +63264,7 @@ export class IfcSolarDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -63281,7 +63283,7 @@ export class IfcSolarDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -63290,7 +63292,7 @@ export class IfcSolarDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -63418,7 +63420,7 @@ export class IfcSpace {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -63434,11 +63436,11 @@ export class IfcSpace {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -63551,7 +63553,7 @@ export class IfcSpaceHeater {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -63567,11 +63569,11 @@ export class IfcSpaceHeater {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -63668,7 +63670,7 @@ export class IfcSpaceHeaterType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -63687,7 +63689,7 @@ export class IfcSpaceHeaterType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -63696,7 +63698,7 @@ export class IfcSpaceHeaterType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -63805,7 +63807,7 @@ export class IfcSpaceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -63824,7 +63826,7 @@ export class IfcSpaceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -63833,7 +63835,7 @@ export class IfcSpaceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -63945,7 +63947,7 @@ export class IfcSpatialElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -63961,11 +63963,11 @@ export class IfcSpatialElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -64051,7 +64053,7 @@ export class IfcSpatialElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -64070,7 +64072,7 @@ export class IfcSpatialElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -64079,7 +64081,7 @@ export class IfcSpatialElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -64178,7 +64180,7 @@ export class IfcSpatialStructureElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -64194,11 +64196,11 @@ export class IfcSpatialStructureElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -64293,7 +64295,7 @@ export class IfcSpatialStructureElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -64312,7 +64314,7 @@ export class IfcSpatialStructureElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -64321,7 +64323,7 @@ export class IfcSpatialStructureElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -64420,7 +64422,7 @@ export class IfcSpatialZone {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -64436,11 +64438,11 @@ export class IfcSpatialZone {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let LongName;
 		if (tape[ptr]) {
@@ -64539,7 +64541,7 @@ export class IfcSpatialZoneType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -64558,7 +64560,7 @@ export class IfcSpatialZoneType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -64567,7 +64569,7 @@ export class IfcSpatialZoneType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -64663,7 +64665,7 @@ export class IfcSphere {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -64696,7 +64698,7 @@ export class IfcSphericalSurface {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -64747,7 +64749,7 @@ export class IfcStackTerminal {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -64763,11 +64765,11 @@ export class IfcStackTerminal {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -64864,7 +64866,7 @@ export class IfcStackTerminalType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -64883,7 +64885,7 @@ export class IfcStackTerminalType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -64892,7 +64894,7 @@ export class IfcStackTerminalType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -64997,7 +64999,7 @@ export class IfcStair {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -65013,11 +65015,11 @@ export class IfcStair {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -65120,7 +65122,7 @@ export class IfcStairFlight {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -65136,11 +65138,11 @@ export class IfcStairFlight {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -65269,7 +65271,7 @@ export class IfcStairFlightType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -65288,7 +65290,7 @@ export class IfcStairFlightType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -65297,7 +65299,7 @@ export class IfcStairFlightType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -65404,7 +65406,7 @@ export class IfcStairType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -65423,7 +65425,7 @@ export class IfcStairType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -65432,7 +65434,7 @@ export class IfcStairType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -65539,7 +65541,7 @@ export class IfcStructuralAction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -65555,15 +65557,15 @@ export class IfcStructuralAction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -65655,7 +65657,7 @@ export class IfcStructuralActivity {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -65671,15 +65673,15 @@ export class IfcStructuralActivity {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -65766,7 +65768,7 @@ export class IfcStructuralAnalysisModel {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -65786,14 +65788,14 @@ export class IfcStructuralAnalysisModel {
 		} else { PredefinedType = null; ptr++; }
 		let OrientationOf2DPlane;
 		if (tape[ptr]) {
-		OrientationOf2DPlane = tape[ptr++];
+		OrientationOf2DPlane = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { OrientationOf2DPlane = null; ptr++; }
 		let LoadedBy;
 		if (tape[ptr]) {
 		LoadedBy = [];
 		let LoadedBy_index = 0;
 		while (LoadedBy_index < tape[ptr].length) {
-			LoadedBy.push(tape[ptr][LoadedBy_index++]);
+			LoadedBy.push(new Handle<IfcStructuralLoadGroup>(tape[ptr][LoadedBy_index++].expressID));
 		}
 	ptr++;
 		} else { LoadedBy = null; ptr++; }
@@ -65802,13 +65804,13 @@ export class IfcStructuralAnalysisModel {
 		HasResults = [];
 		let HasResults_index = 0;
 		while (HasResults_index < tape[ptr].length) {
-			HasResults.push(tape[ptr][HasResults_index++]);
+			HasResults.push(new Handle<IfcStructuralResultGroup>(tape[ptr][HasResults_index++].expressID));
 		}
 	ptr++;
 		} else { HasResults = null; ptr++; }
 		let SharedPlacement;
 		if (tape[ptr]) {
-		SharedPlacement = tape[ptr++];
+		SharedPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { SharedPlacement = null; ptr++; }
 		return new IfcStructuralAnalysisModel(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, PredefinedType, OrientationOf2DPlane, LoadedBy, HasResults, SharedPlacement);
 	}
@@ -65897,7 +65899,7 @@ export class IfcStructuralConnection {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -65913,15 +65915,15 @@ export class IfcStructuralConnection {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedCondition;
 		if (tape[ptr]) {
-		AppliedCondition = tape[ptr++];
+		AppliedCondition = new Handle<IfcBoundaryCondition>(tape[ptr++].expressID);
 		} else { AppliedCondition = null; ptr++; }
 		return new IfcStructuralConnection(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 	}
@@ -66039,7 +66041,7 @@ export class IfcStructuralCurveAction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -66055,15 +66057,15 @@ export class IfcStructuralCurveAction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -66170,7 +66172,7 @@ export class IfcStructuralCurveConnection {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -66186,19 +66188,19 @@ export class IfcStructuralCurveConnection {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedCondition;
 		if (tape[ptr]) {
-		AppliedCondition = tape[ptr++];
+		AppliedCondition = new Handle<IfcBoundaryCondition>(tape[ptr++].expressID);
 		} else { AppliedCondition = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		return new IfcStructuralCurveConnection(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition, Axis);
 	}
@@ -66282,7 +66284,7 @@ export class IfcStructuralCurveMember {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -66298,11 +66300,11 @@ export class IfcStructuralCurveMember {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -66310,7 +66312,7 @@ export class IfcStructuralCurveMember {
 		} else { PredefinedType = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		return new IfcStructuralCurveMember(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, Axis);
 	}
@@ -66391,7 +66393,7 @@ export class IfcStructuralCurveMemberVarying {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -66407,11 +66409,11 @@ export class IfcStructuralCurveMemberVarying {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -66419,7 +66421,7 @@ export class IfcStructuralCurveMemberVarying {
 		} else { PredefinedType = null; ptr++; }
 		let Axis;
 		if (tape[ptr]) {
-		Axis = tape[ptr++];
+		Axis = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Axis = null; ptr++; }
 		return new IfcStructuralCurveMemberVarying(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, Axis);
 	}
@@ -66502,7 +66504,7 @@ export class IfcStructuralCurveReaction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -66518,15 +66520,15 @@ export class IfcStructuralCurveReaction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -66613,7 +66615,7 @@ export class IfcStructuralItem {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -66629,11 +66631,11 @@ export class IfcStructuralItem {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		return new IfcStructuralItem(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
@@ -66716,7 +66718,7 @@ export class IfcStructuralLinearAction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -66732,15 +66734,15 @@ export class IfcStructuralLinearAction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -66881,7 +66883,7 @@ export class IfcStructuralLoadCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -67001,7 +67003,7 @@ export class IfcStructuralLoadConfiguration {
 		Values = [];
 		let Values_index = 0;
 		while (Values_index < tape[ptr].length) {
-			Values.push(tape[ptr][Values_index++]);
+			Values.push(new Handle<IfcStructuralLoadOrResult>(tape[ptr][Values_index++].expressID));
 		}
 	ptr++;
 		} else { Values = null; ptr++; }
@@ -67072,7 +67074,7 @@ export class IfcStructuralLoadGroup {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -67871,7 +67873,7 @@ export class IfcStructuralMember {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -67887,11 +67889,11 @@ export class IfcStructuralMember {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		return new IfcStructuralMember(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 	}
@@ -67974,7 +67976,7 @@ export class IfcStructuralPlanarAction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -67990,15 +67992,15 @@ export class IfcStructuralPlanarAction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -68107,7 +68109,7 @@ export class IfcStructuralPointAction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -68123,15 +68125,15 @@ export class IfcStructuralPointAction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -68223,7 +68225,7 @@ export class IfcStructuralPointConnection {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -68239,19 +68241,19 @@ export class IfcStructuralPointConnection {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedCondition;
 		if (tape[ptr]) {
-		AppliedCondition = tape[ptr++];
+		AppliedCondition = new Handle<IfcBoundaryCondition>(tape[ptr++].expressID);
 		} else { AppliedCondition = null; ptr++; }
 		let ConditionCoordinateSystem;
 		if (tape[ptr]) {
-		ConditionCoordinateSystem = tape[ptr++];
+		ConditionCoordinateSystem = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { ConditionCoordinateSystem = null; ptr++; }
 		return new IfcStructuralPointConnection(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition, ConditionCoordinateSystem);
 	}
@@ -68338,7 +68340,7 @@ export class IfcStructuralPointReaction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -68354,15 +68356,15 @@ export class IfcStructuralPointReaction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -68447,7 +68449,7 @@ export class IfcStructuralReaction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -68463,15 +68465,15 @@ export class IfcStructuralReaction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -68554,7 +68556,7 @@ export class IfcStructuralResultGroup {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -68574,7 +68576,7 @@ export class IfcStructuralResultGroup {
 		} else { TheoryType = null; ptr++; }
 		let ResultForLoadGroup;
 		if (tape[ptr]) {
-		ResultForLoadGroup = tape[ptr++];
+		ResultForLoadGroup = new Handle<IfcStructuralLoadGroup>(tape[ptr++].expressID);
 		} else { ResultForLoadGroup = null; ptr++; }
 		let IsLinear;
 		if (tape[ptr]) {
@@ -68658,7 +68660,7 @@ export class IfcStructuralSurfaceAction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -68674,15 +68676,15 @@ export class IfcStructuralSurfaceAction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -68787,7 +68789,7 @@ export class IfcStructuralSurfaceConnection {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -68803,15 +68805,15 @@ export class IfcStructuralSurfaceConnection {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedCondition;
 		if (tape[ptr]) {
-		AppliedCondition = tape[ptr++];
+		AppliedCondition = new Handle<IfcBoundaryCondition>(tape[ptr++].expressID);
 		} else { AppliedCondition = null; ptr++; }
 		return new IfcStructuralSurfaceConnection(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 	}
@@ -68893,7 +68895,7 @@ export class IfcStructuralSurfaceMember {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -68909,11 +68911,11 @@ export class IfcStructuralSurfaceMember {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -69003,7 +69005,7 @@ export class IfcStructuralSurfaceMemberVarying {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -69019,11 +69021,11 @@ export class IfcStructuralSurfaceMemberVarying {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -69115,7 +69117,7 @@ export class IfcStructuralSurfaceReaction {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -69131,15 +69133,15 @@ export class IfcStructuralSurfaceReaction {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let AppliedLoad;
 		if (tape[ptr]) {
-		AppliedLoad = tape[ptr++];
+		AppliedLoad = new Handle<IfcStructuralLoad>(tape[ptr++].expressID);
 		} else { AppliedLoad = null; ptr++; }
 		let GlobalOrLocal;
 		if (tape[ptr]) {
@@ -69216,7 +69218,7 @@ export class IfcStyleModel {
 		let ptr = 0;
 		let ContextOfItems;
 		if (tape[ptr]) {
-		ContextOfItems = tape[ptr++];
+		ContextOfItems = new Handle<IfcRepresentationContext>(tape[ptr++].expressID);
 		} else { ContextOfItems = null; ptr++; }
 		let RepresentationIdentifier;
 		if (tape[ptr]) {
@@ -69231,7 +69233,7 @@ export class IfcStyleModel {
 		Items = [];
 		let Items_index = 0;
 		while (Items_index < tape[ptr].length) {
-			Items.push(tape[ptr][Items_index++]);
+			Items.push(new Handle<IfcRepresentationItem>(tape[ptr][Items_index++].expressID));
 		}
 	ptr++;
 		} else { Items = null; ptr++; }
@@ -69277,14 +69279,14 @@ export class IfcStyledItem {
 		let ptr = 0;
 		let Item;
 		if (tape[ptr]) {
-		Item = tape[ptr++];
+		Item = new Handle<IfcRepresentationItem>(tape[ptr++].expressID);
 		} else { Item = null; ptr++; }
 		let Styles;
 		if (tape[ptr]) {
 		Styles = [];
 		let Styles_index = 0;
 		while (Styles_index < tape[ptr].length) {
-			Styles.push(tape[ptr][Styles_index++]);
+			Styles.push(ParseType(tape[ptr][Styles_index++]));
 		}
 	ptr++;
 		} else { Styles = null; ptr++; }
@@ -69331,7 +69333,7 @@ export class IfcStyledRepresentation {
 		let ptr = 0;
 		let ContextOfItems;
 		if (tape[ptr]) {
-		ContextOfItems = tape[ptr++];
+		ContextOfItems = new Handle<IfcRepresentationContext>(tape[ptr++].expressID);
 		} else { ContextOfItems = null; ptr++; }
 		let RepresentationIdentifier;
 		if (tape[ptr]) {
@@ -69346,7 +69348,7 @@ export class IfcStyledRepresentation {
 		Items = [];
 		let Items_index = 0;
 		while (Items_index < tape[ptr].length) {
-			Items.push(tape[ptr][Items_index++]);
+			Items.push(new Handle<IfcRepresentationItem>(tape[ptr][Items_index++].expressID));
 		}
 	ptr++;
 		} else { Items = null; ptr++; }
@@ -69412,7 +69414,7 @@ export class IfcSubContractResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -69436,20 +69438,20 @@ export class IfcSubContractResource {
 		} else { LongDescription = null; ptr++; }
 		let Usage;
 		if (tape[ptr]) {
-		Usage = tape[ptr++];
+		Usage = new Handle<IfcResourceTime>(tape[ptr++].expressID);
 		} else { Usage = null; ptr++; }
 		let BaseCosts;
 		if (tape[ptr]) {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -69557,7 +69559,7 @@ export class IfcSubContractResourceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -69576,7 +69578,7 @@ export class IfcSubContractResourceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -69597,13 +69599,13 @@ export class IfcSubContractResourceType {
 		BaseCosts = [];
 		let BaseCosts_index = 0;
 		while (BaseCosts_index < tape[ptr].length) {
-			BaseCosts.push(tape[ptr][BaseCosts_index++]);
+			BaseCosts.push(new Handle<IfcAppliedValue>(tape[ptr][BaseCosts_index++].expressID));
 		}
 	ptr++;
 		} else { BaseCosts = null; ptr++; }
 		let BaseQuantity;
 		if (tape[ptr]) {
-		BaseQuantity = tape[ptr++];
+		BaseQuantity = new Handle<IfcPhysicalQuantity>(tape[ptr++].expressID);
 		} else { BaseQuantity = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -69692,15 +69694,15 @@ export class IfcSubedge {
 		let ptr = 0;
 		let EdgeStart;
 		if (tape[ptr]) {
-		EdgeStart = tape[ptr++];
+		EdgeStart = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { EdgeStart = null; ptr++; }
 		let EdgeEnd;
 		if (tape[ptr]) {
-		EdgeEnd = tape[ptr++];
+		EdgeEnd = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { EdgeEnd = null; ptr++; }
 		let ParentEdge;
 		if (tape[ptr]) {
-		ParentEdge = tape[ptr++];
+		ParentEdge = new Handle<IfcEdge>(tape[ptr++].expressID);
 		} else { ParentEdge = null; ptr++; }
 		return new IfcSubedge(expressID, type, EdgeStart, EdgeEnd, ParentEdge);
 	}
@@ -69754,14 +69756,14 @@ export class IfcSurfaceCurve {
 		let ptr = 0;
 		let Curve3D;
 		if (tape[ptr]) {
-		Curve3D = tape[ptr++];
+		Curve3D = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Curve3D = null; ptr++; }
 		let AssociatedGeometry;
 		if (tape[ptr]) {
 		AssociatedGeometry = [];
 		let AssociatedGeometry_index = 0;
 		while (AssociatedGeometry_index < tape[ptr].length) {
-			AssociatedGeometry.push(tape[ptr][AssociatedGeometry_index++]);
+			AssociatedGeometry.push(new Handle<IfcPcurve>(tape[ptr][AssociatedGeometry_index++].expressID));
 		}
 	ptr++;
 		} else { AssociatedGeometry = null; ptr++; }
@@ -69809,15 +69811,15 @@ export class IfcSurfaceCurveSweptAreaSolid {
 		let ptr = 0;
 		let SweptArea;
 		if (tape[ptr]) {
-		SweptArea = tape[ptr++];
+		SweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptArea = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Directrix;
 		if (tape[ptr]) {
-		Directrix = tape[ptr++];
+		Directrix = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Directrix = null; ptr++; }
 		let StartParam;
 		if (tape[ptr]) {
@@ -69829,7 +69831,7 @@ export class IfcSurfaceCurveSweptAreaSolid {
 		} else { EndParam = null; ptr++; }
 		let ReferenceSurface;
 		if (tape[ptr]) {
-		ReferenceSurface = tape[ptr++];
+		ReferenceSurface = new Handle<IfcSurface>(tape[ptr++].expressID);
 		} else { ReferenceSurface = null; ptr++; }
 		return new IfcSurfaceCurveSweptAreaSolid(expressID, type, SweptArea, Position, Directrix, StartParam, EndParam, ReferenceSurface);
 	}
@@ -69895,7 +69897,7 @@ export class IfcSurfaceFeature {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -69911,11 +69913,11 @@ export class IfcSurfaceFeature {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -69996,15 +69998,15 @@ export class IfcSurfaceOfLinearExtrusion {
 		let ptr = 0;
 		let SweptCurve;
 		if (tape[ptr]) {
-		SweptCurve = tape[ptr++];
+		SweptCurve = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptCurve = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let ExtrudedDirection;
 		if (tape[ptr]) {
-		ExtrudedDirection = tape[ptr++];
+		ExtrudedDirection = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { ExtrudedDirection = null; ptr++; }
 		let Depth;
 		if (tape[ptr]) {
@@ -70048,15 +70050,15 @@ export class IfcSurfaceOfRevolution {
 		let ptr = 0;
 		let SweptCurve;
 		if (tape[ptr]) {
-		SweptCurve = tape[ptr++];
+		SweptCurve = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptCurve = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let AxisPosition;
 		if (tape[ptr]) {
-		AxisPosition = tape[ptr++];
+		AxisPosition = new Handle<IfcAxis1Placement>(tape[ptr++].expressID);
 		} else { AxisPosition = null; ptr++; }
 		return new IfcSurfaceOfRevolution(expressID, type, SweptCurve, Position, AxisPosition);
 	}
@@ -70178,7 +70180,7 @@ export class IfcSurfaceStyle {
 		Styles = [];
 		let Styles_index = 0;
 		while (Styles_index < tape[ptr].length) {
-			Styles.push(tape[ptr][Styles_index++]);
+			Styles.push(ParseType(tape[ptr][Styles_index++]));
 		}
 	ptr++;
 		} else { Styles = null; ptr++; }
@@ -70218,19 +70220,19 @@ export class IfcSurfaceStyleLighting {
 		let ptr = 0;
 		let DiffuseTransmissionColour;
 		if (tape[ptr]) {
-		DiffuseTransmissionColour = tape[ptr++];
+		DiffuseTransmissionColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { DiffuseTransmissionColour = null; ptr++; }
 		let DiffuseReflectionColour;
 		if (tape[ptr]) {
-		DiffuseReflectionColour = tape[ptr++];
+		DiffuseReflectionColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { DiffuseReflectionColour = null; ptr++; }
 		let TransmissionColour;
 		if (tape[ptr]) {
-		TransmissionColour = tape[ptr++];
+		TransmissionColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { TransmissionColour = null; ptr++; }
 		let ReflectanceColour;
 		if (tape[ptr]) {
-		ReflectanceColour = tape[ptr++];
+		ReflectanceColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { ReflectanceColour = null; ptr++; }
 		return new IfcSurfaceStyleLighting(expressID, type, DiffuseTransmissionColour, DiffuseReflectionColour, TransmissionColour, ReflectanceColour);
 	}
@@ -70320,7 +70322,7 @@ export class IfcSurfaceStyleRendering {
 		let ptr = 0;
 		let SurfaceColour;
 		if (tape[ptr]) {
-		SurfaceColour = tape[ptr++];
+		SurfaceColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { SurfaceColour = null; ptr++; }
 		let Transparency;
 		if (tape[ptr]) {
@@ -70328,27 +70330,27 @@ export class IfcSurfaceStyleRendering {
 		} else { Transparency = null; ptr++; }
 		let DiffuseColour;
 		if (tape[ptr]) {
-		DiffuseColour = tape[ptr++];
+		DiffuseColour = ParseType(tape[ptr++]);
 		} else { DiffuseColour = null; ptr++; }
 		let TransmissionColour;
 		if (tape[ptr]) {
-		TransmissionColour = tape[ptr++];
+		TransmissionColour = ParseType(tape[ptr++]);
 		} else { TransmissionColour = null; ptr++; }
 		let DiffuseTransmissionColour;
 		if (tape[ptr]) {
-		DiffuseTransmissionColour = tape[ptr++];
+		DiffuseTransmissionColour = ParseType(tape[ptr++]);
 		} else { DiffuseTransmissionColour = null; ptr++; }
 		let ReflectionColour;
 		if (tape[ptr]) {
-		ReflectionColour = tape[ptr++];
+		ReflectionColour = ParseType(tape[ptr++]);
 		} else { ReflectionColour = null; ptr++; }
 		let SpecularColour;
 		if (tape[ptr]) {
-		SpecularColour = tape[ptr++];
+		SpecularColour = ParseType(tape[ptr++]);
 		} else { SpecularColour = null; ptr++; }
 		let SpecularHighlight;
 		if (tape[ptr]) {
-		SpecularHighlight = tape[ptr++];
+		SpecularHighlight = ParseType(tape[ptr++]);
 		} else { SpecularHighlight = null; ptr++; }
 		let ReflectanceMethod;
 		if (tape[ptr]) {
@@ -70404,7 +70406,7 @@ export class IfcSurfaceStyleShading {
 		let ptr = 0;
 		let SurfaceColour;
 		if (tape[ptr]) {
-		SurfaceColour = tape[ptr++];
+		SurfaceColour = new Handle<IfcColourRgb>(tape[ptr++].expressID);
 		} else { SurfaceColour = null; ptr++; }
 		let Transparency;
 		if (tape[ptr]) {
@@ -70441,7 +70443,7 @@ export class IfcSurfaceStyleWithTextures {
 		Textures = [];
 		let Textures_index = 0;
 		while (Textures_index < tape[ptr].length) {
-			Textures.push(tape[ptr][Textures_index++]);
+			Textures.push(new Handle<IfcSurfaceTexture>(tape[ptr][Textures_index++].expressID));
 		}
 	ptr++;
 		} else { Textures = null; ptr++; }
@@ -70491,7 +70493,7 @@ export class IfcSurfaceTexture {
 		} else { Mode = null; ptr++; }
 		let TextureTransform;
 		if (tape[ptr]) {
-		TextureTransform = tape[ptr++];
+		TextureTransform = new Handle<IfcCartesianTransformationOperator2D>(tape[ptr++].expressID);
 		} else { TextureTransform = null; ptr++; }
 		let Parameter;
 		if (tape[ptr]) {
@@ -70542,11 +70544,11 @@ export class IfcSweptAreaSolid {
 		let ptr = 0;
 		let SweptArea;
 		if (tape[ptr]) {
-		SweptArea = tape[ptr++];
+		SweptArea = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptArea = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		return new IfcSweptAreaSolid(expressID, type, SweptArea, Position);
 	}
@@ -70586,7 +70588,7 @@ export class IfcSweptDiskSolid {
 		let ptr = 0;
 		let Directrix;
 		if (tape[ptr]) {
-		Directrix = tape[ptr++];
+		Directrix = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Directrix = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -70652,7 +70654,7 @@ export class IfcSweptDiskSolidPolygonal {
 		let ptr = 0;
 		let Directrix;
 		if (tape[ptr]) {
-		Directrix = tape[ptr++];
+		Directrix = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { Directrix = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -70717,11 +70719,11 @@ export class IfcSweptSurface {
 		let ptr = 0;
 		let SweptCurve;
 		if (tape[ptr]) {
-		SweptCurve = tape[ptr++];
+		SweptCurve = new Handle<IfcProfileDef>(tape[ptr++].expressID);
 		} else { SweptCurve = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		return new IfcSweptSurface(expressID, type, SweptCurve, Position);
 	}
@@ -70773,7 +70775,7 @@ export class IfcSwitchingDevice {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -70789,11 +70791,11 @@ export class IfcSwitchingDevice {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -70890,7 +70892,7 @@ export class IfcSwitchingDeviceType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -70909,7 +70911,7 @@ export class IfcSwitchingDeviceType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -70918,7 +70920,7 @@ export class IfcSwitchingDeviceType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -71015,7 +71017,7 @@ export class IfcSystem {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -71094,7 +71096,7 @@ export class IfcSystemFurnitureElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -71110,11 +71112,11 @@ export class IfcSystemFurnitureElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -71211,7 +71213,7 @@ export class IfcSystemFurnitureElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -71230,7 +71232,7 @@ export class IfcSystemFurnitureElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -71239,7 +71241,7 @@ export class IfcSystemFurnitureElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -71357,7 +71359,7 @@ export class IfcTShapeProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Depth;
 		if (tape[ptr]) {
@@ -71460,7 +71462,7 @@ export class IfcTable {
 		Rows = [];
 		let Rows_index = 0;
 		while (Rows_index < tape[ptr].length) {
-			Rows.push(tape[ptr][Rows_index++]);
+			Rows.push(new Handle<IfcTableRow>(tape[ptr][Rows_index++].expressID));
 		}
 	ptr++;
 		} else { Rows = null; ptr++; }
@@ -71469,7 +71471,7 @@ export class IfcTable {
 		Columns = [];
 		let Columns_index = 0;
 		while (Columns_index < tape[ptr].length) {
-			Columns.push(tape[ptr][Columns_index++]);
+			Columns.push(new Handle<IfcTableColumn>(tape[ptr][Columns_index++].expressID));
 		}
 	ptr++;
 		} else { Columns = null; ptr++; }
@@ -71533,11 +71535,11 @@ export class IfcTableColumn {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = ParseType(tape[ptr++]);
 		} else { Unit = null; ptr++; }
 		let ReferencePath;
 		if (tape[ptr]) {
-		ReferencePath = tape[ptr++];
+		ReferencePath = new Handle<IfcReference>(tape[ptr++].expressID);
 		} else { ReferencePath = null; ptr++; }
 		return new IfcTableColumn(expressID, type, Identifier, Name, Description, Unit, ReferencePath);
 	}
@@ -71590,7 +71592,7 @@ export class IfcTableRow {
 		RowCells = [];
 		let RowCells_index = 0;
 		while (RowCells_index < tape[ptr].length) {
-			RowCells.push(tape[ptr][RowCells_index++]);
+			RowCells.push(ParseType(tape[ptr][RowCells_index++]));
 		}
 	ptr++;
 		} else { RowCells = null; ptr++; }
@@ -71647,7 +71649,7 @@ export class IfcTank {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -71663,11 +71665,11 @@ export class IfcTank {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -71764,7 +71766,7 @@ export class IfcTankType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -71783,7 +71785,7 @@ export class IfcTankType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -71792,7 +71794,7 @@ export class IfcTankType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -71905,7 +71907,7 @@ export class IfcTask {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -71945,7 +71947,7 @@ export class IfcTask {
 		} else { Priority = null; ptr++; }
 		let TaskTime;
 		if (tape[ptr]) {
-		TaskTime = tape[ptr++];
+		TaskTime = new Handle<IfcTaskTime>(tape[ptr++].expressID);
 		} else { TaskTime = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -72386,7 +72388,7 @@ export class IfcTaskTimeRecurring {
 		} else { Completion = null; ptr++; }
 		let Recurrence;
 		if (tape[ptr]) {
-		Recurrence = tape[ptr++];
+		Recurrence = new Handle<IfcRecurrencePattern>(tape[ptr++].expressID);
 		} else { Recurrence = null; ptr++; }
 		return new IfcTaskTimeRecurring(expressID, type, Name, DataOrigin, UserDefinedDataOrigin, DurationType, ScheduleDuration, ScheduleStart, ScheduleFinish, EarlyStart, EarlyFinish, LateStart, LateFinish, FreeFloat, TotalFloat, IsCritical, StatusTime, ActualDuration, ActualStart, ActualFinish, RemainingTime, Completion, Recurrence);
 	}
@@ -72533,7 +72535,7 @@ export class IfcTaskType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -72552,7 +72554,7 @@ export class IfcTaskType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -72823,7 +72825,7 @@ export class IfcTendon {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -72839,11 +72841,11 @@ export class IfcTendon {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -73004,7 +73006,7 @@ export class IfcTendonAnchor {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -73020,11 +73022,11 @@ export class IfcTendonAnchor {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -73130,7 +73132,7 @@ export class IfcTendonAnchorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -73149,7 +73151,7 @@ export class IfcTendonAnchorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -73158,7 +73160,7 @@ export class IfcTendonAnchorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -73265,7 +73267,7 @@ export class IfcTendonConduit {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -73281,11 +73283,11 @@ export class IfcTendonConduit {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -73388,7 +73390,7 @@ export class IfcTendonConduitType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -73407,7 +73409,7 @@ export class IfcTendonConduitType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -73416,7 +73418,7 @@ export class IfcTendonConduitType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -73529,7 +73531,7 @@ export class IfcTendonType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -73548,7 +73550,7 @@ export class IfcTendonType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -73557,7 +73559,7 @@ export class IfcTendonType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -73665,7 +73667,7 @@ export class IfcTessellatedFaceSet {
 		let ptr = 0;
 		let Coordinates;
 		if (tape[ptr]) {
-		Coordinates = tape[ptr++];
+		Coordinates = new Handle<IfcCartesianPointList3D>(tape[ptr++].expressID);
 		} else { Coordinates = null; ptr++; }
 		return new IfcTessellatedFaceSet(expressID, type, Coordinates);
 	}
@@ -73719,7 +73721,7 @@ export class IfcTextLiteral {
 		} else { Literal = null; ptr++; }
 		let Placement;
 		if (tape[ptr]) {
-		Placement = tape[ptr++];
+		Placement = ParseType(tape[ptr++]);
 		} else { Placement = null; ptr++; }
 		let Path;
 		if (tape[ptr]) {
@@ -73764,7 +73766,7 @@ export class IfcTextLiteralWithExtent {
 		} else { Literal = null; ptr++; }
 		let Placement;
 		if (tape[ptr]) {
-		Placement = tape[ptr++];
+		Placement = ParseType(tape[ptr++]);
 		} else { Placement = null; ptr++; }
 		let Path;
 		if (tape[ptr]) {
@@ -73772,7 +73774,7 @@ export class IfcTextLiteralWithExtent {
 		} else { Path = null; ptr++; }
 		let Extent;
 		if (tape[ptr]) {
-		Extent = tape[ptr++];
+		Extent = new Handle<IfcPlanarExtent>(tape[ptr++].expressID);
 		} else { Extent = null; ptr++; }
 		let BoxAlignment;
 		if (tape[ptr]) {
@@ -73819,15 +73821,15 @@ export class IfcTextStyle {
 		} else { Name = null; ptr++; }
 		let TextCharacterAppearance;
 		if (tape[ptr]) {
-		TextCharacterAppearance = tape[ptr++];
+		TextCharacterAppearance = new Handle<IfcTextStyleForDefinedFont>(tape[ptr++].expressID);
 		} else { TextCharacterAppearance = null; ptr++; }
 		let TextStyle;
 		if (tape[ptr]) {
-		TextStyle = tape[ptr++];
+		TextStyle = new Handle<IfcTextStyleTextModel>(tape[ptr++].expressID);
 		} else { TextStyle = null; ptr++; }
 		let TextFontStyle;
 		if (tape[ptr]) {
-		TextFontStyle = tape[ptr++];
+		TextFontStyle = ParseType(tape[ptr++]);
 		} else { TextFontStyle = null; ptr++; }
 		let ModelOrDraughting;
 		if (tape[ptr]) {
@@ -73909,7 +73911,7 @@ export class IfcTextStyleFontModel {
 		} else { FontWeight = null; ptr++; }
 		let FontSize;
 		if (tape[ptr]) {
-		FontSize = tape[ptr++];
+		FontSize = ParseType(tape[ptr++]);
 		} else { FontSize = null; ptr++; }
 		return new IfcTextStyleFontModel(expressID, type, Name, FontFamily, FontStyle, FontVariant, FontWeight, FontSize);
 	}
@@ -73955,11 +73957,11 @@ export class IfcTextStyleForDefinedFont {
 		let ptr = 0;
 		let Colour;
 		if (tape[ptr]) {
-		Colour = tape[ptr++];
+		Colour = ParseType(tape[ptr++]);
 		} else { Colour = null; ptr++; }
 		let BackgroundColour;
 		if (tape[ptr]) {
-		BackgroundColour = tape[ptr++];
+		BackgroundColour = ParseType(tape[ptr++]);
 		} else { BackgroundColour = null; ptr++; }
 		return new IfcTextStyleForDefinedFont(expressID, type, Colour, BackgroundColour);
 	}
@@ -73999,7 +74001,7 @@ export class IfcTextStyleTextModel {
 		let ptr = 0;
 		let TextIndent;
 		if (tape[ptr]) {
-		TextIndent = tape[ptr++];
+		TextIndent = ParseType(tape[ptr++]);
 		} else { TextIndent = null; ptr++; }
 		let TextAlign;
 		if (tape[ptr]) {
@@ -74011,11 +74013,11 @@ export class IfcTextStyleTextModel {
 		} else { TextDecoration = null; ptr++; }
 		let LetterSpacing;
 		if (tape[ptr]) {
-		LetterSpacing = tape[ptr++];
+		LetterSpacing = ParseType(tape[ptr++]);
 		} else { LetterSpacing = null; ptr++; }
 		let WordSpacing;
 		if (tape[ptr]) {
-		WordSpacing = tape[ptr++];
+		WordSpacing = ParseType(tape[ptr++]);
 		} else { WordSpacing = null; ptr++; }
 		let TextTransform;
 		if (tape[ptr]) {
@@ -74023,7 +74025,7 @@ export class IfcTextStyleTextModel {
 		} else { TextTransform = null; ptr++; }
 		let LineHeight;
 		if (tape[ptr]) {
-		LineHeight = tape[ptr++];
+		LineHeight = ParseType(tape[ptr++]);
 		} else { LineHeight = null; ptr++; }
 		return new IfcTextStyleTextModel(expressID, type, TextIndent, TextAlign, TextDecoration, LetterSpacing, WordSpacing, TextTransform, LineHeight);
 	}
@@ -74078,7 +74080,7 @@ export class IfcTextureCoordinate {
 		Maps = [];
 		let Maps_index = 0;
 		while (Maps_index < tape[ptr].length) {
-			Maps.push(tape[ptr][Maps_index++]);
+			Maps.push(new Handle<IfcSurfaceTexture>(tape[ptr][Maps_index++].expressID));
 		}
 	ptr++;
 		} else { Maps = null; ptr++; }
@@ -74115,7 +74117,7 @@ export class IfcTextureCoordinateGenerator {
 		Maps = [];
 		let Maps_index = 0;
 		while (Maps_index < tape[ptr].length) {
-			Maps.push(tape[ptr][Maps_index++]);
+			Maps.push(new Handle<IfcSurfaceTexture>(tape[ptr][Maps_index++].expressID));
 		}
 	ptr++;
 		} else { Maps = null; ptr++; }
@@ -74172,7 +74174,7 @@ export class IfcTextureMap {
 		Maps = [];
 		let Maps_index = 0;
 		while (Maps_index < tape[ptr].length) {
-			Maps.push(tape[ptr][Maps_index++]);
+			Maps.push(new Handle<IfcSurfaceTexture>(tape[ptr][Maps_index++].expressID));
 		}
 	ptr++;
 		} else { Maps = null; ptr++; }
@@ -74181,13 +74183,13 @@ export class IfcTextureMap {
 		Vertices = [];
 		let Vertices_index = 0;
 		while (Vertices_index < tape[ptr].length) {
-			Vertices.push(tape[ptr][Vertices_index++]);
+			Vertices.push(new Handle<IfcTextureVertex>(tape[ptr][Vertices_index++].expressID));
 		}
 	ptr++;
 		} else { Vertices = null; ptr++; }
 		let MappedTo;
 		if (tape[ptr]) {
-		MappedTo = tape[ptr++];
+		MappedTo = new Handle<IfcFace>(tape[ptr++].expressID);
 		} else { MappedTo = null; ptr++; }
 		return new IfcTextureMap(expressID, type, Maps, Vertices, MappedTo);
 	}
@@ -74361,7 +74363,7 @@ export class IfcTimeSeries {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = tape[ptr++];
+		Unit = ParseType(tape[ptr++]);
 		} else { Unit = null; ptr++; }
 		return new IfcTimeSeries(expressID, type, Name, Description, StartTime, EndTime, TimeSeriesDataType, DataOrigin, UserDefinedDataOrigin, Unit);
 	}
@@ -74412,7 +74414,7 @@ export class IfcTimeSeriesValue {
 		ListValues = [];
 		let ListValues_index = 0;
 		while (ListValues_index < tape[ptr].length) {
-			ListValues.push(tape[ptr][ListValues_index++]);
+			ListValues.push(ParseType(tape[ptr][ListValues_index++]));
 		}
 	ptr++;
 		} else { ListValues = null; ptr++; }
@@ -74464,7 +74466,7 @@ export class IfcTopologyRepresentation {
 		let ptr = 0;
 		let ContextOfItems;
 		if (tape[ptr]) {
-		ContextOfItems = tape[ptr++];
+		ContextOfItems = new Handle<IfcRepresentationContext>(tape[ptr++].expressID);
 		} else { ContextOfItems = null; ptr++; }
 		let RepresentationIdentifier;
 		if (tape[ptr]) {
@@ -74479,7 +74481,7 @@ export class IfcTopologyRepresentation {
 		Items = [];
 		let Items_index = 0;
 		while (Items_index < tape[ptr].length) {
-			Items.push(tape[ptr][Items_index++]);
+			Items.push(new Handle<IfcRepresentationItem>(tape[ptr][Items_index++].expressID));
 		}
 	ptr++;
 		} else { Items = null; ptr++; }
@@ -74525,7 +74527,7 @@ export class IfcToroidalSurface {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement3D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let MajorRadius;
 		if (tape[ptr]) {
@@ -74580,7 +74582,7 @@ export class IfcTransformer {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -74596,11 +74598,11 @@ export class IfcTransformer {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -74697,7 +74699,7 @@ export class IfcTransformerType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -74716,7 +74718,7 @@ export class IfcTransformerType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -74725,7 +74727,7 @@ export class IfcTransformerType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -74824,7 +74826,7 @@ export class IfcTransitionCurveSegment2D {
 		let ptr = 0;
 		let StartPoint;
 		if (tape[ptr]) {
-		StartPoint = tape[ptr++];
+		StartPoint = new Handle<IfcCartesianPoint>(tape[ptr++].expressID);
 		} else { StartPoint = null; ptr++; }
 		let StartDirection;
 		if (tape[ptr]) {
@@ -74909,7 +74911,7 @@ export class IfcTransportElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -74925,11 +74927,11 @@ export class IfcTransportElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -75026,7 +75028,7 @@ export class IfcTransportElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -75045,7 +75047,7 @@ export class IfcTransportElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -75054,7 +75056,7 @@ export class IfcTransportElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -75159,7 +75161,7 @@ export class IfcTrapeziumProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let BottomXDim;
 		if (tape[ptr]) {
@@ -75222,7 +75224,7 @@ export class IfcTriangulatedFaceSet {
 		let ptr = 0;
 		let Coordinates;
 		if (tape[ptr]) {
-		Coordinates = tape[ptr++];
+		Coordinates = new Handle<IfcCartesianPointList3D>(tape[ptr++].expressID);
 		} else { Coordinates = null; ptr++; }
 		let Normals;
 		if (tape[ptr]) {
@@ -75301,7 +75303,7 @@ export class IfcTriangulatedIrregularNetwork {
 		let ptr = 0;
 		let Coordinates;
 		if (tape[ptr]) {
-		Coordinates = tape[ptr++];
+		Coordinates = new Handle<IfcCartesianPointList3D>(tape[ptr++].expressID);
 		} else { Coordinates = null; ptr++; }
 		let Normals;
 		if (tape[ptr]) {
@@ -75389,14 +75391,14 @@ export class IfcTrimmedCurve {
 		let ptr = 0;
 		let BasisCurve;
 		if (tape[ptr]) {
-		BasisCurve = tape[ptr++];
+		BasisCurve = new Handle<IfcCurve>(tape[ptr++].expressID);
 		} else { BasisCurve = null; ptr++; }
 		let Trim1;
 		if (tape[ptr]) {
 		Trim1 = [];
 		let Trim1_index = 0;
 		while (Trim1_index < tape[ptr].length) {
-			Trim1.push(tape[ptr][Trim1_index++]);
+			Trim1.push(ParseType(tape[ptr][Trim1_index++]));
 		}
 	ptr++;
 		} else { Trim1 = null; ptr++; }
@@ -75405,7 +75407,7 @@ export class IfcTrimmedCurve {
 		Trim2 = [];
 		let Trim2_index = 0;
 		while (Trim2_index < tape[ptr].length) {
-			Trim2.push(tape[ptr][Trim2_index++]);
+			Trim2.push(ParseType(tape[ptr][Trim2_index++]));
 		}
 	ptr++;
 		} else { Trim2 = null; ptr++; }
@@ -75464,7 +75466,7 @@ export class IfcTubeBundle {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -75480,11 +75482,11 @@ export class IfcTubeBundle {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -75581,7 +75583,7 @@ export class IfcTubeBundleType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -75600,7 +75602,7 @@ export class IfcTubeBundleType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -75609,7 +75611,7 @@ export class IfcTubeBundleType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -75708,7 +75710,7 @@ export class IfcTypeObject {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -75727,7 +75729,7 @@ export class IfcTypeObject {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -75802,7 +75804,7 @@ export class IfcTypeProcess {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -75821,7 +75823,7 @@ export class IfcTypeProcess {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -75921,7 +75923,7 @@ export class IfcTypeProduct {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -75940,7 +75942,7 @@ export class IfcTypeProduct {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -75949,7 +75951,7 @@ export class IfcTypeProduct {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -76039,7 +76041,7 @@ export class IfcTypeResource {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -76058,7 +76060,7 @@ export class IfcTypeResource {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -76166,7 +76168,7 @@ export class IfcUShapeProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Depth;
 		if (tape[ptr]) {
@@ -76245,7 +76247,7 @@ export class IfcUnitAssignment {
 		Units = [];
 		let Units_index = 0;
 		while (Units_index < tape[ptr].length) {
-			Units.push(tape[ptr][Units_index++]);
+			Units.push(ParseType(tape[ptr][Units_index++]));
 		}
 	ptr++;
 		} else { Units = null; ptr++; }
@@ -76292,7 +76294,7 @@ export class IfcUnitaryControlElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -76308,11 +76310,11 @@ export class IfcUnitaryControlElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -76409,7 +76411,7 @@ export class IfcUnitaryControlElementType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -76428,7 +76430,7 @@ export class IfcUnitaryControlElementType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -76437,7 +76439,7 @@ export class IfcUnitaryControlElementType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -76542,7 +76544,7 @@ export class IfcUnitaryEquipment {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -76558,11 +76560,11 @@ export class IfcUnitaryEquipment {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -76659,7 +76661,7 @@ export class IfcUnitaryEquipmentType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -76678,7 +76680,7 @@ export class IfcUnitaryEquipmentType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -76687,7 +76689,7 @@ export class IfcUnitaryEquipmentType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -76792,7 +76794,7 @@ export class IfcValve {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -76808,11 +76810,11 @@ export class IfcValve {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -76909,7 +76911,7 @@ export class IfcValveType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -76928,7 +76930,7 @@ export class IfcValveType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -76937,7 +76939,7 @@ export class IfcValveType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -77024,7 +77026,7 @@ export class IfcVector {
 		let ptr = 0;
 		let Orientation;
 		if (tape[ptr]) {
-		Orientation = tape[ptr++];
+		Orientation = new Handle<IfcDirection>(tape[ptr++].expressID);
 		} else { Orientation = null; ptr++; }
 		let Magnitude;
 		if (tape[ptr]) {
@@ -77076,7 +77078,7 @@ export class IfcVertexLoop {
 		let ptr = 0;
 		let LoopVertex;
 		if (tape[ptr]) {
-		LoopVertex = tape[ptr++];
+		LoopVertex = new Handle<IfcVertex>(tape[ptr++].expressID);
 		} else { LoopVertex = null; ptr++; }
 		return new IfcVertexLoop(expressID, type, LoopVertex);
 	}
@@ -77103,7 +77105,7 @@ export class IfcVertexPoint {
 		let ptr = 0;
 		let VertexGeometry;
 		if (tape[ptr]) {
-		VertexGeometry = tape[ptr++];
+		VertexGeometry = new Handle<IfcPoint>(tape[ptr++].expressID);
 		} else { VertexGeometry = null; ptr++; }
 		return new IfcVertexPoint(expressID, type, VertexGeometry);
 	}
@@ -77150,7 +77152,7 @@ export class IfcVibrationDamper {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -77166,11 +77168,11 @@ export class IfcVibrationDamper {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -77267,7 +77269,7 @@ export class IfcVibrationDamperType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -77286,7 +77288,7 @@ export class IfcVibrationDamperType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -77295,7 +77297,7 @@ export class IfcVibrationDamperType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -77403,7 +77405,7 @@ export class IfcVibrationIsolator {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -77419,11 +77421,11 @@ export class IfcVibrationIsolator {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -77520,7 +77522,7 @@ export class IfcVibrationIsolatorType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -77539,7 +77541,7 @@ export class IfcVibrationIsolatorType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -77548,7 +77550,7 @@ export class IfcVibrationIsolatorType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -77651,7 +77653,7 @@ export class IfcVirtualElement {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -77667,11 +77669,11 @@ export class IfcVirtualElement {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -77742,7 +77744,7 @@ export class IfcVirtualGridIntersection {
 		IntersectingAxes = [];
 		let IntersectingAxes_index = 0;
 		while (IntersectingAxes_index < tape[ptr].length) {
-			IntersectingAxes.push(tape[ptr][IntersectingAxes_index++]);
+			IntersectingAxes.push(new Handle<IfcGridAxis>(tape[ptr][IntersectingAxes_index++].expressID));
 		}
 	ptr++;
 		} else { IntersectingAxes = null; ptr++; }
@@ -77803,7 +77805,7 @@ export class IfcVoidingFeature {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -77819,11 +77821,11 @@ export class IfcVoidingFeature {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -77918,7 +77920,7 @@ export class IfcWall {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -77934,11 +77936,11 @@ export class IfcWall {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -78033,7 +78035,7 @@ export class IfcWallElementedCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -78049,11 +78051,11 @@ export class IfcWallElementedCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -78148,7 +78150,7 @@ export class IfcWallStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -78164,11 +78166,11 @@ export class IfcWallStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -78265,7 +78267,7 @@ export class IfcWallType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -78284,7 +78286,7 @@ export class IfcWallType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -78293,7 +78295,7 @@ export class IfcWallType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -78398,7 +78400,7 @@ export class IfcWasteTerminal {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -78414,11 +78416,11 @@ export class IfcWasteTerminal {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -78515,7 +78517,7 @@ export class IfcWasteTerminalType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -78534,7 +78536,7 @@ export class IfcWasteTerminalType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -78543,7 +78545,7 @@ export class IfcWasteTerminalType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -78656,7 +78658,7 @@ export class IfcWindow {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -78672,11 +78674,11 @@ export class IfcWindow {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -78817,7 +78819,7 @@ export class IfcWindowLiningProperties {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -78861,7 +78863,7 @@ export class IfcWindowLiningProperties {
 		} else { SecondMullionOffset = null; ptr++; }
 		let ShapeAspectStyle;
 		if (tape[ptr]) {
-		ShapeAspectStyle = tape[ptr++];
+		ShapeAspectStyle = new Handle<IfcShapeAspect>(tape[ptr++].expressID);
 		} else { ShapeAspectStyle = null; ptr++; }
 		let LiningOffset;
 		if (tape[ptr]) {
@@ -78979,7 +78981,7 @@ export class IfcWindowPanelProperties {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -79007,7 +79009,7 @@ export class IfcWindowPanelProperties {
 		} else { FrameThickness = null; ptr++; }
 		let ShapeAspectStyle;
 		if (tape[ptr]) {
-		ShapeAspectStyle = tape[ptr++];
+		ShapeAspectStyle = new Handle<IfcShapeAspect>(tape[ptr++].expressID);
 		} else { ShapeAspectStyle = null; ptr++; }
 		return new IfcWindowPanelProperties(expressID, type, GlobalId, OwnerHistory, Name, Description, OperationType, PanelPosition, FrameDepth, FrameThickness, ShapeAspectStyle);
 	}
@@ -79092,7 +79094,7 @@ export class IfcWindowStandardCase {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -79108,11 +79110,11 @@ export class IfcWindowStandardCase {
 		} else { ObjectType = null; ptr++; }
 		let ObjectPlacement;
 		if (tape[ptr]) {
-		ObjectPlacement = tape[ptr++];
+		ObjectPlacement = new Handle<IfcObjectPlacement>(tape[ptr++].expressID);
 		} else { ObjectPlacement = null; ptr++; }
 		let Representation;
 		if (tape[ptr]) {
-		Representation = tape[ptr++];
+		Representation = new Handle<IfcProductRepresentation>(tape[ptr++].expressID);
 		} else { Representation = null; ptr++; }
 		let Tag;
 		if (tape[ptr]) {
@@ -79245,7 +79247,7 @@ export class IfcWindowStyle {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -79264,7 +79266,7 @@ export class IfcWindowStyle {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -79273,7 +79275,7 @@ export class IfcWindowStyle {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -79391,7 +79393,7 @@ export class IfcWindowType {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -79410,7 +79412,7 @@ export class IfcWindowType {
 		HasPropertySets = [];
 		let HasPropertySets_index = 0;
 		while (HasPropertySets_index < tape[ptr].length) {
-			HasPropertySets.push(tape[ptr][HasPropertySets_index++]);
+			HasPropertySets.push(new Handle<IfcPropertySetDefinition>(tape[ptr][HasPropertySets_index++].expressID));
 		}
 	ptr++;
 		} else { HasPropertySets = null; ptr++; }
@@ -79419,7 +79421,7 @@ export class IfcWindowType {
 		RepresentationMaps = [];
 		let RepresentationMaps_index = 0;
 		while (RepresentationMaps_index < tape[ptr].length) {
-			RepresentationMaps.push(tape[ptr][RepresentationMaps_index++]);
+			RepresentationMaps.push(new Handle<IfcRepresentationMap>(tape[ptr][RepresentationMaps_index++].expressID));
 		}
 	ptr++;
 		} else { RepresentationMaps = null; ptr++; }
@@ -79546,7 +79548,7 @@ export class IfcWorkCalendar {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -79569,7 +79571,7 @@ export class IfcWorkCalendar {
 		WorkingTimes = [];
 		let WorkingTimes_index = 0;
 		while (WorkingTimes_index < tape[ptr].length) {
-			WorkingTimes.push(tape[ptr][WorkingTimes_index++]);
+			WorkingTimes.push(new Handle<IfcWorkTime>(tape[ptr][WorkingTimes_index++].expressID));
 		}
 	ptr++;
 		} else { WorkingTimes = null; ptr++; }
@@ -79578,7 +79580,7 @@ export class IfcWorkCalendar {
 		ExceptionTimes = [];
 		let ExceptionTimes_index = 0;
 		while (ExceptionTimes_index < tape[ptr].length) {
-			ExceptionTimes.push(tape[ptr][ExceptionTimes_index++]);
+			ExceptionTimes.push(new Handle<IfcWorkTime>(tape[ptr][ExceptionTimes_index++].expressID));
 		}
 	ptr++;
 		} else { ExceptionTimes = null; ptr++; }
@@ -79681,7 +79683,7 @@ export class IfcWorkControl {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -79708,7 +79710,7 @@ export class IfcWorkControl {
 		Creators = [];
 		let Creators_index = 0;
 		while (Creators_index < tape[ptr].length) {
-			Creators.push(tape[ptr][Creators_index++]);
+			Creators.push(new Handle<IfcPerson>(tape[ptr][Creators_index++].expressID));
 		}
 	ptr++;
 		} else { Creators = null; ptr++; }
@@ -79842,7 +79844,7 @@ export class IfcWorkPlan {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -79869,7 +79871,7 @@ export class IfcWorkPlan {
 		Creators = [];
 		let Creators_index = 0;
 		while (Creators_index < tape[ptr].length) {
-			Creators.push(tape[ptr][Creators_index++]);
+			Creators.push(new Handle<IfcPerson>(tape[ptr][Creators_index++].expressID));
 		}
 	ptr++;
 		} else { Creators = null; ptr++; }
@@ -80012,7 +80014,7 @@ export class IfcWorkSchedule {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {
@@ -80039,7 +80041,7 @@ export class IfcWorkSchedule {
 		Creators = [];
 		let Creators_index = 0;
 		while (Creators_index < tape[ptr].length) {
-			Creators.push(tape[ptr][Creators_index++]);
+			Creators.push(new Handle<IfcPerson>(tape[ptr][Creators_index++].expressID));
 		}
 	ptr++;
 		} else { Creators = null; ptr++; }
@@ -80174,7 +80176,7 @@ export class IfcWorkTime {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let RecurrencePattern;
 		if (tape[ptr]) {
-		RecurrencePattern = tape[ptr++];
+		RecurrencePattern = new Handle<IfcRecurrencePattern>(tape[ptr++].expressID);
 		} else { RecurrencePattern = null; ptr++; }
 		let Start;
 		if (tape[ptr]) {
@@ -80261,7 +80263,7 @@ export class IfcZShapeProfileDef {
 		} else { ProfileName = null; ptr++; }
 		let Position;
 		if (tape[ptr]) {
-		Position = tape[ptr++];
+		Position = new Handle<IfcAxis2Placement2D>(tape[ptr++].expressID);
 		} else { Position = null; ptr++; }
 		let Depth;
 		if (tape[ptr]) {
@@ -80342,7 +80344,7 @@ export class IfcZone {
 		} else { GlobalId = null; ptr++; }
 		let OwnerHistory;
 		if (tape[ptr]) {
-		OwnerHistory = tape[ptr++];
+		OwnerHistory = new Handle<IfcOwnerHistory>(tape[ptr++].expressID);
 		} else { OwnerHistory = null; ptr++; }
 		let Name;
 		if (tape[ptr]) {

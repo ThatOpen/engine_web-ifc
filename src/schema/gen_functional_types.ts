@@ -262,7 +262,7 @@ elements.forEach((entity) => {
 
 
 
-buffer.push(`export interface Handle<T> { expressID: number; }`);
+buffer.push(`export class Handle<T> { expressID: number; constructor(id: number) { this.expressID = id; } }`);
 buffer.push(`export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }`);
 buffer.push(`export function Value(type: string, value: any): any { return { t: type, v: value }; }`);
 
@@ -306,7 +306,9 @@ types.forEach((type) => {
 });
 
 // TODO: slow linear search!
-buffer.push(`function ParseType(name: string, value: any): any {`);
+buffer.push(`function ParseType(obj: any): any {`);
+buffer.push(`\tif (obj.type === 5) { return new Handle<any>(obj.expressID); }`)
+buffer.push(`\tif (obj.type !== 2) { return obj; }`)
 types.forEach((type) => {
     if (type.isList)
     {
@@ -318,7 +320,7 @@ types.forEach((type) => {
     }
     else
     {
-        buffer.push(`\tif (name === "${type.name.toUpperCase()}") { return new ${type.name}(value); }`)
+        buffer.push(`\tif (obj.label === "${type.name.toUpperCase()}") { return new ${type.name}(obj.value); }`)
     }
 });
 buffer.push(`\tconsole.log("Unknown type: " + name);`);
@@ -370,11 +372,15 @@ elements.forEach((entity) => {
             let parseElement = (val) => {
                 if (param.isType && param.isType.isSelect)
                 {
-                    return `tape[ptr++]`;
+                    return `ParseType(tape[ptr++])`;
                 }
                 else if (param.isType && param.isType.isEnum)
                 {
                     return `new ${param.isType.name}(tape[ptr++])`;
+                }
+                else if (!param.isType)
+                {
+                    return `new Handle<${param.prop.type}>(tape[ptr++].expressID)`;
                 }
                 else
                 {
@@ -385,11 +391,15 @@ elements.forEach((entity) => {
             let parseElementSet = (arrayName, indexVarName) => {
                 if (param.isType && param.isType.isSelect)
                 {
-                    return `${arrayName}[${indexVarName}++]`;//`typeof ${arrayName}[${indexVarName}] == "number" ? ${arrayName}[${indexVarName}++] : ParseType(${arrayName}[${indexVarName}++], ${arrayName}[${indexVarName}++][0])`;
+                    return `ParseType(${arrayName}[${indexVarName}++])`;
                 }
                 else if (param.isType && param.isType.isEnum)
                 {
                     return `new ${param.isType.name}(${arrayName}[${indexVarName}++])`;
+                }
+                else if (!param.isType)
+                {
+                    return `new Handle<${param.prop.type}>(${arrayName}[${indexVarName}++].expressID)`;
                 }
                 else
                 {
