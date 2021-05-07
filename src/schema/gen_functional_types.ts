@@ -370,7 +370,7 @@ elements.forEach((entity) => {
             let parseElement = (val) => {
                 if (param.isType && param.isType.isSelect)
                 {
-                    return `typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0])`;
+                    return `tape[ptr++]`;
                 }
                 else if (param.isType && param.isType.isEnum)
                 {
@@ -385,7 +385,7 @@ elements.forEach((entity) => {
             let parseElementSet = (arrayName, indexVarName) => {
                 if (param.isType && param.isType.isSelect)
                 {
-                    return `typeof ${arrayName}[${indexVarName}] == "number" ? ${arrayName}[${indexVarName}++] : ParseType(${arrayName}[${indexVarName}++], ${arrayName}[${indexVarName}++][0])`;
+                    return `${arrayName}[${indexVarName}++]`;//`typeof ${arrayName}[${indexVarName}] == "number" ? ${arrayName}[${indexVarName}++] : ParseType(${arrayName}[${indexVarName}++], ${arrayName}[${indexVarName}++][0])`;
                 }
                 else if (param.isType && param.isType.isEnum)
                 {

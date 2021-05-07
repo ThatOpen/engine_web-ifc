@@ -249,6 +249,31 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     _tape.push(webifc::IfcTokenType::LINE_END);
 }
 
+template<uint32_t N>
+emscripten::val ReadValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t)
+{
+    switch (t)
+    {
+    case webifc::IfcTokenType::STRING:
+    case webifc::IfcTokenType::ENUM:
+    {
+        webifc::StringView view = tape.ReadStringView();
+        std::string copy(view.data, view.len);
+
+        return emscripten::val(copy);
+    }
+    case webifc::IfcTokenType::REAL:
+    {
+        double d = tape.template Read<double>();
+
+        return emscripten::val(d);
+    }
+    default:
+        // use undefined to signal val parse issue
+        return emscripten::val::undefined();
+    }
+}
+
 emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 {
     webifc::IfcLoader& loader = loaders[modelID];
@@ -282,6 +307,13 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
             break;
         }
         case webifc::IfcTokenType::UNKNOWN:
+        {
+            auto obj = emscripten::val::object(); 
+            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::UNKNOWN))); 
+            topValue.set(topPosition++, obj);
+            
+            break;
+        }
         case webifc::IfcTokenType::EMPTY:
         {
             topValue.set(topPosition++, emscripten::val::null());
@@ -317,38 +349,45 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 
             break;
         }
-        case webifc::IfcTokenType::STRING:
-        case webifc::IfcTokenType::ENUM:
+        case webifc::IfcTokenType::REF:
         {
-            webifc::StringView view = _tape.ReadStringView();
-            std::string copy(view.data, view.len);
-
-            topValue.set(topPosition++, emscripten::val(copy));
+            uint32_t ref = _tape.Read<uint32_t>();
+            auto obj = emscripten::val::object(); 
+            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::REF))); 
+            obj.set("expressID", emscripten::val(ref)); 
+            topValue.set(topPosition++, obj);
 
             break;
         }
         case webifc::IfcTokenType::LABEL:
         {
+            // read label
             webifc::StringView view = _tape.ReadStringView();
             std::string copy(view.data, view.len);
 
-            topValue.set(topPosition++, emscripten::val(copy));
+            auto obj = emscripten::val::object(); 
+            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::LABEL)));
+            obj.set("label", emscripten::val(copy));
 
-            break;
-        }
-        case webifc::IfcTokenType::REF:
-        {
-            uint32_t ref = _tape.Read<uint32_t>();
+            // read set open
+            _tape.Read<char>();
             
-            topValue.set(topPosition++, emscripten::val(ref));
+            // read value following label
+            webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+            obj.set("value", ReadValue(_tape, t));
+
+            // read set close
+            _tape.Read<char>();
+
+            topValue.set(topPosition++, obj);
 
             break;
         }
+        case webifc::IfcTokenType::STRING:
+        case webifc::IfcTokenType::ENUM:
         case webifc::IfcTokenType::REAL:
         {
-            double d = _tape.Read<double>();
-
-            topValue.set(topPosition++, emscripten::val(d));
+            topValue.set(topPosition++, ReadValue(_tape, t));
 
             break;
         }

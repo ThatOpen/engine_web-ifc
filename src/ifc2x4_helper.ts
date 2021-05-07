@@ -6475,7 +6475,7 @@ export class IfcActor {
 		} else { ObjectType = null; ptr++; }
 		let TheActor;
 		if (tape[ptr]) {
-		TheActor = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TheActor = tape[ptr++];
 		} else { TheActor = null; ptr++; }
 		return new IfcActor(expressID, type, GlobalId, OwnerHistory, Name, Description, ObjectType, TheActor);
 	}
@@ -8892,7 +8892,7 @@ export class IfcAppliedValue {
 		} else { Description = null; ptr++; }
 		let AppliedValue;
 		if (tape[ptr]) {
-		AppliedValue = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		AppliedValue = tape[ptr++];
 		} else { AppliedValue = null; ptr++; }
 		let UnitBasis;
 		if (tape[ptr]) {
@@ -9043,11 +9043,11 @@ export class IfcApproval {
 		} else { Qualifier = null; ptr++; }
 		let RequestingApproval;
 		if (tape[ptr]) {
-		RequestingApproval = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RequestingApproval = tape[ptr++];
 		} else { RequestingApproval = null; ptr++; }
 		let GivingApproval;
 		if (tape[ptr]) {
-		GivingApproval = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		GivingApproval = tape[ptr++];
 		} else { GivingApproval = null; ptr++; }
 		return new IfcApproval(expressID, type, Identifier, Name, Description, TimeOfApproval, Status, Level, Qualifier, RequestingApproval, GivingApproval);
 	}
@@ -9390,11 +9390,11 @@ export class IfcAsset {
 		} else { TotalReplacementCost = null; ptr++; }
 		let Owner;
 		if (tape[ptr]) {
-		Owner = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Owner = tape[ptr++];
 		} else { Owner = null; ptr++; }
 		let User;
 		if (tape[ptr]) {
-		User = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		User = tape[ptr++];
 		} else { User = null; ptr++; }
 		let ResponsiblePerson;
 		if (tape[ptr]) {
@@ -11384,11 +11384,11 @@ export class IfcBooleanClippingResult {
 		} else { Operator = null; ptr++; }
 		let FirstOperand;
 		if (tape[ptr]) {
-		FirstOperand = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		FirstOperand = tape[ptr++];
 		} else { FirstOperand = null; ptr++; }
 		let SecondOperand;
 		if (tape[ptr]) {
-		SecondOperand = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SecondOperand = tape[ptr++];
 		} else { SecondOperand = null; ptr++; }
 		return new IfcBooleanClippingResult(expressID, type, Operator, FirstOperand, SecondOperand);
 	}
@@ -11423,11 +11423,11 @@ export class IfcBooleanResult {
 		} else { Operator = null; ptr++; }
 		let FirstOperand;
 		if (tape[ptr]) {
-		FirstOperand = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		FirstOperand = tape[ptr++];
 		} else { FirstOperand = null; ptr++; }
 		let SecondOperand;
 		if (tape[ptr]) {
-		SecondOperand = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SecondOperand = tape[ptr++];
 		} else { SecondOperand = null; ptr++; }
 		return new IfcBooleanResult(expressID, type, Operator, FirstOperand, SecondOperand);
 	}
@@ -11539,27 +11539,27 @@ export class IfcBoundaryEdgeCondition {
 		} else { Name = null; ptr++; }
 		let TranslationalStiffnessByLengthX;
 		if (tape[ptr]) {
-		TranslationalStiffnessByLengthX = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessByLengthX = tape[ptr++];
 		} else { TranslationalStiffnessByLengthX = null; ptr++; }
 		let TranslationalStiffnessByLengthY;
 		if (tape[ptr]) {
-		TranslationalStiffnessByLengthY = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessByLengthY = tape[ptr++];
 		} else { TranslationalStiffnessByLengthY = null; ptr++; }
 		let TranslationalStiffnessByLengthZ;
 		if (tape[ptr]) {
-		TranslationalStiffnessByLengthZ = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessByLengthZ = tape[ptr++];
 		} else { TranslationalStiffnessByLengthZ = null; ptr++; }
 		let RotationalStiffnessByLengthX;
 		if (tape[ptr]) {
-		RotationalStiffnessByLengthX = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessByLengthX = tape[ptr++];
 		} else { RotationalStiffnessByLengthX = null; ptr++; }
 		let RotationalStiffnessByLengthY;
 		if (tape[ptr]) {
-		RotationalStiffnessByLengthY = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessByLengthY = tape[ptr++];
 		} else { RotationalStiffnessByLengthY = null; ptr++; }
 		let RotationalStiffnessByLengthZ;
 		if (tape[ptr]) {
-		RotationalStiffnessByLengthZ = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessByLengthZ = tape[ptr++];
 		} else { RotationalStiffnessByLengthZ = null; ptr++; }
 		return new IfcBoundaryEdgeCondition(expressID, type, Name, TranslationalStiffnessByLengthX, TranslationalStiffnessByLengthY, TranslationalStiffnessByLengthZ, RotationalStiffnessByLengthX, RotationalStiffnessByLengthY, RotationalStiffnessByLengthZ);
 	}
@@ -11617,15 +11617,15 @@ export class IfcBoundaryFaceCondition {
 		} else { Name = null; ptr++; }
 		let TranslationalStiffnessByAreaX;
 		if (tape[ptr]) {
-		TranslationalStiffnessByAreaX = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessByAreaX = tape[ptr++];
 		} else { TranslationalStiffnessByAreaX = null; ptr++; }
 		let TranslationalStiffnessByAreaY;
 		if (tape[ptr]) {
-		TranslationalStiffnessByAreaY = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessByAreaY = tape[ptr++];
 		} else { TranslationalStiffnessByAreaY = null; ptr++; }
 		let TranslationalStiffnessByAreaZ;
 		if (tape[ptr]) {
-		TranslationalStiffnessByAreaZ = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessByAreaZ = tape[ptr++];
 		} else { TranslationalStiffnessByAreaZ = null; ptr++; }
 		return new IfcBoundaryFaceCondition(expressID, type, Name, TranslationalStiffnessByAreaX, TranslationalStiffnessByAreaY, TranslationalStiffnessByAreaZ);
 	}
@@ -11680,27 +11680,27 @@ export class IfcBoundaryNodeCondition {
 		} else { Name = null; ptr++; }
 		let TranslationalStiffnessX;
 		if (tape[ptr]) {
-		TranslationalStiffnessX = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessX = tape[ptr++];
 		} else { TranslationalStiffnessX = null; ptr++; }
 		let TranslationalStiffnessY;
 		if (tape[ptr]) {
-		TranslationalStiffnessY = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessY = tape[ptr++];
 		} else { TranslationalStiffnessY = null; ptr++; }
 		let TranslationalStiffnessZ;
 		if (tape[ptr]) {
-		TranslationalStiffnessZ = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessZ = tape[ptr++];
 		} else { TranslationalStiffnessZ = null; ptr++; }
 		let RotationalStiffnessX;
 		if (tape[ptr]) {
-		RotationalStiffnessX = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessX = tape[ptr++];
 		} else { RotationalStiffnessX = null; ptr++; }
 		let RotationalStiffnessY;
 		if (tape[ptr]) {
-		RotationalStiffnessY = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessY = tape[ptr++];
 		} else { RotationalStiffnessY = null; ptr++; }
 		let RotationalStiffnessZ;
 		if (tape[ptr]) {
-		RotationalStiffnessZ = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessZ = tape[ptr++];
 		} else { RotationalStiffnessZ = null; ptr++; }
 		return new IfcBoundaryNodeCondition(expressID, type, Name, TranslationalStiffnessX, TranslationalStiffnessY, TranslationalStiffnessZ, RotationalStiffnessX, RotationalStiffnessY, RotationalStiffnessZ);
 	}
@@ -11766,31 +11766,31 @@ export class IfcBoundaryNodeConditionWarping {
 		} else { Name = null; ptr++; }
 		let TranslationalStiffnessX;
 		if (tape[ptr]) {
-		TranslationalStiffnessX = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessX = tape[ptr++];
 		} else { TranslationalStiffnessX = null; ptr++; }
 		let TranslationalStiffnessY;
 		if (tape[ptr]) {
-		TranslationalStiffnessY = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessY = tape[ptr++];
 		} else { TranslationalStiffnessY = null; ptr++; }
 		let TranslationalStiffnessZ;
 		if (tape[ptr]) {
-		TranslationalStiffnessZ = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TranslationalStiffnessZ = tape[ptr++];
 		} else { TranslationalStiffnessZ = null; ptr++; }
 		let RotationalStiffnessX;
 		if (tape[ptr]) {
-		RotationalStiffnessX = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessX = tape[ptr++];
 		} else { RotationalStiffnessX = null; ptr++; }
 		let RotationalStiffnessY;
 		if (tape[ptr]) {
-		RotationalStiffnessY = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessY = tape[ptr++];
 		} else { RotationalStiffnessY = null; ptr++; }
 		let RotationalStiffnessZ;
 		if (tape[ptr]) {
-		RotationalStiffnessZ = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RotationalStiffnessZ = tape[ptr++];
 		} else { RotationalStiffnessZ = null; ptr++; }
 		let WarpingStiffness;
 		if (tape[ptr]) {
-		WarpingStiffness = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		WarpingStiffness = tape[ptr++];
 		} else { WarpingStiffness = null; ptr++; }
 		return new IfcBoundaryNodeConditionWarping(expressID, type, Name, TranslationalStiffnessX, TranslationalStiffnessY, TranslationalStiffnessZ, RotationalStiffnessX, RotationalStiffnessY, RotationalStiffnessZ, WarpingStiffness);
 	}
@@ -15953,7 +15953,7 @@ export class IfcCircle {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Position = tape[ptr++];
 		} else { Position = null; ptr++; }
 		let Radius;
 		if (tape[ptr]) {
@@ -16502,7 +16502,7 @@ export class IfcClassificationReference {
 		} else { Name = null; ptr++; }
 		let ReferencedSource;
 		if (tape[ptr]) {
-		ReferencedSource = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		ReferencedSource = tape[ptr++];
 		} else { ReferencedSource = null; ptr++; }
 		let Description;
 		if (tape[ptr]) {
@@ -18410,7 +18410,7 @@ export class IfcConic {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Position = tape[ptr++];
 		} else { Position = null; ptr++; }
 		return new IfcConic(expressID, type, Position);
 	}
@@ -18470,11 +18470,11 @@ export class IfcConnectionCurveGeometry {
 		let ptr = 0;
 		let CurveOnRelatingElement;
 		if (tape[ptr]) {
-		CurveOnRelatingElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CurveOnRelatingElement = tape[ptr++];
 		} else { CurveOnRelatingElement = null; ptr++; }
 		let CurveOnRelatedElement;
 		if (tape[ptr]) {
-		CurveOnRelatedElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CurveOnRelatedElement = tape[ptr++];
 		} else { CurveOnRelatedElement = null; ptr++; }
 		return new IfcConnectionCurveGeometry(expressID, type, CurveOnRelatingElement, CurveOnRelatedElement);
 	}
@@ -18529,11 +18529,11 @@ export class IfcConnectionPointEccentricity {
 		let ptr = 0;
 		let PointOnRelatingElement;
 		if (tape[ptr]) {
-		PointOnRelatingElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		PointOnRelatingElement = tape[ptr++];
 		} else { PointOnRelatingElement = null; ptr++; }
 		let PointOnRelatedElement;
 		if (tape[ptr]) {
-		PointOnRelatedElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		PointOnRelatedElement = tape[ptr++];
 		} else { PointOnRelatedElement = null; ptr++; }
 		let EccentricityInX;
 		if (tape[ptr]) {
@@ -18590,11 +18590,11 @@ export class IfcConnectionPointGeometry {
 		let ptr = 0;
 		let PointOnRelatingElement;
 		if (tape[ptr]) {
-		PointOnRelatingElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		PointOnRelatingElement = tape[ptr++];
 		} else { PointOnRelatingElement = null; ptr++; }
 		let PointOnRelatedElement;
 		if (tape[ptr]) {
-		PointOnRelatedElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		PointOnRelatedElement = tape[ptr++];
 		} else { PointOnRelatedElement = null; ptr++; }
 		return new IfcConnectionPointGeometry(expressID, type, PointOnRelatingElement, PointOnRelatedElement);
 	}
@@ -18624,11 +18624,11 @@ export class IfcConnectionSurfaceGeometry {
 		let ptr = 0;
 		let SurfaceOnRelatingElement;
 		if (tape[ptr]) {
-		SurfaceOnRelatingElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SurfaceOnRelatingElement = tape[ptr++];
 		} else { SurfaceOnRelatingElement = null; ptr++; }
 		let SurfaceOnRelatedElement;
 		if (tape[ptr]) {
-		SurfaceOnRelatedElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SurfaceOnRelatedElement = tape[ptr++];
 		} else { SurfaceOnRelatedElement = null; ptr++; }
 		return new IfcConnectionSurfaceGeometry(expressID, type, SurfaceOnRelatingElement, SurfaceOnRelatedElement);
 	}
@@ -18658,11 +18658,11 @@ export class IfcConnectionVolumeGeometry {
 		let ptr = 0;
 		let VolumeOnRelatingElement;
 		if (tape[ptr]) {
-		VolumeOnRelatingElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		VolumeOnRelatingElement = tape[ptr++];
 		} else { VolumeOnRelatingElement = null; ptr++; }
 		let VolumeOnRelatedElement;
 		if (tape[ptr]) {
-		VolumeOnRelatedElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		VolumeOnRelatedElement = tape[ptr++];
 		} else { VolumeOnRelatedElement = null; ptr++; }
 		return new IfcConnectionVolumeGeometry(expressID, type, VolumeOnRelatingElement, VolumeOnRelatedElement);
 	}
@@ -18718,7 +18718,7 @@ export class IfcConstraint {
 		} else { ConstraintSource = null; ptr++; }
 		let CreatingActor;
 		if (tape[ptr]) {
-		CreatingActor = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CreatingActor = tape[ptr++];
 		} else { CreatingActor = null; ptr++; }
 		let CreationTime;
 		if (tape[ptr]) {
@@ -21067,7 +21067,7 @@ export class IfcCoordinateOperation {
 		let ptr = 0;
 		let SourceCRS;
 		if (tape[ptr]) {
-		SourceCRS = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SourceCRS = tape[ptr++];
 		} else { SourceCRS = null; ptr++; }
 		let TargetCRS;
 		if (tape[ptr]) {
@@ -21437,7 +21437,7 @@ export class IfcCostValue {
 		} else { Description = null; ptr++; }
 		let AppliedValue;
 		if (tape[ptr]) {
-		AppliedValue = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		AppliedValue = tape[ptr++];
 		} else { AppliedValue = null; ptr++; }
 		let UnitBasis;
 		if (tape[ptr]) {
@@ -22121,7 +22121,7 @@ export class IfcCsgSolid {
 		let ptr = 0;
 		let TreeRootExpression;
 		if (tape[ptr]) {
-		TreeRootExpression = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TreeRootExpression = tape[ptr++];
 		} else { TreeRootExpression = null; ptr++; }
 		return new IfcCsgSolid(expressID, type, TreeRootExpression);
 	}
@@ -22649,15 +22649,15 @@ export class IfcCurveStyle {
 		} else { Name = null; ptr++; }
 		let CurveFont;
 		if (tape[ptr]) {
-		CurveFont = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CurveFont = tape[ptr++];
 		} else { CurveFont = null; ptr++; }
 		let CurveWidth;
 		if (tape[ptr]) {
-		CurveWidth = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CurveWidth = tape[ptr++];
 		} else { CurveWidth = null; ptr++; }
 		let CurveColour;
 		if (tape[ptr]) {
-		CurveColour = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CurveColour = tape[ptr++];
 		} else { CurveColour = null; ptr++; }
 		let ModelOrDraughting;
 		if (tape[ptr]) {
@@ -22755,7 +22755,7 @@ export class IfcCurveStyleFontAndScaling {
 		} else { Name = null; ptr++; }
 		let CurveFont;
 		if (tape[ptr]) {
-		CurveFont = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CurveFont = tape[ptr++];
 		} else { CurveFont = null; ptr++; }
 		let CurveFontScaling;
 		if (tape[ptr]) {
@@ -25233,14 +25233,14 @@ export class IfcDocumentInformation {
 		} else { Revision = null; ptr++; }
 		let DocumentOwner;
 		if (tape[ptr]) {
-		DocumentOwner = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		DocumentOwner = tape[ptr++];
 		} else { DocumentOwner = null; ptr++; }
 		let Editors;
 		if (tape[ptr]) {
 		Editors = [];
 		let Editors_index = 0;
 		while (Editors_index < tape[ptr].length) {
-			Editors.push(typeof tape[ptr][Editors_index] == "number" ? tape[ptr][Editors_index++] : ParseType(tape[ptr][Editors_index++], tape[ptr][Editors_index++][0]));
+			Editors.push(tape[ptr][Editors_index++]);
 		}
 	ptr++;
 		} else { Editors = null; ptr++; }
@@ -29689,7 +29689,7 @@ export class IfcEllipse {
 		let ptr = 0;
 		let Position;
 		if (tape[ptr]) {
-		Position = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Position = tape[ptr++];
 		} else { Position = null; ptr++; }
 		let SemiAxis1;
 		if (tape[ptr]) {
@@ -31292,7 +31292,7 @@ export class IfcExternalReferenceRelationship {
 		RelatedResourceObjects = [];
 		let RelatedResourceObjects_index = 0;
 		while (RelatedResourceObjects_index < tape[ptr].length) {
-			RelatedResourceObjects.push(typeof tape[ptr][RelatedResourceObjects_index] == "number" ? tape[ptr][RelatedResourceObjects_index++] : ParseType(tape[ptr][RelatedResourceObjects_index++], tape[ptr][RelatedResourceObjects_index++][0]));
+			RelatedResourceObjects.push(tape[ptr][RelatedResourceObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedResourceObjects = null; ptr++; }
@@ -33214,7 +33214,7 @@ export class IfcFillAreaStyle {
 		FillStyles = [];
 		let FillStyles_index = 0;
 		while (FillStyles_index < tape[ptr].length) {
-			FillStyles.push(typeof tape[ptr][FillStyles_index] == "number" ? tape[ptr][FillStyles_index++] : ParseType(tape[ptr][FillStyles_index++], tape[ptr][FillStyles_index++][0]));
+			FillStyles.push(tape[ptr][FillStyles_index++]);
 		}
 	ptr++;
 		} else { FillStyles = null; ptr++; }
@@ -33265,7 +33265,7 @@ export class IfcFillAreaStyleHatching {
 		} else { HatchLineAppearance = null; ptr++; }
 		let StartOfNextHatchLine;
 		if (tape[ptr]) {
-		StartOfNextHatchLine = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		StartOfNextHatchLine = tape[ptr++];
 		} else { StartOfNextHatchLine = null; ptr++; }
 		let PointOfReferenceHatchLine;
 		if (tape[ptr]) {
@@ -37057,7 +37057,7 @@ export class IfcGeometricCurveSet {
 		Elements = [];
 		let Elements_index = 0;
 		while (Elements_index < tape[ptr].length) {
-			Elements.push(typeof tape[ptr][Elements_index] == "number" ? tape[ptr][Elements_index++] : ParseType(tape[ptr][Elements_index++], tape[ptr][Elements_index++][0]));
+			Elements.push(tape[ptr][Elements_index++]);
 		}
 	ptr++;
 		} else { Elements = null; ptr++; }
@@ -37110,7 +37110,7 @@ export class IfcGeometricRepresentationContext {
 		} else { Precision = null; ptr++; }
 		let WorldCoordinateSystem;
 		if (tape[ptr]) {
-		WorldCoordinateSystem = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		WorldCoordinateSystem = tape[ptr++];
 		} else { WorldCoordinateSystem = null; ptr++; }
 		let TrueNorth;
 		if (tape[ptr]) {
@@ -37214,7 +37214,7 @@ export class IfcGeometricRepresentationSubContext {
 		} else { Precision = null; ptr++; }
 		let WorldCoordinateSystem;
 		if (tape[ptr]) {
-		WorldCoordinateSystem = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		WorldCoordinateSystem = tape[ptr++];
 		} else { WorldCoordinateSystem = null; ptr++; }
 		let TrueNorth;
 		if (tape[ptr]) {
@@ -37296,7 +37296,7 @@ export class IfcGeometricSet {
 		Elements = [];
 		let Elements_index = 0;
 		while (Elements_index < tape[ptr].length) {
-			Elements.push(typeof tape[ptr][Elements_index] == "number" ? tape[ptr][Elements_index++] : ParseType(tape[ptr][Elements_index++], tape[ptr][Elements_index++][0]));
+			Elements.push(tape[ptr][Elements_index++]);
 		}
 	ptr++;
 		} else { Elements = null; ptr++; }
@@ -37528,7 +37528,7 @@ export class IfcGridPlacement {
 		} else { PlacementLocation = null; ptr++; }
 		let PlacementRefDirection;
 		if (tape[ptr]) {
-		PlacementRefDirection = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		PlacementRefDirection = tape[ptr++];
 		} else { PlacementRefDirection = null; ptr++; }
 		return new IfcGridPlacement(expressID, type, PlacementRelTo, PlacementLocation, PlacementRefDirection);
 	}
@@ -38412,7 +38412,7 @@ export class IfcIndexedPolyCurve {
 		Segments = [];
 		let Segments_index = 0;
 		while (Segments_index < tape[ptr].length) {
-			Segments.push(typeof tape[ptr][Segments_index] == "number" ? tape[ptr][Segments_index++] : ParseType(tape[ptr][Segments_index++], tape[ptr][Segments_index++][0]));
+			Segments.push(tape[ptr][Segments_index++]);
 		}
 	ptr++;
 		} else { Segments = null; ptr++; }
@@ -38977,7 +38977,7 @@ export class IfcInventory {
 		} else { PredefinedType = null; ptr++; }
 		let Jurisdiction;
 		if (tape[ptr]) {
-		Jurisdiction = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Jurisdiction = tape[ptr++];
 		} else { Jurisdiction = null; ptr++; }
 		let ResponsiblePersons;
 		if (tape[ptr]) {
@@ -39118,7 +39118,7 @@ export class IfcIrregularTimeSeries {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Unit = tape[ptr++];
 		} else { Unit = null; ptr++; }
 		let Values;
 		if (tape[ptr]) {
@@ -39187,7 +39187,7 @@ export class IfcIrregularTimeSeriesValue {
 		ListValues = [];
 		let ListValues_index = 0;
 		while (ListValues_index < tape[ptr].length) {
-			ListValues.push(typeof tape[ptr][ListValues_index] == "number" ? tape[ptr][ListValues_index++] : ParseType(tape[ptr][ListValues_index++], tape[ptr][ListValues_index++][0]));
+			ListValues.push(tape[ptr][ListValues_index++]);
 		}
 	ptr++;
 		} else { ListValues = null; ptr++; }
@@ -39885,7 +39885,7 @@ export class IfcLagTime {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let LagValue;
 		if (tape[ptr]) {
-		LagValue = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		LagValue = tape[ptr++];
 		} else { LagValue = null; ptr++; }
 		let DurationType;
 		if (tape[ptr]) {
@@ -40199,7 +40199,7 @@ export class IfcLibraryInformation {
 		} else { Version = null; ptr++; }
 		let Publisher;
 		if (tape[ptr]) {
-		Publisher = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Publisher = tape[ptr++];
 		} else { Publisher = null; ptr++; }
 		let VersionDate;
 		if (tape[ptr]) {
@@ -40918,7 +40918,7 @@ export class IfcLightSourceGoniometric {
 		} else { LightEmissionSource = null; ptr++; }
 		let LightDistributionDataSource;
 		if (tape[ptr]) {
-		LightDistributionDataSource = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		LightDistributionDataSource = tape[ptr++];
 		} else { LightDistributionDataSource = null; ptr++; }
 		return new IfcLightSourceGoniometric(expressID, type, Name, LightColour, AmbientIntensity, Intensity, Position, ColourAppearance, ColourTemperature, LuminousFlux, LightEmissionSource, LightDistributionDataSource);
 	}
@@ -41439,7 +41439,7 @@ export class IfcLocalPlacement {
 		} else { PlacementRelTo = null; ptr++; }
 		let RelativePlacement;
 		if (tape[ptr]) {
-		RelativePlacement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelativePlacement = tape[ptr++];
 		} else { RelativePlacement = null; ptr++; }
 		return new IfcLocalPlacement(expressID, type, PlacementRelTo, RelativePlacement);
 	}
@@ -41529,7 +41529,7 @@ export class IfcMapConversion {
 		let ptr = 0;
 		let SourceCRS;
 		if (tape[ptr]) {
-		SourceCRS = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SourceCRS = tape[ptr++];
 		} else { SourceCRS = null; ptr++; }
 		let TargetCRS;
 		if (tape[ptr]) {
@@ -41694,7 +41694,7 @@ export class IfcMaterialClassificationRelationship {
 		MaterialClassifications = [];
 		let MaterialClassifications_index = 0;
 		while (MaterialClassifications_index < tape[ptr].length) {
-			MaterialClassifications.push(typeof tape[ptr][MaterialClassifications_index] == "number" ? tape[ptr][MaterialClassifications_index++] : ParseType(tape[ptr][MaterialClassifications_index++], tape[ptr][MaterialClassifications_index++][0]));
+			MaterialClassifications.push(tape[ptr][MaterialClassifications_index++]);
 		}
 	ptr++;
 		} else { MaterialClassifications = null; ptr++; }
@@ -42787,11 +42787,11 @@ export class IfcMeasureWithUnit {
 		let ptr = 0;
 		let ValueComponent;
 		if (tape[ptr]) {
-		ValueComponent = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		ValueComponent = tape[ptr++];
 		} else { ValueComponent = null; ptr++; }
 		let UnitComponent;
 		if (tape[ptr]) {
-		UnitComponent = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		UnitComponent = tape[ptr++];
 		} else { UnitComponent = null; ptr++; }
 		return new IfcMeasureWithUnit(expressID, type, ValueComponent, UnitComponent);
 	}
@@ -43762,7 +43762,7 @@ export class IfcMetric {
 		} else { ConstraintSource = null; ptr++; }
 		let CreatingActor;
 		if (tape[ptr]) {
-		CreatingActor = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CreatingActor = tape[ptr++];
 		} else { CreatingActor = null; ptr++; }
 		let CreationTime;
 		if (tape[ptr]) {
@@ -43782,7 +43782,7 @@ export class IfcMetric {
 		} else { ValueSource = null; ptr++; }
 		let DataValue;
 		if (tape[ptr]) {
-		DataValue = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		DataValue = tape[ptr++];
 		} else { DataValue = null; ptr++; }
 		let ReferencePath;
 		if (tape[ptr]) {
@@ -44427,7 +44427,7 @@ export class IfcObjective {
 		} else { ConstraintSource = null; ptr++; }
 		let CreatingActor;
 		if (tape[ptr]) {
-		CreatingActor = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		CreatingActor = tape[ptr++];
 		} else { CreatingActor = null; ptr++; }
 		let CreationTime;
 		if (tape[ptr]) {
@@ -44558,7 +44558,7 @@ export class IfcOccupant {
 		} else { ObjectType = null; ptr++; }
 		let TheActor;
 		if (tape[ptr]) {
-		TheActor = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TheActor = tape[ptr++];
 		} else { TheActor = null; ptr++; }
 		let PredefinedType;
 		if (tape[ptr]) {
@@ -47362,7 +47362,7 @@ export class IfcPlanarBox {
 		} else { SizeInY = null; ptr++; }
 		let Placement;
 		if (tape[ptr]) {
-		Placement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Placement = tape[ptr++];
 		} else { Placement = null; ptr++; }
 		return new IfcPlanarBox(expressID, type, SizeInX, SizeInY, Placement);
 	}
@@ -48637,7 +48637,7 @@ export class IfcPresentationLayerAssignment {
 		AssignedItems = [];
 		let AssignedItems_index = 0;
 		while (AssignedItems_index < tape[ptr].length) {
-			AssignedItems.push(typeof tape[ptr][AssignedItems_index] == "number" ? tape[ptr][AssignedItems_index++] : ParseType(tape[ptr][AssignedItems_index++], tape[ptr][AssignedItems_index++][0]));
+			AssignedItems.push(tape[ptr][AssignedItems_index++]);
 		}
 	ptr++;
 		} else { AssignedItems = null; ptr++; }
@@ -48705,7 +48705,7 @@ export class IfcPresentationLayerWithStyle {
 		AssignedItems = [];
 		let AssignedItems_index = 0;
 		while (AssignedItems_index < tape[ptr].length) {
-			AssignedItems.push(typeof tape[ptr][AssignedItems_index] == "number" ? tape[ptr][AssignedItems_index++] : ParseType(tape[ptr][AssignedItems_index++], tape[ptr][AssignedItems_index++][0]));
+			AssignedItems.push(tape[ptr][AssignedItems_index++]);
 		}
 	ptr++;
 		} else { AssignedItems = null; ptr++; }
@@ -48805,7 +48805,7 @@ export class IfcPresentationStyleAssignment {
 		Styles = [];
 		let Styles_index = 0;
 		while (Styles_index < tape[ptr].length) {
-			Styles.push(typeof tape[ptr][Styles_index] == "number" ? tape[ptr][Styles_index++] : ParseType(tape[ptr][Styles_index++], tape[ptr][Styles_index++][0]));
+			Styles.push(tape[ptr][Styles_index++]);
 		}
 	ptr++;
 		} else { Styles = null; ptr++; }
@@ -50102,19 +50102,19 @@ export class IfcPropertyBoundedValue {
 		} else { Description = null; ptr++; }
 		let UpperBoundValue;
 		if (tape[ptr]) {
-		UpperBoundValue = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		UpperBoundValue = tape[ptr++];
 		} else { UpperBoundValue = null; ptr++; }
 		let LowerBoundValue;
 		if (tape[ptr]) {
-		LowerBoundValue = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		LowerBoundValue = tape[ptr++];
 		} else { LowerBoundValue = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Unit = tape[ptr++];
 		} else { Unit = null; ptr++; }
 		let SetPointValue;
 		if (tape[ptr]) {
-		SetPointValue = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SetPointValue = tape[ptr++];
 		} else { SetPointValue = null; ptr++; }
 		return new IfcPropertyBoundedValue(expressID, type, Name, Description, UpperBoundValue, LowerBoundValue, Unit, SetPointValue);
 	}
@@ -50330,7 +50330,7 @@ export class IfcPropertyEnumeratedValue {
 		EnumerationValues = [];
 		let EnumerationValues_index = 0;
 		while (EnumerationValues_index < tape[ptr].length) {
-			EnumerationValues.push(typeof tape[ptr][EnumerationValues_index] == "number" ? tape[ptr][EnumerationValues_index++] : ParseType(tape[ptr][EnumerationValues_index++], tape[ptr][EnumerationValues_index++][0]));
+			EnumerationValues.push(tape[ptr][EnumerationValues_index++]);
 		}
 	ptr++;
 		} else { EnumerationValues = null; ptr++; }
@@ -50387,13 +50387,13 @@ export class IfcPropertyEnumeration {
 		EnumerationValues = [];
 		let EnumerationValues_index = 0;
 		while (EnumerationValues_index < tape[ptr].length) {
-			EnumerationValues.push(typeof tape[ptr][EnumerationValues_index] == "number" ? tape[ptr][EnumerationValues_index++] : ParseType(tape[ptr][EnumerationValues_index++], tape[ptr][EnumerationValues_index++][0]));
+			EnumerationValues.push(tape[ptr][EnumerationValues_index++]);
 		}
 	ptr++;
 		} else { EnumerationValues = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Unit = tape[ptr++];
 		} else { Unit = null; ptr++; }
 		return new IfcPropertyEnumeration(expressID, type, Name, EnumerationValues, Unit);
 	}
@@ -50440,13 +50440,13 @@ export class IfcPropertyListValue {
 		ListValues = [];
 		let ListValues_index = 0;
 		while (ListValues_index < tape[ptr].length) {
-			ListValues.push(typeof tape[ptr][ListValues_index] == "number" ? tape[ptr][ListValues_index++] : ParseType(tape[ptr][ListValues_index++], tape[ptr][ListValues_index++][0]));
+			ListValues.push(tape[ptr][ListValues_index++]);
 		}
 	ptr++;
 		} else { ListValues = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Unit = tape[ptr++];
 		} else { Unit = null; ptr++; }
 		return new IfcPropertyListValue(expressID, type, Name, Description, ListValues, Unit);
 	}
@@ -50502,7 +50502,7 @@ export class IfcPropertyReferenceValue {
 		} else { UsageName = null; ptr++; }
 		let PropertyReference;
 		if (tape[ptr]) {
-		PropertyReference = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		PropertyReference = tape[ptr++];
 		} else { PropertyReference = null; ptr++; }
 		return new IfcPropertyReferenceValue(expressID, type, Name, Description, UsageName, PropertyReference);
 	}
@@ -50786,11 +50786,11 @@ export class IfcPropertySingleValue {
 		} else { Description = null; ptr++; }
 		let NominalValue;
 		if (tape[ptr]) {
-		NominalValue = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		NominalValue = tape[ptr++];
 		} else { NominalValue = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Unit = tape[ptr++];
 		} else { Unit = null; ptr++; }
 		return new IfcPropertySingleValue(expressID, type, Name, Description, NominalValue, Unit);
 	}
@@ -50862,7 +50862,7 @@ export class IfcPropertyTableValue {
 		DefiningValues = [];
 		let DefiningValues_index = 0;
 		while (DefiningValues_index < tape[ptr].length) {
-			DefiningValues.push(typeof tape[ptr][DefiningValues_index] == "number" ? tape[ptr][DefiningValues_index++] : ParseType(tape[ptr][DefiningValues_index++], tape[ptr][DefiningValues_index++][0]));
+			DefiningValues.push(tape[ptr][DefiningValues_index++]);
 		}
 	ptr++;
 		} else { DefiningValues = null; ptr++; }
@@ -50871,7 +50871,7 @@ export class IfcPropertyTableValue {
 		DefinedValues = [];
 		let DefinedValues_index = 0;
 		while (DefinedValues_index < tape[ptr].length) {
-			DefinedValues.push(typeof tape[ptr][DefinedValues_index] == "number" ? tape[ptr][DefinedValues_index++] : ParseType(tape[ptr][DefinedValues_index++], tape[ptr][DefinedValues_index++][0]));
+			DefinedValues.push(tape[ptr][DefinedValues_index++]);
 		}
 	ptr++;
 		} else { DefinedValues = null; ptr++; }
@@ -50881,11 +50881,11 @@ export class IfcPropertyTableValue {
 		} else { Expression = null; ptr++; }
 		let DefiningUnit;
 		if (tape[ptr]) {
-		DefiningUnit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		DefiningUnit = tape[ptr++];
 		} else { DefiningUnit = null; ptr++; }
 		let DefinedUnit;
 		if (tape[ptr]) {
-		DefinedUnit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		DefinedUnit = tape[ptr++];
 		} else { DefinedUnit = null; ptr++; }
 		let CurveInterpolation;
 		if (tape[ptr]) {
@@ -54026,7 +54026,7 @@ export class IfcRegularTimeSeries {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Unit = tape[ptr++];
 		} else { Unit = null; ptr++; }
 		let TimeStep;
 		if (tape[ptr]) {
@@ -54523,7 +54523,7 @@ export class IfcReinforcingBarType {
 		BendingParameters = [];
 		let BendingParameters_index = 0;
 		while (BendingParameters_index < tape[ptr].length) {
-			BendingParameters.push(typeof tape[ptr][BendingParameters_index] == "number" ? tape[ptr][BendingParameters_index++] : ParseType(tape[ptr][BendingParameters_index++], tape[ptr][BendingParameters_index++][0]));
+			BendingParameters.push(tape[ptr][BendingParameters_index++]);
 		}
 	ptr++;
 		} else { BendingParameters = null; ptr++; }
@@ -55191,7 +55191,7 @@ export class IfcReinforcingMeshType {
 		BendingParameters = [];
 		let BendingParameters_index = 0;
 		while (BendingParameters_index < tape[ptr].length) {
-			BendingParameters.push(typeof tape[ptr][BendingParameters_index] == "number" ? tape[ptr][BendingParameters_index++] : ParseType(tape[ptr][BendingParameters_index++], tape[ptr][BendingParameters_index++][0]));
+			BendingParameters.push(tape[ptr][BendingParameters_index++]);
 		}
 	ptr++;
 		} else { BendingParameters = null; ptr++; }
@@ -55901,7 +55901,7 @@ export class IfcRelAssignsToProcess {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingProcess;
 		if (tape[ptr]) {
-		RelatingProcess = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingProcess = tape[ptr++];
 		} else { RelatingProcess = null; ptr++; }
 		let QuantityInProcess;
 		if (tape[ptr]) {
@@ -56001,7 +56001,7 @@ export class IfcRelAssignsToProduct {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingProduct;
 		if (tape[ptr]) {
-		RelatingProduct = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingProduct = tape[ptr++];
 		} else { RelatingProduct = null; ptr++; }
 		return new IfcRelAssignsToProduct(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingProduct);
 	}
@@ -56092,7 +56092,7 @@ export class IfcRelAssignsToResource {
 		} else { RelatedObjectsType = null; ptr++; }
 		let RelatingResource;
 		if (tape[ptr]) {
-		RelatingResource = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingResource = tape[ptr++];
 		} else { RelatingResource = null; ptr++; }
 		return new IfcRelAssignsToResource(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingResource);
 	}
@@ -56169,7 +56169,7 @@ export class IfcRelAssociates {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(typeof tape[ptr][RelatedObjects_index] == "number" ? tape[ptr][RelatedObjects_index++] : ParseType(tape[ptr][RelatedObjects_index++], tape[ptr][RelatedObjects_index++][0]));
+			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -56242,7 +56242,7 @@ export class IfcRelAssociatesApproval {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(typeof tape[ptr][RelatedObjects_index] == "number" ? tape[ptr][RelatedObjects_index++] : ParseType(tape[ptr][RelatedObjects_index++], tape[ptr][RelatedObjects_index++][0]));
+			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -56321,13 +56321,13 @@ export class IfcRelAssociatesClassification {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(typeof tape[ptr][RelatedObjects_index] == "number" ? tape[ptr][RelatedObjects_index++] : ParseType(tape[ptr][RelatedObjects_index++], tape[ptr][RelatedObjects_index++][0]));
+			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingClassification;
 		if (tape[ptr]) {
-		RelatingClassification = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingClassification = tape[ptr++];
 		} else { RelatingClassification = null; ptr++; }
 		return new IfcRelAssociatesClassification(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingClassification);
 	}
@@ -56400,7 +56400,7 @@ export class IfcRelAssociatesConstraint {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(typeof tape[ptr][RelatedObjects_index] == "number" ? tape[ptr][RelatedObjects_index++] : ParseType(tape[ptr][RelatedObjects_index++], tape[ptr][RelatedObjects_index++][0]));
+			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
@@ -56488,13 +56488,13 @@ export class IfcRelAssociatesDocument {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(typeof tape[ptr][RelatedObjects_index] == "number" ? tape[ptr][RelatedObjects_index++] : ParseType(tape[ptr][RelatedObjects_index++], tape[ptr][RelatedObjects_index++][0]));
+			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingDocument;
 		if (tape[ptr]) {
-		RelatingDocument = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingDocument = tape[ptr++];
 		} else { RelatingDocument = null; ptr++; }
 		return new IfcRelAssociatesDocument(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingDocument);
 	}
@@ -56565,13 +56565,13 @@ export class IfcRelAssociatesLibrary {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(typeof tape[ptr][RelatedObjects_index] == "number" ? tape[ptr][RelatedObjects_index++] : ParseType(tape[ptr][RelatedObjects_index++], tape[ptr][RelatedObjects_index++][0]));
+			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingLibrary;
 		if (tape[ptr]) {
-		RelatingLibrary = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingLibrary = tape[ptr++];
 		} else { RelatingLibrary = null; ptr++; }
 		return new IfcRelAssociatesLibrary(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingLibrary);
 	}
@@ -56642,13 +56642,13 @@ export class IfcRelAssociatesMaterial {
 		RelatedObjects = [];
 		let RelatedObjects_index = 0;
 		while (RelatedObjects_index < tape[ptr].length) {
-			RelatedObjects.push(typeof tape[ptr][RelatedObjects_index] == "number" ? tape[ptr][RelatedObjects_index++] : ParseType(tape[ptr][RelatedObjects_index++], tape[ptr][RelatedObjects_index++][0]));
+			RelatedObjects.push(tape[ptr][RelatedObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingMaterial;
 		if (tape[ptr]) {
-		RelatingMaterial = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingMaterial = tape[ptr++];
 		} else { RelatingMaterial = null; ptr++; }
 		return new IfcRelAssociatesMaterial(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingMaterial);
 	}
@@ -57155,7 +57155,7 @@ export class IfcRelConnectsStructuralActivity {
 		} else { Description = null; ptr++; }
 		let RelatingElement;
 		if (tape[ptr]) {
-		RelatingElement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingElement = tape[ptr++];
 		} else { RelatingElement = null; ptr++; }
 		let RelatedStructuralActivity;
 		if (tape[ptr]) {
@@ -57842,7 +57842,7 @@ export class IfcRelDeclares {
 		RelatedDefinitions = [];
 		let RelatedDefinitions_index = 0;
 		while (RelatedDefinitions_index < tape[ptr].length) {
-			RelatedDefinitions.push(typeof tape[ptr][RelatedDefinitions_index] == "number" ? tape[ptr][RelatedDefinitions_index++] : ParseType(tape[ptr][RelatedDefinitions_index++], tape[ptr][RelatedDefinitions_index++][0]));
+			RelatedDefinitions.push(tape[ptr][RelatedDefinitions_index++]);
 		}
 	ptr++;
 		} else { RelatedDefinitions = null; ptr++; }
@@ -58125,7 +58125,7 @@ export class IfcRelDefinesByProperties {
 		} else { RelatedObjects = null; ptr++; }
 		let RelatingPropertyDefinition;
 		if (tape[ptr]) {
-		RelatingPropertyDefinition = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingPropertyDefinition = tape[ptr++];
 		} else { RelatingPropertyDefinition = null; ptr++; }
 		return new IfcRelDefinesByProperties(expressID, type, GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingPropertyDefinition);
 	}
@@ -59143,7 +59143,7 @@ export class IfcRelSpaceBoundary {
 		} else { Description = null; ptr++; }
 		let RelatingSpace;
 		if (tape[ptr]) {
-		RelatingSpace = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingSpace = tape[ptr++];
 		} else { RelatingSpace = null; ptr++; }
 		let RelatedBuildingElement;
 		if (tape[ptr]) {
@@ -59246,7 +59246,7 @@ export class IfcRelSpaceBoundary1stLevel {
 		} else { Description = null; ptr++; }
 		let RelatingSpace;
 		if (tape[ptr]) {
-		RelatingSpace = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingSpace = tape[ptr++];
 		} else { RelatingSpace = null; ptr++; }
 		let RelatedBuildingElement;
 		if (tape[ptr]) {
@@ -59360,7 +59360,7 @@ export class IfcRelSpaceBoundary2ndLevel {
 		} else { Description = null; ptr++; }
 		let RelatingSpace;
 		if (tape[ptr]) {
-		RelatingSpace = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		RelatingSpace = tape[ptr++];
 		} else { RelatingSpace = null; ptr++; }
 		let RelatedBuildingElement;
 		if (tape[ptr]) {
@@ -59757,7 +59757,7 @@ export class IfcRepresentationMap {
 		let ptr = 0;
 		let MappingOrigin;
 		if (tape[ptr]) {
-		MappingOrigin = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		MappingOrigin = tape[ptr++];
 		} else { MappingOrigin = null; ptr++; }
 		let MappedRepresentation;
 		if (tape[ptr]) {
@@ -59898,7 +59898,7 @@ export class IfcResourceApprovalRelationship {
 		RelatedResourceObjects = [];
 		let RelatedResourceObjects_index = 0;
 		while (RelatedResourceObjects_index < tape[ptr].length) {
-			RelatedResourceObjects.push(typeof tape[ptr][RelatedResourceObjects_index] == "number" ? tape[ptr][RelatedResourceObjects_index++] : ParseType(tape[ptr][RelatedResourceObjects_index++], tape[ptr][RelatedResourceObjects_index++][0]));
+			RelatedResourceObjects.push(tape[ptr][RelatedResourceObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedResourceObjects = null; ptr++; }
@@ -59962,7 +59962,7 @@ export class IfcResourceConstraintRelationship {
 		RelatedResourceObjects = [];
 		let RelatedResourceObjects_index = 0;
 		while (RelatedResourceObjects_index < tape[ptr].length) {
-			RelatedResourceObjects.push(typeof tape[ptr][RelatedResourceObjects_index] == "number" ? tape[ptr][RelatedResourceObjects_index++] : ParseType(tape[ptr][RelatedResourceObjects_index++], tape[ptr][RelatedResourceObjects_index++][0]));
+			RelatedResourceObjects.push(tape[ptr][RelatedResourceObjects_index++]);
 		}
 	ptr++;
 		} else { RelatedResourceObjects = null; ptr++; }
@@ -62033,7 +62033,7 @@ export class IfcShapeAspect {
 		} else { ProductDefinitional = null; ptr++; }
 		let PartOfProductDefinitionShape;
 		if (tape[ptr]) {
-		PartOfProductDefinitionShape = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		PartOfProductDefinitionShape = tape[ptr++];
 		} else { PartOfProductDefinitionShape = null; ptr++; }
 		return new IfcShapeAspect(expressID, type, ShapeRepresentations, Name, Description, ProductDefinitional, PartOfProductDefinitionShape);
 	}
@@ -62203,7 +62203,7 @@ export class IfcShellBasedSurfaceModel {
 		SbsmBoundary = [];
 		let SbsmBoundary_index = 0;
 		while (SbsmBoundary_index < tape[ptr].length) {
-			SbsmBoundary.push(typeof tape[ptr][SbsmBoundary_index] == "number" ? tape[ptr][SbsmBoundary_index++] : ParseType(tape[ptr][SbsmBoundary_index++], tape[ptr][SbsmBoundary_index++][0]));
+			SbsmBoundary.push(tape[ptr][SbsmBoundary_index++]);
 		}
 	ptr++;
 		} else { SbsmBoundary = null; ptr++; }
@@ -62322,11 +62322,11 @@ export class IfcSimplePropertyTemplate {
 		} else { Enumerators = null; ptr++; }
 		let PrimaryUnit;
 		if (tape[ptr]) {
-		PrimaryUnit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		PrimaryUnit = tape[ptr++];
 		} else { PrimaryUnit = null; ptr++; }
 		let SecondaryUnit;
 		if (tape[ptr]) {
-		SecondaryUnit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SecondaryUnit = tape[ptr++];
 		} else { SecondaryUnit = null; ptr++; }
 		let Expression;
 		if (tape[ptr]) {
@@ -69284,7 +69284,7 @@ export class IfcStyledItem {
 		Styles = [];
 		let Styles_index = 0;
 		while (Styles_index < tape[ptr].length) {
-			Styles.push(typeof tape[ptr][Styles_index] == "number" ? tape[ptr][Styles_index++] : ParseType(tape[ptr][Styles_index++], tape[ptr][Styles_index++][0]));
+			Styles.push(tape[ptr][Styles_index++]);
 		}
 	ptr++;
 		} else { Styles = null; ptr++; }
@@ -70178,7 +70178,7 @@ export class IfcSurfaceStyle {
 		Styles = [];
 		let Styles_index = 0;
 		while (Styles_index < tape[ptr].length) {
-			Styles.push(typeof tape[ptr][Styles_index] == "number" ? tape[ptr][Styles_index++] : ParseType(tape[ptr][Styles_index++], tape[ptr][Styles_index++][0]));
+			Styles.push(tape[ptr][Styles_index++]);
 		}
 	ptr++;
 		} else { Styles = null; ptr++; }
@@ -70328,27 +70328,27 @@ export class IfcSurfaceStyleRendering {
 		} else { Transparency = null; ptr++; }
 		let DiffuseColour;
 		if (tape[ptr]) {
-		DiffuseColour = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		DiffuseColour = tape[ptr++];
 		} else { DiffuseColour = null; ptr++; }
 		let TransmissionColour;
 		if (tape[ptr]) {
-		TransmissionColour = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TransmissionColour = tape[ptr++];
 		} else { TransmissionColour = null; ptr++; }
 		let DiffuseTransmissionColour;
 		if (tape[ptr]) {
-		DiffuseTransmissionColour = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		DiffuseTransmissionColour = tape[ptr++];
 		} else { DiffuseTransmissionColour = null; ptr++; }
 		let ReflectionColour;
 		if (tape[ptr]) {
-		ReflectionColour = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		ReflectionColour = tape[ptr++];
 		} else { ReflectionColour = null; ptr++; }
 		let SpecularColour;
 		if (tape[ptr]) {
-		SpecularColour = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SpecularColour = tape[ptr++];
 		} else { SpecularColour = null; ptr++; }
 		let SpecularHighlight;
 		if (tape[ptr]) {
-		SpecularHighlight = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		SpecularHighlight = tape[ptr++];
 		} else { SpecularHighlight = null; ptr++; }
 		let ReflectanceMethod;
 		if (tape[ptr]) {
@@ -71533,7 +71533,7 @@ export class IfcTableColumn {
 		} else { Description = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Unit = tape[ptr++];
 		} else { Unit = null; ptr++; }
 		let ReferencePath;
 		if (tape[ptr]) {
@@ -71590,7 +71590,7 @@ export class IfcTableRow {
 		RowCells = [];
 		let RowCells_index = 0;
 		while (RowCells_index < tape[ptr].length) {
-			RowCells.push(typeof tape[ptr][RowCells_index] == "number" ? tape[ptr][RowCells_index++] : ParseType(tape[ptr][RowCells_index++], tape[ptr][RowCells_index++][0]));
+			RowCells.push(tape[ptr][RowCells_index++]);
 		}
 	ptr++;
 		} else { RowCells = null; ptr++; }
@@ -73719,7 +73719,7 @@ export class IfcTextLiteral {
 		} else { Literal = null; ptr++; }
 		let Placement;
 		if (tape[ptr]) {
-		Placement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Placement = tape[ptr++];
 		} else { Placement = null; ptr++; }
 		let Path;
 		if (tape[ptr]) {
@@ -73764,7 +73764,7 @@ export class IfcTextLiteralWithExtent {
 		} else { Literal = null; ptr++; }
 		let Placement;
 		if (tape[ptr]) {
-		Placement = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Placement = tape[ptr++];
 		} else { Placement = null; ptr++; }
 		let Path;
 		if (tape[ptr]) {
@@ -73827,7 +73827,7 @@ export class IfcTextStyle {
 		} else { TextStyle = null; ptr++; }
 		let TextFontStyle;
 		if (tape[ptr]) {
-		TextFontStyle = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TextFontStyle = tape[ptr++];
 		} else { TextFontStyle = null; ptr++; }
 		let ModelOrDraughting;
 		if (tape[ptr]) {
@@ -73909,7 +73909,7 @@ export class IfcTextStyleFontModel {
 		} else { FontWeight = null; ptr++; }
 		let FontSize;
 		if (tape[ptr]) {
-		FontSize = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		FontSize = tape[ptr++];
 		} else { FontSize = null; ptr++; }
 		return new IfcTextStyleFontModel(expressID, type, Name, FontFamily, FontStyle, FontVariant, FontWeight, FontSize);
 	}
@@ -73955,11 +73955,11 @@ export class IfcTextStyleForDefinedFont {
 		let ptr = 0;
 		let Colour;
 		if (tape[ptr]) {
-		Colour = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Colour = tape[ptr++];
 		} else { Colour = null; ptr++; }
 		let BackgroundColour;
 		if (tape[ptr]) {
-		BackgroundColour = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		BackgroundColour = tape[ptr++];
 		} else { BackgroundColour = null; ptr++; }
 		return new IfcTextStyleForDefinedFont(expressID, type, Colour, BackgroundColour);
 	}
@@ -73999,7 +73999,7 @@ export class IfcTextStyleTextModel {
 		let ptr = 0;
 		let TextIndent;
 		if (tape[ptr]) {
-		TextIndent = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		TextIndent = tape[ptr++];
 		} else { TextIndent = null; ptr++; }
 		let TextAlign;
 		if (tape[ptr]) {
@@ -74011,11 +74011,11 @@ export class IfcTextStyleTextModel {
 		} else { TextDecoration = null; ptr++; }
 		let LetterSpacing;
 		if (tape[ptr]) {
-		LetterSpacing = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		LetterSpacing = tape[ptr++];
 		} else { LetterSpacing = null; ptr++; }
 		let WordSpacing;
 		if (tape[ptr]) {
-		WordSpacing = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		WordSpacing = tape[ptr++];
 		} else { WordSpacing = null; ptr++; }
 		let TextTransform;
 		if (tape[ptr]) {
@@ -74023,7 +74023,7 @@ export class IfcTextStyleTextModel {
 		} else { TextTransform = null; ptr++; }
 		let LineHeight;
 		if (tape[ptr]) {
-		LineHeight = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		LineHeight = tape[ptr++];
 		} else { LineHeight = null; ptr++; }
 		return new IfcTextStyleTextModel(expressID, type, TextIndent, TextAlign, TextDecoration, LetterSpacing, WordSpacing, TextTransform, LineHeight);
 	}
@@ -74361,7 +74361,7 @@ export class IfcTimeSeries {
 		} else { UserDefinedDataOrigin = null; ptr++; }
 		let Unit;
 		if (tape[ptr]) {
-		Unit = typeof tape[ptr] == "number" ? tape[ptr++] : ParseType(tape[ptr++], tape[ptr++][0]);
+		Unit = tape[ptr++];
 		} else { Unit = null; ptr++; }
 		return new IfcTimeSeries(expressID, type, Name, Description, StartTime, EndTime, TimeSeriesDataType, DataOrigin, UserDefinedDataOrigin, Unit);
 	}
@@ -74412,7 +74412,7 @@ export class IfcTimeSeriesValue {
 		ListValues = [];
 		let ListValues_index = 0;
 		while (ListValues_index < tape[ptr].length) {
-			ListValues.push(typeof tape[ptr][ListValues_index] == "number" ? tape[ptr][ListValues_index++] : ParseType(tape[ptr][ListValues_index++], tape[ptr][ListValues_index++][0]));
+			ListValues.push(tape[ptr][ListValues_index++]);
 		}
 	ptr++;
 		} else { ListValues = null; ptr++; }
@@ -75396,7 +75396,7 @@ export class IfcTrimmedCurve {
 		Trim1 = [];
 		let Trim1_index = 0;
 		while (Trim1_index < tape[ptr].length) {
-			Trim1.push(typeof tape[ptr][Trim1_index] == "number" ? tape[ptr][Trim1_index++] : ParseType(tape[ptr][Trim1_index++], tape[ptr][Trim1_index++][0]));
+			Trim1.push(tape[ptr][Trim1_index++]);
 		}
 	ptr++;
 		} else { Trim1 = null; ptr++; }
@@ -75405,7 +75405,7 @@ export class IfcTrimmedCurve {
 		Trim2 = [];
 		let Trim2_index = 0;
 		while (Trim2_index < tape[ptr].length) {
-			Trim2.push(typeof tape[ptr][Trim2_index] == "number" ? tape[ptr][Trim2_index++] : ParseType(tape[ptr][Trim2_index++], tape[ptr][Trim2_index++][0]));
+			Trim2.push(tape[ptr][Trim2_index++]);
 		}
 	ptr++;
 		} else { Trim2 = null; ptr++; }
@@ -76245,7 +76245,7 @@ export class IfcUnitAssignment {
 		Units = [];
 		let Units_index = 0;
 		while (Units_index < tape[ptr].length) {
-			Units.push(typeof tape[ptr][Units_index] == "number" ? tape[ptr][Units_index++] : ParseType(tape[ptr][Units_index++], tape[ptr][Units_index++][0]));
+			Units.push(tape[ptr][Units_index++]);
 		}
 	ptr++;
 		} else { Units = null; ptr++; }

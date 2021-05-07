@@ -13,19 +13,18 @@ async function LoadFile(filename)
     
     await ifcapi.Init();
 
-    let modelID = ifcapi.OpenModel("example.ifc", new Uint8Array(ifcData));
+    let modelID = ifcapi.OpenModel(filename, new Uint8Array(ifcData));
 
     let linesJson = [];
     let lines = ifcapi.GetAllLines(modelID)
     for (let i = 0; i < lines.size(); i++)
     {
         let expressID = lines.get(i);
-        console.log(expressID);
         if (expressID !== 0)
         {
-            //console.log(ifcapi.GetRawLineData(modelID, expressID));
+            console.log(ifcapi.GetRawLineData(modelID, expressID));
             let line = ifcapi.GetLine(modelID, expressID);
-            //console.log(line);
+            console.log(line);
             linesJson.push(line);
         }
         /*
@@ -35,6 +34,8 @@ async function LoadFile(filename)
         */
         //ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
     }
+
+    console.log("Done");
 
     fs.writeFileSync("output.json", JSON.stringify(linesJson, null, 4));
 
@@ -69,4 +70,5 @@ async function LoadFile(filename)
     */
 }
 
+let f = "D:/web-ifc/benchmark/ifcfiles/rac_advanced_sample_project.ifc";
 LoadFile("../example.ifc");
