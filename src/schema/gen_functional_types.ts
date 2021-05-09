@@ -48,6 +48,7 @@ interface Type {
 interface Prop {
     name: string;
     type: string;
+    primitive: boolean;
     optional: boolean;
     set: boolean;
 }
@@ -177,10 +178,11 @@ function ParseElements(data)
             let optional = split.indexOf("OPTIONAL") != -1;
             let set = split.indexOf("SET") != -1 || split.indexOf("LIST") != -1;
             let type = split[split.length - 1].replace(";", "");
-            type = expTypeToTSType(type);
+            let tsType = expTypeToTSType(type);
             entity.props.push({
                 name,
-                type,
+                type: tsType,
+                primitive: tsType !== type,
                 optional,
                 set
             })
@@ -338,7 +340,7 @@ elements.forEach((entity) => {
     let params: Param[] = [];
     entity.derivedProps.forEach((prop) => {
         let isType: Type = tmap[prop.type];
-        let propType = `${isType ? prop.type : "Handle<" + prop.type + ">" }${prop.set ? "[]" : ""} ${prop.optional ? "| null" : ""}`;
+        let propType = `${(isType || prop.primitive) ? prop.type : "Handle<" + prop.type + ">" }${prop.set ? "[]" : ""} ${prop.optional ? "| null" : ""}`;
         params.push({ name: prop.name, type: propType, prop, isType });
     });
 
@@ -366,7 +368,7 @@ elements.forEach((entity) => {
         buffer.push(`\t\tlet ${param.name};`)
         if (true)
         {
-            buffer.push(`\t\tif (tape[ptr]) {`);
+            buffer.push(`\t\tif (tape[ptr] && tape[ptr].type !== 0) {`);
         }
         {
             let parseElement = (val) => {
@@ -378,7 +380,7 @@ elements.forEach((entity) => {
                 {
                     return `new ${param.isType.name}(tape[ptr++])`;
                 }
-                else if (!param.isType)
+                else if (!param.isType && !param.prop.primitive)
                 {
                     return `new Handle<${param.prop.type}>(tape[ptr++].expressID)`;
                 }
@@ -397,7 +399,7 @@ elements.forEach((entity) => {
                 {
                     return `new ${param.isType.name}(${arrayName}[${indexVarName}++])`;
                 }
-                else if (!param.isType)
+                else if (!param.isType && !param.prop.primitive)
                 {
                     return `new Handle<${param.prop.type}>(${arrayName}[${indexVarName}++].expressID)`;
                 }
@@ -424,7 +426,7 @@ elements.forEach((entity) => {
         }
         if (true)
         {
-            buffer.push(`\t\t} else { ${param.name} = null; ptr++; }`);
+            buffer.push(`\t\t} else { ${param.name} = tape[ptr]; ptr++; }`);
         }
 
         tapeIndex++;

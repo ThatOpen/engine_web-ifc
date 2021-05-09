@@ -125,7 +125,6 @@ export class IfcAPI
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
-        
         if (flatten)
         {
             this.FlattenLine(modelID, lineData);
@@ -142,7 +141,7 @@ export class IfcAPI
             {
                 line[propertyName] = this.GetLine(modelID, property.expressID, true);
             }
-            else if (Array.isArray(property) && property[0] instanceof ifc2x4helper.Handle)
+            else if (Array.isArray(property) && property.length > 0 && property[0] instanceof ifc2x4helper.Handle)
             {
                 for (let i = 0; i < property.length; i++)
                 {

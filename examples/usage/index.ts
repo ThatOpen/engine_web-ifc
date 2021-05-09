@@ -17,14 +17,18 @@ async function LoadFile(filename)
 
     let linesJson = [];
     let lines = ifcapi.GetAllLines(modelID);
+
+    let propertySetFlattened = ifcapi.GetLine(modelID, 106, true);
+    console.log(JSON.stringify(propertySetFlattened, null, 4));
+    return;
     for (let i = 0; i < lines.size(); i++)
     {
         let expressID = lines.get(i);
         if (expressID !== 0)
         {
-            console.log(ifcapi.GetRawLineData(modelID, expressID));
+            //console.log(ifcapi.GetRawLineData(modelID, expressID));
             let line = ifcapi.GetLine(modelID, expressID);
-            console.log(line);
+            //console.log(line);
             linesJson.push(line);
         }
         /*
@@ -34,9 +38,6 @@ async function LoadFile(filename)
         */
         //ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
     }
-
-    let propertySetFlattened = ifcapi.GetLine(modelID, 4121, true);
-    console.log(propertySetFlattened);
 
     console.log("Done");
 
