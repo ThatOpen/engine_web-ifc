@@ -16,7 +16,7 @@ async function LoadFile(filename)
     let modelID = ifcapi.OpenModel(filename, new Uint8Array(ifcData));
 
     let linesJson = [];
-    let lines = ifcapi.GetAllLines(modelID)
+    let lines = ifcapi.GetAllLines(modelID);
     for (let i = 0; i < lines.size(); i++)
     {
         let expressID = lines.get(i);
@@ -34,6 +34,9 @@ async function LoadFile(filename)
         */
         //ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
     }
+
+    let propertySetFlattened = ifcapi.GetLine(modelID, 4121, true);
+    console.log(propertySetFlattened);
 
     console.log("Done");
 

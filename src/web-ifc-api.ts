@@ -121,10 +121,35 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
-    GetLine(modelID: number, expressID: number)
+    GetLine(modelID: number, expressID: number, flatten: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        return ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        
+        if (flatten)
+        {
+            this.FlattenLine(modelID, lineData);
+        }
+
+        return lineData;
+    }
+
+    FlattenLine(modelID: number, line: any)
+    {
+        Object.keys(line).forEach(propertyName => {
+            let property = line[propertyName];
+            if (property instanceof ifc2x4helper.Handle)
+            {
+                line[propertyName] = this.GetLine(modelID, property.expressID, true);
+            }
+            else if (Array.isArray(property) && property[0] instanceof ifc2x4helper.Handle)
+            {
+                for (let i = 0; i < property.length; i++)
+                {
+                    line[propertyName][i] = this.GetLine(modelID, property[i].expressID, true);
+                }
+            }
+        });
     }
 
     GetRawLineData(modelID: number, expressID: number): RawLineData
