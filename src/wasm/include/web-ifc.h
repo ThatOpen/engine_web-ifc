@@ -558,118 +558,122 @@ namespace webifc
 			file << "ENDSEC;" << std::endl;
 			file << "DATA;" << std::endl;
 
-			_tape.MoveTo(0);
-			bool newLine = true;
-			bool insideSet = false;
-			IfcTokenType prev = IfcTokenType::EMPTY;
-			while (!_tape.AtEnd())
+			for (auto& line : _metaData.lines)
 			{
-				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
-
-				if (t != IfcTokenType::SET_END && t != IfcTokenType::LINE_END)
+				_tape.MoveTo(line.tapeOffset);
+				bool newLine = true;
+				bool insideSet = false;
+				IfcTokenType prev = IfcTokenType::EMPTY;
+				while (!_tape.AtEnd())
 				{
-					if (insideSet && prev != IfcTokenType::SET_BEGIN && prev != IfcTokenType::LABEL && prev != IfcTokenType::LINE_END)
+					IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
+
+					if (t != IfcTokenType::SET_END && t != IfcTokenType::LINE_END)
 					{
-						file << ",";
-					}
-				}
-
-				switch (t)
-				{
-				case IfcTokenType::LINE_END:
-				{
-					file << ";" << std::endl;
-					break;
-				}
-				case IfcTokenType::UNKNOWN:
-				{
-					file << "*";
-
-					break;
-				}
-				case IfcTokenType::EMPTY:
-				{
-					file << "$";
-
-					break;
-				}
-				case IfcTokenType::SET_BEGIN:
-				{
-					file << "(";
-
-					insideSet = true;
-
-					break;
-				}
-				case IfcTokenType::SET_END:
-				{
-					file << ")";
-
-					break;
-				}
-				case IfcTokenType::STRING:
-				{
-					StringView view = _tape.ReadStringView();
-					std::string copy(view.data, view.len);
-
-					file << "'" << copy << "'";
-
-					break;
-				}
-				case IfcTokenType::ENUM:
-				{
-					StringView view = _tape.ReadStringView();
-					std::string copy(view.data, view.len);
-
-					file << "." << copy << ".";
-
-					break;
-				}
-				case IfcTokenType::LABEL:
-				{
-					StringView view = _tape.ReadStringView();
-					std::string copy(view.data, view.len);
-					
-					file << copy;
-
-					break;
-				}
-				case IfcTokenType::REF:
-				{
-					uint32_t ref = _tape.Read<uint32_t>();
-
-					file << "#" << ref;
-
-					if (newLine)
-					{
-						file << "=";
+						if (insideSet && prev != IfcTokenType::SET_BEGIN && prev != IfcTokenType::LABEL && prev != IfcTokenType::LINE_END)
+						{
+							file << ",";
+						}
 					}
 
-					break;
-				}
-				case IfcTokenType::REAL:
-				{
-					double d = _tape.Read<double>();
+					if (t == IfcTokenType::LINE_END)
+					{
+						file << ";" << std::endl;
+						break;
+					}
 
-					file << d;
+					switch (t)
+					{
+					case IfcTokenType::UNKNOWN:
+					{
+						file << "*";
 
-					break;
-				}
-				default:
-					break;
-				}
+						break;
+					}
+					case IfcTokenType::EMPTY:
+					{
+						file << "$";
 
-				if (t == IfcTokenType::LINE_END)
-				{
-					newLine = true;
-					insideSet = false;
-				}
-				else
-				{
-					newLine = false;
-				}
+						break;
+					}
+					case IfcTokenType::SET_BEGIN:
+					{
+						file << "(";
 
-				prev = t;
+						insideSet = true;
+
+						break;
+					}
+					case IfcTokenType::SET_END:
+					{
+						file << ")";
+
+						break;
+					}
+					case IfcTokenType::STRING:
+					{
+						StringView view = _tape.ReadStringView();
+						std::string copy(view.data, view.len);
+
+						file << "'" << copy << "'";
+
+						break;
+					}
+					case IfcTokenType::ENUM:
+					{
+						StringView view = _tape.ReadStringView();
+						std::string copy(view.data, view.len);
+
+						file << "." << copy << ".";
+
+						break;
+					}
+					case IfcTokenType::LABEL:
+					{
+						StringView view = _tape.ReadStringView();
+						std::string copy(view.data, view.len);
+
+						file << copy;
+
+						break;
+					}
+					case IfcTokenType::REF:
+					{
+						uint32_t ref = _tape.Read<uint32_t>();
+
+						file << "#" << ref;
+
+						if (newLine)
+						{
+							file << "=";
+						}
+
+						break;
+					}
+					case IfcTokenType::REAL:
+					{
+						double d = _tape.Read<double>();
+
+						file << d;
+
+						break;
+					}
+					default:
+						break;
+					}
+
+					if (t == IfcTokenType::LINE_END)
+					{
+						newLine = true;
+						insideSet = false;
+					}
+					else
+					{
+						newLine = false;
+					}
+
+					prev = t;
+				}
 			}
 
 			file << "ENDSEC;" << std::endl << "END-ISO-10303-21;";
