@@ -286,6 +286,8 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 
     _tape.SetWriteAtEnd();
 
+    uint32_t start = _tape.GetTotalSize();
+
     // line ID
     _tape.push(webifc::IfcTokenType::REF);
     _tape.push(&expressID, sizeof(uint32_t));
@@ -301,6 +303,10 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 
     // end line
     _tape.push(webifc::IfcTokenType::LINE_END);
+
+    uint32_t end = _tape.GetTotalSize();
+
+    loader.UpdateLineTape(expressID, start, end);
 }
 
 template<uint32_t N>

@@ -487,6 +487,16 @@ namespace webifc
 			_tape.Reverse();
 		}
 
+		inline void UpdateLineTape(uint32_t expressID, uint32_t start, uint32_t end)
+		{
+			uint64_t pos = _tape.GetTotalSize();
+			auto lineID = _metaData.expressIDToLine[expressID];
+			auto& line = _metaData.lines[lineID];
+
+			line.tapeOffset = start;
+			line.tapeEnd = end;
+		}
+
 		inline std::vector<uint32_t> GetSetArgument()
 		{
 			std::vector<uint32_t> tapeOffsets;
