@@ -264,8 +264,13 @@ elements.forEach((entity) => {
 
 
 
-buffer.push(`export class Handle<T> { expressID: number; constructor(id: number) { this.expressID = id; } }`);
-buffer.push(`export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }`);
+buffer.push(`export class Handle<T> {`);
+buffer.push(`\texpressID: number;`);
+buffer.push(`\tconstructor(id: number) { this.expressID = id; }`);
+buffer.push(`\ttoTape(args: any[]){ args.push({ type: 5, expressID: this.expressID }); }`);
+buffer.push(`}`);
+buffer.push(``);
+//buffer.push(`export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }`);
 buffer.push(`export function Value(type: string, value: any): any { return { t: type, v: value }; }`);
 
 buffer.push(`const UNKNOWN = 0;`);
@@ -365,32 +370,113 @@ elements.forEach((entity) => {
     for (let i = 0; i < params.length; i++)
     {
         let param = params[i];
-        buffer.push(`\t\tlet ${param.name};`)
-        if (true)
+        //buffer.push(`\t\tlet ${param.name};`)
+        if (false)
         {
             buffer.push(`\t\tif (tape[ptr] && tape[ptr].type !== 0) {`);
         }
         {
             let parseElement = (val) => {
+                /*
                 if (param.isType && param.isType.isSelect)
                 {
                     return `ParseType(tape[ptr++])`;
                 }
                 else if (param.isType && param.isType.isEnum)
                 {
-                    return `new ${param.isType.name}(tape[ptr++])`;
+                    return `tape[ptr++]`;
                 }
                 else if (!param.isType && !param.prop.primitive)
                 {
                     return `new Handle<${param.prop.type}>(tape[ptr++].expressID)`;
                 }
                 else
+                */
                 {
                     return `tape[ptr++]`;
                 }
             };
 
             let parseElementSet = (arrayName, indexVarName) => {
+                /*
+                if (param.isType && param.isType.isSelect)
+                {
+                    return `ParseType(${arrayName}[${indexVarName}++])`;
+                }
+                else if (param.isType && param.isType.isEnum)
+                {
+                    return `${arrayName}[${indexVarName}++]`;
+                }
+                else if (!param.isType && !param.prop.primitive)
+                {
+                    return `new Handle<${param.prop.type}>(${arrayName}[${indexVarName}++].expressID)`;
+                }
+                else
+                */
+                {
+                    return `${arrayName}[${indexVarName}++]`;
+                }
+            };
+
+            /*
+            if (param.prop.set)
+            {
+                buffer.push(`\t\tlet ${param.name}: any[] = [];`);
+                let indexVarName = `${param.name}_index`;
+                buffer.push(`\t\tlet ${indexVarName} = 0;`);
+                buffer.push(`\t\twhile (${indexVarName} < tape[ptr].length) {`);
+                buffer.push(`\t\t\t${param.name}.push(${parseElementSet(`tape[ptr]`, indexVarName)});`);
+                buffer.push(`\t\t}`);
+                buffer.push(`\tptr++;`);
+            }
+            else
+            */
+            {
+                buffer.push(`\t\tlet ${param.name} = ${parseElement(tapeIndex)};`);
+            }
+        }
+        if (false)
+        {
+            buffer.push(`\t\t} else { ${param.name} = tape[ptr]; ptr++; }`);
+        }
+
+        tapeIndex++;
+    }
+    buffer.push(`\t\treturn new ${entity.name}(expressID, type, ${params.map((p) => p.name).join(", ")});`);
+    buffer.push(`\t}`)
+    buffer.push(`\tToTape(): any[]`)
+    buffer.push(`\t{`)
+    buffer.push(`\t\tlet args: any[] = [];`)
+    params.forEach((param) => {
+        let m = `this.${param.name}`;
+        if (false)
+        {
+            buffer.push(`\t\t//@ts-ignore`);
+            buffer.push(`\t\tif (${m} && ${m}.type !== 0) {`);
+        }
+        {
+            let writeElement = (val) => {
+                /*
+                if (param.isType && param.isType.isSelect)
+                {
+                    return `${m}.toTape(args)`;
+                }
+                else if (param.isType && param.isType.isEnum)
+                {
+                    return `args.push(${m});`;
+                }
+                else if (!param.isType && !param.prop.primitive)
+                {
+                    return `${m}.toTape(args)`;
+                }
+                else
+                */
+                {
+                    return `args.push(${m});`;
+                }
+            };
+
+            let writeElementSet = (arrayName, indexVarName) => {
                 if (param.isType && param.isType.isSelect)
                 {
                     return `ParseType(${arrayName}[${indexVarName}++])`;
@@ -409,6 +495,7 @@ elements.forEach((entity) => {
                 }
             };
 
+                /*
             if (param.prop.set)
             {
                 buffer.push(`\t\t${param.name} = [];`);
@@ -420,104 +507,14 @@ elements.forEach((entity) => {
                 buffer.push(`\tptr++;`);
             }
             else
+                */
             {
-                buffer.push(`\t\t${param.name} = ${parseElement(tapeIndex)};`);
+                buffer.push(`\t\t${writeElement(tapeIndex)};`);
             }
         }
-        if (true)
+        if (false)
         {
-            buffer.push(`\t\t} else { ${param.name} = tape[ptr]; ptr++; }`);
-        }
-
-        tapeIndex++;
-    }
-    buffer.push(`\t\treturn new ${entity.name}(expressID, type, ${params.map((p) => p.name).join(", ")});`);
-    buffer.push(`\t}`)
-    buffer.push(`\tToTape(): any[]`)
-    buffer.push(`\t{`)
-    buffer.push(`\t\tlet args: any[] = [];`)
-    params.forEach((param) => {
-        if (param.prop.optional)
-        {
-            buffer.push(`\t\tif(this.${param.name}){`);
-        }
-        {
-            if (param.isType)
-            {
-                let type = tmap[param.prop.type];
-                let printValue = true;
-                if (type.typeName === "number")
-                {
-                    buffer.push(`\t\targs.push(REAL)`);
-                }
-                else if (type.typeName === "string")
-                {
-                    buffer.push(`\t\targs.push(STRING)`);
-                }
-                else if (param.prop.type === "IfcValue")
-                {
-                    if (param.prop.set)
-                    {
-                    }
-                    else
-                    {
-                        buffer.push(`\t\targs.push(LABEL)`);
-                        buffer.push(`\t\t//@ts-ignore`);
-                        buffer.push(`\t\targs.push(this.${param.name}.t)`);
-                        buffer.push(`\t\targs.push(SET_BEGIN)`);
-                        buffer.push(`\t\t//@ts-ignore`);
-                        buffer.push(`\t\targs.push(typeof this.${param.name}.v == 'string' ? STRING : REAL)`);
-                        buffer.push(`\t\t//@ts-ignore`);
-                        buffer.push(`\t\targs.push(this.${param.name}.v)`);
-                        buffer.push(`\t\targs.push(SET_END)`);
-                    }
-
-                    printValue = false;
-                }
-                else if (param.isType.isEnum)
-                {
-                    buffer.push(`\t\targs.push(ENUM);`);
-                    buffer.push(`\t\targs.push(this.${param.name}.value)`);
-                    
-                    printValue = false;
-                }
-                else
-                {
-                    // TODO: implement
-                    printValue = false;
-                }
-
-                if (printValue)
-                {
-                    if (param.prop.set)
-                    {
-                        buffer.push(`\t\targs.push(...this.${param.name})`);
-                    }
-                    else
-                    {
-                        buffer.push(`\t\targs.push(this.${param.name})`);
-                    }
-                }
-            }
-            else
-            {
-                if (param.prop.set)
-                {
-                    buffer.push(`\t\targs.push(SET_BEGIN)`);
-                    buffer.push(`\t\tthis.${param.name}.forEach((e) => { args.push(REF); args.push(e); });`);
-                    buffer.push(`\t\targs.push(SET_END)`);
-                }
-                else
-                {
-                    buffer.push(`\t\targs.push(REF)`);
-                    buffer.push(`\t\targs.push(this.${param.name})`);
-                }
-            }
-        }
-        if (param.prop.optional)
-        {
-            buffer.push(`\t\t}`);
-            buffer.push(`\t\telse{ args.push(EMPTY); }`);
+            buffer.push(`\t\t} else { args.push(${m}); }`);
         }
     });
     buffer.push(`\t\treturn args;`)

@@ -18,9 +18,8 @@ async function LoadFile(filename)
     let linesJson = [];
     let lines = ifcapi.GetAllLines(modelID);
 
-    let propertySetFlattened = ifcapi.GetLine(modelID, 106, true);
+    let propertySetFlattened = ifcapi.GetLine(modelID, 244, true);
     console.log(JSON.stringify(propertySetFlattened, null, 4));
-    return;
     for (let i = 0; i < lines.size(); i++)
     {
         let expressID = lines.get(i);
@@ -28,7 +27,9 @@ async function LoadFile(filename)
         {
             //console.log(ifcapi.GetRawLineData(modelID, expressID));
             let line = ifcapi.GetLine(modelID, expressID);
-            //console.log(line);
+            console.log(line);
+            ifcapi.WriteLine(modelID, line);
+
             linesJson.push(line);
         }
         /*

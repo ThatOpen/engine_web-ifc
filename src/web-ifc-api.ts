@@ -105,11 +105,6 @@ export class IfcAPI
         return result;
     }
 
-    WriteLine(modelID: number, expressID: number, type: number, parameters: any)
-    {
-        return this.wasmModule.WriteLine(modelID, expressID, type, parameters);
-    }
-
 
     /**  
      * Opens a model and returns a modelID number
@@ -124,6 +119,7 @@ export class IfcAPI
     GetLine(modelID: number, expressID: number, flatten: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
+        console.log(rawLineData);
         let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
         if (flatten)
         {
@@ -133,19 +129,30 @@ export class IfcAPI
         return lineData;
     }
 
+    WriteLine(modelID: number, lineObject: any)
+    {
+        let rawLineData: RawLineData = {
+            ID: lineObject.expressID,
+            type: lineObject.type,
+            arguments: lineObject.ToTape() as any[]
+        }
+
+        this.WriteRawLineData(modelID, rawLineData);
+    }
+
     FlattenLine(modelID: number, line: any)
     {
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
-            if (property instanceof ifc2x4helper.Handle)
+            if (property && property.type === 5)
             {
-                line[propertyName] = this.GetLine(modelID, property.expressID, true);
+                line[propertyName] = this.GetLine(modelID, property.value, true);
             }
-            else if (Array.isArray(property) && property.length > 0 && property[0] instanceof ifc2x4helper.Handle)
+            else if (Array.isArray(property) && property.length > 0 && property[0].type === 5)
             {
                 for (let i = 0; i < property.length; i++)
                 {
-                    line[propertyName][i] = this.GetLine(modelID, property[i].expressID, true);
+                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
                 }
             }
         });
@@ -154,6 +161,11 @@ export class IfcAPI
     GetRawLineData(modelID: number, expressID: number): RawLineData
     {
         return this.wasmModule.GetLine(modelID, expressID) as RawLineData;
+    }
+
+    WriteRawLineData(modelID: number, data: RawLineData)
+    {
+        return this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
     }
 
     GetLineIDsWithType(modelID: number, type: number): Vector<number>

@@ -157,6 +157,42 @@ void ExportFileAsIFC(uint32_t modelID)
     std::cout << "Exported" << std::endl;
 }
 
+template<uint32_t N>
+void WriteValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t, emscripten::val value)
+{
+    switch (t)
+    {
+    case webifc::IfcTokenType::STRING:
+    case webifc::IfcTokenType::ENUM:
+    {
+        std::string copy = value.as<std::string>();
+
+        uint8_t length = copy.size();
+        tape.push(length);
+        tape.push((void*)copy.c_str(), copy.size());
+
+        break;
+    }
+    case webifc::IfcTokenType::REF:
+    {
+        uint32_t val = value.as<uint32_t>();
+        tape.push(&val, sizeof(uint32_t));
+
+        break;
+    }
+    case webifc::IfcTokenType::REAL:
+    {
+        double val = value.as<double>();
+        tape.push(&val, sizeof(double));
+
+        break;
+    }
+    default:
+        // use undefined to signal val parse issue
+        tape.push('?');
+    }
+}
+
 void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
 {
     _tape.push(webifc::IfcTokenType::SET_BEGIN);
@@ -170,53 +206,71 @@ void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
         {
             WriteSet(_tape, child);
         }
-        else
+        else if (child.isNull())
         {
-            webifc::IfcTokenType type = static_cast<webifc::IfcTokenType>(child.as<uint32_t>());
+            _tape.push(webifc::IfcTokenType::EMPTY);
+        }
+        else if (child.isUndefined())
+        {
+            // nothing to do here, possibly mismatch in ifc spec!
+            index++;
+            continue;
+        }
+        else if (child["type"].isNumber())
+        {
+            webifc::IfcTokenType type = static_cast<webifc::IfcTokenType>(child["type"].as<uint32_t>());
             _tape.push(type);
             switch(type)
             {
                 case webifc::IfcTokenType::LINE_END:
-                case webifc::IfcTokenType::UNKNOWN:
                 case webifc::IfcTokenType::EMPTY:
                 case webifc::IfcTokenType::SET_BEGIN:
                 case webifc::IfcTokenType::SET_END:
                 {
-                    // ignore
+                    // ignore, we should not be seeing this
+                    break;
+                }
+                case webifc::IfcTokenType::UNKNOWN:
+                {
+                    // ignore, already pushed above, no further data
+                    break;
+                }
+                case webifc::IfcTokenType::LABEL:
+                {
+                    auto label = child["label"];
+                    auto valueType = static_cast<webifc::IfcTokenType>(child["valueType"].as<uint32_t>());
+                    auto value = child["value"];
+
+                    std::string copy = label.as<std::string>();
+
+                    uint8_t length = copy.size();
+                    _tape.push(length);
+                    _tape.push((void*)copy.c_str(), copy.size());
+
+                    _tape.push(webifc::IfcTokenType::SET_BEGIN);
+
+                    _tape.push(valueType);
+                    WriteValue(_tape, valueType, value);
+
+                    _tape.push(webifc::IfcTokenType::SET_END);
+
                     break;
                 }
                 case webifc::IfcTokenType::STRING:
                 case webifc::IfcTokenType::ENUM:
-                case webifc::IfcTokenType::LABEL:
-                {
-                    child = val[++index];
-                    std::string copy = child.as<std::string>();
-
-                    uint8_t length = copy.size();
-					_tape.push(length);
-                    _tape.push((void*)copy.c_str(), copy.size());
-
-                    break;
-                }
                 case webifc::IfcTokenType::REF:
-                {
-                    child = val[++index];
-                    uint32_t val = child.as<uint32_t>();
-					_tape.push(&val, sizeof(uint32_t));
-
-                    break;
-                }
                 case webifc::IfcTokenType::REAL:
                 {
-                    child = val[++index];
-                    double val = child.as<double>();
-                    _tape.push(&val, sizeof(double));
-
+                    WriteValue(_tape, type, child["value"]);
                     break;
                 }
                 default:
                     break;
             }
+        }
+        else
+        {
+            std::cout << "Error in writeline: unknown object received" << std::endl;
         }
 
         index++;
@@ -268,6 +322,12 @@ emscripten::val ReadValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t)
 
         return emscripten::val(d);
     }
+    case webifc::IfcTokenType::REF:
+    {
+        uint32_t ref = tape.template Read<uint32_t>();
+
+        return emscripten::val(ref);
+    }
     default:
         // use undefined to signal val parse issue
         return emscripten::val::undefined();
@@ -296,6 +356,8 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     {
         webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
 
+        std::cout << t << std::endl;
+
         auto& topValue = valueStack.top();
         auto& topPosition = valuePosition.top();
 
@@ -310,6 +372,7 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
         {
             auto obj = emscripten::val::object(); 
             obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::UNKNOWN))); 
+
             topValue.set(topPosition++, obj);
             
             break;
@@ -349,16 +412,6 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 
             break;
         }
-        case webifc::IfcTokenType::REF:
-        {
-            uint32_t ref = _tape.Read<uint32_t>();
-            auto obj = emscripten::val::object(); 
-            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::REF))); 
-            obj.set("expressID", emscripten::val(ref)); 
-            topValue.set(topPosition++, obj);
-
-            break;
-        }
         case webifc::IfcTokenType::LABEL:
         {
             // read label
@@ -374,6 +427,7 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
             
             // read value following label
             webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+            obj.set("valueType", emscripten::val(static_cast<uint32_t>(t)));
             obj.set("value", ReadValue(_tape, t));
 
             // read set close
@@ -386,8 +440,13 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
         case webifc::IfcTokenType::STRING:
         case webifc::IfcTokenType::ENUM:
         case webifc::IfcTokenType::REAL:
+        case webifc::IfcTokenType::REF:
         {
-            topValue.set(topPosition++, ReadValue(_tape, t));
+            auto obj = emscripten::val::object(); 
+            obj.set("type", emscripten::val(static_cast<uint32_t>(t)));
+            obj.set("value", ReadValue(_tape, t));
+
+            topValue.set(topPosition++, obj);
 
             break;
         }
