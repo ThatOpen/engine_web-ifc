@@ -119,7 +119,6 @@ export class IfcAPI
     GetLine(modelID: number, expressID: number, flatten: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        console.log(rawLineData);
         let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
         if (flatten)
         {

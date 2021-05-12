@@ -356,8 +356,6 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     {
         webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
 
-        std::cout << t << std::endl;
-
         auto& topValue = valueStack.top();
         auto& topPosition = valuePosition.top();
 

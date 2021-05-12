@@ -20,6 +20,7 @@ async function LoadFile(filename)
 
     let propertySetFlattened = ifcapi.GetLine(modelID, 244, true);
     console.log(JSON.stringify(propertySetFlattened, null, 4));
+    let start = WebIFC.ms();
     for (let i = 0; i < lines.size(); i++)
     {
         let expressID = lines.get(i);
@@ -27,7 +28,6 @@ async function LoadFile(filename)
         {
             //console.log(ifcapi.GetRawLineData(modelID, expressID));
             let line = ifcapi.GetLine(modelID, expressID);
-            console.log(line);
             ifcapi.WriteLine(modelID, line);
 
             linesJson.push(line);
@@ -39,6 +39,8 @@ async function LoadFile(filename)
         */
         //ifcapi.WriteLine(modelID, expressID, WebIFC.IFCPROPERTYSINGLEVALUE, property.ToTape());
     }
+    let duration = WebIFC.ms() - start;
+    console.log(`Writing took ${duration} ms`);
 
     console.log("Done");
 
