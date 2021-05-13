@@ -2,7 +2,7 @@ import * as WebIFC from "../../dist/web-ifc-api-node.js";
 import { Equals, WithIFCFileLoaded } from "./utils";
 
 export default async function() {
-    await WithIFCFileLoaded("single_properties_test", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
+    await WithIFCFileLoaded("single_propertyset", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
 
         // this returns a propertyset object at line number 244
         let propertySetFlattened = ifcapi.GetLine(modelID, 244, true) as WebIFC.IfcPropertySet;
@@ -23,7 +23,7 @@ export default async function() {
         Equals("Prop 0 value", props[0].NominalValue.value, "300x300");
     });
 
-    await WithIFCFileLoaded("all_properties_test", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
+    await WithIFCFileLoaded("all_propertysets", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
 
         // grab all propertyset lines in the file
         let lines = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCPROPERTYSET);
@@ -42,5 +42,48 @@ export default async function() {
         }
 
         Equals("num props", numPropsCount, 1061);
+    });
+
+    await WithIFCFileLoaded("properties_for_element", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
+
+        // IFCWall
+        let elementID = 2186;
+
+        // grab all propertyset lines in the file
+        let lines = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCRELDEFINESBYPROPERTIES);
+
+        let propSetIds = [];
+        for (let i = 0; i < lines.size(); i++)
+        {
+            let relID = lines.get(i);
+            let rel = ifcapi.GetLine(modelID, relID) as WebIFC.IfcRelDefinesByProperties;
+            let foundElement = false;
+            rel.RelatedObjects.forEach((relID) => {
+                if (relID.value === elementID)
+                {
+                    foundElement = true;
+                }
+            })
+
+            if (foundElement)
+            {
+                propSetIds.push(rel.RelatingPropertyDefinition.value);
+            }
+        }
+
+        // count number of properties
+        let propsets = propSetIds.map(id => ifcapi.GetLine(modelID, id, true));
+
+        Equals("num propsets", propsets.length, 5);
+
+        let props = [];
+        propsets.forEach((set) => {
+            set.HasProperties.forEach(p => {
+                console.log(`${set.Name.value}/${p.Name.value}: [${p.NominalValue.label}] ${p.NominalValue.value}`);
+                props.push(p);
+            });
+        });
+
+        Equals("num props", props.length, 9);
     });
 }
