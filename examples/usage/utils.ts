@@ -11,7 +11,7 @@ export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: Web
     console.log("Start " + chalk.green(`${name}`));
 
     console.log = function() {
-        clog.apply(this, [`[${name}]: `, ...arguments]);
+        clog.apply(this, [chalk.gray(`[${name}]:`), ...arguments]);
     }
     const ifcData = fs.readFileSync(FILE_NAME);
 
