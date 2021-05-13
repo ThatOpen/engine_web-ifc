@@ -1,5 +1,6 @@
 
-import * as WebIFC from "../../dist/web-ifc-api-node.js";
+import * as WebIFC from "../../dist/web-ifc-api-node.js"; // use this line for local build
+// import * as WebIFC from "web-ifc"; // use this line for package build
 const fs = require("fs");
 
 console.log("Hello web-ifc-node!");
@@ -20,7 +21,7 @@ async function LoadFile(filename)
 
     let propertySetFlattened = ifcapi.GetLine(modelID, 244, true);
     console.log(JSON.stringify(propertySetFlattened, null, 4));
-    propertySetFlattened.HasProperties[0].Description = { type: 1, value: "New description" };
+   // propertySetFlattened.HasProperties[0].Description = { type: 1, value: "New description" };
     ifcapi.WriteLine(modelID, propertySetFlattened);
     let start = WebIFC.ms();
     for (let i = 0; i < lines.size(); i++)
@@ -80,4 +81,4 @@ async function LoadFile(filename)
 }
 
 let f = "D:/web-ifc/benchmark/ifcfiles/rac_advanced_sample_project.ifc";
-LoadFile("../example.ifc");
+LoadFile(f);
