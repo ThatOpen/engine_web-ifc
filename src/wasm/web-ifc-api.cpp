@@ -44,22 +44,15 @@ void WriteFile(const std::string& filename, const std::string& contents)
 
 int OpenModel(std::string filename)
 {
-    std::cout << "Loading: " << filename << std::endl;
-
     uint32_t modelID = loaders.size();
     std::string contents = ReadFile("filename");
     
-    std::cout << "Read " << std::endl;
-
     webifc::IfcLoader loader;
     loaders.push_back(loader);
-    std::cout << "Loading " << std::endl;
     auto start = webifc::ms();
     loaders[modelID].LoadFile(contents);
     auto end = webifc::ms() - start;
     geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
-
-    std::cout << "Loaded " << loaders[modelID].GetNumLines() << " lines in " << end << " ms!" << std::endl;
 
     return modelID;
 }

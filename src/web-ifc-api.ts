@@ -89,7 +89,6 @@ export class IfcAPI
     OpenModel(filename: string, data: string | Uint8Array): number
     {
         this.wasmModule['FS_createDataFile']('/', "filename", data, true, true, true);
-        console.log("Wrote file");
         let result = this.wasmModule.OpenModel(filename);
         this.wasmModule['FS_unlink']("/filename");
         return result;
@@ -98,7 +97,6 @@ export class IfcAPI
     ExportFileAsIFC(modelID: number): Uint8Array
     {
         this.wasmModule.ExportFileAsIFC(modelID);
-        console.log("Exported file");
         //@ts-ignore
         let result = this.fs.readFile("/export.ifc");
         this.wasmModule['FS_unlink']("/export.ifc");

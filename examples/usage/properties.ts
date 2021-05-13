@@ -49,6 +49,9 @@ export default async function() {
         // IFCWall
         let elementID = 2186;
 
+        let element = ifcapi.GetLine(modelID, elementID);
+        console.log(`Listing properties for element: ${element.GlobalId.value}`);
+
         // grab all propertyset lines in the file
         let lines = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCRELDEFINESBYPROPERTIES);
 
