@@ -130,6 +130,43 @@ export class IfcAPI
 
     WriteLine(modelID: number, lineObject: any)
     {
+        // this is pretty weakly-typed nonsense
+        Object.keys(lineObject).forEach(propertyName => {
+            let property = lineObject[propertyName];
+            if (property && property.expressID !== undefined)
+            {
+                // this is a real object, we have to write it as well and convert to a handle
+                // TODO: detect if the object needs to be written at all, or if it's unchanged
+                this.WriteLine(modelID, property);
+
+                // overwrite the reference 
+                // NOTE: this modifies the parameter
+                lineObject[propertyName] = {
+                    type: 5,
+                    value: property.expressID
+                }
+            }
+            else if (Array.isArray(property) && property.length > 0)
+            {
+                for (let i = 0; i < property.length; i++)
+                {
+                    if (property[i].expressID !== undefined)
+                    {
+                        // this is a real object, we have to write it as well and convert to a handle
+                        // TODO: detect if the object needs to be written at all, or if it's unchanged
+                        this.WriteLine(modelID, property[i]);
+        
+                        // overwrite the reference 
+                        // NOTE: this modifies the parameter
+                        lineObject[propertyName][i] = {
+                            type: 5,
+                            value: property[i].expressID
+                        }
+                    }
+                }
+            }
+        });
+
         let rawLineData: RawLineData = {
             ID: lineObject.expressID,
             type: lineObject.type,

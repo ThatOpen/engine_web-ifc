@@ -20,6 +20,8 @@ async function LoadFile(filename)
 
     let propertySetFlattened = ifcapi.GetLine(modelID, 244, true);
     console.log(JSON.stringify(propertySetFlattened, null, 4));
+    propertySetFlattened.HasProperties[0].Description = { type: 1, value: "New description" };
+    ifcapi.WriteLine(modelID, propertySetFlattened);
     let start = WebIFC.ms();
     for (let i = 0; i < lines.size(); i++)
     {
