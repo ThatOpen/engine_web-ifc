@@ -21,8 +21,8 @@
     "gen-schema": "cd src/schema && node gen.js",
     "setup-env": "emsdk_env",
     "init-repo": "git clone https://github.com/g-truc/glm ./src/wasm/deps/glm && git clone https://github.com/mapbox/earcut.hpp ./src/wasm/deps/earcut && git clone https://github.com/executionunit/csgjs-cpp ./src/wasm/deps/scgjs-cpp && npm run gen-schema",
-    "build-release": "npm run build-wasm-release && npm run build-api",
-    "build-debug": "npm run build-wasm-debug && npm run build-api",
+    "build-release": "npm run build-wasm-release && npm run build-api && npm run add-wasm-path",
+    "build-debug": "npm run build-wasm-debug && npm run build-api && npm run add-wasm-path",
     "release_publish": "npm run build-release && cd dist && npm publish",
       
     "build-wasm-debug": "em++ --bind -O3 -g4 -std=c++17 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -O3 -o dist/web-ifc.js",
@@ -37,6 +37,7 @@
     "build-viewer": "npm run bundle-viewer && npm run copy-wasm-viewer",
     "bundle-viewer": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./examples/viewer/web-ifc-viewer.js",
     "copy-wasm-viewer": "cpy dist/web-ifc.wasm examples/viewer",
+    "add-wasm-path": "node src/utils/add-wasm-path.js",
     "serve-viewer": "serve examples/viewer",
     "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\""
   },

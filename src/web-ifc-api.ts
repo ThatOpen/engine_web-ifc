@@ -143,4 +143,9 @@ export class IfcAPI
     {
         return this.wasmModule.LoadAllGeometry(modelID);
     }
+
+    SetWasmPath(path: string){
+        //@ts-ignore
+        WasmPath = path;
+    }
 }
