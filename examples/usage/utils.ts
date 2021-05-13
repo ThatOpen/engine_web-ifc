@@ -21,11 +21,13 @@ export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: Web
 
     let modelID = ifcapi.OpenModel(FILE_NAME, new Uint8Array(ifcData));
 
+    let startTime = WebIFC.ms();
     usageExample(ifcapi, modelID);
+    let endTime = WebIFC.ms();
 
     console.log = clog;
     
-    console.log("End " + chalk.green(`${name}`));
+    console.log("End " + chalk.green(`${name}`) + chalk.yellow(` (${endTime - startTime} ms elapsed)`));
     
     ifcapi.CloseModel(modelID);
 }
