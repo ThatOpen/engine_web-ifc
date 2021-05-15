@@ -265,9 +265,9 @@ elements.forEach((entity) => {
 
 
 buffer.push(`export class Handle<T> {`);
-buffer.push(`\texpressID: number;`);
-buffer.push(`\tconstructor(id: number) { this.expressID = id; }`);
-buffer.push(`\ttoTape(args: any[]){ args.push({ type: 5, expressID: this.expressID }); }`);
+buffer.push(`\tvalue: number;`);
+buffer.push(`\tconstructor(id: number) { this.value = id; }`);
+buffer.push(`\ttoTape(args: any[]){ args.push({ type: 5, value: this.value }); }`);
 buffer.push(`}`);
 buffer.push(``);
 //buffer.push(`export function Write<T>(obj: T): Handle<T> { return { expressID: 0 }; }`);
@@ -292,7 +292,17 @@ types.forEach((type) => {
     else if (type.isSelect)
     {
         buffer.push(`export type ${type.name} = `);
-        buffer.push(type.values.map((v) => `|${v}`).join("\n"));
+        type.values.forEach(type => {
+            let isType: Type = tmap[type];
+            if (isType)
+            {
+                buffer.push(`| ${type}`);
+            }
+            else
+            {
+                buffer.push(`| (Handle<${type}> | ${type})`);
+            }
+        });
         buffer.push(`;`);
     }
     else if (type.isEnum)
@@ -345,7 +355,7 @@ elements.forEach((entity) => {
     let params: Param[] = [];
     entity.derivedProps.forEach((prop) => {
         let isType: Type = tmap[prop.type];
-        let propType = `${(isType || prop.primitive) ? prop.type : "Handle<" + prop.type + ">" }${prop.set ? "[]" : ""} ${prop.optional ? "| null" : ""}`;
+        let propType = `${(isType || prop.primitive) ? prop.type : "(Handle<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${prop.optional ? "| null" : ""}`;
         params.push({ name: prop.name, type: propType, prop, isType });
     });
 

@@ -1,4 +1,5 @@
 import * as WebIFC from "../../dist/web-ifc-api-node.js";
+import { IfcObjectDefinition, IfcPropertySetDefinition } from "../../dist/web-ifc-api-node.js";
 import { Equals, WithIFCFileLoaded } from "./utils";
 
 export default async function() {
@@ -61,7 +62,7 @@ export default async function() {
             let relID = lines.get(i);
             let rel = ifcapi.GetLine(modelID, relID) as WebIFC.IfcRelDefinesByProperties;
             let foundElement = false;
-            rel.RelatedObjects.forEach((relID) => {
+            rel.RelatedObjects.forEach((relID: WebIFC.Handle<IfcObjectDefinition>) => {
                 if (relID.value === elementID)
                 {
                     foundElement = true;
@@ -70,7 +71,11 @@ export default async function() {
 
             if (foundElement)
             {
-                propSetIds.push(rel.RelatingPropertyDefinition.value);
+                if (!Array.isArray(rel.RelatingPropertyDefinition))
+                {
+                    let handle = rel.RelatingPropertyDefinition as WebIFC.Handle<IfcPropertySetDefinition>;
+                    propSetIds.push(handle.value);
+                }
             }
         }
 
