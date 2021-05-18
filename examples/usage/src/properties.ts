@@ -1,9 +1,9 @@
-import * as WebIFC from "../../dist/web-ifc-api-node.js";
-import { IfcObjectDefinition, IfcPropertySetDefinition } from "../../dist/web-ifc-api-node.js";
-import { Equals, WithIFCFileLoaded } from "./utils";
+import * as WebIFC from "../../../dist/web-ifc-api-node.js";
+import { IfcObjectDefinition, IfcPropertySetDefinition } from "../../../dist/web-ifc-api-node.js";
+import { Equals, WithIFCFileLoaded, TestInfo } from "./utils";
 
 export default async function() {
-    await WithIFCFileLoaded("single_propertyset", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
+    await WithIFCFileLoaded("single_propertyset", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
 
         // this returns a propertyset object at line number 244
         let propertySetFlattened = ifcapi.GetLine(modelID, 244, true) as WebIFC.IfcPropertySet;
@@ -24,7 +24,7 @@ export default async function() {
         Equals("Prop 0 value", props[0].NominalValue.value, "300x300");
     });
 
-    await WithIFCFileLoaded("all_propertysets", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
+    await WithIFCFileLoaded("all_propertysets", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
 
         // grab all propertyset lines in the file
         let lines = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCPROPERTYSET);
@@ -45,7 +45,7 @@ export default async function() {
         Equals("num props", numPropsCount, 1061);
     });
 
-    await WithIFCFileLoaded("properties_for_element", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
+    await WithIFCFileLoaded("properties_for_element", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
 
         // IFCWall
         let elementID = 2186;

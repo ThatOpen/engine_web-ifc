@@ -1,4 +1,4 @@
-import * as WebIFC from "../../dist/web-ifc-api-node.js";
+import * as WebIFC from "../../../dist/web-ifc-api-node.js";
 import chalk from 'chalk';
 import fs from "fs";
 
@@ -6,7 +6,12 @@ const FILE_NAME = "../example.ifc";
 
 let clog = console.log.bind(console);
 
-export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: WebIFC.IfcAPI, modelID: number) => void)
+export interface TestInfo
+{
+    rawFileData: Uint8Array;    
+}
+
+export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => void)
 {
     console.log("Start " + chalk.green(`${name}`));
 
@@ -19,10 +24,14 @@ export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: Web
     const ifcapi = new WebIFC.IfcAPI();
     await ifcapi.Init();
 
-    let modelID = ifcapi.OpenModel(FILE_NAME, new Uint8Array(ifcData));
+    let info: TestInfo = {
+        rawFileData: new Uint8Array(ifcData)
+    };
+
+    let modelID = ifcapi.OpenModel(FILE_NAME, info.rawFileData);
 
     let startTime = WebIFC.ms();
-    usageExample(ifcapi, modelID);
+    usageExample(ifcapi, modelID, info);
     let endTime = WebIFC.ms();
 
     console.log = clog;
