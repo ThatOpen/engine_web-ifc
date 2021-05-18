@@ -3,7 +3,8 @@
     "target": "es6",
     "outDir": "dist",
     "moduleResolution" : "node",
-    "declaration": true
+    "declaration": true,
+    "strictNullChecks": true
   },
   "files": [
     "src/web-ifc-api.ts"

@@ -36,24 +36,23 @@ std::string ReadFile(const std::string& filename)
     return buffer;
 }
 
+void WriteFile(const std::string& filename, const std::string& contents)
+{
+    std::ofstream t("/" + filename);
+    t << contents;
+}
+
 int OpenModel(std::string filename)
 {
-    std::cout << "Loading: " << filename << std::endl;
-
     uint32_t modelID = loaders.size();
     std::string contents = ReadFile("filename");
     
-    std::cout << "Read " << std::endl;
-
     webifc::IfcLoader loader;
     loaders.push_back(loader);
-    std::cout << "Loading " << std::endl;
     auto start = webifc::ms();
     loaders[modelID].LoadFile(contents);
     auto end = webifc::ms() - start;
     geomLoaders.push_back(webifc::IfcGeometryLoader(loaders[modelID]));
-
-    std::cout << "Loaded " << loaders[modelID].GetNumLines() << " lines in " << end << " ms!" << std::endl;
 
     return modelID;
 }
@@ -131,6 +130,209 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
     return expressIDs;
 }
 
+std::vector<uint32_t> GetAllLines(uint32_t modelID)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+    std::vector<uint32_t> expressIDs;
+    auto numLines = loader.GetNumLines();
+    for (int i = 0; i < numLines; i++)
+    {
+        expressIDs.push_back(loader.GetLine(i).expressID);
+    }
+    return expressIDs;
+}
+
+void ExportFileAsIFC(uint32_t modelID)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+    std::string exportData = loader.DumpAsIFC();
+    WriteFile("export.ifc", exportData);
+    std::cout << "Exported" << std::endl;
+}
+
+template<uint32_t N>
+void WriteValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t, emscripten::val value)
+{
+    switch (t)
+    {
+    case webifc::IfcTokenType::STRING:
+    case webifc::IfcTokenType::ENUM:
+    {
+        std::string copy = value.as<std::string>();
+
+        uint8_t length = copy.size();
+        tape.push(length);
+        tape.push((void*)copy.c_str(), copy.size());
+
+        break;
+    }
+    case webifc::IfcTokenType::REF:
+    {
+        uint32_t val = value.as<uint32_t>();
+        tape.push(&val, sizeof(uint32_t));
+
+        break;
+    }
+    case webifc::IfcTokenType::REAL:
+    {
+        double val = value.as<double>();
+        tape.push(&val, sizeof(double));
+
+        break;
+    }
+    default:
+        // use undefined to signal val parse issue
+        tape.push('?');
+    }
+}
+
+void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
+{
+    _tape.push(webifc::IfcTokenType::SET_BEGIN);
+
+    uint32_t size = val["length"].as<uint32_t>();
+    int index = 0;
+    while (true && index < size)
+    {
+        emscripten::val child = val[std::to_string(index)];
+        if (child.isArray())
+        {
+            WriteSet(_tape, child);
+        }
+        else if (child.isNull())
+        {
+            _tape.push(webifc::IfcTokenType::EMPTY);
+        }
+        else if (child.isUndefined())
+        {
+            // nothing to do here, possibly mismatch in ifc spec!
+            index++;
+            continue;
+        }
+        else if (child["type"].isNumber())
+        {
+            webifc::IfcTokenType type = static_cast<webifc::IfcTokenType>(child["type"].as<uint32_t>());
+            _tape.push(type);
+            switch(type)
+            {
+                case webifc::IfcTokenType::LINE_END:
+                case webifc::IfcTokenType::EMPTY:
+                case webifc::IfcTokenType::SET_BEGIN:
+                case webifc::IfcTokenType::SET_END:
+                {
+                    // ignore, we should not be seeing this
+                    break;
+                }
+                case webifc::IfcTokenType::UNKNOWN:
+                {
+                    // ignore, already pushed above, no further data
+                    break;
+                }
+                case webifc::IfcTokenType::LABEL:
+                {
+                    auto label = child["label"];
+                    auto valueType = static_cast<webifc::IfcTokenType>(child["valueType"].as<uint32_t>());
+                    auto value = child["value"];
+
+                    std::string copy = label.as<std::string>();
+
+                    uint8_t length = copy.size();
+                    _tape.push(length);
+                    _tape.push((void*)copy.c_str(), copy.size());
+
+                    _tape.push(webifc::IfcTokenType::SET_BEGIN);
+
+                    _tape.push(valueType);
+                    WriteValue(_tape, valueType, value);
+
+                    _tape.push(webifc::IfcTokenType::SET_END);
+
+                    break;
+                }
+                case webifc::IfcTokenType::STRING:
+                case webifc::IfcTokenType::ENUM:
+                case webifc::IfcTokenType::REF:
+                case webifc::IfcTokenType::REAL:
+                {
+                    WriteValue(_tape, type, child["value"]);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            std::cout << "Error in writeline: unknown object received" << std::endl;
+        }
+
+        index++;
+    }
+
+    _tape.push(webifc::IfcTokenType::SET_END);
+}
+
+void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
+{
+    webifc::IfcLoader& loader = loaders[modelID];
+    auto& _tape = loader.GetTape();
+
+    _tape.SetWriteAtEnd();
+
+    uint32_t start = _tape.GetTotalSize();
+
+    // line ID
+    _tape.push(webifc::IfcTokenType::REF);
+    _tape.push(&expressID, sizeof(uint32_t));
+
+    // line TYPE
+    const char* ifcName = GetReadableNameFromTypeCode(type);
+    _tape.push(webifc::IfcTokenType::LABEL);
+    uint8_t length = strlen(ifcName);
+    _tape.push(length);
+    _tape.push((void*)ifcName, length);
+
+    WriteSet(_tape, parameters);
+
+    // end line
+    _tape.push(webifc::IfcTokenType::LINE_END);
+
+    uint32_t end = _tape.GetTotalSize();
+
+    loader.UpdateLineTape(expressID, start, end);
+}
+
+template<uint32_t N>
+emscripten::val ReadValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t)
+{
+    switch (t)
+    {
+    case webifc::IfcTokenType::STRING:
+    case webifc::IfcTokenType::ENUM:
+    {
+        webifc::StringView view = tape.ReadStringView();
+        std::string copy(view.data, view.len);
+
+        return emscripten::val(copy);
+    }
+    case webifc::IfcTokenType::REAL:
+    {
+        double d = tape.template Read<double>();
+
+        return emscripten::val(d);
+    }
+    case webifc::IfcTokenType::REF:
+    {
+        uint32_t ref = tape.template Read<uint32_t>();
+
+        return emscripten::val(ref);
+    }
+    default:
+        // use undefined to signal val parse issue
+        return emscripten::val::undefined();
+    }
+}
+
 emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 {
     webifc::IfcLoader& loader = loaders[modelID];
@@ -164,6 +366,14 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
             break;
         }
         case webifc::IfcTokenType::UNKNOWN:
+        {
+            auto obj = emscripten::val::object(); 
+            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::UNKNOWN))); 
+
+            topValue.set(topPosition++, obj);
+            
+            break;
+        }
         case webifc::IfcTokenType::EMPTY:
         {
             topValue.set(topPosition++, emscripten::val::null());
@@ -199,29 +409,41 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 
             break;
         }
-        case webifc::IfcTokenType::STRING:
-        case webifc::IfcTokenType::ENUM:
+        case webifc::IfcTokenType::LABEL:
         {
+            // read label
             webifc::StringView view = _tape.ReadStringView();
             std::string copy(view.data, view.len);
 
-            topValue.set(topPosition++, emscripten::val(copy));
+            auto obj = emscripten::val::object(); 
+            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::LABEL)));
+            obj.set("label", emscripten::val(copy));
+
+            // read set open
+            _tape.Read<char>();
+            
+            // read value following label
+            webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+            obj.set("valueType", emscripten::val(static_cast<uint32_t>(t)));
+            obj.set("value", ReadValue(_tape, t));
+
+            // read set close
+            _tape.Read<char>();
+
+            topValue.set(topPosition++, obj);
 
             break;
         }
+        case webifc::IfcTokenType::STRING:
+        case webifc::IfcTokenType::ENUM:
+        case webifc::IfcTokenType::REAL:
         case webifc::IfcTokenType::REF:
         {
-            uint32_t ref = _tape.Read<uint32_t>();
-            
-            topValue.set(topPosition++, emscripten::val(ref));
+            auto obj = emscripten::val::object(); 
+            obj.set("type", emscripten::val(static_cast<uint32_t>(t)));
+            obj.set("value", ReadValue(_tape, t));
 
-            break;
-        }
-        case webifc::IfcTokenType::REAL:
-        {
-            double d = _tape.Read<double>();
-
-            topValue.set(topPosition++, emscripten::val(d));
+            topValue.set(topPosition++, obj);
 
             break;
         }
@@ -302,6 +524,9 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetLine", &GetLine);
+    emscripten::function("WriteLine", &WriteLine);
+    emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
+    emscripten::function("GetAllLines", &GetAllLines);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
 }

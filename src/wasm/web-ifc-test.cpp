@@ -167,6 +167,10 @@ int main()
 
     auto start = webifc::ms();
     loader.LoadFile(content);
+
+    std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
+    outputStream << loader.DumpAsIFC();
+    exit(0);
     auto time = webifc::ms() - start;
 
     std::cout << "Reading took " << time << "ms" << std::endl;

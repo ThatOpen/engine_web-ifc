@@ -1,0 +1,5 @@
+node_modules
+*.log
+*.js
+output.json
+*.wasm

@@ -11,6 +11,8 @@
 #include <chrono>
 #include <algorithm>
 #include <set>
+#include <iomanip>
+#include <sstream>
 
 #include "ifc2x4.h"
 #include "util.h"
@@ -399,6 +401,7 @@ namespace webifc
 					break;
 				case IfcTokenType::STRING:
 				case IfcTokenType::ENUM:
+				case IfcTokenType::LABEL:
 				{
 					uint8_t length = _tape.Read<uint8_t>();
 					_tape.AdvanceRead(length);
@@ -484,6 +487,16 @@ namespace webifc
 			_tape.Reverse();
 		}
 
+		inline void UpdateLineTape(uint32_t expressID, uint32_t start, uint32_t end)
+		{
+			uint64_t pos = _tape.GetTotalSize();
+			auto lineID = _metaData.expressIDToLine[expressID];
+			auto& line = _metaData.lines[lineID];
+
+			line.tapeOffset = start;
+			line.tapeEnd = end;
+		}
+
 		inline std::vector<uint32_t> GetSetArgument()
 		{
 			std::vector<uint32_t> tapeOffsets;
@@ -519,6 +532,11 @@ namespace webifc
 						uint8_t length = _tape.Read<uint8_t>();
 						_tape.AdvanceRead(length);
 					}
+					else if (t == IfcTokenType::LABEL)
+					{
+						uint8_t length = _tape.Read<uint8_t>();
+						_tape.AdvanceRead(length);
+					}
 					else
 					{
 						assert(false);
@@ -534,9 +552,148 @@ namespace webifc
 			return tapeOffsets;
 		}
 
+		std::string DumpAsIFC()
+		{
+            std::stringstream file;
+			file << std::setprecision(std::numeric_limits<double>::digits10 + 1);
+
+			std::string description = "no description";
+			std::string name = "no name";
+
+			file << "ISO-10303-21;" << std::endl;
+			file << "HEADER;" << std::endl;
+			file << "FILE_DESCRIPTION(('" << description << "), '2;1');" << std::endl;
+			file << "FILE_NAME('" << name << "', '', (''), (''), 'web-ifc-export');" << std::endl;
+			file << "FILE_SCHEMA(('IFC2X3'));" << std::endl;
+			file << "ENDSEC;" << std::endl;
+			file << "DATA;" << std::endl;
+
+			for (auto& line : _metaData.lines)
+			{
+				_tape.MoveTo(line.tapeOffset);
+				bool newLine = true;
+				bool insideSet = false;
+				IfcTokenType prev = IfcTokenType::EMPTY;
+				while (!_tape.AtEnd())
+				{
+					IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
+
+					if (t != IfcTokenType::SET_END && t != IfcTokenType::LINE_END)
+					{
+						if (insideSet && prev != IfcTokenType::SET_BEGIN && prev != IfcTokenType::LABEL && prev != IfcTokenType::LINE_END)
+						{
+							file << ",";
+						}
+					}
+
+					if (t == IfcTokenType::LINE_END)
+					{
+						file << ";" << std::endl;
+						break;
+					}
+
+					switch (t)
+					{
+					case IfcTokenType::UNKNOWN:
+					{
+						file << "*";
+
+						break;
+					}
+					case IfcTokenType::EMPTY:
+					{
+						file << "$";
+
+						break;
+					}
+					case IfcTokenType::SET_BEGIN:
+					{
+						file << "(";
+
+						insideSet = true;
+
+						break;
+					}
+					case IfcTokenType::SET_END:
+					{
+						file << ")";
+
+						break;
+					}
+					case IfcTokenType::STRING:
+					{
+						StringView view = _tape.ReadStringView();
+						std::string copy(view.data, view.len);
+
+						file << "'" << copy << "'";
+
+						break;
+					}
+					case IfcTokenType::ENUM:
+					{
+						StringView view = _tape.ReadStringView();
+						std::string copy(view.data, view.len);
+
+						file << "." << copy << ".";
+
+						break;
+					}
+					case IfcTokenType::LABEL:
+					{
+						StringView view = _tape.ReadStringView();
+						std::string copy(view.data, view.len);
+
+						file << copy;
+
+						break;
+					}
+					case IfcTokenType::REF:
+					{
+						uint32_t ref = _tape.Read<uint32_t>();
+
+						file << "#" << ref;
+
+						if (newLine)
+						{
+							file << "=";
+						}
+
+						break;
+					}
+					case IfcTokenType::REAL:
+					{
+						double d = _tape.Read<double>();
+
+						file << d;
+
+						break;
+					}
+					default:
+						break;
+					}
+
+					if (t == IfcTokenType::LINE_END)
+					{
+						newLine = true;
+						insideSet = false;
+					}
+					else
+					{
+						newLine = false;
+					}
+
+					prev = t;
+				}
+			}
+
+			file << "ENDSEC;" << std::endl << "END-ISO-10303-21;";
+
+            return file.str();
+		}
+
 	private:
         bool _open = false;
-		webifc::DynamicTape<TAPE_SIZE> _tape; // 16mb chunked tape
+		DynamicTape<TAPE_SIZE> _tape; // 16mb chunked tape
 
         IfcMetaData _metaData;
 	};

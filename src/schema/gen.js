@@ -76,6 +76,20 @@ cppHeader.push("\t};");
 
 cppHeader.push("};");
 
+cppHeader.push("\tconst char* GetReadableNameFromTypeCode(unsigned int ifcCode) {");
+cppHeader.push("\t\tswitch(ifcCode) {");
+
+Object.keys(entities).forEach(element => {
+    let name = element.toUpperCase();
+    let code = crc32(name);
+    cppHeader.push(`\t\t\tcase ${code}: return "${name}";`);
+});
+
+cppHeader.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
+
+cppHeader.push("\t\t}");
+cppHeader.push("\t}");
+
 tsHeader.push("");
 tsHeader.push("export const IfcElements = [");
 tsHeader.push(Object.keys(elements).map(element => {
@@ -88,3 +102,5 @@ tsHeader.push("];");
 
 fs.writeFileSync("../wasm/include/ifc2x4.h", cppHeader.join("\n")); 
 fs.writeFileSync("../ifc2x4.ts", tsHeader.join("\n")); 
+
+console.log(`Done!`);

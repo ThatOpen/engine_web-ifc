@@ -50,8 +50,6 @@ namespace webifc
 		{
 			makeCRCTable();
 
-			std::cout << "Tape " << _tape.GetTotalSize() << std::endl;
-
 			uint32_t maxExpressId = 0;
 			uint32_t lineStart = 0;
 			uint32_t currentIfcType = 0;
@@ -95,6 +93,12 @@ namespace webifc
 				{
 					StringView s = _tape.ReadStringView();
 
+					break;
+				}
+				case IfcTokenType::LABEL:
+				{
+					StringView s = _tape.ReadStringView();
+
 					if (currentIfcType == 0)
 					{
 						currentIfcType = crc32Simple(s.data, s.len);
@@ -121,9 +125,6 @@ namespace webifc
 					break;
 				}
 			}
-
-			std::cout << "Lines normal " << _metaData.lines.size() << std::endl;
-			std::cout << "Max express ID " << maxExpressId << std::endl;
 
 			_metaData.expressIDToLine.resize(maxExpressId + 1);
 

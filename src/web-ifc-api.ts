@@ -3,6 +3,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 const WebIFCWasm = require("./web-ifc");
+export * from "./ifc2x4";
+import * as ifc2x4helper from "./ifc2x4_helper";
+export * from "./ifc2x4_helper";
+
+export const UNKNOWN = 0;
+export const STRING = 1;
+export const LABEL = 2;
+export const ENUM = 3;
+export const REAL = 4;
+export const REF = 5;
+export const EMPTY = 6;
+export const SET_BEGIN = 7;
+export const SET_END = 8;
+export const LINE_END = 9;
  
 export interface Vector<T> {
     get(index: number): T;
@@ -27,6 +41,12 @@ export interface FlatMesh {
     expressID: number;
 }
 
+export interface RawLineData {
+    ID: number;
+    type: number;
+    arguments: any[];
+}
+
 export interface IfcGeometry
 {
     GetVertexData(): number;
@@ -41,7 +61,8 @@ export function ms() {
 
 export class IfcAPI
 {
-    wasmModule = undefined;
+    wasmModule: undefined | any = undefined;
+    fs: undefined | any = undefined;
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality
@@ -52,6 +73,7 @@ export class IfcAPI
         {
             //@ts-ignore
             this.wasmModule = await WebIFCWasm({noInitialRun: true});
+            this.fs = this.wasmModule.FS;
         }
         else
         {
@@ -67,11 +89,20 @@ export class IfcAPI
     OpenModel(filename: string, data: string | Uint8Array): number
     {
         this.wasmModule['FS_createDataFile']('/', "filename", data, true, true, true);
-        console.log("Wrote file");
         let result = this.wasmModule.OpenModel(filename);
         this.wasmModule['FS_unlink']("/filename");
         return result;
     }
+
+    ExportFileAsIFC(modelID: number): Uint8Array
+    {
+        this.wasmModule.ExportFileAsIFC(modelID);
+        //@ts-ignore
+        let result = this.fs.readFile("/export.ifc");
+        this.wasmModule['FS_unlink']("/export.ifc");
+        return result;
+    }
+
 
     /**  
      * Opens a model and returns a modelID number
@@ -83,14 +114,102 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
-    GetLine(modelID: number, expressID: number)
+    GetLine(modelID: number, expressID: number, flatten: boolean = false)
     {
-        return this.wasmModule.GetLine(modelID, expressID);
+        let rawLineData = this.GetRawLineData(modelID, expressID);
+        let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        if (flatten)
+        {
+            this.FlattenLine(modelID, lineData);
+        }
+
+        return lineData;
+    }
+
+    WriteLine(modelID: number, lineObject: any)
+    {
+        // this is pretty weakly-typed nonsense
+        Object.keys(lineObject).forEach(propertyName => {
+            let property = lineObject[propertyName];
+            if (property && property.expressID !== undefined)
+            {
+                // this is a real object, we have to write it as well and convert to a handle
+                // TODO: detect if the object needs to be written at all, or if it's unchanged
+                this.WriteLine(modelID, property);
+
+                // overwrite the reference 
+                // NOTE: this modifies the parameter
+                lineObject[propertyName] = {
+                    type: 5,
+                    value: property.expressID
+                }
+            }
+            else if (Array.isArray(property) && property.length > 0)
+            {
+                for (let i = 0; i < property.length; i++)
+                {
+                    if (property[i].expressID !== undefined)
+                    {
+                        // this is a real object, we have to write it as well and convert to a handle
+                        // TODO: detect if the object needs to be written at all, or if it's unchanged
+                        this.WriteLine(modelID, property[i]);
+        
+                        // overwrite the reference 
+                        // NOTE: this modifies the parameter
+                        lineObject[propertyName][i] = {
+                            type: 5,
+                            value: property[i].expressID
+                        }
+                    }
+                }
+            }
+        });
+
+        let rawLineData: RawLineData = {
+            ID: lineObject.expressID,
+            type: lineObject.type,
+            arguments: lineObject.ToTape() as any[]
+        }
+
+        this.WriteRawLineData(modelID, rawLineData);
+    }
+
+    FlattenLine(modelID: number, line: any)
+    {
+        Object.keys(line).forEach(propertyName => {
+            let property = line[propertyName];
+            if (property && property.type === 5)
+            {
+                line[propertyName] = this.GetLine(modelID, property.value, true);
+            }
+            else if (Array.isArray(property) && property.length > 0 && property[0].type === 5)
+            {
+                for (let i = 0; i < property.length; i++)
+                {
+                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
+                }
+            }
+        });
+    }
+
+    GetRawLineData(modelID: number, expressID: number): RawLineData
+    {
+        return this.wasmModule.GetLine(modelID, expressID) as RawLineData;
+    }
+
+    WriteRawLineData(modelID: number, data: RawLineData)
+    {
+        return this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
     }
 
     GetLineIDsWithType(modelID: number, type: number): Vector<number>
     {
         return this.wasmModule.GetLineIDsWithType(modelID, type);
+    }
+
+    GetAllLines(modelID: Number): Vector<number>
+    {
+        return this.wasmModule.GetAllLines(modelID);
     }
 
     SetGeometryTransformation(modelID: number, transformationMatrix: Array<number>)

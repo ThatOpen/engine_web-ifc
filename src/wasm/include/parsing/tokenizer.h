@@ -11,8 +11,9 @@ namespace webifc
 {
 	enum IfcTokenType : char
 	{
-		UNKNOWN,
+		UNKNOWN = 0,
 		STRING,
+        LABEL,
 		ENUM,
 		REAL,
 		REF,
@@ -124,10 +125,14 @@ namespace webifc
 
 					_tape.push(IfcTokenType::REF);
 					_tape.push(&num, sizeof(uint32_t));
-				} 
-				else if (c == '$' || c == '*')
+				}
+				else if (c == '$')
 				{
 					_tape.push(IfcTokenType::EMPTY);
+				}
+				else if (c == '*')
+				{
+					_tape.push(IfcTokenType::UNKNOWN);
 				}
 				else if (c == '(')
 				{
@@ -168,7 +173,7 @@ namespace webifc
 						pos++;
 					}
 
-					_tape.push(IfcTokenType::STRING);
+					_tape.push(IfcTokenType::LABEL);
 					uint8_t length = pos - start;
 					_tape.push(length);
 					_tape.push((void*)&buf[start], length);
