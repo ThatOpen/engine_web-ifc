@@ -542,8 +542,9 @@ namespace webifc
 					auto coordinatesRef = _loader.GetRefArgument();
 					auto points = ReadIfcCartesianPointList3D(coordinatesRef);
 
-					// second optional argument "closed" is ignored for now
+					// second optional argument closed, ignored
 
+					// indices
 					_loader.MoveToArgumentOffset(line, 2);
 					auto faces = _loader.GetSetArgument();
 
@@ -566,7 +567,56 @@ namespace webifc
 						std::cout << "Unsupported IFCPOLYGONALFACESET with PnIndex!" << std::endl;
 					}
 
-					DumpIfcGeometry(geom, L"test.obj");
+					mesh.transformation = glm::dmat4(1);
+					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
+					_expressIDToMesh[line.expressID] = mesh;
+					return mesh;
+				}
+				case ifc2x4::IFCTRIANGULATEDFACESET:
+				{
+					IfcComposedMesh mesh;
+					mesh.expressID = line.expressID;
+
+					_loader.MoveToArgumentOffset(line, 0);
+
+					auto coordinatesRef = _loader.GetRefArgument();
+					auto points = ReadIfcCartesianPointList3D(coordinatesRef);
+
+					// second argument normals, ignored
+					// third argument closed, ignored
+
+					// indices
+					_loader.MoveToArgumentOffset(line, 3);
+					auto indices = Read2DArrayOfThreeIndices();
+
+					IfcGeometry geom;
+
+
+					_loader.MoveToArgumentOffset(line, 4);
+					if (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
+					{
+						_loader.Reverse();
+						auto pnIndex = Read2DArrayOfThreeIndices();
+
+						// ignore
+						// std::cout << "Unsupported IFCTRIANGULATEDFACESET with PnIndex!" << std::endl;
+					}
+
+					for (int i = 0; i < indices.size(); i += 3)
+					{
+						int i1 = indices[i + 0] - 1;
+						int i2 = indices[i + 1] - 1;
+						int i3 = indices[i + 2] - 1;
+
+						geom.AddFace(points[i1], points[i2], points[i3]);
+					}
+
+					// DumpIfcGeometry(geom, L"test.obj");
 
 					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = geom;
@@ -676,6 +726,26 @@ namespace webifc
 			}
 
 			return IfcComposedMesh();
+		}
+
+		std::vector<uint32_t> Read2DArrayOfThreeIndices()
+		{
+			std::vector<uint32_t> result;
+
+			IfcTokenType t = _loader.GetTokenType();
+
+			// while we have point set begin
+			while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
+			{
+				result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+				result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+				result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+
+				// read point set end
+				_loader.GetTokenType();
+			}
+
+			return result;
 		}
 
 		std::vector<glm::dvec3> ReadIfcCartesianPointList3D(uint32_t expressID)
