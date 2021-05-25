@@ -64,6 +64,17 @@ namespace webifc
         return resultingMesh;
     }
 
+    IfcGeometry boolSubtract(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    {
+
+        IfcGeometry resultingMesh;
+
+        clipMesh(mesh1, mesh2, resultingMesh, true, false, false);
+        clipMesh(mesh2, mesh1, resultingMesh, false, true, false);
+
+        return resultingMesh;
+    }
+
     // TODO: I don't think XOR works right now...
     IfcGeometry boolXOR(IfcGeometry& mesh1, IfcGeometry& mesh2)
     {
