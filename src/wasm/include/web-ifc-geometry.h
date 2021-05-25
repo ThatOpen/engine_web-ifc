@@ -31,6 +31,10 @@ const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
 
 const bool DEBUG_DUMP_SVG = false;
 
+const int CIRCLE_SEGMENTS_LOW = 5;
+const int CIRCLE_SEGMENTS_MEDIUM = 8;
+const int CIRCLE_SEGMENTS_HIGH = 12;
+
 namespace webifc
 {
 	class IfcGeometryLoader
@@ -660,10 +664,8 @@ namespace webifc
 
 					IfcCurve<3> directrix = GetCurve<3>(directrixRef);
 
-					const int CIRCLE_SEGMENTS = 8;
-
 					IfcProfile profile;
-					profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS);
+					profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_MEDIUM);
 
 					IfcGeometry geom = Sweep(profile, directrix);
 
@@ -1501,9 +1503,7 @@ namespace webifc
 				
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				const int CIRCLE_SEGMENTS = 5;
-
-				profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS, placement);
+				profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_HIGH, placement);
 
 				return profile;
 			}
@@ -1864,8 +1864,6 @@ namespace webifc
 					placement = GetLocalPlacement(positionID);
 				}
 
-				const int CIRCLE_SEGMENTS = 10;
-
 				double startDegrees = 0;
 				double endDegrees = 360;
 
@@ -1888,9 +1886,11 @@ namespace webifc
 
 				size_t startIndex = curve.points.size();
 
-				for (int i = 0; i < CIRCLE_SEGMENTS; i++)
+				const int numSegments = CIRCLE_SEGMENTS_HIGH;
+
+				for (int i = 0; i < numSegments; i++)
 				{
-					double ratio = static_cast<double>(i) / ( CIRCLE_SEGMENTS - 1);
+					double ratio = static_cast<double>(i) / (numSegments - 1);
 					double angle = startRad + ratio * lengthRad;
 
 					glm::vec<DIM, glm::f64> pos;
@@ -1997,7 +1997,7 @@ namespace webifc
 			return point;
 		}
 
-		glm::dmat4 coordinationMatrix(1);
+		glm::dmat4 coordinationMatrix = glm::dmat4(1.0);
 		bool isCoordinated = false;
 		IfcLoader& _loader;
 		std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
