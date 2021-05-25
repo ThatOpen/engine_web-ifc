@@ -75,8 +75,17 @@ namespace webifc
 			{
 				IfcPlacedGeometry geometry;
 
+				if (!isCoordinated)
+				{
+					auto& geom = _expressIDToGeometry[composedMesh.expressID];
+					auto pt = geom.GetPoint(0);
+					auto transformedPt = newMatrix * glm::dvec4(pt, 1);
+					coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
+					isCoordinated = true;
+				}
+
 				geometry.color = newParentColor;
-				geometry.transformation = newMatrix;
+				geometry.transformation = coordinationMatrix * newMatrix;
 				geometry.SetFlatTransformation();
 				geometry.geometryExpressID = composedMesh.expressID;
 
@@ -1988,6 +1997,8 @@ namespace webifc
 			return point;
 		}
 
+		glm::dmat4 coordinationMatrix(1);
+		bool isCoordinated = false;
 		IfcLoader& _loader;
 		std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
 		std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
