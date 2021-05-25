@@ -372,13 +372,18 @@ namespace webifc
 		{
 			_tape.MoveTo(line.tapeOffset);
 
-			int movedOver = -3; // first is express id, second is express type, third is set begin
-			bool insideSet = false; // assume no nested sets
-			while (!(movedOver == argumentIndex && !insideSet))
+			int movedOver = -1;
+			int setDepth = 0;
+			while (true)
 			{
-				if (!insideSet)
+				if (setDepth == 1)
 				{
 					movedOver++;
+
+					if (movedOver == argumentIndex)
+					{
+						return;
+					}
 				}
 
 				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
@@ -394,10 +399,14 @@ namespace webifc
 				case IfcTokenType::EMPTY:
 					break;
 				case IfcTokenType::SET_BEGIN:
-					insideSet = movedOver != 0;
+					setDepth++;
 					break;
 				case IfcTokenType::SET_END:
-					insideSet = false;
+					setDepth--;
+					if (setDepth == 0)
+					{
+						return;
+					}
 					break;
 				case IfcTokenType::STRING:
 				case IfcTokenType::ENUM:
