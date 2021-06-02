@@ -238,6 +238,7 @@ namespace webifc
 
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry);
 
+					// TODO: this is inefficient, better make one-to-many subtraction in bool logic
 					for (auto relVoidExpressID : relVoidsIt->second)
 					{
 						IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
@@ -246,8 +247,22 @@ namespace webifc
 						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
 						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
 
-						// TODO: this is inefficient, better make one-to-many subtraction in bool logic
-						flatElementMesh = boolSubtract_CSGJSCPP(flatElementMesh, flatVoidMesh);
+						const bool USE_FAST_BOOLS = false;
+						if (USE_FAST_BOOLS)
+						{
+							IfcGeometry r1;
+							IfcGeometry r2;
+
+							intersectMeshMesh(flatElementMesh, flatVoidMesh, r1, r2);
+
+							flatElementMesh = boolSubtract(r1, r2);
+						}
+						else
+						{
+							flatElementMesh = boolSubtract_CSGJSCPP(flatElementMesh, flatVoidMesh);
+						}
+
+						// DumpIfcGeometry(flatElementMesh, L"res.obj");
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
@@ -1507,7 +1522,39 @@ namespace webifc
 
 				return profile;
 			}
+			case ifc2x4::IFCISHAPEPROFILEDEF:
+			{
+				IfcProfile profile;
 
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
+				profile.isConvex = true;
+
+				_loader.MoveToArgumentOffset(line, 2);
+				uint32_t placementID = _loader.GetRefArgument();
+
+				double width = _loader.GetDoubleArgument();
+				double depth = _loader.GetDoubleArgument();
+				double webThickness = _loader.GetDoubleArgument();
+				double flangeThickness = _loader.GetDoubleArgument();
+
+				// optional fillet
+				bool hasFillet = false;
+				double filletRadius = 0;
+				if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
+				{
+					_loader.Reverse();
+
+					hasFillet = true;
+					filletRadius = _loader.GetDoubleArgument();
+				}
+
+				glm::dmat3 placement = GetAxis2Placement2D(placementID);
+
+				profile.curve = GetIShapedCurve(width, depth, webThickness, flangeThickness, hasFillet, filletRadius, placement);
+
+				return profile;
+			}
 			default:
 				std::cout << "Unexpected profile type: " << line.ifcType << " at " << line.expressID << std::endl;
 				break;

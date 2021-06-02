@@ -284,6 +284,60 @@ namespace webifc
 
 		return c;
 	}
+
+	IfcCurve<2> GetIShapedCurve(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, double filletRadius, glm::dmat3 placement = glm::dmat3(1))
+	{
+		IfcCurve<2> c;
+
+		double hw = width / 2;
+		double hd = depth / 2;
+		double hweb = webThickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1)); // TL
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1)); // TR
+		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness, 1)); // TR knee
+
+		if (hasFillet)
+		{
+			// TODO: interpolate
+			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, +hd - flangeThickness, 1));// TR elbow start
+			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness - filletRadius, 1));// TR elbow end
+
+			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness + filletRadius, 1));// BR elbow start
+			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, -hd + flangeThickness, 1));// BR elbow end
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness, 1));// TR elbow 
+			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness, 1));// BR elbow 
+		}
+
+		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness, 1));// BR knee 
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));// BR
+
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));// BL
+		c.points.push_back(placement * glm::dvec3(-hw, -hd + flangeThickness, 1));// BL knee
+
+		if (hasFillet)
+		{
+			// TODO: interpolate
+			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, -hd + flangeThickness, 1));// BL elbow start
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness + filletRadius, 1));// BL elbow end
+
+			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness - filletRadius, 1));// TL elbow start
+			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, +hd - flangeThickness, 1));// TL elbow end
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness, 1));// BL elbow
+			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness, 1));// TL elbow
+		}
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd - flangeThickness, 1));// TL knee
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));// TL
+
+		return c;
+	}
 	
 	glm::dvec3 projectOntoPlane(const glm::dvec3& origin, const glm::dvec3& normal, const glm::dvec3& point, const glm::dvec3& dir)
 	{
@@ -826,7 +880,7 @@ namespace webifc
 	{
 		std::stringstream obj;
 
-		double scale = 1;
+		double scale = 1.0;
 
 		for (uint32_t i = 0; i < geom.numPoints; i++)
 		{
