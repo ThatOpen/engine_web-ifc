@@ -285,6 +285,27 @@ namespace webifc
 		return c;
 	}
 
+	IfcCurve<2> GetRectangleCurve(double xdim, double ydim, glm::dmat3 placement = glm::dmat3(1))
+	{
+		double halfX = xdim / 2;
+		double halfY = ydim / 2;
+
+		glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
+		glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
+
+		glm::dvec2 tl = placement * glm::dvec3(-halfX, halfY, 1);
+		glm::dvec2 tr = placement * glm::dvec3(halfX, halfY, 1);
+
+		IfcCurve<2> c;
+		c.points.push_back(bl);
+		c.points.push_back(tl);
+		c.points.push_back(tr);
+		c.points.push_back(br);
+		c.points.push_back(bl);
+
+		return c;
+	}
+
 	IfcCurve<2> GetIShapedCurve(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, double filletRadius, glm::dmat3 placement = glm::dmat3(1))
 	{
 		IfcCurve<2> c;
@@ -880,7 +901,7 @@ namespace webifc
 	{
 		std::stringstream obj;
 
-		double scale = 1.0;
+		double scale = 1.0 / 1000.0;
 
 		for (uint32_t i = 0; i < geom.numPoints; i++)
 		{

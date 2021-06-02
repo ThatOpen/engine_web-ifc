@@ -1505,6 +1505,30 @@ namespace webifc
 
 				return profile;
 			}
+			case ifc2x4::IFCRECTANGLEHOLLOWPROFILEDEF:
+			{
+				IfcProfile profile;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
+				profile.isConvex = true;
+
+				_loader.MoveToArgumentOffset(line, 2);
+				uint32_t placementID = _loader.GetRefArgument();
+				double xdim = _loader.GetDoubleArgument();
+				double ydim = _loader.GetDoubleArgument();
+				double thickness = _loader.GetDoubleArgument();
+
+				// fillets not implemented yet
+
+				glm::dmat3 placement = GetAxis2Placement2D(placementID);
+
+				profile.curve = GetRectangleCurve(xdim, ydim, placement);
+				profile.holes.push_back(GetRectangleCurve(xdim - thickness, ydim - thickness, placement));
+				std::reverse(profile.holes[0].points.begin(), profile.holes[0].points.end());
+
+				return profile;
+			}
 			case ifc2x4::IFCCIRCLEPROFILEDEF:
 			{
 				IfcProfile profile;
@@ -1540,6 +1564,7 @@ namespace webifc
 
 				profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_HIGH, placement);
 				profile.holes.push_back(GetCircleCurve(radius - thickness, CIRCLE_SEGMENTS_HIGH, placement));
+				std::reverse(profile.holes[0].points.begin(), profile.holes[0].points.end());
 
 				return profile;
 			}
