@@ -79,7 +79,8 @@ namespace webifc
 			{
 				IfcPlacedGeometry geometry;
 
-				if (!isCoordinated)
+				const bool COORDINATE_TO_ORIGIN = false;
+				if (!isCoordinated && COORDINATE_TO_ORIGIN)
 				{
 					auto& geom = _expressIDToGeometry[composedMesh.expressID];
 					auto pt = geom.GetPoint(0);
