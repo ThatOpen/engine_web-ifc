@@ -5,6 +5,7 @@
  #pragma once
 
 #include <map>
+#include <algorithm>
 
 #include "../../deps/glm/glm/glm.hpp"
 #include "../util.h"
@@ -22,9 +23,11 @@ namespace webifc
         glm::dvec3 norm = glm::cross(v1, v2);
         v2 = glm::normalize(glm::cross(norm, v1));
 
+        double scale = std::max(glm::length(b - a), glm::length(c - a));
+
         glm::dvec3 rel = pt - a;
-        double d1 = dot(v1, rel) / 1000.0;
-        double d2 = dot(v2, rel) / 1000.0;
+        double d1 = dot(v1, rel) / scale;
+        double d2 = dot(v2, rel) / scale;
 
         return {
             d1,
@@ -37,11 +40,13 @@ namespace webifc
         glm::dvec3 v1 = glm::normalize(b - a);
         glm::dvec3 v2 = glm::normalize(c - a);
 
-        glm::dvec3 norm = glm::normalize(cross(v1, v2));
-        v2 = cross(norm, v1);
+        glm::dvec3 norm = glm::cross(v1, v2);
+        v2 = glm::normalize(glm::cross(norm, v1));
 
-        double d1 = pt.x * 1000.0;
-        double d2 = pt.y * 1000.0;
+        double scale = std::max(glm::length(b - a), glm::length(c - a));
+
+        double d1 = pt.x * scale;
+        double d2 = pt.y * scale;
 
         glm::dvec3 p = v1 * d1 + v2 * d2;
 
