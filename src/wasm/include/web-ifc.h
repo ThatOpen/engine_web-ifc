@@ -25,6 +25,11 @@ const uint32_t TAPE_SIZE = 1 << 24;
 namespace webifc
 {
 
+    struct LoaderSettings
+    {
+        bool COORDINATE_TO_ORIGIN = false;
+    };
+
 	long long ms()
 	{
 		using namespace std::chrono;
@@ -38,6 +43,11 @@ namespace webifc
 	class IfcLoader
 	{
 	public:
+        IfcLoader(const LoaderSettings& s = {}):
+            _settings(s)
+        {
+            
+        }
 
 		void PushDataToTape(void* data, size_t size)
 		{
@@ -700,9 +710,15 @@ namespace webifc
             return file.str();
 		}
 
+        const LoaderSettings& GetSettings()
+        {
+            return _settings;
+        }
+
 	private:
         bool _open = false;
 		DynamicTape<TAPE_SIZE> _tape; // 16mb chunked tape
+        LoaderSettings _settings;
 
         IfcMetaData _metaData;
 	};
