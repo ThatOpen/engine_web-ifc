@@ -79,8 +79,7 @@ namespace webifc
 			{
 				IfcPlacedGeometry geometry;
 
-				const bool COORDINATE_TO_ORIGIN = false;
-				if (!isCoordinated && COORDINATE_TO_ORIGIN)
+				if (!isCoordinated && _loader.GetSettings().COORDINATE_TO_ORIGIN)
 				{
 					auto& geom = _expressIDToGeometry[composedMesh.expressID];
 					auto pt = geom.GetPoint(0);
@@ -309,6 +308,56 @@ namespace webifc
 					mesh.transformation = glm::dmat4(1);
 
 					_loader.MoveToArgumentOffset(line, 1);
+					uint32_t firstOperandID = _loader.GetRefArgument();
+					uint32_t secondOperandID = _loader.GetRefArgument();
+
+					auto firstMesh = GetMesh(firstOperandID);
+					auto secondMesh = GetMesh(secondOperandID);
+
+					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
+					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
+
+					// DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
+					// DumpIfcGeometry(flatSecondMesh, L"void.obj");
+
+					if (flatFirstMesh.numFaces == 0)
+					{
+						// bail out because we will get strange meshes
+						// if this happens, probably there's an issue parsing the first mesh
+						return mesh;
+					}
+
+					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
+					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
+
+					auto resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+
+					// DumpIfcGeometry(resultMesh, L"result.obj");
+
+					_expressIDToGeometry[line.expressID] = resultMesh;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+					mesh.hasColor = true;
+					mesh.color = styledItemColor;
+
+					_expressIDToMesh[line.expressID] = mesh;
+					return mesh;
+				}
+				case ifc2x4::IFCBOOLEANRESULT:
+				{
+					// @Refactor: duplicate of above
+					IfcComposedMesh mesh;
+					mesh.transformation = glm::dmat4(1);
+
+					_loader.MoveToArgumentOffset(line, 0);
+					std::string op = _loader.GetStringArgument();
+
+					if (op != "DIFFERENCE")
+					{
+						std::cout << "Unsupported boolean op " << op << " at " << line.expressID << std::endl;
+						return mesh;
+					}
+
 					uint32_t firstOperandID = _loader.GetRefArgument();
 					uint32_t secondOperandID = _loader.GetRefArgument();
 
@@ -1471,6 +1520,7 @@ namespace webifc
 				return profile;
 			}
 			case ifc2x4::IFCRECTANGLEPROFILEDEF:
+			case ifc2x4::IFCROUNDEDRECTANGLEPROFILEDEF:
 			{
 				IfcProfile profile;
 
