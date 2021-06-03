@@ -42,12 +42,12 @@ void WriteFile(const std::string& filename, const std::string& contents)
     t << contents;
 }
 
-int OpenModel(std::string filename)
+int OpenModel(webifc::LoaderSettings settings)
 {
     uint32_t modelID = loaders.size();
     std::string contents = ReadFile("filename");
     
-    webifc::IfcLoader loader;
+    webifc::IfcLoader loader(settings);
     loaders.push_back(loader);
     auto start = webifc::ms();
     loaders[modelID].LoadFile(contents);
@@ -481,6 +481,11 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("y", &glm::dvec4::y)
         .field("z", &glm::dvec4::z)
         .field("w", &glm::dvec4::w)
+        ;
+
+
+    emscripten::value_object<webifc::LoaderSettings>("LoaderSettings")
+        .field("COORDINATE_TO_ORIGIN", &webifc::LoaderSettings::COORDINATE_TO_ORIGIN)
         ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")

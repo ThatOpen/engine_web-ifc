@@ -17,7 +17,12 @@ export const EMPTY = 6;
 export const SET_BEGIN = 7;
 export const SET_END = 8;
 export const LINE_END = 9;
- 
+
+export interface LoaderSettings
+{
+    COORDINATE_TO_ORIGIN: boolean;
+}
+
 export interface Vector<T> {
     get(index: number): T;
     size(): number;
@@ -86,10 +91,13 @@ export class IfcAPI
      * @filename Is for debuggin purposes
      * @data Buffer containing IFC data (bytes)
     */
-    OpenModel(filename: string, data: string | Uint8Array): number
+    OpenModel(data: string | Uint8Array, settings?: LoaderSettings): number
     {
         this.wasmModule['FS_createDataFile']('/', "filename", data, true, true, true);
-        let result = this.wasmModule.OpenModel(filename);
+        let s: LoaderSettings = settings ? settings : {
+            COORDINATE_TO_ORIGIN: false
+        };
+        let result = this.wasmModule.OpenModel(s);
         this.wasmModule['FS_unlink']("/filename");
         return result;
     }
