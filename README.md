@@ -28,9 +28,10 @@ const ifcApi = new WebIFC.IfcAPI();
 await ifcApi.Init();
 
 // open a model from data
-let modelID = ifcApi.OpenModel(/* placeholder filename */, /* IFC data as a string or UInt8Array */);
+let modelID = ifcApi.OpenModel(/* IFC data as a string or UInt8Array */, /* optional settings object */, );
 
-// the model is now loaded! use modelID to fetch geometry
+// the model is now loaded! use modelID to fetch geometry or properties
+// checkout examples/usage for some details on how to read/write IFC
 
 // close the model, all memory is freed
 ifcApi.CloseModel(modelID);
