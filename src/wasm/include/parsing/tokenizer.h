@@ -91,7 +91,7 @@ namespace webifc
 					// apparently I dont fully understand strings in IFC yet
 					// this example from uptown shows that escaping is not used: 'Type G5 - 800kg/m\X2\00B2\X0\';
 					// this example from revit shows that double quotes are used as one quote: 'RPC Tree - Deciduous:Scarlet Oak - 42'':946835'
-					// we do seem to parse the average IFC quite well, so why are these edge cases present?
+					// turns out this is just part of ISO 10303-21, thanks ottosson!
 					while (true)
 					{
 						// if its a quote, maybe its the end of the string
