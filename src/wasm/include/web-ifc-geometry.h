@@ -851,6 +851,33 @@ namespace webifc
 			return result;
 		}
 
+		std::vector<glm::dvec2> ReadIfcCartesianPointList2D(uint32_t expressID)
+		{
+			// TODO: near-duplicate of 3D, can make template
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+
+			_loader.MoveToArgumentOffset(line, 0);
+
+			std::vector<glm::dvec2> result;
+
+			IfcTokenType t = _loader.GetTokenType();
+
+			// while we have point set begin
+			while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
+			{
+				// because these calls cannot be reordered we have to use intermediate variables
+				double x = _loader.GetDoubleArgument();
+				double y = _loader.GetDoubleArgument();
+				result.emplace_back(x, y);
+
+				// read point set end
+				_loader.GetTokenType();
+			}
+
+			return result;
+		}
+
 		void ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D>& bounds, const std::vector<glm::dvec3>& points)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
@@ -1988,6 +2015,46 @@ namespace webifc
 				trim.end = trim2;
 
 				ComputeCurve<DIM>(basisCurveID, curve, trim);
+
+				break;
+			}
+			case ifc2x4::IFCINDEXEDPOLYCURVE:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto pts2DRef = _loader.GetRefArgument();
+
+				if (_loader.GetTokenType() != webifc::IfcTokenType::EMPTY)
+				{
+					std::cout << "non-empty segments in IFCINDEXEDPOLYCURVE currently not supported at " << line.expressID << std::endl;
+					break;
+				}
+
+				_loader.MoveToArgumentOffset(line, 2);
+
+				if (_loader.GetTokenType() != webifc::IfcTokenType::EMPTY)
+				{
+					_loader.Reverse();
+					auto selfIntersects = _loader.GetStringArgument();
+
+					if (selfIntersects == "T")
+					{
+						// TODO: this is probably bad news
+						std::cout << "Self intersecting ifcindexedpolycurve!" << std::endl;
+					}
+				}
+
+				if constexpr (DIM == 2)
+				{
+					auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+					for (auto& pt : pts)
+					{
+						curve.Add(pt);
+					}
+				}
+				else
+				{
+					std::cout << "Parsing ifcindexedpolycurve in 3D is not possible!" << std::endl;
+				}
 
 				break;
 			}
