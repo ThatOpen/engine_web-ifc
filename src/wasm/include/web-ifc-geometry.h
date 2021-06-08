@@ -887,6 +887,7 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
+			case ifc2x4::IFCINDEXEDPOLYGONALFACEWITHVOIDS:
 			case ifc2x4::IFCINDEXEDPOLYGONALFACE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
@@ -897,7 +898,37 @@ namespace webifc
 				{
 					uint32_t index = static_cast<uint32_t>(_loader.GetDoubleArgument(indexID));
 					glm::dvec3 point = points[index - 1]; // indices are 1-based
+					
+					// I am not proud of this
 					bounds.back().curve.points.push_back(point);
+				}
+
+				if (line.ifcType == ifc2x4::IFCINDEXEDPOLYGONALFACE)
+				{
+					break;
+				}
+
+				// case IFCINDEXEDPOLYGONALFACEWITHVOIDS
+				_loader.MoveToArgumentOffset(line, 1);
+
+				// guaranteed to be set begin
+				IfcTokenType t = _loader.GetTokenType();
+
+				// while we have hole-index set begin
+				while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
+				{
+					bounds.emplace_back();
+
+					while (_loader.GetTokenType() != IfcTokenType::SET_END)
+					{
+						_loader.Reverse();
+						uint32_t index = static_cast<uint32_t>(_loader.GetDoubleArgument());
+
+						glm::dvec3 point = points[index - 1]; // indices are still 1-based
+
+						// I am also not proud of this
+						bounds.back().curve.points.push_back(point);
+					}
 				}
 
 				break;

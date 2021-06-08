@@ -409,6 +409,7 @@ namespace webifc
 		BOUND
 	};
 
+	// TODO: IfcBound3D can probably be merged with IfcProfile
 	struct IfcBound3D
 	{
 		IfcBoundType type;
