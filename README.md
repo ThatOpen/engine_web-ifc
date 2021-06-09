@@ -44,7 +44,7 @@ ifcApi.CloseModel(modelID);
 
 The WASM library is built through emscripten, please see [the emscripten installation guide](https://emscripten.org/docs/getting_started/downloads.html) for information on how to set up emscripten. Afterwards both `setup-env` and `em++` need to be in your path.
 
-* For docker clone repository to get more speed.
+* For docker with vscode use `clone repository` to get more speed. First build will take more time.
 
 ### WASM library
 
