@@ -265,7 +265,7 @@ namespace webifc
 		std::vector<glm::dvec3> points;
 	};
 
-	IfcCurve<2> GetCircleCurve(float radius, int numSegments, glm::dmat3 placement = glm::dmat3(1))
+	IfcCurve<2> GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1))
 	{
 		IfcCurve<2> c;
 
@@ -274,8 +274,8 @@ namespace webifc
 			double ratio = static_cast<double>(i) / numSegments;
 			double angle = ratio * CONST_PI * 2;
 			glm::dvec2 circleCoordinate(
-				radius * std::sin(angle),
-				radius * std::cos(angle)
+				radiusX * std::sin(angle),
+				radiusY * std::cos(angle)
 			);
 			glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
 			c.points.push_back(pos);
@@ -283,6 +283,11 @@ namespace webifc
 		c.points.push_back(c.points[0]);
 
 		return c;
+	}
+
+	IfcCurve<2> GetCircleCurve(float radius, int numSegments, glm::dmat3 placement = glm::dmat3(1))
+	{
+		return GetEllipseCurve(radius, radius, numSegments, placement);
 	}
 
 	IfcCurve<2> GetRectangleCurve(double xdim, double ydim, glm::dmat3 placement = glm::dmat3(1))
