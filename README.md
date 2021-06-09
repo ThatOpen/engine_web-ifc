@@ -44,18 +44,22 @@ ifcApi.CloseModel(modelID);
 
 The WASM library is built through emscripten, please see [the emscripten installation guide](https://emscripten.org/docs/getting_started/downloads.html) for information on how to set up emscripten. Afterwards both `setup-env` and `em++` need to be in your path.
 
+* For docker clone repository to get more speed.
+
 ### WASM library
 
 Run `npm install` to install all dependencies.
+* This is executed by default in the docker rebuild
 
 Run `npm run init-repo` to download both dependencies of the project (glm and earcut.hpp) to the correct location. This only needs to happen once.
+* This is executed by default in the docker rebuild
 
 Run `npm run setup-env` whenever you open a new terminal, this will set up the required emscripten environment variables for you to compile code.
+* If you are using docker then run `source /home/node/emsdk/emsdk_env.sh` instead for every new terminal
 
 Run `npm run build-release` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
 
 Run `npm run dev` to launch a development server with a basic ifc file viewer.
-
 
 ### Stand alone C++ executable
 
