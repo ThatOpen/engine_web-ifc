@@ -3,12 +3,8 @@
     "eamodio.gitlens",
     "pflannery.vscode-versionlens",
     "esbenp.prettier-vscode",
-    "bierner.lit-html",
     "ms-azuretools.vscode-docker",
     "github.vscode-pull-request-github",
-    "humao.rest-client",
-    "bradlc.vscode-tailwindcss",
-    "gruntfuggly.todo-tree",
     "ms-vscode-remote.remote-containers",
     "dbaeumer.vscode-eslint",
     "msjsdiag.debugger-for-chrome"
