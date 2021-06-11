@@ -1103,12 +1103,12 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				auto bounds = _loader.GetSetArgument();
 
-				std::vector<IfcBound3D> bounds3D;
+				std::vector<IfcBound3D> bounds3D(bounds.size());
 
-				for (auto& boundToken : bounds)
+				for (int i = 0; i < bounds.size(); i++)
 				{
-					uint32_t boundID = _loader.GetRefArgument(boundToken);
-					bounds3D.push_back(GetBound(boundID));
+					uint32_t boundID = _loader.GetRefArgument(bounds[i]);
+					bounds3D[i] = GetBound(boundID);
 				}
 
 				TriangulateBounds(geometry, bounds3D);
@@ -1968,7 +1968,7 @@ namespace webifc
 		}
 
 		template<uint32_t DIM>
-		void ComputeCurve(uint32_t expressID, IfcCurve<DIM>& curve, IfcTrimmingArguments trim = {})
+		void ComputeCurve(uint32_t expressID, IfcCurve<DIM>& curve, bool sameSense = true, IfcTrimmingArguments trim = {})
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -2020,10 +2020,12 @@ namespace webifc
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto transition = _loader.GetStringArgument();
-				auto sameSense = _loader.GetStringArgument();
+				auto sameSenseS = _loader.GetStringArgument();
 				auto parentID = _loader.GetRefArgument();
 
-				ComputeCurve<DIM>(parentID, curve);
+				bool sameSense = sameSenseS == "T";
+
+				ComputeCurve<DIM>(parentID, curve, sameSense);
 
 				break;
 			}
@@ -2054,7 +2056,7 @@ namespace webifc
 				auto basisCurveID = _loader.GetRefArgument();
 				auto trim1Set = _loader.GetSetArgument();
 				auto trim2Set = _loader.GetSetArgument();
-				auto senseAgreement = _loader.GetStringArgument();
+				auto senseAgreementS = _loader.GetStringArgument();
 				auto trimmingPreference = _loader.GetStringArgument();
 
 				auto trim1 = ParseTrimSelect(trim1Set);
@@ -2065,7 +2067,9 @@ namespace webifc
 				trim.start = trim1;
 				trim.end = trim2;
 
-				ComputeCurve<DIM>(basisCurveID, curve, trim);
+				bool senseAgreement = senseAgreementS == "T";
+
+				ComputeCurve<DIM>(basisCurveID, curve, sameSense ? senseAgreement : false, trim);
 
 				break;
 			}
@@ -2135,9 +2139,16 @@ namespace webifc
 					endDegrees = trim.end.hasParam ? trim.end.param : 360;
 				}
 
-				if (endDegrees < startDegrees)
+				if (!sameSense)
 				{
-					endDegrees += 360;
+					std::swap(startDegrees, endDegrees);
+				}
+				else
+				{
+					if (endDegrees < startDegrees)
+					{
+						endDegrees += 360;
+					}
 				}
 
 				double startRad = startDegrees / 180 * CONST_PI;
@@ -2189,9 +2200,10 @@ namespace webifc
 
 			if (DEBUG_DUMP_SVG)
 			{
-#if DIM==2
-				DumpSVGCurve(curve.points, L"partial_curve.html");
-#endif
+				if constexpr (DIM == 2)
+				{
+					DumpSVGCurve(curve.points, L"partial_curve.html");
+				}
 			}
 		}
 
