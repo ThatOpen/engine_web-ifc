@@ -20,7 +20,6 @@
   "scripts": {
     "gen-schema": "cd src/schema && node gen.js",
     "setup-env": "emsdk_env",
-    "init-repo": "git clone https://github.com/g-truc/glm ./src/wasm/deps/glm && git clone https://github.com/mapbox/earcut.hpp ./src/wasm/deps/earcut && git clone https://github.com/executionunit/csgjs-cpp ./src/wasm/deps/scgjs-cpp && npm run gen-schema",
     "build-release": "npm run build-wasm-release && npm run build-api && npm run add-wasm-path",
     "build-debug": "npm run build-wasm-debug && npm run build-api && npm run add-wasm-path",
     "release_publish": "npm run build-release && cd dist && npm publish",
