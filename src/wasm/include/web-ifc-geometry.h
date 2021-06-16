@@ -30,6 +30,7 @@
 const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
 
 const bool DEBUG_DUMP_SVG = false;
+const bool USE_FAST_BOOLS = false;
 
 const int CIRCLE_SEGMENTS_LOW = 5;
 const int CIRCLE_SEGMENTS_MEDIUM = 8;
@@ -136,6 +137,14 @@ namespace webifc
         {
             _transformation = val;
         }
+
+		template<uint32_t DIM>
+		IfcCurve<DIM> GetCurve(uint32_t expressID)
+		{
+			IfcCurve<DIM> curve;
+			ComputeCurve<DIM>(expressID, curve);
+			return curve;
+		}
 
 	private:
         glm::dmat4 _transformation;
@@ -247,7 +256,6 @@ namespace webifc
 						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
 						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
 
-						const bool USE_FAST_BOOLS = false;
 						if (USE_FAST_BOOLS)
 						{
 							IfcGeometry r1;
@@ -317,8 +325,12 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					// DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
-					// DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					const bool DUMP = false;
+					if (DUMP)
+					{
+						DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
+						DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					}
 
 					if (flatFirstMesh.numFaces == 0)
 					{
@@ -330,9 +342,25 @@ namespace webifc
 					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
 					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
 
-					auto resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+					webifc::IfcGeometry resultMesh;
+					if (USE_FAST_BOOLS)
+					{
+						IfcGeometry r1;
+						IfcGeometry r2;
 
-					// DumpIfcGeometry(resultMesh, L"result.obj");
+						intersectMeshMesh(flatFirstMesh, flatSecondMesh, r1, r2);
+
+						resultMesh = boolSubtract(r1, r2);
+					}
+					else
+					{
+						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+					}
+
+					if (DUMP)
+					{
+						DumpIfcGeometry(resultMesh, L"result.obj");
+					}
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.expressID = line.expressID;
@@ -380,7 +408,20 @@ namespace webifc
 					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
 					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
 
-					auto resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+					webifc::IfcGeometry resultMesh;
+					if (USE_FAST_BOOLS)
+					{
+						IfcGeometry r1;
+						IfcGeometry r2;
+
+						intersectMeshMesh(flatFirstMesh, flatSecondMesh, r1, r2);
+
+						resultMesh = boolSubtract(r1, r2);
+					}
+					else
+					{
+						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+					}
 
 					// DumpIfcGeometry(resultMesh, L"result.obj");
 
@@ -1960,15 +2001,7 @@ namespace webifc
 		}
 
 		template<uint32_t DIM>
-		IfcCurve<DIM> GetCurve(uint32_t expressID)
-		{
-			IfcCurve<DIM> curve;
-			ComputeCurve<DIM>(expressID, curve);
-			return curve;
-		}
-
-		template<uint32_t DIM>
-		void ComputeCurve(uint32_t expressID, IfcCurve<DIM>& curve, bool sameSense = true, IfcTrimmingArguments trim = {})
+		void ComputeCurve(uint32_t expressID, IfcCurve<DIM>& curve, int sameSense = -1, IfcTrimmingArguments trim = {})
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -2011,7 +2044,7 @@ namespace webifc
 
 					uint32_t segmentId = _loader.GetRefArgument(token);
 
-					ComputeCurve<DIM>(segmentId, curve);
+					ComputeCurve<DIM>(segmentId, curve, sameSense);
 				}
 
 				break;
@@ -2067,9 +2100,14 @@ namespace webifc
 				trim.start = trim1;
 				trim.end = trim2;
 
+				if (sameSense == 0)
+				{
+					std::swap(trim.end, trim.start);
+				}
+
 				bool senseAgreement = senseAgreementS == "T";
 
-				ComputeCurve<DIM>(basisCurveID, curve, sameSense ? senseAgreement : false, trim);
+				ComputeCurve<DIM>(basisCurveID, curve, sameSense != -1 ? sameSense : senseAgreement, trim);
 
 				break;
 			}
@@ -2139,22 +2177,28 @@ namespace webifc
 					endDegrees = trim.end.hasParam ? trim.end.param : 360;
 				}
 
-				if (!sameSense)
+				double startRad = startDegrees / 180 * CONST_PI;
+				double endRad = endDegrees / 180 * CONST_PI;
+				double lengthDegrees = endDegrees - startDegrees;
+
+				// unset or true
+				if (sameSense == 1 || sameSense == -1)
 				{
-					std::swap(startDegrees, endDegrees);
+					if (lengthDegrees < 0)
+					{
+						lengthDegrees += 360;
+					}
 				}
 				else
 				{
-					if (endDegrees < startDegrees)
+					if (lengthDegrees > 0)
 					{
-						endDegrees += 360;
+						lengthDegrees -= 360;
 					}
 				}
 
-				double startRad = startDegrees / 180 * CONST_PI;
-				double endRad = endDegrees / 180 * CONST_PI;
+				double lengthRad = lengthDegrees / 180 * CONST_PI;
 
-				double lengthRad = endRad - startRad;
 
 				size_t startIndex = curve.points.size();
 
@@ -2170,7 +2214,7 @@ namespace webifc
 					{
 						glm::dvec2 vec(0);
 						vec[0] = radius * std::cos(angle);
-						vec[1] = -radius * std::sin(angle);
+						vec[1] = -radius * std::sin(angle); // not sure why we need this, but we apparently do
 						pos = placement * glm::dvec3(vec, 1);
 					}
 					else
