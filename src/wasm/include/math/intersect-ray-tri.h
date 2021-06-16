@@ -27,6 +27,7 @@ namespace webifc
         double det = 1.0 / d;
         double u = det * glm::dot(E2, (Q * -1.0));
         double v = det * glm::dot(E1, Q);
+        double w = 1 - u - v;
         t = det * glm::dot(ROV0, (N * -1.0));
 
         // TODO: this fuzz is quite serious
@@ -46,6 +47,19 @@ namespace webifc
         if (result)
         {
             glm::dvec3 vec = origin + (dir * t);
+#ifdef _DEBUG
+            glm::dvec3 bary(w, u, v);
+            glm::dvec3 vecBary = bary.x * A + bary.y * B + bary.z * C;
+            if (!equals(vec, vecBary, EPS_BIG))
+            {
+                printf("bad bary conversion\n");
+            }
+            glm::dvec3 reconstr = ToBary(A, B, C, vec);
+            if (!equals(bary, reconstr, EPS_BIG))
+            {
+                printf("bad bary conversion\n");
+            }
+#endif
             out = vec;
             return true;
         }
