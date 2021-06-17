@@ -124,6 +124,11 @@ namespace webifc
         {
             Face f = mesh.GetFace(i);
 
+            if (i == 4)
+            {
+                // printf("asdf");
+            }
+
             const glm::dvec3& a = mesh.GetPoint(f.i0);
             const glm::dvec3& b = mesh.GetPoint(f.i1);
             const glm::dvec3& c = mesh.GetPoint(f.i2);
@@ -212,11 +217,63 @@ namespace webifc
         return outputMesh;
     }
 
+    struct AABB
+    {
+        glm::dvec3 min = glm::dvec3(DBL_MAX, DBL_MAX, DBL_MAX);
+        glm::dvec3 max = glm::dvec3(-DBL_MAX, -DBL_MAX, -DBL_MAX);
+    };
+
+    AABB GetAABB(const IfcGeometry& mesh)
+    {
+        AABB aabb;
+
+        for (uint32_t i = 0; i < mesh.numPoints; i++)
+        {
+            aabb.min = glm::min(aabb.min, mesh.GetPoint(i));
+            aabb.max = glm::max(aabb.max, mesh.GetPoint(i));
+        }
+
+        return aabb;
+    }
+
+    struct Partition
+    {
+        glm::dvec3 cellsize;
+    };
+
+    const uint32_t GRID_CELLS_AXIS = 100;
+
+    Partition MakePartition(const IfcGeometry& m, const AABB& aabb)
+    {
+        Partition p;
+
+        // compute cellsize of partition
+        glm::dvec3 size = aabb.max - aabb.min;
+        p.cellsize = size / static_cast<double>(GRID_CELLS_AXIS);
+
+        std::vector<int> parts(m.numFaces);
+
+        // add all faces to partition
+        for (uint32_t i = 0; i < m.numFaces; i++)
+        {
+            Face t1 = m.GetFace(i);
+
+            // add face index for all cells
+        }
+
+        return p;
+    }
+
     void intersectMeshMesh(const IfcGeometry& mesh1, const IfcGeometry& mesh2, IfcGeometry& result1, IfcGeometry& result2)
     {
         MeshIntersections meshIntersections1;
         MeshIntersections meshIntersections2;
 
+        AABB aabb1 = GetAABB(mesh1);
+        AABB aabb2 = GetAABB(mesh2);
+
+        Partition part1 = MakePartition(mesh1, aabb1);
+        Partition part2 = MakePartition(mesh2, aabb2);
 
         for (uint32_t i = 0; i < mesh1.numFaces; i++)
         {

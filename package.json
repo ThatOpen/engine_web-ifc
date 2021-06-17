@@ -17,6 +17,9 @@
       "extensions": "ts"
     }
   },
+  "pckg-gui": {
+
+  },
   "scripts": {
     "gen-schema": "cd src/schema && node gen.js",
     "setup-env": "emsdk_env",

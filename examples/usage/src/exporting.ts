@@ -1,5 +1,6 @@
 import { FlatShading } from "three";
-import * as WebIFC from "../../dist/web-ifc-api-node.js";
+// import * as WebIFC from "../../../dist/web-ifc-api-node.js";
+import * as WebIFC from "web-ifc";
 import { Equals, WithIFCFileLoaded, TestInfo } from "./utils";
 
 export default async function() {

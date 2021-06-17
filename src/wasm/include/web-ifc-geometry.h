@@ -155,7 +155,7 @@ namespace webifc
 			auto it = _expressIDToMesh.find(line.expressID);
 			if (it != _expressIDToMesh.end())
 			{
-				//return _expressIDToMesh[line.expressID];
+				return _expressIDToMesh[line.expressID];
 			}
 
 			bool hasColor = false;
