@@ -10,7 +10,7 @@
 #include "./is-inside-mesh.h"
 #define CSGJSCPP_REAL double
 #define CSGJSCPP_IMPLEMENTATION
-#include "../../deps/scgjs-cpp/csgjs.h"
+#include "../../deps/csgjs-cpp/csgjs.h"
 
 namespace webifc
 {
