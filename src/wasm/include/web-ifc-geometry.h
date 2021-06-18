@@ -30,7 +30,6 @@
 const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
 
 const bool DEBUG_DUMP_SVG = false;
-const bool USE_FAST_BOOLS = false;
 
 const int CIRCLE_SEGMENTS_LOW = 5;
 const int CIRCLE_SEGMENTS_MEDIUM = 8;
@@ -256,7 +255,7 @@ namespace webifc
 						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
 						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
 
-						if (USE_FAST_BOOLS)
+						if (_loader.GetSettings().USE_FAST_BOOLS)
 						{
 							IfcGeometry r1;
 							IfcGeometry r2;
@@ -343,7 +342,7 @@ namespace webifc
 					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
 
 					webifc::IfcGeometry resultMesh;
-					if (USE_FAST_BOOLS)
+                    if (_loader.GetSettings().USE_FAST_BOOLS)
 					{
 						IfcGeometry r1;
 						IfcGeometry r2;
@@ -409,7 +408,7 @@ namespace webifc
 					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
 
 					webifc::IfcGeometry resultMesh;
-					if (USE_FAST_BOOLS)
+                    if (_loader.GetSettings().USE_FAST_BOOLS)
 					{
 						IfcGeometry r1;
 						IfcGeometry r2;

@@ -486,6 +486,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<webifc::LoaderSettings>("LoaderSettings")
         .field("COORDINATE_TO_ORIGIN", &webifc::LoaderSettings::COORDINATE_TO_ORIGIN)
+        .field("USE_FAST_BOOLS", &webifc::LoaderSettings::USE_FAST_BOOLS)
         ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")

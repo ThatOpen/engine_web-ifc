@@ -42,7 +42,7 @@ function getData(reader : FileReader){
 
 function LoadModel(data: Uint8Array) {
     const start = ms();
-    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true });
+    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, USE_FAST_BOOLS: true });
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);

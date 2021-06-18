@@ -269,12 +269,6 @@ namespace webifc
         MeshIntersections meshIntersections1;
         MeshIntersections meshIntersections2;
 
-        AABB aabb1 = GetAABB(mesh1);
-        AABB aabb2 = GetAABB(mesh2);
-
-        Partition part1 = MakePartition(mesh1, aabb1);
-        Partition part2 = MakePartition(mesh2, aabb2);
-
         for (uint32_t i = 0; i < mesh1.numFaces; i++)
         {
             for (uint32_t j = 0; j < mesh2.numFaces; j++)
@@ -309,6 +303,7 @@ namespace webifc
             }
         }
 
+        /*
         IfcGeometry m1;
         IfcGeometry m2;
 
@@ -329,6 +324,7 @@ namespace webifc
                 m2.AddFace(mesh2.GetPoint(f.i0), mesh2.GetPoint(f.i1), mesh2.GetPoint(f.i2));
             }
         }
+        */
 
         //DumpIfcGeometry(m1, L"mesh1ints.obj");
         //DumpIfcGeometry(m2, L"mesh2ints.obj");
