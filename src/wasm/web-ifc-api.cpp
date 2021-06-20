@@ -66,6 +66,20 @@ void CloseModel(uint32_t modelID)
     // geomLoaders[modelID] = webifc::IfcGeometryLoader(loaders[modelID]);
 }
 
+webifc::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
+{
+    webifc::IfcGeometryLoader& geomLoader = geomLoaders[modelID];
+    webifc::IfcFlatMesh mesh = geomLoader.GetFlatMesh(expressID);
+    
+    for (auto& geom : mesh.geometries)
+    {
+        auto& flatGeom = geomLoader.GetCachedGeometry(geom.geometryExpressID);
+        flatGeom.GetVertexData();
+    }
+
+    return mesh;
+}
+
 std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 {
     webifc::IfcLoader& loader = loaders[modelID];
@@ -529,6 +543,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
+    emscripten::function("GetFlatMesh", &GetFlatMesh);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);

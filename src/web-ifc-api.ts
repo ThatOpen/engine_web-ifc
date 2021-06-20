@@ -274,6 +274,15 @@ export class IfcAPI
         return this.wasmModule.LoadAllGeometry(modelID);
     }
 
+    /**  
+     * Load geometry for a single element
+     * @modelID Model handle retrieved by OpenModel
+    */
+   GetFlatMesh(modelID: number, expressID: number): FlatMesh
+    {
+        return this.wasmModule.GetFlatMesh(modelID, expressID);
+    }
+
     SetWasmPath(path: string){
         //@ts-ignore
         WasmPath = path;
