@@ -1409,10 +1409,19 @@ namespace webifc
 					if (initialDirectrixNormal == glm::dvec3(0))
 					{
 						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.y, directrixSegmentNormal.x, directrixSegmentNormal.z));
+						if (left == glm::dvec3(0, 0, 0))
+						{
+							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.x, directrixSegmentNormal.z, directrixSegmentNormal.y));
+						}
 					}
 					else
 					{
 						left = glm::cross(directrixSegmentNormal, initialDirectrixNormal);
+					}
+
+					if (left == glm::dvec3(0, 0, 0))
+					{
+						printf("0 left vec in sweep!\n");
 					}
 
 					glm::dvec3 right = glm::cross(directrixSegmentNormal, left);
