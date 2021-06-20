@@ -28,6 +28,8 @@ namespace webifc
     struct LoaderSettings
     {
         bool COORDINATE_TO_ORIGIN = false;
+        bool USE_FAST_BOOLS = false;
+		bool DUMP_CSG_MESHES = false;
     };
 
 	long long ms()

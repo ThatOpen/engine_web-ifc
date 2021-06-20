@@ -16,7 +16,7 @@ namespace webifc
 		return b1 == b2 && b1 == b3 && b1 == b4;
 	}
 
-	bool doLineSegmentsIntersect(const glm::dvec2& p, const glm::dvec2& p2, const glm::dvec2& q, const glm::dvec2& q2) {
+	bool doLineSegmentsIntersect(const glm::dvec2& p, const glm::dvec2& p2, const glm::dvec2& q, const glm::dvec2& q2, bool extendQ = false) {
 		glm::dvec2 r = p2 - p;
 		glm::dvec2 s = q2 - q;
 
@@ -53,6 +53,6 @@ namespace webifc
 		double u = uNumerator / denominator;
 		double t = cross2d(q - p, s) / denominator;
 
-		return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1);
+		return (t >= 0) && (t <= 1) && (u >= 0) && (extendQ || (u <= 1));
 	}
 }

@@ -43,9 +43,7 @@ x64
 ifcPrune.vcxproj.user
 output
 debug_output
-deps
 .bin
 build
 *.log
 node_modules
-emsdk

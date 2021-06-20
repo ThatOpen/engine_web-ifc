@@ -6,6 +6,7 @@
 
 #include <map>
 #include "../../deps/glm/glm/glm.hpp"
+#include "../../deps/earcut/include/mapbox/earcut.hpp"
 
 #include "../util.h"
 #include "line-segment-intersect.h"
@@ -88,7 +89,7 @@ namespace webifc
             // Should we be making this triangle at all?
             //triangles.resize(t.id + 1);
             //triangles[t.id].id = -1;
-            printf("0 triangle");
+            printf("0 triangle\n");
         }
 
         triangles.resize(t.id + 1);
@@ -528,6 +529,16 @@ namespace webifc
         }
         else
         {
+            bool isInTriangle = PointInTriangle(t, prev);
+            if (isInTriangle)
+            {
+                // prev is geometrically inside this triangle, which should not be the case
+                // it should either be part of the triangle or outside it
+                // inside implies we did a bad job adding points!
+                printf("already in tri!\n");
+            }
+
+
             // no edge to previous
             Point dirToPrev = {
                 prev.x - p.x,
@@ -560,7 +571,7 @@ namespace webifc
             // checking for this situation would also have to happen below
 
             // p1 or p2 don't lie on p -> prev, so either internal segment p1 -> p2 intersects, or we don't have any intersection
-            bool linesIntersect = doLineSegmentsIntersect(p1(), p2(), p(), prev());
+            bool linesIntersect = doLineSegmentsIntersect(p1(), p2(), p(), prev(), false);
 
             if (!linesIntersect)
             {
@@ -573,7 +584,7 @@ namespace webifc
             }
 
             // we search in direction of p1 -> p2, so find other triangle on that edge
-            uint32_t curTriangle = FindTriangleWithEdge(p2.id, p1.id, triangles);
+            int32_t curTriangle = FindTriangleWithEdge(p2.id, p1.id, triangles);
 
             if (curTriangle == -1)
             {
@@ -623,11 +634,11 @@ namespace webifc
                 {
                     // select new triangle
                     bool i1 = !EdgeEqual(prevEdge, cur.a, cur.b)
-                        && doLineSegmentsIntersect(cur.a(), cur.b(), p(), prev());
+                        && doLineSegmentsIntersect(cur.a(), cur.b(), p(), prev(), true);
                     bool i2 = !EdgeEqual(prevEdge, cur.b, cur.c)
-                        && doLineSegmentsIntersect(cur.b(), cur.c(), p(), prev());
+                        && doLineSegmentsIntersect(cur.b(), cur.c(), p(), prev(), true);
                     bool i3 = !EdgeEqual(prevEdge, cur.c, cur.a)
-                        && doLineSegmentsIntersect(cur.c(), cur.a(), p(), prev());
+                        && doLineSegmentsIntersect(cur.c(), cur.a(), p(), prev(), true);
                     int32_t nextTriangle = -1;
                     if (i1)
                     {
@@ -695,8 +706,29 @@ namespace webifc
 
     void connectPoints(Point& p, Point& prev, std::vector<Triangle>& triangles)
     {
-        // prevent infinite loops
+        // check if points are already connected
         size_t numTriangles = triangles.size();
+        for (size_t i = 0; i < numTriangles; i++)
+        {
+            Triangle& t = triangles[i];
+            if (t.id != -1)
+            {
+                // t contains p
+                if (t.a.id == p.id || t.b.id == p.id || t.c.id == p.id)
+                {
+                    // t contains prev
+                    if (t.a.id == prev.id || t.b.id == prev.id || t.c.id == prev.id)
+                    {
+                        // t contains p and prev, no need to search further: p->prev is already connected
+                        return;
+                    }
+                }
+            }
+        }
+
+
+        // prevent infinite loops
+        numTriangles = triangles.size();
         for (size_t i = 0; i < numTriangles; i++)
         {
             Triangle& t = triangles[i];
@@ -714,13 +746,26 @@ namespace webifc
         printf("no bueno");
     }
 
-    Point getPoint(const glm::dvec2& pt, std::vector<Point>& points, bool& added)
+    const int32_t steps = 100000;
+
+    glm::dvec2 toGrid(const glm::dvec2& min, const glm::dvec2& dim, const glm::dvec2& pt)
+    {
+        double multiplierX = 1 / dim.x * steps;
+        double multiplierY = 1 / dim.y * steps;
+
+        return {
+            (pt.x - min.x) * multiplierX,
+            (pt.y - min.y) * multiplierY
+        };
+    }
+
+    Point getPoint(const glm::dvec2& min, const glm::dvec2& dim, const glm::dvec2& pt, std::vector<Point>& points, bool& added)
     {
         added = false;
         for (int i = 0; i < points.size(); i++)
         {
             // TODO: looks like EPS_SMALL may not be enough here
-            if (equals2d(pt, points[i](), EPS_SMALL))
+            if (equals2d(toGrid(min, dim, pt), toGrid(min, dim, points[i]()), EPS_SMALL))
             {
                 return points[i];
             }
@@ -731,30 +776,82 @@ namespace webifc
         return newPt;
     }
 
+    bool IsValidTriangulation(const std::vector<Triangle>& triangles)
+    {
+        std::map<std::pair<int, int>, int> counts;
+        std::map<std::pair<int, int>, int> counts2;
+        std::map<int, int> pointOccurrences;
+
+        for (const Triangle& t : triangles)
+        {
+            if (t.id != -1)
+            {
+                counts[std::make_pair(t.a.id, t.b.id)]++;
+                counts[std::make_pair(t.b.id, t.c.id)]++;
+                counts[std::make_pair(t.c.id, t.a.id)]++;
+
+                counts2[std::make_pair(t.a.id, t.b.id)]++;
+                counts2[std::make_pair(t.b.id, t.c.id)]++;
+                counts2[std::make_pair(t.c.id, t.a.id)]++;
+
+                counts2[std::make_pair(t.b.id, t.a.id)]++;
+                counts2[std::make_pair(t.c.id, t.b.id)]++;
+                counts2[std::make_pair(t.a.id, t.c.id)]++;
+
+                pointOccurrences[t.a.id]++;
+                pointOccurrences[t.b.id]++;
+                pointOccurrences[t.c.id]++;
+            }
+        }
+
+        bool valid = true;
+
+        for (auto [k, e] : counts)
+        {
+            if (e > 1)
+            {
+                printf("Invalid triangulation: one way edge with more than one occurrence!\n");
+                valid = false;
+            }
+        }
+
+        for (auto [k, e] : counts2)
+        {
+            if (e > 2)
+            {
+                printf("Invalid triangulation: two way edge with more than two occurrences!\n");
+                valid = false;
+            }
+        }
+
+        return valid;
+    }
+
     int instance = 0;
 
     std::vector<Triangle> triangulate(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c, std::vector<Loop>& loops)
     {
         instance++;
 
-        if (instance == 6)
-        {
-            // printf("asdfasfd");
-        }
-
         triangleID = 0;
         pointID = 0;
+
+        glm::dvec2 min = glm::min(a, glm::min(b, c));
+        glm::dvec2 max = glm::max(a, glm::max(b, c));
+
+        glm::dvec2 dim = max - min;
 
         std::vector<Triangle> triangles;
         std::vector<Point> points;
         bool added;
-        Point pa = getPoint(a, points, added);
-        Point pb = getPoint(b, points, added);
-        Point pc = getPoint(c, points, added);
+        Point pa = getPoint(min, dim, a, points, added);
+        Point pb = getPoint(min, dim, b, points, added);
+        Point pc = getPoint(min, dim, c, points, added);
 
         makeTriangle(triangles, pa, pb, pc);
 
         std::vector<glm::dvec2> sortedPoints;
+        std::vector<std::pair<int, int>> connectPairs;
         for (auto& loop : loops)
         {
             if (loop.hasOne)
@@ -778,11 +875,15 @@ namespace webifc
         for (auto& p : sortedPoints)
         {
             Point prev;
-            Point pt = getPoint(p, points, added);
+            Point pt = getPoint(min, dim, p, points, added);
             if (added)
             {
-                addPoint(pt, prev, triangles);
-                if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"triangles.svg");
+                bool ptInside = PointInTriangle(triangles[0], pt);
+                if (ptInside)
+                {
+                    addPoint(pt, prev, triangles);
+                    if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"triangles2.svg");
+                }
             }
         }
 
@@ -791,10 +892,18 @@ namespace webifc
         {
             if (!loop.hasOne)
             {
-                Point pt1 = getPoint(loop.v1, points, added);
-                Point pt2 = getPoint(loop.v2, points, added);
+                Point pt1 = getPoint(min, dim, loop.v1, points, added);
+                Point pt2 = getPoint(min, dim, loop.v2, points, added);
 
-                connectPoints(pt1, pt2, triangles);
+
+                bool pt1Inside = PointInTriangle(triangles[0], pt1);
+                bool pt2Inside = PointInTriangle(triangles[0], pt2);
+
+                if (pt1Inside && pt2Inside)
+                {
+                    connectPoints(pt1, pt2, triangles);
+                }
+
             }
         }
 

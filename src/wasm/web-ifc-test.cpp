@@ -8,6 +8,7 @@
 
 #include "include/web-ifc.h"
 #include "include/web-ifc-geometry.h"
+#include "include/math/triangulate-with-boundaries.h"
 #include "include/ifc2x4.h"
 
 std::string ReadFile(std::wstring filename)
@@ -18,28 +19,21 @@ std::string ReadFile(std::wstring filename)
     return buffer.str();
 }
 
-void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
+void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader, uint64_t num)
 {
     auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCSLAB);
 
     bool writeFiles = true;
-    auto mesh = geometryLoader.GetMesh(65156);
+    
+    geometryLoader.GetCurve<2>(249889);
+
+    auto mesh = geometryLoader.GetMesh(num);
+
+
     if (writeFiles)
     {
         geometryLoader.DumpMesh(mesh, L"TEST.obj");
     }
-
-    for (int i = 0; i < walls.size(); i++)
-    {
-        auto mesh = geometryLoader.GetMesh(walls[i]);
-
-        if (writeFiles)
-        {
-            geometryLoader.DumpMesh(mesh, L"IFCSLAB" + std::to_wstring(i) + L".obj");
-        }
-    }
-
-    std::cout << walls.size() << " elements" << std::endl;
 }
 
 std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
@@ -152,15 +146,95 @@ void Benchmark()
 
 }
 
+void TestTriangleDecompose()
+{
+    const int NUM_TESTS = 100;
+    const int PTS_PER_TEST = 100;
+    const int EDGE_PTS_PER_TEST = 10;
+
+    const double scaleX = 650;
+    const double scaleY = 1;
+
+    glm::dvec2 a(0, 0);
+    glm::dvec2 b(scaleX, 0);
+    glm::dvec2 c(0, scaleY);
+
+    for (int i = 0; i < NUM_TESTS; i++)
+    {
+        srand(i);
+
+        std::vector<glm::dvec2> points;
+
+        // random points
+        for (int j = 0; j < PTS_PER_TEST; j++)
+        {
+            points.push_back({
+                webifc::RandomDouble(0, scaleX),
+                webifc::RandomDouble(0, scaleY)
+            });
+        }
+
+        // points along the edges
+        for (int j = 0; j < EDGE_PTS_PER_TEST; j++)
+        {
+            glm::dvec2 e1 = b - a;
+            glm::dvec2 e2 = c - a;
+            glm::dvec2 e3 = b - c;
+
+            points.push_back(a + e1 * webifc::RandomDouble(0, 1));
+            points.push_back(a + e2 * webifc::RandomDouble(0, 1));
+            points.push_back(c + e3 * webifc::RandomDouble(0, 1));
+        }
+
+        std::vector<webifc::Loop> loops;
+
+        for (auto& pt : points)
+        {
+            //if (pt.x > scaleX / 2)
+            {
+                webifc::Loop l;
+                l.hasOne = true;
+                l.v1 = pt;
+                loops.push_back(l);
+            }
+        }
+
+        std::cout << "Start test " << i << std::endl;
+
+        auto triangles = webifc::triangulate(a, b, c, loops);
+
+        webifc::IsValidTriangulation(triangles);
+
+        std::vector<webifc::Point> pts;
+
+        for (auto& pt : points)
+        {
+            webifc::Point p;
+            p.x = pt.x;
+            p.y = pt.y;
+            pts.push_back(p);
+        }
+
+        webifc::DumpSVGTriangles(triangles, webifc::Point(), webifc::Point(), L"triangles.svg", pts);
+
+    }
+
+
+}
+
 int main()
 {
     std::cout << "Hello web IFC test!\n";
+
+    // TestTriangleDecompose();
+
+    // return 0;
 
     //Benchmark();
 
     //return 0;
 
-    std::string content = ReadFile(L"D:/web-ifc/benchmark/ifcfiles/rst_basic_sample_project.ifc");
+    std::string content = ReadFile(L"D:/web-ifc/benchmark/ifcfiles/model2.ifc");
 
 
     webifc::IfcLoader loader;
@@ -168,9 +242,9 @@ int main()
     auto start = webifc::ms();
     loader.LoadFile(content);
 
-    std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
-    outputStream << loader.DumpAsIFC();
-    exit(0);
+    //std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
+    //outputStream << loader.DumpAsIFC();
+    //exit(0);
     auto time = webifc::ms() - start;
 
     std::cout << "Reading took " << time << "ms" << std::endl;
@@ -179,7 +253,7 @@ int main()
 
     start = webifc::ms();
 
-    //SpecificLoadTest(loader, geometryLoader);
+    // SpecificLoadTest(loader, geometryLoader, 249556);
     auto meshes = LoadAllTest(loader, geometryLoader);
 
     time = webifc::ms() - start;

@@ -35,6 +35,19 @@ const int CIRCLE_SEGMENTS_LOW = 5;
 const int CIRCLE_SEGMENTS_MEDIUM = 8;
 const int CIRCLE_SEGMENTS_HIGH = 12;
 
+struct GeometryStatistics
+{
+	uint32_t meshCacheHits = 0;
+	uint32_t meshCacheMisses = 0;
+	uint32_t verticesCached = 0;
+	uint32_t totalVertices = 0;
+
+	double GetCacheRatio()
+	{
+		return static_cast<double>(meshCacheHits) / (meshCacheHits + meshCacheMisses);
+	}
+};
+
 namespace webifc
 {
 	class IfcGeometryLoader
@@ -137,8 +150,22 @@ namespace webifc
             _transformation = val;
         }
 
+		template<uint32_t DIM>
+		IfcCurve<DIM> GetCurve(uint32_t expressID)
+		{
+			IfcCurve<DIM> curve;
+			ComputeCurve<DIM>(expressID, curve);
+			return curve;
+		}
+
+		GeometryStatistics GetStatistics()
+		{
+			return _statistics;
+		}
+
 	private:
         glm::dmat4 _transformation;
+		GeometryStatistics _statistics;
 
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
@@ -146,8 +173,11 @@ namespace webifc
 			auto it = _expressIDToMesh.find(line.expressID);
 			if (it != _expressIDToMesh.end())
 			{
-				//return _expressIDToMesh[line.expressID];
+				_statistics.meshCacheHits++;
+				auto& mesh = _expressIDToMesh[line.expressID];
+				return mesh;
 			}
+			_statistics.meshCacheMisses++;
 
 			bool hasColor = false;
 			glm::dvec4 styledItemColor(1);
@@ -247,8 +277,7 @@ namespace webifc
 						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
 						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
 
-						const bool USE_FAST_BOOLS = false;
-						if (USE_FAST_BOOLS)
+						if (_loader.GetSettings().USE_FAST_BOOLS)
 						{
 							IfcGeometry r1;
 							IfcGeometry r2;
@@ -317,8 +346,11 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					// DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
-					// DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
+						DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					}
 
 					if (flatFirstMesh.numFaces == 0)
 					{
@@ -327,12 +359,32 @@ namespace webifc
 						return mesh;
 					}
 
-					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
-					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
+					webifc::IfcGeometry resultMesh;
 
-					auto resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+                    if (_loader.GetSettings().USE_FAST_BOOLS)
+					{
+						IfcGeometry r1;
+						IfcGeometry r2;
 
-					// DumpIfcGeometry(resultMesh, L"result.obj");
+						intersectMeshMesh(flatFirstMesh, flatSecondMesh, r1, r2);
+
+						if (_loader.GetSettings().DUMP_CSG_MESHES)
+						{
+							DumpIfcGeometry(r1, L"substep1.obj");
+							DumpIfcGeometry(r2, L"substep2.obj");
+						}
+
+						resultMesh = boolSubtract(r1, r2);
+					}
+					else
+					{
+						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+					}
+
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(resultMesh, L"result.obj");
+					}
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.expressID = line.expressID;
@@ -380,7 +432,20 @@ namespace webifc
 					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
 					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
 
-					auto resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+					webifc::IfcGeometry resultMesh;
+                    if (_loader.GetSettings().USE_FAST_BOOLS)
+					{
+						IfcGeometry r1;
+						IfcGeometry r2;
+
+						intersectMeshMesh(flatFirstMesh, flatSecondMesh, r1, r2);
+
+						resultMesh = boolSubtract(r1, r2);
+					}
+					else
+					{
+						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+					}
 
 					// DumpIfcGeometry(resultMesh, L"result.obj");
 
@@ -562,6 +627,7 @@ namespace webifc
 
 					return mesh;
 				}
+				case ifc2x4::IFCPRODUCTREPRESENTATION:
 				case ifc2x4::IFCPRODUCTDEFINITIONSHAPE:
 				{
 					IfcComposedMesh mesh;
@@ -1102,12 +1168,12 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				auto bounds = _loader.GetSetArgument();
 
-				std::vector<IfcBound3D> bounds3D;
+				std::vector<IfcBound3D> bounds3D(bounds.size());
 
-				for (auto& boundToken : bounds)
+				for (int i = 0; i < bounds.size(); i++)
 				{
-					uint32_t boundID = _loader.GetRefArgument(boundToken);
-					bounds3D.push_back(GetBound(boundID));
+					uint32_t boundID = _loader.GetRefArgument(bounds[i]);
+					bounds3D[i] = GetBound(boundID);
 				}
 
 				TriangulateBounds(geometry, bounds3D);
@@ -1313,11 +1379,20 @@ namespace webifc
 				}
 				else // middle
 				{
-					// TODO: sometimes outliers cause the perp to become NaN! 
 					// possibly the directrix is bad
 					glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
 					glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
 					glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
+
+					if (std::isnan(p.x))
+					{
+						// TODO: sometimes outliers cause the perp to become NaN! 
+						// this is bad news, as it nans the points added to the final mesh
+						// also, it's hard to bail out now :/
+						// see curve.add() for more info on how this is currently "solved"
+						printf("NaN perp!\n");
+					}
+
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
 					glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
 					glm::dvec3 au = glm::normalize(u1 + u2);
@@ -1334,10 +1409,19 @@ namespace webifc
 					if (initialDirectrixNormal == glm::dvec3(0))
 					{
 						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.y, directrixSegmentNormal.x, directrixSegmentNormal.z));
+						if (left == glm::dvec3(0, 0, 0))
+						{
+							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.x, directrixSegmentNormal.z, directrixSegmentNormal.y));
+						}
 					}
 					else
 					{
 						left = glm::cross(directrixSegmentNormal, initialDirectrixNormal);
+					}
+
+					if (left == glm::dvec3(0, 0, 0))
+					{
+						printf("0 left vec in sweep!\n");
 					}
 
 					glm::dvec3 right = glm::cross(directrixSegmentNormal, left);
@@ -1516,6 +1600,17 @@ namespace webifc
 				geom.AddFace(geom.GetPoint(tl),
 							 geom.GetPoint(tr),
 							 geom.GetPoint(br));
+
+				// TODO: some elements expect different winding
+				/*
+				geom.AddFace(geom.GetPoint(tl),
+					geom.GetPoint(bl),
+					geom.GetPoint(br));
+
+				geom.AddFace(geom.GetPoint(tl),
+					geom.GetPoint(br),
+					geom.GetPoint(tr));
+					*/
 			}
 
 			return geom;
@@ -1652,6 +1747,25 @@ namespace webifc
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
 				profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_HIGH, placement);
+
+				return profile;
+			}
+			case ifc2x4::IFCELLIPSEPROFILEDEF:
+			{
+				IfcProfile profile;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
+				profile.isConvex = true;
+
+				_loader.MoveToArgumentOffset(line, 2);
+				uint32_t placementID = _loader.GetRefArgument();
+				double radiusX = _loader.GetDoubleArgument();
+				double radiusY = _loader.GetDoubleArgument();
+
+				glm::dmat3 placement = GetAxis2Placement2D(placementID);
+
+				profile.curve = GetEllipseCurve(radiusX, radiusY, CIRCLE_SEGMENTS_HIGH, placement);
 
 				return profile;
 			}
@@ -1940,15 +2054,7 @@ namespace webifc
 		}
 
 		template<uint32_t DIM>
-		IfcCurve<DIM> GetCurve(uint32_t expressID)
-		{
-			IfcCurve<DIM> curve;
-			ComputeCurve<DIM>(expressID, curve);
-			return curve;
-		}
-
-		template<uint32_t DIM>
-		void ComputeCurve(uint32_t expressID, IfcCurve<DIM>& curve, IfcTrimmingArguments trim = {})
+		void ComputeCurve(uint32_t expressID, IfcCurve<DIM>& curve, int sameSense = -1, IfcTrimmingArguments trim = {})
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto& line = _loader.GetLine(lineID);
@@ -1991,7 +2097,7 @@ namespace webifc
 
 					uint32_t segmentId = _loader.GetRefArgument(token);
 
-					ComputeCurve<DIM>(segmentId, curve);
+					ComputeCurve<DIM>(segmentId, curve, sameSense);
 				}
 
 				break;
@@ -2000,10 +2106,12 @@ namespace webifc
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto transition = _loader.GetStringArgument();
-				auto sameSense = _loader.GetStringArgument();
+				auto sameSenseS = _loader.GetStringArgument();
 				auto parentID = _loader.GetRefArgument();
 
-				ComputeCurve<DIM>(parentID, curve);
+				bool sameSense = sameSenseS == "T";
+
+				ComputeCurve<DIM>(parentID, curve, sameSense);
 
 				break;
 			}
@@ -2034,7 +2142,7 @@ namespace webifc
 				auto basisCurveID = _loader.GetRefArgument();
 				auto trim1Set = _loader.GetSetArgument();
 				auto trim2Set = _loader.GetSetArgument();
-				auto senseAgreement = _loader.GetStringArgument();
+				auto senseAgreementS = _loader.GetStringArgument();
 				auto trimmingPreference = _loader.GetStringArgument();
 
 				auto trim1 = ParseTrimSelect(trim1Set);
@@ -2045,7 +2153,14 @@ namespace webifc
 				trim.start = trim1;
 				trim.end = trim2;
 
-				ComputeCurve<DIM>(basisCurveID, curve, trim);
+				if (sameSense == 0)
+				{
+					std::swap(trim.end, trim.start);
+				}
+
+				bool senseAgreement = senseAgreementS == "T";
+
+				ComputeCurve<DIM>(basisCurveID, curve, sameSense != -1 ? sameSense : senseAgreement, trim);
 
 				break;
 			}
@@ -2115,15 +2230,28 @@ namespace webifc
 					endDegrees = trim.end.hasParam ? trim.end.param : 360;
 				}
 
-				if (endDegrees < startDegrees)
-				{
-					endDegrees += 360;
-				}
-
 				double startRad = startDegrees / 180 * CONST_PI;
 				double endRad = endDegrees / 180 * CONST_PI;
+				double lengthDegrees = endDegrees - startDegrees;
 
-				double lengthRad = endRad - startRad;
+				// unset or true
+				if (sameSense == 1 || sameSense == -1)
+				{
+					if (lengthDegrees < 0)
+					{
+						lengthDegrees += 360;
+					}
+				}
+				else
+				{
+					if (lengthDegrees > 0)
+					{
+						lengthDegrees -= 360;
+					}
+				}
+
+				double lengthRad = lengthDegrees / 180 * CONST_PI;
+
 
 				size_t startIndex = curve.points.size();
 
@@ -2139,7 +2267,7 @@ namespace webifc
 					{
 						glm::dvec2 vec(0);
 						vec[0] = radius * std::cos(angle);
-						vec[1] = -radius * std::sin(angle);
+						vec[1] = -radius * std::sin(angle); // not sure why we need this, but we apparently do
 						pos = placement * glm::dvec3(vec, 1);
 					}
 					else
@@ -2169,9 +2297,10 @@ namespace webifc
 
 			if (DEBUG_DUMP_SVG)
 			{
-#if DIM==2
-				DumpSVGCurve(curve.points, L"partial_curve.html");
-#endif
+				if constexpr (DIM == 2)
+				{
+					DumpSVGCurve(curve.points, L"partial_curve.html");
+				}
 			}
 		}
 

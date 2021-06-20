@@ -21,6 +21,7 @@ export const LINE_END = 9;
 export interface LoaderSettings
 {
     COORDINATE_TO_ORIGIN: boolean;
+    USE_FAST_BOOLS: boolean;
 }
 
 export interface Vector<T> {
@@ -94,8 +95,10 @@ export class IfcAPI
     OpenModel(data: string | Uint8Array, settings?: LoaderSettings): number
     {
         this.wasmModule['FS_createDataFile']('/', "filename", data, true, true, true);
-        let s: LoaderSettings = settings ? settings : {
-            COORDINATE_TO_ORIGIN: false
+        let s: LoaderSettings = {
+            COORDINATE_TO_ORIGIN: false,
+            USE_FAST_BOOLS: false,
+            ...settings
         };
         let result = this.wasmModule.OpenModel(s);
         this.wasmModule['FS_unlink']("/filename");
@@ -269,6 +272,15 @@ export class IfcAPI
     LoadAllGeometry(modelID: number): Vector<FlatMesh>
     {
         return this.wasmModule.LoadAllGeometry(modelID);
+    }
+
+    /**  
+     * Load geometry for a single element
+     * @modelID Model handle retrieved by OpenModel
+    */
+   GetFlatMesh(modelID: number, expressID: number): FlatMesh
+    {
+        return this.wasmModule.GetFlatMesh(modelID, expressID);
     }
 
     SetWasmPath(path: string){

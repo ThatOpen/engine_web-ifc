@@ -51,9 +51,6 @@ The WASM library is built through emscripten, please see [the emscripten install
 Run `npm install` to install all dependencies.
 * This is executed by default in the docker rebuild
 
-Run `npm run init-repo` to download both dependencies of the project (glm and earcut.hpp) to the correct location. This only needs to happen once.
-* This is executed by default in the docker rebuild
-
 Run `npm run setup-env` whenever you open a new terminal, this will set up the required emscripten environment variables for you to compile code.
 * If you are using docker then run `source /home/node/emsdk/emsdk_env.sh` instead for every new terminal
 * If you get warnings about EM_NODE_JS then run `export EM_NODE_JS=/home/node/emsdk/node/14.15.5_64bit/bin/node`

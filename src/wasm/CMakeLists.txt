@@ -1,14 +1,28 @@
-cmake_minimum_required(VERSION 3.10.0)
-project(web-ifc VERSION 0.1.0)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+cmake_minimum_required (VERSION 3.11)
 
-include(CTest)
-enable_testing()
+project (web-ifc)
 
-add_executable(web-ifc web-ifc-test.cpp)
+set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+set (CMAKE_CXX_EXTENSIONS OFF)
+set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
+file (GLOB WebIfcCoreFiles include/*.h)
+file (GLOB WebIfcMathFiles include/math/*.h)
+file (GLOB WebIfcParsingFiles include/parsing/*.h)
+file (GLOB WebIfcSourceFiles web-ifc-test.cpp)
+
+set (
+	WebIfcFiles
+	${WebIfcCoreFiles}
+	${WebIfcMathFiles}
+	${WebIfcParsingFiles}
+	${WebIfcSourceFiles}
+)
+
+source_group ("core" FILES ${WebIfcCoreFiles})
+source_group ("math" FILES ${WebIfcMathFiles})
+source_group ("parsing" FILES ${WebIfcParsingFiles})
+source_group ("sources" FILES ${WebIfcSourceFiles})
+
+add_executable (web-ifc ${WebIfcFiles})

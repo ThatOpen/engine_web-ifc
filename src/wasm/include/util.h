@@ -120,12 +120,12 @@ namespace webifc
 
 			if (std::isnan(pt.x) || std::isnan(pt.y) || std::isnan(pt.z))
 			{
-				printf("asdf");
+				printf("NaN in geom!\n");
 			}
 
 			if (std::isnan(n.x) || std::isnan(n.y) || std::isnan(n.z))
 			{
-				printf("asdf");
+				printf("NaN in geom!\n");
 			}
 
 			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
@@ -198,7 +198,16 @@ namespace webifc
 					fvertexData[i + 4] = vertexData[i + 4];
 					fvertexData[i + 5] = vertexData[i + 5];
 				}
+
+				// cleanup
+				// vertexData = {};
 			}
+
+			if (fvertexData.empty())
+			{
+				return 0;
+			}
+
 			return (uint32_t)&fvertexData[0];
 		}
 
@@ -223,6 +232,11 @@ namespace webifc
 		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps;
 	}
 
+	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
+	}
+
 	template<uint32_t DIM>
 	struct IfcCurve
 	{
@@ -233,9 +247,26 @@ namespace webifc
 			{
 				points.push_back(pt);
 			}
-			else if (pt != points.back())
+			else
 			{
-				points.push_back(pt);
+				bool add = false;
+				if constexpr (DIM == 2)
+				{
+					add = !equals2d(pt, points.back(), EPS_TINY);
+				}
+				else
+				{
+					add = !equals(pt, points.back(), EPS_TINY);
+				}
+
+				if (add)
+				{
+					points.push_back(pt);
+				}
+				else
+				{
+					// TODO: we are now discarding these points, but they probably should not even be generated
+				}
 			}
 		}
 	};
@@ -265,7 +296,7 @@ namespace webifc
 		std::vector<glm::dvec3> points;
 	};
 
-	IfcCurve<2> GetCircleCurve(float radius, int numSegments, glm::dmat3 placement = glm::dmat3(1))
+	IfcCurve<2> GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1))
 	{
 		IfcCurve<2> c;
 
@@ -274,8 +305,8 @@ namespace webifc
 			double ratio = static_cast<double>(i) / numSegments;
 			double angle = ratio * CONST_PI * 2;
 			glm::dvec2 circleCoordinate(
-				radius * std::sin(angle),
-				radius * std::cos(angle)
+				radiusX * std::sin(angle),
+				radiusY * std::cos(angle)
 			);
 			glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
 			c.points.push_back(pos);
@@ -283,6 +314,11 @@ namespace webifc
 		c.points.push_back(c.points[0]);
 
 		return c;
+	}
+
+	IfcCurve<2> GetCircleCurve(float radius, int numSegments, glm::dmat3 placement = glm::dmat3(1))
+	{
+		return GetEllipseCurve(radius, radius, numSegments, placement);
 	}
 
 	IfcCurve<2> GetRectangleCurve(double xdim, double ydim, glm::dmat3 placement = glm::dmat3(1))
@@ -524,14 +560,15 @@ namespace webifc
 
 		if (width == 0 && height == 0)
 		{
-			printf("asdf");
+			printf("asdf\n");
 		}
 
 		for (auto& pt : input)
 		{
+			// here we invert Y, since the canvas +y is down, but makes more sense to think about +y as up
 			retval.emplace_back(
 				((pt.x - min.x) / (maxSize)) * size.x + offset.x,
-				((pt.y - min.y) / (maxSize)) * size.y + offset.y
+				(size.y - ((pt.y - min.y) / (maxSize)) * size.y) + offset.y
 			);
 		}
 
@@ -549,13 +586,25 @@ namespace webifc
 
 		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "\" xmlns=\"http://www.w3.org/2000/svg\" >";
 
-		for (int i = 1; i < rescaled.size(); i++)
+		if (!rescaled.empty())
 		{
-			auto& start = rescaled[i - 1];
-			auto& end = rescaled[i];
-			svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
-			svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
-			svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
+			for (int i = 1; i < rescaled.size() - 1; i++)
+			{
+				auto& start = rescaled[i - 1];
+				auto& end = rescaled[i];
+				svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
+				svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
+				svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
+			}
+
+			for (int i = rescaled.size() - 1; i < rescaled.size(); i++)
+			{
+				auto& start = rescaled[i - 1];
+				auto& end = rescaled[i];
+				svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
+				svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
+				svg << "style = \"stroke:rgb(0,0,0);stroke-width:2\" />";
+			}
 		}
 
 		for (int i = 0; i < indices.size(); i += 3)
@@ -747,7 +796,7 @@ namespace webifc
 		svg << "style = \"stroke:rgb(255,0,0);stroke-width:1\" />";
 	}
 
-	std::string makeSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev)
+	std::string makeSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev, std::vector<Point> pts = {})
 	{
 		glm::dvec2 size(512, 512);
 		glm::dvec2 offset(5, 5);
@@ -783,6 +832,12 @@ namespace webifc
 		if (prev.id != -1)
 		{
 			svg << "<circle cx = \"" << rprev.x << "\" cy = \"" << rprev.y << "\" r = \"3\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
+		}
+
+		for (auto& pt : pts)
+		{
+			glm::dvec2 p = rescale(pt, bounds, size, offset);
+			svg << "<circle cx = \"" << p.x << "\" cy = \"" << p.y << "\" r = \"1\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
 		}
 
 		svg << "</svg>";
@@ -833,9 +888,9 @@ namespace webifc
 		return svg.str();
 	}
 
-	void DumpSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev, std::wstring filename)
+	void DumpSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev, std::wstring filename, std::vector<Point> pts = {})
 	{
-        writeFile(filename, makeSVGTriangles(triangles, p, prev));
+        writeFile(filename, makeSVGTriangles(triangles, p, prev, pts));
 	}
 
 	void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::wstring filename)
@@ -854,11 +909,6 @@ namespace webifc
 		glm::dvec4(0, 1, 0, 0),
 		glm::dvec4(0, 0, 0, 1)
 	);
-
-	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
-	{
-		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
-	}
 
 	double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
@@ -882,6 +932,45 @@ namespace webifc
 		return std::fabs(norm);
 	}
 
+	// https://en.wikipedia.org/wiki/Barycentric_coordinate_system
+	glm::dvec3 ToBary(const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c, const glm::dvec3& pt)
+	{
+		glm::dvec3 E1 = b - a;
+		glm::dvec3 E2 = c - a;
+		glm::dvec3 ROV0 = pt - a;
+		glm::dvec3 N = glm::cross(E1, E2);
+		glm::dvec3 dir = -N;
+		glm::dvec3 Q = glm::cross(ROV0, dir);
+		double d = dot(dir, N);
+
+		double det = 1.0 / d;
+		double u = det * glm::dot(E2, (Q * -1.0));
+		double v = det * glm::dot(E1, Q);
+		double w = 1 - u - v;
+
+		return glm::dvec3(w, u, v);
+	}
+
+	glm::dvec2 FromBary(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c, const glm::dvec3& pt)
+	{
+		return pt.x * a + pt.y * b + pt.z * c;
+	}
+
+	// assume 0,0 1,0 0,1 triangle
+	glm::dvec3 ToBary2(const glm::dvec2& pt)
+	{
+		double v = pt.x;
+		double w = pt.y;
+		double u = 1 - v - w;
+
+		return glm::dvec3(u, v, w);
+	}
+
+	glm::dvec3 FromBary(const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c, const glm::dvec3& pt)
+	{
+		return pt.x * a + pt.y * b + pt.z * c;
+	}
+
 	void CheckTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
 		if (areaOfTriangle(a, b, c) == 0)
@@ -896,6 +985,11 @@ namespace webifc
 		{
 			printf("0 triangle\n");
 		}
+	}
+
+	double RandomDouble(double lo, double hi)
+	{
+		return lo + static_cast<double>(rand()) / (static_cast<double> (RAND_MAX / (hi - lo)));
 	}
 
 	std::string ToObj(const IfcGeometry& geom, size_t& offset, glm::dmat4 transform = glm::dmat4(1))
