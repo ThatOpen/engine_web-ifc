@@ -35,6 +35,19 @@ const int CIRCLE_SEGMENTS_LOW = 5;
 const int CIRCLE_SEGMENTS_MEDIUM = 8;
 const int CIRCLE_SEGMENTS_HIGH = 12;
 
+struct GeometryStatistics
+{
+	uint32_t meshCacheHits = 0;
+	uint32_t meshCacheMisses = 0;
+	uint32_t verticesCached = 0;
+	uint32_t totalVertices = 0;
+
+	double GetCacheRatio()
+	{
+		return static_cast<double>(meshCacheHits) / (meshCacheHits + meshCacheMisses);
+	}
+};
+
 namespace webifc
 {
 	class IfcGeometryLoader
@@ -145,8 +158,14 @@ namespace webifc
 			return curve;
 		}
 
+		GeometryStatistics GetStatistics()
+		{
+			return _statistics;
+		}
+
 	private:
         glm::dmat4 _transformation;
+		GeometryStatistics _statistics;
 
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
@@ -154,8 +173,11 @@ namespace webifc
 			auto it = _expressIDToMesh.find(line.expressID);
 			if (it != _expressIDToMesh.end())
 			{
-				return _expressIDToMesh[line.expressID];
+				_statistics.meshCacheHits++;
+				auto& mesh = _expressIDToMesh[line.expressID];
+				return mesh;
 			}
+			_statistics.meshCacheMisses++;
 
 			bool hasColor = false;
 			glm::dvec4 styledItemColor(1);
