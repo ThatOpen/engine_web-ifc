@@ -346,8 +346,7 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					const bool DUMP = false;
-					if (DUMP)
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
 					{
 						DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
 						DumpIfcGeometry(flatSecondMesh, L"void.obj");
@@ -360,16 +359,20 @@ namespace webifc
 						return mesh;
 					}
 
-					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
-					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
-
 					webifc::IfcGeometry resultMesh;
+
                     if (_loader.GetSettings().USE_FAST_BOOLS)
 					{
 						IfcGeometry r1;
 						IfcGeometry r2;
 
 						intersectMeshMesh(flatFirstMesh, flatSecondMesh, r1, r2);
+
+						if (_loader.GetSettings().DUMP_CSG_MESHES)
+						{
+							DumpIfcGeometry(r1, L"substep1.obj");
+							DumpIfcGeometry(r2, L"substep2.obj");
+						}
 
 						resultMesh = boolSubtract(r1, r2);
 					}
@@ -378,7 +381,7 @@ namespace webifc
 						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
 					}
 
-					if (DUMP)
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
 					{
 						DumpIfcGeometry(resultMesh, L"result.obj");
 					}
@@ -1579,6 +1582,17 @@ namespace webifc
 				geom.AddFace(geom.GetPoint(tl),
 							 geom.GetPoint(tr),
 							 geom.GetPoint(br));
+
+				// TODO: some elements expect different winding
+				/*
+				geom.AddFace(geom.GetPoint(tl),
+					geom.GetPoint(bl),
+					geom.GetPoint(br));
+
+				geom.AddFace(geom.GetPoint(tl),
+					geom.GetPoint(br),
+					geom.GetPoint(tr));
+					*/
 			}
 
 			return geom;
