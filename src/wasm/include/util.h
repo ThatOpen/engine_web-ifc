@@ -202,6 +202,12 @@ namespace webifc
 				// cleanup
 				// vertexData = {};
 			}
+
+			if (fvertexData.empty())
+			{
+				return 0;
+			}
+
 			return (uint32_t)&fvertexData[0];
 		}
 
@@ -226,6 +232,11 @@ namespace webifc
 		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps;
 	}
 
+	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
+	}
+
 	template<uint32_t DIM>
 	struct IfcCurve
 	{
@@ -236,9 +247,26 @@ namespace webifc
 			{
 				points.push_back(pt);
 			}
-			else if (pt != points.back())
+			else
 			{
-				points.push_back(pt);
+				bool add = false;
+				if constexpr (DIM == 2)
+				{
+					add = !equals2d(pt, points.back(), EPS_TINY);
+				}
+				else
+				{
+					add = !equals(pt, points.back(), EPS_TINY);
+				}
+
+				if (add)
+				{
+					points.push_back(pt);
+				}
+				else
+				{
+					// TODO: we are now discarding these points, but they probably should not even be generated
+				}
 			}
 		}
 	};
@@ -881,11 +909,6 @@ namespace webifc
 		glm::dvec4(0, 1, 0, 0),
 		glm::dvec4(0, 0, 0, 1)
 	);
-
-	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
-	{
-		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
-	}
 
 	double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{

@@ -1379,11 +1379,20 @@ namespace webifc
 				}
 				else // middle
 				{
-					// TODO: sometimes outliers cause the perp to become NaN! 
 					// possibly the directrix is bad
 					glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
 					glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
 					glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
+
+					if (std::isnan(p.x))
+					{
+						// TODO: sometimes outliers cause the perp to become NaN! 
+						// this is bad news, as it nans the points added to the final mesh
+						// also, it's hard to bail out now :/
+						// see curve.add() for more info on how this is currently "solved"
+						printf("NaN perp!\n");
+					}
+
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
 					glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
 					glm::dvec3 au = glm::normalize(u1 + u2);
