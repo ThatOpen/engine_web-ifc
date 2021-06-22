@@ -52,8 +52,10 @@ Run `npm install` to install all dependencies.
 * This is executed by default in the docker rebuild
 
 Run `npm run setup-env` whenever you open a new terminal, this will set up the required emscripten environment variables for you to compile code.
-* If you are using docker then run `source /home/node/emsdk/emsdk_env.sh` instead for every new terminal
-* If you get warnings about EM_NODE_JS then run `export EM_NODE_JS=/home/node/emsdk/node/14.15.5_64bit/bin/node`
+* If you are using docker then run 
+  * `source /home/node/emsdk/emsdk_env.sh` instead for every new terminal
+  * `export EM_NODE_JS=/home/node/emsdk/node/14.15.5_64bit/bin/node`
+    * You might be able to skip this later, but atm you need it due to error you get with EM_NODE_JS
 
 Run `npm run build-release` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
 
