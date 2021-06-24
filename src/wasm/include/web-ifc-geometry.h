@@ -378,7 +378,7 @@ namespace webifc
 					}
 					else
 					{
-						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
+						resultMesh = boolSubtract_CSGJSCPP(flatSecondMesh, flatFirstMesh);
 					}
 
 					if (_loader.GetSettings().DUMP_CSG_MESHES)
