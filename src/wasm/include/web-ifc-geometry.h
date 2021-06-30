@@ -27,13 +27,9 @@
 #include "web-ifc.h"
 #include "util.h"
 
-const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
+const double EXTRUSION_DISTANCE_HALFSPACE_M = 100;
 
 const bool DEBUG_DUMP_SVG = false;
-
-const int CIRCLE_SEGMENTS_LOW = 5;
-const int CIRCLE_SEGMENTS_MEDIUM = 8;
-const int CIRCLE_SEGMENTS_HIGH = 12;
 
 struct GeometryStatistics
 {
@@ -796,7 +792,7 @@ namespace webifc
 					IfcCurve<3> directrix = GetCurve<3>(directrixRef);
 
 					IfcProfile profile;
-					profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_MEDIUM);
+					profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM);
 
 					IfcGeometry geom = Sweep(profile, directrix);
 
@@ -1746,7 +1742,7 @@ namespace webifc
 				
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_HIGH, placement);
+				profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement);
 
 				return profile;
 			}
@@ -1765,7 +1761,7 @@ namespace webifc
 
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				profile.curve = GetEllipseCurve(radiusX, radiusY, CIRCLE_SEGMENTS_HIGH, placement);
+				profile.curve = GetEllipseCurve(radiusX, radiusY, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement);
 
 				return profile;
 			}
@@ -1784,8 +1780,8 @@ namespace webifc
 
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_HIGH, placement);
-				profile.holes.push_back(GetCircleCurve(radius - thickness, CIRCLE_SEGMENTS_HIGH, placement));
+				profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement);
+				profile.holes.push_back(GetCircleCurve(radius - thickness, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement));
 				std::reverse(profile.holes[0].points.begin(), profile.holes[0].points.end());
 
 				return profile;
@@ -2255,7 +2251,7 @@ namespace webifc
 
 				size_t startIndex = curve.points.size();
 
-				const int numSegments = CIRCLE_SEGMENTS_HIGH;
+				const int numSegments = _loader.GetSettings().CIRCLE_SEGMENTS_HIGH;
 
 				for (int i = 0; i < numSegments; i++)
 				{

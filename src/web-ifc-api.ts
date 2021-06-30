@@ -22,6 +22,9 @@ export interface LoaderSettings
 {
     COORDINATE_TO_ORIGIN: boolean;
     USE_FAST_BOOLS: boolean;
+    CIRCLE_SEGMENTS_LOW?: number
+    CIRCLE_SEGMENTS_MEDIUM?: number
+    CIRCLE_SEGMENTS_HIGH?: number
 }
 
 export interface Vector<T> {
@@ -98,6 +101,9 @@ export class IfcAPI
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
             USE_FAST_BOOLS: false,
+            CIRCLE_SEGMENTS_LOW: 5,
+            CIRCLE_SEGMENTS_MEDIUM: 8,
+            CIRCLE_SEGMENTS_HIGH: 12,
             ...settings
         };
         let result = this.wasmModule.OpenModel(s);
