@@ -27,7 +27,7 @@
 #include "web-ifc.h"
 #include "util.h"
 
-const double EXTRUSION_DISTANCE_HALFSPACE_M = 100;
+const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
 
 const bool DEBUG_DUMP_SVG = false;
 
