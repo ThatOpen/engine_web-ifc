@@ -65,6 +65,11 @@ namespace webifc
 			return _expressIDToGeometry[expressID];
 		}
 
+		void ClearCachedGeometry()
+		{
+			_expressIDToGeometry.clear();
+		}
+
 		bool HasCachedGeometry(uint32_t expressID)
 		{
 			return _expressIDToGeometry.find(expressID) != _expressIDToGeometry.end();
