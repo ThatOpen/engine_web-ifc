@@ -26,4 +26,4 @@ jobs:
       run: cmake --build ${{github.workspace}}/src/wasm/Build --config ${{matrix.configuration}}
     - name: Test
       working-directory: ${{github.workspace}}/src/wasm/Build
-      run: ctest -C ${{matrix.configuration}}
+      run: ctest -VV -C ${{matrix.configuration}}
