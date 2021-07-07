@@ -30,6 +30,7 @@ namespace webifc
         bool COORDINATE_TO_ORIGIN = false;
         bool USE_FAST_BOOLS = false;
 		bool DUMP_CSG_MESHES = false;
+		bool MESH_CACHE = false;
     };
 
 	long long ms()
