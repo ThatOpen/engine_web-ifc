@@ -88,6 +88,57 @@ webifc::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
     return mesh;
 }
 
+void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten::val callback) {
+    auto& loader = loaders[modelID];
+    auto& geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return;
+    }
+
+    for (const auto& id : expressIds)
+    {
+        // read the mesh from IFC
+        webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(id);
+
+        // prepare the geometry data
+        for (auto& geom : mesh.geometries)
+        {
+            auto& flatGeom = geomLoader->GetCachedGeometry(geom.geometryExpressID);
+            flatGeom.GetVertexData();
+        }   
+
+        // transfer control to client, geometry data is alive for the time of the callback
+        callback(mesh);
+
+        // clear geometry, freeing memory, client is expected to have consumed the data
+        geomLoader->ClearCachedGeometry();
+    }
+}
+
+void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
+    auto& loader = loaders[modelID];
+    auto& geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return;
+    }
+
+    for (auto type : ifc2x4::IfcElements)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+
+        if (type == ifc2x4::IFCOPENINGELEMENT || type == ifc2x4::IFCSPACE || type == ifc2x4::IFCOPENINGSTANDARDCASE)
+        {
+            continue;
+        }
+
+        StreamMeshes(modelID, elements, callback);
+    }
+}
+
 std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 {
     auto& loader = loaders[modelID];
@@ -602,6 +653,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
+    emscripten::function("StreamMeshes", &StreamMeshes);
+    emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);

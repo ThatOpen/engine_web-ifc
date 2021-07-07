@@ -1,5 +1,5 @@
-// import * as WebIFC from "../../../dist/web-ifc-api-node.js";
-import * as WebIFC from "web-ifc";
+import * as WebIFC from "../../../dist/web-ifc-api-node.js";
+//import * as WebIFC from "web-ifc";
 import chalk from 'chalk';
 import fs from "fs";
 
@@ -23,14 +23,15 @@ export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: Web
 
 
     const ifcapi = new WebIFC.IfcAPI();
-    ifcapi.SetWasmPath("node_modules/web-ifc/");
+//    ifcapi.SetWasmPath("node_modules/web-ifc/");
+    ifcapi.SetWasmPath("./");
     await ifcapi.Init();
 
     let info: TestInfo = {
         rawFileData: new Uint8Array(ifcData)
     };
 
-    let modelID = ifcapi.OpenModel(FILE_NAME, info.rawFileData);
+    let modelID = ifcapi.OpenModel(info.rawFileData);
 
     let startTime = WebIFC.ms();
     usageExample(ifcapi, modelID, info);

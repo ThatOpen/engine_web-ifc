@@ -23,14 +23,14 @@
   "scripts": {
     "gen-schema": "cd src/schema && node gen.js",
     "setup-env": "emsdk_env",
-    "build-release": "npm run build-wasm-release && npm run build-api && npm run add-wasm-path",
-    "build-debug": "npm run build-wasm-debug && npm run build-api && npm run add-wasm-path",
+    "build-release": "npm run build-wasm-release && npm run build-api",
+    "build-debug": "npm run build-wasm-debug && npm run build-api",
     "release_publish": "npm run build-release && cd dist && npm publish",
       
-    "build-wasm-debug": "em++ --bind -O3 -g4 -std=c++17 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
-    "build-wasm-release": "em++ --bind -O3 -std=c++17 -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
+    "build-wasm-debug": "em++ --bind -O3 -gsource-map -std=c++17 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s ASSERTIONS=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
+    "build-wasm-release": "em++ --bind -O3 -std=c++17 -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
 
-    "build-api": "cpy src/*.ts dist && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node && npm run copy-to-dist",
+    "build-api": "cpy src/*.ts dist && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node && npm run copy-to-dist && npm run add-wasm-path",
     "build-ts-api": "tsc --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts dist && cpy dist/web-ifc-api.d.ts dist --rename=web-ifc-api-node.d.ts",
     "build-web-ifc-api-mjs": "esbuild dist/web-ifc-api.ts --bundle --format=esm --external:path --external:fs --outfile=./dist/web-ifc-api.js",
     "build-web-ifc-api-node": "esbuild dist/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api-node.js",
@@ -54,13 +54,18 @@
     "ifc2x4_helper.d.ts"
   ],
   "devDependencies": {
-    "@types/three": "^0.125.3",
-    "three": "^0.126.0",
-    "concurrently": "^6.0.0",
+    "@types/three": "^0.129.1",
+    "three": "^0.129.0",
+    "concurrently": "^6.2.0",
     "cpy-cli": "^3.1.1",
-    "esbuild": "^0.8.49",
-    "npm-watch": "^0.7.0",
-    "serve": "^11.3.2",
-    "typescript": "^4.1.5"
+    "esbuild": "^0.12.9",
+    "npm-watch": "^0.10.0",
+    "serve": "^12.0.0",
+    "typescript": "^4.3.4"
+  },
+  "browser": {
+    "crypto": false,
+    "path": false,
+    "fs": false
   }
 }

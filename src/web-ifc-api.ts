@@ -239,12 +239,12 @@ export class IfcAPI
         this.wasmModule.SetGeometryTransformation(modelID, transformationMatrix);
     }
 
-    GetVertexArray(ptr: number, size: number)
+    GetVertexArray(ptr: number, size: number): Float32Array
     {
         return this.getSubArray(this.wasmModule.HEAPF32, ptr, size);
     }
 
-    GetIndexArray(ptr: number, size: number)
+    GetIndexArray(ptr: number, size: number): Uint32Array
     {
         return this.getSubArray(this.wasmModule.HEAPU32, ptr, size);
     }
@@ -260,6 +260,11 @@ export class IfcAPI
     CloseModel(modelID: number)
     {
         this.wasmModule.CloseModel(modelID);
+    }
+
+    StreamAllMeshes(modelID: number, meshCallback: (mesh: FlatMesh)=>void)
+    {
+        this.wasmModule.StreamAllMeshes(modelID, meshCallback);
     }
 
     /**  

@@ -29,10 +29,11 @@ namespace webifc
     {
         bool COORDINATE_TO_ORIGIN = false;
         bool USE_FAST_BOOLS = false;
-		bool DUMP_CSG_MESHES = false;
-		int CIRCLE_SEGMENTS_LOW = 5;
-		int CIRCLE_SEGMENTS_MEDIUM = 8;
-		int CIRCLE_SEGMENTS_HIGH = 12;
+        bool DUMP_CSG_MESHES = false;
+        int CIRCLE_SEGMENTS_LOW = 5;
+        int CIRCLE_SEGMENTS_MEDIUM = 8;
+        int CIRCLE_SEGMENTS_HIGH = 12;
+        bool MESH_CACHE = false;
     };
 
 	long long ms()

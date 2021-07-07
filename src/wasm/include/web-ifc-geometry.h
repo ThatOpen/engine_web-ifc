@@ -61,6 +61,11 @@ namespace webifc
 			return _expressIDToGeometry[expressID];
 		}
 
+		void ClearCachedGeometry()
+		{
+			_expressIDToGeometry.clear();
+		}
+
 		bool HasCachedGeometry(uint32_t expressID)
 		{
 			return _expressIDToGeometry.find(expressID) != _expressIDToGeometry.end();
@@ -127,7 +132,26 @@ namespace webifc
 
 		IfcComposedMesh GetMesh(uint32_t expressID)
 		{
-			return GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+			if (_loader.GetSettings().MESH_CACHE)
+			{
+				auto it = _expressIDToMesh.find(expressID);
+
+				if (it == _expressIDToMesh.end())
+				{
+					_statistics.meshCacheMisses++;
+					_expressIDToMesh[expressID] = GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+				}
+				else
+				{
+					_statistics.meshCacheHits++;
+				}
+
+				return _expressIDToMesh[expressID];
+			}
+			else
+			{
+				return GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+			}
 		}
 
 		IfcProfile GetProfile(uint32_t expressID)
@@ -166,14 +190,6 @@ namespace webifc
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
 			auto& line = _loader.GetLine(lineID);
-			auto it = _expressIDToMesh.find(line.expressID);
-			if (it != _expressIDToMesh.end())
-			{
-				_statistics.meshCacheHits++;
-				auto& mesh = _expressIDToMesh[line.expressID];
-				return mesh;
-			}
-			_statistics.meshCacheMisses++;
 
 			bool hasColor = false;
 			glm::dvec4 styledItemColor(1);
@@ -222,11 +238,15 @@ namespace webifc
 				}
 			}
 
+			IfcComposedMesh mesh;
+			mesh.expressID = line.expressID;
+			mesh.hasColor = hasColor;
+			mesh.color = styledItemColor;
+			mesh.transformation = glm::dmat4(1);
+
 			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
 			if (isIfcElement)
 			{
-				IfcComposedMesh mesh;
-
 				_loader.MoveToArgumentOffset(line, 5);
 				uint32_t localPlacement = 0;
 				if (_loader.GetTokenType() == IfcTokenType::REF)
@@ -244,10 +264,6 @@ namespace webifc
 				if (localPlacement != 0)
 				{
 					mesh.transformation = GetLocalPlacement(localPlacement);
-				}
-				else
-				{
-					mesh.transformation = glm::dmat4(1);
 				}
 
 				if (ifcPresentation != 0)
@@ -296,14 +312,10 @@ namespace webifc
 					resultMesh.hasColor = true;
 					resultMesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = resultMesh;
 					return resultMesh;
 				}
 				else
 				{
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 			}
@@ -313,25 +325,17 @@ namespace webifc
 				{
 				case ifc2x4::IFCMAPPEDITEM:
 				{
-					IfcComposedMesh mesh;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
 					uint32_t localPlacement = _loader.GetRefArgument();
 
 					mesh.transformation = GetLocalPlacement(localPlacement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
-
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
+					
 					return mesh;
 				}
 				case ifc2x4::IFCBOOLEANCLIPPINGRESULT:
 				{
-					IfcComposedMesh mesh;
-					mesh.transformation = glm::dmat4(1);
-
 					_loader.MoveToArgumentOffset(line, 1);
 					uint32_t firstOperandID = _loader.GetRefArgument();
 					uint32_t secondOperandID = _loader.GetRefArgument();
@@ -383,19 +387,13 @@ namespace webifc
 					}
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.hasColor = true;
-					mesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCBOOLEANRESULT:
 				{
 					// @Refactor: duplicate of above
-					IfcComposedMesh mesh;
-					mesh.transformation = glm::dmat4(1);
 
 					_loader.MoveToArgumentOffset(line, 0);
 					std::string op = _loader.GetStringArgument();
@@ -415,8 +413,11 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					// DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
-					// DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
+						DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					}
 
 					if (flatFirstMesh.numFaces == 0)
 					{
@@ -425,8 +426,11 @@ namespace webifc
 						return mesh;
 					}
 
-					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
-					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
+						DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
+					}
 
 					webifc::IfcGeometry resultMesh;
                     if (_loader.GetSettings().USE_FAST_BOOLS)
@@ -443,22 +447,18 @@ namespace webifc
 						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
 					}
 
-					// DumpIfcGeometry(resultMesh, L"result.obj");
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(resultMesh, L"result.obj");
+					}
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.hasColor = true;
-					mesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCHALFSPACESOLID:
 				{
-					IfcComposedMesh mesh;
-					mesh.transformation = glm::dmat4(1);
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t surfaceID = _loader.GetRefArgument();
 					std::string agreement = _loader.GetStringArgument();
@@ -502,18 +502,12 @@ namespace webifc
 
 					// TODO: this is getting problematic.....
 					_expressIDToGeometry[line.expressID] = geom;
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCPOLYGONALBOUNDEDHALFSPACE:
 				{
-					IfcComposedMesh mesh;
-					mesh.transformation = glm::dmat4(1);
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t surfaceID = _loader.GetRefArgument();
 					std::string agreement = _loader.GetStringArgument();
@@ -557,17 +551,12 @@ namespace webifc
 
 					// TODO: this is getting problematic.....
 					_expressIDToGeometry[line.expressID] = geom;
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCREPRESENTATIONMAP:
 				{
-					IfcComposedMesh mesh;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t axis2Placement = _loader.GetRefArgument();
 					uint32_t ifcPresentation = _loader.GetRefArgument();
@@ -575,18 +564,11 @@ namespace webifc
 					mesh.transformation = GetLocalPlacement(axis2Placement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCFACEBASEDSURFACEMODEL:
 				case ifc2x4::IFCSHELLBASEDSURFACEMODEL:
 				{
-					IfcComposedMesh mesh;
-
-					mesh.transformation = glm::dmat4(1);
-
 					_loader.MoveToArgumentOffset(line, 0);
 					auto shells = _loader.GetSetArgument();
 
@@ -601,54 +583,34 @@ namespace webifc
 						mesh.children.push_back(temp);
 					}
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCFACETEDBREP:
 				{
-					IfcComposedMesh mesh;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 
 					return mesh;
 				}
 				case ifc2x4::IFCPRODUCTREPRESENTATION:
 				case ifc2x4::IFCPRODUCTDEFINITIONSHAPE:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 2);
 					auto representations = _loader.GetSetArgument();
 
-					mesh.transformation = glm::dmat4(1);
 					for (auto& repToken : representations)
 					{
 						uint32_t repID = _loader.GetRefArgument(repToken);
 						mesh.children.push_back(GetMesh(repID));
 					}
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCSHAPEREPRESENTATION:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 1);
 					auto type = _loader.GetStringArgument();
 
@@ -660,23 +622,16 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 3);
 					auto repItems = _loader.GetSetArgument();
 
-					mesh.transformation = glm::dmat4(1);
 					for (auto& repToken : repItems)
 					{
 						uint32_t repID = _loader.GetRefArgument(repToken);
 						mesh.children.push_back(GetMesh(repID));
 					}
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCPOLYGONALFACESET:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 0);
 
 					auto coordinatesRef = _loader.GetRefArgument();
@@ -707,21 +662,14 @@ namespace webifc
 						std::cout << "Unsupported IFCPOLYGONALFACESET with PnIndex!" << std::endl;
 					}
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
+					
 					return mesh;
 				}
 				case ifc2x4::IFCTRIANGULATEDFACESET:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 0);
 
 					auto coordinatesRef = _loader.GetRefArgument();
@@ -758,21 +706,14 @@ namespace webifc
 
 					// DumpIfcGeometry(geom, L"test.obj");
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
+					
 					return mesh;
 				}
 				case ifc2x4::IFCSWEPTDISKSOLID:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					auto directrixRef = _loader.GetRefArgument();
 
@@ -796,20 +737,14 @@ namespace webifc
 
 					IfcGeometry geom = Sweep(profile, directrix);
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCEXTRUDEDAREASOLID:
 				{
-					IfcComposedMesh mesh;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t profileID = _loader.GetRefArgument();
 					uint32_t placementID = _loader.GetRefArgument();
@@ -846,14 +781,10 @@ namespace webifc
 						DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
 					}
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
+					
 					return mesh;
 				}
 
