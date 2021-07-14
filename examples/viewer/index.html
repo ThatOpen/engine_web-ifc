@@ -1,9 +1,47 @@
 <script src="web-ifc-viewer.js"></script>
 
+<head>
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+
+<style>
+    body {
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-direction: row;
+        overflow: hidden;
+    }
+</style>
+
 <body>
-    <input type="file" id="finput">
+    <div id="container" style="width:25%; border:1px solid black;"></div>
+    <div style="width:75%; height: 100%;">
+        <div id= "3dcontainer" style="width:100%; height: 90%;" ></div>
+        <input type="file" id="finput">
+    </div>
 </body>
 
 <script>
-    InitWebIfcViewer()
+    // Based on https://jsfiddle.net/developit/bwgkr6uq/ which just works but is based on unpkg.com.
+    // Provided by loader.min.js.
+    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+    window.MonacoEnvironment = { getWorkerUrl: () => proxy };
+    let proxy = URL.createObjectURL(new Blob([`
+        self.MonacoEnvironment = {
+            baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+        };
+        importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+    `], { type: 'text/javascript' }));
+    require(["vs/editor/editor.main"], function () {
+        InitMonaco(monaco);
+        let editor = monaco.editor.create(document.getElementById('container'), {
+            value: ``,
+            language: 'typescript',
+            theme: 'vs-dark'
+        });
+        InitWebIfcViewer(editor);
+    });
+    
 </script>
