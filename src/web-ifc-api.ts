@@ -92,8 +92,8 @@ export class IfcAPI
 
     /**  
      * Opens a model and returns a modelID number
-     * @filename Is for debuggin purposes
      * @data Buffer containing IFC data (bytes)
+     * @data Settings settings for loading the model
     */
     OpenModel(data: string | Uint8Array, settings?: LoaderSettings): number
     {
@@ -108,6 +108,24 @@ export class IfcAPI
         };
         let result = this.wasmModule.OpenModel(s);
         this.wasmModule['FS_unlink']("/filename");
+        return result;
+    }
+
+    /**  
+     * Creates a new model and returns a modelID number
+     * @data Settings settings for generating data the model
+    */
+    CreateModel(settings?: LoaderSettings): number
+    {
+        let s: LoaderSettings = {
+            COORDINATE_TO_ORIGIN: false,
+            USE_FAST_BOOLS: false,
+            CIRCLE_SEGMENTS_LOW: 5,
+            CIRCLE_SEGMENTS_MEDIUM: 8,
+            CIRCLE_SEGMENTS_HIGH: 12,
+            ...settings
+        };
+        let result = this.wasmModule.CreateModel(s);
         return result;
     }
 

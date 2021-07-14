@@ -62,6 +62,18 @@ int OpenModel(webifc::LoaderSettings settings)
     return modelID;
 }
 
+int CreateModel(webifc::LoaderSettings settings)
+{
+    uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
+    
+    auto loader = std::make_unique<webifc::IfcLoader>(settings);
+    loaders.emplace(modelID, std::move(loader));
+    auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID]);
+    geomLoaders.emplace(modelID, std::move(geomLoader));
+
+    return modelID;
+}
+
 void CloseModel(uint32_t modelID)
 {
     geomLoaders.erase(modelID);
@@ -649,6 +661,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("OpenModel", &OpenModel);
+    emscripten::function("CreateModel", &CreateModel);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
