@@ -21,6 +21,16 @@ namespace webifc
 	const double EPS_SMALL = 1e-6;
 	const double EPS_BIG = 1e-4;
 
+	bool MatrixFlipsTriangles(const glm::dmat4& mat)
+	{
+		return glm::determinant(mat) < 0;
+	}
+
+	bool MatrixFlipsTriangles(const glm::dmat3& mat)
+	{
+		return glm::determinant(mat) < 0;
+	}
+
     void writeFile(std::wstring filename, std::string data)
     {
     #ifdef _MSC_VER
@@ -269,6 +279,26 @@ namespace webifc
 				}
 			}
 		}
+
+		void Invert()
+		{
+			std::reverse(points.begin(), points.end());
+		}
+
+		bool IsCCW()
+		{
+			double sum = 0;
+			
+			for (int i = 0; i < points.size(); i++)
+			{
+				glm::dvec2 pt1 = points[(i - 1)%points.size()];
+				glm::dvec2 pt2 = points[i];
+
+				sum += (pt2.x - pt1.x) * (pt2.y + pt1.y);
+			}
+
+			return sum < 0;
+		}
 	};
 
 	struct IfcSurface
@@ -313,12 +343,23 @@ namespace webifc
 		}
 		c.points.push_back(c.points[0]);
 
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
 		return c;
 	}
 
 	IfcCurve<2> GetCircleCurve(float radius, int numSegments, glm::dmat3 placement = glm::dmat3(1))
 	{
 		return GetEllipseCurve(radius, radius, numSegments, placement);
+	}
+
+	bool GetWindingOfTriangle(const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c)
+	{
+		auto norm = computeNormal(a, b, c);
+		return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
 	}
 
 	IfcCurve<2> GetRectangleCurve(double xdim, double ydim, glm::dmat3 placement = glm::dmat3(1))
@@ -334,10 +375,15 @@ namespace webifc
 
 		IfcCurve<2> c;
 		c.points.push_back(bl);
-		c.points.push_back(tl);
-		c.points.push_back(tr);
 		c.points.push_back(br);
+		c.points.push_back(tr);
+		c.points.push_back(tl);
 		c.points.push_back(bl);
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
 
 		return c;
 	}
@@ -392,6 +438,11 @@ namespace webifc
 
 		c.points.push_back(placement * glm::dvec3(-hw, +hd - flangeThickness, 1));// TL knee
 		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));// TL
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
 
 		return c;
 	}
@@ -500,6 +551,8 @@ namespace webifc
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
+		bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
+
 		auto geomIt = geometryMap.find(mesh.expressID);
 
 		if (geomIt != geometryMap.end())
@@ -515,7 +568,14 @@ namespace webifc
 					glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
 					glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
 
-					geom.AddFace(a, b, c);
+					if (transformationBreaksWinding)
+					{
+						geom.AddFace(b, a, c);
+					}
+					else
+					{
+						geom.AddFace(a, b, c);
+					}
 				}
 			}
 		}
@@ -588,13 +648,22 @@ namespace webifc
 
 		if (!rescaled.empty())
 		{
-			for (int i = 1; i < rescaled.size() - 1; i++)
+			for (int i = 1; i < 2; i++)
 			{
 				auto& start = rescaled[i - 1];
 				auto& end = rescaled[i];
 				svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
 				svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
-				svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
+				svg << "style = \"stroke:rgb(0,255,0);stroke-width:2\" />";
+			}
+
+			for (int i = 2; i < rescaled.size() - 1; i++)
+			{
+				auto& start = rescaled[i - 1];
+				auto& end = rescaled[i];
+				svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
+				svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
+				svg << "style = \"stroke:rgb(0,0,0);stroke-width:2\" />";
 			}
 
 			for (int i = rescaled.size() - 1; i < rescaled.size(); i++)
@@ -603,7 +672,7 @@ namespace webifc
 				auto& end = rescaled[i];
 				svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
 				svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
-				svg << "style = \"stroke:rgb(0,0,0);stroke-width:2\" />";
+				svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
 			}
 		}
 

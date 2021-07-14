@@ -156,7 +156,20 @@ namespace webifc
 
 		IfcProfile GetProfile(uint32_t expressID)
 		{
-			return GetProfileByLine(_loader.ExpressIDToLineID(expressID));
+			auto profile = GetProfileByLine(_loader.ExpressIDToLineID(expressID));
+			if (!profile.curve.IsCCW())
+			{
+				profile.curve.Invert();
+			}
+			for (auto& hole : profile.holes)
+			{
+				if (hole.IsCCW())
+				{
+					hole.Invert();
+				}
+			}
+
+			return profile;
 		}
 
 		void DumpMesh(IfcComposedMesh& mesh, std::wstring filename)
@@ -475,18 +488,12 @@ namespace webifc
 					}
 
 					double d = EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor();
-					IfcCurve<2> c;
-					c.Add(glm::dvec2(-d, -d));
-					c.Add(glm::dvec2(d, -d));
-					c.Add(glm::dvec2(d, d));
-					c.Add(glm::dvec2(-d, d));
-					c.Add(glm::dvec2(-d, -d));
 
 					IfcProfile profile;
 					profile.isConvex = false;
-					profile.curve = c;
+					profile.curve = GetRectangleCurve(d, d, glm::dmat3(1));
 
-					auto geom = Extrude(profile, surface.transformation, extrusionNormal, d);
+					auto geom = Extrude(profile, extrusionNormal, d);
 
 					// @Refactor: duplicate of extrudedareasolid
 					if (flipWinding)
@@ -500,6 +507,7 @@ namespace webifc
 						}
 					}
 
+					mesh.transformation = surface.transformation;
 					// TODO: this is getting problematic.....
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.hasGeometry = true;
@@ -534,7 +542,7 @@ namespace webifc
 					profile.isConvex = false;
 					profile.curve = curve;
 
-					auto geom = Extrude(profile, position, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor(), planeNormal, planePosition);
+					auto geom = Extrude(profile, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor(), planeNormal, planePosition);
 					//auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
 
 					// @Refactor: duplicate of extrudedareasolid
@@ -552,6 +560,7 @@ namespace webifc
 					// TODO: this is getting problematic.....
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.hasGeometry = true;
+					mesh.transformation = position;
 
 					return mesh;
 				}
@@ -752,7 +761,12 @@ namespace webifc
 					double depth = _loader.GetDoubleArgument();
 
 					IfcProfile profile = GetProfile(profileID);
-					glm::dmat4 placement = GetLocalPlacement(placementID);
+					if (profile.curve.points.empty())
+					{
+						return mesh;
+					}
+
+					mesh.transformation = GetLocalPlacement(placementID);
 					glm::dvec3 dir = GetCartesianPoint3D(directionID);
 
 					double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
@@ -763,7 +777,7 @@ namespace webifc
 						DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
 					}
 
-					IfcGeometry geom = Extrude(profile, placement, dir, depth);
+					IfcGeometry geom = Extrude(profile, dir, depth);
 
 					if (flipWinding)
 					{
@@ -1408,7 +1422,7 @@ namespace webifc
 			return geom;
 		}
 
-		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
+		IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
 		{
 			IfcGeometry geom;
 			std::vector<bool> holesIndicesHash;
@@ -1424,7 +1438,7 @@ namespace webifc
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
+					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
 					geom.AddPoint(et, normal);
 					polygon[0].push_back({ pt.x, pt.y });
@@ -1445,7 +1459,7 @@ namespace webifc
 						holesIndicesHash.push_back(j == 0);
 
 						glm::dvec2 pt = hole.points[j];
-						glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
+						glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
 						profile.curve.Add(pt);
 						geom.AddPoint(et, normal);
@@ -1456,10 +1470,19 @@ namespace webifc
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
 				uint32_t offset = 0;
+				bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
+				bool flipWinding = !winding;
+
 				for (int i = 0; i < indices.size(); i += 3)
 				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
-					// CheckTriangle(f2, geom.points);
+					if (flipWinding)
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+					}
+					else
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+					}
 				}
 
 				offset += geom.numPoints;
@@ -1469,12 +1492,12 @@ namespace webifc
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
+					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0), 1);
 
 					if (cuttingPlaneNormal != glm::dvec3(0))
 					{
-						et = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
-						glm::dvec3 transDir = placement * glm::dvec4(dir, 0);
+						et = glm::dvec4(glm::dvec3(pt, 0), 1);
+						glm::dvec3 transDir = glm::dvec4(dir, 0);
 
 						// project {et} onto the plane, following the extrusion normal						
 						double ldotn = glm::dot(transDir, cuttingPlaneNormal);
@@ -1496,8 +1519,14 @@ namespace webifc
 
 				for (int i = 0; i < indices.size(); i += 3)
 				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
-					// CheckTriangle(f2, geom.points);
+					if (flipWinding)
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+					}
+					else
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+					}
 				}
 			}
 
@@ -1516,28 +1545,14 @@ namespace webifc
 				uint32_t tl = capSize + i - 1;
 				uint32_t tr = capSize + i - 0;
 
-				// top    1 2 3 4
-				// bottom 5 6 7 8
-				// first face: 1 6 5, 1 2 6
-				
-				geom.AddFace(geom.GetPoint(tl),
-							 geom.GetPoint(br),
-							 geom.GetPoint(bl));
-
-				geom.AddFace(geom.GetPoint(tl),
-							 geom.GetPoint(tr),
-							 geom.GetPoint(br));
-
-				// TODO: some elements expect different winding
-				/*
-				geom.AddFace(geom.GetPoint(tl),
-					geom.GetPoint(bl),
-					geom.GetPoint(br));
-
+				// this winding should be correct
 				geom.AddFace(geom.GetPoint(tl),
 					geom.GetPoint(br),
-					geom.GetPoint(tr));
-					*/
+					geom.GetPoint(bl));
+
+				geom.AddFace(geom.GetPoint(tl),
+					geom.GetPoint(tr),
+					geom.GetPoint(br));
 			}
 
 			return geom;
@@ -1615,23 +1630,7 @@ namespace webifc
 
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				double halfX = xdim / 2;
-				double halfY = ydim / 2;
-
-				glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
-				glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
-				
-				glm::dvec2 tl = placement * glm::dvec3(-halfX, halfY, 1);
-				glm::dvec2 tr = placement * glm::dvec3(halfX, halfY, 1);
-
-				IfcCurve<2> c;
-				c.points.push_back(bl);
-				c.points.push_back(tl);
-				c.points.push_back(tr);
-				c.points.push_back(br);
-				c.points.push_back(bl);
-
-				profile.curve = c;
+				profile.curve = GetRectangleCurve(xdim, ydim, placement);
 
 				return profile;
 			}
