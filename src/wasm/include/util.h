@@ -235,6 +235,11 @@ namespace webifc
 		{
 			return (uint32_t)indexData.size();
 		}
+
+		bool IsEmpty()
+		{
+			return fvertexData.empty();
+		}
 	};
 
 	bool equals2d(glm::dvec2 A, glm::dvec2 B, double eps = 0)

@@ -210,6 +210,7 @@ namespace webifc
 			auto& relMaterials = _loader.GetRelMaterials();
 			auto& materialDefinitions = _loader.GetMaterialDefinitions();
 			auto& relVoids = _loader.GetRelVoids();
+			auto& relAggregates = _loader.GetRelAggregates();
 
 			auto styledItem = styledItems.find(line.expressID);
 			if (styledItem != styledItems.end())
@@ -284,6 +285,22 @@ namespace webifc
 					mesh.children.push_back(GetMesh(ifcPresentation));
 				}
 
+				/*
+				// not sure if aggregates are needed here...
+				// add aggregates before applying voids!
+				auto relAggIt = relAggregates.find(line.expressID);
+				if (relAggIt != relAggregates.end() && !relAggIt->second.empty())
+				{
+					for (auto relAggExpressID : relAggIt->second)
+					{
+						// hacky fix to avoid double application of the parent matrix
+						auto aggMesh = GetMesh(relAggExpressID);
+						aggMesh.transformation *= glm::inverse(mesh.transformation);
+						mesh.children.push_back(aggMesh);
+					}
+				}
+				*/
+
 				auto relVoidsIt = relVoids.find(line.expressID);
 
 				if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
@@ -293,30 +310,40 @@ namespace webifc
 
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry);
 
-					// TODO: this is inefficient, better make one-to-many subtraction in bool logic
-					for (auto relVoidExpressID : relVoidsIt->second)
+					if (!flatElementMesh.IsEmpty())
 					{
-						IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
-						auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry);
 
-						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
-						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
-
-						if (_loader.GetSettings().USE_FAST_BOOLS)
+						// TODO: this is inefficient, better make one-to-many subtraction in bool logic
+						for (auto relVoidExpressID : relVoidsIt->second)
 						{
-							IfcGeometry r1;
-							IfcGeometry r2;
+							IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
+							auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry);
 
-							intersectMeshMesh(flatElementMesh, flatVoidMesh, r1, r2);
+							if (_loader.GetSettings().DUMP_CSG_MESHES)
+							{
+								DumpIfcGeometry(flatVoidMesh, L"void.obj");
+								DumpIfcGeometry(flatElementMesh, L"mesh.obj");
+							}
 
-							flatElementMesh = boolSubtract(r1, r2);
+							if (_loader.GetSettings().USE_FAST_BOOLS)
+							{
+								IfcGeometry r1;
+								IfcGeometry r2;
+
+								intersectMeshMesh(flatElementMesh, flatVoidMesh, r1, r2);
+
+								flatElementMesh = boolSubtract(r1, r2);
+							}
+							else
+							{
+								flatElementMesh = boolSubtract_CSGJSCPP(flatElementMesh, flatVoidMesh);
+							}
+
+							if (_loader.GetSettings().DUMP_CSG_MESHES)
+							{
+								DumpIfcGeometry(flatElementMesh, L"res.obj");
+							}
 						}
-						else
-						{
-							flatElementMesh = boolSubtract_CSGJSCPP(flatElementMesh, flatVoidMesh);
-						}
-
-						// DumpIfcGeometry(flatElementMesh, L"res.obj");
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
