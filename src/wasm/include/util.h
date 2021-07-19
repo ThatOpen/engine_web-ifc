@@ -238,7 +238,7 @@ namespace webifc
 
 		bool IsEmpty()
 		{
-			return fvertexData.empty();
+			return vertexData.empty();
 		}
 	};
 
