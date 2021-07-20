@@ -553,6 +553,11 @@ namespace webifc
 					glm::dmat4 position = GetLocalPlacement(positionID);
 					webifc::IfcCurve<2> curve = GetCurve<2>(boundaryID);
 
+					if (!curve.IsCCW())
+					{
+						curve.Invert();
+					}
+
 					glm::dvec3 extrusionNormal = glm::dvec3(0, 0, 1);
 					glm::dvec3 planeNormal = surface.transformation[2];
 					glm::dvec3 planePosition = surface.transformation[3];
@@ -582,6 +587,11 @@ namespace webifc
 							geom.indexData[i * 3 + 0] = geom.indexData[i * 3 + 1];
 							geom.indexData[i * 3 + 1] = temp;
 						}
+					}
+					
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(geom, L"pbhs.obj");
 					}
 
 					// TODO: this is getting problematic.....
