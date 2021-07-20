@@ -1,5 +1,7 @@
 # web-ifc
 
+[![Build](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml/badge.svg)](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml)
+
 # Warning: this is pre-alpha software, an experimental backend for IFC.js
 
 Web ifc is a WASM-based ifc parser & geometry generator. This repository contains the c++/typescript source code.
