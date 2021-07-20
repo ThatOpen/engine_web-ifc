@@ -789,6 +789,37 @@ namespace webifc
 
 					return mesh;
 				}
+				case ifc2x4::IFCREVOLVEDAREASOLID:
+				{
+					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t profileID = _loader.GetRefArgument();
+					uint32_t placementID = _loader.GetRefArgument();
+					uint32_t axis1PlacementID = _loader.GetRefArgument();
+					double angle = _loader.GetDoubleArgument();
+
+					IfcProfile profile = GetProfile(profileID);
+					glm::dmat4 placement = GetLocalPlacement(placementID);
+					glm::dvec3 pos;
+					glm::dvec3 axis;
+
+					GetAxis1Placement(axis1PlacementID, pos, axis);
+
+					IfcCurve<3> directrix = BuildArc(pos, axis, angle);
+
+					IfcGeometry geom = Sweep(profile, directrix);
+
+					mesh.transformation = placement;
+					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+
+					mesh.hasColor = hasColor;
+					mesh.color = styledItemColor;
+					_expressIDToMesh[line.expressID] = mesh;
+					return mesh;
+				}
 				case ifc2x4::IFCEXTRUDEDAREASOLID:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
@@ -846,6 +877,46 @@ namespace webifc
 			}
 
 			return IfcComposedMesh();
+		}
+
+		IfcCurve<3> BuildArc(const glm::dvec3& pos, const glm::dvec3& axis, double angleRad)
+		{
+			IfcCurve<3> curve;
+
+			double radius = glm::length(pos);
+
+			glm::dvec3 right = -pos;
+			glm::dvec3 up = glm::cross(axis, right);
+
+			auto curve2D = GetEllipseCurve(1, 1, _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM, glm::dmat3(1), 0, angleRad, true);
+
+			for (auto& pt2D : curve2D.points)
+			{
+				glm::dvec3 pt3D = pos + pt2D.x * right + pt2D.y * up;
+				curve.Add(pt3D);
+			}
+
+			return curve;
+		}
+
+		void GetAxis1Placement(uint32_t expressID, glm::dvec3& pos, glm::dvec3& axis)
+		{
+			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+
+			_loader.MoveToArgumentOffset(line, 0);
+			uint32_t locationID = _loader.GetRefArgument();
+			IfcTokenType dirToken = _loader.GetTokenType();
+
+
+			axis = glm::dvec3(0, 0, 1);
+			if (dirToken == IfcTokenType::REF)
+			{
+				_loader.Reverse();
+				axis = GetCartesianPoint3D(_loader.GetRefArgument());
+			}
+
+			pos = GetCartesianPoint3D(locationID);
 		}
 
 		std::vector<uint32_t> Read2DArrayOfThreeIndices()
@@ -1402,8 +1473,8 @@ namespace webifc
 						printf("0 left vec in sweep!\n");
 					}
 
-					glm::dvec3 right = glm::cross(directrixSegmentNormal, left);
-					left = glm::cross(directrixSegmentNormal, right);
+					glm::dvec3 right = glm::normalize(glm::cross(directrixSegmentNormal, left));
+					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
 
 					// project profile onto planeNormal, place on planeOrigin
 					// TODO: look at holes

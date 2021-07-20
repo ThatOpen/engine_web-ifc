@@ -331,26 +331,43 @@ namespace webifc
 		std::vector<glm::dvec3> points;
 	};
 
-	IfcCurve<2> GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1))
+	IfcCurve<2> GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true)
 	{
 		IfcCurve<2> c;
 
 		for (int i = 0; i < numSegments; i++)
 		{
-			double ratio = static_cast<double>(i) / numSegments;
-			double angle = ratio * CONST_PI * 2;
-			glm::dvec2 circleCoordinate(
-				radiusX * std::sin(angle),
-				radiusY * std::cos(angle)
-			);
+			double ratio = static_cast<double>(i) / (numSegments - 1);
+			double angle = startRad + ratio * (endRad - startRad);
+
+			glm::dvec2 circleCoordinate;
+			if (swap)
+			{
+				circleCoordinate = glm::dvec2(
+					radiusX * std::cos(angle),
+					radiusY * std::sin(angle)
+				);
+			}
+			else
+			{
+				circleCoordinate = glm::dvec2(
+					radiusX * std::sin(angle),
+					radiusY * std::cos(angle)
+				);
+			}
 			glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
 			c.points.push_back(pos);
 		}
-		c.points.push_back(c.points[0]);
 
-		if (MatrixFlipsTriangles(placement))
+		// check for a closed curve
+		if (endRad == CONST_PI * 2 && startRad == 0)
 		{
-			c.Invert();
+			c.points.push_back(c.points[0]);
+
+			if (MatrixFlipsTriangles(placement))
+			{
+				c.Invert();
+			}
 		}
 
 		return c;
