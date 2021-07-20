@@ -1,12 +1,101 @@
 import { IfcAPI, ms } from '../../dist/web-ifc-api';
 import { IfcThree } from './web-ifc-three';
-import { Init3DView, scene } from './web-ifc-scene';
+import { Init3DView, InitBasicScene, scene } from './web-ifc-scene';
+import * as Monaco from 'monaco-editor';
+import * as ts_decl from "./ts_src";
+import * as ts from "typescript";
+import { exampleCode } from './example';
 
 let ifcAPI = new IfcAPI();
 let ifcThree = new IfcThree(ifcAPI);
 
+let timeout = undefined;
+
+function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
+{
+    let code = monacoEditor.getValue();
+    let model = ifcAPI.CreateModel();
+
+    scene.clear();
+    InitBasicScene();
+
+    window.localStorage.setItem('code', code);
+    console.log("Saved code...");
+
+    let compiled = ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS }})
+
+    // this is where we do evil stuff
+    {
+        console.log(` --- Starting EVAL!`);
+        eval(compiled.outputText + `BuildModel(model, ifcAPI)`);
+        console.log(` --- Ending EVAL!`);
+    }
+
+    let ifcData = ifcAPI.ExportFileAsIFC(model);
+    let ifcDataString = new TextDecoder().decode(ifcData);
+    console.log(ifcDataString);
+
+
+    ifcThree.LoadAllGeometry(scene, model);
+
+
+    ifcAPI.CloseModel(model);
+
+    let m2 = ifcAPI.OpenModel(ifcDataString);
+    ifcThree.LoadAllGeometry(scene, m2);
+
+}
+
 //@ts-ignore
-window.InitWebIfcViewer = async () => {
+window.InitMonaco = (monaco: any) => {
+    console.log(ts_decl.ifc2x4);
+    // validation settings
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: false
+    });
+    
+    // compiler options
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+        target: monaco.languages.typescript.ScriptTarget.ES6,
+        allowNonTsExtensions: true
+    });
+    //@ts-ignore
+    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4));
+    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4helper));
+    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.wifcapi));
+}
+
+function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
+{
+    let item = window.localStorage.getItem("code");
+    console.log(item);
+
+    if (item)
+    {
+        monacoEditor.setValue(item);
+    }
+    else
+    {
+        monacoEditor.setValue(exampleCode);
+    }
+
+    monacoEditor.onDidChangeModelContent((e) => {
+        if (timeout)
+        {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => Edited(monacoEditor), 1000);
+    });
+
+    setTimeout(() => {
+        Edited(monacoEditor);
+    }, 1000);
+}
+
+//@ts-ignore
+window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEditor) => {
+    initMonacoEditor(monacoEditor);
   await ifcAPI.Init();
   const fileInput = document.getElementById('finput');
   fileInput.addEventListener('change', fileInputChanged);
@@ -42,7 +131,7 @@ function getData(reader : FileReader){
 
 function LoadModel(data: Uint8Array) {
     const start = ms();
-    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, USE_FAST_BOOLS: true });
+    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, USE_FAST_BOOLS: false });
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);

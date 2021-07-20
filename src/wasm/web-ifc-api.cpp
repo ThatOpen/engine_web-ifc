@@ -421,7 +421,7 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 
     uint32_t end = _tape.GetTotalSize();
 
-    loader->UpdateLineTape(expressID, start, end);
+    loader->UpdateLineTape(expressID, type, start, end);
 }
 
 template<uint32_t N>

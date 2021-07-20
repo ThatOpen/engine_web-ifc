@@ -540,9 +540,32 @@ namespace webifc
 			_tape.Reverse();
 		}
 
-		inline void UpdateLineTape(uint32_t expressID, uint32_t start, uint32_t end)
+		inline void UpdateLineTape(uint32_t expressID, uint32_t type, uint32_t start, uint32_t end)
 		{
 			uint64_t pos = _tape.GetTotalSize();
+
+			// new line?
+			if (expressID >= _metaData.expressIDToLine.size() || _metaData.expressIDToLine[expressID] == 0)
+			{
+				// allocate some space
+				_metaData.expressIDToLine.resize(expressID * 2);
+
+				// create line object
+				int lineID = _metaData.lines.size();
+				_metaData.lines.emplace_back();
+
+				// create a line ID
+				_metaData.expressIDToLine[expressID] = lineID;
+				auto& line = _metaData.lines[lineID];
+
+				// fill line data
+				line.expressID = expressID;
+				line.lineIndex = lineID;
+				line.ifcType = type;
+
+				_metaData.ifcTypeToLineID[type].push_back(lineID);
+			}
+
 			auto lineID = _metaData.expressIDToLine[expressID];
 			auto& line = _metaData.lines[lineID];
 

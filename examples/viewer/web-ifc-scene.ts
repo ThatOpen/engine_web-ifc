@@ -52,8 +52,6 @@ function AnimationLoop() {
   requestAnimationFrame(AnimationLoop);
   controls.update();
   renderer.render(scene, camera);
-  let obj = document.getElementById("3dcontainer") as any;
-  renderer.setSize(obj.innerWidth, obj.innerHeight);
 }
 
 export { scene, Init3DView };
