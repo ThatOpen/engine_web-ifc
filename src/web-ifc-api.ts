@@ -22,6 +22,9 @@ export interface LoaderSettings
 {
     COORDINATE_TO_ORIGIN: boolean;
     USE_FAST_BOOLS: boolean;
+    CIRCLE_SEGMENTS_LOW?: number
+    CIRCLE_SEGMENTS_MEDIUM?: number
+    CIRCLE_SEGMENTS_HIGH?: number
 }
 
 export interface Vector<T> {
@@ -89,8 +92,8 @@ export class IfcAPI
 
     /**  
      * Opens a model and returns a modelID number
-     * @filename Is for debuggin purposes
      * @data Buffer containing IFC data (bytes)
+     * @data Settings settings for loading the model
     */
     OpenModel(data: string | Uint8Array, settings?: LoaderSettings): number
     {
@@ -98,10 +101,31 @@ export class IfcAPI
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
             USE_FAST_BOOLS: false,
+            CIRCLE_SEGMENTS_LOW: 5,
+            CIRCLE_SEGMENTS_MEDIUM: 8,
+            CIRCLE_SEGMENTS_HIGH: 12,
             ...settings
         };
         let result = this.wasmModule.OpenModel(s);
         this.wasmModule['FS_unlink']("/filename");
+        return result;
+    }
+
+    /**  
+     * Creates a new model and returns a modelID number
+     * @data Settings settings for generating data the model
+    */
+    CreateModel(settings?: LoaderSettings): number
+    {
+        let s: LoaderSettings = {
+            COORDINATE_TO_ORIGIN: false,
+            USE_FAST_BOOLS: false,
+            CIRCLE_SEGMENTS_LOW: 5,
+            CIRCLE_SEGMENTS_MEDIUM: 8,
+            CIRCLE_SEGMENTS_HIGH: 12,
+            ...settings
+        };
+        let result = this.wasmModule.CreateModel(s);
         return result;
     }
 
@@ -233,12 +257,12 @@ export class IfcAPI
         this.wasmModule.SetGeometryTransformation(modelID, transformationMatrix);
     }
 
-    GetVertexArray(ptr: number, size: number)
+    GetVertexArray(ptr: number, size: number): Float32Array
     {
         return this.getSubArray(this.wasmModule.HEAPF32, ptr, size);
     }
 
-    GetIndexArray(ptr: number, size: number)
+    GetIndexArray(ptr: number, size: number): Uint32Array
     {
         return this.getSubArray(this.wasmModule.HEAPU32, ptr, size);
     }
@@ -254,6 +278,11 @@ export class IfcAPI
     CloseModel(modelID: number)
     {
         this.wasmModule.CloseModel(modelID);
+    }
+
+    StreamAllMeshes(modelID: number, meshCallback: (mesh: FlatMesh)=>void)
+    {
+        this.wasmModule.StreamAllMeshes(modelID, meshCallback);
     }
 
     /**  

@@ -62,6 +62,18 @@ int OpenModel(webifc::LoaderSettings settings)
     return modelID;
 }
 
+int CreateModel(webifc::LoaderSettings settings)
+{
+    uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
+    
+    auto loader = std::make_unique<webifc::IfcLoader>(settings);
+    loaders.emplace(modelID, std::move(loader));
+    auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID]);
+    geomLoaders.emplace(modelID, std::move(geomLoader));
+
+    return modelID;
+}
+
 void CloseModel(uint32_t modelID)
 {
     geomLoaders.erase(modelID);
@@ -86,6 +98,57 @@ webifc::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
     }
 
     return mesh;
+}
+
+void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten::val callback) {
+    auto& loader = loaders[modelID];
+    auto& geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return;
+    }
+
+    for (const auto& id : expressIds)
+    {
+        // read the mesh from IFC
+        webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(id);
+
+        // prepare the geometry data
+        for (auto& geom : mesh.geometries)
+        {
+            auto& flatGeom = geomLoader->GetCachedGeometry(geom.geometryExpressID);
+            flatGeom.GetVertexData();
+        }   
+
+        // transfer control to client, geometry data is alive for the time of the callback
+        callback(mesh);
+
+        // clear geometry, freeing memory, client is expected to have consumed the data
+        geomLoader->ClearCachedGeometry();
+    }
+}
+
+void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
+    auto& loader = loaders[modelID];
+    auto& geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return;
+    }
+
+    for (auto type : ifc2x4::IfcElements)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+
+        if (type == ifc2x4::IFCOPENINGELEMENT || type == ifc2x4::IFCSPACE || type == ifc2x4::IFCOPENINGSTANDARDCASE)
+        {
+            continue;
+        }
+
+        StreamMeshes(modelID, elements, callback);
+    }
 }
 
 std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
@@ -358,7 +421,7 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 
     uint32_t end = _tape.GetTotalSize();
 
-    loader->UpdateLineTape(expressID, start, end);
+    loader->UpdateLineTape(expressID, type, start, end);
 }
 
 template<uint32_t N>
@@ -556,6 +619,9 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::value_object<webifc::LoaderSettings>("LoaderSettings")
         .field("COORDINATE_TO_ORIGIN", &webifc::LoaderSettings::COORDINATE_TO_ORIGIN)
         .field("USE_FAST_BOOLS", &webifc::LoaderSettings::USE_FAST_BOOLS)
+        .field("CIRCLE_SEGMENTS_LOW", &webifc::LoaderSettings::CIRCLE_SEGMENTS_LOW)
+        .field("CIRCLE_SEGMENTS_MEDIUM", &webifc::LoaderSettings::CIRCLE_SEGMENTS_MEDIUM)
+        .field("CIRCLE_SEGMENTS_HIGH", &webifc::LoaderSettings::CIRCLE_SEGMENTS_HIGH)
         ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
@@ -595,10 +661,13 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("OpenModel", &OpenModel);
+    emscripten::function("CreateModel", &CreateModel);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
+    emscripten::function("StreamMeshes", &StreamMeshes);
+    emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);

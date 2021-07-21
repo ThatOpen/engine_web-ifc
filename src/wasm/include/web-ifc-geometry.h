@@ -31,10 +31,6 @@ const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
 
 const bool DEBUG_DUMP_SVG = false;
 
-const int CIRCLE_SEGMENTS_LOW = 5;
-const int CIRCLE_SEGMENTS_MEDIUM = 8;
-const int CIRCLE_SEGMENTS_HIGH = 12;
-
 struct GeometryStatistics
 {
 	uint32_t meshCacheHits = 0;
@@ -63,6 +59,11 @@ namespace webifc
 		IfcGeometry& GetCachedGeometry(uint32_t expressID)
 		{
 			return _expressIDToGeometry[expressID];
+		}
+
+		void ClearCachedGeometry()
+		{
+			_expressIDToGeometry.clear();
 		}
 
 		bool HasCachedGeometry(uint32_t expressID)
@@ -131,12 +132,44 @@ namespace webifc
 
 		IfcComposedMesh GetMesh(uint32_t expressID)
 		{
-			return GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+			if (_loader.GetSettings().MESH_CACHE)
+			{
+				auto it = _expressIDToMesh.find(expressID);
+
+				if (it == _expressIDToMesh.end())
+				{
+					_statistics.meshCacheMisses++;
+					_expressIDToMesh[expressID] = GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+				}
+				else
+				{
+					_statistics.meshCacheHits++;
+				}
+
+				return _expressIDToMesh[expressID];
+			}
+			else
+			{
+				return GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+			}
 		}
 
 		IfcProfile GetProfile(uint32_t expressID)
 		{
-			return GetProfileByLine(_loader.ExpressIDToLineID(expressID));
+			auto profile = GetProfileByLine(_loader.ExpressIDToLineID(expressID));
+			if (!profile.curve.IsCCW())
+			{
+				profile.curve.Invert();
+			}
+			for (auto& hole : profile.holes)
+			{
+				if (hole.IsCCW())
+				{
+					hole.Invert();
+				}
+			}
+
+			return profile;
 		}
 
 		void DumpMesh(IfcComposedMesh& mesh, std::wstring filename)
@@ -170,14 +203,6 @@ namespace webifc
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
 			auto& line = _loader.GetLine(lineID);
-			auto it = _expressIDToMesh.find(line.expressID);
-			if (it != _expressIDToMesh.end())
-			{
-				_statistics.meshCacheHits++;
-				auto& mesh = _expressIDToMesh[line.expressID];
-				return mesh;
-			}
-			_statistics.meshCacheMisses++;
 
 			bool hasColor = false;
 			glm::dvec4 styledItemColor(1);
@@ -185,6 +210,7 @@ namespace webifc
 			auto& relMaterials = _loader.GetRelMaterials();
 			auto& materialDefinitions = _loader.GetMaterialDefinitions();
 			auto& relVoids = _loader.GetRelVoids();
+			auto& relAggregates = _loader.GetRelAggregates();
 
 			auto styledItem = styledItems.find(line.expressID);
 			if (styledItem != styledItems.end())
@@ -226,11 +252,15 @@ namespace webifc
 				}
 			}
 
+			IfcComposedMesh mesh;
+			mesh.expressID = line.expressID;
+			mesh.hasColor = hasColor;
+			mesh.color = styledItemColor;
+			mesh.transformation = glm::dmat4(1);
+
 			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
 			if (isIfcElement)
 			{
-				IfcComposedMesh mesh;
-
 				_loader.MoveToArgumentOffset(line, 5);
 				uint32_t localPlacement = 0;
 				if (_loader.GetTokenType() == IfcTokenType::REF)
@@ -249,15 +279,27 @@ namespace webifc
 				{
 					mesh.transformation = GetLocalPlacement(localPlacement);
 				}
-				else
-				{
-					mesh.transformation = glm::dmat4(1);
-				}
 
 				if (ifcPresentation != 0)
 				{
 					mesh.children.push_back(GetMesh(ifcPresentation));
 				}
+
+				/*
+				// not sure if aggregates are needed here...
+				// add aggregates before applying voids!
+				auto relAggIt = relAggregates.find(line.expressID);
+				if (relAggIt != relAggregates.end() && !relAggIt->second.empty())
+				{
+					for (auto relAggExpressID : relAggIt->second)
+					{
+						// hacky fix to avoid double application of the parent matrix
+						auto aggMesh = GetMesh(relAggExpressID);
+						aggMesh.transformation *= glm::inverse(mesh.transformation);
+						mesh.children.push_back(aggMesh);
+					}
+				}
+				*/
 
 				auto relVoidsIt = relVoids.find(line.expressID);
 
@@ -268,30 +310,40 @@ namespace webifc
 
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry);
 
-					// TODO: this is inefficient, better make one-to-many subtraction in bool logic
-					for (auto relVoidExpressID : relVoidsIt->second)
+					if (!flatElementMesh.IsEmpty())
 					{
-						IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
-						auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry);
 
-						// DumpIfcGeometry(flatVoidMesh, L"void.obj");
-						// DumpIfcGeometry(flatElementMesh, L"mesh.obj");
-
-						if (_loader.GetSettings().USE_FAST_BOOLS)
+						// TODO: this is inefficient, better make one-to-many subtraction in bool logic
+						for (auto relVoidExpressID : relVoidsIt->second)
 						{
-							IfcGeometry r1;
-							IfcGeometry r2;
+							IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
+							auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry);
 
-							intersectMeshMesh(flatElementMesh, flatVoidMesh, r1, r2);
+							if (_loader.GetSettings().DUMP_CSG_MESHES)
+							{
+								DumpIfcGeometry(flatVoidMesh, L"void.obj");
+								DumpIfcGeometry(flatElementMesh, L"mesh.obj");
+							}
 
-							flatElementMesh = boolSubtract(r1, r2);
+							if (_loader.GetSettings().USE_FAST_BOOLS)
+							{
+								IfcGeometry r1;
+								IfcGeometry r2;
+
+								intersectMeshMesh(flatElementMesh, flatVoidMesh, r1, r2);
+
+								flatElementMesh = boolSubtract(r1, r2);
+							}
+							else
+							{
+								flatElementMesh = boolSubtract_CSGJSCPP(flatElementMesh, flatVoidMesh);
+							}
+
+							if (_loader.GetSettings().DUMP_CSG_MESHES)
+							{
+								DumpIfcGeometry(flatElementMesh, L"res.obj");
+							}
 						}
-						else
-						{
-							flatElementMesh = boolSubtract_CSGJSCPP(flatElementMesh, flatVoidMesh);
-						}
-
-						// DumpIfcGeometry(flatElementMesh, L"res.obj");
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
@@ -300,14 +352,10 @@ namespace webifc
 					resultMesh.hasColor = true;
 					resultMesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = resultMesh;
 					return resultMesh;
 				}
 				else
 				{
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 			}
@@ -317,25 +365,17 @@ namespace webifc
 				{
 				case ifc2x4::IFCMAPPEDITEM:
 				{
-					IfcComposedMesh mesh;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
 					uint32_t localPlacement = _loader.GetRefArgument();
 
 					mesh.transformation = GetLocalPlacement(localPlacement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
-
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
+					
 					return mesh;
 				}
 				case ifc2x4::IFCBOOLEANCLIPPINGRESULT:
 				{
-					IfcComposedMesh mesh;
-					mesh.transformation = glm::dmat4(1);
-
 					_loader.MoveToArgumentOffset(line, 1);
 					uint32_t firstOperandID = _loader.GetRefArgument();
 					uint32_t secondOperandID = _loader.GetRefArgument();
@@ -387,19 +427,13 @@ namespace webifc
 					}
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.hasColor = true;
-					mesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCBOOLEANRESULT:
 				{
 					// @Refactor: duplicate of above
-					IfcComposedMesh mesh;
-					mesh.transformation = glm::dmat4(1);
 
 					_loader.MoveToArgumentOffset(line, 0);
 					std::string op = _loader.GetStringArgument();
@@ -419,8 +453,11 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					// DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
-					// DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
+						DumpIfcGeometry(flatSecondMesh, L"void.obj");
+					}
 
 					if (flatFirstMesh.numFaces == 0)
 					{
@@ -429,8 +466,11 @@ namespace webifc
 						return mesh;
 					}
 
-					// DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
-					// DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
+						DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
+					}
 
 					webifc::IfcGeometry resultMesh;
                     if (_loader.GetSettings().USE_FAST_BOOLS)
@@ -447,22 +487,18 @@ namespace webifc
 						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
 					}
 
-					// DumpIfcGeometry(resultMesh, L"result.obj");
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(resultMesh, L"result.obj");
+					}
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.hasColor = true;
-					mesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCHALFSPACESOLID:
 				{
-					IfcComposedMesh mesh;
-					mesh.transformation = glm::dmat4(1);
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t surfaceID = _loader.GetRefArgument();
 					std::string agreement = _loader.GetStringArgument();
@@ -479,18 +515,12 @@ namespace webifc
 					}
 
 					double d = EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor();
-					IfcCurve<2> c;
-					c.Add(glm::dvec2(-d, -d));
-					c.Add(glm::dvec2(d, -d));
-					c.Add(glm::dvec2(d, d));
-					c.Add(glm::dvec2(-d, d));
-					c.Add(glm::dvec2(-d, -d));
 
 					IfcProfile profile;
 					profile.isConvex = false;
-					profile.curve = c;
+					profile.curve = GetRectangleCurve(d, d, glm::dmat3(1));
 
-					auto geom = Extrude(profile, surface.transformation, extrusionNormal, d);
+					auto geom = Extrude(profile, extrusionNormal, d);
 
 					// @Refactor: duplicate of extrudedareasolid
 					if (flipWinding)
@@ -504,20 +534,15 @@ namespace webifc
 						}
 					}
 
+					mesh.transformation = surface.transformation;
 					// TODO: this is getting problematic.....
 					_expressIDToGeometry[line.expressID] = geom;
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.color = styledItemColor;
 
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCPOLYGONALBOUNDEDHALFSPACE:
 				{
-					IfcComposedMesh mesh;
-					mesh.transformation = glm::dmat4(1);
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t surfaceID = _loader.GetRefArgument();
 					std::string agreement = _loader.GetStringArgument();
@@ -527,6 +552,11 @@ namespace webifc
 					IfcSurface surface = GetSurface(surfaceID);
 					glm::dmat4 position = GetLocalPlacement(positionID);
 					webifc::IfcCurve<2> curve = GetCurve<2>(boundaryID);
+
+					if (!curve.IsCCW())
+					{
+						curve.Invert();
+					}
 
 					glm::dvec3 extrusionNormal = glm::dvec3(0, 0, 1);
 					glm::dvec3 planeNormal = surface.transformation[2];
@@ -544,7 +574,7 @@ namespace webifc
 					profile.isConvex = false;
 					profile.curve = curve;
 
-					auto geom = Extrude(profile, position, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor(), planeNormal, planePosition);
+					auto geom = Extrude(profile, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor(), planeNormal, planePosition);
 					//auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
 
 					// @Refactor: duplicate of extrudedareasolid
@@ -558,20 +588,21 @@ namespace webifc
 							geom.indexData[i * 3 + 1] = temp;
 						}
 					}
+					
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(geom, L"pbhs.obj");
+					}
 
 					// TODO: this is getting problematic.....
 					_expressIDToGeometry[line.expressID] = geom;
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.color = styledItemColor;
+					mesh.transformation = position;
 
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCREPRESENTATIONMAP:
 				{
-					IfcComposedMesh mesh;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t axis2Placement = _loader.GetRefArgument();
 					uint32_t ifcPresentation = _loader.GetRefArgument();
@@ -579,18 +610,11 @@ namespace webifc
 					mesh.transformation = GetLocalPlacement(axis2Placement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCFACEBASEDSURFACEMODEL:
 				case ifc2x4::IFCSHELLBASEDSURFACEMODEL:
 				{
-					IfcComposedMesh mesh;
-
-					mesh.transformation = glm::dmat4(1);
-
 					_loader.MoveToArgumentOffset(line, 0);
 					auto shells = _loader.GetSetArgument();
 
@@ -605,54 +629,34 @@ namespace webifc
 						mesh.children.push_back(temp);
 					}
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCFACETEDBREP:
 				{
-					IfcComposedMesh mesh;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
-					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 
 					return mesh;
 				}
 				case ifc2x4::IFCPRODUCTREPRESENTATION:
 				case ifc2x4::IFCPRODUCTDEFINITIONSHAPE:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 2);
 					auto representations = _loader.GetSetArgument();
 
-					mesh.transformation = glm::dmat4(1);
 					for (auto& repToken : representations)
 					{
 						uint32_t repID = _loader.GetRefArgument(repToken);
 						mesh.children.push_back(GetMesh(repID));
 					}
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCSHAPEREPRESENTATION:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 1);
 					auto type = _loader.GetStringArgument();
 
@@ -664,23 +668,16 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 3);
 					auto repItems = _loader.GetSetArgument();
 
-					mesh.transformation = glm::dmat4(1);
 					for (auto& repToken : repItems)
 					{
 						uint32_t repID = _loader.GetRefArgument(repToken);
 						mesh.children.push_back(GetMesh(repID));
 					}
 
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
 				case ifc2x4::IFCPOLYGONALFACESET:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 0);
 
 					auto coordinatesRef = _loader.GetRefArgument();
@@ -711,21 +708,14 @@ namespace webifc
 						std::cout << "Unsupported IFCPOLYGONALFACESET with PnIndex!" << std::endl;
 					}
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
+					
 					return mesh;
 				}
 				case ifc2x4::IFCTRIANGULATEDFACESET:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 0);
 
 					auto coordinatesRef = _loader.GetRefArgument();
@@ -762,21 +752,14 @@ namespace webifc
 
 					// DumpIfcGeometry(geom, L"test.obj");
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
+					
 					return mesh;
 				}
 				case ifc2x4::IFCSWEPTDISKSOLID:
 				{
-					IfcComposedMesh mesh;
-					mesh.expressID = line.expressID;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					auto directrixRef = _loader.GetRefArgument();
 
@@ -796,11 +779,38 @@ namespace webifc
 					IfcCurve<3> directrix = GetCurve<3>(directrixRef);
 
 					IfcProfile profile;
-					profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_MEDIUM);
+					profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM);
 
 					IfcGeometry geom = Sweep(profile, directrix);
 
-					mesh.transformation = glm::dmat4(1);
+					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+
+					return mesh;
+				}
+				case ifc2x4::IFCREVOLVEDAREASOLID:
+				{
+					IfcComposedMesh mesh;
+
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t profileID = _loader.GetRefArgument();
+					uint32_t placementID = _loader.GetRefArgument();
+					uint32_t axis1PlacementID = _loader.GetRefArgument();
+					double angle = _loader.GetDoubleArgument();
+
+					IfcProfile profile = GetProfile(profileID);
+					glm::dmat4 placement = GetLocalPlacement(placementID);
+					glm::dvec3 pos;
+					glm::dvec3 axis;
+
+					GetAxis1Placement(axis1PlacementID, pos, axis);
+
+					IfcCurve<3> directrix = BuildArc(pos, axis, angle);
+
+					IfcGeometry geom = Sweep(profile, directrix);
+
+					mesh.transformation = placement;
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
@@ -812,8 +822,6 @@ namespace webifc
 				}
 				case ifc2x4::IFCEXTRUDEDAREASOLID:
 				{
-					IfcComposedMesh mesh;
-
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t profileID = _loader.GetRefArgument();
 					uint32_t placementID = _loader.GetRefArgument();
@@ -821,7 +829,12 @@ namespace webifc
 					double depth = _loader.GetDoubleArgument();
 
 					IfcProfile profile = GetProfile(profileID);
-					glm::dmat4 placement = GetLocalPlacement(placementID);
+					if (profile.curve.points.empty())
+					{
+						return mesh;
+					}
+
+					mesh.transformation = GetLocalPlacement(placementID);
 					glm::dvec3 dir = GetCartesianPoint3D(directionID);
 
 					double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
@@ -832,7 +845,7 @@ namespace webifc
 						DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
 					}
 
-					IfcGeometry geom = Extrude(profile, placement, dir, depth);
+					IfcGeometry geom = Extrude(profile, dir, depth);
 
 					if (flipWinding)
 					{
@@ -850,14 +863,10 @@ namespace webifc
 						DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
 					}
 
-					mesh.transformation = glm::dmat4(1);
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-
-					mesh.hasColor = hasColor;
-					mesh.color = styledItemColor;
-					_expressIDToMesh[line.expressID] = mesh;
+					
 					return mesh;
 				}
 
@@ -868,6 +877,46 @@ namespace webifc
 			}
 
 			return IfcComposedMesh();
+		}
+
+		IfcCurve<3> BuildArc(const glm::dvec3& pos, const glm::dvec3& axis, double angleRad)
+		{
+			IfcCurve<3> curve;
+
+			double radius = glm::length(pos);
+
+			glm::dvec3 right = -pos;
+			glm::dvec3 up = glm::cross(axis, right);
+
+			auto curve2D = GetEllipseCurve(1, 1, _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM, glm::dmat3(1), 0, angleRad, true);
+
+			for (auto& pt2D : curve2D.points)
+			{
+				glm::dvec3 pt3D = pos + pt2D.x * right + pt2D.y * up;
+				curve.Add(pt3D);
+			}
+
+			return curve;
+		}
+
+		void GetAxis1Placement(uint32_t expressID, glm::dvec3& pos, glm::dvec3& axis)
+		{
+			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
+			auto& line = _loader.GetLine(lineID);
+
+			_loader.MoveToArgumentOffset(line, 0);
+			uint32_t locationID = _loader.GetRefArgument();
+			IfcTokenType dirToken = _loader.GetTokenType();
+
+
+			axis = glm::dvec3(0, 0, 1);
+			if (dirToken == IfcTokenType::REF)
+			{
+				_loader.Reverse();
+				axis = GetCartesianPoint3D(_loader.GetRefArgument());
+			}
+
+			pos = GetCartesianPoint3D(locationID);
 		}
 
 		std::vector<uint32_t> Read2DArrayOfThreeIndices()
@@ -1424,8 +1473,8 @@ namespace webifc
 						printf("0 left vec in sweep!\n");
 					}
 
-					glm::dvec3 right = glm::cross(directrixSegmentNormal, left);
-					left = glm::cross(directrixSegmentNormal, right);
+					glm::dvec3 right = glm::normalize(glm::cross(directrixSegmentNormal, left));
+					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
 
 					// project profile onto planeNormal, place on planeOrigin
 					// TODO: look at holes
@@ -1481,7 +1530,7 @@ namespace webifc
 			return geom;
 		}
 
-		IfcGeometry Extrude(IfcProfile profile, glm::dmat4 placement, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
+		IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
 		{
 			IfcGeometry geom;
 			std::vector<bool> holesIndicesHash;
@@ -1497,7 +1546,7 @@ namespace webifc
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
+					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
 					geom.AddPoint(et, normal);
 					polygon[0].push_back({ pt.x, pt.y });
@@ -1518,7 +1567,7 @@ namespace webifc
 						holesIndicesHash.push_back(j == 0);
 
 						glm::dvec2 pt = hole.points[j];
-						glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
+						glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
 						profile.curve.Add(pt);
 						geom.AddPoint(et, normal);
@@ -1529,10 +1578,19 @@ namespace webifc
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
 				uint32_t offset = 0;
+				bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
+				bool flipWinding = !winding;
+
 				for (int i = 0; i < indices.size(); i += 3)
 				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
-					// CheckTriangle(f2, geom.points);
+					if (flipWinding)
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+					}
+					else
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+					}
 				}
 
 				offset += geom.numPoints;
@@ -1542,12 +1600,12 @@ namespace webifc
 				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
+					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0), 1);
 
 					if (cuttingPlaneNormal != glm::dvec3(0))
 					{
-						et = placement * glm::dvec4(glm::dvec3(pt, 0), 1);
-						glm::dvec3 transDir = placement * glm::dvec4(dir, 0);
+						et = glm::dvec4(glm::dvec3(pt, 0), 1);
+						glm::dvec3 transDir = glm::dvec4(dir, 0);
 
 						// project {et} onto the plane, following the extrusion normal						
 						double ldotn = glm::dot(transDir, cuttingPlaneNormal);
@@ -1569,8 +1627,14 @@ namespace webifc
 
 				for (int i = 0; i < indices.size(); i += 3)
 				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
-					// CheckTriangle(f2, geom.points);
+					if (flipWinding)
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+					}
+					else
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+					}
 				}
 			}
 
@@ -1589,28 +1653,14 @@ namespace webifc
 				uint32_t tl = capSize + i - 1;
 				uint32_t tr = capSize + i - 0;
 
-				// top    1 2 3 4
-				// bottom 5 6 7 8
-				// first face: 1 6 5, 1 2 6
-				
-				geom.AddFace(geom.GetPoint(tl),
-							 geom.GetPoint(br),
-							 geom.GetPoint(bl));
-
-				geom.AddFace(geom.GetPoint(tl),
-							 geom.GetPoint(tr),
-							 geom.GetPoint(br));
-
-				// TODO: some elements expect different winding
-				/*
-				geom.AddFace(geom.GetPoint(tl),
-					geom.GetPoint(bl),
-					geom.GetPoint(br));
-
+				// this winding should be correct
 				geom.AddFace(geom.GetPoint(tl),
 					geom.GetPoint(br),
-					geom.GetPoint(tr));
-					*/
+					geom.GetPoint(bl));
+
+				geom.AddFace(geom.GetPoint(tl),
+					geom.GetPoint(tr),
+					geom.GetPoint(br));
 			}
 
 			return geom;
@@ -1688,23 +1738,7 @@ namespace webifc
 
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				double halfX = xdim / 2;
-				double halfY = ydim / 2;
-
-				glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
-				glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
-				
-				glm::dvec2 tl = placement * glm::dvec3(-halfX, halfY, 1);
-				glm::dvec2 tr = placement * glm::dvec3(halfX, halfY, 1);
-
-				IfcCurve<2> c;
-				c.points.push_back(bl);
-				c.points.push_back(tl);
-				c.points.push_back(tr);
-				c.points.push_back(br);
-				c.points.push_back(bl);
-
-				profile.curve = c;
+				profile.curve = GetRectangleCurve(xdim, ydim, placement);
 
 				return profile;
 			}
@@ -1746,7 +1780,7 @@ namespace webifc
 				
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_HIGH, placement);
+				profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement);
 
 				return profile;
 			}
@@ -1765,7 +1799,7 @@ namespace webifc
 
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				profile.curve = GetEllipseCurve(radiusX, radiusY, CIRCLE_SEGMENTS_HIGH, placement);
+				profile.curve = GetEllipseCurve(radiusX, radiusY, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement);
 
 				return profile;
 			}
@@ -1784,8 +1818,8 @@ namespace webifc
 
 				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-				profile.curve = GetCircleCurve(radius, CIRCLE_SEGMENTS_HIGH, placement);
-				profile.holes.push_back(GetCircleCurve(radius - thickness, CIRCLE_SEGMENTS_HIGH, placement));
+				profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement);
+				profile.holes.push_back(GetCircleCurve(radius - thickness, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement));
 				std::reverse(profile.holes[0].points.begin(), profile.holes[0].points.end());
 
 				return profile;
@@ -2255,7 +2289,7 @@ namespace webifc
 
 				size_t startIndex = curve.points.size();
 
-				const int numSegments = CIRCLE_SEGMENTS_HIGH;
+				const int numSegments = _loader.GetSettings().CIRCLE_SEGMENTS_HIGH;
 
 				for (int i = 0; i < numSegments; i++)
 				{

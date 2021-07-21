@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    
+    runs-on: ${{matrix.os-type}}
+    
+    strategy:
+      matrix:
+        os-type: [windows-latest]
+        configuration: [Debug, Release, RelWithDebInfo]    
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Configure
+      working-directory: ${{github.workspace}}/src/wasm
+      run: cmake -B ${{github.workspace}}/src/wasm/Build -DCMAKE_BUILD_TYPE=${{matrix.configuration}}
+    - name: Build
+      working-directory: ${{github.workspace}}/src/wasm
+      run: cmake --build ${{github.workspace}}/src/wasm/Build --config ${{matrix.configuration}}
+    - name: Test
+      working-directory: ${{github.workspace}}/src/wasm/Build
+      run: ctest -VV -C ${{matrix.configuration}}

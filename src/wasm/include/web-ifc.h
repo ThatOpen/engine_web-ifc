@@ -29,7 +29,11 @@ namespace webifc
     {
         bool COORDINATE_TO_ORIGIN = false;
         bool USE_FAST_BOOLS = false;
-		bool DUMP_CSG_MESHES = false;
+        bool DUMP_CSG_MESHES = false;
+        int CIRCLE_SEGMENTS_LOW = 5;
+        int CIRCLE_SEGMENTS_MEDIUM = 8;
+        int CIRCLE_SEGMENTS_HIGH = 12;
+        bool MESH_CACHE = false;
     };
 
 	long long ms()
@@ -60,6 +64,12 @@ namespace webifc
 		std::unordered_map<uint32_t, std::vector<uint32_t>>& GetRelVoids()
 		{
 			return _metaData._relVoids;
+		}
+
+		// this is lazy
+		std::unordered_map<uint32_t, std::vector<uint32_t>>& GetRelAggregates()
+		{
+			return _metaData._relAggregates;
 		}
 
 		// this is lazy
@@ -101,6 +111,7 @@ namespace webifc
             parser.ParseTape(numLines);
 
 			PopulateRelVoidsMap();
+			PopulateRelAggregatesMap();
 			PopulateStyledItemMap();
 			PopulateRelMaterialsMap();
 			ReadLinearScalingFactor();
@@ -254,6 +265,27 @@ namespace webifc
 			}
 		}
 
+		void PopulateRelAggregatesMap()
+		{
+			auto relVoids = GetExpressIDsWithType(ifc2x4::IFCRELAGGREGATES);
+
+			for (uint32_t relVoidID : relVoids)
+			{
+				uint32_t lineID = ExpressIDToLineID(relVoidID);
+				auto& line = GetLine(lineID);
+
+				MoveToArgumentOffset(line, 4);
+
+				uint32_t relatingBuildingElement = GetRefArgument();
+				auto aggregates = GetSetArgument();
+
+				for (auto& aggregate : aggregates)
+				{
+					uint32_t aggregateID = GetRefArgument(aggregate);
+					_metaData._relAggregates[relatingBuildingElement].push_back(aggregateID);
+				}
+			}
+		}
 
 		void PopulateStyledItemMap()
 		{
@@ -508,9 +540,32 @@ namespace webifc
 			_tape.Reverse();
 		}
 
-		inline void UpdateLineTape(uint32_t expressID, uint32_t start, uint32_t end)
+		inline void UpdateLineTape(uint32_t expressID, uint32_t type, uint32_t start, uint32_t end)
 		{
 			uint64_t pos = _tape.GetTotalSize();
+
+			// new line?
+			if (expressID >= _metaData.expressIDToLine.size() || _metaData.expressIDToLine[expressID] == 0)
+			{
+				// allocate some space
+				_metaData.expressIDToLine.resize(expressID * 2);
+
+				// create line object
+				int lineID = _metaData.lines.size();
+				_metaData.lines.emplace_back();
+
+				// create a line ID
+				_metaData.expressIDToLine[expressID] = lineID;
+				auto& line = _metaData.lines[lineID];
+
+				// fill line data
+				line.expressID = expressID;
+				line.lineIndex = lineID;
+				line.ifcType = type;
+
+				_metaData.ifcTypeToLineID[type].push_back(lineID);
+			}
+
 			auto lineID = _metaData.expressIDToLine[expressID];
 			auto& line = _metaData.lines[lineID];
 

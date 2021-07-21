@@ -7,11 +7,25 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 let controls;
 
 function Init3DView() {
-  renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.9);
-  document.body.appendChild(renderer.domElement);
+  let obj = document.getElementById("3dcontainer") as any;
+  obj.appendChild(renderer.domElement);
+  renderer.setSize( obj.clientWidth - 20, obj.clientHeight - 20);
+  window.addEventListener('resize', onWindowResize, false );
 
   controls = new OrbitControls(camera, renderer.domElement);
 
+
+  scene.background = new THREE.Color(0x8cc7de);
+
+  InitBasicScene();
+
+  camera.position.z = 5;
+
+  AnimationLoop();
+}
+
+export function InitBasicScene()
+{
   const directionalLight1 = new THREE.DirectionalLight(0xffeeff, 0.8);
   directionalLight1.position.set(1, 1, 1);
   scene.add(directionalLight1);
@@ -22,12 +36,16 @@ function Init3DView() {
 
   const ambientLight = new THREE.AmbientLight(0xffffee, 0.25);
   scene.add(ambientLight);
+}
 
-  scene.background = new THREE.Color(0x8cc7de);
 
-  camera.position.z = 5;
+function onWindowResize(){
+    let obj = document.getElementById("3dcontainer") as any;
+    camera.aspect = obj.clientWidth / obj.clientHeight;
+    camera.updateProjectionMatrix();
 
-  AnimationLoop();
+    renderer.setSize( obj.clientWidth - 20, obj.clientHeight - 20);
+
 }
 
 function AnimationLoop() {

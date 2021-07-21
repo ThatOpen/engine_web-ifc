@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 import * as THREE from "three";
-import { IfcAPI, ms, PlacedGeometry, Color } from "../../dist/web-ifc-api";
+import { IfcAPI, ms, PlacedGeometry, Color, FlatMesh } from "../../dist/web-ifc-api";
   
 export class IfcThree
 {
@@ -23,14 +23,29 @@ export class IfcThree
      * @modelID Model handle retrieved by OpenModel, model must not be closed
     */
     public LoadAllGeometry(scene: THREE.Scene, modelID: number) {
-        const flatMeshes = this.getFlatMeshes(modelID);
+
         const startUploadingTime = ms();
+
+        /*
+        const flatMeshes = this.getFlatMeshes(modelID);
         for (let i = 0; i < flatMeshes.size(); i++) {
             // console.log(flatMeshes.get(i).expressID);
             const placedGeometries = flatMeshes.get(i).geometries;
             for (let j = 0; j < placedGeometries.size(); j++)
                 scene.add(this.getPlacedGeometry(modelID, placedGeometries.get(j)));
         }
+        */
+
+        this.ifcAPI.StreamAllMeshes(modelID, (mesh: FlatMesh) => {
+            // only during the lifetime of this function call, the geometry is available in memory
+            const placedGeometries = mesh.geometries;
+
+            for (let i = 0; i < placedGeometries.size(); i++)
+            {
+                const placedGeometry = placedGeometries.get(i);
+                scene.add(this.getPlacedGeometry(modelID, placedGeometry));
+            }
+        });
         console.log(`Uploading took ${ms() - startUploadingTime} ms`);
     }
     

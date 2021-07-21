@@ -25,10 +25,7 @@ void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geom
 
     bool writeFiles = true;
     
-    geometryLoader.GetCurve<2>(249889);
-
     auto mesh = geometryLoader.GetMesh(num);
-
 
     if (writeFiles)
     {
@@ -234,10 +231,14 @@ int main()
 
     //return 0;
 
-    std::string content = ReadFile(L"D:/web-ifc/benchmark/ifcfiles/model2.ifc");
 
+    std::string content = ReadFile(L"D:/web-ifc/benchmark/ifcfiles/H01_Flachdach_Index01.ifc");
+    //std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
 
-    webifc::IfcLoader loader;
+    webifc::LoaderSettings set;
+    set.DUMP_CSG_MESHES = true;
+
+    webifc::IfcLoader loader(set);
 
     auto start = webifc::ms();
     loader.LoadFile(content);
@@ -253,8 +254,8 @@ int main()
 
     start = webifc::ms();
 
-    // SpecificLoadTest(loader, geometryLoader, 249556);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    SpecificLoadTest(loader, geometryLoader, 57672);
+    //auto meshes = LoadAllTest(loader, geometryLoader);
 
     time = webifc::ms() - start;
 
