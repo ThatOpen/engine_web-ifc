@@ -30,11 +30,11 @@
     "build-wasm-debug": "em++ --bind -O3 -g4 -std=c++17 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
     "build-wasm-release": "em++ --bind -O3 -std=c++17 -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
 
-    "build-api": "cpy src/*.ts dist && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node && npm run copy-to-dist",
+    "build-api": "cpy src/*.ts dist && cpy src/ifc2x4.js dist && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node && npm run copy-to-dist",
     "build-ts-api": "tsc --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts dist && cpy dist/web-ifc-api.d.ts dist --rename=web-ifc-api-node.d.ts",
     "build-web-ifc-api-mjs": "esbuild dist/web-ifc-api.ts --bundle --format=esm --external:path --external:fs --outfile=./dist/web-ifc-api.js",
     "build-web-ifc-api-node": "esbuild dist/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api-node.js",
-    "copy-to-dist": "cpy README.md dist && cpy package.json dist && cpy src/ifc2x4.ts dist",
+    "copy-to-dist": "cpy README.md dist && cpy package.json dist && cpy src/ifc2x4.js dist",
 
     "build-viewer": "npm run bundle-viewer && npm run copy-wasm-viewer",
     "bundle-viewer": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./examples/viewer/web-ifc-viewer.js",
