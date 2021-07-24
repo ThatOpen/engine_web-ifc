@@ -535,6 +535,84 @@ namespace webifc
 			return static_cast<IfcTokenType>(_tape.Read<char>());
 		}
 
+		inline void GetLineDependencies(uint32_t expressID, std::set<uint32_t>& deps)
+		{
+			// move tape to line
+			uint32_t lineID = ExpressIDToLineID(expressID);
+			auto& line = GetLine(lineID);
+			MoveToArgumentOffset(line, 0);
+
+			std::vector<uint32_t> localDeps;
+
+			// scan tape for dependencies
+			while (!_tape.AtEnd())
+			{
+				IfcTokenType t = static_cast<IfcTokenType>(_tape.template Read<char>());
+
+				if (t == IfcTokenType::LINE_END)
+				{
+					break;
+				}
+
+				switch (t)
+				{
+				case IfcTokenType::UNKNOWN:
+				case IfcTokenType::EMPTY:
+				case IfcTokenType::SET_BEGIN:
+				case IfcTokenType::SET_END:
+					break;
+				case IfcTokenType::STRING:
+				case IfcTokenType::ENUM:
+				case IfcTokenType::LABEL:
+				{
+					StringView s = _tape.ReadStringView();
+
+					break;
+				}
+				case IfcTokenType::REF:
+				{
+					uint32_t ref = _tape.template Read<uint32_t>();
+					deps.insert(ref);
+
+					// can't recurse here, it will mess up the tape!
+					localDeps.push_back(ref);
+					break;
+				}
+				case IfcTokenType::REAL:
+				{
+					_tape.template Read<double>();
+					break;
+				}
+				default:
+					break;
+				}
+			}
+
+			for (auto& localDep : localDeps)
+			{
+				GetLineDependencies(localDep, deps);
+			}
+		}
+
+		inline std::set<uint32_t> GetLineDependencies(uint32_t expressID)
+		{
+			std::set<uint32_t> deps;
+			GetLineDependencies(expressID, deps);
+			return deps;
+		}
+
+		inline std::vector<IfcLine> GetLinesForExpressIDs(const std::set<uint32_t>& expressIDs)
+		{
+			std::vector<IfcLine> lines;
+
+			for (auto eid : expressIDs) {
+				auto lineID = ExpressIDToLineID(eid);
+				lines.push_back(GetLine(lineID));
+			}
+
+			return lines;
+		}
+
 		inline void Reverse()
 		{
 			_tape.Reverse();
@@ -628,7 +706,15 @@ namespace webifc
 			return tapeOffsets;
 		}
 
-		std::string DumpAsIFC()
+		std::string DumpSingleObjectAsIFC(uint32_t expressID)
+		{
+			auto deps = GetLineDependencies(expressID);
+			deps.insert(expressID);
+			auto lines = GetLinesForExpressIDs(deps);
+			return DumpAsIFC(lines);
+		}
+
+		std::string DumpAsIFC(const std::vector<IfcLine>& lines = {})
 		{
             std::stringstream file;
 			file << std::setprecision(std::numeric_limits<double>::digits10 + 1);
@@ -644,7 +730,9 @@ namespace webifc
 			file << "ENDSEC;" << std::endl;
 			file << "DATA;" << std::endl;
 
-			for (auto& line : _metaData.lines)
+			const auto& linesToWrite = lines.empty() ? _metaData.lines : lines;
+
+			for (auto& line : linesToWrite)
 			{
 				_tape.MoveTo(line.tapeOffset);
 				bool newLine = true;
