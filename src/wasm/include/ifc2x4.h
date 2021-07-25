@@ -782,6 +782,7 @@ namespace ifc2x4 {
 	bool IsIfcElement(unsigned int ifcCode) {
 		switch(ifcCode) {
 			case 4288193352: return true;
+			case 4097777520: return true;
 			case 1634111441: return true;
 			case 177149247: return true;
 			case 2056796094: return true;
@@ -915,6 +916,7 @@ namespace ifc2x4 {
 		}
 	}
 	std::vector<unsigned int> IfcElements { 
+		4097777520,
 		4288193352,
 		1634111441,
 		177149247,
