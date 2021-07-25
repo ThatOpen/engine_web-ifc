@@ -2057,6 +2057,7 @@ namespace webifc
 		{
 			IfcTrimmingSelect ts;
 
+			/*
 			if (tapeOffsets.size() == 2)
 			{
 				_loader.MoveTo(tapeOffsets[0]);
@@ -2081,6 +2082,35 @@ namespace webifc
 				ts.hasPos = true;
 				// TODO: assuming cartesian point
 				ts.pos = GetCartesianPoint2D(cartesianPointRef);
+			}
+			*/
+			for (int i = 0; i < tapeOffsets.size(); i++)
+			{
+				_loader.MoveTo(tapeOffsets[i]);
+
+				auto tokenType = _loader.GetTokenType();
+				_loader.Reverse();
+
+				if (tokenType == IfcTokenType::REF)
+				{
+					// caresian point
+					uint32_t cartesianPointRef = _loader.GetRefArgument();
+					ts.hasPos = true;
+					ts.pos = GetCartesianPoint2D(cartesianPointRef);
+				}
+				else if (tokenType == IfcTokenType::LABEL)
+				{
+					// parametervalue
+					std::string type = _loader.GetStringArgument();
+
+					if (type == "IFCPARAMETERVALUE")
+					{
+						ts.hasParam = true;
+						i++;
+						_loader.MoveTo(tapeOffsets[i]);
+						ts.param = _loader.GetDoubleArgument();
+					}
+				}
 			}
 
 
