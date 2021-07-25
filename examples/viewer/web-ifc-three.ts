@@ -3,7 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 import * as THREE from "three";
-import { IfcAPI, ms, PlacedGeometry, Color, FlatMesh } from "../../dist/web-ifc-api";
+import { IfcAPI, ms, PlacedGeometry, Color, FlatMesh, IFCSITE } from "../../dist/web-ifc-api";
+import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils";
   
 export class IfcThree
 {
@@ -36,6 +37,8 @@ export class IfcThree
         }
         */
 
+        let geometries = [];
+
         this.ifcAPI.StreamAllMeshes(modelID, (mesh: FlatMesh) => {
             // only during the lifetime of this function call, the geometry is available in memory
             const placedGeometries = mesh.geometries;
@@ -43,9 +46,18 @@ export class IfcThree
             for (let i = 0; i < placedGeometries.size(); i++)
             {
                 const placedGeometry = placedGeometries.get(i);
-                scene.add(this.getPlacedGeometry(modelID, placedGeometry));
+                let mesh = this.getPlacedGeometry(modelID, placedGeometry);
+                let geom = mesh.geometry.applyMatrix4(mesh.matrix);
+                geometries.push(geom);
             }
         });
+
+        const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
+        let mat = new THREE.MeshPhongMaterial();
+        mat.vertexColors = true;
+        const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
+        scene.add(mergedMesh);
+
         console.log(`Uploading took ${ms() - startUploadingTime} ms`);
     }
     
@@ -62,7 +74,6 @@ export class IfcThree
         const geometry = this.getBufferGeometry(modelID, placedGeometry);
         const material = this.getMeshMaterial(placedGeometry.color);
         const mesh = new THREE.Mesh(geometry, material);
-        // mesh.frustumCulled = false; why?
         mesh.matrix = this.getMeshMatrix(placedGeometry.flatTransformation);
         mesh.matrixAutoUpdate = false;
         return mesh;
@@ -72,15 +83,26 @@ export class IfcThree
         const geometry = this.ifcAPI.GetGeometry(modelID, placedGeometry.geometryExpressID);
         const verts = this.ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
         const indices = this.ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
-        const bufferGeometry = this.ifcGeometryToBuffer(verts, indices);
+        const bufferGeometry = this.ifcGeometryToBuffer(placedGeometry.color, verts, indices);
         return bufferGeometry;
     }
+
+    private materials = {};
     
     private getMeshMaterial(color: Color) {
+        let colID = `${color.x}${color.y}${color.z}${color.w}`;
+        if (this.materials[colID])
+        {
+            return this.materials[colID];
+        }
+
         const col = new THREE.Color(color.x, color.y, color.z);
         const material = new THREE.MeshPhongMaterial({ color: col, side: THREE.DoubleSide });
         material.transparent = color.w !== 1;
         if (material.transparent) material.opacity = color.w;
+
+        this.materials[colID] = material;
+
         return material;
     }
     
@@ -90,11 +112,42 @@ export class IfcThree
         return mat;
     }
     
-    private ifcGeometryToBuffer(vertexData: Float32Array, indexData: Uint32Array) {
+    private ifcGeometryToBuffer(color: Color, vertexData: Float32Array, indexData: Uint32Array) {
         const geometry = new THREE.BufferGeometry();
+        /*
         const buffer32 = new THREE.InterleavedBuffer(vertexData, 6);
         geometry.setAttribute('position', new THREE.InterleavedBufferAttribute(buffer32, 3, 0));
         geometry.setAttribute('normal', new THREE.InterleavedBufferAttribute(buffer32, 3, 3));
+        */
+
+        let posFloats = new Float32Array(vertexData.length / 2);
+        let normFloats = new Float32Array(vertexData.length / 2);
+        let colorFloats = new Float32Array(vertexData.length / 2);
+
+        for (let i = 0; i < vertexData.length; i += 6)
+        {
+            posFloats[i / 2 + 0] = vertexData[i + 0];
+            posFloats[i / 2 + 1] = vertexData[i + 1];
+            posFloats[i / 2 + 2] = vertexData[i + 2];
+
+            normFloats[i / 2 + 0] = vertexData[i + 3];
+            normFloats[i / 2 + 1] = vertexData[i + 4];
+            normFloats[i / 2 + 2] = vertexData[i + 5];
+            
+            colorFloats[i / 2 + 0] = color.x;
+            colorFloats[i / 2 + 1] = color.y;
+            colorFloats[i / 2 + 2] = color.z;
+        }
+       
+        geometry.setAttribute(
+            'position',
+            new THREE.BufferAttribute(posFloats, 3));
+        geometry.setAttribute(
+            'normal',
+            new THREE.BufferAttribute(normFloats, 3));
+        geometry.setAttribute(
+            'color',
+            new THREE.BufferAttribute(colorFloats, 3));
         geometry.setIndex(new THREE.BufferAttribute(indexData, 1));
         return geometry;
     }
