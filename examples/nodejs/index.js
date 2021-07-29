@@ -9,11 +9,11 @@ const ifcapi = new WebIFC.IfcAPI();
 async function LoadFile(filename)
 {
     // load model data as a string
-    const ifcData = fs.readFileSync(filename);
+    const ifcData = fs.readFileSync(filename).toString();
     
     await ifcapi.Init();
 
-    let modelID = ifcapi.OpenModel("example.ifc", new Uint8Array(ifcData));
+    let modelID = ifcapi.OpenModel(ifcData);
 
     let properties = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCPROPERTYSINGLEVALUE)
     for (let i = 0; i < properties.size(); i++)

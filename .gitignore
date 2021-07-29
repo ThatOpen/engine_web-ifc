@@ -47,3 +47,5 @@ debug_output
 build
 *.log
 node_modules
+
+.idea/
