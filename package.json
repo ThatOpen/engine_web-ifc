@@ -36,7 +36,9 @@
     "copy-wasm-viewer": "cpy dist/web-ifc.wasm examples/viewer",
     "add-wasm-path": "node src/utils/add-wasm-path.js",
     "serve-viewer": "serve examples/viewer",
-    "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\""
+    "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\"",
+    "docker-build": "docker build -t web-ifc .",
+    "docker-run": "docker run --rm -p 3000:5000 --name web-ifc-container web-ifc"
   },
   "author": "tomvandig",
   "files": [
