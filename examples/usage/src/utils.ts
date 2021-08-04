@@ -12,7 +12,7 @@ export interface TestInfo
     rawFileData: Uint8Array;    
 }
 
-export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => void)
+export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => void, settings?: WebIFC.LoaderSettings)
 {
     console.log("Start " + chalk.green(`${name}`));
 
@@ -31,7 +31,7 @@ export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: Web
         rawFileData: new Uint8Array(ifcData)
     };
 
-    let modelID = ifcapi.OpenModel(info.rawFileData);
+    let modelID = ifcapi.OpenModel(info.rawFileData, settings);
 
     let startTime = WebIFC.ms();
     usageExample(ifcapi, modelID, info);
