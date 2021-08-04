@@ -534,6 +534,21 @@ namespace webifc
 		bool isConvex;
 	};
 
+	std::array<double, 16> FlattenTransformation(const glm::dmat4& transformation)
+	{
+		std::array<double, 16> flatTransformation;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				flatTransformation[i * 4 + j] = transformation[i][j];
+			}
+		}
+
+		return flatTransformation;
+	}
+
 	struct IfcPlacedGeometry
 	{
 		glm::dvec4 color;
@@ -543,13 +558,7 @@ namespace webifc
 
 		void SetFlatTransformation()
 		{
-			for (int i = 0; i < 4; i++)
-			{
-				for (int j = 0; j < 4; j++)
-				{
-					flatTransformation[i * 4 + j] = transformation[i][j];
-				}
-			}
+			flatTransformation = FlattenTransformation(transformation);
 		}
 	};
 

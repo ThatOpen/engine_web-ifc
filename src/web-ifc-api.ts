@@ -257,6 +257,11 @@ export class IfcAPI
         this.wasmModule.SetGeometryTransformation(modelID, transformationMatrix);
     }
 
+    GetCoordinationMatrix(modelID: number): Array<number>
+    {
+        return this.wasmModule.GetCoordinationMatrix(modelID) as Array<number>;
+    }
+
     GetVertexArray(ptr: number, size: number): Float32Array
     {
         return this.getSubArray(this.wasmModule.HEAPF32, ptr, size);

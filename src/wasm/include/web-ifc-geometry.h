@@ -93,17 +93,17 @@ namespace webifc
 			{
 				IfcPlacedGeometry geometry;
 
-				if (!isCoordinated && _loader.GetSettings().COORDINATE_TO_ORIGIN)
+				if (!_isCoordinated && _loader.GetSettings().COORDINATE_TO_ORIGIN)
 				{
 					auto& geom = _expressIDToGeometry[composedMesh.expressID];
 					auto pt = geom.GetPoint(0);
 					auto transformedPt = newMatrix * glm::dvec4(pt, 1);
-					coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
-					isCoordinated = true;
+					_coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
+					_isCoordinated = true;
 				}
 
 				geometry.color = newParentColor;
-				geometry.transformation = coordinationMatrix * newMatrix;
+				geometry.transformation = _coordinationMatrix * newMatrix;
 				geometry.SetFlatTransformation();
 				geometry.geometryExpressID = composedMesh.expressID;
 
@@ -194,6 +194,11 @@ namespace webifc
 		GeometryStatistics GetStatistics()
 		{
 			return _statistics;
+		}
+
+		glm::dmat4 GetCoordinationMatrix()
+		{
+			return _coordinationMatrix;
 		}
 
 	private:
@@ -2431,8 +2436,8 @@ namespace webifc
 			return point;
 		}
 
-		glm::dmat4 coordinationMatrix = glm::dmat4(1.0);
-		bool isCoordinated = false;
+		glm::dmat4 _coordinationMatrix = glm::dmat4(1.0);
+		bool _isCoordinated = false;
 		IfcLoader& _loader;
 		std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
 		std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;

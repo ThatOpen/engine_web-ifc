@@ -220,6 +220,17 @@ void SetGeometryTransformation(uint32_t modelID, std::array<double, 16> m)
     geomLoaders[modelID]->SetTransformation(transformation);
 }
 
+std::array<double, 16> GetCoordinationMatrix(uint32_t modelID)
+{
+    auto& geomLoader = geomLoaders[modelID];
+    if (!geomLoader)
+    {
+        return {};
+    }
+
+    return webifc::FlattenTransformation(geomLoader->GetCoordinationMatrix());
+}
+
 std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
 {
     auto& loader = loaders[modelID];
@@ -667,6 +678,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
     emscripten::function("StreamMeshes", &StreamMeshes);
+    emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("WriteLine", &WriteLine);
