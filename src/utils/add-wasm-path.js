@@ -9,15 +9,15 @@ function Fix(buildFile)
     const oldWasmPath = /var wasmBinaryFile = "web-ifc.wasm";/;
     const newWasmPath = 'var wasmBinaryFile = WasmPath + "web-ifc.wasm";';
 
-    fs.appendFile(buildFile, wasmPathDeclaration, (err) => {
+    fs.appendFileSync(buildFile, wasmPathDeclaration, (err) => {
     if (err) return console.log(err);
     });
 
-    fs.readFile(buildFile, "utf8", (err, data) => {
+    fs.readFileSync(buildFile, "utf8", (err, data) => {
         if (err) return console.error(err);
         
         const result = data.replace(oldWasmPath, newWasmPath);
-        fs.writeFile(buildFile, result, "utf8", (err) => {
+        fs.writeFileSync(buildFile, result, "utf8", (err) => {
             if (err) return console.log(err);
         });
     });
