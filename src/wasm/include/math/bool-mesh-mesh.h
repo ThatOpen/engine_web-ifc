@@ -86,7 +86,7 @@ namespace webifc
         return resultingMesh;
     }
 
-    csgjscpp::Model IfcGeometryToCSGModel(IfcGeometry& mesh1)
+    csgjscpp::Model IfcGeometryToCSGModel(const IfcGeometry& mesh1)
     {
         std::vector<csgjscpp::Polygon> polygons1;
 
@@ -112,7 +112,7 @@ namespace webifc
         return csgjscpp::modelfrompolygons(polygons1);
     }
 
-    IfcGeometry boolSubtract_CSGJSCPP(IfcGeometry& mesh1, IfcGeometry& mesh2)
+    IfcGeometry boolSubtract_CSGJSCPP(const IfcGeometry& mesh1, const IfcGeometry& mesh2)
     {
         auto model1 = IfcGeometryToCSGModel(mesh1);
         auto model2 = IfcGeometryToCSGModel(mesh2);

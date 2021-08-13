@@ -324,30 +324,7 @@ namespace webifc
 							IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
 							auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry);
 
-							if (_loader.GetSettings().DUMP_CSG_MESHES)
-							{
-								DumpIfcGeometry(flatVoidMesh, L"void.obj");
-								DumpIfcGeometry(flatElementMesh, L"mesh.obj");
-							}
-
-							if (_loader.GetSettings().USE_FAST_BOOLS)
-							{
-								IfcGeometry r1;
-								IfcGeometry r2;
-
-								intersectMeshMesh(flatElementMesh, flatVoidMesh, r1, r2);
-
-								flatElementMesh = boolSubtract(r1, r2);
-							}
-							else
-							{
-								flatElementMesh = boolSubtract_CSGJSCPP(flatElementMesh, flatVoidMesh);
-							}
-
-							if (_loader.GetSettings().DUMP_CSG_MESHES)
-							{
-								DumpIfcGeometry(flatElementMesh, L"res.obj");
-							}
+							flatElementMesh = BoolSubtract(flatElementMesh, flatVoidMesh);
 						}
 					}
 
@@ -391,45 +368,7 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					if (_loader.GetSettings().DUMP_CSG_MESHES)
-					{
-						DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
-						DumpIfcGeometry(flatSecondMesh, L"void.obj");
-					}
-
-					if (flatFirstMesh.numFaces == 0)
-					{
-						// bail out because we will get strange meshes
-						// if this happens, probably there's an issue parsing the first mesh
-						return mesh;
-					}
-
-					webifc::IfcGeometry resultMesh;
-
-                    if (_loader.GetSettings().USE_FAST_BOOLS)
-					{
-						IfcGeometry r1;
-						IfcGeometry r2;
-
-						intersectMeshMesh(flatFirstMesh, flatSecondMesh, r1, r2);
-
-						if (_loader.GetSettings().DUMP_CSG_MESHES)
-						{
-							DumpIfcGeometry(r1, L"substep1.obj");
-							DumpIfcGeometry(r2, L"substep2.obj");
-						}
-
-						resultMesh = boolSubtract(r1, r2);
-					}
-					else
-					{
-						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
-					}
-
-					if (_loader.GetSettings().DUMP_CSG_MESHES)
-					{
-						DumpIfcGeometry(resultMesh, L"result.obj");
-					}
+					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondMesh);
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
@@ -458,12 +397,6 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
 
-					if (_loader.GetSettings().DUMP_CSG_MESHES)
-					{
-						DumpIfcGeometry(flatFirstMesh, L"mesh.obj");
-						DumpIfcGeometry(flatSecondMesh, L"void.obj");
-					}
-
 					if (flatFirstMesh.numFaces == 0)
 					{
 						// bail out because we will get strange meshes
@@ -471,31 +404,7 @@ namespace webifc
 						return mesh;
 					}
 
-					if (_loader.GetSettings().DUMP_CSG_MESHES)
-					{
-						DumpIfcGeometry(flatFirstMesh, L"substep1.obj");
-						DumpIfcGeometry(flatSecondMesh, L"substep2.obj");
-					}
-
-					webifc::IfcGeometry resultMesh;
-                    if (_loader.GetSettings().USE_FAST_BOOLS)
-					{
-						IfcGeometry r1;
-						IfcGeometry r2;
-
-						intersectMeshMesh(flatFirstMesh, flatSecondMesh, r1, r2);
-
-						resultMesh = boolSubtract(r1, r2);
-					}
-					else
-					{
-						resultMesh = boolSubtract_CSGJSCPP(flatFirstMesh, flatSecondMesh);
-					}
-
-					if (_loader.GetSettings().DUMP_CSG_MESHES)
-					{
-						DumpIfcGeometry(resultMesh, L"result.obj");
-					}
+					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondMesh);
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
@@ -939,6 +848,52 @@ namespace webifc
 
 				// read point set end
 				_loader.GetTokenType();
+			}
+
+			return result;
+		}
+
+		IfcGeometry BoolSubtract(const IfcGeometry& firstGeom, const IfcGeometry& secondGeom)
+		{
+			IfcGeometry result;
+
+			if (firstGeom.numFaces == 0 || secondGeom.numFaces == 0)
+			{
+				// bail out because we will get strange meshes
+				// if this happens, probably there's an issue parsing the mesh that occurred earlier
+				return firstGeom;
+			}
+
+			if (_loader.GetSettings().DUMP_CSG_MESHES)
+			{
+				DumpIfcGeometry(firstGeom, L"first.obj");
+				DumpIfcGeometry(secondGeom, L"second.obj");
+			}
+
+			if (_loader.GetSettings().USE_FAST_BOOLS)
+			{
+				IfcGeometry r1;
+				IfcGeometry r2;
+
+				intersectMeshMesh(firstGeom, secondGeom, r1, r2);
+
+				result = boolSubtract(r1, r2);
+			}
+			else
+			{
+				const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
+				if (firstGeom.numPoints > threshold || secondGeom.numPoints > threshold)
+				{
+					// bail out because we expect this operation to take too long
+					return firstGeom;
+				}
+
+				result = boolSubtract_CSGJSCPP(firstGeom, secondGeom);
+			}
+
+			if (_loader.GetSettings().DUMP_CSG_MESHES)
+			{
+				DumpIfcGeometry(result, L"result.obj");
 			}
 
 			return result;

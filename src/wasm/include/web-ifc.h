@@ -34,6 +34,7 @@ namespace webifc
         int CIRCLE_SEGMENTS_MEDIUM = 8;
         int CIRCLE_SEGMENTS_HIGH = 12;
         bool MESH_CACHE = false;
+		int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
     };
 
 	long long ms()
