@@ -1068,7 +1068,7 @@ namespace ifc2x4 {
 		3304561284,
 		486154966
 	};
-	std::vector<unsigned int> IfcSecundaryElements {
+	std::vector<unsigned int> IfcSecondaryElements {
 		4288193352,
 		1634111441,
 		177149247,

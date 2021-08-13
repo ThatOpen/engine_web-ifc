@@ -318,12 +318,12 @@ export class IfcAPI
     }
 
     /**  
-     * Load secundary geometry in a model
+     * Load secondary geometry in a model
      * @modelID Model handle retrieved by OpenModel
     */
-    LoadSecundaryGeometry(modelID: number): Vector<FlatMesh>
+    LoadSecondaryGeometry(modelID: number): Vector<FlatMesh>
     {
-        return this.wasmModule.LoadSecundaryGeometry(modelID);
+        return this.wasmModule.LoadSecondaryGeometry(modelID);
     }
 
     /**  

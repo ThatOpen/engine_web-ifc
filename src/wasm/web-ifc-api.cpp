@@ -218,7 +218,7 @@ std::vector<webifc::IfcFlatMesh> LoadMainGeometry(uint32_t modelID)
     return meshes;
 }
 
-std::vector<webifc::IfcFlatMesh> LoadSecundaryGeometry(uint32_t modelID)
+std::vector<webifc::IfcFlatMesh> LoadSecondaryGeometry(uint32_t modelID)
 {
     auto& loader = loaders[modelID];
     auto& geomLoader = geomLoaders[modelID];
@@ -230,7 +230,7 @@ std::vector<webifc::IfcFlatMesh> LoadSecundaryGeometry(uint32_t modelID)
 
     std::vector<webifc::IfcFlatMesh> meshes;
 
-    for (auto type : ifc2x4::IfcSecundaryElements)
+    for (auto type : ifc2x4::IfcSecondaryElements)
     {
         auto elements = loader->GetExpressIDsWithType(type);
 
@@ -739,7 +739,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("LoadMainGeometry", &LoadMainGeometry);
-    emscripten::function("LoadSecundaryGeometry", &LoadSecundaryGeometry);
+    emscripten::function("LoadSecondaryGeometry", &LoadSecondaryGeometry);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
     emscripten::function("CloseModel", &CloseModel);
