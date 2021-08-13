@@ -309,6 +309,24 @@ export class IfcAPI
     }
 
     /**  
+     * Load main geometry in a model
+     * @modelID Model handle retrieved by OpenModel
+    */
+    LoadMainGeometry(modelID: number): Vector<FlatMesh>
+    {
+        return this.wasmModule.LoadMainGeometry(modelID);
+    }
+
+    /**  
+     * Load secundary geometry in a model
+     * @modelID Model handle retrieved by OpenModel
+    */
+    LoadSecundaryGeometry(modelID: number): Vector<FlatMesh>
+    {
+        return this.wasmModule.LoadSecundaryGeometry(modelID);
+    }
+
+    /**  
      * Load geometry for a single element
      * @modelID Model handle retrieved by OpenModel
     */

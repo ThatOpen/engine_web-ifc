@@ -187,6 +187,73 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
     return meshes;
 }
 
+std::vector<webifc::IfcFlatMesh> LoadMainGeometry(uint32_t modelID)
+{
+    auto& loader = loaders[modelID];
+    auto& geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return {};
+    }
+
+    std::vector<webifc::IfcFlatMesh> meshes;
+
+    for (auto type : ifc2x4::IfcMainElements)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+
+        for (int i = 0; i < elements.size(); i++)
+        {
+            webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(elements[i]);
+            for (auto& geom : mesh.geometries)
+            {
+                auto& flatGeom = geomLoader->GetCachedGeometry(geom.geometryExpressID);
+                flatGeom.GetVertexData();
+            }   
+            meshes.push_back(std::move(mesh));
+        }
+    }
+
+    return meshes;
+}
+
+std::vector<webifc::IfcFlatMesh> LoadSecundaryGeometry(uint32_t modelID)
+{
+    auto& loader = loaders[modelID];
+    auto& geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return {};
+    }
+
+    std::vector<webifc::IfcFlatMesh> meshes;
+
+    for (auto type : ifc2x4::IfcSecundaryElements)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+
+        if (type == ifc2x4::IFCOPENINGELEMENT || type == ifc2x4::IFCSPACE || type == ifc2x4::IFCOPENINGSTANDARDCASE)
+        {
+            continue;
+        }
+
+        for (int i = 0; i < elements.size(); i++)
+        {
+            webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(elements[i]);
+            for (auto& geom : mesh.geometries)
+            {
+                auto& flatGeom = geomLoader->GetCachedGeometry(geom.geometryExpressID);
+                flatGeom.GetVertexData();
+            }   
+            meshes.push_back(std::move(mesh));
+        }
+    }
+
+    return meshes;
+}
+
 webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
 {
     auto& geomLoader = geomLoaders[modelID];
@@ -671,6 +738,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<uint32_t>("UintVector");
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
+    emscripten::function("LoadMainGeometry", &LoadMainGeometry);
+    emscripten::function("LoadSecundaryGeometry", &LoadSecundaryGeometry);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
     emscripten::function("CloseModel", &CloseModel);
