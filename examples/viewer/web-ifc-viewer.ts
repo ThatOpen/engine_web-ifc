@@ -135,4 +135,11 @@ function LoadModel(data: Uint8Array) {
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);
+
+    // log errors to console
+    let errors = ifcAPI.GetAndClearErrors(modelID);
+    for (let i = 0; i < errors.size(); i++)
+    {
+        console.log(errors.get(i));
+    }
 }

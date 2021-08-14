@@ -384,7 +384,7 @@ namespace webifc
 
 					if (op != "DIFFERENCE")
 					{
-						std::cout << "Unsupported boolean op " << op << " at " << line.expressID << std::endl;
+						_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported boolean op " + op, line.expressID });
 						return mesh;
 					}
 
@@ -619,7 +619,7 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 3);
 					if (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
 					{
-						std::cout << "Unsupported IFCPOLYGONALFACESET with PnIndex!" << std::endl;
+						_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported IFCPOLYGONALFACESET with PnIndex", line.expressID });
 					}
 
 					_expressIDToGeometry[line.expressID] = geom;
@@ -682,7 +682,7 @@ namespace webifc
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						std::cout << "Inner radius of IFCSWEPTDISKSOLID currently not supported" << std::endl;
+						_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", line.expressID });
 						innerRadius = _loader.GetDoubleArgument();
 					}
 
@@ -785,7 +785,7 @@ namespace webifc
 				}
 
 				default:
-					std::cout << "Unexpected mesh type: " << line.ifcType << " at " << line.expressID << std::endl;
+					_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected mesh type", line.expressID, line.ifcType });
 					break;
 				}
 			}
@@ -1009,7 +1009,7 @@ namespace webifc
 				break;
 			}
 			default:
-				std::cout << "Unexpected indexedface type: " << line.ifcType << " at " << expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected indexedface type", line.expressID, line.ifcType });
 				break;
 			}
 		}
@@ -1037,7 +1037,7 @@ namespace webifc
 				return geometry;
 			}
 			default:
-				std::cout << "Unexpected shell type: " << line.ifcType << " at " << expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected shell type", line.expressID, line.ifcType });
 				break;
 			}
 
@@ -1158,7 +1158,7 @@ namespace webifc
 				return true;
 			}
 			default:
-				std::cout << "Unexpected style type: " << line.ifcType << " at " << expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", line.expressID, line.ifcType });
 				break;
 			}
 
@@ -1190,7 +1190,7 @@ namespace webifc
 			}
 
 			default:
-				std::cout << "Unexpected face type: " << line.ifcType << " at " << expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected face type", line.expressID, line.ifcType });
 				break;
 			}
 		}
@@ -1230,7 +1230,7 @@ namespace webifc
 			}
 
 			default:
-				std::cout << "Unexpected bound type: " << line.ifcType << " at " << expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", line.expressID, line.ifcType });
 				break;
 			}
 
@@ -1271,7 +1271,7 @@ namespace webifc
 			}
 
 			default:
-				std::cout << "Unexpected loop type: " << line.ifcType << " at " << expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", line.expressID, line.ifcType });
 				break;
 			}
 
@@ -1346,7 +1346,7 @@ namespace webifc
 			}
 			else
 			{
-				std::cout << "Bad bound" << std::endl;
+				_loader.ReportError({ LoaderErrorType::PARSING, "bad bound" });
 			}
 		}
 
@@ -1818,7 +1818,7 @@ namespace webifc
 				return profile;
 			}
 			default:
-				std::cout << "Unexpected profile type: " << line.ifcType << " at " << line.expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", line.expressID, line.ifcType });
 				break;
 			}
 
@@ -1842,7 +1842,7 @@ namespace webifc
 				return surface;
 			}
 			default:
-				std::cout << "Unexpected surface type: " << line.ifcType << " at " << line.expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected surface type", line.expressID, line.ifcType });
 				break;
 			}
 
@@ -2006,7 +2006,7 @@ namespace webifc
 			}
 
 			default:
-				std::cout << "Unexpected placement type: " << line.ifcType << " at " << expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", line.expressID, line.ifcType });
 				break;
 			}
 
@@ -2106,7 +2106,7 @@ namespace webifc
 				if (selfIntersects == "T")
 				{
 					// TODO: this is probably bad news
-					printf("Self intersecting composite curve!");
+					_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "Self intersecting composite curve", line.expressID });
 				}
 
 				for (auto& token : segments)
@@ -2150,12 +2150,12 @@ namespace webifc
 					}
 					else
 					{
-						std::cout << "Unsupported trimmingselect IFCLINE" << std::endl;
+						_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType });
 					}
 				}
 				else
 				{
-					std::cout << "Unsupported 3D curve IFCLINE" << std::endl;
+					_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported 3D curve IFCLINE", line.expressID, line.ifcType });
 				}
 
 				break;
@@ -2195,7 +2195,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() != webifc::IfcTokenType::EMPTY)
 				{
-					std::cout << "non-empty segments in IFCINDEXEDPOLYCURVE currently not supported at " << line.expressID << std::endl;
+					_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "non-empty segments in IFCINDEXEDPOLYCURVE currently not supported", line.expressID });
 					break;
 				}
 
@@ -2209,7 +2209,7 @@ namespace webifc
 					if (selfIntersects == "T")
 					{
 						// TODO: this is probably bad news
-						std::cout << "Self intersecting ifcindexedpolycurve!" << std::endl;
+						_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "Self intersecting ifcindexedpolycurve", line.expressID });
 					}
 				}
 
@@ -2223,7 +2223,7 @@ namespace webifc
 				}
 				else
 				{
-					std::cout << "Parsing ifcindexedpolycurve in 3D is not possible!" << std::endl;
+					_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "Parsing ifcindexedpolycurve in 3D is not possible", line.expressID });
 				}
 
 				break;
@@ -2315,7 +2315,7 @@ namespace webifc
 			}
 
 			default:
-				std::cout << "Unexpected curve type: " << line.ifcType << " at " << expressID << std::endl;
+				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", line.expressID, line.ifcType });
 				break;
 			}
 

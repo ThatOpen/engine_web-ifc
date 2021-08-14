@@ -198,6 +198,18 @@ webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
     return geomLoader->GetCachedGeometry(expressID);
 }
 
+std::vector<webifc::LoaderError> GetAndClearErrors(uint32_t modelID)
+{
+    auto& loader = loaders[modelID];
+
+    if (!loader)
+    {
+        return {};
+    }
+    
+    return loader->GetAndClearErrors();
+}
+
 void SetGeometryTransformation(uint32_t modelID, std::array<double, 16> m)
 {
     auto& geomLoader = geomLoaders[modelID];
@@ -660,6 +672,22 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("geometryExpressID", &webifc::IfcPlacedGeometry::geometryExpressID)
         ;
 
+    emscripten::enum_<webifc::LoaderErrorType>("LoaderErrorType")
+        .value("BOOL_ERROR", webifc::LoaderErrorType::BOOL_ERROR)
+        .value("PARSING", webifc::LoaderErrorType::PARSING)
+        .value("UNSPECIFIED", webifc::LoaderErrorType::UNSPECIFIED)
+        .value("UNSUPPORTED_TYPE", webifc::LoaderErrorType::UNSUPPORTED_TYPE)
+        ;
+
+    emscripten::value_object<webifc::LoaderError>("LoaderError")
+        .field("type", &webifc::LoaderError::type)
+        .field("message", &webifc::LoaderError::message)
+        .field("expressID", &webifc::LoaderError::expressID)
+        .field("ifcType", &webifc::LoaderError::ifcType)
+        ;
+
+    emscripten::register_vector<webifc::LoaderError>("LoaderErrorVector");
+
     emscripten::register_vector<webifc::IfcPlacedGeometry>("IfcPlacedGeometryVector");
 
     emscripten::value_object<webifc::IfcFlatMesh>("IfcFlatMesh")
@@ -680,6 +708,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("StreamMeshes", &StreamMeshes);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
+    emscripten::function("GetAndClearErrors", &GetAndClearErrors);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);

@@ -25,6 +25,7 @@ export interface LoaderSettings
     CIRCLE_SEGMENTS_LOW?: number
     CIRCLE_SEGMENTS_MEDIUM?: number
     CIRCLE_SEGMENTS_HIGH?: number
+    BOOL_ABORT_THRESHOLD?: number
 }
 
 export interface Vector<T> {
@@ -54,6 +55,14 @@ export interface RawLineData {
     ID: number;
     type: number;
     arguments: any[];
+}
+
+export interface LoaderError
+{
+    type: string;
+    message: string;
+    expressID: number;
+    ifcType: number;
 }
 
 export interface IfcGeometry
@@ -159,6 +168,11 @@ export class IfcAPI
         }
 
         return lineData;
+    }
+
+    GetAndClearErrors(modelID: number): Vector<LoaderError>
+    {
+        return this.wasmModule.GetAndClearErrors(modelID);
     }
 
     WriteLine(modelID: number, lineObject: any)

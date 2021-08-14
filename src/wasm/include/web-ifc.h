@@ -24,7 +24,6 @@ const uint32_t TAPE_SIZE = 1 << 24;
 
 namespace webifc
 {
-
     struct LoaderSettings
     {
         bool COORDINATE_TO_ORIGIN = false;
@@ -36,6 +35,34 @@ namespace webifc
         bool MESH_CACHE = false;
 		int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
     };
+
+	enum class LoaderErrorType
+	{
+		UNSPECIFIED,
+		PARSING,
+		BOOL_ERROR,
+		UNSUPPORTED_TYPE
+	};
+
+	struct LoaderError
+	{
+		LoaderErrorType type;
+		std::string message;
+		uint32_t expressID;
+		uint32_t ifcType;
+
+		LoaderError(LoaderErrorType t = LoaderErrorType::UNSPECIFIED, 
+					std::string m = "", 
+					uint32_t e = 0, 
+					uint32_t type = 0) :
+			type(t),
+			message(m),
+			expressID(e),
+			ifcType(type)
+		{
+
+		}
+	};
 
 	long long ms()
 	{
@@ -200,7 +227,7 @@ namespace webifc
 
 			if (projects.size() != 1)
 			{
-				std::cout << "Unexpected empty IFCPROJECT: " << projects.size() << std::endl;
+				ReportError({ LoaderErrorType::PARSING, "unexpected empty ifc project" });
 				return;
 			}
 
@@ -437,6 +464,7 @@ namespace webifc
 				{
 				case IfcTokenType::LINE_END:
 				{
+					ReportError({ LoaderErrorType::PARSING, "unexpected line end" });
 					assert(false);
 					break;
 				}
@@ -694,6 +722,7 @@ namespace webifc
 					}
 					else
 					{
+						ReportError({ LoaderErrorType::PARSING, "unexpected token" });
 						assert(false);
 					}
 				}
@@ -861,8 +890,22 @@ namespace webifc
             return _settings;
         }
 
+		void ReportError(const LoaderError&& error)
+		{
+			std::cout << error.message << std::endl;
+			_errors.push_back(std::move(error));
+		}
+
+		std::vector<LoaderError> GetAndClearErrors()
+		{
+			auto temp = _errors;
+			_errors = {};
+			return temp;
+		}
+
 	private:
         bool _open = false;
+		std::vector<LoaderError> _errors;
 		DynamicTape<TAPE_SIZE> _tape; // 16mb chunked tape
         LoaderSettings _settings;
 
