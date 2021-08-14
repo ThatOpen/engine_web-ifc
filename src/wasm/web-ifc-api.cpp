@@ -645,6 +645,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("CIRCLE_SEGMENTS_LOW", &webifc::LoaderSettings::CIRCLE_SEGMENTS_LOW)
         .field("CIRCLE_SEGMENTS_MEDIUM", &webifc::LoaderSettings::CIRCLE_SEGMENTS_MEDIUM)
         .field("CIRCLE_SEGMENTS_HIGH", &webifc::LoaderSettings::CIRCLE_SEGMENTS_HIGH)
+        .field("BOOL_ABORT_THRESHOLD", &webifc::LoaderSettings::BOOL_ABORT_THRESHOLD)
         ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")

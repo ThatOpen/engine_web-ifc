@@ -113,6 +113,7 @@ export class IfcAPI
             CIRCLE_SEGMENTS_LOW: 5,
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
+            BOOL_ABORT_THRESHOLD: 10000,
             ...settings
         };
         let result = this.wasmModule.OpenModel(s);
@@ -132,6 +133,7 @@ export class IfcAPI
             CIRCLE_SEGMENTS_LOW: 5,
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
+            BOOL_ABORT_THRESHOLD: 10000,
             ...settings
         };
         let result = this.wasmModule.CreateModel(s);
