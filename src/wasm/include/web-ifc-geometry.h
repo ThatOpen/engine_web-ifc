@@ -859,6 +859,8 @@ namespace webifc
 
 			if (firstGeom.numFaces == 0 || secondGeom.numFaces == 0)
 			{
+				_loader.ReportError({ LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target" });
+
 				// bail out because we will get strange meshes
 				// if this happens, probably there's an issue parsing the mesh that occurred earlier
 				return firstGeom;
@@ -884,6 +886,8 @@ namespace webifc
 				const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
 				if (firstGeom.numPoints > threshold || secondGeom.numPoints > threshold)
 				{
+					_loader.ReportError({ LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD" });
+
 					// bail out because we expect this operation to take too long
 					return firstGeom;
 				}
