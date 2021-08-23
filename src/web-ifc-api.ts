@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-const WebIFCWasm = require("./web-ifc");
+// const WebIFCWasm = require("./web-ifc");
 export * from "./ifc2x4";
 import * as ifc2x4helper from "./ifc2x4_helper";
 export * from "./ifc2x4_helper";
@@ -79,24 +79,33 @@ export function ms() {
 
 export class IfcAPI
 {
-    wasmModule: undefined | any = undefined;
+    wasmModule!: Record<string, any>;
     fs: undefined | any = undefined;
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality
     */
-    async Init()
+    async Init(path = './web-ifc.wasm')
     {
-        if (WebIFCWasm)
-        {
-            //@ts-ignore
-            this.wasmModule = await WebIFCWasm({noInitialRun: true});
+        if((WebAssembly as any).instantiateStreaming) {
+            this.wasmModule = (await WebAssembly.instantiateStreaming(fetch('./web-ifc.wasm'))).instance.exports;
             this.fs = this.wasmModule.FS;
+        } else {
+            //@ts-ignore
+            const file = require('fs').readFileSync('./web-ifc.wasm');
+            const wasm = await WebAssembly.compile(file);
+            this.wasmModule =  (await WebAssembly.instantiate(wasm)).exports;
         }
-        else
-        {
-            console.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
-        }
+        // if (WebIFCWasm)
+        // {
+        //     //@ts-ignore
+        //     this.wasmModule = await WebIFCWasm({noInitialRun: true});
+        //     this.fs = this.wasmModule.FS;
+        // }
+        // else
+        // {
+        //     console.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
+        // }
     }
 
     /**  

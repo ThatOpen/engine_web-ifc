@@ -24,8 +24,8 @@
     "build-release": "npm run build-wasm-release && npm run build-api",
     "build-debug": "npm run build-wasm-debug && npm run build-api",
     "release_publish": "npm run build-release && cd dist && npm publish",
-    "build-wasm-debug": "em++ --bind -O3 -gsource-map -std=c++17 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s ASSERTIONS=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
-    "build-wasm-release": "em++ --bind -O3 -std=c++17 -flto -fno-exceptions ./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
+    "build-wasm-debug": "em++ --bind -O3 -gsource-map -std=c++17 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions ./wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s ASSERTIONS=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
+    "build-wasm-release": "em++ --bind -O3 -std=c++17 -flto -fno-exceptions ./wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
     "build-api": "cpy src/*.ts dist && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node && npm run copy-to-dist && npm run add-wasm-path",
     "build-ts-api": "tsc --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts dist && cpy dist/web-ifc-api.d.ts dist --rename=web-ifc-api-node.d.ts",
     "build-web-ifc-api-mjs": "esbuild dist/web-ifc-api.ts --bundle --format=esm --external:path --external:fs --outfile=./dist/web-ifc-api.js",
@@ -37,8 +37,9 @@
     "add-wasm-path": "node src/utils/add-wasm-path.js",
     "serve-viewer": "serve examples/viewer",
     "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\"",
-    "docker-build": "docker build -t web-ifc .",
-    "docker-run": "docker run --rm -p 3000:5000 --name web-ifc-container web-ifc"
+    "docker": "docker build --no-cache -t web-ifc .",
+    "docker-build-release": "docker run --rm -v $(pwd)/src:/app/src -v $(pwd)/dist:/app/dist web-ifc npm run build-wasm-release",
+    "docker-dev": "docker run --rm -p 3000:5000 --name web-ifc-container web-ifc"
   },
   "author": "tomvandig",
   "files": [
