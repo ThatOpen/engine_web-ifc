@@ -7,19 +7,16 @@ export default {
   output: [{
       file: pkg.main,
       format: "cjs",
-      exports: "named",
       sourcemap: true
     },
     {
       file: pkg.module,
       format: "es",
-      exports: "named",
       sourcemap: true
     }
   ],
-  external: ['web-ifc', 'three-mesh-bvh', 'three', 'three/examples/jsm/utils/BufferGeometryUtils'],
   plugins: [
     resolve(),
-    typescript()
+    typescript(),
   ],
 };

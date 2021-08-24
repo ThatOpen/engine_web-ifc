@@ -2,10 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// const WebIFCWasm = require("./web-ifc");
-export * from "./ifc2x4";
-import * as ifc2x4helper from "./ifc2x4_helper";
-export * from "./ifc2x4_helper";
+import { WebIFCWasm } from "./web-ifc";
+
+import { FromRawLineData } from './ifc4x2';
+
+declare let WasmPath: string;
 
 export const UNKNOWN = 0;
 export const STRING = 1;
@@ -85,27 +86,17 @@ export class IfcAPI
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality
     */
-    async Init(path = './web-ifc.wasm')
+    async Init()
     {
-        if((WebAssembly as any).instantiateStreaming) {
-            this.wasmModule = (await WebAssembly.instantiateStreaming(fetch('./web-ifc.wasm'))).instance.exports;
+        if (WebIFCWasm)
+        {
+            this.wasmModule = await WebIFCWasm({noInitialRun: true});
             this.fs = this.wasmModule.FS;
-        } else {
-            //@ts-ignore
-            const file = require('fs').readFileSync('./web-ifc.wasm');
-            const wasm = await WebAssembly.compile(file);
-            this.wasmModule =  (await WebAssembly.instantiate(wasm)).exports;
         }
-        // if (WebIFCWasm)
-        // {
-        //     //@ts-ignore
-        //     this.wasmModule = await WebIFCWasm({noInitialRun: true});
-        //     this.fs = this.wasmModule.FS;
-        // }
-        // else
-        // {
-        //     console.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
-        // }
+        else
+        {
+            console.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
+        }
     }
 
     /**  
@@ -152,7 +143,6 @@ export class IfcAPI
     ExportFileAsIFC(modelID: number): Uint8Array
     {
         this.wasmModule.ExportFileAsIFC(modelID);
-        //@ts-ignore
         let result = this.fs.readFile("/export.ifc");
         this.wasmModule['FS_unlink']("/export.ifc");
         return result;
@@ -172,7 +162,7 @@ export class IfcAPI
     GetLine(modelID: number, expressID: number, flatten: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        let lineData = FromRawLineData[rawLineData.type](rawLineData);
         if (flatten)
         {
             this.FlattenLine(modelID, lineData);
@@ -343,7 +333,6 @@ export class IfcAPI
     }
 
     SetWasmPath(path: string){
-        //@ts-ignore
         WasmPath = path;
     }
 }

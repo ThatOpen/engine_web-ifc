@@ -5,23 +5,9 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
-  "watch": {
-    "build-viewer": {
-      "patterns": [
-        "./examples/viewer"
-      ],
-      "extensions": "ts"
-    },
-    "build-web-ifc-api-mjs": {
-      "patterns": [
-        "./src"
-      ],
-      "extensions": "ts"
-    }
-  },
-  "pckg-gui": {},
   "scripts": {
     "build": "rollup -c",
+    "prebuild": "cpy wasm/build/web-ifc.wasm dist",
     "gen-schema": "cd src/schema && node gen.js",
     "setup-env": "emsdk_env",
     "build-release": "npm run build-wasm-release && npm run build-api",
@@ -37,40 +23,26 @@
     "build-viewer": "npm run bundle-viewer && npm run copy-wasm-viewer",
     "bundle-viewer": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./examples/viewer/web-ifc-viewer.js",
     "copy-wasm-viewer": "cpy dist/web-ifc.wasm examples/viewer",
-    "add-wasm-path": "node src/utils/add-wasm-path.js",
     "serve-viewer": "serve examples/viewer",
     "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\"",
     "docker": "docker build --no-cache -t web-ifc .",
-    "docker-build-release": "docker run --rm -v $(pwd)/src:/app/src -v $(pwd)/dist:/app/dist web-ifc npm run build-wasm-release",
-    "docker-dev": "docker run --rm -p 3000:5000 --name web-ifc-container web-ifc"
+    "docker-wasm": "docker run --rm -v $(pwd)/wasm:/app/wasm web-ifc em++ --bind -O3 -std=c++17 -flto -fno-exceptions ./wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o wasm/build/web-ifc.js",
+    "add-wasm-path": "node add-wasm-path.js",
+    "docker-dev": "docker run --rm -p 3000:5000 -v $(pwd)/dist:/app/dist -v $(pwd)/src:/app/src web-ifc npm run dev"
   },
   "author": "tomvandig",
-  "files": [
-    "web-ifc.wasm",
-    "web-ifc-api-node.js",
-    "web-ifc-api-node.d.ts",
-    "web-ifc-api.js",
-    "web-ifc-api.d.ts",
-    "ifc2x4.d.ts",
-    "ifc2x4_helper.d.ts"
-  ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.4",
-    "rollup": "^2.40.0",
-    "rollup-plugin-typescript2": "^0.30.0",
     "@types/three": "^0.130.1",
     "concurrently": "^6.2.0",
     "cpy-cli": "^3.1.1",
     "esbuild": "^0.12.15",
+    "monaco-editor": "^0.26.1",
     "npm-watch": "^0.10.0",
+    "rollup": "^2.40.0",
+    "rollup-plugin-typescript2": "^0.30.0",
     "serve": "^12.0.0",
     "three": "^0.130.1",
-    "typescript": "^4.3.5",
-    "monaco-editor": "^0.26.1"
-  },
-  "browser": {
-    "crypto": false,
-    "path": false,
-    "fs": false
+    "typescript": "^4.3.5"
   }
 }
