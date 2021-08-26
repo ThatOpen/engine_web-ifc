@@ -314,6 +314,11 @@ export class IfcAPI
         this.wasmModule.StreamAllMeshes(modelID, meshCallback);
     }
 
+    StreamAllMeshesWithTypes(modelID: number, types: Array<number>, meshCallback: (mesh: FlatMesh)=>void)
+    {
+        this.wasmModule.StreamAllMeshesWithTypes(modelID, types, meshCallback);
+    }
+
     /**  
      * Checks if a specific model ID is open or closed
      * @modelID Model handle retrieved by OpenModel

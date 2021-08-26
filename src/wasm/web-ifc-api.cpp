@@ -129,6 +129,40 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
     }
 }
 
+void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t>& types, emscripten::val callback)
+{
+    auto& loader = loaders[modelID];
+
+    if (!loader)
+    {
+        return;
+    }
+
+    for (auto& type : types)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+        StreamMeshes(modelID, elements, callback);
+    }
+}
+
+void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, emscripten::val callback)
+{
+    std::vector<uint32_t> types;
+
+    uint32_t size = typesVal["length"].as<uint32_t>();
+    int index = 0;
+    while (index < size)
+    {
+        emscripten::val typeVal = typesVal[std::to_string(index++)];
+
+        uint32_t type = typeVal.as<uint32_t>();
+
+        types.push_back(type);
+    }
+    
+    StreamAllMeshesWithTypes(modelID, types, callback);
+}
+
 void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
     auto& loader = loaders[modelID];
     auto& geomLoader = geomLoaders[modelID];
@@ -138,17 +172,19 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
         return;
     }
 
-    for (auto type : ifc2x4::IfcElements)
-    {
-        auto elements = loader->GetExpressIDsWithType(type);
+    std::vector<uint32_t> types;
 
+    for (auto& type : ifc2x4::IfcElements)
+    {
         if (type == ifc2x4::IFCOPENINGELEMENT || type == ifc2x4::IFCSPACE || type == ifc2x4::IFCOPENINGSTANDARDCASE)
         {
             continue;
         }
 
-        StreamMeshes(modelID, elements, callback);
+        types.push_back(type);
     }
+
+    StreamAllMeshesWithTypes(modelID, types, callback);
 }
 
 std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
@@ -709,6 +745,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("StreamMeshes", &StreamMeshes);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
+    emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
     emscripten::function("GetAndClearErrors", &GetAndClearErrors);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("WriteLine", &WriteLine);
