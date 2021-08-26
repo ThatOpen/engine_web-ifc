@@ -8,6 +8,7 @@ export default async function() {
         let totalSizeVerts = 0;
         let totalSizeIndices = 0;
 
+        // grab all types except SPACE, OPENING and OPENINGSTANDARDCASE
         ifcapi.StreamAllMeshes(modelID, (mesh: WebIFC.FlatMesh) => {
             
             // only during the lifetime of this function call, the geometry is available in memory
@@ -26,7 +27,7 @@ export default async function() {
             }
         });
 
-        Equals("total num vertices", totalSizeVerts, 186234);
-        Equals("total num indices", totalSizeIndices, 45147);
+        Equals("total num vertices", totalSizeVerts, 181602);
+        Equals("total num indices", totalSizeIndices, 43989);
     });
 }
