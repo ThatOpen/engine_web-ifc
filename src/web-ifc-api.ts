@@ -81,6 +81,7 @@ export class IfcAPI
 {
     wasmModule: undefined | any = undefined;
     fs: undefined | any = undefined;
+    wasmPath: string = "";
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality
@@ -89,8 +90,15 @@ export class IfcAPI
     {
         if (WebIFCWasm)
         {
+            let locateFileHandler = (path, prefix) => {
+                // when the wasm module requests the wasm file, we redirect to include the user specified path
+                if (path.endsWith(".wasm")) return prefix + this.wasmPath + path;
+                // otherwise use the default path
+                return prefix + path;
+            }
+
             //@ts-ignore
-            this.wasmModule = await WebIFCWasm({noInitialRun: true});
+            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: locateFileHandler});
             this.fs = this.wasmModule.FS;
         }
         else
@@ -334,7 +342,6 @@ export class IfcAPI
     }
 
     SetWasmPath(path: string){
-        //@ts-ignore
-        WasmPath = path;
+        this.wasmPath = path;
     }
 }
