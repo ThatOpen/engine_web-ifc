@@ -58,6 +58,7 @@ interface Entity {
     parent: null | string;
     props: Prop[];
     derivedProps: Prop[] | null;
+    isIfcProduct: boolean;
 }
 
 function ParseElements(data)
@@ -82,7 +83,8 @@ function ParseElements(data)
                 name,
                 parent: null,
                 props: [],
-                derivedProps: []
+                derivedProps: [],
+                isIfcProduct: false
             };
             readProps = true;
 
@@ -205,13 +207,17 @@ elements.forEach((e) => {
     map[e.name] = e;
 })
 
-function WalkParents(entity, parent)
+function WalkParents(entity: Entity, parent: Entity)
 {
     if (!parent)
     {
         return;
     }
     entity.derivedProps = [...parent.props, ...entity.derivedProps];
+    if (parent.name === "IfcProduct")
+    {
+        entity.isIfcProduct = true;
+    }
     WalkParents(entity, map[parent.parent]);
 }
 
@@ -539,7 +545,7 @@ fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
 /////////////////////////////////////////////////////////////
 
 {
-    let ifcElements = JSON.parse(fs.readFileSync("./ifc4-elements.json").toString());
+    let ifcElements = elements.filter((e) => e.isIfcProduct);
 
     var makeCRCTable = function(){
         var c;
@@ -587,10 +593,10 @@ fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
     cppHeader.push("\tbool IsIfcElement(unsigned int ifcCode) {");
     cppHeader.push("\t\tswitch(ifcCode) {");
 
-    Object.keys(ifcElements).forEach(element => {
-        let name = element.toUpperCase();
+    ifcElements.forEach(element => {
+        let name = element.name.toUpperCase();
         let code = crc32(name);
-        cppHeader.push(`\t\t\tcase ${code}: return true;`);
+        cppHeader.push(`\t\t\tcase ifc2x4::${name}: return true;`);
     });
 
     cppHeader.push(`\t\t\tdefault: return false;`);
@@ -599,10 +605,10 @@ fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
     cppHeader.push("\t}");
 
     cppHeader.push("\tstd::vector<unsigned int> IfcElements { ");
-    cppHeader.push(Object.keys(ifcElements).map(element => {
-        let name = element.toUpperCase();
+    cppHeader.push(ifcElements.map(element => {
+        let name = element.name.toUpperCase();
         let code = crc32(name);
-        return `\t\t${code}`;
+        return `\t\t${name}`;
     }).join(",\n"));
     cppHeader.push("\t};");
 
@@ -614,7 +620,7 @@ fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
     elements.forEach(element => {
         let name = element.name.toUpperCase();
         let code = crc32(name);
-        cppHeader.push(`\t\t\tcase ${code}: return "${name}";`);
+        cppHeader.push(`\t\t\tcase ifc2x4::${name}: return "${name}";`);
     });
 
     cppHeader.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
@@ -624,10 +630,10 @@ fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
 
     tsHeader.push("");
     tsHeader.push("export const IfcElements = [");
-    tsHeader.push(Object.keys(ifcElements).map(element => {
-        let name = element.toUpperCase();
+    tsHeader.push(ifcElements.map(element => {
+        let name = element.name.toUpperCase();
         let code = crc32(name);
-        return `\t${code}`;
+        return `\t${name}`;
     }).join(",\n"));
     tsHeader.push("];");
 

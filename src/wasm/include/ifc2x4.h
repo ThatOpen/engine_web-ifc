@@ -22,6 +22,16 @@ namespace ifc2x4 {
 	static const unsigned int IFCAIRTOAIRHEATRECOVERYTYPE = 1871374353;
 	static const unsigned int IFCALARM = 3087945054;
 	static const unsigned int IFCALARMTYPE = 3001207471;
+	static const unsigned int IFCALIGNMENT = 325726236;
+	static const unsigned int IFCALIGNMENT2DHORIZONTAL = 749761778;
+	static const unsigned int IFCALIGNMENT2DHORIZONTALSEGMENT = 3199563722;
+	static const unsigned int IFCALIGNMENT2DSEGMENT = 2483840362;
+	static const unsigned int IFCALIGNMENT2DVERSEGCIRCULARARC = 3379348081;
+	static const unsigned int IFCALIGNMENT2DVERSEGLINE = 3239324667;
+	static const unsigned int IFCALIGNMENT2DVERSEGPARABOLICARC = 4263986512;
+	static const unsigned int IFCALIGNMENT2DVERTICAL = 53199957;
+	static const unsigned int IFCALIGNMENT2DVERTICALSEGMENT = 2029264950;
+	static const unsigned int IFCALIGNMENTCURVE = 3512275521;
 	static const unsigned int IFCANNOTATION = 1674181508;
 	static const unsigned int IFCANNOTATIONFILLAREA = 669184980;
 	static const unsigned int IFCAPPLICATION = 639542469;
@@ -38,9 +48,15 @@ namespace ifc2x4 {
 	static const unsigned int IFCAXIS1PLACEMENT = 4261334040;
 	static const unsigned int IFCAXIS2PLACEMENT2D = 3125803723;
 	static const unsigned int IFCAXIS2PLACEMENT3D = 2740243338;
+	static const unsigned int IFCBSPLINECURVE = 1967976161;
+	static const unsigned int IFCBSPLINECURVEWITHKNOTS = 2461110595;
+	static const unsigned int IFCBSPLINESURFACE = 2887950389;
+	static const unsigned int IFCBSPLINESURFACEWITHKNOTS = 167062518;
 	static const unsigned int IFCBEAM = 753842376;
 	static const unsigned int IFCBEAMSTANDARDCASE = 2906023776;
 	static const unsigned int IFCBEAMTYPE = 819618141;
+	static const unsigned int IFCBEARING = 4196446775;
+	static const unsigned int IFCBEARINGTYPE = 3649138523;
 	static const unsigned int IFCBLOBTEXTURE = 616511568;
 	static const unsigned int IFCBLOCK = 1334484129;
 	static const unsigned int IFCBOILER = 32344328;
@@ -57,19 +73,20 @@ namespace ifc2x4 {
 	static const unsigned int IFCBOUNDEDSURFACE = 4182860854;
 	static const unsigned int IFCBOUNDINGBOX = 2581212453;
 	static const unsigned int IFCBOXEDHALFSPACE = 2713105998;
-	static const unsigned int IFCBSPLINECURVE = 1967976161;
-	static const unsigned int IFCBSPLINECURVEWITHKNOTS = 2461110595;
-	static const unsigned int IFCBSPLINESURFACE = 2887950389;
-	static const unsigned int IFCBSPLINESURFACEWITHKNOTS = 167062518;
+	static const unsigned int IFCBRIDGE = 644574406;
+	static const unsigned int IFCBRIDGEPART = 963979645;
 	static const unsigned int IFCBUILDING = 4031249490;
+	static const unsigned int IFCBUILDINGELEMENT = 3299480353;
 	static const unsigned int IFCBUILDINGELEMENTPART = 2979338954;
 	static const unsigned int IFCBUILDINGELEMENTPARTTYPE = 39481116;
 	static const unsigned int IFCBUILDINGELEMENTPROXY = 1095909175;
 	static const unsigned int IFCBUILDINGELEMENTPROXYTYPE = 1909888760;
+	static const unsigned int IFCBUILDINGELEMENTTYPE = 1950629157;
 	static const unsigned int IFCBUILDINGSTOREY = 3124254112;
 	static const unsigned int IFCBUILDINGSYSTEM = 1177604601;
 	static const unsigned int IFCBURNER = 2938176219;
 	static const unsigned int IFCBURNERTYPE = 2188180465;
+	static const unsigned int IFCCSHAPEPROFILEDEF = 2898889636;
 	static const unsigned int IFCCABLECARRIERFITTING = 635142910;
 	static const unsigned int IFCCABLECARRIERFITTINGTYPE = 395041908;
 	static const unsigned int IFCCABLECARRIERSEGMENT = 3758799889;
@@ -78,6 +95,8 @@ namespace ifc2x4 {
 	static const unsigned int IFCCABLEFITTINGTYPE = 2674252688;
 	static const unsigned int IFCCABLESEGMENT = 4217484030;
 	static const unsigned int IFCCABLESEGMENTTYPE = 1285652485;
+	static const unsigned int IFCCAISSONFOUNDATION = 3999819293;
+	static const unsigned int IFCCAISSONFOUNDATIONTYPE = 3203706013;
 	static const unsigned int IFCCARTESIANPOINT = 1123145078;
 	static const unsigned int IFCCARTESIANPOINTLIST = 574549367;
 	static const unsigned int IFCCARTESIANPOINTLIST2D = 1675464909;
@@ -95,6 +114,7 @@ namespace ifc2x4 {
 	static const unsigned int IFCCIRCLE = 2611217952;
 	static const unsigned int IFCCIRCLEHOLLOWPROFILEDEF = 2937912522;
 	static const unsigned int IFCCIRCLEPROFILEDEF = 1383045692;
+	static const unsigned int IFCCIRCULARARCSEGMENT2D = 1062206242;
 	static const unsigned int IFCCIVILELEMENT = 1677625105;
 	static const unsigned int IFCCIVILELEMENTTYPE = 3893394355;
 	static const unsigned int IFCCLASSIFICATION = 747523909;
@@ -159,13 +179,13 @@ namespace ifc2x4 {
 	static const unsigned int IFCCREWRESOURCETYPE = 1815067380;
 	static const unsigned int IFCCSGPRIMITIVE3D = 2506170314;
 	static const unsigned int IFCCSGSOLID = 2147822146;
-	static const unsigned int IFCCSHAPEPROFILEDEF = 2898889636;
 	static const unsigned int IFCCURRENCYRELATIONSHIP = 539742890;
 	static const unsigned int IFCCURTAINWALL = 3495092785;
 	static const unsigned int IFCCURTAINWALLTYPE = 1457835157;
 	static const unsigned int IFCCURVE = 2601014836;
 	static const unsigned int IFCCURVEBOUNDEDPLANE = 2827736869;
 	static const unsigned int IFCCURVEBOUNDEDSURFACE = 2629017746;
+	static const unsigned int IFCCURVESEGMENT2D = 1186437898;
 	static const unsigned int IFCCURVESTYLE = 3800577675;
 	static const unsigned int IFCCURVESTYLEFONT = 1105321065;
 	static const unsigned int IFCCURVESTYLEFONTANDSCALING = 2367409068;
@@ -173,6 +193,8 @@ namespace ifc2x4 {
 	static const unsigned int IFCCYLINDRICALSURFACE = 1213902940;
 	static const unsigned int IFCDAMPER = 4074379575;
 	static const unsigned int IFCDAMPERTYPE = 3961806047;
+	static const unsigned int IFCDEEPFOUNDATION = 3426335179;
+	static const unsigned int IFCDEEPFOUNDATIONTYPE = 1306400036;
 	static const unsigned int IFCDERIVEDPROFILEDEF = 3632507154;
 	static const unsigned int IFCDERIVEDUNIT = 1765591967;
 	static const unsigned int IFCDERIVEDUNITELEMENT = 1045800335;
@@ -180,6 +202,7 @@ namespace ifc2x4 {
 	static const unsigned int IFCDIRECTION = 32440307;
 	static const unsigned int IFCDISCRETEACCESSORY = 1335981549;
 	static const unsigned int IFCDISCRETEACCESSORYTYPE = 2635815018;
+	static const unsigned int IFCDISTANCEEXPRESSION = 1945343521;
 	static const unsigned int IFCDISTRIBUTIONCHAMBERELEMENT = 1052013943;
 	static const unsigned int IFCDISTRIBUTIONCHAMBERELEMENTTYPE = 1599208980;
 	static const unsigned int IFCDISTRIBUTIONCIRCUIT = 562808652;
@@ -224,13 +247,13 @@ namespace ifc2x4 {
 	static const unsigned int IFCELECTRICTIMECONTROL = 1003880860;
 	static const unsigned int IFCELECTRICTIMECONTROLTYPE = 712377611;
 	static const unsigned int IFCELEMENT = 1758889154;
-	static const unsigned int IFCELEMENTARYSURFACE = 2777663545;
 	static const unsigned int IFCELEMENTASSEMBLY = 4123344466;
 	static const unsigned int IFCELEMENTASSEMBLYTYPE = 2397081782;
 	static const unsigned int IFCELEMENTCOMPONENT = 1623761950;
 	static const unsigned int IFCELEMENTCOMPONENTTYPE = 2590856083;
 	static const unsigned int IFCELEMENTQUANTITY = 1883228015;
 	static const unsigned int IFCELEMENTTYPE = 339256511;
+	static const unsigned int IFCELEMENTARYSURFACE = 2777663545;
 	static const unsigned int IFCELLIPSE = 1704287377;
 	static const unsigned int IFCELLIPSEPROFILEDEF = 2835456948;
 	static const unsigned int IFCENERGYCONVERSIONDEVICE = 1658829314;
@@ -246,13 +269,13 @@ namespace ifc2x4 {
 	static const unsigned int IFCEVENTTYPE = 4024345920;
 	static const unsigned int IFCEXTENDEDPROPERTIES = 297599258;
 	static const unsigned int IFCEXTERNALINFORMATION = 4294318154;
-	static const unsigned int IFCEXTERNALLYDEFINEDHATCHSTYLE = 2242383968;
-	static const unsigned int IFCEXTERNALLYDEFINEDSURFACESTYLE = 1040185647;
-	static const unsigned int IFCEXTERNALLYDEFINEDTEXTFONT = 3548104201;
 	static const unsigned int IFCEXTERNALREFERENCE = 3200245327;
 	static const unsigned int IFCEXTERNALREFERENCERELATIONSHIP = 1437805879;
 	static const unsigned int IFCEXTERNALSPATIALELEMENT = 1209101575;
 	static const unsigned int IFCEXTERNALSPATIALSTRUCTUREELEMENT = 2853485674;
+	static const unsigned int IFCEXTERNALLYDEFINEDHATCHSTYLE = 2242383968;
+	static const unsigned int IFCEXTERNALLYDEFINEDSURFACESTYLE = 1040185647;
+	static const unsigned int IFCEXTERNALLYDEFINEDTEXTFONT = 3548104201;
 	static const unsigned int IFCEXTRUDEDAREASOLID = 477187591;
 	static const unsigned int IFCEXTRUDEDAREASOLIDTAPERED = 2804161546;
 	static const unsigned int IFCFACE = 2556980723;
@@ -262,6 +285,8 @@ namespace ifc2x4 {
 	static const unsigned int IFCFACESURFACE = 3008276851;
 	static const unsigned int IFCFACETEDBREP = 807026263;
 	static const unsigned int IFCFACETEDBREPWITHVOIDS = 3737207727;
+	static const unsigned int IFCFACILITY = 24185140;
+	static const unsigned int IFCFACILITYPART = 1310830890;
 	static const unsigned int IFCFAILURECONNECTIONCONDITION = 4219587988;
 	static const unsigned int IFCFAN = 3415622556;
 	static const unsigned int IFCFANTYPE = 346874300;
@@ -318,6 +343,7 @@ namespace ifc2x4 {
 	static const unsigned int IFCHEATEXCHANGERTYPE = 1251058090;
 	static const unsigned int IFCHUMIDIFIER = 2068733104;
 	static const unsigned int IFCHUMIDIFIERTYPE = 1806887404;
+	static const unsigned int IFCISHAPEPROFILEDEF = 1484403080;
 	static const unsigned int IFCIMAGETEXTURE = 3905492369;
 	static const unsigned int IFCINDEXEDCOLOURMAP = 3570813810;
 	static const unsigned int IFCINDEXEDPOLYCURVE = 2571569899;
@@ -331,9 +357,9 @@ namespace ifc2x4 {
 	static const unsigned int IFCINVENTORY = 2391368822;
 	static const unsigned int IFCIRREGULARTIMESERIES = 3741457305;
 	static const unsigned int IFCIRREGULARTIMESERIESVALUE = 3020489413;
-	static const unsigned int IFCISHAPEPROFILEDEF = 1484403080;
 	static const unsigned int IFCJUNCTIONBOX = 2176052936;
 	static const unsigned int IFCJUNCTIONBOXTYPE = 4288270099;
+	static const unsigned int IFCLSHAPEPROFILEDEF = 572779678;
 	static const unsigned int IFCLABORRESOURCE = 3827777499;
 	static const unsigned int IFCLABORRESOURCETYPE = 428585644;
 	static const unsigned int IFCLAGTIME = 1585845231;
@@ -352,9 +378,11 @@ namespace ifc2x4 {
 	static const unsigned int IFCLIGHTSOURCEPOSITIONAL = 1520743889;
 	static const unsigned int IFCLIGHTSOURCESPOT = 3422422726;
 	static const unsigned int IFCLINE = 1281925730;
+	static const unsigned int IFCLINESEGMENT2D = 3092502836;
+	static const unsigned int IFCLINEARPLACEMENT = 388784114;
+	static const unsigned int IFCLINEARPOSITIONINGELEMENT = 1154579445;
 	static const unsigned int IFCLOCALPLACEMENT = 2624227202;
 	static const unsigned int IFCLOOP = 1008929658;
-	static const unsigned int IFCLSHAPEPROFILEDEF = 572779678;
 	static const unsigned int IFCMANIFOLDSOLIDBREP = 1425443689;
 	static const unsigned int IFCMAPCONVERSION = 3057273783;
 	static const unsigned int IFCMAPPEDITEM = 2347385850;
@@ -393,16 +421,19 @@ namespace ifc2x4 {
 	static const unsigned int IFCNAMEDUNIT = 1918398963;
 	static const unsigned int IFCOBJECT = 3888040117;
 	static const unsigned int IFCOBJECTDEFINITION = 219451334;
-	static const unsigned int IFCOBJECTIVE = 2251480897;
 	static const unsigned int IFCOBJECTPLACEMENT = 3701648758;
+	static const unsigned int IFCOBJECTIVE = 2251480897;
 	static const unsigned int IFCOCCUPANT = 4143007308;
+	static const unsigned int IFCOFFSETCURVE = 590820931;
 	static const unsigned int IFCOFFSETCURVE2D = 3388369263;
 	static const unsigned int IFCOFFSETCURVE3D = 3505215534;
+	static const unsigned int IFCOFFSETCURVEBYDISTANCES = 2485787929;
+	static const unsigned int IFCOPENSHELL = 2665983363;
 	static const unsigned int IFCOPENINGELEMENT = 3588315303;
 	static const unsigned int IFCOPENINGSTANDARDCASE = 3079942009;
-	static const unsigned int IFCOPENSHELL = 2665983363;
 	static const unsigned int IFCORGANIZATION = 4251960020;
 	static const unsigned int IFCORGANIZATIONRELATIONSHIP = 1411181986;
+	static const unsigned int IFCORIENTATIONEXPRESSION = 643959842;
 	static const unsigned int IFCORIENTEDEDGE = 1029017970;
 	static const unsigned int IFCOUTERBOUNDARYCURVE = 144952367;
 	static const unsigned int IFCOUTLET = 3694346114;
@@ -436,11 +467,12 @@ namespace ifc2x4 {
 	static const unsigned int IFCPOINT = 2067069095;
 	static const unsigned int IFCPOINTONCURVE = 4022376103;
 	static const unsigned int IFCPOINTONSURFACE = 1423911732;
+	static const unsigned int IFCPOLYLOOP = 2924175390;
 	static const unsigned int IFCPOLYGONALBOUNDEDHALFSPACE = 2775532180;
 	static const unsigned int IFCPOLYGONALFACESET = 2839578677;
 	static const unsigned int IFCPOLYLINE = 3724593414;
-	static const unsigned int IFCPOLYLOOP = 2924175390;
 	static const unsigned int IFCPORT = 3740093272;
+	static const unsigned int IFCPOSITIONINGELEMENT = 1946335990;
 	static const unsigned int IFCPOSTALADDRESS = 3355820592;
 	static const unsigned int IFCPREDEFINEDCOLOUR = 759155922;
 	static const unsigned int IFCPREDEFINEDCURVEFONT = 2559016684;
@@ -462,10 +494,10 @@ namespace ifc2x4 {
 	static const unsigned int IFCPROFILEDEF = 3958567839;
 	static const unsigned int IFCPROFILEPROPERTIES = 2802850158;
 	static const unsigned int IFCPROJECT = 103090709;
-	static const unsigned int IFCPROJECTEDCRS = 3843373140;
-	static const unsigned int IFCPROJECTIONELEMENT = 3651124850;
 	static const unsigned int IFCPROJECTLIBRARY = 653396225;
 	static const unsigned int IFCPROJECTORDER = 2904328755;
+	static const unsigned int IFCPROJECTEDCRS = 3843373140;
+	static const unsigned int IFCPROJECTIONELEMENT = 3651124850;
 	static const unsigned int IFCPROPERTY = 2598011224;
 	static const unsigned int IFCPROPERTYABSTRACTION = 986844984;
 	static const unsigned int IFCPROPERTYBOUNDEDVALUE = 871118103;
@@ -510,6 +542,7 @@ namespace ifc2x4 {
 	static const unsigned int IFCRECTANGULARTRIMMEDSURFACE = 3454111270;
 	static const unsigned int IFCRECURRENCEPATTERN = 3915482550;
 	static const unsigned int IFCREFERENCE = 2433181523;
+	static const unsigned int IFCREFERENT = 4021432810;
 	static const unsigned int IFCREGULARTIMESERIES = 3413951693;
 	static const unsigned int IFCREINFORCEMENTBARPROPERTIES = 1580146022;
 	static const unsigned int IFCREINFORCEMENTDEFINITIONPROPERTIES = 3765753017;
@@ -535,12 +568,11 @@ namespace ifc2x4 {
 	static const unsigned int IFCRELASSOCIATESDOCUMENT = 982818633;
 	static const unsigned int IFCRELASSOCIATESLIBRARY = 3840914261;
 	static const unsigned int IFCRELASSOCIATESMATERIAL = 2655215786;
-	static const unsigned int IFCRELATIONSHIP = 478536968;
 	static const unsigned int IFCRELCONNECTS = 826625072;
 	static const unsigned int IFCRELCONNECTSELEMENTS = 1204542856;
 	static const unsigned int IFCRELCONNECTSPATHELEMENTS = 3945020480;
-	static const unsigned int IFCRELCONNECTSPORTS = 3190031847;
 	static const unsigned int IFCRELCONNECTSPORTTOELEMENT = 4201705270;
+	static const unsigned int IFCRELCONNECTSPORTS = 3190031847;
 	static const unsigned int IFCRELCONNECTSSTRUCTURALACTIVITY = 2127690289;
 	static const unsigned int IFCRELCONNECTSSTRUCTURALMEMBER = 1638771189;
 	static const unsigned int IFCRELCONNECTSWITHECCENTRICITY = 504942748;
@@ -559,6 +591,7 @@ namespace ifc2x4 {
 	static const unsigned int IFCRELFLOWCONTROLELEMENTS = 279856033;
 	static const unsigned int IFCRELINTERFERESELEMENTS = 427948657;
 	static const unsigned int IFCRELNESTS = 3268803585;
+	static const unsigned int IFCRELPOSITIONS = 1441486842;
 	static const unsigned int IFCRELPROJECTSELEMENT = 750771296;
 	static const unsigned int IFCRELREFERENCEDINSPATIALSTRUCTURE = 1245217292;
 	static const unsigned int IFCRELSEQUENCE = 4122056220;
@@ -567,6 +600,7 @@ namespace ifc2x4 {
 	static const unsigned int IFCRELSPACEBOUNDARY1STLEVEL = 3523091289;
 	static const unsigned int IFCRELSPACEBOUNDARY2NDLEVEL = 1521410863;
 	static const unsigned int IFCRELVOIDSELEMENT = 1401173127;
+	static const unsigned int IFCRELATIONSHIP = 478536968;
 	static const unsigned int IFCREPARAMETRISEDCOMPOSITECURVESEGMENT = 816062949;
 	static const unsigned int IFCREPRESENTATION = 1076942058;
 	static const unsigned int IFCREPRESENTATIONCONTEXT = 3377609919;
@@ -585,13 +619,16 @@ namespace ifc2x4 {
 	static const unsigned int IFCROOFTYPE = 2781568857;
 	static const unsigned int IFCROOT = 2341007311;
 	static const unsigned int IFCROUNDEDRECTANGLEPROFILEDEF = 2778083089;
+	static const unsigned int IFCSIUNIT = 448429030;
 	static const unsigned int IFCSANITARYTERMINAL = 3053780830;
 	static const unsigned int IFCSANITARYTERMINALTYPE = 1768891740;
 	static const unsigned int IFCSCHEDULINGTIME = 1054537805;
 	static const unsigned int IFCSEAMCURVE = 2157484638;
-	static const unsigned int IFCSECTIONEDSPINE = 1509187699;
 	static const unsigned int IFCSECTIONPROPERTIES = 2042790032;
 	static const unsigned int IFCSECTIONREINFORCEMENTPROPERTIES = 4165799628;
+	static const unsigned int IFCSECTIONEDSOLID = 1862484736;
+	static const unsigned int IFCSECTIONEDSOLIDHORIZONTAL = 1290935644;
+	static const unsigned int IFCSECTIONEDSPINE = 1509187699;
 	static const unsigned int IFCSENSOR = 4086658281;
 	static const unsigned int IFCSENSORTYPE = 1783015770;
 	static const unsigned int IFCSHADINGDEVICE = 1329646415;
@@ -603,7 +640,6 @@ namespace ifc2x4 {
 	static const unsigned int IFCSIMPLEPROPERTY = 3692461612;
 	static const unsigned int IFCSIMPLEPROPERTYTEMPLATE = 3663146110;
 	static const unsigned int IFCSITE = 4097777520;
-	static const unsigned int IFCSIUNIT = 448429030;
 	static const unsigned int IFCSLAB = 1529196076;
 	static const unsigned int IFCSLABELEMENTEDCASE = 3127900445;
 	static const unsigned int IFCSLABSTANDARDCASE = 3027962421;
@@ -667,9 +703,9 @@ namespace ifc2x4 {
 	static const unsigned int IFCSTRUCTURALSURFACEMEMBER = 3979015343;
 	static const unsigned int IFCSTRUCTURALSURFACEMEMBERVARYING = 2218152070;
 	static const unsigned int IFCSTRUCTURALSURFACEREACTION = 603775116;
+	static const unsigned int IFCSTYLEMODEL = 2830218821;
 	static const unsigned int IFCSTYLEDITEM = 3958052878;
 	static const unsigned int IFCSTYLEDREPRESENTATION = 3049322572;
-	static const unsigned int IFCSTYLEMODEL = 2830218821;
 	static const unsigned int IFCSUBCONTRACTRESOURCE = 148013059;
 	static const unsigned int IFCSUBCONTRACTRESOURCETYPE = 4095615324;
 	static const unsigned int IFCSUBEDGE = 2233826070;
@@ -696,6 +732,7 @@ namespace ifc2x4 {
 	static const unsigned int IFCSYSTEM = 2254336722;
 	static const unsigned int IFCSYSTEMFURNITUREELEMENT = 413509423;
 	static const unsigned int IFCSYSTEMFURNITUREELEMENTTYPE = 1580310250;
+	static const unsigned int IFCTSHAPEPROFILEDEF = 3071757647;
 	static const unsigned int IFCTABLE = 985171141;
 	static const unsigned int IFCTABLECOLUMN = 2043862942;
 	static const unsigned int IFCTABLEROW = 531007025;
@@ -709,6 +746,8 @@ namespace ifc2x4 {
 	static const unsigned int IFCTENDON = 3824725483;
 	static const unsigned int IFCTENDONANCHOR = 2347447852;
 	static const unsigned int IFCTENDONANCHORTYPE = 3081323446;
+	static const unsigned int IFCTENDONCONDUIT = 3663046924;
+	static const unsigned int IFCTENDONCONDUITTYPE = 2281632017;
 	static const unsigned int IFCTENDONTYPE = 2415094496;
 	static const unsigned int IFCTESSELLATEDFACESET = 2387106220;
 	static const unsigned int IFCTESSELLATEDITEM = 901063453;
@@ -731,30 +770,33 @@ namespace ifc2x4 {
 	static const unsigned int IFCTOROIDALSURFACE = 1935646853;
 	static const unsigned int IFCTRANSFORMER = 3825984169;
 	static const unsigned int IFCTRANSFORMERTYPE = 1692211062;
+	static const unsigned int IFCTRANSITIONCURVESEGMENT2D = 2595432518;
 	static const unsigned int IFCTRANSPORTELEMENT = 1620046519;
 	static const unsigned int IFCTRANSPORTELEMENTTYPE = 2097647324;
 	static const unsigned int IFCTRAPEZIUMPROFILEDEF = 2715220739;
 	static const unsigned int IFCTRIANGULATEDFACESET = 2916149573;
+	static const unsigned int IFCTRIANGULATEDIRREGULARNETWORK = 1229763772;
 	static const unsigned int IFCTRIMMEDCURVE = 3593883385;
-	static const unsigned int IFCTSHAPEPROFILEDEF = 3071757647;
 	static const unsigned int IFCTUBEBUNDLE = 3026737570;
 	static const unsigned int IFCTUBEBUNDLETYPE = 1600972822;
 	static const unsigned int IFCTYPEOBJECT = 1628702193;
 	static const unsigned int IFCTYPEPROCESS = 3736923433;
 	static const unsigned int IFCTYPEPRODUCT = 2347495698;
 	static const unsigned int IFCTYPERESOURCE = 3698973494;
+	static const unsigned int IFCUSHAPEPROFILEDEF = 427810014;
+	static const unsigned int IFCUNITASSIGNMENT = 180925521;
 	static const unsigned int IFCUNITARYCONTROLELEMENT = 630975310;
 	static const unsigned int IFCUNITARYCONTROLELEMENTTYPE = 3179687236;
 	static const unsigned int IFCUNITARYEQUIPMENT = 4292641817;
 	static const unsigned int IFCUNITARYEQUIPMENTTYPE = 1911125066;
-	static const unsigned int IFCUNITASSIGNMENT = 180925521;
-	static const unsigned int IFCUSHAPEPROFILEDEF = 427810014;
 	static const unsigned int IFCVALVE = 4207607924;
 	static const unsigned int IFCVALVETYPE = 728799441;
 	static const unsigned int IFCVECTOR = 1417489154;
 	static const unsigned int IFCVERTEX = 2799835756;
 	static const unsigned int IFCVERTEXLOOP = 2759199220;
 	static const unsigned int IFCVERTEXPOINT = 1907098498;
+	static const unsigned int IFCVIBRATIONDAMPER = 1530820697;
+	static const unsigned int IFCVIBRATIONDAMPERTYPE = 3956297820;
 	static const unsigned int IFCVIBRATIONISOLATOR = 2391383451;
 	static const unsigned int IFCVIBRATIONISOLATORTYPE = 3313531582;
 	static const unsigned int IFCVIRTUALELEMENT = 2769231204;
@@ -777,1054 +819,1204 @@ namespace ifc2x4 {
 	static const unsigned int IFCWORKPLAN = 4218914973;
 	static const unsigned int IFCWORKSCHEDULE = 3342526732;
 	static const unsigned int IFCWORKTIME = 1236880293;
-	static const unsigned int IFCZONE = 1033361043;
 	static const unsigned int IFCZSHAPEPROFILEDEF = 2543172580;
+	static const unsigned int IFCZONE = 1033361043;
 	bool IsIfcElement(unsigned int ifcCode) {
 		switch(ifcCode) {
-			case 4288193352: return true;
-			case 4097777520: return true;
-			case 1634111441: return true;
-			case 177149247: return true;
-			case 2056796094: return true;
-			case 3087945054: return true;
-			case 277319702: return true;
-			case 753842376: return true;
-			case 2906023776: return true;
-			case 32344328: return true;
-			case 2979338954: return true;
-			case 1095909175: return true;
-			case 2938176219: return true;
-			case 635142910: return true;
-			case 3758799889: return true;
-			case 1051757585: return true;
-			case 4217484030: return true;
-			case 3902619387: return true;
-			case 3296154744: return true;
-			case 1677625105: return true;
-			case 639361253: return true;
-			case 843113511: return true;
-			case 905975707: return true;
-			case 3221913625: return true;
-			case 3571504051: return true;
-			case 2272882330: return true;
-			case 25142252: return true;
-			case 4136498852: return true;
-			case 3640358203: return true;
-			case 1973544240: return true;
-			case 3495092785: return true;
-			case 4074379575: return true;
-			case 1335981549: return true;
-			case 1052013943: return true;
-			case 1062813311: return true;
-			case 1945004755: return true;
-			case 3040386961: return true;
-			case 395920057: return true;
-			case 3242481149: return true;
-			case 342316401: return true;
-			case 3518393246: return true;
-			case 1360408905: return true;
-			case 1904799276: return true;
-			case 862014818: return true;
-			case 3310460725: return true;
-			case 264262732: return true;
-			case 402227799: return true;
-			case 1003880860: return true;
-			case 4123344466: return true;
-			case 1658829314: return true;
-			case 2814081492: return true;
-			case 3747195512: return true;
-			case 484807127: return true;
-			case 3415622556: return true;
-			case 647756555: return true;
-			case 819412036: return true;
-			case 1426591983: return true;
-			case 2058353004: return true;
-			case 4278956645: return true;
-			case 182646315: return true;
-			case 2188021234: return true;
-			case 3132237377: return true;
-			case 987401354: return true;
-			case 707683696: return true;
-			case 2223149337: return true;
-			case 3508470533: return true;
-			case 900683007: return true;
-			case 263784265: return true;
-			case 1509553395: return true;
-			case 3493046030: return true;
-			case 3319311131: return true;
-			case 2068733104: return true;
-			case 4175244083: return true;
-			case 2176052936: return true;
-			case 76236018: return true;
-			case 629592764: return true;
-			case 377706215: return true;
-			case 1437502449: return true;
-			case 1073191201: return true;
-			case 1911478936: return true;
-			case 2474470126: return true;
-			case 3588315303: return true;
-			case 3079942009: return true;
-			case 3694346114: return true;
-			case 1687234759: return true;
-			case 310824031: return true;
-			case 3612865200: return true;
-			case 3171933400: return true;
-			case 1156407060: return true;
-			case 3651124850: return true;
-			case 738039164: return true;
-			case 2295281155: return true;
-			case 90941305: return true;
-			case 2262370178: return true;
-			case 3024970846: return true;
-			case 3283111854: return true;
-			case 979691226: return true;
-			case 2320036040: return true;
-			case 2016517767: return true;
-			case 3053780830: return true;
-			case 4086658281: return true;
-			case 1329646415: return true;
-			case 1529196076: return true;
-			case 3127900445: return true;
-			case 3027962421: return true;
-			case 3420628829: return true;
-			case 1999602285: return true;
-			case 1404847402: return true;
-			case 331165859: return true;
-			case 4252922144: return true;
-			case 3101698114: return true;
-			case 1162798199: return true;
-			case 413509423: return true;
-			case 812556717: return true;
-			case 3824725483: return true;
-			case 2347447852: return true;
-			case 3825984169: return true;
-			case 1620046519: return true;
-			case 3026737570: return true;
-			case 630975310: return true;
-			case 4292641817: return true;
-			case 4207607924: return true;
-			case 2391383451: return true;
-			case 2769231204: return true;
-			case 926996030: return true;
-			case 2391406946: return true;
-			case 4156078855: return true;
-			case 3512223829: return true;
-			case 4237592921: return true;
-			case 3304561284: return true;
-			case 486154966: return true;
+			case ifc2x4::IFCACTUATOR: return true;
+			case ifc2x4::IFCAIRTERMINAL: return true;
+			case ifc2x4::IFCAIRTERMINALBOX: return true;
+			case ifc2x4::IFCAIRTOAIRHEATRECOVERY: return true;
+			case ifc2x4::IFCALARM: return true;
+			case ifc2x4::IFCALIGNMENT: return true;
+			case ifc2x4::IFCANNOTATION: return true;
+			case ifc2x4::IFCAUDIOVISUALAPPLIANCE: return true;
+			case ifc2x4::IFCBEAM: return true;
+			case ifc2x4::IFCBEAMSTANDARDCASE: return true;
+			case ifc2x4::IFCBEARING: return true;
+			case ifc2x4::IFCBOILER: return true;
+			case ifc2x4::IFCBRIDGE: return true;
+			case ifc2x4::IFCBRIDGEPART: return true;
+			case ifc2x4::IFCBUILDING: return true;
+			case ifc2x4::IFCBUILDINGELEMENT: return true;
+			case ifc2x4::IFCBUILDINGELEMENTPART: return true;
+			case ifc2x4::IFCBUILDINGELEMENTPROXY: return true;
+			case ifc2x4::IFCBUILDINGSTOREY: return true;
+			case ifc2x4::IFCBURNER: return true;
+			case ifc2x4::IFCCABLECARRIERFITTING: return true;
+			case ifc2x4::IFCCABLECARRIERSEGMENT: return true;
+			case ifc2x4::IFCCABLEFITTING: return true;
+			case ifc2x4::IFCCABLESEGMENT: return true;
+			case ifc2x4::IFCCAISSONFOUNDATION: return true;
+			case ifc2x4::IFCCHILLER: return true;
+			case ifc2x4::IFCCHIMNEY: return true;
+			case ifc2x4::IFCCIVILELEMENT: return true;
+			case ifc2x4::IFCCOIL: return true;
+			case ifc2x4::IFCCOLUMN: return true;
+			case ifc2x4::IFCCOLUMNSTANDARDCASE: return true;
+			case ifc2x4::IFCCOMMUNICATIONSAPPLIANCE: return true;
+			case ifc2x4::IFCCOMPRESSOR: return true;
+			case ifc2x4::IFCCONDENSER: return true;
+			case ifc2x4::IFCCONTROLLER: return true;
+			case ifc2x4::IFCCOOLEDBEAM: return true;
+			case ifc2x4::IFCCOOLINGTOWER: return true;
+			case ifc2x4::IFCCOVERING: return true;
+			case ifc2x4::IFCCURTAINWALL: return true;
+			case ifc2x4::IFCDAMPER: return true;
+			case ifc2x4::IFCDEEPFOUNDATION: return true;
+			case ifc2x4::IFCDISCRETEACCESSORY: return true;
+			case ifc2x4::IFCDISTRIBUTIONCHAMBERELEMENT: return true;
+			case ifc2x4::IFCDISTRIBUTIONCONTROLELEMENT: return true;
+			case ifc2x4::IFCDISTRIBUTIONELEMENT: return true;
+			case ifc2x4::IFCDISTRIBUTIONFLOWELEMENT: return true;
+			case ifc2x4::IFCDISTRIBUTIONPORT: return true;
+			case ifc2x4::IFCDOOR: return true;
+			case ifc2x4::IFCDOORSTANDARDCASE: return true;
+			case ifc2x4::IFCDUCTFITTING: return true;
+			case ifc2x4::IFCDUCTSEGMENT: return true;
+			case ifc2x4::IFCDUCTSILENCER: return true;
+			case ifc2x4::IFCELECTRICAPPLIANCE: return true;
+			case ifc2x4::IFCELECTRICDISTRIBUTIONBOARD: return true;
+			case ifc2x4::IFCELECTRICFLOWSTORAGEDEVICE: return true;
+			case ifc2x4::IFCELECTRICGENERATOR: return true;
+			case ifc2x4::IFCELECTRICMOTOR: return true;
+			case ifc2x4::IFCELECTRICTIMECONTROL: return true;
+			case ifc2x4::IFCELEMENT: return true;
+			case ifc2x4::IFCELEMENTASSEMBLY: return true;
+			case ifc2x4::IFCELEMENTCOMPONENT: return true;
+			case ifc2x4::IFCENERGYCONVERSIONDEVICE: return true;
+			case ifc2x4::IFCENGINE: return true;
+			case ifc2x4::IFCEVAPORATIVECOOLER: return true;
+			case ifc2x4::IFCEVAPORATOR: return true;
+			case ifc2x4::IFCEXTERNALSPATIALELEMENT: return true;
+			case ifc2x4::IFCEXTERNALSPATIALSTRUCTUREELEMENT: return true;
+			case ifc2x4::IFCFACILITY: return true;
+			case ifc2x4::IFCFACILITYPART: return true;
+			case ifc2x4::IFCFAN: return true;
+			case ifc2x4::IFCFASTENER: return true;
+			case ifc2x4::IFCFEATUREELEMENT: return true;
+			case ifc2x4::IFCFEATUREELEMENTADDITION: return true;
+			case ifc2x4::IFCFEATUREELEMENTSUBTRACTION: return true;
+			case ifc2x4::IFCFILTER: return true;
+			case ifc2x4::IFCFIRESUPPRESSIONTERMINAL: return true;
+			case ifc2x4::IFCFLOWCONTROLLER: return true;
+			case ifc2x4::IFCFLOWFITTING: return true;
+			case ifc2x4::IFCFLOWINSTRUMENT: return true;
+			case ifc2x4::IFCFLOWMETER: return true;
+			case ifc2x4::IFCFLOWMOVINGDEVICE: return true;
+			case ifc2x4::IFCFLOWSEGMENT: return true;
+			case ifc2x4::IFCFLOWSTORAGEDEVICE: return true;
+			case ifc2x4::IFCFLOWTERMINAL: return true;
+			case ifc2x4::IFCFLOWTREATMENTDEVICE: return true;
+			case ifc2x4::IFCFOOTING: return true;
+			case ifc2x4::IFCFURNISHINGELEMENT: return true;
+			case ifc2x4::IFCFURNITURE: return true;
+			case ifc2x4::IFCGEOGRAPHICELEMENT: return true;
+			case ifc2x4::IFCGRID: return true;
+			case ifc2x4::IFCHEATEXCHANGER: return true;
+			case ifc2x4::IFCHUMIDIFIER: return true;
+			case ifc2x4::IFCINTERCEPTOR: return true;
+			case ifc2x4::IFCJUNCTIONBOX: return true;
+			case ifc2x4::IFCLAMP: return true;
+			case ifc2x4::IFCLIGHTFIXTURE: return true;
+			case ifc2x4::IFCLINEARPOSITIONINGELEMENT: return true;
+			case ifc2x4::IFCMECHANICALFASTENER: return true;
+			case ifc2x4::IFCMEDICALDEVICE: return true;
+			case ifc2x4::IFCMEMBER: return true;
+			case ifc2x4::IFCMEMBERSTANDARDCASE: return true;
+			case ifc2x4::IFCMOTORCONNECTION: return true;
+			case ifc2x4::IFCOPENINGELEMENT: return true;
+			case ifc2x4::IFCOPENINGSTANDARDCASE: return true;
+			case ifc2x4::IFCOUTLET: return true;
+			case ifc2x4::IFCPILE: return true;
+			case ifc2x4::IFCPIPEFITTING: return true;
+			case ifc2x4::IFCPIPESEGMENT: return true;
+			case ifc2x4::IFCPLATE: return true;
+			case ifc2x4::IFCPLATESTANDARDCASE: return true;
+			case ifc2x4::IFCPORT: return true;
+			case ifc2x4::IFCPOSITIONINGELEMENT: return true;
+			case ifc2x4::IFCPROJECTIONELEMENT: return true;
+			case ifc2x4::IFCPROTECTIVEDEVICE: return true;
+			case ifc2x4::IFCPROTECTIVEDEVICETRIPPINGUNIT: return true;
+			case ifc2x4::IFCPROXY: return true;
+			case ifc2x4::IFCPUMP: return true;
+			case ifc2x4::IFCRAILING: return true;
+			case ifc2x4::IFCRAMP: return true;
+			case ifc2x4::IFCRAMPFLIGHT: return true;
+			case ifc2x4::IFCREFERENT: return true;
+			case ifc2x4::IFCREINFORCINGBAR: return true;
+			case ifc2x4::IFCREINFORCINGELEMENT: return true;
+			case ifc2x4::IFCREINFORCINGMESH: return true;
+			case ifc2x4::IFCROOF: return true;
+			case ifc2x4::IFCSANITARYTERMINAL: return true;
+			case ifc2x4::IFCSENSOR: return true;
+			case ifc2x4::IFCSHADINGDEVICE: return true;
+			case ifc2x4::IFCSITE: return true;
+			case ifc2x4::IFCSLAB: return true;
+			case ifc2x4::IFCSLABELEMENTEDCASE: return true;
+			case ifc2x4::IFCSLABSTANDARDCASE: return true;
+			case ifc2x4::IFCSOLARDEVICE: return true;
+			case ifc2x4::IFCSPACE: return true;
+			case ifc2x4::IFCSPACEHEATER: return true;
+			case ifc2x4::IFCSPATIALELEMENT: return true;
+			case ifc2x4::IFCSPATIALSTRUCTUREELEMENT: return true;
+			case ifc2x4::IFCSPATIALZONE: return true;
+			case ifc2x4::IFCSTACKTERMINAL: return true;
+			case ifc2x4::IFCSTAIR: return true;
+			case ifc2x4::IFCSTAIRFLIGHT: return true;
+			case ifc2x4::IFCSTRUCTURALACTION: return true;
+			case ifc2x4::IFCSTRUCTURALACTIVITY: return true;
+			case ifc2x4::IFCSTRUCTURALCONNECTION: return true;
+			case ifc2x4::IFCSTRUCTURALCURVEACTION: return true;
+			case ifc2x4::IFCSTRUCTURALCURVECONNECTION: return true;
+			case ifc2x4::IFCSTRUCTURALCURVEMEMBER: return true;
+			case ifc2x4::IFCSTRUCTURALCURVEMEMBERVARYING: return true;
+			case ifc2x4::IFCSTRUCTURALCURVEREACTION: return true;
+			case ifc2x4::IFCSTRUCTURALITEM: return true;
+			case ifc2x4::IFCSTRUCTURALLINEARACTION: return true;
+			case ifc2x4::IFCSTRUCTURALMEMBER: return true;
+			case ifc2x4::IFCSTRUCTURALPLANARACTION: return true;
+			case ifc2x4::IFCSTRUCTURALPOINTACTION: return true;
+			case ifc2x4::IFCSTRUCTURALPOINTCONNECTION: return true;
+			case ifc2x4::IFCSTRUCTURALPOINTREACTION: return true;
+			case ifc2x4::IFCSTRUCTURALREACTION: return true;
+			case ifc2x4::IFCSTRUCTURALSURFACEACTION: return true;
+			case ifc2x4::IFCSTRUCTURALSURFACECONNECTION: return true;
+			case ifc2x4::IFCSTRUCTURALSURFACEMEMBER: return true;
+			case ifc2x4::IFCSTRUCTURALSURFACEMEMBERVARYING: return true;
+			case ifc2x4::IFCSTRUCTURALSURFACEREACTION: return true;
+			case ifc2x4::IFCSURFACEFEATURE: return true;
+			case ifc2x4::IFCSWITCHINGDEVICE: return true;
+			case ifc2x4::IFCSYSTEMFURNITUREELEMENT: return true;
+			case ifc2x4::IFCTANK: return true;
+			case ifc2x4::IFCTENDON: return true;
+			case ifc2x4::IFCTENDONANCHOR: return true;
+			case ifc2x4::IFCTENDONCONDUIT: return true;
+			case ifc2x4::IFCTRANSFORMER: return true;
+			case ifc2x4::IFCTRANSPORTELEMENT: return true;
+			case ifc2x4::IFCTUBEBUNDLE: return true;
+			case ifc2x4::IFCUNITARYCONTROLELEMENT: return true;
+			case ifc2x4::IFCUNITARYEQUIPMENT: return true;
+			case ifc2x4::IFCVALVE: return true;
+			case ifc2x4::IFCVIBRATIONDAMPER: return true;
+			case ifc2x4::IFCVIBRATIONISOLATOR: return true;
+			case ifc2x4::IFCVIRTUALELEMENT: return true;
+			case ifc2x4::IFCVOIDINGFEATURE: return true;
+			case ifc2x4::IFCWALL: return true;
+			case ifc2x4::IFCWALLELEMENTEDCASE: return true;
+			case ifc2x4::IFCWALLSTANDARDCASE: return true;
+			case ifc2x4::IFCWASTETERMINAL: return true;
+			case ifc2x4::IFCWINDOW: return true;
+			case ifc2x4::IFCWINDOWSTANDARDCASE: return true;
 			default: return false;
 		}
 	}
 	std::vector<unsigned int> IfcElements { 
-		4097777520,
-		4288193352,
-		1634111441,
-		177149247,
-		2056796094,
-		3087945054,
-		277319702,
-		753842376,
-		2906023776,
-		32344328,
-		2979338954,
-		1095909175,
-		2938176219,
-		635142910,
-		3758799889,
-		1051757585,
-		4217484030,
-		3902619387,
-		3296154744,
-		1677625105,
-		639361253,
-		843113511,
-		905975707,
-		3221913625,
-		3571504051,
-		2272882330,
-		25142252,
-		4136498852,
-		3640358203,
-		1973544240,
-		3495092785,
-		4074379575,
-		1335981549,
-		1052013943,
-		1062813311,
-		1945004755,
-		3040386961,
-		395920057,
-		3242481149,
-		342316401,
-		3518393246,
-		1360408905,
-		1904799276,
-		862014818,
-		3310460725,
-		264262732,
-		402227799,
-		1003880860,
-		4123344466,
-		1658829314,
-		2814081492,
-		3747195512,
-		484807127,
-		3415622556,
-		647756555,
-		819412036,
-		1426591983,
-		2058353004,
-		4278956645,
-		182646315,
-		2188021234,
-		3132237377,
-		987401354,
-		707683696,
-		2223149337,
-		3508470533,
-		900683007,
-		263784265,
-		1509553395,
-		3493046030,
-		3319311131,
-		2068733104,
-		4175244083,
-		2176052936,
-		76236018,
-		629592764,
-		377706215,
-		1437502449,
-		1073191201,
-		1911478936,
-		2474470126,
-		3588315303,
-		3079942009,
-		3694346114,
-		1687234759,
-		310824031,
-		3612865200,
-		3171933400,
-		1156407060,
-		3651124850,
-		738039164,
-		2295281155,
-		90941305,
-		2262370178,
-		3024970846,
-		3283111854,
-		979691226,
-		2320036040,
-		2016517767,
-		3053780830,
-		4086658281,
-		1329646415,
-		1529196076,
-		3127900445,
-		3027962421,
-		3420628829,
-		1999602285,
-		1404847402,
-		331165859,
-		4252922144,
-		3101698114,
-		1162798199,
-		413509423,
-		812556717,
-		3824725483,
-		2347447852,
-		3825984169,
-		1620046519,
-		3026737570,
-		630975310,
-		4292641817,
-		4207607924,
-		2391383451,
-		2769231204,
-		926996030,
-		2391406946,
-		4156078855,
-		3512223829,
-		4237592921,
-		3304561284,
-		486154966
+		IFCACTUATOR,
+		IFCAIRTERMINAL,
+		IFCAIRTERMINALBOX,
+		IFCAIRTOAIRHEATRECOVERY,
+		IFCALARM,
+		IFCALIGNMENT,
+		IFCANNOTATION,
+		IFCAUDIOVISUALAPPLIANCE,
+		IFCBEAM,
+		IFCBEAMSTANDARDCASE,
+		IFCBEARING,
+		IFCBOILER,
+		IFCBRIDGE,
+		IFCBRIDGEPART,
+		IFCBUILDING,
+		IFCBUILDINGELEMENT,
+		IFCBUILDINGELEMENTPART,
+		IFCBUILDINGELEMENTPROXY,
+		IFCBUILDINGSTOREY,
+		IFCBURNER,
+		IFCCABLECARRIERFITTING,
+		IFCCABLECARRIERSEGMENT,
+		IFCCABLEFITTING,
+		IFCCABLESEGMENT,
+		IFCCAISSONFOUNDATION,
+		IFCCHILLER,
+		IFCCHIMNEY,
+		IFCCIVILELEMENT,
+		IFCCOIL,
+		IFCCOLUMN,
+		IFCCOLUMNSTANDARDCASE,
+		IFCCOMMUNICATIONSAPPLIANCE,
+		IFCCOMPRESSOR,
+		IFCCONDENSER,
+		IFCCONTROLLER,
+		IFCCOOLEDBEAM,
+		IFCCOOLINGTOWER,
+		IFCCOVERING,
+		IFCCURTAINWALL,
+		IFCDAMPER,
+		IFCDEEPFOUNDATION,
+		IFCDISCRETEACCESSORY,
+		IFCDISTRIBUTIONCHAMBERELEMENT,
+		IFCDISTRIBUTIONCONTROLELEMENT,
+		IFCDISTRIBUTIONELEMENT,
+		IFCDISTRIBUTIONFLOWELEMENT,
+		IFCDISTRIBUTIONPORT,
+		IFCDOOR,
+		IFCDOORSTANDARDCASE,
+		IFCDUCTFITTING,
+		IFCDUCTSEGMENT,
+		IFCDUCTSILENCER,
+		IFCELECTRICAPPLIANCE,
+		IFCELECTRICDISTRIBUTIONBOARD,
+		IFCELECTRICFLOWSTORAGEDEVICE,
+		IFCELECTRICGENERATOR,
+		IFCELECTRICMOTOR,
+		IFCELECTRICTIMECONTROL,
+		IFCELEMENT,
+		IFCELEMENTASSEMBLY,
+		IFCELEMENTCOMPONENT,
+		IFCENERGYCONVERSIONDEVICE,
+		IFCENGINE,
+		IFCEVAPORATIVECOOLER,
+		IFCEVAPORATOR,
+		IFCEXTERNALSPATIALELEMENT,
+		IFCEXTERNALSPATIALSTRUCTUREELEMENT,
+		IFCFACILITY,
+		IFCFACILITYPART,
+		IFCFAN,
+		IFCFASTENER,
+		IFCFEATUREELEMENT,
+		IFCFEATUREELEMENTADDITION,
+		IFCFEATUREELEMENTSUBTRACTION,
+		IFCFILTER,
+		IFCFIRESUPPRESSIONTERMINAL,
+		IFCFLOWCONTROLLER,
+		IFCFLOWFITTING,
+		IFCFLOWINSTRUMENT,
+		IFCFLOWMETER,
+		IFCFLOWMOVINGDEVICE,
+		IFCFLOWSEGMENT,
+		IFCFLOWSTORAGEDEVICE,
+		IFCFLOWTERMINAL,
+		IFCFLOWTREATMENTDEVICE,
+		IFCFOOTING,
+		IFCFURNISHINGELEMENT,
+		IFCFURNITURE,
+		IFCGEOGRAPHICELEMENT,
+		IFCGRID,
+		IFCHEATEXCHANGER,
+		IFCHUMIDIFIER,
+		IFCINTERCEPTOR,
+		IFCJUNCTIONBOX,
+		IFCLAMP,
+		IFCLIGHTFIXTURE,
+		IFCLINEARPOSITIONINGELEMENT,
+		IFCMECHANICALFASTENER,
+		IFCMEDICALDEVICE,
+		IFCMEMBER,
+		IFCMEMBERSTANDARDCASE,
+		IFCMOTORCONNECTION,
+		IFCOPENINGELEMENT,
+		IFCOPENINGSTANDARDCASE,
+		IFCOUTLET,
+		IFCPILE,
+		IFCPIPEFITTING,
+		IFCPIPESEGMENT,
+		IFCPLATE,
+		IFCPLATESTANDARDCASE,
+		IFCPORT,
+		IFCPOSITIONINGELEMENT,
+		IFCPROJECTIONELEMENT,
+		IFCPROTECTIVEDEVICE,
+		IFCPROTECTIVEDEVICETRIPPINGUNIT,
+		IFCPROXY,
+		IFCPUMP,
+		IFCRAILING,
+		IFCRAMP,
+		IFCRAMPFLIGHT,
+		IFCREFERENT,
+		IFCREINFORCINGBAR,
+		IFCREINFORCINGELEMENT,
+		IFCREINFORCINGMESH,
+		IFCROOF,
+		IFCSANITARYTERMINAL,
+		IFCSENSOR,
+		IFCSHADINGDEVICE,
+		IFCSITE,
+		IFCSLAB,
+		IFCSLABELEMENTEDCASE,
+		IFCSLABSTANDARDCASE,
+		IFCSOLARDEVICE,
+		IFCSPACE,
+		IFCSPACEHEATER,
+		IFCSPATIALELEMENT,
+		IFCSPATIALSTRUCTUREELEMENT,
+		IFCSPATIALZONE,
+		IFCSTACKTERMINAL,
+		IFCSTAIR,
+		IFCSTAIRFLIGHT,
+		IFCSTRUCTURALACTION,
+		IFCSTRUCTURALACTIVITY,
+		IFCSTRUCTURALCONNECTION,
+		IFCSTRUCTURALCURVEACTION,
+		IFCSTRUCTURALCURVECONNECTION,
+		IFCSTRUCTURALCURVEMEMBER,
+		IFCSTRUCTURALCURVEMEMBERVARYING,
+		IFCSTRUCTURALCURVEREACTION,
+		IFCSTRUCTURALITEM,
+		IFCSTRUCTURALLINEARACTION,
+		IFCSTRUCTURALMEMBER,
+		IFCSTRUCTURALPLANARACTION,
+		IFCSTRUCTURALPOINTACTION,
+		IFCSTRUCTURALPOINTCONNECTION,
+		IFCSTRUCTURALPOINTREACTION,
+		IFCSTRUCTURALREACTION,
+		IFCSTRUCTURALSURFACEACTION,
+		IFCSTRUCTURALSURFACECONNECTION,
+		IFCSTRUCTURALSURFACEMEMBER,
+		IFCSTRUCTURALSURFACEMEMBERVARYING,
+		IFCSTRUCTURALSURFACEREACTION,
+		IFCSURFACEFEATURE,
+		IFCSWITCHINGDEVICE,
+		IFCSYSTEMFURNITUREELEMENT,
+		IFCTANK,
+		IFCTENDON,
+		IFCTENDONANCHOR,
+		IFCTENDONCONDUIT,
+		IFCTRANSFORMER,
+		IFCTRANSPORTELEMENT,
+		IFCTUBEBUNDLE,
+		IFCUNITARYCONTROLELEMENT,
+		IFCUNITARYEQUIPMENT,
+		IFCVALVE,
+		IFCVIBRATIONDAMPER,
+		IFCVIBRATIONISOLATOR,
+		IFCVIRTUALELEMENT,
+		IFCVOIDINGFEATURE,
+		IFCWALL,
+		IFCWALLELEMENTEDCASE,
+		IFCWALLSTANDARDCASE,
+		IFCWASTETERMINAL,
+		IFCWINDOW,
+		IFCWINDOWSTANDARDCASE
 	};
 };
 	const char* GetReadableNameFromTypeCode(unsigned int ifcCode) {
 		switch(ifcCode) {
-			case 3821786052: return "IFCACTIONREQUEST";
-			case 2296667514: return "IFCACTOR";
-			case 3630933823: return "IFCACTORROLE";
-			case 4288193352: return "IFCACTUATOR";
-			case 2874132201: return "IFCACTUATORTYPE";
-			case 618182010: return "IFCADDRESS";
-			case 1635779807: return "IFCADVANCEDBREP";
-			case 2603310189: return "IFCADVANCEDBREPWITHVOIDS";
-			case 3406155212: return "IFCADVANCEDFACE";
-			case 1634111441: return "IFCAIRTERMINAL";
-			case 177149247: return "IFCAIRTERMINALBOX";
-			case 1411407467: return "IFCAIRTERMINALBOXTYPE";
-			case 3352864051: return "IFCAIRTERMINALTYPE";
-			case 2056796094: return "IFCAIRTOAIRHEATRECOVERY";
-			case 1871374353: return "IFCAIRTOAIRHEATRECOVERYTYPE";
-			case 3087945054: return "IFCALARM";
-			case 3001207471: return "IFCALARMTYPE";
-			case 1674181508: return "IFCANNOTATION";
-			case 669184980: return "IFCANNOTATIONFILLAREA";
-			case 639542469: return "IFCAPPLICATION";
-			case 411424972: return "IFCAPPLIEDVALUE";
-			case 130549933: return "IFCAPPROVAL";
-			case 3869604511: return "IFCAPPROVALRELATIONSHIP";
-			case 3798115385: return "IFCARBITRARYCLOSEDPROFILEDEF";
-			case 1310608509: return "IFCARBITRARYOPENPROFILEDEF";
-			case 2705031697: return "IFCARBITRARYPROFILEDEFWITHVOIDS";
-			case 3460190687: return "IFCASSET";
-			case 3207858831: return "IFCASYMMETRICISHAPEPROFILEDEF";
-			case 277319702: return "IFCAUDIOVISUALAPPLIANCE";
-			case 1532957894: return "IFCAUDIOVISUALAPPLIANCETYPE";
-			case 4261334040: return "IFCAXIS1PLACEMENT";
-			case 3125803723: return "IFCAXIS2PLACEMENT2D";
-			case 2740243338: return "IFCAXIS2PLACEMENT3D";
-			case 753842376: return "IFCBEAM";
-			case 2906023776: return "IFCBEAMSTANDARDCASE";
-			case 819618141: return "IFCBEAMTYPE";
-			case 616511568: return "IFCBLOBTEXTURE";
-			case 1334484129: return "IFCBLOCK";
-			case 32344328: return "IFCBOILER";
-			case 231477066: return "IFCBOILERTYPE";
-			case 3649129432: return "IFCBOOLEANCLIPPINGRESULT";
-			case 2736907675: return "IFCBOOLEANRESULT";
-			case 4037036970: return "IFCBOUNDARYCONDITION";
-			case 1136057603: return "IFCBOUNDARYCURVE";
-			case 1560379544: return "IFCBOUNDARYEDGECONDITION";
-			case 3367102660: return "IFCBOUNDARYFACECONDITION";
-			case 1387855156: return "IFCBOUNDARYNODECONDITION";
-			case 2069777674: return "IFCBOUNDARYNODECONDITIONWARPING";
-			case 1260505505: return "IFCBOUNDEDCURVE";
-			case 4182860854: return "IFCBOUNDEDSURFACE";
-			case 2581212453: return "IFCBOUNDINGBOX";
-			case 2713105998: return "IFCBOXEDHALFSPACE";
-			case 1967976161: return "IFCBSPLINECURVE";
-			case 2461110595: return "IFCBSPLINECURVEWITHKNOTS";
-			case 2887950389: return "IFCBSPLINESURFACE";
-			case 167062518: return "IFCBSPLINESURFACEWITHKNOTS";
-			case 4031249490: return "IFCBUILDING";
-			case 2979338954: return "IFCBUILDINGELEMENTPART";
-			case 39481116: return "IFCBUILDINGELEMENTPARTTYPE";
-			case 1095909175: return "IFCBUILDINGELEMENTPROXY";
-			case 1909888760: return "IFCBUILDINGELEMENTPROXYTYPE";
-			case 3124254112: return "IFCBUILDINGSTOREY";
-			case 1177604601: return "IFCBUILDINGSYSTEM";
-			case 2938176219: return "IFCBURNER";
-			case 2188180465: return "IFCBURNERTYPE";
-			case 635142910: return "IFCCABLECARRIERFITTING";
-			case 395041908: return "IFCCABLECARRIERFITTINGTYPE";
-			case 3758799889: return "IFCCABLECARRIERSEGMENT";
-			case 3293546465: return "IFCCABLECARRIERSEGMENTTYPE";
-			case 1051757585: return "IFCCABLEFITTING";
-			case 2674252688: return "IFCCABLEFITTINGTYPE";
-			case 4217484030: return "IFCCABLESEGMENT";
-			case 1285652485: return "IFCCABLESEGMENTTYPE";
-			case 1123145078: return "IFCCARTESIANPOINT";
-			case 574549367: return "IFCCARTESIANPOINTLIST";
-			case 1675464909: return "IFCCARTESIANPOINTLIST2D";
-			case 2059837836: return "IFCCARTESIANPOINTLIST3D";
-			case 59481748: return "IFCCARTESIANTRANSFORMATIONOPERATOR";
-			case 3749851601: return "IFCCARTESIANTRANSFORMATIONOPERATOR2D";
-			case 3486308946: return "IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM";
-			case 3331915920: return "IFCCARTESIANTRANSFORMATIONOPERATOR3D";
-			case 1416205885: return "IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM";
-			case 3150382593: return "IFCCENTERLINEPROFILEDEF";
-			case 3902619387: return "IFCCHILLER";
-			case 2951183804: return "IFCCHILLERTYPE";
-			case 3296154744: return "IFCCHIMNEY";
-			case 2197970202: return "IFCCHIMNEYTYPE";
-			case 2611217952: return "IFCCIRCLE";
-			case 2937912522: return "IFCCIRCLEHOLLOWPROFILEDEF";
-			case 1383045692: return "IFCCIRCLEPROFILEDEF";
-			case 1677625105: return "IFCCIVILELEMENT";
-			case 3893394355: return "IFCCIVILELEMENTTYPE";
-			case 747523909: return "IFCCLASSIFICATION";
-			case 647927063: return "IFCCLASSIFICATIONREFERENCE";
-			case 2205249479: return "IFCCLOSEDSHELL";
-			case 639361253: return "IFCCOIL";
-			case 2301859152: return "IFCCOILTYPE";
-			case 776857604: return "IFCCOLOURRGB";
-			case 3285139300: return "IFCCOLOURRGBLIST";
-			case 3264961684: return "IFCCOLOURSPECIFICATION";
-			case 843113511: return "IFCCOLUMN";
-			case 905975707: return "IFCCOLUMNSTANDARDCASE";
-			case 300633059: return "IFCCOLUMNTYPE";
-			case 3221913625: return "IFCCOMMUNICATIONSAPPLIANCE";
-			case 400855858: return "IFCCOMMUNICATIONSAPPLIANCETYPE";
-			case 2542286263: return "IFCCOMPLEXPROPERTY";
-			case 3875453745: return "IFCCOMPLEXPROPERTYTEMPLATE";
-			case 3732776249: return "IFCCOMPOSITECURVE";
-			case 15328376: return "IFCCOMPOSITECURVEONSURFACE";
-			case 2485617015: return "IFCCOMPOSITECURVESEGMENT";
-			case 1485152156: return "IFCCOMPOSITEPROFILEDEF";
-			case 3571504051: return "IFCCOMPRESSOR";
-			case 3850581409: return "IFCCOMPRESSORTYPE";
-			case 2272882330: return "IFCCONDENSER";
-			case 2816379211: return "IFCCONDENSERTYPE";
-			case 2510884976: return "IFCCONIC";
-			case 370225590: return "IFCCONNECTEDFACESET";
-			case 1981873012: return "IFCCONNECTIONCURVEGEOMETRY";
-			case 2859738748: return "IFCCONNECTIONGEOMETRY";
-			case 45288368: return "IFCCONNECTIONPOINTECCENTRICITY";
-			case 2614616156: return "IFCCONNECTIONPOINTGEOMETRY";
-			case 2732653382: return "IFCCONNECTIONSURFACEGEOMETRY";
-			case 775493141: return "IFCCONNECTIONVOLUMEGEOMETRY";
-			case 1959218052: return "IFCCONSTRAINT";
-			case 3898045240: return "IFCCONSTRUCTIONEQUIPMENTRESOURCE";
-			case 2185764099: return "IFCCONSTRUCTIONEQUIPMENTRESOURCETYPE";
-			case 1060000209: return "IFCCONSTRUCTIONMATERIALRESOURCE";
-			case 4105962743: return "IFCCONSTRUCTIONMATERIALRESOURCETYPE";
-			case 488727124: return "IFCCONSTRUCTIONPRODUCTRESOURCE";
-			case 1525564444: return "IFCCONSTRUCTIONPRODUCTRESOURCETYPE";
-			case 2559216714: return "IFCCONSTRUCTIONRESOURCE";
-			case 2574617495: return "IFCCONSTRUCTIONRESOURCETYPE";
-			case 3419103109: return "IFCCONTEXT";
-			case 3050246964: return "IFCCONTEXTDEPENDENTUNIT";
-			case 3293443760: return "IFCCONTROL";
-			case 25142252: return "IFCCONTROLLER";
-			case 578613899: return "IFCCONTROLLERTYPE";
-			case 2889183280: return "IFCCONVERSIONBASEDUNIT";
-			case 2713554722: return "IFCCONVERSIONBASEDUNITWITHOFFSET";
-			case 4136498852: return "IFCCOOLEDBEAM";
-			case 335055490: return "IFCCOOLEDBEAMTYPE";
-			case 3640358203: return "IFCCOOLINGTOWER";
-			case 2954562838: return "IFCCOOLINGTOWERTYPE";
-			case 1785450214: return "IFCCOORDINATEOPERATION";
-			case 1466758467: return "IFCCOORDINATEREFERENCESYSTEM";
-			case 3895139033: return "IFCCOSTITEM";
-			case 1419761937: return "IFCCOSTSCHEDULE";
-			case 602808272: return "IFCCOSTVALUE";
-			case 1973544240: return "IFCCOVERING";
-			case 1916426348: return "IFCCOVERINGTYPE";
-			case 3295246426: return "IFCCREWRESOURCE";
-			case 1815067380: return "IFCCREWRESOURCETYPE";
-			case 2506170314: return "IFCCSGPRIMITIVE3D";
-			case 2147822146: return "IFCCSGSOLID";
-			case 2898889636: return "IFCCSHAPEPROFILEDEF";
-			case 539742890: return "IFCCURRENCYRELATIONSHIP";
-			case 3495092785: return "IFCCURTAINWALL";
-			case 1457835157: return "IFCCURTAINWALLTYPE";
-			case 2601014836: return "IFCCURVE";
-			case 2827736869: return "IFCCURVEBOUNDEDPLANE";
-			case 2629017746: return "IFCCURVEBOUNDEDSURFACE";
-			case 3800577675: return "IFCCURVESTYLE";
-			case 1105321065: return "IFCCURVESTYLEFONT";
-			case 2367409068: return "IFCCURVESTYLEFONTANDSCALING";
-			case 3510044353: return "IFCCURVESTYLEFONTPATTERN";
-			case 1213902940: return "IFCCYLINDRICALSURFACE";
-			case 4074379575: return "IFCDAMPER";
-			case 3961806047: return "IFCDAMPERTYPE";
-			case 3632507154: return "IFCDERIVEDPROFILEDEF";
-			case 1765591967: return "IFCDERIVEDUNIT";
-			case 1045800335: return "IFCDERIVEDUNITELEMENT";
-			case 2949456006: return "IFCDIMENSIONALEXPONENTS";
-			case 32440307: return "IFCDIRECTION";
-			case 1335981549: return "IFCDISCRETEACCESSORY";
-			case 2635815018: return "IFCDISCRETEACCESSORYTYPE";
-			case 1052013943: return "IFCDISTRIBUTIONCHAMBERELEMENT";
-			case 1599208980: return "IFCDISTRIBUTIONCHAMBERELEMENTTYPE";
-			case 562808652: return "IFCDISTRIBUTIONCIRCUIT";
-			case 1062813311: return "IFCDISTRIBUTIONCONTROLELEMENT";
-			case 2063403501: return "IFCDISTRIBUTIONCONTROLELEMENTTYPE";
-			case 1945004755: return "IFCDISTRIBUTIONELEMENT";
-			case 3256556792: return "IFCDISTRIBUTIONELEMENTTYPE";
-			case 3040386961: return "IFCDISTRIBUTIONFLOWELEMENT";
-			case 3849074793: return "IFCDISTRIBUTIONFLOWELEMENTTYPE";
-			case 3041715199: return "IFCDISTRIBUTIONPORT";
-			case 3205830791: return "IFCDISTRIBUTIONSYSTEM";
-			case 1154170062: return "IFCDOCUMENTINFORMATION";
-			case 770865208: return "IFCDOCUMENTINFORMATIONRELATIONSHIP";
-			case 3732053477: return "IFCDOCUMENTREFERENCE";
-			case 395920057: return "IFCDOOR";
-			case 2963535650: return "IFCDOORLININGPROPERTIES";
-			case 1714330368: return "IFCDOORPANELPROPERTIES";
-			case 3242481149: return "IFCDOORSTANDARDCASE";
-			case 526551008: return "IFCDOORSTYLE";
-			case 2323601079: return "IFCDOORTYPE";
-			case 445594917: return "IFCDRAUGHTINGPREDEFINEDCOLOUR";
-			case 4006246654: return "IFCDRAUGHTINGPREDEFINEDCURVEFONT";
-			case 342316401: return "IFCDUCTFITTING";
-			case 869906466: return "IFCDUCTFITTINGTYPE";
-			case 3518393246: return "IFCDUCTSEGMENT";
-			case 3760055223: return "IFCDUCTSEGMENTTYPE";
-			case 1360408905: return "IFCDUCTSILENCER";
-			case 2030761528: return "IFCDUCTSILENCERTYPE";
-			case 3900360178: return "IFCEDGE";
-			case 476780140: return "IFCEDGECURVE";
-			case 1472233963: return "IFCEDGELOOP";
-			case 1904799276: return "IFCELECTRICAPPLIANCE";
-			case 663422040: return "IFCELECTRICAPPLIANCETYPE";
-			case 862014818: return "IFCELECTRICDISTRIBUTIONBOARD";
-			case 2417008758: return "IFCELECTRICDISTRIBUTIONBOARDTYPE";
-			case 3310460725: return "IFCELECTRICFLOWSTORAGEDEVICE";
-			case 3277789161: return "IFCELECTRICFLOWSTORAGEDEVICETYPE";
-			case 264262732: return "IFCELECTRICGENERATOR";
-			case 1534661035: return "IFCELECTRICGENERATORTYPE";
-			case 402227799: return "IFCELECTRICMOTOR";
-			case 1217240411: return "IFCELECTRICMOTORTYPE";
-			case 1003880860: return "IFCELECTRICTIMECONTROL";
-			case 712377611: return "IFCELECTRICTIMECONTROLTYPE";
-			case 1758889154: return "IFCELEMENT";
-			case 2777663545: return "IFCELEMENTARYSURFACE";
-			case 4123344466: return "IFCELEMENTASSEMBLY";
-			case 2397081782: return "IFCELEMENTASSEMBLYTYPE";
-			case 1623761950: return "IFCELEMENTCOMPONENT";
-			case 2590856083: return "IFCELEMENTCOMPONENTTYPE";
-			case 1883228015: return "IFCELEMENTQUANTITY";
-			case 339256511: return "IFCELEMENTTYPE";
-			case 1704287377: return "IFCELLIPSE";
-			case 2835456948: return "IFCELLIPSEPROFILEDEF";
-			case 1658829314: return "IFCENERGYCONVERSIONDEVICE";
-			case 2107101300: return "IFCENERGYCONVERSIONDEVICETYPE";
-			case 2814081492: return "IFCENGINE";
-			case 132023988: return "IFCENGINETYPE";
-			case 3747195512: return "IFCEVAPORATIVECOOLER";
-			case 3174744832: return "IFCEVAPORATIVECOOLERTYPE";
-			case 484807127: return "IFCEVAPORATOR";
-			case 3390157468: return "IFCEVAPORATORTYPE";
-			case 4148101412: return "IFCEVENT";
-			case 211053100: return "IFCEVENTTIME";
-			case 4024345920: return "IFCEVENTTYPE";
-			case 297599258: return "IFCEXTENDEDPROPERTIES";
-			case 4294318154: return "IFCEXTERNALINFORMATION";
-			case 2242383968: return "IFCEXTERNALLYDEFINEDHATCHSTYLE";
-			case 1040185647: return "IFCEXTERNALLYDEFINEDSURFACESTYLE";
-			case 3548104201: return "IFCEXTERNALLYDEFINEDTEXTFONT";
-			case 3200245327: return "IFCEXTERNALREFERENCE";
-			case 1437805879: return "IFCEXTERNALREFERENCERELATIONSHIP";
-			case 1209101575: return "IFCEXTERNALSPATIALELEMENT";
-			case 2853485674: return "IFCEXTERNALSPATIALSTRUCTUREELEMENT";
-			case 477187591: return "IFCEXTRUDEDAREASOLID";
-			case 2804161546: return "IFCEXTRUDEDAREASOLIDTAPERED";
-			case 2556980723: return "IFCFACE";
-			case 2047409740: return "IFCFACEBASEDSURFACEMODEL";
-			case 1809719519: return "IFCFACEBOUND";
-			case 803316827: return "IFCFACEOUTERBOUND";
-			case 3008276851: return "IFCFACESURFACE";
-			case 807026263: return "IFCFACETEDBREP";
-			case 3737207727: return "IFCFACETEDBREPWITHVOIDS";
-			case 4219587988: return "IFCFAILURECONNECTIONCONDITION";
-			case 3415622556: return "IFCFAN";
-			case 346874300: return "IFCFANTYPE";
-			case 647756555: return "IFCFASTENER";
-			case 2489546625: return "IFCFASTENERTYPE";
-			case 2827207264: return "IFCFEATUREELEMENT";
-			case 2143335405: return "IFCFEATUREELEMENTADDITION";
-			case 1287392070: return "IFCFEATUREELEMENTSUBTRACTION";
-			case 738692330: return "IFCFILLAREASTYLE";
-			case 374418227: return "IFCFILLAREASTYLEHATCHING";
-			case 315944413: return "IFCFILLAREASTYLETILES";
-			case 819412036: return "IFCFILTER";
-			case 1810631287: return "IFCFILTERTYPE";
-			case 1426591983: return "IFCFIRESUPPRESSIONTERMINAL";
-			case 4222183408: return "IFCFIRESUPPRESSIONTERMINALTYPE";
-			case 2652556860: return "IFCFIXEDREFERENCESWEPTAREASOLID";
-			case 2058353004: return "IFCFLOWCONTROLLER";
-			case 3907093117: return "IFCFLOWCONTROLLERTYPE";
-			case 4278956645: return "IFCFLOWFITTING";
-			case 3198132628: return "IFCFLOWFITTINGTYPE";
-			case 182646315: return "IFCFLOWINSTRUMENT";
-			case 4037862832: return "IFCFLOWINSTRUMENTTYPE";
-			case 2188021234: return "IFCFLOWMETER";
-			case 3815607619: return "IFCFLOWMETERTYPE";
-			case 3132237377: return "IFCFLOWMOVINGDEVICE";
-			case 1482959167: return "IFCFLOWMOVINGDEVICETYPE";
-			case 987401354: return "IFCFLOWSEGMENT";
-			case 1834744321: return "IFCFLOWSEGMENTTYPE";
-			case 707683696: return "IFCFLOWSTORAGEDEVICE";
-			case 1339347760: return "IFCFLOWSTORAGEDEVICETYPE";
-			case 2223149337: return "IFCFLOWTERMINAL";
-			case 2297155007: return "IFCFLOWTERMINALTYPE";
-			case 3508470533: return "IFCFLOWTREATMENTDEVICE";
-			case 3009222698: return "IFCFLOWTREATMENTDEVICETYPE";
-			case 900683007: return "IFCFOOTING";
-			case 1893162501: return "IFCFOOTINGTYPE";
-			case 263784265: return "IFCFURNISHINGELEMENT";
-			case 4238390223: return "IFCFURNISHINGELEMENTTYPE";
-			case 1509553395: return "IFCFURNITURE";
-			case 1268542332: return "IFCFURNITURETYPE";
-			case 3493046030: return "IFCGEOGRAPHICELEMENT";
-			case 4095422895: return "IFCGEOGRAPHICELEMENTTYPE";
-			case 987898635: return "IFCGEOMETRICCURVESET";
-			case 3448662350: return "IFCGEOMETRICREPRESENTATIONCONTEXT";
-			case 2453401579: return "IFCGEOMETRICREPRESENTATIONITEM";
-			case 4142052618: return "IFCGEOMETRICREPRESENTATIONSUBCONTEXT";
-			case 3590301190: return "IFCGEOMETRICSET";
-			case 3009204131: return "IFCGRID";
-			case 852622518: return "IFCGRIDAXIS";
-			case 178086475: return "IFCGRIDPLACEMENT";
-			case 2706460486: return "IFCGROUP";
-			case 812098782: return "IFCHALFSPACESOLID";
-			case 3319311131: return "IFCHEATEXCHANGER";
-			case 1251058090: return "IFCHEATEXCHANGERTYPE";
-			case 2068733104: return "IFCHUMIDIFIER";
-			case 1806887404: return "IFCHUMIDIFIERTYPE";
-			case 3905492369: return "IFCIMAGETEXTURE";
-			case 3570813810: return "IFCINDEXEDCOLOURMAP";
-			case 2571569899: return "IFCINDEXEDPOLYCURVE";
-			case 178912537: return "IFCINDEXEDPOLYGONALFACE";
-			case 2294589976: return "IFCINDEXEDPOLYGONALFACEWITHVOIDS";
-			case 1437953363: return "IFCINDEXEDTEXTUREMAP";
-			case 2133299955: return "IFCINDEXEDTRIANGLETEXTUREMAP";
-			case 4175244083: return "IFCINTERCEPTOR";
-			case 3946677679: return "IFCINTERCEPTORTYPE";
-			case 3113134337: return "IFCINTERSECTIONCURVE";
-			case 2391368822: return "IFCINVENTORY";
-			case 3741457305: return "IFCIRREGULARTIMESERIES";
-			case 3020489413: return "IFCIRREGULARTIMESERIESVALUE";
-			case 1484403080: return "IFCISHAPEPROFILEDEF";
-			case 2176052936: return "IFCJUNCTIONBOX";
-			case 4288270099: return "IFCJUNCTIONBOXTYPE";
-			case 3827777499: return "IFCLABORRESOURCE";
-			case 428585644: return "IFCLABORRESOURCETYPE";
-			case 1585845231: return "IFCLAGTIME";
-			case 76236018: return "IFCLAMP";
-			case 1051575348: return "IFCLAMPTYPE";
-			case 2655187982: return "IFCLIBRARYINFORMATION";
-			case 3452421091: return "IFCLIBRARYREFERENCE";
-			case 4162380809: return "IFCLIGHTDISTRIBUTIONDATA";
-			case 629592764: return "IFCLIGHTFIXTURE";
-			case 1161773419: return "IFCLIGHTFIXTURETYPE";
-			case 1566485204: return "IFCLIGHTINTENSITYDISTRIBUTION";
-			case 1402838566: return "IFCLIGHTSOURCE";
-			case 125510826: return "IFCLIGHTSOURCEAMBIENT";
-			case 2604431987: return "IFCLIGHTSOURCEDIRECTIONAL";
-			case 4266656042: return "IFCLIGHTSOURCEGONIOMETRIC";
-			case 1520743889: return "IFCLIGHTSOURCEPOSITIONAL";
-			case 3422422726: return "IFCLIGHTSOURCESPOT";
-			case 1281925730: return "IFCLINE";
-			case 2624227202: return "IFCLOCALPLACEMENT";
-			case 1008929658: return "IFCLOOP";
-			case 572779678: return "IFCLSHAPEPROFILEDEF";
-			case 1425443689: return "IFCMANIFOLDSOLIDBREP";
-			case 3057273783: return "IFCMAPCONVERSION";
-			case 2347385850: return "IFCMAPPEDITEM";
-			case 1838606355: return "IFCMATERIAL";
-			case 1847130766: return "IFCMATERIALCLASSIFICATIONRELATIONSHIP";
-			case 3708119000: return "IFCMATERIALCONSTITUENT";
-			case 2852063980: return "IFCMATERIALCONSTITUENTSET";
-			case 760658860: return "IFCMATERIALDEFINITION";
-			case 2022407955: return "IFCMATERIALDEFINITIONREPRESENTATION";
-			case 248100487: return "IFCMATERIALLAYER";
-			case 3303938423: return "IFCMATERIALLAYERSET";
-			case 1303795690: return "IFCMATERIALLAYERSETUSAGE";
-			case 1847252529: return "IFCMATERIALLAYERWITHOFFSETS";
-			case 2199411900: return "IFCMATERIALLIST";
-			case 2235152071: return "IFCMATERIALPROFILE";
-			case 164193824: return "IFCMATERIALPROFILESET";
-			case 3079605661: return "IFCMATERIALPROFILESETUSAGE";
-			case 3404854881: return "IFCMATERIALPROFILESETUSAGETAPERING";
-			case 552965576: return "IFCMATERIALPROFILEWITHOFFSETS";
-			case 3265635763: return "IFCMATERIALPROPERTIES";
-			case 853536259: return "IFCMATERIALRELATIONSHIP";
-			case 1507914824: return "IFCMATERIALUSAGEDEFINITION";
-			case 2597039031: return "IFCMEASUREWITHUNIT";
-			case 377706215: return "IFCMECHANICALFASTENER";
-			case 2108223431: return "IFCMECHANICALFASTENERTYPE";
-			case 1437502449: return "IFCMEDICALDEVICE";
-			case 1114901282: return "IFCMEDICALDEVICETYPE";
-			case 1073191201: return "IFCMEMBER";
-			case 1911478936: return "IFCMEMBERSTANDARDCASE";
-			case 3181161470: return "IFCMEMBERTYPE";
-			case 3368373690: return "IFCMETRIC";
-			case 2998442950: return "IFCMIRROREDPROFILEDEF";
-			case 2706619895: return "IFCMONETARYUNIT";
-			case 2474470126: return "IFCMOTORCONNECTION";
-			case 977012517: return "IFCMOTORCONNECTIONTYPE";
-			case 1918398963: return "IFCNAMEDUNIT";
-			case 3888040117: return "IFCOBJECT";
-			case 219451334: return "IFCOBJECTDEFINITION";
-			case 2251480897: return "IFCOBJECTIVE";
-			case 3701648758: return "IFCOBJECTPLACEMENT";
-			case 4143007308: return "IFCOCCUPANT";
-			case 3388369263: return "IFCOFFSETCURVE2D";
-			case 3505215534: return "IFCOFFSETCURVE3D";
-			case 3588315303: return "IFCOPENINGELEMENT";
-			case 3079942009: return "IFCOPENINGSTANDARDCASE";
-			case 2665983363: return "IFCOPENSHELL";
-			case 4251960020: return "IFCORGANIZATION";
-			case 1411181986: return "IFCORGANIZATIONRELATIONSHIP";
-			case 1029017970: return "IFCORIENTEDEDGE";
-			case 144952367: return "IFCOUTERBOUNDARYCURVE";
-			case 3694346114: return "IFCOUTLET";
-			case 2837617999: return "IFCOUTLETTYPE";
-			case 1207048766: return "IFCOWNERHISTORY";
-			case 2529465313: return "IFCPARAMETERIZEDPROFILEDEF";
-			case 2519244187: return "IFCPATH";
-			case 1682466193: return "IFCPCURVE";
-			case 2382730787: return "IFCPERFORMANCEHISTORY";
-			case 3566463478: return "IFCPERMEABLECOVERINGPROPERTIES";
-			case 3327091369: return "IFCPERMIT";
-			case 2077209135: return "IFCPERSON";
-			case 101040310: return "IFCPERSONANDORGANIZATION";
-			case 3021840470: return "IFCPHYSICALCOMPLEXQUANTITY";
-			case 2483315170: return "IFCPHYSICALQUANTITY";
-			case 2226359599: return "IFCPHYSICALSIMPLEQUANTITY";
-			case 1687234759: return "IFCPILE";
-			case 1158309216: return "IFCPILETYPE";
-			case 310824031: return "IFCPIPEFITTING";
-			case 804291784: return "IFCPIPEFITTINGTYPE";
-			case 3612865200: return "IFCPIPESEGMENT";
-			case 4231323485: return "IFCPIPESEGMENTTYPE";
-			case 597895409: return "IFCPIXELTEXTURE";
-			case 2004835150: return "IFCPLACEMENT";
-			case 603570806: return "IFCPLANARBOX";
-			case 1663979128: return "IFCPLANAREXTENT";
-			case 220341763: return "IFCPLANE";
-			case 3171933400: return "IFCPLATE";
-			case 1156407060: return "IFCPLATESTANDARDCASE";
-			case 4017108033: return "IFCPLATETYPE";
-			case 2067069095: return "IFCPOINT";
-			case 4022376103: return "IFCPOINTONCURVE";
-			case 1423911732: return "IFCPOINTONSURFACE";
-			case 2775532180: return "IFCPOLYGONALBOUNDEDHALFSPACE";
-			case 2839578677: return "IFCPOLYGONALFACESET";
-			case 3724593414: return "IFCPOLYLINE";
-			case 2924175390: return "IFCPOLYLOOP";
-			case 3740093272: return "IFCPORT";
-			case 3355820592: return "IFCPOSTALADDRESS";
-			case 759155922: return "IFCPREDEFINEDCOLOUR";
-			case 2559016684: return "IFCPREDEFINEDCURVEFONT";
-			case 3727388367: return "IFCPREDEFINEDITEM";
-			case 3778827333: return "IFCPREDEFINEDPROPERTIES";
-			case 3967405729: return "IFCPREDEFINEDPROPERTYSET";
-			case 1775413392: return "IFCPREDEFINEDTEXTFONT";
-			case 677532197: return "IFCPRESENTATIONITEM";
-			case 2022622350: return "IFCPRESENTATIONLAYERASSIGNMENT";
-			case 1304840413: return "IFCPRESENTATIONLAYERWITHSTYLE";
-			case 3119450353: return "IFCPRESENTATIONSTYLE";
-			case 2417041796: return "IFCPRESENTATIONSTYLEASSIGNMENT";
-			case 2744685151: return "IFCPROCEDURE";
-			case 569719735: return "IFCPROCEDURETYPE";
-			case 2945172077: return "IFCPROCESS";
-			case 4208778838: return "IFCPRODUCT";
-			case 673634403: return "IFCPRODUCTDEFINITIONSHAPE";
-			case 2095639259: return "IFCPRODUCTREPRESENTATION";
-			case 3958567839: return "IFCPROFILEDEF";
-			case 2802850158: return "IFCPROFILEPROPERTIES";
-			case 103090709: return "IFCPROJECT";
-			case 3843373140: return "IFCPROJECTEDCRS";
-			case 3651124850: return "IFCPROJECTIONELEMENT";
-			case 653396225: return "IFCPROJECTLIBRARY";
-			case 2904328755: return "IFCPROJECTORDER";
-			case 2598011224: return "IFCPROPERTY";
-			case 986844984: return "IFCPROPERTYABSTRACTION";
-			case 871118103: return "IFCPROPERTYBOUNDEDVALUE";
-			case 1680319473: return "IFCPROPERTYDEFINITION";
-			case 148025276: return "IFCPROPERTYDEPENDENCYRELATIONSHIP";
-			case 4166981789: return "IFCPROPERTYENUMERATEDVALUE";
-			case 3710013099: return "IFCPROPERTYENUMERATION";
-			case 2752243245: return "IFCPROPERTYLISTVALUE";
-			case 941946838: return "IFCPROPERTYREFERENCEVALUE";
-			case 1451395588: return "IFCPROPERTYSET";
-			case 3357820518: return "IFCPROPERTYSETDEFINITION";
-			case 492091185: return "IFCPROPERTYSETTEMPLATE";
-			case 3650150729: return "IFCPROPERTYSINGLEVALUE";
-			case 110355661: return "IFCPROPERTYTABLEVALUE";
-			case 3521284610: return "IFCPROPERTYTEMPLATE";
-			case 1482703590: return "IFCPROPERTYTEMPLATEDEFINITION";
-			case 738039164: return "IFCPROTECTIVEDEVICE";
-			case 2295281155: return "IFCPROTECTIVEDEVICETRIPPINGUNIT";
-			case 655969474: return "IFCPROTECTIVEDEVICETRIPPINGUNITTYPE";
-			case 1842657554: return "IFCPROTECTIVEDEVICETYPE";
-			case 3219374653: return "IFCPROXY";
-			case 90941305: return "IFCPUMP";
-			case 2250791053: return "IFCPUMPTYPE";
-			case 2044713172: return "IFCQUANTITYAREA";
-			case 2093928680: return "IFCQUANTITYCOUNT";
-			case 931644368: return "IFCQUANTITYLENGTH";
-			case 2090586900: return "IFCQUANTITYSET";
-			case 3252649465: return "IFCQUANTITYTIME";
-			case 2405470396: return "IFCQUANTITYVOLUME";
-			case 825690147: return "IFCQUANTITYWEIGHT";
-			case 2262370178: return "IFCRAILING";
-			case 2893384427: return "IFCRAILINGTYPE";
-			case 3024970846: return "IFCRAMP";
-			case 3283111854: return "IFCRAMPFLIGHT";
-			case 2324767716: return "IFCRAMPFLIGHTTYPE";
-			case 1469900589: return "IFCRAMPTYPE";
-			case 1232101972: return "IFCRATIONALBSPLINECURVEWITHKNOTS";
-			case 683857671: return "IFCRATIONALBSPLINESURFACEWITHKNOTS";
-			case 2770003689: return "IFCRECTANGLEHOLLOWPROFILEDEF";
-			case 3615266464: return "IFCRECTANGLEPROFILEDEF";
-			case 2798486643: return "IFCRECTANGULARPYRAMID";
-			case 3454111270: return "IFCRECTANGULARTRIMMEDSURFACE";
-			case 3915482550: return "IFCRECURRENCEPATTERN";
-			case 2433181523: return "IFCREFERENCE";
-			case 3413951693: return "IFCREGULARTIMESERIES";
-			case 1580146022: return "IFCREINFORCEMENTBARPROPERTIES";
-			case 3765753017: return "IFCREINFORCEMENTDEFINITIONPROPERTIES";
-			case 979691226: return "IFCREINFORCINGBAR";
-			case 2572171363: return "IFCREINFORCINGBARTYPE";
-			case 3027567501: return "IFCREINFORCINGELEMENT";
-			case 964333572: return "IFCREINFORCINGELEMENTTYPE";
-			case 2320036040: return "IFCREINFORCINGMESH";
-			case 2310774935: return "IFCREINFORCINGMESHTYPE";
-			case 160246688: return "IFCRELAGGREGATES";
-			case 3939117080: return "IFCRELASSIGNS";
-			case 1683148259: return "IFCRELASSIGNSTOACTOR";
-			case 2495723537: return "IFCRELASSIGNSTOCONTROL";
-			case 1307041759: return "IFCRELASSIGNSTOGROUP";
-			case 1027710054: return "IFCRELASSIGNSTOGROUPBYFACTOR";
-			case 4278684876: return "IFCRELASSIGNSTOPROCESS";
-			case 2857406711: return "IFCRELASSIGNSTOPRODUCT";
-			case 205026976: return "IFCRELASSIGNSTORESOURCE";
-			case 1865459582: return "IFCRELASSOCIATES";
-			case 4095574036: return "IFCRELASSOCIATESAPPROVAL";
-			case 919958153: return "IFCRELASSOCIATESCLASSIFICATION";
-			case 2728634034: return "IFCRELASSOCIATESCONSTRAINT";
-			case 982818633: return "IFCRELASSOCIATESDOCUMENT";
-			case 3840914261: return "IFCRELASSOCIATESLIBRARY";
-			case 2655215786: return "IFCRELASSOCIATESMATERIAL";
-			case 478536968: return "IFCRELATIONSHIP";
-			case 826625072: return "IFCRELCONNECTS";
-			case 1204542856: return "IFCRELCONNECTSELEMENTS";
-			case 3945020480: return "IFCRELCONNECTSPATHELEMENTS";
-			case 3190031847: return "IFCRELCONNECTSPORTS";
-			case 4201705270: return "IFCRELCONNECTSPORTTOELEMENT";
-			case 2127690289: return "IFCRELCONNECTSSTRUCTURALACTIVITY";
-			case 1638771189: return "IFCRELCONNECTSSTRUCTURALMEMBER";
-			case 504942748: return "IFCRELCONNECTSWITHECCENTRICITY";
-			case 3678494232: return "IFCRELCONNECTSWITHREALIZINGELEMENTS";
-			case 3242617779: return "IFCRELCONTAINEDINSPATIALSTRUCTURE";
-			case 886880790: return "IFCRELCOVERSBLDGELEMENTS";
-			case 2802773753: return "IFCRELCOVERSSPACES";
-			case 2565941209: return "IFCRELDECLARES";
-			case 2551354335: return "IFCRELDECOMPOSES";
-			case 693640335: return "IFCRELDEFINES";
-			case 1462361463: return "IFCRELDEFINESBYOBJECT";
-			case 4186316022: return "IFCRELDEFINESBYPROPERTIES";
-			case 307848117: return "IFCRELDEFINESBYTEMPLATE";
-			case 781010003: return "IFCRELDEFINESBYTYPE";
-			case 3940055652: return "IFCRELFILLSELEMENT";
-			case 279856033: return "IFCRELFLOWCONTROLELEMENTS";
-			case 427948657: return "IFCRELINTERFERESELEMENTS";
-			case 3268803585: return "IFCRELNESTS";
-			case 750771296: return "IFCRELPROJECTSELEMENT";
-			case 1245217292: return "IFCRELREFERENCEDINSPATIALSTRUCTURE";
-			case 4122056220: return "IFCRELSEQUENCE";
-			case 366585022: return "IFCRELSERVICESBUILDINGS";
-			case 3451746338: return "IFCRELSPACEBOUNDARY";
-			case 3523091289: return "IFCRELSPACEBOUNDARY1STLEVEL";
-			case 1521410863: return "IFCRELSPACEBOUNDARY2NDLEVEL";
-			case 1401173127: return "IFCRELVOIDSELEMENT";
-			case 816062949: return "IFCREPARAMETRISEDCOMPOSITECURVESEGMENT";
-			case 1076942058: return "IFCREPRESENTATION";
-			case 3377609919: return "IFCREPRESENTATIONCONTEXT";
-			case 3008791417: return "IFCREPRESENTATIONITEM";
-			case 1660063152: return "IFCREPRESENTATIONMAP";
-			case 2914609552: return "IFCRESOURCE";
-			case 2943643501: return "IFCRESOURCEAPPROVALRELATIONSHIP";
-			case 1608871552: return "IFCRESOURCECONSTRAINTRELATIONSHIP";
-			case 2439245199: return "IFCRESOURCELEVELRELATIONSHIP";
-			case 1042787934: return "IFCRESOURCETIME";
-			case 1856042241: return "IFCREVOLVEDAREASOLID";
-			case 3243963512: return "IFCREVOLVEDAREASOLIDTAPERED";
-			case 4158566097: return "IFCRIGHTCIRCULARCONE";
-			case 3626867408: return "IFCRIGHTCIRCULARCYLINDER";
-			case 2016517767: return "IFCROOF";
-			case 2781568857: return "IFCROOFTYPE";
-			case 2341007311: return "IFCROOT";
-			case 2778083089: return "IFCROUNDEDRECTANGLEPROFILEDEF";
-			case 3053780830: return "IFCSANITARYTERMINAL";
-			case 1768891740: return "IFCSANITARYTERMINALTYPE";
-			case 1054537805: return "IFCSCHEDULINGTIME";
-			case 2157484638: return "IFCSEAMCURVE";
-			case 1509187699: return "IFCSECTIONEDSPINE";
-			case 2042790032: return "IFCSECTIONPROPERTIES";
-			case 4165799628: return "IFCSECTIONREINFORCEMENTPROPERTIES";
-			case 4086658281: return "IFCSENSOR";
-			case 1783015770: return "IFCSENSORTYPE";
-			case 1329646415: return "IFCSHADINGDEVICE";
-			case 4074543187: return "IFCSHADINGDEVICETYPE";
-			case 867548509: return "IFCSHAPEASPECT";
-			case 3982875396: return "IFCSHAPEMODEL";
-			case 4240577450: return "IFCSHAPEREPRESENTATION";
-			case 4124623270: return "IFCSHELLBASEDSURFACEMODEL";
-			case 3692461612: return "IFCSIMPLEPROPERTY";
-			case 3663146110: return "IFCSIMPLEPROPERTYTEMPLATE";
-			case 4097777520: return "IFCSITE";
-			case 448429030: return "IFCSIUNIT";
-			case 1529196076: return "IFCSLAB";
-			case 3127900445: return "IFCSLABELEMENTEDCASE";
-			case 3027962421: return "IFCSLABSTANDARDCASE";
-			case 2533589738: return "IFCSLABTYPE";
-			case 2609359061: return "IFCSLIPPAGECONNECTIONCONDITION";
-			case 3420628829: return "IFCSOLARDEVICE";
-			case 1072016465: return "IFCSOLARDEVICETYPE";
-			case 723233188: return "IFCSOLIDMODEL";
-			case 3856911033: return "IFCSPACE";
-			case 1999602285: return "IFCSPACEHEATER";
-			case 1305183839: return "IFCSPACEHEATERTYPE";
-			case 3812236995: return "IFCSPACETYPE";
-			case 1412071761: return "IFCSPATIALELEMENT";
-			case 710998568: return "IFCSPATIALELEMENTTYPE";
-			case 2706606064: return "IFCSPATIALSTRUCTUREELEMENT";
-			case 3893378262: return "IFCSPATIALSTRUCTUREELEMENTTYPE";
-			case 463610769: return "IFCSPATIALZONE";
-			case 2481509218: return "IFCSPATIALZONETYPE";
-			case 451544542: return "IFCSPHERE";
-			case 4015995234: return "IFCSPHERICALSURFACE";
-			case 1404847402: return "IFCSTACKTERMINAL";
-			case 3112655638: return "IFCSTACKTERMINALTYPE";
-			case 331165859: return "IFCSTAIR";
-			case 4252922144: return "IFCSTAIRFLIGHT";
-			case 1039846685: return "IFCSTAIRFLIGHTTYPE";
-			case 338393293: return "IFCSTAIRTYPE";
-			case 682877961: return "IFCSTRUCTURALACTION";
-			case 3544373492: return "IFCSTRUCTURALACTIVITY";
-			case 2515109513: return "IFCSTRUCTURALANALYSISMODEL";
-			case 1179482911: return "IFCSTRUCTURALCONNECTION";
-			case 2273995522: return "IFCSTRUCTURALCONNECTIONCONDITION";
-			case 1004757350: return "IFCSTRUCTURALCURVEACTION";
-			case 4243806635: return "IFCSTRUCTURALCURVECONNECTION";
-			case 214636428: return "IFCSTRUCTURALCURVEMEMBER";
-			case 2445595289: return "IFCSTRUCTURALCURVEMEMBERVARYING";
-			case 2757150158: return "IFCSTRUCTURALCURVEREACTION";
-			case 3136571912: return "IFCSTRUCTURALITEM";
-			case 1807405624: return "IFCSTRUCTURALLINEARACTION";
-			case 2162789131: return "IFCSTRUCTURALLOAD";
-			case 385403989: return "IFCSTRUCTURALLOADCASE";
-			case 3478079324: return "IFCSTRUCTURALLOADCONFIGURATION";
-			case 1252848954: return "IFCSTRUCTURALLOADGROUP";
-			case 1595516126: return "IFCSTRUCTURALLOADLINEARFORCE";
-			case 609421318: return "IFCSTRUCTURALLOADORRESULT";
-			case 2668620305: return "IFCSTRUCTURALLOADPLANARFORCE";
-			case 2473145415: return "IFCSTRUCTURALLOADSINGLEDISPLACEMENT";
-			case 1973038258: return "IFCSTRUCTURALLOADSINGLEDISPLACEMENTDISTORTION";
-			case 1597423693: return "IFCSTRUCTURALLOADSINGLEFORCE";
-			case 1190533807: return "IFCSTRUCTURALLOADSINGLEFORCEWARPING";
-			case 2525727697: return "IFCSTRUCTURALLOADSTATIC";
-			case 3408363356: return "IFCSTRUCTURALLOADTEMPERATURE";
-			case 530289379: return "IFCSTRUCTURALMEMBER";
-			case 1621171031: return "IFCSTRUCTURALPLANARACTION";
-			case 2082059205: return "IFCSTRUCTURALPOINTACTION";
-			case 734778138: return "IFCSTRUCTURALPOINTCONNECTION";
-			case 1235345126: return "IFCSTRUCTURALPOINTREACTION";
-			case 3689010777: return "IFCSTRUCTURALREACTION";
-			case 2986769608: return "IFCSTRUCTURALRESULTGROUP";
-			case 3657597509: return "IFCSTRUCTURALSURFACEACTION";
-			case 1975003073: return "IFCSTRUCTURALSURFACECONNECTION";
-			case 3979015343: return "IFCSTRUCTURALSURFACEMEMBER";
-			case 2218152070: return "IFCSTRUCTURALSURFACEMEMBERVARYING";
-			case 603775116: return "IFCSTRUCTURALSURFACEREACTION";
-			case 3958052878: return "IFCSTYLEDITEM";
-			case 3049322572: return "IFCSTYLEDREPRESENTATION";
-			case 2830218821: return "IFCSTYLEMODEL";
-			case 148013059: return "IFCSUBCONTRACTRESOURCE";
-			case 4095615324: return "IFCSUBCONTRACTRESOURCETYPE";
-			case 2233826070: return "IFCSUBEDGE";
-			case 2513912981: return "IFCSURFACE";
-			case 699246055: return "IFCSURFACECURVE";
-			case 2028607225: return "IFCSURFACECURVESWEPTAREASOLID";
-			case 3101698114: return "IFCSURFACEFEATURE";
-			case 2809605785: return "IFCSURFACEOFLINEAREXTRUSION";
-			case 4124788165: return "IFCSURFACEOFREVOLUTION";
-			case 2934153892: return "IFCSURFACEREINFORCEMENTAREA";
-			case 1300840506: return "IFCSURFACESTYLE";
-			case 3303107099: return "IFCSURFACESTYLELIGHTING";
-			case 1607154358: return "IFCSURFACESTYLEREFRACTION";
-			case 1878645084: return "IFCSURFACESTYLERENDERING";
-			case 846575682: return "IFCSURFACESTYLESHADING";
-			case 1351298697: return "IFCSURFACESTYLEWITHTEXTURES";
-			case 626085974: return "IFCSURFACETEXTURE";
-			case 2247615214: return "IFCSWEPTAREASOLID";
-			case 1260650574: return "IFCSWEPTDISKSOLID";
-			case 1096409881: return "IFCSWEPTDISKSOLIDPOLYGONAL";
-			case 230924584: return "IFCSWEPTSURFACE";
-			case 1162798199: return "IFCSWITCHINGDEVICE";
-			case 2315554128: return "IFCSWITCHINGDEVICETYPE";
-			case 2254336722: return "IFCSYSTEM";
-			case 413509423: return "IFCSYSTEMFURNITUREELEMENT";
-			case 1580310250: return "IFCSYSTEMFURNITUREELEMENTTYPE";
-			case 985171141: return "IFCTABLE";
-			case 2043862942: return "IFCTABLECOLUMN";
-			case 531007025: return "IFCTABLEROW";
-			case 812556717: return "IFCTANK";
-			case 5716631: return "IFCTANKTYPE";
-			case 3473067441: return "IFCTASK";
-			case 1549132990: return "IFCTASKTIME";
-			case 2771591690: return "IFCTASKTIMERECURRING";
-			case 3206491090: return "IFCTASKTYPE";
-			case 912023232: return "IFCTELECOMADDRESS";
-			case 3824725483: return "IFCTENDON";
-			case 2347447852: return "IFCTENDONANCHOR";
-			case 3081323446: return "IFCTENDONANCHORTYPE";
-			case 2415094496: return "IFCTENDONTYPE";
-			case 2387106220: return "IFCTESSELLATEDFACESET";
-			case 901063453: return "IFCTESSELLATEDITEM";
-			case 4282788508: return "IFCTEXTLITERAL";
-			case 3124975700: return "IFCTEXTLITERALWITHEXTENT";
-			case 1447204868: return "IFCTEXTSTYLE";
-			case 1983826977: return "IFCTEXTSTYLEFONTMODEL";
-			case 2636378356: return "IFCTEXTSTYLEFORDEFINEDFONT";
-			case 1640371178: return "IFCTEXTSTYLETEXTMODEL";
-			case 280115917: return "IFCTEXTURECOORDINATE";
-			case 1742049831: return "IFCTEXTURECOORDINATEGENERATOR";
-			case 2552916305: return "IFCTEXTUREMAP";
-			case 1210645708: return "IFCTEXTUREVERTEX";
-			case 3611470254: return "IFCTEXTUREVERTEXLIST";
-			case 1199560280: return "IFCTIMEPERIOD";
-			case 3101149627: return "IFCTIMESERIES";
-			case 581633288: return "IFCTIMESERIESVALUE";
-			case 1377556343: return "IFCTOPOLOGICALREPRESENTATIONITEM";
-			case 1735638870: return "IFCTOPOLOGYREPRESENTATION";
-			case 1935646853: return "IFCTOROIDALSURFACE";
-			case 3825984169: return "IFCTRANSFORMER";
-			case 1692211062: return "IFCTRANSFORMERTYPE";
-			case 1620046519: return "IFCTRANSPORTELEMENT";
-			case 2097647324: return "IFCTRANSPORTELEMENTTYPE";
-			case 2715220739: return "IFCTRAPEZIUMPROFILEDEF";
-			case 2916149573: return "IFCTRIANGULATEDFACESET";
-			case 3593883385: return "IFCTRIMMEDCURVE";
-			case 3071757647: return "IFCTSHAPEPROFILEDEF";
-			case 3026737570: return "IFCTUBEBUNDLE";
-			case 1600972822: return "IFCTUBEBUNDLETYPE";
-			case 1628702193: return "IFCTYPEOBJECT";
-			case 3736923433: return "IFCTYPEPROCESS";
-			case 2347495698: return "IFCTYPEPRODUCT";
-			case 3698973494: return "IFCTYPERESOURCE";
-			case 630975310: return "IFCUNITARYCONTROLELEMENT";
-			case 3179687236: return "IFCUNITARYCONTROLELEMENTTYPE";
-			case 4292641817: return "IFCUNITARYEQUIPMENT";
-			case 1911125066: return "IFCUNITARYEQUIPMENTTYPE";
-			case 180925521: return "IFCUNITASSIGNMENT";
-			case 427810014: return "IFCUSHAPEPROFILEDEF";
-			case 4207607924: return "IFCVALVE";
-			case 728799441: return "IFCVALVETYPE";
-			case 1417489154: return "IFCVECTOR";
-			case 2799835756: return "IFCVERTEX";
-			case 2759199220: return "IFCVERTEXLOOP";
-			case 1907098498: return "IFCVERTEXPOINT";
-			case 2391383451: return "IFCVIBRATIONISOLATOR";
-			case 3313531582: return "IFCVIBRATIONISOLATORTYPE";
-			case 2769231204: return "IFCVIRTUALELEMENT";
-			case 891718957: return "IFCVIRTUALGRIDINTERSECTION";
-			case 926996030: return "IFCVOIDINGFEATURE";
-			case 2391406946: return "IFCWALL";
-			case 4156078855: return "IFCWALLELEMENTEDCASE";
-			case 3512223829: return "IFCWALLSTANDARDCASE";
-			case 1898987631: return "IFCWALLTYPE";
-			case 4237592921: return "IFCWASTETERMINAL";
-			case 1133259667: return "IFCWASTETERMINALTYPE";
-			case 3304561284: return "IFCWINDOW";
-			case 336235671: return "IFCWINDOWLININGPROPERTIES";
-			case 512836454: return "IFCWINDOWPANELPROPERTIES";
-			case 486154966: return "IFCWINDOWSTANDARDCASE";
-			case 1299126871: return "IFCWINDOWSTYLE";
-			case 4009809668: return "IFCWINDOWTYPE";
-			case 4088093105: return "IFCWORKCALENDAR";
-			case 1028945134: return "IFCWORKCONTROL";
-			case 4218914973: return "IFCWORKPLAN";
-			case 3342526732: return "IFCWORKSCHEDULE";
-			case 1236880293: return "IFCWORKTIME";
-			case 1033361043: return "IFCZONE";
-			case 2543172580: return "IFCZSHAPEPROFILEDEF";
+			case ifc2x4::IFCACTIONREQUEST: return "IFCACTIONREQUEST";
+			case ifc2x4::IFCACTOR: return "IFCACTOR";
+			case ifc2x4::IFCACTORROLE: return "IFCACTORROLE";
+			case ifc2x4::IFCACTUATOR: return "IFCACTUATOR";
+			case ifc2x4::IFCACTUATORTYPE: return "IFCACTUATORTYPE";
+			case ifc2x4::IFCADDRESS: return "IFCADDRESS";
+			case ifc2x4::IFCADVANCEDBREP: return "IFCADVANCEDBREP";
+			case ifc2x4::IFCADVANCEDBREPWITHVOIDS: return "IFCADVANCEDBREPWITHVOIDS";
+			case ifc2x4::IFCADVANCEDFACE: return "IFCADVANCEDFACE";
+			case ifc2x4::IFCAIRTERMINAL: return "IFCAIRTERMINAL";
+			case ifc2x4::IFCAIRTERMINALBOX: return "IFCAIRTERMINALBOX";
+			case ifc2x4::IFCAIRTERMINALBOXTYPE: return "IFCAIRTERMINALBOXTYPE";
+			case ifc2x4::IFCAIRTERMINALTYPE: return "IFCAIRTERMINALTYPE";
+			case ifc2x4::IFCAIRTOAIRHEATRECOVERY: return "IFCAIRTOAIRHEATRECOVERY";
+			case ifc2x4::IFCAIRTOAIRHEATRECOVERYTYPE: return "IFCAIRTOAIRHEATRECOVERYTYPE";
+			case ifc2x4::IFCALARM: return "IFCALARM";
+			case ifc2x4::IFCALARMTYPE: return "IFCALARMTYPE";
+			case ifc2x4::IFCALIGNMENT: return "IFCALIGNMENT";
+			case ifc2x4::IFCALIGNMENT2DHORIZONTAL: return "IFCALIGNMENT2DHORIZONTAL";
+			case ifc2x4::IFCALIGNMENT2DHORIZONTALSEGMENT: return "IFCALIGNMENT2DHORIZONTALSEGMENT";
+			case ifc2x4::IFCALIGNMENT2DSEGMENT: return "IFCALIGNMENT2DSEGMENT";
+			case ifc2x4::IFCALIGNMENT2DVERSEGCIRCULARARC: return "IFCALIGNMENT2DVERSEGCIRCULARARC";
+			case ifc2x4::IFCALIGNMENT2DVERSEGLINE: return "IFCALIGNMENT2DVERSEGLINE";
+			case ifc2x4::IFCALIGNMENT2DVERSEGPARABOLICARC: return "IFCALIGNMENT2DVERSEGPARABOLICARC";
+			case ifc2x4::IFCALIGNMENT2DVERTICAL: return "IFCALIGNMENT2DVERTICAL";
+			case ifc2x4::IFCALIGNMENT2DVERTICALSEGMENT: return "IFCALIGNMENT2DVERTICALSEGMENT";
+			case ifc2x4::IFCALIGNMENTCURVE: return "IFCALIGNMENTCURVE";
+			case ifc2x4::IFCANNOTATION: return "IFCANNOTATION";
+			case ifc2x4::IFCANNOTATIONFILLAREA: return "IFCANNOTATIONFILLAREA";
+			case ifc2x4::IFCAPPLICATION: return "IFCAPPLICATION";
+			case ifc2x4::IFCAPPLIEDVALUE: return "IFCAPPLIEDVALUE";
+			case ifc2x4::IFCAPPROVAL: return "IFCAPPROVAL";
+			case ifc2x4::IFCAPPROVALRELATIONSHIP: return "IFCAPPROVALRELATIONSHIP";
+			case ifc2x4::IFCARBITRARYCLOSEDPROFILEDEF: return "IFCARBITRARYCLOSEDPROFILEDEF";
+			case ifc2x4::IFCARBITRARYOPENPROFILEDEF: return "IFCARBITRARYOPENPROFILEDEF";
+			case ifc2x4::IFCARBITRARYPROFILEDEFWITHVOIDS: return "IFCARBITRARYPROFILEDEFWITHVOIDS";
+			case ifc2x4::IFCASSET: return "IFCASSET";
+			case ifc2x4::IFCASYMMETRICISHAPEPROFILEDEF: return "IFCASYMMETRICISHAPEPROFILEDEF";
+			case ifc2x4::IFCAUDIOVISUALAPPLIANCE: return "IFCAUDIOVISUALAPPLIANCE";
+			case ifc2x4::IFCAUDIOVISUALAPPLIANCETYPE: return "IFCAUDIOVISUALAPPLIANCETYPE";
+			case ifc2x4::IFCAXIS1PLACEMENT: return "IFCAXIS1PLACEMENT";
+			case ifc2x4::IFCAXIS2PLACEMENT2D: return "IFCAXIS2PLACEMENT2D";
+			case ifc2x4::IFCAXIS2PLACEMENT3D: return "IFCAXIS2PLACEMENT3D";
+			case ifc2x4::IFCBSPLINECURVE: return "IFCBSPLINECURVE";
+			case ifc2x4::IFCBSPLINECURVEWITHKNOTS: return "IFCBSPLINECURVEWITHKNOTS";
+			case ifc2x4::IFCBSPLINESURFACE: return "IFCBSPLINESURFACE";
+			case ifc2x4::IFCBSPLINESURFACEWITHKNOTS: return "IFCBSPLINESURFACEWITHKNOTS";
+			case ifc2x4::IFCBEAM: return "IFCBEAM";
+			case ifc2x4::IFCBEAMSTANDARDCASE: return "IFCBEAMSTANDARDCASE";
+			case ifc2x4::IFCBEAMTYPE: return "IFCBEAMTYPE";
+			case ifc2x4::IFCBEARING: return "IFCBEARING";
+			case ifc2x4::IFCBEARINGTYPE: return "IFCBEARINGTYPE";
+			case ifc2x4::IFCBLOBTEXTURE: return "IFCBLOBTEXTURE";
+			case ifc2x4::IFCBLOCK: return "IFCBLOCK";
+			case ifc2x4::IFCBOILER: return "IFCBOILER";
+			case ifc2x4::IFCBOILERTYPE: return "IFCBOILERTYPE";
+			case ifc2x4::IFCBOOLEANCLIPPINGRESULT: return "IFCBOOLEANCLIPPINGRESULT";
+			case ifc2x4::IFCBOOLEANRESULT: return "IFCBOOLEANRESULT";
+			case ifc2x4::IFCBOUNDARYCONDITION: return "IFCBOUNDARYCONDITION";
+			case ifc2x4::IFCBOUNDARYCURVE: return "IFCBOUNDARYCURVE";
+			case ifc2x4::IFCBOUNDARYEDGECONDITION: return "IFCBOUNDARYEDGECONDITION";
+			case ifc2x4::IFCBOUNDARYFACECONDITION: return "IFCBOUNDARYFACECONDITION";
+			case ifc2x4::IFCBOUNDARYNODECONDITION: return "IFCBOUNDARYNODECONDITION";
+			case ifc2x4::IFCBOUNDARYNODECONDITIONWARPING: return "IFCBOUNDARYNODECONDITIONWARPING";
+			case ifc2x4::IFCBOUNDEDCURVE: return "IFCBOUNDEDCURVE";
+			case ifc2x4::IFCBOUNDEDSURFACE: return "IFCBOUNDEDSURFACE";
+			case ifc2x4::IFCBOUNDINGBOX: return "IFCBOUNDINGBOX";
+			case ifc2x4::IFCBOXEDHALFSPACE: return "IFCBOXEDHALFSPACE";
+			case ifc2x4::IFCBRIDGE: return "IFCBRIDGE";
+			case ifc2x4::IFCBRIDGEPART: return "IFCBRIDGEPART";
+			case ifc2x4::IFCBUILDING: return "IFCBUILDING";
+			case ifc2x4::IFCBUILDINGELEMENT: return "IFCBUILDINGELEMENT";
+			case ifc2x4::IFCBUILDINGELEMENTPART: return "IFCBUILDINGELEMENTPART";
+			case ifc2x4::IFCBUILDINGELEMENTPARTTYPE: return "IFCBUILDINGELEMENTPARTTYPE";
+			case ifc2x4::IFCBUILDINGELEMENTPROXY: return "IFCBUILDINGELEMENTPROXY";
+			case ifc2x4::IFCBUILDINGELEMENTPROXYTYPE: return "IFCBUILDINGELEMENTPROXYTYPE";
+			case ifc2x4::IFCBUILDINGELEMENTTYPE: return "IFCBUILDINGELEMENTTYPE";
+			case ifc2x4::IFCBUILDINGSTOREY: return "IFCBUILDINGSTOREY";
+			case ifc2x4::IFCBUILDINGSYSTEM: return "IFCBUILDINGSYSTEM";
+			case ifc2x4::IFCBURNER: return "IFCBURNER";
+			case ifc2x4::IFCBURNERTYPE: return "IFCBURNERTYPE";
+			case ifc2x4::IFCCSHAPEPROFILEDEF: return "IFCCSHAPEPROFILEDEF";
+			case ifc2x4::IFCCABLECARRIERFITTING: return "IFCCABLECARRIERFITTING";
+			case ifc2x4::IFCCABLECARRIERFITTINGTYPE: return "IFCCABLECARRIERFITTINGTYPE";
+			case ifc2x4::IFCCABLECARRIERSEGMENT: return "IFCCABLECARRIERSEGMENT";
+			case ifc2x4::IFCCABLECARRIERSEGMENTTYPE: return "IFCCABLECARRIERSEGMENTTYPE";
+			case ifc2x4::IFCCABLEFITTING: return "IFCCABLEFITTING";
+			case ifc2x4::IFCCABLEFITTINGTYPE: return "IFCCABLEFITTINGTYPE";
+			case ifc2x4::IFCCABLESEGMENT: return "IFCCABLESEGMENT";
+			case ifc2x4::IFCCABLESEGMENTTYPE: return "IFCCABLESEGMENTTYPE";
+			case ifc2x4::IFCCAISSONFOUNDATION: return "IFCCAISSONFOUNDATION";
+			case ifc2x4::IFCCAISSONFOUNDATIONTYPE: return "IFCCAISSONFOUNDATIONTYPE";
+			case ifc2x4::IFCCARTESIANPOINT: return "IFCCARTESIANPOINT";
+			case ifc2x4::IFCCARTESIANPOINTLIST: return "IFCCARTESIANPOINTLIST";
+			case ifc2x4::IFCCARTESIANPOINTLIST2D: return "IFCCARTESIANPOINTLIST2D";
+			case ifc2x4::IFCCARTESIANPOINTLIST3D: return "IFCCARTESIANPOINTLIST3D";
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR: return "IFCCARTESIANTRANSFORMATIONOPERATOR";
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2D: return "IFCCARTESIANTRANSFORMATIONOPERATOR2D";
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM: return "IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM";
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D: return "IFCCARTESIANTRANSFORMATIONOPERATOR3D";
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM: return "IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM";
+			case ifc2x4::IFCCENTERLINEPROFILEDEF: return "IFCCENTERLINEPROFILEDEF";
+			case ifc2x4::IFCCHILLER: return "IFCCHILLER";
+			case ifc2x4::IFCCHILLERTYPE: return "IFCCHILLERTYPE";
+			case ifc2x4::IFCCHIMNEY: return "IFCCHIMNEY";
+			case ifc2x4::IFCCHIMNEYTYPE: return "IFCCHIMNEYTYPE";
+			case ifc2x4::IFCCIRCLE: return "IFCCIRCLE";
+			case ifc2x4::IFCCIRCLEHOLLOWPROFILEDEF: return "IFCCIRCLEHOLLOWPROFILEDEF";
+			case ifc2x4::IFCCIRCLEPROFILEDEF: return "IFCCIRCLEPROFILEDEF";
+			case ifc2x4::IFCCIRCULARARCSEGMENT2D: return "IFCCIRCULARARCSEGMENT2D";
+			case ifc2x4::IFCCIVILELEMENT: return "IFCCIVILELEMENT";
+			case ifc2x4::IFCCIVILELEMENTTYPE: return "IFCCIVILELEMENTTYPE";
+			case ifc2x4::IFCCLASSIFICATION: return "IFCCLASSIFICATION";
+			case ifc2x4::IFCCLASSIFICATIONREFERENCE: return "IFCCLASSIFICATIONREFERENCE";
+			case ifc2x4::IFCCLOSEDSHELL: return "IFCCLOSEDSHELL";
+			case ifc2x4::IFCCOIL: return "IFCCOIL";
+			case ifc2x4::IFCCOILTYPE: return "IFCCOILTYPE";
+			case ifc2x4::IFCCOLOURRGB: return "IFCCOLOURRGB";
+			case ifc2x4::IFCCOLOURRGBLIST: return "IFCCOLOURRGBLIST";
+			case ifc2x4::IFCCOLOURSPECIFICATION: return "IFCCOLOURSPECIFICATION";
+			case ifc2x4::IFCCOLUMN: return "IFCCOLUMN";
+			case ifc2x4::IFCCOLUMNSTANDARDCASE: return "IFCCOLUMNSTANDARDCASE";
+			case ifc2x4::IFCCOLUMNTYPE: return "IFCCOLUMNTYPE";
+			case ifc2x4::IFCCOMMUNICATIONSAPPLIANCE: return "IFCCOMMUNICATIONSAPPLIANCE";
+			case ifc2x4::IFCCOMMUNICATIONSAPPLIANCETYPE: return "IFCCOMMUNICATIONSAPPLIANCETYPE";
+			case ifc2x4::IFCCOMPLEXPROPERTY: return "IFCCOMPLEXPROPERTY";
+			case ifc2x4::IFCCOMPLEXPROPERTYTEMPLATE: return "IFCCOMPLEXPROPERTYTEMPLATE";
+			case ifc2x4::IFCCOMPOSITECURVE: return "IFCCOMPOSITECURVE";
+			case ifc2x4::IFCCOMPOSITECURVEONSURFACE: return "IFCCOMPOSITECURVEONSURFACE";
+			case ifc2x4::IFCCOMPOSITECURVESEGMENT: return "IFCCOMPOSITECURVESEGMENT";
+			case ifc2x4::IFCCOMPOSITEPROFILEDEF: return "IFCCOMPOSITEPROFILEDEF";
+			case ifc2x4::IFCCOMPRESSOR: return "IFCCOMPRESSOR";
+			case ifc2x4::IFCCOMPRESSORTYPE: return "IFCCOMPRESSORTYPE";
+			case ifc2x4::IFCCONDENSER: return "IFCCONDENSER";
+			case ifc2x4::IFCCONDENSERTYPE: return "IFCCONDENSERTYPE";
+			case ifc2x4::IFCCONIC: return "IFCCONIC";
+			case ifc2x4::IFCCONNECTEDFACESET: return "IFCCONNECTEDFACESET";
+			case ifc2x4::IFCCONNECTIONCURVEGEOMETRY: return "IFCCONNECTIONCURVEGEOMETRY";
+			case ifc2x4::IFCCONNECTIONGEOMETRY: return "IFCCONNECTIONGEOMETRY";
+			case ifc2x4::IFCCONNECTIONPOINTECCENTRICITY: return "IFCCONNECTIONPOINTECCENTRICITY";
+			case ifc2x4::IFCCONNECTIONPOINTGEOMETRY: return "IFCCONNECTIONPOINTGEOMETRY";
+			case ifc2x4::IFCCONNECTIONSURFACEGEOMETRY: return "IFCCONNECTIONSURFACEGEOMETRY";
+			case ifc2x4::IFCCONNECTIONVOLUMEGEOMETRY: return "IFCCONNECTIONVOLUMEGEOMETRY";
+			case ifc2x4::IFCCONSTRAINT: return "IFCCONSTRAINT";
+			case ifc2x4::IFCCONSTRUCTIONEQUIPMENTRESOURCE: return "IFCCONSTRUCTIONEQUIPMENTRESOURCE";
+			case ifc2x4::IFCCONSTRUCTIONEQUIPMENTRESOURCETYPE: return "IFCCONSTRUCTIONEQUIPMENTRESOURCETYPE";
+			case ifc2x4::IFCCONSTRUCTIONMATERIALRESOURCE: return "IFCCONSTRUCTIONMATERIALRESOURCE";
+			case ifc2x4::IFCCONSTRUCTIONMATERIALRESOURCETYPE: return "IFCCONSTRUCTIONMATERIALRESOURCETYPE";
+			case ifc2x4::IFCCONSTRUCTIONPRODUCTRESOURCE: return "IFCCONSTRUCTIONPRODUCTRESOURCE";
+			case ifc2x4::IFCCONSTRUCTIONPRODUCTRESOURCETYPE: return "IFCCONSTRUCTIONPRODUCTRESOURCETYPE";
+			case ifc2x4::IFCCONSTRUCTIONRESOURCE: return "IFCCONSTRUCTIONRESOURCE";
+			case ifc2x4::IFCCONSTRUCTIONRESOURCETYPE: return "IFCCONSTRUCTIONRESOURCETYPE";
+			case ifc2x4::IFCCONTEXT: return "IFCCONTEXT";
+			case ifc2x4::IFCCONTEXTDEPENDENTUNIT: return "IFCCONTEXTDEPENDENTUNIT";
+			case ifc2x4::IFCCONTROL: return "IFCCONTROL";
+			case ifc2x4::IFCCONTROLLER: return "IFCCONTROLLER";
+			case ifc2x4::IFCCONTROLLERTYPE: return "IFCCONTROLLERTYPE";
+			case ifc2x4::IFCCONVERSIONBASEDUNIT: return "IFCCONVERSIONBASEDUNIT";
+			case ifc2x4::IFCCONVERSIONBASEDUNITWITHOFFSET: return "IFCCONVERSIONBASEDUNITWITHOFFSET";
+			case ifc2x4::IFCCOOLEDBEAM: return "IFCCOOLEDBEAM";
+			case ifc2x4::IFCCOOLEDBEAMTYPE: return "IFCCOOLEDBEAMTYPE";
+			case ifc2x4::IFCCOOLINGTOWER: return "IFCCOOLINGTOWER";
+			case ifc2x4::IFCCOOLINGTOWERTYPE: return "IFCCOOLINGTOWERTYPE";
+			case ifc2x4::IFCCOORDINATEOPERATION: return "IFCCOORDINATEOPERATION";
+			case ifc2x4::IFCCOORDINATEREFERENCESYSTEM: return "IFCCOORDINATEREFERENCESYSTEM";
+			case ifc2x4::IFCCOSTITEM: return "IFCCOSTITEM";
+			case ifc2x4::IFCCOSTSCHEDULE: return "IFCCOSTSCHEDULE";
+			case ifc2x4::IFCCOSTVALUE: return "IFCCOSTVALUE";
+			case ifc2x4::IFCCOVERING: return "IFCCOVERING";
+			case ifc2x4::IFCCOVERINGTYPE: return "IFCCOVERINGTYPE";
+			case ifc2x4::IFCCREWRESOURCE: return "IFCCREWRESOURCE";
+			case ifc2x4::IFCCREWRESOURCETYPE: return "IFCCREWRESOURCETYPE";
+			case ifc2x4::IFCCSGPRIMITIVE3D: return "IFCCSGPRIMITIVE3D";
+			case ifc2x4::IFCCSGSOLID: return "IFCCSGSOLID";
+			case ifc2x4::IFCCURRENCYRELATIONSHIP: return "IFCCURRENCYRELATIONSHIP";
+			case ifc2x4::IFCCURTAINWALL: return "IFCCURTAINWALL";
+			case ifc2x4::IFCCURTAINWALLTYPE: return "IFCCURTAINWALLTYPE";
+			case ifc2x4::IFCCURVE: return "IFCCURVE";
+			case ifc2x4::IFCCURVEBOUNDEDPLANE: return "IFCCURVEBOUNDEDPLANE";
+			case ifc2x4::IFCCURVEBOUNDEDSURFACE: return "IFCCURVEBOUNDEDSURFACE";
+			case ifc2x4::IFCCURVESEGMENT2D: return "IFCCURVESEGMENT2D";
+			case ifc2x4::IFCCURVESTYLE: return "IFCCURVESTYLE";
+			case ifc2x4::IFCCURVESTYLEFONT: return "IFCCURVESTYLEFONT";
+			case ifc2x4::IFCCURVESTYLEFONTANDSCALING: return "IFCCURVESTYLEFONTANDSCALING";
+			case ifc2x4::IFCCURVESTYLEFONTPATTERN: return "IFCCURVESTYLEFONTPATTERN";
+			case ifc2x4::IFCCYLINDRICALSURFACE: return "IFCCYLINDRICALSURFACE";
+			case ifc2x4::IFCDAMPER: return "IFCDAMPER";
+			case ifc2x4::IFCDAMPERTYPE: return "IFCDAMPERTYPE";
+			case ifc2x4::IFCDEEPFOUNDATION: return "IFCDEEPFOUNDATION";
+			case ifc2x4::IFCDEEPFOUNDATIONTYPE: return "IFCDEEPFOUNDATIONTYPE";
+			case ifc2x4::IFCDERIVEDPROFILEDEF: return "IFCDERIVEDPROFILEDEF";
+			case ifc2x4::IFCDERIVEDUNIT: return "IFCDERIVEDUNIT";
+			case ifc2x4::IFCDERIVEDUNITELEMENT: return "IFCDERIVEDUNITELEMENT";
+			case ifc2x4::IFCDIMENSIONALEXPONENTS: return "IFCDIMENSIONALEXPONENTS";
+			case ifc2x4::IFCDIRECTION: return "IFCDIRECTION";
+			case ifc2x4::IFCDISCRETEACCESSORY: return "IFCDISCRETEACCESSORY";
+			case ifc2x4::IFCDISCRETEACCESSORYTYPE: return "IFCDISCRETEACCESSORYTYPE";
+			case ifc2x4::IFCDISTANCEEXPRESSION: return "IFCDISTANCEEXPRESSION";
+			case ifc2x4::IFCDISTRIBUTIONCHAMBERELEMENT: return "IFCDISTRIBUTIONCHAMBERELEMENT";
+			case ifc2x4::IFCDISTRIBUTIONCHAMBERELEMENTTYPE: return "IFCDISTRIBUTIONCHAMBERELEMENTTYPE";
+			case ifc2x4::IFCDISTRIBUTIONCIRCUIT: return "IFCDISTRIBUTIONCIRCUIT";
+			case ifc2x4::IFCDISTRIBUTIONCONTROLELEMENT: return "IFCDISTRIBUTIONCONTROLELEMENT";
+			case ifc2x4::IFCDISTRIBUTIONCONTROLELEMENTTYPE: return "IFCDISTRIBUTIONCONTROLELEMENTTYPE";
+			case ifc2x4::IFCDISTRIBUTIONELEMENT: return "IFCDISTRIBUTIONELEMENT";
+			case ifc2x4::IFCDISTRIBUTIONELEMENTTYPE: return "IFCDISTRIBUTIONELEMENTTYPE";
+			case ifc2x4::IFCDISTRIBUTIONFLOWELEMENT: return "IFCDISTRIBUTIONFLOWELEMENT";
+			case ifc2x4::IFCDISTRIBUTIONFLOWELEMENTTYPE: return "IFCDISTRIBUTIONFLOWELEMENTTYPE";
+			case ifc2x4::IFCDISTRIBUTIONPORT: return "IFCDISTRIBUTIONPORT";
+			case ifc2x4::IFCDISTRIBUTIONSYSTEM: return "IFCDISTRIBUTIONSYSTEM";
+			case ifc2x4::IFCDOCUMENTINFORMATION: return "IFCDOCUMENTINFORMATION";
+			case ifc2x4::IFCDOCUMENTINFORMATIONRELATIONSHIP: return "IFCDOCUMENTINFORMATIONRELATIONSHIP";
+			case ifc2x4::IFCDOCUMENTREFERENCE: return "IFCDOCUMENTREFERENCE";
+			case ifc2x4::IFCDOOR: return "IFCDOOR";
+			case ifc2x4::IFCDOORLININGPROPERTIES: return "IFCDOORLININGPROPERTIES";
+			case ifc2x4::IFCDOORPANELPROPERTIES: return "IFCDOORPANELPROPERTIES";
+			case ifc2x4::IFCDOORSTANDARDCASE: return "IFCDOORSTANDARDCASE";
+			case ifc2x4::IFCDOORSTYLE: return "IFCDOORSTYLE";
+			case ifc2x4::IFCDOORTYPE: return "IFCDOORTYPE";
+			case ifc2x4::IFCDRAUGHTINGPREDEFINEDCOLOUR: return "IFCDRAUGHTINGPREDEFINEDCOLOUR";
+			case ifc2x4::IFCDRAUGHTINGPREDEFINEDCURVEFONT: return "IFCDRAUGHTINGPREDEFINEDCURVEFONT";
+			case ifc2x4::IFCDUCTFITTING: return "IFCDUCTFITTING";
+			case ifc2x4::IFCDUCTFITTINGTYPE: return "IFCDUCTFITTINGTYPE";
+			case ifc2x4::IFCDUCTSEGMENT: return "IFCDUCTSEGMENT";
+			case ifc2x4::IFCDUCTSEGMENTTYPE: return "IFCDUCTSEGMENTTYPE";
+			case ifc2x4::IFCDUCTSILENCER: return "IFCDUCTSILENCER";
+			case ifc2x4::IFCDUCTSILENCERTYPE: return "IFCDUCTSILENCERTYPE";
+			case ifc2x4::IFCEDGE: return "IFCEDGE";
+			case ifc2x4::IFCEDGECURVE: return "IFCEDGECURVE";
+			case ifc2x4::IFCEDGELOOP: return "IFCEDGELOOP";
+			case ifc2x4::IFCELECTRICAPPLIANCE: return "IFCELECTRICAPPLIANCE";
+			case ifc2x4::IFCELECTRICAPPLIANCETYPE: return "IFCELECTRICAPPLIANCETYPE";
+			case ifc2x4::IFCELECTRICDISTRIBUTIONBOARD: return "IFCELECTRICDISTRIBUTIONBOARD";
+			case ifc2x4::IFCELECTRICDISTRIBUTIONBOARDTYPE: return "IFCELECTRICDISTRIBUTIONBOARDTYPE";
+			case ifc2x4::IFCELECTRICFLOWSTORAGEDEVICE: return "IFCELECTRICFLOWSTORAGEDEVICE";
+			case ifc2x4::IFCELECTRICFLOWSTORAGEDEVICETYPE: return "IFCELECTRICFLOWSTORAGEDEVICETYPE";
+			case ifc2x4::IFCELECTRICGENERATOR: return "IFCELECTRICGENERATOR";
+			case ifc2x4::IFCELECTRICGENERATORTYPE: return "IFCELECTRICGENERATORTYPE";
+			case ifc2x4::IFCELECTRICMOTOR: return "IFCELECTRICMOTOR";
+			case ifc2x4::IFCELECTRICMOTORTYPE: return "IFCELECTRICMOTORTYPE";
+			case ifc2x4::IFCELECTRICTIMECONTROL: return "IFCELECTRICTIMECONTROL";
+			case ifc2x4::IFCELECTRICTIMECONTROLTYPE: return "IFCELECTRICTIMECONTROLTYPE";
+			case ifc2x4::IFCELEMENT: return "IFCELEMENT";
+			case ifc2x4::IFCELEMENTASSEMBLY: return "IFCELEMENTASSEMBLY";
+			case ifc2x4::IFCELEMENTASSEMBLYTYPE: return "IFCELEMENTASSEMBLYTYPE";
+			case ifc2x4::IFCELEMENTCOMPONENT: return "IFCELEMENTCOMPONENT";
+			case ifc2x4::IFCELEMENTCOMPONENTTYPE: return "IFCELEMENTCOMPONENTTYPE";
+			case ifc2x4::IFCELEMENTQUANTITY: return "IFCELEMENTQUANTITY";
+			case ifc2x4::IFCELEMENTTYPE: return "IFCELEMENTTYPE";
+			case ifc2x4::IFCELEMENTARYSURFACE: return "IFCELEMENTARYSURFACE";
+			case ifc2x4::IFCELLIPSE: return "IFCELLIPSE";
+			case ifc2x4::IFCELLIPSEPROFILEDEF: return "IFCELLIPSEPROFILEDEF";
+			case ifc2x4::IFCENERGYCONVERSIONDEVICE: return "IFCENERGYCONVERSIONDEVICE";
+			case ifc2x4::IFCENERGYCONVERSIONDEVICETYPE: return "IFCENERGYCONVERSIONDEVICETYPE";
+			case ifc2x4::IFCENGINE: return "IFCENGINE";
+			case ifc2x4::IFCENGINETYPE: return "IFCENGINETYPE";
+			case ifc2x4::IFCEVAPORATIVECOOLER: return "IFCEVAPORATIVECOOLER";
+			case ifc2x4::IFCEVAPORATIVECOOLERTYPE: return "IFCEVAPORATIVECOOLERTYPE";
+			case ifc2x4::IFCEVAPORATOR: return "IFCEVAPORATOR";
+			case ifc2x4::IFCEVAPORATORTYPE: return "IFCEVAPORATORTYPE";
+			case ifc2x4::IFCEVENT: return "IFCEVENT";
+			case ifc2x4::IFCEVENTTIME: return "IFCEVENTTIME";
+			case ifc2x4::IFCEVENTTYPE: return "IFCEVENTTYPE";
+			case ifc2x4::IFCEXTENDEDPROPERTIES: return "IFCEXTENDEDPROPERTIES";
+			case ifc2x4::IFCEXTERNALINFORMATION: return "IFCEXTERNALINFORMATION";
+			case ifc2x4::IFCEXTERNALREFERENCE: return "IFCEXTERNALREFERENCE";
+			case ifc2x4::IFCEXTERNALREFERENCERELATIONSHIP: return "IFCEXTERNALREFERENCERELATIONSHIP";
+			case ifc2x4::IFCEXTERNALSPATIALELEMENT: return "IFCEXTERNALSPATIALELEMENT";
+			case ifc2x4::IFCEXTERNALSPATIALSTRUCTUREELEMENT: return "IFCEXTERNALSPATIALSTRUCTUREELEMENT";
+			case ifc2x4::IFCEXTERNALLYDEFINEDHATCHSTYLE: return "IFCEXTERNALLYDEFINEDHATCHSTYLE";
+			case ifc2x4::IFCEXTERNALLYDEFINEDSURFACESTYLE: return "IFCEXTERNALLYDEFINEDSURFACESTYLE";
+			case ifc2x4::IFCEXTERNALLYDEFINEDTEXTFONT: return "IFCEXTERNALLYDEFINEDTEXTFONT";
+			case ifc2x4::IFCEXTRUDEDAREASOLID: return "IFCEXTRUDEDAREASOLID";
+			case ifc2x4::IFCEXTRUDEDAREASOLIDTAPERED: return "IFCEXTRUDEDAREASOLIDTAPERED";
+			case ifc2x4::IFCFACE: return "IFCFACE";
+			case ifc2x4::IFCFACEBASEDSURFACEMODEL: return "IFCFACEBASEDSURFACEMODEL";
+			case ifc2x4::IFCFACEBOUND: return "IFCFACEBOUND";
+			case ifc2x4::IFCFACEOUTERBOUND: return "IFCFACEOUTERBOUND";
+			case ifc2x4::IFCFACESURFACE: return "IFCFACESURFACE";
+			case ifc2x4::IFCFACETEDBREP: return "IFCFACETEDBREP";
+			case ifc2x4::IFCFACETEDBREPWITHVOIDS: return "IFCFACETEDBREPWITHVOIDS";
+			case ifc2x4::IFCFACILITY: return "IFCFACILITY";
+			case ifc2x4::IFCFACILITYPART: return "IFCFACILITYPART";
+			case ifc2x4::IFCFAILURECONNECTIONCONDITION: return "IFCFAILURECONNECTIONCONDITION";
+			case ifc2x4::IFCFAN: return "IFCFAN";
+			case ifc2x4::IFCFANTYPE: return "IFCFANTYPE";
+			case ifc2x4::IFCFASTENER: return "IFCFASTENER";
+			case ifc2x4::IFCFASTENERTYPE: return "IFCFASTENERTYPE";
+			case ifc2x4::IFCFEATUREELEMENT: return "IFCFEATUREELEMENT";
+			case ifc2x4::IFCFEATUREELEMENTADDITION: return "IFCFEATUREELEMENTADDITION";
+			case ifc2x4::IFCFEATUREELEMENTSUBTRACTION: return "IFCFEATUREELEMENTSUBTRACTION";
+			case ifc2x4::IFCFILLAREASTYLE: return "IFCFILLAREASTYLE";
+			case ifc2x4::IFCFILLAREASTYLEHATCHING: return "IFCFILLAREASTYLEHATCHING";
+			case ifc2x4::IFCFILLAREASTYLETILES: return "IFCFILLAREASTYLETILES";
+			case ifc2x4::IFCFILTER: return "IFCFILTER";
+			case ifc2x4::IFCFILTERTYPE: return "IFCFILTERTYPE";
+			case ifc2x4::IFCFIRESUPPRESSIONTERMINAL: return "IFCFIRESUPPRESSIONTERMINAL";
+			case ifc2x4::IFCFIRESUPPRESSIONTERMINALTYPE: return "IFCFIRESUPPRESSIONTERMINALTYPE";
+			case ifc2x4::IFCFIXEDREFERENCESWEPTAREASOLID: return "IFCFIXEDREFERENCESWEPTAREASOLID";
+			case ifc2x4::IFCFLOWCONTROLLER: return "IFCFLOWCONTROLLER";
+			case ifc2x4::IFCFLOWCONTROLLERTYPE: return "IFCFLOWCONTROLLERTYPE";
+			case ifc2x4::IFCFLOWFITTING: return "IFCFLOWFITTING";
+			case ifc2x4::IFCFLOWFITTINGTYPE: return "IFCFLOWFITTINGTYPE";
+			case ifc2x4::IFCFLOWINSTRUMENT: return "IFCFLOWINSTRUMENT";
+			case ifc2x4::IFCFLOWINSTRUMENTTYPE: return "IFCFLOWINSTRUMENTTYPE";
+			case ifc2x4::IFCFLOWMETER: return "IFCFLOWMETER";
+			case ifc2x4::IFCFLOWMETERTYPE: return "IFCFLOWMETERTYPE";
+			case ifc2x4::IFCFLOWMOVINGDEVICE: return "IFCFLOWMOVINGDEVICE";
+			case ifc2x4::IFCFLOWMOVINGDEVICETYPE: return "IFCFLOWMOVINGDEVICETYPE";
+			case ifc2x4::IFCFLOWSEGMENT: return "IFCFLOWSEGMENT";
+			case ifc2x4::IFCFLOWSEGMENTTYPE: return "IFCFLOWSEGMENTTYPE";
+			case ifc2x4::IFCFLOWSTORAGEDEVICE: return "IFCFLOWSTORAGEDEVICE";
+			case ifc2x4::IFCFLOWSTORAGEDEVICETYPE: return "IFCFLOWSTORAGEDEVICETYPE";
+			case ifc2x4::IFCFLOWTERMINAL: return "IFCFLOWTERMINAL";
+			case ifc2x4::IFCFLOWTERMINALTYPE: return "IFCFLOWTERMINALTYPE";
+			case ifc2x4::IFCFLOWTREATMENTDEVICE: return "IFCFLOWTREATMENTDEVICE";
+			case ifc2x4::IFCFLOWTREATMENTDEVICETYPE: return "IFCFLOWTREATMENTDEVICETYPE";
+			case ifc2x4::IFCFOOTING: return "IFCFOOTING";
+			case ifc2x4::IFCFOOTINGTYPE: return "IFCFOOTINGTYPE";
+			case ifc2x4::IFCFURNISHINGELEMENT: return "IFCFURNISHINGELEMENT";
+			case ifc2x4::IFCFURNISHINGELEMENTTYPE: return "IFCFURNISHINGELEMENTTYPE";
+			case ifc2x4::IFCFURNITURE: return "IFCFURNITURE";
+			case ifc2x4::IFCFURNITURETYPE: return "IFCFURNITURETYPE";
+			case ifc2x4::IFCGEOGRAPHICELEMENT: return "IFCGEOGRAPHICELEMENT";
+			case ifc2x4::IFCGEOGRAPHICELEMENTTYPE: return "IFCGEOGRAPHICELEMENTTYPE";
+			case ifc2x4::IFCGEOMETRICCURVESET: return "IFCGEOMETRICCURVESET";
+			case ifc2x4::IFCGEOMETRICREPRESENTATIONCONTEXT: return "IFCGEOMETRICREPRESENTATIONCONTEXT";
+			case ifc2x4::IFCGEOMETRICREPRESENTATIONITEM: return "IFCGEOMETRICREPRESENTATIONITEM";
+			case ifc2x4::IFCGEOMETRICREPRESENTATIONSUBCONTEXT: return "IFCGEOMETRICREPRESENTATIONSUBCONTEXT";
+			case ifc2x4::IFCGEOMETRICSET: return "IFCGEOMETRICSET";
+			case ifc2x4::IFCGRID: return "IFCGRID";
+			case ifc2x4::IFCGRIDAXIS: return "IFCGRIDAXIS";
+			case ifc2x4::IFCGRIDPLACEMENT: return "IFCGRIDPLACEMENT";
+			case ifc2x4::IFCGROUP: return "IFCGROUP";
+			case ifc2x4::IFCHALFSPACESOLID: return "IFCHALFSPACESOLID";
+			case ifc2x4::IFCHEATEXCHANGER: return "IFCHEATEXCHANGER";
+			case ifc2x4::IFCHEATEXCHANGERTYPE: return "IFCHEATEXCHANGERTYPE";
+			case ifc2x4::IFCHUMIDIFIER: return "IFCHUMIDIFIER";
+			case ifc2x4::IFCHUMIDIFIERTYPE: return "IFCHUMIDIFIERTYPE";
+			case ifc2x4::IFCISHAPEPROFILEDEF: return "IFCISHAPEPROFILEDEF";
+			case ifc2x4::IFCIMAGETEXTURE: return "IFCIMAGETEXTURE";
+			case ifc2x4::IFCINDEXEDCOLOURMAP: return "IFCINDEXEDCOLOURMAP";
+			case ifc2x4::IFCINDEXEDPOLYCURVE: return "IFCINDEXEDPOLYCURVE";
+			case ifc2x4::IFCINDEXEDPOLYGONALFACE: return "IFCINDEXEDPOLYGONALFACE";
+			case ifc2x4::IFCINDEXEDPOLYGONALFACEWITHVOIDS: return "IFCINDEXEDPOLYGONALFACEWITHVOIDS";
+			case ifc2x4::IFCINDEXEDTEXTUREMAP: return "IFCINDEXEDTEXTUREMAP";
+			case ifc2x4::IFCINDEXEDTRIANGLETEXTUREMAP: return "IFCINDEXEDTRIANGLETEXTUREMAP";
+			case ifc2x4::IFCINTERCEPTOR: return "IFCINTERCEPTOR";
+			case ifc2x4::IFCINTERCEPTORTYPE: return "IFCINTERCEPTORTYPE";
+			case ifc2x4::IFCINTERSECTIONCURVE: return "IFCINTERSECTIONCURVE";
+			case ifc2x4::IFCINVENTORY: return "IFCINVENTORY";
+			case ifc2x4::IFCIRREGULARTIMESERIES: return "IFCIRREGULARTIMESERIES";
+			case ifc2x4::IFCIRREGULARTIMESERIESVALUE: return "IFCIRREGULARTIMESERIESVALUE";
+			case ifc2x4::IFCJUNCTIONBOX: return "IFCJUNCTIONBOX";
+			case ifc2x4::IFCJUNCTIONBOXTYPE: return "IFCJUNCTIONBOXTYPE";
+			case ifc2x4::IFCLSHAPEPROFILEDEF: return "IFCLSHAPEPROFILEDEF";
+			case ifc2x4::IFCLABORRESOURCE: return "IFCLABORRESOURCE";
+			case ifc2x4::IFCLABORRESOURCETYPE: return "IFCLABORRESOURCETYPE";
+			case ifc2x4::IFCLAGTIME: return "IFCLAGTIME";
+			case ifc2x4::IFCLAMP: return "IFCLAMP";
+			case ifc2x4::IFCLAMPTYPE: return "IFCLAMPTYPE";
+			case ifc2x4::IFCLIBRARYINFORMATION: return "IFCLIBRARYINFORMATION";
+			case ifc2x4::IFCLIBRARYREFERENCE: return "IFCLIBRARYREFERENCE";
+			case ifc2x4::IFCLIGHTDISTRIBUTIONDATA: return "IFCLIGHTDISTRIBUTIONDATA";
+			case ifc2x4::IFCLIGHTFIXTURE: return "IFCLIGHTFIXTURE";
+			case ifc2x4::IFCLIGHTFIXTURETYPE: return "IFCLIGHTFIXTURETYPE";
+			case ifc2x4::IFCLIGHTINTENSITYDISTRIBUTION: return "IFCLIGHTINTENSITYDISTRIBUTION";
+			case ifc2x4::IFCLIGHTSOURCE: return "IFCLIGHTSOURCE";
+			case ifc2x4::IFCLIGHTSOURCEAMBIENT: return "IFCLIGHTSOURCEAMBIENT";
+			case ifc2x4::IFCLIGHTSOURCEDIRECTIONAL: return "IFCLIGHTSOURCEDIRECTIONAL";
+			case ifc2x4::IFCLIGHTSOURCEGONIOMETRIC: return "IFCLIGHTSOURCEGONIOMETRIC";
+			case ifc2x4::IFCLIGHTSOURCEPOSITIONAL: return "IFCLIGHTSOURCEPOSITIONAL";
+			case ifc2x4::IFCLIGHTSOURCESPOT: return "IFCLIGHTSOURCESPOT";
+			case ifc2x4::IFCLINE: return "IFCLINE";
+			case ifc2x4::IFCLINESEGMENT2D: return "IFCLINESEGMENT2D";
+			case ifc2x4::IFCLINEARPLACEMENT: return "IFCLINEARPLACEMENT";
+			case ifc2x4::IFCLINEARPOSITIONINGELEMENT: return "IFCLINEARPOSITIONINGELEMENT";
+			case ifc2x4::IFCLOCALPLACEMENT: return "IFCLOCALPLACEMENT";
+			case ifc2x4::IFCLOOP: return "IFCLOOP";
+			case ifc2x4::IFCMANIFOLDSOLIDBREP: return "IFCMANIFOLDSOLIDBREP";
+			case ifc2x4::IFCMAPCONVERSION: return "IFCMAPCONVERSION";
+			case ifc2x4::IFCMAPPEDITEM: return "IFCMAPPEDITEM";
+			case ifc2x4::IFCMATERIAL: return "IFCMATERIAL";
+			case ifc2x4::IFCMATERIALCLASSIFICATIONRELATIONSHIP: return "IFCMATERIALCLASSIFICATIONRELATIONSHIP";
+			case ifc2x4::IFCMATERIALCONSTITUENT: return "IFCMATERIALCONSTITUENT";
+			case ifc2x4::IFCMATERIALCONSTITUENTSET: return "IFCMATERIALCONSTITUENTSET";
+			case ifc2x4::IFCMATERIALDEFINITION: return "IFCMATERIALDEFINITION";
+			case ifc2x4::IFCMATERIALDEFINITIONREPRESENTATION: return "IFCMATERIALDEFINITIONREPRESENTATION";
+			case ifc2x4::IFCMATERIALLAYER: return "IFCMATERIALLAYER";
+			case ifc2x4::IFCMATERIALLAYERSET: return "IFCMATERIALLAYERSET";
+			case ifc2x4::IFCMATERIALLAYERSETUSAGE: return "IFCMATERIALLAYERSETUSAGE";
+			case ifc2x4::IFCMATERIALLAYERWITHOFFSETS: return "IFCMATERIALLAYERWITHOFFSETS";
+			case ifc2x4::IFCMATERIALLIST: return "IFCMATERIALLIST";
+			case ifc2x4::IFCMATERIALPROFILE: return "IFCMATERIALPROFILE";
+			case ifc2x4::IFCMATERIALPROFILESET: return "IFCMATERIALPROFILESET";
+			case ifc2x4::IFCMATERIALPROFILESETUSAGE: return "IFCMATERIALPROFILESETUSAGE";
+			case ifc2x4::IFCMATERIALPROFILESETUSAGETAPERING: return "IFCMATERIALPROFILESETUSAGETAPERING";
+			case ifc2x4::IFCMATERIALPROFILEWITHOFFSETS: return "IFCMATERIALPROFILEWITHOFFSETS";
+			case ifc2x4::IFCMATERIALPROPERTIES: return "IFCMATERIALPROPERTIES";
+			case ifc2x4::IFCMATERIALRELATIONSHIP: return "IFCMATERIALRELATIONSHIP";
+			case ifc2x4::IFCMATERIALUSAGEDEFINITION: return "IFCMATERIALUSAGEDEFINITION";
+			case ifc2x4::IFCMEASUREWITHUNIT: return "IFCMEASUREWITHUNIT";
+			case ifc2x4::IFCMECHANICALFASTENER: return "IFCMECHANICALFASTENER";
+			case ifc2x4::IFCMECHANICALFASTENERTYPE: return "IFCMECHANICALFASTENERTYPE";
+			case ifc2x4::IFCMEDICALDEVICE: return "IFCMEDICALDEVICE";
+			case ifc2x4::IFCMEDICALDEVICETYPE: return "IFCMEDICALDEVICETYPE";
+			case ifc2x4::IFCMEMBER: return "IFCMEMBER";
+			case ifc2x4::IFCMEMBERSTANDARDCASE: return "IFCMEMBERSTANDARDCASE";
+			case ifc2x4::IFCMEMBERTYPE: return "IFCMEMBERTYPE";
+			case ifc2x4::IFCMETRIC: return "IFCMETRIC";
+			case ifc2x4::IFCMIRROREDPROFILEDEF: return "IFCMIRROREDPROFILEDEF";
+			case ifc2x4::IFCMONETARYUNIT: return "IFCMONETARYUNIT";
+			case ifc2x4::IFCMOTORCONNECTION: return "IFCMOTORCONNECTION";
+			case ifc2x4::IFCMOTORCONNECTIONTYPE: return "IFCMOTORCONNECTIONTYPE";
+			case ifc2x4::IFCNAMEDUNIT: return "IFCNAMEDUNIT";
+			case ifc2x4::IFCOBJECT: return "IFCOBJECT";
+			case ifc2x4::IFCOBJECTDEFINITION: return "IFCOBJECTDEFINITION";
+			case ifc2x4::IFCOBJECTPLACEMENT: return "IFCOBJECTPLACEMENT";
+			case ifc2x4::IFCOBJECTIVE: return "IFCOBJECTIVE";
+			case ifc2x4::IFCOCCUPANT: return "IFCOCCUPANT";
+			case ifc2x4::IFCOFFSETCURVE: return "IFCOFFSETCURVE";
+			case ifc2x4::IFCOFFSETCURVE2D: return "IFCOFFSETCURVE2D";
+			case ifc2x4::IFCOFFSETCURVE3D: return "IFCOFFSETCURVE3D";
+			case ifc2x4::IFCOFFSETCURVEBYDISTANCES: return "IFCOFFSETCURVEBYDISTANCES";
+			case ifc2x4::IFCOPENSHELL: return "IFCOPENSHELL";
+			case ifc2x4::IFCOPENINGELEMENT: return "IFCOPENINGELEMENT";
+			case ifc2x4::IFCOPENINGSTANDARDCASE: return "IFCOPENINGSTANDARDCASE";
+			case ifc2x4::IFCORGANIZATION: return "IFCORGANIZATION";
+			case ifc2x4::IFCORGANIZATIONRELATIONSHIP: return "IFCORGANIZATIONRELATIONSHIP";
+			case ifc2x4::IFCORIENTATIONEXPRESSION: return "IFCORIENTATIONEXPRESSION";
+			case ifc2x4::IFCORIENTEDEDGE: return "IFCORIENTEDEDGE";
+			case ifc2x4::IFCOUTERBOUNDARYCURVE: return "IFCOUTERBOUNDARYCURVE";
+			case ifc2x4::IFCOUTLET: return "IFCOUTLET";
+			case ifc2x4::IFCOUTLETTYPE: return "IFCOUTLETTYPE";
+			case ifc2x4::IFCOWNERHISTORY: return "IFCOWNERHISTORY";
+			case ifc2x4::IFCPARAMETERIZEDPROFILEDEF: return "IFCPARAMETERIZEDPROFILEDEF";
+			case ifc2x4::IFCPATH: return "IFCPATH";
+			case ifc2x4::IFCPCURVE: return "IFCPCURVE";
+			case ifc2x4::IFCPERFORMANCEHISTORY: return "IFCPERFORMANCEHISTORY";
+			case ifc2x4::IFCPERMEABLECOVERINGPROPERTIES: return "IFCPERMEABLECOVERINGPROPERTIES";
+			case ifc2x4::IFCPERMIT: return "IFCPERMIT";
+			case ifc2x4::IFCPERSON: return "IFCPERSON";
+			case ifc2x4::IFCPERSONANDORGANIZATION: return "IFCPERSONANDORGANIZATION";
+			case ifc2x4::IFCPHYSICALCOMPLEXQUANTITY: return "IFCPHYSICALCOMPLEXQUANTITY";
+			case ifc2x4::IFCPHYSICALQUANTITY: return "IFCPHYSICALQUANTITY";
+			case ifc2x4::IFCPHYSICALSIMPLEQUANTITY: return "IFCPHYSICALSIMPLEQUANTITY";
+			case ifc2x4::IFCPILE: return "IFCPILE";
+			case ifc2x4::IFCPILETYPE: return "IFCPILETYPE";
+			case ifc2x4::IFCPIPEFITTING: return "IFCPIPEFITTING";
+			case ifc2x4::IFCPIPEFITTINGTYPE: return "IFCPIPEFITTINGTYPE";
+			case ifc2x4::IFCPIPESEGMENT: return "IFCPIPESEGMENT";
+			case ifc2x4::IFCPIPESEGMENTTYPE: return "IFCPIPESEGMENTTYPE";
+			case ifc2x4::IFCPIXELTEXTURE: return "IFCPIXELTEXTURE";
+			case ifc2x4::IFCPLACEMENT: return "IFCPLACEMENT";
+			case ifc2x4::IFCPLANARBOX: return "IFCPLANARBOX";
+			case ifc2x4::IFCPLANAREXTENT: return "IFCPLANAREXTENT";
+			case ifc2x4::IFCPLANE: return "IFCPLANE";
+			case ifc2x4::IFCPLATE: return "IFCPLATE";
+			case ifc2x4::IFCPLATESTANDARDCASE: return "IFCPLATESTANDARDCASE";
+			case ifc2x4::IFCPLATETYPE: return "IFCPLATETYPE";
+			case ifc2x4::IFCPOINT: return "IFCPOINT";
+			case ifc2x4::IFCPOINTONCURVE: return "IFCPOINTONCURVE";
+			case ifc2x4::IFCPOINTONSURFACE: return "IFCPOINTONSURFACE";
+			case ifc2x4::IFCPOLYLOOP: return "IFCPOLYLOOP";
+			case ifc2x4::IFCPOLYGONALBOUNDEDHALFSPACE: return "IFCPOLYGONALBOUNDEDHALFSPACE";
+			case ifc2x4::IFCPOLYGONALFACESET: return "IFCPOLYGONALFACESET";
+			case ifc2x4::IFCPOLYLINE: return "IFCPOLYLINE";
+			case ifc2x4::IFCPORT: return "IFCPORT";
+			case ifc2x4::IFCPOSITIONINGELEMENT: return "IFCPOSITIONINGELEMENT";
+			case ifc2x4::IFCPOSTALADDRESS: return "IFCPOSTALADDRESS";
+			case ifc2x4::IFCPREDEFINEDCOLOUR: return "IFCPREDEFINEDCOLOUR";
+			case ifc2x4::IFCPREDEFINEDCURVEFONT: return "IFCPREDEFINEDCURVEFONT";
+			case ifc2x4::IFCPREDEFINEDITEM: return "IFCPREDEFINEDITEM";
+			case ifc2x4::IFCPREDEFINEDPROPERTIES: return "IFCPREDEFINEDPROPERTIES";
+			case ifc2x4::IFCPREDEFINEDPROPERTYSET: return "IFCPREDEFINEDPROPERTYSET";
+			case ifc2x4::IFCPREDEFINEDTEXTFONT: return "IFCPREDEFINEDTEXTFONT";
+			case ifc2x4::IFCPRESENTATIONITEM: return "IFCPRESENTATIONITEM";
+			case ifc2x4::IFCPRESENTATIONLAYERASSIGNMENT: return "IFCPRESENTATIONLAYERASSIGNMENT";
+			case ifc2x4::IFCPRESENTATIONLAYERWITHSTYLE: return "IFCPRESENTATIONLAYERWITHSTYLE";
+			case ifc2x4::IFCPRESENTATIONSTYLE: return "IFCPRESENTATIONSTYLE";
+			case ifc2x4::IFCPRESENTATIONSTYLEASSIGNMENT: return "IFCPRESENTATIONSTYLEASSIGNMENT";
+			case ifc2x4::IFCPROCEDURE: return "IFCPROCEDURE";
+			case ifc2x4::IFCPROCEDURETYPE: return "IFCPROCEDURETYPE";
+			case ifc2x4::IFCPROCESS: return "IFCPROCESS";
+			case ifc2x4::IFCPRODUCT: return "IFCPRODUCT";
+			case ifc2x4::IFCPRODUCTDEFINITIONSHAPE: return "IFCPRODUCTDEFINITIONSHAPE";
+			case ifc2x4::IFCPRODUCTREPRESENTATION: return "IFCPRODUCTREPRESENTATION";
+			case ifc2x4::IFCPROFILEDEF: return "IFCPROFILEDEF";
+			case ifc2x4::IFCPROFILEPROPERTIES: return "IFCPROFILEPROPERTIES";
+			case ifc2x4::IFCPROJECT: return "IFCPROJECT";
+			case ifc2x4::IFCPROJECTLIBRARY: return "IFCPROJECTLIBRARY";
+			case ifc2x4::IFCPROJECTORDER: return "IFCPROJECTORDER";
+			case ifc2x4::IFCPROJECTEDCRS: return "IFCPROJECTEDCRS";
+			case ifc2x4::IFCPROJECTIONELEMENT: return "IFCPROJECTIONELEMENT";
+			case ifc2x4::IFCPROPERTY: return "IFCPROPERTY";
+			case ifc2x4::IFCPROPERTYABSTRACTION: return "IFCPROPERTYABSTRACTION";
+			case ifc2x4::IFCPROPERTYBOUNDEDVALUE: return "IFCPROPERTYBOUNDEDVALUE";
+			case ifc2x4::IFCPROPERTYDEFINITION: return "IFCPROPERTYDEFINITION";
+			case ifc2x4::IFCPROPERTYDEPENDENCYRELATIONSHIP: return "IFCPROPERTYDEPENDENCYRELATIONSHIP";
+			case ifc2x4::IFCPROPERTYENUMERATEDVALUE: return "IFCPROPERTYENUMERATEDVALUE";
+			case ifc2x4::IFCPROPERTYENUMERATION: return "IFCPROPERTYENUMERATION";
+			case ifc2x4::IFCPROPERTYLISTVALUE: return "IFCPROPERTYLISTVALUE";
+			case ifc2x4::IFCPROPERTYREFERENCEVALUE: return "IFCPROPERTYREFERENCEVALUE";
+			case ifc2x4::IFCPROPERTYSET: return "IFCPROPERTYSET";
+			case ifc2x4::IFCPROPERTYSETDEFINITION: return "IFCPROPERTYSETDEFINITION";
+			case ifc2x4::IFCPROPERTYSETTEMPLATE: return "IFCPROPERTYSETTEMPLATE";
+			case ifc2x4::IFCPROPERTYSINGLEVALUE: return "IFCPROPERTYSINGLEVALUE";
+			case ifc2x4::IFCPROPERTYTABLEVALUE: return "IFCPROPERTYTABLEVALUE";
+			case ifc2x4::IFCPROPERTYTEMPLATE: return "IFCPROPERTYTEMPLATE";
+			case ifc2x4::IFCPROPERTYTEMPLATEDEFINITION: return "IFCPROPERTYTEMPLATEDEFINITION";
+			case ifc2x4::IFCPROTECTIVEDEVICE: return "IFCPROTECTIVEDEVICE";
+			case ifc2x4::IFCPROTECTIVEDEVICETRIPPINGUNIT: return "IFCPROTECTIVEDEVICETRIPPINGUNIT";
+			case ifc2x4::IFCPROTECTIVEDEVICETRIPPINGUNITTYPE: return "IFCPROTECTIVEDEVICETRIPPINGUNITTYPE";
+			case ifc2x4::IFCPROTECTIVEDEVICETYPE: return "IFCPROTECTIVEDEVICETYPE";
+			case ifc2x4::IFCPROXY: return "IFCPROXY";
+			case ifc2x4::IFCPUMP: return "IFCPUMP";
+			case ifc2x4::IFCPUMPTYPE: return "IFCPUMPTYPE";
+			case ifc2x4::IFCQUANTITYAREA: return "IFCQUANTITYAREA";
+			case ifc2x4::IFCQUANTITYCOUNT: return "IFCQUANTITYCOUNT";
+			case ifc2x4::IFCQUANTITYLENGTH: return "IFCQUANTITYLENGTH";
+			case ifc2x4::IFCQUANTITYSET: return "IFCQUANTITYSET";
+			case ifc2x4::IFCQUANTITYTIME: return "IFCQUANTITYTIME";
+			case ifc2x4::IFCQUANTITYVOLUME: return "IFCQUANTITYVOLUME";
+			case ifc2x4::IFCQUANTITYWEIGHT: return "IFCQUANTITYWEIGHT";
+			case ifc2x4::IFCRAILING: return "IFCRAILING";
+			case ifc2x4::IFCRAILINGTYPE: return "IFCRAILINGTYPE";
+			case ifc2x4::IFCRAMP: return "IFCRAMP";
+			case ifc2x4::IFCRAMPFLIGHT: return "IFCRAMPFLIGHT";
+			case ifc2x4::IFCRAMPFLIGHTTYPE: return "IFCRAMPFLIGHTTYPE";
+			case ifc2x4::IFCRAMPTYPE: return "IFCRAMPTYPE";
+			case ifc2x4::IFCRATIONALBSPLINECURVEWITHKNOTS: return "IFCRATIONALBSPLINECURVEWITHKNOTS";
+			case ifc2x4::IFCRATIONALBSPLINESURFACEWITHKNOTS: return "IFCRATIONALBSPLINESURFACEWITHKNOTS";
+			case ifc2x4::IFCRECTANGLEHOLLOWPROFILEDEF: return "IFCRECTANGLEHOLLOWPROFILEDEF";
+			case ifc2x4::IFCRECTANGLEPROFILEDEF: return "IFCRECTANGLEPROFILEDEF";
+			case ifc2x4::IFCRECTANGULARPYRAMID: return "IFCRECTANGULARPYRAMID";
+			case ifc2x4::IFCRECTANGULARTRIMMEDSURFACE: return "IFCRECTANGULARTRIMMEDSURFACE";
+			case ifc2x4::IFCRECURRENCEPATTERN: return "IFCRECURRENCEPATTERN";
+			case ifc2x4::IFCREFERENCE: return "IFCREFERENCE";
+			case ifc2x4::IFCREFERENT: return "IFCREFERENT";
+			case ifc2x4::IFCREGULARTIMESERIES: return "IFCREGULARTIMESERIES";
+			case ifc2x4::IFCREINFORCEMENTBARPROPERTIES: return "IFCREINFORCEMENTBARPROPERTIES";
+			case ifc2x4::IFCREINFORCEMENTDEFINITIONPROPERTIES: return "IFCREINFORCEMENTDEFINITIONPROPERTIES";
+			case ifc2x4::IFCREINFORCINGBAR: return "IFCREINFORCINGBAR";
+			case ifc2x4::IFCREINFORCINGBARTYPE: return "IFCREINFORCINGBARTYPE";
+			case ifc2x4::IFCREINFORCINGELEMENT: return "IFCREINFORCINGELEMENT";
+			case ifc2x4::IFCREINFORCINGELEMENTTYPE: return "IFCREINFORCINGELEMENTTYPE";
+			case ifc2x4::IFCREINFORCINGMESH: return "IFCREINFORCINGMESH";
+			case ifc2x4::IFCREINFORCINGMESHTYPE: return "IFCREINFORCINGMESHTYPE";
+			case ifc2x4::IFCRELAGGREGATES: return "IFCRELAGGREGATES";
+			case ifc2x4::IFCRELASSIGNS: return "IFCRELASSIGNS";
+			case ifc2x4::IFCRELASSIGNSTOACTOR: return "IFCRELASSIGNSTOACTOR";
+			case ifc2x4::IFCRELASSIGNSTOCONTROL: return "IFCRELASSIGNSTOCONTROL";
+			case ifc2x4::IFCRELASSIGNSTOGROUP: return "IFCRELASSIGNSTOGROUP";
+			case ifc2x4::IFCRELASSIGNSTOGROUPBYFACTOR: return "IFCRELASSIGNSTOGROUPBYFACTOR";
+			case ifc2x4::IFCRELASSIGNSTOPROCESS: return "IFCRELASSIGNSTOPROCESS";
+			case ifc2x4::IFCRELASSIGNSTOPRODUCT: return "IFCRELASSIGNSTOPRODUCT";
+			case ifc2x4::IFCRELASSIGNSTORESOURCE: return "IFCRELASSIGNSTORESOURCE";
+			case ifc2x4::IFCRELASSOCIATES: return "IFCRELASSOCIATES";
+			case ifc2x4::IFCRELASSOCIATESAPPROVAL: return "IFCRELASSOCIATESAPPROVAL";
+			case ifc2x4::IFCRELASSOCIATESCLASSIFICATION: return "IFCRELASSOCIATESCLASSIFICATION";
+			case ifc2x4::IFCRELASSOCIATESCONSTRAINT: return "IFCRELASSOCIATESCONSTRAINT";
+			case ifc2x4::IFCRELASSOCIATESDOCUMENT: return "IFCRELASSOCIATESDOCUMENT";
+			case ifc2x4::IFCRELASSOCIATESLIBRARY: return "IFCRELASSOCIATESLIBRARY";
+			case ifc2x4::IFCRELASSOCIATESMATERIAL: return "IFCRELASSOCIATESMATERIAL";
+			case ifc2x4::IFCRELCONNECTS: return "IFCRELCONNECTS";
+			case ifc2x4::IFCRELCONNECTSELEMENTS: return "IFCRELCONNECTSELEMENTS";
+			case ifc2x4::IFCRELCONNECTSPATHELEMENTS: return "IFCRELCONNECTSPATHELEMENTS";
+			case ifc2x4::IFCRELCONNECTSPORTTOELEMENT: return "IFCRELCONNECTSPORTTOELEMENT";
+			case ifc2x4::IFCRELCONNECTSPORTS: return "IFCRELCONNECTSPORTS";
+			case ifc2x4::IFCRELCONNECTSSTRUCTURALACTIVITY: return "IFCRELCONNECTSSTRUCTURALACTIVITY";
+			case ifc2x4::IFCRELCONNECTSSTRUCTURALMEMBER: return "IFCRELCONNECTSSTRUCTURALMEMBER";
+			case ifc2x4::IFCRELCONNECTSWITHECCENTRICITY: return "IFCRELCONNECTSWITHECCENTRICITY";
+			case ifc2x4::IFCRELCONNECTSWITHREALIZINGELEMENTS: return "IFCRELCONNECTSWITHREALIZINGELEMENTS";
+			case ifc2x4::IFCRELCONTAINEDINSPATIALSTRUCTURE: return "IFCRELCONTAINEDINSPATIALSTRUCTURE";
+			case ifc2x4::IFCRELCOVERSBLDGELEMENTS: return "IFCRELCOVERSBLDGELEMENTS";
+			case ifc2x4::IFCRELCOVERSSPACES: return "IFCRELCOVERSSPACES";
+			case ifc2x4::IFCRELDECLARES: return "IFCRELDECLARES";
+			case ifc2x4::IFCRELDECOMPOSES: return "IFCRELDECOMPOSES";
+			case ifc2x4::IFCRELDEFINES: return "IFCRELDEFINES";
+			case ifc2x4::IFCRELDEFINESBYOBJECT: return "IFCRELDEFINESBYOBJECT";
+			case ifc2x4::IFCRELDEFINESBYPROPERTIES: return "IFCRELDEFINESBYPROPERTIES";
+			case ifc2x4::IFCRELDEFINESBYTEMPLATE: return "IFCRELDEFINESBYTEMPLATE";
+			case ifc2x4::IFCRELDEFINESBYTYPE: return "IFCRELDEFINESBYTYPE";
+			case ifc2x4::IFCRELFILLSELEMENT: return "IFCRELFILLSELEMENT";
+			case ifc2x4::IFCRELFLOWCONTROLELEMENTS: return "IFCRELFLOWCONTROLELEMENTS";
+			case ifc2x4::IFCRELINTERFERESELEMENTS: return "IFCRELINTERFERESELEMENTS";
+			case ifc2x4::IFCRELNESTS: return "IFCRELNESTS";
+			case ifc2x4::IFCRELPOSITIONS: return "IFCRELPOSITIONS";
+			case ifc2x4::IFCRELPROJECTSELEMENT: return "IFCRELPROJECTSELEMENT";
+			case ifc2x4::IFCRELREFERENCEDINSPATIALSTRUCTURE: return "IFCRELREFERENCEDINSPATIALSTRUCTURE";
+			case ifc2x4::IFCRELSEQUENCE: return "IFCRELSEQUENCE";
+			case ifc2x4::IFCRELSERVICESBUILDINGS: return "IFCRELSERVICESBUILDINGS";
+			case ifc2x4::IFCRELSPACEBOUNDARY: return "IFCRELSPACEBOUNDARY";
+			case ifc2x4::IFCRELSPACEBOUNDARY1STLEVEL: return "IFCRELSPACEBOUNDARY1STLEVEL";
+			case ifc2x4::IFCRELSPACEBOUNDARY2NDLEVEL: return "IFCRELSPACEBOUNDARY2NDLEVEL";
+			case ifc2x4::IFCRELVOIDSELEMENT: return "IFCRELVOIDSELEMENT";
+			case ifc2x4::IFCRELATIONSHIP: return "IFCRELATIONSHIP";
+			case ifc2x4::IFCREPARAMETRISEDCOMPOSITECURVESEGMENT: return "IFCREPARAMETRISEDCOMPOSITECURVESEGMENT";
+			case ifc2x4::IFCREPRESENTATION: return "IFCREPRESENTATION";
+			case ifc2x4::IFCREPRESENTATIONCONTEXT: return "IFCREPRESENTATIONCONTEXT";
+			case ifc2x4::IFCREPRESENTATIONITEM: return "IFCREPRESENTATIONITEM";
+			case ifc2x4::IFCREPRESENTATIONMAP: return "IFCREPRESENTATIONMAP";
+			case ifc2x4::IFCRESOURCE: return "IFCRESOURCE";
+			case ifc2x4::IFCRESOURCEAPPROVALRELATIONSHIP: return "IFCRESOURCEAPPROVALRELATIONSHIP";
+			case ifc2x4::IFCRESOURCECONSTRAINTRELATIONSHIP: return "IFCRESOURCECONSTRAINTRELATIONSHIP";
+			case ifc2x4::IFCRESOURCELEVELRELATIONSHIP: return "IFCRESOURCELEVELRELATIONSHIP";
+			case ifc2x4::IFCRESOURCETIME: return "IFCRESOURCETIME";
+			case ifc2x4::IFCREVOLVEDAREASOLID: return "IFCREVOLVEDAREASOLID";
+			case ifc2x4::IFCREVOLVEDAREASOLIDTAPERED: return "IFCREVOLVEDAREASOLIDTAPERED";
+			case ifc2x4::IFCRIGHTCIRCULARCONE: return "IFCRIGHTCIRCULARCONE";
+			case ifc2x4::IFCRIGHTCIRCULARCYLINDER: return "IFCRIGHTCIRCULARCYLINDER";
+			case ifc2x4::IFCROOF: return "IFCROOF";
+			case ifc2x4::IFCROOFTYPE: return "IFCROOFTYPE";
+			case ifc2x4::IFCROOT: return "IFCROOT";
+			case ifc2x4::IFCROUNDEDRECTANGLEPROFILEDEF: return "IFCROUNDEDRECTANGLEPROFILEDEF";
+			case ifc2x4::IFCSIUNIT: return "IFCSIUNIT";
+			case ifc2x4::IFCSANITARYTERMINAL: return "IFCSANITARYTERMINAL";
+			case ifc2x4::IFCSANITARYTERMINALTYPE: return "IFCSANITARYTERMINALTYPE";
+			case ifc2x4::IFCSCHEDULINGTIME: return "IFCSCHEDULINGTIME";
+			case ifc2x4::IFCSEAMCURVE: return "IFCSEAMCURVE";
+			case ifc2x4::IFCSECTIONPROPERTIES: return "IFCSECTIONPROPERTIES";
+			case ifc2x4::IFCSECTIONREINFORCEMENTPROPERTIES: return "IFCSECTIONREINFORCEMENTPROPERTIES";
+			case ifc2x4::IFCSECTIONEDSOLID: return "IFCSECTIONEDSOLID";
+			case ifc2x4::IFCSECTIONEDSOLIDHORIZONTAL: return "IFCSECTIONEDSOLIDHORIZONTAL";
+			case ifc2x4::IFCSECTIONEDSPINE: return "IFCSECTIONEDSPINE";
+			case ifc2x4::IFCSENSOR: return "IFCSENSOR";
+			case ifc2x4::IFCSENSORTYPE: return "IFCSENSORTYPE";
+			case ifc2x4::IFCSHADINGDEVICE: return "IFCSHADINGDEVICE";
+			case ifc2x4::IFCSHADINGDEVICETYPE: return "IFCSHADINGDEVICETYPE";
+			case ifc2x4::IFCSHAPEASPECT: return "IFCSHAPEASPECT";
+			case ifc2x4::IFCSHAPEMODEL: return "IFCSHAPEMODEL";
+			case ifc2x4::IFCSHAPEREPRESENTATION: return "IFCSHAPEREPRESENTATION";
+			case ifc2x4::IFCSHELLBASEDSURFACEMODEL: return "IFCSHELLBASEDSURFACEMODEL";
+			case ifc2x4::IFCSIMPLEPROPERTY: return "IFCSIMPLEPROPERTY";
+			case ifc2x4::IFCSIMPLEPROPERTYTEMPLATE: return "IFCSIMPLEPROPERTYTEMPLATE";
+			case ifc2x4::IFCSITE: return "IFCSITE";
+			case ifc2x4::IFCSLAB: return "IFCSLAB";
+			case ifc2x4::IFCSLABELEMENTEDCASE: return "IFCSLABELEMENTEDCASE";
+			case ifc2x4::IFCSLABSTANDARDCASE: return "IFCSLABSTANDARDCASE";
+			case ifc2x4::IFCSLABTYPE: return "IFCSLABTYPE";
+			case ifc2x4::IFCSLIPPAGECONNECTIONCONDITION: return "IFCSLIPPAGECONNECTIONCONDITION";
+			case ifc2x4::IFCSOLARDEVICE: return "IFCSOLARDEVICE";
+			case ifc2x4::IFCSOLARDEVICETYPE: return "IFCSOLARDEVICETYPE";
+			case ifc2x4::IFCSOLIDMODEL: return "IFCSOLIDMODEL";
+			case ifc2x4::IFCSPACE: return "IFCSPACE";
+			case ifc2x4::IFCSPACEHEATER: return "IFCSPACEHEATER";
+			case ifc2x4::IFCSPACEHEATERTYPE: return "IFCSPACEHEATERTYPE";
+			case ifc2x4::IFCSPACETYPE: return "IFCSPACETYPE";
+			case ifc2x4::IFCSPATIALELEMENT: return "IFCSPATIALELEMENT";
+			case ifc2x4::IFCSPATIALELEMENTTYPE: return "IFCSPATIALELEMENTTYPE";
+			case ifc2x4::IFCSPATIALSTRUCTUREELEMENT: return "IFCSPATIALSTRUCTUREELEMENT";
+			case ifc2x4::IFCSPATIALSTRUCTUREELEMENTTYPE: return "IFCSPATIALSTRUCTUREELEMENTTYPE";
+			case ifc2x4::IFCSPATIALZONE: return "IFCSPATIALZONE";
+			case ifc2x4::IFCSPATIALZONETYPE: return "IFCSPATIALZONETYPE";
+			case ifc2x4::IFCSPHERE: return "IFCSPHERE";
+			case ifc2x4::IFCSPHERICALSURFACE: return "IFCSPHERICALSURFACE";
+			case ifc2x4::IFCSTACKTERMINAL: return "IFCSTACKTERMINAL";
+			case ifc2x4::IFCSTACKTERMINALTYPE: return "IFCSTACKTERMINALTYPE";
+			case ifc2x4::IFCSTAIR: return "IFCSTAIR";
+			case ifc2x4::IFCSTAIRFLIGHT: return "IFCSTAIRFLIGHT";
+			case ifc2x4::IFCSTAIRFLIGHTTYPE: return "IFCSTAIRFLIGHTTYPE";
+			case ifc2x4::IFCSTAIRTYPE: return "IFCSTAIRTYPE";
+			case ifc2x4::IFCSTRUCTURALACTION: return "IFCSTRUCTURALACTION";
+			case ifc2x4::IFCSTRUCTURALACTIVITY: return "IFCSTRUCTURALACTIVITY";
+			case ifc2x4::IFCSTRUCTURALANALYSISMODEL: return "IFCSTRUCTURALANALYSISMODEL";
+			case ifc2x4::IFCSTRUCTURALCONNECTION: return "IFCSTRUCTURALCONNECTION";
+			case ifc2x4::IFCSTRUCTURALCONNECTIONCONDITION: return "IFCSTRUCTURALCONNECTIONCONDITION";
+			case ifc2x4::IFCSTRUCTURALCURVEACTION: return "IFCSTRUCTURALCURVEACTION";
+			case ifc2x4::IFCSTRUCTURALCURVECONNECTION: return "IFCSTRUCTURALCURVECONNECTION";
+			case ifc2x4::IFCSTRUCTURALCURVEMEMBER: return "IFCSTRUCTURALCURVEMEMBER";
+			case ifc2x4::IFCSTRUCTURALCURVEMEMBERVARYING: return "IFCSTRUCTURALCURVEMEMBERVARYING";
+			case ifc2x4::IFCSTRUCTURALCURVEREACTION: return "IFCSTRUCTURALCURVEREACTION";
+			case ifc2x4::IFCSTRUCTURALITEM: return "IFCSTRUCTURALITEM";
+			case ifc2x4::IFCSTRUCTURALLINEARACTION: return "IFCSTRUCTURALLINEARACTION";
+			case ifc2x4::IFCSTRUCTURALLOAD: return "IFCSTRUCTURALLOAD";
+			case ifc2x4::IFCSTRUCTURALLOADCASE: return "IFCSTRUCTURALLOADCASE";
+			case ifc2x4::IFCSTRUCTURALLOADCONFIGURATION: return "IFCSTRUCTURALLOADCONFIGURATION";
+			case ifc2x4::IFCSTRUCTURALLOADGROUP: return "IFCSTRUCTURALLOADGROUP";
+			case ifc2x4::IFCSTRUCTURALLOADLINEARFORCE: return "IFCSTRUCTURALLOADLINEARFORCE";
+			case ifc2x4::IFCSTRUCTURALLOADORRESULT: return "IFCSTRUCTURALLOADORRESULT";
+			case ifc2x4::IFCSTRUCTURALLOADPLANARFORCE: return "IFCSTRUCTURALLOADPLANARFORCE";
+			case ifc2x4::IFCSTRUCTURALLOADSINGLEDISPLACEMENT: return "IFCSTRUCTURALLOADSINGLEDISPLACEMENT";
+			case ifc2x4::IFCSTRUCTURALLOADSINGLEDISPLACEMENTDISTORTION: return "IFCSTRUCTURALLOADSINGLEDISPLACEMENTDISTORTION";
+			case ifc2x4::IFCSTRUCTURALLOADSINGLEFORCE: return "IFCSTRUCTURALLOADSINGLEFORCE";
+			case ifc2x4::IFCSTRUCTURALLOADSINGLEFORCEWARPING: return "IFCSTRUCTURALLOADSINGLEFORCEWARPING";
+			case ifc2x4::IFCSTRUCTURALLOADSTATIC: return "IFCSTRUCTURALLOADSTATIC";
+			case ifc2x4::IFCSTRUCTURALLOADTEMPERATURE: return "IFCSTRUCTURALLOADTEMPERATURE";
+			case ifc2x4::IFCSTRUCTURALMEMBER: return "IFCSTRUCTURALMEMBER";
+			case ifc2x4::IFCSTRUCTURALPLANARACTION: return "IFCSTRUCTURALPLANARACTION";
+			case ifc2x4::IFCSTRUCTURALPOINTACTION: return "IFCSTRUCTURALPOINTACTION";
+			case ifc2x4::IFCSTRUCTURALPOINTCONNECTION: return "IFCSTRUCTURALPOINTCONNECTION";
+			case ifc2x4::IFCSTRUCTURALPOINTREACTION: return "IFCSTRUCTURALPOINTREACTION";
+			case ifc2x4::IFCSTRUCTURALREACTION: return "IFCSTRUCTURALREACTION";
+			case ifc2x4::IFCSTRUCTURALRESULTGROUP: return "IFCSTRUCTURALRESULTGROUP";
+			case ifc2x4::IFCSTRUCTURALSURFACEACTION: return "IFCSTRUCTURALSURFACEACTION";
+			case ifc2x4::IFCSTRUCTURALSURFACECONNECTION: return "IFCSTRUCTURALSURFACECONNECTION";
+			case ifc2x4::IFCSTRUCTURALSURFACEMEMBER: return "IFCSTRUCTURALSURFACEMEMBER";
+			case ifc2x4::IFCSTRUCTURALSURFACEMEMBERVARYING: return "IFCSTRUCTURALSURFACEMEMBERVARYING";
+			case ifc2x4::IFCSTRUCTURALSURFACEREACTION: return "IFCSTRUCTURALSURFACEREACTION";
+			case ifc2x4::IFCSTYLEMODEL: return "IFCSTYLEMODEL";
+			case ifc2x4::IFCSTYLEDITEM: return "IFCSTYLEDITEM";
+			case ifc2x4::IFCSTYLEDREPRESENTATION: return "IFCSTYLEDREPRESENTATION";
+			case ifc2x4::IFCSUBCONTRACTRESOURCE: return "IFCSUBCONTRACTRESOURCE";
+			case ifc2x4::IFCSUBCONTRACTRESOURCETYPE: return "IFCSUBCONTRACTRESOURCETYPE";
+			case ifc2x4::IFCSUBEDGE: return "IFCSUBEDGE";
+			case ifc2x4::IFCSURFACE: return "IFCSURFACE";
+			case ifc2x4::IFCSURFACECURVE: return "IFCSURFACECURVE";
+			case ifc2x4::IFCSURFACECURVESWEPTAREASOLID: return "IFCSURFACECURVESWEPTAREASOLID";
+			case ifc2x4::IFCSURFACEFEATURE: return "IFCSURFACEFEATURE";
+			case ifc2x4::IFCSURFACEOFLINEAREXTRUSION: return "IFCSURFACEOFLINEAREXTRUSION";
+			case ifc2x4::IFCSURFACEOFREVOLUTION: return "IFCSURFACEOFREVOLUTION";
+			case ifc2x4::IFCSURFACEREINFORCEMENTAREA: return "IFCSURFACEREINFORCEMENTAREA";
+			case ifc2x4::IFCSURFACESTYLE: return "IFCSURFACESTYLE";
+			case ifc2x4::IFCSURFACESTYLELIGHTING: return "IFCSURFACESTYLELIGHTING";
+			case ifc2x4::IFCSURFACESTYLEREFRACTION: return "IFCSURFACESTYLEREFRACTION";
+			case ifc2x4::IFCSURFACESTYLERENDERING: return "IFCSURFACESTYLERENDERING";
+			case ifc2x4::IFCSURFACESTYLESHADING: return "IFCSURFACESTYLESHADING";
+			case ifc2x4::IFCSURFACESTYLEWITHTEXTURES: return "IFCSURFACESTYLEWITHTEXTURES";
+			case ifc2x4::IFCSURFACETEXTURE: return "IFCSURFACETEXTURE";
+			case ifc2x4::IFCSWEPTAREASOLID: return "IFCSWEPTAREASOLID";
+			case ifc2x4::IFCSWEPTDISKSOLID: return "IFCSWEPTDISKSOLID";
+			case ifc2x4::IFCSWEPTDISKSOLIDPOLYGONAL: return "IFCSWEPTDISKSOLIDPOLYGONAL";
+			case ifc2x4::IFCSWEPTSURFACE: return "IFCSWEPTSURFACE";
+			case ifc2x4::IFCSWITCHINGDEVICE: return "IFCSWITCHINGDEVICE";
+			case ifc2x4::IFCSWITCHINGDEVICETYPE: return "IFCSWITCHINGDEVICETYPE";
+			case ifc2x4::IFCSYSTEM: return "IFCSYSTEM";
+			case ifc2x4::IFCSYSTEMFURNITUREELEMENT: return "IFCSYSTEMFURNITUREELEMENT";
+			case ifc2x4::IFCSYSTEMFURNITUREELEMENTTYPE: return "IFCSYSTEMFURNITUREELEMENTTYPE";
+			case ifc2x4::IFCTSHAPEPROFILEDEF: return "IFCTSHAPEPROFILEDEF";
+			case ifc2x4::IFCTABLE: return "IFCTABLE";
+			case ifc2x4::IFCTABLECOLUMN: return "IFCTABLECOLUMN";
+			case ifc2x4::IFCTABLEROW: return "IFCTABLEROW";
+			case ifc2x4::IFCTANK: return "IFCTANK";
+			case ifc2x4::IFCTANKTYPE: return "IFCTANKTYPE";
+			case ifc2x4::IFCTASK: return "IFCTASK";
+			case ifc2x4::IFCTASKTIME: return "IFCTASKTIME";
+			case ifc2x4::IFCTASKTIMERECURRING: return "IFCTASKTIMERECURRING";
+			case ifc2x4::IFCTASKTYPE: return "IFCTASKTYPE";
+			case ifc2x4::IFCTELECOMADDRESS: return "IFCTELECOMADDRESS";
+			case ifc2x4::IFCTENDON: return "IFCTENDON";
+			case ifc2x4::IFCTENDONANCHOR: return "IFCTENDONANCHOR";
+			case ifc2x4::IFCTENDONANCHORTYPE: return "IFCTENDONANCHORTYPE";
+			case ifc2x4::IFCTENDONCONDUIT: return "IFCTENDONCONDUIT";
+			case ifc2x4::IFCTENDONCONDUITTYPE: return "IFCTENDONCONDUITTYPE";
+			case ifc2x4::IFCTENDONTYPE: return "IFCTENDONTYPE";
+			case ifc2x4::IFCTESSELLATEDFACESET: return "IFCTESSELLATEDFACESET";
+			case ifc2x4::IFCTESSELLATEDITEM: return "IFCTESSELLATEDITEM";
+			case ifc2x4::IFCTEXTLITERAL: return "IFCTEXTLITERAL";
+			case ifc2x4::IFCTEXTLITERALWITHEXTENT: return "IFCTEXTLITERALWITHEXTENT";
+			case ifc2x4::IFCTEXTSTYLE: return "IFCTEXTSTYLE";
+			case ifc2x4::IFCTEXTSTYLEFONTMODEL: return "IFCTEXTSTYLEFONTMODEL";
+			case ifc2x4::IFCTEXTSTYLEFORDEFINEDFONT: return "IFCTEXTSTYLEFORDEFINEDFONT";
+			case ifc2x4::IFCTEXTSTYLETEXTMODEL: return "IFCTEXTSTYLETEXTMODEL";
+			case ifc2x4::IFCTEXTURECOORDINATE: return "IFCTEXTURECOORDINATE";
+			case ifc2x4::IFCTEXTURECOORDINATEGENERATOR: return "IFCTEXTURECOORDINATEGENERATOR";
+			case ifc2x4::IFCTEXTUREMAP: return "IFCTEXTUREMAP";
+			case ifc2x4::IFCTEXTUREVERTEX: return "IFCTEXTUREVERTEX";
+			case ifc2x4::IFCTEXTUREVERTEXLIST: return "IFCTEXTUREVERTEXLIST";
+			case ifc2x4::IFCTIMEPERIOD: return "IFCTIMEPERIOD";
+			case ifc2x4::IFCTIMESERIES: return "IFCTIMESERIES";
+			case ifc2x4::IFCTIMESERIESVALUE: return "IFCTIMESERIESVALUE";
+			case ifc2x4::IFCTOPOLOGICALREPRESENTATIONITEM: return "IFCTOPOLOGICALREPRESENTATIONITEM";
+			case ifc2x4::IFCTOPOLOGYREPRESENTATION: return "IFCTOPOLOGYREPRESENTATION";
+			case ifc2x4::IFCTOROIDALSURFACE: return "IFCTOROIDALSURFACE";
+			case ifc2x4::IFCTRANSFORMER: return "IFCTRANSFORMER";
+			case ifc2x4::IFCTRANSFORMERTYPE: return "IFCTRANSFORMERTYPE";
+			case ifc2x4::IFCTRANSITIONCURVESEGMENT2D: return "IFCTRANSITIONCURVESEGMENT2D";
+			case ifc2x4::IFCTRANSPORTELEMENT: return "IFCTRANSPORTELEMENT";
+			case ifc2x4::IFCTRANSPORTELEMENTTYPE: return "IFCTRANSPORTELEMENTTYPE";
+			case ifc2x4::IFCTRAPEZIUMPROFILEDEF: return "IFCTRAPEZIUMPROFILEDEF";
+			case ifc2x4::IFCTRIANGULATEDFACESET: return "IFCTRIANGULATEDFACESET";
+			case ifc2x4::IFCTRIANGULATEDIRREGULARNETWORK: return "IFCTRIANGULATEDIRREGULARNETWORK";
+			case ifc2x4::IFCTRIMMEDCURVE: return "IFCTRIMMEDCURVE";
+			case ifc2x4::IFCTUBEBUNDLE: return "IFCTUBEBUNDLE";
+			case ifc2x4::IFCTUBEBUNDLETYPE: return "IFCTUBEBUNDLETYPE";
+			case ifc2x4::IFCTYPEOBJECT: return "IFCTYPEOBJECT";
+			case ifc2x4::IFCTYPEPROCESS: return "IFCTYPEPROCESS";
+			case ifc2x4::IFCTYPEPRODUCT: return "IFCTYPEPRODUCT";
+			case ifc2x4::IFCTYPERESOURCE: return "IFCTYPERESOURCE";
+			case ifc2x4::IFCUSHAPEPROFILEDEF: return "IFCUSHAPEPROFILEDEF";
+			case ifc2x4::IFCUNITASSIGNMENT: return "IFCUNITASSIGNMENT";
+			case ifc2x4::IFCUNITARYCONTROLELEMENT: return "IFCUNITARYCONTROLELEMENT";
+			case ifc2x4::IFCUNITARYCONTROLELEMENTTYPE: return "IFCUNITARYCONTROLELEMENTTYPE";
+			case ifc2x4::IFCUNITARYEQUIPMENT: return "IFCUNITARYEQUIPMENT";
+			case ifc2x4::IFCUNITARYEQUIPMENTTYPE: return "IFCUNITARYEQUIPMENTTYPE";
+			case ifc2x4::IFCVALVE: return "IFCVALVE";
+			case ifc2x4::IFCVALVETYPE: return "IFCVALVETYPE";
+			case ifc2x4::IFCVECTOR: return "IFCVECTOR";
+			case ifc2x4::IFCVERTEX: return "IFCVERTEX";
+			case ifc2x4::IFCVERTEXLOOP: return "IFCVERTEXLOOP";
+			case ifc2x4::IFCVERTEXPOINT: return "IFCVERTEXPOINT";
+			case ifc2x4::IFCVIBRATIONDAMPER: return "IFCVIBRATIONDAMPER";
+			case ifc2x4::IFCVIBRATIONDAMPERTYPE: return "IFCVIBRATIONDAMPERTYPE";
+			case ifc2x4::IFCVIBRATIONISOLATOR: return "IFCVIBRATIONISOLATOR";
+			case ifc2x4::IFCVIBRATIONISOLATORTYPE: return "IFCVIBRATIONISOLATORTYPE";
+			case ifc2x4::IFCVIRTUALELEMENT: return "IFCVIRTUALELEMENT";
+			case ifc2x4::IFCVIRTUALGRIDINTERSECTION: return "IFCVIRTUALGRIDINTERSECTION";
+			case ifc2x4::IFCVOIDINGFEATURE: return "IFCVOIDINGFEATURE";
+			case ifc2x4::IFCWALL: return "IFCWALL";
+			case ifc2x4::IFCWALLELEMENTEDCASE: return "IFCWALLELEMENTEDCASE";
+			case ifc2x4::IFCWALLSTANDARDCASE: return "IFCWALLSTANDARDCASE";
+			case ifc2x4::IFCWALLTYPE: return "IFCWALLTYPE";
+			case ifc2x4::IFCWASTETERMINAL: return "IFCWASTETERMINAL";
+			case ifc2x4::IFCWASTETERMINALTYPE: return "IFCWASTETERMINALTYPE";
+			case ifc2x4::IFCWINDOW: return "IFCWINDOW";
+			case ifc2x4::IFCWINDOWLININGPROPERTIES: return "IFCWINDOWLININGPROPERTIES";
+			case ifc2x4::IFCWINDOWPANELPROPERTIES: return "IFCWINDOWPANELPROPERTIES";
+			case ifc2x4::IFCWINDOWSTANDARDCASE: return "IFCWINDOWSTANDARDCASE";
+			case ifc2x4::IFCWINDOWSTYLE: return "IFCWINDOWSTYLE";
+			case ifc2x4::IFCWINDOWTYPE: return "IFCWINDOWTYPE";
+			case ifc2x4::IFCWORKCALENDAR: return "IFCWORKCALENDAR";
+			case ifc2x4::IFCWORKCONTROL: return "IFCWORKCONTROL";
+			case ifc2x4::IFCWORKPLAN: return "IFCWORKPLAN";
+			case ifc2x4::IFCWORKSCHEDULE: return "IFCWORKSCHEDULE";
+			case ifc2x4::IFCWORKTIME: return "IFCWORKTIME";
+			case ifc2x4::IFCZSHAPEPROFILEDEF: return "IFCZSHAPEPROFILEDEF";
+			case ifc2x4::IFCZONE: return "IFCZONE";
 			default: return "<web-ifc-type-unknown>";
 		}
 	}
