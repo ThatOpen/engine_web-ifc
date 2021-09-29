@@ -64,3 +64,10 @@ Compiling the library to a standalone executable requires use of CMAKE. For visu
 ## Using the library as a C++ dependency
 
 The library is header only, the files in `web-ifc-cpp` can be trivially included in any project. The library depends on [GLM](https://github.com/g-truc/glm) and [earcut](https://github.com/mapbox/earcut.hpp).
+
+
+# Contributing
+
+Want to help out? Great!
+
+Please checkout [our contribution suggestsions](https://github.com/tomvandig/web-ifc/blob/main/contributing.md).
