@@ -722,7 +722,7 @@ namespace webifc
 
 					IfcCurve<3> directrix = BuildArc(pos, axis, angle);
 
-					IfcGeometry geom = Sweep(profile, directrix);
+					IfcGeometry geom = Sweep(profile, directrix, axis);
 
 					mesh.transformation = placement;
 					_expressIDToGeometry[line.expressID] = geom;
@@ -738,7 +738,7 @@ namespace webifc
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t profileID = _loader.GetRefArgument();
-					uint32_t placementID = _loader.GetRefArgument();
+					uint32_t placementID = _loader.GetOptionalRefArgument();
 					uint32_t directionID = _loader.GetRefArgument();
 					double depth = _loader.GetDoubleArgument();
 
@@ -748,7 +748,11 @@ namespace webifc
 						return mesh;
 					}
 
-					mesh.transformation = GetLocalPlacement(placementID);
+					if (placementID)
+					{
+						mesh.transformation = GetLocalPlacement(placementID);
+					}
+
 					glm::dvec3 dir = GetCartesianPoint3D(directionID);
 
 					double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
@@ -799,7 +803,11 @@ namespace webifc
 
 			double radius = glm::length(pos);
 
-			glm::dvec3 right = -pos;
+			// project pos onto axis
+			double pdota = glm::dot(axis, pos);
+			glm::dvec3 pproja = pdota * axis;
+
+			glm::dvec3 right = -(pos - pproja);
 			glm::dvec3 up = glm::cross(axis, right);
 
 			auto curve2D = GetEllipseCurve(1, 1, _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM, glm::dmat3(1), 0, angleRad, true);
@@ -1302,7 +1310,27 @@ namespace webifc
 
 				uint32_t offset = geometry.numPoints;
 				
-				// TODO: assuming that outer bound is first!
+                // if more than one bound
+				if (bounds.size() > 1) {
+                    // locate the outer bound index
+                    int outerIndex = -1;
+                    for (int i = 0; i < bounds.size(); i++) {
+                        if (bounds[i].type == IfcBoundType::OUTERBOUND) {
+                            outerIndex = i;
+                            break;
+                        }
+                    }
+
+                    // swap the outer bound to the first position
+                    std::swap(bounds[0], bounds[outerIndex]);
+                }
+
+                // if the first bound is not an outer bound now, this is unexpected
+                if(bounds[0].type != IfcBoundType::OUTERBOUND)
+                {
+				    _loader.ReportError({ LoaderErrorType::PARSING, "Expected outer bound first!" });
+                }
+
 				glm::dvec3 v1, v2, v3;
 				if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
 				{
@@ -1310,8 +1338,8 @@ namespace webifc
 					return;
 				}
 
-				glm::dvec3 v12(glm::normalize(v2 - v1));
-				glm::dvec3 v13(glm::normalize(v3 - v1));
+				glm::dvec3 v12(glm::normalize(v3 - v2));
+				glm::dvec3 v13(glm::normalize(v1 - v2));
 				glm::dvec3 n = glm::normalize(glm::cross(v12, v13));
 				v12 = glm::cross(v13, n);
 
@@ -1746,10 +1774,15 @@ namespace webifc
 				profile.isConvex = true;
 
 				_loader.MoveToArgumentOffset(line, 2);
-				uint32_t placementID = _loader.GetRefArgument();
+				uint32_t placementID = _loader.GetOptionalRefArgument();
 				double radius = _loader.GetDoubleArgument();
 				
-				glm::dmat3 placement = GetAxis2Placement2D(placementID);
+				glm::dmat3 placement(1);
+				
+				if (placementID)
+				{
+					GetAxis2Placement2D(placementID);
+				}
 
 				profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement);
 
@@ -1804,7 +1837,18 @@ namespace webifc
 				profile.isConvex = true;
 
 				_loader.MoveToArgumentOffset(line, 2);
-				uint32_t placementID = _loader.GetRefArgument();
+
+				glm::dmat3 placement(1);
+
+				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
+				{
+					_loader.Reverse();
+				
+					uint32_t placementID = _loader.GetRefArgument();
+					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+				}
+
+				_loader.MoveToArgumentOffset(line, 3);
 
 				double width = _loader.GetDoubleArgument();
 				double depth = _loader.GetDoubleArgument();
@@ -1821,8 +1865,6 @@ namespace webifc
 					hasFillet = true;
 					filletRadius = _loader.GetDoubleArgument();
 				}
-
-				glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
 				profile.curve = GetIShapedCurve(width, depth, webThickness, flangeThickness, hasFillet, filletRadius, placement);
 

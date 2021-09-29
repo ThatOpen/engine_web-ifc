@@ -1200,6 +1200,12 @@ namespace webifc
 			readPtr = 0;
 		}
 
+		inline bool Expect(char expectedType)
+		{
+			auto receivedType = Read<char>();
+			return (receivedType == expectedType);
+		}
+
 		template <typename T>
 		inline T Read()
 		{

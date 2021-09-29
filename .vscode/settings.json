@@ -81,7 +81,9 @@
         "random": "cpp",
         "regex": "cpp",
         "filesystem": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "string_view": "cpp",
+        "xmemory0": "cpp"
     },
     "cmake.configureOnOpen": true,
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
