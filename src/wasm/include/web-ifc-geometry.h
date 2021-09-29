@@ -372,6 +372,11 @@ namespace webifc
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
+                    if (!mesh.hasColor && firstMesh.hasColor)
+                    {
+                        mesh.hasColor = true;
+                        mesh.color = firstMesh.color;
+                    }
 
 					return mesh;
 				}
@@ -408,6 +413,11 @@ namespace webifc
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
+                    if (!mesh.hasColor && firstMesh.hasColor)
+                    {
+                        mesh.hasColor = true;
+                        mesh.color = firstMesh.color;
+                    }
 
 					return mesh;
 				}
