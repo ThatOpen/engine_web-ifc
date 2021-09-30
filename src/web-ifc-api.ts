@@ -352,7 +352,7 @@ export class IfcAPI
     }
 
     /**
-     * Creates a map for each spatial element in the specified model for the element's ExpressID and GlobalID.
+     * Creates a map between element ExpressIDs and GlobalIDs.
      * Each element has two entries, (ExpressID -> GlobalID) and (GlobalID -> ExpressID).
      * @modelID Model handle retrieved by OpenModel
      */
