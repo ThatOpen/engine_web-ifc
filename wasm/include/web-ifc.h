@@ -549,8 +549,30 @@ namespace webifc
 
 		inline uint32_t GetRefArgument()
 		{
-			_tape.Read<char>(); // ref type
+			if (!_tape.Expect(IfcTokenType::REF))
+			{
+				ReportError({ LoaderErrorType::PARSING, "unexpected token type, expected REF" });
+				return 0;
+			}
 			return _tape.Read<uint32_t>();
+		}
+
+		inline uint32_t GetOptionalRefArgument()
+		{
+			IfcTokenType t = GetTokenType();
+			if (t == IfcTokenType::EMPTY)
+			{
+				return 0;
+			}
+			else if (t == IfcTokenType::REF)
+			{
+				return _tape.Read<uint32_t>();
+			}
+			else
+			{
+				ReportError({ LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY" });
+				return 0;
+			}
 		}
 
 		inline uint32_t GetRefArgument(uint32_t tapeOffset)

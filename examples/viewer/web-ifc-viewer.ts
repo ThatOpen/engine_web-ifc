@@ -7,6 +7,7 @@ import * as ts from "typescript";
 import { exampleCode } from './example';
 
 let ifcAPI = new IfcAPI();
+ifcAPI.SetWasmPath("wasm/")
 let ifcThree = new IfcThree(ifcAPI);
 
 let timeout = undefined;

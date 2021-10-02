@@ -3,10 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { WebIFCWasm } from "./web-ifc";
-
-import { FromRawLineData } from './ifc4x2';
-
-declare let WasmPath: string;
+import * as ifc2x4helper from "./ifc2x4_helper";
 
 export const UNKNOWN = 0;
 export const STRING = 1;
@@ -80,8 +77,9 @@ export function ms() {
 
 export class IfcAPI
 {
-    wasmModule!: Record<string, any>;
+    wasmModule: undefined | any = undefined;
     fs: undefined | any = undefined;
+    wasmPath: string = "";
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality
@@ -90,7 +88,15 @@ export class IfcAPI
     {
         if (WebIFCWasm)
         {
-            this.wasmModule = await WebIFCWasm({noInitialRun: true});
+            let locateFileHandler = (path, prefix) => {
+                // when the wasm module requests the wasm file, we redirect to include the user specified path
+                if (path.endsWith(".wasm")) return prefix + this.wasmPath + path;
+                // otherwise use the default path
+                return prefix + path;
+            }
+
+            //@ts-ignore
+            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: locateFileHandler});
             this.fs = this.wasmModule.FS;
         }
         else
@@ -143,6 +149,7 @@ export class IfcAPI
     ExportFileAsIFC(modelID: number): Uint8Array
     {
         this.wasmModule.ExportFileAsIFC(modelID);
+        //@ts-ignore
         let result = this.fs.readFile("/export.ifc");
         this.wasmModule['FS_unlink']("/export.ifc");
         return result;
@@ -162,7 +169,7 @@ export class IfcAPI
     GetLine(modelID: number, expressID: number, flatten: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = FromRawLineData[rawLineData.type](rawLineData);
+        let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
         if (flatten)
         {
             this.FlattenLine(modelID, lineData);
@@ -305,6 +312,11 @@ export class IfcAPI
         this.wasmModule.StreamAllMeshes(modelID, meshCallback);
     }
 
+    StreamAllMeshesWithTypes(modelID: number, types: Array<number>, meshCallback: (mesh: FlatMesh)=>void)
+    {
+        this.wasmModule.StreamAllMeshesWithTypes(modelID, types, meshCallback);
+    }
+
     /**  
      * Checks if a specific model ID is open or closed
      * @modelID Model handle retrieved by OpenModel
@@ -333,6 +345,6 @@ export class IfcAPI
     }
 
     SetWasmPath(path: string){
-        WasmPath = path;
+        this.wasmPath = path;
     }
 }
