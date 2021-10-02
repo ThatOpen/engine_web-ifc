@@ -1,4 +1,5 @@
-import * as WebIFC from "../../../dist/web-ifc-api-node.js";
+import { Handle, IfcObjectDefinition, IfcPropertySetDefinition } from "../../../dist";
+import * as WebIFC from "../../../dist";
 import { Equals, WithIFCFileLoaded, TestInfo } from "./utils";
 
 export default async function() {
@@ -12,15 +13,15 @@ export default async function() {
         Equals("Type", propertySetFlattened.type, WebIFC.IFCPROPERTYSET);
         Equals("GUID", propertySetFlattened.GlobalId.value, "0uNK5AgoP1Vw6UlaHiS$iF");
         Equals("Description", propertySetFlattened.Description, null);
-        Equals("Name", propertySetFlattened.Name.value, "Pset_ColumnCommon");
+        Equals("Name", propertySetFlattened.Name!.value, "Pset_ColumnCommon");
 
         // look at the properties inside
         let props = propertySetFlattened.HasProperties as WebIFC.IfcPropertySingleValue[];
         Equals("Num props", props.length, 3);
 
         // check the value of the first property, should be an identifier of 300x300
-        Equals("Prop 0 label", props[0].NominalValue.label, "IFCIDENTIFIER");
-        Equals("Prop 0 value", props[0].NominalValue.value, "300x300");
+        Equals("Prop 0 label", (props[0].NominalValue as any).label, "IFCIDENTIFIER");
+        Equals("Prop 0 value", (props[0].NominalValue as any).value, "300x300");
     });
 
     await WithIFCFileLoaded("all_propertysets", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
@@ -55,13 +56,13 @@ export default async function() {
         // grab all propertyset lines in the file
         let lines = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCRELDEFINESBYPROPERTIES);
 
-        let propSetIds = [];
+        let propSetIds : any[] = [];
         for (let i = 0; i < lines.size(); i++)
         {
             let relID = lines.get(i);
             let rel = ifcapi.GetLine(modelID, relID) as WebIFC.IfcRelDefinesByProperties;
             let foundElement = false;
-            rel.RelatedObjects.forEach((relID: WebIFC.Handle<IfcObjectDefinition>) => {
+            (rel.RelatedObjects as Handle<IfcObjectDefinition>[]).forEach((relID) => {
                 if (relID.value === elementID)
                 {
                     foundElement = true;
@@ -83,7 +84,7 @@ export default async function() {
 
         Equals("num propsets", propsets.length, 5);
 
-        let props = [];
+        let props : any[] = [];
         propsets.forEach((set) => {
             set.HasProperties.forEach(p => {
                 console.log(`${set.Name.value}/${p.Name.value}: [${p.NominalValue.label}] ${p.NominalValue.value}`);

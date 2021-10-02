@@ -1,4 +1,4 @@
-import { IfcAPI, ms } from '../../dist/web-ifc-api';
+import { IfcAPI, ms } from '../../dist';
 import { IfcThree } from './web-ifc-three';
 import { Init3DView, InitBasicScene, scene } from './web-ifc-scene';
 import * as Monaco from 'monaco-editor';
@@ -7,7 +7,7 @@ import * as ts from "typescript";
 import { exampleCode } from './example';
 
 let ifcAPI = new IfcAPI();
-ifcAPI.SetWasmPath("wasm/")
+ifcAPI.wasmPath = '../../dist/';
 let ifcThree = new IfcThree(ifcAPI);
 
 let timeout = undefined;

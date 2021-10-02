@@ -1,9 +1,8 @@
-import * as WebIFC from "../../../dist/web-ifc-api-node.js";
-//import * as WebIFC from "web-ifc";
-import chalk from 'chalk';
-import fs from "fs";
+import * as WebIFC from "../../../dist";
+import * as chalk from 'chalk';
+import * as fs from "fs";
 
-const FILE_NAME = "../example.ifc";
+const FILE_NAME = "examples/example.ifc";
 
 let clog = console.log.bind(console);
 

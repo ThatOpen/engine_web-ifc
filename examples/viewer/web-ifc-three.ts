@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 import * as THREE from "three";
-import { IfcAPI, ms, PlacedGeometry, Color, FlatMesh, IFCSITE } from "../../dist/web-ifc-api";
+import { IfcAPI, ms, PlacedGeometry, Color, FlatMesh } from "../../dist";
 import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils";
   
 export class IfcThree
