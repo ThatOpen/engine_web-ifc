@@ -1,13 +1,15 @@
 
-const WebIFC = require("web-ifc/web-ifc-api.js");
+import { IfcAPI } from "../../dist/index.es.js";
 
 console.log("Hello web-ifc-browser!");
 
-const ifcapi = new WebIFC.IfcAPI();
+const ifcapi = new IfcAPI();
+
+ifcapi.wasmPath = '/dist/';
 
 async function HttpRequest(url)
 {  
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         var oReq = new XMLHttpRequest();
         oReq.responseType = "arraybuffer";
         oReq.addEventListener("load", () => {
@@ -32,4 +34,4 @@ async function LoadFile(filename)
     ifcapi.CloseModel(modelID);
 }
 
-LoadFile("example.ifc");
+LoadFile("../example.ifc");

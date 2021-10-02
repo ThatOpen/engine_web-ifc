@@ -23,7 +23,7 @@
     "build-viewer": "npm run bundle-viewer && npm run copy-wasm-viewer",
     "bundle-viewer": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./examples/viewer/web-ifc-viewer.js",
     "copy-wasm-viewer": "cpy dist/web-ifc.wasm examples/viewer/wasm",
-    "serve-viewer": "serve examples/viewer",
+    "serve": "serve",
     "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\"",
     "docker-build-wasm": "docker-compose up",
     "postdocker-build-wasm": "npm run add-wasm-path",
