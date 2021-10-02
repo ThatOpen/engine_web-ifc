@@ -1,5 +1,5 @@
 
-const WebIFC = require("../../dist/web-ifc-api-node.js");
+const WebIFC = require("../../dist/index.js");
 const fs = require("fs");
 
 console.log("Hello web-ifc-node!");
@@ -60,4 +60,4 @@ async function LoadFile(filename)
     ifcapi.CloseModel(modelID);
 }
 
-LoadFile("../example.ifc");
+LoadFile("examples/example.ifc");
