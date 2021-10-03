@@ -19,7 +19,6 @@
     "example-browser": "live-server --open=/examples/browser/",
     "example-viewer": "live-server --open=/examples/viewer/",
     "example-viewer-build": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./examples/viewer/web-ifc-viewer.js",
-    "preexample-viewer-build": "cd examples/viewer/ && node makesrc.js",
     "example-nodejs": "node examples/nodejs/index.js",
     "example-usage": "ts-node examples/usage/index.ts"
   },

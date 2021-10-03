@@ -1,9 +1,8 @@
 import * as WebIFC from "../../dist";
-import { IfcAPI, ms, IfcExtrudedAreaSolid } from '../../dist';
+import { IfcAPI, ms } from '../../dist';
 import { IfcThree } from './web-ifc-three';
 import { Init3DView, InitBasicScene, scene } from './web-ifc-scene';
 import * as Monaco from 'monaco-editor';
-import * as ts_decl from "./ts_src";
 import * as ts from "typescript";
 
 (window as any).WebIFC = WebIFC;
@@ -25,7 +24,7 @@ function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
     window.localStorage.setItem('code', code);
     console.log("Saved code...");
 
-    code = code.replace('import * as WebIFC from "../../dist";', '');
+    code = code.replace('import * as WebIFC from "web-ifc";', '');
 
     let compiled = ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS }})
 
@@ -38,7 +37,6 @@ function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 
     let ifcData = ifcAPI.ExportFileAsIFC(model);
     let ifcDataString = new TextDecoder().decode(ifcData);
-    console.log(ifcDataString);
 
 
     ifcThree.LoadAllGeometry(scene, model);
@@ -52,8 +50,13 @@ function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 }
 
 //@ts-ignore
-window.InitMonaco = (monaco: any) => {
-    console.log(ts_decl.ifc2x4);
+window.InitMonaco = async (monaco: any) => {
+
+    const ts_decl = [
+        await(await fetch('../../dist/ifc2x4.d.ts')).text(),
+        await(await fetch('../../dist/ifc2x4_helper.d.ts')).text(),
+        await(await fetch('../../dist/web-ifc-api.d.ts')).text(),
+    ]
     // validation settings
     monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
         noSemanticValidation: true,
@@ -65,20 +68,20 @@ window.InitMonaco = (monaco: any) => {
         target: monaco.languages.typescript.ScriptTarget.ES6,
         allowNonTsExtensions: true,
     });
-    //@ts-ignore
-    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4));
-    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4helper));
-    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.wifcapi));
+    
+    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        `declare module 'web-ifc' { ${ ts_decl.join('\n')} }`,
+    ));
 }
 
 async function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 {
     let exampleCode = await(await fetch('example.ts')).text();
-    console.log(exampleCode);
-    
+    // exampleCode = exampleCode.replace('import * as WebIFC from "../../dist";', '');
+    exampleCode = exampleCode.replace('import * as WebIFC from "../../dist";', 'import * as WebIFC from "web-ifc";');
+    // exampleCode = exampleCode.replace('import * as WebIFC from "web-ifc";', '');
 
     let item = window.localStorage.getItem("code");
-    console.log(item);
 
     if (item)
     {
