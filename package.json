@@ -8,7 +8,6 @@
   "scripts": {
     "start": "rollup -c -w",
     "build": "rollup -c",
-    "prebuild": "cpy wasm/build/web-ifc.wasm dist",
     "docker-build-wasm": "docker-compose up",
     "postdocker-build-wasm": "npm run add-wasm-path",
     "add-wasm-path": "node add-wasm-path.js",
