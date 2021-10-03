@@ -1,4 +1,4 @@
-const wifcapi = "../../dist/web-ifc-api-node.d.ts";
+const wifcapi = "../../dist/web-ifc-api.d.ts";
 const ifc2x4helper = "../../dist/ifc2x4_helper.d.ts";
 const ifc2x4 = "../../dist/ifc2x4.d.ts";
 

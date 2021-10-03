@@ -1,10 +1,12 @@
-import { IfcAPI, ms } from '../../dist';
+import * as WebIFC from "../../dist";
+import { IfcAPI, ms, IfcExtrudedAreaSolid } from '../../dist';
 import { IfcThree } from './web-ifc-three';
 import { Init3DView, InitBasicScene, scene } from './web-ifc-scene';
 import * as Monaco from 'monaco-editor';
 import * as ts_decl from "./ts_src";
 import * as ts from "typescript";
-import { exampleCode } from './example';
+
+(window as any).WebIFC = WebIFC;
 
 let ifcAPI = new IfcAPI();
 ifcAPI.wasmPath = '../../dist/';
@@ -22,6 +24,8 @@ function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 
     window.localStorage.setItem('code', code);
     console.log("Saved code...");
+
+    code = code.replace('import * as WebIFC from "../../dist";', '');
 
     let compiled = ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS }})
 
@@ -59,7 +63,7 @@ window.InitMonaco = (monaco: any) => {
     // compiler options
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
         target: monaco.languages.typescript.ScriptTarget.ES6,
-        allowNonTsExtensions: true
+        allowNonTsExtensions: true,
     });
     //@ts-ignore
     console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4));
@@ -67,8 +71,12 @@ window.InitMonaco = (monaco: any) => {
     console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.wifcapi));
 }
 
-function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
+async function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 {
+    let exampleCode = await(await fetch('example.ts')).text();
+    console.log(exampleCode);
+    
+
     let item = window.localStorage.getItem("code");
     console.log(item);
 
@@ -96,7 +104,7 @@ function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 
 //@ts-ignore
 window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEditor) => {
-    initMonacoEditor(monacoEditor);
+    await initMonacoEditor(monacoEditor);
   await ifcAPI.Init();
   const fileInput = document.getElementById('finput');
   fileInput.addEventListener('change', fileInputChanged);

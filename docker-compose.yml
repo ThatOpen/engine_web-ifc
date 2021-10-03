@@ -1,7 +1,6 @@
 services:
   web-ifc:
-    build:
-      context: .
+    image: emscripten/emsdk:2.0.25
     command: "em++ --bind -O3 -std=c++17 -flto -fno-exceptions ./wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o wasm/build/web-ifc.js"
     volumes:
-      - ./wasm:/app/wasm
+      - ./wasm:/src/wasm
