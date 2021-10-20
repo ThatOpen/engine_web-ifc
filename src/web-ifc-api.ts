@@ -77,6 +77,8 @@ export function ms() {
     return new Date().getTime();
 }
 
+export type LocateFileHandlerFn = (path:string, prefix:string) => string;
+
 export class IfcAPI
 {
     wasmModule: undefined | any = undefined;
@@ -84,13 +86,15 @@ export class IfcAPI
     wasmPath: string = "";
 
     /**
-     * Initializes the WASM module (WebIFCWasm), required before using any other functionality
+     * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
+     * Takes an optional locateFile function that let's you override the path from which the 
+     * wasm module is loaded.
     */
-    async Init()
+    async Init(locateFile?: LocateFileHandlerFn)
     {
         if (WebIFCWasm)
         {
-            let locateFileHandler = (path, prefix) => {
+            let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
                 if (path.endsWith(".wasm")) return prefix + this.wasmPath + path;
                 // otherwise use the default path
@@ -98,7 +102,7 @@ export class IfcAPI
             }
 
             //@ts-ignore
-            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: locateFileHandler});
+            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: locateFile || locateFileHandler});
             this.fs = this.wasmModule.FS;
         }
         else
