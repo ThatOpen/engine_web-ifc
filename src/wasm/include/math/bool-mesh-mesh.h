@@ -11,6 +11,7 @@
 #define CSGJSCPP_REAL double
 #define CSGJSCPP_IMPLEMENTATION
 #include "../../deps/csgjs-cpp/csgjs.h"
+#include "../../deps/godot-csg/csg.h"
 
 namespace webifc
 {
@@ -140,4 +141,95 @@ namespace webifc
 
         return result;
     }
-}
+
+    glm::dvec3 GetOffset(glm::dvec3 pt, glm::dvec3 center, glm::dvec3 extents)
+    {
+        auto dpt = pt - center;
+
+        double max = std::max(extents.x, std::max(extents.y, extents.z));
+
+        double scaleMM = 1 / (max);
+
+        return dpt * scaleMM;
+    }
+
+    CSGBrush* IfcGeometryToCSGBrush(const IfcGeometry& mesh, bool scale = false)
+    {
+        CSGBrush* brush = memnew(CSGBrush);
+
+        Vector<Vector3> p_vertices;
+        Vector<Vector2> p_uvs;
+
+        glm::dvec3 center;
+        glm::dvec3 extents;
+
+        if (scale)
+        {
+            mesh.GetCenterExtents(center, extents);
+        }
+
+        for (uint32_t i = 0; i < mesh.numFaces; i++) {
+            Face f = mesh.GetFace(i);
+
+            glm::dvec3 a = mesh.GetPoint(f.i0);
+            glm::dvec3 b = mesh.GetPoint(f.i1);
+            glm::dvec3 c = mesh.GetPoint(f.i2);
+
+            if (scale)
+            {
+                a += GetOffset(a, center, extents);
+                b += GetOffset(b, center, extents);
+                c += GetOffset(c, center, extents);
+            }
+
+            glm::dvec3 norm;
+            if (!computeSafeNormal(a, b, c, norm))
+            {
+                continue;
+            }
+
+            p_vertices.push_back(Vector3(a.x, a.y, a.z));
+            p_vertices.push_back(Vector3(c.x, c.y, c.z));
+            p_vertices.push_back(Vector3(b.x, b.y, b.z));
+
+            p_uvs.push_back(Vector2());
+            p_uvs.push_back(Vector2());
+            p_uvs.push_back(Vector2());
+        }
+
+
+        brush->build_from_faces(p_vertices, p_uvs, {}, {}, {});
+
+        return brush;
+    }
+
+    IfcGeometry boolSubtract_GODOT(const IfcGeometry& mesh1, const IfcGeometry& mesh2)
+    {
+
+        auto model1 = IfcGeometryToCSGBrush(mesh1);
+        auto model2 = IfcGeometryToCSGBrush(mesh2, true);
+
+        CSGBrush* resultBrush = memnew(CSGBrush);
+
+        CSGBrushOperation op;
+        op.merge_brushes(CSGBrushOperation::OPERATION_SUBSTRACTION, *model1, *model2, *resultBrush, 0.001);
+
+        IfcGeometry result;
+
+        for (uint32_t i = 0; i < resultBrush->faces.size(); i ++) {
+            auto face = resultBrush->faces.get(i);
+
+            auto va = face.vertices[0];
+            auto vb = face.vertices[1];
+            auto vc = face.vertices[2];
+
+            glm::dvec3 a(va.x, va.y, va.z);
+            glm::dvec3 b(vb.x, vb.y, vb.z);
+            glm::dvec3 c(vc.x, vc.y, vc.z);
+
+            result.AddFace(a, c, b);
+        }
+
+        return result;
+    }
+    }
