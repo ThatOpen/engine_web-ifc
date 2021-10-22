@@ -311,9 +311,10 @@ namespace webifc
 				if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
 				{
 					IfcComposedMesh resultMesh;
-					resultMesh.transformation = glm::dmat4(1);
 
-					auto flatElementMesh = flatten(mesh, _expressIDToGeometry);
+					auto origin = GetOrigin(mesh, _expressIDToGeometry);
+					auto normalizeMat = glm::translate(-origin);
+					auto flatElementMesh = flatten(mesh, _expressIDToGeometry, normalizeMat);
 
 					if (!flatElementMesh.IsEmpty())
 					{
@@ -322,13 +323,14 @@ namespace webifc
 						for (auto relVoidExpressID : relVoidsIt->second)
 						{
 							IfcComposedMesh voidMesh = GetMesh(relVoidExpressID);
-							auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry);
+							auto flatVoidMesh = flatten(voidMesh, _expressIDToGeometry, normalizeMat);
 
 							flatElementMesh = BoolSubtract(flatElementMesh, flatVoidMesh);
 						}
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
+					resultMesh.transformation = glm::translate(origin);
 					resultMesh.expressID = line.expressID;
 					resultMesh.hasGeometry = true;
 					resultMesh.hasColor = true;
@@ -365,13 +367,18 @@ namespace webifc
 					auto firstMesh = GetMesh(firstOperandID);
 					auto secondMesh = GetMesh(secondOperandID);
 
-					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
-					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
+					auto origin = GetOrigin(firstMesh, _expressIDToGeometry);
+					auto normalizeMat = glm::translate(-origin);
+
+					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
+					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
 					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondMesh);
-
+					
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
+					mesh.transformation = glm::translate(origin);
+
                     if (!mesh.hasColor && firstMesh.hasColor)
                     {
                         mesh.hasColor = true;
@@ -399,8 +406,11 @@ namespace webifc
 					auto firstMesh = GetMesh(firstOperandID);
 					auto secondMesh = GetMesh(secondOperandID);
 
-					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry);
-					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry);
+					auto origin = GetOrigin(firstMesh, _expressIDToGeometry);
+					auto normalizeMat = glm::translate(-origin);
+
+					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
+					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
 					if (flatFirstMesh.numFaces == 0)
 					{
@@ -413,6 +423,7 @@ namespace webifc
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
+					mesh.transformation = glm::translate(origin);
                     if (!mesh.hasColor && firstMesh.hasColor)
                     {
                         mesh.hasColor = true;
@@ -498,7 +509,9 @@ namespace webifc
 					profile.isConvex = false;
 					profile.curve = curve;
 
-					auto geom = Extrude(profile, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor(), planeNormal, planePosition);
+					glm::dmat4 invPosition = glm::inverse(position);
+
+					auto geom = Extrude(profile, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor(), invPosition * glm::dvec4(planeNormal, 0), invPosition * glm::dvec4(planePosition, 1));
 					//auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
 
 					// @Refactor: duplicate of extrudedareasolid
@@ -875,7 +888,14 @@ namespace webifc
 		{
 			IfcGeometry result;
 
-			if (firstGeom.numFaces == 0 || secondGeom.numFaces == 0)
+			glm::dvec3 center;
+			glm::dvec3 extents;
+			firstGeom.GetCenterExtents(center, extents);
+
+			auto first = firstGeom.Normalize(center, extents);
+			auto second = secondGeom.Normalize(center, extents);
+
+			if (first.numFaces == 0 || second.numFaces == 0)
 			{
 				_loader.ReportError({ LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target" });
 
@@ -886,8 +906,8 @@ namespace webifc
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{
-				DumpIfcGeometry(firstGeom, L"first.obj");
-				DumpIfcGeometry(secondGeom, L"second.obj");
+				DumpIfcGeometry(first, L"first.obj");
+				DumpIfcGeometry(second, L"second.obj");
 			}
 
 			if (_loader.GetSettings().USE_FAST_BOOLS)
@@ -895,13 +915,14 @@ namespace webifc
 				IfcGeometry r1;
 				IfcGeometry r2;
 
-				intersectMeshMesh(firstGeom, secondGeom, r1, r2);
+				intersectMeshMesh(first, second, r1, r2);
 
 				result = boolSubtract(r1, r2);
 			}
 			else
 			{
 				const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
+				/*
 				if (firstGeom.numPoints > threshold || secondGeom.numPoints > threshold)
 				{
 					_loader.ReportError({ LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD" });
@@ -909,8 +930,9 @@ namespace webifc
 					// bail out because we expect this operation to take too long
 					return firstGeom;
 				}
+				*/
 
-				result = boolSubtract_CSGJSCPP(firstGeom, secondGeom);
+				result = boolSubtract_GODOT(first, second);
 			}
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
@@ -918,7 +940,7 @@ namespace webifc
 				DumpIfcGeometry(result, L"result.obj");
 			}
 
-			return result;
+			return result.DeNormalize(center, extents);
 		}
 
 		std::vector<glm::dvec3> ReadIfcCartesianPointList3D(uint32_t expressID)
@@ -1331,8 +1353,15 @@ namespace webifc
                         }
                     }
 
-                    // swap the outer bound to the first position
-                    std::swap(bounds[0], bounds[outerIndex]);
+					if (outerIndex == -1)
+					{
+						_loader.ReportError({ LoaderErrorType::PARSING, "Expected outer bound!" });
+					}
+					else
+					{
+						// swap the outer bound to the first position
+						std::swap(bounds[0], bounds[outerIndex]);
+					}
                 }
 
                 // if the first bound is not an outer bound now, this is unexpected
@@ -1345,6 +1374,7 @@ namespace webifc
 				if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
 				{
 					// these points are on a line
+					_loader.ReportError({ LoaderErrorType::PARSING, "No basis found for brep!" });
 					return;
 				}
 
@@ -1579,7 +1609,7 @@ namespace webifc
 
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
-				if (indices.size() <= 3)
+				if (indices.size() < 3)
 				{
 					// probably a degenerate polygon
 					_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "degenerate polygon in extrude" });

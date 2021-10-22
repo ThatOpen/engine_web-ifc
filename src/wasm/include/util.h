@@ -9,6 +9,7 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
+#include <optional>
 
 #include "../deps/glm/glm/glm.hpp"
 
@@ -190,6 +191,62 @@ namespace webifc
 				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
 				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
 			);
+		}
+
+		void GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const
+		{
+			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
+			glm::dvec3 max(DBL_MIN, DBL_MIN, DBL_MIN);
+
+			for (size_t i = 0; i < numPoints; i ++)
+			{
+				auto pt = GetPoint(i);
+				min = glm::min(min, pt);
+				max = glm::max(max, pt);
+			}
+
+			extents = (max - min);
+			center = min + extents / 2.0;
+		}
+
+		IfcGeometry Normalize(glm::dvec3 center, glm::dvec3 extents) const
+		{
+			IfcGeometry newGeom;
+
+			double scale = std::max(extents.x, std::max(extents.y, extents.z));
+
+			for (size_t i = 0; i < numFaces; i++)
+			{
+				auto face = GetFace(i);
+				auto a = (GetPoint(face.i0) - center) / scale;
+				auto b = (GetPoint(face.i1) - center) / scale;
+				auto c = (GetPoint(face.i2) - center) / scale;
+
+				newGeom.AddFace(a, b, c);
+			}
+
+
+			return newGeom;
+		}
+
+		IfcGeometry DeNormalize(glm::dvec3 center, glm::dvec3 extents) const
+		{
+			IfcGeometry newGeom;
+
+			double scale = std::max(extents.x, std::max(extents.y, extents.z));
+
+			for (size_t i = 0; i < numFaces; i++)
+			{
+				auto face = GetFace(i);
+				auto a = GetPoint(face.i0) * scale + center;
+				auto b = GetPoint(face.i1) * scale + center;
+				auto c = GetPoint(face.i2) * scale + center;
+
+				newGeom.AddFace(a, b, c);
+			}
+
+
+			return newGeom;
 		}
 
 		uint32_t GetVertexData()
@@ -577,6 +634,56 @@ namespace webifc
 		bool hasColor = false;
 		std::vector<IfcComposedMesh> children;
 	};
+
+	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, glm::dmat4 mat)
+	{
+		glm::dmat4 newMat = mat * mesh.transformation;
+
+		bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
+
+		auto geomIt = geometryMap.find(mesh.expressID);
+
+		if (geomIt != geometryMap.end())
+		{
+			auto meshGeom = geomIt->second;
+
+			if (meshGeom.numFaces)
+			{
+				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+				{
+					Face f = meshGeom.GetFace(i);
+					glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
+
+					return a;
+				}
+			}
+		}
+
+		for (auto& c : mesh.children)
+		{
+			auto v = GetOriginRec(c, geometryMap, newMat);
+			if (v.has_value())
+			{
+				return v;
+			}
+		}
+
+		return std::nullopt;
+	}
+
+	glm::dvec3 GetOrigin(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap)
+	{
+		auto v = GetOriginRec(mesh, geometryMap, glm::dmat4(1));
+
+		if (v.has_value())
+		{
+			return *v;
+		}
+		else
+		{
+			return glm::dvec3(0);
+		}
+	}
 
 	void flattenRecursive(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, IfcGeometry& geom, glm::dmat4 mat)
 	{
