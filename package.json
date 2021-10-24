@@ -37,7 +37,9 @@
     "serve-viewer": "serve examples/viewer",
     "dev": "concurrently --kill-others \"npm-watch\" \"npm run serve-viewer\"",
     "docker-build": "docker build -t web-ifc .",
-    "docker-run": "docker run --rm -p 3000:5000 --name web-ifc-container web-ifc"
+    "docker-run": "npm run docker-run-container && npm run docker-get-compiled-files ",
+    "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
+    "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist ."
   },
   "author": "tomvandig",
   "files": [
@@ -52,13 +54,14 @@
   "devDependencies": {
     "@types/three": "^0.130.1",
     "concurrently": "^6.2.0",
+    "cpy": "^8.1.2",
     "cpy-cli": "^3.1.1",
     "esbuild": "^0.12.15",
+    "monaco-editor": "^0.26.1",
     "npm-watch": "^0.10.0",
     "serve": "^12.0.0",
     "three": "^0.130.1",
-    "typescript": "^4.3.5",
-    "monaco-editor": "^0.26.1"
+    "typescript": "^4.3.5"
   },
   "browser": {
     "crypto": false,
