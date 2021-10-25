@@ -87,10 +87,11 @@ export class IfcAPI
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
-     * Takes an optional locateFile function that let's you override the path from which the 
-     * wasm module is loaded.
-    */
-    async Init(locateFile?: LocateFileHandlerFn)
+     * 
+     * @param customLocateFileHandler An optional locateFile function that let's
+     * you override the path from which the wasm module is loaded.
+     */
+    async Init(customLocateFileHandler?: LocateFileHandlerFn)
     {
         if (WebIFCWasm)
         {
@@ -102,7 +103,7 @@ export class IfcAPI
             }
 
             //@ts-ignore
-            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: locateFile || locateFileHandler});
+            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler});
             this.fs = this.wasmModule.FS;
         }
         else
