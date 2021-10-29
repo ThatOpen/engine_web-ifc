@@ -25,6 +25,7 @@ namespace webifc
 		std::vector<uint32_t> expressIDToLine;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> ifcTypeToLineID;
 
+		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoidRel;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _relAggregates;
 		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;

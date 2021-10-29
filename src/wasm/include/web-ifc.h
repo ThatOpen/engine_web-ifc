@@ -95,6 +95,12 @@ namespace webifc
 		}
 
 		// this is lazy
+		std::unordered_map<uint32_t, std::vector<uint32_t>>& GetRelVoidRels()
+		{
+			return _metaData._relVoidRel;
+		}
+
+		// this is lazy
 		std::unordered_map<uint32_t, std::vector<uint32_t>>& GetRelAggregates()
 		{
 			return _metaData._relAggregates;
@@ -290,6 +296,7 @@ namespace webifc
 				uint32_t relatedOpeningElement = GetRefArgument();
 
 				_metaData._relVoids[relatingBuildingElement].push_back(relatedOpeningElement);
+				_metaData._relVoidRel[relatingBuildingElement].push_back(relVoidID);
 			}
 		}
 
@@ -649,6 +656,15 @@ namespace webifc
 		{
 			std::set<uint32_t> deps;
 			GetLineDependencies(expressID, deps);
+
+			auto voids = GetRelVoidRels()[expressID];
+
+			for (auto& v : voids)
+			{
+				deps.insert(v);
+				GetLineDependencies(v, deps);
+			}
+
 			return deps;
 		}
 
