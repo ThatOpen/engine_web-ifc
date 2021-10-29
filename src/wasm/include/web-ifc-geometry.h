@@ -917,6 +917,12 @@ namespace webifc
 
 				intersectMeshMesh(first, second, r1, r2);
 
+				if (_loader.GetSettings().DUMP_CSG_MESHES)
+				{
+					DumpIfcGeometry(r1, L"r1.obj");
+					DumpIfcGeometry(r2, L"r2.obj");
+				}
+
 				result = boolSubtract(r1, r2);
 			}
 			else
