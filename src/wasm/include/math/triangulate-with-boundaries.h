@@ -82,6 +82,11 @@ namespace webifc
         t.c = c;
         t.id = triangleID++;
 
+        if (t.a.id == t.b.id || t.b.id == t.c.id || t.a.id == t.c.id)
+        {
+            printf("bad triangle ID");
+        }
+
         double area = areaOfTriangle(t.a(), t.b(), t.c());
 
         if (area == 0)
@@ -90,6 +95,16 @@ namespace webifc
             //triangles.resize(t.id + 1);
             //triangles[t.id].id = -1;
             printf("0 triangle\n");
+        }
+
+        if (TriangleIsCW(t.a(), t.b(), t.c()))
+        {
+            std::swap(t.a, t.b);
+        }
+
+        if (TriangleIsCW(t.a(), t.b(), t.c()))
+        {
+            printf("bad triangle winding");
         }
 
         triangles.resize(t.id + 1);
@@ -375,6 +390,130 @@ namespace webifc
         */
 
         triangles[id].id = -1;
+    }
+
+    void WalkToPoint(Triangle current, Edge prevEdge, Point& p, std::vector<Triangle>& triangles, std::vector<bool>& visited)
+    {
+        if (visited[current.id])
+        {
+            // we are walking around hitting the same triangles, bad news
+            printf("Bad walk!");
+            return;
+        }
+
+        // mark current as visited
+        visited[current.id] = true;
+
+        if (current.a.id == p.id || current.b.id == p.id || current.c.id == p.id)
+        {
+            // triangle contains P, stop looking
+            return;
+        }
+
+        std::pair<int, int> edges[3];
+        edges[0] = { current.b.id, current.a.id };
+        edges[1] = { current.c.id, current.b.id };
+        edges[2] = { current.a.id, current.c.id };
+
+        std::pair<double, int> d[3];
+        d[0] = { sign(p, current.a, current.b), 0 };
+        d[1] = { sign(p, current.b, current.c), 1 };
+        d[2] = { sign(p, current.c, current.a), 2 };
+
+        if (d[0].first < -EPS_TINY && d[1].first < -EPS_TINY && d[2].first < -EPS_TINY)
+        {
+            // all signs negative, point is inside triangle
+            makeTriangle(triangles, current.a, current.b, p);
+            makeTriangle(triangles, current.a, p, current.c);
+            makeTriangle(triangles, p, current.b, current.c);
+
+            DeleteTriangle(current.id, triangles);
+            return;
+        }
+
+        if (d[0].first < d[1].first) std::swap(d[0], d[1]);
+        if (d[1].first < d[2].first) std::swap(d[1], d[2]);
+        if (d[0].first < d[1].first) std::swap(d[0], d[1]);
+
+        for (auto& pair : d)
+        {
+            auto edge = edges[pair.second];
+            int32_t adjacentTriangleID = FindTriangleWithEdge(edge.first, edge.second, triangles);
+            if (adjacentTriangleID != -1)
+            {
+                Triangle adjacentTriangle = triangles[adjacentTriangleID];
+                Edge newEdge;
+                newEdge.a = edge.first;
+                newEdge.b = edge.second;
+
+                if (prevEdge.a == newEdge.b && prevEdge.b == newEdge.a)
+                {
+                    // we're going to the same edge we're coming from, p is on the edge, split triangles
+                    if (std::fabs(pair.first) > EPS_TINY)
+                    {
+                        printf("bad adjacent edge");
+                    }
+
+                    // make tri 1, 2
+                    Point tri1p = GetOtherPoint(triangles[current.id], prevEdge.a, prevEdge.b);
+                    Point first1 = GetOtherPoint(triangles[current.id], tri1p.id, prevEdge.a);
+                    Point second1 = GetOtherPoint(triangles[current.id], prevEdge.b, tri1p.id);
+                    makeTriangle(triangles, p, first1, tri1p);
+                    makeTriangle(triangles, second1, p, tri1p);
+                    
+                    // make tri 3, 4
+                    Point tri2p = GetOtherPoint(triangles[adjacentTriangle.id], prevEdge.a, prevEdge.b);
+                    Point first2 = GetOtherPoint(triangles[adjacentTriangle.id], tri2p.id, prevEdge.a);
+                    Point second2 = GetOtherPoint(triangles[adjacentTriangle.id], prevEdge.b, tri2p.id);
+                    makeTriangle(triangles, first2, tri2p, p);
+                    makeTriangle(triangles, p, tri2p, second2);
+
+                    // delete old ones
+                    DeleteTriangle(current.id, triangles);
+                    DeleteTriangle(adjacentTriangle.id, triangles);
+
+                    return;
+                }
+                
+                return WalkToPoint(adjacentTriangle, newEdge, p, triangles, visited);
+            }
+            else
+            {
+                // no triangle at the other end of this edge, so if we want we can split this edge, let's check if we're on top
+                if (std::fabs(d[0].first) < EPS_TINY)
+                {
+                    // yes we are on top, let's split this edge
+                    Point tri1p = GetOtherPoint(triangles[current.id], edge.first, edge.second);
+                    Point first = GetOtherPoint(triangles[current.id], tri1p.id, edge.second);
+                    Point second = GetOtherPoint(triangles[current.id], edge.first, tri1p.id);
+                    makeTriangle(triangles, p, first, tri1p);
+                    makeTriangle(triangles, second, p, tri1p);
+
+                    DeleteTriangle(current.id, triangles);
+                    return;
+                }
+            }
+        }
+
+        // looks like we have nowhere to walk, p is on an edge of current but which one?
+        // since we've sorted 'd', it should be d[0], but let's do a sanity check
+        auto edge = edges[d[0].second];
+        int32_t adjacentTriangleID = FindTriangleWithEdge(edge.first, edge.second, triangles);
+        if (std::fabs(d[0].first) < EPS_TINY && adjacentTriangleID == -1)
+        {
+            Point tri1p = GetOtherPoint(triangles[current.id], edge.first, edge.second);
+            Point first = GetOtherPoint(triangles[current.id], tri1p.id, edge.second);
+            Point second = GetOtherPoint(triangles[current.id], edge.first, tri1p.id);
+            makeTriangle(triangles, p, first, tri1p);
+            makeTriangle(triangles, second, p, tri1p);
+            
+            DeleteTriangle(current.id, triangles);
+        }
+        else
+        {
+            // insanity
+            printf("BAD WALK!");
+        }
     }
 
     bool addPointToTriangle(Triangle t, Point& p, Point& prev, std::vector<Triangle>& triangles)
@@ -704,6 +843,21 @@ namespace webifc
         printf("no bueno");
     }
 
+    void addPointWalk(Point& p, std::vector<Triangle>& triangles)
+    {
+        size_t numTriangles = triangles.size();
+        std::vector<bool> visited(numTriangles);
+        for (size_t i = 0; i < numTriangles; i++)
+        {
+            if (triangles[i].id != -1)
+            {
+                Edge e;
+                WalkToPoint(triangles[i], e, p, triangles, visited);
+                break;
+            }
+        }
+    }
+
     void connectPoints(Point& p, Point& prev, std::vector<Triangle>& triangles)
     {
         // check if points are already connected
@@ -765,7 +919,8 @@ namespace webifc
         for (int i = 0; i < points.size(); i++)
         {
             // TODO: looks like EPS_SMALL may not be enough here
-            if (equals2d(toGrid(min, dim, pt), toGrid(min, dim, points[i]()), EPS_SMALL))
+            //if (equals2d(toGrid(min, dim, pt), toGrid(min, dim, points[i]()), EPS_SMALL))
+            if (equals2d(pt, points[i](), EPS_SMALL))
             {
                 return points[i];
             }
@@ -829,12 +984,17 @@ namespace webifc
 
     int instance = 0;
 
-    std::vector<Triangle> triangulate(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c, std::vector<Loop>& loops)
+    void ResetTriangles()
+    {
+        triangleID = 0;
+        pointID = 0;
+    }
+
+    std::vector<Triangle> triangulate(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c, std::vector<Loop>& loops, bool& swapped)
     {
         instance++;
 
-        triangleID = 0;
-        pointID = 0;
+        ResetTriangles();
 
         glm::dvec2 min = glm::min(a, glm::min(b, c));
         glm::dvec2 max = glm::max(a, glm::max(b, c));
@@ -849,6 +1009,13 @@ namespace webifc
         Point pc = getPoint(min, dim, c, points, added);
 
         makeTriangle(triangles, pa, pb, pc);
+
+        swapped = false;
+        if (triangles[0].a.id != pa.id || triangles[0].b.id != pb.id || triangles[0].c.id != pc.id)
+        {
+            // some swap happened
+            swapped = true;
+        }
 
         std::vector<glm::dvec2> sortedPoints;
         std::vector<std::pair<int, int>> connectPairs;
@@ -907,6 +1074,33 @@ namespace webifc
             }
         }
 
-        return triangles;
+        std::vector<Triangle> filterTriangles;
+
+        for (auto& t : triangles)
+        {
+            if (t.id != -1)
+            {
+                filterTriangles.push_back(t);
+            }
+        }
+
+        return filterTriangles;
+    }
+
+    std::vector<Triangle> triangulate(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c, std::vector<glm::dvec2>& points)
+    {
+        std::vector<Loop> loops;
+
+        for (auto& p : points)
+        {
+            Loop l;
+            l.hasOne = true;
+            l.v1 = p;
+            loops.push_back(l);
+        }
+
+        bool swapped;
+
+        return triangulate(a, b, c, loops, swapped);
     }
 }

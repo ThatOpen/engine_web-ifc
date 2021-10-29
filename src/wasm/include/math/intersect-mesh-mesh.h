@@ -190,7 +190,8 @@ namespace webifc
                 // drawInSVG(loops, pa, pb, pc);
 
                 // eartcut.hpp seems to have issues with colinear points in holes, so for now use custom slow algo
-                std::vector<Triangle> tesselation = triangulate(pa, pb, pc, loops);
+                bool swapped = false;
+                std::vector<Triangle> tesselation = triangulate(pa, pb, pc, loops, swapped);
 
                 for (auto& triangle : tesselation)
                 {
@@ -204,7 +205,14 @@ namespace webifc
                         glm::dvec3 upb = FromBary(a, b, c, ToBary2(tb));//unProjectFromTriangle(tb, a, b, c);
                         glm::dvec3 upc = FromBary(a, b, c, ToBary2(tc));//unProjectFromTriangle(tc, a, b, c);
 
-                        outputMesh.AddFace(upa, upb, upc);
+                        if (swapped)
+                        {
+                            outputMesh.AddFace(upb, upa, upc);
+                        }
+                        else
+                        {
+                            outputMesh.AddFace(upa, upb, upc);
+                        }
                     }
                 }
             }
@@ -329,8 +337,6 @@ namespace webifc
         //DumpIfcGeometry(m1, L"mesh1ints.obj");
         //DumpIfcGeometry(m2, L"mesh2ints.obj");
 
-        //DumpIfcGeometry(mesh1, L"mesh1.obj");
-        //DumpIfcGeometry(mesh2, L"mesh2.obj");
         result1 = std::move(retriangulateMesh(mesh1, meshIntersections1));
         result2 = std::move(retriangulateMesh(mesh2, meshIntersections2));
     }

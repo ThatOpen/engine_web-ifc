@@ -441,6 +441,12 @@ namespace webifc
 		return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
 	}
 
+	bool TriangleIsCW(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c)
+	{
+		auto norm = computeNormal(glm::dvec3(a, 0), glm::dvec3(b, 0), glm::dvec3(c, 0));
+		return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
+	}
+
 	IfcCurve<2> GetRectangleCurve(double xdim, double ydim, glm::dmat3 placement = glm::dmat3(1))
 	{
 		double halfX = xdim / 2;
@@ -866,7 +872,7 @@ namespace webifc
 			y = p.y;
 		}
 
-        glm::dvec2 operator()()
+        glm::dvec2 operator()() const
         {
             return glm::dvec2(
                 x, y
@@ -1150,6 +1156,11 @@ namespace webifc
 		glm::dvec3 Q = glm::cross(ROV0, dir);
 		double d = dot(dir, N);
 
+		if (d == 0)
+		{
+			printf("bary conversion perp");
+		}
+
 		double det = 1.0 / d;
 		double u = det * glm::dot(E2, (Q * -1.0));
 		double v = det * glm::dot(E1, Q);
@@ -1203,7 +1214,7 @@ namespace webifc
 	{
 		std::stringstream obj;
 
-		double scale = 1.0 / 1000.0;
+		double scale = 1.0;
 
 		for (uint32_t i = 0; i < geom.numPoints; i++)
 		{
