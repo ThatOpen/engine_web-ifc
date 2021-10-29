@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import {IfcElements} from "./ifc2x4";
+
 const WebIFCWasm = require("./web-ifc");
 export * from "./ifc2x4";
 import * as ifc2x4helper from "./ifc2x4_helper";
@@ -77,20 +79,27 @@ export function ms() {
     return new Date().getTime();
 }
 
+export type LocateFileHandlerFn = (path:string, prefix:string) => string;
+
 export class IfcAPI
 {
     wasmModule: undefined | any = undefined;
     fs: undefined | any = undefined;
     wasmPath: string = "";
 
+    ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
+
     /**
-     * Initializes the WASM module (WebIFCWasm), required before using any other functionality
-    */
-    async Init()
+     * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
+     * 
+     * @param customLocateFileHandler An optional locateFile function that let's
+     * you override the path from which the wasm module is loaded.
+     */
+    async Init(customLocateFileHandler?: LocateFileHandlerFn)
     {
         if (WebIFCWasm)
         {
-            let locateFileHandler = (path, prefix) => {
+            let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
                 if (path.endsWith(".wasm")) return prefix + this.wasmPath + path;
                 // otherwise use the default path
@@ -98,7 +107,7 @@ export class IfcAPI
             }
 
             //@ts-ignore
-            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: locateFileHandler});
+            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler});
             this.fs = this.wasmModule.FS;
         }
         else
@@ -306,6 +315,7 @@ export class IfcAPI
     */
     CloseModel(modelID: number)
     {
+        this.ifcGuidMap.delete(modelID);
         this.wasmModule.CloseModel(modelID);
     }
 
@@ -341,9 +351,37 @@ export class IfcAPI
      * Load geometry for a single element
      * @modelID Model handle retrieved by OpenModel
     */
-   GetFlatMesh(modelID: number, expressID: number): FlatMesh
+    GetFlatMesh(modelID: number, expressID: number): FlatMesh
     {
         return this.wasmModule.GetFlatMesh(modelID, expressID);
+    }
+
+    /**
+     * Creates a map between element ExpressIDs and GlobalIDs.
+     * Each element has two entries, (ExpressID -> GlobalID) and (GlobalID -> ExpressID).
+     * @modelID Model handle retrieved by OpenModel
+     */
+    CreateIfcGuidToExpressIdMapping(modelID: number): void {
+       const map = new Map<string | number, string | number>();
+
+       for(let x = 0; x < IfcElements.length; x++){
+
+           const type = IfcElements[x];
+           const lines = this.GetLineIDsWithType(modelID, type);
+           const size = lines.size();
+
+           for(let y = 0; y < size; y++){
+
+               const expressID = lines.get(y);
+               const info = this.GetLine(modelID, expressID);
+               const globalID = info.GlobalId.value;
+
+               map.set(expressID, globalID);
+               map.set(globalID, expressID);
+           }
+       }
+
+       this.ifcGuidMap.set(modelID, map);
     }
 
     SetWasmPath(path: string){
