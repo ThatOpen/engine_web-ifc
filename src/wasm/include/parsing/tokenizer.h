@@ -52,7 +52,7 @@ namespace webifc
 		{
 			bool eof = false;
 			bool isSTEPLine = false;
-			
+			bool firstToken = true;
 			while (true)
 			{
 				if (pos >= len)
@@ -63,11 +63,10 @@ namespace webifc
 
 				const char c = buf[pos];
 
-				bool isFirstToken = pos == 0 || (buf[pos - 1] == '\n' && buf[pos - 2] == ';');
 				bool isWhiteSpace = c == ' ' || c == '\n' || c == '\r' || c == '\t';
 
 				// only consider a line a stepline if the very first non-whitespace character is a ref
-				if (!isWhiteSpace && isFirstToken && c == '#')
+				if (!isWhiteSpace && firstToken && c == '#')
 				{
 					isSTEPLine = true;
 				}
