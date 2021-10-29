@@ -207,7 +207,7 @@ namespace webifc
     {
 
         auto model1 = IfcGeometryToCSGBrush(mesh1);
-        auto model2 = IfcGeometryToCSGBrush(mesh2, true);
+        auto model2 = IfcGeometryToCSGBrush(mesh2, false);
 
         CSGBrush* resultBrush = memnew(CSGBrush);
 
