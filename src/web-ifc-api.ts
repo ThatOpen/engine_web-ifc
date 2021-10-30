@@ -4,7 +4,17 @@
 
 import {IfcElements} from "./ifc2x4";
 
-const WebIFCWasm = require("./web-ifc");
+let WebIFCWasm;
+
+//@ts-ignore
+if (crossOriginIsolated)
+{
+    WebIFCWasm = require("./web-ifc-mt");
+}
+else
+{
+     WebIFCWasm = require("./web-ifc");
+}
 export * from "./ifc2x4";
 import * as ifc2x4helper from "./ifc2x4_helper";
 export * from "./ifc2x4_helper";
@@ -101,7 +111,10 @@ export class IfcAPI
         {
             let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
-                if (path.endsWith(".wasm")) return prefix + this.wasmPath + path;
+                if (path.endsWith(".wasm"))
+                {
+                    return prefix + this.wasmPath + path;
+                }
                 // otherwise use the default path
                 return prefix + path;
             }
