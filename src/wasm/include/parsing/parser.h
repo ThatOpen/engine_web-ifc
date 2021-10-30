@@ -64,17 +64,20 @@ namespace webifc
 				{
 				case IfcTokenType::LINE_END:
 				{
-					IfcLine l;
-					l.expressID = currentExpressID;
-					l.ifcType = currentIfcType;
-					l.lineIndex = static_cast<uint32_t>(_metaData.lines.size());
-					l.tapeOffset = currentTapeOffset;
-					l.tapeEnd = _tape.GetReadOffset();
+					if (currentExpressID != 0)
+					{
+						IfcLine l;
+						l.expressID = currentExpressID;
+						l.ifcType = currentIfcType;
+						l.lineIndex = static_cast<uint32_t>(_metaData.lines.size());
+						l.tapeOffset = currentTapeOffset;
+						l.tapeEnd = _tape.GetReadOffset();
 
-					_metaData.ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
-					maxExpressId = std::max(maxExpressId, l.expressID);
+						_metaData.ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
+						maxExpressId = std::max(maxExpressId, l.expressID);
 
-					_metaData.lines.push_back(std::move(l));
+						_metaData.lines.push_back(std::move(l));
+					}
 
 					// reset
 					currentExpressID = 0;
