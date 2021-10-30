@@ -52,6 +52,7 @@ namespace webifc
 		{
 			bool eof = false;
 			bool isSTEPLine = false;
+			bool isFirstToken = true;
 			
 			while (true)
 			{
@@ -63,7 +64,6 @@ namespace webifc
 
 				const char c = buf[pos];
 
-				bool isFirstToken = pos == 0 || (buf[pos - 1] == '\n' && buf[pos - 2] == ';');
 				bool isWhiteSpace = c == ' ' || c == '\n' || c == '\r' || c == '\t';
 
 				// only consider a line a stepline if the very first non-whitespace character is a ref
@@ -78,11 +78,7 @@ namespace webifc
 					continue;
 				}
 
-				if (!isSTEPLine)
-				{
-					pos++;
-					continue;
-				}
+				isFirstToken = false;
 
 				if (c == '\'')
 				{
@@ -113,10 +109,13 @@ namespace webifc
 						pos++;
 					}
 
-					_tape.push(IfcTokenType::STRING);
-					uint8_t length = pos - start;
-					_tape.push(length);
-					_tape.push((void*)&buf[start], length);
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::STRING);
+						uint8_t length = pos - start;
+						_tape.push(length);
+						_tape.push((void*)&buf[start], length);
+					}
 				} 
 				else if (c == '#')
 				{
@@ -124,20 +123,45 @@ namespace webifc
 
 					uint32_t num = readInt();
 
-					_tape.push(IfcTokenType::REF);
-					_tape.push(&num, sizeof(uint32_t));
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::REF);
+						_tape.push(&num, sizeof(uint32_t));
+					}
 				}
 				else if (c == '$')
 				{
-					_tape.push(IfcTokenType::EMPTY);
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::EMPTY);
+					}
 				}
 				else if (c == '*')
 				{
-					_tape.push(IfcTokenType::UNKNOWN);
+					if (buf[pos - 1] == '/')
+					{
+						pos++;
+
+						// comment
+						while (!(buf[pos -1] == '*' && buf[pos] == '/'))
+						{
+							pos++;
+						}
+					}
+					else
+					{
+						if (isSTEPLine)
+						{
+							_tape.push(IfcTokenType::UNKNOWN);
+						}
+					}
 				}
 				else if (c == '(')
 				{
-					_tape.push(IfcTokenType::SET_BEGIN);
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::SET_BEGIN);
+					}
 				}
 				else if (c >= '0' && c <= '9')
 				{
@@ -149,8 +173,11 @@ namespace webifc
 						value *= -1;
 					}
 
-					_tape.push(IfcTokenType::REAL);
-					_tape.push(&value, sizeof(double));
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::REAL);
+						_tape.push(&value, sizeof(double));
+					}
 				}
 				else if (c == '.')
 				{
@@ -160,11 +187,14 @@ namespace webifc
 					{
 						pos++;
 					}
-					
-					_tape.push(IfcTokenType::ENUM);
-					uint8_t length = pos - start;
-					_tape.push(length);
-					_tape.push((void*)&buf[start], length);
+
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::ENUM);
+						uint8_t length = pos - start;
+						_tape.push(length);
+						_tape.push((void*)&buf[start], length);
+					}
 				}
 				else if (c >= 'A' && c <= 'Z')
 				{
@@ -174,27 +204,37 @@ namespace webifc
 						pos++;
 					}
 
-					_tape.push(IfcTokenType::LABEL);
-					uint8_t length = pos - start;
-					_tape.push(length);
-					_tape.push((void*)&buf[start], length);
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::LABEL);
+						uint8_t length = pos - start;
+						_tape.push(length);
+						_tape.push((void*)&buf[start], length);
+					}
 
 					pos--;
 				}
 				else if (c == ')')
 				{
-					_tape.push(IfcTokenType::SET_END);
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::SET_END);
+					}
 				}
 				else if (c == ';')
 				{
+					if (isSTEPLine)
+					{
+						_tape.push(IfcTokenType::LINE_END);
+					}
 					pos++;
+
 					break;
 				}
 
 				pos++;
 			}
 
-			_tape.push(IfcTokenType::LINE_END);
 			
 			return !eof;
 		}

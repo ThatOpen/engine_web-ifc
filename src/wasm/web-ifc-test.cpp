@@ -230,8 +230,8 @@ int main()
     //return 0;
 
 
-    //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/R8_F1_MAB_AR_M3_XX_XXX_MO_7000.ifc");
-    std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
+    std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/R8_F1_MAB_AR_M3_XX_XXX_MO_7000.ifc");
+    //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
