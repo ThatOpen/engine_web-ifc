@@ -15,7 +15,7 @@ TEST(TriangleWalkInnerEdge)
 
 	auto tris = triangulate(a, b, c, std::vector<glm::dvec2>{ d, e });
 
-	ASSERT_EQ(tris.size(), 2);
+	ASSERT_EQ(tris.size(), 4);
 }
 
 TEST(TriangleWalkOuterEdge)
