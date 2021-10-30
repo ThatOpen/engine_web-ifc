@@ -928,7 +928,7 @@ namespace webifc
 			else
 			{
 				const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
-				/*
+
 				if (firstGeom.numPoints > threshold || secondGeom.numPoints > threshold)
 				{
 					_loader.ReportError({ LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD" });
@@ -936,9 +936,8 @@ namespace webifc
 					// bail out because we expect this operation to take too long
 					return firstGeom;
 				}
-				*/
 
-				result = boolSubtract_GODOT(first, second);
+				result = boolSubtract_CSGJSCPP(first, second);
 			}
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
