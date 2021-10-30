@@ -16,10 +16,24 @@
 #include "include/web-ifc.h"
 #include "include/web-ifc-geometry.h"
 
+#include "version.h"
+
 std::map<uint32_t, std::unique_ptr<webifc::IfcLoader>> loaders;
 std::map<uint32_t, std::unique_ptr<webifc::IfcGeometryLoader>> geomLoaders;
 
 uint32_t GLOBAL_MODEL_ID_COUNTER = 0;
+
+#ifdef __EMSCRIPTEN_PTHREADS__
+#define DEF_MT_ENABLED 
+#endif
+
+#ifdef DEF_MT_ENABLED
+    constexpr bool MT_ENABLED = true;
+#else
+    constexpr bool MT_ENABLED = false;
+#endif
+
+bool shown_version_header = false;
 
 // use to construct API placeholders
 int main() {
@@ -48,6 +62,12 @@ void WriteFile(const std::string& filename, const std::string& contents)
 
 int OpenModel(webifc::LoaderSettings settings)
 {
+    if (!shown_version_header)
+    {
+        std::cout << "web-ifc: " << WEB_IFC_VERSION_NUMBER << " threading: " << MT_ENABLED << std::endl;
+        shown_version_header = true;
+    }
+
     uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
     std::string contents = ReadFile("filename");
     

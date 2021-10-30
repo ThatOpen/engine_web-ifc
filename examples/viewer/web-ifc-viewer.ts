@@ -47,6 +47,8 @@ function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 
 }
 
+if (typeof window != 'undefined')
+{
 //@ts-ignore
 window.InitMonaco = (monaco: any) => {
     console.log(ts_decl.ifc2x4);
@@ -65,6 +67,7 @@ window.InitMonaco = (monaco: any) => {
     console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4));
     console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4helper));
     console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.wifcapi));
+}
 }
 
 function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
@@ -94,6 +97,8 @@ function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
     }, 1000);
 }
 
+if (typeof window != 'undefined')
+{
 //@ts-ignore
 window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEditor) => {
     initMonacoEditor(monacoEditor);
@@ -102,6 +107,7 @@ window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEdit
   fileInput.addEventListener('change', fileInputChanged);
   Init3DView();
 };
+}
 
 async function fileInputChanged() {
   let fileInput = <HTMLInputElement>document.getElementById('finput');

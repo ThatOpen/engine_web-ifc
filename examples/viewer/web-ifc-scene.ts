@@ -1,12 +1,15 @@
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,0.1,1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+let scene;
+let camera;
+let renderer;
 let controls;
 
 function Init3DView() {
+    scene =  new THREE.Scene();
+    renderer =  new THREE.WebGLRenderer({ antialias: true });
+    camera =  new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,0.1,1000);;
   let obj = document.getElementById("3dcontainer") as any;
   obj.appendChild(renderer.domElement);
   renderer.setSize( obj.clientWidth - 20, obj.clientHeight - 20);
