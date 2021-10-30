@@ -1048,8 +1048,10 @@ namespace webifc
                 bool ptInside = PointInTriangle(triangles[0], pt);
                 if (ptInside)
                 {
-                    addPoint(pt, prev, triangles);
-                    if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"triangles2.svg");
+                    //addPoint(pt, prev, triangles);
+                    if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"before_walk.svg");
+                    addPointWalk(pt, triangles);
+                    if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"after_walk.svg");
                 }
             }
         }

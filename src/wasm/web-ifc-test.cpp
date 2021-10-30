@@ -198,7 +198,8 @@ void TestTriangleDecompose()
 
         std::cout << "Start test " << i << std::endl;
 
-        auto triangles = webifc::triangulate(a, b, c, loops);
+        bool swapped = false;
+        auto triangles = webifc::triangulate(a, b, c, loops, swapped);
 
         webifc::IsValidTriangulation(triangles);
 
@@ -213,10 +214,7 @@ void TestTriangleDecompose()
         }
 
         webifc::DumpSVGTriangles(triangles, webifc::Point(), webifc::Point(), L"triangles.svg", pts);
-
     }
-
-
 }
 
 int main()
@@ -232,11 +230,13 @@ int main()
     //return 0;
 
 
-    std::string content = ReadFile(L"D:/web-ifc/benchmark/ifcfiles/H01_Flachdach_Index01.ifc");
-    //std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
+    //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/R8_F1_MAB_AR_M3_XX_XXX_MO_7000.ifc");
+    std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
 
     webifc::LoaderSettings set;
+    set.COORDINATE_TO_ORIGIN = true;
     set.DUMP_CSG_MESHES = true;
+    set.USE_FAST_BOOLS = true;
 
     webifc::IfcLoader loader(set);
 
@@ -250,12 +250,26 @@ int main()
 
     std::cout << "Reading took " << time << "ms" << std::endl;
 
+    /*
+    std::ofstream outputFile("output.ifc");
+    outputFile << loader.DumpSingleObjectAsIFC(1514902);
+    outputFile.close();
+    */
+
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
 
-    SpecificLoadTest(loader, geometryLoader, 57672);
-    //auto meshes = LoadAllTest(loader, geometryLoader);
+    //SpecificLoadTest(loader, geometryLoader, 2615);
+    auto meshes = LoadAllTest(loader, geometryLoader);
+    auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
+
+    auto errors = loader.GetAndClearErrors();
+
+    for (auto error : errors)
+    {
+        std::cout << error.expressID << " " << error.ifcType << " " << std::to_string((int)error.type) << " " << error.message << std::endl;
+    }
 
     time = webifc::ms() - start;
 

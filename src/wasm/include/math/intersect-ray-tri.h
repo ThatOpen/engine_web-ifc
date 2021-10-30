@@ -31,13 +31,13 @@ namespace webifc
         t = det * glm::dot(ROV0, (N * -1.0));
 
         // TODO: this fuzz is quite serious
-        if (t > 0.9999 && t < 1 + EPS_SMALL)
+        if (t > 0.9999 && t < 1 + EPS_SMALL && !infiniteLength)
         {
             t = 1;
         }
 
         // TODO: this fuzz is quite serious
-        if (t < 0.0001 && t > 0 - EPS_SMALL)
+        if (t < 0.0001 && t > 0 - EPS_SMALL && !infiniteLength)
         {
             t = 0;
         }
