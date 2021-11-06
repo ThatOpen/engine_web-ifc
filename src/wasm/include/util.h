@@ -90,7 +90,7 @@ namespace webifc
 
 		double len = glm::length(norm);
 
-		if (len < EPS_SMALL)
+		if (len == 0)
 		{
 			return false;
 		}
@@ -98,6 +98,15 @@ namespace webifc
 		normal = norm / len;
 
 		return true;
+	}
+
+	bool IsInsideCenterExtents(const glm::dvec3& pt, const glm::dvec3& center, const glm::dvec3& extents)
+	{
+		glm::dvec3 delta = pt - center;
+		delta = glm::abs(delta);
+		glm::dvec3 offset = delta - extents;
+		
+		return offset.x < EPS_SMALL && offset.y < EPS_SMALL && offset.z < EPS_SMALL;
 	}
 
 	struct IfcGeometry
@@ -152,6 +161,7 @@ namespace webifc
 			if (!computeSafeNormal(a, b, c, normal))
 			{
 				// bail out, zero area triangle
+				printf("zero tri");
 				return;
 			}
 
@@ -854,6 +864,7 @@ namespace webifc
         double x;
         double y;
         int32_t id = -1;
+		bool isBoundary = false;
 
 		Point()
 		{

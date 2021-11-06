@@ -17,6 +17,10 @@ namespace webifc
 {
     void clipMesh(IfcGeometry& source, IfcGeometry& target, IfcGeometry& result, bool invert, bool flip, bool keepBoundary)
     {
+        glm::dvec3 targetCenter;
+        glm::dvec3 targetExtents;
+        target.GetCenterExtents(targetCenter, targetExtents);
+
         for (uint32_t i = 0; i < source.numFaces; i++)
         {
             Face tri = source.GetFace(i);
@@ -28,7 +32,16 @@ namespace webifc
 
             glm::dvec3 triCenter = (a + b + c) * 1.0 / 3.0;
 
-            auto isInsideTarget = isInsideMesh(triCenter, n, target);
+            auto isInsideTarget = MeshLocation::INSIDE;
+
+            if (IsInsideCenterExtents(triCenter, targetCenter, targetExtents))
+            {
+                isInsideTarget = isInsideMesh(triCenter, n, target);
+            }
+            else
+            {
+                isInsideTarget = MeshLocation::OUTSIDE;
+            }
 
             if ((isInsideTarget == MeshLocation::INSIDE && !invert) || (isInsideTarget == MeshLocation::OUTSIDE && invert) || (isInsideTarget == MeshLocation::BOUNDARY && keepBoundary))
             {
