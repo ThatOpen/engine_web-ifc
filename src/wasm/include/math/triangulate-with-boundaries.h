@@ -5,6 +5,7 @@
  #pragma once
 
 #include <map>
+#include <set>
 #include "../../deps/glm/glm/glm.hpp"
 #include "../../deps/earcut/include/mapbox/earcut.hpp"
 
