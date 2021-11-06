@@ -1,2 +1,2 @@
 
-    const std::string WEB_IFC_VERSION_NUMBER = "0.0.27";
+    const std::string WEB_IFC_VERSION_NUMBER = "0.0.28";
