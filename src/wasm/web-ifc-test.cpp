@@ -201,7 +201,7 @@ void TestTriangleDecompose()
         bool swapped = false;
         auto triangles = webifc::triangulate(a, b, c, loops, swapped);
 
-        webifc::IsValidTriangulation(triangles);
+        // webifc::IsValidTriangulation(triangles, points);
 
         std::vector<webifc::Point> pts;
 
@@ -230,12 +230,12 @@ int main()
     //return 0;
 
 
-    std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/R8_F1_MAB_AR_M3_XX_XXX_MO_7000.ifc");
-    //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
+    //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/01097-Tungasletta-2-Hovedbygg-RC2.ifc");
+    std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
-    set.DUMP_CSG_MESHES = true;
+    set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
 
     webifc::IfcLoader loader(set);
@@ -252,7 +252,7 @@ int main()
 
     /*
     std::ofstream outputFile("output.ifc");
-    outputFile << loader.DumpSingleObjectAsIFC(1514902);
+    outputFile << loader.DumpSingleObjectAsIFC(120119);
     outputFile.close();
     */
 
