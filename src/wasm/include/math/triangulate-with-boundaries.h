@@ -73,9 +73,90 @@ namespace webifc
         return p;
     }
 
+    // TODO: slow
+    std::vector<int32_t> FindTrianglesWithEdge(int32_t a, int32_t b, std::vector<Triangle>& triangles)
+    {
+        std::vector<int32_t> result;
+        std::vector<int32_t> deleted;
+        glm::dvec2 apt;
+        glm::dvec2 bpt;
+
+        for (int i = 0; i < triangles.size(); i++)
+        {
+            Triangle& t = triangles[i];
+
+            bool found = false;
+            if (t.a.id == a && t.b.id == b)
+            {
+                found = true;
+                apt = t.a();
+                bpt = t.b();
+            }
+            else if (t.b.id == a && t.c.id == b)
+            {
+                found = true;
+                apt = t.b();
+                bpt = t.c();
+            }
+            else if (t.c.id == a && t.a.id == b)
+            {
+                found = true;
+                apt = t.c();
+                bpt = t.a();
+            }
+            else if (t.a.id == b && t.b.id == a)
+            {
+                found = true;
+                apt = t.b();
+                bpt = t.a();
+            }
+            else if (t.b.id == b && t.c.id == a)
+            {
+                found = true;
+                apt = t.c();
+                bpt = t.b();
+            }
+            else if (t.c.id == b && t.a.id == a)
+            {
+                found = true;
+                apt = t.a();
+                bpt = t.c();
+            }
+
+            if (found)
+            {
+                if (t.id == -1)
+                {
+                    deleted.push_back(i);
+                }
+                else
+                {
+                    result.push_back(i);
+                }
+            }
+        }
+
+        // every edge must be replaced by a new edge, whether it has 1 or 2 adjacent triangles
+        // a mismatch here means we made a mistake
+        if (result.size() > 2)
+        {
+            printf("Triangle with this edge already deleted!");
+        }
+
+        return result;
+    }
+
+    void CheckTriangleEdges(Triangle& t, std::vector<Triangle>& triangles)
+    {
+        FindTrianglesWithEdge(t.a.id, t.b.id, triangles);
+        FindTrianglesWithEdge(t.b.id, t.c.id, triangles);
+        FindTrianglesWithEdge(t.c.id, t.a.id, triangles);
+    }
+
     // ccw
     bool makeTriangle(std::vector<Triangle>& triangles, const Point& a, const Point& b, const Point& c)
     {
+
         Triangle t;
         t.a = a;
         t.b = b;
@@ -154,98 +235,14 @@ namespace webifc
         return -1;
     }
 
-    // TODO: slow
-    std::vector<int32_t> FindTrianglesWithEdge(int32_t a, int32_t b, std::vector<Triangle>& triangles)
-    {
-        std::vector<int32_t> result;
-        std::vector<int32_t> deleted;
-        glm::dvec2 apt;
-        glm::dvec2 bpt;
-
-        for (int i = 0; i < triangles.size(); i++)
-        {
-            Triangle& t = triangles[i];
-
-            bool found = false;
-            if (t.a.id == a && t.b.id == b)
-            {
-                found = true;
-                apt = t.a();
-                bpt = t.b();
-            }
-            else if (t.b.id == a && t.c.id == b)
-            {
-                found = true;
-                apt = t.b();
-                bpt = t.c();
-            }
-            else if (t.c.id == a && t.a.id == b)
-            {
-                found = true;
-                apt = t.c();
-                bpt = t.a();
-            }
-            else if (t.a.id == b && t.b.id == a)
-            {
-                found = true;
-                apt = t.b();
-                bpt = t.a();
-            }
-            else if (t.b.id == b && t.c.id == a)
-            {
-                found = true;
-                apt = t.c();
-                bpt = t.b();
-            }
-            else if (t.c.id == b && t.a.id == a)
-            {
-                found = true;
-                apt = t.a();
-                bpt = t.c();
-            }
-
-            if (found)
-            {
-                if (t.id == -1)
-                {
-                    deleted.push_back(i);
-                }
-                else
-                {
-                    result.push_back(i);
-                }
-            }
-        }
-
-        Triangle& t = triangles[0];
-        Point pta;
-        pta.x = apt.x;
-        pta.y = apt.y;
-        Point ptb;
-        ptb.x = bpt.x;
-        ptb.y = bpt.y;
-
-        bool bothOnEdge = (onEdge2(pta, t.a, t.b) && onEdge2(ptb, t.a, t.b)) || (onEdge2(pta, t.b, t.c) && onEdge2(ptb, t.b, t.c)) || (onEdge2(pta, t.c, t.a) && onEdge2(ptb, t.c, t.a));
-
-        // every edge must be replaced by a new edge, whether it has 1 or 2 adjacent triangles
-        // a mismatch here means we made a mistake
-        if (result.size() > 2)
-        {
-            printf("Triangle with this edge already deleted!");
-        }
-
-        return result;
-    }
-
-    void CheckTriangleEdges(Triangle& t, std::vector<Triangle>& triangles)
-    {
-        FindTrianglesWithEdge(t.a.id, t.b.id, triangles);
-        FindTrianglesWithEdge(t.b.id, t.c.id, triangles);
-        FindTrianglesWithEdge(t.c.id, t.a.id, triangles);
-    }
-
     void triangulateBoundary(std::vector<Point>& boundary, std::vector<Triangle>& triangles)
     {
+        if (boundary.size() < 3)
+        {
+            printf("bad monotone chain");
+            return;
+        }
+
         // special case triangle
         if (boundary.size() == 3)
         {
@@ -392,7 +389,95 @@ namespace webifc
         triangles[id].id = -1;
     }
 
-    void WalkToPoint(Triangle current, Edge prevEdge, Point& p, std::vector<Triangle>& triangles, std::vector<bool>& visited)
+    bool WalkToPointPath(Triangle current, Edge prevEdge, Point& p, Point& prev, std::vector<Triangle>& triangles, std::vector<bool>& visited, std::vector<Edge>& path, std::vector<int>& trianglePath)
+    {
+        if (visited[current.id])
+        {
+            // we are walking around hitting the same triangles, bad news
+            printf("Bad walk!");
+            return true;
+        }
+
+        // mark current as visited
+        visited[current.id] = true;
+        trianglePath.push_back(current.id);
+
+        if (current.a.id == p.id || current.b.id == p.id || current.c.id == p.id)
+        {
+            // triangle contains P, stop looking
+            return true;
+        }
+
+        bool aUp = sign(current.a, p, prev) > 0;
+        bool bUp = sign(current.b, p, prev) > 0;
+        bool cUp = sign(current.c, p, prev) > 0;
+
+        // all same sign means this triangle is unfit for further walking
+        if (aUp == bUp && bUp == cUp)
+        {
+            return false;
+        }
+
+        // not all the same, figure out where the two boundary edges are
+        std::vector<Edge> boundaries;
+        if (aUp != bUp)
+        {
+            if (sign(p, current.a, current.b) > 0)
+            {
+                boundaries.push_back({ current.a.id, current.b.id });
+            }
+        }
+        if (bUp != cUp)
+        {
+            if (sign(p, current.b, current.c) > 0)
+            {
+                boundaries.push_back({ current.b.id, current.c.id });
+            }
+        }
+        if (cUp != aUp)
+        {
+            if (sign(p, current.c, current.a) > 0)
+            {
+                boundaries.push_back({ current.c.id, current.a.id });
+            }
+        }
+
+        if (boundaries.size() != 1)
+        {
+            printf("wrong number boundaries");
+            return true;
+        }
+
+        Edge edge;
+        for (auto& newEdge : boundaries)
+        {
+            if (prevEdge.a == newEdge.b && prevEdge.b == newEdge.a)
+            {
+                // this is the edge we came from
+                printf("getting bad edge");
+            }
+            else
+            {
+                // this could be the new edge!
+                edge = newEdge;
+            }
+        }
+
+        int32_t adjacentTriangleID = FindTriangleWithEdge(edge.b, edge.a, triangles);
+        if (adjacentTriangleID != -1)
+        {
+            path.push_back(edge);
+            return WalkToPointPath(triangles[adjacentTriangleID], edge, p, prev, triangles, visited, path, trianglePath);
+        }
+        else
+        {
+            printf("couldnt find adjacent triangle, but still searching");
+            return true;
+        }
+
+    }
+
+    void WalkToPoint(Triangle current, Edge prevEdge, Point& p, std::vector<Triangle>& triangles, std::vector<bool>& visited, std::vector<Edge>& path, std::vector<int>& trianglePath)
     {
         if (visited[current.id])
         {
@@ -403,6 +488,7 @@ namespace webifc
 
         // mark current as visited
         visited[current.id] = true;
+        trianglePath.push_back(current.id);
 
         if (current.a.id == p.id || current.b.id == p.id || current.c.id == p.id)
         {
@@ -474,14 +560,18 @@ namespace webifc
 
                     return;
                 }
+
+                path.push_back(newEdge);
                 
-                return WalkToPoint(adjacentTriangle, newEdge, p, triangles, visited);
+                return WalkToPoint(adjacentTriangle, newEdge, p, triangles, visited, path, trianglePath);
             }
             else
             {
                 // no triangle at the other end of this edge, so if we want we can split this edge, let's check if we're on top
                 if (std::fabs(d[0].first) < EPS_TINY)
                 {
+                    p.isBoundary = true;
+
                     // yes we are on top, let's split this edge
                     Point tri1p = GetOtherPoint(triangles[current.id], edge.first, edge.second);
                     Point first = GetOtherPoint(triangles[current.id], tri1p.id, edge.second);
@@ -501,6 +591,8 @@ namespace webifc
         int32_t adjacentTriangleID = FindTriangleWithEdge(edge.first, edge.second, triangles);
         if (std::fabs(d[0].first) < EPS_TINY && adjacentTriangleID == -1)
         {
+            p.isBoundary = true;
+
             Point tri1p = GetOtherPoint(triangles[current.id], edge.first, edge.second);
             Point first = GetOtherPoint(triangles[current.id], tri1p.id, edge.second);
             Point second = GetOtherPoint(triangles[current.id], edge.first, tri1p.id);
@@ -852,8 +944,131 @@ namespace webifc
             if (triangles[i].id != -1)
             {
                 Edge e;
-                WalkToPoint(triangles[i], e, p, triangles, visited);
+                std::vector<Edge> path;
+                std::vector<int> trianglePath;
+                WalkToPoint(triangles[i], e, p, triangles, visited, path, trianglePath);
                 break;
+            }
+        }
+    }
+
+    bool ListHasPoint(std::vector<Triangle>& triangles, int id)
+    {
+        for (size_t i = 0; i < triangles.size(); i++)
+        {
+            if (triangles[i].id != -1)
+            {
+                if (HasPoint(triangles[i], id))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    void connectPointWalk(Point& a, Point& b, std::vector<Triangle>& triangles, std::vector<Point>& points)
+    {
+        if (!ListHasPoint(triangles, a.id) || !ListHasPoint(triangles, b.id))
+        {
+            printf("Missing points during connect");
+            return;
+        }
+
+        size_t numTriangles = triangles.size();
+        for (size_t i = 0; i < numTriangles; i++)
+        {
+            if (HasPoint(triangles[i], a.id) && HasPoint(triangles[i], b.id))
+            {
+                // already done!
+                return;
+            }
+        }
+
+        for (size_t i = 0; i < numTriangles; i++)
+        {
+            if (triangles[i].id != -1)
+            {
+                if (HasPoint(triangles[i], a.id))
+                {
+                    if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"before_connect.svg", points);
+
+                    // triangle contains A, lets walk from this triangle to B
+                    Edge e;
+                    std::vector<Edge> path;
+                    std::vector<int> trianglePath;
+                    std::vector<bool> visited(numTriangles);
+                    if (!WalkToPointPath(triangles[i], e, b, a, triangles, visited, path, trianglePath))
+                    {
+                        // a is in this tri, but we can't start walking from here
+                        continue;
+                    }
+
+                    // get the boundary point list of the walk
+                    std::vector<Point> boundary;
+                    boundary.push_back(a);
+                    for (Edge& e : path)
+                    {
+                        if (e.a != a.id && e.b != a.id)
+                        {
+                            boundary.push_back(points[e.a]);
+                            boundary.push_back(points[e.b]);
+                        }
+                        else
+                        {
+                            // if we hit an edge with A, we reset the boundary to it
+                            boundary.clear();
+                            boundary.push_back(a);
+                        }
+                    }
+
+                    boundary.push_back(b);
+
+                    if (boundary.size() == 2)
+                    {
+                        // direct connection between a and b, no need to delete or triangulate anything!
+                        return;
+                    }
+
+                    // delete triangles encountered during the walk
+                    int deleteTriOffset = -1;
+                    for (int i = 0; i < trianglePath.size(); i++)
+                    {
+                        bool hasA = HasPoint(triangles[trianglePath[i]], a.id);
+                        if (hasA)
+                        {
+                            // we want to start deleting from the last triangle including A
+                            deleteTriOffset = i;
+                        }
+                    }
+
+                    if (deleteTriOffset == trianglePath.size())
+                    {
+                        // nothing to delete, so also nothing to triangulate
+                        return;
+                    }
+
+                    if (deleteTriOffset == -1)
+                    {
+                        printf("no A in triangle path!");
+                        return;
+                    }
+
+                    for (int i = deleteTriOffset; i < trianglePath.size(); i++)
+                    {
+                        triangles[trianglePath[i]].id = -1;
+                        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"before_monotone.svg", points);
+                    }
+
+                    if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"before_monotone.svg", points);
+
+                    TriangulateBoundary(a, b, triangles, boundary);
+
+                    if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"after_monotone.svg", points);
+
+                    return;
+                }
             }
         }
     }
@@ -913,7 +1128,7 @@ namespace webifc
         };
     }
 
-    Point getPoint(const glm::dvec2& min, const glm::dvec2& dim, const glm::dvec2& pt, std::vector<Point>& points, bool& added)
+    Point& getPoint(const glm::dvec2& min, const glm::dvec2& dim, const glm::dvec2& pt, std::vector<Point>& points, bool& added)
     {
         added = false;
         for (int i = 0; i < points.size(); i++)
@@ -928,10 +1143,31 @@ namespace webifc
         added = true;
         Point newPt = makePoint(pt.x, pt.y);
         points.push_back(newPt);
-        return newPt;
+        return points.back();
     }
 
-    bool IsValidTriangulation(const std::vector<Triangle>& triangles)
+    std::set<int> GetPrimaryEdges(Point p, const std::vector<Point>& points)
+    {
+        std::set<int> edges;
+        if (onEdge(p, points[0], points[1]))
+        {
+            edges.insert(0);
+        }
+
+        if (onEdge(p, points[1], points[2]))
+        {
+            edges.insert(1);
+        }
+
+        if (onEdge(p, points[2], points[0]))
+        {
+            edges.insert(2);
+        }
+
+        return edges;
+    }
+
+    bool IsValidTriangulation(const std::vector<Triangle>& triangles, const std::vector<Point>& points)
     {
         std::map<std::pair<int, int>, int> counts;
         std::map<std::pair<int, int>, int> counts2;
@@ -977,6 +1213,44 @@ namespace webifc
                 printf("Invalid triangulation: two way edge with more than two occurrences!\n");
                 valid = false;
             }
+            else if (e == 1)
+            {
+                bool pt1Boundary = points[k.first].isBoundary;
+                bool pt2Boundary = points[k.second].isBoundary;
+
+                if (pt1Boundary && pt2Boundary)
+                {
+                    // check if its the same boundary
+                    if (k.first <= 2 && k.second <= 2)
+                    {
+                        // one of the initial 3 edges, ignore
+                    }
+                    else
+                    {
+                        auto e1 = GetPrimaryEdges(points[k.first], points);
+                        auto e2 = GetPrimaryEdges(points[k.second], points);
+
+                        std::set<int> overlap;
+
+                        std::set_intersection(e1.begin(), e1.end(),
+                                              e2.begin(), e2.end(),
+                                              std::inserter(overlap, overlap.begin()));
+
+                        if (overlap.empty())
+                        {
+                            printf("Single edge with mismatching primary edges!");
+                        }
+                        if (e1.empty() || e2.empty())
+                        {
+                            printf("Single edge outside primary edges!");
+                        }
+                    }
+                }
+                else
+                {
+                    printf("Single edge without boundary point!");
+                }
+            }
         }
 
         return valid;
@@ -1007,6 +1281,10 @@ namespace webifc
         Point pa = getPoint(min, dim, a, points, added);
         Point pb = getPoint(min, dim, b, points, added);
         Point pc = getPoint(min, dim, c, points, added);
+
+        points[pa.id].isBoundary = true;
+        points[pb.id].isBoundary = true;
+        points[pc.id].isBoundary = true;
 
         makeTriangle(triangles, pa, pb, pc);
 
@@ -1042,7 +1320,7 @@ namespace webifc
         for (auto& p : sortedPoints)
         {
             Point prev;
-            Point pt = getPoint(min, dim, p, points, added);
+            Point& pt = getPoint(min, dim, p, points, added);
             if (added)
             {
                 bool ptInside = PointInTriangle(triangles[0], pt);
@@ -1052,6 +1330,7 @@ namespace webifc
                     if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"before_walk.svg");
                     addPointWalk(pt, triangles);
                     if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"after_walk.svg");
+                    if (DUMP_SVG_TRIANGLES) IsValidTriangulation(triangles, points);
                 }
             }
         }
@@ -1070,7 +1349,18 @@ namespace webifc
 
                 if (pt1Inside && pt2Inside)
                 {
-                    connectPoints(pt1, pt2, triangles);
+                    connectPointWalk(pt1, pt2, triangles, points);
+                    if (DUMP_SVG_TRIANGLES) IsValidTriangulation(triangles, points);
+                    // connectPoints(pt1, pt2, triangles);
+
+
+                    if (DUMP_SVG_TRIANGLES)
+                    {
+                        if (!ListHasPoint(triangles, 0) || !ListHasPoint(triangles, 1) || !ListHasPoint(triangles, 2))
+                        {
+                            printf("missing points!");
+                        }
+                    }
                 }
 
             }
