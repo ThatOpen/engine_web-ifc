@@ -1,25 +1,35 @@
-# web-ifc
+
+<p align="center">
+  <a href="https://ifcjs.github.io/info/">ifc.js</a>
+  |
+  <a href="https://tomvandig.github.io/web-ifc/examples/viewer/index.html">demo</a>
+  |
+  <a href="https://discord.com/invite/g7Uzn2KSwB">discord</a>
+  |
+  <a href="https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src">usage examples</a>
+  |
+  <a href="https://www.npmjs.com/package/web-ifc">npm package</a>
+  |
+  <a href="https://github.com/tomvandig/web-ifc/blob/main/contributing.md">contributing</a>
+</p>
+
+<img src="https://ifcjs.github.io/info/img/logo.svg" width="256">
+<h1>web-ifc</h1>
 
 [![Build](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml/badge.svg)](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml)
 ![npm](https://img.shields.io/npm/dw/web-ifc)
 
-# Warning: this is pre-alpha software, an experimental backend for IFC.js
+**web-ifc** is a javascript library to read and write ifc files, at native speeds. **web-ifc** is part of the [ifc.js](https://ifcjs.github.io/info/) project, which aims to lower the threshold for developing open BIM applications.
 
-Web ifc is a WASM-based ifc parser & geometry generator. This repository contains the c++/typescript source code.
+## Status
 
-https://www.npmjs.com/package/web-ifc
+Although it appears to already be used in production, web-ifc is in pre-alpha status until ifc support matures. The list of currently supported ifc elements, or level of support for different ifc types, is an undocumented work in progress.
 
-[Example viewer application using ThreeJS](https://tomvandig.github.io/web-ifc/examples/viewer/index.html)
-
-## Installing the library as an npm dependency
+## Install
 
 `npm install web-ifc`
 
-## Using the library
-
-See `examples` for different ways to use web-ifc.
-
-For a short intro, this is how to use the library from javascript:
+## Quick setup
 
 ```JavaScript
 const WebIFC = require("web-ifc/web-ifc-api.js");
@@ -41,7 +51,9 @@ ifcApi.CloseModel(modelID);
 
 ```
 
-## Building the library
+See [examples](https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src) for more details on how to use web-ifc.
+
+## Building WASM module
 
 ### Setting up emscripten
 
@@ -53,21 +65,15 @@ Run `npm install` to install all dependencies.
 
 Run `npm run setup-env` whenever you open a new terminal, this will set up the required emscripten environment variables for you to compile code.
 
-Run `npm run build-release` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
+Run `npm run build-release-all` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
 
 Run `npm run dev` to launch a development server with a basic ifc file viewer.
 
+## Stand alone C++
 
-### Stand alone C++ executable
+Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/tomvandig/web-ifc/blob/main/src/wasm/web-ifc-test.cpp) for a simple entry point to get started.
 
-Compiling the library to a standalone executable requires use of CMAKE. For visual studio code, the easiest way is by installing [cmake-tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools).
-
-## Using the library as a C++ dependency
-
-The library is header only, the files in `web-ifc-cpp` can be trivially included in any project. The library depends on [GLM](https://github.com/g-truc/glm) and [earcut](https://github.com/mapbox/earcut.hpp).
-
-
-# Contributing
+## Contributing
 
 Want to help out? Great!
 
