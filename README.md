@@ -13,8 +13,8 @@
   <a href="https://github.com/tomvandig/web-ifc/blob/main/contributing.md">contributing</a>
 </p>
 
-<img src="https://ifcjs.github.io/info/img/logo.svg" width="256">
-<h1>web-ifc</h1>
+<img src="banner.png">
+<h1>web-ifc <img src="https://ifcjs.github.io/info/img/logo.svg" width="32"></h1>
 
 [![Build](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml/badge.svg)](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml)
 ![npm](https://img.shields.io/npm/dw/web-ifc)
