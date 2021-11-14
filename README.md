@@ -23,7 +23,9 @@
 
 ## Status
 
-Although it appears to already be used in production, web-ifc is in pre-alpha status until ifc support matures. The list of currently supported ifc elements, or level of support for different ifc types, is an undocumented work in progress.
+Although it is quite stable and fast already, web-ifc is in **pre-alpha status** until ifc support matures. The list of currently supported ifc elements, or level of support for different ifc types, is an undocumented work in progress. 
+
+Depending on your models, web-ifc may be quick and correct, or slow and broken, please share any problematic models so I can take a look :)
 
 ## Install
 
