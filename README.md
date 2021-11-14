@@ -1,6 +1,7 @@
 # web-ifc
 
 [![Build](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml/badge.svg)](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml)
+![npm](https://img.shields.io/npm/dw/web-ifc)
 
 # Warning: this is pre-alpha software, an experimental backend for IFC.js
 
