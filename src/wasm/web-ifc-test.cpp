@@ -108,7 +108,7 @@ void Benchmark()
         webifc::IfcLoader loader;
         auto start = webifc::ms();
         {
-            loader.LoadFile(content);
+            //loader.LoadFile(content);
         }
         auto time = webifc::ms() - start;
 
@@ -241,7 +241,16 @@ int main()
     webifc::IfcLoader loader(set);
 
     auto start = webifc::ms();
-    loader.LoadFile(content);
+    size_t contentOffset = 0;
+    loader.LoadFile([&](char* dest, size_t destSize)
+                    {
+                        uint32_t length = std::min(content.size() - contentOffset, destSize);
+                        memcpy(dest, &content[contentOffset], length);
+
+                        contentOffset += length;
+
+                        return length;
+                    });
 
     //std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
     //outputStream << loader.DumpAsIFC();

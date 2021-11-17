@@ -136,10 +136,10 @@ namespace webifc
 			return ret;
 		}
 
-		void LoadFile(const std::string& content)
+		void LoadFile(const std::function<uint32_t(char*, size_t)>& requestData)
 		{
             Tokenizer<TAPE_SIZE> tokenizer(_tape);
-            uint32_t numLines = tokenizer.Tokenize(content);
+            uint32_t numLines = tokenizer.Tokenize(requestData);
 
             Parser<TAPE_SIZE> parser(_tape, _metaData);
             parser.ParseTape(numLines);

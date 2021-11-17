@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 #include "crack_atof.h"
 #include "../util.h"
@@ -29,8 +30,6 @@ namespace webifc
     class Tokenizer {
     public:
 
-		const size_t READ_BUF_SIZE = 1024 * 1024; // 1 mb
-		std::vector<uint8_t> _readBuffer;
 		std::vector<char> _temp;
 
 		struct BufferPointer
@@ -39,38 +38,56 @@ namespace webifc
 			char cur;
 			char next;
 
-			uint32_t pos;
-			uint32_t len;
-			const char* buf;
+			uint32_t bufPos;
+			uint32_t bufLength;
+
+			const size_t READ_BUF_SIZE = 1024 * 1024; // 1 mb
+			std::function<uint32_t(char*, size_t)> _requestData;
+			std::vector<char> _readBuffer;
+
+			bool done = false;
+
+			BufferPointer() :
+				_readBuffer(READ_BUF_SIZE)
+			{
+
+			}
 
 			__forceinline void Advance()
 			{
-				pos++;
+				bufPos++;
+
+				if (AtEnd())
+				{
+					bufPos = 0;
+					bufLength = _requestData(&_readBuffer[0], READ_BUF_SIZE);
+					done = bufLength == 0;
+				}
+
 				prev = cur;
 				cur = next;
-				next = AtEnd() ? 0 : buf[pos];
+				next = done ? 0 : _readBuffer[bufPos];
 			}
 
 			__forceinline bool AtEnd()
 			{
-				return pos > len;
+				return bufPos >= bufLength;
 			}
 		};
 
 		BufferPointer _ptr;
 
         Tokenizer(webifc::DynamicTape<N>& t):
-            _tape(t),
-			_readBuffer( READ_BUF_SIZE )
+            _tape(t)
         {
 
         }
 
-        uint32_t Tokenize(const std::string& content)
+        uint32_t Tokenize(const std::function<uint32_t(char*, size_t)>& requestData)
         {
-			_ptr.buf = content.data();
-			_ptr.pos = -1;
-			_ptr.len = static_cast<uint32_t>(content.size());
+			_ptr._requestData = requestData;
+			_ptr.bufPos = 1;
+			_ptr.bufLength = 0;
 			_ptr.Advance();
 			_ptr.Advance();
 
@@ -89,7 +106,7 @@ namespace webifc
 			
 			while (true)
 			{
-				if (_ptr.AtEnd())
+				if (_ptr.done)
 				{
 					eof = true;
 					break;
@@ -139,7 +156,10 @@ namespace webifc
 
 					_tape.push(IfcTokenType::STRING);
 					_tape.push((uint8_t)_temp.size());
-					_tape.push((void*)&_temp[0], _temp.size());
+					if (!_temp.empty())
+					{
+						_tape.push((void*)&_temp[0], _temp.size());
+					}
 				} 
 				else if (c == '#')
 				{
