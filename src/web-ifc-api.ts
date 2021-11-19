@@ -17,6 +17,7 @@ else
 }
 export * from "./ifc2x4";
 import * as ifc2x4helper from "./ifc2x4_helper";
+import { Properties } from "./helpers/properties";
 export * from "./ifc2x4_helper";
 
 export const UNKNOWN = 0;
@@ -98,6 +99,11 @@ export class IfcAPI
     wasmPath: string = "";
 
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
+
+    /**
+     * Contains all the logic and methods regarding properties, psets, qsets, etc.
+     */
+    properties = new Properties(this);
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
@@ -400,4 +406,6 @@ export class IfcAPI
     SetWasmPath(path: string){
         this.wasmPath = path;
     }
+
+
 }
