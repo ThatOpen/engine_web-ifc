@@ -53,11 +53,11 @@ namespace webifc
 
 			}
 
-			__forceinline void Advance()
+			inline void Advance()
 			{
 				bufPos++;
 
-				if (AtEnd())
+				if (!done && AtEnd())
 				{
 					bufPos = 0;
 					bufLength = _requestData(&_readBuffer[0], READ_BUF_SIZE);
@@ -69,7 +69,7 @@ namespace webifc
 				next = done ? 0 : _readBuffer[bufPos];
 			}
 
-			__forceinline bool AtEnd()
+			inline bool AtEnd()
 			{
 				return bufPos >= bufLength;
 			}
@@ -209,6 +209,9 @@ namespace webifc
 
 					_tape.push(IfcTokenType::REAL);
 					_tape.push(&value, sizeof(double));
+
+					// skip next advance
+					continue;
 				}
 				else if (c == '.')
 				{
@@ -256,7 +259,7 @@ namespace webifc
 			}
 
 			
-			return !eof;
+			return !eof && !_ptr.done;
 		}
         
 		uint32_t readInt()
@@ -280,7 +283,7 @@ namespace webifc
 
 			_temp.clear();
 
-			while ((_ptr.cur >= '0' && _ptr.cur <= '9') || (_ptr.cur == '.') || _ptr.cur == 'e' || _ptr.cur == 'E')
+			while ((_ptr.cur >= '0' && _ptr.cur <= '9') || (_ptr.cur == '.') || _ptr.cur == 'e' || _ptr.cur == 'E' || _ptr.cur == '-')
 			{
 				_temp.push_back(_ptr.cur);
 				_ptr.Advance();
@@ -289,7 +292,6 @@ namespace webifc
 			const char* start = &(_temp[0]);
 			const char* end = start;
 			double d = crack_atof(end, start + _temp.size());
-			ptrdiff_t size = end - start;
 
 			return d;
 		}
