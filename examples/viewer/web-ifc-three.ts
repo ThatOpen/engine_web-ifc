@@ -50,6 +50,8 @@ export class IfcThree
                 let geom = mesh.geometry.applyMatrix4(mesh.matrix);
                 geometries.push(geom);
             }
+
+            //console.log(this.ifcAPI.wasmModule.HEAPU8.length);
         });
 
         const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
@@ -80,10 +82,14 @@ export class IfcThree
     }
     
     private getBufferGeometry(modelID: number, placedGeometry: PlacedGeometry) {
+        // WARNING: geometry must be deleted when requested from WASM
         const geometry = this.ifcAPI.GetGeometry(modelID, placedGeometry.geometryExpressID);
         const verts = this.ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
         const indices = this.ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
         const bufferGeometry = this.ifcGeometryToBuffer(placedGeometry.color, verts, indices);
+
+        //@ts-ignore
+        geometry.delete();
         return bufferGeometry;
     }
 
