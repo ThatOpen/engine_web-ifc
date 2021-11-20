@@ -108,7 +108,7 @@ void Benchmark()
         webifc::IfcLoader loader;
         auto start = webifc::ms();
         {
-            loader.LoadFile(content);
+            //loader.LoadFile(content);
         }
         auto time = webifc::ms() - start;
 
@@ -230,8 +230,8 @@ int main()
     //return 0;
 
 
-    //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/01097-Tungasletta-2-Hovedbygg-RC2.ifc");
-    std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
+    std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/BIM_Projekt_Golden_Nugget-Architektur_und_Ingenieurbau.ifc");
+    //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -241,7 +241,16 @@ int main()
     webifc::IfcLoader loader(set);
 
     auto start = webifc::ms();
-    loader.LoadFile(content);
+    size_t contentOffset = 0;
+    loader.LoadFile([&](char* dest, size_t destSize)
+                    {
+                        uint32_t length = std::min(content.size() - contentOffset, destSize);
+                        memcpy(dest, &content[contentOffset], length);
+
+                        contentOffset += length;
+
+                        return length;
+                    });
 
     //std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
     //outputStream << loader.DumpAsIFC();

@@ -60,7 +60,7 @@ void WriteFile(const std::string& filename, const std::string& contents)
     t << contents;
 }
 
-int OpenModel(webifc::LoaderSettings settings)
+int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
 {
     if (!shown_version_header)
     {
@@ -69,12 +69,17 @@ int OpenModel(webifc::LoaderSettings settings)
     }
 
     uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
-    std::string contents = ReadFile("filename");
     
     auto loader = std::make_unique<webifc::IfcLoader>(settings);
     loaders.emplace(modelID, std::move(loader));
     auto start = webifc::ms();
-    loaders[modelID]->LoadFile(contents);
+    size_t contentOffset = 0;
+    loaders[modelID]->LoadFile([&](char* dest, size_t destSize)
+                    {
+                        emscripten::val retVal = callback((uint32_t)dest, destSize);
+                        uint32_t len = retVal.as<uint32_t>();
+                        return len;
+                    });
     auto end = webifc::ms() - start;
     auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID]);
     geomLoaders.emplace(modelID, std::move(geomLoader));

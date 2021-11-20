@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <vector>
+#include <functional>
+
 #include "crack_atof.h"
 #include "../util.h"
 
@@ -27,17 +30,66 @@ namespace webifc
     class Tokenizer {
     public:
 
+		std::vector<char> _temp;
+
+		struct BufferPointer
+		{
+			char prev;
+			char cur;
+			char next;
+
+			uint32_t bufPos;
+			uint32_t bufLength;
+
+			const size_t READ_BUF_SIZE = 1024 * 1024; // 1 mb
+			std::function<uint32_t(char*, size_t)> _requestData;
+			std::vector<char> _readBuffer;
+
+			bool done = false;
+
+			BufferPointer() :
+				_readBuffer(READ_BUF_SIZE)
+			{
+
+			}
+
+			inline void Advance()
+			{
+				bufPos++;
+
+				if (!done && AtEnd())
+				{
+					bufPos = 0;
+					bufLength = _requestData(&_readBuffer[0], READ_BUF_SIZE);
+					done = bufLength == 0;
+				}
+
+				prev = cur;
+				cur = next;
+				next = done ? 0 : _readBuffer[bufPos];
+			}
+
+			inline bool AtEnd()
+			{
+				return bufPos >= bufLength;
+			}
+		};
+
+		BufferPointer _ptr;
+
         Tokenizer(webifc::DynamicTape<N>& t):
             _tape(t)
         {
 
         }
 
-        uint32_t Tokenize(const std::string& content)
+        uint32_t Tokenize(const std::function<uint32_t(char*, size_t)>& requestData)
         {
-			buf = content.data();
-			pos = 0;
-			len = static_cast<uint32_t>(content.size());
+			_ptr._requestData = requestData;
+			_ptr.bufPos = 1;
+			_ptr.bufLength = 0;
+			_ptr.Advance();
+			_ptr.Advance();
 
 			uint32_t numLines = 0;
 			while (TokenizeLine())
@@ -54,64 +106,72 @@ namespace webifc
 			
 			while (true)
 			{
-				if (pos >= len)
+				if (_ptr.done)
 				{
 					eof = true;
 					break;
 				}
 
-				const char c = buf[pos];
+				const char c = _ptr.cur;
 
 				bool isWhiteSpace = c == ' ' || c == '\n' || c == '\r' || c == '\t';
 				
 				if (isWhiteSpace)
 				{
-					pos++;
+					_ptr.Advance();
 					continue;
 				}
 
 				if (c == '\'')
 				{
-					pos++;
+					_ptr.Advance();
 					bool prevSlash = false;
-					uint32_t start = pos;
+					_temp.clear();
 					// apparently I dont fully understand strings in IFC yet
 					// this example from uptown shows that escaping is not used: 'Type G5 - 800kg/m\X2\00B2\X0\';
 					// this example from revit shows that double quotes are used as one quote: 'RPC Tree - Deciduous:Scarlet Oak - 42'':946835'
 					// turns out this is just part of ISO 10303-21, thanks ottosson!
 					while (true)
 					{
+						_temp.push_back(_ptr.cur);
 						// if its a quote, maybe its the end of the string
-						if (buf[pos] == '\'')
+						if (_ptr.cur == '\'')
 						{
 							// if there's another quote behind it, its not
-							if (buf[pos + 1] == '\'')
+							if (_ptr.next == '\'')
 							{
 								// we also bump pos, otherwise we still break next loop...
-								pos++;
+								_ptr.Advance();
+								_temp.push_back(_ptr.cur);
 							}
 							else
 							{
+								_temp.pop_back();
 								break;
 							}
 						}
 
-						pos++;
+						_ptr.Advance();
 					}
 
 					_tape.push(IfcTokenType::STRING);
-					uint8_t length = pos - start;
-					_tape.push(length);
-					_tape.push((void*)&buf[start], length);
+					_tape.push((uint8_t)_temp.size());
+					if (!_temp.empty())
+					{
+						_tape.push((void*)&_temp[0], _temp.size());
+					}
 				} 
 				else if (c == '#')
 				{
-					pos++;
+					_ptr.Advance();
 
 					uint32_t num = readInt();
 
 					_tape.push(IfcTokenType::REF);
 					_tape.push(&num, sizeof(uint32_t));
+
+					// skip next advance
+					continue;
 				}
 				else if (c == '$')
 				{
@@ -119,14 +179,14 @@ namespace webifc
 				}
 				else if (c == '*')
 				{
-					if (buf[pos - 1] == '/')
+					if (_ptr.prev == '/')
 					{
-						pos++;
+						_ptr.Advance();
 
 						// comment
-						while (!(buf[pos -1] == '*' && buf[pos] == '/'))
+						while (!(_ptr.prev == '*' && _ptr.cur == '/'))
 						{
-							pos++;
+							_ptr.Advance();
 						}
 					}
 					else
@@ -140,8 +200,7 @@ namespace webifc
 				}
 				else if (c >= '0' && c <= '9')
 				{
-
-					bool negative = buf[pos - 1] == '-';
+					bool negative = _ptr.prev == '-';
 					double value = readDouble();
 					if (negative)
 					{
@@ -150,35 +209,39 @@ namespace webifc
 
 					_tape.push(IfcTokenType::REAL);
 					_tape.push(&value, sizeof(double));
+
+					// skip next advance
+					continue;
 				}
 				else if (c == '.')
 				{
-					pos++;
-					uint32_t start = pos;
-					while (buf[pos] != '.')
+					_temp.clear();
+					_ptr.Advance();
+					while (_ptr.cur != '.')
 					{
-						pos++;
+						_temp.push_back(_ptr.cur);
+						_ptr.Advance();
 					}
 
 					_tape.push(IfcTokenType::ENUM);
-					uint8_t length = pos - start;
-					_tape.push(length);
-					_tape.push((void*)&buf[start], length);
+					_tape.push((uint8_t)_temp.size());
+					_tape.push((void*)&_temp[0], _temp.size());
 				}
 				else if (c >= 'A' && c <= 'Z')
 				{
-					uint32_t start = pos;
-					while ((buf[pos] >= 'A' && buf[pos] <= 'Z') || buf[pos] >= '0' && buf[pos] <= '9')
+					_temp.clear();
+					while ((_ptr.cur >= 'A' && _ptr.cur <= 'Z') || _ptr.cur >= '0' && _ptr.cur <= '9')
 					{
-						pos++;
+						_temp.push_back(_ptr.cur);
+						_ptr.Advance();
 					}
 
 					_tape.push(IfcTokenType::LABEL);
-					uint8_t length = pos - start;
-					_tape.push(length);
-					_tape.push((void*)&buf[start], length);
+					_tape.push((uint8_t)_temp.size());
+					_tape.push((void*)&_temp[0], _temp.size());
 
-					pos--;
+					// skip next advance
+					continue;
 				}
 				else if (c == ')')
 				{
@@ -187,69 +250,53 @@ namespace webifc
 				else if (c == ';')
 				{
 					_tape.push(IfcTokenType::LINE_END);
-					pos++;
+					_ptr.Advance();
 
 					break;
 				}
 
-				pos++;
+				_ptr.Advance();
 			}
 
 			
-			return !eof;
+			return !eof && !_ptr.done;
 		}
         
 		uint32_t readInt()
 		{
 			uint32_t val = 0;
-			char c = buf[pos];
+			char c = _ptr.cur;
 			
 			while (c >= '0' && c <= '9')
 			{
 				val = val * 10 + (c - '0');
-				pos++;
-				c = buf[pos];
+				_ptr.Advance();
+				c = _ptr.cur;
 			}
-
-			pos--;
 
 			return val;
 		}
 
 		double readDouble()
 		{
-			/*
-			char* end1;
-			double d1 = std::strtod(&buf[pos], &end1);
-			ptrdiff_t size1 = end1 - &buf[pos];
-			*/
+			char c = _ptr.cur;
 
-			const char* start = &buf[pos];
+			_temp.clear();
+
+			while ((_ptr.cur >= '0' && _ptr.cur <= '9') || (_ptr.cur == '.') || _ptr.cur == 'e' || _ptr.cur == 'E' || _ptr.cur == '-')
+			{
+				_temp.push_back(_ptr.cur);
+				_ptr.Advance();
+			}
+
+			const char* start = &(_temp[0]);
 			const char* end = start;
-			double d = crack_atof(end, &buf[len]);
-			ptrdiff_t size = end - start;
-
-			/*
-			if (size1 != size)
-			{
-				printf("asdf");
-			}
-			if (std::fabs(d1 - d) > 1e-4)
-			{
-				printf("asdf");
-			}
-			*/
-
-			pos += static_cast<uint32_t>(size - 1);
+			double d = crack_atof(end, start + _temp.size());
 
 			return d;
 		}
 
     private:
         webifc::DynamicTape<N>& _tape;
-
-		uint32_t pos;
-		uint32_t len;
-		const char* buf;
     };
 }

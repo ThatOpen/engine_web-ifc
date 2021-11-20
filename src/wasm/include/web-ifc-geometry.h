@@ -63,7 +63,7 @@ namespace webifc
 
 		void ClearCachedGeometry()
 		{
-			_expressIDToGeometry.clear();
+			_expressIDToGeometry = {};
 		}
 
 		bool HasCachedGeometry(uint32_t expressID)
