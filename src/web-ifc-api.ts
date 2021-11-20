@@ -134,9 +134,8 @@ export class IfcAPI
      * @data Buffer containing IFC data (bytes)
      * @data Settings settings for loading the model
     */
-    OpenModel(data: string | Uint8Array, settings?: LoaderSettings): number
+    OpenModel(data: Uint8Array, settings?: LoaderSettings): number
     {
-        this.wasmModule['FS_createDataFile']('/', "filename", data, true, true, true);
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
             USE_FAST_BOOLS: false,
@@ -146,8 +145,20 @@ export class IfcAPI
             BOOL_ABORT_THRESHOLD: 10000,
             ...settings
         };
-        let result = this.wasmModule.OpenModel(s);
-        this.wasmModule['FS_unlink']("/filename");
+
+        let offsetInSrc = 0;
+        let result = this.wasmModule.OpenModel(s, (destPtr: number, destSize: number) => {
+            let srcSize = Math.min(data.byteLength - offsetInSrc, destSize);
+
+            let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + destSize);
+            let src = data.subarray(offsetInSrc, offsetInSrc + srcSize);
+
+            dest.set(src);
+
+            offsetInSrc += srcSize;
+
+            return srcSize;
+        });
         return result;
     }
 
