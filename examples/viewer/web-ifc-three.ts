@@ -38,6 +38,7 @@ export class IfcThree
         */
 
         let geometries = [];
+        let transparentGeometries = [];
 
         this.ifcAPI.StreamAllMeshes(modelID, (mesh: FlatMesh) => {
             // only during the lifetime of this function call, the geometry is available in memory
@@ -48,7 +49,14 @@ export class IfcThree
                 const placedGeometry = placedGeometries.get(i);
                 let mesh = this.getPlacedGeometry(modelID, placedGeometry);
                 let geom = mesh.geometry.applyMatrix4(mesh.matrix);
-                geometries.push(geom);
+                if (placedGeometry.color.w !== 1)
+                {
+                    transparentGeometries.push(geom);
+                }
+                else
+                {
+                    geometries.push(geom);
+                }
             }
 
             //console.log(this.ifcAPI.wasmModule.HEAPU8.length);
@@ -59,6 +67,15 @@ export class IfcThree
         mat.vertexColors = true;
         const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
         scene.add(mergedMesh);
+
+        const combinedGeometryTransp = BufferGeometryUtils.mergeBufferGeometries(transparentGeometries);
+        let matTransp = new THREE.MeshPhongMaterial();
+        matTransp.vertexColors = true;
+        matTransp.transparent = true;
+        matTransp.opacity = 0.5;
+        const mergedMeshTransp = new THREE.Mesh(combinedGeometryTransp, matTransp);
+        scene.add(mergedMeshTransp);
+
 
         console.log(`Uploading took ${ms() - startUploadingTime} ms`);
     }
