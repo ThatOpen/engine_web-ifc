@@ -149,4 +149,6 @@ function LoadModel(data: Uint8Array) {
     {
         console.log(errors.get(i));
     }
+
+    ifcAPI.CloseModel(modelID);
 }
