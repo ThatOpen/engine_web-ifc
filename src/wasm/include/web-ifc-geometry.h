@@ -1388,7 +1388,27 @@ namespace webifc
 				glm::dvec3 n = glm::normalize(glm::cross(v12, v13));
 				v12 = glm::cross(v13, n);
 
-				std::vector<glm::dvec2> temp;
+				// check winding of outer bound
+				IfcCurve<2> test;
+				for (int i = 0; i < bounds[0].curve.points.size(); i++)
+				{
+					glm::dvec3 pt = bounds[0].curve.points[i];
+					glm::dvec3 pt2 = pt - v1;
+
+					glm::dvec2 proj(
+						glm::dot(pt2, v12),
+						glm::dot(pt2, v13)
+					);
+
+					test.Add(proj);
+				}
+
+				// if the outer bound is clockwise under the current projection (v12,v13,n), we invert the projection
+				if (!test.IsCCW())
+				{
+					n *= -1;
+					std::swap(v12, v13);
+				}
 
 				for (auto& bound : bounds)
 				{
@@ -1406,7 +1426,6 @@ namespace webifc
 							glm::dot(pt2, v13)
 						);
 
-						temp.push_back(proj);
 						points.push_back({ proj.x, proj.y });
 					}
 
