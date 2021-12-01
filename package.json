@@ -28,7 +28,7 @@
     "build-wasm-debug": "em++ --bind -O3 -gsource-map -std=c++17 --source-map-base http://localhost:5000/web-ifc-js/wasm-lib/ -flto -fno-exceptions./src/wasm/web-ifc-api.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s ASSERTIONS=1 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
     "build-wasm-release": "em++ --bind -O3 -std=c++17 -flto --define-macro=REAL_T_IS_DOUBLE -I ./src/wasm/deps/godot-csg/  -I ./src/wasm/deps/godot-csg/platform/javascript/ ./src/wasm/web-ifc-api.cpp  ./src/wasm/deps/godot-csg/csg.cpp ./src/wasm/deps/godot-csg/core/math/aabb.cpp ./src/wasm/deps/godot-csg/core/math/basis.cpp ./src/wasm/deps/godot-csg/core/math/math_funcs.cpp ./src/wasm/deps/godot-csg/core/os/memory.cpp ./src/wasm/deps/godot-csg/core/os/mutex.cpp ./src/wasm/deps/godot-csg/thirdparty/misc/pcg.cpp ./src/wasm/deps/godot-csg/core/math/plane.cpp ./src/wasm/deps/godot-csg/core/math/quaternion.cpp ./src/wasm/deps/godot-csg/core/math/random_pcg.cpp ./src/wasm/deps/godot-csg/core/math/transform_3d.cpp ./src/wasm/deps/godot-csg/core/math/vector2.cpp ./src/wasm/deps/godot-csg/core/math/vector3.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s USE_PTHREADS=0 -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc.js",
     "build-wasm-release-mt": "em++ --bind -O3 -std=c++17 -flto --define-macro=REAL_T_IS_DOUBLE -I ./src/wasm/deps/godot-csg/  -I ./src/wasm/deps/godot-csg/platform/javascript/ ./src/wasm/web-ifc-api.cpp  ./src/wasm/deps/godot-csg/csg.cpp ./src/wasm/deps/godot-csg/core/math/aabb.cpp ./src/wasm/deps/godot-csg/core/math/basis.cpp ./src/wasm/deps/godot-csg/core/math/math_funcs.cpp ./src/wasm/deps/godot-csg/core/os/memory.cpp ./src/wasm/deps/godot-csg/core/os/mutex.cpp ./src/wasm/deps/godot-csg/thirdparty/misc/pcg.cpp ./src/wasm/deps/godot-csg/core/math/plane.cpp ./src/wasm/deps/godot-csg/core/math/quaternion.cpp ./src/wasm/deps/godot-csg/core/math/random_pcg.cpp ./src/wasm/deps/godot-csg/core/math/transform_3d.cpp ./src/wasm/deps/godot-csg/core/math/vector2.cpp ./src/wasm/deps/godot-csg/core/math/vector3.cpp -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency -s EXPORTED_RUNTIME_METHODS=[\"FS\"] -O3 -o dist/web-ifc-mt.js",
-    "build-api": "cpy src/*.ts dist && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node && npm run copy-to-dist",
+    "build-api": "cpy src/*.ts dist && cpy src/helpers/*.ts dist/helpers && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-node && npm run copy-to-dist",
     "build-ts-api": "tsc --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts dist && cpy dist/web-ifc-api.d.ts dist --rename=web-ifc-api-node.d.ts",
     "build-web-ifc-api-mjs": "esbuild dist/web-ifc-api.ts --bundle --format=esm --external:path --external:fs --external:perf_hooks --outfile=./dist/web-ifc-api.js",
     "build-web-ifc-api-node": "esbuild dist/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api-node.js",
@@ -42,7 +42,8 @@
     "docker-build": "docker build -t web-ifc .",
     "docker-run": "npm run docker-run-container && npm run docker-get-compiled-files ",
     "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
-    "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist ."
+    "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
+    "test": "jest"
   },
   "author": "tomvandig",
   "files": [
@@ -61,6 +62,7 @@
     "cpy": "^8.1.2",
     "cpy-cli": "^3.1.1",
     "esbuild": "^0.12.15",
+    "jest": "^27.4.2",
     "monaco-editor": "^0.26.1",
     "npm-watch": "^0.10.0",
     "serve": "^12.0.0",
