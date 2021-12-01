@@ -7,7 +7,7 @@ import {IfcElements} from "./ifc2x4";
 let WebIFCWasm;
 
 //@ts-ignore
-if (self.crossOriginIsolated)
+if (typeof self !== 'undefined' && self.crossOriginIsolated)
 {
     WebIFCWasm = require("./web-ifc-mt");
 }
