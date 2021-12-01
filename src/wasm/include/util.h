@@ -81,7 +81,7 @@ namespace webifc
 	}
 
 	// just follow the ifc spec, damn
-	bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3& normal)
+	bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3& normal, double eps = 0)
 	{
 		glm::dvec3 v12(v2 - v1);
 		glm::dvec3 v13(v3 - v1);
@@ -90,7 +90,7 @@ namespace webifc
 
 		double len = glm::length(norm);
 
-		if (len == 0)
+		if (len <= eps)
 		{
 			return false;
 		}
@@ -575,7 +575,7 @@ namespace webifc
 		glm::dvec3 normal;
 		for (auto& p : points)
 		{
-			if (computeSafeNormal(v1, v2, p, normal))
+			if (computeSafeNormal(v1, v2, p, normal, EPS_SMALL))
 			{
 				v3 = p;
 				return true;
