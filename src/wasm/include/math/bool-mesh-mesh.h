@@ -225,7 +225,7 @@ namespace webifc
         CSGBrush* resultBrush = memnew(CSGBrush);
 
         CSGBrushOperation op;
-        op.merge_brushes(CSGBrushOperation::OPERATION_SUBSTRACTION, *model1, *model2, *resultBrush, 0.001);
+        op.merge_brushes(CSGBrushOperation::OPERATION_SUBTRACTION, *model1, *model2, *resultBrush, 0.001);
 
         IfcGeometry result;
 
