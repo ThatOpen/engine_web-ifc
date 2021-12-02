@@ -9,7 +9,7 @@ beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
 
-    const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc');
+    const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
 })
