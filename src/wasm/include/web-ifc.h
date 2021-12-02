@@ -33,7 +33,7 @@ namespace webifc
         int CIRCLE_SEGMENTS_MEDIUM = 8;
         int CIRCLE_SEGMENTS_HIGH = 12;
         bool MESH_CACHE = false;
-		int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
+				int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
     };
 
 	enum class LoaderErrorType
@@ -77,11 +77,11 @@ namespace webifc
 	class IfcLoader
 	{
 	public:
-        IfcLoader(const LoaderSettings& s = {}):
-            _settings(s)
-        {
-            
-        }
+		IfcLoader(const LoaderSettings& s = {}):
+				_settings(s)
+		{
+				
+		}
 
 		void PushDataToTape(void* data, size_t size)
 		{
@@ -138,11 +138,11 @@ namespace webifc
 
 		void LoadFile(const std::function<uint32_t(char*, size_t)>& requestData)
 		{
-            Tokenizer<TAPE_SIZE> tokenizer(_tape);
-            uint32_t numLines = tokenizer.Tokenize(requestData);
+			Tokenizer<TAPE_SIZE> tokenizer(_tape);
+			uint32_t numLines = tokenizer.Tokenize(requestData);
 
-            Parser<TAPE_SIZE> parser(_tape, _metaData);
-            parser.ParseTape(numLines);
+			Parser<TAPE_SIZE> parser(_tape, _metaData);
+			parser.ParseTape(numLines);
 
 			PopulateRelVoidsMap();
 			PopulateRelAggregatesMap();
@@ -442,10 +442,20 @@ namespace webifc
 			return _metaData.linearScalingFactor;
 		}
 
-        bool IsOpen()
-        {
-            return _open;
-        }
+		bool IsOpen()
+		{
+			return _open;
+		}
+
+		void SetOpen()
+		{
+			_open = true;
+		}
+
+		void SetClosed()
+		{
+			_open = false;
+		}
 
 		void MoveToArgumentOffset(IfcLine& line, int argumentIndex)
 		{
@@ -784,7 +794,7 @@ namespace webifc
 
 		std::string DumpAsIFC(const std::vector<IfcLine>& lines = {})
 		{
-            std::stringstream file;
+			std::stringstream file;
 			file << std::setprecision(std::numeric_limits<double>::digits10 + 1);
 
 			std::string description = "no description";
@@ -923,10 +933,10 @@ namespace webifc
             return file.str();
 		}
 
-        const LoaderSettings& GetSettings()
-        {
-            return _settings;
-        }
+		const LoaderSettings& GetSettings()
+		{
+				return _settings;
+		}
 
 		void ReportError(const LoaderError&& error)
 		{
@@ -942,11 +952,11 @@ namespace webifc
 		}
 
 	private:
-        bool _open = false;
+		bool _open = false;
 		std::vector<LoaderError> _errors;
 		DynamicTape<TAPE_SIZE> _tape; // 16mb chunked tape
-        LoaderSettings _settings;
+		LoaderSettings _settings;
 
-        IfcMetaData _metaData;
+		IfcMetaData _metaData;
 	};
 }
