@@ -497,21 +497,30 @@ namespace webifc
 					glm::dvec3 planeNormal = surface.transformation[2];
 					glm::dvec3 planePosition = surface.transformation[3];
 
+
+					glm::dmat4 invPosition = glm::inverse(position);
+					glm::dvec3 localPlaneNormal = invPosition * glm::dvec4(planeNormal, 0);
+					auto localPlanePos = invPosition * glm::dvec4(planePosition, 1);
+
 					bool flipWinding = false;
-					if (agreement == "T")
+					double extrudeDistance = EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor();
+
+					bool halfSpaceInPlaneDirection = agreement != "T";
+					bool extrudeInPlaneDirection = glm::dot(localPlaneNormal, extrusionNormal) > 0;
+					bool ignoreDistanceInExtrude = (!halfSpaceInPlaneDirection && extrudeInPlaneDirection) || (halfSpaceInPlaneDirection && !extrudeInPlaneDirection);
+					if (ignoreDistanceInExtrude)
 					{
-						//extrusionNormal *= -1;
-						//planeNormal *= -1;
-						//flipWinding = true;
+						// spec says this should be * 0, but that causes issues for degenerate 0 volume pbhs
+						// hopefully we can get away by just inverting it
+						extrudeDistance *= -1;
+						flipWinding = true;
 					}
 
 					IfcProfile profile;
 					profile.isConvex = false;
 					profile.curve = curve;
 
-					glm::dmat4 invPosition = glm::inverse(position);
-
-					auto geom = Extrude(profile, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE_M / _loader.GetLinearScalingFactor(), invPosition * glm::dvec4(planeNormal, 0), invPosition * glm::dvec4(planePosition, 1));
+					auto geom = Extrude(profile, extrusionNormal, extrudeDistance, localPlaneNormal, localPlanePos);
 					//auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
 
 					// @Refactor: duplicate of extrudedareasolid
