@@ -5,7 +5,8 @@
     "outDir": "dist",
     "moduleResolution" : "node",
     "declaration": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "esModuleInterop": true
   },
   "files": [
     "src/web-ifc-api.ts"

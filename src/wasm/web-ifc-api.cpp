@@ -72,7 +72,10 @@ int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
     
     auto loader = std::make_unique<webifc::IfcLoader>(settings);
     loaders.emplace(modelID, std::move(loader));
+
+    // Start the timer.
     auto start = webifc::ms();
+
     size_t contentOffset = 0;
     loaders[modelID]->LoadFile([&](char* dest, size_t destSize)
                     {
@@ -80,7 +83,13 @@ int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
                         uint32_t len = retVal.as<uint32_t>();
                         return len;
                     });
+
+    // Ensure IsOpen will return true upon successful load.
+    loaders[modelID]->SetOpen();
+
+    // Stop the timer.
     auto end = webifc::ms() - start;
+
     auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID]);
     geomLoaders.emplace(modelID, std::move(geomLoader));
 
@@ -102,6 +111,7 @@ int CreateModel(webifc::LoaderSettings settings)
 void CloseModel(uint32_t modelID)
 {
     geomLoaders.erase(modelID);
+    loaders[modelID]->SetClosed();
     loaders.erase(modelID);
 }
 
