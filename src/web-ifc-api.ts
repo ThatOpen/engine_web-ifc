@@ -13,7 +13,7 @@ if (typeof self !== 'undefined' && self.crossOriginIsolated)
 }
 else
 {
-     WebIFCWasm = require("./web-ifc");
+    WebIFCWasm = require("./web-ifc");
 }
 export * from "./ifc2x4";
 import * as ifc2x4helper from "./ifc2x4_helper";

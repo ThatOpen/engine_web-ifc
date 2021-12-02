@@ -15,14 +15,23 @@ beforeAll(async () => {
 })
 
 describe('WebIfcApi', () => {
-    test('Load a basic IFC model', async () => {
-        const geometry : Vector<FlatMesh> = ifcApi.LoadAllGeometry(modelID);
-
+    test('can retrieve a modelID', () => {
         expect(modelID).toBe(0);
+    })
+
+    test('can ensure model is open', () => {
+        const isOpen : boolean = ifcApi.IsModelOpen(modelID);
+        expect(isOpen).toBeTruthy();
+    })
+
+    test('can return the correct number of elements', () => {
+        const geometry : Vector<FlatMesh> = ifcApi.LoadAllGeometry(modelID);
         expect(geometry.size()).toBe(119);
     })
 })
 
 afterAll(() => {
     ifcApi.CloseModel(modelID);
+    const isOpen : boolean = ifcApi.IsModelOpen(modelID);
+    expect(isOpen).toBeFalsy()
 })
