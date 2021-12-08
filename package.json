@@ -2,7 +2,8 @@
   "name": "web-ifc",
   "version": "0.0.30",
   "description": "ifc loading on the web",
-  "main": "web-ifc-api.js",
+  "main": "web-ifc-api-node.js",
+  "module": "web-ifc-api.js",
   "watch": {
     "build-viewer": {
       "patterns": [
