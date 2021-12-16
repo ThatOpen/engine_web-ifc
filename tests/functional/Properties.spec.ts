@@ -25,6 +25,11 @@ describe('Properties', () => {
         expect(walls.length).toBe(17)
     })
 
+    test('can get all IFCELEMENT items', async () => {
+        const elements : any[] = await properties.getAllItemsOfTypeOrSubtype(modelID, IfcElements.IFCELEMENT, false)
+        expect(elements.length).toBe(115)
+    })
+
     test('can get IFCWALLSTANDARDCASE details', async () => {
         const allWalls : any[] = await properties.getAllItemsOfType(modelID, IfcElements.IFCWALLSTANDARDCASE, false)
         const firstWallId = allWalls[0]
