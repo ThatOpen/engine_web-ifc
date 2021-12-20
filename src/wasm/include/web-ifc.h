@@ -502,7 +502,7 @@ namespace webifc
 				case IfcTokenType::ENUM:
 				case IfcTokenType::LABEL:
 				{
-					uint8_t length = _tape.Read<uint8_t>();
+					uint16_t length = _tape.Read<uint16_t>();
 					_tape.AdvanceRead(length);
 					break;
 				}
@@ -760,12 +760,12 @@ namespace webifc
 					}
 					else if (t == IfcTokenType::STRING)
 					{
-						uint8_t length = _tape.Read<uint8_t>();
+						uint16_t length = _tape.Read<uint16_t>();
 						_tape.AdvanceRead(length);
 					}
 					else if (t == IfcTokenType::LABEL)
 					{
-						uint8_t length = _tape.Read<uint8_t>();
+						uint16_t length = _tape.Read<uint16_t>();
 						_tape.AdvanceRead(length);
 					}
 					else

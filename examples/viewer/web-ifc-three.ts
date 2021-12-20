@@ -62,19 +62,25 @@ export class IfcThree
             //console.log(this.ifcAPI.wasmModule.HEAPU8.length);
         });
 
-        const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
-        let mat = new THREE.MeshPhongMaterial();
-        mat.vertexColors = true;
-        const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
-        scene.add(mergedMesh);
+        if (geometries.length > 0)
+        {
+            const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
+            let mat = new THREE.MeshPhongMaterial();
+            mat.vertexColors = true;
+            const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
+            scene.add(mergedMesh);
+        }
 
-        const combinedGeometryTransp = BufferGeometryUtils.mergeBufferGeometries(transparentGeometries);
-        let matTransp = new THREE.MeshPhongMaterial();
-        matTransp.vertexColors = true;
-        matTransp.transparent = true;
-        matTransp.opacity = 0.5;
-        const mergedMeshTransp = new THREE.Mesh(combinedGeometryTransp, matTransp);
-        scene.add(mergedMeshTransp);
+        if (transparentGeometries.length > 0)
+        {
+            const combinedGeometryTransp = BufferGeometryUtils.mergeBufferGeometries(transparentGeometries);
+            let matTransp = new THREE.MeshPhongMaterial();
+            matTransp.vertexColors = true;
+            matTransp.transparent = true;
+            matTransp.opacity = 0.5;
+            const mergedMeshTransp = new THREE.Mesh(combinedGeometryTransp, matTransp);
+            scene.add(mergedMeshTransp);
+        }
 
 
         console.log(`Uploading took ${ms() - startUploadingTime} ms`);

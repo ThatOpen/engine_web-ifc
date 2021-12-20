@@ -819,7 +819,9 @@ namespace webifc
 					
 					return mesh;
 				}
-
+				case ifc2x4::IFCPOLYLINE:
+					// ignore polylines as meshes
+					return mesh;
 				default:
 					_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected mesh type", line.expressID, line.ifcType });
 					break;

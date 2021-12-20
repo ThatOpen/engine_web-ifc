@@ -42,7 +42,7 @@ function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 
     ifcAPI.CloseModel(model);
 
-    let m2 = ifcAPI.OpenModel(ifcDataString);
+    let m2 = ifcAPI.OpenModel(ifcData);
     ifcThree.LoadAllGeometry(scene, m2);
 
 }

@@ -1301,6 +1301,11 @@ namespace webifc
 			sizes[writePtr] += 1;
 		}
 
+		inline void push2(uint16_t v)
+		{
+			push(&v, 2);
+		}
+
 		inline void push(void* v, unsigned long long size)
 		{
 			CheckChunk(size);
@@ -1362,7 +1367,7 @@ namespace webifc
 
         StringView ReadStringView()
         {
-			uint8_t length = Read<uint8_t>();
+			uint16_t length = Read<uint16_t>();
 			char* charPtr = (char*)GetReadPtr();
 			AdvanceRead(length);
 

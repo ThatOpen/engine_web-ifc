@@ -155,7 +155,7 @@ namespace webifc
 					}
 
 					_tape.push(IfcTokenType::STRING);
-					_tape.push((uint8_t)_temp.size());
+					_tape.push2((uint16_t)_temp.size());
 					if (!_temp.empty())
 					{
 						_tape.push((void*)&_temp[0], _temp.size());
@@ -224,7 +224,7 @@ namespace webifc
 					}
 
 					_tape.push(IfcTokenType::ENUM);
-					_tape.push((uint8_t)_temp.size());
+					_tape.push2((uint16_t)_temp.size());
 					_tape.push((void*)&_temp[0], _temp.size());
 				}
 				else if (c >= 'A' && c <= 'Z')
@@ -237,7 +237,7 @@ namespace webifc
 					}
 
 					_tape.push(IfcTokenType::LABEL);
-					_tape.push((uint8_t)_temp.size());
+					_tape.push2((uint16_t)_temp.size());
 					_tape.push((void*)&_temp[0], _temp.size());
 
 					// skip next advance

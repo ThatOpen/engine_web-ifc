@@ -230,7 +230,7 @@ int main()
     //return 0;
 
 
-    std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/BIM_Projekt_Golden_Nugget-Architektur_und_Ingenieurbau.ifc");
+    std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/test.ifc");
     //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
 
     webifc::LoaderSettings set;
@@ -269,8 +269,8 @@ int main()
 
     start = webifc::ms();
 
-    //SpecificLoadTest(loader, geometryLoader, 2615);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    SpecificLoadTest(loader, geometryLoader, 167779);
+    //auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = loader.GetAndClearErrors();

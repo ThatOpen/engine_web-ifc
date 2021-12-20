@@ -156,8 +156,11 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
             flatGeom.GetVertexData();
         }   
 
-        // transfer control to client, geometry data is alive for the time of the callback
-        callback(mesh);
+        if (!mesh.geometries.empty())
+        {
+            // transfer control to client, geometry data is alive for the time of the callback
+            callback(mesh);
+        }
 
         // clear geometry, freeing memory, client is expected to have consumed the data
         geomLoader->ClearCachedGeometry();
