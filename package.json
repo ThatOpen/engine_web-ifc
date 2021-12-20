@@ -54,7 +54,9 @@
     "web-ifc-api.js",
     "web-ifc-api.d.ts",
     "ifc2x4.d.ts",
-    "ifc2x4_helper.d.ts"
+    "ifc2x4_helper.d.ts",
+    "helpers/ifc-elements.d.ts",
+    "helpers/properties.d.ts"
   ],
   "devDependencies": {
     "@types/jest": "^27.0.3",
