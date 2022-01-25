@@ -18,6 +18,7 @@
 
 [![Build](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml/badge.svg)](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml)
 ![npm](https://img.shields.io/npm/dw/web-ifc)
+![opencollective](https://opencollective.com/ifcjs/tiers/badge.svg)
 
 **web-ifc** is a javascript library to read and write ifc files, at native speeds. **web-ifc** is part of the [ifc.js](https://ifcjs.github.io/info/) project, which aims to lower the threshold for developing open BIM applications.
 
