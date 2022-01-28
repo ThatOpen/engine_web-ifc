@@ -374,8 +374,8 @@ void WriteValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t, emscripten
     {
         std::string copy = value.as<std::string>();
 
-        uint8_t length = copy.size();
-        tape.push(length);
+        uint16_t length = copy.size();
+        tape.push2((uint16_t)length);
         tape.push((void*)copy.c_str(), copy.size());
 
         break;
@@ -450,8 +450,8 @@ void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
 
                     std::string copy = label.as<std::string>();
 
-                    uint8_t length = copy.size();
-                    _tape.push(length);
+                    uint16_t length = copy.size();
+                    _tape.push2((uint16_t)length);
                     _tape.push((void*)copy.c_str(), copy.size());
 
                     _tape.push(webifc::IfcTokenType::SET_BEGIN);
@@ -507,8 +507,8 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     // line TYPE
     const char* ifcName = GetReadableNameFromTypeCode(type);
     _tape.push(webifc::IfcTokenType::LABEL);
-    uint8_t length = strlen(ifcName);
-    _tape.push(length);
+    uint16_t length = strlen(ifcName);
+    _tape.push2((uint16_t)length);
     _tape.push((void*)ifcName, length);
 
     WriteSet(_tape, parameters);
