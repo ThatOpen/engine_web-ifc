@@ -9,7 +9,7 @@ const ifcapi = new WebIFC.IfcAPI();
 async function LoadFile(filename)
 {
     // load model data as a string
-    const ifcData = fs.readFileSync(filename).toString();
+    const ifcData = fs.readFileSync(filename);
     
     await ifcapi.Init();
 
