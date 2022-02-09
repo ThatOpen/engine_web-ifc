@@ -2,9 +2,11 @@
 <p align="center">
   <a href="https://ifcjs.github.io/info/">ifc.js</a>
   |
+  <a href="https://ifcjs.github.io/info/docs/Guide/web-ifc/Introduction">documentation</a>
+  |
   <a href="https://tomvandig.github.io/web-ifc/examples/viewer/index.html">demo</a>
   |
-  <a href="https://discord.com/invite/g7Uzn2KSwB">discord</a>
+  <a href="https://discord.gg/FXfyR4XrKT">discord</a>
   |
   <a href="https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src">usage examples</a>
   |
