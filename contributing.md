@@ -31,7 +31,7 @@ Here's some stuff we need help on:
 
 
 This list is pretty big, but not at all complete, there's much more things that could be improved! 
-If you need help getting started come find us in the [discord channel](https://discord.com/invite/g7Uzn2KSwB).
+If you need help getting started come find us in the [discord channel](https://discord.gg/FXfyR4XrKT).
 
 If you have an idea that's not on the list, please tell us about it so we can discuss if we want it in the repo.
 
