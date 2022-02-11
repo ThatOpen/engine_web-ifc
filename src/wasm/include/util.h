@@ -649,6 +649,27 @@ namespace webifc
 		bool hasGeometry = false;
 		bool hasColor = false;
 		std::vector<IfcComposedMesh> children;
+
+		std::optional<glm::dvec4> GetColor()
+		{
+			if (hasColor)
+			{
+				return color;
+			}
+			else
+			{
+				for (auto& c : children)
+				{
+					auto col = c.GetColor();
+					if (col.has_value())
+					{
+						return col;
+					}
+				}
+			}
+
+			return std::nullopt;
+		}
 	};
 
 	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, glm::dmat4 mat)

@@ -253,7 +253,18 @@ namespace webifc
 								}
 							}
 						}
+
+						// if no color found, check material itself
+						if (!hasColor)
+						{
+							bool success = GetColor(item.second, styledItemColor);
+							if (success)
+							{
+								hasColor = true;
+							}
+						}
 					}
+
 				}
 			}
 
@@ -315,6 +326,7 @@ namespace webifc
 					auto origin = GetOrigin(mesh, _expressIDToGeometry);
 					auto normalizeMat = glm::translate(-origin);
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry, normalizeMat);
+					auto elementColor = mesh.GetColor();
 
 					if (!flatElementMesh.IsEmpty())
 					{
@@ -333,8 +345,20 @@ namespace webifc
 					resultMesh.transformation = glm::translate(origin);
 					resultMesh.expressID = line.expressID;
 					resultMesh.hasGeometry = true;
-					resultMesh.hasColor = true;
-					resultMesh.color = styledItemColor;
+					if (hasColor)
+					{
+						resultMesh.color = styledItemColor;
+						resultMesh.hasColor = true;
+					}
+					else if (elementColor.has_value())
+					{
+						resultMesh.hasColor = true;
+						resultMesh.color = *elementColor;
+					}
+					else
+					{
+						resultMesh.hasColor = false;
+					}
 
 					return resultMesh;
 				}
@@ -1216,6 +1240,56 @@ namespace webifc
 				outputColor.a = 1;
 
 				return true;
+			}
+			case ifc2x4::IFCMATERIALLAYERSETUSAGE:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t layerSetID = _loader.GetRefArgument();
+				return GetColor(layerSetID, outputColor);
+			}
+			case ifc2x4::IFCMATERIALLAYERSET:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto layers = _loader.GetSetArgument();
+
+				for (auto& layer : layers)
+				{
+					uint32_t layerID = _loader.GetRefArgument(layer);
+					glm::dvec4 color;
+					bool foundColor = GetColor(layerID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+
+				return false;
+			}
+			case ifc2x4::IFCMATERIALLAYER:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t matRepID = _loader.GetRefArgument();
+				return GetColor(matRepID, outputColor);
+			}
+			case ifc2x4::IFCMATERIAL:
+			{
+				if (_loader.GetMaterialDefinitions().count(line.expressID) != 0)
+				{
+					auto& defs = _loader.GetMaterialDefinitions()[line.expressID];
+					for (auto def : defs)
+					{
+						bool success = GetColor(def.second, outputColor);
+						if (success)
+						{
+							return true;
+						}
+					}
+
+					return false;
+				}
+
+				return false;
 			}
 			default:
 				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", line.expressID, line.ifcType });
