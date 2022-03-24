@@ -35,8 +35,9 @@ namespace webifc
     void writeFile(std::wstring filename, std::string data)
     {
     #ifdef _MSC_VER
-		std::ofstream out(L"debug_output/" + filename);
+		std::ofstream out(filename);
 		out << data;
+		out.close();
     #endif
     }
 
@@ -542,6 +543,40 @@ namespace webifc
 		return c;
 	}
 	
+	IfcCurve<2> GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
+	{
+		IfcCurve<2> c;
+
+		double hw = width / 2;
+		double hd = depth / 2;
+		double hweb = thickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+
+		if (hasFillet)
+		{
+			//TODO: Create interpolation and sloped lines
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(-hw, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(+hw - thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(+hw - thickness, +hd, 1));		
+		}
+
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+
 	glm::dvec3 projectOntoPlane(const glm::dvec3& origin, const glm::dvec3& normal, const glm::dvec3& point, const glm::dvec3& dir)
 	{
 		// project {et} onto the plane, following the extrusion normal						

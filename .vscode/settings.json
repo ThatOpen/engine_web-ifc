@@ -83,7 +83,16 @@
         "filesystem": "cpp",
         "stack": "cpp",
         "string_view": "cpp",
-        "xmemory0": "cpp"
+        "xmemory0": "cpp",
+        "bit": "cpp",
+        "charconv": "cpp",
+        "cinttypes": "cpp",
+        "compare": "cpp",
+        "format": "cpp",
+        "forward_list": "cpp",
+        "span": "cpp",
+        "stop_token": "cpp",
+        "unordered_set": "cpp"
     },
     "cmake.configureOnOpen": true,
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
