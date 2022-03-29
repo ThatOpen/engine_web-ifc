@@ -2019,6 +2019,52 @@ namespace webifc
 
 				return profile;
 			}
+			case ifc2x4::IFCLSHAPEPROFILEDEF:
+			{
+				IfcProfile profile;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
+				profile.isConvex = false;
+
+				_loader.MoveToArgumentOffset(line, 2);
+
+				glm::dmat3 placement(1);
+
+				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
+				{
+					_loader.Reverse();
+				
+					uint32_t placementID = _loader.GetRefArgument();
+					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+				}
+
+				_loader.MoveToArgumentOffset(line, 3);
+				double filletRadius = 0;
+				double depth = _loader.GetDoubleArgument();
+				double width = _loader.GetDoubleArgument();
+				double thickness = _loader.GetDoubleArgument();
+				filletRadius = _loader.GetDoubleArgument();
+				double edgeRadius = _loader.GetDoubleArgument();
+				double legSlope = _loader.GetDoubleArgument();
+				double centreOfGravityInX = _loader.GetDoubleArgument();
+				double centreOfGravityInY = _loader.GetDoubleArgument();
+
+				// optional fillet
+				bool hasFillet = false;
+
+				if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
+				{
+					_loader.Reverse();
+
+					hasFillet = true;
+					filletRadius = _loader.GetDoubleArgument();
+				}
+
+				profile.curve = GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement);
+
+				return profile;
+			}
 			default:
 				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", line.expressID, line.ifcType });
 				break;
