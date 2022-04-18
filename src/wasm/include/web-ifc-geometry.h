@@ -95,15 +95,19 @@ namespace webifc
 
 				if (!_isCoordinated && _loader.GetSettings().COORDINATE_TO_ORIGIN)
 				{
-					auto& geom = _expressIDToGeometry[composedMesh.expressID];
+					auto &geom = _expressIDToGeometry[composedMesh.expressID];
 					auto pt = geom.GetPoint(0);
 					auto transformedPt = newMatrix * glm::dvec4(pt, 1);
 					_coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
 					_isCoordinated = true;
 				}
 
+				auto &geom = _expressIDToGeometry[composedMesh.expressID];
+				if (!geom.normalized)
+					geom.Normalize();
+
 				geometry.color = newParentColor;
-				geometry.transformation = _coordinationMatrix * newMatrix;
+				geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(geom.min);
 				geometry.SetFlatTransformation();
 				geometry.geometryExpressID = composedMesh.expressID;
 
