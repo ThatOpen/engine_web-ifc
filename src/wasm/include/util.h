@@ -1,8 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
- 
- #pragma once
+
+#pragma once
 
 #include <sstream>
 #include <fstream>
@@ -22,36 +22,34 @@ namespace webifc
 	const double EPS_SMALL = 1e-6;
 	const double EPS_BIG = 1e-4;
 
-	bool MatrixFlipsTriangles(const glm::dmat4& mat)
+	bool MatrixFlipsTriangles(const glm::dmat4 &mat)
 	{
 		return glm::determinant(mat) < 0;
 	}
 
-	bool MatrixFlipsTriangles(const glm::dmat3& mat)
+	bool MatrixFlipsTriangles(const glm::dmat3 &mat)
 	{
 		return glm::determinant(mat) < 0;
 	}
 
-    void writeFile(std::wstring filename, std::string data)
-    {
-    #ifdef _MSC_VER
+	void writeFile(std::wstring filename, std::string data)
+	{
+#ifdef _MSC_VER
 		std::ofstream out(filename);
 		out << data;
 		out.close();
-    #endif
-    }
+#endif
+	}
 
 	// for some reason std::string_view is not compiling...
 	struct StringView
 	{
-		StringView(char* d, uint32_t l) :
-			data(d),
-			len(l)
+		StringView(char *d, uint32_t l) : data(d),
+										  len(l)
 		{
-
 		}
 
-		char* data;
+		char *data;
 		uint32_t len;
 	};
 
@@ -82,7 +80,7 @@ namespace webifc
 	}
 
 	// just follow the ifc spec, damn
-	bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3& normal, double eps = 0)
+	bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3 &normal, double eps = 0)
 	{
 		glm::dvec3 v12(v2 - v1);
 		glm::dvec3 v13(v3 - v1);
@@ -101,12 +99,12 @@ namespace webifc
 		return true;
 	}
 
-	bool IsInsideCenterExtents(const glm::dvec3& pt, const glm::dvec3& center, const glm::dvec3& extents)
+	bool IsInsideCenterExtents(const glm::dvec3 &pt, const glm::dvec3 &center, const glm::dvec3 &extents)
 	{
 		glm::dvec3 delta = pt - center;
 		delta = glm::abs(delta);
 		glm::dvec3 offset = delta - extents;
-		
+
 		return offset.x < EPS_SMALL && offset.y < EPS_SMALL && offset.z < EPS_SMALL;
 	}
 
@@ -119,18 +117,18 @@ namespace webifc
 		uint32_t numPoints = 0;
 		uint32_t numFaces = 0;
 
-		inline void AddPoint(glm::dvec4& pt, glm::dvec3& n)
+		inline void AddPoint(glm::dvec4 &pt, glm::dvec3 &n)
 		{
 			glm::dvec3 p = pt;
 			AddPoint(p, n);
 		}
 
-		inline void AddPoint(glm::dvec3& pt, glm::dvec3& n)
+		inline void AddPoint(glm::dvec3 &pt, glm::dvec3 &n)
 		{
-			//vertexData.reserve((numPoints + 1) * VERTEX_FORMAT_SIZE_FLOATS);
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
+			// vertexData.reserve((numPoints + 1) * VERTEX_FORMAT_SIZE_FLOATS);
+			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
+			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
+			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
 			vertexData.push_back(pt.x);
 			vertexData.push_back(pt.y);
 			vertexData.push_back(pt.z);
@@ -149,9 +147,9 @@ namespace webifc
 				printf("NaN in geom!\n");
 			}
 
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
+			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
+			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
+			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
 
 			numPoints += 1;
 		}
@@ -175,10 +173,10 @@ namespace webifc
 
 		inline void AddFace(uint32_t a, uint32_t b, uint32_t c)
 		{
-			//indexData.reserve((numFaces + 1) * 3);
-			//indexData[numFaces * 3 + 0] = a;
-			//indexData[numFaces * 3 + 1] = b;
-			//indexData[numFaces * 3 + 2] = c;
+			// indexData.reserve((numFaces + 1) * 3);
+			// indexData[numFaces * 3 + 0] = a;
+			// indexData[numFaces * 3 + 1] = b;
+			// indexData[numFaces * 3 + 2] = c;
 			indexData.push_back(a);
 			indexData.push_back(b);
 			indexData.push_back(c);
@@ -200,16 +198,15 @@ namespace webifc
 			return glm::dvec3(
 				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0],
 				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
-				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
-			);
+				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]);
 		}
 
-		void GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const
+		void GetCenterExtents(glm::dvec3 &center, glm::dvec3 &extents) const
 		{
 			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
 			glm::dvec3 max(DBL_MIN, DBL_MIN, DBL_MIN);
 
-			for (size_t i = 0; i < numPoints; i ++)
+			for (size_t i = 0; i < numPoints; i++)
 			{
 				auto pt = GetPoint(i);
 				min = glm::min(min, pt);
@@ -236,7 +233,6 @@ namespace webifc
 				newGeom.AddFace(a, b, c);
 			}
 
-
 			return newGeom;
 		}
 
@@ -256,7 +252,6 @@ namespace webifc
 				newGeom.AddFace(a, b, c);
 			}
 
-
 			return newGeom;
 		}
 
@@ -271,7 +266,7 @@ namespace webifc
 					fvertexData[i + 0] = vertexData[i + 0];
 					fvertexData[i + 1] = vertexData[i + 1];
 					fvertexData[i + 2] = vertexData[i + 2];
-				
+
 					fvertexData[i + 3] = vertexData[i + 3];
 					fvertexData[i + 4] = vertexData[i + 4];
 					fvertexData[i + 5] = vertexData[i + 5];
@@ -320,11 +315,11 @@ namespace webifc
 		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
 	}
 
-	template<uint32_t DIM>
+	template <uint32_t DIM>
 	struct IfcCurve
 	{
 		std::vector<glm::vec<DIM, glm::f64>> points;
-		inline void Add(const glm::vec<DIM, glm::f64>& pt)
+		inline void Add(const glm::vec<DIM, glm::f64> &pt)
 		{
 			if (points.empty())
 			{
@@ -361,10 +356,10 @@ namespace webifc
 		bool IsCCW()
 		{
 			double sum = 0;
-			
+
 			for (int i = 0; i < points.size(); i++)
 			{
-				glm::dvec2 pt1 = points[(i - 1)%points.size()];
+				glm::dvec2 pt1 = points[(i - 1) % points.size()];
 				glm::dvec2 pt2 = points[i];
 
 				sum += (pt2.x - pt1.x) * (pt2.y + pt1.y);
@@ -413,15 +408,13 @@ namespace webifc
 			{
 				circleCoordinate = glm::dvec2(
 					radiusX * std::cos(angle),
-					radiusY * std::sin(angle)
-				);
+					radiusY * std::sin(angle));
 			}
 			else
 			{
 				circleCoordinate = glm::dvec2(
 					radiusX * std::sin(angle),
-					radiusY * std::cos(angle)
-				);
+					radiusY * std::cos(angle));
 			}
 			glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
 			c.points.push_back(pos);
@@ -446,13 +439,13 @@ namespace webifc
 		return GetEllipseCurve(radius, radius, numSegments, placement);
 	}
 
-	bool GetWindingOfTriangle(const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c)
+	bool GetWindingOfTriangle(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c)
 	{
 		auto norm = computeNormal(a, b, c);
 		return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
 	}
 
-	bool TriangleIsCW(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c)
+	bool TriangleIsCW(const glm::dvec2 &a, const glm::dvec2 &b, const glm::dvec2 &c)
 	{
 		auto norm = computeNormal(glm::dvec3(a, 0), glm::dvec3(b, 0), glm::dvec3(c, 0));
 		return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
@@ -492,48 +485,48 @@ namespace webifc
 		double hd = depth / 2;
 		double hweb = webThickness / 2;
 
-		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1)); // TL
-		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1)); // TR
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));				   // TL
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));				   // TR
 		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness, 1)); // TR knee
 
 		if (hasFillet)
 		{
 			// TODO: interpolate
-			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, +hd - flangeThickness, 1));// TR elbow start
-			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness - filletRadius, 1));// TR elbow end
+			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, +hd - flangeThickness, 1)); // TR elbow start
+			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness - filletRadius, 1)); // TR elbow end
 
-			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness + filletRadius, 1));// BR elbow start
-			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, -hd + flangeThickness, 1));// BR elbow end
+			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness + filletRadius, 1)); // BR elbow start
+			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, -hd + flangeThickness, 1)); // BR elbow end
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness, 1));// TR elbow 
-			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness, 1));// BR elbow 
+			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness, 1)); // TR elbow
+			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness, 1)); // BR elbow
 		}
 
-		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness, 1));// BR knee 
-		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));// BR
+		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness, 1)); // BR knee
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));				   // BR
 
-		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));// BL
-		c.points.push_back(placement * glm::dvec3(-hw, -hd + flangeThickness, 1));// BL knee
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));				   // BL
+		c.points.push_back(placement * glm::dvec3(-hw, -hd + flangeThickness, 1)); // BL knee
 
 		if (hasFillet)
 		{
 			// TODO: interpolate
-			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, -hd + flangeThickness, 1));// BL elbow start
-			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness + filletRadius, 1));// BL elbow end
+			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, -hd + flangeThickness, 1)); // BL elbow start
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness + filletRadius, 1)); // BL elbow end
 
-			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness - filletRadius, 1));// TL elbow start
-			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, +hd - flangeThickness, 1));// TL elbow end
+			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness - filletRadius, 1)); // TL elbow start
+			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, +hd - flangeThickness, 1)); // TL elbow end
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness, 1));// BL elbow
-			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness, 1));// TL elbow
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness, 1)); // BL elbow
+			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness, 1)); // TL elbow
 		}
 
-		c.points.push_back(placement * glm::dvec3(-hw, +hd - flangeThickness, 1));// TL knee
-		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));// TL
+		c.points.push_back(placement * glm::dvec3(-hw, +hd - flangeThickness, 1)); // TL knee
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));				   // TL
 
 		if (MatrixFlipsTriangles(placement))
 		{
@@ -542,7 +535,7 @@ namespace webifc
 
 		return c;
 	}
-	
+
 	IfcCurve<2> GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
 	{
 		IfcCurve<2> c;
@@ -557,13 +550,13 @@ namespace webifc
 
 		if (hasFillet)
 		{
-			//TODO: Create interpolation and sloped lines
+			// TODO: Create interpolation and sloped lines
 		}
 		else
 		{
 			c.points.push_back(placement * glm::dvec3(-hw, -hd + thickness, 1));
 			c.points.push_back(placement * glm::dvec3(+hw - thickness, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(+hw - thickness, +hd, 1));		
+			c.points.push_back(placement * glm::dvec3(+hw - thickness, +hd, 1));
 		}
 
 		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
@@ -576,10 +569,9 @@ namespace webifc
 		return c;
 	}
 
-
-	glm::dvec3 projectOntoPlane(const glm::dvec3& origin, const glm::dvec3& normal, const glm::dvec3& point, const glm::dvec3& dir)
+	glm::dvec3 projectOntoPlane(const glm::dvec3 &origin, const glm::dvec3 &normal, const glm::dvec3 &point, const glm::dvec3 &dir)
 	{
-		// project {et} onto the plane, following the extrusion normal						
+		// project {et} onto the plane, following the extrusion normal
 		double ldotn = glm::dot(dir, normal);
 		if (ldotn == 0)
 		{
@@ -594,11 +586,11 @@ namespace webifc
 		}
 	}
 
-	bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3>& points, glm::dvec3& v1, glm::dvec3& v2, glm::dvec3& v3)
+	bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3> &points, glm::dvec3 &v1, glm::dvec3 &v2, glm::dvec3 &v3)
 	{
 		v1 = points[0];
 
-		for (auto& p : points)
+		for (auto &p : points)
 		{
 			if (v1 != p)
 			{
@@ -608,15 +600,32 @@ namespace webifc
 		}
 
 		glm::dvec3 normal;
-		for (auto& p : points)
+		// multiple tries to find the best match
+		for (double i = 0; i < 4; i++)
 		{
-			if (computeSafeNormal(v1, v2, p, normal, EPS_SMALL))
+			double EPS = EPS_SMALL;
+			if (i == 0)
 			{
-				v3 = p;
-				return true;
+				EPS = 100;
+			}
+			if (i == 1)
+			{
+				EPS = 1;
+			}
+			if (i == 2)
+			{
+				EPS = 0.01;
+			}
+			for (auto &p : points)
+			{
+				if (computeSafeNormal(v1, v2, p, normal, EPS))
+				{
+					v3 = p;
+					return true;
+				}
 			}
 		}
-
+		
 		return false;
 	}
 
@@ -642,7 +651,7 @@ namespace webifc
 		bool isConvex;
 	};
 
-	std::array<double, 16> FlattenTransformation(const glm::dmat4& transformation)
+	std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)
 	{
 		std::array<double, 16> flatTransformation;
 
@@ -693,7 +702,7 @@ namespace webifc
 			}
 			else
 			{
-				for (auto& c : children)
+				for (auto &c : children)
 				{
 					auto col = c.GetColor();
 					if (col.has_value())
@@ -707,7 +716,7 @@ namespace webifc
 		}
 	};
 
-	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, glm::dmat4 mat)
+	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
@@ -731,7 +740,7 @@ namespace webifc
 			}
 		}
 
-		for (auto& c : mesh.children)
+		for (auto &c : mesh.children)
 		{
 			auto v = GetOriginRec(c, geometryMap, newMat);
 			if (v.has_value())
@@ -743,7 +752,7 @@ namespace webifc
 		return std::nullopt;
 	}
 
-	glm::dvec3 GetOrigin(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap)
+	glm::dvec3 GetOrigin(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap)
 	{
 		auto v = GetOriginRec(mesh, geometryMap, glm::dmat4(1));
 
@@ -757,7 +766,7 @@ namespace webifc
 		}
 	}
 
-	void flattenRecursive(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, IfcGeometry& geom, glm::dmat4 mat)
+	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, IfcGeometry &geom, glm::dmat4 mat)
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
@@ -790,13 +799,13 @@ namespace webifc
 			}
 		}
 
-		for (auto& c : mesh.children)
+		for (auto &c : mesh.children)
 		{
 			flattenRecursive(c, geometryMap, geom, newMat);
 		}
 	}
 
-	IfcGeometry flatten(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, glm::dmat4 mat = glm::dmat4(1))
+	IfcGeometry flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
 	{
 		IfcGeometry geom;
 		flattenRecursive(mesh, geometryMap, geom, mat);
@@ -809,15 +818,13 @@ namespace webifc
 
 		glm::dvec2 min(
 			DBL_MAX,
-			DBL_MAX
-		);
+			DBL_MAX);
 
 		glm::dvec2 max(
 			-DBL_MAX,
-			-DBL_MAX
-		);
+			-DBL_MAX);
 
-		for (auto& pt : input)
+		for (auto &pt : input)
 		{
 			min = glm::min(min, pt);
 			max = glm::max(max, pt);
@@ -833,13 +840,12 @@ namespace webifc
 			printf("asdf\n");
 		}
 
-		for (auto& pt : input)
+		for (auto &pt : input)
 		{
 			// here we invert Y, since the canvas +y is down, but makes more sense to think about +y as up
 			retval.emplace_back(
 				((pt.x - min.x) / (maxSize)) * size.x + offset.x,
-				(size.y - ((pt.y - min.y) / (maxSize)) * size.y) + offset.y
-			);
+				(size.y - ((pt.y - min.y) / (maxSize)) * size.y) + offset.y);
 		}
 
 		return retval;
@@ -860,8 +866,8 @@ namespace webifc
 		{
 			for (int i = 1; i < 2; i++)
 			{
-				auto& start = rescaled[i - 1];
-				auto& end = rescaled[i];
+				auto &start = rescaled[i - 1];
+				auto &end = rescaled[i];
 				svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
 				svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
 				svg << "style = \"stroke:rgb(0,255,0);stroke-width:2\" />";
@@ -869,8 +875,8 @@ namespace webifc
 
 			for (int i = 2; i < rescaled.size() - 1; i++)
 			{
-				auto& start = rescaled[i - 1];
-				auto& end = rescaled[i];
+				auto &start = rescaled[i - 1];
+				auto &end = rescaled[i];
 				svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
 				svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
 				svg << "style = \"stroke:rgb(0,0,0);stroke-width:2\" />";
@@ -878,8 +884,8 @@ namespace webifc
 
 			for (int i = rescaled.size() - 1; i < rescaled.size(); i++)
 			{
-				auto& start = rescaled[i - 1];
-				auto& end = rescaled[i];
+				auto &start = rescaled[i - 1];
+				auto &end = rescaled[i];
 				svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
 				svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
 				svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
@@ -902,29 +908,28 @@ namespace webifc
 
 	void DumpSVGCurve(std::vector<glm::dvec2> points, std::wstring filename, std::vector<uint32_t> indices = {})
 	{
-        writeFile(filename, makeSVGLines(points, indices));
+		writeFile(filename, makeSVGLines(points, indices));
 	}
 
 	void DumpSVGCurve(std::vector<glm::dvec3> points, glm::vec3 dir, std::wstring filename, std::vector<uint32_t> indices = {})
 	{
 		std::vector<glm::dvec2> points2D;
-		for (auto& pt : points)
+		for (auto &pt : points)
 		{
 			points2D.emplace_back(pt.x, pt.z);
 		}
 		DumpSVGCurve(points2D, filename, indices);
 	}
 
-    struct Point
-    {
-        double x;
-        double y;
-        int32_t id = -1;
+	struct Point
+	{
+		double x;
+		double y;
+		int32_t id = -1;
 		bool isBoundary = false;
 
 		Point()
 		{
-
 		}
 
 		Point(double xx, double yy)
@@ -939,28 +944,27 @@ namespace webifc
 			y = p.y;
 		}
 
-        glm::dvec2 operator()() const
-        {
-            return glm::dvec2(
-                x, y
-            );
-        }
-    };
+		glm::dvec2 operator()() const
+		{
+			return glm::dvec2(
+				x, y);
+		}
+	};
 
-    struct Triangle
-    {
-        Point a;
-        Point b;
-        Point c;
+	struct Triangle
+	{
+		Point a;
+		Point b;
+		Point c;
 
-        int32_t id = -1;
-    };
+		int32_t id = -1;
+	};
 
-    struct Edge
-    {
-        int32_t a = -1;
-        int32_t b = -1;
-    };
+	struct Edge
+	{
+		int32_t a = -1;
+		int32_t b = -1;
+	};
 
 	struct Bounds
 	{
@@ -972,16 +976,14 @@ namespace webifc
 	{
 		return glm::dvec2(
 			std::min(m.x, p.x),
-			std::min(m.y, p.y)
-		);
+			std::min(m.y, p.y));
 	}
 
 	glm::dvec2 cmax(glm::dvec2 m, Point p)
 	{
 		return glm::dvec2(
 			std::max(m.x, p.x),
-			std::max(m.y, p.y)
-		);
+			std::max(m.y, p.y));
 	}
 
 	Bounds getBounds(std::vector<Triangle> input, glm::dvec2 size, glm::dvec2 offset)
@@ -990,15 +992,13 @@ namespace webifc
 
 		glm::dvec2 min(
 			DBL_MAX,
-			DBL_MAX
-		);
+			DBL_MAX);
 
 		glm::dvec2 max(
 			-DBL_MAX,
-			-DBL_MAX
-		);
+			-DBL_MAX);
 
-		for (auto& tri : input)
+		for (auto &tri : input)
 		{
 			min = cmin(min, tri.a);
 			max = cmax(max, tri.a);
@@ -1020,8 +1020,7 @@ namespace webifc
 
 		return {
 			min,
-			max
-		};
+			max};
 	}
 
 	Bounds getBounds(std::vector<std::vector<glm::dvec2>> input, glm::dvec2 size, glm::dvec2 offset)
@@ -1030,17 +1029,15 @@ namespace webifc
 
 		glm::dvec2 min(
 			DBL_MAX,
-			DBL_MAX
-		);
+			DBL_MAX);
 
 		glm::dvec2 max(
 			-DBL_MAX,
-			-DBL_MAX
-		);
+			-DBL_MAX);
 
-		for (auto& loop : input)
+		for (auto &loop : input)
 		{
-			for (auto& point : loop)
+			for (auto &point : loop)
 			{
 				min = glm::min(min, point);
 				max = glm::max(max, point);
@@ -1057,19 +1054,17 @@ namespace webifc
 
 		return {
 			min,
-			max
-		};
+			max};
 	}
 
 	glm::dvec2 rescale(Point p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
 	{
 		return glm::dvec2(
 			((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
-			((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y
-		);
+			((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
 	}
 
-	void svgMakeLine(glm::dvec2 a, glm::dvec2 b, std::stringstream& svg)
+	void svgMakeLine(glm::dvec2 a, glm::dvec2 b, std::stringstream &svg)
 	{
 		svg << "<line x1=\"" << a.x << "\" y1=\"" << a.y << "\" ";
 		svg << "x2=\"" << b.x << "\" y2=\"" << b.y << "\" ";
@@ -1087,7 +1082,7 @@ namespace webifc
 
 		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "  \" xmlns=\"http://www.w3.org/2000/svg\" >";
 
-		for (auto& t : triangles)
+		for (auto &t : triangles)
 		{
 			if (t.id != -1)
 			{
@@ -1114,7 +1109,7 @@ namespace webifc
 			svg << "<circle cx = \"" << rprev.x << "\" cy = \"" << rprev.y << "\" r = \"3\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
 		}
 
-		for (auto& pt : pts)
+		for (auto &pt : pts)
 		{
 			glm::dvec2 p = rescale(pt, bounds, size, offset);
 			svg << "<circle cx = \"" << p.x << "\" cy = \"" << p.y << "\" r = \"1\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
@@ -1129,8 +1124,7 @@ namespace webifc
 	{
 		return glm::dvec2(
 			((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
-			((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y
-		);
+			((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
 	}
 
 	std::string makeSVGLines(std::vector<std::vector<glm::dvec2>> lines)
@@ -1144,7 +1138,7 @@ namespace webifc
 
 		svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << " \" xmlns=\"http://www.w3.org/2000/svg\">";
 
-		for (auto& line : lines)
+		for (auto &line : lines)
 		{
 			if (line.size() > 1)
 			{
@@ -1170,12 +1164,12 @@ namespace webifc
 
 	void DumpSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev, std::wstring filename, std::vector<Point> pts = {})
 	{
-        writeFile(filename, makeSVGTriangles(triangles, p, prev, pts));
+		writeFile(filename, makeSVGTriangles(triangles, p, prev, pts));
 	}
 
 	void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::wstring filename)
 	{
-        writeFile(filename, makeSVGLines(lines));
+		writeFile(filename, makeSVGLines(lines));
 	}
 
 	bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
@@ -1187,8 +1181,7 @@ namespace webifc
 		glm::dvec4(1, 0, 0, 0),
 		glm::dvec4(0, 0, -1, 0),
 		glm::dvec4(0, 1, 0, 0),
-		glm::dvec4(0, 0, 0, 1)
-	);
+		glm::dvec4(0, 0, 0, 1));
 
 	double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
@@ -1199,7 +1192,8 @@ namespace webifc
 		return glm::length(norm) / 2;
 	}
 
-	double cross2d(const glm::dvec2& point1, const glm::dvec2& point2) {
+	double cross2d(const glm::dvec2 &point1, const glm::dvec2 &point2)
+	{
 		return point1.x * point2.y - point1.y * point2.x;
 	}
 
@@ -1213,7 +1207,7 @@ namespace webifc
 	}
 
 	// https://en.wikipedia.org/wiki/Barycentric_coordinate_system
-	glm::dvec3 ToBary(const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c, const glm::dvec3& pt)
+	glm::dvec3 ToBary(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dvec3 &pt)
 	{
 		glm::dvec3 E1 = b - a;
 		glm::dvec3 E2 = c - a;
@@ -1236,13 +1230,13 @@ namespace webifc
 		return glm::dvec3(w, u, v);
 	}
 
-	glm::dvec2 FromBary(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c, const glm::dvec3& pt)
+	glm::dvec2 FromBary(const glm::dvec2 &a, const glm::dvec2 &b, const glm::dvec2 &c, const glm::dvec3 &pt)
 	{
 		return pt.x * a + pt.y * b + pt.z * c;
 	}
 
 	// assume 0,0 1,0 0,1 triangle
-	glm::dvec3 ToBary2(const glm::dvec2& pt)
+	glm::dvec3 ToBary2(const glm::dvec2 &pt)
 	{
 		double v = pt.x;
 		double w = pt.y;
@@ -1251,7 +1245,7 @@ namespace webifc
 		return glm::dvec3(u, v, w);
 	}
 
-	glm::dvec3 FromBary(const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c, const glm::dvec3& pt)
+	glm::dvec3 FromBary(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dvec3 &pt)
 	{
 		return pt.x * a + pt.y * b + pt.z * c;
 	}
@@ -1264,7 +1258,7 @@ namespace webifc
 		}
 	}
 
-	void CheckTriangle(Face& f, std::vector<glm::dvec3>& pts)
+	void CheckTriangle(Face &f, std::vector<glm::dvec3> &pts)
 	{
 		if (areaOfTriangle(pts[f.i0], pts[f.i1], pts[f.i2]) == 0)
 		{
@@ -1274,10 +1268,10 @@ namespace webifc
 
 	double RandomDouble(double lo, double hi)
 	{
-		return lo + static_cast<double>(rand()) / (static_cast<double> (RAND_MAX / (hi - lo)));
+		return lo + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (hi - lo)));
 	}
 
-	std::string ToObj(const IfcGeometry& geom, size_t& offset, glm::dmat4 transform = glm::dmat4(1))
+	std::string ToObj(const IfcGeometry &geom, size_t &offset, glm::dmat4 transform = glm::dmat4(1))
 	{
 		std::stringstream obj;
 
@@ -1300,13 +1294,13 @@ namespace webifc
 		return obj.str();
 	}
 
-	std::string ToObj(IfcComposedMesh& mesh, std::unordered_map<uint32_t, IfcGeometry>& geometryMap, size_t& offset, glm::dmat4 mat = glm::dmat4(1))
+	std::string ToObj(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, size_t &offset, glm::dmat4 mat = glm::dmat4(1))
 	{
 		std::string complete;
 
 		glm::dmat4 trans = mat * mesh.transformation;
 
-		auto& geom = geometryMap[mesh.expressID];
+		auto &geom = geometryMap[mesh.expressID];
 
 		complete += ToObj(geom, offset, trans);
 
@@ -1318,14 +1312,14 @@ namespace webifc
 		return complete;
 	}
 
-	void DumpIfcGeometry(const IfcGeometry& geom, std::wstring filename)
+	void DumpIfcGeometry(const IfcGeometry &geom, std::wstring filename)
 	{
 		size_t offset = 0;
-        writeFile(filename, ToObj(geom, offset));
+		writeFile(filename, ToObj(geom, offset));
 	}
 
 	//! This is essentially a chunked tightly packed dynamic array
-	template<uint32_t N>
+	template <uint32_t N>
 	class DynamicTape
 	{
 	public:
@@ -1362,7 +1356,7 @@ namespace webifc
 			push(&v, 2);
 		}
 
-		inline void push(void* v, unsigned long long size)
+		inline void push(void *v, unsigned long long size)
 		{
 			CheckChunk(size);
 			memcpy(chunks.back().data() + sizes[writePtr], v, size);
@@ -1399,11 +1393,11 @@ namespace webifc
 		template <typename T>
 		inline T Read()
 		{
-			std::array<uint8_t, N>& chunk = chunks[readChunkIndex];
-			uint8_t* valuePtr = &chunk[readPtr];
+			std::array<uint8_t, N> &chunk = chunks[readChunkIndex];
+			uint8_t *valuePtr = &chunk[readPtr];
 
-			//T v = *(T*)(valuePtr);
-			// make this memory access aligned for emscripten
+			// T v = *(T*)(valuePtr);
+			//  make this memory access aligned for emscripten
 
 			T v;
 
@@ -1413,22 +1407,22 @@ namespace webifc
 			return v;
 		}
 
-		void* GetReadPtr()
+		void *GetReadPtr()
 		{
-			std::array<uint8_t, N>& chunk = chunks[readChunkIndex];
-			uint8_t* valuePtr = &chunk[readPtr];
+			std::array<uint8_t, N> &chunk = chunks[readChunkIndex];
+			uint8_t *valuePtr = &chunk[readPtr];
 
-			return (void*)valuePtr;
+			return (void *)valuePtr;
 		}
 
-        StringView ReadStringView()
-        {
+		StringView ReadStringView()
+		{
 			uint16_t length = Read<uint16_t>();
-			char* charPtr = (char*)GetReadPtr();
+			char *charPtr = (char *)GetReadPtr();
 			AdvanceRead(length);
 
-			return StringView { charPtr, length };
-        }
+			return StringView{charPtr, length};
+		}
 
 		inline void Reverse()
 		{
@@ -1464,12 +1458,12 @@ namespace webifc
 			std::ofstream file("tape.bin");
 			for (int i = 0; i < chunks.size(); i++)
 			{
-				std::array<uint8_t, N>& ch = chunks[i];
-				file.write((char*)ch.data(), sizes[i]);
+				std::array<uint8_t, N> &ch = chunks[i];
+				file.write((char *)ch.data(), sizes[i]);
 			}
 		}
 
-		uint32_t Copy(uint32_t offset, uint32_t endOffset, uint8_t* dest)
+		uint32_t Copy(uint32_t offset, uint32_t endOffset, uint8_t *dest)
 		{
 			uint32_t chunkStart = offset / N;
 			uint32_t chunkStartPos = offset % N;
@@ -1480,7 +1474,7 @@ namespace webifc
 			if (chunkStart == chunkEnd)
 			{
 				memcpy(dest, &chunks[chunkStart][chunkStartPos], chunkEndPos - chunkStartPos);
-				
+
 				return chunkEndPos - chunkStartPos;
 			}
 			else
@@ -1506,7 +1500,6 @@ namespace webifc
 		}
 
 	private:
-
 		uint32_t readPtr = 0;
 		uint32_t readChunkIndex = 0;
 		uint32_t writePtr = -1;
