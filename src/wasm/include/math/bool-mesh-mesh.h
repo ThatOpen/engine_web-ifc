@@ -155,6 +155,41 @@ namespace webifc
         return result;
     }
 
+    IfcGeometry boolMultiOp_CSGJSCPP(const IfcGeometry& firstGeom, const std::vector<IfcGeometry>& secondGeoms)
+    {
+        csgjscpp::Model model;
+
+        for(auto& geom : secondGeoms)
+        {
+          auto m = IfcGeometryToCSGModel(geom);
+          model = csgjscpp::csgunion(model, m);
+        }
+
+        auto firstModel = IfcGeometryToCSGModel(firstGeom);
+        auto ModelResult = csgjscpp::csgsubtract(firstModel, model);;
+
+        IfcGeometry result;
+
+        for (uint32_t i = 0; i < ModelResult.indices.size(); i += 3)
+        {
+            uint32_t i0 = ModelResult.indices[i + 0];
+            uint32_t i1 = ModelResult.indices[i + 1];
+            uint32_t i2 = ModelResult.indices[i + 2];
+
+            csgjscpp::Vertex va = ModelResult.vertices[i0];
+            csgjscpp::Vertex vb = ModelResult.vertices[i1];
+            csgjscpp::Vertex vc = ModelResult.vertices[i2];
+
+            glm::dvec3 a(va.pos.x, va.pos.y, va.pos.z);
+            glm::dvec3 b(vb.pos.x, vb.pos.y, vb.pos.z);
+            glm::dvec3 c(vc.pos.x, vc.pos.y, vc.pos.z);
+
+            result.AddFace(a, b, c);
+        }
+
+        return result;
+    }
+
     glm::dvec3 GetOffset(glm::dvec3 pt, glm::dvec3 center, glm::dvec3 extents)
     {
         auto dpt = pt - center;
