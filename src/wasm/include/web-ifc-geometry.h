@@ -1,8 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
- 
- #pragma once
+
+#pragma once
 
 #include <string>
 #include <vector>
@@ -21,7 +21,6 @@
 
 #include "math/intersect-mesh-mesh.h"
 #include "math/bool-mesh-mesh.h"
-
 
 #include "ifc2x4.h"
 #include "web-ifc.h"
@@ -49,14 +48,12 @@ namespace webifc
 	class IfcGeometryLoader
 	{
 	public:
-		IfcGeometryLoader(IfcLoader& l) :
-			_loader(l),
-			_transformation(1)
+		IfcGeometryLoader(IfcLoader &l) : _loader(l),
+										  _transformation(1)
 		{
-
 		}
 
-		IfcGeometry& GetCachedGeometry(uint32_t expressID)
+		IfcGeometry &GetCachedGeometry(uint32_t expressID)
 		{
 			return _expressIDToGeometry[expressID];
 		}
@@ -74,10 +71,10 @@ namespace webifc
 		IfcGeometry GetFlattenedGeometry(uint32_t expressID)
 		{
 			auto mesh = GetMesh(expressID);
-            return flatten(mesh, _expressIDToGeometry, NormalizeIFC);
+			return flatten(mesh, _expressIDToGeometry, NormalizeIFC);
 		}
 
-		void AddComposedMeshToFlatMesh(IfcFlatMesh& flatMesh, const IfcComposedMesh& composedMesh, const glm::dmat4& parentMatrix = glm::dmat4(1), const glm::dvec4& color = glm::dvec4(1, 1, 1, 1), bool hasColor = false)
+		void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false)
 		{
 			glm::dvec4 newParentColor = color;
 			bool newHasColor = hasColor;
@@ -114,7 +111,7 @@ namespace webifc
 				flatMesh.geometries.push_back(geometry);
 			}
 
-			for (auto& c : composedMesh.children)
+			for (auto &c : composedMesh.children)
 			{
 				AddComposedMeshToFlatMesh(flatMesh, c, newMatrix, newParentColor, newHasColor);
 			}
@@ -165,7 +162,7 @@ namespace webifc
 			{
 				profile.curve.Invert();
 			}
-			for (auto& hole : profile.holes)
+			for (auto &hole : profile.holes)
 			{
 				if (hole.IsCCW())
 				{
@@ -176,18 +173,18 @@ namespace webifc
 			return profile;
 		}
 
-		void DumpMesh(IfcComposedMesh& mesh, std::wstring filename)
+		void DumpMesh(IfcComposedMesh &mesh, std::wstring filename)
 		{
 			size_t offset = 0;
-            writeFile(filename, ToObj(mesh, _expressIDToGeometry, offset, NormalizeIFC));
+			writeFile(filename, ToObj(mesh, _expressIDToGeometry, offset, NormalizeIFC));
 		}
 
-        void SetTransformation(const glm::dmat4& val)
-        {
-            _transformation = val;
-        }
+		void SetTransformation(const glm::dmat4 &val)
+		{
+			_transformation = val;
+		}
 
-		template<uint32_t DIM>
+		template <uint32_t DIM>
 		IfcCurve<DIM> GetCurve(uint32_t expressID)
 		{
 			IfcCurve<DIM> curve;
@@ -206,20 +203,20 @@ namespace webifc
 		}
 
 	private:
-        glm::dmat4 _transformation;
+		glm::dmat4 _transformation;
 		GeometryStatistics _statistics;
 
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			bool hasColor = false;
 			glm::dvec4 styledItemColor(1);
-			auto& styledItems = _loader.GetStyledItems();
-			auto& relMaterials = _loader.GetRelMaterials();
-			auto& materialDefinitions = _loader.GetMaterialDefinitions();
-			auto& relVoids = _loader.GetRelVoids();
-			auto& relAggregates = _loader.GetRelAggregates();
+			auto &styledItems = _loader.GetStyledItems();
+			auto &relMaterials = _loader.GetRelMaterials();
+			auto &materialDefinitions = _loader.GetMaterialDefinitions();
+			auto &relVoids = _loader.GetRelVoids();
+			auto &relAggregates = _loader.GetRelAggregates();
 
 			auto styledItem = styledItems.find(line.expressID);
 			if (styledItem != styledItems.end())
@@ -241,12 +238,12 @@ namespace webifc
 				auto material = relMaterials.find(line.expressID);
 				if (material != relMaterials.end())
 				{
-					auto& materials = material->second;
+					auto &materials = material->second;
 					for (auto item : materials)
 					{
 						if (materialDefinitions.count(item.second) != 0)
 						{
-							auto& defs = materialDefinitions[item.second];
+							auto &defs = materialDefinitions[item.second];
 							for (auto def : defs)
 							{
 								bool success = GetColor(def.second, styledItemColor);
@@ -258,17 +255,16 @@ namespace webifc
 							}
 						}
 
-						// if no color found, check material itself
-						if (!hasColor)
-						{
-							bool success = GetColor(item.second, styledItemColor);
-							if (success)
-							{
-								hasColor = true;
-							}
-						}
+						// // if no color found, check material itself
+						// if (!hasColor)
+						// {
+						// 	bool success = GetColor(item.second, styledItemColor);
+						// 	if (success)
+						// 	{
+						// 		hasColor = true;
+						// 	}
+						// }
 					}
-
 				}
 			}
 
@@ -330,7 +326,7 @@ namespace webifc
 					auto origin = GetOrigin(mesh, _expressIDToGeometry);
 					auto normalizeMat = glm::translate(-origin);
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry, normalizeMat);
-					auto elementColor = mesh.GetColor();
+					//auto elementColor = mesh.GetColor();
 
 					if (!flatElementMesh.IsEmpty())
 					{
@@ -354,11 +350,11 @@ namespace webifc
 						resultMesh.color = styledItemColor;
 						resultMesh.hasColor = true;
 					}
-					else if (elementColor.has_value())
-					{
-						resultMesh.hasColor = true;
-						resultMesh.color = *elementColor;
-					}
+					// else if (elementColor.has_value())
+					// {
+					// 	resultMesh.hasColor = true;
+					// 	resultMesh.color = *elementColor;
+					// }
 					else
 					{
 						resultMesh.hasColor = false;
@@ -383,7 +379,7 @@ namespace webifc
 
 					mesh.transformation = GetLocalPlacement(localPlacement);
 					mesh.children.push_back(GetMesh(ifcPresentation));
-					
+
 					return mesh;
 				}
 				case ifc2x4::IFCBOOLEANCLIPPINGRESULT:
@@ -402,16 +398,16 @@ namespace webifc
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
 					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondMesh);
-					
+
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
 					mesh.transformation = glm::translate(origin);
 
-                    if (!mesh.hasColor && firstMesh.hasColor)
-                    {
-                        mesh.hasColor = true;
-                        mesh.color = firstMesh.color;
-                    }
+					if (!mesh.hasColor && firstMesh.hasColor)
+					{
+						mesh.hasColor = true;
+						mesh.color = firstMesh.color;
+					}
 
 					return mesh;
 				}
@@ -424,7 +420,7 @@ namespace webifc
 
 					if (op != "DIFFERENCE")
 					{
-						_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported boolean op " + op, line.expressID });
+						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported boolean op " + op, line.expressID});
 						return mesh;
 					}
 
@@ -452,11 +448,11 @@ namespace webifc
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
 					mesh.transformation = glm::translate(origin);
-                    if (!mesh.hasColor && firstMesh.hasColor)
-                    {
-                        mesh.hasColor = true;
-                        mesh.color = firstMesh.color;
-                    }
+					if (!mesh.hasColor && firstMesh.hasColor)
+					{
+						mesh.hasColor = true;
+						mesh.color = firstMesh.color;
+					}
 
 					return mesh;
 				}
@@ -525,7 +521,6 @@ namespace webifc
 					glm::dvec3 planeNormal = surface.transformation[2];
 					glm::dvec3 planePosition = surface.transformation[3];
 
-
 					glm::dmat4 invPosition = glm::inverse(position);
 					glm::dvec3 localPlaneNormal = invPosition * glm::dvec4(planeNormal, 0);
 					auto localPlanePos = invPosition * glm::dvec4(planePosition, 1);
@@ -549,7 +544,7 @@ namespace webifc
 					profile.curve = curve;
 
 					auto geom = Extrude(profile, extrusionNormal, extrudeDistance, localPlaneNormal, localPlanePos);
-					//auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
+					// auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
 
 					// @Refactor: duplicate of extrudedareasolid
 					if (flipWinding)
@@ -562,7 +557,7 @@ namespace webifc
 							geom.indexData[i * 3 + 1] = temp;
 						}
 					}
-					
+
 					if (_loader.GetSettings().DUMP_CSG_MESHES)
 					{
 						DumpIfcGeometry(geom, L"pbhs.obj");
@@ -592,7 +587,7 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 0);
 					auto shells = _loader.GetSetArgument();
 
-					for (auto& shell : shells)
+					for (auto &shell : shells)
 					{
 						uint32_t shellRef = _loader.GetRefArgument(shell);
 						IfcComposedMesh temp;
@@ -621,7 +616,7 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 2);
 					auto representations = _loader.GetSetArgument();
 
-					for (auto& repToken : representations)
+					for (auto &repToken : representations)
 					{
 						uint32_t repID = _loader.GetRefArgument(repToken);
 						mesh.children.push_back(GetMesh(repID));
@@ -642,7 +637,7 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 3);
 					auto repItems = _loader.GetSetArgument();
 
-					for (auto& repToken : repItems)
+					for (auto &repToken : repItems)
 					{
 						uint32_t repID = _loader.GetRefArgument(repToken);
 						mesh.children.push_back(GetMesh(repID));
@@ -666,7 +661,7 @@ namespace webifc
 					IfcGeometry geom;
 
 					std::vector<IfcBound3D> bounds;
-					for (auto& face : faces)
+					for (auto &face : faces)
 					{
 						uint32_t faceID = _loader.GetRefArgument(face);
 						ReadIndexedPolygonalFace(faceID, bounds, points);
@@ -679,13 +674,13 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 3);
 					if (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
 					{
-						_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported IFCPOLYGONALFACESET with PnIndex", line.expressID });
+						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported IFCPOLYGONALFACESET with PnIndex", line.expressID});
 					}
 
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					
+
 					return mesh;
 				}
 				case ifc2x4::IFCTRIANGULATEDFACESET:
@@ -703,7 +698,6 @@ namespace webifc
 					auto indices = Read2DArrayOfThreeIndices();
 
 					IfcGeometry geom;
-
 
 					_loader.MoveToArgumentOffset(line, 4);
 					if (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
@@ -729,7 +723,7 @@ namespace webifc
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					
+
 					return mesh;
 				}
 				case ifc2x4::IFCSWEPTDISKSOLID:
@@ -742,13 +736,13 @@ namespace webifc
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", line.expressID });
+						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", line.expressID});
 						innerRadius = _loader.GetDoubleArgument();
 					}
 
 					// TODO: ignoring start/end params for now
 					double startParam = 0; // = _loader.GetDoubleArgument();
-					double endParam = 0; // = _loader.GetDoubleArgument();
+					double endParam = 0;   // = _loader.GetDoubleArgument();
 
 					IfcCurve<3> directrix = GetCurve<3>(directrixRef);
 
@@ -844,14 +838,14 @@ namespace webifc
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;
-					
+
 					return mesh;
 				}
 				case ifc2x4::IFCPOLYLINE:
 					// ignore polylines as meshes
 					return mesh;
 				default:
-					_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected mesh type", line.expressID, line.ifcType });
+					_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected mesh type", line.expressID, line.ifcType});
 					break;
 				}
 			}
@@ -859,7 +853,7 @@ namespace webifc
 			return IfcComposedMesh();
 		}
 
-		IfcCurve<3> BuildArc(const glm::dvec3& pos, const glm::dvec3& axis, double angleRad)
+		IfcCurve<3> BuildArc(const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad)
 		{
 			IfcCurve<3> curve;
 
@@ -874,7 +868,7 @@ namespace webifc
 
 			auto curve2D = GetEllipseCurve(1, 1, _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM, glm::dmat3(1), 0, angleRad, true);
 
-			for (auto& pt2D : curve2D.points)
+			for (auto &pt2D : curve2D.points)
 			{
 				glm::dvec3 pt3D = pos + pt2D.x * right + pt2D.y * up;
 				curve.Add(pt3D);
@@ -883,15 +877,14 @@ namespace webifc
 			return curve;
 		}
 
-		void GetAxis1Placement(uint32_t expressID, glm::dvec3& pos, glm::dvec3& axis)
+		void GetAxis1Placement(uint32_t expressID, glm::dvec3 &pos, glm::dvec3 &axis)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 			uint32_t locationID = _loader.GetRefArgument();
 			IfcTokenType dirToken = _loader.GetTokenType();
-
 
 			axis = glm::dvec3(0, 0, 1);
 			if (dirToken == IfcTokenType::REF)
@@ -923,7 +916,7 @@ namespace webifc
 			return result;
 		}
 
-		IfcGeometry BoolSubtract(const IfcGeometry& firstGeom, const IfcGeometry& secondGeom)
+		IfcGeometry BoolSubtract(const IfcGeometry &firstGeom, const IfcGeometry &secondGeom)
 		{
 			IfcGeometry result;
 
@@ -936,7 +929,7 @@ namespace webifc
 
 			if (first.numFaces == 0 || second.numFaces == 0)
 			{
-				_loader.ReportError({ LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target" });
+				_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
 
 				// bail out because we will get strange meshes
 				// if this happens, probably there's an issue parsing the mesh that occurred earlier
@@ -970,7 +963,7 @@ namespace webifc
 
 				if (firstGeom.numPoints > threshold || secondGeom.numPoints > threshold)
 				{
-					_loader.ReportError({ LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD" });
+					_loader.ReportError({LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD"});
 
 					// bail out because we expect this operation to take too long
 					return firstGeom;
@@ -990,7 +983,7 @@ namespace webifc
 		std::vector<glm::dvec3> ReadIfcCartesianPointList3D(uint32_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 
@@ -1018,7 +1011,7 @@ namespace webifc
 		{
 			// TODO: near-duplicate of 3D, can make template
 			auto lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 
@@ -1041,10 +1034,10 @@ namespace webifc
 			return result;
 		}
 
-		void ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D>& bounds, const std::vector<glm::dvec3>& points)
+		void ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			bounds.emplace_back();
 
@@ -1057,11 +1050,11 @@ namespace webifc
 				auto indexIDs = _loader.GetSetArgument();
 
 				IfcGeometry geometry;
-				for (auto& indexID : indexIDs)
+				for (auto &indexID : indexIDs)
 				{
 					uint32_t index = static_cast<uint32_t>(_loader.GetDoubleArgument(indexID));
 					glm::dvec3 point = points[index - 1]; // indices are 1-based
-					
+
 					// I am not proud of this
 					bounds.back().curve.points.push_back(point);
 				}
@@ -1097,15 +1090,49 @@ namespace webifc
 				break;
 			}
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected indexedface type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected indexedface type", line.expressID, line.ifcType});
 				break;
 			}
+		}
+
+		bool ReadMaterialList(uint32_t expressID, std::vector<glm::dvec4> &outputColor)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto &line = _loader.GetLine(lineID);
+
+			_loader.MoveToArgumentOffset(line, 0);
+			
+			std::vector<glm::dvec2> result;
+
+			// while we have material set begin
+			while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
+			{
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					const auto &matDef = _loader.GetRefArgument();
+
+					auto &defs = _loader.GetMaterialDefinitions()[matDef];
+					for (auto def : defs)
+					{
+						glm::dvec4 tempColor;
+						bool success = GetColor(def.second, tempColor);
+						if (success)
+						{
+							outputColor.push_back(tempColor);
+						}
+					}
+				}
+				// read material set end
+				_loader.GetTokenType();
+			}
+			return outputColor.size() > 0;
 		}
 
 		IfcGeometry GetBrep(uint32_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x4::IFCCONNECTEDFACESET:
@@ -1116,7 +1143,7 @@ namespace webifc
 				auto faces = _loader.GetSetArgument();
 
 				IfcGeometry geometry;
-				for (auto& faceToken : faces)
+				for (auto &faceToken : faces)
 				{
 					uint32_t faceID = _loader.GetRefArgument(faceToken);
 					AddFaceToGeometry(faceID, geometry);
@@ -1125,17 +1152,17 @@ namespace webifc
 				return geometry;
 			}
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected shell type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected shell type", line.expressID, line.ifcType});
 				break;
 			}
 
 			return IfcGeometry();
 		}
 
-		bool GetColor(uint32_t expressID, glm::dvec4& outputColor)
+		bool GetColor(uint32_t expressID, glm::dvec4 &outputColor)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x4::IFCPRESENTATIONSTYLEASSIGNMENT:
@@ -1143,7 +1170,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				auto ifcPresentationStyleSelects = _loader.GetSetArgument();
 
-				for (auto& styleSelect : ifcPresentationStyleSelects)
+				for (auto &styleSelect : ifcPresentationStyleSelects)
 				{
 					uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
 					glm::dvec4 color;
@@ -1162,7 +1189,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 2);
 				auto ifcSurfaceStyleElementSelects = _loader.GetSetArgument();
 
-				for (auto& styleElementSelect : ifcSurfaceStyleElementSelects)
+				for (auto &styleElementSelect : ifcSurfaceStyleElementSelects)
 				{
 					uint32_t styleElementSelectID = _loader.GetRefArgument(styleElementSelect);
 					glm::dvec4 color;
@@ -1202,7 +1229,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 3);
 				auto repItems = _loader.GetSetArgument();
 
-				for (auto& repItem : repItems)
+				for (auto &repItem : repItems)
 				{
 					uint32_t repItemID = _loader.GetRefArgument(repItem);
 					glm::dvec4 color;
@@ -1221,7 +1248,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 1);
 				auto styledItems = _loader.GetSetArgument();
 
-				for (auto& styledItem : styledItems)
+				for (auto &styledItem : styledItems)
 				{
 					uint32_t styledItemID = _loader.GetRefArgument(styledItem);
 					glm::dvec4 color;
@@ -1256,7 +1283,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				auto layers = _loader.GetSetArgument();
 
-				for (auto& layer : layers)
+				for (auto &layer : layers)
 				{
 					uint32_t layerID = _loader.GetRefArgument(layer);
 					glm::dvec4 color;
@@ -1280,7 +1307,7 @@ namespace webifc
 			{
 				if (_loader.GetMaterialDefinitions().count(line.expressID) != 0)
 				{
-					auto& defs = _loader.GetMaterialDefinitions()[line.expressID];
+					auto &defs = _loader.GetMaterialDefinitions()[line.expressID];
 					for (auto def : defs)
 					{
 						bool success = GetColor(def.second, outputColor);
@@ -1296,17 +1323,17 @@ namespace webifc
 				return false;
 			}
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", line.expressID, line.ifcType});
 				break;
 			}
 
 			return false;
 		}
 
-		void AddFaceToGeometry(uint32_t expressID, IfcGeometry& geometry)
+		void AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			switch (line.ifcType)
 			{
@@ -1328,7 +1355,7 @@ namespace webifc
 			}
 
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected face type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected face type", line.expressID, line.ifcType});
 				break;
 			}
 		}
@@ -1336,7 +1363,7 @@ namespace webifc
 		IfcBound3D GetBound(uint32_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			switch (line.ifcType)
 			{
@@ -1368,7 +1395,7 @@ namespace webifc
 			}
 
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", line.expressID, line.ifcType});
 				break;
 			}
 
@@ -1378,7 +1405,7 @@ namespace webifc
 		IfcCurve3D GetLoop(uint32_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			switch (line.ifcType)
 			{
@@ -1392,10 +1419,10 @@ namespace webifc
 				curve.points.reserve(points.size());
 
 				uint32_t prevID = 0;
-				for (auto& token : points)
+				for (auto &token : points)
 				{
 					uint32_t pointId = _loader.GetRefArgument(token);
-					
+
 					// trim out consecutive equal points
 					if (pointId != prevID)
 					{
@@ -1409,7 +1436,7 @@ namespace webifc
 			}
 
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", line.expressID, line.ifcType});
 				break;
 			}
 
@@ -1417,7 +1444,7 @@ namespace webifc
 			return curve;
 		}
 
-		void TriangulateBounds(IfcGeometry& geometry, std::vector<IfcBound3D>& bounds)
+		void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds)
 		{
 			if (bounds.size() == 1 && bounds[0].curve.points.size() == 3)
 			{
@@ -1435,40 +1462,43 @@ namespace webifc
 				std::vector<std::vector<Point>> polygon;
 
 				uint32_t offset = geometry.numPoints;
-				
-                // if more than one bound
-				if (bounds.size() > 1) {
-                    // locate the outer bound index
-                    int outerIndex = -1;
-                    for (int i = 0; i < bounds.size(); i++) {
-                        if (bounds[i].type == IfcBoundType::OUTERBOUND) {
-                            outerIndex = i;
-                            break;
-                        }
-                    }
+
+				// if more than one bound
+				if (bounds.size() > 1)
+				{
+					// locate the outer bound index
+					int outerIndex = -1;
+					for (int i = 0; i < bounds.size(); i++)
+					{
+						if (bounds[i].type == IfcBoundType::OUTERBOUND)
+						{
+							outerIndex = i;
+							break;
+						}
+					}
 
 					if (outerIndex == -1)
 					{
-						_loader.ReportError({ LoaderErrorType::PARSING, "Expected outer bound!" });
+						_loader.ReportError({LoaderErrorType::PARSING, "Expected outer bound!"});
 					}
 					else
 					{
 						// swap the outer bound to the first position
 						std::swap(bounds[0], bounds[outerIndex]);
 					}
-                }
+				}
 
-                // if the first bound is not an outer bound now, this is unexpected
-                if(bounds[0].type != IfcBoundType::OUTERBOUND)
-                {
-				    _loader.ReportError({ LoaderErrorType::PARSING, "Expected outer bound first!" });
-                }
+				// if the first bound is not an outer bound now, this is unexpected
+				if (bounds[0].type != IfcBoundType::OUTERBOUND)
+				{
+					_loader.ReportError({LoaderErrorType::PARSING, "Expected outer bound first!"});
+				}
 
 				glm::dvec3 v1, v2, v3;
 				if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
 				{
 					// these points are on a line
-					_loader.ReportError({ LoaderErrorType::PARSING, "No basis found for brep!" });
+					_loader.ReportError({LoaderErrorType::PARSING, "No basis found for brep!"});
 					return;
 				}
 
@@ -1486,8 +1516,7 @@ namespace webifc
 
 					glm::dvec2 proj(
 						glm::dot(pt2, v12),
-						glm::dot(pt2, v13)
-					);
+						glm::dot(pt2, v13));
 
 					test.Add(proj);
 				}
@@ -1499,7 +1528,7 @@ namespace webifc
 					std::swap(v12, v13);
 				}
 
-				for (auto& bound : bounds)
+				for (auto &bound : bounds)
 				{
 					std::vector<Point> points;
 					for (int i = 0; i < bound.curve.points.size(); i++)
@@ -1512,15 +1541,13 @@ namespace webifc
 
 						glm::dvec2 proj(
 							glm::dot(pt2, v12),
-							glm::dot(pt2, v13)
-						);
+							glm::dot(pt2, v13));
 
-						points.push_back({ proj.x, proj.y });
+						points.push_back({proj.x, proj.y});
 					}
 
 					polygon.push_back(points);
 				}
-
 
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
@@ -1531,16 +1558,16 @@ namespace webifc
 			}
 			else
 			{
-				_loader.ReportError({ LoaderErrorType::PARSING, "bad bound" });
+				_loader.ReportError({LoaderErrorType::PARSING, "bad bound"});
 			}
 		}
 
 		//! This implementation generates much more vertices than needed, and does not have smoothed normals
-		IfcGeometry Sweep(const IfcProfile& profile, const IfcCurve<3>& directrix, const glm::dvec3& initialDirectrixNormal = glm::dvec3(0))
+		IfcGeometry Sweep(const IfcProfile &profile, const IfcCurve<3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0))
 		{
 			IfcGeometry geom;
 
-			auto& dpts = directrix.points;
+			auto &dpts = directrix.points;
 
 			if (dpts.size() <= 1)
 			{
@@ -1580,7 +1607,7 @@ namespace webifc
 
 					if (std::isnan(p.x))
 					{
-						// TODO: sometimes outliers cause the perp to become NaN! 
+						// TODO: sometimes outliers cause the perp to become NaN!
 						// this is bad news, as it nans the points added to the final mesh
 						// also, it's hard to bail out now :/
 						// see curve.add() for more info on how this is currently "solved"
@@ -1623,8 +1650,8 @@ namespace webifc
 
 					// project profile onto planeNormal, place on planeOrigin
 					// TODO: look at holes
-					auto& ppts = profile.curve.points;
-					for (auto& pt2D : ppts)
+					auto &ppts = profile.curve.points;
+					for (auto &pt2D : ppts)
 					{
 						glm::dvec3 pt = pt2D.x * left + pt2D.y * right + planeOrigin;
 						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
@@ -1635,25 +1662,25 @@ namespace webifc
 				else
 				{
 					// project previous curve onto the normal
-					const IfcCurve<3>& prevCurve = curves.back();
+					const IfcCurve<3> &prevCurve = curves.back();
 
-					auto& ppts = prevCurve.points;
-					for (auto& pt : ppts)
+					auto &ppts = prevCurve.points;
+					for (auto &pt : ppts)
 					{
 						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
 						segmentForCurve.Add(proj);
 					}
 				}
-				
+
 				curves.push_back(segmentForCurve);
 			}
 
 			// connect the curves
 			for (int i = 1; i < dpts.size(); i++)
 			{
-				const auto& c1 = curves[i - 1].points;
-				const auto& c2 = curves[i].points;
+				const auto &c1 = curves[i - 1].points;
+				const auto &c2 = curves[i].points;
 
 				uint32_t capSize = c1.size();
 				for (int j = 1; j < capSize; j++)
@@ -1669,8 +1696,8 @@ namespace webifc
 				}
 			}
 
-			//DumpSVGCurve(directrix.points, glm::dvec3(), L"directrix.html");
-			//DumpIfcGeometry(geom, L"sweep.obj");
+			// DumpSVGCurve(directrix.points, glm::dvec3(), L"directrix.html");
+			// DumpIfcGeometry(geom, L"sweep.obj");
 
 			return geom;
 		}
@@ -1683,7 +1710,7 @@ namespace webifc
 			// build the caps
 			{
 				using Point = std::array<double, 2>;
-				int polygonCount = 1 + profile.holes.size(); //Main profile + holes
+				int polygonCount = 1 + profile.holes.size(); // Main profile + holes
 				std::vector<std::vector<Point>> polygon(polygonCount);
 
 				glm::dvec3 normal = dir;
@@ -1694,10 +1721,10 @@ namespace webifc
 					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
 					geom.AddPoint(et, normal);
-					polygon[0].push_back({ pt.x, pt.y });
+					polygon[0].push_back({pt.x, pt.y});
 				}
 
-				for(int i = 0; i < profile.curve.points.size(); i++)
+				for (int i = 0; i < profile.curve.points.size(); i++)
 				{
 					holesIndicesHash.push_back(false);
 				}
@@ -1716,7 +1743,7 @@ namespace webifc
 
 						profile.curve.Add(pt);
 						geom.AddPoint(et, normal);
-						polygon[i + 1].push_back({ pt.x, pt.y }); //Index 0 is main profile; see earcut reference
+						polygon[i + 1].push_back({pt.x, pt.y}); // Index 0 is main profile; see earcut reference
 					}
 				}
 
@@ -1725,7 +1752,7 @@ namespace webifc
 				if (indices.size() < 3)
 				{
 					// probably a degenerate polygon
-					_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "degenerate polygon in extrude" });
+					_loader.ReportError({LoaderErrorType::UNSPECIFIED, "degenerate polygon in extrude"});
 					return geom;
 				}
 
@@ -1759,7 +1786,7 @@ namespace webifc
 						et = glm::dvec4(glm::dvec3(pt, 0), 1);
 						glm::dvec3 transDir = glm::dvec4(dir, 0);
 
-						// project {et} onto the plane, following the extrusion normal						
+						// project {et} onto the plane, following the extrusion normal
 						double ldotn = glm::dot(transDir, cuttingPlaneNormal);
 						if (ldotn == 0)
 						{
@@ -1793,7 +1820,7 @@ namespace webifc
 			uint32_t capSize = profile.curve.points.size();
 			for (int i = 1; i < capSize; i++)
 			{
-				//https://github.com/tomvandig/web-ifc/issues/5
+				// https://github.com/tomvandig/web-ifc/issues/5
 				if (holesIndicesHash[i])
 				{
 					continue;
@@ -1807,18 +1834,18 @@ namespace webifc
 
 				// this winding should be correct
 				geom.AddFace(geom.GetPoint(tl),
-					geom.GetPoint(br),
-					geom.GetPoint(bl));
+							 geom.GetPoint(br),
+							 geom.GetPoint(bl));
 
 				geom.AddFace(geom.GetPoint(tl),
-					geom.GetPoint(tr),
-					geom.GetPoint(br));
+							 geom.GetPoint(tr),
+							 geom.GetPoint(br));
 			}
 
 			return geom;
 		}
 
-		bool IsCurveConvex(IfcCurve<2>& curve)
+		bool IsCurveConvex(IfcCurve<2> &curve)
 		{
 			for (int i = 2; i < curve.points.size(); i++)
 			{
@@ -1835,10 +1862,9 @@ namespace webifc
 			return true;
 		}
 
-
 		IfcProfile GetProfileByLine(uint32_t lineID)
 		{
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x4::IFCARBITRARYCLOSEDPROFILEDEF:
@@ -1865,8 +1891,8 @@ namespace webifc
 
 				_loader.MoveToArgumentOffset(line, 3);
 				auto holes = _loader.GetSetArgument();
-				
-				for (auto& hole : holes)
+
+				for (auto &hole : holes)
 				{
 					IfcCurve<2> holeCurve = GetCurve<2>(_loader.GetRefArgument(hole));
 					profile.holes.push_back(holeCurve);
@@ -1929,9 +1955,9 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 2);
 				uint32_t placementID = _loader.GetOptionalRefArgument();
 				double radius = _loader.GetDoubleArgument();
-				
+
 				glm::dmat3 placement(1);
-				
+
 				if (placementID)
 				{
 					GetAxis2Placement2D(placementID);
@@ -1996,7 +2022,7 @@ namespace webifc
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 				{
 					_loader.Reverse();
-				
+
 					uint32_t placementID = _loader.GetRefArgument();
 					glm::dmat3 placement = GetAxis2Placement2D(placementID);
 				}
@@ -2038,7 +2064,7 @@ namespace webifc
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 				{
 					_loader.Reverse();
-				
+
 					uint32_t placementID = _loader.GetRefArgument();
 					glm::dmat3 placement = GetAxis2Placement2D(placementID);
 				}
@@ -2070,7 +2096,7 @@ namespace webifc
 				return profile;
 			}
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", line.expressID, line.ifcType});
 				break;
 			}
 
@@ -2080,7 +2106,7 @@ namespace webifc
 		IfcSurface GetSurface(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x4::IFCPLANE:
@@ -2094,7 +2120,7 @@ namespace webifc
 				return surface;
 			}
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected surface type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected surface type", line.expressID, line.ifcType});
 				break;
 			}
 
@@ -2104,7 +2130,7 @@ namespace webifc
 		glm::dmat3 GetAxis2Placement2D(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 			uint32_t locationID = _loader.GetRefArgument();
@@ -2124,14 +2150,13 @@ namespace webifc
 			return glm::dmat3(
 				glm::dvec3(xAxis, 0),
 				glm::dvec3(yAxis, 0),
-				glm::dvec3(pos, 1)
-			);
+				glm::dvec3(pos, 1));
 		}
 
 		glm::dmat4 GetLocalPlacement(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x4::IFCAXIS2PLACEMENT3D:
@@ -2158,21 +2183,18 @@ namespace webifc
 
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
-
-					
 				glm::dvec3 yAxis = glm::cross(zAxis, xAxis);
 
 				return glm::dmat4(
 					glm::dvec4(xAxis, 0),
 					glm::dvec4(yAxis, 0),
 					glm::dvec4(zAxis, 0),
-					glm::dvec4(pos, 1)
-				);
+					glm::dvec4(pos, 1));
 			}
 			case ifc2x4::IFCLOCALPLACEMENT:
 			{
 				glm::dmat4 relPlacement(1);
-				
+
 				_loader.MoveToArgumentOffset(line, 0);
 				IfcTokenType relPlacementToken = _loader.GetTokenType();
 				if (relPlacementToken == IfcTokenType::REF)
@@ -2186,9 +2208,9 @@ namespace webifc
 
 				glm::dmat4 axis2Placement = GetLocalPlacement(axis2PlacementID);
 
-
 				auto result = relPlacement * axis2Placement;
-				return result;;
+				return result;
+				;
 			}
 			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
 			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM:
@@ -2200,7 +2222,6 @@ namespace webifc
 				glm::dvec3 Axis1(1, 0, 0);
 				glm::dvec3 Axis2(0, 1, 0);
 				glm::dvec3 Axis3(0, 0, 1);
-
 
 				_loader.MoveToArgumentOffset(line, 0);
 				if (_loader.GetTokenType() == IfcTokenType::REF)
@@ -2253,19 +2274,18 @@ namespace webifc
 					glm::dvec4(Axis1 * scale1, 0),
 					glm::dvec4(Axis2 * scale2, 0),
 					glm::dvec4(Axis3 * scale3, 0),
-					glm::dvec4(pos, 1)
-				);
+					glm::dvec4(pos, 1));
 			}
 
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", line.expressID, line.ifcType});
 				break;
 			}
 
 			return glm::dmat4();
 		}
 
-		IfcTrimmingSelect ParseTrimSelect(std::vector<uint32_t>& tapeOffsets)
+		IfcTrimmingSelect ParseTrimSelect(std::vector<uint32_t> &tapeOffsets)
 		{
 			IfcTrimmingSelect ts;
 
@@ -2325,15 +2345,14 @@ namespace webifc
 				}
 			}
 
-
 			return ts;
 		}
 
-		template<uint32_t DIM>
-		void ComputeCurve(uint32_t expressID, IfcCurve<DIM>& curve, int sameSense = -1, IfcTrimmingArguments trim = {})
+		template <uint32_t DIM>
+		void ComputeCurve(uint32_t expressID, IfcCurve<DIM> &curve, int sameSense = -1, IfcTrimmingArguments trim = {})
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
 			case ifc2x4::IFCPOLYLINE:
@@ -2341,7 +2360,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				auto points = _loader.GetSetArgument();
 
-				for (auto& token : points)
+				for (auto &token : points)
 				{
 					uint32_t pointId = _loader.GetRefArgument(token);
 					curve.Add(GetCartesianPoint<DIM>(pointId));
@@ -2358,10 +2377,10 @@ namespace webifc
 				if (selfIntersects == "T")
 				{
 					// TODO: this is probably bad news
-					_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "Self intersecting composite curve", line.expressID });
+					_loader.ReportError({LoaderErrorType::UNSPECIFIED, "Self intersecting composite curve", line.expressID});
 				}
 
-				for (auto& token : segments)
+				for (auto &token : segments)
 				{
 					if (DEBUG_DUMP_SVG)
 					{
@@ -2402,12 +2421,12 @@ namespace webifc
 					}
 					else
 					{
-						_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType });
+						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType});
 					}
 				}
 				else
 				{
-					_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported 3D curve IFCLINE", line.expressID, line.ifcType });
+					_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported 3D curve IFCLINE", line.expressID, line.ifcType});
 				}
 
 				break;
@@ -2447,7 +2466,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() != webifc::IfcTokenType::EMPTY)
 				{
-					_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "non-empty segments in IFCINDEXEDPOLYCURVE currently not supported", line.expressID });
+					_loader.ReportError({LoaderErrorType::UNSPECIFIED, "non-empty segments in IFCINDEXEDPOLYCURVE currently not supported", line.expressID});
 					break;
 				}
 
@@ -2461,21 +2480,21 @@ namespace webifc
 					if (selfIntersects == "T")
 					{
 						// TODO: this is probably bad news
-						_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "Self intersecting ifcindexedpolycurve", line.expressID });
+						_loader.ReportError({LoaderErrorType::UNSPECIFIED, "Self intersecting ifcindexedpolycurve", line.expressID});
 					}
 				}
 
 				if constexpr (DIM == 2)
 				{
 					auto pts = ReadIfcCartesianPointList2D(pts2DRef);
-					for (auto& pt : pts)
+					for (auto &pt : pts)
 					{
 						curve.Add(pt);
 					}
 				}
 				else
 				{
-					_loader.ReportError({ LoaderErrorType::UNSPECIFIED, "Parsing ifcindexedpolycurve in 3D is not possible", line.expressID });
+					_loader.ReportError({LoaderErrorType::UNSPECIFIED, "Parsing ifcindexedpolycurve in 3D is not possible", line.expressID});
 				}
 
 				break;
@@ -2528,7 +2547,6 @@ namespace webifc
 
 				double lengthRad = lengthDegrees / 180 * CONST_PI;
 
-
 				size_t startIndex = curve.points.size();
 
 				const int numSegments = _loader.GetSettings().CIRCLE_SEGMENTS_HIGH;
@@ -2553,7 +2571,7 @@ namespace webifc
 						vec[1] = radius * std::sin(angle); // negative or not???
 						pos = placement * glm::dvec4(glm::dvec3(vec), 1);
 					}
-					//glm::vec<DIM, glm::f64> pos = placement * glm::vec<DIM + 1, glm::f64>(vec, 1);
+					// glm::vec<DIM, glm::f64> pos = placement * glm::vec<DIM + 1, glm::f64>(vec, 1);
 					curve.Add(pos);
 				}
 
@@ -2567,7 +2585,7 @@ namespace webifc
 			}
 
 			default:
-				_loader.ReportError({ LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", line.expressID, line.ifcType });
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", line.expressID, line.ifcType});
 				break;
 			}
 
@@ -2583,15 +2601,14 @@ namespace webifc
 		glm::dvec2 GetCartesianPoint2D(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 			auto coords = _loader.GetSetArgument();
 
 			glm::dvec2 point(
 				_loader.GetDoubleArgument(coords[0]),
-				_loader.GetDoubleArgument(coords[1])
-			);
+				_loader.GetDoubleArgument(coords[1]));
 
 			return point;
 		}
@@ -2599,7 +2616,7 @@ namespace webifc
 		glm::dvec3 GetCartesianPoint3D(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			/*
 			_loader.MoveToArgumentOffset(line, 0);
@@ -2625,11 +2642,11 @@ namespace webifc
 			return point;
 		}
 
-		template<uint32_t DIM>
+		template <uint32_t DIM>
 		glm::vec<DIM, glm::f64> GetCartesianPoint(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-			auto& line = _loader.GetLine(lineID);
+			auto &line = _loader.GetLine(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
 			IfcTokenType t = _loader.GetTokenType();
@@ -2645,7 +2662,7 @@ namespace webifc
 
 		glm::dmat4 _coordinationMatrix = glm::dmat4(1.0);
 		bool _isCoordinated = false;
-		IfcLoader& _loader;
+		IfcLoader &_loader;
 		std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
 		std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
 	};
