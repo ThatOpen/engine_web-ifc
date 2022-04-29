@@ -255,15 +255,15 @@ namespace webifc
 							}
 						}
 
-						// if no color found, check material itself
-						if (!hasColor)
-						{
-							bool success = GetColor(item.second, styledItemColor);
-							if (success)
-							{
-								hasColor = true;
-							}
-						}
+						// // if no color found, check material itself
+						// if (!hasColor)
+						// {
+						// 	bool success = GetColor(item.second, styledItemColor);
+						// 	if (success)
+						// 	{
+						// 		hasColor = true;
+						// 	}
+						// }
 					}
 				}
 			}
@@ -326,7 +326,7 @@ namespace webifc
 					auto origin = GetOrigin(mesh, _expressIDToGeometry);
 					auto normalizeMat = glm::translate(-origin);
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry, normalizeMat);
-					auto elementColor = mesh.GetColor();
+					//auto elementColor = mesh.GetColor();
 
 					if (!flatElementMesh.IsEmpty())
 					{
@@ -350,11 +350,11 @@ namespace webifc
 						resultMesh.color = styledItemColor;
 						resultMesh.hasColor = true;
 					}
-					else if (elementColor.has_value())
-					{
-						resultMesh.hasColor = true;
-						resultMesh.color = *elementColor;
-					}
+					// else if (elementColor.has_value())
+					// {
+					// 	resultMesh.hasColor = true;
+					// 	resultMesh.color = *elementColor;
+					// }
 					else
 					{
 						resultMesh.hasColor = false;
@@ -1094,40 +1094,6 @@ namespace webifc
 				break;
 			}
 		}
-
-		// bool ReadMaterialList(uint32_t expressID, std::vector<glm::dvec4> &outputColor)
-		// {
-		// 	auto lineID = _loader.ExpressIDToLineID(expressID);
-		// 	auto &line = _loader.GetLine(lineID);
-
-		// 	_loader.MoveToArgumentOffset(line, 0);
-			
-		// 	std::vector<glm::dvec2> result;
-
-		// 	// while we have material set begin
-		// 	while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
-		// 	{
-		// 		if (_loader.GetTokenType() == IfcTokenType::REF)
-		// 		{
-		// 			_loader.Reverse();
-		// 			const auto &matDef = _loader.GetRefArgument();
-
-		// 			auto &defs = _loader.GetMaterialDefinitions()[matDef];
-		// 			for (auto def : defs)
-		// 			{
-		// 				glm::dvec4 tempColor;
-		// 				bool success = GetColor(def.second, tempColor);
-		// 				if (success)
-		// 				{
-		// 					outputColor.push_back(tempColor);
-		// 				}
-		// 			}
-		// 		}
-		// 		// read material set end
-		// 		_loader.GetTokenType();
-		// 	}
-		// 	return outputColor.size() > 0;
-		// }
 
 		IfcGeometry GetBrep(uint32_t expressID)
 		{
