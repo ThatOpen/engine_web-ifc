@@ -163,6 +163,7 @@ namespace webifc
 				} 
 				else if (c == '#')
 				{
+					//We must add some sort of warning when lower case types are found in the IFC file
 					_ptr.Advance();
 
 					uint32_t num = readInt();
