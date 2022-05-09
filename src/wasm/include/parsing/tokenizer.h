@@ -163,7 +163,6 @@ namespace webifc
 				} 
 				else if (c == '#')
 				{
-					//We must add some sort of warning when lower case types are found in the IFC file
 					_ptr.Advance();
 
 					uint32_t num = readInt();
@@ -241,6 +240,16 @@ namespace webifc
 					_tape.push2((uint16_t)_temp.size());
 					_tape.push((void*)&_temp[0], _temp.size());
 
+					// skip next advance
+					continue;
+				}
+				else if (c >= 'a' && c <= 'z')
+				{
+					//Must add some sort of warning about the IFC file being corrupt because of lower case element names
+					while ((_ptr.cur >= 'a' && _ptr.cur <= 'z') || (_ptr.cur >= 'A' && _ptr.cur <= 'Z'))
+					{
+						_ptr.Advance();
+					}
 					// skip next advance
 					continue;
 				}
