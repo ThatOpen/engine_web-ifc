@@ -326,7 +326,7 @@ namespace webifc
 					auto origin = GetOrigin(mesh, _expressIDToGeometry);
 					auto normalizeMat = glm::translate(-origin);
 					auto flatElementMesh = flatten(mesh, _expressIDToGeometry, normalizeMat);
-					//auto elementColor = mesh.GetColor();
+					auto elementColor = mesh.GetColor();
 
 					if (!flatElementMesh.IsEmpty())
 					{
@@ -345,16 +345,17 @@ namespace webifc
 					resultMesh.transformation = glm::translate(origin);
 					resultMesh.expressID = line.expressID;
 					resultMesh.hasGeometry = true;
+					// If there is no styledItemcolor apply color of the object
 					if (hasColor)
 					{
 						resultMesh.color = styledItemColor;
 						resultMesh.hasColor = true;
 					}
-					// else if (elementColor.has_value())
-					// {
-					// 	resultMesh.hasColor = true;
-					// 	resultMesh.color = *elementColor;
-					// }
+					else if (elementColor.has_value())
+					{
+						resultMesh.hasColor = true;
+						resultMesh.color = *elementColor;
+					}
 					else
 					{
 						resultMesh.hasColor = false;
