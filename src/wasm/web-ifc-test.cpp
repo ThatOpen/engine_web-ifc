@@ -38,7 +38,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::
     std::vector<webifc::IfcFlatMesh> meshes;
 
     for (auto type : ifc2x4::IfcElements)
-    {
+    {    
         auto elements = loader.GetExpressIDsWithType(type);
 
         for (int i = 0; i < elements.size(); i++)
@@ -228,9 +228,9 @@ int main()
     //Benchmark();
 
     //return 0;
-    
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#143/haus.ifc");
-    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#102/M3D-CON-CD.ifc");
+
+    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#102 Solved/M3D-CON-CD.ifc");
+    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#152/color_simple_structure.ifc");
     //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/test.ifc");
     //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
 
@@ -269,7 +269,7 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    //SpecificLoadTest(loader, geometryLoader, 524);
+    //SpecificLoadTest(loader, geometryLoader, 2407);
     auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 

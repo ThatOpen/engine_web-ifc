@@ -227,12 +227,13 @@ namespace webifc
 					_tape.push2((uint16_t)_temp.size());
 					_tape.push((void*)&_temp[0], _temp.size());
 				}
-				else if (c >= 'A' && c <= 'Z')
+				else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
 				{
 					_temp.clear();
-					while ((_ptr.cur >= 'A' && _ptr.cur <= 'Z') || _ptr.cur >= '0' && _ptr.cur <= '9')
+					while ((_ptr.cur >= 'A' && _ptr.cur <= 'Z') || (_ptr.cur >= 'a' && _ptr.cur <= 'z') || (_ptr.cur >= '0' && _ptr.cur <= '9'))
 					{
-						_temp.push_back(_ptr.cur);
+						const char c2 = toupper(_ptr.cur);
+						_temp.push_back(c2);
 						_ptr.Advance();
 					}
 
