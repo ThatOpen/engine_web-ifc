@@ -102,8 +102,17 @@ namespace webifc
 				auto &geom = _expressIDToGeometry[composedMesh.expressID];
 				if (!geom.normalized)
 					geom.Normalize();
-
-				geometry.color = newParentColor;
+				
+				if(!composedMesh.hasColor)
+				{
+					geometry.color = newParentColor;
+				}
+				else
+				{
+					geometry.color = composedMesh.color;
+					newParentColor = composedMesh.color;
+					newHasColor = composedMesh.hasColor;
+				}
 				geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(geom.min);
 				geometry.SetFlatTransformation();
 				geometry.geometryExpressID = composedMesh.expressID;
@@ -255,15 +264,15 @@ namespace webifc
 							}
 						}
 
-						// // if no color found, check material itself
-						// if (!hasColor)
-						// {
-						// 	bool success = GetColor(item.second, styledItemColor);
-						// 	if (success)
-						// 	{
-						// 		hasColor = true;
-						// 	}
-						// }
+						// if no color found, check material itself
+						if (!hasColor)
+						{
+							bool success = GetColor(item.second, styledItemColor);
+							if (success)
+							{
+								hasColor = true;
+							}
+						}
 					}
 				}
 			}
