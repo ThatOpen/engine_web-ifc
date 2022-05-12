@@ -97,6 +97,7 @@ export class IfcAPI
     wasmModule: undefined | any = undefined;
     fs: undefined | any = undefined;
     wasmPath: string = "";
+    isWasmPathAbsolute = false;
 
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
@@ -119,6 +120,11 @@ export class IfcAPI
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
                 if (path.endsWith(".wasm"))
                 {
+                    if (this.isWasmPathAbsolute) 
+                    {
+                        return this.wasmPath + path;
+                    }
+
                     return prefix + this.wasmPath + path;
                 }
                 // otherwise use the default path
@@ -414,8 +420,9 @@ export class IfcAPI
        this.ifcGuidMap.set(modelID, map);
     }
 
-    SetWasmPath(path: string){
+    SetWasmPath(path: string, absolute = false){
         this.wasmPath = path;
+        this.isWasmPathAbsolute = absolute;
     }
 
 
