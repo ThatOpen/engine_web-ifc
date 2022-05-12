@@ -215,6 +215,15 @@ namespace webifc
 		glm::dmat4 _transformation;
 		GeometryStatistics _statistics;
 
+		double GetOptionalDoubleParam(double defaultValue = 0) {
+			if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
+			{
+				_loader.Reverse();
+				return _loader.GetDoubleArgument();
+			}
+			return defaultValue;
+		}
+
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
 			auto &line = _loader.GetLine(lineID);
@@ -2068,6 +2077,45 @@ namespace webifc
 				}
 
 				profile.curve = GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement);
+
+				return profile;
+			}
+			case ifc2x4::IFCUSHAPEPROFILEDEF:
+			{
+				IfcProfile profile;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
+				profile.isConvex = true;
+
+				_loader.MoveToArgumentOffset(line, 2);
+
+				glm::dmat3 placement(1);
+
+				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
+				{
+					_loader.Reverse();
+
+					uint32_t placementID = _loader.GetRefArgument();
+					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+				}
+
+				_loader.MoveToArgumentOffset(line, 3);
+
+				double depth = _loader.GetDoubleArgument();
+				double flangeWidth = _loader.GetDoubleArgument();
+				double webThickness = _loader.GetDoubleArgument();
+				double flangeThickness = _loader.GetDoubleArgument();
+
+				// optional parameters
+				//double filletRadius = GetOptionalDoubleParam();
+				//double edgeRadius = GetOptionalDoubleParam();
+				//double flangeSlope = GetOptionalDoubleParam();
+				double filletRadius = 0;
+				double edgeRadius = 0;
+				double flangeSlope = 0;
+				
+				profile.curve = GetUShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, flangeSlope, placement);
 
 				return profile;
 			}

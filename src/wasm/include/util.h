@@ -560,6 +560,43 @@ namespace webifc
 		return c;
 	}
 
+	IfcCurve<2> GetUShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, double filletRadius, double edgeRadius, double flangeSlope, glm::dmat3 placement = glm::dmat3(1))
+	{
+		IfcCurve<2> c;
+
+		double hd = depth / 2;
+		double hw = flangeWidth / 2;
+		double hweb = webThickness / 2;
+		double slopeOffsetRight = flangeSlope * hw;
+		double slopeOffsetLeft = flangeSlope * (hw - webThickness);
+		double flangeReferencePointY = hd - flangeThickness;
+
+		// TODO: implement the radius
+
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
+
+		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness + slopeOffsetRight, 1));
+
+		c.points.push_back(placement * glm::dvec3(-hw + webThickness, +hd - flangeThickness, 1 - slopeOffsetLeft));
+		c.points.push_back(placement * glm::dvec3(-hw + webThickness, -hd + flangeThickness, 1 + slopeOffsetLeft));
+
+		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness - slopeOffsetRight, 1));
+
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+	
 	IfcCurve<2> GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
 	{
 		IfcCurve<2> c;
