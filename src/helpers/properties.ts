@@ -6,6 +6,7 @@ import {
 } from "../web-ifc-api";
 
 import { IfcElements } from './ifc-elements'
+import { IfcTypesMap } from "./types-map";
 
 interface pName {
     name: number;
@@ -58,6 +59,10 @@ export class Properties {
     private types: any;
 
     constructor(private api: IfcAPI) {
+    }
+
+    getIfcType(type: number) {
+        return IfcTypesMap[type];
     }
 
     async getItemProperties(modelID: number, id: number, recursive = false) {
