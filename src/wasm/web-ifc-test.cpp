@@ -230,7 +230,7 @@ int main()
     //return 0;
 
     //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#102 Solved/M3D-CON-CD.ifc");
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#143 Processing/haus.ifc");
+    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#144 Processing/building1_mod.ifc");
     //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/test.ifc");
     //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
 

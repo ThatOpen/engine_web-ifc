@@ -422,6 +422,11 @@ namespace webifc
 			return _tape.Copy(startOffset, endOffset, dest);
 		}
 
+		bool ValidExpressID(uint32_t expressID)
+		{
+			return _metaData.expressIDToLine.capacity() > expressID;
+		}
+
 		uint32_t ExpressIDToLineID(uint32_t expressID)
 		{
 			return _metaData.expressIDToLine[expressID];

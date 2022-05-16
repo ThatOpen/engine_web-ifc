@@ -285,7 +285,7 @@ namespace webifc
 
 			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
 			if (isIfcElement)
-			{
+			{			
 				_loader.MoveToArgumentOffset(line, 5);
 				uint32_t localPlacement = 0;
 				if (_loader.GetTokenType() == IfcTokenType::REF)
@@ -300,12 +300,12 @@ namespace webifc
 					ifcPresentation = _loader.GetRefArgument();
 				}
 
-				if (localPlacement != 0)
+				if (localPlacement != 0 && ValidExpressId(localPlacement))
 				{
 					mesh.transformation = GetLocalPlacement(localPlacement);
 				}
 
-				if (ifcPresentation != 0)
+				if (ifcPresentation != 0 && ValidExpressId(ifcPresentation))
 				{
 					mesh.children.push_back(GetMesh(ifcPresentation));
 				}
@@ -904,6 +904,33 @@ namespace webifc
 			}
 
 			pos = GetCartesianPoint3D(locationID);
+		}
+
+		std::vector<uint32_t> ReadCurveIndices()
+		{
+			std::vector<uint32_t> result;
+
+			IfcTokenType t = _loader.GetTokenType();
+			if(t == IfcTokenType::REF)
+			{
+				_loader.Reverse();
+				uint32_t lineID = _loader.ExpressIDToLineID(_loader.GetRefArgument());
+				auto &line = _loader.GetLine(lineID);
+				_loader.MoveToArgumentOffset(line, 0);
+			}
+
+			// while we don't have line set end
+			while (_loader.GetTokenType() != IfcTokenType::SET_END)
+			{
+				_loader.Reverse();
+				if((_loader.GetTokenType() == IfcTokenType::REAL))
+				{
+					_loader.Reverse();
+					result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+				}
+			}
+
+			return result;
 		}
 
 		std::vector<uint32_t> Read2DArrayOfThreeIndices()
@@ -2129,6 +2156,19 @@ namespace webifc
 				glm::dvec3(pos, 1));
 		}
 
+		bool ValidExpressId(uint32_t expressID)
+		{
+			if(_loader.ValidExpressID(expressID))
+			{
+				return true;
+			}
+			else
+			{
+				_loader.ReportError({LoaderErrorType::PARSING, "Missing ExpressID reference " + std::to_string(expressID), expressID});
+				return false;
+			}
+		}
+
 		glm::dmat4 GetLocalPlacement(uint32_t expressID)
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
@@ -2450,11 +2490,18 @@ namespace webifc
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto pts2DRef = _loader.GetRefArgument();
-
-				if (_loader.GetTokenType() != webifc::IfcTokenType::EMPTY)
+				webifc::IfcTokenType tk = _loader.GetTokenType();
+				if (tk != webifc::IfcTokenType::EMPTY)
 				{
+					if (tk == IfcTokenType::SET_BEGIN)
+					{
+						auto pnIndex = ReadCurveIndices();
+					}
+					else
+					{
 					_loader.ReportError({LoaderErrorType::UNSPECIFIED, "non-empty segments in IFCINDEXEDPOLYCURVE currently not supported", line.expressID});
 					break;
+					}
 				}
 
 				_loader.MoveToArgumentOffset(line, 2);
