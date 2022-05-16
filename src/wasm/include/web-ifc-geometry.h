@@ -2490,19 +2490,6 @@ namespace webifc
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto pts2DRef = _loader.GetRefArgument();
-				webifc::IfcTokenType tk = _loader.GetTokenType();
-				if (tk != webifc::IfcTokenType::EMPTY)
-				{
-					if (tk == IfcTokenType::SET_BEGIN)
-					{
-						auto pnIndex = ReadCurveIndices();
-					}
-					else
-					{
-					_loader.ReportError({LoaderErrorType::UNSPECIFIED, "non-empty segments in IFCINDEXEDPOLYCURVE currently not supported", line.expressID});
-					break;
-					}
-				}
 
 				_loader.MoveToArgumentOffset(line, 2);
 
@@ -2520,10 +2507,23 @@ namespace webifc
 
 				if constexpr (DIM == 2)
 				{
-					auto pts = ReadIfcCartesianPointList2D(pts2DRef);
-					for (auto &pt : pts)
+					_loader.MoveToArgumentOffset(line, 1);
+					if (_loader.GetTokenType() != webifc::IfcTokenType::EMPTY)
 					{
-						curve.Add(pt);
+						auto pnIndex = ReadCurveIndices();
+						auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+						for (auto &pt : pnIndex)
+						{
+							curve.Add(pts[pt - 1]);
+						}
+					}
+					else
+					{
+						auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+						for (auto &pt : pts)
+						{
+							curve.Add(pt);
+						}
 					}
 				}
 				else
