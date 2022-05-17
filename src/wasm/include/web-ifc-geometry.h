@@ -1917,10 +1917,19 @@ namespace webifc
 				double xdim = _loader.GetDoubleArgument();
 				double ydim = _loader.GetDoubleArgument();
 
-				glm::dmat3 placement = GetAxis2Placement2D(placementID);
-
-				profile.curve = GetRectangleCurve(xdim, ydim, placement);
-
+				if(placementID != 0)
+				{
+					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+					profile.curve = GetRectangleCurve(xdim, ydim, placement);
+				}
+				else
+				{
+					glm::dmat3 placement = glm::dmat3(
+						glm::dvec3(1, 0, 0),
+						glm::dvec3(0, 1, 0),
+						glm::dvec3(0, 0, 1));
+					profile.curve = GetRectangleCurve(xdim, ydim, placement);
+				}
 				return profile;
 			}
 			case ifc2x4::IFCRECTANGLEHOLLOWPROFILEDEF:
