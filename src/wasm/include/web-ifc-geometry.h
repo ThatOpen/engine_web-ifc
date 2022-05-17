@@ -2152,12 +2152,12 @@ namespace webifc
 			if (dirToken == IfcTokenType::REF)
 			{
 				_loader.Reverse();
-				xAxis = GetCartesianPoint2D(_loader.GetRefArgument());
+				xAxis = glm::normalize(GetCartesianPoint2D(_loader.GetRefArgument()));
 			}
 
 			glm::dvec2 pos = GetCartesianPoint2D(locationID);
 
-			glm::dvec2 yAxis = glm::dvec2(xAxis.y, -xAxis.x);
+			glm::dvec2 yAxis = glm::normalize(glm::dvec2(xAxis.y, -xAxis.x));
 
 			return glm::dmat3(
 				glm::dvec3(xAxis, 0),
@@ -2195,7 +2195,7 @@ namespace webifc
 				if (zID == IfcTokenType::REF)
 				{
 					_loader.Reverse();
-					zAxis = GetCartesianPoint3D(_loader.GetRefArgument());
+					zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
 				_loader.MoveToArgumentOffset(line, 2);
@@ -2203,7 +2203,7 @@ namespace webifc
 				if (xID == IfcTokenType::REF)
 				{
 					_loader.Reverse();
-					xAxis = GetCartesianPoint3D(_loader.GetRefArgument());
+					xAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
