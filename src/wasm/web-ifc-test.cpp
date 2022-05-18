@@ -229,8 +229,8 @@ int main()
 
     //return 0;
 
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#131 Processing/mapped-shape-with-multiple-items.ifc");
-    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Processing/FWH-Structure.ifc");
+    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#137 Processing/very_simple_assembled.ifc");
+    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Processing/FWH-Structure.ifc");
     //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/test.ifc");
     //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
 

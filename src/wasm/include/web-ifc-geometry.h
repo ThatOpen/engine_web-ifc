@@ -610,6 +610,16 @@ namespace webifc
 
 					return mesh;
 				}
+				case ifc2x4::IFCADVANCEDBREP:
+				{
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t ifcPresentation = _loader.GetRefArgument();
+
+					_expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
+					mesh.hasGeometry = true;
+
+					return mesh;
+				}
 				case ifc2x4::IFCFACETEDBREP:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
@@ -1356,7 +1366,33 @@ namespace webifc
 				TriangulateBounds(geometry, bounds3D);
 				break;
 			}
+			case ifc2x4::IFCADVANCEDFACE:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto bounds = _loader.GetSetArgument();
 
+				std::vector<IfcBound3D> bounds3D(bounds.size());
+
+				for (int i = 0; i < bounds.size(); i++)
+				{
+					uint32_t boundID = _loader.GetRefArgument(bounds[i]);
+					bounds3D[i] = GetBound(boundID);
+				}
+
+				_loader.MoveToArgumentOffset(line, 1);
+				auto surfRef = _loader.GetRefArgument();
+
+				//TODO: read the surface to trim the face
+
+				auto surface = GetSurface(surfRef);
+
+				//TODO: place the face in the surface
+
+				ProjectFaceOnSurface(surface, bounds3D);
+
+				TriangulateBounds(geometry, bounds3D);
+				break;
+			}
 			default:
 				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected face type", line.expressID, line.ifcType});
 				break;
@@ -2119,6 +2155,7 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto &line = _loader.GetLine(lineID);
+			// TODO: IfcSweptSurface and IfcBSplineSurface still missing
 			switch (line.ifcType)
 			{
 			case ifc2x4::IFCPLANE:
