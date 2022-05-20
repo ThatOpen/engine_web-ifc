@@ -1382,15 +1382,12 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 1);
 				auto surfRef = _loader.GetRefArgument();
 
-				//TODO: read the surface to trim the face
-
 				auto surface = GetSurface(surfRef);
 
-				//TODO: place the face in the surface
-
-				ProjectFaceOnSurface(surface, bounds3D);
+				//TODO: place the face in the surface and tringulate
 
 				TriangulateBounds(geometry, bounds3D);
+
 				break;
 			}
 			default:
@@ -1473,7 +1470,26 @@ namespace webifc
 
 				return curve;
 			}
+			case ifc2x4::IFCEDGELOOP:
+			{
+				IfcCurve3D curve;
 
+				_loader.MoveToArgumentOffset(line, 0);
+				auto edges = _loader.GetSetArgument();
+
+				for (auto &token : edges)
+				{
+					uint32_t edgeId = _loader.GetRefArgument(token);
+					IfcCurve<3> edgeCurve = GetOrientedEdge(edgeId);
+
+					for (auto &pt : edgeCurve.points)
+					{
+						curve.points.push_back(pt);
+					}
+				}
+
+				return curve;
+			}
 			default:
 				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", line.expressID, line.ifcType});
 				break;
@@ -1481,6 +1497,36 @@ namespace webifc
 
 			IfcCurve3D curve;
 			return curve;
+		}
+
+		IfcCurve<3> GetOrientedEdge(uint32_t expressID)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto &line = _loader.GetLine(lineID);
+
+			_loader.MoveToArgumentOffset(line, 3);
+			std::string orientValue = _loader.GetStringArgument();
+			bool orient = orientValue == "T";
+
+			_loader.MoveToArgumentOffset(line, 2);
+			uint32_t edgeCurveRef = _loader.GetRefArgument();
+
+			//Read edgeCurve
+			
+			auto edgeID = _loader.ExpressIDToLineID(edgeCurveRef);
+			line = _loader.GetLine(edgeID);
+
+			_loader.MoveToArgumentOffset(line, 0);
+			uint32_t vertex1Ref = _loader.GetRefArgument();
+
+			_loader.MoveToArgumentOffset(line, 1);
+			uint32_t vertex2Ref = _loader.GetRefArgument();
+
+			_loader.MoveToArgumentOffset(line, 2);
+			uint32_t CurveRef = _loader.GetRefArgument();
+			IfcCurve<3> curveEdge = GetCurve<3>(CurveRef);		
+
+			return curveEdge;
 		}
 
 		void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds)
@@ -2155,6 +2201,7 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto &line = _loader.GetLine(lineID);
+
 			// TODO: IfcSweptSurface and IfcBSplineSurface still missing
 			switch (line.ifcType)
 			{
@@ -2358,7 +2405,7 @@ namespace webifc
 			return glm::dmat4();
 		}
 
-		IfcTrimmingSelect ParseTrimSelect(std::vector<uint32_t> &tapeOffsets)
+		IfcTrimmingSelect ParseTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets)
 		{
 			IfcTrimmingSelect ts;
 
@@ -2401,7 +2448,14 @@ namespace webifc
 					// caresian point
 					uint32_t cartesianPointRef = _loader.GetRefArgument();
 					ts.hasPos = true;
-					ts.pos = GetCartesianPoint2D(cartesianPointRef);
+					if(DIM == 2)
+					{
+						ts.pos = GetCartesianPoint2D(cartesianPointRef);
+					}
+					if(DIM == 3)
+					{
+						ts.pos3D = GetCartesianPoint3D(cartesianPointRef);
+					}
 				}
 				else if (tokenType == IfcTokenType::LABEL)
 				{
@@ -2497,9 +2551,17 @@ namespace webifc
 						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType});
 					}
 				}
-				else
+				else if constexpr (DIM == 3)
 				{
-					_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported 3D curve IFCLINE", line.expressID, line.ifcType});
+					if (trim.start.hasPos && trim.end.hasPos)
+					{
+						curve.Add(trim.start.pos3D);
+						curve.Add(trim.end.pos3D);
+					}
+					else
+					{
+						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType});
+					}
 				}
 
 				break;
@@ -2510,13 +2572,15 @@ namespace webifc
 				auto basisCurveID = _loader.GetRefArgument();
 				auto trim1Set = _loader.GetSetArgument();
 				auto trim2Set = _loader.GetSetArgument();
+
 				auto senseAgreementS = _loader.GetStringArgument();
 				auto trimmingPreference = _loader.GetStringArgument();
 
-				auto trim1 = ParseTrimSelect(trim1Set);
-				auto trim2 = ParseTrimSelect(trim2Set);
+				auto trim1 = ParseTrimSelect(DIM, trim1Set);
+				auto trim2 = ParseTrimSelect(DIM, trim2Set);
 
 				IfcTrimmingArguments trim;
+
 				trim.exist = true;
 				trim.start = trim1;
 				trim.end = trim2;

@@ -404,6 +404,7 @@ namespace webifc
 		bool hasPos = false;
 		double param;
 		glm::dvec2 pos;
+		glm::dvec3 pos3D;
 	};
 
 	struct IfcTrimmingArguments
