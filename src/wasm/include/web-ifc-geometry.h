@@ -2279,7 +2279,6 @@ namespace webifc
 
 				auto result = relPlacement * axis2Placement;
 				return result;
-				;
 			}
 			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
 			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM:
@@ -2310,11 +2309,12 @@ namespace webifc
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
 				_loader.MoveToArgumentOffset(line, 3);
-				if (_loader.GetTokenType() == IfcTokenType::REF)
+				if (_loader.GetTokenType() == IfcTokenType::REAL)
 				{
 					_loader.Reverse();
 					scale1 = _loader.GetDoubleArgument();
 				}
+
 				_loader.MoveToArgumentOffset(line, 4);
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
@@ -2325,25 +2325,36 @@ namespace webifc
 				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
 				{
 					_loader.MoveToArgumentOffset(line, 5);
-					if (_loader.GetTokenType() == IfcTokenType::REF)
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
 						_loader.Reverse();
 						scale2 = _loader.GetDoubleArgument();
 					}
 
 					_loader.MoveToArgumentOffset(line, 6);
-					if (_loader.GetTokenType() == IfcTokenType::REF)
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
 						_loader.Reverse();
 						scale3 = _loader.GetDoubleArgument();
 					}
 				}
-
-				return glm::dmat4(
-					glm::dvec4(Axis1 * scale1, 0),
-					glm::dvec4(Axis2 * scale2, 0),
-					glm::dvec4(Axis3 * scale3, 0),
-					glm::dvec4(pos, 1));
+			
+				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D)
+				{
+					return glm::dmat4(
+						glm::dvec4(Axis1 * scale1, 0),
+						glm::dvec4(Axis2 * scale1, 0),
+						glm::dvec4(Axis3 * scale1, 0),
+						glm::dvec4(pos, 1));
+				}
+				else
+				{
+					return glm::dmat4(
+						glm::dvec4(Axis1 * scale1, 0),
+						glm::dvec4(Axis2 * scale2, 0),
+						glm::dvec4(Axis3 * scale3, 0),
+						glm::dvec4(pos, 1));
+				}
 			}
 
 			default:
