@@ -1971,10 +1971,19 @@ namespace webifc
 				double xdim = _loader.GetDoubleArgument();
 				double ydim = _loader.GetDoubleArgument();
 
-				glm::dmat3 placement = GetAxis2Placement2D(placementID);
-
-				profile.curve = GetRectangleCurve(xdim, ydim, placement);
-
+				if(placementID != 0)
+				{
+					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+					profile.curve = GetRectangleCurve(xdim, ydim, placement);
+				}
+				else
+				{
+					glm::dmat3 placement = glm::dmat3(
+						glm::dvec3(1, 0, 0),
+						glm::dvec3(0, 1, 0),
+						glm::dvec3(0, 0, 1));
+					profile.curve = GetRectangleCurve(xdim, ydim, placement);
+				}
 				return profile;
 			}
 			case ifc2x4::IFCRECTANGLEHOLLOWPROFILEDEF:
@@ -2292,7 +2301,7 @@ namespace webifc
 
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
-				glm::dvec3 yAxis = glm::cross(zAxis, xAxis);
+				glm::dvec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
 
 				return glm::dmat4(
 					glm::dvec4(xAxis, 0),
@@ -2335,13 +2344,13 @@ namespace webifc
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
 					_loader.Reverse();
-					Axis1 = GetCartesianPoint3D(_loader.GetRefArgument());
+					Axis1 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 				_loader.MoveToArgumentOffset(line, 1);
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
 					_loader.Reverse();
-					Axis2 = GetCartesianPoint3D(_loader.GetRefArgument());
+					Axis2 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
 				_loader.MoveToArgumentOffset(line, 2);
@@ -2359,7 +2368,7 @@ namespace webifc
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
 					_loader.Reverse();
-					Axis3 = GetCartesianPoint3D(_loader.GetRefArgument());
+					Axis3 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
 				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
