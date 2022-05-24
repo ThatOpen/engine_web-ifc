@@ -102,8 +102,8 @@ namespace webifc
 				auto &geom = _expressIDToGeometry[composedMesh.expressID];
 				if (!geom.normalized)
 					geom.Normalize();
-				
-				if(!composedMesh.hasColor)
+
+				if (!composedMesh.hasColor)
 				{
 					geometry.color = newParentColor;
 				}
@@ -285,7 +285,7 @@ namespace webifc
 
 			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
 			if (isIfcElement)
-			{			
+			{
 				_loader.MoveToArgumentOffset(line, 5);
 				uint32_t localPlacement = 0;
 				if (_loader.GetTokenType() == IfcTokenType::REF)
@@ -921,7 +921,7 @@ namespace webifc
 			std::vector<uint32_t> result;
 
 			IfcTokenType t = _loader.GetTokenType();
-			if(t == IfcTokenType::REF)
+			if (t == IfcTokenType::REF)
 			{
 				_loader.Reverse();
 				uint32_t lineID = _loader.ExpressIDToLineID(_loader.GetRefArgument());
@@ -933,7 +933,7 @@ namespace webifc
 			while (_loader.GetTokenType() != IfcTokenType::SET_END)
 			{
 				_loader.Reverse();
-				if((_loader.GetTokenType() == IfcTokenType::REAL))
+				if ((_loader.GetTokenType() == IfcTokenType::REAL))
 				{
 					_loader.Reverse();
 					result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
@@ -1384,7 +1384,12 @@ namespace webifc
 
 				auto surface = GetSurface(surfRef);
 
-				//TODO: place the face in the surface and tringulate
+				// TODO: place the face in the surface and tringulate
+
+				if (expressID == 455055 || expressID == 455072 || expressID == 455096 || expressID == 455113 || expressID == 455130 || expressID == 455147 || expressID == 455164 || expressID == 455181 || expressID == 455198 || expressID == 455222)
+				{
+					expressID = expressID;
+				}
 
 				TriangulateBounds(geometry, bounds3D);
 
@@ -1482,9 +1487,24 @@ namespace webifc
 					uint32_t edgeId = _loader.GetRefArgument(token);
 					IfcCurve<3> edgeCurve = GetOrientedEdge(edgeId);
 
-					for (auto &pt : edgeCurve.points)
+					//Important not to repeat the last point otherwise triangulation fails
+					//if the list has zero points this is initial, no repetition is possible, otherwise we must check
+					if (curve.points.size() == 0)
 					{
-						curve.points.push_back(pt);
+						for (auto &pt : edgeCurve.points)
+						{
+							curve.points.push_back(pt);
+						}
+					}
+					else
+					{
+						for (auto &pt : edgeCurve.points)
+						{
+							if (notPresent(pt, curve.points))
+							{
+								curve.points.push_back(pt);
+							}
+						}
 					}
 				}
 
@@ -1499,6 +1519,18 @@ namespace webifc
 			return curve;
 		}
 
+		bool notPresent(glm::dvec3 pt, std::vector<glm::dvec3> points)
+		{
+			for (auto &pt2 : points)
+			{
+				if(pt.x == pt2.x && pt.y == pt2.y && pt.z == pt2.z)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
 		IfcCurve<3> GetOrientedEdge(uint32_t expressID)
 		{
 			auto lineID = _loader.ExpressIDToLineID(expressID);
@@ -1511,8 +1543,8 @@ namespace webifc
 			_loader.MoveToArgumentOffset(line, 2);
 			uint32_t edgeCurveRef = _loader.GetRefArgument();
 
-			//Read edgeCurve
-			
+			// Read edgeCurve
+
 			auto edgeID = _loader.ExpressIDToLineID(edgeCurveRef);
 			line = _loader.GetLine(edgeID);
 
@@ -1524,7 +1556,12 @@ namespace webifc
 
 			_loader.MoveToArgumentOffset(line, 2);
 			uint32_t CurveRef = _loader.GetRefArgument();
-			IfcCurve<3> curveEdge = GetCurve<3>(CurveRef);		
+			IfcCurve<3> curveEdge = GetCurve<3>(CurveRef);
+
+			if(!orient)
+			{
+				std::reverse(curveEdge.points.begin(), curveEdge.points.end());
+			}
 
 			return curveEdge;
 		}
@@ -1999,7 +2036,7 @@ namespace webifc
 				double xdim = _loader.GetDoubleArgument();
 				double ydim = _loader.GetDoubleArgument();
 
-				if(placementID != 0)
+				if (placementID != 0)
 				{
 					glm::dmat3 placement = GetAxis2Placement2D(placementID);
 					profile.curve = GetRectangleCurve(xdim, ydim, placement);
@@ -2118,7 +2155,7 @@ namespace webifc
 					_loader.Reverse();
 
 					uint32_t placementID = _loader.GetRefArgument();
-					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+					placement = GetAxis2Placement2D(placementID);
 				}
 
 				_loader.MoveToArgumentOffset(line, 3);
@@ -2251,7 +2288,7 @@ namespace webifc
 
 		bool ValidExpressId(uint32_t expressID)
 		{
-			if(_loader.ValidExpressID(expressID))
+			if (_loader.ValidExpressID(expressID))
 			{
 				return true;
 			}
@@ -2378,7 +2415,7 @@ namespace webifc
 						scale3 = _loader.GetDoubleArgument();
 					}
 				}
-			
+
 				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D)
 				{
 					return glm::dmat4(
@@ -2448,11 +2485,11 @@ namespace webifc
 					// caresian point
 					uint32_t cartesianPointRef = _loader.GetRefArgument();
 					ts.hasPos = true;
-					if(DIM == 2)
+					if (DIM == 2)
 					{
 						ts.pos = GetCartesianPoint2D(cartesianPointRef);
 					}
-					if(DIM == 3)
+					if (DIM == 3)
 					{
 						ts.pos3D = GetCartesianPoint3D(cartesianPointRef);
 					}

@@ -269,8 +269,8 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    //SpecificLoadTest(loader, geometryLoader, 2407);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    SpecificLoadTest(loader, geometryLoader, 30058);
+    //auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = loader.GetAndClearErrors();
