@@ -102,8 +102,8 @@ namespace webifc
 				auto &geom = _expressIDToGeometry[composedMesh.expressID];
 				if (!geom.normalized)
 					geom.Normalize();
-				
-				if(!composedMesh.hasColor)
+
+				if (!composedMesh.hasColor)
 				{
 					geometry.color = newParentColor;
 				}
@@ -294,7 +294,7 @@ namespace webifc
 
 			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
 			if (isIfcElement)
-			{			
+			{
 				_loader.MoveToArgumentOffset(line, 5);
 				uint32_t localPlacement = 0;
 				if (_loader.GetTokenType() == IfcTokenType::REF)
@@ -629,6 +629,16 @@ namespace webifc
 
 					return mesh;
 				}
+				case ifc2x4::IFCADVANCEDBREP:
+				{
+					_loader.MoveToArgumentOffset(line, 0);
+					uint32_t ifcPresentation = _loader.GetRefArgument();
+
+					_expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
+					mesh.hasGeometry = true;
+
+					return mesh;
+				}
 				case ifc2x4::IFCFACETEDBREP:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
@@ -930,7 +940,7 @@ namespace webifc
 			std::vector<uint32_t> result;
 
 			IfcTokenType t = _loader.GetTokenType();
-			if(t == IfcTokenType::REF)
+			if (t == IfcTokenType::REF)
 			{
 				_loader.Reverse();
 				uint32_t lineID = _loader.ExpressIDToLineID(_loader.GetRefArgument());
@@ -942,7 +952,7 @@ namespace webifc
 			while (_loader.GetTokenType() != IfcTokenType::SET_END)
 			{
 				_loader.Reverse();
-				if((_loader.GetTokenType() == IfcTokenType::REAL))
+				if ((_loader.GetTokenType() == IfcTokenType::REAL))
 				{
 					_loader.Reverse();
 					result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
@@ -1410,7 +1420,35 @@ namespace webifc
 				TriangulateBounds(geometry, bounds3D);
 				break;
 			}
+			case ifc2x4::IFCADVANCEDFACE:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto bounds = _loader.GetSetArgument();
 
+				std::vector<IfcBound3D> bounds3D(bounds.size());
+
+				for (int i = 0; i < bounds.size(); i++)
+				{
+					uint32_t boundID = _loader.GetRefArgument(bounds[i]);
+					bounds3D[i] = GetBound(boundID);
+				}
+
+				_loader.MoveToArgumentOffset(line, 1);
+				auto surfRef = _loader.GetRefArgument();
+
+				auto surface = GetSurface(surfRef);
+
+				// TODO: place the face in the surface and tringulate
+
+				if (expressID == 455055 || expressID == 455072 || expressID == 455096 || expressID == 455113 || expressID == 455130 || expressID == 455147 || expressID == 455164 || expressID == 455181 || expressID == 455198 || expressID == 455222)
+				{
+					expressID = expressID;
+				}
+
+				TriangulateBounds(geometry, bounds3D);
+
+				break;
+			}
 			default:
 				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected face type", line.expressID, line.ifcType});
 				break;
@@ -1491,7 +1529,41 @@ namespace webifc
 
 				return curve;
 			}
+			case ifc2x4::IFCEDGELOOP:
+			{
+				IfcCurve3D curve;
 
+				_loader.MoveToArgumentOffset(line, 0);
+				auto edges = _loader.GetSetArgument();
+
+				for (auto &token : edges)
+				{
+					uint32_t edgeId = _loader.GetRefArgument(token);
+					IfcCurve<3> edgeCurve = GetOrientedEdge(edgeId);
+
+					//Important not to repeat the last point otherwise triangulation fails
+					//if the list has zero points this is initial, no repetition is possible, otherwise we must check
+					if (curve.points.size() == 0)
+					{
+						for (auto &pt : edgeCurve.points)
+						{
+							curve.points.push_back(pt);
+						}
+					}
+					else
+					{
+						for (auto &pt : edgeCurve.points)
+						{
+							if (notPresent(pt, curve.points))
+							{
+								curve.points.push_back(pt);
+							}
+						}
+					}
+				}
+
+				return curve;
+			}
 			default:
 				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", line.expressID, line.ifcType});
 				break;
@@ -1499,6 +1571,53 @@ namespace webifc
 
 			IfcCurve3D curve;
 			return curve;
+		}
+
+		bool notPresent(glm::dvec3 pt, std::vector<glm::dvec3> points)
+		{
+			for (auto &pt2 : points)
+			{
+				if(pt.x == pt2.x && pt.y == pt2.y && pt.z == pt2.z)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		IfcCurve<3> GetOrientedEdge(uint32_t expressID)
+		{
+			auto lineID = _loader.ExpressIDToLineID(expressID);
+			auto &line = _loader.GetLine(lineID);
+
+			_loader.MoveToArgumentOffset(line, 3);
+			std::string orientValue = _loader.GetStringArgument();
+			bool orient = orientValue == "T";
+
+			_loader.MoveToArgumentOffset(line, 2);
+			uint32_t edgeCurveRef = _loader.GetRefArgument();
+
+			// Read edgeCurve
+
+			auto edgeID = _loader.ExpressIDToLineID(edgeCurveRef);
+			line = _loader.GetLine(edgeID);
+
+			_loader.MoveToArgumentOffset(line, 0);
+			uint32_t vertex1Ref = _loader.GetRefArgument();
+
+			_loader.MoveToArgumentOffset(line, 1);
+			uint32_t vertex2Ref = _loader.GetRefArgument();
+
+			_loader.MoveToArgumentOffset(line, 2);
+			uint32_t CurveRef = _loader.GetRefArgument();
+			IfcCurve<3> curveEdge = GetCurve<3>(CurveRef);
+
+			if(!orient)
+			{
+				std::reverse(curveEdge.points.begin(), curveEdge.points.end());
+			}
+
+			return curveEdge;
 		}
 
 		void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds)
@@ -1971,7 +2090,7 @@ namespace webifc
 				double xdim = _loader.GetDoubleArgument();
 				double ydim = _loader.GetDoubleArgument();
 
-				if(placementID != 0)
+				if (placementID != 0)
 				{
 					glm::dmat3 placement = GetAxis2Placement2D(placementID);
 					profile.curve = GetRectangleCurve(xdim, ydim, placement);
@@ -2090,7 +2209,7 @@ namespace webifc
 					_loader.Reverse();
 
 					uint32_t placementID = _loader.GetRefArgument();
-					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+					placement = GetAxis2Placement2D(placementID);
 				}
 
 				_loader.MoveToArgumentOffset(line, 3);
@@ -2212,6 +2331,8 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto &line = _loader.GetLine(lineID);
+
+			// TODO: IfcSweptSurface and IfcBSplineSurface still missing
 			switch (line.ifcType)
 			{
 			case ifc2x4::IFCPLANE:
@@ -2260,7 +2381,7 @@ namespace webifc
 
 		bool ValidExpressId(uint32_t expressID)
 		{
-			if(_loader.ValidExpressID(expressID))
+			if (_loader.ValidExpressID(expressID))
 			{
 				return true;
 			}
@@ -2387,7 +2508,7 @@ namespace webifc
 						scale3 = _loader.GetDoubleArgument();
 					}
 				}
-			
+
 				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D)
 				{
 					return glm::dmat4(
@@ -2414,7 +2535,7 @@ namespace webifc
 			return glm::dmat4();
 		}
 
-		IfcTrimmingSelect ParseTrimSelect(std::vector<uint32_t> &tapeOffsets)
+		IfcTrimmingSelect ParseTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets)
 		{
 			IfcTrimmingSelect ts;
 
@@ -2457,7 +2578,14 @@ namespace webifc
 					// caresian point
 					uint32_t cartesianPointRef = _loader.GetRefArgument();
 					ts.hasPos = true;
-					ts.pos = GetCartesianPoint2D(cartesianPointRef);
+					if (DIM == 2)
+					{
+						ts.pos = GetCartesianPoint2D(cartesianPointRef);
+					}
+					if (DIM == 3)
+					{
+						ts.pos3D = GetCartesianPoint3D(cartesianPointRef);
+					}
 				}
 				else if (tokenType == IfcTokenType::LABEL)
 				{
@@ -2553,9 +2681,17 @@ namespace webifc
 						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType});
 					}
 				}
-				else
+				else if constexpr (DIM == 3)
 				{
-					_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported 3D curve IFCLINE", line.expressID, line.ifcType});
+					if (trim.start.hasPos && trim.end.hasPos)
+					{
+						curve.Add(trim.start.pos3D);
+						curve.Add(trim.end.pos3D);
+					}
+					else
+					{
+						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType});
+					}
 				}
 
 				break;
@@ -2566,13 +2702,15 @@ namespace webifc
 				auto basisCurveID = _loader.GetRefArgument();
 				auto trim1Set = _loader.GetSetArgument();
 				auto trim2Set = _loader.GetSetArgument();
+
 				auto senseAgreementS = _loader.GetStringArgument();
 				auto trimmingPreference = _loader.GetStringArgument();
 
-				auto trim1 = ParseTrimSelect(trim1Set);
-				auto trim2 = ParseTrimSelect(trim2Set);
+				auto trim1 = ParseTrimSelect(DIM, trim1Set);
+				auto trim2 = ParseTrimSelect(DIM, trim2Set);
 
 				IfcTrimmingArguments trim;
+
 				trim.exist = true;
 				trim.start = trim1;
 				trim.end = trim2;
