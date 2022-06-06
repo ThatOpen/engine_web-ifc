@@ -1600,15 +1600,15 @@ namespace webifc
 			// Read edgeCurve
 
 			auto edgeID = _loader.ExpressIDToLineID(edgeCurveRef);
-			line = _loader.GetLine(edgeID);
+			auto& edgeLine = _loader.GetLine(edgeID);
 
-			_loader.MoveToArgumentOffset(line, 0);
+			_loader.MoveToArgumentOffset(edgeLine, 0);
 			uint32_t vertex1Ref = _loader.GetRefArgument();
 
-			_loader.MoveToArgumentOffset(line, 1);
+			_loader.MoveToArgumentOffset(edgeLine, 1);
 			uint32_t vertex2Ref = _loader.GetRefArgument();
 
-			_loader.MoveToArgumentOffset(line, 2);
+			_loader.MoveToArgumentOffset(edgeLine, 2);
 			uint32_t CurveRef = _loader.GetRefArgument();
 			IfcCurve<3> curveEdge = GetCurve<3>(CurveRef);
 
