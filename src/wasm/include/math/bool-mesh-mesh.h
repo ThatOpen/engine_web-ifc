@@ -144,7 +144,7 @@ namespace webifc
             }
             else
             {
-                index.emplace_back(i) = at;
+                index.emplace_back(at);
             }
         }
 
