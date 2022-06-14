@@ -2715,14 +2715,15 @@ namespace webifc
 				trim.start = trim1;
 				trim.end = trim2;
 
+				bool senseAgreement = senseAgreementS == "T";
+
 				if (sameSense == 0)
 				{
 					std::swap(trim.end, trim.start);
+					senseAgreement = !senseAgreement;
 				}
 
-				bool senseAgreement = senseAgreementS == "T";
-
-				ComputeCurve<DIM>(basisCurveID, curve, sameSense != -1 ? sameSense : senseAgreement, trim);
+				ComputeCurve<DIM>(basisCurveID, curve, senseAgreement, trim);
 
 				break;
 			}
