@@ -1068,7 +1068,7 @@ namespace webifc
           return firstGeom;
         }
 
-        result = boolMultiOp_CSGJSCPP(firstGeom, seconds);
+        result = boolMultiOp_Manifold(firstGeom, seconds);
       }
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)

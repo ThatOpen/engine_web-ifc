@@ -101,8 +101,8 @@ if (typeof window != 'undefined')
 {
 //@ts-ignore
 window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEditor) => {
-    initMonacoEditor(monacoEditor);
   await ifcAPI.Init();
+  initMonacoEditor(monacoEditor);
   const fileInput = document.getElementById('finput');
   fileInput.addEventListener('change', fileInputChanged);
   Init3DView();
@@ -138,7 +138,7 @@ function getData(reader : FileReader){
 
 function LoadModel(data: Uint8Array) {
     const start = ms();
-    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, USE_FAST_BOOLS: true });
+    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, USE_FAST_BOOLS: false });
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);
