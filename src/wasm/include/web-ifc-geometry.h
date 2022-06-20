@@ -1440,11 +1440,6 @@ namespace webifc
 
 				// TODO: place the face in the surface and tringulate
 
-				if (expressID == 455055 || expressID == 455072 || expressID == 455096 || expressID == 455113 || expressID == 455130 || expressID == 455147 || expressID == 455164 || expressID == 455181 || expressID == 455198 || expressID == 455222)
-				{
-					expressID = expressID;
-				}
-
 				TriangulateBounds(geometry, bounds3D);
 
 				break;
