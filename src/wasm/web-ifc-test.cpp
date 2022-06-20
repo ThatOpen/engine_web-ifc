@@ -230,9 +230,10 @@ int main()
     //return 0;
 
     //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#137 Processing/very_simple_assembled.ifc");
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Processing/FWH-Structure.ifc");
+    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Processing/FWH-Structure.ifc");
     //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/test.ifc");
     //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
+    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Solved/#172 Processing/15.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -269,8 +270,8 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    SpecificLoadTest(loader, geometryLoader, 30058);
-    //auto meshes = LoadAllTest(loader, geometryLoader);
+    //SpecificLoadTest(loader, geometryLoader, 30058);
+    auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = loader.GetAndClearErrors();

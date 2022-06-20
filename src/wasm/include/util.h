@@ -393,9 +393,65 @@ namespace webifc
 		}
 	};
 
+	struct IfcProfile
+	{
+		std::string type;
+		IfcCurve<2> curve;
+		std::vector<IfcCurve<2>> holes;
+		bool isConvex;
+	};
+
+	struct IfcProfile3D
+	{
+		std::string type;
+		IfcCurve<3> curve;
+		bool isConvex;
+	};
+
+	struct Cylinder
+	{
+		bool Active = false;
+		double Radius;
+	};
+
+	struct BSpline
+	{
+		bool Active = false;
+		double UDegree;
+		double VDegree;
+		std::string ClosedU;
+		std::string ClosedV;
+		std::string CurveType;
+		std::vector<std::vector<double>> Weights;
+		std::vector<std::vector<glm::dvec3>> ControlPoints;
+		std::vector<glm::f64> UKnots;
+		std::vector<glm::f64> VKnots;
+		std::vector<glm::f64> indexesU;
+		std::vector<glm::f64> indexesV;
+	};
+
+	struct Revolution
+	{
+		bool Active = false;
+		glm::dmat4 Direction;
+		IfcProfile3D Profile;
+	};
+
+	struct Extrusion
+	{
+		bool Active = false;
+		glm::dvec3 Direction;
+		IfcProfile Profile;
+		double Length;
+	};
+
 	struct IfcSurface
 	{
 		glm::dmat4 transformation;
+		BSpline BSplineSurface;
+		Cylinder CylinderSurface;
+		Revolution RevolutionSurface;
+		Extrusion ExtrusionSurface;
 	};
 
 	struct IfcTrimmingSelect
@@ -417,6 +473,7 @@ namespace webifc
 	struct IfcCurve3D
 	{
 		std::vector<glm::dvec3> points;
+		std::vector<int> indices;
 	};
 
 	IfcCurve<2> GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true)
@@ -631,6 +688,176 @@ namespace webifc
 		return c;
 	}
 
+	glm::dvec2 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
+	{
+
+		glm::dvec2 point;
+
+		int domainLow = degree;
+		int domainHigh = knots.size() - 1 - degree;
+
+		double low = knots[domainLow];
+		double high = knots[domainHigh];
+
+		double tPrime = t * (high - low) + low;
+		if (tPrime < low || tPrime > high)
+		{
+			printf("BSpline tPrime out of bounds\n");
+			return glm::dvec2(0, 0);
+		}
+
+		// find s (the spline segment) for the [t] value provided
+		int s = 0;
+		for (int i = domainLow; i < domainHigh; i++)
+		{
+			if (knots[i] <= tPrime && tPrime < knots[i + 1])
+			{
+				s = i;
+				break;
+			}
+		}
+
+		// TODO: this should be done before calling the function, instead of calling it for each t
+		// convert points to homogeneous coordinates
+		std::vector<glm::dvec3> homogeneousPoints;
+		for (int i = 0; i < points.size(); i++)
+		{
+			glm::dvec2 p = points[i];
+			glm::dvec3 h = glm::dvec3(p.x * weights[i], p.y * weights[i], weights[i]);
+			homogeneousPoints.push_back(h);
+		}
+
+		// l (level) goes from 1 to the curve degree + 1
+		double alpha;
+		for (int l = 1; l <= degree + 1; l++)
+		{
+			// build level l of the pyramid
+			for (int i = s; i > s - degree - 1 + l; i--)
+			{
+				alpha = (tPrime - knots[i]) / (knots[i + degree + 1 - l] - knots[i]);
+
+				// interpolate each component
+
+				double x = (1 - alpha) * homogeneousPoints[i - 1].x + alpha * homogeneousPoints[i].x;
+				double y = (1 - alpha) * homogeneousPoints[i - 1].y + alpha * homogeneousPoints[i].y;
+				double w = (1 - alpha) * homogeneousPoints[i - 1].z + alpha * homogeneousPoints[i].z;
+				glm::dvec3 p = glm::dvec3(x, y, w);
+
+				homogeneousPoints[i] = p;
+			}
+		}
+
+		// convert back to cartesian and return
+		point = glm::dvec2(homogeneousPoints[s].x / homogeneousPoints[s].z, homogeneousPoints[s].y / homogeneousPoints[s].z);
+		return point;
+	}
+
+	std::vector<glm::dvec2> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
+	{
+		std::vector<glm::dvec2> c;
+
+		for (double i = 0; i < 1; i += 0.05)
+		{
+			glm::dvec2 point = InterpolateRationalBSplineCurveWithKnots(i, degree, points, knots, weights);
+			c.push_back(point);
+		}
+		// TODO: flip triangles?
+		/*
+				if (MatrixFlipsTriangles(placement))
+				{
+					c.Invert();
+				}
+		*/
+		return c;
+	}
+
+
+	glm::dvec3 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
+	{
+		glm::dvec3 point;
+
+		int domainLow = degree;
+		int domainHigh = knots.size() - 1 - degree;
+
+		double low = knots[domainLow];
+		double high = knots[domainHigh];
+
+		double tPrime = t * (high - low) + low;
+		if (tPrime < low || tPrime > high)
+		{
+			printf("BSpline tPrime out of bounds\n");
+			return glm::dvec3(0, 0, 0);
+		}
+
+		// find s (the spline segment) for the [t] value provided
+		int s = 0;
+		for (int i = domainLow; i < domainHigh; i++)
+		{
+			if (knots[i] <= tPrime && tPrime < knots[i + 1])
+			{
+				s = i;
+				break;
+			}
+		}
+
+		// TODO: this should be done before calling the function, instead of calling it for each t
+		// convert points to homogeneous coordinates
+		std::vector<glm::dvec4> homogeneousPoints;
+		for (int i = 0; i < points.size(); i++)
+		{
+			glm::dvec3 p = points[i];
+			glm::dvec4 h = glm::dvec4(p.x * weights[i], p.y * weights[i], p.z * weights[i], weights[i]);
+			homogeneousPoints.push_back(h);
+		}
+
+		// l (level) goes from 1 to the curve degree + 1
+		double alpha;
+		for (int l = 1; l <= degree + 1; l++)
+		{
+			// build level l of the pyramid
+			for (int i = s; i > s - degree - 1 + l; i--)
+			{
+				alpha = (tPrime - knots[i]) / (knots[i + degree + 1 - l] - knots[i]);
+
+				// interpolate each component
+
+				double x = (1 - alpha) * homogeneousPoints[i - 1].x + alpha * homogeneousPoints[i].x;
+				double y = (1 - alpha) * homogeneousPoints[i - 1].y + alpha * homogeneousPoints[i].y;
+				double z = (1 - alpha) * homogeneousPoints[i - 1].z + alpha * homogeneousPoints[i].z;
+				double w = (1 - alpha) * homogeneousPoints[i - 1].w + alpha * homogeneousPoints[i].w;
+
+				homogeneousPoints[i] = glm::dvec4(x, y, z, w);
+			}
+		}
+
+		// convert back to cartesian and return
+		point = glm::dvec3(homogeneousPoints[s].x / homogeneousPoints[s].w, homogeneousPoints[s].y / homogeneousPoints[s].w, homogeneousPoints[s].z / homogeneousPoints[s].w);
+		return point;
+	}
+
+
+	std::vector<glm::dvec3> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
+	{
+
+		std::vector<glm::dvec3> c;
+
+		for (double i = 0; i < 1; i += 0.05)
+		{
+			glm::dvec3 point = InterpolateRationalBSplineCurveWithKnots(i, degree, points, knots, weights);
+			c.push_back(point);
+		}
+
+		// TODO: flip triangles?
+		/*
+				if (MatrixFlipsTriangles(placement))
+				{
+					c.Invert();
+				}
+		*/
+
+		return c;
+	}
+
 	glm::dvec3 projectOntoPlane(const glm::dvec3 &origin, const glm::dvec3 &normal, const glm::dvec3 &point, const glm::dvec3 &dir)
 	{
 		// project {et} onto the plane, following the extrusion normal
@@ -703,14 +930,6 @@ namespace webifc
 		IfcBoundType type;
 		bool orientation;
 		IfcCurve3D curve;
-	};
-
-	struct IfcProfile
-	{
-		std::string type;
-		IfcCurve<2> curve;
-		std::vector<IfcCurve<2>> holes;
-		bool isConvex;
 	};
 
 	std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)

@@ -789,6 +789,67 @@ namespace webifc
 			return tapeOffsets;
 		}
 
+		inline std::vector<std::vector<uint32_t>> GetSetListArgument()
+		{
+			std::vector<std::vector<uint32_t>> tapeOffsets;
+			_tape.Read<char>(); // set begin
+			int depth = 1;	
+			std::vector<uint32_t> tempSet;
+			
+			while (true)
+			{
+				uint32_t offset = _tape.GetReadOffset();
+				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
+
+				if (t == IfcTokenType::SET_BEGIN)
+				{	
+					tempSet = std::vector<uint32_t>();
+					depth++;
+				}
+				else if (t == IfcTokenType::SET_END)
+				{
+					tapeOffsets.push_back(tempSet);
+					depth--;
+				}
+				else
+				{
+					tempSet.push_back(offset);
+
+					if (t == IfcTokenType::REAL)
+					{
+						_tape.Read<double>();
+					}
+					else if (t == IfcTokenType::REF)
+					{
+						_tape.Read<uint32_t>();
+					}
+					else if (t == IfcTokenType::STRING)
+					{
+						uint16_t length = _tape.Read<uint16_t>();
+						_tape.AdvanceRead(length);
+					}
+					else if (t == IfcTokenType::LABEL)
+					{
+						uint16_t length = _tape.Read<uint16_t>();
+						_tape.AdvanceRead(length);
+					}
+					else
+					{
+						ReportError({ LoaderErrorType::PARSING, "unexpected token" });
+						assert(false);
+					}
+				}
+
+				if (depth == 0)
+				{
+					break;
+				}
+			}
+
+			return tapeOffsets;
+		}
+
+
 		std::string DumpSingleObjectAsIFC(uint32_t expressID)
 		{
 			auto deps = GetLineDependencies(expressID);
