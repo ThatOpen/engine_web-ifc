@@ -987,8 +987,10 @@ namespace webifc
 			IfcGeometry result;
       IfcGeometry secondGeom;
 
+      #ifdef __EMSCRIPTEN__
       if (_loader.GetSettings().USE_FAST_BOOLS)
       {
+      #endif
         for(auto geom : secondGeoms)
         {
           if(geom.numFaces != 0)
@@ -1028,6 +1030,7 @@ namespace webifc
           DumpIfcGeometry(r2, L"r2.obj");
         }
         result = boolSubtract(r1, r2);
+      #ifdef __EMSCRIPTEN__
       }
       else
       {
@@ -1070,6 +1073,7 @@ namespace webifc
 
         result = boolMultiOp_Manifold(firstGeom, seconds);
       }
+      #endif
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{

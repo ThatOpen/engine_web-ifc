@@ -9,9 +9,11 @@
 #include "../util.h"
 #include "./is-inside-mesh.h"
 
+#ifdef __EMSCRIPTEN__
 #include "../../deps/manifold/manifold/include/manifold.h"
 
 //#define DEBUG_BOOLEAN_INPUT
+#endif
 
 namespace webifc
 {
@@ -100,6 +102,7 @@ namespace webifc
         return resultingMesh;
     }
 
+    #ifdef __EMSCRIPTEN__
     manifold::Mesh geom2mesh(const IfcGeometry& geometry) {
         manifold::Mesh mesh;
 
@@ -226,5 +229,6 @@ namespace webifc
 
         return resultGeom;
     }
+    #endif
 
 }
