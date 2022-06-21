@@ -3517,11 +3517,11 @@ namespace webifc
 					{
 						if constexpr (DIM == 2)
 						{
-							double xx = placement[3].x - trim.start.pos.x;
-							double yy = placement[3].y - trim.start.pos.y;
+							double xx = placement[2].x - trim.start.pos.x;
+							double yy = placement[2].y - trim.start.pos.y;
 							startDegrees = VectorToAngle(xx, yy);
-							xx = placement[3].x - trim.end.pos.x;
-							yy = placement[3].y - trim.end.pos.y;
+							xx = placement[2].x - trim.end.pos.x;
+							yy = placement[2].y - trim.end.pos.y;
 							endDegrees = VectorToAngle(xx, yy);
 						}
 						else if constexpr (DIM == 3)
