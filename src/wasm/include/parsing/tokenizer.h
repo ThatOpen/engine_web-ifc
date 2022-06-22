@@ -288,7 +288,7 @@ namespace webifc
 
 			_temp.clear();
 
-			while ((_ptr.cur >= '0' && _ptr.cur <= '9') || (_ptr.cur == '.') || _ptr.cur == 'e' || _ptr.cur == 'E' || _ptr.cur == '-')
+			while ((_ptr.cur >= '0' && _ptr.cur <= '9') || (_ptr.cur == '.') || _ptr.cur == 'e' || _ptr.cur == 'E' || _ptr.cur == '-'|| _ptr.cur == '+')
 			{
 				_temp.push_back(_ptr.cur);
 				_ptr.Advance();
