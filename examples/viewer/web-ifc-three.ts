@@ -22,8 +22,9 @@ export class IfcThree
      * Loads all geometry for the model with id "modelID" into the supplied scene
      * @scene Threejs Scene object
      * @modelID Model handle retrieved by OpenModel, model must not be closed
+     * @onProgress Progress callback (optional)
     */
-    public LoadAllGeometry(scene: THREE.Scene, modelID: number) {
+    public LoadAllGeometry(scene: THREE.Scene, modelID: number, onProgress?: (loaded: number, total: number) => void) {
 
         const startUploadingTime = ms();
 
@@ -40,50 +41,70 @@ export class IfcThree
         let geometries = [];
         let transparentGeometries = [];
 
-        this.ifcAPI.StreamAllMeshes(modelID, (mesh: FlatMesh) => {
-            // only during the lifetime of this function call, the geometry is available in memory
-            const placedGeometries = mesh.geometries;
+        let ids = this.ifcAPI.GetAllMeshIDs(modelID), idx = 0;
+        onProgress?.(0, ids.length);
 
-            for (let i = 0; i < placedGeometries.size(); i++)
-            {
-                const placedGeometry = placedGeometries.get(i);
-                let mesh = this.getPlacedGeometry(modelID, placedGeometry);
-                let geom = mesh.geometry.applyMatrix4(mesh.matrix);
-                if (placedGeometry.color.w !== 1)
+        // Choose here how many meshes do we stream at once
+        const n = Math.min(100, Math.max(1, Math.floor(ids.length / 20)));
+
+        const stream = (): void => {
+            const ids2load = ids.subarray(idx, idx + n);
+
+            this.ifcAPI.StreamMeshes(modelID, ids2load, (mesh: FlatMesh) => {
+                // only during the lifetime of this function call, the geometry is available in memory
+                const placedGeometries = mesh.geometries;
+    
+                for (let i = 0; i < placedGeometries.size(); i++)
                 {
-                    transparentGeometries.push(geom);
+                    const placedGeometry = placedGeometries.get(i);
+                    let mesh = this.getPlacedGeometry(modelID, placedGeometry);
+                    let geom = mesh.geometry.applyMatrix4(mesh.matrix);
+                    if (placedGeometry.color.w !== 1)
+                    {
+                        transparentGeometries.push(geom);
+                    }
+                    else
+                    {
+                        geometries.push(geom);
+                    }
                 }
-                else
+    
+                //console.log(this.ifcAPI.wasmModule.HEAPU8.length);
+            });
+
+            idx += n;
+            if(idx < ids.length) {
+                onProgress?.(idx, ids.length);
+                requestAnimationFrame(stream);
+            } else {
+                onProgress?.(ids.length, ids.length);
+
+                if (geometries.length > 0)
                 {
-                    geometries.push(geom);
+                    const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
+                    let mat = new THREE.MeshPhongMaterial();
+                    mat.vertexColors = true;
+                    const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
+                    scene.add(mergedMesh);
                 }
+        
+                if (transparentGeometries.length > 0)
+                {
+                    const combinedGeometryTransp = BufferGeometryUtils.mergeBufferGeometries(transparentGeometries);
+                    let matTransp = new THREE.MeshPhongMaterial();
+                    matTransp.vertexColors = true;
+                    matTransp.transparent = true;
+                    matTransp.opacity = 0.5;
+                    const mergedMeshTransp = new THREE.Mesh(combinedGeometryTransp, matTransp);
+                    scene.add(mergedMeshTransp);
+                }
+        
+        
+                console.log(`Uploading took ${ms() - startUploadingTime} ms`);                
             }
+        };
 
-            //console.log(this.ifcAPI.wasmModule.HEAPU8.length);
-        });
-
-        if (geometries.length > 0)
-        {
-            const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
-            let mat = new THREE.MeshPhongMaterial();
-            mat.vertexColors = true;
-            const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
-            scene.add(mergedMesh);
-        }
-
-        if (transparentGeometries.length > 0)
-        {
-            const combinedGeometryTransp = BufferGeometryUtils.mergeBufferGeometries(transparentGeometries);
-            let matTransp = new THREE.MeshPhongMaterial();
-            matTransp.vertexColors = true;
-            matTransp.transparent = true;
-            matTransp.opacity = 0.5;
-            const mergedMeshTransp = new THREE.Mesh(combinedGeometryTransp, matTransp);
-            scene.add(mergedMeshTransp);
-        }
-
-
-        console.log(`Uploading took ${ms() - startUploadingTime} ms`);
+        requestAnimationFrame(stream);
     }
     
     private getFlatMeshes(modelID: number) {

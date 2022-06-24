@@ -141,14 +141,18 @@ function LoadModel(data: Uint8Array) {
     const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, USE_FAST_BOOLS: false });
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
-    ifcThree.LoadAllGeometry(scene, modelID);
+    ifcThree.LoadAllGeometry(scene, modelID, function progress(loaded, total) {
+        console.log(`Progress: ${Math.floor(100 * loaded / total)}%`);
 
-    // log errors to console
-    let errors = ifcAPI.GetAndClearErrors(modelID);
-    for (let i = 0; i < errors.size(); i++)
-    {
-        console.log(errors.get(i));
-    }
+        if(loaded === total) {
+            // log errors to console
+            let errors = ifcAPI.GetAndClearErrors(modelID);
+            for (let i = 0; i < errors.size(); i++)
+            {
+                console.log(errors.get(i));
+            }
 
-    ifcAPI.CloseModel(modelID);
+            ifcAPI.CloseModel(modelID);
+        }
+    });
 }
