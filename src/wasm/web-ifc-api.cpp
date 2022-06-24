@@ -225,6 +225,40 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
     StreamAllMeshesWithTypes(modelID, types, callback);
 }
 
+std::vector<uint32_t> GetAllMeshIDs(uint32_t modelID) {
+    std::vector<uint32_t> expressIDs;
+
+    // this collects expressIDs exactly like StreamAllMeshes
+    auto& loader = loaders[modelID];
+    auto& geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return {};
+    }
+
+    std::vector<uint32_t> types;
+
+    for (auto& type : ifc2x4::IfcElements)
+    {
+        if (type == ifc2x4::IFCOPENINGELEMENT || type == ifc2x4::IFCSPACE || type == ifc2x4::IFCOPENINGSTANDARDCASE)
+        {
+            continue;
+        }
+
+        types.push_back(type);
+    }
+
+    // this fetches IDs like StreamAllMeshesWithTypes, but does not stream meshes
+    for (auto& type : types)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+        expressIDs.insert(expressIDs.end(), elements.begin(), elements.end());
+    }
+
+    return expressIDs;
+}
+
 std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 {
     auto& loader = loaders[modelID];
@@ -784,6 +818,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
+    emscripten::function("GetAllMeshIDs", &GetAllMeshIDs);
     emscripten::function("GetAndClearErrors", &GetAndClearErrors);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("WriteLine", &WriteLine);
