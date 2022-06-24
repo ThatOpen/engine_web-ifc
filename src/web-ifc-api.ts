@@ -355,6 +355,13 @@ export class IfcAPI
         this.wasmModule.CloseModel(modelID);
     }
 
+    StreamMeshes(modelID: number, expressIDs: Uint32Array, meshCallback: (mesh: FlatMesh)=>void)
+    {
+        const vector = new this.wasmModule.UintVector();
+        for(let i = 0; i < expressIDs.length; i++) vector.push_back(expressIDs[i]);
+        this.wasmModule.StreamMeshes(modelID, vector, meshCallback);
+    }
+
     StreamAllMeshes(modelID: number, meshCallback: (mesh: FlatMesh)=>void)
     {
         this.wasmModule.StreamAllMeshes(modelID, meshCallback);
@@ -363,6 +370,14 @@ export class IfcAPI
     StreamAllMeshesWithTypes(modelID: number, types: Array<number>, meshCallback: (mesh: FlatMesh)=>void)
     {
         this.wasmModule.StreamAllMeshesWithTypes(modelID, types, meshCallback);
+    }
+
+    GetAllMeshIDs(modelID: number): Uint32Array
+    {
+        let result: Vector<number> = this.wasmModule.GetAllMeshIDs(modelID);
+        let array: Uint32Array = new Uint32Array(result.size());
+        for(let i = 0; i < array.length; i++) array[i] = result.get(i);
+        return array;
     }
 
     /**  
