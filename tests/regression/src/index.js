@@ -2,7 +2,7 @@ import { Viewer } from './viewer.js';
 import { ConvertIfcToThreeJS } from './loader.js';
 
 window.onload = function () {
-	let viewer = new Viewer ();
+    let viewer = new Viewer ();
     let fileUrl = document.location.hash.substring (1);
 
     let loader = document.createElement ('div');

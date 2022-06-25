@@ -46,8 +46,8 @@ export class Viewer
         });
 
         window.addEventListener ('resize', () => {
-			this.Resize ();
-		});
+            this.Resize ();
+        });
 
         this.Resize ();
         this.Render ();
