@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import * as WebIFC from "../../../dist/web-ifc-api.js";
+import * as WebIFC from '../../../dist/web-ifc-api.js';
+import { LogBegin, LogEnd } from './logger.js';
 
 var ifcApi = null;
 
@@ -44,8 +45,9 @@ function ConvertIfcMesh (modelID, ifcMesh)
     return result;
 }
 
-function ConvertIfcFileBuffer (fileBuffer, onReady)
+function ConvertIfcFileBuffer (fileBuffer)
 {
+    LogBegin ('Convert IFC to three.js');
     result = new THREE.Object3D ();
     let modelID = ifcApi.OpenModel (fileBuffer, {
         COORDINATE_TO_ORIGIN : true
@@ -61,15 +63,17 @@ function ConvertIfcFileBuffer (fileBuffer, onReady)
     }
 
     ifcApi.CloseModel (modelID);
+    LogEnd ('Convert IFC to three.js');
     return result;
 }
 
 function DownloadAndConvertIfcFile (fileUrl, onReady)
 {
+    LogBegin ('Download file: ' + fileUrl);
     fetch (fileUrl).then (async (response) => {
-        console.log ('IFC file loaded');
         let buffer = await response.arrayBuffer ();
         let fileBuffer = new Uint8Array (buffer);
+        LogEnd ('Download file: ' + fileUrl);
         let result = ConvertIfcFileBuffer (fileBuffer, onReady);
         onReady (result);
     });
@@ -78,10 +82,11 @@ function DownloadAndConvertIfcFile (fileUrl, onReady)
 export function ConvertIfcToThreeJS (fileUrl, onReady)
 {
     if (ifcApi === null) {
+        LogBegin ('Init IfcAPI');
         ifcApi = new WebIFC.IfcAPI ();
         ifcApi.SetWasmPath ('./../../../../dist/');
         ifcApi.Init ().then (() => {
-            console.log ('IfcAPI initialized');
+            LogEnd ('Init IfcAPI');
             DownloadAndConvertIfcFile (fileUrl, onReady);
         })
     } else {

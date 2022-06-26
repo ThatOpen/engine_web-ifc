@@ -1,5 +1,6 @@
 import { Viewer } from './viewer.js';
 import { ConvertIfcToThreeJS } from './loader.js';
+import { LogBegin, LogEnd } from './logger.js';
 
 window.onload = function () {
     let viewer = new Viewer ();
@@ -11,8 +12,10 @@ window.onload = function () {
     document.body.appendChild (loader);
 
     ConvertIfcToThreeJS (fileUrl, (result) => {
+        LogBegin ('Visualizing three.js model');
         viewer.SetMainObject (result);
         viewer.FitToScreen ();
+        LogEnd ('Visualizing three.js model');
         document.body.removeChild (loader);
     });
 };
