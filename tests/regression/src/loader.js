@@ -7,7 +7,6 @@ var ifcApi = null;
 function ConvertIfcMesh (modelID, ifcMesh)
 {
     let result = new THREE.Object3D ();
-    let vertexOffset = 0;
     let ifcGeometries = ifcMesh.geometries;
     for (let geometryIndex = 0; geometryIndex < ifcGeometries.size (); geometryIndex++) {
         let ifcGeometry = ifcGeometries.get (geometryIndex);
@@ -38,8 +37,6 @@ function ConvertIfcMesh (modelID, ifcMesh)
 
         let mesh = new THREE.Mesh (geometry, material);
         result.add (mesh);
-
-        vertexOffset += ifcVertices.length / 6;
     }
 
     return result;
