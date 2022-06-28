@@ -193,7 +193,7 @@ namespace webifc
             manifold::Manifold first(firstMesh);
 
             // collect holes
-            std::vector<manifold::Manifold> holes;
+            manifold::Manifold combinedHole;
 
             for (auto& holeGeom : secondGeoms)
             {
@@ -201,10 +201,8 @@ namespace webifc
 
                 manifold::Manifold holeManifold(holeMesh);
 
-                holes.push_back(holeManifold);
+                combinedHole += holeManifold;
             }
-
-            manifold::Manifold combinedHole = manifold::Manifold::Compose(holes);
 
             // subtract the combined hole
             if (combinedHole.IsManifold()) {
