@@ -428,6 +428,7 @@ namespace webifc
 		std::vector<glm::f64> VKnots;
 		std::vector<glm::f64> indexesU;
 		std::vector<glm::f64> indexesV;
+		std::vector<std::vector<glm::f64>> WeightPoints;
 	};
 
 	struct Revolution

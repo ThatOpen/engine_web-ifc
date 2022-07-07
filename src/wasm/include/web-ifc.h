@@ -1,8 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
- 
- #pragma once
+
+#pragma once
 
 #include <string>
 #include <vector>
@@ -24,17 +24,17 @@ const uint32_t TAPE_SIZE = 1 << 24;
 
 namespace webifc
 {
-    struct LoaderSettings
-    {
-        bool COORDINATE_TO_ORIGIN = false;
-        bool USE_FAST_BOOLS = false;
-        bool DUMP_CSG_MESHES = false;
-        int CIRCLE_SEGMENTS_LOW = 5;
-        int CIRCLE_SEGMENTS_MEDIUM = 8;
-        int CIRCLE_SEGMENTS_HIGH = 12;
-        bool MESH_CACHE = false;
-				int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
-    };
+	struct LoaderSettings
+	{
+		bool COORDINATE_TO_ORIGIN = false;
+		bool USE_FAST_BOOLS = false;
+		bool DUMP_CSG_MESHES = false;
+		int CIRCLE_SEGMENTS_LOW = 5;
+		int CIRCLE_SEGMENTS_MEDIUM = 8;
+		int CIRCLE_SEGMENTS_HIGH = 12;
+		bool MESH_CACHE = false;
+		int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
+	};
 
 	enum class LoaderErrorType
 	{
@@ -51,16 +51,14 @@ namespace webifc
 		uint32_t expressID;
 		uint32_t ifcType;
 
-		LoaderError(LoaderErrorType t = LoaderErrorType::UNSPECIFIED, 
-					std::string m = "", 
-					uint32_t e = 0, 
-					uint32_t type = 0) :
-			type(t),
-			message(m),
-			expressID(e),
-			ifcType(type)
+		LoaderError(LoaderErrorType t = LoaderErrorType::UNSPECIFIED,
+					std::string m = "",
+					uint32_t e = 0,
+					uint32_t type = 0) : type(t),
+										 message(m),
+										 expressID(e),
+										 ifcType(type)
 		{
-
 		}
 	};
 
@@ -68,8 +66,7 @@ namespace webifc
 	{
 		using namespace std::chrono;
 		milliseconds millis = duration_cast<milliseconds>(
-			system_clock::now().time_since_epoch()
-			);
+			system_clock::now().time_since_epoch());
 
 		return millis.count();
 	}
@@ -77,66 +74,63 @@ namespace webifc
 	class IfcLoader
 	{
 	public:
-		IfcLoader(const LoaderSettings& s = {}):
-				_settings(s)
+		IfcLoader(const LoaderSettings &s = {}) : _settings(s)
 		{
-				
 		}
 
-		void PushDataToTape(void* data, size_t size)
+		void PushDataToTape(void *data, size_t size)
 		{
 			_tape.push(data, size);
 		}
 
 		// this is lazy
-		std::unordered_map<uint32_t, std::vector<uint32_t>>& GetRelVoids()
+		std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids()
 		{
 			return _metaData._relVoids;
 		}
 
 		// this is lazy
-		std::unordered_map<uint32_t, std::vector<uint32_t>>& GetRelVoidRels()
+		std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoidRels()
 		{
 			return _metaData._relVoidRel;
 		}
 
 		// this is lazy
-		std::unordered_map<uint32_t, std::vector<uint32_t>>& GetRelAggregates()
+		std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelAggregates()
 		{
 			return _metaData._relAggregates;
 		}
 
 		// this is lazy
-		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>& GetStyledItems()
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetStyledItems()
 		{
 			return _metaData._styledItems;
 		}
 
 		// this is lazy
-		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>& GetRelMaterials()
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetRelMaterials()
 		{
 			return _metaData._relMaterials;
 		}
 
 		// this is lazy
-		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>& GetMaterialDefinitions()
+		std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetMaterialDefinitions()
 		{
 			return _metaData._materialDefinitions;
 		}
 
 		std::vector<uint32_t> GetExpressIDsWithType(uint32_t type)
 		{
-			auto& list = _metaData.ifcTypeToLineID[type];
+			auto &list = _metaData.ifcTypeToLineID[type];
 			std::vector<uint32_t> ret(list.size());
 
-			std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID) {
-				return _metaData.lines[lineID].expressID;
-			});
+			std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
+						   { return _metaData.lines[lineID].expressID; });
 
 			return ret;
 		}
 
-		void LoadFile(const std::function<uint32_t(char*, size_t)>& requestData)
+		void LoadFile(const std::function<uint32_t(char *, size_t)> &requestData)
 		{
 			Tokenizer<TAPE_SIZE> tokenizer(_tape);
 			uint32_t numLines = tokenizer.Tokenize(requestData);
@@ -151,7 +145,7 @@ namespace webifc
 			ReadLinearScalingFactor();
 		}
 
-		double ConvertPrefix(const std::string& prefix)
+		double ConvertPrefix(const std::string &prefix)
 		{
 			if (prefix == "")
 			{
@@ -233,27 +227,27 @@ namespace webifc
 
 			if (projects.size() != 1)
 			{
-				ReportError({ LoaderErrorType::PARSING, "unexpected empty ifc project" });
+				ReportError({LoaderErrorType::PARSING, "unexpected empty ifc project"});
 				return;
 			}
 
 			auto projectEID = projects[0];
 
-			auto& line = GetLine(ExpressIDToLineID(projectEID));
+			auto &line = GetLine(ExpressIDToLineID(projectEID));
 			MoveToArgumentOffset(line, 8);
 
 			auto unitsID = GetRefArgument();
 
-			auto& unitsLine = GetLine(ExpressIDToLineID(unitsID));
+			auto &unitsLine = GetLine(ExpressIDToLineID(unitsID));
 			MoveToArgumentOffset(unitsLine, 0);
 
 			auto unitIds = GetSetArgument();
 
-			for (auto& unitID : unitIds)
+			for (auto &unitID : unitIds)
 			{
 				auto unitRef = GetRefArgument(unitID);
 
-				auto& line = GetLine(ExpressIDToLineID(unitRef));
+				auto &line = GetLine(ExpressIDToLineID(unitRef));
 
 				if (line.ifcType == ifc2x4::IFCSIUNIT)
 				{
@@ -288,7 +282,7 @@ namespace webifc
 			for (uint32_t relVoidID : relVoids)
 			{
 				uint32_t lineID = ExpressIDToLineID(relVoidID);
-				auto& line = GetLine(lineID);
+				auto &line = GetLine(lineID);
 
 				MoveToArgumentOffset(line, 4);
 
@@ -307,14 +301,14 @@ namespace webifc
 			for (uint32_t relVoidID : relVoids)
 			{
 				uint32_t lineID = ExpressIDToLineID(relVoidID);
-				auto& line = GetLine(lineID);
+				auto &line = GetLine(lineID);
 
 				MoveToArgumentOffset(line, 4);
 
 				uint32_t relatingBuildingElement = GetRefArgument();
 				auto aggregates = GetSetArgument();
 
-				for (auto& aggregate : aggregates)
+				for (auto &aggregate : aggregates)
 				{
 					uint32_t aggregateID = GetRefArgument(aggregate);
 					_metaData._relAggregates[relatingBuildingElement].push_back(aggregateID);
@@ -329,7 +323,7 @@ namespace webifc
 			for (uint32_t styledItemID : styledItems)
 			{
 				uint32_t lineID = ExpressIDToLineID(styledItemID);
-				auto& line = GetLine(lineID);
+				auto &line = GetLine(lineID);
 
 				MoveToArgumentOffset(line, 0);
 
@@ -343,7 +337,7 @@ namespace webifc
 
 					auto styleAssignments = GetSetArgument();
 
-					for (auto& styleAssignment : styleAssignments)
+					for (auto &styleAssignment : styleAssignments)
 					{
 						uint32_t styleAssignmentID = GetRefArgument(styleAssignment);
 						_metaData._styledItems[representationItem].emplace_back(styledItemID, styleAssignmentID);
@@ -359,7 +353,7 @@ namespace webifc
 			for (uint32_t styledItemID : styledItems)
 			{
 				uint32_t lineID = ExpressIDToLineID(styledItemID);
-				auto& line = GetLine(lineID);
+				auto &line = GetLine(lineID);
 
 				MoveToArgumentOffset(line, 5);
 
@@ -369,7 +363,7 @@ namespace webifc
 
 				auto RelatedObjects = GetSetArgument();
 
-				for (auto& ifcRoot : RelatedObjects)
+				for (auto &ifcRoot : RelatedObjects)
 				{
 					uint32_t ifcRootID = GetRefArgument(ifcRoot);
 					_metaData._relMaterials[ifcRootID].emplace_back(styledItemID, materialSelect);
@@ -381,7 +375,7 @@ namespace webifc
 			for (uint32_t styledItemID : matDefs)
 			{
 				uint32_t lineID = ExpressIDToLineID(styledItemID);
-				auto& line = GetLine(lineID);
+				auto &line = GetLine(lineID);
 
 				MoveToArgumentOffset(line, 2);
 
@@ -391,7 +385,7 @@ namespace webifc
 
 				uint32_t material = GetRefArgument();
 
-				for (auto& representation : representations)
+				for (auto &representation : representations)
 				{
 					uint32_t representationID = GetRefArgument(representation);
 					_metaData._materialDefinitions[material].emplace_back(styledItemID, representationID);
@@ -404,17 +398,17 @@ namespace webifc
 			_tape.DumpToDisk();
 		}
 
-        size_t GetNumLines()
-        {
-            return _metaData.lines.size();
-        }
+		size_t GetNumLines()
+		{
+			return _metaData.lines.size();
+		}
 
-		std::vector<uint32_t>& GetLineIDsWithType(uint32_t type)
+		std::vector<uint32_t> &GetLineIDsWithType(uint32_t type)
 		{
 			return _metaData.ifcTypeToLineID[type];
 		}
 
-		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t* dest)
+		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t *dest)
 		{
 			uint32_t startOffset = _metaData.lines[_metaData.expressIDToLine[expressID]].tapeOffset;
 			uint32_t endOffset = _metaData.lines[_metaData.expressIDToLine[expressID]].tapeEnd;
@@ -432,12 +426,12 @@ namespace webifc
 			return _metaData.expressIDToLine[expressID];
 		}
 
-		IfcLine& GetLine(uint32_t lineID)
+		IfcLine &GetLine(uint32_t lineID)
 		{
 			return _metaData.lines[lineID];
 		}
 
-		webifc::DynamicTape<TAPE_SIZE>& GetTape()
+		webifc::DynamicTape<TAPE_SIZE> &GetTape()
 		{
 			return _tape;
 		}
@@ -462,7 +456,7 @@ namespace webifc
 			_open = false;
 		}
 
-		void MoveToArgumentOffset(IfcLine& line, int argumentIndex)
+		void MoveToArgumentOffset(IfcLine &line, int argumentIndex)
 		{
 			_tape.MoveTo(line.tapeOffset);
 
@@ -486,7 +480,7 @@ namespace webifc
 				{
 				case IfcTokenType::LINE_END:
 				{
-					ReportError({ LoaderErrorType::PARSING, "unexpected line end" });
+					ReportError({LoaderErrorType::PARSING, "unexpected line end"});
 					assert(false);
 					break;
 				}
@@ -573,7 +567,7 @@ namespace webifc
 		{
 			if (!_tape.Expect(IfcTokenType::REF))
 			{
-				ReportError({ LoaderErrorType::PARSING, "unexpected token type, expected REF" });
+				ReportError({LoaderErrorType::PARSING, "unexpected token type, expected REF"});
 				return 0;
 			}
 			return _tape.Read<uint32_t>();
@@ -592,7 +586,7 @@ namespace webifc
 			}
 			else
 			{
-				ReportError({ LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY" });
+				ReportError({LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY"});
 				return 0;
 			}
 		}
@@ -608,11 +602,11 @@ namespace webifc
 			return static_cast<IfcTokenType>(_tape.Read<char>());
 		}
 
-		inline void GetLineDependencies(uint32_t expressID, std::set<uint32_t>& deps)
+		inline void GetLineDependencies(uint32_t expressID, std::set<uint32_t> &deps)
 		{
 			// move tape to line
 			uint32_t lineID = ExpressIDToLineID(expressID);
-			auto& line = GetLine(lineID);
+			auto &line = GetLine(lineID);
 			MoveToArgumentOffset(line, 0);
 
 			std::vector<uint32_t> localDeps;
@@ -661,7 +655,7 @@ namespace webifc
 				}
 			}
 
-			for (auto& localDep : localDeps)
+			for (auto &localDep : localDeps)
 			{
 				GetLineDependencies(localDep, deps);
 			}
@@ -674,7 +668,7 @@ namespace webifc
 
 			auto voids = GetRelVoidRels()[expressID];
 
-			for (auto& v : voids)
+			for (auto &v : voids)
 			{
 				deps.insert(v);
 				GetLineDependencies(v, deps);
@@ -683,11 +677,12 @@ namespace webifc
 			return deps;
 		}
 
-		inline std::vector<IfcLine> GetLinesForExpressIDs(const std::set<uint32_t>& expressIDs)
+		inline std::vector<IfcLine> GetLinesForExpressIDs(const std::set<uint32_t> &expressIDs)
 		{
 			std::vector<IfcLine> lines;
 
-			for (auto eid : expressIDs) {
+			for (auto eid : expressIDs)
+			{
 				auto lineID = ExpressIDToLineID(eid);
 				lines.push_back(GetLine(lineID));
 			}
@@ -716,7 +711,7 @@ namespace webifc
 
 				// create a line ID
 				_metaData.expressIDToLine[expressID] = lineID;
-				auto& line = _metaData.lines[lineID];
+				auto &line = _metaData.lines[lineID];
 
 				// fill line data
 				line.expressID = expressID;
@@ -727,7 +722,7 @@ namespace webifc
 			}
 
 			auto lineID = _metaData.expressIDToLine[expressID];
-			auto& line = _metaData.lines[lineID];
+			auto &line = _metaData.lines[lineID];
 
 			line.tapeOffset = start;
 			line.tapeEnd = end;
@@ -775,7 +770,7 @@ namespace webifc
 					}
 					else
 					{
-						ReportError({ LoaderErrorType::PARSING, "unexpected token" });
+						ReportError({LoaderErrorType::PARSING, "unexpected token"});
 						assert(false);
 					}
 				}
@@ -793,16 +788,16 @@ namespace webifc
 		{
 			std::vector<std::vector<uint32_t>> tapeOffsets;
 			_tape.Read<char>(); // set begin
-			int depth = 1;	
+			int depth = 1;
 			std::vector<uint32_t> tempSet;
-			
+
 			while (true)
 			{
 				uint32_t offset = _tape.GetReadOffset();
 				IfcTokenType t = static_cast<IfcTokenType>(_tape.Read<char>());
 
 				if (t == IfcTokenType::SET_BEGIN)
-				{	
+				{
 					tempSet = std::vector<uint32_t>();
 					depth++;
 				}
@@ -835,7 +830,7 @@ namespace webifc
 					}
 					else
 					{
-						ReportError({ LoaderErrorType::PARSING, "unexpected token" });
+						ReportError({LoaderErrorType::PARSING, "unexpected token"});
 						assert(false);
 					}
 				}
@@ -849,7 +844,6 @@ namespace webifc
 			return tapeOffsets;
 		}
 
-
 		std::string DumpSingleObjectAsIFC(uint32_t expressID)
 		{
 			auto deps = GetLineDependencies(expressID);
@@ -858,7 +852,7 @@ namespace webifc
 			return DumpAsIFC(lines);
 		}
 
-		std::string DumpAsIFC(const std::vector<IfcLine>& lines = {})
+		std::string DumpAsIFC(const std::vector<IfcLine> &lines = {})
 		{
 			std::stringstream file;
 			file << std::setprecision(std::numeric_limits<double>::digits10 + 1);
@@ -869,14 +863,14 @@ namespace webifc
 			file << "ISO-10303-21;" << std::endl;
 			file << "HEADER;" << std::endl;
 			file << "FILE_DESCRIPTION(('" << description << "'), '2;1');" << std::endl;
-			file << "FILE_NAME('" << name << "', '', (''), (''), 'web-ifc-export');" << std::endl;
+			file << "FILE_NAME('" << name << "', '', (''), (''), 'web-ifc-export','','');" << std::endl;
 			file << "FILE_SCHEMA(('IFC2X3'));" << std::endl;
 			file << "ENDSEC;" << std::endl;
 			file << "DATA;" << std::endl;
 
-			const auto& linesToWrite = lines.empty() ? _metaData.lines : lines;
+			const auto &linesToWrite = lines.empty() ? _metaData.lines : lines;
 
-			for (auto& line : linesToWrite)
+			for (auto &line : linesToWrite)
 			{
 				_tape.MoveTo(line.tapeOffset);
 				bool newLine = true;
@@ -994,17 +988,18 @@ namespace webifc
 				}
 			}
 
-			file << "ENDSEC;" << std::endl << "END-ISO-10303-21;";
+			file << "ENDSEC;" << std::endl
+				 << "END-ISO-10303-21;";
 
-            return file.str();
+			return file.str();
 		}
 
-		const LoaderSettings& GetSettings()
+		const LoaderSettings &GetSettings()
 		{
-				return _settings;
+			return _settings;
 		}
 
-		void ReportError(const LoaderError&& error)
+		void ReportError(const LoaderError &&error)
 		{
 			std::cout << error.message << std::endl;
 			_errors.push_back(std::move(error));

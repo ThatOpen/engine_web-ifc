@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
- 
+
 #include <iostream>
 #include <fstream>
 #include <filesystem>
@@ -19,12 +19,12 @@ std::string ReadFile(std::wstring filename)
     return buffer.str();
 }
 
-void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader, uint64_t num)
+void SpecificLoadTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader, uint64_t num)
 {
     auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCSLAB);
 
     bool writeFiles = true;
-    
+
     auto mesh = geometryLoader.GetMesh(num);
 
     if (writeFiles)
@@ -33,12 +33,12 @@ void SpecificLoadTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geom
     }
 }
 
-std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::IfcGeometryLoader& geometryLoader)
+std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
 {
     std::vector<webifc::IfcFlatMesh> meshes;
 
     for (auto type : ifc2x4::IfcElements)
-    {    
+    {
         auto elements = loader.GetExpressIDsWithType(type);
 
         for (int i = 0; i < elements.size(); i++)
@@ -64,16 +64,16 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader& loader, webifc::
     return meshes;
 }
 
-void DumpRefs(std::unordered_map<uint32_t, std::vector<uint32_t>>& refs)
+void DumpRefs(std::unordered_map<uint32_t, std::vector<uint32_t>> &refs)
 {
     std::ofstream of("refs.txt");
 
     int32_t prev = 0;
-    for (auto& it : refs)
+    for (auto &it : refs)
     {
         if (!it.second.empty())
         {
-            for (auto& i : it.second)
+            for (auto &i : it.second)
             {
                 of << (((int32_t)i) - (prev));
                 prev = i;
@@ -93,13 +93,13 @@ void Benchmark()
 {
     std::vector<BenchMarkResult> results;
     std::string path = "../../../benchmark/ifcfiles";
-    for (const auto& entry : std::filesystem::directory_iterator(path))
+    for (const auto &entry : std::filesystem::directory_iterator(path))
     {
         if (entry.path().extension().string() != ".ifc")
         {
             continue;
         }
-        
+
         std::wstring filePath = entry.path().wstring();
         std::string filename = entry.path().filename().string();
 
@@ -108,7 +108,7 @@ void Benchmark()
         webifc::IfcLoader loader;
         auto start = webifc::ms();
         {
-            //loader.LoadFile(content);
+            // loader.LoadFile(content);
         }
         auto time = webifc::ms() - start;
 
@@ -117,16 +117,16 @@ void Benchmark()
         result.timeMS = time;
         result.sizeBytes = entry.file_size();
         results.push_back(result);
-        
+
         std::cout << "Reading " << result.file << " took " << time << "ms" << std::endl;
     }
 
     std::cout << std::endl;
     std::cout << std::endl;
     std::cout << "Results:" << std::endl;
-    
+
     double avgMBsec = 0;
-    for (auto& result : results)
+    for (auto &result : results)
     {
         double MBsec = result.sizeBytes / 1000.0 / result.timeMS;
         avgMBsec += MBsec;
@@ -140,7 +140,6 @@ void Benchmark()
 
     std::cout << std::endl;
     std::cout << std::endl;
-
 }
 
 void TestTriangleDecompose()
@@ -165,10 +164,8 @@ void TestTriangleDecompose()
         // random points
         for (int j = 0; j < PTS_PER_TEST; j++)
         {
-            points.push_back({
-                webifc::RandomDouble(0, scaleX),
-                webifc::RandomDouble(0, scaleY)
-            });
+            points.push_back({webifc::RandomDouble(0, scaleX),
+                              webifc::RandomDouble(0, scaleY)});
         }
 
         // points along the edges
@@ -185,9 +182,9 @@ void TestTriangleDecompose()
 
         std::vector<webifc::Loop> loops;
 
-        for (auto& pt : points)
+        for (auto &pt : points)
         {
-            //if (pt.x > scaleX / 2)
+            // if (pt.x > scaleX / 2)
             {
                 webifc::Loop l;
                 l.hasOne = true;
@@ -205,7 +202,7 @@ void TestTriangleDecompose()
 
         std::vector<webifc::Point> pts;
 
-        for (auto& pt : points)
+        for (auto &pt : points)
         {
             webifc::Point p;
             p.x = pt.x;
@@ -225,14 +222,16 @@ int main()
 
     // return 0;
 
-    //Benchmark();
+    // Benchmark();
 
-    //return 0;
+    // return 0;
 
-    //std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/test.ifc");
-    //std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
-    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#142 Processing blocked/Ferroflex Oberglatt.ifc");
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#121 Processing/VE_RT1801-EQ-D-FC-150_AIR_PRIMAIRE_V2.ifc");
+    // std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/test.ifc");
+    // std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
+    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#142 Processing blocked/Ferroflex Oberglatt.ifc");
+    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#121 Processing/VE_RT1801-EQ-D-FC-150_AIR_PRIMAIRE_V2.ifc");
+    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#117 Processing blocked/ifcsite.ifc");
+    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Solved/#172 Processing/15_testing.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -243,33 +242,32 @@ int main()
 
     auto start = webifc::ms();
     size_t contentOffset = 0;
-    loader.LoadFile([&](char* dest, size_t destSize)
+    loader.LoadFile([&](char *dest, size_t destSize)
                     {
                         uint32_t length = std::min(content.size() - contentOffset, destSize);
                         memcpy(dest, &content[contentOffset], length);
 
                         contentOffset += length;
 
-                        return length;
-                    });
+                        return length; });
 
-    //std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
-    //outputStream << loader.DumpAsIFC();
-    //exit(0);
+    // std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
+    // outputStream << loader.DumpAsIFC();
+    // exit(0);
     auto time = webifc::ms() - start;
 
     std::cout << "Reading took " << time << "ms" << std::endl;
 
-    /*
-    std::ofstream outputFile("output.ifc");
-    outputFile << loader.DumpSingleObjectAsIFC(120119);
-    outputFile.close();
-    */
+    // std::ofstream outputFile("output.ifc");
+    // outputFile << loader.DumpSingleObjectAsIFC(14363);
+    // outputFile.close();
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    //SpecificLoadTest(loader, geometryLoader, 330586);
+    //SpecificLoadTest(loader, geometryLoader, 30782);
+    //SpecificLoadTest(loader, geometryLoader, 92180);
+    //SpecificLoadTest(loader, geometryLoader, 211736);
     auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 

@@ -221,7 +221,8 @@ namespace webifc
 		glm::dmat4 _transformation;
 		GeometryStatistics _statistics;
 
-		double GetOptionalDoubleParam(double defaultValue = 0) {
+		double GetOptionalDoubleParam(double defaultValue = 0)
+		{
 			if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
 			{
 				_loader.Reverse();
@@ -356,17 +357,17 @@ namespace webifc
 					{
 
 						// TODO: this is inefficient, better make one-to-many subtraction in bool logic
-            std::vector<IfcGeometry> voidGeoms;
+						std::vector<IfcGeometry> voidGeoms;
 
 						for (auto relVoidExpressID : relVoidsIt->second)
 						{
-              IfcComposedMesh voidGeom = GetMesh(relVoidExpressID);
+							IfcComposedMesh voidGeom = GetMesh(relVoidExpressID);
 							auto flatVoidMesh = flatten(voidGeom, _expressIDToGeometry, normalizeMat);
 
-              voidGeoms.push_back(flatVoidMesh);
+							voidGeoms.push_back(flatVoidMesh);
 						}
 
-            flatElementMesh = BoolSubtract(flatElementMesh, voidGeoms);
+						flatElementMesh = BoolSubtract(flatElementMesh, voidGeoms);
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
@@ -426,8 +427,8 @@ namespace webifc
 					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
 					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
-          std::vector<IfcGeometry> flatSecondGeoms;
-          flatSecondGeoms.push_back(flatSecondMesh);
+					std::vector<IfcGeometry> flatSecondGeoms;
+					flatSecondGeoms.push_back(flatSecondMesh);
 
 					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondGeoms);
 
@@ -475,8 +476,8 @@ namespace webifc
 						return mesh;
 					}
 
-          std::vector<IfcGeometry> flatSecondGeoms;
-          flatSecondGeoms.push_back(flatSecondMesh);
+					std::vector<IfcGeometry> flatSecondGeoms;
+					flatSecondGeoms.push_back(flatSecondMesh);
 
 					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondGeoms);
 
@@ -988,76 +989,76 @@ namespace webifc
 			return result;
 		}
 
-		IfcGeometry BoolSubtract(const IfcGeometry& firstGeom, const std::vector<IfcGeometry>& secondGeoms)
+		IfcGeometry BoolSubtract(const IfcGeometry &firstGeom, const std::vector<IfcGeometry> &secondGeoms)
 		{
 			IfcGeometry result;
-      IfcGeometry secondGeom;
+			IfcGeometry secondGeom;
 
-      if (_loader.GetSettings().USE_FAST_BOOLS)
-      {
-        for(auto geom : secondGeoms)
-        {
-          if(geom.numFaces != 0)
-          {
-              if(secondGeom.numFaces == 0)
-              {
-                secondGeom = geom;
-              }
-              else
-              {
-                secondGeom = boolJoin(secondGeom, geom);
-              }
+			if (_loader.GetSettings().USE_FAST_BOOLS)
+			{
+				for (auto geom : secondGeoms)
+				{
+					if (geom.numFaces != 0)
+					{
+						if (secondGeom.numFaces == 0)
+						{
+							secondGeom = geom;
+						}
+						else
+						{
+							secondGeom = boolJoin(secondGeom, geom);
+						}
 
-              if (_loader.GetSettings().DUMP_CSG_MESHES)
-              {
-                DumpIfcGeometry(geom, L"geom.obj");
-              }
-          }
-        }
-        if (firstGeom.numFaces == 0 || secondGeom.numFaces == 0)
-        {
-          _loader.ReportError({ LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target" });
+						if (_loader.GetSettings().DUMP_CSG_MESHES)
+						{
+							DumpIfcGeometry(geom, L"geom.obj");
+						}
+					}
+				}
+				if (firstGeom.numFaces == 0 || secondGeom.numFaces == 0)
+				{
+					_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
 
-          // bail out because we will get strange meshes
-          // if this happens, probably there's an issue parsing the mesh that occurred earlier
-          return firstGeom;
-        }
+					// bail out because we will get strange meshes
+					// if this happens, probably there's an issue parsing the mesh that occurred earlier
+					return firstGeom;
+				}
 
-        IfcGeometry r1;
-        IfcGeometry r2;
+				IfcGeometry r1;
+				IfcGeometry r2;
 
-        intersectMeshMesh(firstGeom, secondGeom, r1, r2);
+				intersectMeshMesh(firstGeom, secondGeom, r1, r2);
 
-        if (_loader.GetSettings().DUMP_CSG_MESHES)
-        {
-          DumpIfcGeometry(r1, L"r1.obj");
-          DumpIfcGeometry(r2, L"r2.obj");
-        }
-        result = boolSubtract(r1, r2);
-      }
-      else
-      {
-        const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
-        std::vector<IfcGeometry> seconds;
+				if (_loader.GetSettings().DUMP_CSG_MESHES)
+				{
+					DumpIfcGeometry(r1, L"r1.obj");
+					DumpIfcGeometry(r2, L"r2.obj");
+				}
+				result = boolSubtract(r1, r2);
+			}
+			else
+			{
+				const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
+				std::vector<IfcGeometry> seconds;
 
-        for(auto& geom : secondGeoms)
-        {
-          if(geom.numPoints < threshold)
-          {
-            seconds.push_back(geom);
-          }
-          else
-          {
-            _loader.ReportError({ LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD" });
-          }
+				for (auto &geom : secondGeoms)
+				{
+					if (geom.numPoints < threshold)
+					{
+						seconds.push_back(geom);
+					}
+					else
+					{
+						_loader.ReportError({LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD"});
+					}
 
-          if (_loader.GetSettings().DUMP_CSG_MESHES)
-          {
-            DumpIfcGeometry(geom, L"geom.obj");
-          }
-        }
+					if (_loader.GetSettings().DUMP_CSG_MESHES)
+					{
+						DumpIfcGeometry(geom, L"geom.obj");
+					}
+				}
 
-        if (firstGeom.numPoints > threshold)
+				if (firstGeom.numPoints > threshold)
 				{
 					_loader.ReportError({LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD"});
 
@@ -1065,22 +1066,22 @@ namespace webifc
 					return firstGeom;
 				}
 
-        if (firstGeom.numFaces == 0 || seconds.size() == 0)
-        {
-          _loader.ReportError({ LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target" });
+				if (firstGeom.numFaces == 0 || seconds.size() == 0)
+				{
+					_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
 
-          // bail out because we will get strange meshes
-          // if this happens, probably there's an issue parsing the mesh that occurred earlier
-          return firstGeom;
-        }
+					// bail out because we will get strange meshes
+					// if this happens, probably there's an issue parsing the mesh that occurred earlier
+					return firstGeom;
+				}
 
-        result = boolMultiOp_CSGJSCPP(firstGeom, seconds);
-      }
+				result = boolMultiOp_CSGJSCPP(firstGeom, seconds);
+			}
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{
-        DumpIfcGeometry(firstGeom, L"first.obj");
-        DumpIfcGeometry(secondGeom, L"second.obj");
+				DumpIfcGeometry(firstGeom, L"first.obj");
+				DumpIfcGeometry(secondGeom, L"second.obj");
 				DumpIfcGeometry(result, L"result.obj");
 			}
 
@@ -1448,8 +1449,8 @@ namespace webifc
 
 				if (surface.BSplineSurface.Active)
 				{
-					//geometry = GetRationalBSplineSurfaceWithKnots(surface.BSplineSurface);
-					TriangulateBspline(geometry, bounds3D, surface);
+					// geometry = GetRationalBSplineSurfaceWithKnots(surface.BSplineSurface);
+					// TriangulateBspline(geometry, bounds3D, surface);
 				}
 				else if (surface.CylinderSurface.Active)
 				{
@@ -1487,12 +1488,19 @@ namespace webifc
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t loop = _loader.GetRefArgument();
-				// IfcToken orientation = tokens[_loader.GetArgumentOffset(tokens, 1)];
+				_loader.MoveToArgumentOffset(line, 1);
+				std::string orientValue = _loader.GetStringArgument();
+				bool orient = orientValue == "T";
 
 				IfcBound3D bound;
 				bound.curve = GetLoop(loop);
-				bound.orientation = true;
+				bound.orientation = orient;
 				bound.type = IfcBoundType::OUTERBOUND;
+
+				if (!orient)
+				{
+					std::reverse(bound.curve.points.begin(), bound.curve.points.end());
+				}
 
 				return bound;
 			}
@@ -1500,12 +1508,19 @@ namespace webifc
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t loop = _loader.GetRefArgument();
-				// IfcToken orientation = tokens[_loader.GetArgumentOffset(tokens, 1)];
+				_loader.MoveToArgumentOffset(line, 1);
+				std::string orientValue = _loader.GetStringArgument();
+				bool orient = orientValue == "T";
 
 				IfcBound3D bound;
 				bound.curve = GetLoop(loop);
-				bound.orientation = true;
+				bound.orientation = orient;
 				bound.type = IfcBoundType::BOUND;
+
+				if (!orient)
+				{
+					std::reverse(bound.curve.points.begin(), bound.curve.points.end());
+				}
 
 				return bound;
 			}
@@ -1562,8 +1577,8 @@ namespace webifc
 					uint32_t edgeId = _loader.GetRefArgument(token);
 					IfcCurve<3> edgeCurve = GetOrientedEdge(edgeId);
 
-					//Important not to repeat the last point otherwise triangulation fails
-					//if the list has zero points this is initial, no repetition is possible, otherwise we must check
+					// Important not to repeat the last point otherwise triangulation fails
+					// if the list has zero points this is initial, no repetition is possible, otherwise we must check
 					if (curve.points.size() == 0)
 					{
 						for (auto &pt : edgeCurve.points)
@@ -1601,7 +1616,7 @@ namespace webifc
 		{
 			for (auto &pt2 : points)
 			{
-				if(pt.x == pt2.x && pt.y == pt2.y && pt.z == pt2.z)
+				if (pt.x == pt2.x && pt.y == pt2.y && pt.z == pt2.z)
 				{
 					return false;
 				}
@@ -1617,14 +1632,19 @@ namespace webifc
 			_loader.MoveToArgumentOffset(line, 3);
 			std::string orientValue = _loader.GetStringArgument();
 			bool orient = orientValue == "T";
-
 			_loader.MoveToArgumentOffset(line, 2);
 			uint32_t edgeCurveRef = _loader.GetRefArgument();
+			IfcCurve<3> curveEdge = GetEdgeCurve(edgeCurveRef);
 
-			return GetEdgeCurve(edgeCurveRef, orient);
+			if (orient)
+			{
+				std::reverse(curveEdge.points.begin(), curveEdge.points.end());
+			}
+
+			return curveEdge;
 		}
 
-		IfcCurve<3> GetEdgeCurve(uint32_t expressID, bool orient)
+		IfcCurve<3> GetEdgeCurve(uint32_t expressID)
 		{
 			auto edgeID = _loader.ExpressIDToLineID(expressID);
 			auto &line = _loader.GetLine(edgeID);
@@ -1643,10 +1663,6 @@ namespace webifc
 				uint32_t CurveRef = _loader.GetRefArgument();
 				IfcCurve<3> curveEdge = GetCurve<3>(CurveRef);
 
-				if (!orient)
-				{
-					std::reverse(curveEdge.points.begin(), curveEdge.points.end());
-				}
 				return curveEdge;
 			}
 			default:
@@ -2030,7 +2046,42 @@ namespace webifc
 
 		void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
-			TriangulateBounds(geometry, bounds);
+			// NO EXAMPLE FILES ABOUT THIS CASE
+
+			// THIS IS A SIMPLE EXTRUSION, NOT TRIMMED
+
+			double len = surface.ExtrusionSurface.Length;
+			glm::dvec3 dir = surface.ExtrusionSurface.Direction;
+
+			for (int j = 0; j < surface.ExtrusionSurface.Profile.curve.points.size() - 1; j++)
+			{
+				int j2 = j + 1;
+
+				double npx = surface.ExtrusionSurface.Profile.curve.points[j].x + dir.x * len;
+				double npy = surface.ExtrusionSurface.Profile.curve.points[j].y + dir.y * len;
+				double npz = dir.z * len;
+				glm::dvec3 nptj1 = glm::dvec3(
+					npx,
+					npy,
+					npz);
+				npx = surface.ExtrusionSurface.Profile.curve.points[j2].x + dir.x * len;
+				npy = surface.ExtrusionSurface.Profile.curve.points[j2].y + dir.y * len;
+				npz = dir.z * len;
+				glm::dvec3 nptj2 = glm::dvec3(
+					npx,
+					npy,
+					npz);
+				geometry.AddFace(
+					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j], 0),
+					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
+					nptj1);
+				geometry.AddFace(
+					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
+					nptj2,
+					nptj1);
+			}
+
+			// TriangulateBounds(geometry, bounds);
 		}
 
 		void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
@@ -2461,6 +2512,7 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
+			case ifc2x4::IFCARBITRARYOPENPROFILEDEF:
 			case ifc2x4::IFCARBITRARYCLOSEDPROFILEDEF:
 			{
 				IfcProfile profile;
@@ -2726,13 +2778,13 @@ namespace webifc
 				double flangeThickness = _loader.GetDoubleArgument();
 
 				// optional parameters
-				//double filletRadius = GetOptionalDoubleParam();
-				//double edgeRadius = GetOptionalDoubleParam();
-				//double flangeSlope = GetOptionalDoubleParam();
+				// double filletRadius = GetOptionalDoubleParam();
+				// double edgeRadius = GetOptionalDoubleParam();
+				// double flangeSlope = GetOptionalDoubleParam();
 				double filletRadius = 0;
 				double edgeRadius = 0;
 				double flangeSlope = 0;
-				
+
 				profile.curve = GetUShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, flangeSlope, placement);
 
 				return profile;
@@ -2915,6 +2967,106 @@ namespace webifc
 				surface.BSplineSurface.VKnots = Vknots;
 				surface.BSplineSurface.indexesU = indexesU;
 				surface.BSplineSurface.indexesV = indexesV;
+
+				return surface;
+
+				break;
+			}
+			case ifc2x4::IFCRATIONALBSPLINESURFACEWITHKNOTS:
+			{
+				IfcSurface surface;
+
+				std::vector<std::vector<glm::vec<3, glm::f64>>> ctrolPts;
+				std::vector<std::vector<glm::f64>> weightPts;
+				std::vector<glm::f64> Uknots;
+				std::vector<glm::f64> Vknots;
+				std::vector<glm::f64> indexesU;
+				std::vector<glm::f64> indexesV;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				double Udegree = _loader.GetDoubleArgument();
+
+				_loader.MoveToArgumentOffset(line, 1);
+				double Vdegree = _loader.GetDoubleArgument();
+
+				_loader.MoveToArgumentOffset(line, 2);
+				auto ctrlPointGroups = _loader.GetSetListArgument();
+				for (auto &set : ctrlPointGroups)
+				{
+					std::vector<glm::vec<3, glm::f64>> list;
+					for (auto &token : set)
+					{
+						uint32_t pointId = _loader.GetRefArgument(token);
+						list.push_back(GetCartesianPoint<3>(pointId));
+					}
+					ctrolPts.push_back(list);
+				}
+
+				_loader.MoveToArgumentOffset(line, 3);
+				auto curveType = _loader.GetStringArgument();
+
+				_loader.MoveToArgumentOffset(line, 4);
+				auto closedU = _loader.GetStringArgument();
+
+				_loader.MoveToArgumentOffset(line, 5);
+				auto closedV = _loader.GetStringArgument();
+
+				_loader.MoveToArgumentOffset(line, 6);
+				auto selfIntersect = _loader.GetStringArgument();
+
+				_loader.MoveToArgumentOffset(line, 7);
+				auto knotSetU = _loader.GetSetArgument();
+
+				_loader.MoveToArgumentOffset(line, 8);
+				auto knotSetV = _loader.GetSetArgument();
+
+				_loader.MoveToArgumentOffset(line, 9);
+				auto indexesSetU = _loader.GetSetArgument();
+
+				_loader.MoveToArgumentOffset(line, 10);
+				auto indexesSetV = _loader.GetSetArgument();
+
+				_loader.MoveToArgumentOffset(line, 12);
+				auto weightPointGroups = _loader.GetSetListArgument();
+				for (auto &set : weightPointGroups)
+				{
+					std::vector<glm::f64> list;
+					for (auto &token : set)
+					{
+						list.push_back(_loader.GetDoubleArgument(token));
+					}
+					weightPts.push_back(list);
+				}
+
+				for (auto &token : knotSetU)
+				{
+					Uknots.push_back(_loader.GetDoubleArgument(token));
+				}
+
+				for (auto &token : knotSetV)
+				{
+					Vknots.push_back(_loader.GetDoubleArgument(token));
+				}
+
+				for (auto &token : indexesSetU)
+				{
+					indexesU.push_back(_loader.GetDoubleArgument(token));
+				}
+
+				for (auto &token : indexesSetV)
+				{
+					indexesV.push_back(_loader.GetDoubleArgument(token));
+				}
+
+				surface.BSplineSurface.Active = true;
+				surface.BSplineSurface.UDegree = Udegree;
+				surface.BSplineSurface.VDegree = Vdegree;
+				surface.BSplineSurface.ControlPoints = ctrolPts;
+				surface.BSplineSurface.UKnots = Uknots;
+				surface.BSplineSurface.VKnots = Vknots;
+				surface.BSplineSurface.indexesU = indexesU;
+				surface.BSplineSurface.indexesV = indexesV;
+				surface.BSplineSurface.WeightPoints = weightPts;
 
 				return surface;
 
@@ -3374,7 +3526,7 @@ namespace webifc
 						glm::dvec3 vector;
 						vector = GetVector(vectorID);
 
-						if (sameSense)
+						if (sameSense == 1 || sameSense == -1)
 						{
 							glm::dvec3 p1 = placement + vector * trim.start.param;
 							glm::dvec3 p2 = placement + vector * trim.end.param;
@@ -3398,8 +3550,16 @@ namespace webifc
 				{
 					if (trim.start.hasPos && trim.end.hasPos)
 					{
-						curve.Add(trim.start.pos3D);
-						curve.Add(trim.end.pos3D);
+						if (sameSense == 0)
+						{
+							curve.Add(trim.start.pos3D);
+							curve.Add(trim.end.pos3D);
+						}
+						else
+						{
+							curve.Add(trim.end.pos3D);
+							curve.Add(trim.start.pos3D);
+						}
 					}
 					else
 					{
@@ -3432,7 +3592,7 @@ namespace webifc
 
 				if (sameSense == 0)
 				{
-					std::swap(trim.end, trim.start);
+					// std::swap(trim.end, trim.start);
 					senseAgreement = !senseAgreement;
 				}
 
@@ -3582,7 +3742,6 @@ namespace webifc
 				{
 					double ratio = static_cast<double>(i) / (numSegments - 1);
 					double angle = startRad + ratio * lengthRad;
-
 					glm::vec<DIM, glm::f64> pos;
 					if constexpr (DIM == 2)
 					{
@@ -3596,6 +3755,135 @@ namespace webifc
 						glm::dvec3 vec(0);
 						vec[0] = radius * std::cos(angle);
 						vec[1] = -radius * std::sin(angle); // negative or not???
+						pos = placement * glm::dvec4(glm::dvec3(vec), 1);
+					}
+					// glm::vec<DIM, glm::f64> pos = placement * glm::vec<DIM + 1, glm::f64>(vec, 1);
+					curve.Add(pos);
+				}
+
+				// without a trim, we close the circle
+				if (!trim.exist)
+				{
+					curve.Add(curve.points[startIndex]);
+				}
+
+				break;
+			}
+			case ifc2x4::IFCELLIPSE:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto positionID = _loader.GetRefArgument();
+				double radius1 = _loader.GetDoubleArgument();
+				double radius2 = _loader.GetDoubleArgument();
+
+				glm::mat<DIM + 1, DIM + 1, glm::f64, glm::defaultp> placement;
+				if constexpr (DIM == 2)
+				{
+					placement = GetAxis2Placement2D(positionID);
+				}
+				else
+				{
+					placement = GetLocalPlacement(positionID);
+				}
+
+				double startDegrees = 0;
+				double endDegrees = 360;
+
+				if (trim.exist)
+				{
+					if (trim.start.hasParam && trim.end.hasParam)
+					{
+						startDegrees = trim.start.param;
+						endDegrees = trim.end.param;
+					}
+					else if (trim.start.hasPos && trim.end.hasPos)
+					{
+						if constexpr (DIM == 2)
+						{
+							double xx = placement[2].x - trim.start.pos.x;
+							double yy = placement[2].y - trim.start.pos.y;
+							startDegrees = VectorToAngle(xx, yy);
+							xx = placement[2].x - trim.end.pos.x;
+							yy = placement[2].y - trim.end.pos.y;
+							endDegrees = VectorToAngle(xx, yy);
+						}
+						else if constexpr (DIM == 3)
+						{
+							glm::dvec4 vecX = placement[0];
+							glm::dvec4 vecY = placement[1];
+							glm::dvec4 vecZ = placement[2];
+
+							double xxS = trim.start.pos3D.x - placement[3].x;
+							double yyS = trim.start.pos3D.y - placement[3].y;
+							double zzS = trim.start.pos3D.z - placement[3].z;
+
+							double xxE = trim.end.pos3D.x - placement[3].x;
+							double yyE = trim.end.pos3D.y - placement[3].y;
+							double zzE = trim.end.pos3D.z - placement[3].z;
+
+							double dxS = vecX.x * xxS + vecX.y * yyS + vecX.z * zzS;
+							double dyS = vecY.x * xxS + vecY.y * yyS + vecY.z * zzS;
+							double dzS = vecZ.x * xxS + vecZ.y * yyS + vecZ.z * zzS;
+
+							double dxE = vecX.x * xxE + vecX.y * yyE + vecX.z * zzE;
+							double dyE = vecY.x * xxE + vecY.y * yyE + vecY.z * zzE;
+							double dzE = vecZ.x * xxE + vecZ.y * yyE + vecZ.z * zzE;
+
+							endDegrees = VectorToAngle(dxS, dyS) - 90;
+							startDegrees = VectorToAngle(dxE, dyE) - 90;
+						}
+					}
+				}
+
+				double startRad = startDegrees / 180 * CONST_PI;
+				double endRad = endDegrees / 180 * CONST_PI;
+
+				// Because this is an ellipse you need to correct the angles
+
+				// startRad = atan((radius1 / radius2) * tan(startDegrees));
+				// endRad = atan((radius1 / radius2) * tan(endDegrees));
+
+				double lengthDegrees = endDegrees - startDegrees;
+
+				// unset or true
+				if (sameSense == 1 || sameSense == -1)
+				{
+					if (lengthDegrees < 0)
+					{
+						lengthDegrees += 360;
+					}
+				}
+				else
+				{
+					if (lengthDegrees > 0)
+					{
+						lengthDegrees -= 360;
+					}
+				}
+
+				double lengthRad = lengthDegrees / 180 * CONST_PI;
+
+				size_t startIndex = curve.points.size();
+
+				const int numSegments = _loader.GetSettings().CIRCLE_SEGMENTS_HIGH;
+
+				for (int i = 0; i < numSegments; i++)
+				{
+					double ratio = static_cast<double>(i) / (numSegments - 1);
+					double angle = startRad + ratio * lengthRad;
+					glm::vec<DIM, glm::f64> pos;
+					if constexpr (DIM == 2)
+					{
+						glm::dvec2 vec(0);
+						vec[0] = radius1 * std::cos(angle);
+						vec[1] = -radius2 * std::sin(angle); // not sure why we need this, but we apparently do
+						pos = placement * glm::dvec3(vec, 1);
+					}
+					else
+					{
+						glm::dvec3 vec(0);
+						vec[0] = radius1 * std::cos(angle);
+						vec[1] = -radius2 * std::sin(angle); // negative or not???
 						pos = placement * glm::dvec4(glm::dvec3(vec), 1);
 					}
 					// glm::vec<DIM, glm::f64> pos = placement * glm::vec<DIM + 1, glm::f64>(vec, 1);
@@ -3654,6 +3942,8 @@ namespace webifc
 				{
 					curve.Add(tempPoints[i]);
 				}
+
+				std::reverse(curve.points.begin(), curve.points.end());
 
 				break;
 			}
@@ -3724,6 +4014,8 @@ namespace webifc
 					curve.Add(tempPoints[i]);
 				}
 
+				std::reverse(curve.points.begin(), curve.points.end());
+
 				break;
 			}
 
@@ -3787,6 +4079,8 @@ namespace webifc
 				{
 					curve.Add(tempPoints[i]);
 				}
+
+				std::reverse(curve.points.begin(), curve.points.end());
 
 				break;
 			}
