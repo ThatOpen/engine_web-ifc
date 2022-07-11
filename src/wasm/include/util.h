@@ -424,10 +424,10 @@ namespace webifc
 		std::string CurveType;
 		std::vector<std::vector<double>> Weights;
 		std::vector<std::vector<glm::dvec3>> ControlPoints;
+		std::vector<glm::f64> UMultiplicity;
+		std::vector<glm::f64> VMultiplicity;
 		std::vector<glm::f64> UKnots;
 		std::vector<glm::f64> VKnots;
-		std::vector<glm::f64> indexesU;
-		std::vector<glm::f64> indexesV;
 		std::vector<std::vector<glm::f64>> WeightPoints;
 	};
 
@@ -632,7 +632,6 @@ namespace webifc
 
 		// TODO: implement the radius
 
-
 		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
 		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
 
@@ -655,7 +654,7 @@ namespace webifc
 
 		return c;
 	}
-	
+
 	IfcCurve<2> GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
 	{
 		IfcCurve<2> c;
@@ -772,7 +771,6 @@ namespace webifc
 		return c;
 	}
 
-
 	glm::dvec3 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
 	{
 		glm::dvec3 point;
@@ -835,7 +833,6 @@ namespace webifc
 		point = glm::dvec3(homogeneousPoints[s].x / homogeneousPoints[s].w, homogeneousPoints[s].y / homogeneousPoints[s].w, homogeneousPoints[s].z / homogeneousPoints[s].w);
 		return point;
 	}
-
 
 	std::vector<glm::dvec3> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
 	{
@@ -915,7 +912,7 @@ namespace webifc
 				}
 			}
 		}
-		
+
 		return false;
 	}
 

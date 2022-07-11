@@ -265,7 +265,7 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    //SpecificLoadTest(loader, geometryLoader, 30782);
+    SpecificLoadTest(loader, geometryLoader, 30782);
     //SpecificLoadTest(loader, geometryLoader, 92180);
     //SpecificLoadTest(loader, geometryLoader, 211736);
     auto meshes = LoadAllTest(loader, geometryLoader);

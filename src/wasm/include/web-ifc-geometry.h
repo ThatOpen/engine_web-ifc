@@ -22,6 +22,8 @@
 #include "math/intersect-mesh-mesh.h"
 #include "math/bool-mesh-mesh.h"
 
+#include "tinynurbs/tinynurbs.h"
+
 #include "ifc2x4.h"
 #include "web-ifc.h"
 #include "util.h"
@@ -1449,8 +1451,7 @@ namespace webifc
 
 				if (surface.BSplineSurface.Active)
 				{
-					// geometry = GetRationalBSplineSurfaceWithKnots(surface.BSplineSurface);
-					// TriangulateBspline(geometry, bounds3D, surface);
+					TriangulateBspline(geometry, bounds3D, surface);
 				}
 				else if (surface.CylinderSurface.Active)
 				{
@@ -1468,7 +1469,6 @@ namespace webifc
 				{
 					TriangulateBounds(geometry, bounds3D);
 				}
-
 				break;
 			}
 			default:
@@ -2086,7 +2086,107 @@ namespace webifc
 
 		void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
-			TriangulateBounds(geometry, bounds);
+			tinynurbs::RationalSurface3d srf;
+			srf.degree_u = surface.BSplineSurface.UDegree;
+			srf.degree_v = surface.BSplineSurface.VDegree;
+
+			size_t num_u = surface.BSplineSurface.ControlPoints.size();
+			size_t num_v = surface.BSplineSurface.ControlPoints[0].size();
+
+			std::vector<glm::dvec3> controlPoints;
+			for (std::vector<glm::dvec3> row : surface.BSplineSurface.ControlPoints)
+			{
+				for (glm::dvec3 point : row)
+				{
+					controlPoints.push_back({point.x, point.y, point.z});
+				}
+			}
+			srf.control_points = tinynurbs::array2(num_u, num_v, controlPoints);
+
+			for (glm::f64 knotU : surface.BSplineSurface.UKnots)
+			{
+				srf.knots_u.push_back((double)knotU);
+			}
+
+			for (glm::f64 knotV : surface.BSplineSurface.VKnots)
+			{
+				srf.knots_v.push_back((double)knotV);
+			}
+
+			std::vector<double> weights;
+			for (std::vector<double> row : surface.BSplineSurface.Weights)
+			{
+				for (double weight : row)
+				{
+					weights.push_back(weight);
+				}
+			}
+			if (weights.size() != num_u * num_v)
+			{
+				for (int i = 0; i < num_u * num_v; i++)
+				{
+					weights.push_back(1.0);
+				}
+			}
+			srf.weights = tinynurbs::array2(num_u, num_v, weights);
+
+			// srf = getHemisphere();
+
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			srf.knots_u = surface.BSplineSurface.UKnots; //{ 0.000000, 0.000000, 0.000000, 0.000000, 1224.744871, 1224.744871, 1224.744871, 1224.744871  };
+			srf.knots_v = surface.BSplineSurface.VKnots; //{ 1.000000, 1.000000, 2.000000, 2.000000  };
+			if (srf.knots_u.size() != num_u + surface.BSplineSurface.UDegree + 1)
+			{
+				for (int r = 0; r < surface.BSplineSurface.UDegree; r++)
+				{
+					srf.knots_u.push_back(srf.knots_u[srf.knots_u.size() - 1]);
+					srf.knots_u.insert(srf.knots_u.begin(), srf.knots_u[0]);
+				}
+			}
+			if (srf.knots_v.size() != num_v + surface.BSplineSurface.VDegree + 1)
+			{
+				for (int r = 0; r < surface.BSplineSurface.VDegree; r++)
+				{
+					srf.knots_v.push_back(srf.knots_v[srf.knots_v.size() - 1]);
+					srf.knots_v.insert(srf.knots_v.begin(), srf.knots_v[0]);
+				}
+			}
+
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			if (tinynurbs::surfaceIsValid(srf))
+			{
+				double step = 0.05;
+				for (double j = 0; j <= 1; j += step)
+				{
+					for (double i = 0; i <= 1; i += step)
+					{
+						glm::dvec3 pt00 = tinynurbs::surfacePoint(srf, i, j);
+						glm::dvec3 pt01 = tinynurbs::surfacePoint(srf, i, j + step);
+						glm::dvec3 pt10 = tinynurbs::surfacePoint(srf, i + step, j);
+						glm::dvec3 pt11 = tinynurbs::surfacePoint(srf, i + step, j + step);
+
+						geometry.AddFace(pt00, pt01, pt11);
+						geometry.AddFace(pt00, pt11, pt10);
+					}
+				}
+			}
+		}
+
+		tinynurbs::RationalSurface3d getHemisphere()
+		{
+			// Dummy hemisphere surface to test
+			tinynurbs::RationalSurface3d srf;
+			srf.degree_u = 3;
+			srf.degree_v = 3;
+			srf.knots_u = {0, 0, 0, 0, 1, 1, 1, 1};
+			srf.knots_v = {0, 0, 0, 0, 1, 1, 1, 1};
+			// 4x4 grid (tinynurbs::array2) of control points and weights
+			// https://www.geometrictools.com/Documentation/NURBSCircleSphere.pdf
+			srf.control_points = {4, 4, {glm::dvec3(0, 0, 10), glm::dvec3(0, 0, 10), glm::dvec3(0, 0, 10), glm::dvec3(0, 0, 10), glm::dvec3(20, 0, 10), glm::dvec3(20, 40, 1), glm::dvec3(-20, 40, 1), glm::dvec3(-20, 0, 10), glm::dvec3(20, 0, -10), glm::dvec3(20, 40, -10), glm::dvec3(-20, 40, -10), glm::dvec3(-20, 0, -10), glm::dvec3(0, 0, -10), glm::dvec3(0, 0, -10), glm::dvec3(0, 0, -10), glm::dvec3(0, 0, -10)}};
+			srf.weights = {4, 4, {1, 1.f / 3.f, 1.f / 3.f, 1, 1.f / 3.f, 1.f / 9.f, 1.f / 9.f, 1.f / 3.f, 1.f / 3.f, 1.f / 9.f, 1.f / 9.f, 1.f / 3.f, 1, 1.f / 3.f, 1.f / 3.f, 1}};
+			return srf;
 		}
 
 		void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds)
@@ -2891,10 +2991,10 @@ namespace webifc
 				IfcSurface surface;
 
 				std::vector<std::vector<glm::vec<3, glm::f64>>> ctrolPts;
-				std::vector<glm::f64> Uknots;
-				std::vector<glm::f64> Vknots;
-				std::vector<glm::f64> indexesU;
-				std::vector<glm::f64> indexesV;
+				std::vector<glm::f64> UMultiplicity;
+				std::vector<glm::f64> VMultiplicity;
+				std::vector<glm::f64> UKnots;
+				std::vector<glm::f64> VKnots;
 
 				_loader.MoveToArgumentOffset(line, 0);
 				double Udegree = _loader.GetDoubleArgument();
@@ -2941,32 +3041,32 @@ namespace webifc
 
 				for (auto &token : knotSetU)
 				{
-					Uknots.push_back(_loader.GetDoubleArgument(token));
+					UMultiplicity.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				for (auto &token : knotSetV)
 				{
-					Vknots.push_back(_loader.GetDoubleArgument(token));
+					VMultiplicity.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				for (auto &token : indexesSetU)
 				{
-					indexesU.push_back(_loader.GetDoubleArgument(token));
+					UKnots.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				for (auto &token : indexesSetV)
 				{
-					indexesV.push_back(_loader.GetDoubleArgument(token));
+					VKnots.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				surface.BSplineSurface.Active = true;
 				surface.BSplineSurface.UDegree = Udegree;
 				surface.BSplineSurface.VDegree = Vdegree;
 				surface.BSplineSurface.ControlPoints = ctrolPts;
-				surface.BSplineSurface.UKnots = Uknots;
-				surface.BSplineSurface.VKnots = Vknots;
-				surface.BSplineSurface.indexesU = indexesU;
-				surface.BSplineSurface.indexesV = indexesV;
+				surface.BSplineSurface.UMultiplicity = UMultiplicity;
+				surface.BSplineSurface.VMultiplicity = VMultiplicity;
+				surface.BSplineSurface.UKnots = UKnots;
+				surface.BSplineSurface.VKnots = VKnots;
 
 				return surface;
 
@@ -2978,10 +3078,10 @@ namespace webifc
 
 				std::vector<std::vector<glm::vec<3, glm::f64>>> ctrolPts;
 				std::vector<std::vector<glm::f64>> weightPts;
-				std::vector<glm::f64> Uknots;
-				std::vector<glm::f64> Vknots;
-				std::vector<glm::f64> indexesU;
-				std::vector<glm::f64> indexesV;
+				std::vector<glm::f64> UMultiplicity;
+				std::vector<glm::f64> VMultiplicity;
+				std::vector<glm::f64> UKnots;
+				std::vector<glm::f64> VKnots;
 
 				_loader.MoveToArgumentOffset(line, 0);
 				double Udegree = _loader.GetDoubleArgument();
@@ -3040,32 +3140,32 @@ namespace webifc
 
 				for (auto &token : knotSetU)
 				{
-					Uknots.push_back(_loader.GetDoubleArgument(token));
+					UMultiplicity.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				for (auto &token : knotSetV)
 				{
-					Vknots.push_back(_loader.GetDoubleArgument(token));
+					VMultiplicity.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				for (auto &token : indexesSetU)
 				{
-					indexesU.push_back(_loader.GetDoubleArgument(token));
+					UKnots.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				for (auto &token : indexesSetV)
 				{
-					indexesV.push_back(_loader.GetDoubleArgument(token));
+					VKnots.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				surface.BSplineSurface.Active = true;
 				surface.BSplineSurface.UDegree = Udegree;
 				surface.BSplineSurface.VDegree = Vdegree;
 				surface.BSplineSurface.ControlPoints = ctrolPts;
-				surface.BSplineSurface.UKnots = Uknots;
-				surface.BSplineSurface.VKnots = Vknots;
-				surface.BSplineSurface.indexesU = indexesU;
-				surface.BSplineSurface.indexesV = indexesV;
+				surface.BSplineSurface.UMultiplicity = UMultiplicity;
+				surface.BSplineSurface.VMultiplicity = VMultiplicity;
+				surface.BSplineSurface.UKnots = UKnots;
+				surface.BSplineSurface.VKnots = VKnots;
 				surface.BSplineSurface.WeightPoints = weightPts;
 
 				return surface;

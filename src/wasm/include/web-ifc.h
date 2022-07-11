@@ -803,7 +803,11 @@ namespace webifc
 				}
 				else if (t == IfcTokenType::SET_END)
 				{
-					tapeOffsets.push_back(tempSet);
+					if (tempSet.size() > 0)
+					{
+						tapeOffsets.push_back(tempSet);
+						tempSet = std::vector<uint32_t>();
+					}
 					depth--;
 				}
 				else
