@@ -2103,16 +2103,6 @@ namespace webifc
 			}
 			srf.control_points = tinynurbs::array2(num_u, num_v, controlPoints);
 
-			for (glm::f64 knotU : surface.BSplineSurface.UKnots)
-			{
-				srf.knots_u.push_back((double)knotU);
-			}
-
-			for (glm::f64 knotV : surface.BSplineSurface.VKnots)
-			{
-				srf.knots_v.push_back((double)knotV);
-			}
-
 			std::vector<double> weights;
 			for (std::vector<double> row : surface.BSplineSurface.Weights)
 			{
@@ -2134,33 +2124,90 @@ namespace webifc
 
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			srf.knots_u = surface.BSplineSurface.UKnots; //{ 0.000000, 0.000000, 0.000000, 0.000000, 1224.744871, 1224.744871, 1224.744871, 1224.744871  };
-			srf.knots_v = surface.BSplineSurface.VKnots; //{ 1.000000, 1.000000, 2.000000, 2.000000  };
-			if (srf.knots_u.size() != num_u + surface.BSplineSurface.UDegree + 1)
+			for (int i = 0; i < surface.BSplineSurface.UMultiplicity.size(); i++)
 			{
-				for (int r = 0; r < surface.BSplineSurface.UDegree; r++)
+				for (int r = 0; r < surface.BSplineSurface.UMultiplicity[i]; r++)
 				{
-					srf.knots_u.push_back(srf.knots_u[srf.knots_u.size() - 1]);
-					srf.knots_u.insert(srf.knots_u.begin(), srf.knots_u[0]);
-				}
-			}
-			if (srf.knots_v.size() != num_v + surface.BSplineSurface.VDegree + 1)
-			{
-				for (int r = 0; r < surface.BSplineSurface.VDegree; r++)
-				{
-					srf.knots_v.push_back(srf.knots_v[srf.knots_v.size() - 1]);
-					srf.knots_v.insert(srf.knots_v.begin(), srf.knots_v[0]);
+					srf.knots_u.push_back(surface.BSplineSurface.UKnots[i]);
 				}
 			}
 
-			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			for (int i = 0; i < surface.BSplineSurface.VMultiplicity.size(); i++)
+			{
+				for (int r = 0; r < surface.BSplineSurface.VMultiplicity[i]; r++)
+				{
+					srf.knots_v.push_back(surface.BSplineSurface.VKnots[i]);
+				}
+			}
+
+			////////////////////////////////////////////Find representation boundaries//////////////////////////////////////////////
 
 			if (tinynurbs::surfaceIsValid(srf))
 			{
-				double step = 0.05;
-				for (double j = 0; j <= 1; j += step)
+				bool first = true;
+				double maxU = 1;
+				double maxV = 1;
+				double minU = 0;
+				double minV = 0;
+
+				std::vector<std::vector<glm::highp_dvec3>> gridValues;
+				std::vector<std::vector<glm::dvec2>> uvGridValues;
+				// Fill values if there is no previous values
+				double step1 = 0.01;
+				for (double i = -1; i <= 2; i += step1)
 				{
-					for (double i = 0; i <= 1; i += step)
+					std::vector<glm::highp_dvec3> tmpGrid;
+					std::vector<glm::dvec2> uvTmpGrid;
+					for (double j = -1; j <= 2; j += step1)
+					{
+						glm::highp_dvec3 pt00 = tinynurbs::surfacePoint(srf, i, j);
+						tmpGrid.push_back(pt00);
+						glm::dvec2 pt01 = glm::dvec2(i,j);
+						uvTmpGrid.push_back(pt01);
+					}
+					gridValues.push_back(tmpGrid);
+					uvGridValues.push_back(uvTmpGrid);
+				}
+
+				for (int j = 0; j < bounds[0].curve.points.size(); j++)
+				{
+					glm::dvec3 pt = bounds[0].curve.points[j];
+					glm::dvec2 puv = FindCoordinatesOnNurbs(pt, srf, gridValues, uvGridValues);
+					if (first)
+					{
+						first = false;
+						maxU = puv.x;
+						maxV = puv.y;
+						minU = puv.x;
+						minV = puv.y;
+					}
+					else
+					{
+						if (puv.x > maxU)
+						{
+							maxU = puv.x;
+						}
+						if (puv.y > maxV)
+						{
+							maxV = puv.y;
+						}
+						if (puv.x < minU)
+						{
+							minU = puv.x;
+						}
+						if (puv.y < minV)
+						{
+							minV = puv.y;
+						}
+					}
+				}
+
+				////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+				double step = 0.05;
+				for (double i = minU; i <= maxU; i += step)
+				{
+					for (double j = minV; j <= maxV; j += step)
 					{
 						glm::dvec3 pt00 = tinynurbs::surfacePoint(srf, i, j);
 						glm::dvec3 pt01 = tinynurbs::surfacePoint(srf, i, j + step);
@@ -2172,6 +2219,62 @@ namespace webifc
 					}
 				}
 			}
+		}
+
+		glm::dvec2 FindCoordinatesOnNurbs(glm::dvec3 pt, tinynurbs::RationalSurface3d srf, std::vector<std::vector<glm::highp_dvec3>> gridValues, std::vector<std::vector<glm::dvec2>> uvGridValues)
+		{
+			// First round
+
+			double fU = 0;
+			double fV = 0;
+			double maxdi = 1e+100;
+			double step1 = 0.01;
+			for (double i = 0; i < gridValues.size(); i++)
+			{
+				for (double j = 0; j < gridValues[i].size(); j++)
+				{
+					glm::dvec3 pt00 = gridValues[i][j];
+					double di = glm::distance(pt00, pt);
+					if (di < maxdi)
+					{
+						maxdi = di;
+						fU = uvGridValues[i][j].x;
+						fV = uvGridValues[i][j].y;
+					}
+				}
+			}
+
+			// Second round
+
+			int round = 0;
+			double limit = 0.001;
+			double stepOld = step1;
+			double step2 = step1 / 4;
+
+			while (maxdi > limit && round < 3)
+			{
+				for (double i = 0; i <= 4; i++)
+				{
+					for (double j = 0; j <= 4; j++)
+					{
+						double nU = fU - stepOld + i * step2;
+						double nV = fV - stepOld + j * step2;
+						glm::dvec3 pt00 = tinynurbs::surfacePoint(srf, nU, nV);
+						double di = glm::distance(pt00, pt);
+						if (di < maxdi)
+						{
+							maxdi = di;
+							fU = nU;
+							fV = nV;
+						}
+					}
+				}
+				stepOld = step2;
+				step2 = step2 / 4;
+				round++;
+			}
+
+			return glm::dvec2(fU, fV);
 		}
 
 		tinynurbs::RationalSurface3d getHemisphere()
