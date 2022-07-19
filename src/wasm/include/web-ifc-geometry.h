@@ -2153,26 +2153,11 @@ namespace webifc
 				std::vector<std::vector<glm::highp_dvec3>> gridValues;
 				std::vector<std::vector<glm::dvec2>> uvGridValues;
 				// Fill values if there is no previous values
-				double step1 = 0.01;
-				for (double i = -1; i <= 2; i += step1)
-				{
-					std::vector<glm::highp_dvec3> tmpGrid;
-					std::vector<glm::dvec2> uvTmpGrid;
-					for (double j = -1; j <= 2; j += step1)
-					{
-						glm::highp_dvec3 pt00 = tinynurbs::surfacePoint(srf, i, j);
-						tmpGrid.push_back(pt00);
-						glm::dvec2 pt01 = glm::dvec2(i,j);
-						uvTmpGrid.push_back(pt01);
-					}
-					gridValues.push_back(tmpGrid);
-					uvGridValues.push_back(uvTmpGrid);
-				}
 
 				for (int j = 0; j < bounds[0].curve.points.size(); j++)
 				{
 					glm::dvec3 pt = bounds[0].curve.points[j];
-					glm::dvec2 puv = FindCoordinatesOnNurbs(pt, srf, gridValues, uvGridValues);
+					glm::dvec2 puv = FindCoordinatesOnNurbs(pt, srf);
 					if (first)
 					{
 						first = false;
@@ -2221,57 +2206,52 @@ namespace webifc
 			}
 		}
 
-		glm::dvec2 FindCoordinatesOnNurbs(glm::dvec3 pt, tinynurbs::RationalSurface3d srf, std::vector<std::vector<glm::highp_dvec3>> gridValues, std::vector<std::vector<glm::dvec2>> uvGridValues)
+		glm::dvec2 FindCoordinatesOnNurbs(glm::dvec3 pt, tinynurbs::RationalSurface3d srf)
 		{
+			int round = 0.0;
+			double step1 = 0.01;
+			double limit = 0.0001;
+			double rotacions = 6;
+			double stepOld = step1;
+
 			// First round
 
-			double fU = 0;
-			double fV = 0;
+			double fU = 0.5;
+			double fV = 0.5;
 			double maxdi = 1e+100;
-			double step1 = 0.01;
-			for (double i = 0; i < gridValues.size(); i++)
+
+			for (double r = 0; r < 5; r++)
 			{
-				for (double j = 0; j < gridValues[i].size(); j++)
+				round = 0;
+
+				while (maxdi > limit && round < 3)
 				{
-					glm::dvec3 pt00 = gridValues[i][j];
-					double di = glm::distance(pt00, pt);
-					if (di < maxdi)
+					for (double i = 0; i < rotacions; i++)
 					{
-						maxdi = di;
-						fU = uvGridValues[i][j].x;
-						fV = uvGridValues[i][j].y;
-					}
-				}
-			}
-
-			// Second round
-
-			int round = 0;
-			double limit = 0.001;
-			double stepOld = step1;
-			double step2 = step1 / 4;
-
-			while (maxdi > limit && round < 3)
-			{
-				for (double i = 0; i <= 4; i++)
-				{
-					for (double j = 0; j <= 4; j++)
-					{
-						double nU = fU - stepOld + i * step2;
-						double nV = fV - stepOld + j * step2;
-						glm::dvec3 pt00 = tinynurbs::surfacePoint(srf, nU, nV);
-						double di = glm::distance(pt00, pt);
-						if (di < maxdi)
+						double rads = (i / rotacions) * CONST_PI * 2;
+						double incU = glm::sin(rads) / (r * r * 100);
+						double incV = glm::cos(rads) / (r * r * 100);
+						bool repeat = true;
+						while (repeat)
 						{
-							maxdi = di;
-							fU = nU;
-							fV = nV;
+							double ffU = fU + incU;
+							double ffV = fV + incV;
+							glm::highp_dvec3 pt00 = tinynurbs::surfacePoint(srf, ffU, ffV);
+							double di = glm::distance(pt00, pt);
+							if (di < maxdi)
+							{
+								maxdi = di;
+								fU = ffU;
+								fV = ffV;
+							}
+							else
+							{
+								repeat = false;
+							}
 						}
 					}
+					round++;
 				}
-				stepOld = step2;
-				step2 = step2 / 4;
-				round++;
 			}
 
 			return glm::dvec2(fU, fV);
