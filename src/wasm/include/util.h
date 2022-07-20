@@ -13,6 +13,8 @@
 
 #include "../deps/glm/glm/glm.hpp"
 
+#include "tinynurbs/tinynurbs.h"
+
 #define CONST_PI 3.141592653589793238462643383279502884L
 
 namespace webifc
@@ -686,6 +688,161 @@ namespace webifc
 		}
 
 		return c;
+	}
+
+	glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf)
+	{
+		// Dades inicials
+
+		glm::highp_dvec3 ptc = tinynurbs::surfacePoint(srf, 0.0, 0.0);
+		glm::highp_dvec3 pth = tinynurbs::surfacePoint(srf, 1.0, 0.0);
+		glm::highp_dvec3 ptv = tinynurbs::surfacePoint(srf, 0.0, 1.0);
+
+		double dh = glm::distance(ptc, pth);
+		double dv = glm::distance(ptc, ptv);
+		double pr = (dh + 1) / (dv + 1);
+
+		double step1 = 0.01;
+		double minError = 0.0001;
+		double maxError = 0.01;
+		double rotacions = 6;
+		double stepOld = step1;
+
+		// Primera ronda
+
+		double fU = 0.5;
+		double fV = 0.5;
+		double divisor = 100;
+		double maxdi = 1e+100;
+		double extension = 0;
+
+		while (maxdi > maxError && divisor < 10000)
+		{
+			for (double r = 1; r < 5; r++)
+			{
+				int round = 0;
+				while (maxdi > minError && round < 3)
+				{
+					for (double i = 0; i < rotacions; i++)
+					{
+						double rads = (i / rotacions) * CONST_PI * 2;
+						double incU = glm::sin(rads) / (r * r * divisor);
+						double incV = glm::cos(rads) / (r * r * divisor);
+						if (pr > 1)
+						{
+							incV *= pr;
+						}
+						else
+						{
+							incU /= pr;
+						}
+						bool repeat = true;
+						while (repeat)
+						{
+							double ffU = fU + incU;
+							double ffV = fV + incV;
+							glm::highp_dvec3 pt00 = tinynurbs::surfacePoint(srf, ffU, ffV);
+							double di = glm::distance(pt00, pt);
+							if (di < maxdi)
+							{
+								maxdi = di;
+								fU = ffU;
+								fV = ffV;
+							}
+							else
+							{
+								repeat = false;
+							}
+						}
+					}
+					round++;
+				}
+			}
+			divisor *= 3;
+		}
+
+		// If first method fails to provide a precise solution we use second slow but reliable method
+		double repetition = 0;
+		while (maxdi > maxError && repetition < 8)
+		{
+			double extension = 1;
+			double repetitionTemp = repetition;
+			while (repetitionTemp > 3)
+			{
+				repetitionTemp -= 4;
+				extension++;
+			}
+			if (repetitionTemp == 0)
+			{
+				fU = extension;
+				fV = 0;
+			}
+			if (repetitionTemp == 1)
+			{
+				fU = 0;
+				fV = extension;
+			}
+			if (repetitionTemp == 2)
+			{
+				fU = -extension;
+				fV = 0;
+			}
+			if (repetitionTemp == 3)
+			{
+				fU = 0;
+				fV = -extension;
+			}
+			maxdi = 1e+100;
+			divisor = 100;
+			rotacions = 6;
+			while (maxdi > maxError && divisor < 10000)
+			{
+				for (double r = 1; r < 5; r++)
+				{
+					int round = 0;
+					while (maxdi > minError && round < 3)
+					{
+						for (double i = 0; i < rotacions; i++)
+						{
+							double rads = (i / rotacions) * CONST_PI * 2;
+							double incU = glm::sin(rads) / (r * r * divisor);
+							double incV = glm::cos(rads) / (r * r * divisor);
+							if (pr > 1)
+							{
+								incV *= pr;
+							}
+							else
+							{
+								incU /= pr;
+							}
+							bool repeat = true;
+							while (repeat)
+							{
+								double ffU = fU + incU;
+								double ffV = fV + incV;
+								glm::highp_dvec3 pt00 = tinynurbs::surfacePoint(srf, ffU, ffV);
+								double di = glm::distance(pt00, pt);
+								if (di < maxdi)
+								{
+									maxdi = di;
+									fU = ffU;
+									fV = ffV;
+								}
+								else
+								{
+									repeat = false;
+								}
+							}
+						}
+						round++;
+					}
+				}
+				divisor *= 3;
+			}
+			repetition++;
+		}
+
+		return glm::dvec2(fU, fV);
 	}
 
 	glm::dvec2 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)

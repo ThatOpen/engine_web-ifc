@@ -226,13 +226,9 @@ int main()
 
     // return 0;
 
-    // std::string content = ReadFile(L"D:/web-ifc-obb/benchmark/ifcfiles/test.ifc");
-    // std::string content = ReadFile(L"D:/web-ifc/src/wasm/build/output.ifc");
-    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#142 Processing blocked/Ferroflex Oberglatt.ifc");
-    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#121 Processing/VE_RT1801-EQ-D-FC-150_AIR_PRIMAIRE_V2.ifc");
-    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#117 Processing blocked/ifcsite.ifc");
+    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#145 Solved/S_Office_Integrated Design Archi.ifc");
     // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Solved/#172 Processing/15_testing.ifc");
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Solved/BSI_EXAMPLES/advanced_brep_1.ifc");
+    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Solved/BSI_EXAMPLES/advanced_brep_1.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -266,9 +262,9 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    SpecificLoadTest(loader, geometryLoader, 181);
-    //SpecificLoadTest(loader, geometryLoader, 92180);
-    //SpecificLoadTest(loader, geometryLoader, 211736);
+    SpecificLoadTest(loader, geometryLoader, 414835);
+    // SpecificLoadTest(loader, geometryLoader, 30782);
+    // SpecificLoadTest(loader, geometryLoader, 181);
     auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
