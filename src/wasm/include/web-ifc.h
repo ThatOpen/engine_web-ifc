@@ -422,11 +422,6 @@ namespace webifc
 			return _tape.Copy(startOffset, endOffset, dest);
 		}
 
-		bool ValidExpressID(uint32_t expressID)
-		{
-			return _metaData.expressIDToLine.capacity() > expressID;
-		}
-
 		uint32_t ExpressIDToLineID(uint32_t expressID)
 		{
 			return _metaData.expressIDToLine[expressID];
@@ -808,7 +803,7 @@ namespace webifc
 			file << "ISO-10303-21;" << std::endl;
 			file << "HEADER;" << std::endl;
 			file << "FILE_DESCRIPTION(('" << description << "'), '2;1');" << std::endl;
-			file << "FILE_NAME('" << name << "', '', (''), (''), 'web-ifc-export');" << std::endl;
+			file << "FILE_NAME('" << name << "', '', (''), (''), 'web-ifc-export', '', '');" << std::endl;
 			file << "FILE_SCHEMA(('IFC2X3'));" << std::endl;
 			file << "ENDSEC;" << std::endl;
 			file << "DATA;" << std::endl;
