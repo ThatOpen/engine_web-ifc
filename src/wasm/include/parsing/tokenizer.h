@@ -8,6 +8,7 @@
 #include <functional>
 
 #include "crack_atof.h"
+#include "p21decode.h"
 #include "../util.h"
 
 namespace webifc
@@ -153,6 +154,9 @@ namespace webifc
 
 						_ptr.Advance();
 					}
+
+					if (need_to_decode(_temp))
+						_temp = p21decoder(_temp).unescape();
 
 					_tape.push(IfcTokenType::STRING);
 					_tape.push2((uint16_t)_temp.size());

@@ -1,2 +1,0 @@
-// This is the root directory of the Godot custom build.
-include ':assetPacks:installTime'

@@ -8,10 +8,12 @@
 
 #include "../util.h"
 #include "./is-inside-mesh.h"
-#define CSGJSCPP_REAL double
-#define CSGJSCPP_IMPLEMENTATION
-#include "../../deps/csgjs-cpp/csgjs.h"
-#include "../../deps/godot-csg/csg.h"
+
+#ifdef __EMSCRIPTEN__
+#include "../../deps/manifold/manifold/include/manifold.h"
+
+//#define DEBUG_BOOLEAN_INPUT
+#endif
 
 namespace webifc
 {
@@ -100,184 +102,133 @@ namespace webifc
         return resultingMesh;
     }
 
-    csgjscpp::Model IfcGeometryToCSGModel(const IfcGeometry& mesh1)
-    {
-        std::vector<csgjscpp::Polygon> polygons1;
+    #ifdef __EMSCRIPTEN__
+    manifold::Mesh geom2mesh(const IfcGeometry& geometry) {
+        manifold::Mesh mesh;
 
-        for (uint32_t i = 0; i < mesh1.numFaces; i++)
+        #ifdef DEBUG_BOOLEAN_INPUT
+        puts("# geometry.obj\n");
+        #endif
+
+        // unfortunately we cannot just copy geometry indices
+        // since duplicate vertices make manifold lib unhappy
+        // for now let's just brute-force de-duplication here
+        std::vector<int> index;
+        glm::dvec3 e = geometry.GetExtent() * 1e-6;
+        for (int i = 0, j = 0; i < geometry.numPoints; i++)
         {
-            Face f = mesh1.GetFace(i);
-            std::vector<csgjscpp::Vertex> verts;
+            double x = geometry.vertexData[i * VERTEX_FORMAT_SIZE_FLOATS + 0];
+            double y = geometry.vertexData[i * VERTEX_FORMAT_SIZE_FLOATS + 1];
+            double z = geometry.vertexData[i * VERTEX_FORMAT_SIZE_FLOATS + 2];
 
-            glm::dvec3 a = mesh1.GetPoint(f.i0);
-            glm::dvec3 b = mesh1.GetPoint(f.i1);
-            glm::dvec3 c = mesh1.GetPoint(f.i2);
-
-            glm::dvec3 n = computeNormal(a, b, c);
-
-
-            verts.push_back(csgjscpp::Vertex{ csgjscpp::Vector(a.x, a.y, a.z), csgjscpp::Vector(n.x, n.y, n.z), 0 });
-            verts.push_back(csgjscpp::Vertex{ csgjscpp::Vector(b.x, b.y, b.z), csgjscpp::Vector(n.x, n.y, n.z), 0 });
-            verts.push_back(csgjscpp::Vertex{ csgjscpp::Vector(c.x, c.y, c.z), csgjscpp::Vector(n.x, n.y, n.z), 0 });
-
-            polygons1.push_back(csgjscpp::Polygon(verts));
-        }
-
-        return csgjscpp::modelfrompolygons(polygons1);
-    }
-
-    IfcGeometry boolSubtract_CSGJSCPP(const IfcGeometry& mesh1, const IfcGeometry& mesh2)
-    {
-        auto model1 = IfcGeometryToCSGModel(mesh1);
-        auto model2 = IfcGeometryToCSGModel(mesh2);
-
-        auto m = csgjscpp::csgsubtract(model1, model2);
-
-        IfcGeometry result;
-
-        for (uint32_t i = 0; i < m.indices.size(); i += 3)
-        {
-            uint32_t i0 = m.indices[i + 0];
-            uint32_t i1 = m.indices[i + 1];
-            uint32_t i2 = m.indices[i + 2];
-
-            csgjscpp::Vertex va = m.vertices[i0];
-            csgjscpp::Vertex vb = m.vertices[i1];
-            csgjscpp::Vertex vc = m.vertices[i2];
-
-            glm::dvec3 a(va.pos.x, va.pos.y, va.pos.z);
-            glm::dvec3 b(vb.pos.x, vb.pos.y, vb.pos.z);
-            glm::dvec3 c(vc.pos.x, vc.pos.y, vc.pos.z);
-
-            result.AddFace(a, b, c);
-        }
-
-        return result;
-    }
-
-    IfcGeometry boolMultiOp_CSGJSCPP(const IfcGeometry& firstGeom, const std::vector<IfcGeometry>& secondGeoms)
-    {
-        csgjscpp::Model model;
-
-        for(auto& geom : secondGeoms)
-        {
-          auto m = IfcGeometryToCSGModel(geom);
-          model = csgjscpp::csgunion(model, m);
-        }
-
-        auto firstModel = IfcGeometryToCSGModel(firstGeom);
-        auto ModelResult = csgjscpp::csgsubtract(firstModel, model);;
-
-        IfcGeometry result;
-
-        for (uint32_t i = 0; i < ModelResult.indices.size(); i += 3)
-        {
-            uint32_t i0 = ModelResult.indices[i + 0];
-            uint32_t i1 = ModelResult.indices[i + 1];
-            uint32_t i2 = ModelResult.indices[i + 2];
-
-            csgjscpp::Vertex va = ModelResult.vertices[i0];
-            csgjscpp::Vertex vb = ModelResult.vertices[i1];
-            csgjscpp::Vertex vc = ModelResult.vertices[i2];
-
-            glm::dvec3 a(va.pos.x, va.pos.y, va.pos.z);
-            glm::dvec3 b(vb.pos.x, vb.pos.y, vb.pos.z);
-            glm::dvec3 c(vc.pos.x, vc.pos.y, vc.pos.z);
-
-            result.AddFace(a, b, c);
-        }
-
-        return result;
-    }
-
-    glm::dvec3 GetOffset(glm::dvec3 pt, glm::dvec3 center, glm::dvec3 extents)
-    {
-        auto dpt = pt - center;
-
-        double max = std::max(extents.x, std::max(extents.y, extents.z));
-
-        double scaleMM = 1 / (max);
-
-        return dpt * scaleMM;
-    }
-
-    CSGBrush* IfcGeometryToCSGBrush(const IfcGeometry& mesh, bool scale = false)
-    {
-        CSGBrush* brush = memnew(CSGBrush);
-
-        Vector<Vector3> p_vertices;
-        Vector<Vector2> p_uvs;
-
-        glm::dvec3 center;
-        glm::dvec3 extents;
-
-        if (scale)
-        {
-            mesh.GetCenterExtents(center, extents);
-        }
-
-        for (uint32_t i = 0; i < mesh.numFaces; i++) {
-            Face f = mesh.GetFace(i);
-
-            glm::dvec3 a = mesh.GetPoint(f.i0);
-            glm::dvec3 b = mesh.GetPoint(f.i1);
-            glm::dvec3 c = mesh.GetPoint(f.i2);
-
-            if (scale)
+            // find i-th geometry point in first j mesh points
+            int at = -1;
+            for (int k = 0; k < j; k++)
             {
-                a += GetOffset(a, center, extents);
-                b += GetOffset(b, center, extents);
-                c += GetOffset(c, center, extents);
+                const glm::vec3& kth = mesh.vertPos[k];
+                if (
+                    (abs(x - kth.x) < e.x) &&
+                    (abs(y - kth.y) < e.y) &&
+                    (abs(z - kth.z) < e.z)
+                    )
+                {
+                    at = k; break;
+                }
             }
 
-            glm::dvec3 norm;
-            if (!computeSafeNormal(a, b, c, norm))
+            if (at < 0)
             {
-                continue;
+                mesh.vertPos.emplace_back(x, y, z);
+                index.emplace_back(j); j++;
+
+                #ifdef DEBUG_BOOLEAN_INPUT
+                printf("v %f %f %f\n", x, y, z);
+                #endif
+            }
+            else
+            {
+                index.emplace_back(at);
+            }
+        }
+
+        for (int i = 0; i < geometry.numFaces; i++)
+        {
+            int a = index[geometry.indexData[i * 3 + 0]];
+            int b = index[geometry.indexData[i * 3 + 1]];
+            int c = index[geometry.indexData[i * 3 + 2]];
+
+            // due to a de-duplication some very thin triangles
+            // has now collapsed into a single line - lose them
+            if((a == b) || (b == c) || (c == a)) continue;
+
+            mesh.triVerts.emplace_back(a, b, c);
+
+            #ifdef DEBUG_BOOLEAN_INPUT
+            printf("f %d %d %d\n", a + 1, b + 1, c + 1);
+            #endif
+        }
+
+        return mesh;
+    }
+
+    IfcGeometry boolMultiOp_Manifold(const IfcGeometry& firstGeom, const std::vector<IfcGeometry>& secondGeoms)
+    {
+        #ifdef DEBUG_BOOLEAN_INPUT
+        printf("\nboolMultiOp_Manifold, %d holes\n", (int)secondGeoms.size());
+        #endif
+
+        IfcGeometry resultGeom;
+
+        manifold::Mesh firstMesh = geom2mesh(firstGeom);
+
+        // manifold throws exceptions if unhappy - however
+        // exceptions do not work in emscripten by default
+        // due to the overhead and/or poor browser support
+        // https://emscripten.org/docs/porting/exceptions.html
+        // we have to either build with exceptions or hope
+        // that there will be no errors triggered here :')
+
+        try
+        {
+            manifold::Manifold first(firstMesh);
+
+            // collect holes
+            std::vector<manifold::Manifold> holes;
+
+            for (auto& holeGeom : secondGeoms)
+            {
+                manifold::Mesh holeMesh = geom2mesh(holeGeom);
+
+                manifold::Manifold holeManifold(holeMesh);
+
+                holes.push_back(holeManifold);
             }
 
-            p_vertices.push_back(Vector3(a.x, a.y, a.z));
-            p_vertices.push_back(Vector3(c.x, c.y, c.z));
-            p_vertices.push_back(Vector3(b.x, b.y, b.z));
+            manifold::Manifold combinedHole = manifold::Manifold::Compose(holes);
 
-            p_uvs.push_back(Vector2());
-            p_uvs.push_back(Vector2());
-            p_uvs.push_back(Vector2());
+            // subtract the combined hole
+            if (combinedHole.IsManifold()) {
+                first -= combinedHole;
+            }
+
+            // convert back to IfcGeometry
+            manifold::Mesh resultMesh = first.GetMesh();
+
+            for (int i = 0, n = resultMesh.triVerts.size(); i < n; i++) {
+                resultGeom.AddFace(
+                    resultMesh.vertPos[resultMesh.triVerts[i][0]],
+                    resultMesh.vertPos[resultMesh.triVerts[i][1]],
+                    resultMesh.vertPos[resultMesh.triVerts[i][2]]
+                );
+            }
+        }
+        catch (const std::runtime_error& e)
+        {
+            printf("%s\n", e.what());
         }
 
-
-        brush->build_from_faces(p_vertices, p_uvs, {}, {}, {});
-
-        return brush;
+        return resultGeom;
     }
+    #endif
 
-    IfcGeometry boolSubtract_GODOT(const IfcGeometry& mesh1, const IfcGeometry& mesh2)
-    {
-
-        auto model1 = IfcGeometryToCSGBrush(mesh1);
-        auto model2 = IfcGeometryToCSGBrush(mesh2, false);
-
-        CSGBrush* resultBrush = memnew(CSGBrush);
-
-        CSGBrushOperation op;
-        op.merge_brushes(CSGBrushOperation::OPERATION_SUBTRACTION, *model1, *model2, *resultBrush, 0.001);
-
-        IfcGeometry result;
-
-        for (uint32_t i = 0; i < resultBrush->faces.size(); i ++) {
-            auto face = resultBrush->faces.get(i);
-
-            auto va = face.vertices[0];
-            auto vb = face.vertices[1];
-            auto vc = face.vertices[2];
-
-            glm::dvec3 a(va.x, va.y, va.z);
-            glm::dvec3 b(vb.x, vb.y, vb.z);
-            glm::dvec3 c(vc.x, vc.y, vc.z);
-
-            result.AddFace(a, c, b);
-        }
-
-        return result;
-    }
-    }
+}

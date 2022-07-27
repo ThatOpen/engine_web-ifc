@@ -996,20 +996,22 @@ namespace webifc
 			IfcGeometry result;
 			IfcGeometry secondGeom;
 
-			if (_loader.GetSettings().USE_FAST_BOOLS)
-			{
-				for (auto geom : secondGeoms)
-				{
-					if (geom.numFaces != 0)
-					{
-						if (secondGeom.numFaces == 0)
-						{
-							secondGeom = geom;
-						}
-						else
-						{
-							secondGeom = boolJoin(secondGeom, geom);
-						}
+      #ifdef __EMSCRIPTEN__
+      if (_loader.GetSettings().USE_FAST_BOOLS)
+      {
+      #endif
+        for(auto geom : secondGeoms)
+        {
+          if(geom.numFaces != 0)
+          {
+              if(secondGeom.numFaces == 0)
+              {
+                secondGeom = geom;
+              }
+              else
+              {
+                secondGeom = boolJoin(secondGeom, geom);
+              }
 
 						if (_loader.GetSettings().DUMP_CSG_MESHES)
 						{
@@ -1031,17 +1033,18 @@ namespace webifc
 
 				intersectMeshMesh(firstGeom, secondGeom, r1, r2);
 
-				if (_loader.GetSettings().DUMP_CSG_MESHES)
-				{
-					DumpIfcGeometry(r1, L"r1.obj");
-					DumpIfcGeometry(r2, L"r2.obj");
-				}
-				result = boolSubtract(r1, r2);
-			}
-			else
-			{
-				const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
-				std::vector<IfcGeometry> seconds;
+        if (_loader.GetSettings().DUMP_CSG_MESHES)
+        {
+          DumpIfcGeometry(r1, L"r1.obj");
+          DumpIfcGeometry(r2, L"r2.obj");
+        }
+        result = boolSubtract(r1, r2);
+      #ifdef __EMSCRIPTEN__
+      }
+      else
+      {
+        const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
+        std::vector<IfcGeometry> seconds;
 
 				for (auto &geom : secondGeoms)
 				{
@@ -1077,8 +1080,9 @@ namespace webifc
 					return firstGeom;
 				}
 
-				result = boolMultiOp_CSGJSCPP(firstGeom, seconds);
-			}
+        result = boolMultiOp_Manifold(firstGeom, seconds);
+      }
+      #endif
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{
@@ -1636,8 +1640,9 @@ namespace webifc
 			uint32_t edgeCurveRef = _loader.GetRefArgument();
 			IfcCurve<3> curveEdge = GetEdge(edgeCurveRef);
 
-			// REVIEW THAT ORIENT, sometimes it fails
-			if (orient)
+			// Read edgeCurve
+
+			if(orient)
 			{
 				std::reverse(curveEdge.points.begin(), curveEdge.points.end());
 			}
