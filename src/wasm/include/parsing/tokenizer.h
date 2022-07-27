@@ -8,6 +8,7 @@
 #include <functional>
 
 #include "crack_atof.h"
+#include "p21decode.h"
 #include "../util.h"
 
 namespace webifc
@@ -154,6 +155,9 @@ namespace webifc
 						_ptr.Advance();
 					}
 
+					if (need_to_decode(_temp))
+						_temp = p21decoder(_temp).unescape();
+
 					_tape.push(IfcTokenType::STRING);
 					_tape.push2((uint16_t)_temp.size());
 					if (!_temp.empty())
@@ -284,7 +288,7 @@ namespace webifc
 
 			_temp.clear();
 
-			while ((_ptr.cur >= '0' && _ptr.cur <= '9') || (_ptr.cur == '.') || _ptr.cur == 'e' || _ptr.cur == 'E' || _ptr.cur == '-')
+			while ((_ptr.cur >= '0' && _ptr.cur <= '9') || (_ptr.cur == '.') || _ptr.cur == 'e' || _ptr.cur == 'E' || _ptr.cur == '-'|| _ptr.cur == '+')
 			{
 				_temp.push_back(_ptr.cur);
 				_ptr.Advance();

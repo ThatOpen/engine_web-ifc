@@ -120,7 +120,7 @@ namespace webifc
 		uint32_t numPoints = 0;
 		uint32_t numFaces = 0;
 
-		glm::dvec3 GetExtent()
+		glm::dvec3 GetExtent() const
 		{
 			return max - min;
 		}
