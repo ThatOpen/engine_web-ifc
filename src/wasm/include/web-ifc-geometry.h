@@ -1841,12 +1841,11 @@ namespace webifc
 			{
 				for (int j = 0; j < bounds[i].curve.points.size(); j++)
 				{
-					double xx = bounds[i].curve.points[j].x - cent.x;
-					double yy = bounds[i].curve.points[j].y - cent.y;
-					double zz = bounds[i].curve.points[j].z - cent.z;
-					double dx = vecX.x * xx + vecX.y * yy + vecX.z * zz;
-					double dy = vecY.x * xx + vecY.y * yy + vecY.z * zz;
-					double dz = vecZ.x * xx + vecZ.y * yy + vecZ.z * zz;
+
+					glm::dvec3 vv = bounds[i].curve.points[j] - cent;
+					double dx = glm::dot(vecX, vv);
+					double dy = glm::dot(vecY, vv);
+					double dz = glm::dot(vecZ, vv);
 					if (maxZ < dz)
 					{
 						maxZ = dz;
@@ -1945,12 +1944,10 @@ namespace webifc
 
 			for (int j = 0; j < bounding.size(); j++)
 			{
-				double xx = bounding[j].x - cent.x;
-				double yy = bounding[j].y - cent.y;
-				double zz = bounding[j].z - cent.z;
-				double dx = vecX.x * xx + vecX.y * yy + vecX.z * zz;
-				double dy = vecY.x * xx + vecY.y * yy + vecY.z * zz;
-				double dz = vecZ.x * xx + vecZ.y * yy + vecZ.z * zz;
+				glm::dvec3 vv = bounding[j] - cent;
+				double dx = glm::dot(vecX, vv);
+				double dy = glm::dot(vecY, vv);
+				double dz = glm::dot(vecZ, vv);
 				double temp = VectorToAngle(dx, dy);
 				while (temp < 0)
 				{
@@ -3839,21 +3836,22 @@ namespace webifc
 							glm::dvec4 vecY = placement[1];
 							glm::dvec4 vecZ = placement[2];
 
-							double xxS = trim.start.pos3D.x - placement[3].x;
-							double yyS = trim.start.pos3D.y - placement[3].y;
-							double zzS = trim.start.pos3D.z - placement[3].z;
+							glm::dvec3 v1 = glm::dvec3(
+								trim.start.pos3D.x - placement[3].x,
+								trim.start.pos3D.y - placement[3].y,
+								trim.start.pos3D.z - placement[3].z);
+							glm::dvec3 v2 = glm::dvec3(
+								trim.end.pos3D.x - placement[3].x,
+								trim.end.pos3D.y - placement[3].y,
+								trim.end.pos3D.z - placement[3].z);
 
-							double xxE = trim.end.pos3D.x - placement[3].x;
-							double yyE = trim.end.pos3D.y - placement[3].y;
-							double zzE = trim.end.pos3D.z - placement[3].z;
+							double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
+							double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
+							double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
 
-							double dxS = vecX.x * xxS + vecX.y * yyS + vecX.z * zzS;
-							double dyS = vecY.x * xxS + vecY.y * yyS + vecY.z * zzS;
-							double dzS = vecZ.x * xxS + vecZ.y * yyS + vecZ.z * zzS;
-
-							double dxE = vecX.x * xxE + vecX.y * yyE + vecX.z * zzE;
-							double dyE = vecY.x * xxE + vecY.y * yyE + vecY.z * zzE;
-							double dzE = vecZ.x * xxE + vecZ.y * yyE + vecZ.z * zzE;
+							double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
+							double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
+							double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
 
 							endDegrees = VectorToAngle(dxS, dyS) - 90;
 							startDegrees = VectorToAngle(dxE, dyE) - 90;
@@ -3961,21 +3959,22 @@ namespace webifc
 							glm::dvec4 vecY = placement[1];
 							glm::dvec4 vecZ = placement[2];
 
-							double xxS = trim.start.pos3D.x - placement[3].x;
-							double yyS = trim.start.pos3D.y - placement[3].y;
-							double zzS = trim.start.pos3D.z - placement[3].z;
+							glm::dvec3 v1 = glm::dvec3(
+								trim.start.pos3D.x - placement[3].x,
+								trim.start.pos3D.y - placement[3].y,
+								trim.start.pos3D.z - placement[3].z);
+							glm::dvec3 v2 = glm::dvec3(
+								trim.end.pos3D.x - placement[3].x,
+								trim.end.pos3D.y - placement[3].y,
+								trim.end.pos3D.z - placement[3].z);
 
-							double xxE = trim.end.pos3D.x - placement[3].x;
-							double yyE = trim.end.pos3D.y - placement[3].y;
-							double zzE = trim.end.pos3D.z - placement[3].z;
+							double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
+							double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
+							double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
 
-							double dxS = vecX.x * xxS + vecX.y * yyS + vecX.z * zzS;
-							double dyS = vecY.x * xxS + vecY.y * yyS + vecY.z * zzS;
-							double dzS = vecZ.x * xxS + vecZ.y * yyS + vecZ.z * zzS;
-
-							double dxE = vecX.x * xxE + vecX.y * yyE + vecX.z * zzE;
-							double dyE = vecY.x * xxE + vecY.y * yyE + vecY.z * zzE;
-							double dzE = vecZ.x * xxE + vecZ.y * yyE + vecZ.z * zzE;
+							double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
+							double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
+							double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
 
 							endDegrees = VectorToAngle(dxS, dyS) - 90;
 							startDegrees = VectorToAngle(dxE, dyE) - 90;
