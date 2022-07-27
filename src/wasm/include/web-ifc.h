@@ -867,7 +867,7 @@ namespace webifc
 			file << "ISO-10303-21;" << std::endl;
 			file << "HEADER;" << std::endl;
 			file << "FILE_DESCRIPTION(('" << description << "'), '2;1');" << std::endl;
-			file << "FILE_NAME('" << name << "', '', (''), (''), 'web-ifc-export','','');" << std::endl;
+			file << "FILE_NAME('" << name << "', '', (''), (''), 'web-ifc-export', '', '');" << std::endl;
 			file << "FILE_SCHEMA(('IFC2X3'));" << std::endl;
 			file << "ENDSEC;" << std::endl;
 			file << "DATA;" << std::endl;
