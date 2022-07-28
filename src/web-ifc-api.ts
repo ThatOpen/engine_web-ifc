@@ -269,6 +269,18 @@ export class IfcAPI
             }
         });
 
+        // Workaround for #178.
+        // TODO(pablo): Still need to actually
+        // write this data, but ignoring it generates valid
+        // IFC. Guessing this is caused by over-recursion to the leaf
+        // values.
+        if (lineObject.expressID == undefined
+            || lineObject.type == undefined
+            || lineObject.ToType === undefined) {
+            console.warn('Line object cannot be serialized: ', lineObject)
+            return
+        }
+
         let rawLineData: RawLineData = {
             ID: lineObject.expressID,
             type: lineObject.type,
