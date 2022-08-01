@@ -52,7 +52,9 @@
     "docker-run": "npm run docker-run-container && npm run docker-get-compiled-files ",
     "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
     "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
-    "test": "jest ./tests"
+    "test": "jest ./tests",
+    "regression-test-build": "esbuild tests/regression/src/index.js --bundle --minify --sourcemap --outfile=tests/regression/public/build/test.js",
+    "regression-test": "npm run regression-test-build && http-server"
   },
   "author": "tomvandig",
   "files": [
@@ -75,6 +77,7 @@
     "cpy": "^8.1.2",
     "cpy-cli": "^3.1.1",
     "esbuild": "^0.12.15",
+    "http-server": "^14.1.1",
     "jest": "^27.4.2",
     "monaco-editor": "^0.26.1",
     "npm-watch": "^0.10.0",
