@@ -3577,7 +3577,7 @@ namespace webifc
 		}
 
 		template <uint32_t DIM>
-		void ComputeCurve(uint32_t expressID, IfcCurve<DIM> &curve, bool edge, int sameSense = -1, IfcTrimmingArguments trim = {})
+		void ComputeCurve(uint32_t expressID, IfcCurve<DIM> &curve, bool edge, int sameSense = -1, int trimSense = -1, IfcTrimmingArguments trim = {})
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto &line = _loader.GetLine(lineID);
@@ -3628,7 +3628,7 @@ namespace webifc
 
 					uint32_t segmentId = _loader.GetRefArgument(token);
 
-					ComputeCurve<DIM>(segmentId, curve, edge, sameSense);
+					ComputeCurve<DIM>(segmentId, curve, edge, sameSense, trimSense);
 				}
 
 				break;
@@ -3642,7 +3642,7 @@ namespace webifc
 
 				bool sameSense = sameSenseS == "T";
 
-				ComputeCurve<DIM>(parentID, curve, edge, sameSense);
+				ComputeCurve<DIM>(parentID, curve, edge, sameSense, trimSense);
 
 				break;
 			}
@@ -3742,12 +3742,12 @@ namespace webifc
 
 				bool senseAgreement = senseAgreementS == "T";
 
-				if (sameSense == 0)
+				if (trimSense == 0)
 				{
 					senseAgreement = !senseAgreement;
 				}
 
-				ComputeCurve<DIM>(basisCurveID, curve, edge, senseAgreement, trim);
+				ComputeCurve<DIM>(basisCurveID, curve, edge, sameSense, senseAgreement, trim);
 
 				break;
 			}
@@ -3869,7 +3869,7 @@ namespace webifc
 				double lengthDegrees = endDegrees - startDegrees;
 
 				// unset or true
-				if (sameSense == 1 || sameSense == -1)
+				if (trimSense == 1 || trimSense == -1)
 				{
 					if (lengthDegrees < 0)
 					{
@@ -3894,6 +3894,12 @@ namespace webifc
 				{
 					double ratio = static_cast<double>(i) / (numSegments - 1);
 					double angle = startRad + ratio * lengthRad;
+
+					if(sameSense == 0)
+					{
+						angle = endRad - ratio * lengthRad;
+					}
+
 					glm::vec<DIM, glm::f64> pos;
 					if constexpr (DIM == 2)
 					{
@@ -3998,7 +4004,7 @@ namespace webifc
 				double lengthDegrees = endDegrees - startDegrees;
 
 				// unset or true
-				if (sameSense == 1 || sameSense == -1)
+				if (trimSense == 1 || trimSense == -1)
 				{
 					if (lengthDegrees < 0)
 					{
@@ -4023,6 +4029,10 @@ namespace webifc
 				{
 					double ratio = static_cast<double>(i) / (numSegments - 1);
 					double angle = startRad + ratio * lengthRad;
+					if(sameSense == 0)
+					{
+						angle = endRad - ratio * lengthRad;
+					}
 					glm::vec<DIM, glm::f64> pos;
 					if constexpr (DIM == 2)
 					{
