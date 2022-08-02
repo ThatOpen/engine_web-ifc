@@ -763,13 +763,16 @@ namespace webifc
 
 		// If first method fails to provide a precise solution we use second slow but reliable method
 		double repetition = 0;
+		double maxdis = maxdi;
+		double fUs = fU;
+		double fVs = fV;
 		while (maxdi > maxError && repetition < 8)
 		{
 			double extension = 1;
 			double repetitionTemp = repetition;
-			while (repetitionTemp > 3)
+			while (repetitionTemp > 4)
 			{
-				repetitionTemp -= 4;
+				repetitionTemp -= 3;
 				extension++;
 			}
 			if (repetitionTemp == 0)
@@ -792,6 +795,7 @@ namespace webifc
 				fU = 0;
 				fV = -extension;
 			}
+
 			maxdi = 1e+100;
 			divisor = 100;
 			rotacions = 6;
@@ -827,6 +831,12 @@ namespace webifc
 									maxdi = di;
 									fU = ffU;
 									fV = ffV;
+									if (di < maxdis)
+									{
+										maxdis = di;
+										fUs = ffU;
+										fVs = ffV;
+									}
 								}
 								else
 								{
@@ -842,7 +852,115 @@ namespace webifc
 			repetition++;
 		}
 
-		return glm::dvec2(fU, fV);
+		//If the second method fails then we go to the third method
+		while (maxdi > maxError * 3 && repetition < 32)
+		{
+			double extension = 1;
+			double repetitionTemp = repetition;
+			while (repetitionTemp > 7)
+			{
+				repetitionTemp -= 8;
+				extension++;
+			}
+			if (repetitionTemp == 0)
+			{
+				fU = extension;
+				fV = 0;
+			}
+			if (repetitionTemp == 1)
+			{
+				fU = 0;
+				fV = extension;
+			}
+			if (repetitionTemp == 2)
+			{
+				fU = -extension;
+				fV = 0;
+			}
+			if (repetitionTemp == 3)
+			{
+				fU = 0;
+				fV = -extension;
+			}
+
+			if (repetitionTemp == 4)
+			{
+				fU = extension * 0.707;
+				fV = extension * 0.707;
+			}
+			if (repetitionTemp == 5)
+			{
+				fU = -extension * 0.707;
+				fV = extension * 0.707;
+			}
+			if (repetitionTemp == 6)
+			{
+				fU = extension * 0.707;
+				fV = -extension * 0.707;
+			}
+			if (repetitionTemp == 7)
+			{
+				fU = -extension * 0.707;
+				fV = -extension * 0.707;
+			}
+
+			maxdi = 1e+100;
+			divisor = 100;
+			rotacions = 6;
+			while (maxdi > maxError && divisor < 10000)
+			{
+				for (double r = 1; r < 5; r++)
+				{
+					int round = 0;
+					while (maxdi > minError && round < 3)
+					{
+						for (double i = 0; i < rotacions; i++)
+						{
+							double rads = (i / rotacions) * CONST_PI * 2;
+							double incU = glm::sin(rads) / (r * r * divisor);
+							double incV = glm::cos(rads) / (r * r * divisor);
+							if (pr > 1)
+							{
+								incV *= pr;
+							}
+							else
+							{
+								incU /= pr;
+							}
+							bool repeat = true;
+							while (repeat)
+							{
+								double ffU = fU + incU;
+								double ffV = fV + incV;
+								glm::highp_dvec3 pt00 = tinynurbs::surfacePoint(srf, ffU, ffV);
+								double di = glm::distance(pt00, pt);
+								if (di < maxdi)
+								{
+									maxdi = di;
+									fU = ffU;
+									fV = ffV;
+									if (di < maxdis)
+									{
+										maxdis = di;
+										fUs = ffU;
+										fVs = ffV;
+									}
+								}
+								else
+								{
+									repeat = false;
+								}
+							}
+						}
+						round++;
+					}
+				}
+				divisor *= 3;
+			}
+			repetition++;
+		}
+
+		return glm::dvec2(fUs, fVs);
 	}
 
 	glm::dvec2 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
