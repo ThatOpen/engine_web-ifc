@@ -763,13 +763,13 @@ namespace webifc
 
 		// If first method fails to provide a precise solution we use second slow but reliable method
 		double repetition = 0;
-		while (maxdi > maxError && repetition < 8)
+		while (maxdi > maxError && repetition < 32)
 		{
 			double extension = 1;
 			double repetitionTemp = repetition;
-			while (repetitionTemp > 3)
+			while (repetitionTemp > 7)
 			{
-				repetitionTemp -= 4;
+				repetitionTemp -= 8;
 				extension++;
 			}
 			if (repetitionTemp == 0)
@@ -792,6 +792,28 @@ namespace webifc
 				fU = 0;
 				fV = -extension;
 			}
+
+			if (repetitionTemp == 4)
+			{
+				fU = extension * 0.707;
+				fV = extension * 0.707;
+			}
+			if (repetitionTemp == 5)
+			{
+				fU = -extension * 0.707;
+				fV = extension * 0.707;
+			}
+			if (repetitionTemp == 6)
+			{
+				fU = extension * 0.707;
+				fV = -extension * 0.707;
+			}
+			if (repetitionTemp == 7)
+			{
+				fU = -extension * 0.707;
+				fV = -extension * 0.707;
+			}
+
 			maxdi = 1e+100;
 			divisor = 100;
 			rotacions = 6;

@@ -996,22 +996,22 @@ namespace webifc
 			IfcGeometry result;
 			IfcGeometry secondGeom;
 
-      #ifdef __EMSCRIPTEN__
-      if (_loader.GetSettings().USE_FAST_BOOLS)
-      {
-      #endif
-        for(auto geom : secondGeoms)
-        {
-          if(geom.numFaces != 0)
-          {
-              if(secondGeom.numFaces == 0)
-              {
-                secondGeom = geom;
-              }
-              else
-              {
-                secondGeom = boolJoin(secondGeom, geom);
-              }
+#ifdef __EMSCRIPTEN__
+			if (_loader.GetSettings().USE_FAST_BOOLS)
+			{
+#endif
+				for (auto geom : secondGeoms)
+				{
+					if (geom.numFaces != 0)
+					{
+						if (secondGeom.numFaces == 0)
+						{
+							secondGeom = geom;
+						}
+						else
+						{
+							secondGeom = boolJoin(secondGeom, geom);
+						}
 
 						if (_loader.GetSettings().DUMP_CSG_MESHES)
 						{
@@ -1033,18 +1033,18 @@ namespace webifc
 
 				intersectMeshMesh(firstGeom, secondGeom, r1, r2);
 
-        if (_loader.GetSettings().DUMP_CSG_MESHES)
-        {
-          DumpIfcGeometry(r1, L"r1.obj");
-          DumpIfcGeometry(r2, L"r2.obj");
-        }
-        result = boolSubtract(r1, r2);
-      #ifdef __EMSCRIPTEN__
-      }
-      else
-      {
-        const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
-        std::vector<IfcGeometry> seconds;
+				if (_loader.GetSettings().DUMP_CSG_MESHES)
+				{
+					DumpIfcGeometry(r1, L"r1.obj");
+					DumpIfcGeometry(r2, L"r2.obj");
+				}
+				result = boolSubtract(r1, r2);
+#ifdef __EMSCRIPTEN__
+			}
+			else
+			{
+				const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
+				std::vector<IfcGeometry> seconds;
 
 				for (auto &geom : secondGeoms)
 				{
@@ -1080,9 +1080,9 @@ namespace webifc
 					return firstGeom;
 				}
 
-        result = boolMultiOp_Manifold(firstGeom, seconds);
-      }
-      #endif
+				result = boolMultiOp_Manifold(firstGeom, seconds);
+			}
+#endif
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{
@@ -1642,7 +1642,7 @@ namespace webifc
 
 			// Read edgeCurve
 
-			if(orient)
+			if (orient)
 			{
 				std::reverse(curveEdge.points.begin(), curveEdge.points.end());
 			}
@@ -2094,7 +2094,6 @@ namespace webifc
 			tinynurbs::RationalSurface3d srf;
 			srf.degree_u = surface.BSplineSurface.UDegree;
 			srf.degree_v = surface.BSplineSurface.VDegree;
-
 			size_t num_u = surface.BSplineSurface.ControlPoints.size();
 			size_t num_v = surface.BSplineSurface.ControlPoints[0].size();
 
@@ -3097,6 +3096,57 @@ namespace webifc
 					VKnots.push_back(_loader.GetDoubleArgument(token));
 				}
 
+				if (UKnots[UKnots.size() - 1] != (int)UKnots[UKnots.size() - 1])
+				{
+					for (uint32_t i = 0; i < UKnots.size(); i++)
+					{
+						UKnots[i] = UKnots[i] * (UKnots.size() - 1) / UKnots[UKnots.size() - 1];
+					}
+				}
+
+				if (VKnots[VKnots.size() - 1] != (int)VKnots[VKnots.size() - 1])
+				{
+					for (uint32_t i = 0; i < VKnots.size(); i++)
+					{
+						VKnots[i] = VKnots[i] * (VKnots.size() - 1) / VKnots[VKnots.size() - 1];
+					}
+				}
+
+				// if (closedU == "T")
+				// {
+				// 	std::vector<std::vector<glm::vec<3, glm::f64>>> newCtrolPts;
+				// 	for (uint32_t i = 0; i < Udegree; i++)
+				// 	{
+				// 		newCtrolPts.push_back(ctrolPts[ctrolPts.size() - 1 + (i - Udegree)]);
+				// 	}
+				// 	for (uint32_t s = 0; s < ctrolPts.size(); s++)
+				// 	{
+				// 		newCtrolPts.push_back(ctrolPts[s]);
+				// 	}
+				// 	ctrolPts = newCtrolPts;
+				// 	UMultiplicity[0] += Udegree;
+				// }
+
+				// if (closedV == "T")
+				// {
+				// 	std::vector<std::vector<glm::vec<3, glm::f64>>> newCtrolPts;
+				// 	for (uint32_t r = 0; r < ctrolPts.size(); r++)
+				// 	{
+				// 		std::vector<glm::vec<3, glm::f64>> newSubList;
+				// 		for (uint32_t i = 0; i < Vdegree; i++)
+				// 		{
+				// 			newSubList.push_back(ctrolPts[r][ctrolPts[r].size() - 1 + (i - Vdegree)]);
+				// 		}
+				// 		for (uint32_t s = 0; s < ctrolPts[r].size(); s++)
+				// 		{
+				// 			newSubList.push_back(ctrolPts[r][s]);
+				// 		}
+				// 		newCtrolPts.push_back(newSubList);
+				// 	}
+				// 	ctrolPts = newCtrolPts;
+				// 	VMultiplicity[0] += Vdegree;
+				// }
+
 				surface.BSplineSurface.Active = true;
 				surface.BSplineSurface.UDegree = Udegree;
 				surface.BSplineSurface.VDegree = Vdegree;
@@ -3195,6 +3245,57 @@ namespace webifc
 				{
 					VKnots.push_back(_loader.GetDoubleArgument(token));
 				}
+
+				if (UKnots[UKnots.size() - 1] != (int)UKnots[UKnots.size() - 1])
+				{
+					for (uint32_t i = 0; i < UKnots.size(); i++)
+					{
+						UKnots[i] = UKnots[i] * (UKnots.size() - 1) / UKnots[UKnots.size() - 1];
+					}
+				}
+
+				if (VKnots[VKnots.size() - 1] != (int)VKnots[VKnots.size() - 1])
+				{
+					for (uint32_t i = 0; i < VKnots.size(); i++)
+					{
+						VKnots[i] = VKnots[i] * (VKnots.size() - 1) / VKnots[VKnots.size() - 1];
+					}
+				}
+
+				// if (closedU == "T")
+				// {
+				// 	std::vector<std::vector<glm::vec<3, glm::f64>>> newCtrolPts;
+				// 	for (uint32_t i = 0; i < Udegree; i++)
+				// 	{
+				// 		newCtrolPts.push_back(ctrolPts[ctrolPts.size() - 1 + (i - Udegree)]);
+				// 	}
+				// 	for (uint32_t s = 0; s < ctrolPts.size(); s++)
+				// 	{
+				// 		newCtrolPts.push_back(ctrolPts[s]);
+				// 	}
+				// 	ctrolPts = newCtrolPts;
+				// 	UMultiplicity[0] += Udegree;
+				// }
+
+				// if (closedV == "T")
+				// {
+				// 	std::vector<std::vector<glm::vec<3, glm::f64>>> newCtrolPts;
+				// 	for (uint32_t r = 0; r < ctrolPts.size(); r++)
+				// 	{
+				// 		std::vector<glm::vec<3, glm::f64>> newSubList;
+				// 		for (uint32_t i = 0; i < Vdegree; i++)
+				// 		{
+				// 			newSubList.push_back(ctrolPts[r][ctrolPts[r].size() - 1 + (i - Vdegree)]);
+				// 		}
+				// 		for (uint32_t s = 0; s < ctrolPts[r].size(); s++)
+				// 		{
+				// 			newSubList.push_back(ctrolPts[r][s]);
+				// 		}
+				// 		newCtrolPts.push_back(newSubList);
+				// 	}
+				// 	ctrolPts = newCtrolPts;
+				// 	VMultiplicity[0] += Vdegree;
+				// }
 
 				surface.BSplineSurface.Active = true;
 				surface.BSplineSurface.UDegree = Udegree;
@@ -3895,7 +3996,7 @@ namespace webifc
 					double ratio = static_cast<double>(i) / (numSegments - 1);
 					double angle = startRad + ratio * lengthRad;
 
-					if(sameSense == 0)
+					if (sameSense == 0)
 					{
 						angle = endRad - ratio * lengthRad;
 					}
@@ -4029,7 +4130,7 @@ namespace webifc
 				{
 					double ratio = static_cast<double>(i) / (numSegments - 1);
 					double angle = startRad + ratio * lengthRad;
-					if(sameSense == 0)
+					if (sameSense == 0)
 					{
 						angle = endRad - ratio * lengthRad;
 					}
