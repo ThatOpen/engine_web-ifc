@@ -2752,7 +2752,7 @@ namespace webifc
 
 				if (placementID)
 				{
-					GetAxis2Placement2D(placementID);
+					placement = GetAxis2Placement2D(placementID);
 				}
 
 				profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_HIGH, placement);
