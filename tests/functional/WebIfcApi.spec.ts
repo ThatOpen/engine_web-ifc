@@ -29,17 +29,13 @@ beforeAll(async () => {
     emptyFileModelID = ifcApi.CreateModel();
 })
 
-describe('WebIfcApi reading', () => {
+describe('WebIfcApi reading methods', () => {
     test('can retrieve a modelID', () => {
         expect(modelID).toBe(0);
     })
     test('can ensure model is open', () => {
         const isOpen : boolean = ifcApi.IsModelOpen(modelID);
         expect(isOpen).toBeTruthy();
-    })
-    test('can return the correct number geometries', () => {
-        geometries = ifcApi.LoadAllGeometry(modelID);
-        expect(geometries.size()).toBe(allGeometriesSize);
     })
     test('can return the correct number of line with a given Type', () => {
         let properties = ifcApi.GetLineIDsWithType(modelID, WebIFC.IFCPROPERTYSINGLEVALUE)
@@ -84,6 +80,15 @@ describe('WebIfcApi reading', () => {
         ifcApi.CreateIfcGuidToExpressIdMapping(modelID);
         expect(ifcApi.ifcGuidMap.get(0)?.get(expressIDMatchingGuid.expressID)).toEqual(expressIDMatchingGuid.guid);
     })
+
+
+
+})
+describe('WebIfcApi geometries', () => {
+    test('can return the correct number geometries', () => {
+        geometries = ifcApi.LoadAllGeometry(modelID);
+        expect(geometries.size()).toBe(allGeometriesSize);
+    })
     test('can Get a Flat Mesh', () => {
         let geometryExpressId = geometries.get(1).expressID;
         let flatMesh : FlatMesh  = ifcApi.GetFlatMesh(modelID, geometryExpressId);
@@ -102,33 +107,56 @@ describe('WebIfcApi reading', () => {
            ++count
         });
         expect(count).toEqual(IFCEXTRUDEDAREASOLIDMeshesCount);
-    })
-    // this test must be reviewed!
+    })  
     test('can get geometry', () => {
         let geometryId = geometries.get(1).expressID;
         const geometry : IfcGeometry = ifcApi.GetGeometry(modelID,geometryId);
         expect(geometry.GetIndexData()).not.toBeNull()
+        expect(geometry.GetIndexDataSize()).not.toBeNull()
+        expect(geometry.GetVertexData()).not.toBeNull()
+        expect(geometry.GetVertexDataSize()).not.toBeNull()
     })
-    // this test must be reviewed!
     test('can Get Coordination Matrix', () => {
         let coordinationMatrix : Array<number> = ifcApi.GetCoordinationMatrix(modelID);
         expect(coordinationMatrix.join(",")).toEqual("1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1");
     })
-    // this test must be reviewed!
-    test('can GetVertexArray from geometry', () => {
-        expect(true).toBe(true);
+    test('expect vertexArray as Float32Array', () => {
+        let geometryId = geometries.get(1).expressID;
+        const geometry : IfcGeometry = ifcApi.GetGeometry(modelID,geometryId);
+        let vertexArray : Float32Array = ifcApi.GetVertexArray(geometry.GetVertexData(),geometry.GetVertexDataSize());
+        expect(vertexArray).toBeInstanceOf(Float32Array);
     })
     // this test must be reviewed!
-    test('can GetIndexArray from geometry', () => {
-        expect(true).toBe(true);
+    test('can return vertex array from a flat mesh', () => {
+        let geometryExpressId = geometries.get(1).expressID;
+        let flatMesh = ifcApi.GetFlatMesh(modelID, geometryExpressId);
+        let flatMesheGeometries : IfcGeometry = ifcApi.GetGeometry(modelID, flatMesh.geometries.get(0).geometryExpressID);
+        let geometryVertexArray : Float32Array = ifcApi.GetVertexArray(flatMesheGeometries.GetVertexData(), flatMesheGeometries.GetVertexDataSize());
+        expect(geometryVertexArray.length > 0).toBeTruthy();
+    })
+    test('expect index array as Float32Array', () => {
+        let geometryId = geometries.get(1).expressID;
+        const geometry : IfcGeometry = ifcApi.GetGeometry(modelID,geometryId);
+        let indexArray : Float32Array = ifcApi.GetVertexArray(geometry.GetIndexData(),geometry.GetIndexDataSize());
+        expect(indexArray).toBeInstanceOf(Float32Array);
     })
     // this test must be reviewed!
-    test('can getSubArray from geometry', () => {
-        expect(true).toBe(true);
+    test('can return geometry index datas from a flat mesh', () => {
+        let geometryExpressId = geometries.get(1).expressID;
+        let flatMesh = ifcApi.GetFlatMesh(modelID, geometryExpressId);
+        let flatMesheGeometries : IfcGeometry = ifcApi.GetGeometry(modelID, flatMesh.geometries.get(0).geometryExpressID);
+        let geometryIndexData : Uint32Array = ifcApi.GetIndexArray(flatMesheGeometries.GetIndexData(), flatMesheGeometries.GetIndexDataSize());
+        expect(geometryIndexData.length > 0).toBeTruthy();
     })
-})
+});
+describe('WebIfcApi geometry transformation', () => {
 
-describe('WebIfcApi writing', () => {
+    test('should throw Error with message \'invalid matrix size\' when matrix size != 16', () => {
+        let f = ifcApi.SetGeometryTransformation(modelID, [1]);
+        expect(f).toThrow("invalid matrix size");
+    })
+});
+describe('WebIfcApi writing methods', () => {
     test('Can create an empty model', () => {
         expect(emptyFileModelID).toBe(1);
     })
