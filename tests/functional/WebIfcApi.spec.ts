@@ -251,10 +251,15 @@ describe('WebIfcApi known failures', () => {
         failModelID = ifcApi.OpenModel(exampleIFCData);
         const IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID = 237;
         //console.log(ifcApi.GetLineIDsWithType(failModelID, IFCELECTRICDISTRIBUTIONPOINT));
-        let f = ifcApi.GetLine(failModelID, IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID);
-
+        //let f = ifcApi.GetLine(failModelID, IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID);
+        try {
+            ifcApi.GetLine(failModelID, IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID);
+            expect(false).toBeTruthy();
+        } catch (error) {
+            expect(true).toBeTruthy();
+        }
         
-        expect(f).toThrow("FromRawLineData[rawLineData.type] is not a function"); // fail if error doesnt exist anymore ;) 
+        //expect(f).toThrow("FromRawLineData[rawLineData.type] is not a function"); // fail if error doesnt exist anymore ;) 
         ifcApi.CloseModel(failModelID);
     });
 
@@ -270,6 +275,7 @@ describe('WebIfcApi known failures', () => {
         const exampleIFCData = fs.readFileSync(exampleIFCPath);
         try {
             ifcApi.OpenModel(exampleIFCData, config);
+            expect(true).toBeFalsy();
         } catch (error) {
             expect(true).toBeTruthy();
         } 
