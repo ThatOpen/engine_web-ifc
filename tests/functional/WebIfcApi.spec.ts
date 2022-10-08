@@ -239,6 +239,40 @@ describe('WebIfcApi writing methods', () => {
     })
     
 })
+
+
+describe('WebIfcApi known failures', () => {
+    test("GetLine doesn't support all entity types (only IFC4?) issue:#212", async () => {
+        let ifcApi = new WebIFC.IfcAPI();
+        await ifcApi.Init();
+        let failModelID = 0;
+        const exampleIFCPath : string = path.join(__dirname, '../artifacts/Sample_entities.ifc');
+        const exampleIFCData = fs.readFileSync(exampleIFCPath);
+        failModelID = ifcApi.OpenModel(exampleIFCData);
+        const IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID = 237;
+        //console.log(ifcApi.GetLineIDsWithType(failModelID, IFCELECTRICDISTRIBUTIONPOINT));
+        let f = ifcApi.GetLine(failModelID, IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID);
+
+        
+        expect(f).toThrow("FromRawLineData[rawLineData.type] is not a function"); // fail if error doesnt exist anymore ;) 
+        ifcApi.CloseModel(failModelID);
+    });
+
+    test("IFCTEXT with length > 256: the last 256 chars get cut of the text issue:#146", async () => {
+        let ifcApi = new WebIFC.IfcAPI();
+        await ifcApi.Init();
+        let failModelID = 0;
+        let expressID = 248;
+        const exampleIFCPath : string = path.join(__dirname, '../artifacts/Sample_entities.ifc');
+        const exampleIFCData = fs.readFileSync(exampleIFCPath);
+        failModelID = ifcApi.OpenModel(exampleIFCData);
+        let line = ifcApi.GetLine(failModelID, expressID);
+        
+        expect(line.NominalValue.value.length).toEqual(259); 
+        ifcApi.CloseModel(failModelID);
+    });
+})
+
 afterAll(() => {
     ifcApi.CloseModel(modelID);
     const isOpen : boolean = ifcApi.IsModelOpen(modelID);
