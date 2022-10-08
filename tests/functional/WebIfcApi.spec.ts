@@ -258,19 +258,25 @@ describe('WebIfcApi known failures', () => {
         ifcApi.CloseModel(failModelID);
     });
 
-    test("IFCTEXT with length > 256: the last 256 chars get cut of the text issue:#146", async () => {
+    test("OpenModel fails when USE_FAST_BOOLS is disabled issue:#209", async () => {
         let ifcApi = new WebIFC.IfcAPI();
+        let config = {
+            COORDINATE_TO_ORIGIN: false,
+            USE_FAST_BOOLS: false
+        };
         await ifcApi.Init();
         let failModelID = 0;
-        let expressID = 248;
-        const exampleIFCPath : string = path.join(__dirname, '../artifacts/Sample_entities.ifc');
+        const exampleIFCPath : string = path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc');
         const exampleIFCData = fs.readFileSync(exampleIFCPath);
-        failModelID = ifcApi.OpenModel(exampleIFCData);
-        let line = ifcApi.GetLine(failModelID, expressID);
-        
-        expect(line.NominalValue.value.length).toEqual(259); 
+        try {
+            ifcApi.OpenModel(exampleIFCData, config);
+        } catch (error) {
+            expect(true).toBeTruthy();
+        } 
         ifcApi.CloseModel(failModelID);
     });
+
+
 })
 
 afterAll(() => {
