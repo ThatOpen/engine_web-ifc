@@ -94,6 +94,12 @@ describe('WebIfcApi geometries', () => {
         let flatMesh : FlatMesh  = ifcApi.GetFlatMesh(modelID, geometryExpressId);
         expect(flatMesh.geometries.size() > 0).toBeTruthy();
     })
+    test('expect the correct flatMesh to be returned', () => {
+        let geometryExpressId = geometries.get(1).expressID;
+        let flatMesh: FlatMesh = ifcApi.GetFlatMesh(modelID, geometryExpressId);
+        console.log(geometryExpressId);
+        expect(flatMesh.expressID).toEqual(geometryExpressId);
+    })
     test('can ensure the corret number of all streamed meshes ', () => {
         let count : number = 0;
         ifcApi.StreamAllMeshes(modelID,(mesh)=>{
