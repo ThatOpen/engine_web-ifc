@@ -416,6 +416,11 @@ namespace webifc
 			return _tape.Copy(startOffset, endOffset, dest);
 		}
 
+		uint32_t GetMaxExpressId()
+		{
+			return _metaData.expressIDToLine.size() - 1;
+		}
+
 		bool ValidExpressID(uint32_t expressID)
 		{
 			return _metaData.expressIDToLine.capacity() > expressID;

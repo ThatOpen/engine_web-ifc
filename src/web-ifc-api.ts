@@ -274,12 +274,12 @@ export class IfcAPI
         // write this data, but ignoring it generates valid
         // IFC. Guessing this is caused by over-recursion to the leaf
         // values.
-        if (lineObject.expressID == undefined
-            || lineObject.type == undefined
-            || lineObject.ToType === undefined) {
-            console.warn('Line object cannot be serialized: ', lineObject)
-            return
-        }
+        // if (lineObject.expressID == undefined
+        //     || lineObject.type == undefined
+        //     || lineObject.ToType === undefined) {
+        //     console.warn('Line object cannot be serialized: ', lineObject)
+        //     return
+        // }
 
         let rawLineData: RawLineData = {
             ID: lineObject.expressID,
@@ -404,6 +404,16 @@ export class IfcAPI
         return this.wasmModule.GetFlatMesh(modelID, expressID);
     }
 
+    /**
+     * Returns the maximum ExpressID value in the IFC file, ex.- #9999999
+     * @param modelID Model handle retrieved by OpenModel
+     * @returns Express numerical value
+     */
+    GetMaxExpressID(modelID: number)
+    {
+        return this.wasmModule.GetMaxExpressID(modelID);
+    }
+    
     /**
      * Creates a map between element ExpressIDs and GlobalIDs.
      * Each element has two entries, (ExpressID -> GlobalID) and (GlobalID -> ExpressID).
