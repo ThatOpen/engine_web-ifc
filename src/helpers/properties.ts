@@ -81,7 +81,7 @@ export class Properties {
         return await this.getProperty(modelID, elementID, recursive, PropsNames.materials);
     }
 
-    async getSpatialStructure(modelID: number, includeProperties?: boolean) {
+    async getSpatialStructure(modelID: number, includeProperties?: boolean): Promise<Node> {
         await this.getAllTypesOfModel(modelID);
         const chunks = await this.getSpatialTreeChunks(modelID);
         const allLines = await this.api.GetLineIDsWithType(modelID, IFCPROJECT);

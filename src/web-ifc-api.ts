@@ -241,7 +241,7 @@ export class IfcAPI
                 // TODO: detect if the object needs to be written at all, or if it's unchanged
                 this.WriteLine(modelID, property);
 
-                // overwrite the reference 
+                // overwrite the reference
                 // NOTE: this modifies the parameter
                 lineObject[propertyName] = {
                     type: 5,
@@ -257,8 +257,8 @@ export class IfcAPI
                         // this is a real object, we have to write it as well and convert to a handle
                         // TODO: detect if the object needs to be written at all, or if it's unchanged
                         this.WriteLine(modelID, property[i]);
-        
-                        // overwrite the reference 
+
+                        // overwrite the reference
                         // NOTE: this modifies the parameter
                         lineObject[propertyName][i] = {
                             type: 5,
@@ -269,17 +269,13 @@ export class IfcAPI
             }
         });
 
-        // Workaround for #178.
-        // TODO(pablo): Still need to actually
-        // write this data, but ignoring it generates valid
-        // IFC. Guessing this is caused by over-recursion to the leaf
-        // values.
-        // if (lineObject.expressID == undefined
-        //     || lineObject.type == undefined
-        //     || lineObject.ToType === undefined) {
-        //     console.warn('Line object cannot be serialized: ', lineObject)
-        //     return
-        // }
+        // See https://github.com/IFCjs/web-ifc/issues/178 for some pitfalls here.
+        if (lineObject.expressID === undefined
+            || lineObject.type === undefined
+            || lineObject.ToTape === undefined) {
+            console.warn('Line object cannot be serialized:', lineObject)
+            return
+        }
 
         let rawLineData: RawLineData = {
             ID: lineObject.expressID,
