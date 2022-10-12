@@ -776,6 +776,7 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
     emscripten::function("CloseModel", &CloseModel);
+    emscripten::function("GetMaxExpressID", &GetMaxExpressID);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
