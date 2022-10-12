@@ -75,6 +75,7 @@ async function LoadFile(filename) {
     //Find ownerHistory
     let owHs = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCOWNERHISTORY);
 
+    //Add single property
     maxEID++;
     numLines++;
     let property = new IfcPropertySingleValue(
@@ -120,6 +121,7 @@ async function LoadFile(filename) {
         { type: 5, value: pSetID }
     );
     ifcapi.WriteLine(modelID, psetRel);
+    //End editing
 
     let time = WebIFC.ms() - start;
     console.log(`Writing ${numLines} lines took ${time} ms`);
