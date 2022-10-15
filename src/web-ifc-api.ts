@@ -328,8 +328,7 @@ export class IfcAPI
     {
         if (transformationMatrix.length != 16)
         {
-            console.log(`Bad transformation matrix size: ${transformationMatrix.length}`);
-            return;
+            throw new Error("invalid matrix size");
         }
         this.wasmModule.SetGeometryTransformation(modelID, transformationMatrix);
     }
