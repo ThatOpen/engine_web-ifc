@@ -64,12 +64,13 @@ int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
 {
     if (!shown_version_header)
     {
-        std::cout << "web-ifc: " << WEB_IFC_VERSION_NUMBER << " threading: " << MT_ENABLED << std::endl;
+      webifc::logInfo("web-ifc: " + WEB_IFC_VERSION_NUMBER +
+                      " threading: " + (MT_ENABLED ? "enabled" : "disabled"));
         shown_version_header = true;
     }
 
     uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
-    
+
     auto loader = std::make_unique<webifc::IfcLoader>(settings);
     loaders.emplace(modelID, std::move(loader));
 
@@ -361,7 +362,7 @@ void ExportFileAsIFC(uint32_t modelID)
 
     std::string exportData = loader->DumpAsIFC();
     WriteFile("export.ifc", exportData);
-    std::cout << "Exported" << std::endl;
+    webifc::logInfo("Exported to export.ifc");
 }
 
 template<uint32_t N>
@@ -477,7 +478,7 @@ void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
         }
         else
         {
-            std::cout << "Error in writeline: unknown object received" << std::endl;
+          webifc::logError("Error in writeline: unknown object received");
         }
 
         index++;
@@ -693,7 +694,24 @@ extern "C" bool IsModelOpen(uint32_t modelID)
 
     return loader->IsOpen();
 }
-    
+
+void SetLogLevel(const webifc::LogLevel& level)
+{
+  webifc::LOG_LEVEL = level;
+  string sl;
+    switch (level) {
+      case webifc::LogLevel::DEBUG: sl = "d"; break;
+      case webifc::LogLevel::INFO: sl = "i"; break;
+      case webifc::LogLevel::WARN: sl = "w"; break;
+      case webifc::LogLevel::ERROR: sl = "e"; break;
+      case webifc::LogLevel::OFF:  sl = "o"; break; // intentional fallthrough
+      default:
+        std::cout << "HIT DEFAULT :( " << std::endl;
+        webifc::LOG_LEVEL = webifc::LogLevel::DEBUG; sl = "def";// be noisey if unknown level
+    }
+        std::cout << "SETTING LOG LEVEL! " << sl << std::endl;
+}
+
 EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::class_<webifc::IfcGeometry>("IfcGeometry")
@@ -747,6 +765,14 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("geometryExpressID", &webifc::IfcPlacedGeometry::geometryExpressID)
         ;
 
+    emscripten::enum_<webifc::LogLevel>("LogLevel")
+        .value("DEBUG", webifc::LogLevel::DEBUG)
+        .value("INFO", webifc::LogLevel::INFO)
+        .value("WARN", webifc::LogLevel::WARN)
+        .value("ERROR", webifc::LogLevel::ERROR)
+        .value("OFF", webifc::LogLevel::OFF)
+        ;
+
     emscripten::enum_<webifc::LoaderErrorType>("LoaderErrorType")
         .value("BOOL_ERROR", webifc::LoaderErrorType::BOOL_ERROR)
         .value("PARSING", webifc::LoaderErrorType::PARSING)
@@ -791,4 +817,5 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
     emscripten::function("GetAllLines", &GetAllLines);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
+    emscripten::function("SetLogLevel", &SetLogLevel);
 }

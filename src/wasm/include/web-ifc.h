@@ -24,7 +24,18 @@ const uint32_t TAPE_SIZE = 1 << 24;
 
 namespace webifc
 {
-	struct LoaderSettings
+	enum class LogLevel
+	{
+		DEBUG = 0,
+		INFO = 1,
+		WARN = 2,
+		ERROR = 3,
+		OFF = 4
+	};
+
+        LogLevel LOG_LEVEL = LogLevel::INFO;
+
+        struct LoaderSettings
 	{
 		bool COORDINATE_TO_ORIGIN = false;
 		bool USE_FAST_BOOLS = false;
@@ -36,7 +47,44 @@ namespace webifc
 		int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
 	};
 
-	enum class LoaderErrorType
+        void log(const std::string& msg, const LogLevel& level)
+	{
+          string sl;
+        	if (level >= LOG_LEVEL) {
+                	std::string fullMsg = msg;
+                        switch (level) {
+                                case LogLevel::DEBUG: fullMsg = "DEBUG: " + msg; sl = "debug"; break;
+                        	case LogLevel::INFO:  fullMsg = "INFO: "  + msg; sl = "info";  break;
+                        	case LogLevel::WARN:  fullMsg = "WARN: "  + msg; sl = "warn";  break;
+                        	case LogLevel::ERROR: fullMsg = "ERROR: " + msg; sl = "error";  break;
+                        	case LogLevel::OFF:   return;
+                                default:              fullMsg = msg; sl = "default";
+                        }
+                        std::cout << fullMsg << "AND LOG LEVEL IS: " << sl << std::endl;
+                }
+        }
+
+        void logDebug(const std::string& msg)
+        {
+          log(msg, LogLevel::DEBUG);
+        }
+
+        void logInfo(const std::string& msg)
+        {
+          log(msg, LogLevel::INFO);
+        }
+
+        void logWarn(const std::string& msg)
+        {
+          log(msg, LogLevel::WARN);
+        }
+
+        void logError(const std::string& msg)
+        {
+          log(msg, LogLevel::ERROR);
+        }
+
+        enum class LoaderErrorType
 	{
 		UNSPECIFIED,
 		PARSING,
@@ -52,13 +100,13 @@ namespace webifc
 		uint32_t ifcType;
 
 		LoaderError(LoaderErrorType t = LoaderErrorType::UNSPECIFIED,
-					std::string m = "",
-					uint32_t e = 0,
-					uint32_t type = 0) : type(t),
-										 message(m),
-										 expressID(e),
-										 ifcType(type)
-		{
+                            std::string m = "",
+                            uint32_t e = 0,
+                            uint32_t type = 0) : type(t),
+                                                 message(m),
+                                                 expressID(e),
+                                                 ifcType(type)
+                {
 		}
 	};
 
@@ -993,7 +1041,7 @@ namespace webifc
 			}
 
 			file << "ENDSEC;" << std::endl
-				 << "END-ISO-10303-21;";
+                             << "END-ISO-10303-21;";
 
 			return file.str();
 		}
@@ -1005,7 +1053,7 @@ namespace webifc
 
 		void ReportError(const LoaderError &&error)
 		{
-			std::cout << error.message << std::endl;
+                        logError(error.message);
 			_errors.push_back(std::move(error));
 		}
 

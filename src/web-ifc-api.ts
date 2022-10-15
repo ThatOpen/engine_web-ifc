@@ -33,12 +33,22 @@ export const LINE_END = 9;
 
 export interface LoaderSettings
 {
-    COORDINATE_TO_ORIGIN: boolean;
-    USE_FAST_BOOLS: boolean;
-    CIRCLE_SEGMENTS_LOW?: number
-    CIRCLE_SEGMENTS_MEDIUM?: number
-    CIRCLE_SEGMENTS_HIGH?: number
-    BOOL_ABORT_THRESHOLD?: number
+    COORDINATE_TO_ORIGIN?: boolean;
+    USE_FAST_BOOLS?: boolean;
+    CIRCLE_SEGMENTS_LOW?: number;
+    CIRCLE_SEGMENTS_MEDIUM?: number;
+    CIRCLE_SEGMENTS_HIGH?: number;
+    BOOL_ABORT_THRESHOLD?: number;
+    PRINT_VERSION_STRING?: boolean;
+}
+
+export enum LogLevel
+{
+    DEBUG = 0,
+    INFO = 1,
+    WARN = 2,
+    ERROR = 3,
+    OFF = 4,
 }
 
 export interface Vector<T> {
@@ -141,7 +151,13 @@ export class IfcAPI
         }
     }
 
-    /**  
+    SetLogLevel(level: LogLevel): void
+    {
+        console.log('setting log level: ', level)
+        this.wasmModule.SetLogLevel(level)
+    }
+
+    /**
      * Opens a model and returns a modelID number
      * @data Buffer containing IFC data (bytes)
      * @data Settings settings for loading the model
@@ -157,7 +173,6 @@ export class IfcAPI
             BOOL_ABORT_THRESHOLD: 10000,
             ...settings
         };
-
         let offsetInSrc = 0;
         let result = this.wasmModule.OpenModel(s, (destPtr: number, destSize: number) => {
             let srcSize = Math.min(data.byteLength - offsetInSrc, destSize);
@@ -174,7 +189,7 @@ export class IfcAPI
         return result;
     }
 
-    /**  
+    /**
      * Creates a new model and returns a modelID number
      * @data Settings settings for generating data the model
     */

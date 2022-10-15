@@ -15,7 +15,7 @@ beforeAll(async () => {
 
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
-    modelID = ifcApi.OpenModel(exampleIFCData);
+    modelID = ifcApi.OpenModel(exampleIFCData, {PRINT_VERSION_STRING: false});
     properties = ifcApi.properties
 })
 

@@ -10,11 +10,12 @@ let ifcApi : IfcAPI
 
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
-    await ifcApi.Init();
-
+  await ifcApi.Init();
+  console.log('here is the value for OFF: ', WebIFC.LogLevel.OFF)
+    ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
-    modelId = ifcApi.OpenModel(exampleIFCData);
+      modelId = ifcApi.OpenModel(exampleIFCData);
 })
 
 
