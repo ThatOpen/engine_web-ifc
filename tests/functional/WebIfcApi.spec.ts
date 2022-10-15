@@ -63,6 +63,7 @@ let geometries: Vector < FlatMesh > ; // to store geometries instead of refetchi
 let allGeometriesSize: number = 119;
 let quantityOfknownErrors: number = 0;
 let meshesCount: number = 115;
+let totalLineNumber : number = 6487;
 let emptyFileModelID: number;
 let expressIDMatchingGuid: any = {
     expressID: 2863,
@@ -100,7 +101,7 @@ describe('WebIfcApi reading methods', () => {
     })
     test('can return the correct number of line when getting all lines', () => {
         const lines: any = ifcApi.GetAllLines(modelID);
-        expect(lines.size()).toEqual(6487);
+        expect(lines.size()).toEqual(totalLineNumber);
     })
     test('can GetLine', () => {
         const line: Object = ifcApi.GetLine(modelID, expressId);
@@ -311,7 +312,6 @@ describe('WebIfcApi writing methods', () => {
         expect(project.Description.value).toBe("foobar");
     })
     test('can write a line by giving a line object', () => {
-        let anIfcSpace: any = ifcApi.GetLine(modelID, 9989);
         let projectBeforeWriting: any = ifcApi.GetAllLines(modelID);
         let payload = {
             expressID: 9999999,
@@ -346,17 +346,16 @@ describe('WebIfcApi writing methods', () => {
             PredefinedType: undefined,
             ElevationWithFlooring: undefined
         }
-
         ifcApi.WriteLine(modelID, payload);
         let projectAfterWriting: any = ifcApi.GetAllLines(modelID);
         expect(projectBeforeWriting.size() + 1).toEqual(projectAfterWriting.size());
     })
     test('can modify a line by giving a line object', () => {
-        let project: any = ifcApi.GetLine(modelID, 1);
-        project.Name.value = "foo";
-        ifcApi.WriteLine(modelID, project);
-        let projectReloaded: any = ifcApi.GetLine(modelID, 1);
-        expect(projectReloaded.Name.value).toEqual("foo");
+        let aSpace: any = ifcApi.GetLine(modelID, expressId);
+        aSpace.Name.value = "foo";
+        ifcApi.WriteLine(modelID, aSpace);
+        let aSpaceReloaded: any = ifcApi.GetLine(modelID, expressId);
+        expect(aSpaceReloaded.Name.value).toEqual("foo");
     })
     test('can Export File As IFC', () => {
         let ifcDatas = ifcApi.ExportFileAsIFC(modelID);
