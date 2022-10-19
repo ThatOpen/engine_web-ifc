@@ -108,6 +108,171 @@ int CreateModel(webifc::LoaderSettings settings)
     return modelID;
 }
 
+
+void serialize(std::vector<std::string> filePaths, std::string serializedName, emscripten::val callback, uint32_t ramLimit = 200000000)
+{
+    auto settings = webifc::LoaderSettings();
+    auto loader = std::make_unique<webifc::IfcLoader>(settings);
+
+    loader->ActivateSerializer(ramLimit);
+    loader->SetSerializedFileName(serializedName);
+    loader->SetCallback([&](std::string dest, size_t destSize)
+                        {
+                        emscripten::val retVal = callback(dest, destSize);
+                        return dest; });
+
+    uint32_t numLines = 0;
+
+    for (uint32_t fi = 0; fi < filePaths.size(); fi++)
+    {
+        std::ifstream bigFile(filePaths[fi], std::ios::binary | std::ios::ate);
+        int fileSize = bigFile.tellg();
+        bigFile.seekg(0);
+        constexpr size_t bufferSize = 5000;
+        std::array<char, bufferSize> buffer;
+        
+        bool inText = false;
+        std::string prevStringChunk = "";
+        std::string content = "";
+
+        if (bigFile.fail())
+        {
+            std::cout << "ERROR, Could not open " << filePaths[fi] << std::endl;
+            exit(1);
+        }
+
+        while (bigFile)
+        {
+            content.clear();
+            for (int i(0); i < bufferSize; ++i)
+                buffer[i] = '\0';
+            bigFile.read(buffer.data(), bufferSize);
+            content = buffer.data();
+
+            if (content.size() > bufferSize)
+            {
+                content.erase(bufferSize, content.size() - bufferSize);
+            }
+
+            // keep record of quotations
+            for (int j = 0; j < content.size(); j++)
+            {
+                if (content[j] == '\'')
+                {
+                    inText = !inText;
+                }
+            }
+
+            // Add the preovious uncomplete string chunk
+            content = prevStringChunk + content;
+
+            bool doit = true;
+            prevStringChunk.clear();
+            uint32_t i = 1;
+            bool inText2 = inText;
+
+            while (true)
+            {
+                uint32_t idx = content.size() - i;
+                // Negative idx is not suposed to happen
+
+                if (content.size() < i)
+                {
+                    doit = false;
+                    break;
+                }
+                if (content[idx] == '\'')
+                {
+                    inText2 = !inText2;
+                }
+                // Only if you are not in a text the ';' indicates end of line
+                if (content[idx] == ';' && !inText2)
+                {
+                    break;
+                }
+                else
+                {
+                    // All the incomplete text is keep in the prevStringChunk
+                    prevStringChunk.push_back(content[idx]);
+                }
+                i++;
+            }
+
+            // Reverse the uncomplete string line
+            reverse(prevStringChunk.begin(), prevStringChunk.end());
+
+            if (doit)
+            {
+                // Remove uncomplete last line
+                content.erase(content.size() - prevStringChunk.size(), prevStringChunk.size());
+                content = content + " ";
+
+                size_t contentOffset = 0;
+                numLines += loader->readFilePart([&](char *dest, size_t destSize)
+                                                 {
+                        uint32_t length = std::min(content.size() - contentOffset, destSize);
+                        memcpy(dest, &content[contentOffset], length);
+
+                        contentOffset += length;
+
+                        return length; });
+            }
+        }
+        bigFile.close();
+    }
+
+    loader->storeLastChunk();
+    loader->storeMetadata(numLines);
+    loader->DisableSerializer();
+}
+
+uint32_t openSerialized(std::vector<std::string> paths, webifc::LoaderSettings settings, uint32_t ramLimit = 200000000)
+{
+    for (int i(0); i < paths.size(); ++i)
+    {
+        std::cout << paths[i] << std::endl;
+    }
+    uint32_t modelID = CreateModel(settings);
+
+    loaders[modelID]->ActivateSerializer(ramLimit);
+    loaders[modelID]->SetBinPaths(paths);
+    uint32_t numLines = loaders[modelID]->loadMetadata();
+
+    std::cout << "Metdata loaded..." << std::endl;
+    // Continue opening
+    loaders[modelID]->LoadSerializedFileData(numLines);
+
+    std::cout << "Context data loaded..." << std::endl;
+
+    // Ensure IsOpen will return true upon successful load.
+    loaders[modelID]->SetOpen();
+
+    //testing if it is able to read geometry//
+
+    // std::cout << "Loading geometry..." << std::endl;
+
+    // std::vector<webifc::IfcFlatMesh> meshes;
+
+    // for (auto type : ifc2x4::IfcElements)
+    // {
+    //     auto elements = loaders[modelID]->GetExpressIDsWithType(type);
+
+    //     for (int i = 0; i < elements.size(); i++)
+    //     {
+    //         auto mesh = geomLoaders[modelID]->GetFlatMesh(elements[i]);
+    //         meshes.push_back(mesh);
+    //     }
+    // }
+
+    //End testing//
+
+    loaders[modelID]->DisableSerializer();
+
+    std::cout << "Serialized files successfully loaded" << std::endl;
+
+    return modelID;
+}
+
 void CloseModel(uint32_t modelID)
 {
     geomLoaders.erase(modelID);
@@ -761,6 +926,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("ifcType", &webifc::LoaderError::ifcType)
         ;
 
+    emscripten::register_vector<std::string>("stringVector");
+
     emscripten::register_vector<webifc::LoaderError>("LoaderErrorVector");
 
     emscripten::register_vector<webifc::IfcPlacedGeometry>("IfcPlacedGeometryVector");
@@ -774,6 +941,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<uint32_t>("UintVector");
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
+    emscripten::function("Serialize", &serialize);
+    emscripten::function("OpenSerialized", &openSerialized);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
     emscripten::function("CloseModel", &CloseModel);
