@@ -683,6 +683,12 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     return retVal;
 }
 
+uint32_t GetMaxExpressID(uint32_t modelID)
+{
+    auto &loader = loaders[modelID];
+    return loader->GetMaxExpressId();
+}
+
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
     auto& loader = loaders[modelID];
@@ -776,6 +782,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
+    emscripten::function("GetMaxExpressID", &GetMaxExpressID);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);

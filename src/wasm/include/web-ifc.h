@@ -408,6 +408,11 @@ namespace webifc
 			return _metaData.ifcTypeToLineID[type];
 		}
 
+		uint32_t GetMaxExpressId()
+		{
+			return _metaData.expressIDToLine.size() - 1;
+		}
+
 		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t *dest)
 		{
 			uint32_t startOffset = _metaData.lines[_metaData.expressIDToLine[expressID]].tapeOffset;

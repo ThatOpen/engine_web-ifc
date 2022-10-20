@@ -401,6 +401,16 @@ export class IfcAPI
     }
 
     /**
+         * Returns the maximum ExpressID value in the IFC file, ex.- #9999999
+         * @param modelID Model handle retrieved by OpenModel
+         * @returns Express numerical value
+         */
+    GetMaxExpressID(modelID: number)
+    {
+        return this.wasmModule.GetMaxExpressID(modelID);
+    }
+
+    /**
      * Creates a map between element ExpressIDs and GlobalIDs.
      * Each element has two entries, (ExpressID -> GlobalID) and (GlobalID -> ExpressID).
      * @modelID Model handle retrieved by OpenModel
