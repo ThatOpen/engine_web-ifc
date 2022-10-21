@@ -24,13 +24,13 @@ const uint32_t TAPE_SIZE = 1 << 24;
 
 namespace webifc
 {
-	enum class LogLevel
+        enum class LogLevel : int
 	{
 		DEBUG = 0,
-		INFO = 1,
-		WARN = 2,
-		ERROR = 3,
-		OFF = 4
+		INFO,
+		WARN,
+		ERROR,
+		OFF
 	};
 
         LogLevel LOG_LEVEL = LogLevel::INFO;
@@ -49,18 +49,17 @@ namespace webifc
 
         void log(const std::string& msg, const LogLevel& level)
 	{
-          string sl;
         	if (level >= LOG_LEVEL) {
                 	std::string fullMsg = msg;
                         switch (level) {
-                                case LogLevel::DEBUG: fullMsg = "DEBUG: " + msg; sl = "debug"; break;
-                        	case LogLevel::INFO:  fullMsg = "INFO: "  + msg; sl = "info";  break;
-                        	case LogLevel::WARN:  fullMsg = "WARN: "  + msg; sl = "warn";  break;
-                        	case LogLevel::ERROR: fullMsg = "ERROR: " + msg; sl = "error";  break;
+                                case LogLevel::DEBUG: fullMsg = "DEBUG: " + msg; break;
+                        	case LogLevel::INFO:  fullMsg = "INFO: "  + msg; break;
+                        	case LogLevel::WARN:  fullMsg = "WARN: "  + msg; break;
+                        	case LogLevel::ERROR: fullMsg = "ERROR: " + msg; break;
                         	case LogLevel::OFF:   return;
-                                default:              fullMsg = msg; sl = "default";
+                                default:              fullMsg = msg;
                         }
-                        std::cout << fullMsg << "AND LOG LEVEL IS: " << sl << std::endl;
+                        std::cout << fullMsg << std::endl;
                 }
         }
 

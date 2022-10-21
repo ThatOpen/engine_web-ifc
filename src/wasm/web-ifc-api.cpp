@@ -695,21 +695,19 @@ extern "C" bool IsModelOpen(uint32_t modelID)
     return loader->IsOpen();
 }
 
-void SetLogLevel(const webifc::LogLevel& level)
+/**
+ * Sets the global log level.
+ * @param {number} levelArg Will be clamped between DEBUG and OFF.
+ */
+void SetLogLevel(int levelArg)
 {
-  webifc::LOG_LEVEL = level;
-  string sl;
-    switch (level) {
-      case webifc::LogLevel::DEBUG: sl = "d"; break;
-      case webifc::LogLevel::INFO: sl = "i"; break;
-      case webifc::LogLevel::WARN: sl = "w"; break;
-      case webifc::LogLevel::ERROR: sl = "e"; break;
-      case webifc::LogLevel::OFF:  sl = "o"; break; // intentional fallthrough
-      default:
-        std::cout << "HIT DEFAULT :( " << std::endl;
-        webifc::LOG_LEVEL = webifc::LogLevel::DEBUG; sl = "def";// be noisey if unknown level
+    if (levelArg < static_cast<int>(webifc::LogLevel::DEBUG)) {
+        webifc::LOG_LEVEL = webifc::LogLevel::DEBUG;
+    } else if (levelArg > static_cast<int>(webifc::LogLevel::OFF)) {
+        webifc::LOG_LEVEL = webifc::LogLevel::OFF;
+    } else {
+        webifc::LOG_LEVEL = static_cast<webifc::LogLevel>(levelArg);
     }
-        std::cout << "SETTING LOG LEVEL! " << sl << std::endl;
 }
 
 EMSCRIPTEN_BINDINGS(my_module) {

@@ -42,6 +42,9 @@ export interface LoaderSettings
     PRINT_VERSION_STRING?: boolean;
 }
 
+
+// TODO(pablo): Don't know how to get static refs to the values, so
+// manually keeping in-sync with src/wasm/include/web-ifc.h.
 export enum LogLevel
 {
     DEBUG = 0,
@@ -153,7 +156,6 @@ export class IfcAPI
 
     SetLogLevel(level: LogLevel): void
     {
-        console.log('setting log level: ', level)
         this.wasmModule.SetLogLevel(level)
     }
 
@@ -288,7 +290,7 @@ export class IfcAPI
         if (lineObject.expressID === undefined
             || lineObject.type === undefined
             || lineObject.ToTape === undefined) {
-            console.warn('Line object cannot be serialized:', lineObject)
+            console.warn('Line object cannot be serialized; invalid format:', lineObject)
             return
         }
 
