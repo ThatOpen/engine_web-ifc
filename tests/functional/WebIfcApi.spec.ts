@@ -3,11 +3,8 @@ import * as path from 'path';
 import * as WebIFC from '../../dist/web-ifc-api-node.js';
 import type { Vector, FlatMesh, IfcAPI } from '../../dist/web-ifc-api-node.js';
 
-
 let modelID : number
 let ifcApi : IfcAPI
-
-
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
@@ -16,7 +13,6 @@ beforeAll(async () => {
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
 })
-
 
 describe('WebIfcApi', () => {
     test('can retrieve a modelID', () => {
@@ -33,7 +29,6 @@ describe('WebIfcApi', () => {
         expect(geometry.size()).toBe(119);
     })
 })
-
 
 afterAll(() => {
     ifcApi.CloseModel(modelID);
