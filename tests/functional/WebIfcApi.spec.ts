@@ -49,11 +49,9 @@ import type {
     Vector,
     FlatMesh,
     IfcAPI,
+    IfcGeometry,
     RawLineData
 } from '../../dist/web-ifc-api-node.js';
-import {
-    IfcGeometry
-} from 'web-ifc';
 
 
 let ifcApi: IfcAPI;
@@ -77,12 +75,14 @@ let expectedVertexAndIndexDatas: any = {
 let IFCEXTRUDEDAREASOLIDMeshesCount = 97;
 let givenCoordinationMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
+
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
 
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
+
     modelID = ifcApi.OpenModel(exampleIFCData);
     emptyFileModelID = ifcApi.CreateModel();
 })
@@ -90,9 +90,11 @@ beforeAll(async () => {
 describe('WebIfcApi reading methods', () => {
     test('can retrieve a modelID', () => {
         expect(modelID).toBe(0);
+
     })
     test('can ensure model is open', () => {
         const isOpen: boolean = ifcApi.IsModelOpen(modelID);
+
         expect(isOpen).toBeTruthy();
     })
     test('can return the correct number of line with a given Type', () => {
@@ -357,12 +359,14 @@ describe('WebIfcApi writing methods', () => {
         let aSpaceReloaded: any = ifcApi.GetLine(modelID, expressId);
         expect(aSpaceReloaded.Name.value).toEqual("foo");
     })
+
     test('can Export File As IFC', () => {
         let ifcDatas = ifcApi.ExportFileAsIFC(modelID);
         let exportModelID = ifcApi.OpenModel(ifcDatas);
         const line: any = ifcApi.GetLine(exportModelID, expressId);
         expect(exportModelID).toEqual(2);
         expect(line.expressID).toEqual(expressId);
+
 
     })
 
@@ -445,10 +449,36 @@ describe('WebIfcApi known failures', () => {
 
 })
 
+describe('some use cases', () => {
+    test("can write a new property value and read it back in", async () => {
+        async function getFirstStorey(api, mId) {
+            const storeyIds = await api.properties.getAllItemsOfType(mId, WebIFC.IFCBUILDINGSTOREY, false);
+            expect(storeyIds.length).toBe(2);
+            const storeyId = storeyIds[0];
+            const storey = await api.properties.getItemProperties(mId, storeyId);
+            return [storey, storeyId];
+          }
+          let [storey, storeyId] = await getFirstStorey(ifcApi, modelID);
+          const newStoreyName = 'Nivel 1 - Editado'
+          storey.LongName.value = newStoreyName;
+          ifcApi.WriteLine(modelID, storey);
+          storey = await ifcApi.properties.getItemProperties(modelID, storeyId);
+          expect(storey.LongName.value).toBe(newStoreyName);
+      
+          const writtenData = await ifcApi.ExportFileAsIFC(modelID);
+          let modelId = ifcApi.OpenModel(writtenData);
+          [storey, storeyId] = await getFirstStorey(ifcApi, modelId);
+          expect(storey.LongName.value).toBe(newStoreyName);
+    });
+    
+})
+
 afterAll(() => {
+
     ifcApi.CloseModel(modelID);
     const isOpen: boolean = ifcApi.IsModelOpen(modelID);
     const isOpenEmptyFileModelID: boolean = ifcApi.IsModelOpen(emptyFileModelID);
+
     expect(isOpen).toBeFalsy()
     expect(isOpenEmptyFileModelID).toBeFalsy()
 })
