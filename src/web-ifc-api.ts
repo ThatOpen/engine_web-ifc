@@ -213,10 +213,40 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
-    GetLine(modelID: number, expressID: number, flatten: boolean = false)
+    GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        let inverseData = ifc2x4helper.InversePropertyDef[rawLineData.type];
+        
+        if (inverse && inverseData != null) 
+        {
+          for (let inverseProp of inverseData) 
+          {
+            if (!inverseProp.set) lineData[inverseProp.name] = null;
+            else lineData[inverseProp.name] = [];
+            
+            let lines =  this.GetLineIDsWithType(modelID,inverseProp.type);
+            for (let x = 0; x < lines.size(); x++)
+            {
+              let line = this.GetRawLineData(modelID,lines.get(x));
+              if ( (Array.isArray(line.arguments[inverseProp.pos]) && line.arguments[inverseProp.pos].some((val) => val.value == expressID))
+                    || line.arguments[inverseProp.pos] != null && line.arguments[inverseProp.pos].value == expressID)
+              {
+                if (lineData[inverseProp.name] == null)
+                {
+                  lineData[inverseProp.name] = { type: 5,  value: line.ID };
+                  break;
+                } 
+                else
+                {
+                  lineData[inverseProp.name].push({ type: 5,  value: line.ID });
+                }
+              }
+            }
+          }
+        }
+        
         if (flatten)
         {
             this.FlattenLine(modelID, lineData);
@@ -286,19 +316,19 @@ export class IfcAPI
         this.WriteRawLineData(modelID, rawLineData);
     }
 
-    FlattenLine(modelID: number, line: any)
+    FlattenLine(modelID: number, line: any, inverse: boolean = false)
     {
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
             if (property && property.type === 5)
             {
-                line[propertyName] = this.GetLine(modelID, property.value, true);
+                line[propertyName] = this.GetLine(modelID, property.value, true, inverse);
             }
             else if (Array.isArray(property) && property.length > 0 && property[0].type === 5)
             {
                 for (let i = 0; i < property.length; i++)
                 {
-                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
+                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true, inverse);
                 }
             }
         });
