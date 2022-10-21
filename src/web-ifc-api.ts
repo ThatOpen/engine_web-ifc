@@ -150,7 +150,7 @@ export class IfcAPI
     {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: false,
+            USE_FAST_BOOLS: true,
             CIRCLE_SEGMENTS_LOW: 5,
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
@@ -182,7 +182,7 @@ export class IfcAPI
     {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: false,
+            USE_FAST_BOOLS: true,
             CIRCLE_SEGMENTS_LOW: 5,
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
