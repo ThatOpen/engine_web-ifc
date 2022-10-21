@@ -15,7 +15,7 @@ beforeAll(async () => {
     ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
-    modelID = ifcApi.OpenModel(exampleIFCData, {PRINT_VERSION_STRING: false});
+    modelID = ifcApi.OpenModel(exampleIFCData);
     properties = ifcApi.properties
 })
 

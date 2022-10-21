@@ -39,7 +39,6 @@ export interface LoaderSettings
     CIRCLE_SEGMENTS_MEDIUM?: number;
     CIRCLE_SEGMENTS_HIGH?: number;
     BOOL_ABORT_THRESHOLD?: number;
-    PRINT_VERSION_STRING?: boolean;
 }
 
 
