@@ -214,6 +214,174 @@ void TestTriangleDecompose()
     }
 }
 
+uint32_t openSerialized(std::vector<std::string> paths, webifc::LoaderSettings settings)
+{
+    std::map<uint32_t, std::unique_ptr<webifc::IfcLoader>> loaders;
+    std::map<uint32_t, std::unique_ptr<webifc::IfcGeometryLoader>> geomLoaders;
+
+    uint32_t modelID = 0;
+
+    auto loader = std::make_unique<webifc::IfcLoader>(settings);
+    loaders.emplace(modelID, std::move(loader));
+    auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID]);
+    geomLoaders.emplace(modelID, std::move(geomLoader));
+
+    for (int i(0); i < paths.size(); ++i)
+    {
+        std::cout << paths[i] << std::endl;
+    }
+
+    loaders[modelID]->ActivateSerializer();
+    loaders[modelID]->SetBinPaths(paths);
+    uint32_t numLines = loaders[modelID]->loadMetadata();
+
+    // Continue opening
+    loaders[modelID]->LoadSerializedFileData(numLines);
+
+    // Ensure IsOpen will return true upon successful load.
+    loaders[modelID]->SetOpen();
+
+    ////////////
+
+    std::vector<webifc::IfcFlatMesh> meshes;
+
+    for (auto type : ifc2x4::IfcElements)
+    {
+        auto elements = loaders[modelID]->GetExpressIDsWithType(type);
+
+        for (int i = 0; i < elements.size(); i++)
+        {
+            auto mesh = geomLoaders[modelID]->GetFlatMesh(elements[i]);
+            meshes.push_back(mesh);
+        }
+    }
+
+    loaders[modelID]->DisableSerializer();
+
+    ////////////
+
+    return modelID;
+}
+
+void serialize(std::vector<std::string> filePaths, std::string serializedName)
+{
+    auto settings = webifc::LoaderSettings();
+    auto loader = std::make_unique<webifc::IfcLoader>(settings);
+
+    loader->ActivateSerializer();
+    loader->SetSerializedFileName(serializedName);
+
+    uint32_t numLines = 0;
+
+    for (uint32_t fi = 0; fi < filePaths.size(); fi++)
+    {
+        std::ifstream bigFile(filePaths[fi], std::ios::binary | std::ios::ate);
+        int fileSize = bigFile.tellg();
+        bigFile.seekg(0);
+        constexpr size_t bufferSize = 5000;
+        std::array<char, bufferSize> buffer;
+
+        bool inText = false;
+        std::string prevStringChunk = "";
+        std::string content = "";
+
+        if (bigFile.fail())
+        {
+            std::cout << "ERROR, Could not open " << filePaths[fi] << std::endl;
+            exit(1);
+        }
+
+        uint32_t count = 0;
+        uint32_t update = 0;
+
+        while (bigFile)
+        {
+            content.clear(); // You must clean string this way, otherwise memory leaks in chrome
+            for (int i(0); i < bufferSize; ++i)
+                buffer[i] = '\0';
+            bigFile.read(buffer.data(), bufferSize);
+            content = buffer.data();
+
+            if (content.size() > bufferSize)
+            {
+                content.erase(bufferSize, content.size() - bufferSize);
+            }
+
+            // keep record of quotations
+            for (int j = 0; j < content.size(); j++)
+            {
+                if (content[j] == '\'')
+                {
+                    inText = !inText;
+                }
+            }
+
+            // Add the preovious uncomplete string chunk
+            content = prevStringChunk + content;
+
+            bool doit = true;
+            prevStringChunk.clear(); // You must clean string this way, otherwise memory leaks in chrome
+            uint32_t i = 1;
+            bool inText2 = inText;
+
+            while (true)
+            {
+                uint32_t idx = content.size() - i;
+                // Negative idx is not suposed to happen
+
+                if (content.size() < i)
+                {
+                    doit = false;
+                    break;
+                }
+                if (content[idx] == '\'')
+                {
+                    inText2 = !inText2;
+                }
+                // Only if you are not in a text the ';' indicates end of line
+                if (content[idx] == ';' && !inText2)
+                {
+                    break;
+                }
+                else
+                {
+                    // All the incomplete text is keep in the prevStringChunk
+                    prevStringChunk.push_back(content[idx]);
+                }
+                i++;
+            }
+
+            // Reverse the uncomplete string line
+            reverse(prevStringChunk.begin(), prevStringChunk.end());
+
+            if (doit)
+            {
+                // Remove uncomplete last line
+                content.erase(content.size() - prevStringChunk.size(), prevStringChunk.size());
+                content = content + " ";
+
+                size_t contentOffset = 0;
+                numLines += loader->readFilePart([&](char *dest, size_t destSize)
+                                                 {
+                        uint32_t length = std::min(content.size() - contentOffset, destSize);
+                        memcpy(dest, &content[contentOffset], length);
+
+                        contentOffset += length;
+
+                        return length; });
+            }
+
+            count++;
+            update++;
+        }
+        bigFile.close();
+    }
+
+    loader->storeLastChunk();
+    loader->storeMetadata(numLines);
+    loader->DisableSerializer();
+}
+
 int main()
 {
     std::cout << "Hello web IFC test!\n";

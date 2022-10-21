@@ -202,6 +202,22 @@ export class IfcAPI
         return result;
     }
 
+    async Serialize(paths: any, serializedFileName: any, storeSerialized: (buffer: any) => void, ramLimit: number = 200000000): Promise<void> {
+        this.wasmModule.Serialize(paths, serializedFileName, storeSerialized, ramLimit);
+    }
+
+    OpenSerialized(paths: any, settings?: LoaderSettings, ramLimit: number = 200000000): number {
+        let s: LoaderSettings = {
+            COORDINATE_TO_ORIGIN: false,
+            USE_FAST_BOOLS: true,
+            CIRCLE_SEGMENTS_LOW: 5,
+            CIRCLE_SEGMENTS_MEDIUM: 8,
+            CIRCLE_SEGMENTS_HIGH: 12,
+            BOOL_ABORT_THRESHOLD: 10000,
+            ...settings
+        };
+        return this.wasmModule.OpenSerialized(paths, s, ramLimit);
+    }
 
     /**  
      * Opens a model and returns a modelID number
@@ -400,6 +416,16 @@ export class IfcAPI
         return this.wasmModule.GetFlatMesh(modelID, expressID);
     }
 
+    /**
+     * Returns the maximum ExpressID value in the IFC file, ex.- #9999999
+     * @param modelID Model handle retrieved by OpenModel
+     * @returns Express numerical value
+     */
+    GetMaxExpressID(modelID: number)
+    {
+        return this.wasmModule.GetMaxExpressID(modelID);
+    }
+    
     /**
      * Creates a map between element ExpressIDs and GlobalIDs.
      * Each element has two entries, (ExpressID -> GlobalID) and (GlobalID -> ExpressID).

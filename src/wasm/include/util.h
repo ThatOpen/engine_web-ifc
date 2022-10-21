@@ -1872,6 +1872,30 @@ namespace webifc
 		writeFile(filename, ToObj(geom, offset));
 	}
 
+	//This class defines a datachunk that can be loaded and unloaded from an external source file
+	template <uint32_t N>
+	class chunkUnit
+	{
+	public:
+		void clear()
+		{
+			std::vector<uint8_t>().swap(chunk);
+			loaded = false;
+		}
+
+		void initialize()
+		{
+			chunk.resize(N);
+		}
+
+		size_t size;
+		bool loaded = false;
+		uint32_t timesLoaded = 0;
+		std::vector<uint8_t> chunk;
+
+	private:
+	};
+
 	//! This is essentially a chunked tightly packed dynamic array
 	template <uint32_t N>
 	class DynamicTape
@@ -1882,18 +1906,104 @@ namespace webifc
 			AddChunk();
 		}
 
+
+		inline void unLoadChunk(uint32_t ChunkIndex)
+		{
+			std::cout << "Unloading chunk " + std::to_string(ChunkIndex) << std::endl;
+			chunks[ChunkIndex].clear();
+			loadedMemory -= chunks[ChunkIndex].size;
+		}
+
+		inline void loadChunk(uint32_t ChunkIndex)
+		{
+			std::cout << "Loading chunk " + std::to_string(ChunkIndex) << std::endl;
+			chunks[ChunkIndex].initialize();
+			LoadFromDisk(ChunkIndex);
+			chunks[ChunkIndex].timesLoaded++;
+			loadedMemory += chunks[ChunkIndex].size;
+		}
+
+		inline void updateMemory()
+		{
+			loadedMemory = 0;
+			for (int i = 0; i < chunks.size(); i++)
+			{
+				if (chunks[i].loaded)
+				{
+					loadedMemory += chunks[i].size;
+				}
+			}
+		}
+
+		inline void updateChunks()
+		{
+			if (serialize)
+			{
+				if (readChunkIndex < chunks.size())
+				{
+					if (!chunks[readChunkIndex].loaded)
+					{
+						loadChunk(readChunkIndex);
+					}
+				}
+				if (loadedMemory > ramLimit)
+				{
+					uint32_t times = 1;
+					bool cont = true;
+					while (cont)
+					{
+						for (int i = 0; i < chunks.size(); i++)
+						{
+
+							if (loadedMemory > ramLimit)
+							{
+								if (chunks[i].timesLoaded == times)
+								{
+									if (i != readChunkIndex && chunks[i].loaded)
+									{
+										unLoadChunk(i);
+									}
+								}
+							}
+							else
+							{
+								cont = false;
+								break;
+							}
+						}
+						times++;
+					}
+				}
+			}
+		}
+
 		inline void AddChunk()
 		{
 			chunks.emplace_back();
-			memset(chunks.back().data(), 0, N);
-			sizes.push_back(0);
+			chunks.back().initialize();
 			writePtr++;
+			chunks[writePtr].loaded = true;
+			chunks[writePtr].timesLoaded = 1;
+		}
+
+		inline void storeChunk()
+		{
+			if (serialize)
+			{
+				DumpToDisk(writePtr);
+				updateChunks();
+			}
 		}
 
 		inline void CheckChunk(unsigned long long size)
 		{
-			if (sizes[writePtr] + size >= N)
+			if (chunks[writePtr].size + size >= N)
 			{
+				loadedMemory += chunks[writePtr].size;
+				if (serialize)
+				{
+					storeChunk();
+				}
 				AddChunk();
 			}
 		}
@@ -1901,8 +2011,8 @@ namespace webifc
 		inline void push(char v)
 		{
 			CheckChunk(1);
-			chunks.back().data()[sizes[writePtr]] = v;
-			sizes[writePtr] += 1;
+			chunks.back().chunk.data()[chunks[writePtr].size] = v;
+			chunks[writePtr].size += 1;
 		}
 
 		inline void push2(uint16_t v)
@@ -1913,8 +2023,8 @@ namespace webifc
 		inline void push(void *v, unsigned long long size)
 		{
 			CheckChunk(size);
-			memcpy(chunks.back().data() + sizes[writePtr], v, size);
-			sizes[writePtr] += size;
+			memcpy(chunks.back().chunk.data() + chunks[writePtr].size, v, size);
+			chunks[writePtr].size += size;
 		}
 
 		inline void SetWriteAtEnd()
@@ -1924,7 +2034,7 @@ namespace webifc
 
 		uint64_t GetTotalSize()
 		{
-			return (chunks.size() - 1) * N + sizes.back();
+			return (chunks.size() - 1) * N + chunks.back().size;
 		}
 
 		uint64_t GetCapacity()
@@ -1936,6 +2046,7 @@ namespace webifc
 		{
 			readChunkIndex = 0;
 			readPtr = 0;
+			updateChunks();
 		}
 
 		inline bool Expect(char expectedType)
@@ -1947,7 +2058,8 @@ namespace webifc
 		template <typename T>
 		inline T Read()
 		{
-			std::array<uint8_t, N> &chunk = chunks[readChunkIndex];
+			updateChunks();
+			std::vector<uint8_t> &chunk = chunks[readChunkIndex].chunk;
 			uint8_t *valuePtr = &chunk[readPtr];
 
 			// T v = *(T*)(valuePtr);
@@ -1963,7 +2075,8 @@ namespace webifc
 
 		void *GetReadPtr()
 		{
-			std::array<uint8_t, N> &chunk = chunks[readChunkIndex];
+			updateChunks();
+			std::vector<uint8_t> &chunk = chunks[readChunkIndex].chunk;
 			uint8_t *valuePtr = &chunk[readPtr];
 
 			return (void *)valuePtr;
@@ -1986,8 +2099,8 @@ namespace webifc
 			}
 			else
 			{
-				readChunkIndex--;
-				readPtr = static_cast<uint32_t>(sizes[readChunkIndex] - 1);
+				decreaseChunkIndex();
+				readPtr = static_cast<uint32_t>(chunks[readChunkIndex].size - 1);
 			}
 		}
 
@@ -2004,17 +2117,97 @@ namespace webifc
 		inline void MoveTo(uint32_t pos)
 		{
 			readChunkIndex = pos / N;
+			updateChunks();
 			readPtr = pos % N;
 		}
 
-		void DumpToDisk()
+		void DumpToDisk(uint32_t num)
 		{
-			std::ofstream file("tape.bin");
+			std::stringstream ss;
+			ss << num;
+			std::string str;
+			ss >> str;
+			std::ofstream file(serializedFileName + "_" + str + ".bin", std::ios::binary | std::ios::out);
+			std::vector<uint8_t> &ch = chunks[num].chunk;
+			file.write((char *)ch.data(), chunks[num].size);
+			file.close();
+			if (callbackActive)
+			{
+				std::string filename = serializedFileName + "_" + str + ".bin";
+				_storeData(filename, chunks[num].size);
+			}
+		}
+
+		void LoadFromDisk(uint32_t num)
+		{
+			uint64_t contador = 0;
+			std::cout << "Loading " + BinPaths[num] << std::endl;
+			std::ifstream bin_file(BinPaths[num], std::ios::binary | std::ios::out);
+			if (bin_file.good())
+			{
+				/*Read Binary data using streambuffer iterators.*/
+				std::vector<uint8_t> v_buf((std::istreambuf_iterator<char>(bin_file)), (std::istreambuf_iterator<char>()));
+				for (int i = 0; i < v_buf.size(); i++)
+				{
+					chunks[num].chunk.data()[contador] = v_buf[i];
+					contador++;
+				}
+				bin_file.close();
+			}
+			else
+			{
+				throw std::exception();
+			}
+			chunks[num].loaded = true;
+		}
+
+		void storeMetadata(uint32_t numLines)
+		{
+			std::stringstream ss;
+			ss << chunks.size();
+			std::string str;
+			ss >> str;
+			std::ofstream fout;
+			fout.open(serializedFileName + "_" + str + ".bin");
+			fout << chunks.size() << std::endl;
 			for (int i = 0; i < chunks.size(); i++)
 			{
-				std::array<uint8_t, N> &ch = chunks[i];
-				file.write((char *)ch.data(), sizes[i]);
+				fout << chunks[i].size << std::endl;
 			}
+			fout << numLines << std::endl;
+			fout.close();
+			if (callbackActive)
+			{
+				std::string filename = serializedFileName + "_" + str + ".bin";
+				_storeData(filename, 0);
+			}
+		}
+
+		uint32_t loadMetadata()
+		{
+			chunks.clear();
+			size_t _size;
+			uint32_t idx = 0;
+			std::ifstream meta(BinPaths[BinPaths.size() - 1]);
+			uint32_t numChnks = 0;
+			meta >> numChnks;
+			while (meta >> _size)
+			{
+				chunks.emplace_back();
+				chunks.back().initialize();
+				chunks[idx].loaded = false;
+				chunks[idx].size = _size;
+				chunks[idx].timesLoaded = 1;
+				idx++;
+				if (idx == numChnks)
+				{
+					break;
+				}
+			}
+			uint32_t numLns = 0;
+			meta >> numLns;
+			meta.close();
+			return numLns;
 		}
 
 		uint32_t Copy(uint32_t offset, uint32_t endOffset, uint8_t *dest)
@@ -2025,40 +2218,67 @@ namespace webifc
 			uint32_t chunkEnd = endOffset / N;
 			uint32_t chunkEndPos = endOffset % N;
 
+			if (serialize)
+			{
+				loadChunk(chunkStart);
+				loadChunk(chunkEnd);
+			}
 			if (chunkStart == chunkEnd)
 			{
-				memcpy(dest, &chunks[chunkStart][chunkStartPos], chunkEndPos - chunkStartPos);
-
+				memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], chunkEndPos - chunkStartPos);
+				updateChunks();
+				
 				return chunkEndPos - chunkStartPos;
 			}
 			else
 			{
-				uint32_t startChunkSize = sizes[chunkStart];
+				uint32_t startChunkSize = chunks[chunkStart].size;
 				uint32_t partOfStartchunk = startChunkSize - chunkStartPos;
-
-				memcpy(dest, &chunks[chunkStart][chunkStartPos], partOfStartchunk);
-				memcpy(dest + partOfStartchunk, &chunks[chunkEnd][0], chunkEndPos);
-
+				memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], partOfStartchunk);
+				memcpy(dest + partOfStartchunk, &chunks[chunkEnd].chunk[0], chunkEndPos);
+				updateChunks();
+				
 				return partOfStartchunk + chunkEndPos;
 			}
 		}
 
 		inline void AdvanceRead(unsigned long long size)
 		{
+			updateChunks();
 			readPtr += static_cast<uint32_t>(size);
-			if (readPtr >= sizes[readChunkIndex])
+			if (readPtr >= chunks[readChunkIndex].size)
 			{
-				readChunkIndex++;
+				increaseChunkIndex();
 				readPtr = 0;
 			}
 		}
 
+		inline void increaseChunkIndex()
+		{
+			readChunkIndex++;
+			updateChunks();
+		}
+
+		inline void decreaseChunkIndex()
+		{
+			readChunkIndex--;
+			updateChunks();
+		}
+
+		std::function<std::string(std::string, size_t)> _storeData;
+		bool serialize = false;
+		uint64_t ramLimit = 100000000;
+		std::vector<std::string> BinPaths;
+		std::string serializedFileName;
+		bool callbackActive = false;
+
 	private:
+
 		uint32_t readPtr = 0;
 		uint32_t readChunkIndex = 0;
 		uint32_t writePtr = -1;
-		std::vector<std::array<uint8_t, N>> chunks;
-		std::vector<size_t> sizes;
+		uint64_t loadedMemory = 0;
+		std::vector<chunkUnit<N>> chunks;
 	};
 
 }
