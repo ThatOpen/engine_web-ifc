@@ -64,8 +64,8 @@ int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
 {
     if (!shown_version_header)
     {
-      webifc::logInfo("web-ifc: " + WEB_IFC_VERSION_NUMBER +
-                      " threading: " + (MT_ENABLED ? "enabled" : "disabled"));
+        webifc::logInfo("web-ifc: " + WEB_IFC_VERSION_NUMBER +
+                        " threading: " + (MT_ENABLED ? "enabled" : "disabled"));
         shown_version_header = true;
     }
 
@@ -478,7 +478,7 @@ void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
         }
         else
         {
-          webifc::logError("Error in writeline: unknown object received");
+            webifc::logError("Error in writeline: unknown object received");
         }
 
         index++;

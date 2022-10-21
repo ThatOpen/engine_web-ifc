@@ -57,31 +57,15 @@ namespace webifc
                         	case LogLevel::WARN:  fullMsg = "WARN: "  + msg; break;
                         	case LogLevel::ERROR: fullMsg = "ERROR: " + msg; break;
                         	case LogLevel::OFF:   return;
-                                default:              fullMsg = msg;
                         }
                         std::cout << fullMsg << std::endl;
                 }
         }
 
-        void logDebug(const std::string& msg)
-        {
-          log(msg, LogLevel::DEBUG);
-        }
-
-        void logInfo(const std::string& msg)
-        {
-          log(msg, LogLevel::INFO);
-        }
-
-        void logWarn(const std::string& msg)
-        {
-          log(msg, LogLevel::WARN);
-        }
-
-        void logError(const std::string& msg)
-        {
-          log(msg, LogLevel::ERROR);
-        }
+        void logDebug(const std::string& msg) { log(msg, LogLevel::DEBUG); }
+        void logInfo(const std::string& msg)  { log(msg, LogLevel::INFO);  }
+        void logWarn(const std::string& msg)  { log(msg, LogLevel::WARN);  }
+        void logError(const std::string& msg) { log(msg, LogLevel::ERROR); }
 
         enum class LoaderErrorType
 	{
