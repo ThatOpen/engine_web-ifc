@@ -223,26 +223,17 @@ export class IfcAPI
         {
           for (let inverseProp of inverseData) 
           {
-            if (!inverseProp.set) lineData[inverseProp.name] = null;
-            else lineData[inverseProp.name] = [];
+            if (!inverseProp[3]) lineData[inverseProp[0]] = null;
+            else lineData[inverseProp[0]] = [];
             
-            let lines =  this.GetLineIDsWithType(modelID,inverseProp.type);
-            for (let x = 0; x < lines.size(); x++)
+            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, inverseProp[1], inverseProp[2], inverseProp[3]);
+            if (!inverseProp[3] && inverseIDs.size()>0) 
             {
-              let line = this.GetRawLineData(modelID,lines.get(x));
-              if ( (Array.isArray(line.arguments[inverseProp.pos]) && line.arguments[inverseProp.pos].some((val) => val.value == expressID))
-                    || line.arguments[inverseProp.pos] != null && line.arguments[inverseProp.pos].value == expressID)
-              {
-                if (lineData[inverseProp.name] == null)
-                {
-                  lineData[inverseProp.name] = { type: 5,  value: line.ID };
-                  break;
-                } 
-                else
-                {
-                  lineData[inverseProp.name].push({ type: 5,  value: line.ID });
-                }
-              }
+              lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
+            }
+            else 
+            {
+                for (let x = 0; x < inverseIDs.size(); x++) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
             }
           }
         }

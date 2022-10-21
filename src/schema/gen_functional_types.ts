@@ -358,7 +358,7 @@ elements.forEach((entity) => {
         }
       }
       let type = crc32(prop.type.toUpperCase());
-      buffer.push(`\t\t { name:'${prop.name}',type:${type},pos:${pos},set:${prop.set}},`);
+      buffer.push(`\t\t ['${prop.name}',${type},${pos},${prop.set}],`);
     });
     buffer.push(`];`);
 });
