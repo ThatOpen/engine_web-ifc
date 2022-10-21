@@ -695,9 +695,13 @@ extern "C" bool IsModelOpen(uint32_t modelID)
     return loader->IsOpen();
 }
 
+// TODO(pablo): the level param ought to be LogLevel, but I couldn't
+// get the value passing from typescript correctly.  The levels are
+// kept in sync with src/web-ifc-api.ts
+)
 /**
  * Sets the global log level.
- * @param {number} levelArg Will be clamped between DEBUG and OFF.
+ * @data levelArg Will be clamped between DEBUG and OFF.
  */
 void SetLogLevel(int levelArg)
 {
