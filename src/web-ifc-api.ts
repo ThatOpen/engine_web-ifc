@@ -253,7 +253,7 @@ export class IfcAPI
         
         if (flatten)
         {
-            this.FlattenLine(modelID, lineData);
+            this.FlattenLine(modelID, lineData, inverse);
         }
 
         return lineData;
