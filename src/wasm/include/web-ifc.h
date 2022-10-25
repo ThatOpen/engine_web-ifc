@@ -269,9 +269,38 @@ namespace webifc
 					if (unitType == "LENGTHUNIT" && unitName == "METRE")
 					{
 						double prefix = ConvertPrefix(unitPrefix);
-						_metaData.linearScalingFactor = prefix;
+						_metaData.linearScalingFactor *= prefix;
 					}
 				}
+				if(line.ifcType == ifc2x4::IFCCONVERSIONBASEDUNIT)
+				{
+					MoveToArgumentOffset(line, 1);
+					std::string unitType = GetStringArgument();
+					MoveToArgumentOffset(line, 3);
+					auto unitRefLine = GetRefArgument();
+					auto &unitLine = GetLine(ExpressIDToLineID(unitRefLine));
+					
+					MoveToArgumentOffset(unitLine, 1);
+					auto ratios = GetSetArgument();
+
+					double ratio = GetDoubleArgument(ratios[0]);
+					if(unitType == "LENGTHUNIT")
+					{
+						_metaData.linearScalingFactor *= ratio;
+					}
+					else if (unitType == "AREAUNIT")
+					{
+						_metaData.squaredScalingFactor *= ratio;
+					}
+					else if (unitType == "VOLUMEUNIT")
+					{
+						_metaData.cubicScalingFactor *= ratio;
+					}
+					else if (unitType == "PLANEANGLEUNIT")
+					{
+						_metaData.angularScalingFactor *= ratio;
+					}
+				}		
 			}
 		}
 

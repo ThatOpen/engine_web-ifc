@@ -138,7 +138,7 @@ function getData(reader : FileReader){
 
 function LoadModel(data: Uint8Array) {
     const start = ms();
-    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, USE_FAST_BOOLS: false });
+    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: false, USE_FAST_BOOLS: false });
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);
