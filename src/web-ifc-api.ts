@@ -33,12 +33,24 @@ export const LINE_END = 9;
 
 export interface LoaderSettings
 {
-    COORDINATE_TO_ORIGIN: boolean;
-    USE_FAST_BOOLS: boolean;
-    CIRCLE_SEGMENTS_LOW?: number
-    CIRCLE_SEGMENTS_MEDIUM?: number
-    CIRCLE_SEGMENTS_HIGH?: number
-    BOOL_ABORT_THRESHOLD?: number
+    COORDINATE_TO_ORIGIN?: boolean;
+    USE_FAST_BOOLS?: boolean;
+    CIRCLE_SEGMENTS_LOW?: number;
+    CIRCLE_SEGMENTS_MEDIUM?: number;
+    CIRCLE_SEGMENTS_HIGH?: number;
+    BOOL_ABORT_THRESHOLD?: number;
+}
+
+
+// TODO(pablo): Don't know how to get static refs to the values, so
+// manually keeping in-sync with src/wasm/include/web-ifc.h.
+export enum LogLevel
+{
+    DEBUG = 0,
+    INFO = 1,
+    WARN = 2,
+    ERROR = 3,
+    OFF = 4,
 }
 
 export interface Vector<T> {
@@ -106,9 +118,11 @@ export class IfcAPI
      */
     properties = new Properties(this);
 
+    logLevel = LogLevel.INFO
+
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
-     * 
+     *
      * @param customLocateFileHandler An optional locateFile function that let's
      * you override the path from which the wasm module is loaded.
      */
@@ -120,7 +134,7 @@ export class IfcAPI
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
                 if (path.endsWith(".wasm"))
                 {
-                    if (this.isWasmPathAbsolute) 
+                    if (this.isWasmPathAbsolute)
                     {
                         return this.wasmPath + path;
                     }
@@ -137,11 +151,11 @@ export class IfcAPI
         }
         else
         {
-            console.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
+            this.LogError(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
         }
     }
 
-    /**  
+    /**
      * Opens a model and returns a modelID number
      * @data Buffer containing IFC data (bytes)
      * @data Settings settings for loading the model
@@ -157,7 +171,6 @@ export class IfcAPI
             BOOL_ABORT_THRESHOLD: 10000,
             ...settings
         };
-
         let offsetInSrc = 0;
         let result = this.wasmModule.OpenModel(s, (destPtr: number, destSize: number) => {
             let srcSize = Math.min(data.byteLength - offsetInSrc, destSize);
@@ -174,7 +187,7 @@ export class IfcAPI
         return result;
     }
 
-    /**  
+    /**
      * Creates a new model and returns a modelID number
      * @data Settings settings for generating data the model
     */
@@ -203,7 +216,7 @@ export class IfcAPI
     }
 
 
-    /**  
+    /**
      * Opens a model and returns a modelID number
      * @modelID Model handle retrieved by OpenModel, model must not be closed
      * @data Buffer containing IFC data (bytes)
@@ -213,10 +226,31 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
-    GetLine(modelID: number, expressID: number, flatten: boolean = false)
+    GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        let inverseData = ifc2x4helper.InversePropertyDef[rawLineData.type];
+        
+        if (inverse && inverseData != null) 
+        {
+          for (let inverseProp of inverseData) 
+          {
+            if (!inverseProp[3]) lineData[inverseProp[0]] = null;
+            else lineData[inverseProp[0]] = [];
+            
+            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, inverseProp[1], inverseProp[2], inverseProp[3]);
+            if (!inverseProp[3] && inverseIDs.size()>0) 
+            {
+              lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
+            }
+            else 
+            {
+                for (let x = 0; x < inverseIDs.size(); x++) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
+            }
+          }
+        }
+        
         if (flatten)
         {
             this.FlattenLine(modelID, lineData);
@@ -273,7 +307,7 @@ export class IfcAPI
         if (lineObject.expressID === undefined
             || lineObject.type === undefined
             || lineObject.ToTape === undefined) {
-            console.warn('Line object cannot be serialized:', lineObject)
+            this.LogWarn('Line object cannot be serialized; invalid format:', lineObject)
             return
         }
 
@@ -286,19 +320,19 @@ export class IfcAPI
         this.WriteRawLineData(modelID, rawLineData);
     }
 
-    FlattenLine(modelID: number, line: any)
+    FlattenLine(modelID: number, line: any, inverse: boolean = false)
     {
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
             if (property && property.type === 5)
             {
-                line[propertyName] = this.GetLine(modelID, property.value, true);
+                line[propertyName] = this.GetLine(modelID, property.value, true, inverse);
             }
             else if (Array.isArray(property) && property.length > 0 && property[0].type === 5)
             {
                 for (let i = 0; i < property.length; i++)
                 {
-                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
+                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true, inverse);
                 }
             }
         });
@@ -328,7 +362,7 @@ export class IfcAPI
     {
         if (transformationMatrix.length != 16)
         {
-            console.log(`Bad transformation matrix size: ${transformationMatrix.length}`);
+            this.LogWarn(`Bad transformation matrix size: ${transformationMatrix.length}`);
             return;
         }
         this.wasmModule.SetGeometryTransformation(modelID, transformationMatrix);
@@ -353,7 +387,7 @@ export class IfcAPI
         return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes).slice(0);
     }
 
-    /**  
+    /**
      * Closes a model and frees all related memory
      * @modelID Model handle retrieved by OpenModel, model must not be closed
     */
@@ -373,7 +407,7 @@ export class IfcAPI
         this.wasmModule.StreamAllMeshesWithTypes(modelID, types, meshCallback);
     }
 
-    /**  
+    /**
      * Checks if a specific model ID is open or closed
      * @modelID Model handle retrieved by OpenModel
     */
@@ -382,7 +416,7 @@ export class IfcAPI
         return this.wasmModule.IsModelOpen(modelID);
     }
 
-    /**  
+    /**
      * Load all geometry in a model
      * @modelID Model handle retrieved by OpenModel
     */
@@ -391,7 +425,7 @@ export class IfcAPI
         return this.wasmModule.LoadAllGeometry(modelID);
     }
 
-    /**  
+    /**
      * Load geometry for a single element
      * @modelID Model handle retrieved by OpenModel
     */
@@ -433,5 +467,37 @@ export class IfcAPI
         this.isWasmPathAbsolute = absolute;
     }
 
+    SetLogLevel(level: LogLevel): void
+    {
+        this.logLevel = level;
+        this.wasmModule.SetLogLevel(level);
+    }
 
+    LogDebug(...msg: string[]): void
+    {
+        if (this.logLevel >= LogLevel.DEBUG) {
+            console.log('DEBUG:', ...msg);
+        }
+    }
+
+    LogInfo(...msg: string[]): void
+    {
+        if (this.logLevel >= LogLevel.INFO) {
+            console.log('INFO:', ...msg);
+        }
+    }
+
+    LogWarn(...msg: string[]): void
+    {
+        if (this.logLevel >= LogLevel.WARN) {
+            console.warn('WARN:', ...msg);
+        }
+    }
+
+    LogError(...msg: string[]): void
+    {
+        if (this.logLevel >= LogLevel.ERROR) {
+            console.error('ERROR:', ...msg);
+        }
+    }
 }

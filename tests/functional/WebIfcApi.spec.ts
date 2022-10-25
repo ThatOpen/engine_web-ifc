@@ -8,6 +8,7 @@ function Utf8ArrayToStr(array: Uint8Array) {
     var out, i, len, c;
     var char2, char3;
 
+
     out = "";
     len = array.length;
     i = 0;
@@ -76,10 +77,11 @@ let IFCEXTRUDEDAREASOLIDMeshesCount = 97;
 let givenCoordinationMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
 
+
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
-
+    ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
 
@@ -90,11 +92,9 @@ beforeAll(async () => {
 describe('WebIfcApi reading methods', () => {
     test('can retrieve a modelID', () => {
         expect(modelID).toBe(0);
-
     })
     test('can ensure model is open', () => {
         const isOpen: boolean = ifcApi.IsModelOpen(modelID);
-
         expect(isOpen).toBeTruthy();
     })
     test('can return the correct number of line with a given Type', () => {
@@ -478,7 +478,6 @@ afterAll(() => {
     ifcApi.CloseModel(modelID);
     const isOpen: boolean = ifcApi.IsModelOpen(modelID);
     const isOpenEmptyFileModelID: boolean = ifcApi.IsModelOpen(emptyFileModelID);
-
     expect(isOpen).toBeFalsy()
     expect(isOpenEmptyFileModelID).toBeFalsy()
 })
