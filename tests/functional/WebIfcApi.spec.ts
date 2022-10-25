@@ -8,6 +8,7 @@ function Utf8ArrayToStr(array: Uint8Array) {
     var out, i, len, c;
     var char2, char3;
 
+
     out = "";
     len = array.length;
     i = 0;
@@ -79,7 +80,7 @@ let givenCoordinationMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
-
+    ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
 

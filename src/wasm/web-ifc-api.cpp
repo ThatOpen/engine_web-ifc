@@ -64,12 +64,13 @@ int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
 {
     if (!shown_version_header)
     {
-        std::cout << "web-ifc: " << WEB_IFC_VERSION_NUMBER << " threading: " << MT_ENABLED << std::endl;
+        webifc::logInfo("web-ifc: " + WEB_IFC_VERSION_NUMBER +
+                        " threading: " + (MT_ENABLED ? "enabled" : "disabled"));
         shown_version_header = true;
     }
 
     uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
-    
+
     auto loader = std::make_unique<webifc::IfcLoader>(settings);
     loaders.emplace(modelID, std::move(loader));
 
@@ -317,6 +318,52 @@ std::array<double, 16> GetCoordinationMatrix(uint32_t modelID)
     return webifc::FlattenTransformation(geomLoader->GetCoordinationMatrix());
 }
 
+
+std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expressID, uint32_t targetType, uint32_t position, bool singular)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return {};
+    }
+    std::vector<uint32_t> inverseIDs;
+    auto lineIDs = loader->GetLineIDsWithType(targetType);
+    for (auto lineID : lineIDs)
+    {
+      loader->MoveToLineArgument(lineID, position);
+      auto& _tape = loader->GetTape();
+
+      webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+      if (t == webifc::IfcTokenType::REF) 
+      {
+        uint32_t val = _tape.template Read<uint32_t>();
+        if (val == expressID)
+        {
+          inverseIDs.push_back(loader->LineIDToExpressID(lineID));
+          if (singular) return inverseIDs;
+        }
+      }
+      else if (t == webifc::IfcTokenType::SET_BEGIN)
+      {
+          while (!_tape.AtEnd())
+          {
+              webifc::IfcTokenType setValueType = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+              if (setValueType == webifc::IfcTokenType::SET_END) break;
+              if (setValueType == webifc::IfcTokenType::REF) 
+              {
+                uint32_t val = _tape.template Read<uint32_t>();
+                if (val == expressID)
+                {
+                  inverseIDs.push_back(loader->LineIDToExpressID(lineID));
+                  if (singular) return inverseIDs;
+                }
+              }
+          }
+      }
+    }
+    return inverseIDs;
+}
+
 std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
 {
     auto& loader = loaders[modelID];
@@ -361,7 +408,7 @@ void ExportFileAsIFC(uint32_t modelID)
 
     std::string exportData = loader->DumpAsIFC();
     WriteFile("export.ifc", exportData);
-    std::cout << "Exported" << std::endl;
+    webifc::logInfo("Exported to export.ifc");
 }
 
 template<uint32_t N>
@@ -477,7 +524,7 @@ void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
         }
         else
         {
-            std::cout << "Error in writeline: unknown object received" << std::endl;
+            webifc::logError("Error in writeline: unknown object received");
         }
 
         index++;
@@ -693,7 +740,26 @@ extern "C" bool IsModelOpen(uint32_t modelID)
 
     return loader->IsOpen();
 }
-    
+
+// TODO(pablo): the level param ought to be LogLevel, but I couldn't
+// get the value passing from typescript correctly.  The levels are
+// kept in sync with src/web-ifc-api.ts
+
+/**
+ * Sets the global log level.
+ * @data levelArg Will be clamped between DEBUG and OFF.
+ */
+void SetLogLevel(int levelArg)
+{
+    if (levelArg < static_cast<int>(webifc::LogLevel::DEBUG)) {
+        webifc::LOG_LEVEL = webifc::LogLevel::DEBUG;
+    } else if (levelArg > static_cast<int>(webifc::LogLevel::OFF)) {
+        webifc::LOG_LEVEL = webifc::LogLevel::OFF;
+    } else {
+        webifc::LOG_LEVEL = static_cast<webifc::LogLevel>(levelArg);
+    }
+}
+
 EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::class_<webifc::IfcGeometry>("IfcGeometry")
@@ -747,6 +813,14 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("geometryExpressID", &webifc::IfcPlacedGeometry::geometryExpressID)
         ;
 
+    emscripten::enum_<webifc::LogLevel>("LogLevel")
+        .value("DEBUG", webifc::LogLevel::DEBUG)
+        .value("INFO", webifc::LogLevel::INFO)
+        .value("WARN", webifc::LogLevel::WARN)
+        .value("ERROR", webifc::LogLevel::ERROR)
+        .value("OFF", webifc::LogLevel::OFF)
+        ;
+
     emscripten::enum_<webifc::LoaderErrorType>("LoaderErrorType")
         .value("BOOL_ERROR", webifc::LoaderErrorType::BOOL_ERROR)
         .value("PARSING", webifc::LoaderErrorType::PARSING)
@@ -789,6 +863,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
+    emscripten::function("GetInversePropertyForItem", &GetInversePropertyForItem);
     emscripten::function("GetAllLines", &GetAllLines);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
+    emscripten::function("SetLogLevel", &SetLogLevel);
 }

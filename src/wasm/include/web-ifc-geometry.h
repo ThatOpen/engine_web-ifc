@@ -677,7 +677,7 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 1);
 					auto type = _loader.GetStringArgument();
 
-					if (type != "Body")
+					if (type != "Body" && type != "Facetation")
 					{
 						return mesh;
 					}
