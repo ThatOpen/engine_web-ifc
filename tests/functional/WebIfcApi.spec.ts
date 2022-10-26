@@ -77,13 +77,13 @@ let IFCEXTRUDEDAREASOLIDMeshesCount = 97;
 let givenCoordinationMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
 
+
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
-    ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
+
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
-
     modelID = ifcApi.OpenModel(exampleIFCData);
     emptyFileModelID = ifcApi.CreateModel();
 })
@@ -92,10 +92,10 @@ describe('WebIfcApi reading methods', () => {
     test('can retrieve a modelID', () => {
         expect(modelID).toBe(0);
 
+
     })
     test('can ensure model is open', () => {
-        const isOpen: boolean = ifcApi.IsModelOpen(modelID);
-
+        const isOpen : boolean = ifcApi.IsModelOpen(modelId);
         expect(isOpen).toBeTruthy();
     })
     test('can return the correct number of line with a given Type', () => {
@@ -473,6 +473,7 @@ describe('some use cases', () => {
     });
     
 })
+
 
 afterAll(() => {
 
