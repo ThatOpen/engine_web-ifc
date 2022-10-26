@@ -150,7 +150,7 @@ export class IfcAPI
     {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: false,
+            USE_FAST_BOOLS: true, //TODO: This needs to be fixed in the future to rely on elalish/manifold
             CIRCLE_SEGMENTS_LOW: 5,
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
@@ -182,7 +182,7 @@ export class IfcAPI
     {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: false,
+            USE_FAST_BOOLS: true, //TODO: This needs to be fixed in the future to rely on elalish/manifold
             CIRCLE_SEGMENTS_LOW: 5,
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
@@ -213,31 +213,10 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
-    GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
+    GetLine(modelID: number, expressID: number, flatten: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
-        let inverseData = ifc2x4helper.InversePropertyDef[rawLineData.type];
-        
-        if (inverse && inverseData != null) 
-        {
-          for (let inverseProp of inverseData) 
-          {
-            if (!inverseProp[3]) lineData[inverseProp[0]] = null;
-            else lineData[inverseProp[0]] = [];
-            
-            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, inverseProp[1], inverseProp[2], inverseProp[3]);
-            if (!inverseProp[3] && inverseIDs.size()>0) 
-            {
-              lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
-            }
-            else 
-            {
-                for (let x = 0; x < inverseIDs.size(); x++) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
-            }
-          }
-        }
-        
         if (flatten)
         {
             this.FlattenLine(modelID, lineData, inverse);
@@ -307,19 +286,19 @@ export class IfcAPI
         this.WriteRawLineData(modelID, rawLineData);
     }
 
-    FlattenLine(modelID: number, line: any, inverse: boolean = false)
+    FlattenLine(modelID: number, line: any)
     {
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
             if (property && property.type === 5)
             {
-                line[propertyName] = this.GetLine(modelID, property.value, true, inverse);
+                line[propertyName] = this.GetLine(modelID, property.value, true);
             }
             else if (Array.isArray(property) && property.length > 0 && property[0].type === 5)
             {
                 for (let i = 0; i < property.length; i++)
                 {
-                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true, inverse);
+                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
                 }
             }
         });
@@ -419,6 +398,16 @@ export class IfcAPI
     GetFlatMesh(modelID: number, expressID: number): FlatMesh
     {
         return this.wasmModule.GetFlatMesh(modelID, expressID);
+    }
+
+    /**
+         * Returns the maximum ExpressID value in the IFC file, ex.- #9999999
+         * @param modelID Model handle retrieved by OpenModel
+         * @returns Express numerical value
+         */
+    GetMaxExpressID(modelID: number)
+    {
+        return this.wasmModule.GetMaxExpressID(modelID);
     }
 
     /**

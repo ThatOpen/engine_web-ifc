@@ -65,8 +65,8 @@ export class Properties {
         return IfcTypesMap[type];
     }
 
-    async getItemProperties(modelID: number, id: number, recursive = false, inverse = false) {
-        return this.api.GetLine(modelID, id, recursive, inverse);
+    async getItemProperties(modelID: number, id: number, recursive = false) {
+        return this.api.GetLine(modelID, id, recursive);
     }
 
     async getPropertySets(modelID: number, elementID: number, recursive = false) {

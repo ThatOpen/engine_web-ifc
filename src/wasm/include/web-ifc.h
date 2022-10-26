@@ -27,7 +27,7 @@ namespace webifc
 	struct LoaderSettings
 	{
 		bool COORDINATE_TO_ORIGIN = false;
-		bool USE_FAST_BOOLS = false;
+		bool USE_FAST_BOOLS = true; //TODO: This needs to be fixed in the future to rely on elalish/manifold
 		bool DUMP_CSG_MESHES = false;
 		int CIRCLE_SEGMENTS_LOW = 5;
 		int CIRCLE_SEGMENTS_MEDIUM = 8;
@@ -269,9 +269,38 @@ namespace webifc
 					if (unitType == "LENGTHUNIT" && unitName == "METRE")
 					{
 						double prefix = ConvertPrefix(unitPrefix);
-						_metaData.linearScalingFactor = prefix;
+						_metaData.linearScalingFactor *= prefix;
 					}
 				}
+				if(line.ifcType == ifc2x4::IFCCONVERSIONBASEDUNIT)
+				{
+					MoveToArgumentOffset(line, 1);
+					std::string unitType = GetStringArgument();
+					MoveToArgumentOffset(line, 3);
+					auto unitRefLine = GetRefArgument();
+					auto &unitLine = GetLine(ExpressIDToLineID(unitRefLine));
+					
+					MoveToArgumentOffset(unitLine, 1);
+					auto ratios = GetSetArgument();
+
+					double ratio = GetDoubleArgument(ratios[0]);
+					if(unitType == "LENGTHUNIT")
+					{
+						_metaData.linearScalingFactor *= ratio;
+					}
+					else if (unitType == "AREAUNIT")
+					{
+						_metaData.squaredScalingFactor *= ratio;
+					}
+					else if (unitType == "VOLUMEUNIT")
+					{
+						_metaData.cubicScalingFactor *= ratio;
+					}
+					else if (unitType == "PLANEANGLEUNIT")
+					{
+						_metaData.angularScalingFactor *= ratio;
+					}
+				}		
 			}
 		}
 
@@ -408,6 +437,11 @@ namespace webifc
 			return _metaData.ifcTypeToLineID[type];
 		}
 
+		uint32_t GetMaxExpressId()
+		{
+			return _metaData.expressIDToLine.size() - 1;
+		}
+
 		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t *dest)
 		{
 			uint32_t startOffset = _metaData.lines[_metaData.expressIDToLine[expressID]].tapeOffset;
@@ -424,11 +458,6 @@ namespace webifc
 		uint32_t ExpressIDToLineID(uint32_t expressID)
 		{
 			return _metaData.expressIDToLine[expressID];
-		}
-		
-		uint32_t LineIDToExpressID(uint32_t lineID)
-		{
-			return _metaData.lines[lineID].expressID;
 		}
 
 		IfcLine &GetLine(uint32_t lineID)
