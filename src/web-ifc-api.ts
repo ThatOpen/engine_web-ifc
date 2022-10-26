@@ -313,7 +313,6 @@ export class IfcAPI
 
     FlattenLine(modelID: number, line: any)
     {
-        //console.log("get line:"+line.ID);
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
             if (property && property.type === 5)
