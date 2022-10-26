@@ -220,7 +220,7 @@ export class IfcAPI
         
         if (flatten)
         {
-            this.FlattenLine(modelID, lineData, inverse);
+            this.FlattenLine(modelID, lineData);
         }
         
         let inverseData = ifc2x4helper.InversePropertyDef[rawLineData.type];
