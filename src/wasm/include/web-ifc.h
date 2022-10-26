@@ -454,11 +454,6 @@ namespace webifc
 		{
 			return _metaData.expressIDToLine[expressID];
 		}
-		
-		uint32_t LineIDToExpressID(uint32_t lineID)
-		{
-			return _metaData.lines[lineID].expressID;
-		}
 
 		IfcLine &GetLine(uint32_t lineID)
 		{

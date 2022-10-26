@@ -9,31 +9,6 @@ let ifc4x2 = fs.readFileSync("./IFC4x2.exp").toString();
 
 console.log("Read def file");
 
-function makeCRCTable(){
-    var c;
-    var crcTable = [];
-    for(var n =0; n < 256; n++){
-        c = n;
-        for(var k =0; k < 8; k++){
-            c = ((c&1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
-        }
-        crcTable[n] = c;
-    }
-    return crcTable;
-}
-
-let crcTable = makeCRCTable();
-
-function crc32(str) {
-    var crc = 0 ^ (-1);
-
-    for (var i = 0; i < str.length; i++ ) {
-        crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF];
-    }
-
-    return (crc ^ (-1)) >>> 0;
-};
-
 function expTypeToTSType(expTypeName)
 {
     let tsType = expTypeName;
@@ -78,37 +53,12 @@ interface Prop {
     set: boolean;
 }
 
-interface InverseProp {
-    name: string;
-    type: string;
-    set: boolean;
-    for: string;
-}
-
 interface Entity {
     name: string;
     parent: null | string;
     props: Prop[];
-    inverseProps: InverseProp[],
     derivedProps: Prop[] | null;
-    derivedInverseProps: InverseProp[] | null,
     isIfcProduct: boolean;
-}
-
-function ParseInverse(line,entity) 
-{
-    let split = line.split(" ");
-    let name = split[0].replace("INVERSE","").trim();
-    let set = split.indexOf("SET") != -1 || split.indexOf("LIST") != -1;
-    let forVal = split[split.length - 1].replace(";", "");
-    let type = split[split.length - 3];
-    let tsType = expTypeToTSType(type);
-    entity.inverseProps.push({
-      name,
-      type: tsType,
-      set,
-      for: forVal
-    });  
 }
 
 function ParseElements(data)
@@ -120,7 +70,6 @@ function ParseElements(data)
     let type: Type | false = false;
     let entity: Entity | false = false;
     let readProps = false;
-    let readInverse = false;
 
     for (let i = 0; i < lines.length; i++)
     {
@@ -135,12 +84,9 @@ function ParseElements(data)
                 parent: null,
                 props: [],
                 derivedProps: [],
-                inverseProps: [],
-                derivedInverseProps: [],
                 isIfcProduct: false
             };
             readProps = true;
-            readInverse = false;
 
             let subIndex = split.indexOf("SUBTYPE");
             if (subIndex != -1)
@@ -153,34 +99,26 @@ function ParseElements(data)
         {
             if (entity) entities.push(entity);
             readProps = false;
-            readInverse = false;
         }
         else if (line.indexOf("WHERE") == 0)
         {
             readProps = false;
-            readInverse = false;
         }
         else if (line.indexOf("INVERSE") == 0)
         {
             readProps = false;
-            readInverse = true;
-            // there is one inverse property on this line
-            ParseInverse(line,entity);
         }
         else if (line.indexOf("DERIVE") == 0)
         {
             readProps = false;
-            readInverse = false;
         }
         else if (line.indexOf("UNIQUE") == 0)
         {
             readProps = false;
-            readInverse = false;
         }
         else if (line.indexOf("TYPE") == 0)
         {
             readProps = false;
-            readInverse = false;
 
             let split = line.split(" ").map((s) => s.trim());
             let name = split[1];
@@ -234,10 +172,6 @@ function ParseElements(data)
             }
             type = false;
         }
-        else if (entity && readInverse && hasColon) 
-        {
-          ParseInverse(line,entity);
-        }
         else if (entity && readProps && hasColon)
         {
             // property
@@ -280,7 +214,6 @@ function WalkParents(entity: Entity, parent: Entity)
         return;
     }
     entity.derivedProps = [...parent.props, ...entity.derivedProps];
-    entity.derivedInverseProps = [...parent.inverseProps,...entity.derivedInverseProps];
     if (parent.name === "IfcProduct")
     {
         entity.isIfcProduct = true;
@@ -335,33 +268,7 @@ elements.forEach((entity) => {
     buffer.push(`};`);
 });
 
-buffer.push(`export let InversePropertyDef = {};`);
-elements.forEach((entity) => {
-    if (entity.derivedInverseProps.length == 0) return;
-    buffer.push(`InversePropertyDef[ifc2x4.${entity.name.toUpperCase()}] = [`);
-    entity.derivedInverseProps.forEach((prop) => {
-      let pos = 0;
-      //find the target element
-      for (targetEntity of elements) 
-      {
-        if (targetEntity.name == prop.type) 
-        {
-          for (let i=0; i < targetEntity.derivedProps.length;i++)
-          {
-              if (targetEntity.derivedProps[i].name == prop.for) 
-              {
-                pos = i;
-                break;
-              }
-          }
-          break;
-        }
-      }
-      let type = crc32(prop.type.toUpperCase());
-      buffer.push(`\t\t ['${prop.name}',${type},${pos},${prop.set}],`);
-    });
-    buffer.push(`];`);
-});
+
 
 buffer.push(`export class Handle<T> {`);
 buffer.push(`\tvalue: number;`);
@@ -457,7 +364,7 @@ elements.forEach((entity) => {
         let propType = `${(isType || prop.primitive) ? prop.type : "(Handle<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${prop.optional ? "| null" : ""}`;
         params.push({ name: prop.name, type: propType, prop, isType });
     });
-    
+
     buffer.push(`export class ${entity.name} {`);
     buffer.push(`\tconstructor(expressID: number, type: number, ${params.map((p) => `${p.name}: ${p.type}`).join(", ")})`)
     buffer.push(`\t{`)
@@ -472,11 +379,6 @@ elements.forEach((entity) => {
     params.forEach((param) => {
         buffer.push(`\t${param.name}: ${param.type};`)
     })
-    entity.derivedInverseProps.forEach((prop) => {
-        let type = `${"(Handle<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
-        buffer.push(`\t${prop.name}: ${type};`);
-    });
-    
     buffer.push(`\tstatic FromTape(expressID: number, type: number, tape: any[]): ${entity.name}`)
     buffer.push(`\t{`);
     buffer.push(`\t\tlet ptr = 0;`);
@@ -642,75 +544,102 @@ fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
 //////////// CRC32 GEN //////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
+{
+    let ifcElements = elements.filter((e) => e.isIfcProduct);
 
-let ifcElements = elements.filter((e) => e.isIfcProduct);
+    var makeCRCTable = function(){
+        var c;
+        var crcTable = [];
+        for(var n =0; n < 256; n++){
+            c = n;
+            for(var k =0; k < 8; k++){
+                c = ((c&1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+            }
+            crcTable[n] = c;
+        }
+        return crcTable;
+    }
 
-let tsHeader = [];
-let cppHeader = [];
-cppHeader.push("#pragma once");
-cppHeader.push("");
-cppHeader.push("#include <vector>");
-cppHeader.push("");
-cppHeader.push("// unique list of crc32 codes for ifc classes");
-cppHeader.push("");
-cppHeader.push("namespace ifc2x4 {");
+    let crcTable = false;
 
-elements.forEach(element => {
-    let name = element.name.toUpperCase();
-    let code = crc32(name);
-    cppHeader.push(`\tstatic const unsigned int ${name} = ${code};`);
-    tsHeader.push(`export const ${name} = ${code};`);
-});
+    var crc32 = function(str) {
+        var crcTable = crcTable || (crcTable = makeCRCTable());
+        var crc = 0 ^ (-1);
 
-cppHeader.push("\tbool IsIfcElement(unsigned int ifcCode) {");
-cppHeader.push("\t\tswitch(ifcCode) {");
+        for (var i = 0; i < str.length; i++ ) {
+            crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF];
+        }
 
-ifcElements.forEach(element => {
-    let name = element.name.toUpperCase();
-    let code = crc32(name);
-    cppHeader.push(`\t\t\tcase ifc2x4::${name}: return true;`);
-});
+        return (crc ^ (-1)) >>> 0;
+    };
 
-cppHeader.push(`\t\t\tdefault: return false;`);
+    let tsHeader = [];
+    let cppHeader = [];
+    cppHeader.push("#pragma once");
+    cppHeader.push("");
+    cppHeader.push("#include <vector>");
+    cppHeader.push("");
+    cppHeader.push("// unique list of crc32 codes for ifc classes");
+    cppHeader.push("");
+    cppHeader.push("namespace ifc2x4 {");
 
-cppHeader.push("\t\t}");
-cppHeader.push("\t}");
+    elements.forEach(element => {
+        let name = element.name.toUpperCase();
+        let code = crc32(name);
+        cppHeader.push(`\tstatic const unsigned int ${name} = ${code};`);
+        tsHeader.push(`export const ${name} = ${code};`);
+    });
 
-cppHeader.push("\tstd::vector<unsigned int> IfcElements { ");
-cppHeader.push(ifcElements.map(element => {
-    let name = element.name.toUpperCase();
-    let code = crc32(name);
-    return `\t\t${name}`;
-}).join(",\n"));
-cppHeader.push("\t};");
+    cppHeader.push("\tbool IsIfcElement(unsigned int ifcCode) {");
+    cppHeader.push("\t\tswitch(ifcCode) {");
 
-cppHeader.push("};");
+    ifcElements.forEach(element => {
+        let name = element.name.toUpperCase();
+        let code = crc32(name);
+        cppHeader.push(`\t\t\tcase ifc2x4::${name}: return true;`);
+    });
 
-cppHeader.push("\tconst char* GetReadableNameFromTypeCode(unsigned int ifcCode) {");
-cppHeader.push("\t\tswitch(ifcCode) {");
+    cppHeader.push(`\t\t\tdefault: return false;`);
 
-elements.forEach(element => {
-    let name = element.name.toUpperCase();
-    let code = crc32(name);
-    cppHeader.push(`\t\t\tcase ifc2x4::${name}: return "${name}";`);
-});
+    cppHeader.push("\t\t}");
+    cppHeader.push("\t}");
 
-cppHeader.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
+    cppHeader.push("\tstd::vector<unsigned int> IfcElements { ");
+    cppHeader.push(ifcElements.map(element => {
+        let name = element.name.toUpperCase();
+        let code = crc32(name);
+        return `\t\t${name}`;
+    }).join(",\n"));
+    cppHeader.push("\t};");
 
-cppHeader.push("\t\t}");
-cppHeader.push("\t}");
+    cppHeader.push("};");
 
-tsHeader.push("");
-tsHeader.push("export const IfcElements = [");
-tsHeader.push(ifcElements.map(element => {
-    let name = element.name.toUpperCase();
-    let code = crc32(name);
-    return `\t${name}`;
-}).join(",\n"));
-tsHeader.push("];");
+    cppHeader.push("\tconst char* GetReadableNameFromTypeCode(unsigned int ifcCode) {");
+    cppHeader.push("\t\tswitch(ifcCode) {");
+
+    elements.forEach(element => {
+        let name = element.name.toUpperCase();
+        let code = crc32(name);
+        cppHeader.push(`\t\t\tcase ifc2x4::${name}: return "${name}";`);
+    });
+
+    cppHeader.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
+
+    cppHeader.push("\t\t}");
+    cppHeader.push("\t}");
+
+    tsHeader.push("");
+    tsHeader.push("export const IfcElements = [");
+    tsHeader.push(ifcElements.map(element => {
+        let name = element.name.toUpperCase();
+        let code = crc32(name);
+        return `\t${name}`;
+    }).join(",\n"));
+    tsHeader.push("];");
 
 
-fs.writeFileSync("../wasm/include/ifc2x4.h", cppHeader.join("\n")); 
-fs.writeFileSync("../ifc2x4.ts", tsHeader.join("\n")); 
+    fs.writeFileSync("../wasm/include/ifc2x4.h", cppHeader.join("\n")); 
+    fs.writeFileSync("../ifc2x4.ts", tsHeader.join("\n")); 
 
-console.log(`Done!`);
+    console.log(`Done!`);
+}
