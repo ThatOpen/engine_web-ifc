@@ -223,7 +223,6 @@ export class IfcAPI
             this.FlattenLine(modelID, lineData, inverse);
         }
         
-        
         let inverseData = ifc2x4helper.InversePropertyDef[rawLineData.type];
         if (inverse && inverseData != null) 
         {
