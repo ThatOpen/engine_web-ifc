@@ -27,7 +27,7 @@ namespace webifc
 	struct LoaderSettings
 	{
 		bool COORDINATE_TO_ORIGIN = false;
-		bool USE_FAST_BOOLS = false;
+		bool USE_FAST_BOOLS = true; //TODO: This needs to be fixed in the future to rely on elalish/manifold
 		bool DUMP_CSG_MESHES = false;
 		int CIRCLE_SEGMENTS_LOW = 5;
 		int CIRCLE_SEGMENTS_MEDIUM = 8;
