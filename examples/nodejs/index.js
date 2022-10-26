@@ -22,7 +22,7 @@ async function LoadFile(filename) {
 
     let start = WebIFC.ms();
 
-    //Types of data
+    //Data types
 
     // enum IfcTokenType : char
     // {
@@ -40,19 +40,19 @@ async function LoadFile(filename) {
 
     console.log(`Modify values`);
 
-    //Edit IfcProduct
+    //IfcProduct edition
     let storeys = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCBUILDINGSTOREY);
     for (let i = 0; i < storeys.size(); i++) {
         numLines++;
         let expressID = storeys.get(i);
         const storey = await ifcapi.properties.getItemProperties(modelID, expressID);
-        storey.Description = { type: 1, value: 'Description' }; //type value is 1 -> STRING
-        storey.Name = { type: 1, value: 'Name' }; //Always use '
+        storey.Description = { type: 1, value: 'Description' }; //Value type is 1 -> STRING
+        storey.Name = { type: 1, value: 'Name' }; //Use always '
         storey.LongName = { type: 1, value: 'Long name' };
         ifcapi.WriteLine(modelID, storey);
     }
 
-    //Edit IfcProperty
+    //IfcProperty edition
     let properties = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCPROPERTYSINGLEVALUE)
     for (let i = 0; i < properties.size(); i++) {
         numLines++;
@@ -66,7 +66,7 @@ async function LoadFile(filename) {
 
     console.log(`Add new properties`);
 
-    //Find last ExpressId
+    //Max ExpressId
     let maxEID = ifcapi.GetMaxExpressID(modelID);
 
     //Find ownerHistory
@@ -77,12 +77,12 @@ async function LoadFile(filename) {
     let property = new IfcPropertySingleValue(
         maxEID,
         IFCPROPERTYSINGLEVALUE,
-        { type: 1, value: 'Classification' }, //value content always contained in ''
+        { type: 1, value: 'Classification' },
         null,
         {
-            type: 2, //Property content type is 2 -> LABEL
+            type: 2, //Property content is type 2 -> LABEL
             label: 'IFCLABEL',
-            valueType: 1, //Value type is 1 -> STRING
+            valueType: 1, //Value is type 1 -> STRING
             value: 'New value'
         },
         null);
@@ -96,7 +96,7 @@ async function LoadFile(filename) {
         maxEID,
         IFCPROPERTYSET,
         { type: 1, value: '350fFD9fjAtPfVihcqa4Yn' },
-        { type: 5, value: owHs.get(0) }, //Reference type is 5 -> REF
+        { type: 5, value: owHs.get(0) }, //Reference is type 5 -> REF
         { type: 1, value: 'Classification' },
         { type: 1, value: 'Description' },
         [{ type: 5, value: propID }]);
