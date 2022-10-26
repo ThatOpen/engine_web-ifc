@@ -213,15 +213,41 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
-    GetLine(modelID: number, expressID: number, flatten: boolean = false)
+    GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        
         if (flatten)
         {
             this.FlattenLine(modelID, lineData, inverse);
         }
-
+        
+        
+        let inverseData = ifc2x4helper.InversePropertyDef[rawLineData.type];
+        if (inverse && inverseData != null) 
+        {
+          for (let inverseProp of inverseData) 
+          {
+            if (!inverseProp[3]) lineData[inverseProp[0]] = null;
+            else lineData[inverseProp[0]] = [];
+            
+            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, inverseProp[1], inverseProp[2], inverseProp[3]);
+            if (!inverseProp[3] && inverseIDs.size()>0) 
+            {
+              if (!flatten) lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
+              else lineData[inverseProp[0]] = this.GetLine(modelID, inverseIDs.get(0));
+            }
+            else 
+            {
+                for (let x = 0; x < inverseIDs.size(); x++) {
+                  if (!flatten) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
+                  else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(0)));
+                }
+            }
+          }
+        }
+        
         return lineData;
     }
 
@@ -288,6 +314,7 @@ export class IfcAPI
 
     FlattenLine(modelID: number, line: any)
     {
+        //console.log("get line:"+line.ID);
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
             if (property && property.type === 5)
