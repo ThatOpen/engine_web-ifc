@@ -317,6 +317,52 @@ std::array<double, 16> GetCoordinationMatrix(uint32_t modelID)
     return webifc::FlattenTransformation(geomLoader->GetCoordinationMatrix());
 }
 
+
+std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expressID, uint32_t targetType, uint32_t position, bool singular)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return {};
+    }
+    std::vector<uint32_t> inverseIDs;
+    auto lineIDs = loader->GetLineIDsWithType(targetType);
+    for (auto lineID : lineIDs)
+    {
+      loader->MoveToLineArgument(lineID, position);
+      auto& _tape = loader->GetTape();
+
+      webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+      if (t == webifc::IfcTokenType::REF) 
+      {
+        uint32_t val = _tape.template Read<uint32_t>();
+        if (val == expressID)
+        {
+          inverseIDs.push_back(loader->LineIDToExpressID(lineID));
+          if (singular) return inverseIDs;
+        }
+      }
+      else if (t == webifc::IfcTokenType::SET_BEGIN)
+      {
+          while (!_tape.AtEnd())
+          {
+              webifc::IfcTokenType setValueType = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+              if (setValueType == webifc::IfcTokenType::SET_END) break;
+              if (setValueType == webifc::IfcTokenType::REF) 
+              {
+                uint32_t val = _tape.template Read<uint32_t>();
+                if (val == expressID)
+                {
+                  inverseIDs.push_back(loader->LineIDToExpressID(lineID));
+                  if (singular) return inverseIDs;
+                }
+              }
+          }
+      }
+    }
+    return inverseIDs;
+}
+
 std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
 {
     auto& loader = loaders[modelID];
@@ -796,6 +842,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
+    emscripten::function("GetInversePropertyForItem", &GetInversePropertyForItem);
     emscripten::function("GetAllLines", &GetAllLines);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
 }
