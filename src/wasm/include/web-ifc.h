@@ -455,6 +455,15 @@ namespace webifc
 			return _metaData.expressIDToLine.capacity() > expressID;
 		}
 
+		bool ValidateExpressID(uint32_t expressID)
+		{
+			std::vector<IfcLine>& lines = _metaData.lines;
+
+			auto check = find_if(lines.begin(), lines.end(), [&expressID](const IfcLine& obj){return obj.expressID == expressID;});
+
+			return (check != lines.end());
+		}
+
 		uint32_t ExpressIDToLineID(uint32_t expressID)
 		{
 			return _metaData.expressIDToLine[expressID];
