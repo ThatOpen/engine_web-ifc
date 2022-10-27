@@ -380,6 +380,17 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
     return expressIDs;
 }
 
+bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return {};
+    }
+
+    return loader->ValidateExpressID(expressId);
+}
+
 std::vector<uint32_t> GetAllLines(uint32_t modelID)
 {
     auto& loader = loaders[modelID];
@@ -841,6 +852,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetLine", &GetLine);
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
+    emscripten::function("ValidateExpressID", &ValidateExpressID);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
     emscripten::function("GetInversePropertyForItem", &GetInversePropertyForItem);
     emscripten::function("GetAllLines", &GetAllLines);

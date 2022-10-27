@@ -215,6 +215,11 @@ export class IfcAPI
 
     GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
     {
+        let expressCheck = this.wasmModule.ValidateExpressID(modelID, expressID);  
+        if(!expressCheck){
+           return; 
+        }
+
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
         
