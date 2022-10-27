@@ -44,6 +44,7 @@
     "copy-to-dist": "cpy README.md dist && cpy package.json dist && cpy src/ifc2x4.ts dist",
     "build-viewer": "npm run bundle-viewer && npm run copy-wasm-viewer",
     "bundle-viewer": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./examples/viewer/web-ifc-viewer.js",
+    "bundle-ifc2x4": "esbuild ./src/ifc2x4.ts --bundle --platform=node --outfile=./src/ifc2x4.js",
     "copy-wasm-viewer": "cpy dist/*.wasm examples/viewer/wasm && cpy dist/web-ifc-mt.worker.js examples/viewer",
     "serve-viewer": "node examples/viewer/file_server.js",
     "set-version": "node src/setversion.js",

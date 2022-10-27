@@ -2449,6 +2449,15 @@ FromRawLineData[ifc2x4.IFCZSHAPEPROFILEDEF] = (d) => {
 FromRawLineData[ifc2x4.IFCZONE] = (d) => {
 	return IfcZone.FromTape(d.ID, d.type, d.arguments);
 };
+FromRawLineData[ifc2x4.FILE_DESCRIPTION] = (d) => {
+	return FILE_DESCRIPTION.FromTape(d.ID, d.type, d.arguments);
+};
+FromRawLineData[ifc2x4.FILE_NAME] = (d) => {
+	return FILE_NAME.FromTape(d.ID, d.type, d.arguments);
+};
+FromRawLineData[ifc2x4.FILE_SCHEMA] = (d) => {
+	return FILE_SCHEMA.FromTape(d.ID, d.type, d.arguments);
+};
 export let InversePropertyDef = {};
 InversePropertyDef[ifc2x4.IFCACTIONREQUEST] = [
 		 ['HasAssignments',3939117080,4,true],
@@ -58619,6 +58628,63 @@ export class IfcZone {
 		args.push(this.Description);;
 		args.push(this.ObjectType);;
 		args.push(this.LongName);;
+		return args;
+	}
+};
+export class FILE_DESCRIPTION {
+	constructor(expressID: number, type: number, )
+	{
+		this.expressID = expressID;
+		this.type = type;
+	}
+	expressID: number;
+	type: number;
+	static FromTape(expressID: number, type: number, tape: any[]): FILE_DESCRIPTION
+	{
+		let ptr = 0;
+		return new FILE_DESCRIPTION(expressID, type, );
+	}
+	ToTape(): any[]
+	{
+		let args: any[] = [];
+		return args;
+	}
+};
+export class FILE_NAME {
+	constructor(expressID: number, type: number, )
+	{
+		this.expressID = expressID;
+		this.type = type;
+	}
+	expressID: number;
+	type: number;
+	static FromTape(expressID: number, type: number, tape: any[]): FILE_NAME
+	{
+		let ptr = 0;
+		return new FILE_NAME(expressID, type, );
+	}
+	ToTape(): any[]
+	{
+		let args: any[] = [];
+		return args;
+	}
+};
+export class FILE_SCHEMA {
+	constructor(expressID: number, type: number, )
+	{
+		this.expressID = expressID;
+		this.type = type;
+	}
+	expressID: number;
+	type: number;
+	static FromTape(expressID: number, type: number, tape: any[]): FILE_SCHEMA
+	{
+		let ptr = 0;
+		return new FILE_SCHEMA(expressID, type, );
+	}
+	ToTape(): any[]
+	{
+		let args: any[] = [];
 		return args;
 	}
 };
