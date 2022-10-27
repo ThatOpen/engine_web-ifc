@@ -213,6 +213,11 @@ export class IfcAPI
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
+    GetHeaderLine(modelID: number, headerType: number)
+    {
+        return this.wasmModule.GetHeaderLine(modelID, headerType);
+    }
+    
     GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
     {
         let rawLineData = this.GetRawLineData(modelID, expressID);

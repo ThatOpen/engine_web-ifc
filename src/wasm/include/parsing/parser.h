@@ -78,6 +78,20 @@ namespace webifc
 
 						_metaData.lines.push_back(std::move(l));
 					}
+					else if (currentIfcType != 0)
+					{
+						if(currentIfcType == ifc2x4::FILE_DESCRIPTION || currentIfcType == ifc2x4::FILE_NAME||currentIfcType == ifc2x4::FILE_SCHEMA )
+						{
+							IfcHeaderLine l;
+							l.ifcType = currentIfcType;
+							l.lineIndex = static_cast<uint32_t>(_metaData.headerLines.size());
+							l.tapeOffset = currentTapeOffset;
+							l.tapeEnd = _tape.GetReadOffset();
+
+							_metaData.ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
+							_metaData.headerLines.push_back(std::move(l));
+						}
+					}
 
 					// reset
 					currentExpressID = 0;

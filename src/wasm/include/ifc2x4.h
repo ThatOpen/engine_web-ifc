@@ -5,6 +5,9 @@
 // unique list of crc32 codes for ifc classes
 
 namespace ifc2x4 {
+	static const unsigned int FILE_DESCRIPTION = 599546466;
+	static const unsigned int FILE_NAME = 1390159747;
+	static const unsigned int FILE_SCHEMA = 1109904537;
 	static const unsigned int IFCACTIONREQUEST = 3821786052;
 	static const unsigned int IFCACTOR = 2296667514;
 	static const unsigned int IFCACTORROLE = 3630933823;
@@ -1201,6 +1204,9 @@ namespace ifc2x4 {
 };
 	const char* GetReadableNameFromTypeCode(unsigned int ifcCode) {
 		switch(ifcCode) {
+			case ifc2x4::FILE_DESCRIPTION: return "FILE_DESCRIPTION";
+			case ifc2x4::FILE_NAME: return "FILE_NAME";
+			case ifc2x4::FILE_SCHEMA: return "FILE_SCHEMA";
 			case ifc2x4::IFCACTIONREQUEST: return "IFCACTIONREQUEST";
 			case ifc2x4::IFCACTOR: return "IFCACTOR";
 			case ifc2x4::IFCACTORROLE: return "IFCACTORROLE";

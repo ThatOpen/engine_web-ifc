@@ -17,13 +17,24 @@ namespace webifc
 		uint32_t tapeEnd;
 	};
 
+	struct IfcHeaderLine
+	{
+		uint32_t ifcType;
+		uint32_t lineIndex;
+		uint32_t tapeOffset;
+		uint32_t tapeEnd;
+	};
+
     struct IfcMetaData
     {
 		double linearScalingFactor = 1;
 
 		std::vector<IfcLine> lines;
+		std::vector<IfcHeaderLine> headerLines;
 		std::vector<uint32_t> expressIDToLine;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> ifcTypeToLineID;
+
+		std::unordered_map<uint32_t, std::vector<uint32_t>> ifcTypeToHeaderLineID;
 
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoidRel;
 		std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;

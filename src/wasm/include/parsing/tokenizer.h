@@ -234,7 +234,7 @@ namespace webifc
 				else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
 				{
 					_temp.clear();
-					while ((_ptr.cur >= 'A' && _ptr.cur <= 'Z') || (_ptr.cur >= 'a' && _ptr.cur <= 'z') || (_ptr.cur >= '0' && _ptr.cur <= '9'))
+					while ((_ptr.cur >= 'A' && _ptr.cur <= 'Z') || (_ptr.cur >= 'a' && _ptr.cur <= 'z') || (_ptr.cur >= '0' && _ptr.cur <= '9') || _ptr.cur == '_')
 					{
 						const char c2 = toupper(_ptr.cur);
 						_temp.push_back(c2);
