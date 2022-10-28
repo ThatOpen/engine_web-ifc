@@ -27,7 +27,7 @@ namespace webifc
 	struct LoaderSettings
 	{
 		bool COORDINATE_TO_ORIGIN = false;
-		bool USE_FAST_BOOLS = false;
+		bool USE_FAST_BOOLS = true; //TODO: This needs to be fixed in the future to rely on elalish/manifold
 		bool DUMP_CSG_MESHES = false;
 		int CIRCLE_SEGMENTS_LOW = 5;
 		int CIRCLE_SEGMENTS_MEDIUM = 8;
@@ -194,6 +194,17 @@ namespace webifc
 			ReadLinearScalingFactor();
 		}
 
+		std::vector<IfcHeaderLine> GetHeaderLinesWithType(uint32_t type)
+		{
+			auto &list = _metaData.ifcTypeToHeaderLineID[type];
+			std::vector<IfcHeaderLine> ret(list.size());
+
+			std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
+						   { return _metaData.headerLines[lineID]; });
+
+			return ret;
+		}
+
 		void LoadFile(const std::function<uint32_t(char *, size_t)> &requestData)
 		{
 			Tokenizer<TAPE_SIZE> tokenizer(_tape);
@@ -333,9 +344,38 @@ namespace webifc
 					if (unitType == "LENGTHUNIT" && unitName == "METRE")
 					{
 						double prefix = ConvertPrefix(unitPrefix);
-						_metaData.linearScalingFactor = prefix;
+						_metaData.linearScalingFactor *= prefix;
 					}
 				}
+				if(line.ifcType == ifc2x4::IFCCONVERSIONBASEDUNIT)
+				{
+					MoveToArgumentOffset(line, 1);
+					std::string unitType = GetStringArgument();
+					MoveToArgumentOffset(line, 3);
+					auto unitRefLine = GetRefArgument();
+					auto &unitLine = GetLine(ExpressIDToLineID(unitRefLine));
+					
+					MoveToArgumentOffset(unitLine, 1);
+					auto ratios = GetSetArgument();
+
+					double ratio = GetDoubleArgument(ratios[0]);
+					if(unitType == "LENGTHUNIT")
+					{
+						_metaData.linearScalingFactor *= ratio;
+					}
+					else if (unitType == "AREAUNIT")
+					{
+						_metaData.squaredScalingFactor *= ratio;
+					}
+					else if (unitType == "VOLUMEUNIT")
+					{
+						_metaData.cubicScalingFactor *= ratio;
+					}
+					else if (unitType == "PLANEANGLEUNIT")
+					{
+						_metaData.angularScalingFactor *= ratio;
+					}
+				}		
 			}
 		}
 
@@ -467,6 +507,11 @@ namespace webifc
 			return _metaData.ifcTypeToLineID[type];
 		}
 
+		uint32_t GetMaxExpressId()
+		{
+			return _metaData.expressIDToLine.size() - 1;
+		}
+
 		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t *dest)
 		{
 			uint32_t startOffset = _metaData.lines[_metaData.expressIDToLine[expressID]].tapeOffset;
@@ -480,9 +525,23 @@ namespace webifc
 			return _metaData.expressIDToLine.capacity() > expressID;
 		}
 
+		bool ValidateExpressID(uint32_t expressID)
+		{
+			std::vector<IfcLine>& lines = _metaData.lines;
+
+			auto check = find_if(lines.begin(), lines.end(), [&expressID](const IfcLine& obj){return obj.expressID == expressID;});
+
+			return (check != lines.end());
+		}
+
 		uint32_t ExpressIDToLineID(uint32_t expressID)
 		{
 			return _metaData.expressIDToLine[expressID];
+		}
+		
+		uint32_t LineIDToExpressID(uint32_t lineID)
+		{
+			return _metaData.lines[lineID].expressID;
 		}
 
 		IfcLine &GetLine(uint32_t lineID)
@@ -518,7 +577,17 @@ namespace webifc
 		void MoveToArgumentOffset(IfcLine &line, int argumentIndex)
 		{
 			_tape.MoveTo(line.tapeOffset);
+			ArgumentOffset(argumentIndex);
+		}
 
+		void MoveToHeaderArgumentOffset(IfcHeaderLine &line, int argumentIndex)
+		{
+			_tape.MoveTo(line.tapeOffset);
+			ArgumentOffset(argumentIndex);	
+		}
+
+		void ArgumentOffset(int argumentIndex)
+		{
 			int movedOver = -1;
 			int setDepth = 0;
 			while (true)
@@ -601,6 +670,12 @@ namespace webifc
 			StringView s = _tape.ReadStringView();
 
 			return std::string(s.data, s.len);
+		}
+
+		inline std::string GetStringArgument(uint32_t tapeOffset)
+		{
+			_tape.MoveTo(tapeOffset);
+			return GetStringArgument();
 		}
 
 		inline StringView GetStringViewArgument()

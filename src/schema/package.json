@@ -15,7 +15,7 @@
     }
   },
   "scripts": {
-    "start": "node gen.js",
+    "start": "node gen_functional_types.js",
     "watch": "npm-watch ",
     "gen": "esbuild gen_functional_types.ts --bundle --platform=node --outfile=gen_functional_types.js && node gen_functional_types.js "
   },

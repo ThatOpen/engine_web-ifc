@@ -482,6 +482,52 @@ std::array<double, 16> GetCoordinationMatrix(uint32_t modelID)
     return webifc::FlattenTransformation(geomLoader->GetCoordinationMatrix());
 }
 
+
+std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expressID, uint32_t targetType, uint32_t position, bool singular)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return {};
+    }
+    std::vector<uint32_t> inverseIDs;
+    auto lineIDs = loader->GetLineIDsWithType(targetType);
+    for (auto lineID : lineIDs)
+    {
+      loader->MoveToLineArgument(lineID, position);
+      auto& _tape = loader->GetTape();
+
+      webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+      if (t == webifc::IfcTokenType::REF) 
+      {
+        uint32_t val = _tape.template Read<uint32_t>();
+        if (val == expressID)
+        {
+          inverseIDs.push_back(loader->LineIDToExpressID(lineID));
+          if (singular) return inverseIDs;
+        }
+      }
+      else if (t == webifc::IfcTokenType::SET_BEGIN)
+      {
+          while (!_tape.AtEnd())
+          {
+              webifc::IfcTokenType setValueType = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+              if (setValueType == webifc::IfcTokenType::SET_END) break;
+              if (setValueType == webifc::IfcTokenType::REF) 
+              {
+                uint32_t val = _tape.template Read<uint32_t>();
+                if (val == expressID)
+                {
+                  inverseIDs.push_back(loader->LineIDToExpressID(lineID));
+                  if (singular) return inverseIDs;
+                }
+              }
+          }
+      }
+    }
+    return inverseIDs;
+}
+
 std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
 {
     auto& loader = loaders[modelID];
@@ -497,6 +543,17 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, uint32_t type)
         expressIDs.push_back(loader->GetLine(lineID).expressID);
     }
     return expressIDs;
+}
+
+bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return {};
+    }
+
+    return loader->ValidateExpressID(expressId);
 }
 
 std::vector<uint32_t> GetAllLines(uint32_t modelID)
@@ -717,23 +774,12 @@ emscripten::val ReadValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t)
     }
 }
 
-emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
+emscripten::val& GetArgs(const std::unique_ptr<webifc::IfcLoader>& loader, emscripten::val& arguments)
 {
-    auto& loader = loaders[modelID];
-    if (!loader)
-    {
-        return emscripten::val::undefined();
-    }
-
-    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
     auto& _tape = loader->GetTape();
-
-    loader->MoveToArgumentOffset(line, 0);
 
     std::stack<emscripten::val> valueStack;
     std::stack<int> valuePosition;
-
-    auto arguments = emscripten::val::array();
 
     valueStack.push(arguments);
     valuePosition.push(0);
@@ -840,12 +886,67 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
         }
     }
 
+    return arguments;
+}
+
+emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
+{
+    auto& loader = loaders[modelID];
+    
+    if (!loader)
+    {
+        return emscripten::val::undefined();
+    }
+
+    auto lines = loader->GetHeaderLinesWithType(headerType);
+
+    if(lines.size() <= 0){
+        return emscripten::val::undefined(); 
+    }
+    auto line = lines[0];
+    loader->MoveToHeaderArgumentOffset(line, 0);
+
+    auto arguments = emscripten::val::array();
+
+    GetArgs(loader, arguments);
+
+    std::string s(GetReadableNameFromTypeCode(line.ifcType));
+    auto retVal = emscripten::val::object();
+    retVal.set(emscripten::val("ID"), line.lineIndex);
+    retVal.set(emscripten::val("type"), s);
+    retVal.set(emscripten::val("arguments"), arguments);
+
+    return retVal;
+}
+
+emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return emscripten::val::undefined();
+    }
+
+    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
+
+    loader->MoveToArgumentOffset(line, 0);
+
+    auto arguments = emscripten::val::array();
+
+    GetArgs(loader, arguments);
+
     auto retVal = emscripten::val::object();
     retVal.set(emscripten::val("ID"), line.expressID);
     retVal.set(emscripten::val("type"), line.ifcType);
     retVal.set(emscripten::val("arguments"), arguments);
 
     return retVal;
+}
+
+uint32_t GetMaxExpressID(uint32_t modelID)
+{
+    auto &loader = loaders[modelID];
+    return loader->GetMaxExpressId();
 }
 
 extern "C" bool IsModelOpen(uint32_t modelID)
@@ -945,6 +1046,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("OpenSerialized", &openSerialized);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
+    emscripten::function("GetMaxExpressID", &GetMaxExpressID);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
@@ -955,9 +1057,12 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
     emscripten::function("GetAndClearErrors", &GetAndClearErrors);
     emscripten::function("GetLine", &GetLine);
+    emscripten::function("GetHeaderLine", &GetHeaderLine);
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
+    emscripten::function("ValidateExpressID", &ValidateExpressID);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
+    emscripten::function("GetInversePropertyForItem", &GetInversePropertyForItem);
     emscripten::function("GetAllLines", &GetAllLines);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
 }

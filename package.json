@@ -44,6 +44,7 @@
     "copy-to-dist": "cpy README.md dist && cpy package.json dist && cpy src/ifc2x4.ts dist",
     "build-viewer": "npm run bundle-viewer && npm run copy-wasm-viewer",
     "bundle-viewer": "esbuild ./examples/viewer/web-ifc-viewer.ts --bundle --platform=node --outfile=./examples/viewer/web-ifc-viewer.js",
+    "bundle-ifc2x4": "esbuild ./src/ifc2x4.ts --bundle --platform=node --outfile=./src/ifc2x4.js",
     "copy-wasm-viewer": "cpy dist/*.wasm examples/viewer/wasm && cpy dist/web-ifc-mt.worker.js examples/viewer",
     "serve-viewer": "node examples/viewer/file_server.js",
     "set-version": "node src/setversion.js",
@@ -52,7 +53,9 @@
     "docker-run": "npm run docker-run-container && npm run docker-get-compiled-files ",
     "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
     "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
-    "test": "jest ./tests",
+    "test": "jest  --runInBand ",
+    "test:unit": "jest  --runInBand --testMatch['**/tests/unit/**/*.spec.ts']",
+    "test:functional": "jest  --runInBand --testMatch['**/tests/functional/**/*.spec.ts']",
     "regression-test-build": "esbuild tests/regression/src/index.js --bundle --minify --sourcemap --outfile=tests/regression/public/build/test.js",
     "regression-test": "npm run regression-test-build && http-server"
   },
