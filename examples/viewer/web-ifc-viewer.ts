@@ -74,7 +74,7 @@ function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 {
     let item = window.localStorage.getItem("code");
     console.log(item);
-
+    item = item?.trim();
     if (item)
     {
         monacoEditor.setValue(item);
