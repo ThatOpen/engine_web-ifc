@@ -814,6 +814,9 @@ export const IFCWORKSCHEDULE = 3342526732;
 export const IFCWORKTIME = 1236880293;
 export const IFCZSHAPEPROFILEDEF = 2543172580;
 export const IFCZONE = 1033361043;
+export const FILE_DESCRIPTION = 599546466;
+export const FILE_NAME = 1390159747;
+export const FILE_SCHEMA = 1109904537;
 
 export const IfcElements = [
 	IFCACTUATOR,

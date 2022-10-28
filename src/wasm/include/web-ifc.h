@@ -130,6 +130,17 @@ namespace webifc
 			return ret;
 		}
 
+		std::vector<IfcHeaderLine> GetHeaderLinesWithType(uint32_t type)
+		{
+			auto &list = _metaData.ifcTypeToHeaderLineID[type];
+			std::vector<IfcHeaderLine> ret(list.size());
+
+			std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
+						   { return _metaData.headerLines[lineID]; });
+
+			return ret;
+		}
+
 		void LoadFile(const std::function<uint32_t(char *, size_t)> &requestData)
 		{
 			Tokenizer<TAPE_SIZE> tokenizer(_tape);
@@ -507,7 +518,17 @@ namespace webifc
 		void MoveToArgumentOffset(IfcLine &line, int argumentIndex)
 		{
 			_tape.MoveTo(line.tapeOffset);
+			ArgumentOffset(argumentIndex);
+		}
 
+		void MoveToHeaderArgumentOffset(IfcHeaderLine &line, int argumentIndex)
+		{
+			_tape.MoveTo(line.tapeOffset);
+			ArgumentOffset(argumentIndex);	
+		}
+
+		void ArgumentOffset(int argumentIndex)
+		{
 			int movedOver = -1;
 			int setDepth = 0;
 			while (true)
@@ -590,6 +611,12 @@ namespace webifc
 			StringView s = _tape.ReadStringView();
 
 			return std::string(s.data, s.len);
+		}
+
+		inline std::string GetStringArgument(uint32_t tapeOffset)
+		{
+			_tape.MoveTo(tapeOffset);
+			return GetStringArgument();
 		}
 
 		inline StringView GetStringViewArgument()

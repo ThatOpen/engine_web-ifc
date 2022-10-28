@@ -609,23 +609,12 @@ emscripten::val ReadValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t)
     }
 }
 
-emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
+emscripten::val& GetArgs(const std::unique_ptr<webifc::IfcLoader>& loader, emscripten::val& arguments)
 {
-    auto& loader = loaders[modelID];
-    if (!loader)
-    {
-        return emscripten::val::undefined();
-    }
-
-    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
     auto& _tape = loader->GetTape();
-
-    loader->MoveToArgumentOffset(line, 0);
 
     std::stack<emscripten::val> valueStack;
     std::stack<int> valuePosition;
-
-    auto arguments = emscripten::val::array();
 
     valueStack.push(arguments);
     valuePosition.push(0);
@@ -731,6 +720,55 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
             break;
         }
     }
+
+    return arguments;
+}
+
+emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
+{
+    auto& loader = loaders[modelID];
+    
+    if (!loader)
+    {
+        return emscripten::val::undefined();
+    }
+
+    auto lines = loader->GetHeaderLinesWithType(headerType);
+
+    if(lines.size() <= 0){
+        return emscripten::val::undefined(); 
+    }
+    auto line = lines[0];
+    loader->MoveToHeaderArgumentOffset(line, 0);
+
+    auto arguments = emscripten::val::array();
+
+    GetArgs(loader, arguments);
+
+    std::string s(GetReadableNameFromTypeCode(line.ifcType));
+    auto retVal = emscripten::val::object();
+    retVal.set(emscripten::val("ID"), line.lineIndex);
+    retVal.set(emscripten::val("type"), s);
+    retVal.set(emscripten::val("arguments"), arguments);
+
+    return retVal;
+}
+
+emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return emscripten::val::undefined();
+    }
+
+    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
+
+    loader->MoveToArgumentOffset(line, 0);
+
+    auto arguments = emscripten::val::array();
+
+    GetArgs(loader, arguments);
 
     auto retVal = emscripten::val::object();
     retVal.set(emscripten::val("ID"), line.expressID);
@@ -850,6 +888,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
     emscripten::function("GetAndClearErrors", &GetAndClearErrors);
     emscripten::function("GetLine", &GetLine);
+    emscripten::function("GetHeaderLine", &GetHeaderLine);
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
     emscripten::function("ValidateExpressID", &ValidateExpressID);

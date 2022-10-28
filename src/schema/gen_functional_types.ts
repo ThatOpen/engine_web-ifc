@@ -267,6 +267,34 @@ let parsed = ParseElements(ifc4x2);
 let elements = parsed.entities;
 let types = parsed.types;
 console.log(JSON.stringify(elements, null, 4));
+let fileDescription = {
+    name: "FILE_DESCRIPTION",
+    parent: null,
+    props: [],
+    derivedProps: [],
+    inverseProps: [],
+    derivedInverseProps: [],
+    isIfcProduct: false
+}
+let fileName = {
+    name: "FILE_NAME",
+    parent: null,
+    props: [],
+    derivedProps: [],
+    inverseProps: [],
+    derivedInverseProps: [],
+    isIfcProduct: false
+}
+let fileSchema = {
+    name: "FILE_SCHEMA",
+    parent: null,
+    props: [],
+    derivedProps: [],
+    inverseProps: [],
+    derivedInverseProps: [],
+    isIfcProduct: false
+}
+elements.push(fileDescription, fileName, fileSchema);
 
 let map = {};
 elements.forEach((e) => {
