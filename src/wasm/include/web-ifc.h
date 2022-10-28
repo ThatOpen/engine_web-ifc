@@ -990,6 +990,24 @@ namespace webifc
 			return DumpAsIFC(lines);
 		}
 
+		std::string getAsStringWithBigE(double theNumber)
+		{
+			std::stringstream stream;
+			stream << theNumber;
+			std::string s = stream.str();
+
+			for (unsigned int j = 0; j < s.length(); j++)
+			{
+				if (s[j] == 'e')
+				{
+					s[j] = 'E';
+					break;
+				}
+			}
+
+			return s;
+		}
+
 		std::string DumpAsIFC(const std::vector<IfcLine> &lines = {})
 		{
 			std::stringstream file;
@@ -1104,7 +1122,9 @@ namespace webifc
 					{
 						double d = _tape.Read<double>();
 
-						file << d;
+						// file << d;
+
+						file << getAsStringWithBigE(d);
 
 						break;
 					}
