@@ -78,6 +78,33 @@ namespace webifc
 		{
 		}
 
+		void ActivateSerializer(size_t RamLimit = 200000000)
+		{
+			_tape.serialize = true;
+			_tape.ramLimit = RamLimit;
+		}
+
+		void SetSerializedFileName(std::string serializedFileName)
+		{
+			_tape.serializedFileName = serializedFileName;
+		}
+
+		void SetCallback(const std::function<std::string(std::string, size_t)> &storeData)
+		{
+			_tape._storeData = storeData;
+			_tape.callbackActive = true;
+		}
+
+		void SetBinPaths(std::vector<std::string> paths)
+		{
+			_tape.BinPaths = paths;
+		}
+
+		void DisableSerializer()
+		{
+			_tape.serialize = false;
+		}
+
 		void PushDataToTape(void *data, size_t size)
 		{
 			_tape.push(data, size);
@@ -128,6 +155,43 @@ namespace webifc
 						   { return _metaData.lines[lineID].expressID; });
 
 			return ret;
+		}
+
+		uint32_t readFilePart(const std::function<uint32_t(char *, size_t)> &requestData)
+		{
+			Tokenizer<TAPE_SIZE> tokenizer(_tape);
+			return tokenizer.Tokenize(requestData);
+			return 0;
+		}
+
+		void storeLastChunk()
+		{
+			Tokenizer<TAPE_SIZE> tokenizer(_tape);
+			_tape.storeChunk();
+			_tape.updateMemory();
+		}
+
+		uint32_t loadMetadata()
+		{
+			uint32_t numLns = _tape.loadMetadata();
+			_tape.updateChunks();
+			return numLns;
+		}
+
+		void storeMetadata(uint32_t numLines)
+		{
+			_tape.storeMetadata(numLines);
+		}
+
+		void LoadSerializedFileData(uint32_t numLines)
+		{
+			Parser<TAPE_SIZE> parser(_tape, _metaData);
+			parser.ParseTape(numLines);
+			PopulateRelVoidsMap();
+			PopulateRelAggregatesMap();
+			PopulateStyledItemMap();
+			PopulateRelMaterialsMap();
+			ReadLinearScalingFactor();
 		}
 
 		std::vector<IfcHeaderLine> GetHeaderLinesWithType(uint32_t type)
@@ -431,11 +495,6 @@ namespace webifc
 					_metaData._materialDefinitions[material].emplace_back(styledItemID, representationID);
 				}
 			}
-		}
-
-		void DumpToDisk()
-		{
-			_tape.DumpToDisk();
 		}
 
 		size_t GetNumLines()
