@@ -65,6 +65,7 @@ let meshesCount: number = 115;
 let totalLineNumber : number = 6487;
 let emptyFileModelID: number;
 let lastExpressId : number = 14312;
+let expectedFileDescription : string = "ViewDefinition [CoordinationView_V2.0]";
 let expressIDMatchingGuid: any = {
     expressID: 2863,
     guid: "0VNYAWfXv8JvIRVfOzYH1j"
@@ -227,6 +228,11 @@ describe('WebIfcApi geometries', () => {
     test('Can get max expressID', () => {
         const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
         expect(maxExpressId).toEqual(lastExpressId);
+    })
+    test('Can get header information', () => {
+        const headerLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_DESCRIPTION );
+        expect(headerLine.type).toEqual("FILE_DESCRIPTION");
+        expect(headerLine.arguments[0][0].value).toEqual(expectedFileDescription);
     })
 });
 describe('WebIfcApi geometry transformation', () => {
