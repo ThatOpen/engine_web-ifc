@@ -64,6 +64,7 @@ let quantityOfknownErrors: number = 0;
 let meshesCount: number = 115;
 let totalLineNumber : number = 6487;
 let emptyFileModelID: number;
+let lastExpressId : number = 14312;
 let expressIDMatchingGuid: any = {
     expressID: 2863,
     guid: "0VNYAWfXv8JvIRVfOzYH1j"
@@ -222,6 +223,10 @@ describe('WebIfcApi geometries', () => {
             ++count
         });
         expect(count).toEqual(IFCEXTRUDEDAREASOLIDMeshesCount);
+    })
+    test('Can get max expressID', () => {
+        const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
+        expect(maxExpressId).toEqual(lastExpressId);
     })
 });
 describe('WebIfcApi geometry transformation', () => {
