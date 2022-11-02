@@ -95,7 +95,7 @@ describe('WebIfcApi reading methods', () => {
 
     })
     test('can ensure model is open', () => {
-        const isOpen : boolean = ifcApi.IsModelOpen(modelId);
+        const isOpen : boolean = ifcApi.IsModelOpen(modelID);
         expect(isOpen).toBeTruthy();
     })
     test('can return the correct number of line with a given Type', () => {
