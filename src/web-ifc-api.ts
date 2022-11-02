@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import {IfcElements} from "./ifc2x4";
+import {IfcTypesMap} from "./helpers/types-map";
 
 let WebIFCWasm;
 
@@ -84,6 +85,12 @@ export interface IfcGeometry
     GetVertexDataSize(): number;
     GetIndexData(): number;
     GetIndexDataSize(): number;
+}
+
+export interface ifcType
+{
+    typeID: number;
+    typeName: string;
 }
 
 export function ms() {
@@ -232,6 +239,24 @@ export class IfcAPI
     GetHeaderLine(modelID: number, headerType: number)
     {
         return this.wasmModule.GetHeaderLine(modelID, headerType);
+    }
+
+    async GetAllTypesOfModel(modelID: number): Promise<ifcType[]>
+    {
+        let intType: Vector<number> = await this.properties.getAllTypesFromModel(modelID);
+        let res: number[] = [];
+        for(let key in intType) {
+            let value = intType[key];
+            res.push(value);
+        }
+        let types = [... new Set(res)];
+        
+        let typesNames: ifcType[] = [];
+        for (let i = 0; i < types.length; i++) {
+            const type = types[i];
+            typesNames.push({typeID: type, typeName: IfcTypesMap[type]});
+        }
+        return typesNames;
     }
     
     GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
