@@ -358,6 +358,36 @@ namespace webifc
 					MoveToArgumentOffset(unitLine, 1);
 					auto ratios = GetSetArgument();
 
+					///Scale Correction
+
+					MoveToArgumentOffset(unitLine, 2);
+					auto scaleRefLine = GetRefArgument();
+
+					auto &scaleLine = GetLine(ExpressIDToLineID(scaleRefLine));
+
+					MoveToArgumentOffset(scaleLine, 1);
+					std::string unitTypeScale = GetStringArgument();
+
+					std::string unitPrefix;
+
+					MoveToArgumentOffset(scaleLine, 2);
+					if (GetTokenType() == IfcTokenType::ENUM)
+					{
+						Reverse();
+						unitPrefix = GetStringArgument();
+					}
+
+					MoveToArgumentOffset(scaleLine, 3);
+					std::string unitName = GetStringArgument();
+
+					if (unitTypeScale == "LENGTHUNIT" && unitName == "METRE")
+					{
+						double prefix = ConvertPrefix(unitPrefix);
+						_metaData.linearScalingFactor *= prefix;
+					}
+
+					///
+
 					double ratio = GetDoubleArgument(ratios[0]);
 					if(unitType == "LENGTHUNIT")
 					{
