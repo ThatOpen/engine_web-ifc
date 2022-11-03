@@ -3578,6 +3578,7 @@ namespace webifc
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
 				glm::dvec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+				xAxis = glm::normalize(glm::cross(yAxis, zAxis));
 
 				return glm::dmat4(
 					glm::dvec4(xAxis, 0),
