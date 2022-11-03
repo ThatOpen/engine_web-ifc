@@ -253,7 +253,7 @@ uint32_t openSerialized(std::vector<std::string> paths, webifc::LoaderSettings s
 
     // std::vector<webifc::IfcFlatMesh> meshes;
 
-    // for (auto type : ifc2x4::IfcElements)
+    // for (auto type : ifc::IfcElements)
     // {
     //     auto elements = loaders[modelID]->GetExpressIDsWithType(type);
 
@@ -377,9 +377,9 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
 
     std::vector<uint32_t> types;
 
-    for (auto& type : ifc2x4::IfcElements)
+    for (auto& type : ifc::IfcElement)
     {
-        if (type == ifc2x4::IFCOPENINGELEMENT || type == ifc2x4::IFCSPACE || type == ifc2x4::IFCOPENINGSTANDARDCASE)
+        if (type == ifc::IFCOPENINGELEMENT || type == ifc::IFCSPACE || type == ifc::IFCOPENINGSTANDARDCASE)
         {
             continue;
         }
@@ -402,11 +402,11 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 
     std::vector<webifc::IfcFlatMesh> meshes;
 
-    for (auto type : ifc2x4::IfcElements)
+    for (auto type : ifc::IfcElement)
     {
         auto elements = loader->GetExpressIDsWithType(type);
 
-        if (type == ifc2x4::IFCOPENINGELEMENT || type == ifc2x4::IFCSPACE || type == ifc2x4::IFCOPENINGSTANDARDCASE)
+        if (type == ifc::IFCOPENINGELEMENT || type == ifc::IFCSPACE || type == ifc::IFCOPENINGSTANDARDCASE)
         {
             continue;
         }

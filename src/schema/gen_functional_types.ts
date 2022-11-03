@@ -1,272 +1,9 @@
-import { FromRawLineData } from "../ifc2x4_helper";
+import {} from "./gen_functional_types_interfaces";
+import {crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
 
 const fs = require("fs");
 const { type } = require("os");
 
-console.log("Starting...");
-
-let ifc4x2 = fs.readFileSync("./IFC4x2.exp").toString();
-
-console.log("Read def file");
-
-function makeCRCTable(){
-    var c;
-    var crcTable = [];
-    for(var n =0; n < 256; n++){
-        c = n;
-        for(var k =0; k < 8; k++){
-            c = ((c&1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
-        }
-        crcTable[n] = c;
-    }
-    return crcTable;
-}
-
-let crcTable = makeCRCTable();
-
-function crc32(str) {
-    var crc = 0 ^ (-1);
-
-    for (var i = 0; i < str.length; i++ ) {
-        crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF];
-    }
-
-    return (crc ^ (-1)) >>> 0;
-};
-
-function expTypeToTSType(expTypeName)
-{
-    let tsType = expTypeName;
-    if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER")
-    {
-        tsType = "number";
-    }
-    else if (expTypeName == "STRING")
-    {
-        tsType = "string";
-    }
-    else if (expTypeName == "BOOLEAN")
-    {
-        tsType = "boolean";
-    }
-    else if (expTypeName == "BINARY")
-    {
-        tsType = "number";
-    }
-    else if (expTypeName == "LOGICAL")
-    {
-        tsType = "boolean";
-    }
-
-    return tsType;
-}
-
-interface Type {
-    name: string;
-    typeName : string;
-    isList: boolean;
-    isEnum: boolean;
-    isSelect: boolean;
-    values: string[];
-}
-
-interface Prop {
-    name: string;
-    type: string;
-    primitive: boolean;
-    optional: boolean;
-    set: boolean;
-}
-
-interface InverseProp {
-    name: string;
-    type: string;
-    set: boolean;
-    for: string;
-}
-
-interface Entity {
-    name: string;
-    parent: null | string;
-    props: Prop[];
-    inverseProps: InverseProp[],
-    derivedProps: Prop[] | null;
-    derivedInverseProps: InverseProp[] | null,
-    isIfcProduct: boolean;
-}
-
-function ParseInverse(line,entity) 
-{
-    let split = line.split(" ");
-    let name = split[0].replace("INVERSE","").trim();
-    let set = split.indexOf("SET") != -1 || split.indexOf("LIST") != -1;
-    let forVal = split[split.length - 1].replace(";", "");
-    let type = split[split.length - 3];
-    let tsType = expTypeToTSType(type);
-    entity.inverseProps.push({
-      name,
-      type: tsType,
-      set,
-      for: forVal
-    });  
-}
-
-function ParseElements(data)
-{
-    let lines = data.split(";");
-
-    let entities: Entity[] = [];
-    let types: Type[] = [];
-    let type: Type | false = false;
-    let entity: Entity | false = false;
-    let readProps = false;
-    let readInverse = false;
-
-    for (let i = 0; i < lines.length; i++)
-    {
-        let line = lines[i].trim();
-        let hasColon = line.indexOf(" : ") != -1;
-        if (line.indexOf("ENTITY") == 0)
-        {
-            let split = line.split(" ");
-            let name = split[1].trim();
-            entity = {
-                name,
-                parent: null,
-                props: [],
-                derivedProps: [],
-                inverseProps: [],
-                derivedInverseProps: [],
-                isIfcProduct: false
-            };
-            readProps = true;
-            readInverse = false;
-
-            let subIndex = split.indexOf("SUBTYPE");
-            if (subIndex != -1)
-            {
-                let parent = split[subIndex + 2].replace("(", "").replace(")", "");
-                entity.parent = parent;
-            }
-        }
-        else if (line.indexOf("END_ENTITY") == 0)
-        {
-            if (entity) entities.push(entity);
-            readProps = false;
-            readInverse = false;
-        }
-        else if (line.indexOf("WHERE") == 0)
-        {
-            readProps = false;
-            readInverse = false;
-        }
-        else if (line.indexOf("INVERSE") == 0)
-        {
-            readProps = false;
-            readInverse = true;
-            // there is one inverse property on this line
-            ParseInverse(line,entity);
-        }
-        else if (line.indexOf("DERIVE") == 0)
-        {
-            readProps = false;
-            readInverse = false;
-        }
-        else if (line.indexOf("UNIQUE") == 0)
-        {
-            readProps = false;
-            readInverse = false;
-        }
-        else if (line.indexOf("TYPE") == 0)
-        {
-            readProps = false;
-            readInverse = false;
-
-            let split = line.split(" ").map((s) => s.trim());
-            let name = split[1];
-
-
-            let isList = split.indexOf("LIST") != -1 || split.indexOf("SET") != -1 || split.indexOf("ARRAY") != -1;
-            let isEnum = split.indexOf("ENUMERATION") != -1;
-            let isSelect = split[3].indexOf("SELECT") == 0;
-            let values: null | string[] = null;
-
-            let typeName = "";
-            if (isList)
-            {
-                typeName = split[split.length - 1];
-            }
-            else if (isEnum || isSelect)
-            {
-                let firstBracket = line.indexOf("(");
-                let secondBracket = line.indexOf(")");
-
-                let stringList = line.substring(firstBracket + 1, secondBracket);
-                values = stringList.split(",").map((s) => s.trim());
-            }
-            else
-            {
-                typeName = split[3];
-            }
-
-            let firstBracket = typeName.indexOf("(");
-            if (firstBracket != -1)
-            {
-                typeName = typeName.substr(0, firstBracket);
-            }
-
-            typeName = expTypeToTSType(typeName);
-            
-            type = {
-                name,
-                typeName,
-                isList,
-                isEnum,
-                isSelect,
-                values
-            }
-        }
-        else if (line.indexOf("END_TYPE") == 0)
-        {
-            if (type)
-            {
-                types.push(type);
-            }
-            type = false;
-        }
-        else if (entity && readInverse && hasColon) 
-        {
-          ParseInverse(line,entity);
-        }
-        else if (entity && readProps && hasColon)
-        {
-            // property
-            let split = line.split(" ");
-            let name = split[0];
-            let optional = split.indexOf("OPTIONAL") != -1;
-            let set = split.indexOf("SET") != -1 || split.indexOf("LIST") != -1;
-            let type = split[split.length - 1].replace(";", "");
-            let tsType = expTypeToTSType(type);
-            entity.props.push({
-                name,
-                type: tsType,
-                primitive: tsType !== type,
-                optional,
-                set
-            })
-        }
-    }
-
-    return {
-        entities,
-        types
-    };
-}
-
-let parsed = ParseElements(ifc4x2);
-let elements = parsed.entities;
-let types = parsed.types;
-console.log(JSON.stringify(elements, null, 4));
 let fileDescription = {
     name: "FILE_DESCRIPTION",
     parent: null,
@@ -294,35 +31,121 @@ let fileSchema = {
     derivedInverseProps: [],
     isIfcProduct: false
 }
-elements.push(fileDescription, fileName, fileSchema);
 
-let map = {};
-elements.forEach((e) => {
-    map[e.name] = e;
-})
 
-function WalkParents(entity: Entity, parent: Entity)
-{
-    if (!parent)
-    {
-        return;
-    }
-    entity.derivedProps = [...parent.props, ...entity.derivedProps];
-    entity.derivedInverseProps = [...parent.inverseProps,...entity.derivedInverseProps];
-    if (parent.name === "IfcProduct")
-    {
-        entity.isIfcProduct = true;
-    }
-    WalkParents(entity, map[parent.parent]);
+let crcTable = makeCRCTable();
+
+console.log("Starting...");
+
+let tsHelper = [];
+tsHelper.push(`// This is a generated file, please see: gen_functional_types.js`);
+tsHelper.push(`import * as ifc from "./ifc-schema";`);
+tsHelper.push();
+
+
+let completeEntityList = new Set();
+let completeifcElementList = new Set();
+
+var files = fs.readdirSync("./");
+for (var i = 0; i < files.length; i++) {
+  if (!files[i].endsWith(".exp")) continue;
+  var schemaName = files[i].replace(".exp","");
+  console.log("Generating Schema for:"+schemaName);
+  let schemaData = fs.readFileSync("./"+files[i]).toString();
+  let parsed = parseElements(schemaData);
+  let entities = parsed.entities;
+  entities.push(fileDescription, fileName, fileSchema);
+  let types = parsed.types;
+  
+  entities.forEach((e) => {
+      e.derivedProps = [...e.props];
+      walkParents(e,entities);
+  });
+  
+  for (var x=0; x < entities.length; x++) 
+  {
+      completeEntityList.add(entities[x].name);
+      if (entities[x].isIfcProduct)
+      {
+        completeifcElementList.add(entities[x].name);
+      }
+  }  
 }
 
-elements.forEach((e) => {
-    e.derivedProps = [...e.props];
-    if (e.parent)
-    {
-        WalkParents(e, map[e.parent]);
-    }
+//finish writing the TS metaData
+fs.writeFileSync("../ifc_schema_helper.ts", tsHelper.join("\n")); 
+
+// now write out the global c++/ts metadata. All the WASM needs to know about is a list of all entities
+
+console.log(`Writing Global WASM/TS Metadata!...`);
+
+let tsHeader = []
+let cppHeader = [];
+cppHeader.push("#pragma once");
+cppHeader.push("");
+cppHeader.push("#include <vector>");
+cppHeader.push("");
+cppHeader.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
+tsHeader.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
+cppHeader.push("");
+cppHeader.push("namespace ifc {");
+completeEntityList.forEach(entity => {
+    let name = entity.toUpperCase();
+    let code = crc32(name,crcTable);
+    cppHeader.push(`\tstatic const unsigned int ${name} = ${code};`);
+    tsHeader.push(`export const ${name} = ${code};`)
 });
+
+cppHeader.push("\tbool isIfcElement(unsigned int ifcCode) {");
+cppHeader.push("\t\tswitch(ifcCode) {");
+
+completeifcElementList.forEach(element => {
+    let name = element.toUpperCase();
+    let code = crc32(name,crcTable);
+    cppHeader.push(`\t\t\tcase ifc::${name}: return true;`);
+});
+
+cppHeader.push(`\t\t\tdefault: return false;`);
+
+cppHeader.push("\t\t}");
+cppHeader.push("\t}");
+
+tsHeader.push("export const IfcElements =[");
+cppHeader.push("\tstd::vector<unsigned int> IfcElement { ");
+completeifcElementList.forEach(element => {
+    let name = element.toUpperCase();
+    let code = crc32(name,crcTable);
+    cppHeader.push(`\t\t${name},`);
+    tsHeader.push(`\t${name},`);
+});
+cppHeader.push("\t};");
+tsHeader.push("];")
+
+cppHeader.push("};");
+
+cppHeader.push("\tconst char* GetReadableNameFromTypeCode(unsigned int ifcCode) {");
+cppHeader.push("\t\tswitch(ifcCode) {");
+completeEntityList.forEach(entity => {
+    let name = entity.toUpperCase();
+    let code = crc32(name,crcTable);
+    cppHeader.push(`\t\t\tcase ifc::${name}: return "${name}";`);
+});
+
+cppHeader.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
+
+cppHeader.push("\t\t}");
+cppHeader.push("\t}");
+
+fs.writeFileSync("../wasm/include/ifc-schema.h", cppHeader.join("\n")); 
+fs.writeFileSync("../ifc-schema.ts", tsHeader.join("\n")); 
+
+console.log(`...Done!`);
+
+
+
+
+console.log(JSON.stringify(elements, null, 4));
+
 
 console.log(map["IfcPropertySingleValue"]);
 console.log(map["IfcPropertySet"]);
@@ -337,24 +160,7 @@ types.forEach((t) => {
 console.log(tmap["IfcActionSourceTypeEnum"]);
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// --------------------------------------------- code generation ---------------------------------------------
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const TS_OUTPUT_FILE = "../IFC4x2.ts";
-
-let buffer = [];
-
-buffer.push();
-buffer.push(`// This is a generated file, please see: gen_functional_types.js`);
-buffer.push();
-buffer.push();
-buffer.push(`import * as ifc2x4 from "./ifc2x4";`);
-buffer.push();
 
 buffer.push(`export let FromRawLineData = {};`);
 elements.forEach((entity) => {
@@ -469,14 +275,6 @@ types.forEach((type) => {
 });
 buffer.push(`\tconsole.log("Unknown type: " + name);`);
 buffer.push(`};`);
-
-interface Param
-{
-    name: string;
-    type: string;
-    prop: Prop;
-    isType: Type;
-}
 
 elements.forEach((entity) => {
     let params: Param[] = [];
@@ -673,15 +471,6 @@ fs.writeFileSync(TS_OUTPUT_FILE, buffer.join("\n"));
 
 let ifcElements = elements.filter((e) => e.isIfcProduct);
 
-let tsHeader = [];
-let cppHeader = [];
-cppHeader.push("#pragma once");
-cppHeader.push("");
-cppHeader.push("#include <vector>");
-cppHeader.push("");
-cppHeader.push("// unique list of crc32 codes for ifc classes");
-cppHeader.push("");
-cppHeader.push("namespace ifc2x4 {");
 
 elements.forEach(element => {
     let name = element.name.toUpperCase();
@@ -738,7 +527,7 @@ tsHeader.push(ifcElements.map(element => {
 tsHeader.push("];");
 
 
-fs.writeFileSync("../wasm/include/ifc2x4.h", cppHeader.join("\n")); 
-fs.writeFileSync("../ifc2x4.ts", tsHeader.join("\n")); 
+
+
 
 console.log(`Done!`);
