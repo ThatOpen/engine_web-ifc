@@ -34,12 +34,24 @@ export const LINE_END = 9;
 
 export interface LoaderSettings
 {
-    COORDINATE_TO_ORIGIN: boolean;
-    USE_FAST_BOOLS: boolean;
-    CIRCLE_SEGMENTS_LOW?: number
-    CIRCLE_SEGMENTS_MEDIUM?: number
-    CIRCLE_SEGMENTS_HIGH?: number
-    BOOL_ABORT_THRESHOLD?: number
+    COORDINATE_TO_ORIGIN?: boolean;
+    USE_FAST_BOOLS?: boolean;
+    CIRCLE_SEGMENTS_LOW?: number;
+    CIRCLE_SEGMENTS_MEDIUM?: number;
+    CIRCLE_SEGMENTS_HIGH?: number;
+    BOOL_ABORT_THRESHOLD?: number;
+}
+
+
+// TODO(pablo): Don't know how to get static refs to the values, so
+// manually keeping in-sync with src/wasm/include/web-ifc.h.
+export enum LogLevel
+{
+    DEBUG = 0,
+    INFO = 1,
+    WARN = 2,
+    ERROR = 3,
+    OFF = 4,
 }
 
 export interface Vector<T> {
@@ -113,9 +125,11 @@ export class IfcAPI
      */
     properties = new Properties(this);
 
+    logLevel = LogLevel.INFO
+
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
-     * 
+     *
      * @param customLocateFileHandler An optional locateFile function that let's
      * you override the path from which the wasm module is loaded.
      */
@@ -127,7 +141,7 @@ export class IfcAPI
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
                 if (path.endsWith(".wasm"))
                 {
-                    if (this.isWasmPathAbsolute) 
+                    if (this.isWasmPathAbsolute)
                     {
                         return this.wasmPath + path;
                     }
@@ -144,11 +158,11 @@ export class IfcAPI
         }
         else
         {
-            console.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
+            this.LogError(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
         }
     }
 
-    /**  
+    /**
      * Opens a model and returns a modelID number
      * @data Buffer containing IFC data (bytes)
      * @data Settings settings for loading the model
@@ -164,7 +178,6 @@ export class IfcAPI
             BOOL_ABORT_THRESHOLD: 10000,
             ...settings
         };
-
         let offsetInSrc = 0;
         let result = this.wasmModule.OpenModel(s, (destPtr: number, destSize: number) => {
             let srcSize = Math.min(data.byteLength - offsetInSrc, destSize);
@@ -181,7 +194,7 @@ export class IfcAPI
         return result;
     }
 
-    /**  
+    /**
      * Creates a new model and returns a modelID number
      * @data Settings settings for generating data the model
     */
@@ -226,7 +239,7 @@ export class IfcAPI
         return this.wasmModule.OpenSerialized(paths, s, ramLimit);
     }
 
-    /**  
+    /**
      * Opens a model and returns a modelID number
      * @modelID Model handle retrieved by OpenModel, model must not be closed
      * @data Buffer containing IFC data (bytes)
@@ -349,7 +362,7 @@ export class IfcAPI
         if (lineObject.expressID === undefined
             || lineObject.type === undefined
             || lineObject.ToTape === undefined) {
-            console.warn('Line object cannot be serialized:', lineObject)
+            this.LogWarn('Line object cannot be serialized; invalid format:', lineObject)
             return
         }
 
@@ -404,8 +417,7 @@ export class IfcAPI
     {
         if (transformationMatrix.length != 16)
         {
-            console.log(`Bad transformation matrix size: ${transformationMatrix.length}`);
-            return;
+            throw new Error(`invalid matrix size: ${transformationMatrix.length}`);
         }
         this.wasmModule.SetGeometryTransformation(modelID, transformationMatrix);
     }
@@ -429,7 +441,7 @@ export class IfcAPI
         return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes).slice(0);
     }
 
-    /**  
+    /**
      * Closes a model and frees all related memory
      * @modelID Model handle retrieved by OpenModel, model must not be closed
     */
@@ -449,7 +461,7 @@ export class IfcAPI
         this.wasmModule.StreamAllMeshesWithTypes(modelID, types, meshCallback);
     }
 
-    /**  
+    /**
      * Checks if a specific model ID is open or closed
      * @modelID Model handle retrieved by OpenModel
     */
@@ -458,7 +470,7 @@ export class IfcAPI
         return this.wasmModule.IsModelOpen(modelID);
     }
 
-    /**  
+    /**
      * Load all geometry in a model
      * @modelID Model handle retrieved by OpenModel
     */
@@ -467,7 +479,7 @@ export class IfcAPI
         return this.wasmModule.LoadAllGeometry(modelID);
     }
 
-    /**  
+    /**
      * Load geometry for a single element
      * @modelID Model handle retrieved by OpenModel
     */
@@ -519,5 +531,37 @@ export class IfcAPI
         this.isWasmPathAbsolute = absolute;
     }
 
+    SetLogLevel(level: LogLevel): void
+    {
+        this.logLevel = level;
+        this.wasmModule.SetLogLevel(level);
+    }
 
+    LogDebug(...msg: string[]): void
+    {
+        if (this.logLevel >= LogLevel.DEBUG) {
+            console.log('DEBUG:', ...msg);
+        }
+    }
+
+    LogInfo(...msg: string[]): void
+    {
+        if (this.logLevel >= LogLevel.INFO) {
+            console.log('INFO:', ...msg);
+        }
+    }
+
+    LogWarn(...msg: string[]): void
+    {
+        if (this.logLevel >= LogLevel.WARN) {
+            console.warn('WARN:', ...msg);
+        }
+    }
+
+    LogError(...msg: string[]): void
+    {
+        if (this.logLevel >= LogLevel.ERROR) {
+            console.error('ERROR:', ...msg);
+        }
+    }
 }
