@@ -92,6 +92,11 @@ export class Properties {
         return project;
     }
 
+    async getAllTypesFromModel(modelID: number){
+        await this.getAllTypesOfModel(modelID);
+        return this.types;
+    }
+
     async getAllItemsOfType(modelID: number, type: number, verbose: boolean) {
         let items: number[] = [];
         const lines = await this.api.GetLineIDsWithType(modelID, type);
