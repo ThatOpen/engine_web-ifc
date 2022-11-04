@@ -136,7 +136,7 @@ function getData(reader : FileReader){
   return data;
 }
 
-function LoadModel(data: Uint8Array) {
+async function LoadModel(data: Uint8Array) {
     const start = ms();
     //TODO: This needs to be fixed in the future to rely on elalish/manifold
     const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: false, USE_FAST_BOOLS: true }); 
@@ -149,6 +149,15 @@ function LoadModel(data: Uint8Array) {
     for (let i = 0; i < errors.size(); i++)
     {
         console.log(errors.get(i));
+    }
+
+    //Example to get all types used in the model
+    let types = await ifcAPI.GetAllTypesOfModel(modelID);
+    for (let i = 0; i < types.length; i++) {
+        let type = types[i];
+        console.log(type);
+        console.log(type.typeID);
+        console.log(type.typeName);
     }
 
     ifcAPI.CloseModel(modelID);

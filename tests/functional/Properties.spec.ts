@@ -16,7 +16,7 @@ let properties: Properties
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
-
+    ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
