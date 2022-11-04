@@ -949,6 +949,7 @@ namespace webifc
 			std::vector<uint32_t> result;
 
 			IfcTokenType t = _loader.GetTokenType();
+			// If you receive a reference then go to the reference
 			if (t == IfcTokenType::REF)
 			{
 				_loader.Reverse();
@@ -956,15 +957,36 @@ namespace webifc
 				auto &line = _loader.GetLine(lineID);
 				_loader.MoveToArgumentOffset(line, 0);
 			}
+			// If you receive a text (IFCLINEINDEX) then read the text and go on
+			else if (t == IfcTokenType::LABEL)
+			{
+				_loader.Reverse();
+				string nameElement = _loader.GetStringArgument();
+			}
 
 			// while we don't have line set end
 			while (_loader.GetTokenType() != IfcTokenType::SET_END)
 			{
 				_loader.Reverse();
-				if ((_loader.GetTokenType() == IfcTokenType::REAL))
+				t = _loader.GetTokenType();
+				// If you receive a real then add the real to the list
+				if (t == IfcTokenType::REAL)
 				{
 					_loader.Reverse();
 					result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+				}
+				// If you receive a text (IFCLINEINDEX) then read the text and go on
+				else if (t == IfcTokenType::LABEL)
+				{
+					_loader.Reverse();
+					string nameElement = _loader.GetStringArgument();
+				}
+				// If you receive a list then call the function in a recursive way
+				else if (t == IfcTokenType::SET_BEGIN)
+				{
+					_loader.Reverse();
+					std::vector<uint32_t> _result = ReadCurveIndices();
+					result.insert(result.end(), _result.begin(), _result.end());
 				}
 			}
 
@@ -2927,7 +2949,7 @@ namespace webifc
 				return profile;
 			}
 			case ifc2x4::IFCDERIVEDPROFILEDEF:
-			{				
+			{
 				_loader.MoveToArgumentOffset(line, 2);
 				uint32_t profileID = _loader.GetRefArgument();
 				IfcProfile profile = GetProfileByLine(_loader.ExpressIDToLineID(profileID));
