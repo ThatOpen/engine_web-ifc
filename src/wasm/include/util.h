@@ -402,6 +402,8 @@ namespace webifc
 		IfcCurve<2> curve;
 		std::vector<IfcCurve<2>> holes;
 		bool isConvex;
+		bool isComposite;
+		std::vector<IfcProfile> profiles;
 	};
 
 	struct IfcProfile3D
