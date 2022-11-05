@@ -33,12 +33,31 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     let result = new FileResult();
     result.filename = filename;
 
-    let data = fs.readFileSync(filename);
+    //let modelID = module.OpenModel("example.ifc", new Uint8Array(data.toString()));
 
+    const ifcFilePath = path.join(__dirname, './'+filename);
+    const ifcFileContent = fs.readFileSync(ifcFilePath);
     let startTime = ms();
+    let modelID : number = module.OpenModel(ifcFileContent);
+    let endTime = ms();
+    result.timeTakenToOpenModel = endTime - startTime; // time to open and close the file and nothing else
 
-    let modelID = module.OpenModel("example.ifc", new Uint8Array(data));
+    startTime = ms();
+    result.numberOfIfcEntities = module.GetAllLines(modelID).size();
 
+    result.totalNumberOfProducedMesh = 0;
+    module.StreamAllMeshes(modelID, (mesh) => {
+        ++result.totalNumberOfProducedMesh;
+    });
+
+    result.totalNumberOfGeometries = module.LoadAllGeometry(modelID).size();
+    let stats = fs.statSync(ifcFilePath);
+    let fileSizeInBytes = stats.size;
+    // Convert the file size to megabytes (optional)
+    let sizeMo = fileSizeInBytes / (1024*1024);
+    result.fileSize = parseFloat(sizeMo.toFixed(2));
+
+    result.totalNumberOfErrors =  module.GetAndClearErrors(modelID).size();
     module.CloseModel(modelID);
 
     let endTime = ms();
