@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "detect-gpu": "^4.0.46",
     "fs-extra": "^9.1.0",
     "ts-node": "^10.1.1",
     "web-ifc": "0.0.36"

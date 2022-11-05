@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-
+import * as os from 'os';
 const BENCHMARK_FILES_DIR = "./ifcfiles";
-
+import { getGPUTier } from 'detect-gpu';
 import * as NewWebIFC from '../dist/web-ifc-api-node';
 import { ms } from '../dist/web-ifc-api-node';
 
@@ -18,6 +18,13 @@ class FileResult
     totalNumberOfProducedMesh: number;
     totalNumberOfGeometries : number;
     totalNumberOfErrors: number;
+}
+
+class SystemInfo{
+    gpu: string;
+    cpuName: string;
+    freeRam: number;
+    totalRam: number;
 }
 
 class BenchMarkResult
@@ -86,6 +93,24 @@ async function GetBenchmarkFiles(): Promise<string[]>
     return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => f.endsWith(".ifc")).map((f) => path.join(BENCHMARK_FILES_DIR, f)).slice(0, 8);
 }
 
+async function getSystemInformations(): Promise<SystemInfo>
+{
+    const gpuTier = await getGPUTier();
+    let systemInfo = new SystemInfo();
+    systemInfo.gpu = gpuTier.gpu ? gpuTier.gpu : "";
+    systemInfo.cpuName = os.cpus()[0]["model"];
+
+    const osFreeMem = os.freemem();
+    const allFreeMem = (osFreeMem / (1024 * 1024));
+    systemInfo.freeRam = allFreeMem;
+    
+    const osTotalMem = os.totalmem();
+    const avbMem = (osTotalMem / (1024 * 1024));
+    systemInfo.totalRam = avbMem;
+
+    return systemInfo;
+}
+
 async function RunBenchmark()
 {
     let files = await GetBenchmarkFiles();
@@ -96,6 +121,8 @@ async function RunBenchmark()
 
     let newResult = await BenchmarkWebIFC(newIfcAPI, files);
 
+    let systemInfo = await getSystemInformations();
+    console.log(systemInfo);
     console.log(newResult.results.values());
 }
 
