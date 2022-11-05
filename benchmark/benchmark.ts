@@ -139,7 +139,14 @@ async function getSystemInformations(): Promise<SystemInfo>
 
     return systemInfo;
 }
-
+function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string, FileResult>): string
+{
+    let formatter = new BenchmarkResultFormatter();
+    let markdown : string = "# System informations \n "+JSON.stringify(systemInfo)+"\n _________ \n";
+    formatter.results = fileResult;
+    markdown += formatter.getMarkdownTable();
+    return markdown;
+}
 async function RunBenchmark()
 {
     let files = await GetBenchmarkFiles();
@@ -149,6 +156,7 @@ async function RunBenchmark()
     console.log(``);
 
     let newResult = await BenchmarkWebIFC(newIfcAPI, files);
+    let markdown = generateMarkdownReport(systemInfo, newResult.results);
 
     let systemInfo = await getSystemInformations();
     console.log(systemInfo);
