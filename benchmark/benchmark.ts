@@ -143,9 +143,9 @@ async function getSystemInformations(): Promise<SystemInfo>
 async function RunBenchmark()
 {
     let files = await GetBenchmarkFiles();
-
+    let systemInfo = await getSystemInformations();
     console.log(``);
-    console.log(`Expect device settings...`);
+    console.log(systemInfo);
     console.log(``);
 
     let newResult = await BenchmarkWebIFC(newIfcAPI, files);
