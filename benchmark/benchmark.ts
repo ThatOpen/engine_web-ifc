@@ -26,7 +26,16 @@ class SystemInfo{
     freeRam: number;
     totalRam: number;
 }
+// hack Object.fromEntries doesn't works
+function mapToObj(inputMap) {
+    let obj = {};
 
+    inputMap.forEach(function(value, key){
+        obj[key] = value
+    });
+
+    return obj;
+}
 class BenchMarkResult
 {
     results: Map<string, FileResult>;
