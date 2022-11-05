@@ -31,7 +31,27 @@ class BenchMarkResult
 {
     results: Map<string, FileResult>;
 }
+class BenchmarkResultFormatter{
+    results: Map<string, FileResult>;
+    getMarkdownTable() : string
+    {
+        let datas =  mapToObj(this.results);
+        console.log(datas)
+        const keys = Object.keys(datas);
 
+        // todo auto gen
+        let header = "| filename | fileSize | timeTakenToOpenModel | timeSuccess | numberOfIfcEntities | totalNumberOfProducedMesh | totalNumberOfGeometries | totalNumberOfErrors | \n"
+        // todo auto gen
+        let separator = "|-------|------|-------|-------|-------|-------|-------|-------| \n";
+        let readme = `${header}${separator}`;
+        // todo auto gen
+        keys.map((key) => {
+            let line = datas[key];
+            readme += `| ${line["filename"]} | ${line["fileSize"]} | ${line["timeTakenToOpenModel"]} | ${line["timeSuccess"]} | ${line["numberOfIfcEntities"]} | ${line["totalNumberOfProducedMesh"]} | ${line["totalNumberOfGeometries"]} | ${line["totalNumberOfErrors"]} |\n `
+        })
+        return readme;
+    }
+}
 async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResult>
 {
     let result = new FileResult();
