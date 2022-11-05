@@ -6,10 +6,7 @@ const BENCHMARK_FILES_DIR = "./ifcfiles";
 import * as NewWebIFC from '../dist/web-ifc-api-node';
 import { ms } from '../dist/web-ifc-api-node';
 
-import * as OldWebIFC from 'web-ifc/web-ifc-api-node';
-
 let newIfcAPI = new NewWebIFC.IfcAPI();
-let oldIfcAPI = new OldWebIFC.IfcAPI();
 
 class FileResult
 {
@@ -32,7 +29,7 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
 {
     let result = new FileResult();
     result.filename = filename;
-
+    
     //let modelID = module.OpenModel("example.ifc", new Uint8Array(data.toString()));
 
     const ifcFilePath = path.join(__dirname, './'+filename);
@@ -44,7 +41,7 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
 
     startTime = ms();
     result.numberOfIfcEntities = module.GetAllLines(modelID).size();
-
+    
     result.totalNumberOfProducedMesh = 0;
     module.StreamAllMeshes(modelID, (mesh) => {
         ++result.totalNumberOfProducedMesh;
@@ -60,8 +57,6 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     result.totalNumberOfErrors =  module.GetAndClearErrors(modelID).size();
     module.CloseModel(modelID);
 
-    let endTime = ms();
-    result.timeTaken = endTime - startTime;
 
     endTime = ms();
     result.timeSuccess = endTime - startTime;
@@ -76,7 +71,6 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
 
     let result = new BenchMarkResult();
     result.results = new Map<string, FileResult>();
-
     for (let file in files)
     {
         let filename = files[file];
@@ -86,21 +80,6 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
     return result;
 }
 
-function combine(oldResult: BenchMarkResult, newResult: BenchMarkResult)
-{
-    console.log("");
-    console.log("");
-    console.log("");
-    console.log("*******************");
-    oldResult.results.forEach((r) => {
-        let filename = r.filename;
-        let oldFileResult = oldResult.results.get(filename);
-        let newFileResult = newResult.results.get(filename);
-
-        console.log(`${filename}: ${oldFileResult.timeTaken}\t->\t${newFileResult.timeTaken}`);
-    });
-    console.log("*******************");
-}
 
 async function GetBenchmarkFiles(): Promise<string[]>
 {
@@ -111,18 +90,13 @@ async function RunBenchmark()
 {
     let files = await GetBenchmarkFiles();
 
-    console.log(`Previous version...`);
     console.log(``);
-
-    let oldResult = await BenchmarkWebIFC(oldIfcAPI, files);
-
-    console.log(``);
-    console.log(`New version...`);
+    console.log(`Expect device settings...`);
     console.log(``);
 
     let newResult = await BenchmarkWebIFC(newIfcAPI, files);
 
-    combine(oldResult, newResult);
+    console.log(newResult.results.values());
 }
 
 RunBenchmark();
