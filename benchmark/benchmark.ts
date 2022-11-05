@@ -163,6 +163,7 @@ async function RunBenchmark()
     let newResult = await BenchmarkWebIFC(newIfcAPI, files);
     let markdown = generateMarkdownReport(systemInfo, newResult.results);
 
+
     await writeResult(markdown);
 }
 
