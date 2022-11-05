@@ -14,7 +14,13 @@ let oldIfcAPI = new OldWebIFC.IfcAPI();
 class FileResult
 {
     filename: string;
-    timeTaken: number;
+    fileSize: number;
+    timeTakenToOpenModel: number;
+    timeSuccess: number;
+    numberOfIfcEntities: number;
+    totalNumberOfProducedMesh: number;
+    totalNumberOfGeometries : number;
+    totalNumberOfErrors: number;
 }
 
 class BenchMarkResult
