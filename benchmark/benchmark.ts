@@ -63,7 +63,9 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     let endTime = ms();
     result.timeTaken = endTime - startTime;
 
-    console.log(`Parsed model ${result.filename} in ${result.timeTaken}`);
+    endTime = ms();
+    result.timeSuccess = endTime - startTime;
+    console.log(`Parsed model ${result.filename} in ${result.timeTakenToOpenModel} ms`);
 
     return result;
 }
