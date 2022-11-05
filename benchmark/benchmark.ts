@@ -36,6 +36,11 @@ function mapToObj(inputMap) {
 
     return obj;
 }
+async function writeResult(content : string){
+    fs.writeFile('../benchmark.md', content, () => {
+        
+    })
+}
 class BenchMarkResult
 {
     results: Map<string, FileResult>;
@@ -158,9 +163,7 @@ async function RunBenchmark()
     let newResult = await BenchmarkWebIFC(newIfcAPI, files);
     let markdown = generateMarkdownReport(systemInfo, newResult.results);
 
-    let systemInfo = await getSystemInformations();
-    console.log(systemInfo);
-    console.log(newResult.results.values());
+    await writeResult(markdown);
 }
 
 RunBenchmark();
