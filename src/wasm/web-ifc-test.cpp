@@ -58,9 +58,11 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader &loader, webifc::
             */
 
             meshes.push_back(mesh);
+
+            
         }
     }
-
+    
     return meshes;
 }
 
@@ -431,11 +433,7 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    // SpecificLoadTest(loader, geometryLoader, 11);
-    // SpecificLoadTest(loader, geometryLoader, 414835);
-    // SpecificLoadTest(loader, geometryLoader, 30782);
-    // SpecificLoadTest(loader, geometryLoader, 217102);
-    // SpecificLoadTest(loader, geometryLoader, 181);
+    // SpecificLoadTest(loader, geometryLoader, 31);
     auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 

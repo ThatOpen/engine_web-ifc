@@ -311,6 +311,22 @@ namespace webifc
 			return (uint32_t)&fvertexData[0];
 		}
 
+		void AddGeometry(IfcGeometry geom)
+		{
+			uint32_t maxIndex = numPoints;
+			numPoints += geom.numPoints;
+			min = glm::min(min, geom.min);
+			max = glm::max(max, geom.max);
+			vertexData.insert(vertexData.end(), geom.vertexData.begin(), geom.vertexData.end());
+			for (uint32_t k = 0; k < geom.numFaces; k++)
+			{
+				AddFace(
+					maxIndex + geom.indexData[k * 3 + 0],
+					maxIndex + geom.indexData[k * 3 + 1],
+					maxIndex + geom.indexData[k * 3 + 2]);
+			}
+		}
+
 		uint32_t GetVertexDataSize()
 		{
 			return (uint32_t)fvertexData.size();
@@ -855,7 +871,7 @@ namespace webifc
 			repetition++;
 		}
 
-		//If the second method fails then we go to the third method
+		// If the second method fails then we go to the third method
 		while (maxdi > maxError * 3 && repetition < 32)
 		{
 			double extension = 1;
@@ -1875,7 +1891,7 @@ namespace webifc
 		writeFile(filename, ToObj(geom, offset));
 	}
 
-	//This class defines a datachunk that can be loaded and unloaded from an external source file
+	// This class defines a datachunk that can be loaded and unloaded from an external source file
 	template <uint32_t N>
 	class chunkUnit
 	{
@@ -1908,7 +1924,6 @@ namespace webifc
 		{
 			AddChunk();
 		}
-
 
 		inline void unLoadChunk(uint32_t ChunkIndex)
 		{
@@ -2230,7 +2245,7 @@ namespace webifc
 			{
 				memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], chunkEndPos - chunkStartPos);
 				updateChunks();
-				
+
 				return chunkEndPos - chunkStartPos;
 			}
 			else
@@ -2240,7 +2255,7 @@ namespace webifc
 				memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], partOfStartchunk);
 				memcpy(dest + partOfStartchunk, &chunks[chunkEnd].chunk[0], chunkEndPos);
 				updateChunks();
-				
+
 				return partOfStartchunk + chunkEndPos;
 			}
 		}
@@ -2276,7 +2291,6 @@ namespace webifc
 		bool callbackActive = false;
 
 	private:
-
 		uint32_t readPtr = 0;
 		uint32_t readChunkIndex = 0;
 		uint32_t writePtr = -1;

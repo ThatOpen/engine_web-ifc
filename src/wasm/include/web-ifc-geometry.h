@@ -856,16 +856,7 @@ namespace webifc
 						for (uint32_t i = 0; i < profile.profiles.size(); i++)
 						{
 							IfcGeometry geom_t = Sweep(profile.profiles[i], directrix, axis);
-							uint32_t maxIndex = geom.numPoints;
-							geom.numPoints += geom_t.numPoints;
-							geom.vertexData.insert(geom.vertexData.end(), geom_t.vertexData.begin(), geom_t.vertexData.end());
-							for (uint32_t k = 0; k < geom_t.numFaces; k++)
-							{
-								geom.AddFace(
-									maxIndex + geom_t.indexData[k * 3 + 0],
-									maxIndex + geom_t.indexData[k * 3 + 1],
-									maxIndex + geom_t.indexData[k * 3 + 2]);
-							}
+							geom.AddGeometry(geom_t);
 						}
 					}
 
@@ -953,16 +944,7 @@ namespace webifc
 									geom_t.indexData[k * 3 + 1] = temp;
 								}
 							}
-							uint32_t maxIndex = geom.numPoints;
-							geom.numPoints += geom_t.numPoints;
-							geom.vertexData.insert(geom.vertexData.end(), geom_t.vertexData.begin(), geom_t.vertexData.end());
-							for (uint32_t k = 0; k < geom_t.numFaces; k++)
-							{
-								geom.AddFace(
-									maxIndex + geom_t.indexData[k * 3 + 0],
-									maxIndex + geom_t.indexData[k * 3 + 1],
-									maxIndex + geom_t.indexData[k * 3 + 2]);
-							}
+							geom.AddGeometry(geom_t);
 						}
 					}
 
