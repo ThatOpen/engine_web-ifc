@@ -418,7 +418,7 @@ namespace webifc
 		IfcCurve<2> curve;
 		std::vector<IfcCurve<2>> holes;
 		bool isConvex;
-		bool isComposite;
+		bool isComposite = false;
 		std::vector<IfcProfile> profiles;
 	};
 
