@@ -65,8 +65,8 @@ export class Properties {
         return IfcTypesMap[type];
     }
 
-    async getItemProperties(modelID: number, id: number, recursive = false) {
-        return this.api.GetLine(modelID, id, recursive);
+    async getItemProperties(modelID: number, id: number, recursive = false, inverse = false) {
+        return this.api.GetLine(modelID, id, recursive, inverse);
     }
 
     async getPropertySets(modelID: number, elementID: number, recursive = false) {
@@ -90,6 +90,11 @@ export class Properties {
         await this.getSpatialNode(modelID, project, chunks, includeProperties);
         this.cleanupTypes();
         return project;
+    }
+
+    async getAllTypesFromModel(modelID: number){
+        await this.getAllTypesOfModel(modelID);
+        return this.types;
     }
 
     async getAllItemsOfType(modelID: number, type: number, verbose: boolean) {

@@ -677,7 +677,7 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 1);
 					auto type = _loader.GetStringArgument();
 
-					if (type != "Body")
+					if (type != "Body" && type != "Facetation")
 					{
 						return mesh;
 					}
@@ -949,6 +949,7 @@ namespace webifc
 			std::vector<uint32_t> result;
 
 			IfcTokenType t = _loader.GetTokenType();
+			// If you receive a reference then go to the reference
 			if (t == IfcTokenType::REF)
 			{
 				_loader.Reverse();
@@ -956,15 +957,36 @@ namespace webifc
 				auto &line = _loader.GetLine(lineID);
 				_loader.MoveToArgumentOffset(line, 0);
 			}
+			// If you receive a text (IFCLINEINDEX) then read the text and go on
+			else if (t == IfcTokenType::LABEL)
+			{
+				_loader.Reverse();
+				string nameElement = _loader.GetStringArgument();
+			}
 
 			// while we don't have line set end
 			while (_loader.GetTokenType() != IfcTokenType::SET_END)
 			{
 				_loader.Reverse();
-				if ((_loader.GetTokenType() == IfcTokenType::REAL))
+				t = _loader.GetTokenType();
+				// If you receive a real then add the real to the list
+				if (t == IfcTokenType::REAL)
 				{
 					_loader.Reverse();
 					result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+				}
+				// If you receive a text (IFCLINEINDEX) then read the text and go on
+				else if (t == IfcTokenType::LABEL)
+				{
+					_loader.Reverse();
+					string nameElement = _loader.GetStringArgument();
+				}
+				// If you receive a list then call the function in a recursive way
+				else if (t == IfcTokenType::SET_BEGIN)
+				{
+					_loader.Reverse();
+					std::vector<uint32_t> _result = ReadCurveIndices();
+					result.insert(result.end(), _result.begin(), _result.end());
 				}
 			}
 
@@ -2926,6 +2948,23 @@ namespace webifc
 
 				return profile;
 			}
+			case ifc2x4::IFCDERIVEDPROFILEDEF:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				uint32_t profileID = _loader.GetRefArgument();
+				IfcProfile profile = GetProfileByLine(_loader.ExpressIDToLineID(profileID));
+
+				_loader.MoveToArgumentOffset(line, 3);
+				uint32_t transformID = _loader.GetRefArgument();
+				glm::dmat3 transformation = GetAxis2Placement2D(transformID);
+
+				for (uint32_t i = 0; i < profile.curve.points.size(); i++)
+				{
+					profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i], 1);
+				}
+
+				return profile;
+			}
 			default:
 				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", line.expressID, line.ifcType});
 				break;
@@ -3401,28 +3440,94 @@ namespace webifc
 		{
 			uint32_t lineID = _loader.ExpressIDToLineID(expressID);
 			auto &line = _loader.GetLine(lineID);
-
-			_loader.MoveToArgumentOffset(line, 0);
-			uint32_t locationID = _loader.GetRefArgument();
-			IfcTokenType dirToken = _loader.GetTokenType();
-
-			glm::dvec2 xAxis = glm::dvec2(1, 0);
-			if (dirToken == IfcTokenType::REF)
+			switch (line.ifcType)
 			{
-				_loader.Reverse();
-				xAxis = glm::normalize(GetCartesianPoint2D(_loader.GetRefArgument()));
+			case ifc2x4::IFCAXIS2PLACEMENT2D:
+			{
+
+				uint32_t lineID = _loader.ExpressIDToLineID(expressID);
+				auto &line = _loader.GetLine(lineID);
+
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t locationID = _loader.GetRefArgument();
+				IfcTokenType dirToken = _loader.GetTokenType();
+
+				glm::dvec2 xAxis = glm::dvec2(1, 0);
+				if (dirToken == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					xAxis = glm::normalize(GetCartesianPoint2D(_loader.GetRefArgument()));
+				}
+
+				glm::dvec2 pos = GetCartesianPoint2D(locationID);
+
+				glm::dvec2 yAxis = glm::normalize(glm::dvec2(xAxis.y, -xAxis.x));
+
+				return glm::dmat3(
+					glm::dvec3(xAxis, 0),
+					glm::dvec3(yAxis, 0),
+					glm::dvec3(pos, 1));
+			}
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2D:
+			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM:
+			{
+				double scale1 = 1.0;
+				double scale2 = 1.0;
+
+				glm::dvec2 Axis1(1, 0);
+				glm::dvec2 Axis2(0, 1);
+
+				_loader.MoveToArgumentOffset(line, 0);
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					Axis1 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+				}
+				_loader.MoveToArgumentOffset(line, 1);
+				if (_loader.GetTokenType() == IfcTokenType::REF)
+				{
+					_loader.Reverse();
+					Axis2 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+				}
+
+				_loader.MoveToArgumentOffset(line, 2);
+				uint32_t posID = _loader.GetRefArgument();
+				glm::dvec2 pos = GetCartesianPoint2D(posID);
+
+				_loader.MoveToArgumentOffset(line, 3);
+				if (_loader.GetTokenType() == IfcTokenType::REAL)
+				{
+					_loader.Reverse();
+					scale1 = _loader.GetDoubleArgument();
+				}
+
+				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
+				{
+					_loader.MoveToArgumentOffset(line, 4);
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						scale2 = _loader.GetDoubleArgument();
+					}
+				}
+
+				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
+				{
+					scale2 = scale1;
+				}
+
+				return glm::dmat3(
+					glm::dvec3(Axis1 * scale1, 0),
+					glm::dvec3(Axis2 * scale2, 0),
+					glm::dvec3(pos, 1));
+			}
+			default:
+				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 2D placement type", line.expressID, line.ifcType});
+				break;
 			}
 
-			glm::dvec2 pos = GetCartesianPoint2D(locationID);
-
-			glm::dvec2 yAxis = glm::normalize(glm::dvec2(xAxis.y, -xAxis.x));
-
-			return glm::dmat3(
-				glm::dvec3(xAxis, 0),
-				glm::dvec3(yAxis, 0),
-				glm::dvec3(pos, 1));
+			return glm::dmat3();
 		}
-
 		bool ValidExpressId(uint32_t expressID)
 		{
 			if (_loader.ValidExpressID(expressID))
@@ -3495,6 +3600,7 @@ namespace webifc
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
 				glm::dvec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+				xAxis = glm::normalize(glm::cross(yAxis, zAxis));
 
 				return glm::dmat4(
 					glm::dvec4(xAxis, 0),
@@ -3583,22 +3689,16 @@ namespace webifc
 
 				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D)
 				{
-					return glm::dmat4(
-						glm::dvec4(Axis1 * scale1, 0),
-						glm::dvec4(Axis2 * scale1, 0),
-						glm::dvec4(Axis3 * scale1, 0),
-						glm::dvec4(pos, 1));
+					scale2 = scale1;
+					scale3 = scale1;
 				}
-				else
-				{
-					return glm::dmat4(
-						glm::dvec4(Axis1 * scale1, 0),
-						glm::dvec4(Axis2 * scale2, 0),
-						glm::dvec4(Axis3 * scale3, 0),
-						glm::dvec4(pos, 1));
-				}
-			}
 
+				return glm::dmat4(
+					glm::dvec4(Axis1 * scale1, 0),
+					glm::dvec4(Axis2 * scale2, 0),
+					glm::dvec4(Axis3 * scale3, 0),
+					glm::dvec4(pos, 1));
+			}
 			default:
 				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", line.expressID, line.ifcType});
 				break;

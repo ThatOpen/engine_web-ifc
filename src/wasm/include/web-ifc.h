@@ -24,10 +24,21 @@ const uint32_t TAPE_SIZE = 1 << 24;
 
 namespace webifc
 {
-	struct LoaderSettings
+        enum class LogLevel : int
+	{
+		DEBUG = 0,
+		INFO,
+		WARN,
+		ERROR,
+		OFF
+	};
+
+        LogLevel LOG_LEVEL = LogLevel::INFO;
+
+        struct LoaderSettings
 	{
 		bool COORDINATE_TO_ORIGIN = false;
-		bool USE_FAST_BOOLS = true;
+		bool USE_FAST_BOOLS = true; //TODO: This needs to be fixed in the future to rely on elalish/manifold
 		bool DUMP_CSG_MESHES = false;
 		int CIRCLE_SEGMENTS_LOW = 5;
 		int CIRCLE_SEGMENTS_MEDIUM = 8;
@@ -36,7 +47,27 @@ namespace webifc
 		int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
 	};
 
-	enum class LoaderErrorType
+        void log(const std::string& msg, const LogLevel& level)
+	{
+        	if (level >= LOG_LEVEL) {
+                	std::string fullMsg = msg;
+                        switch (level) {
+                                case LogLevel::DEBUG: fullMsg = "DEBUG: " + msg; break;
+                        	case LogLevel::INFO:  fullMsg = "INFO: "  + msg; break;
+                        	case LogLevel::WARN:  fullMsg = "WARN: "  + msg; break;
+                        	case LogLevel::ERROR: fullMsg = "ERROR: " + msg; break;
+                        	case LogLevel::OFF:   return;
+                        }
+                        std::cout << fullMsg << std::endl;
+                }
+        }
+
+        void logDebug(const std::string& msg) { log(msg, LogLevel::DEBUG); }
+        void logInfo(const std::string& msg)  { log(msg, LogLevel::INFO);  }
+        void logWarn(const std::string& msg)  { log(msg, LogLevel::WARN);  }
+        void logError(const std::string& msg) { log(msg, LogLevel::ERROR); }
+
+        enum class LoaderErrorType
 	{
 		UNSPECIFIED,
 		PARSING,
@@ -52,13 +83,13 @@ namespace webifc
 		uint32_t ifcType;
 
 		LoaderError(LoaderErrorType t = LoaderErrorType::UNSPECIFIED,
-					std::string m = "",
-					uint32_t e = 0,
-					uint32_t type = 0) : type(t),
-										 message(m),
-										 expressID(e),
-										 ifcType(type)
-		{
+                            std::string m = "",
+                            uint32_t e = 0,
+                            uint32_t type = 0) : type(t),
+                                                 message(m),
+                                                 expressID(e),
+                                                 ifcType(type)
+                {
 		}
 	};
 
@@ -76,6 +107,33 @@ namespace webifc
 	public:
 		IfcLoader(const LoaderSettings &s = {}) : _settings(s)
 		{
+		}
+
+		void ActivateSerializer(size_t RamLimit = 200000000)
+		{
+			_tape.serialize = true;
+			_tape.ramLimit = RamLimit;
+		}
+
+		void SetSerializedFileName(std::string serializedFileName)
+		{
+			_tape.serializedFileName = serializedFileName;
+		}
+
+		void SetCallback(const std::function<std::string(std::string, size_t)> &storeData)
+		{
+			_tape._storeData = storeData;
+			_tape.callbackActive = true;
+		}
+
+		void SetBinPaths(std::vector<std::string> paths)
+		{
+			_tape.BinPaths = paths;
+		}
+
+		void DisableSerializer()
+		{
+			_tape.serialize = false;
 		}
 
 		void PushDataToTape(void *data, size_t size)
@@ -126,6 +184,54 @@ namespace webifc
 
 			std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
 						   { return _metaData.lines[lineID].expressID; });
+
+			return ret;
+		}
+
+		uint32_t readFilePart(const std::function<uint32_t(char *, size_t)> &requestData)
+		{
+			Tokenizer<TAPE_SIZE> tokenizer(_tape);
+			return tokenizer.Tokenize(requestData);
+			return 0;
+		}
+
+		void storeLastChunk()
+		{
+			Tokenizer<TAPE_SIZE> tokenizer(_tape);
+			_tape.storeChunk();
+			_tape.updateMemory();
+		}
+
+		uint32_t loadMetadata()
+		{
+			uint32_t numLns = _tape.loadMetadata();
+			_tape.updateChunks();
+			return numLns;
+		}
+
+		void storeMetadata(uint32_t numLines)
+		{
+			_tape.storeMetadata(numLines);
+		}
+
+		void LoadSerializedFileData(uint32_t numLines)
+		{
+			Parser<TAPE_SIZE> parser(_tape, _metaData);
+			parser.ParseTape(numLines);
+			PopulateRelVoidsMap();
+			PopulateRelAggregatesMap();
+			PopulateStyledItemMap();
+			PopulateRelMaterialsMap();
+			ReadLinearScalingFactor();
+		}
+
+		std::vector<IfcHeaderLine> GetHeaderLinesWithType(uint32_t type)
+		{
+			auto &list = _metaData.ifcTypeToHeaderLineID[type];
+			std::vector<IfcHeaderLine> ret(list.size());
+
+			std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
+						   { return _metaData.headerLines[lineID]; });
 
 			return ret;
 		}
@@ -269,9 +375,68 @@ namespace webifc
 					if (unitType == "LENGTHUNIT" && unitName == "METRE")
 					{
 						double prefix = ConvertPrefix(unitPrefix);
-						_metaData.linearScalingFactor = prefix;
+						_metaData.linearScalingFactor *= prefix;
 					}
 				}
+				if(line.ifcType == ifc2x4::IFCCONVERSIONBASEDUNIT)
+				{
+					MoveToArgumentOffset(line, 1);
+					std::string unitType = GetStringArgument();
+					MoveToArgumentOffset(line, 3);
+					auto unitRefLine = GetRefArgument();
+					auto &unitLine = GetLine(ExpressIDToLineID(unitRefLine));
+					
+					MoveToArgumentOffset(unitLine, 1);
+					auto ratios = GetSetArgument();
+
+					///Scale Correction
+
+					MoveToArgumentOffset(unitLine, 2);
+					auto scaleRefLine = GetRefArgument();
+
+					auto &scaleLine = GetLine(ExpressIDToLineID(scaleRefLine));
+
+					MoveToArgumentOffset(scaleLine, 1);
+					std::string unitTypeScale = GetStringArgument();
+
+					std::string unitPrefix;
+
+					MoveToArgumentOffset(scaleLine, 2);
+					if (GetTokenType() == IfcTokenType::ENUM)
+					{
+						Reverse();
+						unitPrefix = GetStringArgument();
+					}
+
+					MoveToArgumentOffset(scaleLine, 3);
+					std::string unitName = GetStringArgument();
+
+					if (unitTypeScale == "LENGTHUNIT" && unitName == "METRE")
+					{
+						double prefix = ConvertPrefix(unitPrefix);
+						_metaData.linearScalingFactor *= prefix;
+					}
+
+					///
+
+					double ratio = GetDoubleArgument(ratios[0]);
+					if(unitType == "LENGTHUNIT")
+					{
+						_metaData.linearScalingFactor *= ratio;
+					}
+					else if (unitType == "AREAUNIT")
+					{
+						_metaData.squaredScalingFactor *= ratio;
+					}
+					else if (unitType == "VOLUMEUNIT")
+					{
+						_metaData.cubicScalingFactor *= ratio;
+					}
+					else if (unitType == "PLANEANGLEUNIT")
+					{
+						_metaData.angularScalingFactor *= ratio;
+					}
+				}		
 			}
 		}
 
@@ -393,11 +558,6 @@ namespace webifc
 			}
 		}
 
-		void DumpToDisk()
-		{
-			_tape.DumpToDisk();
-		}
-
 		size_t GetNumLines()
 		{
 			return _metaData.lines.size();
@@ -406,6 +566,11 @@ namespace webifc
 		std::vector<uint32_t> &GetLineIDsWithType(uint32_t type)
 		{
 			return _metaData.ifcTypeToLineID[type];
+		}
+
+		uint32_t GetMaxExpressId()
+		{
+			return _metaData.expressIDToLine.size() - 1;
 		}
 
 		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t *dest)
@@ -421,9 +586,23 @@ namespace webifc
 			return _metaData.expressIDToLine.capacity() > expressID;
 		}
 
+		bool ValidateExpressID(uint32_t expressID)
+		{
+			std::vector<IfcLine>& lines = _metaData.lines;
+
+			auto check = find_if(lines.begin(), lines.end(), [&expressID](const IfcLine& obj){return obj.expressID == expressID;});
+
+			return (check != lines.end());
+		}
+
 		uint32_t ExpressIDToLineID(uint32_t expressID)
 		{
 			return _metaData.expressIDToLine[expressID];
+		}
+		
+		uint32_t LineIDToExpressID(uint32_t lineID)
+		{
+			return _metaData.lines[lineID].expressID;
 		}
 
 		IfcLine &GetLine(uint32_t lineID)
@@ -459,7 +638,17 @@ namespace webifc
 		void MoveToArgumentOffset(IfcLine &line, int argumentIndex)
 		{
 			_tape.MoveTo(line.tapeOffset);
+			ArgumentOffset(argumentIndex);
+		}
 
+		void MoveToHeaderArgumentOffset(IfcHeaderLine &line, int argumentIndex)
+		{
+			_tape.MoveTo(line.tapeOffset);
+			ArgumentOffset(argumentIndex);	
+		}
+
+		void ArgumentOffset(int argumentIndex)
+		{
 			int movedOver = -1;
 			int setDepth = 0;
 			while (true)
@@ -542,6 +731,12 @@ namespace webifc
 			StringView s = _tape.ReadStringView();
 
 			return std::string(s.data, s.len);
+		}
+
+		inline std::string GetStringArgument(uint32_t tapeOffset)
+		{
+			_tape.MoveTo(tapeOffset);
+			return GetStringArgument();
 		}
 
 		inline StringView GetStringViewArgument()
@@ -856,6 +1051,24 @@ namespace webifc
 			return DumpAsIFC(lines);
 		}
 
+		std::string getAsStringWithBigE(double theNumber)
+		{
+			std::stringstream stream;
+			stream << theNumber;
+			std::string s = stream.str();
+
+			for (unsigned int j = 0; j < s.length(); j++)
+			{
+				if (s[j] == 'e')
+				{
+					s[j] = 'E';
+					break;
+				}
+			}
+
+			return s;
+		}
+
 		std::string DumpAsIFC(const std::vector<IfcLine> &lines = {})
 		{
 			std::stringstream file;
@@ -970,7 +1183,9 @@ namespace webifc
 					{
 						double d = _tape.Read<double>();
 
-						file << d;
+						// file << d;
+
+						file << getAsStringWithBigE(d);
 
 						break;
 					}
@@ -993,7 +1208,7 @@ namespace webifc
 			}
 
 			file << "ENDSEC;" << std::endl
-				 << "END-ISO-10303-21;";
+                             << "END-ISO-10303-21;";
 
 			return file.str();
 		}
@@ -1005,7 +1220,7 @@ namespace webifc
 
 		void ReportError(const LoaderError &&error)
 		{
-			std::cout << error.message << std::endl;
+                        logError(error.message);
 			_errors.push_back(std::move(error));
 		}
 
