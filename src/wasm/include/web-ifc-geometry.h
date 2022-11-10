@@ -785,12 +785,24 @@ namespace webifc
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
 						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", line.expressID});
+						_loader.Reverse();
 						innerRadius = _loader.GetDoubleArgument();
 					}
 
-					// TODO: ignoring start/end params for now
-					double startParam = 0; // = _loader.GetDoubleArgument();
-					double endParam = 0;   // = _loader.GetDoubleArgument();
+					double startParam = 0;
+					double endParam = 0;
+
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						startParam = _loader.GetDoubleArgument();
+					}
+
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						endParam = _loader.GetDoubleArgument();
+					}
 
 					IfcCurve<3> directrix = GetCurve<3>(directrixRef);
 
@@ -2371,7 +2383,23 @@ namespace webifc
 		{
 			IfcGeometry geom;
 
-			auto &dpts = directrix.points;
+			std::vector<glm::vec<3, glm::f64>> dpts;
+
+			// Remove repeated points
+			for (int i = 0; i < directrix.points.size(); i++)
+			{
+				if (i < directrix.points.size() - 1)
+				{
+					if (glm::distance(directrix.points[i], directrix.points[i + 1]) > 10e-5)
+					{
+						dpts.push_back(directrix.points[i]);
+					}
+				}
+				else
+				{
+					dpts.push_back(directrix.points[i]);
+				}
+			}
 
 			if (dpts.size() <= 1)
 			{
@@ -2409,6 +2437,8 @@ namespace webifc
 					glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
 					glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
 
+					double prod = glm::dot(n1, n2);
+
 					if (std::isnan(p.x))
 					{
 						// TODO: sometimes outliers cause the perp to become NaN!
@@ -2420,6 +2450,14 @@ namespace webifc
 
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
 					glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
+
+					// TODO: Bad solution to prevent projection to infinity
+					if (glm::dot(n1, n2) < -0.9)
+					{
+						n2 = -n2;
+						u2 = -u2;
+					}
+
 					glm::dvec3 au = glm::normalize(u1 + u2);
 					planeNormal = glm::normalize(glm::cross(au, p));
 					directrixSegmentNormal = n1; // n1 or n2 doesn't matter
@@ -2437,6 +2475,10 @@ namespace webifc
 						if (left == glm::dvec3(0, 0, 0))
 						{
 							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.x, directrixSegmentNormal.z, directrixSegmentNormal.y));
+						}
+						if (left == glm::dvec3(0, 0, 0))
+						{
+							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.z, directrixSegmentNormal.y, directrixSegmentNormal.x));
 						}
 					}
 					else
@@ -2460,7 +2502,7 @@ namespace webifc
 						glm::dvec3 pt = pt2D.x * left + pt2D.y * right + planeOrigin;
 						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
-						segmentForCurve.Add(pt);
+						segmentForCurve.Add(proj);
 					}
 				}
 				else
