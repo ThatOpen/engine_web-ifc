@@ -2926,7 +2926,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCDERIVEDPROFILEDEF:
+			case ifc::IFCDERIVEDPROFILEDEF:
 			{				
 				_loader.MoveToArgumentOffset(line, 2);
 				uint32_t profileID = _loader.GetRefArgument();
@@ -3420,7 +3420,7 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCAXIS2PLACEMENT2D:
+			case ifc::IFCAXIS2PLACEMENT2D:
 			{
 
 				uint32_t lineID = _loader.ExpressIDToLineID(expressID);
@@ -3446,8 +3446,8 @@ namespace webifc
 					glm::dvec3(yAxis, 0),
 					glm::dvec3(pos, 1));
 			}
-			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2D:
-			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM:
+			case ifc::IFCCARTESIANTRANSFORMATIONOPERATOR2D:
+			case ifc::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM:
 			{
 				double scale1 = 1.0;
 				double scale2 = 1.0;
@@ -3479,7 +3479,7 @@ namespace webifc
 					scale1 = _loader.GetDoubleArgument();
 				}
 
-				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
+				if (line.ifcType == ifc::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
 				{
 					_loader.MoveToArgumentOffset(line, 4);
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
@@ -3489,7 +3489,7 @@ namespace webifc
 					}
 				}
 
-				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
+				if (line.ifcType == ifc::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
 				{
 					scale2 = scale1;
 				}

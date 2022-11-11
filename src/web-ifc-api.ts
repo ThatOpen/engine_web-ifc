@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {IfcElements} from "./ifc2x4";
+import {IfcElements,FILE_SCHEMA} from "./ifc-schema";
 
 let WebIFCWasm;
 
@@ -15,10 +15,10 @@ else
 {
     WebIFCWasm = require("./web-ifc");
 }
-export * from "./ifc2x4";
-import * as ifc2x4helper from "./ifc2x4_helper";
+export * from "./ifc-schema";
+import * as ifc from "./ifc_schema_helper";
 import { Properties } from "./helpers/properties";
-export * from "./ifc2x4_helper";
+export * from "./ifc_schema_helper";
 
 export const UNKNOWN = 0;
 export const STRING = 1;
@@ -98,7 +98,9 @@ export class IfcAPI
     fs: undefined | any = undefined;
     wasmPath: string = "";
     isWasmPathAbsolute = false;
-
+    
+    modelSchemaList: number[];
+    
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
     /**
@@ -171,6 +173,7 @@ export class IfcAPI
 
             return srcSize;
         });
+        this.modelSchemaList[result] = this.GetHeaderLine(result,FILE_SCHEMA);
         return result;
     }
 
@@ -242,14 +245,15 @@ export class IfcAPI
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        let schema = this.GetHeaderLine(modelID,FILE_SCHEMA);
+        let lineData = ifc.FromRawLineData[schema][rawLineData.type](rawLineData);
         
         if (flatten)
         {
             this.FlattenLine(modelID, lineData);
         }
         
-        let inverseData = ifc2x4helper.InversePropertyDef[rawLineData.type];
+        let inverseData = ifc.InversePropertyDef[schema][rawLineData.type];
         if (inverse && inverseData != null) 
         {
           for (let inverseProp of inverseData) 
@@ -469,7 +473,7 @@ export class IfcAPI
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
        const map = new Map<string | number, string | number>();
 
-       for(let x = 0; x < IfcElements.length; x++){
+       for(let x = 0; x < Object().keys(IfcElements).length; x++){
 
            const type = IfcElements[x];
            const lines = this.GetLineIDsWithType(modelID, type);

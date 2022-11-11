@@ -1,3 +1,76 @@
+export function sortEntities(entities) {
+  let sortedEntities = [];
+  let unsortedEntities = [];
+  entities.forEach(val => unsortedEntities.push(val));
+  while (unsortedEntities.length > 0)
+  {
+    for (let i=0; i < unsortedEntities.length; i++) 
+    {
+      if (unsortedEntities[i].parent == null || sortedEntities.some( e => e.name === unsortedEntities[i].parent))
+      {
+        sortedEntities.push(unsortedEntities[i]);
+      }
+    }
+    unsortedEntities = unsortedEntities.filter(n => !sortedEntities.includes(n));
+  }
+  return sortedEntities;
+}
+
+export function generateClass(entity, buffer, types, schemaName) 
+{
+
+  if (!entity.parent)
+  {
+    buffer.push(`\texport class ${entity.name} {`);
+    buffer.push(`\t\texpressID: number;`);
+    buffer.push(`\t\ttype: number;`);
+  } 
+  else
+  {
+    buffer.push(`\texport class ${entity.name} extends ${schemaName}.${entity.parent} {`);
+  }
+  
+  entity.props.forEach((param) => {
+    let isType: Type = types.some( x => x.name == param.name);
+    let propType = `${(isType || param.primitive) ? param.type : "(Handle<" + schemaName + "."+ param.type + `> | ${schemaName}.${param.type})` }${param.set ? "[]" : ""} ${param.optional ? "| null" : ""}`;
+    buffer.push(`\t\t${param.name}: ${propType};`)
+  });
+  
+  entity.inverseProps.forEach((prop) => {
+    let type = `${"(Handle<" + schemaName + "."+ prop.type + `> | ${schemaName}.${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
+    buffer.push(`\t\t${prop.name}: ${type};`);
+  });
+
+  buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.map((p) => `${p.name}: ${(types.some( x => x.name == p.name) || p.primitive) ? p.type : "(Handle<" + schemaName + "."+ p.type + `> | ${schemaName}.${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  buffer.push(`\t\t{`)
+  if (!entity.parent)
+  {
+    buffer.push(`\t\t\tthis.expressID = expressID;`);
+    buffer.push(`\t\t\tthis.type = type;`);
+  } else {
+    var nonLocalProps = entity.derivedProps.filter(n => !entity.props.includes(n))
+    if (nonLocalProps.length ==0) buffer.push(`\t\t\tsuper(expressID,type);`);
+    else buffer.push(`\t\t\tsuper(expressID,type,${nonLocalProps.map((p) => `${p.name}`).join(", ")});`)
+  }
+  entity.props.forEach((param) => {
+      buffer.push(`\t\t\tthis.${param.name} = ${param.name};`)
+  });
+  
+  buffer.push(`\t\t}`)
+  buffer.push(`\t\tstatic FromTape(expressID: number, type: number, tape: any[]): ${entity.name}`)
+  buffer.push(`\t\t{`);
+  buffer.push(`\t\t\tlet ptr = 0;`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((p) => 'tape[ptr++]').join(", ")});`);
+  buffer.push(`\t\t}`)
+  buffer.push(`\t\tToTape(): any[]`)
+  buffer.push(`\t\t{`)
+  buffer.push(`\t\t\tlet args: any[] = [];`)
+  buffer.push(`\t\t\targs.push(${entity.derivedProps.map((p) => `this.${p.name}`).join(", ")});`);
+  buffer.push(`\t\t\treturn args;`)
+  buffer.push(`\t\t}`)
+  buffer.push(`\t};`);
+}
+
 export function makeCRCTable(){
     var c;
     var crcTable = [];
@@ -92,6 +165,7 @@ export function parseElements(data)
                 derivedInverseProps: [],
                 isIfcProduct: false
             };
+            if (name === "IfcProduct") entity.isIfcProduct = true;
             readProps = true;
             readInverse = false;
 
@@ -199,6 +273,11 @@ export function parseElements(data)
             let optional = split.indexOf("OPTIONAL") != -1;
             let set = split.indexOf("SET") != -1 || split.indexOf("LIST") != -1;
             let type = split[split.length - 1].replace(";", "");
+            let firstBracket = type.indexOf("(");
+            if (firstBracket != -1)
+            {
+                type = type.substr(0, firstBracket);
+            }
             let tsType = expTypeToTSType(type);
             entity.props.push({
                 name,
@@ -216,11 +295,12 @@ export function parseElements(data)
     };
 }
 
-function findParent(parentName: String, entityList: Entity[])
+function findEntity(entityName: String, entityList: Entity[])
 {
+  if (entityName == null) return null;
   for (var i=0; i < entityList.length;i++) 
   {
-      if (entityList[i].name == parentName)
+      if (entityList[i].name == entityName)
       {
         return entityList[i];
       }
@@ -230,19 +310,14 @@ function findParent(parentName: String, entityList: Entity[])
 
 export function walkParents(entity: Entity, entityList: Entity[])
 {
-    if (!entity.parent) return;
-    let parent = findParent(entity.parent,entityList);
-    if (parent == null) return;
-    walkParents(parent, entityList);
-    if (entity.name === "IfcProduct")
-    {
-      entity.isIfcProduct = true;
-    }
-    entity.derivedProps = [...parent.props, ...entity.derivedProps];
-    entity.derivedInverseProps = [...parent.inverseProps,...entity.derivedInverseProps];
-  
-    if (parent.isIfcProduct)
-    {
-        entity.isIfcProduct = true;
+    let parent = findEntity(entity.parent,entityList);
+    if (parent == null) {
+      entity.derivedProps  = entity.props;
+      entity.derivedInverseProps = entity.inverseProps;
+    } else {
+      walkParents(parent, entityList);
+      if (parent.isIfcProduct) entity.isIfcProduct = true;
+      entity.derivedProps = [...parent.derivedProps, ...entity.props];
+      entity.derivedInverseProps = [...parent.derivedInverseProps,...entity.inverseProps];
     }
 }

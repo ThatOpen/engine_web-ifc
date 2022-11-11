@@ -1,12 +1,9 @@
 import {
-    IfcAPI,
+    IfcAPI, IfcEntities,
     IFCPROJECT, IFCRELAGGREGATES, IFCRELASSOCIATESMATERIAL,
     IFCRELCONTAINEDINSPATIALSTRUCTURE,
     IFCRELDEFINESBYPROPERTIES, IFCRELDEFINESBYTYPE
 } from "../web-ifc-api";
-
-import { IfcElements } from './ifc-elements'
-import { IfcTypesMap } from "./types-map";
 
 interface pName {
     name: number;
@@ -62,7 +59,7 @@ export class Properties {
     }
 
     getIfcType(type: number) {
-        return IfcTypesMap[type];
+       return IfcEntities[type];
     }
 
     async getItemProperties(modelID: number, id: number, recursive = false, inverse = false) {
@@ -172,7 +169,7 @@ export class Properties {
 
     private getNodeType(id: number) {
         const typeID = this.types[id];
-        return IfcElements[typeID];
+        return IfcEntities[typeID];
     }
 
     private async getSpatialTreeChunks(modelID: number) {
