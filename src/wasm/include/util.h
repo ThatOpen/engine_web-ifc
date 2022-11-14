@@ -456,6 +456,21 @@ namespace webifc
 		Cylinder CylinderSurface;
 		Revolution RevolutionSurface;
 		Extrusion ExtrusionSurface;
+
+		glm::dvec3 normal()
+		{
+			if(!CylinderSurface.Active && !BSplineSurface.Active && !RevolutionSurface.Active)
+			{
+				return transformation[2];
+			}
+			else
+			{
+				if(BSplineSurface.Active) {printf("Normal to bspline still not implemented\n");}
+				if(CylinderSurface.Active) {printf("Normal to cylinder still not implemented\n");}
+				if(RevolutionSurface.Active) {printf("Normal to revolution still not implemented\n");}
+				return glm::dvec3(0);
+			}
+		}
 	};
 
 	struct IfcTrimmingSelect
@@ -853,7 +868,7 @@ namespace webifc
 			repetition++;
 		}
 
-		//If the second method fails then we go to the third method
+		// If the second method fails then we go to the third method
 		while (maxdi > maxError * 3 && repetition < 32)
 		{
 			double extension = 1;
@@ -1873,7 +1888,7 @@ namespace webifc
 		writeFile(filename, ToObj(geom, offset));
 	}
 
-	//This class defines a datachunk that can be loaded and unloaded from an external source file
+	// This class defines a datachunk that can be loaded and unloaded from an external source file
 	template <uint32_t N>
 	class chunkUnit
 	{
@@ -1906,7 +1921,6 @@ namespace webifc
 		{
 			AddChunk();
 		}
-
 
 		inline void unLoadChunk(uint32_t ChunkIndex)
 		{
@@ -2228,7 +2242,7 @@ namespace webifc
 			{
 				memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], chunkEndPos - chunkStartPos);
 				updateChunks();
-				
+
 				return chunkEndPos - chunkStartPos;
 			}
 			else
@@ -2238,7 +2252,7 @@ namespace webifc
 				memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], partOfStartchunk);
 				memcpy(dest + partOfStartchunk, &chunks[chunkEnd].chunk[0], chunkEndPos);
 				updateChunks();
-				
+
 				return partOfStartchunk + chunkEndPos;
 			}
 		}
@@ -2274,7 +2288,6 @@ namespace webifc
 		bool callbackActive = false;
 
 	private:
-
 		uint32_t readPtr = 0;
 		uint32_t readChunkIndex = 0;
 		uint32_t writePtr = -1;

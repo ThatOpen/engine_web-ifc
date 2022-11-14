@@ -395,7 +395,7 @@ int main()
     // return 0;
 
     //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#83 processing/05111002_IFCR2_Geo_Columns_1.ifc");
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/v41.ifc");
+    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -429,11 +429,8 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    SpecificLoadTest(loader, geometryLoader, 29888);
-    // SpecificLoadTest(loader, geometryLoader, 414835);
-    // SpecificLoadTest(loader, geometryLoader, 30782);
-    // SpecificLoadTest(loader, geometryLoader, 217102);
-    // SpecificLoadTest(loader, geometryLoader, 181);
+    SpecificLoadTest(loader, geometryLoader, 2591);
+    //SpecificLoadTest(loader, geometryLoader, 2837);
     //auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 

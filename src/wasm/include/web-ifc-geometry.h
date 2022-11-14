@@ -774,8 +774,92 @@ namespace webifc
 
 					return mesh;
 				}
+				case ifc2x4::IFCSURFACECURVESWEPTAREASOLID:
+				{
+
+					// TODO: closed sweeps not implemented
+					// TODO: the plane is not being used now
+
+					_loader.MoveToArgumentOffset(line, 0);
+
+					IfcProfile profile;
+					glm::dmat4 placement(1);
+					IfcCurve<3> directrix;
+					webifc::IfcSurface surface;
+
+					double startParam = 0;
+					double endParam = 1;
+					auto profileID = _loader.GetRefArgument();
+					auto placementID = _loader.GetRefArgument();
+					auto directrixRef = _loader.GetRefArgument();
+					bool closed = false;
+
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						startParam = _loader.GetDoubleArgument();
+					}
+
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						endParam = _loader.GetDoubleArgument();
+					}
+
+					auto surfaceID = _loader.GetRefArgument();
+
+					if (profileID)
+					{
+						profile = GetProfile(profileID);
+					}
+					else
+					{
+						break;
+					}
+
+					if (placementID)
+					{
+						placement = GetLocalPlacement(placementID);
+					}
+
+					if (directrixRef)
+					{
+						directrix = GetCurve<3>(directrixRef);
+					}
+					else
+					{
+						break;
+					}
+
+					double dst = glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]);
+					if (startParam == 0 && endParam == 1 && dst < 1e-5)
+					{
+						closed = true;
+					}
+
+					if (surfaceID)
+					{
+						surface = GetSurface(surfaceID);
+					}
+					else
+					{
+						break;
+					}
+
+					IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal());
+
+					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+
+					return mesh;
+				}
 				case ifc2x4::IFCSWEPTDISKSOLID:
 				{
+					// TODO: prevent self intersections in Sweep function still not working properly
+
+					bool closed = false;
+
 					_loader.MoveToArgumentOffset(line, 0);
 					auto directrixRef = _loader.GetRefArgument();
 
@@ -809,7 +893,7 @@ namespace webifc
 					IfcProfile profile;
 					profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM);
 
-					IfcGeometry geom = Sweep(profile, directrix);
+					IfcGeometry geom = Sweep(closed, profile, directrix);
 
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
@@ -832,11 +916,13 @@ namespace webifc
 					glm::dvec3 pos;
 					glm::dvec3 axis;
 
+					bool closed = false;
+
 					GetAxis1Placement(axis1PlacementID, pos, axis);
 
 					IfcCurve<3> directrix = BuildArc(pos, axis, angle);
 
-					IfcGeometry geom = Sweep(profile, directrix, axis);
+					IfcGeometry geom = Sweep(closed, profile, directrix, axis);
 
 					mesh.transformation = placement;
 					_expressIDToGeometry[line.expressID] = geom;
@@ -2379,7 +2465,7 @@ namespace webifc
 		}
 
 		//! This implementation generates much more vertices than needed, and does not have smoothed normals
-		IfcGeometry Sweep(const IfcProfile &profile, const IfcCurve<3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0))
+		IfcGeometry Sweep(const bool closed, const IfcProfile &profile, const IfcCurve<3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0))
 		{
 			IfcGeometry geom;
 
@@ -2399,6 +2485,20 @@ namespace webifc
 				{
 					dpts.push_back(directrix.points[i]);
 				}
+			}
+
+			if (closed)
+			{
+				glm::vec<3, glm::f64> dirStart = dpts[dpts.size() - 2] - dpts[dpts.size() - 1];
+				glm::vec<3, glm::f64> dirEnd = dpts[1] - dpts[0];
+				std::vector<glm::vec<3, glm::f64>> newDpts;
+				newDpts.push_back(dpts[0] + dirStart);
+				for (int i = 0; i < dpts.size(); i++)
+				{
+					newDpts.push_back(dpts[i]);
+				}
+				newDpts.push_back(dpts[dpts.size() - 1] + dirEnd);
+				dpts = newDpts;
 			}
 
 			if (dpts.size() <= 1)
@@ -2451,7 +2551,9 @@ namespace webifc
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
 					glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
 
-					// TODO: Bad solution to prevent projection to infinity
+					// TODO: When n1 and n2 have similar direction but opposite side...
+					// ... projection tend to infinity. -> glm::dot(n1, n2)
+					// I implemented a bad solution to prevent projection to infinity
 					if (glm::dot(n1, n2) < -0.9)
 					{
 						n2 = -n2;
@@ -2498,8 +2600,8 @@ namespace webifc
 					// TODO: look at holes
 					auto &ppts = profile.curve.points;
 					for (auto &pt2D : ppts)
-					{
-						glm::dvec3 pt = pt2D.x * left + pt2D.y * right + planeOrigin;
+					{						
+						glm::dvec3 pt = -pt2D.x * right + -pt2D.y * left + planeOrigin;
 						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
 						segmentForCurve.Add(proj);
@@ -2519,12 +2621,22 @@ namespace webifc
 					}
 				}
 
-				curves.push_back(segmentForCurve);
+				if (!closed || (i != 0 && i != dpts.size() - 1))
+				{
+					curves.push_back(segmentForCurve);
+				}
+			}
+
+			if (closed)
+			{
+				dpts.pop_back();
+				dpts.erase(dpts.begin());
 			}
 
 			// connect the curves
 			for (int i = 1; i < dpts.size(); i++)
 			{
+
 				const auto &c1 = curves[i - 1].points;
 				const auto &c2 = curves[i].points;
 
