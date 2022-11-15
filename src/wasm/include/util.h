@@ -474,6 +474,21 @@ namespace webifc
 		Cylinder CylinderSurface;
 		Revolution RevolutionSurface;
 		Extrusion ExtrusionSurface;
+
+		glm::dvec3 normal()
+		{
+			if(!CylinderSurface.Active && !BSplineSurface.Active && !RevolutionSurface.Active)
+			{
+				return transformation[2];
+			}
+			else
+			{
+				if(BSplineSurface.Active) {printf("Normal to bspline still not implemented\n");}
+				if(CylinderSurface.Active) {printf("Normal to cylinder still not implemented\n");}
+				if(RevolutionSurface.Active) {printf("Normal to revolution still not implemented\n");}
+				return glm::dvec3(0);
+			}
+		}
 	};
 
 	struct IfcTrimmingSelect
