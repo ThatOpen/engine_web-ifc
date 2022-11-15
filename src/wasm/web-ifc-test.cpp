@@ -394,10 +394,8 @@ int main()
 
     // return 0;
 
-    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#145 Solved/S_Office_Integrated Design Archi.ifc");
-    // std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#156 Solved/#172 Processing/15_testing.ifc");
-    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/IFC/IFC_BSI_ADVANCEDBREPS/bsi_basin-advanced-brep FAIL.ifc");
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#231/test.ifc");
+    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#83 processing/05111002_IFCR2_Geo_Columns_1.ifc");
+    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -431,12 +429,9 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = webifc::ms();
-    // SpecificLoadTest(loader, geometryLoader, 11);
-    // SpecificLoadTest(loader, geometryLoader, 414835);
-    // SpecificLoadTest(loader, geometryLoader, 30782);
-    // SpecificLoadTest(loader, geometryLoader, 217102);
-    // SpecificLoadTest(loader, geometryLoader, 181);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    SpecificLoadTest(loader, geometryLoader, 2591);
+    //SpecificLoadTest(loader, geometryLoader, 2837);
+    //auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = loader.GetAndClearErrors();
