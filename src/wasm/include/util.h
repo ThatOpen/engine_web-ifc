@@ -311,6 +311,22 @@ namespace webifc
 			return (uint32_t)&fvertexData[0];
 		}
 
+		void AddGeometry(IfcGeometry geom)
+		{
+			uint32_t maxIndex = numPoints;
+			numPoints += geom.numPoints;
+			min = glm::min(min, geom.min);
+			max = glm::max(max, geom.max);
+			vertexData.insert(vertexData.end(), geom.vertexData.begin(), geom.vertexData.end());
+			for (uint32_t k = 0; k < geom.numFaces; k++)
+			{
+				AddFace(
+					maxIndex + geom.indexData[k * 3 + 0],
+					maxIndex + geom.indexData[k * 3 + 1],
+					maxIndex + geom.indexData[k * 3 + 2]);
+			}
+		}
+
 		uint32_t GetVertexDataSize()
 		{
 			return (uint32_t)fvertexData.size();
@@ -402,6 +418,8 @@ namespace webifc
 		IfcCurve<2> curve;
 		std::vector<IfcCurve<2>> holes;
 		bool isConvex;
+		bool isComposite = false;
+		std::vector<IfcProfile> profiles;
 	};
 
 	struct IfcProfile3D

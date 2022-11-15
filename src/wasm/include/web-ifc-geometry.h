@@ -169,15 +169,36 @@ namespace webifc
 		IfcProfile GetProfile(uint32_t expressID)
 		{
 			auto profile = GetProfileByLine(_loader.ExpressIDToLineID(expressID));
-			if (!profile.curve.IsCCW())
+
+			if (!profile.isComposite)
 			{
-				profile.curve.Invert();
-			}
-			for (auto &hole : profile.holes)
-			{
-				if (hole.IsCCW())
+				if (!profile.curve.IsCCW())
 				{
-					hole.Invert();
+					profile.curve.Invert();
+				}
+				for (auto &hole : profile.holes)
+				{
+					if (hole.IsCCW())
+					{
+						hole.Invert();
+					}
+				}
+			}
+			else
+			{
+				for (uint32_t i = 0; i < profile.profiles.size(); i++)
+				{
+					if (!profile.profiles[i].curve.IsCCW())
+					{
+						profile.profiles[i].curve.Invert();
+					}
+					for (auto &hole : profile.profiles[i].holes)
+					{
+						if (hole.IsCCW())
+						{
+							hole.Invert();
+						}
+					}
 				}
 			}
 
@@ -922,7 +943,20 @@ namespace webifc
 
 					IfcCurve<3> directrix = BuildArc(pos, axis, angle);
 
-					IfcGeometry geom = Sweep(closed, profile, directrix, axis);
+					IfcGeometry geom;
+
+					if (!profile.isComposite)
+					{
+						geom = Sweep(closed, profile, directrix, axis);
+					}
+					else
+					{
+						for (uint32_t i = 0; i < profile.profiles.size(); i++)
+						{
+							IfcGeometry geom_t = Sweep(closed, profile.profiles[i], directrix, axis);
+							geom.AddGeometry(geom_t);
+						}
+					}
 
 					mesh.transformation = placement;
 					_expressIDToGeometry[line.expressID] = geom;
@@ -943,9 +977,22 @@ namespace webifc
 					double depth = _loader.GetDoubleArgument();
 
 					IfcProfile profile = GetProfile(profileID);
-					if (profile.curve.points.empty())
+					if (!profile.isComposite)
 					{
-						return mesh;
+						if (profile.curve.points.empty())
+						{
+							return mesh;
+						}
+					}
+					else
+					{
+						for (uint32_t i = 0; i < profile.profiles.size(); i++)
+						{
+							if (profile.profiles[i].curve.points.empty())
+							{
+								return mesh;
+							}
+						}
 					}
 
 					if (placementID)
@@ -958,24 +1005,48 @@ namespace webifc
 					double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
 					bool flipWinding = dirDot < 0; // can't be perp according to spec
 
+					// TODO: correct dump in case of compositeProfile
 					if (DEBUG_DUMP_SVG)
 					{
 						DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
 					}
 
-					IfcGeometry geom = Extrude(profile, dir, depth);
+					IfcGeometry geom;
 
-					if (flipWinding)
+					if (!profile.isComposite)
 					{
-						for (uint32_t i = 0; i < geom.numFaces; i++)
+						geom = Extrude(profile, dir, depth);
+						if (flipWinding)
 						{
-							uint32_t temp = geom.indexData[i * 3 + 0];
-							temp = geom.indexData[i * 3 + 0];
-							geom.indexData[i * 3 + 0] = geom.indexData[i * 3 + 1];
-							geom.indexData[i * 3 + 1] = temp;
+							for (uint32_t i = 0; i < geom.numFaces; i++)
+							{
+								uint32_t temp = geom.indexData[i * 3 + 0];
+								temp = geom.indexData[i * 3 + 0];
+								geom.indexData[i * 3 + 0] = geom.indexData[i * 3 + 1];
+								geom.indexData[i * 3 + 1] = temp;
+							}
+						}
+					}
+					else
+					{
+						for (uint32_t i = 0; i < profile.profiles.size(); i++)
+						{
+							IfcGeometry geom_t = Extrude(profile.profiles[i], dir, depth);
+							if (flipWinding)
+							{
+								for (uint32_t k = 0; k < geom_t.numFaces; k++)
+								{
+									uint32_t temp = geom_t.indexData[k * 3 + 0];
+									temp = geom_t.indexData[k * 3 + 0];
+									geom_t.indexData[k * 3 + 0] = geom_t.indexData[k * 3 + 1];
+									geom_t.indexData[k * 3 + 1] = temp;
+								}
+							}
+							geom.AddGeometry(geom_t);
 						}
 					}
 
+					// TODO: correct dump in case of compositeProfile
 					if (DEBUG_DUMP_SVG)
 					{
 						DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
@@ -2176,35 +2247,69 @@ namespace webifc
 			double len = surface.ExtrusionSurface.Length;
 			glm::dvec3 dir = surface.ExtrusionSurface.Direction;
 
-			for (int j = 0; j < surface.ExtrusionSurface.Profile.curve.points.size() - 1; j++)
+			if (!surface.ExtrusionSurface.Profile.isComposite)
 			{
-				int j2 = j + 1;
+				for (int j = 0; j < surface.ExtrusionSurface.Profile.curve.points.size() - 1; j++)
+				{
+					int j2 = j + 1;
 
-				double npx = surface.ExtrusionSurface.Profile.curve.points[j].x + dir.x * len;
-				double npy = surface.ExtrusionSurface.Profile.curve.points[j].y + dir.y * len;
-				double npz = dir.z * len;
-				glm::dvec3 nptj1 = glm::dvec3(
-					npx,
-					npy,
-					npz);
-				npx = surface.ExtrusionSurface.Profile.curve.points[j2].x + dir.x * len;
-				npy = surface.ExtrusionSurface.Profile.curve.points[j2].y + dir.y * len;
-				npz = dir.z * len;
-				glm::dvec3 nptj2 = glm::dvec3(
-					npx,
-					npy,
-					npz);
-				geometry.AddFace(
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j], 0),
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
-					nptj1);
-				geometry.AddFace(
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
-					nptj2,
-					nptj1);
+					double npx = surface.ExtrusionSurface.Profile.curve.points[j].x + dir.x * len;
+					double npy = surface.ExtrusionSurface.Profile.curve.points[j].y + dir.y * len;
+					double npz = dir.z * len;
+					glm::dvec3 nptj1 = glm::dvec3(
+						npx,
+						npy,
+						npz);
+					npx = surface.ExtrusionSurface.Profile.curve.points[j2].x + dir.x * len;
+					npy = surface.ExtrusionSurface.Profile.curve.points[j2].y + dir.y * len;
+					npz = dir.z * len;
+					glm::dvec3 nptj2 = glm::dvec3(
+						npx,
+						npy,
+						npz);
+					geometry.AddFace(
+						glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j], 0),
+						glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
+						nptj1);
+					geometry.AddFace(
+						glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
+						nptj2,
+						nptj1);
+				}
 			}
+			else
+			{
+				for (uint32_t i = 0; i < surface.ExtrusionSurface.Profile.profiles.size(); i++)
+				{
+					for (int j = 0; j < surface.ExtrusionSurface.Profile.profiles[i].curve.points.size() - 1; j++)
+					{
+						int j2 = j + 1;
 
-			// TriangulateBounds(geometry, bounds);
+						double npx = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j].x + dir.x * len;
+						double npy = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j].y + dir.y * len;
+						double npz = dir.z * len;
+						glm::dvec3 nptj1 = glm::dvec3(
+							npx,
+							npy,
+							npz);
+						npx = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].x + dir.x * len;
+						npy = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].y + dir.y * len;
+						npz = dir.z * len;
+						glm::dvec3 nptj2 = glm::dvec3(
+							npx,
+							npy,
+							npz);
+						geometry.AddFace(
+							glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j], 0),
+							glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2], 0),
+							nptj1);
+						geometry.AddFace(
+							glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2], 0),
+							nptj2,
+							nptj1);
+					}
+				}
+			}
 		}
 
 		void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
@@ -3112,9 +3217,50 @@ namespace webifc
 				uint32_t transformID = _loader.GetRefArgument();
 				glm::dmat3 transformation = GetAxis2Placement2D(transformID);
 
-				for (uint32_t i = 0; i < profile.curve.points.size(); i++)
+				if (!profile.isComposite)
 				{
-					profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i], 1);
+					for (uint32_t i = 0; i < profile.curve.points.size(); i++)
+					{
+						profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i], 1);
+					}
+				}
+				else
+				{
+					for (uint32_t j = 0; j < profile.profiles.size(); j++)
+					{
+						for (uint32_t i = 0; i < profile.profiles[j].curve.points.size(); i++)
+						{
+							profile.profiles[j].curve.points[i] = transformation * glm::dvec3(profile.profiles[j].curve.points[i], 1);
+						}
+					}
+				}
+
+				return profile;
+			}
+			case ifc2x4::IFCCOMPOSITEPROFILEDEF:
+			{
+				IfcProfile profile = IfcProfile();
+
+				std::vector<uint32_t> lst;
+
+				_loader.MoveToArgumentOffset(line, 2);
+				IfcTokenType t = _loader.GetTokenType();
+				if (t == webifc::IfcTokenType::SET_BEGIN)
+				{
+					while (_loader.GetTokenType() == webifc::IfcTokenType::REF)
+					{
+						_loader.Reverse();
+						uint32_t profileID = _loader.ExpressIDToLineID(_loader.GetRefArgument());
+						lst.push_back(profileID);
+					}
+				}
+
+				profile.isComposite = true;
+
+				for (uint32_t i = 0; i < lst.size(); i++)
+				{
+					IfcProfile profile_t = GetProfileByLine(lst[i]);
+					profile.profiles.push_back(profile_t);
 				}
 
 				return profile;
