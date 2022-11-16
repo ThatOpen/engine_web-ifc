@@ -169,15 +169,36 @@ namespace webifc
 		IfcProfile GetProfile(uint32_t expressID)
 		{
 			auto profile = GetProfileByLine(_loader.ExpressIDToLineID(expressID));
-			if (!profile.curve.IsCCW())
+
+			if (!profile.isComposite)
 			{
-				profile.curve.Invert();
-			}
-			for (auto &hole : profile.holes)
-			{
-				if (hole.IsCCW())
+				if (!profile.curve.IsCCW())
 				{
-					hole.Invert();
+					profile.curve.Invert();
+				}
+				for (auto &hole : profile.holes)
+				{
+					if (hole.IsCCW())
+					{
+						hole.Invert();
+					}
+				}
+			}
+			else
+			{
+				for (uint32_t i = 0; i < profile.profiles.size(); i++)
+				{
+					if (!profile.profiles[i].curve.IsCCW())
+					{
+						profile.profiles[i].curve.Invert();
+					}
+					for (auto &hole : profile.profiles[i].holes)
+					{
+						if (hole.IsCCW())
+						{
+							hole.Invert();
+						}
+					}
 				}
 			}
 
@@ -776,6 +797,90 @@ namespace webifc
 				}
 				case ifc::IFCSWEPTDISKSOLID:
 				{
+
+					// TODO: closed sweeps not implemented
+					// TODO: the plane is not being used now
+
+					_loader.MoveToArgumentOffset(line, 0);
+
+					IfcProfile profile;
+					glm::dmat4 placement(1);
+					IfcCurve<3> directrix;
+					webifc::IfcSurface surface;
+
+					double startParam = 0;
+					double endParam = 1;
+					auto profileID = _loader.GetRefArgument();
+					auto placementID = _loader.GetRefArgument();
+					auto directrixRef = _loader.GetRefArgument();
+					bool closed = false;
+
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						startParam = _loader.GetDoubleArgument();
+					}
+
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						endParam = _loader.GetDoubleArgument();
+					}
+
+					auto surfaceID = _loader.GetRefArgument();
+
+					if (profileID)
+					{
+						profile = GetProfile(profileID);
+					}
+					else
+					{
+						break;
+					}
+
+					if (placementID)
+					{
+						placement = GetLocalPlacement(placementID);
+					}
+
+					if (directrixRef)
+					{
+						directrix = GetCurve<3>(directrixRef);
+					}
+					else
+					{
+						break;
+					}
+
+					double dst = glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]);
+					if (startParam == 0 && endParam == 1 && dst < 1e-5)
+					{
+						closed = true;
+					}
+
+					if (surfaceID)
+					{
+						surface = GetSurface(surfaceID);
+					}
+					else
+					{
+						break;
+					}
+
+					IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal());
+
+					_expressIDToGeometry[line.expressID] = geom;
+					mesh.expressID = line.expressID;
+					mesh.hasGeometry = true;
+
+					return mesh;
+				}
+				case ifc::IFCSWEPTDISKSOLID:
+				{
+					// TODO: prevent self intersections in Sweep function still not working properly
+
+					bool closed = false;
+
 					_loader.MoveToArgumentOffset(line, 0);
 					auto directrixRef = _loader.GetRefArgument();
 
@@ -785,19 +890,31 @@ namespace webifc
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
 						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", line.expressID});
+						_loader.Reverse();
 						innerRadius = _loader.GetDoubleArgument();
 					}
 
-					// TODO: ignoring start/end params for now
-					double startParam = 0; // = _loader.GetDoubleArgument();
-					double endParam = 0;   // = _loader.GetDoubleArgument();
+					double startParam = 0;
+					double endParam = 0;
+
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						startParam = _loader.GetDoubleArgument();
+					}
+
+					if (_loader.GetTokenType() == IfcTokenType::REAL)
+					{
+						_loader.Reverse();
+						endParam = _loader.GetDoubleArgument();
+					}
 
 					IfcCurve<3> directrix = GetCurve<3>(directrixRef);
 
 					IfcProfile profile;
 					profile.curve = GetCircleCurve(radius, _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM);
 
-					IfcGeometry geom = Sweep(profile, directrix);
+					IfcGeometry geom = Sweep(closed, profile, directrix);
 
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
@@ -820,11 +937,26 @@ namespace webifc
 					glm::dvec3 pos;
 					glm::dvec3 axis;
 
+					bool closed = false;
+
 					GetAxis1Placement(axis1PlacementID, pos, axis);
 
 					IfcCurve<3> directrix = BuildArc(pos, axis, angle);
 
-					IfcGeometry geom = Sweep(profile, directrix, axis);
+					IfcGeometry geom;
+
+					if (!profile.isComposite)
+					{
+						geom = Sweep(closed, profile, directrix, axis);
+					}
+					else
+					{
+						for (uint32_t i = 0; i < profile.profiles.size(); i++)
+						{
+							IfcGeometry geom_t = Sweep(closed, profile.profiles[i], directrix, axis);
+							geom.AddGeometry(geom_t);
+						}
+					}
 
 					mesh.transformation = placement;
 					_expressIDToGeometry[line.expressID] = geom;
@@ -845,9 +977,22 @@ namespace webifc
 					double depth = _loader.GetDoubleArgument();
 
 					IfcProfile profile = GetProfile(profileID);
-					if (profile.curve.points.empty())
+					if (!profile.isComposite)
 					{
-						return mesh;
+						if (profile.curve.points.empty())
+						{
+							return mesh;
+						}
+					}
+					else
+					{
+						for (uint32_t i = 0; i < profile.profiles.size(); i++)
+						{
+							if (profile.profiles[i].curve.points.empty())
+							{
+								return mesh;
+							}
+						}
 					}
 
 					if (placementID)
@@ -860,24 +1005,48 @@ namespace webifc
 					double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
 					bool flipWinding = dirDot < 0; // can't be perp according to spec
 
+					// TODO: correct dump in case of compositeProfile
 					if (DEBUG_DUMP_SVG)
 					{
 						DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
 					}
 
-					IfcGeometry geom = Extrude(profile, dir, depth);
+					IfcGeometry geom;
 
-					if (flipWinding)
+					if (!profile.isComposite)
 					{
-						for (uint32_t i = 0; i < geom.numFaces; i++)
+						geom = Extrude(profile, dir, depth);
+						if (flipWinding)
 						{
-							uint32_t temp = geom.indexData[i * 3 + 0];
-							temp = geom.indexData[i * 3 + 0];
-							geom.indexData[i * 3 + 0] = geom.indexData[i * 3 + 1];
-							geom.indexData[i * 3 + 1] = temp;
+							for (uint32_t i = 0; i < geom.numFaces; i++)
+							{
+								uint32_t temp = geom.indexData[i * 3 + 0];
+								temp = geom.indexData[i * 3 + 0];
+								geom.indexData[i * 3 + 0] = geom.indexData[i * 3 + 1];
+								geom.indexData[i * 3 + 1] = temp;
+							}
+						}
+					}
+					else
+					{
+						for (uint32_t i = 0; i < profile.profiles.size(); i++)
+						{
+							IfcGeometry geom_t = Extrude(profile.profiles[i], dir, depth);
+							if (flipWinding)
+							{
+								for (uint32_t k = 0; k < geom_t.numFaces; k++)
+								{
+									uint32_t temp = geom_t.indexData[k * 3 + 0];
+									temp = geom_t.indexData[k * 3 + 0];
+									geom_t.indexData[k * 3 + 0] = geom_t.indexData[k * 3 + 1];
+									geom_t.indexData[k * 3 + 1] = temp;
+								}
+							}
+							geom.AddGeometry(geom_t);
 						}
 					}
 
+					// TODO: correct dump in case of compositeProfile
 					if (DEBUG_DUMP_SVG)
 					{
 						DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
@@ -949,6 +1118,7 @@ namespace webifc
 			std::vector<uint32_t> result;
 
 			IfcTokenType t = _loader.GetTokenType();
+			// If you receive a reference then go to the reference
 			if (t == IfcTokenType::REF)
 			{
 				_loader.Reverse();
@@ -956,15 +1126,36 @@ namespace webifc
 				auto &line = _loader.GetLine(lineID);
 				_loader.MoveToArgumentOffset(line, 0);
 			}
+			// If you receive a text (IFCLINEINDEX) then read the text and go on
+			else if (t == IfcTokenType::LABEL)
+			{
+				_loader.Reverse();
+				string nameElement = _loader.GetStringArgument();
+			}
 
 			// while we don't have line set end
 			while (_loader.GetTokenType() != IfcTokenType::SET_END)
 			{
 				_loader.Reverse();
-				if ((_loader.GetTokenType() == IfcTokenType::REAL))
+				t = _loader.GetTokenType();
+				// If you receive a real then add the real to the list
+				if (t == IfcTokenType::REAL)
 				{
 					_loader.Reverse();
 					result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+				}
+				// If you receive a text (IFCLINEINDEX) then read the text and go on
+				else if (t == IfcTokenType::LABEL)
+				{
+					_loader.Reverse();
+					string nameElement = _loader.GetStringArgument();
+				}
+				// If you receive a list then call the function in a recursive way
+				else if (t == IfcTokenType::SET_BEGIN)
+				{
+					_loader.Reverse();
+					std::vector<uint32_t> _result = ReadCurveIndices();
+					result.insert(result.end(), _result.begin(), _result.end());
 				}
 			}
 
@@ -2056,35 +2247,69 @@ namespace webifc
 			double len = surface.ExtrusionSurface.Length;
 			glm::dvec3 dir = surface.ExtrusionSurface.Direction;
 
-			for (int j = 0; j < surface.ExtrusionSurface.Profile.curve.points.size() - 1; j++)
+			if (!surface.ExtrusionSurface.Profile.isComposite)
 			{
-				int j2 = j + 1;
+				for (int j = 0; j < surface.ExtrusionSurface.Profile.curve.points.size() - 1; j++)
+				{
+					int j2 = j + 1;
 
-				double npx = surface.ExtrusionSurface.Profile.curve.points[j].x + dir.x * len;
-				double npy = surface.ExtrusionSurface.Profile.curve.points[j].y + dir.y * len;
-				double npz = dir.z * len;
-				glm::dvec3 nptj1 = glm::dvec3(
-					npx,
-					npy,
-					npz);
-				npx = surface.ExtrusionSurface.Profile.curve.points[j2].x + dir.x * len;
-				npy = surface.ExtrusionSurface.Profile.curve.points[j2].y + dir.y * len;
-				npz = dir.z * len;
-				glm::dvec3 nptj2 = glm::dvec3(
-					npx,
-					npy,
-					npz);
-				geometry.AddFace(
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j], 0),
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
-					nptj1);
-				geometry.AddFace(
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
-					nptj2,
-					nptj1);
+					double npx = surface.ExtrusionSurface.Profile.curve.points[j].x + dir.x * len;
+					double npy = surface.ExtrusionSurface.Profile.curve.points[j].y + dir.y * len;
+					double npz = dir.z * len;
+					glm::dvec3 nptj1 = glm::dvec3(
+						npx,
+						npy,
+						npz);
+					npx = surface.ExtrusionSurface.Profile.curve.points[j2].x + dir.x * len;
+					npy = surface.ExtrusionSurface.Profile.curve.points[j2].y + dir.y * len;
+					npz = dir.z * len;
+					glm::dvec3 nptj2 = glm::dvec3(
+						npx,
+						npy,
+						npz);
+					geometry.AddFace(
+						glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j], 0),
+						glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
+						nptj1);
+					geometry.AddFace(
+						glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2], 0),
+						nptj2,
+						nptj1);
+				}
 			}
+			else
+			{
+				for (uint32_t i = 0; i < surface.ExtrusionSurface.Profile.profiles.size(); i++)
+				{
+					for (int j = 0; j < surface.ExtrusionSurface.Profile.profiles[i].curve.points.size() - 1; j++)
+					{
+						int j2 = j + 1;
 
-			// TriangulateBounds(geometry, bounds);
+						double npx = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j].x + dir.x * len;
+						double npy = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j].y + dir.y * len;
+						double npz = dir.z * len;
+						glm::dvec3 nptj1 = glm::dvec3(
+							npx,
+							npy,
+							npz);
+						npx = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].x + dir.x * len;
+						npy = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].y + dir.y * len;
+						npz = dir.z * len;
+						glm::dvec3 nptj2 = glm::dvec3(
+							npx,
+							npy,
+							npz);
+						geometry.AddFace(
+							glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j], 0),
+							glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2], 0),
+							nptj1);
+						geometry.AddFace(
+							glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2], 0),
+							nptj2,
+							nptj1);
+					}
+				}
+			}
 		}
 
 		void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
@@ -2345,11 +2570,41 @@ namespace webifc
 		}
 
 		//! This implementation generates much more vertices than needed, and does not have smoothed normals
-		IfcGeometry Sweep(const IfcProfile &profile, const IfcCurve<3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0))
+		IfcGeometry Sweep(const bool closed, const IfcProfile &profile, const IfcCurve<3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0))
 		{
 			IfcGeometry geom;
 
-			auto &dpts = directrix.points;
+			std::vector<glm::vec<3, glm::f64>> dpts;
+
+			// Remove repeated points
+			for (int i = 0; i < directrix.points.size(); i++)
+			{
+				if (i < directrix.points.size() - 1)
+				{
+					if (glm::distance(directrix.points[i], directrix.points[i + 1]) > 10e-5)
+					{
+						dpts.push_back(directrix.points[i]);
+					}
+				}
+				else
+				{
+					dpts.push_back(directrix.points[i]);
+				}
+			}
+
+			if (closed)
+			{
+				glm::vec<3, glm::f64> dirStart = dpts[dpts.size() - 2] - dpts[dpts.size() - 1];
+				glm::vec<3, glm::f64> dirEnd = dpts[1] - dpts[0];
+				std::vector<glm::vec<3, glm::f64>> newDpts;
+				newDpts.push_back(dpts[0] + dirStart);
+				for (int i = 0; i < dpts.size(); i++)
+				{
+					newDpts.push_back(dpts[i]);
+				}
+				newDpts.push_back(dpts[dpts.size() - 1] + dirEnd);
+				dpts = newDpts;
+			}
 
 			if (dpts.size() <= 1)
 			{
@@ -2387,6 +2642,8 @@ namespace webifc
 					glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
 					glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
 
+					double prod = glm::dot(n1, n2);
+
 					if (std::isnan(p.x))
 					{
 						// TODO: sometimes outliers cause the perp to become NaN!
@@ -2398,6 +2655,16 @@ namespace webifc
 
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
 					glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
+
+					// TODO: When n1 and n2 have similar direction but opposite side...
+					// ... projection tend to infinity. -> glm::dot(n1, n2)
+					// I implemented a bad solution to prevent projection to infinity
+					if (glm::dot(n1, n2) < -0.9)
+					{
+						n2 = -n2;
+						u2 = -u2;
+					}
+
 					glm::dvec3 au = glm::normalize(u1 + u2);
 					planeNormal = glm::normalize(glm::cross(au, p));
 					directrixSegmentNormal = n1; // n1 or n2 doesn't matter
@@ -2415,6 +2682,10 @@ namespace webifc
 						if (left == glm::dvec3(0, 0, 0))
 						{
 							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.x, directrixSegmentNormal.z, directrixSegmentNormal.y));
+						}
+						if (left == glm::dvec3(0, 0, 0))
+						{
+							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.z, directrixSegmentNormal.y, directrixSegmentNormal.x));
 						}
 					}
 					else
@@ -2434,11 +2705,11 @@ namespace webifc
 					// TODO: look at holes
 					auto &ppts = profile.curve.points;
 					for (auto &pt2D : ppts)
-					{
-						glm::dvec3 pt = pt2D.x * left + pt2D.y * right + planeOrigin;
+					{						
+						glm::dvec3 pt = -pt2D.x * right + -pt2D.y * left + planeOrigin;
 						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
-						segmentForCurve.Add(pt);
+						segmentForCurve.Add(proj);
 					}
 				}
 				else
@@ -2455,12 +2726,22 @@ namespace webifc
 					}
 				}
 
-				curves.push_back(segmentForCurve);
+				if (!closed || (i != 0 && i != dpts.size() - 1))
+				{
+					curves.push_back(segmentForCurve);
+				}
+			}
+
+			if (closed)
+			{
+				dpts.pop_back();
+				dpts.erase(dpts.begin());
 			}
 
 			// connect the curves
 			for (int i = 1; i < dpts.size(); i++)
 			{
+
 				const auto &c1 = curves[i - 1].points;
 				const auto &c2 = curves[i].points;
 
@@ -2926,6 +3207,7 @@ namespace webifc
 
 				return profile;
 			}
+
 			case ifc::IFCDERIVEDPROFILEDEF:
 			{				
 				_loader.MoveToArgumentOffset(line, 2);
@@ -2936,9 +3218,50 @@ namespace webifc
 				uint32_t transformID = _loader.GetRefArgument();
 				glm::dmat3 transformation = GetAxis2Placement2D(transformID);
 
-				for (uint32_t i = 0; i < profile.curve.points.size(); i++)
+				if (!profile.isComposite)
 				{
-					profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i], 1);
+					for (uint32_t i = 0; i < profile.curve.points.size(); i++)
+					{
+						profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i], 1);
+					}
+				}
+				else
+				{
+					for (uint32_t j = 0; j < profile.profiles.size(); j++)
+					{
+						for (uint32_t i = 0; i < profile.profiles[j].curve.points.size(); i++)
+						{
+							profile.profiles[j].curve.points[i] = transformation * glm::dvec3(profile.profiles[j].curve.points[i], 1);
+						}
+					}
+				}
+
+				return profile;
+			}
+			case ifc2x4::IFCCOMPOSITEPROFILEDEF:
+			{
+				IfcProfile profile = IfcProfile();
+
+				std::vector<uint32_t> lst;
+
+				_loader.MoveToArgumentOffset(line, 2);
+				IfcTokenType t = _loader.GetTokenType();
+				if (t == webifc::IfcTokenType::SET_BEGIN)
+				{
+					while (_loader.GetTokenType() == webifc::IfcTokenType::REF)
+					{
+						_loader.Reverse();
+						uint32_t profileID = _loader.ExpressIDToLineID(_loader.GetRefArgument());
+						lst.push_back(profileID);
+					}
+				}
+
+				profile.isComposite = true;
+
+				for (uint32_t i = 0; i < lst.size(); i++)
+				{
+					IfcProfile profile_t = GetProfileByLine(lst[i]);
+					profile.profiles.push_back(profile_t);
 				}
 
 				return profile;
@@ -3578,6 +3901,7 @@ namespace webifc
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
 
 				glm::dvec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+				xAxis = glm::normalize(glm::cross(yAxis, zAxis));
 
 				return glm::dmat4(
 					glm::dvec4(xAxis, 0),

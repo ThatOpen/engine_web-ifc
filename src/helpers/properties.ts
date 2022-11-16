@@ -73,6 +73,7 @@ export class Properties {
         return project;
     }
 
+
     private async getRelatedProperties(modelID: number, elementID: number, recursive = false, inversePropname, relationName) {
         const lineData = await this.api.GetLine(modelID, elementID, false, true);
         const result: any[] = [];
