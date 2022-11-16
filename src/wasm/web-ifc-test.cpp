@@ -9,7 +9,7 @@
 #include "include/web-ifc.h"
 #include "include/web-ifc-geometry.h"
 #include "include/math/triangulate-with-boundaries.h"
-#include "include/ifc2x4.h"
+#include "include/ifc-schema.h"
 
 std::string ReadFile(std::wstring filename)
 {
@@ -21,7 +21,7 @@ std::string ReadFile(std::wstring filename)
 
 void SpecificLoadTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader, uint64_t num)
 {
-    auto walls = loader.GetExpressIDsWithType(ifc2x4::IFCSLAB);
+    auto walls = loader.GetExpressIDsWithType(ifc::IFCSLAB);
 
     bool writeFiles = true;
 
@@ -37,7 +37,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader &loader, webifc::
 {
     std::vector<webifc::IfcFlatMesh> meshes;
 
-    for (auto type : ifc2x4::IfcElements)
+    for (auto type : ifc::IfcElement)
     {
         auto elements = loader.GetExpressIDsWithType(type);
 
@@ -247,7 +247,7 @@ uint32_t openSerialized(std::vector<std::string> paths, webifc::LoaderSettings s
 
     std::vector<webifc::IfcFlatMesh> meshes;
 
-    for (auto type : ifc2x4::IfcElements)
+    for (auto type : ifc::IfcElement)
     {
         auto elements = loaders[modelID]->GetExpressIDsWithType(type);
 
