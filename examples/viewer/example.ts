@@ -39,7 +39,7 @@ interface pt2D
 function Point(model: number, api: IfcAPI, o: pt): any
 {
     let ID = EID++;
-    let pt = new IfcCartesianPoint(ID, 
+    let pt = new IFC4.IfcCartesianPoint(ID, 
                     IFCCARTESIANPOINT, 
                     [real(o.x), real(o.y), real(o.z)]);
     api.WriteLine(model, pt);
@@ -49,7 +49,7 @@ function Point(model: number, api: IfcAPI, o: pt): any
 function Dir(model: number, api: IfcAPI, o: pt): any
 {
     let ID = EID++;
-    let pt = new IfcDirection(ID, 
+    let pt = new IFC4.IfcDirection(ID, 
                     IFCDIRECTION, 
                     [real(o.x), real(o.y), real(o.z)]);
     api.WriteLine(model, pt);
@@ -59,7 +59,7 @@ function Dir(model: number, api: IfcAPI, o: pt): any
 function Point2D(model: number, api: IfcAPI, o: pt2D): any
 {
     let ID = EID++;
-    let pt = new IfcCartesianPoint(ID, 
+    let pt = new IFC4.IfcCartesianPoint(ID, 
                     IFCCARTESIANPOINT, 
                     [real(o.x), real(o.y)]);
     api.WriteLine(model, pt);
@@ -70,7 +70,7 @@ function AxisPlacement(model: number, api: IfcAPI, o: pt): any
 {
     let locationID = Point(model, api, o);
     let ID = EID++;
-    let pt = new IfcAxis2Placement3D(ID, 
+    let pt = new IFC4.IfcAxis2Placement3D(ID, 
                     IFCAXIS2PLACEMENT3D, 
                     locationID, 
                     empty(),
@@ -83,7 +83,7 @@ function AxisPlacement2D(model: number, api: IfcAPI, o: pt2D): any
 {
     let locationID = Point2D(model, api, o);
     let ID = EID++;
-    let pt = new IfcAxis2Placement2D(ID, 
+    let pt = new IFC4.IfcAxis2Placement2D(ID, 
                     IFCAXIS2PLACEMENT2D,
                     locationID, 
                     empty());
@@ -95,7 +95,7 @@ function Placement(model: number, api: IfcAPI, o: pt)
 {
     let axisID = AxisPlacement(model, api, o);
     let ID = EID++;
-    let pt = new IfcLocalPlacement(ID, 
+    let pt = new IFC4.IfcLocalPlacement(ID, 
                     IFCLOCALPLACEMENT,
                     empty(),
                     axisID);
@@ -106,9 +106,9 @@ function Placement(model: number, api: IfcAPI, o: pt)
 function CircleProfile(model: number, api: IfcAPI, rad: number, o: pt2D)
 {
     let ID = EID++;
-    let pt = new IfcCircleProfileDef(ID,
+    let pt = new IFC4.IfcCircleProfileDef(ID,
                     IFCCIRCLEPROFILEDEF,
-                    enm(IfcProfileTypeEnum.AREA),
+                    enm(IFC4.IfcProfileTypeEnum.AREA),
                     str('column-prefab'),
                     AxisPlacement2D(model, api, o),
                     real(rad));
@@ -119,7 +119,7 @@ function CircleProfile(model: number, api: IfcAPI, rad: number, o: pt2D)
 function ExtrudedAreaSolid(model: number, api: IfcAPI, pos: pt, dir: pt, rad: number, len: number)
 {
     let ID = EID++;
-    let pt = new IfcExtrudedAreaSolid(ID, 
+    let pt = new IFC4.IfcExtrudedAreaSolid(ID, 
                     IFCEXTRUDEDAREASOLID,
                     CircleProfile(model, api, rad, { x: 0, y: 0 }),
                     AxisPlacement(model, api, pos),
@@ -138,7 +138,7 @@ function StandardColumn(model: number, api: IfcAPI, pos: pt)
         2);
 
     let ID = EID++;
-    let pt = new IfcColumn(ID, 
+    let pt = new IFC4.IfcColumn(ID, 
                     IFCCOLUMN,
                     str("GUID"),
                     empty(),

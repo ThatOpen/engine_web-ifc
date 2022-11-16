@@ -1,12 +1,12 @@
 const wifcapi = "../../dist/web-ifc-api-node.d.ts";
-const ifc2x4helper = "../../dist/ifc2x4_helper.d.ts";
-const ifc2x4 = "../../dist/ifc2x4.d.ts";
+const ifc_schema_helper = "../../dist/ifc_schema_helper.d.ts";
+const ifc_schema = "../../dist/ifc-schema.d.ts";
 
 const fs = require("fs");
 
 const wifcapi_data = fs.readFileSync(wifcapi).toString();
-const ifc2x4helper_data = fs.readFileSync(ifc2x4helper).toString();
-const ifc2x4_data = fs.readFileSync(ifc2x4).toString();
+const ifc_helper_data = fs.readFileSync(ifc_schema_helper).toString();
+const ifc_schema_data = fs.readFileSync(ifc_schema).toString();
 
 let escape = (s) => {
     return JSON.stringify(s.replace(/export/g, "")).slice(1, -1);
@@ -14,8 +14,8 @@ let escape = (s) => {
 
 let tsContent = `
     export let wifcapi = "${escape(wifcapi_data)}";
-    export let ifc2x4helper = "${escape(ifc2x4helper_data)}";
-    export let ifc2x4 = "${escape(ifc2x4_data)}";
+    export let ifc_schema_helper = "${escape(ifc_helper_data)}";
+    export let ifc_schema = "${escape(ifc_schema_data)}";
 
 `;
 

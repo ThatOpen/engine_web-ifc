@@ -50,7 +50,7 @@ for (var i = 0; i < files.length; i++) {
   tsHelper.push(`FromRawLineData['${schemaName}'] = {};`);
   tsHelper.push(`InversePropertyDef['${schemaName}'] = {};`);
   tsHelper.push(`InheritanceDef['${schemaName}'] = {};`);
-  tsHelperClasses.push(`namespace ${schemaName} {`);
+  tsHelperClasses.push(`export namespace ${schemaName} {`);
   let schemaData = fs.readFileSync("./"+files[i]).toString();
   let parsed = parseElements(schemaData);
   let entities = sortEntities(parsed.entities);

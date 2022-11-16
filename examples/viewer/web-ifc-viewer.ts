@@ -51,7 +51,7 @@ if (typeof window != 'undefined')
 {
 //@ts-ignore
 window.InitMonaco = (monaco: any) => {
-    console.log(ts_decl.ifc2x4);
+    console.log(ts_decl.ifc_schema);
     // validation settings
     monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
         noSemanticValidation: true,
@@ -64,8 +64,8 @@ window.InitMonaco = (monaco: any) => {
         allowNonTsExtensions: true
     });
     //@ts-ignore
-    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4));
-    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc2x4helper));
+    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc_schema));
+    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc_schema_helper));
     console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.wifcapi));
 }
 }
@@ -139,7 +139,7 @@ function getData(reader : FileReader){
 async function LoadModel(data: Uint8Array) {
     const start = ms();
     //TODO: This needs to be fixed in the future to rely on elalish/manifold
-    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: false, USE_FAST_BOOLS: true }); 
+    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: false, USE_FAST_BOOLS: false }); 
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);
