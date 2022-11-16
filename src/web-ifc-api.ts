@@ -266,22 +266,15 @@ export class IfcAPI
         return this.wasmModule.GetHeaderLine(modelID, headerType);
     }
 
-    async GetAllTypesOfModel(modelID: number): Promise<ifcType[]>
+    GetAllTypesOfModel(modelID: number): ifcType[]
     {
-        let intType: Vector<number> = await this.properties.getAllTypesFromModel(modelID);
-        let res: number[] = [];
-        for(let key in intType) {
-            let value = intType[key];
-            res.push(value);
-        }
-        let types = [... new Set(res)];
-        
-        let typesNames: ifcType[] = [];
-        for (let i = 0; i < types.length; i++) {
-            const type = types[i];
-            typesNames.push({typeID: type, typeName: IfcTypesMap[type]});
-        }
-        return typesNames;
+      let typesNames: ifcType[] = [];
+      const elements = Object.keys(IfcEntities).map((e) => parseInt(e));
+      for(let i = 0; i < elements.length; i++) {
+          const lines = this.GetLineIDsWithType(modelID, elements[i]);
+          if (lines.size() > 0 )   typesNames.push({typeID: elements[i], typeName: IfcEntities[elements[i]]});
+      }
+      return typesNames;
     }
     
     GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
