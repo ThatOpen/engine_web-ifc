@@ -795,7 +795,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc::IFCSWEPTDISKSOLID:
+				case ifc::IFCSURFACECURVESWEPTAREASOLID:
 				{
 
 					// TODO: closed sweeps not implemented
@@ -3238,7 +3238,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCCOMPOSITEPROFILEDEF:
+			case ifc::IFCCOMPOSITEPROFILEDEF:
 			{
 				IfcProfile profile = IfcProfile();
 
