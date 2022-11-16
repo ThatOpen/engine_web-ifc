@@ -26,6 +26,7 @@ interface InverseProp {
 interface Entity {
     name: string;
     parent: null | string;
+    children: string[];
     props: Prop[];
     inverseProps: InverseProp[],
     derivedProps: Prop[] | null;

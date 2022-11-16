@@ -1,5 +1,5 @@
 import {} from "./gen_functional_types_interfaces";
-import {sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
+import {findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
 
 const fs = require("fs");
 const { type } = require("os");
@@ -32,6 +32,7 @@ tsHelper.push(`const SET_END = 8;`);
 tsHelper.push(`const LINE_END = 9;`);
 tsHelper.push(`export let FromRawLineData = {};`);
 tsHelper.push(`export let InversePropertyDef = {};`);
+tsHelper.push(`export let InheritanceDef = {};`);
 
 let tsHelperClasses = [];
 
@@ -46,6 +47,9 @@ for (var i = 0; i < files.length; i++) {
   if (!files[i].endsWith(".exp")) continue;
   var schemaName = files[i].replace(".exp","");
   console.log("Generating Schema for:"+schemaName);
+  tsHelper.push(`FromRawLineData['${schemaName}'] = {};`);
+  tsHelper.push(`InversePropertyDef['${schemaName}'] = {};`);
+  tsHelper.push(`InheritanceDef['${schemaName}'] = {};`);
   tsHelperClasses.push(`namespace ${schemaName} {`);
   let schemaData = fs.readFileSync("./"+files[i]).toString();
   let parsed = parseElements(schemaData);
@@ -94,6 +98,9 @@ for (var i = 0; i < files.length; i++) {
       walkParents(e,entities);
   });
   
+  //now work out the children
+  entities = findSubClasses(entities);
+  
   for (var x=0; x < entities.length; x++) 
   {
       generateClass(entities[x],tsHelperClasses,types, schemaName);
@@ -103,11 +110,16 @@ for (var i = 0; i < files.length; i++) {
         completeifcElementList.add(entities[x].name);
       }
   
-      tsHelper.push(`FromRawLineData[ifc.${schemaName}][ifc.${entities[x].name.toUpperCase()}] = (d) => { return ${schemaName}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
+      tsHelper.push(`FromRawLineData['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (d) => { return ${schemaName}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
+    
+      if (entities[x].children.length > 0)
+      {
+        tsHelper.push(`InheritanceDef['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = [${entities[x].children.map((c) => `ifc.${c.toUpperCase()}`).join(",")}];`);
+      }
       
       if (entities[x].derivedInverseProps.length > 0)
       {
-        tsHelper.push(`InversePropertyDef[ifc.${schemaName}][ifc.${entities[x].name.toUpperCase()}] = [`);
+        tsHelper.push(`InversePropertyDef['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = [`);
         entities[x].derivedInverseProps.forEach((prop) => {
           let pos = 0;
           //find the target element
@@ -126,7 +138,7 @@ for (var i = 0; i < files.length; i++) {
               break;
             }
           }
-          let type = crc32(prop.type.toUpperCase(),crcTable);
+          let type  = `ifc.${prop.type.toUpperCase()}`
           tsHelper.push(`\t\t ['${prop.name}',${type},${pos},${prop.set}],`);
         });
         tsHelper.push(`];`);
@@ -152,10 +164,6 @@ cppHeader.push("#include <vector>");
 cppHeader.push("");
 cppHeader.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
 tsHeader.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
-for (var i = 0; i < files.length; i++)
-{
-  if (files[i].includes(".exp")) tsHeader.push(`export const ${files[i].replace(".exp","")} = ${crc32(files[i].replace(".exp",""),crcTable)};`)
-} 
 cppHeader.push("");
 cppHeader.push("namespace ifc {");
 completeEntityList.forEach(entity => {
@@ -179,16 +187,14 @@ cppHeader.push(`\t\t\tdefault: return false;`);
 cppHeader.push("\t\t}");
 cppHeader.push("\t}");
 
-tsHeader.push("export const IfcElements: {[key: number]: string} = {");
+
 cppHeader.push("\tstd::vector<unsigned int> IfcElement { ");
 completeifcElementList.forEach(element => {
     let name = element.toUpperCase();
     let code = crc32(name,crcTable);
     cppHeader.push(`\t\t${name},`);
-    tsHeader.push(`\t${code}: '${name}',`);
 });
 cppHeader.push("\t};");
-tsHeader.push("};")
 
 cppHeader.push("};");
 

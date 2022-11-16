@@ -160,6 +160,7 @@ export function parseElements(data)
                 name,
                 parent: null,
                 props: [],
+                children: [],
                 derivedProps: [],
                 inverseProps: [],
                 derivedInverseProps: [],
@@ -306,6 +307,18 @@ function findEntity(entityName: String, entityList: Entity[])
       }
   }
   return null;
+}
+
+export function findSubClasses(entities: Entity[])
+{
+  for (var y = entities.length-1; y >= 0; y-- ) 
+  {
+      let parent = findEntity(entities[y].parent,entities);
+      if (parent == null) continue;
+      parent.children.push( ... entities[y].children );
+      parent.children.push(entities[y].name)
+  }
+  return entities;
 }
 
 export function walkParents(entity: Entity, entityList: Entity[])

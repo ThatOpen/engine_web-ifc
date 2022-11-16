@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {IfcElements,FILE_SCHEMA} from "./ifc-schema";
+import {IfcEntities,FILE_SCHEMA} from "./ifc-schema";
 
 let WebIFCWasm;
 
@@ -99,7 +99,7 @@ export class IfcAPI
     wasmPath: string = "";
     isWasmPathAbsolute = false;
     
-    modelSchemaList: number[];
+    modelSchemaList: string[] = [];
     
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
@@ -173,8 +173,18 @@ export class IfcAPI
 
             return srcSize;
         });
-        this.modelSchemaList[result] = this.GetHeaderLine(result,FILE_SCHEMA);
+        this.modelSchemaList[result] = this.GetHeaderLine(result,FILE_SCHEMA).arguments[0][0].value;
+        console.log("Parsing Model using "+this.modelSchemaList[result]+" Schema");
         return result;
+    }
+    
+    /**
+     * Fetches the schema version of a given model
+     *
+    */
+    GetModelSchema(modelID: number)
+    {
+      return this.modelSchemaList[modelID];
     }
 
     /**  
@@ -245,15 +255,14 @@ export class IfcAPI
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let schema = this.GetHeaderLine(modelID,FILE_SCHEMA);
-        let lineData = ifc.FromRawLineData[schema][rawLineData.type](rawLineData);
+        let lineData = ifc.FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData);
         
         if (flatten)
         {
             this.FlattenLine(modelID, lineData);
         }
         
-        let inverseData = ifc.InversePropertyDef[schema][rawLineData.type];
+        let inverseData = ifc.InversePropertyDef[this.modelSchemaList[modelID]][rawLineData.type];
         if (inverse && inverseData != null) 
         {
           for (let inverseProp of inverseData) 
@@ -261,7 +270,9 @@ export class IfcAPI
             if (!inverseProp[3]) lineData[inverseProp[0]] = null;
             else lineData[inverseProp[0]] = [];
             
-            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, inverseProp[1], inverseProp[2], inverseProp[3]);
+            let targetTypes = [inverseProp[1]];
+            targetTypes=targetTypes.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
+            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, targetTypes, inverseProp[2], inverseProp[3]);
             if (!inverseProp[3] && inverseIDs.size()>0) 
             {
               if (!flatten) lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
@@ -271,7 +282,7 @@ export class IfcAPI
             {
                 for (let x = 0; x < inverseIDs.size(); x++) {
                   if (!flatten) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
-                  else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(0)));
+                  else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(x)));
                 }
             }
           }
@@ -369,9 +380,15 @@ export class IfcAPI
         return this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
     }
 
-    GetLineIDsWithType(modelID: number, type: number): Vector<number>
+    GetLineIDsWithType(modelID: number, type: number, includeInherited: boolean = false): Vector<number>
     {
-        return this.wasmModule.GetLineIDsWithType(modelID, type);
+        let types: Array<number> = [];
+        types.push(type);
+        if (includeInherited)
+        {
+          types = types.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][type]);
+        } 
+        return this.wasmModule.GetLineIDsWithType(modelID, types);
     }
 
     GetAllLines(modelID: Number): Vector<number>
@@ -464,6 +481,18 @@ export class IfcAPI
     {
         return this.wasmModule.GetMaxExpressID(modelID);
     }
+    
+    /**
+         * Returns the type of a given ifc entity in the fiule.
+         * @param modelID Model handle retrieved by OpenModel
+         * @param expressID Line Number
+         * @returns IFC Type Code
+         */
+         
+    GetLineType(modelID: number, expressID: number)
+    {
+        return this.wasmModule.GetLineType(modelID, expressID);
+    }
 
     /**
      * Creates a map between element ExpressIDs and GlobalIDs.
@@ -473,9 +502,9 @@ export class IfcAPI
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
        const map = new Map<string | number, string | number>();
 
-       for(let x = 0; x < Object().keys(IfcElements).length; x++){
+       for(let x = 0; x < Object().keys(IfcEntities).length; x++){
 
-           const type = IfcElements[x];
+           const type = x;
            const lines = this.GetLineIDsWithType(modelID, type);
            const size = lines.size();
 
@@ -483,6 +512,7 @@ export class IfcAPI
 
                const expressID = lines.get(y);
                const info = this.GetLine(modelID, expressID);
+               if (info.GlobalId == null) continue;
                const globalID = info.GlobalId.value;
 
                map.set(expressID, globalID);

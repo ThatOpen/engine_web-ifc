@@ -1,8 +1,7 @@
 import {
     IfcAPI, IfcEntities,
-    IFCPROJECT, IFCRELAGGREGATES, IFCRELASSOCIATESMATERIAL,
+    IFCPROJECT, IFCRELAGGREGATES,
     IFCRELCONTAINEDINSPATIALSTRUCTURE,
-    IFCRELDEFINESBYPROPERTIES, IFCRELDEFINESBYTYPE
 } from "../web-ifc-api";
 
 interface pName {
@@ -30,30 +29,10 @@ const PropsNames = {
         relating: 'RelatingStructure',
         related: 'RelatedElements',
         key: 'children'
-    },
-    psets: {
-        name: IFCRELDEFINESBYPROPERTIES,
-        relating: 'RelatingPropertyDefinition',
-        related: 'RelatedObjects',
-        key: 'hasPsets'
-    },
-    materials: {
-        name: IFCRELASSOCIATESMATERIAL,
-        relating: 'RelatingMaterial',
-        related: 'RelatedObjects',
-        key: 'hasMaterial'
-    },
-    type: {
-        name: IFCRELDEFINESBYTYPE,
-        relating: 'RelatingType',
-        related: 'RelatedObjects',
-        key: 'hasType'
     }
 };
 
 export class Properties {
-
-    private types: any;
 
     constructor(private api: IfcAPI) {
     }
@@ -67,51 +46,52 @@ export class Properties {
     }
 
     async getPropertySets(modelID: number, elementID: number, recursive = false) {
-        return await this.getProperty(modelID, elementID, recursive, PropsNames.psets);
+        return await this.getRelatedProperties(modelID, elementID,recursive, 'IsDefinedBy', 'RelatingPropertyDefinition');
     }
 
     async getTypeProperties(modelID: number, elementID: number, recursive = false) {
-        return await this.getProperty(modelID, elementID, recursive, PropsNames.type);
+        if (this.api.GetModelSchema(modelID) == 'IFX2X3')
+        {
+          return await this.getRelatedProperties(modelID, elementID, recursive, 'IsDefinedBy', 'RelatingType');
+        } 
+        else
+        {
+          return await this.getRelatedProperties(modelID, elementID, recursive, 'IsTypedBy', 'RelatingType');
+        }
     }
 
     async getMaterialsProperties(modelID: number, elementID: number, recursive = false) {
-        return await this.getProperty(modelID, elementID, recursive, PropsNames.materials);
+        return await this.getRelatedProperties(modelID, elementID,recursive, 'HasAssociations', 'RelatingMaterial');
     }
 
     async getSpatialStructure(modelID: number, includeProperties?: boolean): Promise<Node> {
-        await this.getAllTypesOfModel(modelID);
         const chunks = await this.getSpatialTreeChunks(modelID);
         const allLines = await this.api.GetLineIDsWithType(modelID, IFCPROJECT);
         const projectID = allLines.get(0);
         const project = Properties.newIfcProject(projectID);
         await this.getSpatialNode(modelID, project, chunks, includeProperties);
-        this.cleanupTypes();
         return project;
     }
 
-    async getAllItemsOfType(modelID: number, type: number, verbose: boolean) {
-        let items: number[] = [];
-        const lines = await this.api.GetLineIDsWithType(modelID, type);
-        for (let i = 0; i < lines.size(); i++) items.push(lines.get(i));
-        if (!verbose) return items;
+    private async getRelatedProperties(modelID: number, elementID: number, recursive = false, inversePropname, relationName) {
+        const lineData = await this.api.GetLine(modelID, elementID, false, true);
         const result: any[] = [];
-        for (let i = 0; i < items.length; i++) {
-            result.push(await this.api.GetLine(modelID, items[i]));
-        }
-        return result;
-    }
-
-    private async getProperty(modelID: number, elementID: number, recursive = false, propName: pName) {
-        const propSetIds = await this.getAllRelatedItemsOfType(modelID, elementID, propName);
-        const result: any[] = [];
-        for (let i = 0; i < propSetIds.length; i++) {
-            result.push(await this.api.GetLine(modelID, propSetIds[i], recursive));
+        let rels = lineData[inversePropname];
+        if (rels == null ) return result;
+        if (!Array.isArray(rels)) rels = [rels];
+        for (let i = 0; i < rels.length; i++) {
+          let propSetIds =  await this.api.GetLine(modelID, rels[i].value, false, false)[relationName];
+          if (propSetIds == null) continue;
+          if (!Array.isArray(propSetIds)) propSetIds = [propSetIds];
+          for (let x = 0; x < propSetIds.length; x++) {
+            result.push(await this.api.GetLine(modelID, propSetIds[x].value, recursive));
+          }
         }
         return result;
     }
 
     private async getChunks(modelID: number, chunks: any, propNames: pName) {
-        const relation = await this.api.GetLineIDsWithType(modelID, propNames.name);
+        const relation = await this.api.GetLineIDsWithType(modelID, propNames.name,true);
         for (let i = 0; i < relation.size(); i++) {
             const rel = await this.api.GetLine(modelID, relation.get(i), false);
             this.saveChunk(chunks, propNames, rel);
@@ -147,7 +127,7 @@ export class Properties {
         const nodes: any[] = [];
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
-            let node = this.newNode(child);
+            let node = this.newNode(child,this.api.GetLineType(modelID, child));
             if (includeProperties) {
                 const properties = await this.getItemProperties(modelID, node.expressID) as any;
                 node = {...properties, ...node};
@@ -158,20 +138,13 @@ export class Properties {
         (node[prop] as Node[]) = nodes;
     }
 
-    private newNode(id: number) {
-        const typeName = this.getNodeType(id);
+    private newNode(id: number, type: number) {
         return {
             expressID: id,
-            type: typeName,
+            type: IfcEntities[type],
             children: []
         };
     }
-
-    private getNodeType(id: number) {
-        const typeID = this.types[id];
-        return IfcEntities[typeID];
-    }
-
     private async getSpatialTreeChunks(modelID: number) {
         const treeChunks: any = {};
         await this.getChunks(modelID, treeChunks, PropsNames.aggregates);
@@ -187,39 +160,5 @@ export class Properties {
         } else {
             chunks[relating] = chunks[relating].concat(related);
         }
-    }
-
-    private getRelated(rel: any, propNames: pName, IDs: number[]) {
-        const element = rel[propNames.relating];
-        if (!Array.isArray(element)) IDs.push(element.value);
-        else element.forEach((ele) => IDs.push(ele.value));
-    }
-
-    private async getAllRelatedItemsOfType(modelID: number, id: number, propNames: pName) {
-        const lines = await this.api.GetLineIDsWithType(modelID, propNames.name);
-        const IDs: number[] = [];
-        for (let i = 0; i < lines.size(); i++) {
-            const rel = await this.api.GetLine(modelID, lines.get(i));
-            const isRelated = Properties.isRelated(id, rel, propNames);
-            if (isRelated) this.getRelated(rel, propNames, IDs);
-        }
-        return IDs;
-    }
-
-    private cleanupTypes() {
-        this.types = {};
-    }
-
-    private async getAllTypesOfModel(modelID: number) {
-        const result = {};
-        const elements = Object.keys(IfcElements).map((e) => parseInt(e));
-        for(let i = 0; i < elements.length; i++) {
-            const element = elements[i];
-            const lines = await this.api.GetLineIDsWithType(modelID, element);
-            const size = lines.size();
-            //@ts-ignore
-            for (let i = 0; i < size; i++) result[lines.get(i)] = element;
-        }
-        this.types = result;
     }
 }
