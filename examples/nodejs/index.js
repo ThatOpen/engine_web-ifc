@@ -1,7 +1,7 @@
 const WebIFC = require("../../dist/web-ifc-api-node.js");
 const fs = require("fs");
 const { Console } = require("console");
-const { IfcPropertySingleValue, IFCPROPERTYSINGLEVALUE, IfcText, IfcIdentifier, IfcValve } = require("../../dist/web-ifc-api-node.js");
+const { IfcPropertySingleValue, IFCPROPERTYSINGLEVALUE, IfcText, IfcIdentifier, IfcValve, IfcSIUnit, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
 const { EMPTY, IfcPropertySet, IFCPROPERTYSET, IfcGloballyUniqueId, IfcLabel, IfcRelDefinesByProperties, IFCRELDEFINESBYPROPERTIES } = require("../../dist/web-ifc-api-node.js");
 
 console.log("Hello web-ifc-node!");
@@ -39,6 +39,15 @@ async function LoadFile(filename) {
     // };
 
     console.log(`Modify values`);
+
+    //Change units
+    let units = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCSIUNIT);
+    for (let i = 0; i < units.size(); i++) {
+        let expressID = units.get(i);
+        const unit = await ifcapi.properties.getItemProperties(modelID, expressID);
+        unit.Prefix = { type: 3, value: 'MILLI' };
+        ifcapi.WriteLine(modelID, unit);
+    }
 
     //IfcProduct edition
     let storeys = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCBUILDINGSTOREY);
@@ -117,6 +126,34 @@ async function LoadFile(filename) {
         { type: 5, value: pSetID }
     );
     ifcapi.WriteLine(modelID, psetRel);
+
+    console.log(`Add new units`);
+    //Add units
+    const unitID = maxEID;
+    maxEID++;
+    numLines++;
+    let newUnits = new IfcSIUnit(
+        unitID,
+        IFCSIUNIT,
+        { type: 0, value: '*' },
+        { type: 3, value: 'LENGTHUNIT' },
+        { type: 3, value: 'MILLI' },
+        { type: 3, value: 'METRE' }
+    )
+    ifcapi.WriteLine(modelID, newUnits);
+
+    const unitID2 = maxEID;
+    maxEID++;
+    numLines++;
+    let newUnits2 = new IfcSIUnit(
+        unitID2,
+        IFCSIUNIT,
+        { type: 0, value: '*' },
+        { type: 3, value: 'LENGTHUNIT' },
+        null,
+        { type: 3, value: 'METRE' }
+    )
+    ifcapi.WriteLine(modelID, newUnits2);
 
     let time = WebIFC.ms() - start;
     console.log(`Writing ${numLines} lines took ${time} ms`);
