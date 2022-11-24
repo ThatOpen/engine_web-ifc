@@ -378,7 +378,7 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
 
     std::vector<uint32_t> types;
 
-    for (auto& type : ifc::IfcElement)
+    for (auto& type : ifc::IfcElements)
     {
         if (type == ifc::IFCOPENINGELEMENT || type == ifc::IFCSPACE || type == ifc::IFCOPENINGSTANDARDCASE)
         {
@@ -403,7 +403,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 
     std::vector<webifc::IfcFlatMesh> meshes;
 
-    for (auto type : ifc::IfcElement)
+    for (auto type : ifc::IfcElements)
     {
         auto elements = loader->GetExpressIDsWithType(type);
 

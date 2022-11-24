@@ -37,7 +37,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader &loader, webifc::
 {
     std::vector<webifc::IfcFlatMesh> meshes;
 
-    for (auto type : ifc::IfcElement)
+    for (auto type : ifc::IfcElements)
     {
         auto elements = loader.GetExpressIDsWithType(type);
 
@@ -247,7 +247,7 @@ uint32_t openSerialized(std::vector<std::string> paths, webifc::LoaderSettings s
 
     std::vector<webifc::IfcFlatMesh> meshes;
 
-    for (auto type : ifc::IfcElement)
+    for (auto type : ifc::IfcElements)
     {
         auto elements = loaders[modelID]->GetExpressIDsWithType(type);
 

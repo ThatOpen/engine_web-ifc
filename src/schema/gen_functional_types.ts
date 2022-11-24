@@ -188,13 +188,16 @@ cppHeader.push("\t\t}");
 cppHeader.push("\t}");
 
 
-cppHeader.push("\tstd::vector<unsigned int> IfcElement { ");
+cppHeader.push("\tstd::vector<unsigned int> IfcElements { ");
+tsHeader.push("export const IfcElements = [")
 completeifcElementList.forEach(element => {
     let name = element.toUpperCase();
     let code = crc32(name,crcTable);
     cppHeader.push(`\t\t${name},`);
+    tsHeader.push(`\t${name},`);
 });
 cppHeader.push("\t};");
+tsHeader.push("];")
 
 cppHeader.push("};");
 

@@ -1085,7 +1085,7 @@ namespace ifc {
 			default: return false;
 		}
 	}
-	std::vector<unsigned int> IfcElement { 
+	std::vector<unsigned int> IfcElements { 
 		IFCPRODUCT,
 		IFCPROXY,
 		IFCSPATIALSTRUCTUREELEMENT,
