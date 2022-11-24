@@ -24,7 +24,7 @@
 
 #include "tinynurbs/tinynurbs.h"
 
-#include "ifc2x4.h"
+#include "ifc-schema.h"
 #include "web-ifc.h"
 #include "util.h"
 
@@ -322,7 +322,7 @@ namespace webifc
 			mesh.color = styledItemColor;
 			mesh.transformation = glm::dmat4(1);
 
-			bool isIfcElement = ifc2x4::IsIfcElement(line.ifcType);
+			bool isIfcElement = ifc::isIfcElement(line.ifcType);
 			if (isIfcElement)
 			{
 				_loader.MoveToArgumentOffset(line, 5);
@@ -424,7 +424,7 @@ namespace webifc
 			{
 				switch (line.ifcType)
 				{
-				case ifc2x4::IFCMAPPEDITEM:
+				case ifc::IFCMAPPEDITEM:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
@@ -435,7 +435,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCBOOLEANCLIPPINGRESULT:
+				case ifc::IFCBOOLEANCLIPPINGRESULT:
 				{
 					_loader.MoveToArgumentOffset(line, 1);
 					uint32_t firstOperandID = _loader.GetRefArgument();
@@ -467,7 +467,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCBOOLEANRESULT:
+				case ifc::IFCBOOLEANRESULT:
 				{
 					// @Refactor: duplicate of above
 
@@ -515,7 +515,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCHALFSPACESOLID:
+				case ifc::IFCHALFSPACESOLID:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t surfaceID = _loader.GetRefArgument();
@@ -559,7 +559,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCPOLYGONALBOUNDEDHALFSPACE:
+				case ifc::IFCPOLYGONALBOUNDEDHALFSPACE:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t surfaceID = _loader.GetRefArgument();
@@ -629,7 +629,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCREPRESENTATIONMAP:
+				case ifc::IFCREPRESENTATIONMAP:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t axis2Placement = _loader.GetRefArgument();
@@ -640,8 +640,8 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCFACEBASEDSURFACEMODEL:
-				case ifc2x4::IFCSHELLBASEDSURFACEMODEL:
+				case ifc::IFCFACEBASEDSURFACEMODEL:
+				case ifc::IFCSHELLBASEDSURFACEMODEL:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					auto shells = _loader.GetSetArgument();
@@ -659,7 +659,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCADVANCEDBREP:
+				case ifc::IFCADVANCEDBREP:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
@@ -669,7 +669,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCFACETEDBREP:
+				case ifc::IFCFACETEDBREP:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t ifcPresentation = _loader.GetRefArgument();
@@ -679,8 +679,8 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCPRODUCTREPRESENTATION:
-				case ifc2x4::IFCPRODUCTDEFINITIONSHAPE:
+				case ifc::IFCPRODUCTREPRESENTATION:
+				case ifc::IFCPRODUCTDEFINITIONSHAPE:
 				{
 					_loader.MoveToArgumentOffset(line, 2);
 					auto representations = _loader.GetSetArgument();
@@ -693,7 +693,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCSHAPEREPRESENTATION:
+				case ifc::IFCSHAPEREPRESENTATION:
 				{
 					_loader.MoveToArgumentOffset(line, 1);
 					auto type = _loader.GetStringArgument();
@@ -714,7 +714,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCPOLYGONALFACESET:
+				case ifc::IFCPOLYGONALFACESET:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 
@@ -752,7 +752,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCTRIANGULATEDFACESET:
+				case ifc::IFCTRIANGULATEDFACESET:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 
@@ -795,7 +795,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCSURFACECURVESWEPTAREASOLID:
+				case ifc::IFCSURFACECURVESWEPTAREASOLID:
 				{
 
 					// TODO: closed sweeps not implemented
@@ -875,7 +875,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCSWEPTDISKSOLID:
+				case ifc::IFCSWEPTDISKSOLID:
 				{
 					// TODO: prevent self intersections in Sweep function still not working properly
 
@@ -922,7 +922,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCREVOLVEDAREASOLID:
+				case ifc::IFCREVOLVEDAREASOLID:
 				{
 					IfcComposedMesh mesh;
 
@@ -968,7 +968,7 @@ namespace webifc
 					_expressIDToMesh[line.expressID] = mesh;
 					return mesh;
 				}
-				case ifc2x4::IFCEXTRUDEDAREASOLID:
+				case ifc::IFCEXTRUDEDAREASOLID:
 				{
 					_loader.MoveToArgumentOffset(line, 0);
 					uint32_t profileID = _loader.GetRefArgument();
@@ -1058,7 +1058,7 @@ namespace webifc
 
 					return mesh;
 				}
-				case ifc2x4::IFCPOLYLINE:
+				case ifc::IFCPOLYLINE:
 					// ignore polylines as meshes
 					return mesh;
 				default:
@@ -1348,8 +1348,8 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCINDEXEDPOLYGONALFACEWITHVOIDS:
-			case ifc2x4::IFCINDEXEDPOLYGONALFACE:
+			case ifc::IFCINDEXEDPOLYGONALFACEWITHVOIDS:
+			case ifc::IFCINDEXEDPOLYGONALFACE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto indexIDs = _loader.GetSetArgument();
@@ -1364,7 +1364,7 @@ namespace webifc
 					bounds.back().curve.points.push_back(point);
 				}
 
-				if (line.ifcType == ifc2x4::IFCINDEXEDPOLYGONALFACE)
+				if (line.ifcType == ifc::IFCINDEXEDPOLYGONALFACE)
 				{
 					break;
 				}
@@ -1406,9 +1406,9 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCCONNECTEDFACESET:
-			case ifc2x4::IFCCLOSEDSHELL:
-			case ifc2x4::IFCOPENSHELL:
+			case ifc::IFCCONNECTEDFACESET:
+			case ifc::IFCCLOSEDSHELL:
+			case ifc::IFCOPENSHELL:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto faces = _loader.GetSetArgument();
@@ -1436,7 +1436,7 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCPRESENTATIONSTYLEASSIGNMENT:
+			case ifc::IFCPRESENTATIONSTYLEASSIGNMENT:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto ifcPresentationStyleSelects = _loader.GetSetArgument();
@@ -1455,7 +1455,7 @@ namespace webifc
 
 				return false;
 			}
-			case ifc2x4::IFCSURFACESTYLE:
+			case ifc::IFCSURFACESTYLE:
 			{
 				_loader.MoveToArgumentOffset(line, 2);
 				auto ifcSurfaceStyleElementSelects = _loader.GetSetArgument();
@@ -1474,7 +1474,7 @@ namespace webifc
 
 				return false;
 			}
-			case ifc2x4::IFCSURFACESTYLERENDERING:
+			case ifc::IFCSURFACESTYLERENDERING:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				GetColor(_loader.GetRefArgument(), outputColor);
@@ -1488,14 +1488,14 @@ namespace webifc
 
 				return true;
 			}
-			case ifc2x4::IFCSURFACESTYLESHADING:
+			case ifc::IFCSURFACESTYLESHADING:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				GetColor(_loader.GetRefArgument(), outputColor);
 
 				return true;
 			}
-			case ifc2x4::IFCSTYLEDREPRESENTATION:
+			case ifc::IFCSTYLEDREPRESENTATION:
 			{
 				_loader.MoveToArgumentOffset(line, 3);
 				auto repItems = _loader.GetSetArgument();
@@ -1514,7 +1514,7 @@ namespace webifc
 
 				return false;
 			}
-			case ifc2x4::IFCSTYLEDITEM:
+			case ifc::IFCSTYLEDITEM:
 			{
 				_loader.MoveToArgumentOffset(line, 1);
 				auto styledItems = _loader.GetSetArgument();
@@ -1533,7 +1533,7 @@ namespace webifc
 
 				return false;
 			}
-			case ifc2x4::IFCCOLOURRGB:
+			case ifc::IFCCOLOURRGB:
 			{
 				_loader.MoveToArgumentOffset(line, 1);
 				outputColor.r = _loader.GetDoubleArgument();
@@ -1543,13 +1543,13 @@ namespace webifc
 
 				return true;
 			}
-			case ifc2x4::IFCMATERIALLAYERSETUSAGE:
+			case ifc::IFCMATERIALLAYERSETUSAGE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t layerSetID = _loader.GetRefArgument();
 				return GetColor(layerSetID, outputColor);
 			}
-			case ifc2x4::IFCMATERIALLAYERSET:
+			case ifc::IFCMATERIALLAYERSET:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto layers = _loader.GetSetArgument();
@@ -1568,13 +1568,13 @@ namespace webifc
 
 				return false;
 			}
-			case ifc2x4::IFCMATERIALLAYER:
+			case ifc::IFCMATERIALLAYER:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t matRepID = _loader.GetRefArgument();
 				return GetColor(matRepID, outputColor);
 			}
-			case ifc2x4::IFCMATERIAL:
+			case ifc::IFCMATERIAL:
 			{
 				if (_loader.GetMaterialDefinitions().count(line.expressID) != 0)
 				{
@@ -1626,7 +1626,7 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCFACE:
+			case ifc::IFCFACE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto bounds = _loader.GetSetArgument();
@@ -1642,7 +1642,7 @@ namespace webifc
 				TriangulateBounds(geometry, bounds3D);
 				break;
 			}
-			case ifc2x4::IFCADVANCEDFACE:
+			case ifc::IFCADVANCEDFACE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto bounds = _loader.GetSetArgument();
@@ -1697,7 +1697,7 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCFACEOUTERBOUND:
+			case ifc::IFCFACEOUTERBOUND:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t loop = _loader.GetRefArgument();
@@ -1717,7 +1717,7 @@ namespace webifc
 
 				return bound;
 			}
-			case ifc2x4::IFCFACEBOUND:
+			case ifc::IFCFACEBOUND:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t loop = _loader.GetRefArgument();
@@ -1752,7 +1752,7 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCPOLYLOOP:
+			case ifc::IFCPOLYLOOP:
 			{
 				IfcCurve3D curve;
 
@@ -1777,7 +1777,7 @@ namespace webifc
 
 				return curve;
 			}
-			case ifc2x4::IFCEDGELOOP:
+			case ifc::IFCEDGELOOP:
 			{
 				IfcCurve3D curve;
 
@@ -1866,7 +1866,7 @@ namespace webifc
 
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCEDGECURVE:
+			case ifc::IFCEDGECURVE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				uint32_t vertex1Ref = _loader.GetRefArgument();
@@ -2948,8 +2948,8 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCARBITRARYOPENPROFILEDEF:
-			case ifc2x4::IFCARBITRARYCLOSEDPROFILEDEF:
+			case ifc::IFCARBITRARYOPENPROFILEDEF:
+			case ifc::IFCARBITRARYCLOSEDPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -2961,7 +2961,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCARBITRARYPROFILEDEFWITHVOIDS:
+			case ifc::IFCARBITRARYPROFILEDEFWITHVOIDS:
 			{
 				IfcProfile profile;
 
@@ -2982,8 +2982,8 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCRECTANGLEPROFILEDEF:
-			case ifc2x4::IFCROUNDEDRECTANGLEPROFILEDEF:
+			case ifc::IFCRECTANGLEPROFILEDEF:
+			case ifc::IFCROUNDEDRECTANGLEPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -3011,7 +3011,7 @@ namespace webifc
 				}
 				return profile;
 			}
-			case ifc2x4::IFCRECTANGLEHOLLOWPROFILEDEF:
+			case ifc::IFCRECTANGLEHOLLOWPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -3035,7 +3035,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCCIRCLEPROFILEDEF:
+			case ifc::IFCCIRCLEPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -3058,7 +3058,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCELLIPSEPROFILEDEF:
+			case ifc::IFCELLIPSEPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -3077,7 +3077,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCCIRCLEHOLLOWPROFILEDEF:
+			case ifc::IFCCIRCLEHOLLOWPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -3098,7 +3098,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCISHAPEPROFILEDEF:
+			case ifc::IFCISHAPEPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -3140,7 +3140,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCLSHAPEPROFILEDEF:
+			case ifc::IFCLSHAPEPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -3186,7 +3186,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCUSHAPEPROFILEDEF:
+			case ifc::IFCUSHAPEPROFILEDEF:
 			{
 				IfcProfile profile;
 
@@ -3225,8 +3225,9 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCDERIVEDPROFILEDEF:
-			{
+
+			case ifc::IFCDERIVEDPROFILEDEF:
+			{				
 				_loader.MoveToArgumentOffset(line, 2);
 				uint32_t profileID = _loader.GetRefArgument();
 				IfcProfile profile = GetProfileByLine(_loader.ExpressIDToLineID(profileID));
@@ -3255,7 +3256,7 @@ namespace webifc
 
 				return profile;
 			}
-			case ifc2x4::IFCCOMPOSITEPROFILEDEF:
+			case ifc::IFCCOMPOSITEPROFILEDEF:
 			{
 				IfcProfile profile = IfcProfile();
 
@@ -3296,7 +3297,7 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCARBITRARYOPENPROFILEDEF:
+			case ifc::IFCARBITRARYOPENPROFILEDEF:
 			{
 				IfcProfile3D profile;
 
@@ -3323,7 +3324,7 @@ namespace webifc
 			// TODO: IfcSweptSurface and IfcBSplineSurface still missing
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCPLANE:
+			case ifc::IFCPLANE:
 			{
 				IfcSurface surface;
 
@@ -3333,7 +3334,7 @@ namespace webifc
 
 				return surface;
 			}
-			case ifc2x4::IFCBSPLINESURFACE:
+			case ifc::IFCBSPLINESURFACE:
 			{
 				IfcSurface surface;
 
@@ -3380,7 +3381,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCBSPLINESURFACEWITHKNOTS:
+			case ifc::IFCBSPLINESURFACEWITHKNOTS:
 			{
 				IfcSurface surface;
 
@@ -3517,7 +3518,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCRATIONALBSPLINESURFACEWITHKNOTS:
+			case ifc::IFCRATIONALBSPLINESURFACEWITHKNOTS:
 			{
 				IfcSurface surface;
 
@@ -3668,7 +3669,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCCYLINDRICALSURFACE:
+			case ifc::IFCCYLINDRICALSURFACE:
 			{
 				IfcSurface surface;
 
@@ -3686,7 +3687,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCSURFACEOFREVOLUTION:
+			case ifc::IFCSURFACEOFREVOLUTION:
 			{
 				IfcSurface surface;
 
@@ -3713,7 +3714,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCSURFACEOFLINEAREXTRUSION:
+			case ifc::IFCSURFACEOFLINEAREXTRUSION:
 			{
 				IfcSurface surface;
 
@@ -3760,7 +3761,7 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCAXIS2PLACEMENT2D:
+			case ifc::IFCAXIS2PLACEMENT2D:
 			{
 
 				uint32_t lineID = _loader.ExpressIDToLineID(expressID);
@@ -3786,8 +3787,8 @@ namespace webifc
 					glm::dvec3(yAxis, 0),
 					glm::dvec3(pos, 1));
 			}
-			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2D:
-			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM:
+			case ifc::IFCCARTESIANTRANSFORMATIONOPERATOR2D:
+			case ifc::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM:
 			{
 				double scale1 = 1.0;
 				double scale2 = 1.0;
@@ -3819,7 +3820,7 @@ namespace webifc
 					scale1 = _loader.GetDoubleArgument();
 				}
 
-				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
+				if (line.ifcType == ifc::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
 				{
 					_loader.MoveToArgumentOffset(line, 4);
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
@@ -3829,7 +3830,7 @@ namespace webifc
 					}
 				}
 
-				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
+				if (line.ifcType == ifc::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
 				{
 					scale2 = scale1;
 				}
@@ -3865,7 +3866,7 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCAXIS1PLACEMENT:
+			case ifc::IFCAXIS1PLACEMENT:
 			{
 				glm::dvec3 zAxis(0, 0, 1);
 				glm::dvec3 xAxis(1, 0, 0);
@@ -3893,7 +3894,7 @@ namespace webifc
 
 				return result;
 			}
-			case ifc2x4::IFCAXIS2PLACEMENT3D:
+			case ifc::IFCAXIS2PLACEMENT3D:
 			{
 				glm::dvec3 zAxis(0, 0, 1);
 				glm::dvec3 xAxis(1, 0, 0);
@@ -3926,7 +3927,7 @@ namespace webifc
 					glm::dvec4(zAxis, 0),
 					glm::dvec4(pos, 1));
 			}
-			case ifc2x4::IFCLOCALPLACEMENT:
+			case ifc::IFCLOCALPLACEMENT:
 			{
 				glm::dmat4 relPlacement(1);
 
@@ -3946,8 +3947,8 @@ namespace webifc
 				auto result = relPlacement * axis2Placement;
 				return result;
 			}
-			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
-			case ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM:
+			case ifc::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
+			case ifc::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM:
 			{
 				double scale1 = 1.0;
 				double scale2 = 1.0;
@@ -3988,7 +3989,7 @@ namespace webifc
 					Axis3 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
-				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
+				if (line.ifcType == ifc::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
 				{
 					_loader.MoveToArgumentOffset(line, 5);
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
@@ -4005,7 +4006,7 @@ namespace webifc
 					}
 				}
 
-				if (line.ifcType == ifc2x4::IFCCARTESIANTRANSFORMATIONOPERATOR3D)
+				if (line.ifcType == ifc::IFCCARTESIANTRANSFORMATIONOPERATOR3D)
 				{
 					scale2 = scale1;
 					scale3 = scale1;
@@ -4102,7 +4103,7 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 			switch (line.ifcType)
 			{
-			case ifc2x4::IFCPOLYLINE:
+			case ifc::IFCPOLYLINE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto points = _loader.GetSetArgument();
@@ -4123,7 +4124,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCCOMPOSITECURVE:
+			case ifc::IFCCOMPOSITECURVE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto segments = _loader.GetSetArgument();
@@ -4152,7 +4153,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCCOMPOSITECURVESEGMENT:
+			case ifc::IFCCOMPOSITECURVESEGMENT:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto transition = _loader.GetStringArgument();
@@ -4165,7 +4166,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCLINE:
+			case ifc::IFCLINE:
 			{
 				bool condition = sameSense == 1 || sameSense == -1;
 				if (edge)
@@ -4240,7 +4241,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCTRIMMEDCURVE:
+			case ifc::IFCTRIMMEDCURVE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto basisCurveID = _loader.GetRefArgument();
@@ -4270,7 +4271,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCINDEXEDPOLYCURVE:
+			case ifc::IFCINDEXEDPOLYCURVE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto pts2DRef = _loader.GetRefArgument();
@@ -4317,7 +4318,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCCIRCLE:
+			case ifc::IFCCIRCLE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto positionID = _loader.GetRefArgument();
@@ -4445,7 +4446,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCELLIPSE:
+			case ifc::IFCELLIPSE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
 				auto positionID = _loader.GetRefArgument();
@@ -4578,7 +4579,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCBSPLINECURVE:
+			case ifc::IFCBSPLINECURVE:
 			{
 				bool condition = sameSense == 0;
 				if (edge)
@@ -4636,7 +4637,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCBSPLINECURVEWITHKNOTS:
+			case ifc::IFCBSPLINECURVEWITHKNOTS:
 			{
 				bool condition = sameSense == 0;
 				if (edge)
@@ -4715,7 +4716,7 @@ namespace webifc
 
 				break;
 			}
-			case ifc2x4::IFCRATIONALBSPLINECURVEWITHKNOTS:
+			case ifc::IFCRATIONALBSPLINECURVEWITHKNOTS:
 			{
 
 				bool condition = sameSense == 0;

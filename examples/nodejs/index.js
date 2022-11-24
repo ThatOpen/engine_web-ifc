@@ -1,8 +1,7 @@
 const WebIFC = require("../../dist/web-ifc-api-node.js");
 const fs = require("fs");
 const { Console } = require("console");
-const { IfcPropertySingleValue, IFCPROPERTYSINGLEVALUE, IfcText, IfcIdentifier, IfcValve } = require("../../dist/web-ifc-api-node.js");
-const { EMPTY, IfcPropertySet, IFCPROPERTYSET, IfcGloballyUniqueId, IfcLabel, IfcRelDefinesByProperties, IFCRELDEFINESBYPROPERTIES } = require("../../dist/web-ifc-api-node.js");
+const { IFC2X3, IFCPROPERTYSINGLEVALUE, EMPTY, IFCPROPERTYSET, IFCRELDEFINESBYPROPERTIES, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
 
 console.log("Hello web-ifc-node!");
 
@@ -40,6 +39,15 @@ async function LoadFile(filename) {
 
     console.log(`Modify values`);
 
+    //Change units
+    let units = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCSIUNIT);
+    for (let i = 0; i < units.size(); i++) {
+        let expressID = units.get(i);
+        const unit = await ifcapi.properties.getItemProperties(modelID, expressID);
+        unit.Prefix = { type: 3, value: 'MILLI' };
+        ifcapi.WriteLine(modelID, unit);
+    }
+
     //IfcProduct edition
     let storeys = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCBUILDINGSTOREY);
     for (let i = 0; i < storeys.size(); i++) {
@@ -74,7 +82,7 @@ async function LoadFile(filename) {
 
     maxEID++;
     numLines++;
-    let property = new IfcPropertySingleValue(
+    let property = new IFC2X3.IfcPropertySingleValue(
         maxEID,
         IFCPROPERTYSINGLEVALUE,
         { type: 1, value: 'Classification' },
@@ -92,7 +100,7 @@ async function LoadFile(filename) {
     const propID = maxEID;
     maxEID++;
     numLines++;
-    let pSet = new IfcPropertySet(
+    let pSet = new IFC2X3.IfcPropertySet(
         maxEID,
         IFCPROPERTYSET,
         { type: 1, value: '350fFD9fjAtPfVihcqa4Yn' },
@@ -106,7 +114,7 @@ async function LoadFile(filename) {
     const pSetID = maxEID;
     maxEID++;
     numLines++;
-    let psetRel = new IfcRelDefinesByProperties(
+    let psetRel = new IFC2X3.IfcRelDefinesByProperties(
         maxEID,
         IFCRELDEFINESBYPROPERTIES,
         { type: 1, value: '53sfET9fjfyPfVi4cqa7Yn' },
@@ -117,6 +125,34 @@ async function LoadFile(filename) {
         { type: 5, value: pSetID }
     );
     ifcapi.WriteLine(modelID, psetRel);
+
+    console.log(`Add new units`);
+    //Add units
+    const unitID = maxEID;
+    maxEID++;
+    numLines++;
+    let newUnits = new IFC2X3.IfcSIUnit(
+        unitID,
+        IFCSIUNIT,
+        { type: 0, value: '*' },
+        { type: 3, value: 'LENGTHUNIT' },
+        { type: 3, value: 'MILLI' },
+        { type: 3, value: 'METRE' }
+    )
+    ifcapi.WriteLine(modelID, newUnits);
+
+    const unitID2 = maxEID;
+    maxEID++;
+    numLines++;
+    let newUnits2 = new IFC2X3.IfcSIUnit(
+        unitID2,
+        IFCSIUNIT,
+        { type: 0, value: '*' },
+        { type: 3, value: 'LENGTHUNIT' },
+        null,
+        { type: 3, value: 'METRE' }
+    )
+    ifcapi.WriteLine(modelID, newUnits2);
 
     let time = WebIFC.ms() - start;
     console.log(`Writing ${numLines} lines took ${time} ms`);
