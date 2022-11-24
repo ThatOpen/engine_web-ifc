@@ -2,8 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {IfcElements} from "./ifc2x4";
-import {IfcTypesMap} from "./helpers/types-map";
+import {IfcEntities,IfcElements,FILE_SCHEMA} from "./ifc-schema";
 
 let WebIFCWasm;
 
@@ -16,10 +15,10 @@ else
 {
     WebIFCWasm = require("./web-ifc");
 }
-export * from "./ifc2x4";
-import * as ifc2x4helper from "./ifc2x4_helper";
+export * from "./ifc-schema";
+import * as ifc from "./ifc_schema_helper";
 import { Properties } from "./helpers/properties";
-export * from "./ifc2x4_helper";
+export * from "./ifc_schema_helper";
 
 export const UNKNOWN = 0;
 export const STRING = 1;
@@ -117,7 +116,9 @@ export class IfcAPI
     fs: undefined | any = undefined;
     wasmPath: string = "";
     isWasmPathAbsolute = false;
-
+    
+    modelSchemaList: string[] = [];
+    
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
     /**
@@ -191,7 +192,18 @@ export class IfcAPI
 
             return srcSize;
         });
+        this.modelSchemaList[result] = this.GetHeaderLine(result,FILE_SCHEMA).arguments[0][0].value;
+        console.log("Parsing Model using "+this.modelSchemaList[result]+" Schema");
         return result;
+    }
+    
+    /**
+     * Fetches the schema version of a given model
+     *
+    */
+    GetModelSchema(modelID: number)
+    {
+      return this.modelSchemaList[modelID];
     }
 
     /**
@@ -254,22 +266,15 @@ export class IfcAPI
         return this.wasmModule.GetHeaderLine(modelID, headerType);
     }
 
-    async GetAllTypesOfModel(modelID: number): Promise<ifcType[]>
+    GetAllTypesOfModel(modelID: number): ifcType[]
     {
-        let intType: Vector<number> = await this.properties.getAllTypesFromModel(modelID);
-        let res: number[] = [];
-        for(let key in intType) {
-            let value = intType[key];
-            res.push(value);
-        }
-        let types = [... new Set(res)];
-        
-        let typesNames: ifcType[] = [];
-        for (let i = 0; i < types.length; i++) {
-            const type = types[i];
-            typesNames.push({typeID: type, typeName: IfcTypesMap[type]});
-        }
-        return typesNames;
+      let typesNames: ifcType[] = [];
+      const elements = Object.keys(IfcEntities).map((e) => parseInt(e));
+      for(let i = 0; i < elements.length; i++) {
+          const lines = this.GetLineIDsWithType(modelID, elements[i]);
+          if (lines.size() > 0 )   typesNames.push({typeID: elements[i], typeName: IfcEntities[elements[i]]});
+      }
+      return typesNames;
     }
     
     GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false)
@@ -280,14 +285,14 @@ export class IfcAPI
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = ifc2x4helper.FromRawLineData[rawLineData.type](rawLineData);
+        let lineData = ifc.FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData);
         
         if (flatten)
         {
             this.FlattenLine(modelID, lineData);
         }
         
-        let inverseData = ifc2x4helper.InversePropertyDef[rawLineData.type];
+        let inverseData = ifc.InversePropertyDef[this.modelSchemaList[modelID]][rawLineData.type];
         if (inverse && inverseData != null) 
         {
           for (let inverseProp of inverseData) 
@@ -295,7 +300,9 @@ export class IfcAPI
             if (!inverseProp[3]) lineData[inverseProp[0]] = null;
             else lineData[inverseProp[0]] = [];
             
-            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, inverseProp[1], inverseProp[2], inverseProp[3]);
+            let targetTypes = [inverseProp[1]];
+            targetTypes=targetTypes.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
+            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, targetTypes, inverseProp[2], inverseProp[3]);
             if (!inverseProp[3] && inverseIDs.size()>0) 
             {
               if (!flatten) lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
@@ -305,7 +312,7 @@ export class IfcAPI
             {
                 for (let x = 0; x < inverseIDs.size(); x++) {
                   if (!flatten) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
-                  else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(0)));
+                  else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(x)));
                 }
             }
           }
@@ -403,9 +410,15 @@ export class IfcAPI
         return this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
     }
 
-    GetLineIDsWithType(modelID: number, type: number): Vector<number>
+    GetLineIDsWithType(modelID: number, type: number, includeInherited: boolean = false): Vector<number>
     {
-        return this.wasmModule.GetLineIDsWithType(modelID, type);
+        let types: Array<number> = [];
+        types.push(type);
+        if (includeInherited)
+        {
+          types = types.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][type]);
+        } 
+        return this.wasmModule.GetLineIDsWithType(modelID, types);
     }
 
     GetAllLines(modelID: Number): Vector<number>
@@ -497,6 +510,18 @@ export class IfcAPI
     {
         return this.wasmModule.GetMaxExpressID(modelID);
     }
+    
+    /**
+         * Returns the type of a given ifc entity in the fiule.
+         * @param modelID Model handle retrieved by OpenModel
+         * @param expressID Line Number
+         * @returns IFC Type Code
+         */
+         
+    GetLineType(modelID: number, expressID: number)
+    {
+        return this.wasmModule.GetLineType(modelID, expressID);
+    }
 
     /**
      * Creates a map between element ExpressIDs and GlobalIDs.
@@ -506,9 +531,9 @@ export class IfcAPI
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
        const map = new Map<string | number, string | number>();
 
-       for(let x = 0; x < IfcElements.length; x++){
+       for(let x = 0; x < Object().keys(IfcEntities).length; x++){
 
-           const type = IfcElements[x];
+           const type = x;
            const lines = this.GetLineIDsWithType(modelID, type);
            const size = lines.size();
 
@@ -516,6 +541,7 @@ export class IfcAPI
 
                const expressID = lines.get(y);
                const info = this.GetLine(modelID, expressID);
+               if (info.GlobalId == null) continue;
                const globalID = info.GlobalId.value;
 
                map.set(expressID, globalID);

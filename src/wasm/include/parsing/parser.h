@@ -80,7 +80,7 @@ namespace webifc
 					}
 					else if (currentIfcType != 0)
 					{
-						if(currentIfcType == ifc2x4::FILE_DESCRIPTION || currentIfcType == ifc2x4::FILE_NAME||currentIfcType == ifc2x4::FILE_SCHEMA )
+						if(currentIfcType == ifc::FILE_DESCRIPTION || currentIfcType == ifc::FILE_NAME||currentIfcType == ifc::FILE_SCHEMA )
 						{
 							IfcHeaderLine l;
 							l.ifcType = currentIfcType;

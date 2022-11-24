@@ -1,8 +1,7 @@
 const WebIFC = require("../../dist/web-ifc-api-node.js");
 const fs = require("fs");
 const { Console } = require("console");
-const { IfcPropertySingleValue, IFCPROPERTYSINGLEVALUE, IfcText, IfcIdentifier, IfcValve, IfcSIUnit, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
-const { EMPTY, IfcPropertySet, IFCPROPERTYSET, IfcGloballyUniqueId, IfcLabel, IfcRelDefinesByProperties, IFCRELDEFINESBYPROPERTIES } = require("../../dist/web-ifc-api-node.js");
+const { IFC2X3, IFCPROPERTYSINGLEVALUE, EMPTY, IFCPROPERTYSET, IFCRELDEFINESBYPROPERTIES, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
 
 console.log("Hello web-ifc-node!");
 
@@ -83,7 +82,7 @@ async function LoadFile(filename) {
 
     maxEID++;
     numLines++;
-    let property = new IfcPropertySingleValue(
+    let property = new IFC2X3.IfcPropertySingleValue(
         maxEID,
         IFCPROPERTYSINGLEVALUE,
         { type: 1, value: 'Classification' },
@@ -101,7 +100,7 @@ async function LoadFile(filename) {
     const propID = maxEID;
     maxEID++;
     numLines++;
-    let pSet = new IfcPropertySet(
+    let pSet = new IFC2X3.IfcPropertySet(
         maxEID,
         IFCPROPERTYSET,
         { type: 1, value: '350fFD9fjAtPfVihcqa4Yn' },
@@ -115,7 +114,7 @@ async function LoadFile(filename) {
     const pSetID = maxEID;
     maxEID++;
     numLines++;
-    let psetRel = new IfcRelDefinesByProperties(
+    let psetRel = new IFC2X3.IfcRelDefinesByProperties(
         maxEID,
         IFCRELDEFINESBYPROPERTIES,
         { type: 1, value: '53sfET9fjfyPfVi4cqa7Yn' },
@@ -132,7 +131,7 @@ async function LoadFile(filename) {
     const unitID = maxEID;
     maxEID++;
     numLines++;
-    let newUnits = new IfcSIUnit(
+    let newUnits = new IFC2X3.IfcSIUnit(
         unitID,
         IFCSIUNIT,
         { type: 0, value: '*' },
@@ -145,7 +144,7 @@ async function LoadFile(filename) {
     const unitID2 = maxEID;
     maxEID++;
     numLines++;
-    let newUnits2 = new IfcSIUnit(
+    let newUnits2 = new IFC2X3.IfcSIUnit(
         unitID2,
         IFCSIUNIT,
         { type: 0, value: '*' },

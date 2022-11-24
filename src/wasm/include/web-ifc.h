@@ -14,7 +14,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "ifc2x4.h"
+#include "ifc-schema.h"
 #include "util.h"
 #include "parsing/tokenizer.h"
 #include "parsing/parser.h"
@@ -329,7 +329,7 @@ namespace webifc
 
 		void ReadLinearScalingFactor()
 		{
-			auto projects = GetExpressIDsWithType(ifc2x4::IFCPROJECT);
+			auto projects = GetExpressIDsWithType(ifc::IFCPROJECT);
 
 			if (projects.size() != 1)
 			{
@@ -355,7 +355,7 @@ namespace webifc
 
 				auto &line = GetLine(ExpressIDToLineID(unitRef));
 
-				if (line.ifcType == ifc2x4::IFCSIUNIT)
+				if (line.ifcType == ifc::IFCSIUNIT)
 				{
 					MoveToArgumentOffset(line, 1);
 					std::string unitType = GetStringArgument();
@@ -378,7 +378,7 @@ namespace webifc
 						_metaData.linearScalingFactor *= prefix;
 					}
 				}
-				if(line.ifcType == ifc2x4::IFCCONVERSIONBASEDUNIT)
+				if(line.ifcType == ifc::IFCCONVERSIONBASEDUNIT)
 				{
 					MoveToArgumentOffset(line, 1);
 					std::string unitType = GetStringArgument();
@@ -442,7 +442,7 @@ namespace webifc
 
 		void PopulateRelVoidsMap()
 		{
-			auto relVoids = GetExpressIDsWithType(ifc2x4::IFCRELVOIDSELEMENT);
+			auto relVoids = GetExpressIDsWithType(ifc::IFCRELVOIDSELEMENT);
 
 			for (uint32_t relVoidID : relVoids)
 			{
@@ -461,7 +461,7 @@ namespace webifc
 
 		void PopulateRelAggregatesMap()
 		{
-			auto relVoids = GetExpressIDsWithType(ifc2x4::IFCRELAGGREGATES);
+			auto relVoids = GetExpressIDsWithType(ifc::IFCRELAGGREGATES);
 
 			for (uint32_t relVoidID : relVoids)
 			{
@@ -483,7 +483,7 @@ namespace webifc
 
 		void PopulateStyledItemMap()
 		{
-			auto styledItems = GetExpressIDsWithType(ifc2x4::IFCSTYLEDITEM);
+			auto styledItems = GetExpressIDsWithType(ifc::IFCSTYLEDITEM);
 
 			for (uint32_t styledItemID : styledItems)
 			{
@@ -513,7 +513,7 @@ namespace webifc
 
 		void PopulateRelMaterialsMap()
 		{
-			auto styledItems = GetExpressIDsWithType(ifc2x4::IFCRELASSOCIATESMATERIAL);
+			auto styledItems = GetExpressIDsWithType(ifc::IFCRELASSOCIATESMATERIAL);
 
 			for (uint32_t styledItemID : styledItems)
 			{
@@ -535,7 +535,7 @@ namespace webifc
 				}
 			}
 
-			auto matDefs = GetExpressIDsWithType(ifc2x4::IFCMATERIALDEFINITIONREPRESENTATION);
+			auto matDefs = GetExpressIDsWithType(ifc::IFCMATERIALDEFINITIONREPRESENTATION);
 
 			for (uint32_t styledItemID : matDefs)
 			{
