@@ -1,4 +1,4 @@
-import {} from "./gen_functional_types_interfaces";
+import {Type, Prop, InverseProp, Entity, Param} from "./gen_functional_types_interfaces";
 import {findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
 
 const fs = require("fs");
@@ -8,7 +8,7 @@ let crcTable = makeCRCTable();
 
 console.log("Starting...");
 
-let tsHelper = [];
+let tsHelper: Array<string> = [];
 tsHelper.push(`// This is a generated file, please see: gen_functional_types.js`);
 tsHelper.push(`import * as ifc from "./ifc-schema";`);
 tsHelper.push();
@@ -34,13 +34,13 @@ tsHelper.push(`export let FromRawLineData = {};`);
 tsHelper.push(`export let InversePropertyDef = {};`);
 tsHelper.push(`export let InheritanceDef = {};`);
 
-let tsHelperClasses = [];
+let tsHelperClasses: Array<string>  = [];
 
-let completeEntityList = new Set();
+let completeEntityList = new Set<string>();
 completeEntityList.add("FILE_SCHEMA");
 completeEntityList.add("FILE_NAME");
 completeEntityList.add("FILE_DESCRIPTION");
-let completeifcElementList = new Set();
+let completeifcElementList = new Set<string>();
 
 var files = fs.readdirSync("./");
 for (var i = 0; i < files.length; i++) {
@@ -53,7 +53,7 @@ for (var i = 0; i < files.length; i++) {
   tsHelperClasses.push(`export namespace ${schemaName} {`);
   let schemaData = fs.readFileSync("./"+files[i]).toString();
   let parsed = parseElements(schemaData);
-  let entities = sortEntities(parsed.entities);
+  let entities: Array<Entity> = sortEntities(parsed.entities);
   let types = parsed.types;
   
   types.forEach((type) => {
@@ -65,7 +65,7 @@ for (var i = 0; i < files.length; i++) {
       {
           tsHelperClasses.push(`\texport type ${type.name} = `);
           type.values.forEach(refType => {
-              let isType: Type = types.some( x => x.name == refType.name);
+              let isType: boolean = types.some( x => x.name == refType);
               if (isType)
               {
                   tsHelperClasses.push(`\t\t| ${refType}`);
@@ -123,7 +123,7 @@ for (var i = 0; i < files.length; i++) {
         entities[x].derivedInverseProps.forEach((prop) => {
           let pos = 0;
           //find the target element
-          for (targetEntity of entities) 
+          for (let targetEntity of entities) 
           {
             if (targetEntity.name == prop.type) 
             {
@@ -156,8 +156,8 @@ fs.writeFileSync("../ifc_schema_helper.ts", tsHelper.join("\n"));
 
 console.log(`Writing Global WASM/TS Metadata!...`);
 
-let tsHeader = []
-let cppHeader = [];
+let tsHeader:Array<string> = []
+let cppHeader: Array<string> = [];
 cppHeader.push("#pragma once");
 cppHeader.push("");
 cppHeader.push("#include <vector>");

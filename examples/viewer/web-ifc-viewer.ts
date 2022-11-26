@@ -7,7 +7,7 @@ import * as ts from "typescript";
 import { exampleCode } from './example';
 
 let ifcAPI = new IfcAPI();
-ifcAPI.SetWasmPath("wasm/")
+ifcAPI.SetWasmPath("/")
 let ifcThree = new IfcThree(ifcAPI);
 
 let timeout = undefined;
@@ -105,8 +105,15 @@ window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEdit
   initMonacoEditor(monacoEditor);
   const fileInput = document.getElementById('finput');
   fileInput.addEventListener('change', fileInputChanged);
+  const codereset = document.getElementById('rcode');
+  codereset.addEventListener('click', resetCode);
   Init3DView();
 };
+}
+
+async function resetCode() {
+    window.localStorage.setItem('code', exampleCode);
+    location.reload();
 }
 
 async function fileInputChanged() {

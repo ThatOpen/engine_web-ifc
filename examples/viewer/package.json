@@ -1,0 +1,17 @@
+{
+  "name": "web-ifc-viewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node makesrc.js && esbuild --bundle web-ifc-viewer.ts --platform=node --outfile=./dist/web-ifc-viewer.js && rm ts_src.ts && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc",
+    "start": "http-server -c-1 dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cpy-cli": "^4.2.0",
+    "esbuild": "^0.8.49",
+    "http-server": "^14.1.1"
+  }
+}

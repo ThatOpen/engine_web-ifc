@@ -1,5 +1,5 @@
 
-const WebIFC = require("web-ifc/web-ifc-api.js");
+const WebIFC = require("../../dist/web-ifc-api.js");
 
 console.log("Hello web-ifc-browser!");
 
@@ -24,8 +24,7 @@ async function LoadFile(filename)
 
     let ifcData = await HttpRequest(filename);
     console.log("Got data!");
-
-    let modelID = ifcapi.OpenModel(filename, ifcData);
+    let modelID = ifcapi.OpenModel(ifcData);
 
     console.log(`Loaded model ${filename} to modelID ${modelID}`);
 

@@ -55,13 +55,13 @@ export default async function() {
         // grab all propertyset lines in the file
         let lines = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCRELDEFINESBYPROPERTIES);
 
-        let propSetIds = [];
+        let propSetIds: any = [];
         for (let i = 0; i < lines.size(); i++)
         {
             let relID = lines.get(i);
-            let rel = ifcapi.GetLine(modelID, relID) as WebIFC.IfcRelDefinesByProperties;
+            let rel = ifcapi.GetLine(modelID, relID) as WebIFC.IFC2X3.IfcRelDefinesByProperties;
             let foundElement = false;
-            rel.RelatedObjects.forEach((relID: WebIFC.Handle<IfcObjectDefinition>) => {
+            rel.RelatedObjects.forEach((relID: WebIFC.Handle<WebIFC.IFC2X3.IfcObjectDefinition>) => {
                 if (relID.value === elementID)
                 {
                     foundElement = true;
@@ -72,7 +72,7 @@ export default async function() {
             {
                 if (!Array.isArray(rel.RelatingPropertyDefinition))
                 {
-                    let handle = rel.RelatingPropertyDefinition as WebIFC.Handle<IfcPropertySetDefinition>;
+                    let handle = rel.RelatingPropertyDefinition as WebIFC.Handle<WebIFC.IFC2X3.IfcPropertySetDefinition>;
                     propSetIds.push(handle.value);
                 }
             }
@@ -83,7 +83,7 @@ export default async function() {
 
         Equals("num propsets", propsets.length, 5);
 
-        let props = [];
+        let props: any = [];
         propsets.forEach((set) => {
             set.HasProperties.forEach(p => {
                 console.log(`${set.Name.value}/${p.Name.value}: [${p.NominalValue.label}] ${p.NominalValue.value}`);

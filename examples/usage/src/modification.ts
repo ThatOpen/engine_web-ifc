@@ -1,5 +1,5 @@
-// import * as WebIFC from "../../../dist/web-ifc-api-node.js";
-import * as WebIFC from "web-ifc/web-ifc-api-node";
+import * as WebIFC from "../../../dist/web-ifc-api-node.js";
+//import * as WebIFC from "web-ifc/web-ifc-api-node";
 import { Equals, WithIFCFileLoaded, TestInfo } from "./utils";
 
 export default async function() {

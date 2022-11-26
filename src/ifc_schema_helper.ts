@@ -15273,9 +15273,9 @@ export namespace IFC2X3 {
 		| (Handle<IfcPersonAndOrganization> | IfcPersonAndOrganization)
 	;
 	export type IfcAppliedValueSelect = 
-		| (Handle<IfcRatioMeasure> | IfcRatioMeasure)
+		| IfcRatioMeasure
 		| (Handle<IfcMeasureWithUnit> | IfcMeasureWithUnit)
-		| (Handle<IfcMonetaryMeasure> | IfcMonetaryMeasure)
+		| IfcMonetaryMeasure
 	;
 	export type IfcAxis2Placement = 
 		| (Handle<IfcAxis2Placement2D> | IfcAxis2Placement2D)
@@ -15300,10 +15300,10 @@ export namespace IFC2X3 {
 	;
 	export type IfcColourOrFactor = 
 		| (Handle<IfcColourRgb> | IfcColourRgb)
-		| (Handle<IfcNormalisedRatioMeasure> | IfcNormalisedRatioMeasure)
+		| IfcNormalisedRatioMeasure
 	;
 	export type IfcConditionCriterionSelect = 
-		| (Handle<IfcLabel> | IfcLabel)
+		| IfcLabel
 		| (Handle<IfcMeasureWithUnit> | IfcMeasureWithUnit)
 	;
 	export type IfcCsgSelect = 
@@ -15311,7 +15311,7 @@ export namespace IFC2X3 {
 		| (Handle<IfcCsgPrimitive3D> | IfcCsgPrimitive3D)
 	;
 	export type IfcCurveFontOrScaledCurveFontSelect = 
-		| (Handle<IfcCurveStyleFontSelect> | IfcCurveStyleFontSelect)
+		| IfcCurveStyleFontSelect
 		| (Handle<IfcCurveStyleFontAndScaling> | IfcCurveStyleFontAndScaling)
 	;
 	export type IfcCurveOrEdgeCurve = 
@@ -15332,74 +15332,74 @@ export namespace IFC2X3 {
 		| (Handle<IfcExternallyDefinedSymbol> | IfcExternallyDefinedSymbol)
 	;
 	export type IfcDerivedMeasureValue = 
-		| (Handle<IfcVolumetricFlowRateMeasure> | IfcVolumetricFlowRateMeasure)
-		| (Handle<IfcTimeStamp> | IfcTimeStamp)
-		| (Handle<IfcThermalTransmittanceMeasure> | IfcThermalTransmittanceMeasure)
-		| (Handle<IfcThermalResistanceMeasure> | IfcThermalResistanceMeasure)
-		| (Handle<IfcThermalAdmittanceMeasure> | IfcThermalAdmittanceMeasure)
-		| (Handle<IfcPressureMeasure> | IfcPressureMeasure)
-		| (Handle<IfcPowerMeasure> | IfcPowerMeasure)
-		| (Handle<IfcMassFlowRateMeasure> | IfcMassFlowRateMeasure)
-		| (Handle<IfcMassDensityMeasure> | IfcMassDensityMeasure)
-		| (Handle<IfcLinearVelocityMeasure> | IfcLinearVelocityMeasure)
-		| (Handle<IfcKinematicViscosityMeasure> | IfcKinematicViscosityMeasure)
-		| (Handle<IfcIntegerCountRateMeasure> | IfcIntegerCountRateMeasure)
-		| (Handle<IfcHeatFluxDensityMeasure> | IfcHeatFluxDensityMeasure)
-		| (Handle<IfcFrequencyMeasure> | IfcFrequencyMeasure)
-		| (Handle<IfcEnergyMeasure> | IfcEnergyMeasure)
-		| (Handle<IfcElectricVoltageMeasure> | IfcElectricVoltageMeasure)
-		| (Handle<IfcDynamicViscosityMeasure> | IfcDynamicViscosityMeasure)
-		| (Handle<IfcCompoundPlaneAngleMeasure> | IfcCompoundPlaneAngleMeasure)
-		| (Handle<IfcAngularVelocityMeasure> | IfcAngularVelocityMeasure)
-		| (Handle<IfcThermalConductivityMeasure> | IfcThermalConductivityMeasure)
-		| (Handle<IfcMolecularWeightMeasure> | IfcMolecularWeightMeasure)
-		| (Handle<IfcVaporPermeabilityMeasure> | IfcVaporPermeabilityMeasure)
-		| (Handle<IfcMoistureDiffusivityMeasure> | IfcMoistureDiffusivityMeasure)
-		| (Handle<IfcIsothermalMoistureCapacityMeasure> | IfcIsothermalMoistureCapacityMeasure)
-		| (Handle<IfcSpecificHeatCapacityMeasure> | IfcSpecificHeatCapacityMeasure)
-		| (Handle<IfcMonetaryMeasure> | IfcMonetaryMeasure)
-		| (Handle<IfcMagneticFluxDensityMeasure> | IfcMagneticFluxDensityMeasure)
-		| (Handle<IfcMagneticFluxMeasure> | IfcMagneticFluxMeasure)
-		| (Handle<IfcLuminousFluxMeasure> | IfcLuminousFluxMeasure)
-		| (Handle<IfcForceMeasure> | IfcForceMeasure)
-		| (Handle<IfcInductanceMeasure> | IfcInductanceMeasure)
-		| (Handle<IfcIlluminanceMeasure> | IfcIlluminanceMeasure)
-		| (Handle<IfcElectricResistanceMeasure> | IfcElectricResistanceMeasure)
-		| (Handle<IfcElectricConductanceMeasure> | IfcElectricConductanceMeasure)
-		| (Handle<IfcElectricChargeMeasure> | IfcElectricChargeMeasure)
-		| (Handle<IfcDoseEquivalentMeasure> | IfcDoseEquivalentMeasure)
-		| (Handle<IfcElectricCapacitanceMeasure> | IfcElectricCapacitanceMeasure)
-		| (Handle<IfcAbsorbedDoseMeasure> | IfcAbsorbedDoseMeasure)
-		| (Handle<IfcRadioActivityMeasure> | IfcRadioActivityMeasure)
-		| (Handle<IfcRotationalFrequencyMeasure> | IfcRotationalFrequencyMeasure)
-		| (Handle<IfcTorqueMeasure> | IfcTorqueMeasure)
-		| (Handle<IfcAccelerationMeasure> | IfcAccelerationMeasure)
-		| (Handle<IfcLinearForceMeasure> | IfcLinearForceMeasure)
-		| (Handle<IfcLinearStiffnessMeasure> | IfcLinearStiffnessMeasure)
-		| (Handle<IfcModulusOfSubgradeReactionMeasure> | IfcModulusOfSubgradeReactionMeasure)
-		| (Handle<IfcModulusOfElasticityMeasure> | IfcModulusOfElasticityMeasure)
-		| (Handle<IfcMomentOfInertiaMeasure> | IfcMomentOfInertiaMeasure)
-		| (Handle<IfcPlanarForceMeasure> | IfcPlanarForceMeasure)
-		| (Handle<IfcRotationalStiffnessMeasure> | IfcRotationalStiffnessMeasure)
-		| (Handle<IfcShearModulusMeasure> | IfcShearModulusMeasure)
-		| (Handle<IfcLinearMomentMeasure> | IfcLinearMomentMeasure)
-		| (Handle<IfcLuminousIntensityDistributionMeasure> | IfcLuminousIntensityDistributionMeasure)
-		| (Handle<IfcCurvatureMeasure> | IfcCurvatureMeasure)
-		| (Handle<IfcMassPerLengthMeasure> | IfcMassPerLengthMeasure)
-		| (Handle<IfcModulusOfLinearSubgradeReactionMeasure> | IfcModulusOfLinearSubgradeReactionMeasure)
-		| (Handle<IfcModulusOfRotationalSubgradeReactionMeasure> | IfcModulusOfRotationalSubgradeReactionMeasure)
-		| (Handle<IfcRotationalMassMeasure> | IfcRotationalMassMeasure)
-		| (Handle<IfcSectionalAreaIntegralMeasure> | IfcSectionalAreaIntegralMeasure)
-		| (Handle<IfcSectionModulusMeasure> | IfcSectionModulusMeasure)
-		| (Handle<IfcTemperatureGradientMeasure> | IfcTemperatureGradientMeasure)
-		| (Handle<IfcThermalExpansionCoefficientMeasure> | IfcThermalExpansionCoefficientMeasure)
-		| (Handle<IfcWarpingConstantMeasure> | IfcWarpingConstantMeasure)
-		| (Handle<IfcWarpingMomentMeasure> | IfcWarpingMomentMeasure)
-		| (Handle<IfcSoundPowerMeasure> | IfcSoundPowerMeasure)
-		| (Handle<IfcSoundPressureMeasure> | IfcSoundPressureMeasure)
-		| (Handle<IfcHeatingValueMeasure> | IfcHeatingValueMeasure)
-		| (Handle<IfcPHMeasure> | IfcPHMeasure)
-		| (Handle<IfcIonConcentrationMeasure> | IfcIonConcentrationMeasure)
+		| IfcVolumetricFlowRateMeasure
+		| IfcTimeStamp
+		| IfcThermalTransmittanceMeasure
+		| IfcThermalResistanceMeasure
+		| IfcThermalAdmittanceMeasure
+		| IfcPressureMeasure
+		| IfcPowerMeasure
+		| IfcMassFlowRateMeasure
+		| IfcMassDensityMeasure
+		| IfcLinearVelocityMeasure
+		| IfcKinematicViscosityMeasure
+		| IfcIntegerCountRateMeasure
+		| IfcHeatFluxDensityMeasure
+		| IfcFrequencyMeasure
+		| IfcEnergyMeasure
+		| IfcElectricVoltageMeasure
+		| IfcDynamicViscosityMeasure
+		| IfcCompoundPlaneAngleMeasure
+		| IfcAngularVelocityMeasure
+		| IfcThermalConductivityMeasure
+		| IfcMolecularWeightMeasure
+		| IfcVaporPermeabilityMeasure
+		| IfcMoistureDiffusivityMeasure
+		| IfcIsothermalMoistureCapacityMeasure
+		| IfcSpecificHeatCapacityMeasure
+		| IfcMonetaryMeasure
+		| IfcMagneticFluxDensityMeasure
+		| IfcMagneticFluxMeasure
+		| IfcLuminousFluxMeasure
+		| IfcForceMeasure
+		| IfcInductanceMeasure
+		| IfcIlluminanceMeasure
+		| IfcElectricResistanceMeasure
+		| IfcElectricConductanceMeasure
+		| IfcElectricChargeMeasure
+		| IfcDoseEquivalentMeasure
+		| IfcElectricCapacitanceMeasure
+		| IfcAbsorbedDoseMeasure
+		| IfcRadioActivityMeasure
+		| IfcRotationalFrequencyMeasure
+		| IfcTorqueMeasure
+		| IfcAccelerationMeasure
+		| IfcLinearForceMeasure
+		| IfcLinearStiffnessMeasure
+		| IfcModulusOfSubgradeReactionMeasure
+		| IfcModulusOfElasticityMeasure
+		| IfcMomentOfInertiaMeasure
+		| IfcPlanarForceMeasure
+		| IfcRotationalStiffnessMeasure
+		| IfcShearModulusMeasure
+		| IfcLinearMomentMeasure
+		| IfcLuminousIntensityDistributionMeasure
+		| IfcCurvatureMeasure
+		| IfcMassPerLengthMeasure
+		| IfcModulusOfLinearSubgradeReactionMeasure
+		| IfcModulusOfRotationalSubgradeReactionMeasure
+		| IfcRotationalMassMeasure
+		| IfcSectionalAreaIntegralMeasure
+		| IfcSectionModulusMeasure
+		| IfcTemperatureGradientMeasure
+		| IfcThermalExpansionCoefficientMeasure
+		| IfcWarpingConstantMeasure
+		| IfcWarpingMomentMeasure
+		| IfcSoundPowerMeasure
+		| IfcSoundPressureMeasure
+		| IfcHeatingValueMeasure
+		| IfcPHMeasure
+		| IfcIonConcentrationMeasure
 	;
 	export type IfcDocumentSelect = 
 		| (Handle<IfcDocumentReference> | IfcDocumentReference)
@@ -15416,7 +15416,7 @@ export namespace IFC2X3 {
 	export type IfcFillStyleSelect = 
 		| (Handle<IfcFillAreaStyleHatching> | IfcFillAreaStyleHatching)
 		| (Handle<IfcFillAreaStyleTiles> | IfcFillAreaStyleTiles)
-		| (Handle<IfcColour> | IfcColour)
+		| IfcColour
 		| (Handle<IfcExternallyDefinedHatchStyle> | IfcExternallyDefinedHatchStyle)
 	;
 	export type IfcGeometricSetSelect = 
@@ -15426,7 +15426,7 @@ export namespace IFC2X3 {
 	;
 	export type IfcHatchLineDistanceSelect = 
 		| (Handle<IfcOneDirectionRepeatFactor> | IfcOneDirectionRepeatFactor)
-		| (Handle<IfcPositiveLengthMeasure> | IfcPositiveLengthMeasure)
+		| IfcPositiveLengthMeasure
 	;
 	export type IfcLayeredItem = 
 		| (Handle<IfcRepresentationItem> | IfcRepresentationItem)
@@ -15448,34 +15448,34 @@ export namespace IFC2X3 {
 		| (Handle<IfcMaterialLayer> | IfcMaterialLayer)
 	;
 	export type IfcMeasureValue = 
-		| (Handle<IfcVolumeMeasure> | IfcVolumeMeasure)
-		| (Handle<IfcTimeMeasure> | IfcTimeMeasure)
-		| (Handle<IfcThermodynamicTemperatureMeasure> | IfcThermodynamicTemperatureMeasure)
-		| (Handle<IfcSolidAngleMeasure> | IfcSolidAngleMeasure)
-		| (Handle<IfcPositiveRatioMeasure> | IfcPositiveRatioMeasure)
-		| (Handle<IfcRatioMeasure> | IfcRatioMeasure)
-		| (Handle<IfcPositivePlaneAngleMeasure> | IfcPositivePlaneAngleMeasure)
-		| (Handle<IfcPlaneAngleMeasure> | IfcPlaneAngleMeasure)
-		| (Handle<IfcParameterValue> | IfcParameterValue)
-		| (Handle<IfcNumericMeasure> | IfcNumericMeasure)
-		| (Handle<IfcMassMeasure> | IfcMassMeasure)
-		| (Handle<IfcPositiveLengthMeasure> | IfcPositiveLengthMeasure)
-		| (Handle<IfcLengthMeasure> | IfcLengthMeasure)
-		| (Handle<IfcElectricCurrentMeasure> | IfcElectricCurrentMeasure)
-		| (Handle<IfcDescriptiveMeasure> | IfcDescriptiveMeasure)
-		| (Handle<IfcCountMeasure> | IfcCountMeasure)
-		| (Handle<IfcContextDependentMeasure> | IfcContextDependentMeasure)
-		| (Handle<IfcAreaMeasure> | IfcAreaMeasure)
-		| (Handle<IfcAmountOfSubstanceMeasure> | IfcAmountOfSubstanceMeasure)
-		| (Handle<IfcLuminousIntensityMeasure> | IfcLuminousIntensityMeasure)
-		| (Handle<IfcNormalisedRatioMeasure> | IfcNormalisedRatioMeasure)
-		| (Handle<IfcComplexNumber> | IfcComplexNumber)
+		| IfcVolumeMeasure
+		| IfcTimeMeasure
+		| IfcThermodynamicTemperatureMeasure
+		| IfcSolidAngleMeasure
+		| IfcPositiveRatioMeasure
+		| IfcRatioMeasure
+		| IfcPositivePlaneAngleMeasure
+		| IfcPlaneAngleMeasure
+		| IfcParameterValue
+		| IfcNumericMeasure
+		| IfcMassMeasure
+		| IfcPositiveLengthMeasure
+		| IfcLengthMeasure
+		| IfcElectricCurrentMeasure
+		| IfcDescriptiveMeasure
+		| IfcCountMeasure
+		| IfcContextDependentMeasure
+		| IfcAreaMeasure
+		| IfcAmountOfSubstanceMeasure
+		| IfcLuminousIntensityMeasure
+		| IfcNormalisedRatioMeasure
+		| IfcComplexNumber
 	;
 	export type IfcMetricValueSelect = 
-		| (Handle<IfcDateTimeSelect> | IfcDateTimeSelect)
+		| IfcDateTimeSelect
 		| (Handle<IfcMeasureWithUnit> | IfcMeasureWithUnit)
 		| (Handle<IfcTable> | IfcTable)
-		| (Handle<IfcText> | IfcText)
+		| IfcText
 		| (Handle<IfcTimeSeries> | IfcTimeSeries)
 		| (Handle<IfcCostValue> | IfcCostValue)
 	;
@@ -15495,7 +15495,7 @@ export namespace IFC2X3 {
 		| (Handle<IfcAppliedValue> | IfcAppliedValue)
 	;
 	export type IfcOrientationSelect = 
-		| (Handle<IfcPlaneAngleMeasure> | IfcPlaneAngleMeasure)
+		| IfcPlaneAngleMeasure
 		| (Handle<IfcDirection> | IfcDirection)
 	;
 	export type IfcPointOrVertexPoint = 
@@ -15503,7 +15503,7 @@ export namespace IFC2X3 {
 		| (Handle<IfcVertexPoint> | IfcVertexPoint)
 	;
 	export type IfcPresentationStyleSelect = 
-		| (Handle<IfcNullStyle> | IfcNullStyle)
+		| IfcNullStyle
 		| (Handle<IfcCurveStyle> | IfcCurveStyle)
 		| (Handle<IfcSymbolStyle> | IfcSymbolStyle)
 		| (Handle<IfcFillAreaStyle> | IfcFillAreaStyle)
@@ -15515,25 +15515,25 @@ export namespace IFC2X3 {
 		| (Handle<IfcOpenShell> | IfcOpenShell)
 	;
 	export type IfcSimpleValue = 
-		| (Handle<IfcInteger> | IfcInteger)
-		| (Handle<IfcReal> | IfcReal)
-		| (Handle<IfcBoolean> | IfcBoolean)
-		| (Handle<IfcIdentifier> | IfcIdentifier)
-		| (Handle<IfcText> | IfcText)
-		| (Handle<IfcLabel> | IfcLabel)
-		| (Handle<IfcLogical> | IfcLogical)
+		| IfcInteger
+		| IfcReal
+		| IfcBoolean
+		| IfcIdentifier
+		| IfcText
+		| IfcLabel
+		| IfcLogical
 	;
 	export type IfcSizeSelect = 
-		| (Handle<IfcRatioMeasure> | IfcRatioMeasure)
-		| (Handle<IfcLengthMeasure> | IfcLengthMeasure)
-		| (Handle<IfcDescriptiveMeasure> | IfcDescriptiveMeasure)
-		| (Handle<IfcPositiveLengthMeasure> | IfcPositiveLengthMeasure)
-		| (Handle<IfcNormalisedRatioMeasure> | IfcNormalisedRatioMeasure)
-		| (Handle<IfcPositiveRatioMeasure> | IfcPositiveRatioMeasure)
+		| IfcRatioMeasure
+		| IfcLengthMeasure
+		| IfcDescriptiveMeasure
+		| IfcPositiveLengthMeasure
+		| IfcNormalisedRatioMeasure
+		| IfcPositiveRatioMeasure
 	;
 	export type IfcSpecularHighlightSelect = 
-		| (Handle<IfcSpecularExponent> | IfcSpecularExponent)
-		| (Handle<IfcSpecularRoughness> | IfcSpecularRoughness)
+		| IfcSpecularExponent
+		| IfcSpecularRoughness
 	;
 	export type IfcStructuralActivityAssignmentSelect = 
 		| (Handle<IfcStructuralItem> | IfcStructuralItem)
@@ -15552,7 +15552,7 @@ export namespace IFC2X3 {
 		| (Handle<IfcSurfaceStyleRefraction> | IfcSurfaceStyleRefraction)
 	;
 	export type IfcSymbolStyleSelect = 
-		| (Handle<IfcColour> | IfcColour)
+		| IfcColour
 	;
 	export type IfcTextFontSelect = 
 		| (Handle<IfcPreDefinedTextFont> | IfcPreDefinedTextFont)
@@ -15564,7 +15564,7 @@ export namespace IFC2X3 {
 	;
 	export type IfcTrimmingSelect = 
 		| (Handle<IfcCartesianPoint> | IfcCartesianPoint)
-		| (Handle<IfcParameterValue> | IfcParameterValue)
+		| IfcParameterValue
 	;
 	export type IfcUnit = 
 		| (Handle<IfcDerivedUnit> | IfcDerivedUnit)
@@ -15572,9 +15572,9 @@ export namespace IFC2X3 {
 		| (Handle<IfcMonetaryUnit> | IfcMonetaryUnit)
 	;
 	export type IfcValue = 
-		| (Handle<IfcMeasureValue> | IfcMeasureValue)
-		| (Handle<IfcSimpleValue> | IfcSimpleValue)
-		| (Handle<IfcDerivedMeasureValue> | IfcDerivedMeasureValue)
+		| IfcMeasureValue
+		| IfcSimpleValue
+		| IfcDerivedMeasureValue
 	;
 	export type IfcVectorOrDirection = 
 		| (Handle<IfcDirection> | IfcDirection)
@@ -32714,15 +32714,15 @@ export namespace IFC4 {
 	export type IfcAppliedValueSelect = 
 		| (Handle<IfcMeasureWithUnit> | IfcMeasureWithUnit)
 		| (Handle<IfcReference> | IfcReference)
-		| (Handle<IfcValue> | IfcValue)
+		| IfcValue
 	;
 	export type IfcAxis2Placement = 
 		| (Handle<IfcAxis2Placement2D> | IfcAxis2Placement2D)
 		| (Handle<IfcAxis2Placement3D> | IfcAxis2Placement3D)
 	;
 	export type IfcBendingParameterSelect = 
-		| (Handle<IfcLengthMeasure> | IfcLengthMeasure)
-		| (Handle<IfcPlaneAngleMeasure> | IfcPlaneAngleMeasure)
+		| IfcLengthMeasure
+		| IfcPlaneAngleMeasure
 	;
 	export type IfcBooleanOperand = 
 		| (Handle<IfcBooleanResult> | IfcBooleanResult)
@@ -32745,7 +32745,7 @@ export namespace IFC4 {
 	;
 	export type IfcColourOrFactor = 
 		| (Handle<IfcColourRgb> | IfcColourRgb)
-		| (Handle<IfcNormalisedRatioMeasure> | IfcNormalisedRatioMeasure)
+		| IfcNormalisedRatioMeasure
 	;
 	export type IfcCoordinateReferenceSystemSelect = 
 		| (Handle<IfcCoordinateReferenceSystem> | IfcCoordinateReferenceSystem)
@@ -32757,7 +32757,7 @@ export namespace IFC4 {
 	;
 	export type IfcCurveFontOrScaledCurveFontSelect = 
 		| (Handle<IfcCurveStyleFontAndScaling> | IfcCurveStyleFontAndScaling)
-		| (Handle<IfcCurveStyleFontSelect> | IfcCurveStyleFontSelect)
+		| IfcCurveStyleFontSelect
 	;
 	export type IfcCurveOnSurface = 
 		| (Handle<IfcCompositeCurveOnSurface> | IfcCompositeCurveOnSurface)
@@ -32777,84 +32777,84 @@ export namespace IFC4 {
 		| (Handle<IfcPropertyDefinition> | IfcPropertyDefinition)
 	;
 	export type IfcDerivedMeasureValue = 
-		| (Handle<IfcAbsorbedDoseMeasure> | IfcAbsorbedDoseMeasure)
-		| (Handle<IfcAccelerationMeasure> | IfcAccelerationMeasure)
-		| (Handle<IfcAngularVelocityMeasure> | IfcAngularVelocityMeasure)
-		| (Handle<IfcAreaDensityMeasure> | IfcAreaDensityMeasure)
-		| (Handle<IfcCompoundPlaneAngleMeasure> | IfcCompoundPlaneAngleMeasure)
-		| (Handle<IfcCurvatureMeasure> | IfcCurvatureMeasure)
-		| (Handle<IfcDoseEquivalentMeasure> | IfcDoseEquivalentMeasure)
-		| (Handle<IfcDynamicViscosityMeasure> | IfcDynamicViscosityMeasure)
-		| (Handle<IfcElectricCapacitanceMeasure> | IfcElectricCapacitanceMeasure)
-		| (Handle<IfcElectricChargeMeasure> | IfcElectricChargeMeasure)
-		| (Handle<IfcElectricConductanceMeasure> | IfcElectricConductanceMeasure)
-		| (Handle<IfcElectricResistanceMeasure> | IfcElectricResistanceMeasure)
-		| (Handle<IfcElectricVoltageMeasure> | IfcElectricVoltageMeasure)
-		| (Handle<IfcEnergyMeasure> | IfcEnergyMeasure)
-		| (Handle<IfcForceMeasure> | IfcForceMeasure)
-		| (Handle<IfcFrequencyMeasure> | IfcFrequencyMeasure)
-		| (Handle<IfcHeatFluxDensityMeasure> | IfcHeatFluxDensityMeasure)
-		| (Handle<IfcHeatingValueMeasure> | IfcHeatingValueMeasure)
-		| (Handle<IfcIlluminanceMeasure> | IfcIlluminanceMeasure)
-		| (Handle<IfcInductanceMeasure> | IfcInductanceMeasure)
-		| (Handle<IfcIntegerCountRateMeasure> | IfcIntegerCountRateMeasure)
-		| (Handle<IfcIonConcentrationMeasure> | IfcIonConcentrationMeasure)
-		| (Handle<IfcIsothermalMoistureCapacityMeasure> | IfcIsothermalMoistureCapacityMeasure)
-		| (Handle<IfcKinematicViscosityMeasure> | IfcKinematicViscosityMeasure)
-		| (Handle<IfcLinearForceMeasure> | IfcLinearForceMeasure)
-		| (Handle<IfcLinearMomentMeasure> | IfcLinearMomentMeasure)
-		| (Handle<IfcLinearStiffnessMeasure> | IfcLinearStiffnessMeasure)
-		| (Handle<IfcLinearVelocityMeasure> | IfcLinearVelocityMeasure)
-		| (Handle<IfcLuminousFluxMeasure> | IfcLuminousFluxMeasure)
-		| (Handle<IfcLuminousIntensityDistributionMeasure> | IfcLuminousIntensityDistributionMeasure)
-		| (Handle<IfcMagneticFluxDensityMeasure> | IfcMagneticFluxDensityMeasure)
-		| (Handle<IfcMagneticFluxMeasure> | IfcMagneticFluxMeasure)
-		| (Handle<IfcMassDensityMeasure> | IfcMassDensityMeasure)
-		| (Handle<IfcMassFlowRateMeasure> | IfcMassFlowRateMeasure)
-		| (Handle<IfcMassPerLengthMeasure> | IfcMassPerLengthMeasure)
-		| (Handle<IfcModulusOfElasticityMeasure> | IfcModulusOfElasticityMeasure)
-		| (Handle<IfcModulusOfLinearSubgradeReactionMeasure> | IfcModulusOfLinearSubgradeReactionMeasure)
-		| (Handle<IfcModulusOfRotationalSubgradeReactionMeasure> | IfcModulusOfRotationalSubgradeReactionMeasure)
-		| (Handle<IfcModulusOfSubgradeReactionMeasure> | IfcModulusOfSubgradeReactionMeasure)
-		| (Handle<IfcMoistureDiffusivityMeasure> | IfcMoistureDiffusivityMeasure)
-		| (Handle<IfcMolecularWeightMeasure> | IfcMolecularWeightMeasure)
-		| (Handle<IfcMomentOfInertiaMeasure> | IfcMomentOfInertiaMeasure)
-		| (Handle<IfcMonetaryMeasure> | IfcMonetaryMeasure)
-		| (Handle<IfcPHMeasure> | IfcPHMeasure)
-		| (Handle<IfcPlanarForceMeasure> | IfcPlanarForceMeasure)
-		| (Handle<IfcPowerMeasure> | IfcPowerMeasure)
-		| (Handle<IfcPressureMeasure> | IfcPressureMeasure)
-		| (Handle<IfcRadioActivityMeasure> | IfcRadioActivityMeasure)
-		| (Handle<IfcRotationalFrequencyMeasure> | IfcRotationalFrequencyMeasure)
-		| (Handle<IfcRotationalMassMeasure> | IfcRotationalMassMeasure)
-		| (Handle<IfcRotationalStiffnessMeasure> | IfcRotationalStiffnessMeasure)
-		| (Handle<IfcSectionModulusMeasure> | IfcSectionModulusMeasure)
-		| (Handle<IfcSectionalAreaIntegralMeasure> | IfcSectionalAreaIntegralMeasure)
-		| (Handle<IfcShearModulusMeasure> | IfcShearModulusMeasure)
-		| (Handle<IfcSoundPowerLevelMeasure> | IfcSoundPowerLevelMeasure)
-		| (Handle<IfcSoundPowerMeasure> | IfcSoundPowerMeasure)
-		| (Handle<IfcSoundPressureLevelMeasure> | IfcSoundPressureLevelMeasure)
-		| (Handle<IfcSoundPressureMeasure> | IfcSoundPressureMeasure)
-		| (Handle<IfcSpecificHeatCapacityMeasure> | IfcSpecificHeatCapacityMeasure)
-		| (Handle<IfcTemperatureGradientMeasure> | IfcTemperatureGradientMeasure)
-		| (Handle<IfcTemperatureRateOfChangeMeasure> | IfcTemperatureRateOfChangeMeasure)
-		| (Handle<IfcThermalAdmittanceMeasure> | IfcThermalAdmittanceMeasure)
-		| (Handle<IfcThermalConductivityMeasure> | IfcThermalConductivityMeasure)
-		| (Handle<IfcThermalExpansionCoefficientMeasure> | IfcThermalExpansionCoefficientMeasure)
-		| (Handle<IfcThermalResistanceMeasure> | IfcThermalResistanceMeasure)
-		| (Handle<IfcThermalTransmittanceMeasure> | IfcThermalTransmittanceMeasure)
-		| (Handle<IfcTorqueMeasure> | IfcTorqueMeasure)
-		| (Handle<IfcVaporPermeabilityMeasure> | IfcVaporPermeabilityMeasure)
-		| (Handle<IfcVolumetricFlowRateMeasure> | IfcVolumetricFlowRateMeasure)
-		| (Handle<IfcWarpingConstantMeasure> | IfcWarpingConstantMeasure)
-		| (Handle<IfcWarpingMomentMeasure> | IfcWarpingMomentMeasure)
+		| IfcAbsorbedDoseMeasure
+		| IfcAccelerationMeasure
+		| IfcAngularVelocityMeasure
+		| IfcAreaDensityMeasure
+		| IfcCompoundPlaneAngleMeasure
+		| IfcCurvatureMeasure
+		| IfcDoseEquivalentMeasure
+		| IfcDynamicViscosityMeasure
+		| IfcElectricCapacitanceMeasure
+		| IfcElectricChargeMeasure
+		| IfcElectricConductanceMeasure
+		| IfcElectricResistanceMeasure
+		| IfcElectricVoltageMeasure
+		| IfcEnergyMeasure
+		| IfcForceMeasure
+		| IfcFrequencyMeasure
+		| IfcHeatFluxDensityMeasure
+		| IfcHeatingValueMeasure
+		| IfcIlluminanceMeasure
+		| IfcInductanceMeasure
+		| IfcIntegerCountRateMeasure
+		| IfcIonConcentrationMeasure
+		| IfcIsothermalMoistureCapacityMeasure
+		| IfcKinematicViscosityMeasure
+		| IfcLinearForceMeasure
+		| IfcLinearMomentMeasure
+		| IfcLinearStiffnessMeasure
+		| IfcLinearVelocityMeasure
+		| IfcLuminousFluxMeasure
+		| IfcLuminousIntensityDistributionMeasure
+		| IfcMagneticFluxDensityMeasure
+		| IfcMagneticFluxMeasure
+		| IfcMassDensityMeasure
+		| IfcMassFlowRateMeasure
+		| IfcMassPerLengthMeasure
+		| IfcModulusOfElasticityMeasure
+		| IfcModulusOfLinearSubgradeReactionMeasure
+		| IfcModulusOfRotationalSubgradeReactionMeasure
+		| IfcModulusOfSubgradeReactionMeasure
+		| IfcMoistureDiffusivityMeasure
+		| IfcMolecularWeightMeasure
+		| IfcMomentOfInertiaMeasure
+		| IfcMonetaryMeasure
+		| IfcPHMeasure
+		| IfcPlanarForceMeasure
+		| IfcPowerMeasure
+		| IfcPressureMeasure
+		| IfcRadioActivityMeasure
+		| IfcRotationalFrequencyMeasure
+		| IfcRotationalMassMeasure
+		| IfcRotationalStiffnessMeasure
+		| IfcSectionModulusMeasure
+		| IfcSectionalAreaIntegralMeasure
+		| IfcShearModulusMeasure
+		| IfcSoundPowerLevelMeasure
+		| IfcSoundPowerMeasure
+		| IfcSoundPressureLevelMeasure
+		| IfcSoundPressureMeasure
+		| IfcSpecificHeatCapacityMeasure
+		| IfcTemperatureGradientMeasure
+		| IfcTemperatureRateOfChangeMeasure
+		| IfcThermalAdmittanceMeasure
+		| IfcThermalConductivityMeasure
+		| IfcThermalExpansionCoefficientMeasure
+		| IfcThermalResistanceMeasure
+		| IfcThermalTransmittanceMeasure
+		| IfcTorqueMeasure
+		| IfcVaporPermeabilityMeasure
+		| IfcVolumetricFlowRateMeasure
+		| IfcWarpingConstantMeasure
+		| IfcWarpingMomentMeasure
 	;
 	export type IfcDocumentSelect = 
 		| (Handle<IfcDocumentInformation> | IfcDocumentInformation)
 		| (Handle<IfcDocumentReference> | IfcDocumentReference)
 	;
 	export type IfcFillStyleSelect = 
-		| (Handle<IfcColour> | IfcColour)
+		| IfcColour
 		| (Handle<IfcExternallyDefinedHatchStyle> | IfcExternallyDefinedHatchStyle)
 		| (Handle<IfcFillAreaStyleHatching> | IfcFillAreaStyleHatching)
 		| (Handle<IfcFillAreaStyleTiles> | IfcFillAreaStyleTiles)
@@ -32869,7 +32869,7 @@ export namespace IFC4 {
 		| (Handle<IfcVirtualGridIntersection> | IfcVirtualGridIntersection)
 	;
 	export type IfcHatchLineDistanceSelect = 
-		| (Handle<IfcPositiveLengthMeasure> | IfcPositiveLengthMeasure)
+		| IfcPositiveLengthMeasure
 		| (Handle<IfcVector> | IfcVector)
 	;
 	export type IfcLayeredItem = 
@@ -32890,29 +32890,29 @@ export namespace IFC4 {
 		| (Handle<IfcMaterialUsageDefinition> | IfcMaterialUsageDefinition)
 	;
 	export type IfcMeasureValue = 
-		| (Handle<IfcAmountOfSubstanceMeasure> | IfcAmountOfSubstanceMeasure)
-		| (Handle<IfcAreaMeasure> | IfcAreaMeasure)
-		| (Handle<IfcComplexNumber> | IfcComplexNumber)
-		| (Handle<IfcContextDependentMeasure> | IfcContextDependentMeasure)
-		| (Handle<IfcCountMeasure> | IfcCountMeasure)
-		| (Handle<IfcDescriptiveMeasure> | IfcDescriptiveMeasure)
-		| (Handle<IfcElectricCurrentMeasure> | IfcElectricCurrentMeasure)
-		| (Handle<IfcLengthMeasure> | IfcLengthMeasure)
-		| (Handle<IfcLuminousIntensityMeasure> | IfcLuminousIntensityMeasure)
-		| (Handle<IfcMassMeasure> | IfcMassMeasure)
-		| (Handle<IfcNonNegativeLengthMeasure> | IfcNonNegativeLengthMeasure)
-		| (Handle<IfcNormalisedRatioMeasure> | IfcNormalisedRatioMeasure)
-		| (Handle<IfcNumericMeasure> | IfcNumericMeasure)
-		| (Handle<IfcParameterValue> | IfcParameterValue)
-		| (Handle<IfcPlaneAngleMeasure> | IfcPlaneAngleMeasure)
-		| (Handle<IfcPositiveLengthMeasure> | IfcPositiveLengthMeasure)
-		| (Handle<IfcPositivePlaneAngleMeasure> | IfcPositivePlaneAngleMeasure)
-		| (Handle<IfcPositiveRatioMeasure> | IfcPositiveRatioMeasure)
-		| (Handle<IfcRatioMeasure> | IfcRatioMeasure)
-		| (Handle<IfcSolidAngleMeasure> | IfcSolidAngleMeasure)
-		| (Handle<IfcThermodynamicTemperatureMeasure> | IfcThermodynamicTemperatureMeasure)
-		| (Handle<IfcTimeMeasure> | IfcTimeMeasure)
-		| (Handle<IfcVolumeMeasure> | IfcVolumeMeasure)
+		| IfcAmountOfSubstanceMeasure
+		| IfcAreaMeasure
+		| IfcComplexNumber
+		| IfcContextDependentMeasure
+		| IfcCountMeasure
+		| IfcDescriptiveMeasure
+		| IfcElectricCurrentMeasure
+		| IfcLengthMeasure
+		| IfcLuminousIntensityMeasure
+		| IfcMassMeasure
+		| IfcNonNegativeLengthMeasure
+		| IfcNormalisedRatioMeasure
+		| IfcNumericMeasure
+		| IfcParameterValue
+		| IfcPlaneAngleMeasure
+		| IfcPositiveLengthMeasure
+		| IfcPositivePlaneAngleMeasure
+		| IfcPositiveRatioMeasure
+		| IfcRatioMeasure
+		| IfcSolidAngleMeasure
+		| IfcThermodynamicTemperatureMeasure
+		| IfcTimeMeasure
+		| IfcVolumeMeasure
 	;
 	export type IfcMetricValueSelect = 
 		| (Handle<IfcAppliedValue> | IfcAppliedValue)
@@ -32920,19 +32920,19 @@ export namespace IFC4 {
 		| (Handle<IfcReference> | IfcReference)
 		| (Handle<IfcTable> | IfcTable)
 		| (Handle<IfcTimeSeries> | IfcTimeSeries)
-		| (Handle<IfcValue> | IfcValue)
+		| IfcValue
 	;
 	export type IfcModulusOfRotationalSubgradeReactionSelect = 
-		| (Handle<IfcBoolean> | IfcBoolean)
-		| (Handle<IfcModulusOfRotationalSubgradeReactionMeasure> | IfcModulusOfRotationalSubgradeReactionMeasure)
+		| IfcBoolean
+		| IfcModulusOfRotationalSubgradeReactionMeasure
 	;
 	export type IfcModulusOfSubgradeReactionSelect = 
-		| (Handle<IfcBoolean> | IfcBoolean)
-		| (Handle<IfcModulusOfSubgradeReactionMeasure> | IfcModulusOfSubgradeReactionMeasure)
+		| IfcBoolean
+		| IfcModulusOfSubgradeReactionMeasure
 	;
 	export type IfcModulusOfTranslationalSubgradeReactionSelect = 
-		| (Handle<IfcBoolean> | IfcBoolean)
-		| (Handle<IfcModulusOfLinearSubgradeReactionMeasure> | IfcModulusOfLinearSubgradeReactionMeasure)
+		| IfcBoolean
+		| IfcModulusOfLinearSubgradeReactionMeasure
 	;
 	export type IfcObjectReferenceSelect = 
 		| (Handle<IfcAddress> | IfcAddress)
@@ -32952,7 +32952,7 @@ export namespace IFC4 {
 	export type IfcPresentationStyleSelect = 
 		| (Handle<IfcCurveStyle> | IfcCurveStyle)
 		| (Handle<IfcFillAreaStyle> | IfcFillAreaStyle)
-		| (Handle<IfcNullStyle> | IfcNullStyle)
+		| IfcNullStyle
 		| (Handle<IfcSurfaceStyle> | IfcSurfaceStyle)
 		| (Handle<IfcTextStyle> | IfcTextStyle)
 	;
@@ -32970,7 +32970,7 @@ export namespace IFC4 {
 	;
 	export type IfcPropertySetDefinitionSelect = 
 		| (Handle<IfcPropertySetDefinition> | IfcPropertySetDefinition)
-		| (Handle<IfcPropertySetDefinitionSet> | IfcPropertySetDefinitionSet)
+		| IfcPropertySetDefinitionSet
 	;
 	export type IfcResourceObjectSelect = 
 		| (Handle<IfcActorRole> | IfcActorRole)
@@ -32995,40 +32995,40 @@ export namespace IFC4 {
 		| (Handle<IfcTypeResource> | IfcTypeResource)
 	;
 	export type IfcRotationalStiffnessSelect = 
-		| (Handle<IfcBoolean> | IfcBoolean)
-		| (Handle<IfcRotationalStiffnessMeasure> | IfcRotationalStiffnessMeasure)
+		| IfcBoolean
+		| IfcRotationalStiffnessMeasure
 	;
 	export type IfcSegmentIndexSelect = 
-		| (Handle<IfcArcIndex> | IfcArcIndex)
-		| (Handle<IfcLineIndex> | IfcLineIndex)
+		| IfcArcIndex
+		| IfcLineIndex
 	;
 	export type IfcShell = 
 		| (Handle<IfcClosedShell> | IfcClosedShell)
 		| (Handle<IfcOpenShell> | IfcOpenShell)
 	;
 	export type IfcSimpleValue = 
-		| (Handle<IfcBinary> | IfcBinary)
-		| (Handle<IfcBoolean> | IfcBoolean)
-		| (Handle<IfcDate> | IfcDate)
-		| (Handle<IfcDateTime> | IfcDateTime)
-		| (Handle<IfcDuration> | IfcDuration)
-		| (Handle<IfcIdentifier> | IfcIdentifier)
-		| (Handle<IfcInteger> | IfcInteger)
-		| (Handle<IfcLabel> | IfcLabel)
-		| (Handle<IfcLogical> | IfcLogical)
-		| (Handle<IfcPositiveInteger> | IfcPositiveInteger)
-		| (Handle<IfcReal> | IfcReal)
-		| (Handle<IfcText> | IfcText)
-		| (Handle<IfcTime> | IfcTime)
-		| (Handle<IfcTimeStamp> | IfcTimeStamp)
+		| IfcBinary
+		| IfcBoolean
+		| IfcDate
+		| IfcDateTime
+		| IfcDuration
+		| IfcIdentifier
+		| IfcInteger
+		| IfcLabel
+		| IfcLogical
+		| IfcPositiveInteger
+		| IfcReal
+		| IfcText
+		| IfcTime
+		| IfcTimeStamp
 	;
 	export type IfcSizeSelect = 
-		| (Handle<IfcDescriptiveMeasure> | IfcDescriptiveMeasure)
-		| (Handle<IfcLengthMeasure> | IfcLengthMeasure)
-		| (Handle<IfcNormalisedRatioMeasure> | IfcNormalisedRatioMeasure)
-		| (Handle<IfcPositiveLengthMeasure> | IfcPositiveLengthMeasure)
-		| (Handle<IfcPositiveRatioMeasure> | IfcPositiveRatioMeasure)
-		| (Handle<IfcRatioMeasure> | IfcRatioMeasure)
+		| IfcDescriptiveMeasure
+		| IfcLengthMeasure
+		| IfcNormalisedRatioMeasure
+		| IfcPositiveLengthMeasure
+		| IfcPositiveRatioMeasure
+		| IfcRatioMeasure
 	;
 	export type IfcSolidOrShell = 
 		| (Handle<IfcClosedShell> | IfcClosedShell)
@@ -33039,8 +33039,8 @@ export namespace IFC4 {
 		| (Handle<IfcSpace> | IfcSpace)
 	;
 	export type IfcSpecularHighlightSelect = 
-		| (Handle<IfcSpecularExponent> | IfcSpecularExponent)
-		| (Handle<IfcSpecularRoughness> | IfcSpecularRoughness)
+		| IfcSpecularExponent
+		| IfcSpecularRoughness
 	;
 	export type IfcStructuralActivityAssignmentSelect = 
 		| (Handle<IfcElement> | IfcElement)
@@ -33067,16 +33067,16 @@ export namespace IFC4 {
 		| (Handle<IfcPreDefinedTextFont> | IfcPreDefinedTextFont)
 	;
 	export type IfcTimeOrRatioSelect = 
-		| (Handle<IfcDuration> | IfcDuration)
-		| (Handle<IfcRatioMeasure> | IfcRatioMeasure)
+		| IfcDuration
+		| IfcRatioMeasure
 	;
 	export type IfcTranslationalStiffnessSelect = 
-		| (Handle<IfcBoolean> | IfcBoolean)
-		| (Handle<IfcLinearStiffnessMeasure> | IfcLinearStiffnessMeasure)
+		| IfcBoolean
+		| IfcLinearStiffnessMeasure
 	;
 	export type IfcTrimmingSelect = 
 		| (Handle<IfcCartesianPoint> | IfcCartesianPoint)
-		| (Handle<IfcParameterValue> | IfcParameterValue)
+		| IfcParameterValue
 	;
 	export type IfcUnit = 
 		| (Handle<IfcDerivedUnit> | IfcDerivedUnit)
@@ -33084,17 +33084,17 @@ export namespace IFC4 {
 		| (Handle<IfcNamedUnit> | IfcNamedUnit)
 	;
 	export type IfcValue = 
-		| (Handle<IfcDerivedMeasureValue> | IfcDerivedMeasureValue)
-		| (Handle<IfcMeasureValue> | IfcMeasureValue)
-		| (Handle<IfcSimpleValue> | IfcSimpleValue)
+		| IfcDerivedMeasureValue
+		| IfcMeasureValue
+		| IfcSimpleValue
 	;
 	export type IfcVectorOrDirection = 
 		| (Handle<IfcDirection> | IfcDirection)
 		| (Handle<IfcVector> | IfcVector)
 	;
 	export type IfcWarpingStiffnessSelect = 
-		| (Handle<IfcBoolean> | IfcBoolean)
-		| (Handle<IfcWarpingMomentMeasure> | IfcWarpingMomentMeasure)
+		| IfcBoolean
+		| IfcWarpingMomentMeasure
 	;
 	export class IfcActorRole {
 		expressID: number;

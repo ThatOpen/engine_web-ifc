@@ -4,16 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild --bundle index.js --platform=node --outfile=./dist/bundle.js && cpy index.html dist && cpy node_modules/web-ifc/web-ifc.wasm dist && cpy node_modules/web-ifc/web-ifc.js dist && cpy ../example.ifc dist",
-    "start": "serve dist"
+    "build": "esbuild --bundle index.js --platform=node --outfile=./dist/bundle.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc",
+    "start": "http-server -c-1 dist"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cpy": "^8.1.1",
-    "cpy-cli": "^3.1.1",
+    "cpy-cli": "^4.2.0",
     "esbuild": "^0.8.49",
-    "serve": "^11.3.2",
-    "web-ifc": "0.0.13"
+    "http-server": "^14.1.1"
   }
 }

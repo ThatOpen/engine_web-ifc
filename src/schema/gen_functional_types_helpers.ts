@@ -1,6 +1,9 @@
-export function sortEntities(entities) {
-  let sortedEntities = [];
-  let unsortedEntities = [];
+import {Entity, Type} from "./gen_functional_types_interfaces";
+
+
+export function sortEntities(entities: Array<Entity>) {
+  let sortedEntities: Array<Entity> = [];
+  let unsortedEntities: Array<Entity> = [];
   entities.forEach(val => unsortedEntities.push(val));
   while (unsortedEntities.length > 0)
   {
@@ -31,7 +34,7 @@ export function generateClass(entity, buffer, types, schemaName)
   }
   
   entity.props.forEach((param) => {
-    let isType: Type = types.some( x => x.name == param.name);
+    let isType: boolean = types.some( x => x.name == param.name);
     let propType = `${(isType || param.primitive) ? param.type : "(Handle<" + schemaName + "."+ param.type + `> | ${schemaName}.${param.type})` }${param.set ? "[]" : ""} ${param.optional ? "| null" : ""}`;
     buffer.push(`\t\t${param.name}: ${propType};`)
   });
@@ -73,7 +76,7 @@ export function generateClass(entity, buffer, types, schemaName)
 
 export function makeCRCTable(){
     var c;
-    var crcTable = [];
+    var crcTable: Array<number> = [];
     for(var n =0; n < 256; n++){
         c = n;
         for(var k =0; k < 8; k++){
@@ -217,7 +220,7 @@ export function parseElements(data)
             let isList = split.indexOf("LIST") != -1 || split.indexOf("SET") != -1 || split.indexOf("ARRAY") != -1;
             let isEnum = split.indexOf("ENUMERATION") != -1;
             let isSelect = split[3].indexOf("SELECT") == 0;
-            let values: null | string[] = null;
+            let values: string[] = [];
 
             let typeName = "";
             if (isList)
@@ -296,7 +299,7 @@ export function parseElements(data)
     };
 }
 
-function findEntity(entityName: String, entityList: Entity[])
+function findEntity(entityName: String | null, entityList: Entity[])
 {
   if (entityName == null) return null;
   for (var i=0; i < entityList.length;i++) 
