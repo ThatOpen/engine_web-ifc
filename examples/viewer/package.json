@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node makesrc.js && esbuild --bundle web-ifc-viewer.ts --platform=node --outfile=./dist/web-ifc-viewer.js && rm ts_src.ts && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc",
+    "build": "node makesrc.js && esbuild --bundle web-ifc-viewer.ts --platform=node --outfile=./dist/web-ifc-viewer.js && rm ts_src.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc",
     "start": "http-server -c-1 dist"
   },
   "author": "",
