@@ -1,13 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as os from 'os';
-const BENCHMARK_FILES_DIR = "./ifcfiles";
+
 import { getGPUTier } from 'detect-gpu';
-import * as NewWebIFC from '../dist/web-ifc-api-node';
-import { ms } from '../dist/web-ifc-api-node';
+import * as WebIFC from '../dist/web-ifc-api-node';
+import { IfcConstructionMaterialResourceTypeEnum, ms } from '../dist/web-ifc-api-node';
 
-let newIfcAPI = new NewWebIFC.IfcAPI();
-
+let newIfcAPI = new WebIFC.IfcAPI();
+const OUTPUT_FILE = '../benchmark.md';
+const BENCHMARK_FILES_DIR = "./ifcfiles";
 class FileResult
 {
     filename: string;
@@ -37,7 +38,7 @@ function mapToObj(inputMap) {
     return obj;
 }
 async function writeResult(content : string){
-    fs.writeFile('../benchmark.md', content, () => {
+    fs.writeFile(OUTPUT_FILE, content, () => {
         
     })
 }
@@ -47,25 +48,40 @@ class BenchMarkResult
 }
 class BenchmarkResultFormatter{
     results: Map<string, FileResult>;
+    columns : Object
     getMarkdownTable() : string
     {
         let datas =  mapToObj(this.results);
-        console.log(datas)
-        const keys = Object.keys(datas);
-
-        // todo auto gen
-        let header = "| filename | fileSize | timeTakenToOpenModel | timeSuccess | numberOfIfcEntities | totalNumberOfProducedMesh | totalNumberOfGeometries | totalNumberOfErrors | \n"
-        // todo auto gen
-        let separator = "|-------|------|-------|-------|-------|-------|-------|-------| \n";
-        let readme = `${header}${separator}`;
-        // todo auto gen
-        keys.map((key) => {
+        const lines = Object.keys(datas);
+        const columns = Object.entries(this.columns);
+        let benchmarkMarkdown = this.getMarkdownTableHeader(columns);
+        lines.map((key) => {
             let line = datas[key];
-            readme += `| ${line["filename"]} | ${line["fileSize"]} | ${line["timeTakenToOpenModel"]} | ${line["timeSuccess"]} | ${line["numberOfIfcEntities"]} | ${line["totalNumberOfProducedMesh"]} | ${line["totalNumberOfGeometries"]} | ${line["totalNumberOfErrors"]} |\n `
+            benchmarkMarkdown += this.getMarkdownTableRow(line, columns);
         })
-        return readme;
+        return benchmarkMarkdown;
+    }
+    private getMarkdownTableHeader(columns: any) : string
+    {
+        let header = "|";
+        let separator = "|";
+        for (const [column, value] of columns) {
+            header += ` ${value} |`;
+            separator += "-------|"
+        }
+        return `${header}\n${separator}\n|`;
+    }
+    private getMarkdownTableRow(line : any, columns : any) : string 
+    {
+        let row = "";
+        for (const [column, value] of columns) {
+            row += ` ${line[column]} |`;
+        }
+        row += "\n";
+        return row;
     }
 }
+
 async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResult>
 {
     let result = new FileResult();
@@ -75,6 +91,7 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
 
     const ifcFilePath = path.join(__dirname, './'+filename);
     const ifcFileContent = fs.readFileSync(ifcFilePath);
+    
     let startTime = ms();
     let modelID : number = module.OpenModel(ifcFileContent);
     let endTime = ms();
@@ -147,6 +164,16 @@ async function getSystemInformations(): Promise<SystemInfo>
 function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string, FileResult>): string
 {
     let formatter = new BenchmarkResultFormatter();
+    formatter.columns = {
+        filename: "filename",
+        fileSize: "Size (mo)",
+        timeTakenToOpenModel: "Time to open model (ms)",
+        timeSuccess: "Time to execute all (ms)",
+        numberOfIfcEntities: "Total ifc entities",
+        totalNumberOfProducedMesh: "Total meshes",
+        totalNumberOfGeometries : "Total geometries",
+        totalNumberOfErrors: "total errors"
+    };
     let markdown : string = "# System informations \n "+JSON.stringify(systemInfo)+"\n _________ \n";
     formatter.results = fileResult;
     markdown += formatter.getMarkdownTable();
