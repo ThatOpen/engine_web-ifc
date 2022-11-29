@@ -72,6 +72,8 @@ Run `npm run setup-env` whenever you open a new terminal, this will set up the r
 
 Run `npm run build-release-all` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
 
+If you wish to build the WASM with debugging enabled you can run `npm run build-debug`. This will enable you to inspect debugging information better when running web-ifc.
+
 Run `npm run dev` to launch a development server with a basic ifc file viewer.
 
 ## Stand alone C++
