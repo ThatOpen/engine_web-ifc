@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild --bundle index.js --platform=node --outfile=./dist/bundle.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc",
+    "build": "make-dir dist && esbuild --bundle index.js --platform=node --outfile=./dist/bundle.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc",
     "start": "http-server -c-1 dist"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "cpy-cli": "^4.2.0",
-    "esbuild": "^0.8.49",
-    "http-server": "^14.1.1"
+    "esbuild": "^0.12.15",
+    "http-server": "^14.1.1",
+    "make-dir-cli": "^3.0.0"
   }
 }
