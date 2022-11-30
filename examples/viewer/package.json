@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "make-dir dist && node makesrc.js && esbuild --bundle web-ifc-viewer.ts --platform=node --outfile=./dist/web-ifc-viewer.js && rm ts_src.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc",
+    "build": "make-dir dist && node makesrc.js && esbuild --bundle web-ifc-viewer.ts --platform=node --outfile=./dist/web-ifc-viewer.js && del ts_src.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc",
     "start": "http-server -c-1 dist"
   },
   "author": "",
@@ -14,6 +14,6 @@
     "esbuild": "^0.12.15",
     "http-server": "^14.1.1",
     "make-dir-cli": "^3.0.0",
-    "rimraf": "^3.0.2"
+    "del-cli": "^5.0.0"
   }
 }
