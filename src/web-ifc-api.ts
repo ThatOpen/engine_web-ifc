@@ -321,6 +321,11 @@ export class IfcAPI
         return lineData;
     }
 
+    GetNextExpressID(modelID: number, expressID: number): number
+    {
+        return this.wasmModule.GetNextExpressID(modelID, expressID);
+    }
+
     GetAndClearErrors(modelID: number): Vector<LoaderError>
     {
         return this.wasmModule.GetAndClearErrors(modelID);

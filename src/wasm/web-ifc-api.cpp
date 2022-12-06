@@ -563,6 +563,33 @@ bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
     return loader->ValidateExpressID(expressId);
 }
 
+uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
+{
+    auto& loader = loaders[modelID];
+    if(!loader)
+    {
+        return {};
+    }
+
+    uint32_t currentId = expressId;
+
+    bool cont = true;
+    uint32_t maxId = loader->GetMaxExpressId();
+
+    while(cont)
+    {
+        if(currentId >= maxId)
+        {
+            cont = false;
+            continue;
+        }
+        currentId++;
+        cont = !(loader->ValidateExpressID(currentId));
+    }
+
+    return currentId;
+}
+
 std::vector<uint32_t> GetAllLines(uint32_t modelID)
 {
     auto& loader = loaders[modelID];
@@ -1108,6 +1135,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("WriteLine", &WriteLine);
     emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
     emscripten::function("ValidateExpressID", &ValidateExpressID);
+    emscripten::function("GetNextExpressID", &GetNextExpressID);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);
     emscripten::function("GetInversePropertyForItem", &GetInversePropertyForItem);
     emscripten::function("GetAllLines", &GetAllLines);
