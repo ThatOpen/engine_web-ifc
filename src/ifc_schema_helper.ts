@@ -2,6 +2,8 @@
 import * as ifc from "./ifc-schema";
 export class Handle<T> {
 	value: number;
+	label: string | null;
+	valueType: number | null;
 	constructor(id: number) { this.value = id; }
 	toTape(args: any[]){ args.push({ type: 5, value: this.value }); }
 }
@@ -12841,468 +12843,710 @@ InversePropertyDef['IFC4'][ifc.IFCCONTROLLER] = [
 export namespace IFC2X3 {
 	export class IfcAbsorbedDoseMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcAccelerationMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcAmountOfSubstanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcAngularVelocityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcAreaMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcBoolean {
 		value: boolean;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: boolean) { this.value = v;}
 	};
 	export class IfcBoxAlignment {
 		value: IfcLabel;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcLabel) { this.value = v;}
 	};
-	export type IfcComplexNumber = Array<number>;
-	export type IfcCompoundPlaneAngleMeasure = Array<number>;
+	export class IfcComplexNumber {
+		valueType: number | null;
+		label: string | null;
+		value: Array<number>;
+		constructor(v: Array<number>) { this.value = v;}
+	};
+	export class IfcCompoundPlaneAngleMeasure {
+		valueType: number | null;
+		label: string | null;
+		value: Array<number>;
+		constructor(v: Array<number>) { this.value = v;}
+	};
 	export class IfcContextDependentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcCountMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcCurvatureMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDayInMonthNumber {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDaylightSavingHour {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDescriptiveMeasure {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcDimensionCount {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDoseEquivalentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDynamicViscosityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricCapacitanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricChargeMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricConductanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricCurrentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricResistanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricVoltageMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcEnergyMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcFontStyle {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcFontVariant {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcFontWeight {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcForceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcFrequencyMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcGloballyUniqueId {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcHeatFluxDensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcHeatingValueMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcHourInDay {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcIdentifier {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcIlluminanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcInductanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcInteger {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcIntegerCountRateMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcIonConcentrationMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcIsothermalMoistureCapacityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcKinematicViscosityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLabel {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcLengthMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLinearForceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLinearMomentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLinearStiffnessMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLinearVelocityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLogical {
 		value: boolean;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: boolean) { this.value = v;}
 	};
 	export class IfcLuminousFluxMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLuminousIntensityDistributionMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLuminousIntensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMagneticFluxDensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMagneticFluxMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMassDensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMassFlowRateMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMassMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMassPerLengthMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMinuteInHour {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcModulusOfElasticityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcModulusOfLinearSubgradeReactionMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcModulusOfRotationalSubgradeReactionMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcModulusOfSubgradeReactionMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMoistureDiffusivityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMolecularWeightMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMomentOfInertiaMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMonetaryMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMonthInYearNumber {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcNormalisedRatioMeasure {
 		value: IfcRatioMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcRatioMeasure) { this.value = v;}
 	};
 	export class IfcNumericMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPHMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcParameterValue {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPlanarForceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPlaneAngleMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPositiveLengthMeasure {
 		value: IfcLengthMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcLengthMeasure) { this.value = v;}
 	};
 	export class IfcPositivePlaneAngleMeasure {
 		value: IfcPlaneAngleMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcPlaneAngleMeasure) { this.value = v;}
 	};
 	export class IfcPositiveRatioMeasure {
 		value: IfcRatioMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcRatioMeasure) { this.value = v;}
 	};
 	export class IfcPowerMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPresentableText {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcPressureMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRadioActivityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRatioMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcReal {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRotationalFrequencyMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRotationalMassMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRotationalStiffnessMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSecondInMinute {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSectionModulusMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSectionalAreaIntegralMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcShearModulusMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSolidAngleMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSoundPowerMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSoundPressureMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSpecificHeatCapacityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSpecularExponent {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSpecularRoughness {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTemperatureGradientMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcText {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTextAlignment {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTextDecoration {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTextFontName {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTextTransformation {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcThermalAdmittanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermalConductivityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermalExpansionCoefficientMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermalResistanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermalTransmittanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermodynamicTemperatureMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTimeMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTimeStamp {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTorqueMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcVaporPermeabilityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcVolumeMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcVolumetricFlowRateMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcWarpingConstantMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcWarpingMomentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcYearNumber {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcActionSourceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DEAD_LOAD_G = "DEAD_LOAD_G";
 		static COMPLETION_G1 = "COMPLETION_G1";
@@ -13334,6 +13578,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcActionTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PERMANENT_G = "PERMANENT_G";
 		static VARIABLE_Q = "VARIABLE_Q";
@@ -13343,6 +13589,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcActuatorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ELECTRICACTUATOR = "ELECTRICACTUATOR";
 		static HANDOPERATEDACTUATOR = "HANDOPERATEDACTUATOR";
@@ -13354,6 +13602,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcAddressTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static OFFICE = "OFFICE";
 		static SITE = "SITE";
@@ -13363,12 +13613,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcAheadOrBehind {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AHEAD = "AHEAD";
 		static BEHIND = "BEHIND";
 	};
 	export class IfcAirTerminalBoxTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONSTANTFLOW = "CONSTANTFLOW";
 		static VARIABLEFLOWPRESSUREDEPENDANT = "VARIABLEFLOWPRESSUREDEPENDANT";
@@ -13378,6 +13632,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcAirTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GRILLE = "GRILLE";
 		static REGISTER = "REGISTER";
@@ -13391,6 +13647,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcAirToAirHeatRecoveryTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FIXEDPLATECOUNTERFLOWEXCHANGER = "FIXEDPLATECOUNTERFLOWEXCHANGER";
 		static FIXEDPLATECROSSFLOWEXCHANGER = "FIXEDPLATECROSSFLOWEXCHANGER";
@@ -13406,6 +13664,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcAlarmTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BELL = "BELL";
 		static BREAKGLASSBUTTON = "BREAKGLASSBUTTON";
@@ -13418,6 +13678,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcAnalysisModelTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static IN_PLANE_LOADING_2D = "IN_PLANE_LOADING_2D";
 		static OUT_PLANE_LOADING_2D = "OUT_PLANE_LOADING_2D";
@@ -13427,6 +13689,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcAnalysisTheoryTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FIRST_ORDER_THEORY = "FIRST_ORDER_THEORY";
 		static SECOND_ORDER_THEORY = "SECOND_ORDER_THEORY";
@@ -13437,6 +13701,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcArithmeticOperatorEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ADD = "ADD";
 		static DIVIDE = "DIVIDE";
@@ -13445,6 +13711,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcAssemblyPlaceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SITE = "SITE";
 		static FACTORY = "FACTORY";
@@ -13452,6 +13720,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcBSplineCurveForm {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static POLYLINE_FORM = "POLYLINE_FORM";
 		static CIRCULAR_ARC = "CIRCULAR_ARC";
@@ -13462,6 +13732,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcBeamTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BEAM = "BEAM";
 		static JOIST = "JOIST";
@@ -13472,6 +13744,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcBenchmarkEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GREATERTHAN = "GREATERTHAN";
 		static GREATERTHANOREQUALTO = "GREATERTHANOREQUALTO";
@@ -13482,6 +13756,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcBoilerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static WATER = "WATER";
 		static STEAM = "STEAM";
@@ -13490,6 +13766,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcBooleanOperator {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static UNION = "UNION";
 		static INTERSECTION = "INTERSECTION";
@@ -13497,12 +13775,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcBuildingElementProxyTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcCableCarrierFittingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BEND = "BEND";
 		static CROSS = "CROSS";
@@ -13513,6 +13795,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCableCarrierSegmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CABLELADDERSEGMENT = "CABLELADDERSEGMENT";
 		static CABLETRAYSEGMENT = "CABLETRAYSEGMENT";
@@ -13523,6 +13807,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCableSegmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CABLESEGMENT = "CABLESEGMENT";
 		static CONDUCTORSEGMENT = "CONDUCTORSEGMENT";
@@ -13531,6 +13817,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcChangeActionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static NOCHANGE = "NOCHANGE";
 		static MODIFIED = "MODIFIED";
@@ -13541,6 +13829,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcChillerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRCOOLED = "AIRCOOLED";
 		static WATERCOOLED = "WATERCOOLED";
@@ -13550,6 +13840,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCoilTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DXCOOLINGCOIL = "DXCOOLINGCOIL";
 		static WATERCOOLINGCOIL = "WATERCOOLINGCOIL";
@@ -13562,6 +13854,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcColumnTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COLUMN = "COLUMN";
 		static USERDEFINED = "USERDEFINED";
@@ -13569,6 +13863,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCompressorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DYNAMIC = "DYNAMIC";
 		static RECIPROCATING = "RECIPROCATING";
@@ -13590,6 +13886,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCondenserTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static WATERCOOLEDSHELLTUBE = "WATERCOOLEDSHELLTUBE";
 		static WATERCOOLEDSHELLCOIL = "WATERCOOLEDSHELLCOIL";
@@ -13602,6 +13900,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcConnectionTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ATPATH = "ATPATH";
 		static ATSTART = "ATSTART";
@@ -13610,6 +13910,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcConstraintEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static HARD = "HARD";
 		static SOFT = "SOFT";
@@ -13619,6 +13921,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcControllerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLOATING = "FLOATING";
 		static PROPORTIONAL = "PROPORTIONAL";
@@ -13631,6 +13935,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCooledBeamTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACTIVE = "ACTIVE";
 		static PASSIVE = "PASSIVE";
@@ -13639,6 +13945,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCoolingTowerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static NATURALDRAFT = "NATURALDRAFT";
 		static MECHANICALINDUCEDDRAFT = "MECHANICALINDUCEDDRAFT";
@@ -13648,6 +13956,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCostScheduleTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BUDGET = "BUDGET";
 		static COSTPLAN = "COSTPLAN";
@@ -13661,6 +13971,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCoveringTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CEILING = "CEILING";
 		static FLOORING = "FLOORING";
@@ -13675,6 +13987,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCurrencyEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AED = "AED";
 		static AES = "AES";
@@ -13762,12 +14076,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcCurtainWallTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcDamperTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONTROLDAMPER = "CONTROLDAMPER";
 		static FIREDAMPER = "FIREDAMPER";
@@ -13785,6 +14103,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDataOriginEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static MEASURED = "MEASURED";
 		static PREDICTED = "PREDICTED";
@@ -13794,6 +14114,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDerivedUnitEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ANGULARVELOCITYUNIT = "ANGULARVELOCITYUNIT";
 		static COMPOUNDPLANEANGLEUNIT = "COMPOUNDPLANEANGLEUNIT";
@@ -13847,18 +14169,24 @@ export namespace IFC2X3 {
 	};
 	export class IfcDimensionExtentUsage {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ORIGIN = "ORIGIN";
 		static TARGET = "TARGET";
 	};
 	export class IfcDirectionSenseEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static POSITIVE = "POSITIVE";
 		static NEGATIVE = "NEGATIVE";
 	};
 	export class IfcDistributionChamberElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FORMEDDUCT = "FORMEDDUCT";
 		static INSPECTIONCHAMBER = "INSPECTIONCHAMBER";
@@ -13873,6 +14201,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDocumentConfidentialityEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PUBLIC = "PUBLIC";
 		static RESTRICTED = "RESTRICTED";
@@ -13883,6 +14213,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDocumentStatusEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DRAFT = "DRAFT";
 		static FINALDRAFT = "FINALDRAFT";
@@ -13892,6 +14224,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDoorPanelOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SWINGING = "SWINGING";
 		static DOUBLE_ACTING = "DOUBLE_ACTING";
@@ -13904,6 +14238,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDoorPanelPositionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LEFT = "LEFT";
 		static MIDDLE = "MIDDLE";
@@ -13912,6 +14248,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDoorStyleConstructionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ALUMINIUM = "ALUMINIUM";
 		static HIGH_GRADE_STEEL = "HIGH_GRADE_STEEL";
@@ -13925,6 +14263,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDoorStyleOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SINGLE_SWING_LEFT = "SINGLE_SWING_LEFT";
 		static SINGLE_SWING_RIGHT = "SINGLE_SWING_RIGHT";
@@ -13947,6 +14287,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDuctFittingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BEND = "BEND";
 		static CONNECTOR = "CONNECTOR";
@@ -13960,6 +14302,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDuctSegmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static RIGIDSEGMENT = "RIGIDSEGMENT";
 		static FLEXIBLESEGMENT = "FLEXIBLESEGMENT";
@@ -13968,6 +14312,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDuctSilencerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLATOVAL = "FLATOVAL";
 		static RECTANGULAR = "RECTANGULAR";
@@ -13977,6 +14323,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcElectricApplianceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPUTER = "COMPUTER";
 		static DIRECTWATERHEATER = "DIRECTWATERHEATER";
@@ -14007,6 +14355,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcElectricCurrentEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ALTERNATING = "ALTERNATING";
 		static DIRECT = "DIRECT";
@@ -14014,6 +14364,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcElectricDistributionPointFunctionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ALARMPANEL = "ALARMPANEL";
 		static CONSUMERUNIT = "CONSUMERUNIT";
@@ -14029,6 +14381,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcElectricFlowStorageDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BATTERY = "BATTERY";
 		static CAPACITORBANK = "CAPACITORBANK";
@@ -14040,12 +14394,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcElectricGeneratorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcElectricHeaterTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ELECTRICPOINTHEATER = "ELECTRICPOINTHEATER";
 		static ELECTRICCABLEHEATER = "ELECTRICCABLEHEATER";
@@ -14055,6 +14413,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcElectricMotorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DC = "DC";
 		static INDUCTION = "INDUCTION";
@@ -14066,6 +14426,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcElectricTimeControlTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static TIMECLOCK = "TIMECLOCK";
 		static TIMEDELAY = "TIMEDELAY";
@@ -14075,6 +14437,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcElementAssemblyTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACCESSORY_ASSEMBLY = "ACCESSORY_ASSEMBLY";
 		static ARCH = "ARCH";
@@ -14090,6 +14454,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcElementCompositionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPLEX = "COMPLEX";
 		static ELEMENT = "ELEMENT";
@@ -14097,6 +14463,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcEnergySequenceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PRIMARY = "PRIMARY";
 		static SECONDARY = "SECONDARY";
@@ -14107,6 +14475,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcEnvironmentalImpactCategoryEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMBINEDVALUE = "COMBINEDVALUE";
 		static DISPOSAL = "DISPOSAL";
@@ -14119,6 +14489,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcEvaporativeCoolerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DIRECTEVAPORATIVERANDOMMEDIAAIRCOOLER = "DIRECTEVAPORATIVERANDOMMEDIAAIRCOOLER";
 		static DIRECTEVAPORATIVERIGIDMEDIAAIRCOOLER = "DIRECTEVAPORATIVERIGIDMEDIAAIRCOOLER";
@@ -14134,6 +14506,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcEvaporatorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DIRECTEXPANSIONSHELLANDTUBE = "DIRECTEXPANSIONSHELLANDTUBE";
 		static DIRECTEXPANSIONTUBEINTUBE = "DIRECTEXPANSIONTUBEINTUBE";
@@ -14145,6 +14519,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcFanTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CENTRIFUGALFORWARDCURVED = "CENTRIFUGALFORWARDCURVED";
 		static CENTRIFUGALRADIAL = "CENTRIFUGALRADIAL";
@@ -14158,6 +14534,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcFilterTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRPARTICLEFILTER = "AIRPARTICLEFILTER";
 		static ODORFILTER = "ODORFILTER";
@@ -14169,6 +14547,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcFireSuppressionTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BREECHINGINLET = "BREECHINGINLET";
 		static FIREHYDRANT = "FIREHYDRANT";
@@ -14180,6 +14560,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcFlowDirectionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SOURCE = "SOURCE";
 		static SINK = "SINK";
@@ -14188,6 +14570,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcFlowInstrumentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PRESSUREGAUGE = "PRESSUREGAUGE";
 		static THERMOMETER = "THERMOMETER";
@@ -14202,6 +14586,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcFlowMeterTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ELECTRICMETER = "ELECTRICMETER";
 		static ENERGYMETER = "ENERGYMETER";
@@ -14214,6 +14600,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcFootingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FOOTING_BEAM = "FOOTING_BEAM";
 		static PAD_FOOTING = "PAD_FOOTING";
@@ -14224,6 +14612,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcGasTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GASAPPLIANCE = "GASAPPLIANCE";
 		static GASBOOSTER = "GASBOOSTER";
@@ -14233,6 +14623,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcGeometricProjectionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GRAPH_VIEW = "GRAPH_VIEW";
 		static SKETCH_VIEW = "SKETCH_VIEW";
@@ -14246,12 +14638,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcGlobalOrLocalEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GLOBAL_COORDS = "GLOBAL_COORDS";
 		static LOCAL_COORDS = "LOCAL_COORDS";
 	};
 	export class IfcHeatExchangerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PLATE = "PLATE";
 		static SHELLANDTUBE = "SHELLANDTUBE";
@@ -14260,6 +14656,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcHumidifierTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STEAMINJECTION = "STEAMINJECTION";
 		static ADIABATICAIRWASHER = "ADIABATICAIRWASHER";
@@ -14279,6 +14677,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcInternalOrExternalEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static INTERNAL = "INTERNAL";
 		static EXTERNAL = "EXTERNAL";
@@ -14286,6 +14686,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcInventoryTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ASSETINVENTORY = "ASSETINVENTORY";
 		static SPACEINVENTORY = "SPACEINVENTORY";
@@ -14295,12 +14697,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcJunctionBoxTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcLampTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPACTFLUORESCENT = "COMPACTFLUORESCENT";
 		static FLUORESCENT = "FLUORESCENT";
@@ -14313,6 +14719,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcLayerSetDirectionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AXIS1 = "AXIS1";
 		static AXIS2 = "AXIS2";
@@ -14320,6 +14728,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcLightDistributionCurveEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static TYPE_A = "TYPE_A";
 		static TYPE_B = "TYPE_B";
@@ -14328,6 +14738,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcLightEmissionSourceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPACTFLUORESCENT = "COMPACTFLUORESCENT";
 		static FLUORESCENT = "FLUORESCENT";
@@ -14343,6 +14755,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcLightFixtureTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static POINTSOURCE = "POINTSOURCE";
 		static DIRECTIONSOURCE = "DIRECTIONSOURCE";
@@ -14351,6 +14765,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcLoadGroupTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LOAD_GROUP = "LOAD_GROUP";
 		static LOAD_CASE = "LOAD_CASE";
@@ -14361,12 +14777,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcLogicalOperatorEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LOGICALAND = "LOGICALAND";
 		static LOGICALOR = "LOGICALOR";
 	};
 	export class IfcMemberTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BRACE = "BRACE";
 		static CHORD = "CHORD";
@@ -14385,6 +14805,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcMotorConnectionTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BELTDRIVE = "BELTDRIVE";
 		static COUPLING = "COUPLING";
@@ -14394,11 +14816,15 @@ export namespace IFC2X3 {
 	};
 	export class IfcNullStyle {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static NULL = "NULL";
 	};
 	export class IfcObjectTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PRODUCT = "PRODUCT";
 		static PROCESS = "PROCESS";
@@ -14411,6 +14837,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcObjectiveEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CODECOMPLIANCE = "CODECOMPLIANCE";
 		static DESIGNINTENT = "DESIGNINTENT";
@@ -14423,6 +14851,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcOccupantTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ASSIGNEE = "ASSIGNEE";
 		static ASSIGNOR = "ASSIGNOR";
@@ -14436,6 +14866,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcOutletTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AUDIOVISUALOUTLET = "AUDIOVISUALOUTLET";
 		static COMMUNICATIONSOUTLET = "COMMUNICATIONSOUTLET";
@@ -14445,6 +14877,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcPermeableCoveringOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GRILL = "GRILL";
 		static LOUVER = "LOUVER";
@@ -14454,6 +14888,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcPhysicalOrVirtualEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PHYSICAL = "PHYSICAL";
 		static VIRTUAL = "VIRTUAL";
@@ -14461,6 +14897,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcPileConstructionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CAST_IN_PLACE = "CAST_IN_PLACE";
 		static COMPOSITE = "COMPOSITE";
@@ -14471,6 +14909,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcPileTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COHESION = "COHESION";
 		static FRICTION = "FRICTION";
@@ -14480,6 +14920,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcPipeFittingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BEND = "BEND";
 		static CONNECTOR = "CONNECTOR";
@@ -14493,6 +14935,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcPipeSegmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLEXIBLESEGMENT = "FLEXIBLESEGMENT";
 		static RIGIDSEGMENT = "RIGIDSEGMENT";
@@ -14503,6 +14947,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcPlateTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CURTAIN_PANEL = "CURTAIN_PANEL";
 		static SHEET = "SHEET";
@@ -14511,6 +14957,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcProcedureTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ADVICE_CAUTION = "ADVICE_CAUTION";
 		static ADVICE_NOTE = "ADVICE_NOTE";
@@ -14524,12 +14972,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcProfileTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CURVE = "CURVE";
 		static AREA = "AREA";
 	};
 	export class IfcProjectOrderRecordTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CHANGE = "CHANGE";
 		static MAINTENANCE = "MAINTENANCE";
@@ -14541,6 +14993,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcProjectOrderTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CHANGEORDER = "CHANGEORDER";
 		static MAINTENANCEWORKORDER = "MAINTENANCEWORKORDER";
@@ -14552,12 +15006,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcProjectedOrTrueLengthEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PROJECTED_LENGTH = "PROJECTED_LENGTH";
 		static TRUE_LENGTH = "TRUE_LENGTH";
 	};
 	export class IfcPropertySourceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DESIGN = "DESIGN";
 		static DESIGNMAXIMUM = "DESIGNMAXIMUM";
@@ -14571,6 +15029,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcProtectiveDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FUSEDISCONNECTOR = "FUSEDISCONNECTOR";
 		static CIRCUITBREAKER = "CIRCUITBREAKER";
@@ -14583,6 +15043,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcPumpTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CIRCULATOR = "CIRCULATOR";
 		static ENDSUCTION = "ENDSUCTION";
@@ -14594,6 +15056,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcRailingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static HANDRAIL = "HANDRAIL";
 		static GUARDRAIL = "GUARDRAIL";
@@ -14603,6 +15067,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcRampFlightTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAIGHT = "STRAIGHT";
 		static SPIRAL = "SPIRAL";
@@ -14611,6 +15077,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcRampTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAIGHT_RUN_RAMP = "STRAIGHT_RUN_RAMP";
 		static TWO_STRAIGHT_RUN_RAMP = "TWO_STRAIGHT_RUN_RAMP";
@@ -14623,6 +15091,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcReflectanceMethodEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BLINN = "BLINN";
 		static FLAT = "FLAT";
@@ -14637,6 +15107,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcReinforcingBarRoleEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static MAIN = "MAIN";
 		static SHEAR = "SHEAR";
@@ -14650,12 +15122,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcReinforcingBarSurfaceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PLAIN = "PLAIN";
 		static TEXTURED = "TEXTURED";
 	};
 	export class IfcResourceConsumptionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONSUMED = "CONSUMED";
 		static PARTIALLYCONSUMED = "PARTIALLYCONSUMED";
@@ -14668,12 +15144,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcRibPlateDirectionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DIRECTION_X = "DIRECTION_X";
 		static DIRECTION_Y = "DIRECTION_Y";
 	};
 	export class IfcRoleEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SUPPLIER = "SUPPLIER";
 		static MANUFACTURER = "MANUFACTURER";
@@ -14701,6 +15181,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcRoofTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLAT_ROOF = "FLAT_ROOF";
 		static SHED_ROOF = "SHED_ROOF";
@@ -14719,6 +15201,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSIPrefix {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static EXA = "EXA";
 		static PETA = "PETA";
@@ -14739,6 +15223,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSIUnitName {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AMPERE = "AMPERE";
 		static BECQUEREL = "BECQUEREL";
@@ -14773,6 +15259,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSanitaryTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BATH = "BATH";
 		static BIDET = "BIDET";
@@ -14789,12 +15277,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcSectionTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static UNIFORM = "UNIFORM";
 		static TAPERED = "TAPERED";
 	};
 	export class IfcSensorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CO2SENSOR = "CO2SENSOR";
 		static FIRESENSOR = "FIRESENSOR";
@@ -14814,6 +15306,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSequenceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static START_START = "START_START";
 		static START_FINISH = "START_FINISH";
@@ -14823,6 +15317,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcServiceLifeFactorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static A_QUALITYOFCOMPONENTS = "A_QUALITYOFCOMPONENTS";
 		static B_DESIGNLEVEL = "B_DESIGNLEVEL";
@@ -14836,6 +15332,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcServiceLifeTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACTUALSERVICELIFE = "ACTUALSERVICELIFE";
 		static EXPECTEDSERVICELIFE = "EXPECTEDSERVICELIFE";
@@ -14845,6 +15343,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSlabTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLOOR = "FLOOR";
 		static ROOF = "ROOF";
@@ -14855,6 +15355,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSoundScaleEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DBA = "DBA";
 		static DBB = "DBB";
@@ -14866,6 +15368,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSpaceHeaterTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SECTIONALRADIATOR = "SECTIONALRADIATOR";
 		static PANELRADIATOR = "PANELRADIATOR";
@@ -14879,12 +15383,16 @@ export namespace IFC2X3 {
 	};
 	export class IfcSpaceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcStackTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BIRDCAGE = "BIRDCAGE";
 		static COWL = "COWL";
@@ -14894,6 +15402,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcStairFlightTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAIGHT = "STRAIGHT";
 		static WINDER = "WINDER";
@@ -14905,6 +15415,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcStairTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAIGHT_RUN_STAIR = "STRAIGHT_RUN_STAIR";
 		static TWO_STRAIGHT_RUN_STAIR = "TWO_STRAIGHT_RUN_STAIR";
@@ -14925,6 +15437,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcStateEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static READWRITE = "READWRITE";
 		static READONLY = "READONLY";
@@ -14934,6 +15448,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcStructuralCurveTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static RIGID_JOINED_MEMBER = "RIGID_JOINED_MEMBER";
 		static PIN_JOINED_MEMBER = "PIN_JOINED_MEMBER";
@@ -14945,6 +15461,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcStructuralSurfaceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BENDING_ELEMENT = "BENDING_ELEMENT";
 		static MEMBRANE_ELEMENT = "MEMBRANE_ELEMENT";
@@ -14954,6 +15472,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSurfaceSide {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static POSITIVE = "POSITIVE";
 		static NEGATIVE = "NEGATIVE";
@@ -14961,6 +15481,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSurfaceTextureEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BUMP = "BUMP";
 		static OPACITY = "OPACITY";
@@ -14974,6 +15496,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcSwitchingDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONTACTOR = "CONTACTOR";
 		static EMERGENCYSTOP = "EMERGENCYSTOP";
@@ -14985,6 +15509,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTankTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PREFORMED = "PREFORMED";
 		static SECTIONAL = "SECTIONAL";
@@ -14995,6 +15521,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTendonTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAND = "STRAND";
 		static WIRE = "WIRE";
@@ -15005,6 +15533,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTextPath {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LEFT = "LEFT";
 		static RIGHT = "RIGHT";
@@ -15013,6 +15543,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcThermalLoadSourceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PEOPLE = "PEOPLE";
 		static LIGHTING = "LIGHTING";
@@ -15030,6 +15562,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcThermalLoadTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SENSIBLE = "SENSIBLE";
 		static LATENT = "LATENT";
@@ -15038,6 +15572,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTimeSeriesDataTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONTINUOUS = "CONTINUOUS";
 		static DISCRETE = "DISCRETE";
@@ -15049,6 +15585,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTimeSeriesScheduleTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ANNUAL = "ANNUAL";
 		static MONTHLY = "MONTHLY";
@@ -15059,6 +15597,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTransformerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CURRENT = "CURRENT";
 		static FREQUENCY = "FREQUENCY";
@@ -15068,6 +15608,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTransitionCode {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DISCONTINUOUS = "DISCONTINUOUS";
 		static CONTINUOUS = "CONTINUOUS";
@@ -15076,6 +15618,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTransportElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ELEVATOR = "ELEVATOR";
 		static ESCALATOR = "ESCALATOR";
@@ -15085,6 +15629,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTrimmingPreference {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CARTESIAN = "CARTESIAN";
 		static PARAMETER = "PARAMETER";
@@ -15092,6 +15638,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcTubeBundleTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FINNED = "FINNED";
 		static USERDEFINED = "USERDEFINED";
@@ -15099,6 +15647,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcUnitEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ABSORBEDDOSEUNIT = "ABSORBEDDOSEUNIT";
 		static AMOUNTOFSUBSTANCEUNIT = "AMOUNTOFSUBSTANCEUNIT";
@@ -15133,6 +15683,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcUnitaryEquipmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRHANDLER = "AIRHANDLER";
 		static AIRCONDITIONINGUNIT = "AIRCONDITIONINGUNIT";
@@ -15143,6 +15695,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcValveTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRRELEASE = "AIRRELEASE";
 		static ANTIVACUUM = "ANTIVACUUM";
@@ -15170,6 +15724,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcVibrationIsolatorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPRESSION = "COMPRESSION";
 		static SPRING = "SPRING";
@@ -15178,6 +15734,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcWallTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STANDARD = "STANDARD";
 		static POLYGONAL = "POLYGONAL";
@@ -15189,6 +15747,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcWasteTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLOORTRAP = "FLOORTRAP";
 		static FLOORWASTE = "FLOORWASTE";
@@ -15205,6 +15765,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcWindowPanelOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SIDEHUNGRIGHTHAND = "SIDEHUNGRIGHTHAND";
 		static SIDEHUNGLEFTHAND = "SIDEHUNGLEFTHAND";
@@ -15223,6 +15785,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcWindowPanelPositionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LEFT = "LEFT";
 		static MIDDLE = "MIDDLE";
@@ -15233,6 +15797,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcWindowStyleConstructionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ALUMINIUM = "ALUMINIUM";
 		static HIGH_GRADE_STEEL = "HIGH_GRADE_STEEL";
@@ -15245,6 +15811,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcWindowStyleOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SINGLE_PANEL = "SINGLE_PANEL";
 		static DOUBLE_PANEL_VERTICAL = "DOUBLE_PANEL_VERTICAL";
@@ -15260,6 +15828,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcWorkControlTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACTUAL = "ACTUAL";
 		static BASELINE = "BASELINE";
@@ -29743,511 +30313,788 @@ export namespace IFC2X3 {
 export namespace IFC4 {
 	export class IfcAbsorbedDoseMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcAccelerationMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcAmountOfSubstanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcAngularVelocityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
-	export type IfcArcIndex = Array<IfcPositiveInteger>;
+	export class IfcArcIndex {
+		valueType: number | null;
+		label: string | null;
+		value: Array<IfcPositiveInteger>;
+		constructor(v: Array<IfcPositiveInteger>) { this.value = v;}
+	};
 	export class IfcAreaDensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcAreaMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcBinary {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcBoolean {
 		value: boolean;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: boolean) { this.value = v;}
 	};
 	export class IfcBoxAlignment {
 		value: IfcLabel;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcLabel) { this.value = v;}
 	};
 	export class IfcCardinalPointReference {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
-	export type IfcComplexNumber = Array<number>;
-	export type IfcCompoundPlaneAngleMeasure = Array<number>;
+	export class IfcComplexNumber {
+		valueType: number | null;
+		label: string | null;
+		value: Array<number>;
+		constructor(v: Array<number>) { this.value = v;}
+	};
+	export class IfcCompoundPlaneAngleMeasure {
+		valueType: number | null;
+		label: string | null;
+		value: Array<number>;
+		constructor(v: Array<number>) { this.value = v;}
+	};
 	export class IfcContextDependentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcCountMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcCurvatureMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDate {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcDateTime {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcDayInMonthNumber {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDayInWeekNumber {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDescriptiveMeasure {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcDimensionCount {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDoseEquivalentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcDuration {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcDynamicViscosityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricCapacitanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricChargeMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricConductanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricCurrentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricResistanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcElectricVoltageMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcEnergyMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcFontStyle {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcFontVariant {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcFontWeight {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcForceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcFrequencyMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcGloballyUniqueId {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcHeatFluxDensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcHeatingValueMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcIdentifier {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcIlluminanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcInductanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcInteger {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcIntegerCountRateMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcIonConcentrationMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcIsothermalMoistureCapacityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcKinematicViscosityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLabel {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcLanguageId {
 		value: IfcIdentifier;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcIdentifier) { this.value = v;}
 	};
 	export class IfcLengthMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
-	export type IfcLineIndex = Array<IfcPositiveInteger>;
+	export class IfcLineIndex {
+		valueType: number | null;
+		label: string | null;
+		value: Array<IfcPositiveInteger>;
+		constructor(v: Array<IfcPositiveInteger>) { this.value = v;}
+	};
 	export class IfcLinearForceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLinearMomentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLinearStiffnessMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLinearVelocityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLogical {
 		value: boolean;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: boolean) { this.value = v;}
 	};
 	export class IfcLuminousFluxMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLuminousIntensityDistributionMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcLuminousIntensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMagneticFluxDensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMagneticFluxMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMassDensityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMassFlowRateMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMassMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMassPerLengthMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcModulusOfElasticityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcModulusOfLinearSubgradeReactionMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcModulusOfRotationalSubgradeReactionMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcModulusOfSubgradeReactionMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMoistureDiffusivityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMolecularWeightMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMomentOfInertiaMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMonetaryMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcMonthInYearNumber {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcNonNegativeLengthMeasure {
 		value: IfcLengthMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcLengthMeasure) { this.value = v;}
 	};
 	export class IfcNormalisedRatioMeasure {
 		value: IfcRatioMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcRatioMeasure) { this.value = v;}
 	};
 	export class IfcNumericMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPHMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcParameterValue {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPlanarForceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPlaneAngleMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPositiveInteger {
 		value: IfcInteger;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcInteger) { this.value = v;}
 	};
 	export class IfcPositiveLengthMeasure {
 		value: IfcLengthMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcLengthMeasure) { this.value = v;}
 	};
 	export class IfcPositivePlaneAngleMeasure {
 		value: IfcPlaneAngleMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcPlaneAngleMeasure) { this.value = v;}
 	};
 	export class IfcPositiveRatioMeasure {
 		value: IfcRatioMeasure;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: IfcRatioMeasure) { this.value = v;}
 	};
 	export class IfcPowerMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcPresentableText {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcPressureMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
-	export type IfcPropertySetDefinitionSet = Array<IfcPropertySetDefinition>;
+	export class IfcPropertySetDefinitionSet {
+		valueType: number | null;
+		label: string | null;
+		value: Array<IfcPropertySetDefinition>;
+		constructor(v: Array<IfcPropertySetDefinition>) { this.value = v;}
+	};
 	export class IfcRadioActivityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRatioMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcReal {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRotationalFrequencyMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRotationalMassMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcRotationalStiffnessMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSectionModulusMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSectionalAreaIntegralMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcShearModulusMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSolidAngleMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSoundPowerLevelMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSoundPowerMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSoundPressureLevelMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSoundPressureMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSpecificHeatCapacityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSpecularExponent {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcSpecularRoughness {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTemperatureGradientMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTemperatureRateOfChangeMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcText {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTextAlignment {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTextDecoration {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTextFontName {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTextTransformation {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcThermalAdmittanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermalConductivityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermalExpansionCoefficientMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermalResistanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermalTransmittanceMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcThermodynamicTemperatureMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTime {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcTimeMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTimeStamp {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcTorqueMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcURIReference {
 		value: string;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: string) { this.value = v;}
 	};
 	export class IfcVaporPermeabilityMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcVolumeMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcVolumetricFlowRateMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcWarpingConstantMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcWarpingMomentMeasure {
 		value: number;
+		label: string| null;
+		valueType: number| null;
 		constructor(v: number) { this.value = v;}
 	};
 	export class IfcActionRequestTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static EMAIL = "EMAIL";
 		static FAX = "FAX";
@@ -30259,6 +31106,8 @@ export namespace IFC4 {
 	};
 	export class IfcActionSourceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DEAD_LOAD_G = "DEAD_LOAD_G";
 		static COMPLETION_G1 = "COMPLETION_G1";
@@ -30290,6 +31139,8 @@ export namespace IFC4 {
 	};
 	export class IfcActionTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PERMANENT_G = "PERMANENT_G";
 		static VARIABLE_Q = "VARIABLE_Q";
@@ -30299,6 +31150,8 @@ export namespace IFC4 {
 	};
 	export class IfcActuatorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ELECTRICACTUATOR = "ELECTRICACTUATOR";
 		static HANDOPERATEDACTUATOR = "HANDOPERATEDACTUATOR";
@@ -30310,6 +31163,8 @@ export namespace IFC4 {
 	};
 	export class IfcAddressTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static OFFICE = "OFFICE";
 		static SITE = "SITE";
@@ -30319,6 +31174,8 @@ export namespace IFC4 {
 	};
 	export class IfcAirTerminalBoxTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONSTANTFLOW = "CONSTANTFLOW";
 		static VARIABLEFLOWPRESSUREDEPENDANT = "VARIABLEFLOWPRESSUREDEPENDANT";
@@ -30328,6 +31185,8 @@ export namespace IFC4 {
 	};
 	export class IfcAirTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DIFFUSER = "DIFFUSER";
 		static GRILLE = "GRILLE";
@@ -30338,6 +31197,8 @@ export namespace IFC4 {
 	};
 	export class IfcAirToAirHeatRecoveryTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FIXEDPLATECOUNTERFLOWEXCHANGER = "FIXEDPLATECOUNTERFLOWEXCHANGER";
 		static FIXEDPLATECROSSFLOWEXCHANGER = "FIXEDPLATECROSSFLOWEXCHANGER";
@@ -30353,6 +31214,8 @@ export namespace IFC4 {
 	};
 	export class IfcAlarmTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BELL = "BELL";
 		static BREAKGLASSBUTTON = "BREAKGLASSBUTTON";
@@ -30365,6 +31228,8 @@ export namespace IFC4 {
 	};
 	export class IfcAnalysisModelTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static IN_PLANE_LOADING_2D = "IN_PLANE_LOADING_2D";
 		static OUT_PLANE_LOADING_2D = "OUT_PLANE_LOADING_2D";
@@ -30374,6 +31239,8 @@ export namespace IFC4 {
 	};
 	export class IfcAnalysisTheoryTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FIRST_ORDER_THEORY = "FIRST_ORDER_THEORY";
 		static SECOND_ORDER_THEORY = "SECOND_ORDER_THEORY";
@@ -30384,6 +31251,8 @@ export namespace IFC4 {
 	};
 	export class IfcArithmeticOperatorEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ADD = "ADD";
 		static DIVIDE = "DIVIDE";
@@ -30392,6 +31261,8 @@ export namespace IFC4 {
 	};
 	export class IfcAssemblyPlaceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SITE = "SITE";
 		static FACTORY = "FACTORY";
@@ -30399,6 +31270,8 @@ export namespace IFC4 {
 	};
 	export class IfcAudioVisualApplianceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AMPLIFIER = "AMPLIFIER";
 		static CAMERA = "CAMERA";
@@ -30416,6 +31289,8 @@ export namespace IFC4 {
 	};
 	export class IfcBSplineCurveForm {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static POLYLINE_FORM = "POLYLINE_FORM";
 		static CIRCULAR_ARC = "CIRCULAR_ARC";
@@ -30426,6 +31301,8 @@ export namespace IFC4 {
 	};
 	export class IfcBSplineSurfaceForm {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PLANE_SURF = "PLANE_SURF";
 		static CYLINDRICAL_SURF = "CYLINDRICAL_SURF";
@@ -30441,6 +31318,8 @@ export namespace IFC4 {
 	};
 	export class IfcBeamTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BEAM = "BEAM";
 		static JOIST = "JOIST";
@@ -30453,6 +31332,8 @@ export namespace IFC4 {
 	};
 	export class IfcBenchmarkEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GREATERTHAN = "GREATERTHAN";
 		static GREATERTHANOREQUALTO = "GREATERTHANOREQUALTO";
@@ -30467,6 +31348,8 @@ export namespace IFC4 {
 	};
 	export class IfcBoilerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static WATER = "WATER";
 		static STEAM = "STEAM";
@@ -30475,6 +31358,8 @@ export namespace IFC4 {
 	};
 	export class IfcBooleanOperator {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static UNION = "UNION";
 		static INTERSECTION = "INTERSECTION";
@@ -30482,6 +31367,8 @@ export namespace IFC4 {
 	};
 	export class IfcBuildingElementPartTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static INSULATION = "INSULATION";
 		static PRECASTPANEL = "PRECASTPANEL";
@@ -30490,6 +31377,8 @@ export namespace IFC4 {
 	};
 	export class IfcBuildingElementProxyTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPLEX = "COMPLEX";
 		static ELEMENT = "ELEMENT";
@@ -30501,6 +31390,8 @@ export namespace IFC4 {
 	};
 	export class IfcBuildingSystemTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FENESTRATION = "FENESTRATION";
 		static FOUNDATION = "FOUNDATION";
@@ -30513,12 +31404,16 @@ export namespace IFC4 {
 	};
 	export class IfcBurnerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcCableCarrierFittingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BEND = "BEND";
 		static CROSS = "CROSS";
@@ -30529,6 +31424,8 @@ export namespace IFC4 {
 	};
 	export class IfcCableCarrierSegmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CABLELADDERSEGMENT = "CABLELADDERSEGMENT";
 		static CABLETRAYSEGMENT = "CABLETRAYSEGMENT";
@@ -30539,6 +31436,8 @@ export namespace IFC4 {
 	};
 	export class IfcCableFittingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONNECTOR = "CONNECTOR";
 		static ENTRY = "ENTRY";
@@ -30550,6 +31449,8 @@ export namespace IFC4 {
 	};
 	export class IfcCableSegmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BUSBARSEGMENT = "BUSBARSEGMENT";
 		static CABLESEGMENT = "CABLESEGMENT";
@@ -30560,6 +31461,8 @@ export namespace IFC4 {
 	};
 	export class IfcChangeActionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static NOCHANGE = "NOCHANGE";
 		static MODIFIED = "MODIFIED";
@@ -30569,6 +31472,8 @@ export namespace IFC4 {
 	};
 	export class IfcChillerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRCOOLED = "AIRCOOLED";
 		static WATERCOOLED = "WATERCOOLED";
@@ -30578,12 +31483,16 @@ export namespace IFC4 {
 	};
 	export class IfcChimneyTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcCoilTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DXCOOLINGCOIL = "DXCOOLINGCOIL";
 		static ELECTRICHEATINGCOIL = "ELECTRICHEATINGCOIL";
@@ -30597,6 +31506,8 @@ export namespace IFC4 {
 	};
 	export class IfcColumnTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COLUMN = "COLUMN";
 		static PILASTER = "PILASTER";
@@ -30605,6 +31516,8 @@ export namespace IFC4 {
 	};
 	export class IfcCommunicationsApplianceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ANTENNA = "ANTENNA";
 		static COMPUTER = "COMPUTER";
@@ -30623,12 +31536,16 @@ export namespace IFC4 {
 	};
 	export class IfcComplexPropertyTemplateTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static P_COMPLEX = "P_COMPLEX";
 		static Q_COMPLEX = "Q_COMPLEX";
 	};
 	export class IfcCompressorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DYNAMIC = "DYNAMIC";
 		static RECIPROCATING = "RECIPROCATING";
@@ -30650,6 +31567,8 @@ export namespace IFC4 {
 	};
 	export class IfcCondenserTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRCOOLED = "AIRCOOLED";
 		static EVAPORATIVECOOLED = "EVAPORATIVECOOLED";
@@ -30663,6 +31582,8 @@ export namespace IFC4 {
 	};
 	export class IfcConnectionTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ATPATH = "ATPATH";
 		static ATSTART = "ATSTART";
@@ -30671,6 +31592,8 @@ export namespace IFC4 {
 	};
 	export class IfcConstraintEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static HARD = "HARD";
 		static SOFT = "SOFT";
@@ -30680,6 +31603,8 @@ export namespace IFC4 {
 	};
 	export class IfcConstructionEquipmentResourceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DEMOLISHING = "DEMOLISHING";
 		static EARTHMOVING = "EARTHMOVING";
@@ -30694,6 +31619,8 @@ export namespace IFC4 {
 	};
 	export class IfcConstructionMaterialResourceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AGGREGATES = "AGGREGATES";
 		static CONCRETE = "CONCRETE";
@@ -30709,6 +31636,8 @@ export namespace IFC4 {
 	};
 	export class IfcConstructionProductResourceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ASSEMBLY = "ASSEMBLY";
 		static FORMWORK = "FORMWORK";
@@ -30717,6 +31646,8 @@ export namespace IFC4 {
 	};
 	export class IfcControllerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLOATING = "FLOATING";
 		static PROGRAMMABLE = "PROGRAMMABLE";
@@ -30728,6 +31659,8 @@ export namespace IFC4 {
 	};
 	export class IfcCooledBeamTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACTIVE = "ACTIVE";
 		static PASSIVE = "PASSIVE";
@@ -30736,6 +31669,8 @@ export namespace IFC4 {
 	};
 	export class IfcCoolingTowerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static NATURALDRAFT = "NATURALDRAFT";
 		static MECHANICALINDUCEDDRAFT = "MECHANICALINDUCEDDRAFT";
@@ -30745,12 +31680,16 @@ export namespace IFC4 {
 	};
 	export class IfcCostItemTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcCostScheduleTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BUDGET = "BUDGET";
 		static COSTPLAN = "COSTPLAN";
@@ -30764,6 +31703,8 @@ export namespace IFC4 {
 	};
 	export class IfcCoveringTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CEILING = "CEILING";
 		static FLOORING = "FLOORING";
@@ -30780,6 +31721,8 @@ export namespace IFC4 {
 	};
 	export class IfcCrewResourceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static OFFICE = "OFFICE";
 		static SITE = "SITE";
@@ -30788,12 +31731,16 @@ export namespace IFC4 {
 	};
 	export class IfcCurtainWallTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcCurveInterpolationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LINEAR = "LINEAR";
 		static LOG_LINEAR = "LOG_LINEAR";
@@ -30802,6 +31749,8 @@ export namespace IFC4 {
 	};
 	export class IfcDamperTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BACKDRAFTDAMPER = "BACKDRAFTDAMPER";
 		static BALANCINGDAMPER = "BALANCINGDAMPER";
@@ -30819,6 +31768,8 @@ export namespace IFC4 {
 	};
 	export class IfcDataOriginEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static MEASURED = "MEASURED";
 		static PREDICTED = "PREDICTED";
@@ -30828,6 +31779,8 @@ export namespace IFC4 {
 	};
 	export class IfcDerivedUnitEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ANGULARVELOCITYUNIT = "ANGULARVELOCITYUNIT";
 		static AREADENSITYUNIT = "AREADENSITYUNIT";
@@ -30885,12 +31838,16 @@ export namespace IFC4 {
 	};
 	export class IfcDirectionSenseEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static POSITIVE = "POSITIVE";
 		static NEGATIVE = "NEGATIVE";
 	};
 	export class IfcDiscreteAccessoryTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ANCHORPLATE = "ANCHORPLATE";
 		static BRACKET = "BRACKET";
@@ -30900,6 +31857,8 @@ export namespace IFC4 {
 	};
 	export class IfcDistributionChamberElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FORMEDDUCT = "FORMEDDUCT";
 		static INSPECTIONCHAMBER = "INSPECTIONCHAMBER";
@@ -30914,6 +31873,8 @@ export namespace IFC4 {
 	};
 	export class IfcDistributionPortTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CABLE = "CABLE";
 		static CABLECARRIER = "CABLECARRIER";
@@ -30924,6 +31885,8 @@ export namespace IFC4 {
 	};
 	export class IfcDistributionSystemEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRCONDITIONING = "AIRCONDITIONING";
 		static AUDIOVISUAL = "AUDIOVISUAL";
@@ -30972,6 +31935,8 @@ export namespace IFC4 {
 	};
 	export class IfcDocumentConfidentialityEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PUBLIC = "PUBLIC";
 		static RESTRICTED = "RESTRICTED";
@@ -30982,6 +31947,8 @@ export namespace IFC4 {
 	};
 	export class IfcDocumentStatusEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DRAFT = "DRAFT";
 		static FINALDRAFT = "FINALDRAFT";
@@ -30991,6 +31958,8 @@ export namespace IFC4 {
 	};
 	export class IfcDoorPanelOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SWINGING = "SWINGING";
 		static DOUBLE_ACTING = "DOUBLE_ACTING";
@@ -31004,6 +31973,8 @@ export namespace IFC4 {
 	};
 	export class IfcDoorPanelPositionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LEFT = "LEFT";
 		static MIDDLE = "MIDDLE";
@@ -31012,6 +31983,8 @@ export namespace IFC4 {
 	};
 	export class IfcDoorStyleConstructionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ALUMINIUM = "ALUMINIUM";
 		static HIGH_GRADE_STEEL = "HIGH_GRADE_STEEL";
@@ -31025,6 +31998,8 @@ export namespace IFC4 {
 	};
 	export class IfcDoorStyleOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SINGLE_SWING_LEFT = "SINGLE_SWING_LEFT";
 		static SINGLE_SWING_RIGHT = "SINGLE_SWING_RIGHT";
@@ -31047,6 +32022,8 @@ export namespace IFC4 {
 	};
 	export class IfcDoorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DOOR = "DOOR";
 		static GATE = "GATE";
@@ -31056,6 +32033,8 @@ export namespace IFC4 {
 	};
 	export class IfcDoorTypeOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SINGLE_SWING_LEFT = "SINGLE_SWING_LEFT";
 		static SINGLE_SWING_RIGHT = "SINGLE_SWING_RIGHT";
@@ -31080,6 +32059,8 @@ export namespace IFC4 {
 	};
 	export class IfcDuctFittingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BEND = "BEND";
 		static CONNECTOR = "CONNECTOR";
@@ -31093,6 +32074,8 @@ export namespace IFC4 {
 	};
 	export class IfcDuctSegmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static RIGIDSEGMENT = "RIGIDSEGMENT";
 		static FLEXIBLESEGMENT = "FLEXIBLESEGMENT";
@@ -31101,6 +32084,8 @@ export namespace IFC4 {
 	};
 	export class IfcDuctSilencerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLATOVAL = "FLATOVAL";
 		static RECTANGULAR = "RECTANGULAR";
@@ -31110,6 +32095,8 @@ export namespace IFC4 {
 	};
 	export class IfcElectricApplianceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DISHWASHER = "DISHWASHER";
 		static ELECTRICCOOKER = "ELECTRICCOOKER";
@@ -31132,6 +32119,8 @@ export namespace IFC4 {
 	};
 	export class IfcElectricDistributionBoardTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONSUMERUNIT = "CONSUMERUNIT";
 		static DISTRIBUTIONBOARD = "DISTRIBUTIONBOARD";
@@ -31142,6 +32131,8 @@ export namespace IFC4 {
 	};
 	export class IfcElectricFlowStorageDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BATTERY = "BATTERY";
 		static CAPACITORBANK = "CAPACITORBANK";
@@ -31153,6 +32144,8 @@ export namespace IFC4 {
 	};
 	export class IfcElectricGeneratorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CHP = "CHP";
 		static ENGINEGENERATOR = "ENGINEGENERATOR";
@@ -31162,6 +32155,8 @@ export namespace IFC4 {
 	};
 	export class IfcElectricMotorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DC = "DC";
 		static INDUCTION = "INDUCTION";
@@ -31173,6 +32168,8 @@ export namespace IFC4 {
 	};
 	export class IfcElectricTimeControlTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static TIMECLOCK = "TIMECLOCK";
 		static TIMEDELAY = "TIMEDELAY";
@@ -31182,6 +32179,8 @@ export namespace IFC4 {
 	};
 	export class IfcElementAssemblyTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACCESSORY_ASSEMBLY = "ACCESSORY_ASSEMBLY";
 		static ARCH = "ARCH";
@@ -31197,6 +32196,8 @@ export namespace IFC4 {
 	};
 	export class IfcElementCompositionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPLEX = "COMPLEX";
 		static ELEMENT = "ELEMENT";
@@ -31204,6 +32205,8 @@ export namespace IFC4 {
 	};
 	export class IfcEngineTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static EXTERNALCOMBUSTION = "EXTERNALCOMBUSTION";
 		static INTERNALCOMBUSTION = "INTERNALCOMBUSTION";
@@ -31212,6 +32215,8 @@ export namespace IFC4 {
 	};
 	export class IfcEvaporativeCoolerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DIRECTEVAPORATIVERANDOMMEDIAAIRCOOLER = "DIRECTEVAPORATIVERANDOMMEDIAAIRCOOLER";
 		static DIRECTEVAPORATIVERIGIDMEDIAAIRCOOLER = "DIRECTEVAPORATIVERIGIDMEDIAAIRCOOLER";
@@ -31227,6 +32232,8 @@ export namespace IFC4 {
 	};
 	export class IfcEvaporatorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DIRECTEXPANSION = "DIRECTEXPANSION";
 		static DIRECTEXPANSIONSHELLANDTUBE = "DIRECTEXPANSIONSHELLANDTUBE";
@@ -31239,6 +32246,8 @@ export namespace IFC4 {
 	};
 	export class IfcEventTriggerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static EVENTRULE = "EVENTRULE";
 		static EVENTMESSAGE = "EVENTMESSAGE";
@@ -31249,6 +32258,8 @@ export namespace IFC4 {
 	};
 	export class IfcEventTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STARTEVENT = "STARTEVENT";
 		static ENDEVENT = "ENDEVENT";
@@ -31258,6 +32269,8 @@ export namespace IFC4 {
 	};
 	export class IfcExternalSpatialElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static EXTERNAL = "EXTERNAL";
 		static EXTERNAL_EARTH = "EXTERNAL_EARTH";
@@ -31268,6 +32281,8 @@ export namespace IFC4 {
 	};
 	export class IfcFanTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CENTRIFUGALFORWARDCURVED = "CENTRIFUGALFORWARDCURVED";
 		static CENTRIFUGALRADIAL = "CENTRIFUGALRADIAL";
@@ -31281,6 +32296,8 @@ export namespace IFC4 {
 	};
 	export class IfcFastenerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GLUE = "GLUE";
 		static MORTAR = "MORTAR";
@@ -31290,6 +32307,8 @@ export namespace IFC4 {
 	};
 	export class IfcFilterTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRPARTICLEFILTER = "AIRPARTICLEFILTER";
 		static COMPRESSEDAIRFILTER = "COMPRESSEDAIRFILTER";
@@ -31302,6 +32321,8 @@ export namespace IFC4 {
 	};
 	export class IfcFireSuppressionTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BREECHINGINLET = "BREECHINGINLET";
 		static FIREHYDRANT = "FIREHYDRANT";
@@ -31313,6 +32334,8 @@ export namespace IFC4 {
 	};
 	export class IfcFlowDirectionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SOURCE = "SOURCE";
 		static SINK = "SINK";
@@ -31321,6 +32344,8 @@ export namespace IFC4 {
 	};
 	export class IfcFlowInstrumentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PRESSUREGAUGE = "PRESSUREGAUGE";
 		static THERMOMETER = "THERMOMETER";
@@ -31335,6 +32360,8 @@ export namespace IFC4 {
 	};
 	export class IfcFlowMeterTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ENERGYMETER = "ENERGYMETER";
 		static GASMETER = "GASMETER";
@@ -31345,6 +32372,8 @@ export namespace IFC4 {
 	};
 	export class IfcFootingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CAISSON_FOUNDATION = "CAISSON_FOUNDATION";
 		static FOOTING_BEAM = "FOOTING_BEAM";
@@ -31356,6 +32385,8 @@ export namespace IFC4 {
 	};
 	export class IfcFurnitureTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CHAIR = "CHAIR";
 		static TABLE = "TABLE";
@@ -31369,6 +32400,8 @@ export namespace IFC4 {
 	};
 	export class IfcGeographicElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static TERRAIN = "TERRAIN";
 		static USERDEFINED = "USERDEFINED";
@@ -31376,6 +32409,8 @@ export namespace IFC4 {
 	};
 	export class IfcGeometricProjectionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GRAPH_VIEW = "GRAPH_VIEW";
 		static SKETCH_VIEW = "SKETCH_VIEW";
@@ -31389,12 +32424,16 @@ export namespace IFC4 {
 	};
 	export class IfcGlobalOrLocalEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GLOBAL_COORDS = "GLOBAL_COORDS";
 		static LOCAL_COORDS = "LOCAL_COORDS";
 	};
 	export class IfcGridTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static RECTANGULAR = "RECTANGULAR";
 		static RADIAL = "RADIAL";
@@ -31405,6 +32444,8 @@ export namespace IFC4 {
 	};
 	export class IfcHeatExchangerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PLATE = "PLATE";
 		static SHELLANDTUBE = "SHELLANDTUBE";
@@ -31413,6 +32454,8 @@ export namespace IFC4 {
 	};
 	export class IfcHumidifierTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STEAMINJECTION = "STEAMINJECTION";
 		static ADIABATICAIRWASHER = "ADIABATICAIRWASHER";
@@ -31432,6 +32475,8 @@ export namespace IFC4 {
 	};
 	export class IfcInterceptorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CYCLONIC = "CYCLONIC";
 		static GREASE = "GREASE";
@@ -31442,6 +32487,8 @@ export namespace IFC4 {
 	};
 	export class IfcInternalOrExternalEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static INTERNAL = "INTERNAL";
 		static EXTERNAL = "EXTERNAL";
@@ -31452,6 +32499,8 @@ export namespace IFC4 {
 	};
 	export class IfcInventoryTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ASSETINVENTORY = "ASSETINVENTORY";
 		static SPACEINVENTORY = "SPACEINVENTORY";
@@ -31461,6 +32510,8 @@ export namespace IFC4 {
 	};
 	export class IfcJunctionBoxTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DATA = "DATA";
 		static POWER = "POWER";
@@ -31469,6 +32520,8 @@ export namespace IFC4 {
 	};
 	export class IfcKnotType {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static UNIFORM_KNOTS = "UNIFORM_KNOTS";
 		static QUASI_UNIFORM_KNOTS = "QUASI_UNIFORM_KNOTS";
@@ -31477,6 +32530,8 @@ export namespace IFC4 {
 	};
 	export class IfcLaborResourceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ADMINISTRATION = "ADMINISTRATION";
 		static CARPENTRY = "CARPENTRY";
@@ -31502,6 +32557,8 @@ export namespace IFC4 {
 	};
 	export class IfcLampTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPACTFLUORESCENT = "COMPACTFLUORESCENT";
 		static FLUORESCENT = "FLUORESCENT";
@@ -31517,6 +32574,8 @@ export namespace IFC4 {
 	};
 	export class IfcLayerSetDirectionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AXIS1 = "AXIS1";
 		static AXIS2 = "AXIS2";
@@ -31524,6 +32583,8 @@ export namespace IFC4 {
 	};
 	export class IfcLightDistributionCurveEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static TYPE_A = "TYPE_A";
 		static TYPE_B = "TYPE_B";
@@ -31532,6 +32593,8 @@ export namespace IFC4 {
 	};
 	export class IfcLightEmissionSourceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPACTFLUORESCENT = "COMPACTFLUORESCENT";
 		static FLUORESCENT = "FLUORESCENT";
@@ -31547,6 +32610,8 @@ export namespace IFC4 {
 	};
 	export class IfcLightFixtureTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static POINTSOURCE = "POINTSOURCE";
 		static DIRECTIONSOURCE = "DIRECTIONSOURCE";
@@ -31556,6 +32621,8 @@ export namespace IFC4 {
 	};
 	export class IfcLoadGroupTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LOAD_GROUP = "LOAD_GROUP";
 		static LOAD_CASE = "LOAD_CASE";
@@ -31565,6 +32632,8 @@ export namespace IFC4 {
 	};
 	export class IfcLogicalOperatorEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LOGICALAND = "LOGICALAND";
 		static LOGICALOR = "LOGICALOR";
@@ -31574,6 +32643,8 @@ export namespace IFC4 {
 	};
 	export class IfcMechanicalFastenerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ANCHORBOLT = "ANCHORBOLT";
 		static BOLT = "BOLT";
@@ -31590,6 +32661,8 @@ export namespace IFC4 {
 	};
 	export class IfcMedicalDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRSTATION = "AIRSTATION";
 		static FEEDAIRUNIT = "FEEDAIRUNIT";
@@ -31601,6 +32674,8 @@ export namespace IFC4 {
 	};
 	export class IfcMemberTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BRACE = "BRACE";
 		static CHORD = "CHORD";
@@ -31619,6 +32694,8 @@ export namespace IFC4 {
 	};
 	export class IfcMotorConnectionTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BELTDRIVE = "BELTDRIVE";
 		static COUPLING = "COUPLING";
@@ -31628,11 +32705,15 @@ export namespace IFC4 {
 	};
 	export class IfcNullStyle {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static NULL = "NULL";
 	};
 	export class IfcObjectTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PRODUCT = "PRODUCT";
 		static PROCESS = "PROCESS";
@@ -31645,6 +32726,8 @@ export namespace IFC4 {
 	};
 	export class IfcObjectiveEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CODECOMPLIANCE = "CODECOMPLIANCE";
 		static CODEWAIVER = "CODEWAIVER";
@@ -31662,6 +32745,8 @@ export namespace IFC4 {
 	};
 	export class IfcOccupantTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ASSIGNEE = "ASSIGNEE";
 		static ASSIGNOR = "ASSIGNOR";
@@ -31675,6 +32760,8 @@ export namespace IFC4 {
 	};
 	export class IfcOpeningElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static OPENING = "OPENING";
 		static RECESS = "RECESS";
@@ -31683,6 +32770,8 @@ export namespace IFC4 {
 	};
 	export class IfcOutletTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AUDIOVISUALOUTLET = "AUDIOVISUALOUTLET";
 		static COMMUNICATIONSOUTLET = "COMMUNICATIONSOUTLET";
@@ -31694,12 +32783,16 @@ export namespace IFC4 {
 	};
 	export class IfcPerformanceHistoryTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcPermeableCoveringOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static GRILL = "GRILL";
 		static LOUVER = "LOUVER";
@@ -31709,6 +32802,8 @@ export namespace IFC4 {
 	};
 	export class IfcPermitTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACCESS = "ACCESS";
 		static BUILDING = "BUILDING";
@@ -31718,6 +32813,8 @@ export namespace IFC4 {
 	};
 	export class IfcPhysicalOrVirtualEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PHYSICAL = "PHYSICAL";
 		static VIRTUAL = "VIRTUAL";
@@ -31725,6 +32822,8 @@ export namespace IFC4 {
 	};
 	export class IfcPileConstructionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CAST_IN_PLACE = "CAST_IN_PLACE";
 		static COMPOSITE = "COMPOSITE";
@@ -31735,6 +32834,8 @@ export namespace IFC4 {
 	};
 	export class IfcPileTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BORED = "BORED";
 		static DRIVEN = "DRIVEN";
@@ -31747,6 +32848,8 @@ export namespace IFC4 {
 	};
 	export class IfcPipeFittingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BEND = "BEND";
 		static CONNECTOR = "CONNECTOR";
@@ -31760,6 +32863,8 @@ export namespace IFC4 {
 	};
 	export class IfcPipeSegmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CULVERT = "CULVERT";
 		static FLEXIBLESEGMENT = "FLEXIBLESEGMENT";
@@ -31771,6 +32876,8 @@ export namespace IFC4 {
 	};
 	export class IfcPlateTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CURTAIN_PANEL = "CURTAIN_PANEL";
 		static SHEET = "SHEET";
@@ -31779,6 +32886,8 @@ export namespace IFC4 {
 	};
 	export class IfcPreferredSurfaceCurveRepresentation {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CURVE3D = "CURVE3D";
 		static PCURVE_S1 = "PCURVE_S1";
@@ -31786,6 +32895,8 @@ export namespace IFC4 {
 	};
 	export class IfcProcedureTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ADVICE_CAUTION = "ADVICE_CAUTION";
 		static ADVICE_NOTE = "ADVICE_NOTE";
@@ -31799,12 +32910,16 @@ export namespace IFC4 {
 	};
 	export class IfcProfileTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CURVE = "CURVE";
 		static AREA = "AREA";
 	};
 	export class IfcProjectOrderTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CHANGEORDER = "CHANGEORDER";
 		static MAINTENANCEWORKORDER = "MAINTENANCEWORKORDER";
@@ -31816,18 +32931,24 @@ export namespace IFC4 {
 	};
 	export class IfcProjectedOrTrueLengthEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PROJECTED_LENGTH = "PROJECTED_LENGTH";
 		static TRUE_LENGTH = "TRUE_LENGTH";
 	};
 	export class IfcProjectionElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcPropertySetTemplateTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PSET_TYPEDRIVENONLY = "PSET_TYPEDRIVENONLY";
 		static PSET_TYPEDRIVENOVERRIDE = "PSET_TYPEDRIVENOVERRIDE";
@@ -31840,6 +32961,8 @@ export namespace IFC4 {
 	};
 	export class IfcProtectiveDeviceTrippingUnitTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ELECTRONIC = "ELECTRONIC";
 		static ELECTROMAGNETIC = "ELECTROMAGNETIC";
@@ -31850,6 +32973,8 @@ export namespace IFC4 {
 	};
 	export class IfcProtectiveDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CIRCUITBREAKER = "CIRCUITBREAKER";
 		static EARTHLEAKAGECIRCUITBREAKER = "EARTHLEAKAGECIRCUITBREAKER";
@@ -31863,6 +32988,8 @@ export namespace IFC4 {
 	};
 	export class IfcPumpTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CIRCULATOR = "CIRCULATOR";
 		static ENDSUCTION = "ENDSUCTION";
@@ -31876,6 +33003,8 @@ export namespace IFC4 {
 	};
 	export class IfcRailingTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static HANDRAIL = "HANDRAIL";
 		static GUARDRAIL = "GUARDRAIL";
@@ -31885,6 +33014,8 @@ export namespace IFC4 {
 	};
 	export class IfcRampFlightTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAIGHT = "STRAIGHT";
 		static SPIRAL = "SPIRAL";
@@ -31893,6 +33024,8 @@ export namespace IFC4 {
 	};
 	export class IfcRampTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAIGHT_RUN_RAMP = "STRAIGHT_RUN_RAMP";
 		static TWO_STRAIGHT_RUN_RAMP = "TWO_STRAIGHT_RUN_RAMP";
@@ -31905,6 +33038,8 @@ export namespace IFC4 {
 	};
 	export class IfcRecurrenceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DAILY = "DAILY";
 		static WEEKLY = "WEEKLY";
@@ -31917,6 +33052,8 @@ export namespace IFC4 {
 	};
 	export class IfcReflectanceMethodEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BLINN = "BLINN";
 		static FLAT = "FLAT";
@@ -31931,6 +33068,8 @@ export namespace IFC4 {
 	};
 	export class IfcReinforcingBarRoleEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static MAIN = "MAIN";
 		static SHEAR = "SHEAR";
@@ -31945,12 +33084,16 @@ export namespace IFC4 {
 	};
 	export class IfcReinforcingBarSurfaceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PLAIN = "PLAIN";
 		static TEXTURED = "TEXTURED";
 	};
 	export class IfcReinforcingBarTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ANCHORING = "ANCHORING";
 		static EDGE = "EDGE";
@@ -31965,12 +33108,16 @@ export namespace IFC4 {
 	};
 	export class IfcReinforcingMeshTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static USERDEFINED = "USERDEFINED";
 		static NOTDEFINED = "NOTDEFINED";
 	};
 	export class IfcRoleEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SUPPLIER = "SUPPLIER";
 		static MANUFACTURER = "MANUFACTURER";
@@ -31998,6 +33145,8 @@ export namespace IFC4 {
 	};
 	export class IfcRoofTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLAT_ROOF = "FLAT_ROOF";
 		static SHED_ROOF = "SHED_ROOF";
@@ -32017,6 +33166,8 @@ export namespace IFC4 {
 	};
 	export class IfcSIPrefix {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static EXA = "EXA";
 		static PETA = "PETA";
@@ -32037,6 +33188,8 @@ export namespace IFC4 {
 	};
 	export class IfcSIUnitName {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AMPERE = "AMPERE";
 		static BECQUEREL = "BECQUEREL";
@@ -32071,6 +33224,8 @@ export namespace IFC4 {
 	};
 	export class IfcSanitaryTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BATH = "BATH";
 		static BIDET = "BIDET";
@@ -32087,12 +33242,16 @@ export namespace IFC4 {
 	};
 	export class IfcSectionTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static UNIFORM = "UNIFORM";
 		static TAPERED = "TAPERED";
 	};
 	export class IfcSensorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COSENSOR = "COSENSOR";
 		static CO2SENSOR = "CO2SENSOR";
@@ -32123,6 +33282,8 @@ export namespace IFC4 {
 	};
 	export class IfcSequenceEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static START_START = "START_START";
 		static START_FINISH = "START_FINISH";
@@ -32133,6 +33294,8 @@ export namespace IFC4 {
 	};
 	export class IfcShadingDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static JALOUSIE = "JALOUSIE";
 		static SHUTTER = "SHUTTER";
@@ -32142,6 +33305,8 @@ export namespace IFC4 {
 	};
 	export class IfcSimplePropertyTemplateTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static P_SINGLEVALUE = "P_SINGLEVALUE";
 		static P_ENUMERATEDVALUE = "P_ENUMERATEDVALUE";
@@ -32158,6 +33323,8 @@ export namespace IFC4 {
 	};
 	export class IfcSlabTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLOOR = "FLOOR";
 		static ROOF = "ROOF";
@@ -32168,6 +33335,8 @@ export namespace IFC4 {
 	};
 	export class IfcSolarDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SOLARCOLLECTOR = "SOLARCOLLECTOR";
 		static SOLARPANEL = "SOLARPANEL";
@@ -32176,6 +33345,8 @@ export namespace IFC4 {
 	};
 	export class IfcSpaceHeaterTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONVECTOR = "CONVECTOR";
 		static RADIATOR = "RADIATOR";
@@ -32184,6 +33355,8 @@ export namespace IFC4 {
 	};
 	export class IfcSpaceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SPACE = "SPACE";
 		static PARKING = "PARKING";
@@ -32195,6 +33368,8 @@ export namespace IFC4 {
 	};
 	export class IfcSpatialZoneTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONSTRUCTION = "CONSTRUCTION";
 		static FIRESAFETY = "FIRESAFETY";
@@ -32209,6 +33384,8 @@ export namespace IFC4 {
 	};
 	export class IfcStackTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BIRDCAGE = "BIRDCAGE";
 		static COWL = "COWL";
@@ -32218,6 +33395,8 @@ export namespace IFC4 {
 	};
 	export class IfcStairFlightTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAIGHT = "STRAIGHT";
 		static WINDER = "WINDER";
@@ -32229,6 +33408,8 @@ export namespace IFC4 {
 	};
 	export class IfcStairTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static STRAIGHT_RUN_STAIR = "STRAIGHT_RUN_STAIR";
 		static TWO_STRAIGHT_RUN_STAIR = "TWO_STRAIGHT_RUN_STAIR";
@@ -32249,6 +33430,8 @@ export namespace IFC4 {
 	};
 	export class IfcStateEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static READWRITE = "READWRITE";
 		static READONLY = "READONLY";
@@ -32258,6 +33441,8 @@ export namespace IFC4 {
 	};
 	export class IfcStructuralCurveActivityTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONST = "CONST";
 		static LINEAR = "LINEAR";
@@ -32271,6 +33456,8 @@ export namespace IFC4 {
 	};
 	export class IfcStructuralCurveMemberTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static RIGID_JOINED_MEMBER = "RIGID_JOINED_MEMBER";
 		static PIN_JOINED_MEMBER = "PIN_JOINED_MEMBER";
@@ -32282,6 +33469,8 @@ export namespace IFC4 {
 	};
 	export class IfcStructuralSurfaceActivityTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONST = "CONST";
 		static BILINEAR = "BILINEAR";
@@ -32292,6 +33481,8 @@ export namespace IFC4 {
 	};
 	export class IfcStructuralSurfaceMemberTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BENDING_ELEMENT = "BENDING_ELEMENT";
 		static MEMBRANE_ELEMENT = "MEMBRANE_ELEMENT";
@@ -32301,6 +33492,8 @@ export namespace IFC4 {
 	};
 	export class IfcSubContractResourceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PURCHASE = "PURCHASE";
 		static WORK = "WORK";
@@ -32309,6 +33502,8 @@ export namespace IFC4 {
 	};
 	export class IfcSurfaceFeatureTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static MARK = "MARK";
 		static TAG = "TAG";
@@ -32318,6 +33513,8 @@ export namespace IFC4 {
 	};
 	export class IfcSurfaceSide {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static POSITIVE = "POSITIVE";
 		static NEGATIVE = "NEGATIVE";
@@ -32325,6 +33522,8 @@ export namespace IFC4 {
 	};
 	export class IfcSwitchingDeviceTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONTACTOR = "CONTACTOR";
 		static DIMMERSWITCH = "DIMMERSWITCH";
@@ -32340,6 +33539,8 @@ export namespace IFC4 {
 	};
 	export class IfcSystemFurnitureElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static PANEL = "PANEL";
 		static WORKSURFACE = "WORKSURFACE";
@@ -32348,6 +33549,8 @@ export namespace IFC4 {
 	};
 	export class IfcTankTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BASIN = "BASIN";
 		static BREAKPRESSURE = "BREAKPRESSURE";
@@ -32361,6 +33564,8 @@ export namespace IFC4 {
 	};
 	export class IfcTaskDurationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ELAPSEDTIME = "ELAPSEDTIME";
 		static WORKTIME = "WORKTIME";
@@ -32368,6 +33573,8 @@ export namespace IFC4 {
 	};
 	export class IfcTaskTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ATTENDANCE = "ATTENDANCE";
 		static CONSTRUCTION = "CONSTRUCTION";
@@ -32386,6 +33593,8 @@ export namespace IFC4 {
 	};
 	export class IfcTendonAnchorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COUPLER = "COUPLER";
 		static FIXED_END = "FIXED_END";
@@ -32395,6 +33604,8 @@ export namespace IFC4 {
 	};
 	export class IfcTendonTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static BAR = "BAR";
 		static COATED = "COATED";
@@ -32405,6 +33616,8 @@ export namespace IFC4 {
 	};
 	export class IfcTextPath {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LEFT = "LEFT";
 		static RIGHT = "RIGHT";
@@ -32413,6 +33626,8 @@ export namespace IFC4 {
 	};
 	export class IfcTimeSeriesDataTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CONTINUOUS = "CONTINUOUS";
 		static DISCRETE = "DISCRETE";
@@ -32424,6 +33639,8 @@ export namespace IFC4 {
 	};
 	export class IfcTransformerTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CURRENT = "CURRENT";
 		static FREQUENCY = "FREQUENCY";
@@ -32435,6 +33652,8 @@ export namespace IFC4 {
 	};
 	export class IfcTransitionCode {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static DISCONTINUOUS = "DISCONTINUOUS";
 		static CONTINUOUS = "CONTINUOUS";
@@ -32443,6 +33662,8 @@ export namespace IFC4 {
 	};
 	export class IfcTransportElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ELEVATOR = "ELEVATOR";
 		static ESCALATOR = "ESCALATOR";
@@ -32454,6 +33675,8 @@ export namespace IFC4 {
 	};
 	export class IfcTrimmingPreference {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CARTESIAN = "CARTESIAN";
 		static PARAMETER = "PARAMETER";
@@ -32461,6 +33684,8 @@ export namespace IFC4 {
 	};
 	export class IfcTubeBundleTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FINNED = "FINNED";
 		static USERDEFINED = "USERDEFINED";
@@ -32468,6 +33693,8 @@ export namespace IFC4 {
 	};
 	export class IfcUnitEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ABSORBEDDOSEUNIT = "ABSORBEDDOSEUNIT";
 		static AMOUNTOFSUBSTANCEUNIT = "AMOUNTOFSUBSTANCEUNIT";
@@ -32502,6 +33729,8 @@ export namespace IFC4 {
 	};
 	export class IfcUnitaryControlElementTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ALARMPANEL = "ALARMPANEL";
 		static CONTROLPANEL = "CONTROLPANEL";
@@ -32516,6 +33745,8 @@ export namespace IFC4 {
 	};
 	export class IfcUnitaryEquipmentTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRHANDLER = "AIRHANDLER";
 		static AIRCONDITIONINGUNIT = "AIRCONDITIONINGUNIT";
@@ -32527,6 +33758,8 @@ export namespace IFC4 {
 	};
 	export class IfcValveTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static AIRRELEASE = "AIRRELEASE";
 		static ANTIVACUUM = "ANTIVACUUM";
@@ -32554,6 +33787,8 @@ export namespace IFC4 {
 	};
 	export class IfcVibrationIsolatorTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static COMPRESSION = "COMPRESSION";
 		static SPRING = "SPRING";
@@ -32562,6 +33797,8 @@ export namespace IFC4 {
 	};
 	export class IfcVoidingFeatureTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static CUTOUT = "CUTOUT";
 		static NOTCH = "NOTCH";
@@ -32574,6 +33811,8 @@ export namespace IFC4 {
 	};
 	export class IfcWallTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static MOVABLE = "MOVABLE";
 		static PARAPET = "PARAPET";
@@ -32589,6 +33828,8 @@ export namespace IFC4 {
 	};
 	export class IfcWasteTerminalTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FLOORTRAP = "FLOORTRAP";
 		static FLOORWASTE = "FLOORWASTE";
@@ -32602,6 +33843,8 @@ export namespace IFC4 {
 	};
 	export class IfcWindowPanelOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SIDEHUNGRIGHTHAND = "SIDEHUNGRIGHTHAND";
 		static SIDEHUNGLEFTHAND = "SIDEHUNGLEFTHAND";
@@ -32620,6 +33863,8 @@ export namespace IFC4 {
 	};
 	export class IfcWindowPanelPositionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static LEFT = "LEFT";
 		static MIDDLE = "MIDDLE";
@@ -32630,6 +33875,8 @@ export namespace IFC4 {
 	};
 	export class IfcWindowStyleConstructionEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ALUMINIUM = "ALUMINIUM";
 		static HIGH_GRADE_STEEL = "HIGH_GRADE_STEEL";
@@ -32642,6 +33889,8 @@ export namespace IFC4 {
 	};
 	export class IfcWindowStyleOperationEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SINGLE_PANEL = "SINGLE_PANEL";
 		static DOUBLE_PANEL_VERTICAL = "DOUBLE_PANEL_VERTICAL";
@@ -32657,6 +33906,8 @@ export namespace IFC4 {
 	};
 	export class IfcWindowTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static WINDOW = "WINDOW";
 		static SKYLIGHT = "SKYLIGHT";
@@ -32666,6 +33917,8 @@ export namespace IFC4 {
 	};
 	export class IfcWindowTypePartitioningEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static SINGLE_PANEL = "SINGLE_PANEL";
 		static DOUBLE_PANEL_VERTICAL = "DOUBLE_PANEL_VERTICAL";
@@ -32681,6 +33934,8 @@ export namespace IFC4 {
 	};
 	export class IfcWorkCalendarTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static FIRSTSHIFT = "FIRSTSHIFT";
 		static SECONDSHIFT = "SECONDSHIFT";
@@ -32690,6 +33945,8 @@ export namespace IFC4 {
 	};
 	export class IfcWorkPlanTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACTUAL = "ACTUAL";
 		static BASELINE = "BASELINE";
@@ -32699,6 +33956,8 @@ export namespace IFC4 {
 	};
 	export class IfcWorkScheduleTypeEnum {
 		value: string;
+		label: string | null;
+		valueType: number | null;
 		constructor(v: string) { this.value = v;}
 		static ACTUAL = "ACTUAL";
 		static BASELINE = "BASELINE";

@@ -14,6 +14,8 @@ tsHelper.push(`import * as ifc from "./ifc-schema";`);
 tsHelper.push();
 tsHelper.push(`export class Handle<T> {`);
 tsHelper.push(`\tvalue: number;`);
+tsHelper.push(`\tlabel: string | null;`)
+tsHelper.push(`\tvalueType: number | null;`)
 tsHelper.push(`\tconstructor(id: number) { this.value = id; }`);
 tsHelper.push(`\ttoTape(args: any[]){ args.push({ type: 5, value: this.value }); }`);
 tsHelper.push(`}`);
@@ -59,7 +61,12 @@ for (var i = 0; i < files.length; i++) {
   types.forEach((type) => {
       if (type.isList)
       {
-          tsHelperClasses.push(`\texport type ${type.name} = Array<${type.typeName}>;`);
+          tsHelperClasses.push(`\texport class ${type.name} {`);
+          tsHelperClasses.push(`\t\tvalueType: number | null;`)
+          tsHelperClasses.push(`\t\tlabel: string | null;`)
+          tsHelperClasses.push(`\t\tvalue: Array<${type.typeName}>;`)
+          tsHelperClasses.push(`\t\tconstructor(v: Array<${type.typeName}>) { this.value = v;}`);
+          tsHelperClasses.push(`\t};`);
       }
       else if (type.isSelect)
       {
@@ -81,6 +88,8 @@ for (var i = 0; i < files.length; i++) {
       {
           tsHelperClasses.push(`\texport class ${type.name} {`);
           tsHelperClasses.push(`\t\tvalue: string;`)
+          tsHelperClasses.push(`\t\tlabel: string | null;`)
+          tsHelperClasses.push(`\t\tvalueType: number | null;`)
           tsHelperClasses.push(`\t\tconstructor(v: string) { this.value = v;}`);
           tsHelperClasses.push(type.values.map((v) => `\t\tstatic ${v} = "${v}";`).join("\n"));
           tsHelperClasses.push(`\t};`);
@@ -89,6 +98,8 @@ for (var i = 0; i < files.length; i++) {
       {
           tsHelperClasses.push(`\texport class ${type.name} {`);
           tsHelperClasses.push(`\t\tvalue: ${type.typeName};`)
+          tsHelperClasses.push(`\t\tlabel: string| null;`)
+          tsHelperClasses.push(`\t\tvalueType: number| null;`)
           tsHelperClasses.push(`\t\tconstructor(v: ${type.typeName}) { this.value = v;}`);
           tsHelperClasses.push(`\t};`);
       }

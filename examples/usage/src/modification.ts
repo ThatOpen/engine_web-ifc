@@ -9,7 +9,7 @@ export default async function() {
         // lets modify a line
         {
             // this returns a propertyset object at line number 244
-            let propertySet = ifcapi.GetLine(modelID, 244) as WebIFC.IfcPropertySet;
+            let propertySet = ifcapi.GetLine(modelID, 244) as WebIFC.IFC2X3.IfcPropertySet;
 
             // check the guid before modification
             Equals("GUID before", propertySet.GlobalId.value, "0uNK5AgoP1Vw6UlaHiS$iF");
@@ -21,7 +21,7 @@ export default async function() {
 
         // and read it back modified
         {
-            let propertySet = ifcapi.GetLine(modelID, 244) as WebIFC.IfcPropertySet;
+            let propertySet = ifcapi.GetLine(modelID, 244) as WebIFC.IFC2X3.IfcPropertySet;
             
             // check guid after modification
             Equals("GUID after", propertySet.GlobalId.value, newGuidValue);
@@ -35,10 +35,10 @@ export default async function() {
 
         // lets modify a line
         {
-            let propertySetFlat = ifcapi.GetLine(modelID, 244, true) as WebIFC.IfcPropertySet;
+            let propertySetFlat = ifcapi.GetLine(modelID, 244, true) as WebIFC.IFC2X3.IfcPropertySet;
 
             // check the guid before modification
-            let prop = propertySetFlat.HasProperties[0] as WebIFC.IfcPropertySingleValue;
+            let prop = propertySetFlat.HasProperties[0] as WebIFC.IFC2X3.IfcPropertySingleValue;
             Equals("Name before", prop.Name.value, "Reference");
 
             prop.Name.value = modifiedNameValue;
@@ -49,8 +49,8 @@ export default async function() {
         let propID = -1;
         // read the root back modified
         {
-            let propertySetFlat = ifcapi.GetLine(modelID, 244, true) as WebIFC.IfcPropertySet;
-            let prop = propertySetFlat.HasProperties[0] as WebIFC.IfcPropertySingleValue;
+            let propertySetFlat = ifcapi.GetLine(modelID, 244, true) as WebIFC.IFC2X3.IfcPropertySet;
+            let prop = propertySetFlat.HasProperties[0] as WebIFC.IFC2X3.IfcPropertySingleValue;
             propID = prop.expressID;
 
             // check guid after modification
@@ -59,7 +59,7 @@ export default async function() {
 
         // and the subelement
         {
-            let prop = ifcapi.GetLine(modelID, propID) as WebIFC.IfcPropertySingleValue;
+            let prop = ifcapi.GetLine(modelID, propID) as WebIFC.IFC2X3.IfcPropertySingleValue;
             
             // check guid after modification
             Equals("Name after sub", prop.Name.value, modifiedNameValue);
