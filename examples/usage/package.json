@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "copy-wasm": "cpy ../../dist/web-ifc.wasm .",
     "start": "ts-node index.ts"
   },
   "author": "",
