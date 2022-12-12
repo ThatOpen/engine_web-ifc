@@ -1,44 +1,124 @@
 import * as fs from "fs";
 import * as path from "path";
+import * as os from 'os';
 
+import { getGPUTier } from 'detect-gpu';
+import * as WebIFC from '../dist/web-ifc-api-node';
+import { IfcConstructionMaterialResourceTypeEnum, ms } from '../dist/web-ifc-api-node';
+
+let newIfcAPI = new WebIFC.IfcAPI();
+const OUTPUT_FILE = '../benchmark.md';
 const BENCHMARK_FILES_DIR = "./ifcfiles";
-
-import * as NewWebIFC from '../dist/web-ifc-api-node';
-import { ms } from '../dist/web-ifc-api-node';
-
-import * as OldWebIFC from 'web-ifc/web-ifc-api-node';
-
-let newIfcAPI = new NewWebIFC.IfcAPI();
-let oldIfcAPI = new OldWebIFC.IfcAPI();
-
 class FileResult
 {
     filename: string;
-    timeTaken: number;
+    fileSize: number;
+    timeTakenToOpenModel: number;
+    timeSuccess: number;
+    numberOfIfcEntities: number;
+    totalNumberOfProducedMesh: number;
+    totalNumberOfGeometries : number;
+    totalNumberOfErrors: number;
 }
 
+class SystemInfo{
+    gpu: string;
+    cpuName: string;
+    freeRam: number;
+    totalRam: number;
+}
+// hack Object.fromEntries doesn't works
+function mapToObj(inputMap) {
+    let obj = {};
+
+    inputMap.forEach(function(value, key){
+        obj[key] = value
+    });
+
+    return obj;
+}
+async function writeResult(content : string){
+    fs.writeFile(OUTPUT_FILE, content, () => {
+        
+    })
+}
 class BenchMarkResult
 {
     results: Map<string, FileResult>;
+}
+class BenchmarkResultFormatter{
+    results: Map<string, FileResult>;
+    columns : Object
+    getMarkdownTable() : string
+    {
+        let datas =  mapToObj(this.results);
+        const lines = Object.keys(datas);
+        const columns = Object.entries(this.columns);
+        let benchmarkMarkdown = this.getMarkdownTableHeader(columns);
+        lines.map((key) => {
+            let line = datas[key];
+            benchmarkMarkdown += this.getMarkdownTableRow(line, columns);
+        })
+        return benchmarkMarkdown;
+    }
+    private getMarkdownTableHeader(columns: any) : string
+    {
+        let header = "|";
+        let separator = "|";
+        for (const [column, value] of columns) {
+            header += ` ${value} |`;
+            separator += "-------|"
+        }
+        return `${header}\n${separator}\n|`;
+    }
+    private getMarkdownTableRow(line : any, columns : any) : string 
+    {
+        let row = "";
+        for (const [column, value] of columns) {
+            row += ` ${line[column]} |`;
+        }
+        row += "\n";
+        return row;
+    }
 }
 
 async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResult>
 {
     let result = new FileResult();
     result.filename = filename;
+    
+    //let modelID = module.OpenModel("example.ifc", new Uint8Array(data.toString()));
 
-    let data = fs.readFileSync(filename);
-
+    const ifcFilePath = path.join(__dirname, './'+filename);
+    const ifcFileContent = fs.readFileSync(ifcFilePath);
+    
     let startTime = ms();
+    let modelID : number = module.OpenModel(ifcFileContent);
+    let endTime = ms();
+    result.timeTakenToOpenModel = endTime - startTime; // time to open and close the file and nothing else
 
-    let modelID = module.OpenModel("example.ifc", new Uint8Array(data));
+    startTime = ms();
+    result.numberOfIfcEntities = module.GetAllLines(modelID).size();
+    
+    result.totalNumberOfProducedMesh = 0;
+    module.StreamAllMeshes(modelID, (mesh) => {
+        ++result.totalNumberOfProducedMesh;
+    });
 
+    result.totalNumberOfGeometries = module.LoadAllGeometry(modelID).size();
+    let stats = fs.statSync(ifcFilePath);
+    let fileSizeInBytes = stats.size;
+    // Convert the file size to megabytes (optional)
+    let sizeMo = fileSizeInBytes / (1024*1024);
+    result.fileSize = parseFloat(sizeMo.toFixed(2));
+
+    result.totalNumberOfErrors =  module.GetAndClearErrors(modelID).size();
     module.CloseModel(modelID);
 
-    let endTime = ms();
-    result.timeTaken = endTime - startTime;
 
-    console.log(`Parsed model ${result.filename} in ${result.timeTaken}`);
+    endTime = ms();
+    result.timeSuccess = endTime - startTime;
+    console.log(`Parsed model ${result.filename} in ${result.timeTakenToOpenModel} ms`);
 
     return result;
 }
@@ -49,7 +129,6 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
 
     let result = new BenchMarkResult();
     result.results = new Map<string, FileResult>();
-
     for (let file in files)
     {
         let filename = files[file];
@@ -59,43 +138,60 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
     return result;
 }
 
-function combine(oldResult: BenchMarkResult, newResult: BenchMarkResult)
-{
-    console.log("");
-    console.log("");
-    console.log("");
-    console.log("*******************");
-    oldResult.results.forEach((r) => {
-        let filename = r.filename;
-        let oldFileResult = oldResult.results.get(filename);
-        let newFileResult = newResult.results.get(filename);
-
-        console.log(`${filename}: ${oldFileResult.timeTaken}\t->\t${newFileResult.timeTaken}`);
-    });
-    console.log("*******************");
-}
 
 async function GetBenchmarkFiles(): Promise<string[]>
 {
     return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => f.endsWith(".ifc")).map((f) => path.join(BENCHMARK_FILES_DIR, f)).slice(0, 8);
 }
 
+async function getSystemInformations(): Promise<SystemInfo>
+{
+    const gpuTier = await getGPUTier();
+    let systemInfo = new SystemInfo();
+    systemInfo.gpu = gpuTier.gpu ? gpuTier.gpu : "";
+    systemInfo.cpuName = os.cpus()[0]["model"];
+
+    const osFreeMem = os.freemem();
+    const allFreeMem = (osFreeMem / (1024 * 1024));
+    systemInfo.freeRam = allFreeMem;
+    
+    const osTotalMem = os.totalmem();
+    const avbMem = (osTotalMem / (1024 * 1024));
+    systemInfo.totalRam = avbMem;
+
+    return systemInfo;
+}
+function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string, FileResult>): string
+{
+    let formatter = new BenchmarkResultFormatter();
+    formatter.columns = {
+        filename: "filename",
+        fileSize: "Size (mo)",
+        timeTakenToOpenModel: "Time to open model (ms)",
+        timeSuccess: "Time to execute all (ms)",
+        numberOfIfcEntities: "Total ifc entities",
+        totalNumberOfProducedMesh: "Total meshes",
+        totalNumberOfGeometries : "Total geometries",
+        totalNumberOfErrors: "total errors"
+    };
+    let markdown : string = "# System informations \n "+JSON.stringify(systemInfo)+"\n _________ \n";
+    formatter.results = fileResult;
+    markdown += formatter.getMarkdownTable();
+    return markdown;
+}
 async function RunBenchmark()
 {
     let files = await GetBenchmarkFiles();
-
-    console.log(`Previous version...`);
+    let systemInfo = await getSystemInformations();
     console.log(``);
-
-    let oldResult = await BenchmarkWebIFC(oldIfcAPI, files);
-
-    console.log(``);
-    console.log(`New version...`);
+    console.log(systemInfo);
     console.log(``);
 
     let newResult = await BenchmarkWebIFC(newIfcAPI, files);
+    let markdown = generateMarkdownReport(systemInfo, newResult.results);
 
-    combine(oldResult, newResult);
+
+    await writeResult(markdown);
 }
 
 RunBenchmark();
