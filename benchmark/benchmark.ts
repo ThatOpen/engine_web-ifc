@@ -4,7 +4,6 @@ import * as os from 'os';
 
 import { getGPUTier } from 'detect-gpu';
 import * as WebIFC from '../dist/web-ifc-api-node';
-import { IfcConstructionMaterialResourceTypeEnum, ms } from '../dist/web-ifc-api-node';
 
 let newIfcAPI = new WebIFC.IfcAPI();
 const OUTPUT_FILE = '../benchmark.md';
@@ -27,6 +26,12 @@ class SystemInfo{
     freeRam: number;
     totalRam: number;
 }
+
+const ms = (): number => {
+  const date = new Date();
+  return date.getTime();
+};
+
 // hack Object.fromEntries doesn't works
 function mapToObj(inputMap) {
     let obj = {};
