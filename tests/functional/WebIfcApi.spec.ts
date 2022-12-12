@@ -143,7 +143,15 @@ describe('WebIfcApi reading methods', () => {
         ifcApi.CreateIfcGuidToExpressIdMapping(modelID);
         expect(ifcApi.ifcGuidMap.get(0)?.get(expressIDMatchingGuid.expressID)).toEqual(expressIDMatchingGuid.guid);
     })
-
+    test('can return the next highest expressID if the ID is sequential', () => {
+        expect(ifcApi.GetNextExpressID(modelID, 5)).toBe(6);
+    })
+    test('can return the next highest expressID if the ID is not sequential', () => {
+        expect(ifcApi.GetNextExpressID(modelID, 9)).toBe(11);
+    })
+    test('returns same expressID if it is the max ID', () => {
+        expect(ifcApi.GetNextExpressID(modelID, 14312)).toBe(14312);
+    })
 
 
 })
