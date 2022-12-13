@@ -60,8 +60,8 @@ export default async function() {
             let relID = lines.get(i);
             let rel = ifcapi.GetLine(modelID, relID) as WebIFC.IFC2X3.IfcRelDefinesByProperties;
             let foundElement = false;
-            rel.RelatedObjects.forEach((relID: WebIFC.Handle<WebIFC.IFC2X3.IfcObjectDefinition>) => {
-                if (relID.value === elementID)
+            rel.RelatedObjects.forEach((relID: any ) => {
+                if (typeof relID.value != "undefined" &&  relID.value === elementID)
                 {
                     foundElement = true;
                 }
@@ -78,13 +78,13 @@ export default async function() {
         }
 
         // count number of properties
-        let propsets = propSetIds.map(id => ifcapi.GetLine(modelID, id, true));
+        let propsets = propSetIds.map((id:number) => ifcapi.GetLine(modelID, id, true));
 
         Equals("num propsets", propsets.length, 5);
 
         let props: any = [];
-        propsets.forEach((set) => {
-            set.HasProperties.forEach(p => {
+        propsets.forEach((set:any) => {
+            set.HasProperties.forEach((p:any) => {
                 console.log(`${set.Name.value}/${p.Name.value}: [${p.NominalValue.label}] ${p.NominalValue.value}`);
                 props.push(p);
             });

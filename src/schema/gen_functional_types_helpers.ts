@@ -19,7 +19,7 @@ export function sortEntities(entities: Array<Entity>) {
   return sortedEntities;
 }
 
-export function generateClass(entity, buffer, types, schemaName) 
+export function generateClass(entity:Entity, buffer: Array<string>, types:Type[], schemaName:string) 
 {
 
   if (!entity.parent)
@@ -34,7 +34,7 @@ export function generateClass(entity, buffer, types, schemaName)
   }
   
   entity.props.forEach((param) => {
-    let isType: boolean = types.some( x => x.name == param.name);
+    let isType: boolean = types.some( (x:Type) => x.name == param.name);
     let propType = `${(isType || param.primitive) ? param.type : "(Handle<" + schemaName + "."+ param.type + `> | ${schemaName}.${param.type})` }${param.set ? "[]" : ""} ${param.optional ? "| null" : ""}`;
     buffer.push(`\t\t${param.name}: ${propType};`)
   });
@@ -86,7 +86,7 @@ export function makeCRCTable(){
     return crcTable;
 }
 
-export function crc32(str,crcTable) {
+export function crc32(str:string,crcTable:Array<number> ) {
     var crc = 0 ^ (-1);
 
     for (var i = 0; i < str.length; i++ ) {
@@ -96,7 +96,7 @@ export function crc32(str,crcTable) {
     return (crc ^ (-1)) >>> 0;
 }
 
-export function expTypeToTSType(expTypeName)
+export function expTypeToTSType(expTypeName:string)
 {
     let tsType = expTypeName;
     if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER")
@@ -123,7 +123,7 @@ export function expTypeToTSType(expTypeName)
     return tsType;
 }
 
-export function parseInverse(line,entity) 
+export function parseInverse(line:string,entity:Entity) 
 {
     let split = line.split(" ");
     let name = split[0].replace("INVERSE","").trim();
@@ -139,7 +139,7 @@ export function parseInverse(line,entity)
     });  
 }
 
-export function parseElements(data)
+export function parseElements(data:string)
 {
     let lines = data.split(";");
 
@@ -195,7 +195,7 @@ export function parseElements(data)
             readProps = false;
             readInverse = true;
             // there is one inverse property on this line
-            parseInverse(line,entity);
+            if (entity) parseInverse(line,entity);
         }
         else if (line.indexOf("DERIVE") == 0)
         {
@@ -212,7 +212,7 @@ export function parseElements(data)
             readProps = false;
             readInverse = false;
 
-            let split = line.split(" ").map((s) => s.trim());
+            let split = line.split(" ").map((s:string) => s.trim());
             let name = split[1];
 
 
@@ -232,7 +232,7 @@ export function parseElements(data)
                 let secondBracket = line.indexOf(")");
 
                 let stringList = line.substring(firstBracket + 1, secondBracket);
-                values = stringList.split(",").map((s) => s.trim());
+                values = stringList.split(",").map((s:string) => s.trim());
             }
             else
             {

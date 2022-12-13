@@ -4,7 +4,7 @@
 
 import {IfcEntities,IfcElements,FILE_SCHEMA} from "./ifc-schema";
 
-let WebIFCWasm;
+let WebIFCWasm: any;
 
 //@ts-ignore
 if (typeof self !== 'undefined' && self.crossOriginIsolated)
@@ -455,7 +455,7 @@ export class IfcAPI
         return this.getSubArray(this.wasmModule.HEAPU32, ptr, size);
     }
 
-    getSubArray(heap, startPtr, sizeBytes) {
+    getSubArray(heap:any, startPtr:number, sizeBytes:number) {
         return heap.subarray(startPtr / 4, startPtr / 4 + sizeBytes).slice(0);
     }
 

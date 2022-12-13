@@ -15,8 +15,8 @@ tsHelper.push(`import {RawLineData} from "./web-ifc-api";`);
 tsHelper.push();
 tsHelper.push(`export class Handle<T> {`);
 tsHelper.push(`\tvalue: number;`);
-tsHelper.push(`\tlabel: string | null;`)
-tsHelper.push(`\tvalueType: number | null;`)
+tsHelper.push(`\tlabel!: string | null;`)
+tsHelper.push(`\tvalueType!: number | null;`)
 tsHelper.push(`\tconstructor(id: number) { this.value = id; }`);
 tsHelper.push(`\ttoTape(args: unknown[]){ args.push({ type: 5, value: this.value }); }`);
 tsHelper.push(`}`);
