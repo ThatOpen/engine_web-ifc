@@ -41,7 +41,7 @@ export function generateClass(entity, buffer, types, schemaName)
   
   entity.inverseProps.forEach((prop) => {
     let type = `${"(Handle<" + schemaName + "."+ prop.type + `> | ${schemaName}.${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
-    buffer.push(`\t\t${prop.name}: ${type};`);
+    buffer.push(`\t\t${prop.name}!: ${type};`);
   });
 
   buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.map((p) => `${p.name}: ${(types.some( x => x.name == p.name) || p.primitive) ? p.type : "(Handle<" + schemaName + "."+ p.type + `> | ${schemaName}.${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)

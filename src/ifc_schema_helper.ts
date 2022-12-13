@@ -16182,8 +16182,8 @@ export namespace IFC2X3 {
 		Purpose: (Handle<IFC2X3.IfcAddressTypeEnum> | IFC2X3.IfcAddressTypeEnum) | null;
 		Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null;
 		UserDefinedPurpose: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
-		OfPerson: (Handle<IFC2X3.IfcPerson> | IFC2X3.IfcPerson)[] | null;
-		OfOrganization: (Handle<IFC2X3.IfcOrganization> | IFC2X3.IfcOrganization)[] | null;
+		OfPerson!: (Handle<IFC2X3.IfcPerson> | IFC2X3.IfcPerson)[] | null;
+		OfOrganization!: (Handle<IFC2X3.IfcOrganization> | IFC2X3.IfcOrganization)[] | null;
 		constructor(expressID: number, type: number, Purpose: (Handle<IFC2X3.IfcAddressTypeEnum> | IFC2X3.IfcAddressTypeEnum) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, UserDefinedPurpose: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			this.expressID = expressID;
@@ -16241,9 +16241,9 @@ export namespace IFC2X3 {
 		UnitBasis: (Handle<IFC2X3.IfcMeasureWithUnit> | IFC2X3.IfcMeasureWithUnit) | null;
 		ApplicableDate: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null;
 		FixedUntilDate: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null;
-		ValuesReferenced: (Handle<IFC2X3.IfcReferencesValueDocument> | IFC2X3.IfcReferencesValueDocument)[] | null;
-		ValueOfComponents: (Handle<IFC2X3.IfcAppliedValueRelationship> | IFC2X3.IfcAppliedValueRelationship)[] | null;
-		IsComponentIn: (Handle<IFC2X3.IfcAppliedValueRelationship> | IFC2X3.IfcAppliedValueRelationship)[] | null;
+		ValuesReferenced!: (Handle<IFC2X3.IfcReferencesValueDocument> | IFC2X3.IfcReferencesValueDocument)[] | null;
+		ValueOfComponents!: (Handle<IFC2X3.IfcAppliedValueRelationship> | IFC2X3.IfcAppliedValueRelationship)[] | null;
+		IsComponentIn!: (Handle<IFC2X3.IfcAppliedValueRelationship> | IFC2X3.IfcAppliedValueRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, AppliedValue: (Handle<IFC2X3.IfcAppliedValueSelect> | IFC2X3.IfcAppliedValueSelect) | null, UnitBasis: (Handle<IFC2X3.IfcMeasureWithUnit> | IFC2X3.IfcMeasureWithUnit) | null, ApplicableDate: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, FixedUntilDate: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null)
 		{
 			this.expressID = expressID;
@@ -16307,9 +16307,9 @@ export namespace IFC2X3 {
 		ApprovalQualifier: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null;
 		Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) ;
 		Identifier: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) ;
-		Actors: (Handle<IFC2X3.IfcApprovalActorRelationship> | IFC2X3.IfcApprovalActorRelationship)[] | null;
-		IsRelatedWith: (Handle<IFC2X3.IfcApprovalRelationship> | IFC2X3.IfcApprovalRelationship)[] | null;
-		Relates: (Handle<IFC2X3.IfcApprovalRelationship> | IFC2X3.IfcApprovalRelationship)[] | null;
+		Actors!: (Handle<IFC2X3.IfcApprovalActorRelationship> | IFC2X3.IfcApprovalActorRelationship)[] | null;
+		IsRelatedWith!: (Handle<IFC2X3.IfcApprovalRelationship> | IFC2X3.IfcApprovalRelationship)[] | null;
+		Relates!: (Handle<IFC2X3.IfcApprovalRelationship> | IFC2X3.IfcApprovalRelationship)[] | null;
 		constructor(expressID: number, type: number, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ApprovalDateTime: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) , ApprovalStatus: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ApprovalLevel: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ApprovalQualifier: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) , Identifier: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) )
 		{
 			this.expressID = expressID;
@@ -16567,7 +16567,7 @@ export namespace IFC2X3 {
 		Edition: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) ;
 		EditionDate: (Handle<IFC2X3.IfcCalendarDate> | IFC2X3.IfcCalendarDate) | null;
 		Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) ;
-		Contains: (Handle<IFC2X3.IfcClassificationItem> | IFC2X3.IfcClassificationItem)[] | null;
+		Contains!: (Handle<IFC2X3.IfcClassificationItem> | IFC2X3.IfcClassificationItem)[] | null;
 		constructor(expressID: number, type: number, Source: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) , Edition: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) , EditionDate: (Handle<IFC2X3.IfcCalendarDate> | IFC2X3.IfcCalendarDate) | null, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) )
 		{
 			this.expressID = expressID;
@@ -16595,8 +16595,8 @@ export namespace IFC2X3 {
 		Notation: (Handle<IFC2X3.IfcClassificationNotationFacet> | IFC2X3.IfcClassificationNotationFacet) ;
 		ItemOf: (Handle<IFC2X3.IfcClassification> | IFC2X3.IfcClassification) | null;
 		Title: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) ;
-		IsClassifiedItemIn: (Handle<IFC2X3.IfcClassificationItemRelationship> | IFC2X3.IfcClassificationItemRelationship)[] | null;
-		IsClassifyingItemIn: (Handle<IFC2X3.IfcClassificationItemRelationship> | IFC2X3.IfcClassificationItemRelationship)[] | null;
+		IsClassifiedItemIn!: (Handle<IFC2X3.IfcClassificationItemRelationship> | IFC2X3.IfcClassificationItemRelationship)[] | null;
+		IsClassifyingItemIn!: (Handle<IFC2X3.IfcClassificationItemRelationship> | IFC2X3.IfcClassificationItemRelationship)[] | null;
 		constructor(expressID: number, type: number, Notation: (Handle<IFC2X3.IfcClassificationNotationFacet> | IFC2X3.IfcClassificationNotationFacet) , ItemOf: (Handle<IFC2X3.IfcClassification> | IFC2X3.IfcClassification) | null, Title: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) )
 		{
 			this.expressID = expressID;
@@ -16802,12 +16802,12 @@ export namespace IFC2X3 {
 		CreatingActor: (Handle<IFC2X3.IfcActorSelect> | IFC2X3.IfcActorSelect) | null;
 		CreationTime: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null;
 		UserDefinedGrade: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
-		ClassifiedAs: (Handle<IFC2X3.IfcConstraintClassificationRelationship> | IFC2X3.IfcConstraintClassificationRelationship)[] | null;
-		RelatesConstraints: (Handle<IFC2X3.IfcConstraintRelationship> | IFC2X3.IfcConstraintRelationship)[] | null;
-		IsRelatedWith: (Handle<IFC2X3.IfcConstraintRelationship> | IFC2X3.IfcConstraintRelationship)[] | null;
-		PropertiesForConstraint: (Handle<IFC2X3.IfcPropertyConstraintRelationship> | IFC2X3.IfcPropertyConstraintRelationship)[] | null;
-		Aggregates: (Handle<IFC2X3.IfcConstraintAggregationRelationship> | IFC2X3.IfcConstraintAggregationRelationship)[] | null;
-		IsAggregatedIn: (Handle<IFC2X3.IfcConstraintAggregationRelationship> | IFC2X3.IfcConstraintAggregationRelationship)[] | null;
+		ClassifiedAs!: (Handle<IFC2X3.IfcConstraintClassificationRelationship> | IFC2X3.IfcConstraintClassificationRelationship)[] | null;
+		RelatesConstraints!: (Handle<IFC2X3.IfcConstraintRelationship> | IFC2X3.IfcConstraintRelationship)[] | null;
+		IsRelatedWith!: (Handle<IFC2X3.IfcConstraintRelationship> | IFC2X3.IfcConstraintRelationship)[] | null;
+		PropertiesForConstraint!: (Handle<IFC2X3.IfcPropertyConstraintRelationship> | IFC2X3.IfcPropertyConstraintRelationship)[] | null;
+		Aggregates!: (Handle<IFC2X3.IfcConstraintAggregationRelationship> | IFC2X3.IfcConstraintAggregationRelationship)[] | null;
+		IsAggregatedIn!: (Handle<IFC2X3.IfcConstraintAggregationRelationship> | IFC2X3.IfcConstraintAggregationRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) , Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ConstraintGrade: (Handle<IFC2X3.IfcConstraintEnum> | IFC2X3.IfcConstraintEnum) , ConstraintSource: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, CreatingActor: (Handle<IFC2X3.IfcActorSelect> | IFC2X3.IfcActorSelect) | null, CreationTime: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, UserDefinedGrade: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			this.expressID = expressID;
@@ -17219,8 +17219,8 @@ export namespace IFC2X3 {
 		ValidUntil: (Handle<IFC2X3.IfcCalendarDate> | IFC2X3.IfcCalendarDate) | null;
 		Confidentiality: (Handle<IFC2X3.IfcDocumentConfidentialityEnum> | IFC2X3.IfcDocumentConfidentialityEnum) | null;
 		Status: (Handle<IFC2X3.IfcDocumentStatusEnum> | IFC2X3.IfcDocumentStatusEnum) | null;
-		IsPointedTo: (Handle<IFC2X3.IfcDocumentInformationRelationship> | IFC2X3.IfcDocumentInformationRelationship)[] | null;
-		IsPointer: (Handle<IFC2X3.IfcDocumentInformationRelationship> | IFC2X3.IfcDocumentInformationRelationship)[] | null;
+		IsPointedTo!: (Handle<IFC2X3.IfcDocumentInformationRelationship> | IFC2X3.IfcDocumentInformationRelationship)[] | null;
+		IsPointer!: (Handle<IFC2X3.IfcDocumentInformationRelationship> | IFC2X3.IfcDocumentInformationRelationship)[] | null;
 		constructor(expressID: number, type: number, DocumentId: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) , Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, DocumentReferences: (Handle<IFC2X3.IfcDocumentReference> | IFC2X3.IfcDocumentReference)[] | null, Purpose: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, IntendedUse: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, Scope: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, Revision: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, DocumentOwner: (Handle<IFC2X3.IfcActorSelect> | IFC2X3.IfcActorSelect) | null, Editors: (Handle<IFC2X3.IfcActorSelect> | IFC2X3.IfcActorSelect)[] | null, CreationTime: (Handle<IFC2X3.IfcDateAndTime> | IFC2X3.IfcDateAndTime) | null, LastRevisionTime: (Handle<IFC2X3.IfcDateAndTime> | IFC2X3.IfcDateAndTime) | null, ElectronicFormat: (Handle<IFC2X3.IfcDocumentElectronicFormat> | IFC2X3.IfcDocumentElectronicFormat) | null, ValidFrom: (Handle<IFC2X3.IfcCalendarDate> | IFC2X3.IfcCalendarDate) | null, ValidUntil: (Handle<IFC2X3.IfcCalendarDate> | IFC2X3.IfcCalendarDate) | null, Confidentiality: (Handle<IFC2X3.IfcDocumentConfidentialityEnum> | IFC2X3.IfcDocumentConfidentialityEnum) | null, Status: (Handle<IFC2X3.IfcDocumentStatusEnum> | IFC2X3.IfcDocumentStatusEnum) | null)
 		{
 			this.expressID = expressID;
@@ -17432,10 +17432,10 @@ export namespace IFC2X3 {
 		AxisTag: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
 		AxisCurve: (Handle<IFC2X3.IfcCurve> | IFC2X3.IfcCurve) ;
 		SameSense: (Handle<IFC2X3.IfcBoolean> | IFC2X3.IfcBoolean) ;
-		PartOfW: (Handle<IFC2X3.IfcGrid> | IFC2X3.IfcGrid)[] | null;
-		PartOfV: (Handle<IFC2X3.IfcGrid> | IFC2X3.IfcGrid)[] | null;
-		PartOfU: (Handle<IFC2X3.IfcGrid> | IFC2X3.IfcGrid)[] | null;
-		HasIntersections: (Handle<IFC2X3.IfcVirtualGridIntersection> | IFC2X3.IfcVirtualGridIntersection)[] | null;
+		PartOfW!: (Handle<IFC2X3.IfcGrid> | IFC2X3.IfcGrid)[] | null;
+		PartOfV!: (Handle<IFC2X3.IfcGrid> | IFC2X3.IfcGrid)[] | null;
+		PartOfU!: (Handle<IFC2X3.IfcGrid> | IFC2X3.IfcGrid)[] | null;
+		HasIntersections!: (Handle<IFC2X3.IfcVirtualGridIntersection> | IFC2X3.IfcVirtualGridIntersection)[] | null;
 		constructor(expressID: number, type: number, AxisTag: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, AxisCurve: (Handle<IFC2X3.IfcCurve> | IFC2X3.IfcCurve) , SameSense: (Handle<IFC2X3.IfcBoolean> | IFC2X3.IfcBoolean) )
 		{
 			this.expressID = expressID;
@@ -17511,7 +17511,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcLibraryReference extends IFC2X3.IfcExternalReference {
-		ReferenceIntoLibrary: (Handle<IFC2X3.IfcLibraryInformation> | IFC2X3.IfcLibraryInformation)[] | null;
+		ReferenceIntoLibrary!: (Handle<IFC2X3.IfcLibraryInformation> | IFC2X3.IfcLibraryInformation)[] | null;
 		constructor(expressID: number, type: number, Location: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ItemReference: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,Location, ItemReference, Name);
@@ -17612,8 +17612,8 @@ export namespace IFC2X3 {
 		expressID: number;
 		type: number;
 		Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) ;
-		HasRepresentation: (Handle<IFC2X3.IfcMaterialDefinitionRepresentation> | IFC2X3.IfcMaterialDefinitionRepresentation)[] | null;
-		ClassifiedAs: (Handle<IFC2X3.IfcMaterialClassificationRelationship> | IFC2X3.IfcMaterialClassificationRelationship)[] | null;
+		HasRepresentation!: (Handle<IFC2X3.IfcMaterialDefinitionRepresentation> | IFC2X3.IfcMaterialDefinitionRepresentation)[] | null;
+		ClassifiedAs!: (Handle<IFC2X3.IfcMaterialClassificationRelationship> | IFC2X3.IfcMaterialClassificationRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) )
 		{
 			this.expressID = expressID;
@@ -17662,7 +17662,7 @@ export namespace IFC2X3 {
 		Material: (Handle<IFC2X3.IfcMaterial> | IFC2X3.IfcMaterial) | null;
 		LayerThickness: (Handle<IFC2X3.IfcPositiveLengthMeasure> | IFC2X3.IfcPositiveLengthMeasure) ;
 		IsVentilated: (Handle<IFC2X3.IfcLogical> | IFC2X3.IfcLogical) | null;
-		ToMaterialLayerSet: (Handle<IFC2X3.IfcMaterialLayerSet> | IFC2X3.IfcMaterialLayerSet) | null;
+		ToMaterialLayerSet!: (Handle<IFC2X3.IfcMaterialLayerSet> | IFC2X3.IfcMaterialLayerSet) | null;
 		constructor(expressID: number, type: number, Material: (Handle<IFC2X3.IfcMaterial> | IFC2X3.IfcMaterial) | null, LayerThickness: (Handle<IFC2X3.IfcPositiveLengthMeasure> | IFC2X3.IfcPositiveLengthMeasure) , IsVentilated: (Handle<IFC2X3.IfcLogical> | IFC2X3.IfcLogical) | null)
 		{
 			this.expressID = expressID;
@@ -17933,8 +17933,8 @@ export namespace IFC2X3 {
 	export class IfcObjectPlacement {
 		expressID: number;
 		type: number;
-		PlacesObject: (Handle<IFC2X3.IfcProduct> | IFC2X3.IfcProduct)[] | null;
-		ReferencedByPlacements: (Handle<IFC2X3.IfcLocalPlacement> | IFC2X3.IfcLocalPlacement)[] | null;
+		PlacesObject!: (Handle<IFC2X3.IfcProduct> | IFC2X3.IfcProduct)[] | null;
+		ReferencedByPlacements!: (Handle<IFC2X3.IfcLocalPlacement> | IFC2X3.IfcLocalPlacement)[] | null;
 		constructor(expressID: number, type: number, )
 		{
 			this.expressID = expressID;
@@ -18020,9 +18020,9 @@ export namespace IFC2X3 {
 		Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null;
 		Roles: (Handle<IFC2X3.IfcActorRole> | IFC2X3.IfcActorRole)[] | null;
 		Addresses: (Handle<IFC2X3.IfcAddress> | IFC2X3.IfcAddress)[] | null;
-		IsRelatedBy: (Handle<IFC2X3.IfcOrganizationRelationship> | IFC2X3.IfcOrganizationRelationship)[] | null;
-		Relates: (Handle<IFC2X3.IfcOrganizationRelationship> | IFC2X3.IfcOrganizationRelationship)[] | null;
-		Engages: (Handle<IFC2X3.IfcPersonAndOrganization> | IFC2X3.IfcPersonAndOrganization)[] | null;
+		IsRelatedBy!: (Handle<IFC2X3.IfcOrganizationRelationship> | IFC2X3.IfcOrganizationRelationship)[] | null;
+		Relates!: (Handle<IFC2X3.IfcOrganizationRelationship> | IFC2X3.IfcOrganizationRelationship)[] | null;
+		Engages!: (Handle<IFC2X3.IfcPersonAndOrganization> | IFC2X3.IfcPersonAndOrganization)[] | null;
 		constructor(expressID: number, type: number, Id: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) , Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, Roles: (Handle<IFC2X3.IfcActorRole> | IFC2X3.IfcActorRole)[] | null, Addresses: (Handle<IFC2X3.IfcAddress> | IFC2X3.IfcAddress)[] | null)
 		{
 			this.expressID = expressID;
@@ -18120,7 +18120,7 @@ export namespace IFC2X3 {
 		SuffixTitles: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel)[] | null;
 		Roles: (Handle<IFC2X3.IfcActorRole> | IFC2X3.IfcActorRole)[] | null;
 		Addresses: (Handle<IFC2X3.IfcAddress> | IFC2X3.IfcAddress)[] | null;
-		EngagedIn: (Handle<IFC2X3.IfcPersonAndOrganization> | IFC2X3.IfcPersonAndOrganization)[] | null;
+		EngagedIn!: (Handle<IFC2X3.IfcPersonAndOrganization> | IFC2X3.IfcPersonAndOrganization)[] | null;
 		constructor(expressID: number, type: number, Id: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null, FamilyName: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, GivenName: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, MiddleNames: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel)[] | null, PrefixTitles: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel)[] | null, SuffixTitles: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel)[] | null, Roles: (Handle<IFC2X3.IfcActorRole> | IFC2X3.IfcActorRole)[] | null, Addresses: (Handle<IFC2X3.IfcAddress> | IFC2X3.IfcAddress)[] | null)
 		{
 			this.expressID = expressID;
@@ -18177,7 +18177,7 @@ export namespace IFC2X3 {
 		type: number;
 		Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) ;
 		Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null;
-		PartOfComplex: (Handle<IFC2X3.IfcPhysicalComplexQuantity> | IFC2X3.IfcPhysicalComplexQuantity)[] | null;
+		PartOfComplex!: (Handle<IFC2X3.IfcPhysicalComplexQuantity> | IFC2X3.IfcPhysicalComplexQuantity)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) , Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null)
 		{
 			this.expressID = expressID;
@@ -18521,9 +18521,9 @@ export namespace IFC2X3 {
 		type: number;
 		Name: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) ;
 		Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null;
-		PropertyForDependance: (Handle<IFC2X3.IfcPropertyDependencyRelationship> | IFC2X3.IfcPropertyDependencyRelationship)[] | null;
-		PropertyDependsOn: (Handle<IFC2X3.IfcPropertyDependencyRelationship> | IFC2X3.IfcPropertyDependencyRelationship)[] | null;
-		PartOfComplex: (Handle<IFC2X3.IfcComplexProperty> | IFC2X3.IfcComplexProperty)[] | null;
+		PropertyForDependance!: (Handle<IFC2X3.IfcPropertyDependencyRelationship> | IFC2X3.IfcPropertyDependencyRelationship)[] | null;
+		PropertyDependsOn!: (Handle<IFC2X3.IfcPropertyDependencyRelationship> | IFC2X3.IfcPropertyDependencyRelationship)[] | null;
+		PartOfComplex!: (Handle<IFC2X3.IfcComplexProperty> | IFC2X3.IfcComplexProperty)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) , Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null)
 		{
 			this.expressID = expressID;
@@ -18832,9 +18832,9 @@ export namespace IFC2X3 {
 		RepresentationIdentifier: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
 		RepresentationType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
 		Items: (Handle<IFC2X3.IfcRepresentationItem> | IFC2X3.IfcRepresentationItem)[] ;
-		RepresentationMap: (Handle<IFC2X3.IfcRepresentationMap> | IFC2X3.IfcRepresentationMap)[] | null;
-		LayerAssignments: (Handle<IFC2X3.IfcPresentationLayerAssignment> | IFC2X3.IfcPresentationLayerAssignment)[] | null;
-		OfProductRepresentation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation)[] | null;
+		RepresentationMap!: (Handle<IFC2X3.IfcRepresentationMap> | IFC2X3.IfcRepresentationMap)[] | null;
+		LayerAssignments!: (Handle<IFC2X3.IfcPresentationLayerAssignment> | IFC2X3.IfcPresentationLayerAssignment)[] | null;
+		OfProductRepresentation!: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation)[] | null;
 		constructor(expressID: number, type: number, ContextOfItems: (Handle<IFC2X3.IfcRepresentationContext> | IFC2X3.IfcRepresentationContext) , RepresentationIdentifier: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, RepresentationType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Items: (Handle<IFC2X3.IfcRepresentationItem> | IFC2X3.IfcRepresentationItem)[] )
 		{
 			this.expressID = expressID;
@@ -18861,7 +18861,7 @@ export namespace IFC2X3 {
 		type: number;
 		ContextIdentifier: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
 		ContextType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
-		RepresentationsInContext: (Handle<IFC2X3.IfcRepresentation> | IFC2X3.IfcRepresentation)[] | null;
+		RepresentationsInContext!: (Handle<IFC2X3.IfcRepresentation> | IFC2X3.IfcRepresentation)[] | null;
 		constructor(expressID: number, type: number, ContextIdentifier: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ContextType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			this.expressID = expressID;
@@ -18884,8 +18884,8 @@ export namespace IFC2X3 {
 	export class IfcRepresentationItem {
 		expressID: number;
 		type: number;
-		LayerAssignments: (Handle<IFC2X3.IfcPresentationLayerAssignment> | IFC2X3.IfcPresentationLayerAssignment)[] | null;
-		StyledByItem: (Handle<IFC2X3.IfcStyledItem> | IFC2X3.IfcStyledItem)[] | null;
+		LayerAssignments!: (Handle<IFC2X3.IfcPresentationLayerAssignment> | IFC2X3.IfcPresentationLayerAssignment)[] | null;
+		StyledByItem!: (Handle<IFC2X3.IfcStyledItem> | IFC2X3.IfcStyledItem)[] | null;
 		constructor(expressID: number, type: number, )
 		{
 			this.expressID = expressID;
@@ -18908,7 +18908,7 @@ export namespace IFC2X3 {
 		type: number;
 		MappingOrigin: (Handle<IFC2X3.IfcAxis2Placement> | IFC2X3.IfcAxis2Placement) ;
 		MappedRepresentation: (Handle<IFC2X3.IfcRepresentation> | IFC2X3.IfcRepresentation) ;
-		MapUsage: (Handle<IFC2X3.IfcMappedItem> | IFC2X3.IfcMappedItem)[] | null;
+		MapUsage!: (Handle<IFC2X3.IfcMappedItem> | IFC2X3.IfcMappedItem)[] | null;
 		constructor(expressID: number, type: number, MappingOrigin: (Handle<IFC2X3.IfcAxis2Placement> | IFC2X3.IfcAxis2Placement) , MappedRepresentation: (Handle<IFC2X3.IfcRepresentation> | IFC2X3.IfcRepresentation) )
 		{
 			this.expressID = expressID;
@@ -19093,7 +19093,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcShapeModel extends IFC2X3.IfcRepresentation {
-		OfShapeAspect: (Handle<IFC2X3.IfcShapeAspect> | IFC2X3.IfcShapeAspect)[] | null;
+		OfShapeAspect!: (Handle<IFC2X3.IfcShapeAspect> | IFC2X3.IfcShapeAspect)[] | null;
 		constructor(expressID: number, type: number, ContextOfItems: (Handle<IFC2X3.IfcRepresentationContext> | IFC2X3.IfcRepresentationContext) , RepresentationIdentifier: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, RepresentationType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Items: (Handle<IFC2X3.IfcRepresentationItem> | IFC2X3.IfcRepresentationItem)[] )
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
@@ -19478,7 +19478,7 @@ export namespace IFC2X3 {
 		type: number;
 		RowCells: (Handle<IFC2X3.IfcValue> | IFC2X3.IfcValue)[] ;
 		IsHeading: boolean ;
-		OfTable: (Handle<IFC2X3.IfcTable> | IFC2X3.IfcTable) | null;
+		OfTable!: (Handle<IFC2X3.IfcTable> | IFC2X3.IfcTable) | null;
 		constructor(expressID: number, type: number, RowCells: (Handle<IFC2X3.IfcValue> | IFC2X3.IfcValue)[] , IsHeading: boolean )
 		{
 			this.expressID = expressID;
@@ -19666,7 +19666,7 @@ export namespace IFC2X3 {
 	export class IfcTextureCoordinate {
 		expressID: number;
 		type: number;
-		AnnotatedSurface: (Handle<IFC2X3.IfcAnnotationSurface> | IFC2X3.IfcAnnotationSurface)[] | null;
+		AnnotatedSurface!: (Handle<IFC2X3.IfcAnnotationSurface> | IFC2X3.IfcAnnotationSurface)[] | null;
 		constructor(expressID: number, type: number, )
 		{
 			this.expressID = expressID;
@@ -19782,7 +19782,7 @@ export namespace IFC2X3 {
 		DataOrigin: (Handle<IFC2X3.IfcDataOriginEnum> | IFC2X3.IfcDataOriginEnum) ;
 		UserDefinedDataOrigin: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
 		Unit: (Handle<IFC2X3.IfcUnit> | IFC2X3.IfcUnit) | null;
-		DocumentedBy: (Handle<IFC2X3.IfcTimeSeriesReferenceRelationship> | IFC2X3.IfcTimeSeriesReferenceRelationship)[] | null;
+		DocumentedBy!: (Handle<IFC2X3.IfcTimeSeriesReferenceRelationship> | IFC2X3.IfcTimeSeriesReferenceRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) , Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, StartTime: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) , EndTime: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) , TimeSeriesDataType: (Handle<IFC2X3.IfcTimeSeriesDataTypeEnum> | IFC2X3.IfcTimeSeriesDataTypeEnum) , DataOrigin: (Handle<IFC2X3.IfcDataOriginEnum> | IFC2X3.IfcDataOriginEnum) , UserDefinedDataOrigin: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Unit: (Handle<IFC2X3.IfcUnit> | IFC2X3.IfcUnit) | null)
 		{
 			this.expressID = expressID;
@@ -20458,7 +20458,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcDocumentReference extends IFC2X3.IfcExternalReference {
-		ReferenceToDocument: (Handle<IFC2X3.IfcDocumentInformation> | IFC2X3.IfcDocumentInformation)[] | null;
+		ReferenceToDocument!: (Handle<IFC2X3.IfcDocumentInformation> | IFC2X3.IfcDocumentInformation)[] | null;
 		constructor(expressID: number, type: number, Location: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ItemReference: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,Location, ItemReference, Name);
@@ -20763,7 +20763,7 @@ export namespace IFC2X3 {
 		Precision: number | null;
 		WorldCoordinateSystem: (Handle<IFC2X3.IfcAxis2Placement> | IFC2X3.IfcAxis2Placement) ;
 		TrueNorth: (Handle<IFC2X3.IfcDirection> | IFC2X3.IfcDirection) | null;
-		HasSubContexts: (Handle<IFC2X3.IfcGeometricRepresentationSubContext> | IFC2X3.IfcGeometricRepresentationSubContext)[] | null;
+		HasSubContexts!: (Handle<IFC2X3.IfcGeometricRepresentationSubContext> | IFC2X3.IfcGeometricRepresentationSubContext)[] | null;
 		constructor(expressID: number, type: number, ContextIdentifier: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ContextType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, CoordinateSpaceDimension: (Handle<IFC2X3.IfcDimensionCount> | IFC2X3.IfcDimensionCount) , Precision: number | null, WorldCoordinateSystem: (Handle<IFC2X3.IfcAxis2Placement> | IFC2X3.IfcAxis2Placement) , TrueNorth: (Handle<IFC2X3.IfcDirection> | IFC2X3.IfcDirection) | null)
 		{
 			super(expressID,type,ContextIdentifier, ContextType);
@@ -21202,10 +21202,10 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcObjectDefinition extends IFC2X3.IfcRoot {
-		HasAssignments: (Handle<IFC2X3.IfcRelAssigns> | IFC2X3.IfcRelAssigns)[] | null;
-		IsDecomposedBy: (Handle<IFC2X3.IfcRelDecomposes> | IFC2X3.IfcRelDecomposes)[] | null;
-		Decomposes: (Handle<IFC2X3.IfcRelDecomposes> | IFC2X3.IfcRelDecomposes)[] | null;
-		HasAssociations: (Handle<IFC2X3.IfcRelAssociates> | IFC2X3.IfcRelAssociates)[] | null;
+		HasAssignments!: (Handle<IFC2X3.IfcRelAssigns> | IFC2X3.IfcRelAssigns)[] | null;
+		IsDecomposedBy!: (Handle<IFC2X3.IfcRelDecomposes> | IFC2X3.IfcRelDecomposes)[] | null;
+		Decomposes!: (Handle<IFC2X3.IfcRelDecomposes> | IFC2X3.IfcRelDecomposes)[] | null;
+		HasAssociations!: (Handle<IFC2X3.IfcRelAssociates> | IFC2X3.IfcRelAssociates)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -21577,8 +21577,8 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcProductDefinitionShape extends IFC2X3.IfcProductRepresentation {
-		ShapeOfProduct: (Handle<IFC2X3.IfcProduct> | IFC2X3.IfcProduct)[] | null;
-		HasShapeAspects: (Handle<IFC2X3.IfcShapeAspect> | IFC2X3.IfcShapeAspect)[] | null;
+		ShapeOfProduct!: (Handle<IFC2X3.IfcProduct> | IFC2X3.IfcProduct)[] | null;
+		HasShapeAspects!: (Handle<IFC2X3.IfcShapeAspect> | IFC2X3.IfcShapeAspect)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, Representations: (Handle<IFC2X3.IfcRepresentation> | IFC2X3.IfcRepresentation)[] )
 		{
 			super(expressID,type,Name, Description, Representations);
@@ -21619,7 +21619,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcPropertyDefinition extends IFC2X3.IfcRoot {
-		HasAssociations: (Handle<IFC2X3.IfcRelAssociates> | IFC2X3.IfcRelAssociates)[] | null;
+		HasAssociations!: (Handle<IFC2X3.IfcRelAssociates> | IFC2X3.IfcRelAssociates)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -21700,8 +21700,8 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcPropertySetDefinition extends IFC2X3.IfcPropertyDefinition {
-		PropertyDefinitionOf: (Handle<IFC2X3.IfcRelDefinesByProperties> | IFC2X3.IfcRelDefinesByProperties)[] | null;
-		DefinesType: (Handle<IFC2X3.IfcTypeObject> | IFC2X3.IfcTypeObject)[] | null;
+		PropertyDefinitionOf!: (Handle<IFC2X3.IfcRelDefinesByProperties> | IFC2X3.IfcRelDefinesByProperties)[] | null;
+		DefinesType!: (Handle<IFC2X3.IfcTypeObject> | IFC2X3.IfcTypeObject)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -22562,7 +22562,7 @@ export namespace IFC2X3 {
 	export class IfcTypeObject extends IFC2X3.IfcObjectDefinition {
 		ApplicableOccurrence: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
 		HasPropertySets: (Handle<IFC2X3.IfcPropertySetDefinition> | IFC2X3.IfcPropertySetDefinition)[] | null;
-		ObjectTypeOf: (Handle<IFC2X3.IfcRelDefinesByType> | IFC2X3.IfcRelDefinesByType)[] | null;
+		ObjectTypeOf!: (Handle<IFC2X3.IfcRelDefinesByType> | IFC2X3.IfcRelDefinesByType)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ApplicableOccurrence: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, HasPropertySets: (Handle<IFC2X3.IfcPropertySetDefinition> | IFC2X3.IfcPropertySetDefinition)[] | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -23203,7 +23203,7 @@ export namespace IFC2X3 {
 		Transition: (Handle<IFC2X3.IfcTransitionCode> | IFC2X3.IfcTransitionCode) ;
 		SameSense: boolean ;
 		ParentCurve: (Handle<IFC2X3.IfcCurve> | IFC2X3.IfcCurve) ;
-		UsingCurves: (Handle<IFC2X3.IfcCompositeCurve> | IFC2X3.IfcCompositeCurve)[] | null;
+		UsingCurves!: (Handle<IFC2X3.IfcCompositeCurve> | IFC2X3.IfcCompositeCurve)[] | null;
 		constructor(expressID: number, type: number, Transition: (Handle<IFC2X3.IfcTransitionCode> | IFC2X3.IfcTransitionCode) , SameSense: boolean , ParentCurve: (Handle<IFC2X3.IfcCurve> | IFC2X3.IfcCurve) )
 		{
 			super(expressID,type);
@@ -23399,7 +23399,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcDimensionCurve extends IFC2X3.IfcAnnotationCurveOccurrence {
-		AnnotatedBySymbols: (Handle<IFC2X3.IfcTerminatorSymbol> | IFC2X3.IfcTerminatorSymbol)[] | null;
+		AnnotatedBySymbols!: (Handle<IFC2X3.IfcTerminatorSymbol> | IFC2X3.IfcTerminatorSymbol)[] | null;
 		constructor(expressID: number, type: number, Item: (Handle<IFC2X3.IfcRepresentationItem> | IFC2X3.IfcRepresentationItem) | null, Styles: (Handle<IFC2X3.IfcPresentationStyleAssignment> | IFC2X3.IfcPresentationStyleAssignment)[] , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,Item, Styles, Name);
@@ -23547,8 +23547,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcDraughtingCallout extends IFC2X3.IfcGeometricRepresentationItem {
 		Contents: (Handle<IFC2X3.IfcDraughtingCalloutElement> | IFC2X3.IfcDraughtingCalloutElement)[] ;
-		IsRelatedFromCallout: (Handle<IFC2X3.IfcDraughtingCalloutRelationship> | IFC2X3.IfcDraughtingCalloutRelationship)[] | null;
-		IsRelatedToCallout: (Handle<IFC2X3.IfcDraughtingCalloutRelationship> | IFC2X3.IfcDraughtingCalloutRelationship)[] | null;
+		IsRelatedFromCallout!: (Handle<IFC2X3.IfcDraughtingCalloutRelationship> | IFC2X3.IfcDraughtingCalloutRelationship)[] | null;
+		IsRelatedToCallout!: (Handle<IFC2X3.IfcDraughtingCalloutRelationship> | IFC2X3.IfcDraughtingCalloutRelationship)[] | null;
 		constructor(expressID: number, type: number, Contents: (Handle<IFC2X3.IfcDraughtingCalloutElement> | IFC2X3.IfcDraughtingCalloutElement)[] )
 		{
 			super(expressID,type);
@@ -24031,7 +24031,7 @@ export namespace IFC2X3 {
 	};
 	export class IfcObject extends IFC2X3.IfcObjectDefinition {
 		ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
-		IsDefinedBy: (Handle<IFC2X3.IfcRelDefines> | IFC2X3.IfcRelDefines)[] | null;
+		IsDefinedBy!: (Handle<IFC2X3.IfcRelDefines> | IFC2X3.IfcRelDefines)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -24161,9 +24161,9 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcProcess extends IFC2X3.IfcObject {
-		OperatesOn: (Handle<IFC2X3.IfcRelAssignsToProcess> | IFC2X3.IfcRelAssignsToProcess)[] | null;
-		IsSuccessorFrom: (Handle<IFC2X3.IfcRelSequence> | IFC2X3.IfcRelSequence)[] | null;
-		IsPredecessorTo: (Handle<IFC2X3.IfcRelSequence> | IFC2X3.IfcRelSequence)[] | null;
+		OperatesOn!: (Handle<IFC2X3.IfcRelAssignsToProcess> | IFC2X3.IfcRelAssignsToProcess)[] | null;
+		IsSuccessorFrom!: (Handle<IFC2X3.IfcRelSequence> | IFC2X3.IfcRelSequence)[] | null;
+		IsPredecessorTo!: (Handle<IFC2X3.IfcRelSequence> | IFC2X3.IfcRelSequence)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -24183,7 +24183,7 @@ export namespace IFC2X3 {
 	export class IfcProduct extends IFC2X3.IfcObject {
 		ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null;
 		Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null;
-		ReferencedBy: (Handle<IFC2X3.IfcRelAssignsToProduct> | IFC2X3.IfcRelAssignsToProduct)[] | null;
+		ReferencedBy!: (Handle<IFC2X3.IfcRelAssignsToProduct> | IFC2X3.IfcRelAssignsToProduct)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -25331,7 +25331,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcResource extends IFC2X3.IfcObject {
-		ResourceOf: (Handle<IFC2X3.IfcRelAssignsToResource> | IFC2X3.IfcRelAssignsToResource)[] | null;
+		ResourceOf!: (Handle<IFC2X3.IfcRelAssignsToResource> | IFC2X3.IfcRelAssignsToResource)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -25414,9 +25414,9 @@ export namespace IFC2X3 {
 	export class IfcSpatialStructureElement extends IFC2X3.IfcProduct {
 		LongName: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
 		CompositionType: (Handle<IFC2X3.IfcElementCompositionEnum> | IFC2X3.IfcElementCompositionEnum) ;
-		ReferencesElements: (Handle<IFC2X3.IfcRelReferencedInSpatialStructure> | IFC2X3.IfcRelReferencedInSpatialStructure)[] | null;
-		ServicedBySystems: (Handle<IFC2X3.IfcRelServicesBuildings> | IFC2X3.IfcRelServicesBuildings)[] | null;
-		ContainsElements: (Handle<IFC2X3.IfcRelContainedInSpatialStructure> | IFC2X3.IfcRelContainedInSpatialStructure)[] | null;
+		ReferencesElements!: (Handle<IFC2X3.IfcRelReferencedInSpatialStructure> | IFC2X3.IfcRelReferencedInSpatialStructure)[] | null;
+		ServicedBySystems!: (Handle<IFC2X3.IfcRelServicesBuildings> | IFC2X3.IfcRelServicesBuildings)[] | null;
+		ContainsElements!: (Handle<IFC2X3.IfcRelContainedInSpatialStructure> | IFC2X3.IfcRelContainedInSpatialStructure)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, LongName: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, CompositionType: (Handle<IFC2X3.IfcElementCompositionEnum> | IFC2X3.IfcElementCompositionEnum) )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -25474,7 +25474,7 @@ export namespace IFC2X3 {
 	export class IfcStructuralActivity extends IFC2X3.IfcProduct {
 		AppliedLoad: (Handle<IFC2X3.IfcStructuralLoad> | IFC2X3.IfcStructuralLoad) ;
 		GlobalOrLocal: (Handle<IFC2X3.IfcGlobalOrLocalEnum> | IFC2X3.IfcGlobalOrLocalEnum) ;
-		AssignedToStructuralItem: (Handle<IFC2X3.IfcRelConnectsStructuralActivity> | IFC2X3.IfcRelConnectsStructuralActivity) | null;
+		AssignedToStructuralItem!: (Handle<IFC2X3.IfcRelConnectsStructuralActivity> | IFC2X3.IfcRelConnectsStructuralActivity) | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, AppliedLoad: (Handle<IFC2X3.IfcStructuralLoad> | IFC2X3.IfcStructuralLoad) , GlobalOrLocal: (Handle<IFC2X3.IfcGlobalOrLocalEnum> | IFC2X3.IfcGlobalOrLocalEnum) )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -25494,7 +25494,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcStructuralItem extends IFC2X3.IfcProduct {
-		AssignedStructuralActivity: (Handle<IFC2X3.IfcRelConnectsStructuralActivity> | IFC2X3.IfcRelConnectsStructuralActivity)[] | null;
+		AssignedStructuralActivity!: (Handle<IFC2X3.IfcRelConnectsStructuralActivity> | IFC2X3.IfcRelConnectsStructuralActivity)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -25512,8 +25512,8 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcStructuralMember extends IFC2X3.IfcStructuralItem {
-		ReferencesElement: (Handle<IFC2X3.IfcRelConnectsStructuralElement> | IFC2X3.IfcRelConnectsStructuralElement)[] | null;
-		ConnectedBy: (Handle<IFC2X3.IfcRelConnectsStructuralMember> | IFC2X3.IfcRelConnectsStructuralMember)[] | null;
+		ReferencesElement!: (Handle<IFC2X3.IfcRelConnectsStructuralElement> | IFC2X3.IfcRelConnectsStructuralElement)[] | null;
+		ConnectedBy!: (Handle<IFC2X3.IfcRelConnectsStructuralMember> | IFC2X3.IfcRelConnectsStructuralMember)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -25531,7 +25531,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcStructuralReaction extends IFC2X3.IfcStructuralActivity {
-		Causes: (Handle<IFC2X3.IfcStructuralAction> | IFC2X3.IfcStructuralAction)[] | null;
+		Causes!: (Handle<IFC2X3.IfcStructuralAction> | IFC2X3.IfcStructuralAction)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, AppliedLoad: (Handle<IFC2X3.IfcStructuralLoad> | IFC2X3.IfcStructuralLoad) , GlobalOrLocal: (Handle<IFC2X3.IfcGlobalOrLocalEnum> | IFC2X3.IfcGlobalOrLocalEnum) )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
@@ -25737,7 +25737,7 @@ export namespace IFC2X3 {
 	};
 	export class IfcActor extends IFC2X3.IfcObject {
 		TheActor: (Handle<IFC2X3.IfcActorSelect> | IFC2X3.IfcActorSelect) ;
-		IsActingUpon: (Handle<IFC2X3.IfcRelAssignsToActor> | IFC2X3.IfcRelAssignsToActor)[] | null;
+		IsActingUpon!: (Handle<IFC2X3.IfcRelAssignsToActor> | IFC2X3.IfcRelAssignsToActor)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, TheActor: (Handle<IFC2X3.IfcActorSelect> | IFC2X3.IfcActorSelect) )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -25756,7 +25756,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcAnnotation extends IFC2X3.IfcProduct {
-		ContainedInStructure: (Handle<IFC2X3.IfcRelContainedInSpatialStructure> | IFC2X3.IfcRelContainedInSpatialStructure)[] | null;
+		ContainedInStructure!: (Handle<IFC2X3.IfcRelContainedInSpatialStructure> | IFC2X3.IfcRelContainedInSpatialStructure)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -26018,7 +26018,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcControl extends IFC2X3.IfcObject {
-		Controls: (Handle<IFC2X3.IfcRelAssignsToControl> | IFC2X3.IfcRelAssignsToControl)[] | null;
+		Controls!: (Handle<IFC2X3.IfcRelAssignsToControl> | IFC2X3.IfcRelAssignsToControl)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -26226,18 +26226,18 @@ export namespace IFC2X3 {
 	};
 	export class IfcElement extends IFC2X3.IfcProduct {
 		Tag: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null;
-		HasStructuralMember: (Handle<IFC2X3.IfcRelConnectsStructuralElement> | IFC2X3.IfcRelConnectsStructuralElement)[] | null;
-		FillsVoids: (Handle<IFC2X3.IfcRelFillsElement> | IFC2X3.IfcRelFillsElement)[] | null;
-		ConnectedTo: (Handle<IFC2X3.IfcRelConnectsElements> | IFC2X3.IfcRelConnectsElements)[] | null;
-		HasCoverings: (Handle<IFC2X3.IfcRelCoversBldgElements> | IFC2X3.IfcRelCoversBldgElements)[] | null;
-		HasProjections: (Handle<IFC2X3.IfcRelProjectsElement> | IFC2X3.IfcRelProjectsElement)[] | null;
-		ReferencedInStructures: (Handle<IFC2X3.IfcRelReferencedInSpatialStructure> | IFC2X3.IfcRelReferencedInSpatialStructure)[] | null;
-		HasPorts: (Handle<IFC2X3.IfcRelConnectsPortToElement> | IFC2X3.IfcRelConnectsPortToElement)[] | null;
-		HasOpenings: (Handle<IFC2X3.IfcRelVoidsElement> | IFC2X3.IfcRelVoidsElement)[] | null;
-		IsConnectionRealization: (Handle<IFC2X3.IfcRelConnectsWithRealizingElements> | IFC2X3.IfcRelConnectsWithRealizingElements)[] | null;
-		ProvidesBoundaries: (Handle<IFC2X3.IfcRelSpaceBoundary> | IFC2X3.IfcRelSpaceBoundary)[] | null;
-		ConnectedFrom: (Handle<IFC2X3.IfcRelConnectsElements> | IFC2X3.IfcRelConnectsElements)[] | null;
-		ContainedInStructure: (Handle<IFC2X3.IfcRelContainedInSpatialStructure> | IFC2X3.IfcRelContainedInSpatialStructure)[] | null;
+		HasStructuralMember!: (Handle<IFC2X3.IfcRelConnectsStructuralElement> | IFC2X3.IfcRelConnectsStructuralElement)[] | null;
+		FillsVoids!: (Handle<IFC2X3.IfcRelFillsElement> | IFC2X3.IfcRelFillsElement)[] | null;
+		ConnectedTo!: (Handle<IFC2X3.IfcRelConnectsElements> | IFC2X3.IfcRelConnectsElements)[] | null;
+		HasCoverings!: (Handle<IFC2X3.IfcRelCoversBldgElements> | IFC2X3.IfcRelCoversBldgElements)[] | null;
+		HasProjections!: (Handle<IFC2X3.IfcRelProjectsElement> | IFC2X3.IfcRelProjectsElement)[] | null;
+		ReferencedInStructures!: (Handle<IFC2X3.IfcRelReferencedInSpatialStructure> | IFC2X3.IfcRelReferencedInSpatialStructure)[] | null;
+		HasPorts!: (Handle<IFC2X3.IfcRelConnectsPortToElement> | IFC2X3.IfcRelConnectsPortToElement)[] | null;
+		HasOpenings!: (Handle<IFC2X3.IfcRelVoidsElement> | IFC2X3.IfcRelVoidsElement)[] | null;
+		IsConnectionRealization!: (Handle<IFC2X3.IfcRelConnectsWithRealizingElements> | IFC2X3.IfcRelConnectsWithRealizingElements)[] | null;
+		ProvidesBoundaries!: (Handle<IFC2X3.IfcRelSpaceBoundary> | IFC2X3.IfcRelSpaceBoundary)[] | null;
+		ConnectedFrom!: (Handle<IFC2X3.IfcRelConnectsElements> | IFC2X3.IfcRelConnectsElements)[] | null;
+		ContainedInStructure!: (Handle<IFC2X3.IfcRelContainedInSpatialStructure> | IFC2X3.IfcRelContainedInSpatialStructure)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, Tag: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -26508,7 +26508,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcFeatureElementAddition extends IFC2X3.IfcFeatureElement {
-		ProjectsElements: (Handle<IFC2X3.IfcRelProjectsElement> | IFC2X3.IfcRelProjectsElement) | null;
+		ProjectsElements!: (Handle<IFC2X3.IfcRelProjectsElement> | IFC2X3.IfcRelProjectsElement) | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, Tag: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -26526,7 +26526,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcFeatureElementSubtraction extends IFC2X3.IfcFeatureElement {
-		VoidsElements: (Handle<IFC2X3.IfcRelVoidsElement> | IFC2X3.IfcRelVoidsElement) | null;
+		VoidsElements!: (Handle<IFC2X3.IfcRelVoidsElement> | IFC2X3.IfcRelVoidsElement) | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, Tag: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -26738,7 +26738,7 @@ export namespace IFC2X3 {
 		UAxes: (Handle<IFC2X3.IfcGridAxis> | IFC2X3.IfcGridAxis)[] ;
 		VAxes: (Handle<IFC2X3.IfcGridAxis> | IFC2X3.IfcGridAxis)[] ;
 		WAxes: (Handle<IFC2X3.IfcGridAxis> | IFC2X3.IfcGridAxis)[] | null;
-		ContainedInStructure: (Handle<IFC2X3.IfcRelContainedInSpatialStructure> | IFC2X3.IfcRelContainedInSpatialStructure)[] | null;
+		ContainedInStructure!: (Handle<IFC2X3.IfcRelContainedInSpatialStructure> | IFC2X3.IfcRelContainedInSpatialStructure)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, UAxes: (Handle<IFC2X3.IfcGridAxis> | IFC2X3.IfcGridAxis)[] , VAxes: (Handle<IFC2X3.IfcGridAxis> | IFC2X3.IfcGridAxis)[] , WAxes: (Handle<IFC2X3.IfcGridAxis> | IFC2X3.IfcGridAxis)[] | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -26759,7 +26759,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcGroup extends IFC2X3.IfcObject {
-		IsGroupedBy: (Handle<IFC2X3.IfcRelAssignsToGroup> | IFC2X3.IfcRelAssignsToGroup) | null;
+		IsGroupedBy!: (Handle<IFC2X3.IfcRelAssignsToGroup> | IFC2X3.IfcRelAssignsToGroup) | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -27055,7 +27055,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcOpeningElement extends IFC2X3.IfcFeatureElementSubtraction {
-		HasFillings: (Handle<IFC2X3.IfcRelFillsElement> | IFC2X3.IfcRelFillsElement)[] | null;
+		HasFillings!: (Handle<IFC2X3.IfcRelFillsElement> | IFC2X3.IfcRelFillsElement)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, Tag: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -27225,9 +27225,9 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcPort extends IFC2X3.IfcProduct {
-		ContainedIn: (Handle<IFC2X3.IfcRelConnectsPortToElement> | IFC2X3.IfcRelConnectsPortToElement) | null;
-		ConnectedFrom: (Handle<IFC2X3.IfcRelConnectsPorts> | IFC2X3.IfcRelConnectsPorts)[] | null;
-		ConnectedTo: (Handle<IFC2X3.IfcRelConnectsPorts> | IFC2X3.IfcRelConnectsPorts)[] | null;
+		ContainedIn!: (Handle<IFC2X3.IfcRelConnectsPortToElement> | IFC2X3.IfcRelConnectsPortToElement) | null;
+		ConnectedFrom!: (Handle<IFC2X3.IfcRelConnectsPorts> | IFC2X3.IfcRelConnectsPorts)[] | null;
+		ConnectedTo!: (Handle<IFC2X3.IfcRelConnectsPorts> | IFC2X3.IfcRelConnectsPorts)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -27495,7 +27495,7 @@ export namespace IFC2X3 {
 		StartFloat: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null;
 		FinishFloat: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null;
 		Completion: (Handle<IFC2X3.IfcPositiveRatioMeasure> | IFC2X3.IfcPositiveRatioMeasure) | null;
-		ScheduleTimeControlAssigned: (Handle<IFC2X3.IfcRelAssignsTasks> | IFC2X3.IfcRelAssignsTasks) | null;
+		ScheduleTimeControlAssigned!: (Handle<IFC2X3.IfcRelAssignsTasks> | IFC2X3.IfcRelAssignsTasks) | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ActualStart: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, EarlyStart: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, LateStart: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, ScheduleStart: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, ActualFinish: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, EarlyFinish: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, LateFinish: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, ScheduleFinish: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, ScheduleDuration: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null, ActualDuration: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null, RemainingTime: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null, FreeFloat: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null, TotalFloat: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null, IsCritical: boolean | null, StatusTime: (Handle<IFC2X3.IfcDateTimeSelect> | IFC2X3.IfcDateTimeSelect) | null, StartFloat: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null, FinishFloat: (Handle<IFC2X3.IfcTimeMeasure> | IFC2X3.IfcTimeMeasure) | null, Completion: (Handle<IFC2X3.IfcPositiveRatioMeasure> | IFC2X3.IfcPositiveRatioMeasure) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -27600,8 +27600,8 @@ export namespace IFC2X3 {
 	export class IfcSpace extends IFC2X3.IfcSpatialStructureElement {
 		InteriorOrExteriorSpace: (Handle<IFC2X3.IfcInternalOrExternalEnum> | IFC2X3.IfcInternalOrExternalEnum) ;
 		ElevationWithFlooring: (Handle<IFC2X3.IfcLengthMeasure> | IFC2X3.IfcLengthMeasure) | null;
-		HasCoverings: (Handle<IFC2X3.IfcRelCoversSpaces> | IFC2X3.IfcRelCoversSpaces)[] | null;
-		BoundedBy: (Handle<IFC2X3.IfcRelSpaceBoundary> | IFC2X3.IfcRelSpaceBoundary)[] | null;
+		HasCoverings!: (Handle<IFC2X3.IfcRelCoversSpaces> | IFC2X3.IfcRelCoversSpaces)[] | null;
+		BoundedBy!: (Handle<IFC2X3.IfcRelSpaceBoundary> | IFC2X3.IfcRelSpaceBoundary)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, LongName: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, CompositionType: (Handle<IFC2X3.IfcElementCompositionEnum> | IFC2X3.IfcElementCompositionEnum) , InteriorOrExteriorSpace: (Handle<IFC2X3.IfcInternalOrExternalEnum> | IFC2X3.IfcInternalOrExternalEnum) , ElevationWithFlooring: (Handle<IFC2X3.IfcLengthMeasure> | IFC2X3.IfcLengthMeasure) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType);
@@ -27645,8 +27645,8 @@ export namespace IFC2X3 {
 		MinRequiredArea: (Handle<IFC2X3.IfcAreaMeasure> | IFC2X3.IfcAreaMeasure) | null;
 		RequestedLocation: (Handle<IFC2X3.IfcSpatialStructureElement> | IFC2X3.IfcSpatialStructureElement) | null;
 		StandardRequiredArea: (Handle<IFC2X3.IfcAreaMeasure> | IFC2X3.IfcAreaMeasure) ;
-		HasInteractionReqsFrom: (Handle<IFC2X3.IfcRelInteractionRequirements> | IFC2X3.IfcRelInteractionRequirements)[] | null;
-		HasInteractionReqsTo: (Handle<IFC2X3.IfcRelInteractionRequirements> | IFC2X3.IfcRelInteractionRequirements)[] | null;
+		HasInteractionReqsFrom!: (Handle<IFC2X3.IfcRelInteractionRequirements> | IFC2X3.IfcRelInteractionRequirements)[] | null;
+		HasInteractionReqsTo!: (Handle<IFC2X3.IfcRelInteractionRequirements> | IFC2X3.IfcRelInteractionRequirements)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, SpaceProgramIdentifier: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) , MaxRequiredArea: (Handle<IFC2X3.IfcAreaMeasure> | IFC2X3.IfcAreaMeasure) | null, MinRequiredArea: (Handle<IFC2X3.IfcAreaMeasure> | IFC2X3.IfcAreaMeasure) | null, RequestedLocation: (Handle<IFC2X3.IfcSpatialStructureElement> | IFC2X3.IfcSpatialStructureElement) | null, StandardRequiredArea: (Handle<IFC2X3.IfcAreaMeasure> | IFC2X3.IfcAreaMeasure) )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -27748,7 +27748,7 @@ export namespace IFC2X3 {
 	};
 	export class IfcStructuralConnection extends IFC2X3.IfcStructuralItem {
 		AppliedCondition: (Handle<IFC2X3.IfcBoundaryCondition> | IFC2X3.IfcBoundaryCondition) | null;
-		ConnectsStructuralMembers: (Handle<IFC2X3.IfcRelConnectsStructuralMember> | IFC2X3.IfcRelConnectsStructuralMember)[] | null;
+		ConnectsStructuralMembers!: (Handle<IFC2X3.IfcRelConnectsStructuralMember> | IFC2X3.IfcRelConnectsStructuralMember)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, AppliedCondition: (Handle<IFC2X3.IfcBoundaryCondition> | IFC2X3.IfcBoundaryCondition) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -27865,8 +27865,8 @@ export namespace IFC2X3 {
 		ActionSource: (Handle<IFC2X3.IfcActionSourceTypeEnum> | IFC2X3.IfcActionSourceTypeEnum) ;
 		Coefficient: (Handle<IFC2X3.IfcRatioMeasure> | IFC2X3.IfcRatioMeasure) | null;
 		Purpose: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null;
-		SourceOfResultGroup: (Handle<IFC2X3.IfcStructuralResultGroup> | IFC2X3.IfcStructuralResultGroup)[] | null;
-		LoadGroupFor: (Handle<IFC2X3.IfcStructuralAnalysisModel> | IFC2X3.IfcStructuralAnalysisModel)[] | null;
+		SourceOfResultGroup!: (Handle<IFC2X3.IfcStructuralResultGroup> | IFC2X3.IfcStructuralResultGroup)[] | null;
+		LoadGroupFor!: (Handle<IFC2X3.IfcStructuralAnalysisModel> | IFC2X3.IfcStructuralAnalysisModel)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, PredefinedType: (Handle<IFC2X3.IfcLoadGroupTypeEnum> | IFC2X3.IfcLoadGroupTypeEnum) , ActionType: (Handle<IFC2X3.IfcActionTypeEnum> | IFC2X3.IfcActionTypeEnum) , ActionSource: (Handle<IFC2X3.IfcActionSourceTypeEnum> | IFC2X3.IfcActionSourceTypeEnum) , Coefficient: (Handle<IFC2X3.IfcRatioMeasure> | IFC2X3.IfcRatioMeasure) | null, Purpose: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -27983,7 +27983,7 @@ export namespace IFC2X3 {
 		TheoryType: (Handle<IFC2X3.IfcAnalysisTheoryTypeEnum> | IFC2X3.IfcAnalysisTheoryTypeEnum) ;
 		ResultForLoadGroup: (Handle<IFC2X3.IfcStructuralLoadGroup> | IFC2X3.IfcStructuralLoadGroup) | null;
 		IsLinear: boolean ;
-		ResultGroupFor: (Handle<IFC2X3.IfcStructuralAnalysisModel> | IFC2X3.IfcStructuralAnalysisModel)[] | null;
+		ResultGroupFor!: (Handle<IFC2X3.IfcStructuralAnalysisModel> | IFC2X3.IfcStructuralAnalysisModel)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, TheoryType: (Handle<IFC2X3.IfcAnalysisTheoryTypeEnum> | IFC2X3.IfcAnalysisTheoryTypeEnum) , ResultForLoadGroup: (Handle<IFC2X3.IfcStructuralLoadGroup> | IFC2X3.IfcStructuralLoadGroup) | null, IsLinear: boolean )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -28061,7 +28061,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcSystem extends IFC2X3.IfcGroup {
-		ServicesBuildings: (Handle<IFC2X3.IfcRelServicesBuildings> | IFC2X3.IfcRelServicesBuildings)[] | null;
+		ServicesBuildings!: (Handle<IFC2X3.IfcRelServicesBuildings> | IFC2X3.IfcRelServicesBuildings)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -29007,8 +29007,8 @@ export namespace IFC2X3 {
 	};
 	export class IfcCovering extends IFC2X3.IfcBuildingElement {
 		PredefinedType: (Handle<IFC2X3.IfcCoveringTypeEnum> | IFC2X3.IfcCoveringTypeEnum) | null;
-		CoversSpaces: (Handle<IFC2X3.IfcRelCoversSpaces> | IFC2X3.IfcRelCoversSpaces)[] | null;
-		Covers: (Handle<IFC2X3.IfcRelCoversBldgElements> | IFC2X3.IfcRelCoversBldgElements)[] | null;
+		CoversSpaces!: (Handle<IFC2X3.IfcRelCoversSpaces> | IFC2X3.IfcRelCoversSpaces)[] | null;
+		Covers!: (Handle<IFC2X3.IfcRelCoversBldgElements> | IFC2X3.IfcRelCoversBldgElements)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, Tag: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null, PredefinedType: (Handle<IFC2X3.IfcCoveringTypeEnum> | IFC2X3.IfcCoveringTypeEnum) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -29167,7 +29167,7 @@ export namespace IFC2X3 {
 		}
 	};
 	export class IfcDistributionFlowElement extends IFC2X3.IfcDistributionElement {
-		HasControlElements: (Handle<IFC2X3.IfcRelFlowControlElements> | IFC2X3.IfcRelFlowControlElements)[] | null;
+		HasControlElements!: (Handle<IFC2X3.IfcRelFlowControlElements> | IFC2X3.IfcRelFlowControlElements)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, Tag: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -30243,7 +30243,7 @@ export namespace IFC2X3 {
 	};
 	export class IfcDistributionControlElement extends IFC2X3.IfcDistributionElement {
 		ControlElementId: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null;
-		AssignedToFlowElement: (Handle<IFC2X3.IfcRelFlowControlElements> | IFC2X3.IfcRelFlowControlElements)[] | null;
+		AssignedToFlowElement!: (Handle<IFC2X3.IfcRelFlowControlElements> | IFC2X3.IfcRelFlowControlElements)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC2X3.IfcGloballyUniqueId> | IFC2X3.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC2X3.IfcOwnerHistory> | IFC2X3.IfcOwnerHistory) , Name: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, Description: (Handle<IFC2X3.IfcText> | IFC2X3.IfcText) | null, ObjectType: (Handle<IFC2X3.IfcLabel> | IFC2X3.IfcLabel) | null, ObjectPlacement: (Handle<IFC2X3.IfcObjectPlacement> | IFC2X3.IfcObjectPlacement) | null, Representation: (Handle<IFC2X3.IfcProductRepresentation> | IFC2X3.IfcProductRepresentation) | null, Tag: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null, ControlElementId: (Handle<IFC2X3.IfcIdentifier> | IFC2X3.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -34361,7 +34361,7 @@ export namespace IFC4 {
 		Role: (Handle<IFC4.IfcRoleEnum> | IFC4.IfcRoleEnum) ;
 		UserDefinedRole: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
-		HasExternalReference: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		HasExternalReference!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
 		constructor(expressID: number, type: number, Role: (Handle<IFC4.IfcRoleEnum> | IFC4.IfcRoleEnum) , UserDefinedRole: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			this.expressID = expressID;
@@ -34388,8 +34388,8 @@ export namespace IFC4 {
 		Purpose: (Handle<IFC4.IfcAddressTypeEnum> | IFC4.IfcAddressTypeEnum) | null;
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		UserDefinedPurpose: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		OfPerson: (Handle<IFC4.IfcPerson> | IFC4.IfcPerson)[] | null;
-		OfOrganization: (Handle<IFC4.IfcOrganization> | IFC4.IfcOrganization)[] | null;
+		OfPerson!: (Handle<IFC4.IfcPerson> | IFC4.IfcPerson)[] | null;
+		OfOrganization!: (Handle<IFC4.IfcOrganization> | IFC4.IfcOrganization)[] | null;
 		constructor(expressID: number, type: number, Purpose: (Handle<IFC4.IfcAddressTypeEnum> | IFC4.IfcAddressTypeEnum) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, UserDefinedPurpose: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			this.expressID = expressID;
@@ -34451,7 +34451,7 @@ export namespace IFC4 {
 		Condition: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		ArithmeticOperator: (Handle<IFC4.IfcArithmeticOperatorEnum> | IFC4.IfcArithmeticOperatorEnum) | null;
 		Components: (Handle<IFC4.IfcAppliedValue> | IFC4.IfcAppliedValue)[] | null;
-		HasExternalReference: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		HasExternalReference!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, AppliedValue: (Handle<IFC4.IfcAppliedValueSelect> | IFC4.IfcAppliedValueSelect) | null, UnitBasis: (Handle<IFC4.IfcMeasureWithUnit> | IFC4.IfcMeasureWithUnit) | null, ApplicableDate: (Handle<IFC4.IfcDate> | IFC4.IfcDate) | null, FixedUntilDate: (Handle<IFC4.IfcDate> | IFC4.IfcDate) | null, Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Condition: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ArithmeticOperator: (Handle<IFC4.IfcArithmeticOperatorEnum> | IFC4.IfcArithmeticOperatorEnum) | null, Components: (Handle<IFC4.IfcAppliedValue> | IFC4.IfcAppliedValue)[] | null)
 		{
 			this.expressID = expressID;
@@ -34491,11 +34491,11 @@ export namespace IFC4 {
 		Qualifier: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		RequestingApproval: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) | null;
 		GivingApproval: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) | null;
-		HasExternalReferences: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
-		ApprovedObjects: (Handle<IFC4.IfcRelAssociatesApproval> | IFC4.IfcRelAssociatesApproval)[] | null;
-		ApprovedResources: (Handle<IFC4.IfcResourceApprovalRelationship> | IFC4.IfcResourceApprovalRelationship)[] | null;
-		IsRelatedWith: (Handle<IFC4.IfcApprovalRelationship> | IFC4.IfcApprovalRelationship)[] | null;
-		Relates: (Handle<IFC4.IfcApprovalRelationship> | IFC4.IfcApprovalRelationship)[] | null;
+		HasExternalReferences!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		ApprovedObjects!: (Handle<IFC4.IfcRelAssociatesApproval> | IFC4.IfcRelAssociatesApproval)[] | null;
+		ApprovedResources!: (Handle<IFC4.IfcResourceApprovalRelationship> | IFC4.IfcResourceApprovalRelationship)[] | null;
+		IsRelatedWith!: (Handle<IFC4.IfcApprovalRelationship> | IFC4.IfcApprovalRelationship)[] | null;
+		Relates!: (Handle<IFC4.IfcApprovalRelationship> | IFC4.IfcApprovalRelationship)[] | null;
 		constructor(expressID: number, type: number, Identifier: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, TimeOfApproval: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) | null, Status: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Level: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Qualifier: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, RequestingApproval: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) | null, GivingApproval: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) | null)
 		{
 			this.expressID = expressID;
@@ -34737,8 +34737,8 @@ export namespace IFC4 {
 		CreatingActor: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) | null;
 		CreationTime: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) | null;
 		UserDefinedGrade: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		HasExternalReferences: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
-		PropertiesForConstraint: (Handle<IFC4.IfcResourceConstraintRelationship> | IFC4.IfcResourceConstraintRelationship)[] | null;
+		HasExternalReferences!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		PropertiesForConstraint!: (Handle<IFC4.IfcResourceConstraintRelationship> | IFC4.IfcResourceConstraintRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ConstraintGrade: (Handle<IFC4.IfcConstraintEnum> | IFC4.IfcConstraintEnum) , ConstraintSource: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, CreatingActor: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) | null, CreationTime: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) | null, UserDefinedGrade: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			this.expressID = expressID;
@@ -34794,7 +34794,7 @@ export namespace IFC4 {
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		GeodeticDatum: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		VerticalDatum: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
-		HasCoordinateOperation: (Handle<IFC4.IfcCoordinateOperation> | IFC4.IfcCoordinateOperation)[] | null;
+		HasCoordinateOperation!: (Handle<IFC4.IfcCoordinateOperation> | IFC4.IfcCoordinateOperation)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, GeodeticDatum: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, VerticalDatum: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			this.expressID = expressID;
@@ -34943,7 +34943,7 @@ export namespace IFC4 {
 		Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null;
 		Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		ExternalReferenceForResources: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		ExternalReferenceForResources!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
 		constructor(expressID: number, type: number, Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			this.expressID = expressID;
@@ -35021,10 +35021,10 @@ export namespace IFC4 {
 		AxisTag: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		AxisCurve: (Handle<IFC4.IfcCurve> | IFC4.IfcCurve) ;
 		SameSense: (Handle<IFC4.IfcBoolean> | IFC4.IfcBoolean) ;
-		PartOfW: (Handle<IFC4.IfcGrid> | IFC4.IfcGrid)[] | null;
-		PartOfV: (Handle<IFC4.IfcGrid> | IFC4.IfcGrid)[] | null;
-		PartOfU: (Handle<IFC4.IfcGrid> | IFC4.IfcGrid)[] | null;
-		HasIntersections: (Handle<IFC4.IfcVirtualGridIntersection> | IFC4.IfcVirtualGridIntersection)[] | null;
+		PartOfW!: (Handle<IFC4.IfcGrid> | IFC4.IfcGrid)[] | null;
+		PartOfV!: (Handle<IFC4.IfcGrid> | IFC4.IfcGrid)[] | null;
+		PartOfU!: (Handle<IFC4.IfcGrid> | IFC4.IfcGrid)[] | null;
+		HasIntersections!: (Handle<IFC4.IfcVirtualGridIntersection> | IFC4.IfcVirtualGridIntersection)[] | null;
 		constructor(expressID: number, type: number, AxisTag: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, AxisCurve: (Handle<IFC4.IfcCurve> | IFC4.IfcCurve) , SameSense: (Handle<IFC4.IfcBoolean> | IFC4.IfcBoolean) )
 		{
 			this.expressID = expressID;
@@ -35076,8 +35076,8 @@ export namespace IFC4 {
 		VersionDate: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) | null;
 		Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null;
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
-		LibraryInfoForObjects: (Handle<IFC4.IfcRelAssociatesLibrary> | IFC4.IfcRelAssociatesLibrary)[] | null;
-		HasLibraryReferences: (Handle<IFC4.IfcLibraryReference> | IFC4.IfcLibraryReference)[] | null;
+		LibraryInfoForObjects!: (Handle<IFC4.IfcRelAssociatesLibrary> | IFC4.IfcRelAssociatesLibrary)[] | null;
+		HasLibraryReferences!: (Handle<IFC4.IfcLibraryReference> | IFC4.IfcLibraryReference)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Version: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Publisher: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) | null, VersionDate: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) | null, Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			super(expressID,type);
@@ -35104,7 +35104,7 @@ export namespace IFC4 {
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		Language: (Handle<IFC4.IfcLanguageId> | IFC4.IfcLanguageId) | null;
 		ReferencedLibrary: (Handle<IFC4.IfcLibraryInformation> | IFC4.IfcLibraryInformation) | null;
-		LibraryRefForObjects: (Handle<IFC4.IfcRelAssociatesLibrary> | IFC4.IfcRelAssociatesLibrary)[] | null;
+		LibraryRefForObjects!: (Handle<IFC4.IfcRelAssociatesLibrary> | IFC4.IfcRelAssociatesLibrary)[] | null;
 		constructor(expressID: number, type: number, Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Language: (Handle<IFC4.IfcLanguageId> | IFC4.IfcLanguageId) | null, ReferencedLibrary: (Handle<IFC4.IfcLibraryInformation> | IFC4.IfcLibraryInformation) | null)
 		{
 			super(expressID,type,Location, Identification, Name);
@@ -35230,9 +35230,9 @@ export namespace IFC4 {
 	export class IfcMaterialDefinition {
 		expressID: number;
 		type: number;
-		AssociatedTo: (Handle<IFC4.IfcRelAssociatesMaterial> | IFC4.IfcRelAssociatesMaterial)[] | null;
-		HasExternalReferences: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
-		HasProperties: (Handle<IFC4.IfcMaterialProperties> | IFC4.IfcMaterialProperties)[] | null;
+		AssociatedTo!: (Handle<IFC4.IfcRelAssociatesMaterial> | IFC4.IfcRelAssociatesMaterial)[] | null;
+		HasExternalReferences!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		HasProperties!: (Handle<IFC4.IfcMaterialProperties> | IFC4.IfcMaterialProperties)[] | null;
 		constructor(expressID: number, type: number, )
 		{
 			this.expressID = expressID;
@@ -35258,7 +35258,7 @@ export namespace IFC4 {
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		Priority: (Handle<IFC4.IfcInteger> | IFC4.IfcInteger) | null;
-		ToMaterialLayerSet: (Handle<IFC4.IfcMaterialLayerSet> | IFC4.IfcMaterialLayerSet) | null;
+		ToMaterialLayerSet!: (Handle<IFC4.IfcMaterialLayerSet> | IFC4.IfcMaterialLayerSet) | null;
 		constructor(expressID: number, type: number, Material: (Handle<IFC4.IfcMaterial> | IFC4.IfcMaterial) | null, LayerThickness: (Handle<IFC4.IfcNonNegativeLengthMeasure> | IFC4.IfcNonNegativeLengthMeasure) , IsVentilated: (Handle<IFC4.IfcLogical> | IFC4.IfcLogical) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Priority: (Handle<IFC4.IfcInteger> | IFC4.IfcInteger) | null)
 		{
 			super(expressID,type);
@@ -35355,7 +35355,7 @@ export namespace IFC4 {
 		Profile: (Handle<IFC4.IfcProfileDef> | IFC4.IfcProfileDef) ;
 		Priority: (Handle<IFC4.IfcInteger> | IFC4.IfcInteger) | null;
 		Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		ToMaterialProfileSet: (Handle<IFC4.IfcMaterialProfileSet> | IFC4.IfcMaterialProfileSet) | null;
+		ToMaterialProfileSet!: (Handle<IFC4.IfcMaterialProfileSet> | IFC4.IfcMaterialProfileSet) | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Material: (Handle<IFC4.IfcMaterial> | IFC4.IfcMaterial) | null, Profile: (Handle<IFC4.IfcProfileDef> | IFC4.IfcProfileDef) , Priority: (Handle<IFC4.IfcInteger> | IFC4.IfcInteger) | null, Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type);
@@ -35425,7 +35425,7 @@ export namespace IFC4 {
 	export class IfcMaterialUsageDefinition {
 		expressID: number;
 		type: number;
-		AssociatedTo: (Handle<IFC4.IfcRelAssociatesMaterial> | IFC4.IfcRelAssociatesMaterial)[] | null;
+		AssociatedTo!: (Handle<IFC4.IfcRelAssociatesMaterial> | IFC4.IfcRelAssociatesMaterial)[] | null;
 		constructor(expressID: number, type: number, )
 		{
 			this.expressID = expressID;
@@ -35541,8 +35541,8 @@ export namespace IFC4 {
 	export class IfcObjectPlacement {
 		expressID: number;
 		type: number;
-		PlacesObject: (Handle<IFC4.IfcProduct> | IFC4.IfcProduct)[] | null;
-		ReferencedByPlacements: (Handle<IFC4.IfcLocalPlacement> | IFC4.IfcLocalPlacement)[] | null;
+		PlacesObject!: (Handle<IFC4.IfcProduct> | IFC4.IfcProduct)[] | null;
+		ReferencedByPlacements!: (Handle<IFC4.IfcLocalPlacement> | IFC4.IfcLocalPlacement)[] | null;
 		constructor(expressID: number, type: number, )
 		{
 			this.expressID = expressID;
@@ -35593,9 +35593,9 @@ export namespace IFC4 {
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		Roles: (Handle<IFC4.IfcActorRole> | IFC4.IfcActorRole)[] | null;
 		Addresses: (Handle<IFC4.IfcAddress> | IFC4.IfcAddress)[] | null;
-		IsRelatedBy: (Handle<IFC4.IfcOrganizationRelationship> | IFC4.IfcOrganizationRelationship)[] | null;
-		Relates: (Handle<IFC4.IfcOrganizationRelationship> | IFC4.IfcOrganizationRelationship)[] | null;
-		Engages: (Handle<IFC4.IfcPersonAndOrganization> | IFC4.IfcPersonAndOrganization)[] | null;
+		IsRelatedBy!: (Handle<IFC4.IfcOrganizationRelationship> | IFC4.IfcOrganizationRelationship)[] | null;
+		Relates!: (Handle<IFC4.IfcOrganizationRelationship> | IFC4.IfcOrganizationRelationship)[] | null;
+		Engages!: (Handle<IFC4.IfcPersonAndOrganization> | IFC4.IfcPersonAndOrganization)[] | null;
 		constructor(expressID: number, type: number, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Roles: (Handle<IFC4.IfcActorRole> | IFC4.IfcActorRole)[] | null, Addresses: (Handle<IFC4.IfcAddress> | IFC4.IfcAddress)[] | null)
 		{
 			this.expressID = expressID;
@@ -35665,7 +35665,7 @@ export namespace IFC4 {
 		SuffixTitles: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel)[] | null;
 		Roles: (Handle<IFC4.IfcActorRole> | IFC4.IfcActorRole)[] | null;
 		Addresses: (Handle<IFC4.IfcAddress> | IFC4.IfcAddress)[] | null;
-		EngagedIn: (Handle<IFC4.IfcPersonAndOrganization> | IFC4.IfcPersonAndOrganization)[] | null;
+		EngagedIn!: (Handle<IFC4.IfcPersonAndOrganization> | IFC4.IfcPersonAndOrganization)[] | null;
 		constructor(expressID: number, type: number, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, FamilyName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, GivenName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, MiddleNames: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel)[] | null, PrefixTitles: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel)[] | null, SuffixTitles: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel)[] | null, Roles: (Handle<IFC4.IfcActorRole> | IFC4.IfcActorRole)[] | null, Addresses: (Handle<IFC4.IfcAddress> | IFC4.IfcAddress)[] | null)
 		{
 			this.expressID = expressID;
@@ -35722,8 +35722,8 @@ export namespace IFC4 {
 		type: number;
 		Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) ;
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
-		HasExternalReferences: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
-		PartOfComplex: (Handle<IFC4.IfcPhysicalComplexQuantity> | IFC4.IfcPhysicalComplexQuantity)[] | null;
+		HasExternalReferences!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		PartOfComplex!: (Handle<IFC4.IfcPhysicalComplexQuantity> | IFC4.IfcPhysicalComplexQuantity)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			this.expressID = expressID;
@@ -35941,8 +35941,8 @@ export namespace IFC4 {
 		type: number;
 		ProfileType: (Handle<IFC4.IfcProfileTypeEnum> | IFC4.IfcProfileTypeEnum) ;
 		ProfileName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		HasExternalReference: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
-		HasProperties: (Handle<IFC4.IfcProfileProperties> | IFC4.IfcProfileProperties)[] | null;
+		HasExternalReference!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		HasProperties!: (Handle<IFC4.IfcProfileProperties> | IFC4.IfcProfileProperties)[] | null;
 		constructor(expressID: number, type: number, ProfileType: (Handle<IFC4.IfcProfileTypeEnum> | IFC4.IfcProfileTypeEnum) , ProfileName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			this.expressID = expressID;
@@ -35988,7 +35988,7 @@ export namespace IFC4 {
 	export class IfcPropertyAbstraction {
 		expressID: number;
 		type: number;
-		HasExternalReferences: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		HasExternalReferences!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
 		constructor(expressID: number, type: number, )
 		{
 			this.expressID = expressID;
@@ -36228,9 +36228,9 @@ export namespace IFC4 {
 		RepresentationIdentifier: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		RepresentationType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		Items: (Handle<IFC4.IfcRepresentationItem> | IFC4.IfcRepresentationItem)[] ;
-		RepresentationMap: (Handle<IFC4.IfcRepresentationMap> | IFC4.IfcRepresentationMap)[] | null;
-		LayerAssignments: (Handle<IFC4.IfcPresentationLayerAssignment> | IFC4.IfcPresentationLayerAssignment)[] | null;
-		OfProductRepresentation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation)[] | null;
+		RepresentationMap!: (Handle<IFC4.IfcRepresentationMap> | IFC4.IfcRepresentationMap)[] | null;
+		LayerAssignments!: (Handle<IFC4.IfcPresentationLayerAssignment> | IFC4.IfcPresentationLayerAssignment)[] | null;
+		OfProductRepresentation!: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation)[] | null;
 		constructor(expressID: number, type: number, ContextOfItems: (Handle<IFC4.IfcRepresentationContext> | IFC4.IfcRepresentationContext) , RepresentationIdentifier: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, RepresentationType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Items: (Handle<IFC4.IfcRepresentationItem> | IFC4.IfcRepresentationItem)[] )
 		{
 			this.expressID = expressID;
@@ -36257,7 +36257,7 @@ export namespace IFC4 {
 		type: number;
 		ContextIdentifier: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		ContextType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		RepresentationsInContext: (Handle<IFC4.IfcRepresentation> | IFC4.IfcRepresentation)[] | null;
+		RepresentationsInContext!: (Handle<IFC4.IfcRepresentation> | IFC4.IfcRepresentation)[] | null;
 		constructor(expressID: number, type: number, ContextIdentifier: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ContextType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			this.expressID = expressID;
@@ -36280,8 +36280,8 @@ export namespace IFC4 {
 	export class IfcRepresentationItem {
 		expressID: number;
 		type: number;
-		LayerAssignment: (Handle<IFC4.IfcPresentationLayerAssignment> | IFC4.IfcPresentationLayerAssignment)[] | null;
-		StyledByItem: (Handle<IFC4.IfcStyledItem> | IFC4.IfcStyledItem)[] | null;
+		LayerAssignment!: (Handle<IFC4.IfcPresentationLayerAssignment> | IFC4.IfcPresentationLayerAssignment)[] | null;
+		StyledByItem!: (Handle<IFC4.IfcStyledItem> | IFC4.IfcStyledItem)[] | null;
 		constructor(expressID: number, type: number, )
 		{
 			this.expressID = expressID;
@@ -36304,8 +36304,8 @@ export namespace IFC4 {
 		type: number;
 		MappingOrigin: (Handle<IFC4.IfcAxis2Placement> | IFC4.IfcAxis2Placement) ;
 		MappedRepresentation: (Handle<IFC4.IfcRepresentation> | IFC4.IfcRepresentation) ;
-		HasShapeAspects: (Handle<IFC4.IfcShapeAspect> | IFC4.IfcShapeAspect)[] | null;
-		MapUsage: (Handle<IFC4.IfcMappedItem> | IFC4.IfcMappedItem)[] | null;
+		HasShapeAspects!: (Handle<IFC4.IfcShapeAspect> | IFC4.IfcShapeAspect)[] | null;
+		MapUsage!: (Handle<IFC4.IfcMappedItem> | IFC4.IfcMappedItem)[] | null;
 		constructor(expressID: number, type: number, MappingOrigin: (Handle<IFC4.IfcAxis2Placement> | IFC4.IfcAxis2Placement) , MappedRepresentation: (Handle<IFC4.IfcRepresentation> | IFC4.IfcRepresentation) )
 		{
 			this.expressID = expressID;
@@ -36455,7 +36455,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcShapeModel extends IFC4.IfcRepresentation {
-		OfShapeAspect: (Handle<IFC4.IfcShapeAspect> | IFC4.IfcShapeAspect)[] | null;
+		OfShapeAspect!: (Handle<IFC4.IfcShapeAspect> | IFC4.IfcShapeAspect)[] | null;
 		constructor(expressID: number, type: number, ContextOfItems: (Handle<IFC4.IfcRepresentationContext> | IFC4.IfcRepresentationContext) , RepresentationIdentifier: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, RepresentationType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Items: (Handle<IFC4.IfcRepresentationItem> | IFC4.IfcRepresentationItem)[] )
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
@@ -36804,8 +36804,8 @@ export namespace IFC4 {
 		Mode: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		TextureTransform: (Handle<IFC4.IfcCartesianTransformationOperator2D> | IFC4.IfcCartesianTransformationOperator2D) | null;
 		Parameter: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier)[] | null;
-		IsMappedBy: (Handle<IFC4.IfcTextureCoordinate> | IFC4.IfcTextureCoordinate)[] | null;
-		UsedInStyles: (Handle<IFC4.IfcSurfaceStyleWithTextures> | IFC4.IfcSurfaceStyleWithTextures)[] | null;
+		IsMappedBy!: (Handle<IFC4.IfcTextureCoordinate> | IFC4.IfcTextureCoordinate)[] | null;
+		UsedInStyles!: (Handle<IFC4.IfcSurfaceStyleWithTextures> | IFC4.IfcSurfaceStyleWithTextures)[] | null;
 		constructor(expressID: number, type: number, RepeatS: (Handle<IFC4.IfcBoolean> | IFC4.IfcBoolean) , RepeatT: (Handle<IFC4.IfcBoolean> | IFC4.IfcBoolean) , Mode: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, TextureTransform: (Handle<IFC4.IfcCartesianTransformationOperator2D> | IFC4.IfcCartesianTransformationOperator2D) | null, Parameter: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier)[] | null)
 		{
 			super(expressID,type);
@@ -37217,7 +37217,7 @@ export namespace IFC4 {
 		DataOrigin: (Handle<IFC4.IfcDataOriginEnum> | IFC4.IfcDataOriginEnum) ;
 		UserDefinedDataOrigin: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		Unit: (Handle<IFC4.IfcUnit> | IFC4.IfcUnit) | null;
-		HasExternalReference: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		HasExternalReference!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, StartTime: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) , EndTime: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) , TimeSeriesDataType: (Handle<IFC4.IfcTimeSeriesDataTypeEnum> | IFC4.IfcTimeSeriesDataTypeEnum) , DataOrigin: (Handle<IFC4.IfcDataOriginEnum> | IFC4.IfcDataOriginEnum) , UserDefinedDataOrigin: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Unit: (Handle<IFC4.IfcUnit> | IFC4.IfcUnit) | null)
 		{
 			this.expressID = expressID;
@@ -37530,8 +37530,8 @@ export namespace IFC4 {
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null;
 		ReferenceTokens: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier)[] | null;
-		ClassificationForObjects: (Handle<IFC4.IfcRelAssociatesClassification> | IFC4.IfcRelAssociatesClassification)[] | null;
-		HasReferences: (Handle<IFC4.IfcClassificationReference> | IFC4.IfcClassificationReference)[] | null;
+		ClassificationForObjects!: (Handle<IFC4.IfcRelAssociatesClassification> | IFC4.IfcRelAssociatesClassification)[] | null;
+		HasReferences!: (Handle<IFC4.IfcClassificationReference> | IFC4.IfcClassificationReference)[] | null;
 		constructor(expressID: number, type: number, Source: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Edition: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, EditionDate: (Handle<IFC4.IfcDate> | IFC4.IfcDate) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null, ReferenceTokens: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier)[] | null)
 		{
 			super(expressID,type);
@@ -37559,8 +37559,8 @@ export namespace IFC4 {
 		ReferencedSource: (Handle<IFC4.IfcClassificationReferenceSelect> | IFC4.IfcClassificationReferenceSelect) | null;
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		Sort: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
-		ClassificationRefForObjects: (Handle<IFC4.IfcRelAssociatesClassification> | IFC4.IfcRelAssociatesClassification)[] | null;
-		HasReferences: (Handle<IFC4.IfcClassificationReference> | IFC4.IfcClassificationReference)[] | null;
+		ClassificationRefForObjects!: (Handle<IFC4.IfcRelAssociatesClassification> | IFC4.IfcRelAssociatesClassification)[] | null;
+		HasReferences!: (Handle<IFC4.IfcClassificationReference> | IFC4.IfcClassificationReference)[] | null;
 		constructor(expressID: number, type: number, Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ReferencedSource: (Handle<IFC4.IfcClassificationReferenceSelect> | IFC4.IfcClassificationReferenceSelect) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Sort: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			super(expressID,type,Location, Identification, Name);
@@ -37704,7 +37704,7 @@ export namespace IFC4 {
 	};
 	export class IfcContextDependentUnit extends IFC4.IfcNamedUnit {
 		Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) ;
-		HasExternalReference: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		HasExternalReference!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
 		constructor(expressID: number, type: number, Dimensions: (Handle<IFC4.IfcDimensionalExponents> | IFC4.IfcDimensionalExponents) , UnitType: (Handle<IFC4.IfcUnitEnum> | IFC4.IfcUnitEnum) , Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) )
 		{
 			super(expressID,type,Dimensions, UnitType);
@@ -37725,7 +37725,7 @@ export namespace IFC4 {
 	export class IfcConversionBasedUnit extends IFC4.IfcNamedUnit {
 		Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) ;
 		ConversionFactor: (Handle<IFC4.IfcMeasureWithUnit> | IFC4.IfcMeasureWithUnit) ;
-		HasExternalReference: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
+		HasExternalReference!: (Handle<IFC4.IfcExternalReferenceRelationship> | IFC4.IfcExternalReferenceRelationship)[] | null;
 		constructor(expressID: number, type: number, Dimensions: (Handle<IFC4.IfcDimensionalExponents> | IFC4.IfcDimensionalExponents) , UnitType: (Handle<IFC4.IfcUnitEnum> | IFC4.IfcUnitEnum) , Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , ConversionFactor: (Handle<IFC4.IfcMeasureWithUnit> | IFC4.IfcMeasureWithUnit) )
 		{
 			super(expressID,type,Dimensions, UnitType);
@@ -37921,10 +37921,10 @@ export namespace IFC4 {
 		ValidUntil: (Handle<IFC4.IfcDate> | IFC4.IfcDate) | null;
 		Confidentiality: (Handle<IFC4.IfcDocumentConfidentialityEnum> | IFC4.IfcDocumentConfidentialityEnum) | null;
 		Status: (Handle<IFC4.IfcDocumentStatusEnum> | IFC4.IfcDocumentStatusEnum) | null;
-		DocumentInfoForObjects: (Handle<IFC4.IfcRelAssociatesDocument> | IFC4.IfcRelAssociatesDocument)[] | null;
-		HasDocumentReferences: (Handle<IFC4.IfcDocumentReference> | IFC4.IfcDocumentReference)[] | null;
-		IsPointedTo: (Handle<IFC4.IfcDocumentInformationRelationship> | IFC4.IfcDocumentInformationRelationship)[] | null;
-		IsPointer: (Handle<IFC4.IfcDocumentInformationRelationship> | IFC4.IfcDocumentInformationRelationship)[] | null;
+		DocumentInfoForObjects!: (Handle<IFC4.IfcRelAssociatesDocument> | IFC4.IfcRelAssociatesDocument)[] | null;
+		HasDocumentReferences!: (Handle<IFC4.IfcDocumentReference> | IFC4.IfcDocumentReference)[] | null;
+		IsPointedTo!: (Handle<IFC4.IfcDocumentInformationRelationship> | IFC4.IfcDocumentInformationRelationship)[] | null;
+		IsPointer!: (Handle<IFC4.IfcDocumentInformationRelationship> | IFC4.IfcDocumentInformationRelationship)[] | null;
 		constructor(expressID: number, type: number, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) , Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null, Purpose: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, IntendedUse: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Scope: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Revision: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, DocumentOwner: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) | null, Editors: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect)[] | null, CreationTime: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) | null, LastRevisionTime: (Handle<IFC4.IfcDateTime> | IFC4.IfcDateTime) | null, ElectronicFormat: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, ValidFrom: (Handle<IFC4.IfcDate> | IFC4.IfcDate) | null, ValidUntil: (Handle<IFC4.IfcDate> | IFC4.IfcDate) | null, Confidentiality: (Handle<IFC4.IfcDocumentConfidentialityEnum> | IFC4.IfcDocumentConfidentialityEnum) | null, Status: (Handle<IFC4.IfcDocumentStatusEnum> | IFC4.IfcDocumentStatusEnum) | null)
 		{
 			super(expressID,type);
@@ -37984,7 +37984,7 @@ export namespace IFC4 {
 	export class IfcDocumentReference extends IFC4.IfcExternalReference {
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		ReferencedDocument: (Handle<IFC4.IfcDocumentInformation> | IFC4.IfcDocumentInformation) | null;
-		DocumentRefForObjects: (Handle<IFC4.IfcRelAssociatesDocument> | IFC4.IfcRelAssociatesDocument)[] | null;
+		DocumentRefForObjects!: (Handle<IFC4.IfcRelAssociatesDocument> | IFC4.IfcRelAssociatesDocument)[] | null;
 		constructor(expressID: number, type: number, Location: (Handle<IFC4.IfcURIReference> | IFC4.IfcURIReference) | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ReferencedDocument: (Handle<IFC4.IfcDocumentInformation> | IFC4.IfcDocumentInformation) | null)
 		{
 			super(expressID,type,Location, Identification, Name);
@@ -38116,7 +38116,7 @@ export namespace IFC4 {
 	};
 	export class IfcFace extends IFC4.IfcTopologicalRepresentationItem {
 		Bounds: (Handle<IFC4.IfcFaceBound> | IFC4.IfcFaceBound)[] ;
-		HasTextureMaps: (Handle<IFC4.IfcTextureMap> | IFC4.IfcTextureMap)[] | null;
+		HasTextureMaps!: (Handle<IFC4.IfcTextureMap> | IFC4.IfcTextureMap)[] | null;
 		constructor(expressID: number, type: number, Bounds: (Handle<IFC4.IfcFaceBound> | IFC4.IfcFaceBound)[] )
 		{
 			super(expressID,type);
@@ -38248,8 +38248,8 @@ export namespace IFC4 {
 		Precision: (Handle<IFC4.IfcReal> | IFC4.IfcReal) | null;
 		WorldCoordinateSystem: (Handle<IFC4.IfcAxis2Placement> | IFC4.IfcAxis2Placement) ;
 		TrueNorth: (Handle<IFC4.IfcDirection> | IFC4.IfcDirection) | null;
-		HasSubContexts: (Handle<IFC4.IfcGeometricRepresentationSubContext> | IFC4.IfcGeometricRepresentationSubContext)[] | null;
-		HasCoordinateOperation: (Handle<IFC4.IfcCoordinateOperation> | IFC4.IfcCoordinateOperation)[] | null;
+		HasSubContexts!: (Handle<IFC4.IfcGeometricRepresentationSubContext> | IFC4.IfcGeometricRepresentationSubContext)[] | null;
+		HasCoordinateOperation!: (Handle<IFC4.IfcCoordinateOperation> | IFC4.IfcCoordinateOperation)[] | null;
 		constructor(expressID: number, type: number, ContextIdentifier: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ContextType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, CoordinateSpaceDimension: (Handle<IFC4.IfcDimensionCount> | IFC4.IfcDimensionCount) , Precision: (Handle<IFC4.IfcReal> | IFC4.IfcReal) | null, WorldCoordinateSystem: (Handle<IFC4.IfcAxis2Placement> | IFC4.IfcAxis2Placement) , TrueNorth: (Handle<IFC4.IfcDirection> | IFC4.IfcDirection) | null)
 		{
 			super(expressID,type,ContextIdentifier, ContextType);
@@ -38702,9 +38702,9 @@ export namespace IFC4 {
 		Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) ;
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		HasRepresentation: (Handle<IFC4.IfcMaterialDefinitionRepresentation> | IFC4.IfcMaterialDefinitionRepresentation)[] | null;
-		IsRelatedWith: (Handle<IFC4.IfcMaterialRelationship> | IFC4.IfcMaterialRelationship)[] | null;
-		RelatesTo: (Handle<IFC4.IfcMaterialRelationship> | IFC4.IfcMaterialRelationship)[] | null;
+		HasRepresentation!: (Handle<IFC4.IfcMaterialDefinitionRepresentation> | IFC4.IfcMaterialDefinitionRepresentation)[] | null;
+		IsRelatedWith!: (Handle<IFC4.IfcMaterialRelationship> | IFC4.IfcMaterialRelationship)[] | null;
+		RelatesTo!: (Handle<IFC4.IfcMaterialRelationship> | IFC4.IfcMaterialRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type);
@@ -38730,7 +38730,7 @@ export namespace IFC4 {
 		Material: (Handle<IFC4.IfcMaterial> | IFC4.IfcMaterial) ;
 		Fraction: (Handle<IFC4.IfcNormalisedRatioMeasure> | IFC4.IfcNormalisedRatioMeasure) | null;
 		Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		ToMaterialConstituentSet: (Handle<IFC4.IfcMaterialConstituentSet> | IFC4.IfcMaterialConstituentSet) | null;
+		ToMaterialConstituentSet!: (Handle<IFC4.IfcMaterialConstituentSet> | IFC4.IfcMaterialConstituentSet) | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Material: (Handle<IFC4.IfcMaterial> | IFC4.IfcMaterial) , Fraction: (Handle<IFC4.IfcNormalisedRatioMeasure> | IFC4.IfcNormalisedRatioMeasure) | null, Category: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type);
@@ -38925,13 +38925,13 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcObjectDefinition extends IFC4.IfcRoot {
-		HasAssignments: (Handle<IFC4.IfcRelAssigns> | IFC4.IfcRelAssigns)[] | null;
-		Nests: (Handle<IFC4.IfcRelNests> | IFC4.IfcRelNests)[] | null;
-		IsNestedBy: (Handle<IFC4.IfcRelNests> | IFC4.IfcRelNests)[] | null;
-		HasContext: (Handle<IFC4.IfcRelDeclares> | IFC4.IfcRelDeclares)[] | null;
-		IsDecomposedBy: (Handle<IFC4.IfcRelAggregates> | IFC4.IfcRelAggregates)[] | null;
-		Decomposes: (Handle<IFC4.IfcRelAggregates> | IFC4.IfcRelAggregates)[] | null;
-		HasAssociations: (Handle<IFC4.IfcRelAssociates> | IFC4.IfcRelAssociates)[] | null;
+		HasAssignments!: (Handle<IFC4.IfcRelAssigns> | IFC4.IfcRelAssigns)[] | null;
+		Nests!: (Handle<IFC4.IfcRelNests> | IFC4.IfcRelNests)[] | null;
+		IsNestedBy!: (Handle<IFC4.IfcRelNests> | IFC4.IfcRelNests)[] | null;
+		HasContext!: (Handle<IFC4.IfcRelDeclares> | IFC4.IfcRelDeclares)[] | null;
+		IsDecomposedBy!: (Handle<IFC4.IfcRelAggregates> | IFC4.IfcRelAggregates)[] | null;
+		Decomposes!: (Handle<IFC4.IfcRelAggregates> | IFC4.IfcRelAggregates)[] | null;
+		HasAssociations!: (Handle<IFC4.IfcRelAssociates> | IFC4.IfcRelAssociates)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -39290,8 +39290,8 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcProductDefinitionShape extends IFC4.IfcProductRepresentation {
-		ShapeOfProduct: (Handle<IFC4.IfcProduct> | IFC4.IfcProduct)[] | null;
-		HasShapeAspects: (Handle<IFC4.IfcShapeAspect> | IFC4.IfcShapeAspect)[] | null;
+		ShapeOfProduct!: (Handle<IFC4.IfcProduct> | IFC4.IfcProduct)[] | null;
+		HasShapeAspects!: (Handle<IFC4.IfcShapeAspect> | IFC4.IfcShapeAspect)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, Representations: (Handle<IFC4.IfcRepresentation> | IFC4.IfcRepresentation)[] )
 		{
 			super(expressID,type,Name, Description, Representations);
@@ -39330,12 +39330,12 @@ export namespace IFC4 {
 	export class IfcProperty extends IFC4.IfcPropertyAbstraction {
 		Name: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) ;
 		Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
-		PartOfPset: (Handle<IFC4.IfcPropertySet> | IFC4.IfcPropertySet)[] | null;
-		PropertyForDependance: (Handle<IFC4.IfcPropertyDependencyRelationship> | IFC4.IfcPropertyDependencyRelationship)[] | null;
-		PropertyDependsOn: (Handle<IFC4.IfcPropertyDependencyRelationship> | IFC4.IfcPropertyDependencyRelationship)[] | null;
-		PartOfComplex: (Handle<IFC4.IfcComplexProperty> | IFC4.IfcComplexProperty)[] | null;
-		HasConstraints: (Handle<IFC4.IfcResourceConstraintRelationship> | IFC4.IfcResourceConstraintRelationship)[] | null;
-		HasApprovals: (Handle<IFC4.IfcResourceApprovalRelationship> | IFC4.IfcResourceApprovalRelationship)[] | null;
+		PartOfPset!: (Handle<IFC4.IfcPropertySet> | IFC4.IfcPropertySet)[] | null;
+		PropertyForDependance!: (Handle<IFC4.IfcPropertyDependencyRelationship> | IFC4.IfcPropertyDependencyRelationship)[] | null;
+		PropertyDependsOn!: (Handle<IFC4.IfcPropertyDependencyRelationship> | IFC4.IfcPropertyDependencyRelationship)[] | null;
+		PartOfComplex!: (Handle<IFC4.IfcComplexProperty> | IFC4.IfcComplexProperty)[] | null;
+		HasConstraints!: (Handle<IFC4.IfcResourceConstraintRelationship> | IFC4.IfcResourceConstraintRelationship)[] | null;
+		HasApprovals!: (Handle<IFC4.IfcResourceApprovalRelationship> | IFC4.IfcResourceApprovalRelationship)[] | null;
 		constructor(expressID: number, type: number, Name: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) , Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			super(expressID,type);
@@ -39355,8 +39355,8 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcPropertyDefinition extends IFC4.IfcRoot {
-		HasContext: (Handle<IFC4.IfcRelDeclares> | IFC4.IfcRelDeclares)[] | null;
-		HasAssociations: (Handle<IFC4.IfcRelAssociates> | IFC4.IfcRelAssociates)[] | null;
+		HasContext!: (Handle<IFC4.IfcRelDeclares> | IFC4.IfcRelDeclares)[] | null;
+		HasAssociations!: (Handle<IFC4.IfcRelAssociates> | IFC4.IfcRelAssociates)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -39397,9 +39397,9 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcPropertySetDefinition extends IFC4.IfcPropertyDefinition {
-		DefinesType: (Handle<IFC4.IfcTypeObject> | IFC4.IfcTypeObject)[] | null;
-		IsDefinedBy: (Handle<IFC4.IfcRelDefinesByTemplate> | IFC4.IfcRelDefinesByTemplate)[] | null;
-		DefinesOccurrence: (Handle<IFC4.IfcRelDefinesByProperties> | IFC4.IfcRelDefinesByProperties)[] | null;
+		DefinesType!: (Handle<IFC4.IfcTypeObject> | IFC4.IfcTypeObject)[] | null;
+		IsDefinedBy!: (Handle<IFC4.IfcRelDefinesByTemplate> | IFC4.IfcRelDefinesByTemplate)[] | null;
+		DefinesOccurrence!: (Handle<IFC4.IfcRelDefinesByProperties> | IFC4.IfcRelDefinesByProperties)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -40251,7 +40251,7 @@ export namespace IFC4 {
 	export class IfcTypeObject extends IFC4.IfcObjectDefinition {
 		ApplicableOccurrence: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		HasPropertySets: (Handle<IFC4.IfcPropertySetDefinition> | IFC4.IfcPropertySetDefinition)[] | null;
-		Types: (Handle<IFC4.IfcRelDefinesByType> | IFC4.IfcRelDefinesByType)[] | null;
+		Types!: (Handle<IFC4.IfcRelDefinesByType> | IFC4.IfcRelDefinesByType)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ApplicableOccurrence: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, HasPropertySets: (Handle<IFC4.IfcPropertySetDefinition> | IFC4.IfcPropertySetDefinition)[] | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -40274,7 +40274,7 @@ export namespace IFC4 {
 		Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		LongDescription: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		ProcessType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		OperatesOn: (Handle<IFC4.IfcRelAssignsToProcess> | IFC4.IfcRelAssignsToProcess)[] | null;
+		OperatesOn!: (Handle<IFC4.IfcRelAssignsToProcess> | IFC4.IfcRelAssignsToProcess)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ApplicableOccurrence: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, HasPropertySets: (Handle<IFC4.IfcPropertySetDefinition> | IFC4.IfcPropertySetDefinition)[] | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, LongDescription: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ProcessType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets);
@@ -40297,7 +40297,7 @@ export namespace IFC4 {
 	export class IfcTypeProduct extends IFC4.IfcTypeObject {
 		RepresentationMaps: (Handle<IFC4.IfcRepresentationMap> | IFC4.IfcRepresentationMap)[] | null;
 		Tag: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		ReferencedBy: (Handle<IFC4.IfcRelAssignsToProduct> | IFC4.IfcRelAssignsToProduct)[] | null;
+		ReferencedBy!: (Handle<IFC4.IfcRelAssignsToProduct> | IFC4.IfcRelAssignsToProduct)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ApplicableOccurrence: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, HasPropertySets: (Handle<IFC4.IfcPropertySetDefinition> | IFC4.IfcPropertySetDefinition)[] | null, RepresentationMaps: (Handle<IFC4.IfcRepresentationMap> | IFC4.IfcRepresentationMap)[] | null, Tag: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets);
@@ -40320,7 +40320,7 @@ export namespace IFC4 {
 		Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		LongDescription: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
 		ResourceType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		ResourceOf: (Handle<IFC4.IfcRelAssignsToResource> | IFC4.IfcRelAssignsToResource)[] | null;
+		ResourceOf!: (Handle<IFC4.IfcRelAssignsToResource> | IFC4.IfcRelAssignsToResource)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ApplicableOccurrence: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, HasPropertySets: (Handle<IFC4.IfcPropertySetDefinition> | IFC4.IfcPropertySetDefinition)[] | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, LongDescription: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ResourceType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets);
@@ -40973,7 +40973,7 @@ export namespace IFC4 {
 		Transition: (Handle<IFC4.IfcTransitionCode> | IFC4.IfcTransitionCode) ;
 		SameSense: (Handle<IFC4.IfcBoolean> | IFC4.IfcBoolean) ;
 		ParentCurve: (Handle<IFC4.IfcCurve> | IFC4.IfcCurve) ;
-		UsingCurves: (Handle<IFC4.IfcCompositeCurve> | IFC4.IfcCompositeCurve)[] | null;
+		UsingCurves!: (Handle<IFC4.IfcCompositeCurve> | IFC4.IfcCompositeCurve)[] | null;
 		constructor(expressID: number, type: number, Transition: (Handle<IFC4.IfcTransitionCode> | IFC4.IfcTransitionCode) , SameSense: (Handle<IFC4.IfcBoolean> | IFC4.IfcBoolean) , ParentCurve: (Handle<IFC4.IfcCurve> | IFC4.IfcCurve) )
 		{
 			super(expressID,type);
@@ -41020,8 +41020,8 @@ export namespace IFC4 {
 		Phase: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
 		RepresentationContexts: (Handle<IFC4.IfcRepresentationContext> | IFC4.IfcRepresentationContext)[] | null;
 		UnitsInContext: (Handle<IFC4.IfcUnitAssignment> | IFC4.IfcUnitAssignment) | null;
-		IsDefinedBy: (Handle<IFC4.IfcRelDefinesByProperties> | IFC4.IfcRelDefinesByProperties)[] | null;
-		Declares: (Handle<IFC4.IfcRelDeclares> | IFC4.IfcRelDeclares)[] | null;
+		IsDefinedBy!: (Handle<IFC4.IfcRelDefinesByProperties> | IFC4.IfcRelDefinesByProperties)[] | null;
+		Declares!: (Handle<IFC4.IfcRelDeclares> | IFC4.IfcRelDeclares)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, LongName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Phase: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, RepresentationContexts: (Handle<IFC4.IfcRepresentationContext> | IFC4.IfcRepresentationContext)[] | null, UnitsInContext: (Handle<IFC4.IfcUnitAssignment> | IFC4.IfcUnitAssignment) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -41570,7 +41570,7 @@ export namespace IFC4 {
 	};
 	export class IfcIndexedPolygonalFace extends IFC4.IfcTessellatedItem {
 		CoordIndex: (Handle<IFC4.IfcPositiveInteger> | IFC4.IfcPositiveInteger)[] ;
-		ToFaceSet: (Handle<IFC4.IfcPolygonalFaceSet> | IFC4.IfcPolygonalFaceSet)[] | null;
+		ToFaceSet!: (Handle<IFC4.IfcPolygonalFaceSet> | IFC4.IfcPolygonalFaceSet)[] | null;
 		constructor(expressID: number, type: number, CoordIndex: (Handle<IFC4.IfcPositiveInteger> | IFC4.IfcPositiveInteger)[] )
 		{
 			super(expressID,type);
@@ -41697,10 +41697,10 @@ export namespace IFC4 {
 	};
 	export class IfcObject extends IFC4.IfcObjectDefinition {
 		ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		IsDeclaredBy: (Handle<IFC4.IfcRelDefinesByObject> | IFC4.IfcRelDefinesByObject)[] | null;
-		Declares: (Handle<IFC4.IfcRelDefinesByObject> | IFC4.IfcRelDefinesByObject)[] | null;
-		IsTypedBy: (Handle<IFC4.IfcRelDefinesByType> | IFC4.IfcRelDefinesByType)[] | null;
-		IsDefinedBy: (Handle<IFC4.IfcRelDefinesByProperties> | IFC4.IfcRelDefinesByProperties)[] | null;
+		IsDeclaredBy!: (Handle<IFC4.IfcRelDefinesByObject> | IFC4.IfcRelDefinesByObject)[] | null;
+		Declares!: (Handle<IFC4.IfcRelDefinesByObject> | IFC4.IfcRelDefinesByObject)[] | null;
+		IsTypedBy!: (Handle<IFC4.IfcRelDefinesByType> | IFC4.IfcRelDefinesByType)[] | null;
+		IsDefinedBy!: (Handle<IFC4.IfcRelDefinesByProperties> | IFC4.IfcRelDefinesByProperties)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -41896,9 +41896,9 @@ export namespace IFC4 {
 	export class IfcProcess extends IFC4.IfcObject {
 		Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		LongDescription: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
-		IsPredecessorTo: (Handle<IFC4.IfcRelSequence> | IFC4.IfcRelSequence)[] | null;
-		IsSuccessorFrom: (Handle<IFC4.IfcRelSequence> | IFC4.IfcRelSequence)[] | null;
-		OperatesOn: (Handle<IFC4.IfcRelAssignsToProcess> | IFC4.IfcRelAssignsToProcess)[] | null;
+		IsPredecessorTo!: (Handle<IFC4.IfcRelSequence> | IFC4.IfcRelSequence)[] | null;
+		IsSuccessorFrom!: (Handle<IFC4.IfcRelSequence> | IFC4.IfcRelSequence)[] | null;
+		OperatesOn!: (Handle<IFC4.IfcRelAssignsToProcess> | IFC4.IfcRelAssignsToProcess)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, LongDescription: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -41920,7 +41920,7 @@ export namespace IFC4 {
 	export class IfcProduct extends IFC4.IfcObject {
 		ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null;
 		Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null;
-		ReferencedBy: (Handle<IFC4.IfcRelAssignsToProduct> | IFC4.IfcRelAssignsToProduct)[] | null;
+		ReferencedBy!: (Handle<IFC4.IfcRelAssignsToProduct> | IFC4.IfcRelAssignsToProduct)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -42084,7 +42084,7 @@ export namespace IFC4 {
 		TemplateType: (Handle<IFC4.IfcPropertySetTemplateTypeEnum> | IFC4.IfcPropertySetTemplateTypeEnum) | null;
 		ApplicableEntity: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		HasPropertyTemplates: (Handle<IFC4.IfcPropertyTemplate> | IFC4.IfcPropertyTemplate)[] ;
-		Defines: (Handle<IFC4.IfcRelDefinesByTemplate> | IFC4.IfcRelDefinesByTemplate)[] | null;
+		Defines!: (Handle<IFC4.IfcRelDefinesByTemplate> | IFC4.IfcRelDefinesByTemplate)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, TemplateType: (Handle<IFC4.IfcPropertySetTemplateTypeEnum> | IFC4.IfcPropertySetTemplateTypeEnum) | null, ApplicableEntity: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, HasPropertyTemplates: (Handle<IFC4.IfcPropertyTemplate> | IFC4.IfcPropertyTemplate)[] )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -42155,8 +42155,8 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcPropertyTemplate extends IFC4.IfcPropertyTemplateDefinition {
-		PartOfComplexTemplate: (Handle<IFC4.IfcComplexPropertyTemplate> | IFC4.IfcComplexPropertyTemplate)[] | null;
-		PartOfPsetTemplate: (Handle<IFC4.IfcPropertySetTemplate> | IFC4.IfcPropertySetTemplate)[] | null;
+		PartOfComplexTemplate!: (Handle<IFC4.IfcComplexPropertyTemplate> | IFC4.IfcComplexPropertyTemplate)[] | null;
+		PartOfPsetTemplate!: (Handle<IFC4.IfcPropertySetTemplate> | IFC4.IfcPropertySetTemplate)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
@@ -43195,7 +43195,7 @@ export namespace IFC4 {
 	};
 	export class IfcRelSpaceBoundary1stLevel extends IFC4.IfcRelSpaceBoundary {
 		ParentBoundary: (Handle<IFC4.IfcRelSpaceBoundary1stLevel> | IFC4.IfcRelSpaceBoundary1stLevel) | null;
-		InnerBoundaries: (Handle<IFC4.IfcRelSpaceBoundary1stLevel> | IFC4.IfcRelSpaceBoundary1stLevel)[] | null;
+		InnerBoundaries!: (Handle<IFC4.IfcRelSpaceBoundary1stLevel> | IFC4.IfcRelSpaceBoundary1stLevel)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, RelatingSpace: (Handle<IFC4.IfcSpaceBoundarySelect> | IFC4.IfcSpaceBoundarySelect) , RelatedBuildingElement: (Handle<IFC4.IfcElement> | IFC4.IfcElement) , ConnectionGeometry: (Handle<IFC4.IfcConnectionGeometry> | IFC4.IfcConnectionGeometry) | null, PhysicalOrVirtualBoundary: (Handle<IFC4.IfcPhysicalOrVirtualEnum> | IFC4.IfcPhysicalOrVirtualEnum) , InternalOrExternalBoundary: (Handle<IFC4.IfcInternalOrExternalEnum> | IFC4.IfcInternalOrExternalEnum) , ParentBoundary: (Handle<IFC4.IfcRelSpaceBoundary1stLevel> | IFC4.IfcRelSpaceBoundary1stLevel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary);
@@ -43215,7 +43215,7 @@ export namespace IFC4 {
 	};
 	export class IfcRelSpaceBoundary2ndLevel extends IFC4.IfcRelSpaceBoundary1stLevel {
 		CorrespondingBoundary: (Handle<IFC4.IfcRelSpaceBoundary2ndLevel> | IFC4.IfcRelSpaceBoundary2ndLevel) | null;
-		Corresponds: (Handle<IFC4.IfcRelSpaceBoundary2ndLevel> | IFC4.IfcRelSpaceBoundary2ndLevel)[] | null;
+		Corresponds!: (Handle<IFC4.IfcRelSpaceBoundary2ndLevel> | IFC4.IfcRelSpaceBoundary2ndLevel)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, RelatingSpace: (Handle<IFC4.IfcSpaceBoundarySelect> | IFC4.IfcSpaceBoundarySelect) , RelatedBuildingElement: (Handle<IFC4.IfcElement> | IFC4.IfcElement) , ConnectionGeometry: (Handle<IFC4.IfcConnectionGeometry> | IFC4.IfcConnectionGeometry) | null, PhysicalOrVirtualBoundary: (Handle<IFC4.IfcPhysicalOrVirtualEnum> | IFC4.IfcPhysicalOrVirtualEnum) , InternalOrExternalBoundary: (Handle<IFC4.IfcInternalOrExternalEnum> | IFC4.IfcInternalOrExternalEnum) , ParentBoundary: (Handle<IFC4.IfcRelSpaceBoundary1stLevel> | IFC4.IfcRelSpaceBoundary1stLevel) | null, CorrespondingBoundary: (Handle<IFC4.IfcRelSpaceBoundary2ndLevel> | IFC4.IfcRelSpaceBoundary2ndLevel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary, ParentBoundary);
@@ -43276,7 +43276,7 @@ export namespace IFC4 {
 	export class IfcResource extends IFC4.IfcObject {
 		Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
 		LongDescription: (Handle<IFC4.IfcText> | IFC4.IfcText) | null;
-		ResourceOf: (Handle<IFC4.IfcRelAssignsToResource> | IFC4.IfcRelAssignsToResource)[] | null;
+		ResourceOf!: (Handle<IFC4.IfcRelAssignsToResource> | IFC4.IfcRelAssignsToResource)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, LongDescription: (Handle<IFC4.IfcText> | IFC4.IfcText) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -43412,9 +43412,9 @@ export namespace IFC4 {
 	};
 	export class IfcSpatialElement extends IFC4.IfcProduct {
 		LongName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		ContainsElements: (Handle<IFC4.IfcRelContainedInSpatialStructure> | IFC4.IfcRelContainedInSpatialStructure)[] | null;
-		ServicedBySystems: (Handle<IFC4.IfcRelServicesBuildings> | IFC4.IfcRelServicesBuildings)[] | null;
-		ReferencesElements: (Handle<IFC4.IfcRelReferencedInSpatialStructure> | IFC4.IfcRelReferencedInSpatialStructure)[] | null;
+		ContainsElements!: (Handle<IFC4.IfcRelContainedInSpatialStructure> | IFC4.IfcRelContainedInSpatialStructure)[] | null;
+		ServicedBySystems!: (Handle<IFC4.IfcRelServicesBuildings> | IFC4.IfcRelServicesBuildings)[] | null;
+		ReferencesElements!: (Handle<IFC4.IfcRelReferencedInSpatialStructure> | IFC4.IfcRelReferencedInSpatialStructure)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, LongName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -43568,7 +43568,7 @@ export namespace IFC4 {
 	export class IfcStructuralActivity extends IFC4.IfcProduct {
 		AppliedLoad: (Handle<IFC4.IfcStructuralLoad> | IFC4.IfcStructuralLoad) ;
 		GlobalOrLocal: (Handle<IFC4.IfcGlobalOrLocalEnum> | IFC4.IfcGlobalOrLocalEnum) ;
-		AssignedToStructuralItem: (Handle<IFC4.IfcRelConnectsStructuralActivity> | IFC4.IfcRelConnectsStructuralActivity)[] | null;
+		AssignedToStructuralItem!: (Handle<IFC4.IfcRelConnectsStructuralActivity> | IFC4.IfcRelConnectsStructuralActivity)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, AppliedLoad: (Handle<IFC4.IfcStructuralLoad> | IFC4.IfcStructuralLoad) , GlobalOrLocal: (Handle<IFC4.IfcGlobalOrLocalEnum> | IFC4.IfcGlobalOrLocalEnum) )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -43588,7 +43588,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcStructuralItem extends IFC4.IfcProduct {
-		AssignedStructuralActivity: (Handle<IFC4.IfcRelConnectsStructuralActivity> | IFC4.IfcRelConnectsStructuralActivity)[] | null;
+		AssignedStructuralActivity!: (Handle<IFC4.IfcRelConnectsStructuralActivity> | IFC4.IfcRelConnectsStructuralActivity)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -43606,7 +43606,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcStructuralMember extends IFC4.IfcStructuralItem {
-		ConnectedBy: (Handle<IFC4.IfcRelConnectsStructuralMember> | IFC4.IfcRelConnectsStructuralMember)[] | null;
+		ConnectedBy!: (Handle<IFC4.IfcRelConnectsStructuralMember> | IFC4.IfcRelConnectsStructuralMember)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -43875,8 +43875,8 @@ export namespace IFC4 {
 	};
 	export class IfcTessellatedFaceSet extends IFC4.IfcTessellatedItem {
 		Coordinates: (Handle<IFC4.IfcCartesianPointList3D> | IFC4.IfcCartesianPointList3D) ;
-		HasColours: (Handle<IFC4.IfcIndexedColourMap> | IFC4.IfcIndexedColourMap)[] | null;
-		HasTextures: (Handle<IFC4.IfcIndexedTextureMap> | IFC4.IfcIndexedTextureMap)[] | null;
+		HasColours!: (Handle<IFC4.IfcIndexedColourMap> | IFC4.IfcIndexedColourMap)[] | null;
+		HasTextures!: (Handle<IFC4.IfcIndexedTextureMap> | IFC4.IfcIndexedTextureMap)[] | null;
 		constructor(expressID: number, type: number, Coordinates: (Handle<IFC4.IfcCartesianPointList3D> | IFC4.IfcCartesianPointList3D) )
 		{
 			super(expressID,type);
@@ -44029,7 +44029,7 @@ export namespace IFC4 {
 	};
 	export class IfcActor extends IFC4.IfcObject {
 		TheActor: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) ;
-		IsActingUpon: (Handle<IFC4.IfcRelAssignsToActor> | IFC4.IfcRelAssignsToActor)[] | null;
+		IsActingUpon!: (Handle<IFC4.IfcRelAssignsToActor> | IFC4.IfcRelAssignsToActor)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, TheActor: (Handle<IFC4.IfcActorSelect> | IFC4.IfcActorSelect) )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -44084,7 +44084,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcAnnotation extends IFC4.IfcProduct {
-		ContainedInStructure: (Handle<IFC4.IfcRelContainedInSpatialStructure> | IFC4.IfcRelContainedInSpatialStructure)[] | null;
+		ContainedInStructure!: (Handle<IFC4.IfcRelContainedInSpatialStructure> | IFC4.IfcRelContainedInSpatialStructure)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -44511,7 +44511,7 @@ export namespace IFC4 {
 	};
 	export class IfcControl extends IFC4.IfcObject {
 		Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
-		Controls: (Handle<IFC4.IfcRelAssignsToControl> | IFC4.IfcRelAssignsToControl)[] | null;
+		Controls!: (Handle<IFC4.IfcRelAssignsToControl> | IFC4.IfcRelAssignsToControl)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Identification: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -44818,18 +44818,18 @@ export namespace IFC4 {
 	};
 	export class IfcElement extends IFC4.IfcProduct {
 		Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null;
-		FillsVoids: (Handle<IFC4.IfcRelFillsElement> | IFC4.IfcRelFillsElement)[] | null;
-		ConnectedTo: (Handle<IFC4.IfcRelConnectsElements> | IFC4.IfcRelConnectsElements)[] | null;
-		IsInterferedByElements: (Handle<IFC4.IfcRelInterferesElements> | IFC4.IfcRelInterferesElements)[] | null;
-		InterferesElements: (Handle<IFC4.IfcRelInterferesElements> | IFC4.IfcRelInterferesElements)[] | null;
-		HasProjections: (Handle<IFC4.IfcRelProjectsElement> | IFC4.IfcRelProjectsElement)[] | null;
-		ReferencedInStructures: (Handle<IFC4.IfcRelReferencedInSpatialStructure> | IFC4.IfcRelReferencedInSpatialStructure)[] | null;
-		HasOpenings: (Handle<IFC4.IfcRelVoidsElement> | IFC4.IfcRelVoidsElement)[] | null;
-		IsConnectionRealization: (Handle<IFC4.IfcRelConnectsWithRealizingElements> | IFC4.IfcRelConnectsWithRealizingElements)[] | null;
-		ProvidesBoundaries: (Handle<IFC4.IfcRelSpaceBoundary> | IFC4.IfcRelSpaceBoundary)[] | null;
-		ConnectedFrom: (Handle<IFC4.IfcRelConnectsElements> | IFC4.IfcRelConnectsElements)[] | null;
-		ContainedInStructure: (Handle<IFC4.IfcRelContainedInSpatialStructure> | IFC4.IfcRelContainedInSpatialStructure)[] | null;
-		HasCoverings: (Handle<IFC4.IfcRelCoversBldgElements> | IFC4.IfcRelCoversBldgElements)[] | null;
+		FillsVoids!: (Handle<IFC4.IfcRelFillsElement> | IFC4.IfcRelFillsElement)[] | null;
+		ConnectedTo!: (Handle<IFC4.IfcRelConnectsElements> | IFC4.IfcRelConnectsElements)[] | null;
+		IsInterferedByElements!: (Handle<IFC4.IfcRelInterferesElements> | IFC4.IfcRelInterferesElements)[] | null;
+		InterferesElements!: (Handle<IFC4.IfcRelInterferesElements> | IFC4.IfcRelInterferesElements)[] | null;
+		HasProjections!: (Handle<IFC4.IfcRelProjectsElement> | IFC4.IfcRelProjectsElement)[] | null;
+		ReferencedInStructures!: (Handle<IFC4.IfcRelReferencedInSpatialStructure> | IFC4.IfcRelReferencedInSpatialStructure)[] | null;
+		HasOpenings!: (Handle<IFC4.IfcRelVoidsElement> | IFC4.IfcRelVoidsElement)[] | null;
+		IsConnectionRealization!: (Handle<IFC4.IfcRelConnectsWithRealizingElements> | IFC4.IfcRelConnectsWithRealizingElements)[] | null;
+		ProvidesBoundaries!: (Handle<IFC4.IfcRelSpaceBoundary> | IFC4.IfcRelSpaceBoundary)[] | null;
+		ConnectedFrom!: (Handle<IFC4.IfcRelConnectsElements> | IFC4.IfcRelConnectsElements)[] | null;
+		ContainedInStructure!: (Handle<IFC4.IfcRelContainedInSpatialStructure> | IFC4.IfcRelContainedInSpatialStructure)[] | null;
+		HasCoverings!: (Handle<IFC4.IfcRelCoversBldgElements> | IFC4.IfcRelCoversBldgElements)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -45150,7 +45150,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcFeatureElementAddition extends IFC4.IfcFeatureElement {
-		ProjectsElements: (Handle<IFC4.IfcRelProjectsElement> | IFC4.IfcRelProjectsElement) | null;
+		ProjectsElements!: (Handle<IFC4.IfcRelProjectsElement> | IFC4.IfcRelProjectsElement) | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -45168,7 +45168,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcFeatureElementSubtraction extends IFC4.IfcFeatureElement {
-		VoidsElements: (Handle<IFC4.IfcRelVoidsElement> | IFC4.IfcRelVoidsElement) | null;
+		VoidsElements!: (Handle<IFC4.IfcRelVoidsElement> | IFC4.IfcRelVoidsElement) | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -45402,7 +45402,7 @@ export namespace IFC4 {
 		VAxes: (Handle<IFC4.IfcGridAxis> | IFC4.IfcGridAxis)[] ;
 		WAxes: (Handle<IFC4.IfcGridAxis> | IFC4.IfcGridAxis)[] | null;
 		PredefinedType: (Handle<IFC4.IfcGridTypeEnum> | IFC4.IfcGridTypeEnum) | null;
-		ContainedInStructure: (Handle<IFC4.IfcRelContainedInSpatialStructure> | IFC4.IfcRelContainedInSpatialStructure)[] | null;
+		ContainedInStructure!: (Handle<IFC4.IfcRelContainedInSpatialStructure> | IFC4.IfcRelContainedInSpatialStructure)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, UAxes: (Handle<IFC4.IfcGridAxis> | IFC4.IfcGridAxis)[] , VAxes: (Handle<IFC4.IfcGridAxis> | IFC4.IfcGridAxis)[] , WAxes: (Handle<IFC4.IfcGridAxis> | IFC4.IfcGridAxis)[] | null, PredefinedType: (Handle<IFC4.IfcGridTypeEnum> | IFC4.IfcGridTypeEnum) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -45424,7 +45424,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcGroup extends IFC4.IfcObject {
-		IsGroupedBy: (Handle<IFC4.IfcRelAssignsToGroup> | IFC4.IfcRelAssignsToGroup)[] | null;
+		IsGroupedBy!: (Handle<IFC4.IfcRelAssignsToGroup> | IFC4.IfcRelAssignsToGroup)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -45767,7 +45767,7 @@ export namespace IFC4 {
 	};
 	export class IfcOpeningElement extends IFC4.IfcFeatureElementSubtraction {
 		PredefinedType: (Handle<IFC4.IfcOpeningElementTypeEnum> | IFC4.IfcOpeningElementTypeEnum) | null;
-		HasFillings: (Handle<IFC4.IfcRelFillsElement> | IFC4.IfcRelFillsElement)[] | null;
+		HasFillings!: (Handle<IFC4.IfcRelFillsElement> | IFC4.IfcRelFillsElement)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, PredefinedType: (Handle<IFC4.IfcOpeningElementTypeEnum> | IFC4.IfcOpeningElementTypeEnum) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -46011,9 +46011,9 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcPort extends IFC4.IfcProduct {
-		ContainedIn: (Handle<IFC4.IfcRelConnectsPortToElement> | IFC4.IfcRelConnectsPortToElement)[] | null;
-		ConnectedFrom: (Handle<IFC4.IfcRelConnectsPorts> | IFC4.IfcRelConnectsPorts)[] | null;
-		ConnectedTo: (Handle<IFC4.IfcRelConnectsPorts> | IFC4.IfcRelConnectsPorts)[] | null;
+		ContainedIn!: (Handle<IFC4.IfcRelConnectsPortToElement> | IFC4.IfcRelConnectsPortToElement)[] | null;
+		ConnectedFrom!: (Handle<IFC4.IfcRelConnectsPorts> | IFC4.IfcRelConnectsPorts)[] | null;
+		ConnectedTo!: (Handle<IFC4.IfcRelConnectsPorts> | IFC4.IfcRelConnectsPorts)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -46478,8 +46478,8 @@ export namespace IFC4 {
 	export class IfcSpace extends IFC4.IfcSpatialStructureElement {
 		PredefinedType: (Handle<IFC4.IfcSpaceTypeEnum> | IFC4.IfcSpaceTypeEnum) | null;
 		ElevationWithFlooring: (Handle<IFC4.IfcLengthMeasure> | IFC4.IfcLengthMeasure) | null;
-		HasCoverings: (Handle<IFC4.IfcRelCoversSpaces> | IFC4.IfcRelCoversSpaces)[] | null;
-		BoundedBy: (Handle<IFC4.IfcRelSpaceBoundary> | IFC4.IfcRelSpaceBoundary)[] | null;
+		HasCoverings!: (Handle<IFC4.IfcRelCoversSpaces> | IFC4.IfcRelCoversSpaces)[] | null;
+		BoundedBy!: (Handle<IFC4.IfcRelSpaceBoundary> | IFC4.IfcRelSpaceBoundary)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, LongName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, CompositionType: (Handle<IFC4.IfcElementCompositionEnum> | IFC4.IfcElementCompositionEnum) | null, PredefinedType: (Handle<IFC4.IfcSpaceTypeEnum> | IFC4.IfcSpaceTypeEnum) | null, ElevationWithFlooring: (Handle<IFC4.IfcLengthMeasure> | IFC4.IfcLengthMeasure) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType);
@@ -46616,7 +46616,7 @@ export namespace IFC4 {
 	};
 	export class IfcStructuralConnection extends IFC4.IfcStructuralItem {
 		AppliedCondition: (Handle<IFC4.IfcBoundaryCondition> | IFC4.IfcBoundaryCondition) | null;
-		ConnectsStructuralMembers: (Handle<IFC4.IfcRelConnectsStructuralMember> | IFC4.IfcRelConnectsStructuralMember)[] | null;
+		ConnectsStructuralMembers!: (Handle<IFC4.IfcRelConnectsStructuralMember> | IFC4.IfcRelConnectsStructuralMember)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, AppliedCondition: (Handle<IFC4.IfcBoundaryCondition> | IFC4.IfcBoundaryCondition) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
@@ -46754,8 +46754,8 @@ export namespace IFC4 {
 		ActionSource: (Handle<IFC4.IfcActionSourceTypeEnum> | IFC4.IfcActionSourceTypeEnum) ;
 		Coefficient: (Handle<IFC4.IfcRatioMeasure> | IFC4.IfcRatioMeasure) | null;
 		Purpose: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null;
-		SourceOfResultGroup: (Handle<IFC4.IfcStructuralResultGroup> | IFC4.IfcStructuralResultGroup)[] | null;
-		LoadGroupFor: (Handle<IFC4.IfcStructuralAnalysisModel> | IFC4.IfcStructuralAnalysisModel)[] | null;
+		SourceOfResultGroup!: (Handle<IFC4.IfcStructuralResultGroup> | IFC4.IfcStructuralResultGroup)[] | null;
+		LoadGroupFor!: (Handle<IFC4.IfcStructuralAnalysisModel> | IFC4.IfcStructuralAnalysisModel)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, PredefinedType: (Handle<IFC4.IfcLoadGroupTypeEnum> | IFC4.IfcLoadGroupTypeEnum) , ActionType: (Handle<IFC4.IfcActionTypeEnum> | IFC4.IfcActionTypeEnum) , ActionSource: (Handle<IFC4.IfcActionSourceTypeEnum> | IFC4.IfcActionSourceTypeEnum) , Coefficient: (Handle<IFC4.IfcRatioMeasure> | IFC4.IfcRatioMeasure) | null, Purpose: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -46834,7 +46834,7 @@ export namespace IFC4 {
 		TheoryType: (Handle<IFC4.IfcAnalysisTheoryTypeEnum> | IFC4.IfcAnalysisTheoryTypeEnum) ;
 		ResultForLoadGroup: (Handle<IFC4.IfcStructuralLoadGroup> | IFC4.IfcStructuralLoadGroup) | null;
 		IsLinear: (Handle<IFC4.IfcBoolean> | IFC4.IfcBoolean) ;
-		ResultGroupFor: (Handle<IFC4.IfcStructuralAnalysisModel> | IFC4.IfcStructuralAnalysisModel)[] | null;
+		ResultGroupFor!: (Handle<IFC4.IfcStructuralAnalysisModel> | IFC4.IfcStructuralAnalysisModel)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, TheoryType: (Handle<IFC4.IfcAnalysisTheoryTypeEnum> | IFC4.IfcAnalysisTheoryTypeEnum) , ResultForLoadGroup: (Handle<IFC4.IfcStructuralLoadGroup> | IFC4.IfcStructuralLoadGroup) | null, IsLinear: (Handle<IFC4.IfcBoolean> | IFC4.IfcBoolean) )
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -46950,7 +46950,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcSystem extends IFC4.IfcGroup {
-		ServicesBuildings: (Handle<IFC4.IfcRelServicesBuildings> | IFC4.IfcRelServicesBuildings)[] | null;
+		ServicesBuildings!: (Handle<IFC4.IfcRelServicesBuildings> | IFC4.IfcRelServicesBuildings)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
@@ -48202,8 +48202,8 @@ export namespace IFC4 {
 	};
 	export class IfcCovering extends IFC4.IfcBuildingElement {
 		PredefinedType: (Handle<IFC4.IfcCoveringTypeEnum> | IFC4.IfcCoveringTypeEnum) | null;
-		CoversSpaces: (Handle<IFC4.IfcRelCoversSpaces> | IFC4.IfcRelCoversSpaces)[] | null;
-		CoversElements: (Handle<IFC4.IfcRelCoversBldgElements> | IFC4.IfcRelCoversBldgElements)[] | null;
+		CoversSpaces!: (Handle<IFC4.IfcRelCoversSpaces> | IFC4.IfcRelCoversSpaces)[] | null;
+		CoversElements!: (Handle<IFC4.IfcRelCoversBldgElements> | IFC4.IfcRelCoversBldgElements)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null, PredefinedType: (Handle<IFC4.IfcCoveringTypeEnum> | IFC4.IfcCoveringTypeEnum) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -48334,7 +48334,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcDistributionElement extends IFC4.IfcElement {
-		HasPorts: (Handle<IFC4.IfcRelConnectsPortToElement> | IFC4.IfcRelConnectsPortToElement)[] | null;
+		HasPorts!: (Handle<IFC4.IfcRelConnectsPortToElement> | IFC4.IfcRelConnectsPortToElement)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -48352,7 +48352,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcDistributionFlowElement extends IFC4.IfcDistributionElement {
-		HasControlElements: (Handle<IFC4.IfcRelFlowControlElements> | IFC4.IfcRelFlowControlElements)[] | null;
+		HasControlElements!: (Handle<IFC4.IfcRelFlowControlElements> | IFC4.IfcRelFlowControlElements)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
@@ -48704,7 +48704,7 @@ export namespace IFC4 {
 	};
 	export class IfcExternalSpatialElement extends IFC4.IfcExternalSpatialStructureElement {
 		PredefinedType: (Handle<IFC4.IfcExternalSpatialElementTypeEnum> | IFC4.IfcExternalSpatialElementTypeEnum) | null;
-		BoundedBy: (Handle<IFC4.IfcRelSpaceBoundary> | IFC4.IfcRelSpaceBoundary)[] | null;
+		BoundedBy!: (Handle<IFC4.IfcRelSpaceBoundary> | IFC4.IfcRelSpaceBoundary)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, LongName: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, PredefinedType: (Handle<IFC4.IfcExternalSpatialElementTypeEnum> | IFC4.IfcExternalSpatialElementTypeEnum) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName);
@@ -50481,7 +50481,7 @@ export namespace IFC4 {
 		}
 	};
 	export class IfcDistributionControlElement extends IFC4.IfcDistributionElement {
-		AssignedToFlowElement: (Handle<IFC4.IfcRelFlowControlElements> | IFC4.IfcRelFlowControlElements)[] | null;
+		AssignedToFlowElement!: (Handle<IFC4.IfcRelFlowControlElements> | IFC4.IfcRelFlowControlElements)[] | null;
 		constructor(expressID: number, type: number, GlobalId: (Handle<IFC4.IfcGloballyUniqueId> | IFC4.IfcGloballyUniqueId) , OwnerHistory: (Handle<IFC4.IfcOwnerHistory> | IFC4.IfcOwnerHistory) | null, Name: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, Description: (Handle<IFC4.IfcText> | IFC4.IfcText) | null, ObjectType: (Handle<IFC4.IfcLabel> | IFC4.IfcLabel) | null, ObjectPlacement: (Handle<IFC4.IfcObjectPlacement> | IFC4.IfcObjectPlacement) | null, Representation: (Handle<IFC4.IfcProductRepresentation> | IFC4.IfcProductRepresentation) | null, Tag: (Handle<IFC4.IfcIdentifier> | IFC4.IfcIdentifier) | null)
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
