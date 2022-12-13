@@ -62,16 +62,15 @@ export function generateClass(entity, buffer, types, schemaName)
   buffer.push(`\t\t}`)
   buffer.push(`\t\tstatic FromTape(expressID: number, type: number, tape: any[]): ${entity.name}`)
   buffer.push(`\t\t{`);
-  buffer.push(`\t\t\tlet ptr = 0;`);
-  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((p) => 'tape[ptr++]').join(", ")});`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((p, i) => 'tape['+i+']').join(", ")});`);
   buffer.push(`\t\t}`)
-  buffer.push(`\t\tToTape(): any[]`)
+  buffer.push(`\t\tToTape(): unknown[]`)
   buffer.push(`\t\t{`)
-  buffer.push(`\t\t\tlet args: any[] = [];`)
+  buffer.push(`\t\t\tconst args: unknown[] = [];`)
   buffer.push(`\t\t\targs.push(${entity.derivedProps.map((p) => `this.${p.name}`).join(", ")});`);
   buffer.push(`\t\t\treturn args;`)
   buffer.push(`\t\t}`)
-  buffer.push(`\t};`);
+  buffer.push(`\t}`);
 }
 
 export function makeCRCTable(){
