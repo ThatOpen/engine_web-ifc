@@ -62,8 +62,8 @@ for (var i = 0; i < files.length; i++) {
       if (type.isList)
       {
           tsHelperClasses.push(`\texport class ${type.name} {`);
-          tsHelperClasses.push(`\t\tvalueType: number | null;`)
-          tsHelperClasses.push(`\t\tlabel: string | null;`)
+          tsHelperClasses.push(`\t\tvalueType !: number | null;`)
+          tsHelperClasses.push(`\t\tlabel !: string | null;`)
           tsHelperClasses.push(`\t\tvalue: Array<${type.typeName}>;`)
           tsHelperClasses.push(`\t\tconstructor(v: Array<${type.typeName}>) { this.value = v;}`);
           tsHelperClasses.push(`\t};`);
@@ -87,9 +87,9 @@ for (var i = 0; i < files.length; i++) {
       else if (type.isEnum)
       {
           tsHelperClasses.push(`\texport class ${type.name} {`);
-          tsHelperClasses.push(`\t\tvalue: string;`)
-          tsHelperClasses.push(`\t\tlabel: string | null;`)
-          tsHelperClasses.push(`\t\tvalueType: number | null;`)
+          tsHelperClasses.push(`\t\tvalue : string;`)
+          tsHelperClasses.push(`\t\tlabel !: string | null;`)
+          tsHelperClasses.push(`\t\tvalueType !: number | null;`)
           tsHelperClasses.push(`\t\tconstructor(v: string) { this.value = v;}`);
           tsHelperClasses.push(type.values.map((v) => `\t\tstatic ${v} = "${v}";`).join("\n"));
           tsHelperClasses.push(`\t};`);
@@ -98,8 +98,8 @@ for (var i = 0; i < files.length; i++) {
       {
           tsHelperClasses.push(`\texport class ${type.name} {`);
           tsHelperClasses.push(`\t\tvalue: ${type.typeName};`)
-          tsHelperClasses.push(`\t\tlabel: string| null;`)
-          tsHelperClasses.push(`\t\tvalueType: number| null;`)
+          tsHelperClasses.push(`\t\tlabel !: string| null;`)
+          tsHelperClasses.push(`\t\tvalueType !: number| null;`)
           tsHelperClasses.push(`\t\tconstructor(v: ${type.typeName}) { this.value = v;}`);
           tsHelperClasses.push(`\t};`);
       }
