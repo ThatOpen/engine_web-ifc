@@ -60,9 +60,9 @@ export function generateClass(entity:Entity, buffer: Array<string>, types:Type[]
   });
   
   buffer.push(`\t\t}`)
-  buffer.push(`\t\tstatic FromTape(expressID: number, type: number, tape: any[]): ${entity.name}`)
+  buffer.push(`\t\tstatic FromTape(expressID: number, type: number, _tape: any[]): ${entity.name}`)
   buffer.push(`\t\t{`);
-  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((p, i) => 'tape['+i+']').join(", ")});`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((_, i) => '_tape['+i+']').join(", ")});`);
   buffer.push(`\t\t}`)
   buffer.push(`\t\tToTape(): unknown[]`)
   buffer.push(`\t\t{`)

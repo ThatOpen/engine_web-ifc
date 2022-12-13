@@ -1,8 +1,8 @@
-import {Type, Prop, InverseProp, Entity, Param} from "./gen_functional_types_interfaces";
+import {Entity} from "./gen_functional_types_interfaces";
 import {findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
 
 const fs = require("fs");
-const { type } = require("os");
+
 
 let crcTable = makeCRCTable();
 
@@ -13,7 +13,7 @@ tsHelper.push(`// This is a generated file, please see: gen_functional_types.js`
 tsHelper.push(`import  * as ifc from "./ifc-schema";`);
 tsHelper.push(`import {RawLineData} from "./web-ifc-api";`);
 tsHelper.push();
-tsHelper.push(`export class Handle<T> {`);
+tsHelper.push(`export class Handle<_> {`);
 tsHelper.push(`\tvalue: number;`);
 tsHelper.push(`\tlabel!: string | null;`)
 tsHelper.push(`\tvalueType!: number | null;`)
@@ -180,7 +180,6 @@ cppHeader.push("\t\tswitch(ifcCode) {");
 
 completeifcElementList.forEach(element => {
     let name = element.toUpperCase();
-    let code = crc32(name,crcTable);
     cppHeader.push(`\t\t\tcase ifc::${name}: return true;`);
 });
 
@@ -194,7 +193,6 @@ cppHeader.push("\tstd::vector<unsigned int> IfcElements { ");
 tsHeader.push("export const IfcElements = [")
 completeifcElementList.forEach(element => {
     let name = element.toUpperCase();
-    let code = crc32(name,crcTable);
     cppHeader.push(`\t\t${name},`);
     tsHeader.push(`\t${name},`);
 });

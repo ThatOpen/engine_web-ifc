@@ -1,7 +1,7 @@
 // This is a generated file, please see: gen_functional_types.js
 import  * as ifc from "./ifc-schema";
 import {RawLineData} from "./web-ifc-api";
-export class Handle<T> {
+export class Handle<_> {
 	value: number;
 	label!: string | null;
 	valueType!: number | null;
@@ -16155,9 +16155,9 @@ export namespace IFC2X3 {
 			this.UserDefinedRole = UserDefinedRole;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActorRole
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActorRole
 		{
-			return new IfcActorRole(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcActorRole(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16182,9 +16182,9 @@ export namespace IFC2X3 {
 			this.Description = Description;
 			this.UserDefinedPurpose = UserDefinedPurpose;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAddress
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAddress
 		{
-			return new IfcAddress(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAddress(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16209,9 +16209,9 @@ export namespace IFC2X3 {
 			this.ApplicationFullName = ApplicationFullName;
 			this.ApplicationIdentifier = ApplicationIdentifier;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcApplication
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcApplication
 		{
-			return new IfcApplication(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcApplication(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16243,9 +16243,9 @@ export namespace IFC2X3 {
 			this.ApplicableDate = ApplicableDate;
 			this.FixedUntilDate = FixedUntilDate;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAppliedValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAppliedValue
 		{
-			return new IfcAppliedValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcAppliedValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16272,9 +16272,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAppliedValueRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAppliedValueRelationship
 		{
-			return new IfcAppliedValueRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcAppliedValueRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16308,9 +16308,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.Identifier = Identifier;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcApproval
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcApproval
 		{
-			return new IfcApproval(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcApproval(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16333,9 +16333,9 @@ export namespace IFC2X3 {
 			this.Approval = Approval;
 			this.Role = Role;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcApprovalActorRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcApprovalActorRelationship
 		{
-			return new IfcApprovalActorRelationship(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcApprovalActorRelationship(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16356,9 +16356,9 @@ export namespace IFC2X3 {
 			this.ApprovedProperties = ApprovedProperties;
 			this.Approval = Approval;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcApprovalPropertyRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcApprovalPropertyRelationship
 		{
-			return new IfcApprovalPropertyRelationship(expressID, type, tape[0], tape[1]);
+			return new IfcApprovalPropertyRelationship(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16383,9 +16383,9 @@ export namespace IFC2X3 {
 			this.Description = Description;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcApprovalRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcApprovalRelationship
 		{
-			return new IfcApprovalRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcApprovalRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16404,9 +16404,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryCondition
 		{
-			return new IfcBoundaryCondition(expressID, type, tape[0]);
+			return new IfcBoundaryCondition(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16432,9 +16432,9 @@ export namespace IFC2X3 {
 			this.RotationalStiffnessByLengthY = RotationalStiffnessByLengthY;
 			this.RotationalStiffnessByLengthZ = RotationalStiffnessByLengthZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryEdgeCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryEdgeCondition
 		{
-			return new IfcBoundaryEdgeCondition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcBoundaryEdgeCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16454,9 +16454,9 @@ export namespace IFC2X3 {
 			this.LinearStiffnessByAreaY = LinearStiffnessByAreaY;
 			this.LinearStiffnessByAreaZ = LinearStiffnessByAreaZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryFaceCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryFaceCondition
 		{
-			return new IfcBoundaryFaceCondition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcBoundaryFaceCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16482,9 +16482,9 @@ export namespace IFC2X3 {
 			this.RotationalStiffnessY = RotationalStiffnessY;
 			this.RotationalStiffnessZ = RotationalStiffnessZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryNodeCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryNodeCondition
 		{
-			return new IfcBoundaryNodeCondition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcBoundaryNodeCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16500,9 +16500,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, LinearStiffnessX, LinearStiffnessY, LinearStiffnessZ, RotationalStiffnessX, RotationalStiffnessY, RotationalStiffnessZ);
 			this.WarpingStiffness = WarpingStiffness;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryNodeConditionWarping
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryNodeConditionWarping
 		{
-			return new IfcBoundaryNodeConditionWarping(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcBoundaryNodeConditionWarping(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16525,9 +16525,9 @@ export namespace IFC2X3 {
 			this.MonthComponent = MonthComponent;
 			this.YearComponent = YearComponent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCalendarDate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCalendarDate
 		{
-			return new IfcCalendarDate(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCalendarDate(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16553,9 +16553,9 @@ export namespace IFC2X3 {
 			this.EditionDate = EditionDate;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClassification
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClassification
 		{
-			return new IfcClassification(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcClassification(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16580,9 +16580,9 @@ export namespace IFC2X3 {
 			this.ItemOf = ItemOf;
 			this.Title = Title;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClassificationItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClassificationItem
 		{
-			return new IfcClassificationItem(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcClassificationItem(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16603,9 +16603,9 @@ export namespace IFC2X3 {
 			this.RelatingItem = RelatingItem;
 			this.RelatedItems = RelatedItems;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClassificationItemRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClassificationItemRelationship
 		{
-			return new IfcClassificationItemRelationship(expressID, type, tape[0], tape[1]);
+			return new IfcClassificationItemRelationship(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16624,9 +16624,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.NotationFacets = NotationFacets;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClassificationNotation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClassificationNotation
 		{
-			return new IfcClassificationNotation(expressID, type, tape[0]);
+			return new IfcClassificationNotation(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16645,9 +16645,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.NotationValue = NotationValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClassificationNotationFacet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClassificationNotationFacet
 		{
-			return new IfcClassificationNotationFacet(expressID, type, tape[0]);
+			return new IfcClassificationNotationFacet(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16666,9 +16666,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColourSpecification
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColourSpecification
 		{
-			return new IfcColourSpecification(expressID, type, tape[0]);
+			return new IfcColourSpecification(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16685,7 +16685,7 @@ export namespace IFC2X3 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionGeometry
 		{
 			return new IfcConnectionGeometry(expressID, type, );
 		}
@@ -16705,9 +16705,9 @@ export namespace IFC2X3 {
 			this.PointOnRelatingElement = PointOnRelatingElement;
 			this.PointOnRelatedElement = PointOnRelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionPointGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionPointGeometry
 		{
-			return new IfcConnectionPointGeometry(expressID, type, tape[0], tape[1]);
+			return new IfcConnectionPointGeometry(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16727,9 +16727,9 @@ export namespace IFC2X3 {
 			this.LocationAtRelatedElement = LocationAtRelatedElement;
 			this.ProfileOfPort = ProfileOfPort;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionPortGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionPortGeometry
 		{
-			return new IfcConnectionPortGeometry(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcConnectionPortGeometry(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16747,9 +16747,9 @@ export namespace IFC2X3 {
 			this.SurfaceOnRelatingElement = SurfaceOnRelatingElement;
 			this.SurfaceOnRelatedElement = SurfaceOnRelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionSurfaceGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionSurfaceGeometry
 		{
-			return new IfcConnectionSurfaceGeometry(expressID, type, tape[0], tape[1]);
+			return new IfcConnectionSurfaceGeometry(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16786,9 +16786,9 @@ export namespace IFC2X3 {
 			this.CreationTime = CreationTime;
 			this.UserDefinedGrade = UserDefinedGrade;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstraint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstraint
 		{
-			return new IfcConstraint(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcConstraint(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16815,9 +16815,9 @@ export namespace IFC2X3 {
 			this.RelatedConstraints = RelatedConstraints;
 			this.LogicalAggregator = LogicalAggregator;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstraintAggregationRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstraintAggregationRelationship
 		{
-			return new IfcConstraintAggregationRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcConstraintAggregationRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16838,9 +16838,9 @@ export namespace IFC2X3 {
 			this.ClassifiedConstraint = ClassifiedConstraint;
 			this.RelatedClassifications = RelatedClassifications;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstraintClassificationRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstraintClassificationRelationship
 		{
-			return new IfcConstraintClassificationRelationship(expressID, type, tape[0], tape[1]);
+			return new IfcConstraintClassificationRelationship(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16865,9 +16865,9 @@ export namespace IFC2X3 {
 			this.RelatingConstraint = RelatingConstraint;
 			this.RelatedConstraints = RelatedConstraints;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstraintRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstraintRelationship
 		{
-			return new IfcConstraintRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcConstraintRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16890,9 +16890,9 @@ export namespace IFC2X3 {
 			this.MinuteOffset = MinuteOffset;
 			this.Sense = Sense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoordinatedUniversalTimeOffset
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoordinatedUniversalTimeOffset
 		{
-			return new IfcCoordinatedUniversalTimeOffset(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCoordinatedUniversalTimeOffset(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16910,9 +16910,9 @@ export namespace IFC2X3 {
 			this.CostType = CostType;
 			this.Condition = Condition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCostValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCostValue
 		{
-			return new IfcCostValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcCostValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16939,9 +16939,9 @@ export namespace IFC2X3 {
 			this.RateDateTime = RateDateTime;
 			this.RateSource = RateSource;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurrencyRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurrencyRelationship
 		{
-			return new IfcCurrencyRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCurrencyRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16962,9 +16962,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.PatternList = PatternList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveStyleFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveStyleFont
 		{
-			return new IfcCurveStyleFont(expressID, type, tape[0], tape[1]);
+			return new IfcCurveStyleFont(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -16987,9 +16987,9 @@ export namespace IFC2X3 {
 			this.CurveFont = CurveFont;
 			this.CurveFontScaling = CurveFontScaling;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveStyleFontAndScaling
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveStyleFontAndScaling
 		{
-			return new IfcCurveStyleFontAndScaling(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCurveStyleFontAndScaling(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17010,9 +17010,9 @@ export namespace IFC2X3 {
 			this.VisibleSegmentLength = VisibleSegmentLength;
 			this.InvisibleSegmentLength = InvisibleSegmentLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveStyleFontPattern
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveStyleFontPattern
 		{
-			return new IfcCurveStyleFontPattern(expressID, type, tape[0], tape[1]);
+			return new IfcCurveStyleFontPattern(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17033,9 +17033,9 @@ export namespace IFC2X3 {
 			this.DateComponent = DateComponent;
 			this.TimeComponent = TimeComponent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDateAndTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDateAndTime
 		{
-			return new IfcDateAndTime(expressID, type, tape[0], tape[1]);
+			return new IfcDateAndTime(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17058,9 +17058,9 @@ export namespace IFC2X3 {
 			this.UnitType = UnitType;
 			this.UserDefinedType = UserDefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDerivedUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDerivedUnit
 		{
-			return new IfcDerivedUnit(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcDerivedUnit(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17081,9 +17081,9 @@ export namespace IFC2X3 {
 			this.Unit = Unit;
 			this.Exponent = Exponent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDerivedUnitElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDerivedUnitElement
 		{
-			return new IfcDerivedUnitElement(expressID, type, tape[0], tape[1]);
+			return new IfcDerivedUnitElement(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17114,9 +17114,9 @@ export namespace IFC2X3 {
 			this.AmountOfSubstanceExponent = AmountOfSubstanceExponent;
 			this.LuminousIntensityExponent = LuminousIntensityExponent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDimensionalExponents
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDimensionalExponents
 		{
-			return new IfcDimensionalExponents(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcDimensionalExponents(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17139,9 +17139,9 @@ export namespace IFC2X3 {
 			this.MimeContentType = MimeContentType;
 			this.MimeSubtype = MimeSubtype;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDocumentElectronicFormat
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDocumentElectronicFormat
 		{
-			return new IfcDocumentElectronicFormat(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcDocumentElectronicFormat(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17194,9 +17194,9 @@ export namespace IFC2X3 {
 			this.Confidentiality = Confidentiality;
 			this.Status = Status;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDocumentInformation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDocumentInformation
 		{
-			return new IfcDocumentInformation(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16]);
+			return new IfcDocumentInformation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17219,9 +17219,9 @@ export namespace IFC2X3 {
 			this.RelatedDocuments = RelatedDocuments;
 			this.RelationshipType = RelationshipType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDocumentInformationRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDocumentInformationRelationship
 		{
-			return new IfcDocumentInformationRelationship(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcDocumentInformationRelationship(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17246,9 +17246,9 @@ export namespace IFC2X3 {
 			this.RelatingDraughtingCallout = RelatingDraughtingCallout;
 			this.RelatedDraughtingCallout = RelatedDraughtingCallout;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDraughtingCalloutRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDraughtingCalloutRelationship
 		{
-			return new IfcDraughtingCalloutRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcDraughtingCalloutRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17268,9 +17268,9 @@ export namespace IFC2X3 {
 			this.Category = Category;
 			this.UserDefinedCategory = UserDefinedCategory;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEnvironmentalImpactValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEnvironmentalImpactValue
 		{
-			return new IfcEnvironmentalImpactValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcEnvironmentalImpactValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17293,9 +17293,9 @@ export namespace IFC2X3 {
 			this.ItemReference = ItemReference;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternalReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternalReference
 		{
-			return new IfcExternalReference(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternalReference(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17309,9 +17309,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Location, ItemReference, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternallyDefinedHatchStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternallyDefinedHatchStyle
 		{
-			return new IfcExternallyDefinedHatchStyle(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternallyDefinedHatchStyle(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17325,9 +17325,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Location, ItemReference, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternallyDefinedSurfaceStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternallyDefinedSurfaceStyle
 		{
-			return new IfcExternallyDefinedSurfaceStyle(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternallyDefinedSurfaceStyle(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17341,9 +17341,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Location, ItemReference, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternallyDefinedSymbol
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternallyDefinedSymbol
 		{
-			return new IfcExternallyDefinedSymbol(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternallyDefinedSymbol(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17357,9 +17357,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Location, ItemReference, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternallyDefinedTextFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternallyDefinedTextFont
 		{
-			return new IfcExternallyDefinedTextFont(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternallyDefinedTextFont(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17386,9 +17386,9 @@ export namespace IFC2X3 {
 			this.AxisCurve = AxisCurve;
 			this.SameSense = SameSense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGridAxis
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGridAxis
 		{
-			return new IfcGridAxis(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcGridAxis(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17409,9 +17409,9 @@ export namespace IFC2X3 {
 			this.TimeStamp = TimeStamp;
 			this.ListValues = ListValues;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIrregularTimeSeriesValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIrregularTimeSeriesValue
 		{
-			return new IfcIrregularTimeSeriesValue(expressID, type, tape[0], tape[1]);
+			return new IfcIrregularTimeSeriesValue(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17438,9 +17438,9 @@ export namespace IFC2X3 {
 			this.VersionDate = VersionDate;
 			this.LibraryReference = LibraryReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLibraryInformation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLibraryInformation
 		{
-			return new IfcLibraryInformation(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcLibraryInformation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17455,9 +17455,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Location, ItemReference, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLibraryReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLibraryReference
 		{
-			return new IfcLibraryReference(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcLibraryReference(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17480,9 +17480,9 @@ export namespace IFC2X3 {
 			this.SecondaryPlaneAngle = SecondaryPlaneAngle;
 			this.LuminousIntensity = LuminousIntensity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightDistributionData
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightDistributionData
 		{
-			return new IfcLightDistributionData(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcLightDistributionData(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17503,9 +17503,9 @@ export namespace IFC2X3 {
 			this.LightDistributionCurve = LightDistributionCurve;
 			this.DistributionData = DistributionData;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightIntensityDistribution
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightIntensityDistribution
 		{
-			return new IfcLightIntensityDistribution(expressID, type, tape[0], tape[1]);
+			return new IfcLightIntensityDistribution(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17532,9 +17532,9 @@ export namespace IFC2X3 {
 			this.Zone = Zone;
 			this.DaylightSavingOffset = DaylightSavingOffset;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLocalTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLocalTime
 		{
-			return new IfcLocalTime(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcLocalTime(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17555,9 +17555,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterial
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterial
 		{
-			return new IfcMaterial(expressID, type, tape[0]);
+			return new IfcMaterial(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17578,9 +17578,9 @@ export namespace IFC2X3 {
 			this.MaterialClassifications = MaterialClassifications;
 			this.ClassifiedMaterial = ClassifiedMaterial;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialClassificationRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialClassificationRelationship
 		{
-			return new IfcMaterialClassificationRelationship(expressID, type, tape[0], tape[1]);
+			return new IfcMaterialClassificationRelationship(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17604,9 +17604,9 @@ export namespace IFC2X3 {
 			this.LayerThickness = LayerThickness;
 			this.IsVentilated = IsVentilated;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialLayer
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialLayer
 		{
-			return new IfcMaterialLayer(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcMaterialLayer(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17627,9 +17627,9 @@ export namespace IFC2X3 {
 			this.MaterialLayers = MaterialLayers;
 			this.LayerSetName = LayerSetName;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialLayerSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialLayerSet
 		{
-			return new IfcMaterialLayerSet(expressID, type, tape[0], tape[1]);
+			return new IfcMaterialLayerSet(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17654,9 +17654,9 @@ export namespace IFC2X3 {
 			this.DirectionSense = DirectionSense;
 			this.OffsetFromReferenceLine = OffsetFromReferenceLine;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialLayerSetUsage
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialLayerSetUsage
 		{
-			return new IfcMaterialLayerSetUsage(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcMaterialLayerSetUsage(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17675,9 +17675,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Materials = Materials;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialList
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialList
 		{
-			return new IfcMaterialList(expressID, type, tape[0]);
+			return new IfcMaterialList(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17696,9 +17696,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Material = Material;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialProperties
 		{
-			return new IfcMaterialProperties(expressID, type, tape[0]);
+			return new IfcMaterialProperties(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17719,9 +17719,9 @@ export namespace IFC2X3 {
 			this.ValueComponent = ValueComponent;
 			this.UnitComponent = UnitComponent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMeasureWithUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMeasureWithUnit
 		{
-			return new IfcMeasureWithUnit(expressID, type, tape[0], tape[1]);
+			return new IfcMeasureWithUnit(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17745,9 +17745,9 @@ export namespace IFC2X3 {
 			this.PoissonRatio = PoissonRatio;
 			this.ThermalExpansionCoefficient = ThermalExpansionCoefficient;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMechanicalMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMechanicalMaterialProperties
 		{
-			return new IfcMechanicalMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcMechanicalMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17775,9 +17775,9 @@ export namespace IFC2X3 {
 			this.PlasticStrain = PlasticStrain;
 			this.Relaxations = Relaxations;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMechanicalSteelMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMechanicalSteelMaterialProperties
 		{
-			return new IfcMechanicalSteelMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcMechanicalSteelMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17797,9 +17797,9 @@ export namespace IFC2X3 {
 			this.ValueSource = ValueSource;
 			this.DataValue = DataValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMetric
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMetric
 		{
-			return new IfcMetric(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcMetric(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17818,9 +17818,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Currency = Currency;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMonetaryUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMonetaryUnit
 		{
-			return new IfcMonetaryUnit(expressID, type, tape[0]);
+			return new IfcMonetaryUnit(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17841,9 +17841,9 @@ export namespace IFC2X3 {
 			this.Dimensions = Dimensions;
 			this.UnitType = UnitType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcNamedUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcNamedUnit
 		{
-			return new IfcNamedUnit(expressID, type, tape[0], tape[1]);
+			return new IfcNamedUnit(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17862,7 +17862,7 @@ export namespace IFC2X3 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcObjectPlacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcObjectPlacement
 		{
 			return new IfcObjectPlacement(expressID, type, );
 		}
@@ -17886,9 +17886,9 @@ export namespace IFC2X3 {
 			this.ObjectiveQualifier = ObjectiveQualifier;
 			this.UserDefinedQualifier = UserDefinedQualifier;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcObjective
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcObjective
 		{
-			return new IfcObjective(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcObjective(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17920,9 +17920,9 @@ export namespace IFC2X3 {
 			this.SolarReflectanceFront = SolarReflectanceFront;
 			this.SolarReflectanceBack = SolarReflectanceBack;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOpticalMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOpticalMaterialProperties
 		{
-			return new IfcOpticalMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcOpticalMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17952,9 +17952,9 @@ export namespace IFC2X3 {
 			this.Roles = Roles;
 			this.Addresses = Addresses;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOrganization
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOrganization
 		{
-			return new IfcOrganization(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcOrganization(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -17979,9 +17979,9 @@ export namespace IFC2X3 {
 			this.RelatingOrganization = RelatingOrganization;
 			this.RelatedOrganizations = RelatedOrganizations;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOrganizationRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOrganizationRelationship
 		{
-			return new IfcOrganizationRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcOrganizationRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18014,9 +18014,9 @@ export namespace IFC2X3 {
 			this.LastModifyingApplication = LastModifyingApplication;
 			this.CreationDate = CreationDate;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOwnerHistory
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOwnerHistory
 		{
-			return new IfcOwnerHistory(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcOwnerHistory(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18050,9 +18050,9 @@ export namespace IFC2X3 {
 			this.Roles = Roles;
 			this.Addresses = Addresses;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPerson
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPerson
 		{
-			return new IfcPerson(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcPerson(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18075,9 +18075,9 @@ export namespace IFC2X3 {
 			this.TheOrganization = TheOrganization;
 			this.Roles = Roles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPersonAndOrganization
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPersonAndOrganization
 		{
-			return new IfcPersonAndOrganization(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPersonAndOrganization(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18099,9 +18099,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPhysicalQuantity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPhysicalQuantity
 		{
-			return new IfcPhysicalQuantity(expressID, type, tape[0], tape[1]);
+			return new IfcPhysicalQuantity(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18117,9 +18117,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description);
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPhysicalSimpleQuantity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPhysicalSimpleQuantity
 		{
-			return new IfcPhysicalSimpleQuantity(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPhysicalSimpleQuantity(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18147,9 +18147,9 @@ export namespace IFC2X3 {
 			this.PostalCode = PostalCode;
 			this.Country = Country;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPostalAddress
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPostalAddress
 		{
-			return new IfcPostalAddress(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPostalAddress(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18168,9 +18168,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedItem
 		{
-			return new IfcPreDefinedItem(expressID, type, tape[0]);
+			return new IfcPreDefinedItem(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18184,9 +18184,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedSymbol
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedSymbol
 		{
-			return new IfcPreDefinedSymbol(expressID, type, tape[0]);
+			return new IfcPreDefinedSymbol(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18200,9 +18200,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedTerminatorSymbol
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedTerminatorSymbol
 		{
-			return new IfcPreDefinedTerminatorSymbol(expressID, type, tape[0]);
+			return new IfcPreDefinedTerminatorSymbol(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18216,9 +18216,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedTextFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedTextFont
 		{
-			return new IfcPreDefinedTextFont(expressID, type, tape[0]);
+			return new IfcPreDefinedTextFont(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18243,9 +18243,9 @@ export namespace IFC2X3 {
 			this.AssignedItems = AssignedItems;
 			this.Identifier = Identifier;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationLayerAssignment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationLayerAssignment
 		{
-			return new IfcPresentationLayerAssignment(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPresentationLayerAssignment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18267,9 +18267,9 @@ export namespace IFC2X3 {
 			this.LayerBlocked = LayerBlocked;
 			this.LayerStyles = LayerStyles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationLayerWithStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationLayerWithStyle
 		{
-			return new IfcPresentationLayerWithStyle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcPresentationLayerWithStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18288,9 +18288,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationStyle
 		{
-			return new IfcPresentationStyle(expressID, type, tape[0]);
+			return new IfcPresentationStyle(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18309,9 +18309,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Styles = Styles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationStyleAssignment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationStyleAssignment
 		{
-			return new IfcPresentationStyleAssignment(expressID, type, tape[0]);
+			return new IfcPresentationStyleAssignment(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18334,9 +18334,9 @@ export namespace IFC2X3 {
 			this.Description = Description;
 			this.Representations = Representations;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProductRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProductRepresentation
 		{
-			return new IfcProductRepresentation(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcProductRepresentation(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18358,9 +18358,9 @@ export namespace IFC2X3 {
 			this.COContent = COContent;
 			this.CO2Content = CO2Content;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProductsOfCombustionProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProductsOfCombustionProperties
 		{
-			return new IfcProductsOfCombustionProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcProductsOfCombustionProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18381,9 +18381,9 @@ export namespace IFC2X3 {
 			this.ProfileType = ProfileType;
 			this.ProfileName = ProfileName;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProfileDef
 		{
-			return new IfcProfileDef(expressID, type, tape[0], tape[1]);
+			return new IfcProfileDef(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18404,9 +18404,9 @@ export namespace IFC2X3 {
 			this.ProfileName = ProfileName;
 			this.ProfileDefinition = ProfileDefinition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProfileProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProfileProperties
 		{
-			return new IfcProfileProperties(expressID, type, tape[0], tape[1]);
+			return new IfcProfileProperties(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18430,9 +18430,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProperty
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProperty
 		{
-			return new IfcProperty(expressID, type, tape[0], tape[1]);
+			return new IfcProperty(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18457,9 +18457,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyConstraintRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyConstraintRelationship
 		{
-			return new IfcPropertyConstraintRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyConstraintRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18486,9 +18486,9 @@ export namespace IFC2X3 {
 			this.Description = Description;
 			this.Expression = Expression;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyDependencyRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyDependencyRelationship
 		{
-			return new IfcPropertyDependencyRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcPropertyDependencyRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18511,9 +18511,9 @@ export namespace IFC2X3 {
 			this.EnumerationValues = EnumerationValues;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyEnumeration
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyEnumeration
 		{
-			return new IfcPropertyEnumeration(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPropertyEnumeration(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18529,9 +18529,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description, Unit);
 			this.AreaValue = AreaValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityArea
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityArea
 		{
-			return new IfcQuantityArea(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcQuantityArea(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18547,9 +18547,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description, Unit);
 			this.CountValue = CountValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityCount
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityCount
 		{
-			return new IfcQuantityCount(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcQuantityCount(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18565,9 +18565,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description, Unit);
 			this.LengthValue = LengthValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityLength
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityLength
 		{
-			return new IfcQuantityLength(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcQuantityLength(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18583,9 +18583,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description, Unit);
 			this.TimeValue = TimeValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityTime
 		{
-			return new IfcQuantityTime(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcQuantityTime(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18601,9 +18601,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description, Unit);
 			this.VolumeValue = VolumeValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityVolume
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityVolume
 		{
-			return new IfcQuantityVolume(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcQuantityVolume(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18619,9 +18619,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description, Unit);
 			this.WeightValue = WeightValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityWeight
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityWeight
 		{
-			return new IfcQuantityWeight(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcQuantityWeight(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18646,9 +18646,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReferencesValueDocument
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReferencesValueDocument
 		{
-			return new IfcReferencesValueDocument(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcReferencesValueDocument(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18677,9 +18677,9 @@ export namespace IFC2X3 {
 			this.NominalBarDiameter = NominalBarDiameter;
 			this.BarCount = BarCount;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcementBarProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcementBarProperties
 		{
-			return new IfcReinforcementBarProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcReinforcementBarProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18700,9 +18700,9 @@ export namespace IFC2X3 {
 			this.RelaxationValue = RelaxationValue;
 			this.InitialStress = InitialStress;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelaxation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelaxation
 		{
-			return new IfcRelaxation(expressID, type, tape[0], tape[1]);
+			return new IfcRelaxation(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18730,9 +18730,9 @@ export namespace IFC2X3 {
 			this.RepresentationType = RepresentationType;
 			this.Items = Items;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRepresentation
 		{
-			return new IfcRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18754,9 +18754,9 @@ export namespace IFC2X3 {
 			this.ContextIdentifier = ContextIdentifier;
 			this.ContextType = ContextType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRepresentationContext
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRepresentationContext
 		{
-			return new IfcRepresentationContext(expressID, type, tape[0], tape[1]);
+			return new IfcRepresentationContext(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18775,7 +18775,7 @@ export namespace IFC2X3 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRepresentationItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRepresentationItem
 		{
 			return new IfcRepresentationItem(expressID, type, );
 		}
@@ -18799,9 +18799,9 @@ export namespace IFC2X3 {
 			this.MappingOrigin = MappingOrigin;
 			this.MappedRepresentation = MappedRepresentation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRepresentationMap
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRepresentationMap
 		{
-			return new IfcRepresentationMap(expressID, type, tape[0], tape[1]);
+			return new IfcRepresentationMap(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18825,9 +18825,9 @@ export namespace IFC2X3 {
 			this.RibSpacing = RibSpacing;
 			this.Direction = Direction;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRibPlateProfileProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRibPlateProfileProperties
 		{
-			return new IfcRibPlateProfileProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRibPlateProfileProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18852,9 +18852,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRoot
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRoot
 		{
-			return new IfcRoot(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRoot(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18872,9 +18872,9 @@ export namespace IFC2X3 {
 			this.Prefix = Prefix;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSIUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSIUnit
 		{
-			return new IfcSIUnit(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSIUnit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18897,9 +18897,9 @@ export namespace IFC2X3 {
 			this.StartProfile = StartProfile;
 			this.EndProfile = EndProfile;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSectionProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSectionProperties
 		{
-			return new IfcSectionProperties(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSectionProperties(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18928,9 +18928,9 @@ export namespace IFC2X3 {
 			this.SectionDefinition = SectionDefinition;
 			this.CrossSectionReinforcementDefinitions = CrossSectionReinforcementDefinitions;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSectionReinforcementProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSectionReinforcementProperties
 		{
-			return new IfcSectionReinforcementProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcSectionReinforcementProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18957,9 +18957,9 @@ export namespace IFC2X3 {
 			this.ProductDefinitional = ProductDefinitional;
 			this.PartOfProductDefinitionShape = PartOfProductDefinitionShape;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShapeAspect
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShapeAspect
 		{
-			return new IfcShapeAspect(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcShapeAspect(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18974,9 +18974,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShapeModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShapeModel
 		{
-			return new IfcShapeModel(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcShapeModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -18990,9 +18990,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShapeRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShapeRepresentation
 		{
-			return new IfcShapeRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcShapeRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19006,9 +19006,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSimpleProperty
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSimpleProperty
 		{
-			return new IfcSimpleProperty(expressID, type, tape[0], tape[1]);
+			return new IfcSimpleProperty(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19027,9 +19027,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralConnectionCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralConnectionCondition
 		{
-			return new IfcStructuralConnectionCondition(expressID, type, tape[0]);
+			return new IfcStructuralConnectionCondition(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19048,9 +19048,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoad
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoad
 		{
-			return new IfcStructuralLoad(expressID, type, tape[0]);
+			return new IfcStructuralLoad(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19064,9 +19064,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadStatic
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadStatic
 		{
-			return new IfcStructuralLoadStatic(expressID, type, tape[0]);
+			return new IfcStructuralLoadStatic(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19086,9 +19086,9 @@ export namespace IFC2X3 {
 			this.DeltaT_Y = DeltaT_Y;
 			this.DeltaT_Z = DeltaT_Z;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadTemperature
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadTemperature
 		{
-			return new IfcStructuralLoadTemperature(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcStructuralLoadTemperature(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19102,9 +19102,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStyleModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStyleModel
 		{
-			return new IfcStyleModel(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcStyleModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19124,9 +19124,9 @@ export namespace IFC2X3 {
 			this.Styles = Styles;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStyledItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStyledItem
 		{
-			return new IfcStyledItem(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcStyledItem(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19140,9 +19140,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStyledRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStyledRepresentation
 		{
-			return new IfcStyledRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcStyledRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19160,9 +19160,9 @@ export namespace IFC2X3 {
 			this.Side = Side;
 			this.Styles = Styles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyle
 		{
-			return new IfcSurfaceStyle(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSurfaceStyle(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19187,9 +19187,9 @@ export namespace IFC2X3 {
 			this.TransmissionColour = TransmissionColour;
 			this.ReflectanceColour = ReflectanceColour;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleLighting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleLighting
 		{
-			return new IfcSurfaceStyleLighting(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSurfaceStyleLighting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19210,9 +19210,9 @@ export namespace IFC2X3 {
 			this.RefractionIndex = RefractionIndex;
 			this.DispersionFactor = DispersionFactor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleRefraction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleRefraction
 		{
-			return new IfcSurfaceStyleRefraction(expressID, type, tape[0], tape[1]);
+			return new IfcSurfaceStyleRefraction(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19231,9 +19231,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.SurfaceColour = SurfaceColour;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleShading
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleShading
 		{
-			return new IfcSurfaceStyleShading(expressID, type, tape[0]);
+			return new IfcSurfaceStyleShading(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19252,9 +19252,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Textures = Textures;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleWithTextures
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleWithTextures
 		{
-			return new IfcSurfaceStyleWithTextures(expressID, type, tape[0]);
+			return new IfcSurfaceStyleWithTextures(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19279,9 +19279,9 @@ export namespace IFC2X3 {
 			this.TextureType = TextureType;
 			this.TextureTransform = TextureTransform;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceTexture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceTexture
 		{
-			return new IfcSurfaceTexture(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSurfaceTexture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19297,9 +19297,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name);
 			this.StyleOfSymbol = StyleOfSymbol;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSymbolStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSymbolStyle
 		{
-			return new IfcSymbolStyle(expressID, type, tape[0], tape[1]);
+			return new IfcSymbolStyle(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19320,9 +19320,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.Rows = Rows;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTable
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTable
 		{
-			return new IfcTable(expressID, type, tape[0], tape[1]);
+			return new IfcTable(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19344,9 +19344,9 @@ export namespace IFC2X3 {
 			this.RowCells = RowCells;
 			this.IsHeading = IsHeading;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTableRow
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTableRow
 		{
-			return new IfcTableRow(expressID, type, tape[0], tape[1]);
+			return new IfcTableRow(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19370,9 +19370,9 @@ export namespace IFC2X3 {
 			this.ElectronicMailAddresses = ElectronicMailAddresses;
 			this.WWWHomePageURL = WWWHomePageURL;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTelecomAddress
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTelecomAddress
 		{
-			return new IfcTelecomAddress(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcTelecomAddress(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19392,9 +19392,9 @@ export namespace IFC2X3 {
 			this.TextStyle = TextStyle;
 			this.TextFontStyle = TextFontStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyle
 		{
-			return new IfcTextStyle(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcTextStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19418,9 +19418,9 @@ export namespace IFC2X3 {
 			this.FontWeight = FontWeight;
 			this.FontSize = FontSize;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyleFontModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyleFontModel
 		{
-			return new IfcTextStyleFontModel(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcTextStyleFontModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19441,9 +19441,9 @@ export namespace IFC2X3 {
 			this.Colour = Colour;
 			this.BackgroundColour = BackgroundColour;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyleForDefinedFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyleForDefinedFont
 		{
-			return new IfcTextStyleForDefinedFont(expressID, type, tape[0], tape[1]);
+			return new IfcTextStyleForDefinedFont(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19474,9 +19474,9 @@ export namespace IFC2X3 {
 			this.TextTransform = TextTransform;
 			this.LineHeight = LineHeight;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyleTextModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyleTextModel
 		{
-			return new IfcTextStyleTextModel(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcTextStyleTextModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19503,9 +19503,9 @@ export namespace IFC2X3 {
 			this.BoxRotateAngle = BoxRotateAngle;
 			this.CharacterSpacing = CharacterSpacing;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyleWithBoxCharacteristics
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyleWithBoxCharacteristics
 		{
-			return new IfcTextStyleWithBoxCharacteristics(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcTextStyleWithBoxCharacteristics(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19523,7 +19523,7 @@ export namespace IFC2X3 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureCoordinate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureCoordinate
 		{
 			return new IfcTextureCoordinate(expressID, type, );
 		}
@@ -19543,9 +19543,9 @@ export namespace IFC2X3 {
 			this.Mode = Mode;
 			this.Parameter = Parameter;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureCoordinateGenerator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureCoordinateGenerator
 		{
-			return new IfcTextureCoordinateGenerator(expressID, type, tape[0], tape[1]);
+			return new IfcTextureCoordinateGenerator(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19561,9 +19561,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.TextureMaps = TextureMaps;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureMap
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureMap
 		{
-			return new IfcTextureMap(expressID, type, tape[0]);
+			return new IfcTextureMap(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19582,9 +19582,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Coordinates = Coordinates;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureVertex
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureVertex
 		{
-			return new IfcTextureVertex(expressID, type, tape[0]);
+			return new IfcTextureVertex(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19606,9 +19606,9 @@ export namespace IFC2X3 {
 			this.FreezingPoint = FreezingPoint;
 			this.ThermalConductivity = ThermalConductivity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcThermalMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcThermalMaterialProperties
 		{
-			return new IfcThermalMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcThermalMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19642,9 +19642,9 @@ export namespace IFC2X3 {
 			this.UserDefinedDataOrigin = UserDefinedDataOrigin;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTimeSeries
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTimeSeries
 		{
-			return new IfcTimeSeries(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcTimeSeries(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19665,9 +19665,9 @@ export namespace IFC2X3 {
 			this.ReferencedTimeSeries = ReferencedTimeSeries;
 			this.TimeSeriesReferences = TimeSeriesReferences;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTimeSeriesReferenceRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTimeSeriesReferenceRelationship
 		{
-			return new IfcTimeSeriesReferenceRelationship(expressID, type, tape[0], tape[1]);
+			return new IfcTimeSeriesReferenceRelationship(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19686,9 +19686,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.ListValues = ListValues;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTimeSeriesValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTimeSeriesValue
 		{
-			return new IfcTimeSeriesValue(expressID, type, tape[0]);
+			return new IfcTimeSeriesValue(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19702,7 +19702,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTopologicalRepresentationItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTopologicalRepresentationItem
 		{
 			return new IfcTopologicalRepresentationItem(expressID, type, );
 		}
@@ -19718,9 +19718,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTopologyRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTopologyRepresentation
 		{
-			return new IfcTopologyRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcTopologyRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19739,9 +19739,9 @@ export namespace IFC2X3 {
 			this.type = type;
 			this.Units = Units;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUnitAssignment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUnitAssignment
 		{
-			return new IfcUnitAssignment(expressID, type, tape[0]);
+			return new IfcUnitAssignment(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19755,7 +19755,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVertex
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVertex
 		{
 			return new IfcVertex(expressID, type, );
 		}
@@ -19778,9 +19778,9 @@ export namespace IFC2X3 {
 			this.TextureVertices = TextureVertices;
 			this.TexturePoints = TexturePoints;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVertexBasedTextureMap
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVertexBasedTextureMap
 		{
-			return new IfcVertexBasedTextureMap(expressID, type, tape[0], tape[1]);
+			return new IfcVertexBasedTextureMap(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19796,9 +19796,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.VertexGeometry = VertexGeometry;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVertexPoint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVertexPoint
 		{
-			return new IfcVertexPoint(expressID, type, tape[0]);
+			return new IfcVertexPoint(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19819,9 +19819,9 @@ export namespace IFC2X3 {
 			this.IntersectingAxes = IntersectingAxes;
 			this.OffsetDistances = OffsetDistances;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVirtualGridIntersection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVirtualGridIntersection
 		{
-			return new IfcVirtualGridIntersection(expressID, type, tape[0], tape[1]);
+			return new IfcVirtualGridIntersection(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19849,9 +19849,9 @@ export namespace IFC2X3 {
 			this.PHLevel = PHLevel;
 			this.DissolvedSolidsContent = DissolvedSolidsContent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWaterProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWaterProperties
 		{
-			return new IfcWaterProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcWaterProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19865,9 +19865,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Item, Styles, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationOccurrence
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationOccurrence
 		{
-			return new IfcAnnotationOccurrence(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAnnotationOccurrence(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19881,9 +19881,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Item, Styles, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationSurfaceOccurrence
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationSurfaceOccurrence
 		{
-			return new IfcAnnotationSurfaceOccurrence(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAnnotationSurfaceOccurrence(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19897,9 +19897,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Item, Styles, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationSymbolOccurrence
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationSymbolOccurrence
 		{
-			return new IfcAnnotationSymbolOccurrence(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAnnotationSymbolOccurrence(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19913,9 +19913,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Item, Styles, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationTextOccurrence
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationTextOccurrence
 		{
-			return new IfcAnnotationTextOccurrence(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAnnotationTextOccurrence(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19931,9 +19931,9 @@ export namespace IFC2X3 {
 			super(expressID,type,ProfileType, ProfileName);
 			this.OuterCurve = OuterCurve;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcArbitraryClosedProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcArbitraryClosedProfileDef
 		{
-			return new IfcArbitraryClosedProfileDef(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcArbitraryClosedProfileDef(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19949,9 +19949,9 @@ export namespace IFC2X3 {
 			super(expressID,type,ProfileType, ProfileName);
 			this.Curve = Curve;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcArbitraryOpenProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcArbitraryOpenProfileDef
 		{
-			return new IfcArbitraryOpenProfileDef(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcArbitraryOpenProfileDef(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19967,9 +19967,9 @@ export namespace IFC2X3 {
 			super(expressID,type,ProfileType, ProfileName, OuterCurve);
 			this.InnerCurves = InnerCurves;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcArbitraryProfileDefWithVoids
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcArbitraryProfileDefWithVoids
 		{
-			return new IfcArbitraryProfileDefWithVoids(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcArbitraryProfileDefWithVoids(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -19987,9 +19987,9 @@ export namespace IFC2X3 {
 			this.RasterFormat = RasterFormat;
 			this.RasterCode = RasterCode;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBlobTexture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBlobTexture
 		{
-			return new IfcBlobTexture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcBlobTexture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20005,9 +20005,9 @@ export namespace IFC2X3 {
 			super(expressID,type,ProfileType, ProfileName, Curve);
 			this.Thickness = Thickness;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCenterLineProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCenterLineProfileDef
 		{
-			return new IfcCenterLineProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCenterLineProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20023,9 +20023,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Location, ItemReference, Name);
 			this.ReferencedSource = ReferencedSource;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClassificationReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClassificationReference
 		{
-			return new IfcClassificationReference(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcClassificationReference(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20045,9 +20045,9 @@ export namespace IFC2X3 {
 			this.Green = Green;
 			this.Blue = Blue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColourRgb
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColourRgb
 		{
-			return new IfcColourRgb(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcColourRgb(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20065,9 +20065,9 @@ export namespace IFC2X3 {
 			this.UsageName = UsageName;
 			this.HasProperties = HasProperties;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcComplexProperty
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcComplexProperty
 		{
-			return new IfcComplexProperty(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcComplexProperty(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20085,9 +20085,9 @@ export namespace IFC2X3 {
 			this.Profiles = Profiles;
 			this.Label = Label;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompositeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompositeProfileDef
 		{
-			return new IfcCompositeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCompositeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20103,9 +20103,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.CfsFaces = CfsFaces;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectedFaceSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectedFaceSet
 		{
-			return new IfcConnectedFaceSet(expressID, type, tape[0]);
+			return new IfcConnectedFaceSet(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20123,9 +20123,9 @@ export namespace IFC2X3 {
 			this.CurveOnRelatingElement = CurveOnRelatingElement;
 			this.CurveOnRelatedElement = CurveOnRelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionCurveGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionCurveGeometry
 		{
-			return new IfcConnectionCurveGeometry(expressID, type, tape[0], tape[1]);
+			return new IfcConnectionCurveGeometry(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20145,9 +20145,9 @@ export namespace IFC2X3 {
 			this.EccentricityInY = EccentricityInY;
 			this.EccentricityInZ = EccentricityInZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionPointEccentricity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionPointEccentricity
 		{
-			return new IfcConnectionPointEccentricity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcConnectionPointEccentricity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20163,9 +20163,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Dimensions, UnitType);
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcContextDependentUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcContextDependentUnit
 		{
-			return new IfcContextDependentUnit(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcContextDependentUnit(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20183,9 +20183,9 @@ export namespace IFC2X3 {
 			this.Name = Name;
 			this.ConversionFactor = ConversionFactor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConversionBasedUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConversionBasedUnit
 		{
-			return new IfcConversionBasedUnit(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcConversionBasedUnit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20205,9 +20205,9 @@ export namespace IFC2X3 {
 			this.CurveWidth = CurveWidth;
 			this.CurveColour = CurveColour;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveStyle
 		{
-			return new IfcCurveStyle(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCurveStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20227,9 +20227,9 @@ export namespace IFC2X3 {
 			this.Operator = Operator;
 			this.Label = Label;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDerivedProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDerivedProfileDef
 		{
-			return new IfcDerivedProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcDerivedProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20243,9 +20243,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name, Description, RelatingDraughtingCallout, RelatedDraughtingCallout);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDimensionCalloutRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDimensionCalloutRelationship
 		{
-			return new IfcDimensionCalloutRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcDimensionCalloutRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20259,9 +20259,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name, Description, RelatingDraughtingCallout, RelatedDraughtingCallout);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDimensionPair
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDimensionPair
 		{
-			return new IfcDimensionPair(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcDimensionPair(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20276,9 +20276,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Location, ItemReference, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDocumentReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDocumentReference
 		{
-			return new IfcDocumentReference(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcDocumentReference(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20292,9 +20292,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDraughtingPreDefinedTextFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDraughtingPreDefinedTextFont
 		{
-			return new IfcDraughtingPreDefinedTextFont(expressID, type, tape[0]);
+			return new IfcDraughtingPreDefinedTextFont(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20312,9 +20312,9 @@ export namespace IFC2X3 {
 			this.EdgeStart = EdgeStart;
 			this.EdgeEnd = EdgeEnd;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEdge
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEdge
 		{
-			return new IfcEdge(expressID, type, tape[0], tape[1]);
+			return new IfcEdge(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20332,9 +20332,9 @@ export namespace IFC2X3 {
 			this.EdgeGeometry = EdgeGeometry;
 			this.SameSense = SameSense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEdgeCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEdgeCurve
 		{
-			return new IfcEdgeCurve(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcEdgeCurve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20354,9 +20354,9 @@ export namespace IFC2X3 {
 			this.Description = Description;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExtendedMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExtendedMaterialProperties
 		{
-			return new IfcExtendedMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcExtendedMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20372,9 +20372,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Bounds = Bounds;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFace
 		{
-			return new IfcFace(expressID, type, tape[0]);
+			return new IfcFace(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20392,9 +20392,9 @@ export namespace IFC2X3 {
 			this.Bound = Bound;
 			this.Orientation = Orientation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFaceBound
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFaceBound
 		{
-			return new IfcFaceBound(expressID, type, tape[0], tape[1]);
+			return new IfcFaceBound(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20408,9 +20408,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Bound, Orientation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFaceOuterBound
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFaceOuterBound
 		{
-			return new IfcFaceOuterBound(expressID, type, tape[0], tape[1]);
+			return new IfcFaceOuterBound(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20428,9 +20428,9 @@ export namespace IFC2X3 {
 			this.FaceSurface = FaceSurface;
 			this.SameSense = SameSense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFaceSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFaceSurface
 		{
-			return new IfcFaceSurface(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcFaceSurface(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20456,9 +20456,9 @@ export namespace IFC2X3 {
 			this.CompressionFailureY = CompressionFailureY;
 			this.CompressionFailureZ = CompressionFailureZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFailureConnectionCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFailureConnectionCondition
 		{
-			return new IfcFailureConnectionCondition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcFailureConnectionCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20474,9 +20474,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name);
 			this.FillStyles = FillStyles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFillAreaStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFillAreaStyle
 		{
-			return new IfcFillAreaStyle(expressID, type, tape[0], tape[1]);
+			return new IfcFillAreaStyle(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20498,9 +20498,9 @@ export namespace IFC2X3 {
 			this.LowerHeatingValue = LowerHeatingValue;
 			this.HigherHeatingValue = HigherHeatingValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFuelProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFuelProperties
 		{
-			return new IfcFuelProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcFuelProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20520,9 +20520,9 @@ export namespace IFC2X3 {
 			this.Porosity = Porosity;
 			this.MassDensity = MassDensity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeneralMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeneralMaterialProperties
 		{
-			return new IfcGeneralMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcGeneralMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20546,9 +20546,9 @@ export namespace IFC2X3 {
 			this.MaximumPlateThickness = MaximumPlateThickness;
 			this.CrossSectionArea = CrossSectionArea;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeneralProfileProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeneralProfileProperties
 		{
-			return new IfcGeneralProfileProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcGeneralProfileProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20571,9 +20571,9 @@ export namespace IFC2X3 {
 			this.WorldCoordinateSystem = WorldCoordinateSystem;
 			this.TrueNorth = TrueNorth;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricRepresentationContext
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricRepresentationContext
 		{
-			return new IfcGeometricRepresentationContext(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcGeometricRepresentationContext(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20587,7 +20587,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricRepresentationItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricRepresentationItem
 		{
 			return new IfcGeometricRepresentationItem(expressID, type, );
 		}
@@ -20611,9 +20611,9 @@ export namespace IFC2X3 {
 			this.TargetView = TargetView;
 			this.UserDefinedTargetView = UserDefinedTargetView;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricRepresentationSubContext
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricRepresentationSubContext
 		{
-			return new IfcGeometricRepresentationSubContext(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcGeometricRepresentationSubContext(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20629,9 +20629,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Elements = Elements;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricSet
 		{
-			return new IfcGeometricSet(expressID, type, tape[0]);
+			return new IfcGeometricSet(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20649,9 +20649,9 @@ export namespace IFC2X3 {
 			this.PlacementLocation = PlacementLocation;
 			this.PlacementRefDirection = PlacementRefDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGridPlacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGridPlacement
 		{
-			return new IfcGridPlacement(expressID, type, tape[0], tape[1]);
+			return new IfcGridPlacement(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20669,9 +20669,9 @@ export namespace IFC2X3 {
 			this.BaseSurface = BaseSurface;
 			this.AgreementFlag = AgreementFlag;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHalfSpaceSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHalfSpaceSolid
 		{
-			return new IfcHalfSpaceSolid(expressID, type, tape[0], tape[1]);
+			return new IfcHalfSpaceSolid(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20695,9 +20695,9 @@ export namespace IFC2X3 {
 			this.VaporPermeability = VaporPermeability;
 			this.MoistureDiffusivity = MoistureDiffusivity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHygroscopicMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHygroscopicMaterialProperties
 		{
-			return new IfcHygroscopicMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcHygroscopicMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20713,9 +20713,9 @@ export namespace IFC2X3 {
 			super(expressID,type,RepeatS, RepeatT, TextureType, TextureTransform);
 			this.UrlReference = UrlReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcImageTexture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcImageTexture
 		{
-			return new IfcImageTexture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcImageTexture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20731,9 +20731,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description, StartTime, EndTime, TimeSeriesDataType, DataOrigin, UserDefinedDataOrigin, Unit);
 			this.Values = Values;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIrregularTimeSeries
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIrregularTimeSeries
 		{
-			return new IfcIrregularTimeSeries(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcIrregularTimeSeries(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20755,9 +20755,9 @@ export namespace IFC2X3 {
 			this.AmbientIntensity = AmbientIntensity;
 			this.Intensity = Intensity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSource
 		{
-			return new IfcLightSource(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcLightSource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20771,9 +20771,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name, LightColour, AmbientIntensity, Intensity);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourceAmbient
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourceAmbient
 		{
-			return new IfcLightSourceAmbient(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcLightSourceAmbient(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20789,9 +20789,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, LightColour, AmbientIntensity, Intensity);
 			this.Orientation = Orientation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourceDirectional
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourceDirectional
 		{
-			return new IfcLightSourceDirectional(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcLightSourceDirectional(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20817,9 +20817,9 @@ export namespace IFC2X3 {
 			this.LightEmissionSource = LightEmissionSource;
 			this.LightDistributionDataSource = LightDistributionDataSource;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourceGoniometric
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourceGoniometric
 		{
-			return new IfcLightSourceGoniometric(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcLightSourceGoniometric(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20843,9 +20843,9 @@ export namespace IFC2X3 {
 			this.DistanceAttenuation = DistanceAttenuation;
 			this.QuadricAttenuation = QuadricAttenuation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourcePositional
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourcePositional
 		{
-			return new IfcLightSourcePositional(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcLightSourcePositional(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20867,9 +20867,9 @@ export namespace IFC2X3 {
 			this.SpreadAngle = SpreadAngle;
 			this.BeamWidthAngle = BeamWidthAngle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourceSpot
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourceSpot
 		{
-			return new IfcLightSourceSpot(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcLightSourceSpot(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20887,9 +20887,9 @@ export namespace IFC2X3 {
 			this.PlacementRelTo = PlacementRelTo;
 			this.RelativePlacement = RelativePlacement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLocalPlacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLocalPlacement
 		{
-			return new IfcLocalPlacement(expressID, type, tape[0], tape[1]);
+			return new IfcLocalPlacement(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20903,7 +20903,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLoop
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLoop
 		{
 			return new IfcLoop(expressID, type, );
 		}
@@ -20923,9 +20923,9 @@ export namespace IFC2X3 {
 			this.MappingSource = MappingSource;
 			this.MappingTarget = MappingTarget;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMappedItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMappedItem
 		{
-			return new IfcMappedItem(expressID, type, tape[0], tape[1]);
+			return new IfcMappedItem(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20941,9 +20941,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, Description, Representations);
 			this.RepresentedMaterial = RepresentedMaterial;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialDefinitionRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialDefinitionRepresentation
 		{
-			return new IfcMaterialDefinitionRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcMaterialDefinitionRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20969,9 +20969,9 @@ export namespace IFC2X3 {
 			this.ProtectivePoreRatio = ProtectivePoreRatio;
 			this.WaterImpermeability = WaterImpermeability;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMechanicalConcreteMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMechanicalConcreteMaterialProperties
 		{
-			return new IfcMechanicalConcreteMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcMechanicalConcreteMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -20989,9 +20989,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcObjectDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcObjectDefinition
 		{
-			return new IfcObjectDefinition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcObjectDefinition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21007,9 +21007,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.RepeatFactor = RepeatFactor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOneDirectionRepeatFactor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOneDirectionRepeatFactor
 		{
-			return new IfcOneDirectionRepeatFactor(expressID, type, tape[0]);
+			return new IfcOneDirectionRepeatFactor(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21023,9 +21023,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,CfsFaces);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOpenShell
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOpenShell
 		{
-			return new IfcOpenShell(expressID, type, tape[0]);
+			return new IfcOpenShell(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21043,9 +21043,9 @@ export namespace IFC2X3 {
 			this.EdgeElement = EdgeElement;
 			this.Orientation = Orientation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOrientedEdge
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOrientedEdge
 		{
-			return new IfcOrientedEdge(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcOrientedEdge(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21061,9 +21061,9 @@ export namespace IFC2X3 {
 			super(expressID,type,ProfileType, ProfileName);
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcParameterizedProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcParameterizedProfileDef
 		{
-			return new IfcParameterizedProfileDef(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcParameterizedProfileDef(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21079,9 +21079,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.EdgeList = EdgeList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPath
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPath
 		{
-			return new IfcPath(expressID, type, tape[0]);
+			return new IfcPath(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21103,9 +21103,9 @@ export namespace IFC2X3 {
 			this.Quality = Quality;
 			this.Usage = Usage;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPhysicalComplexQuantity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPhysicalComplexQuantity
 		{
-			return new IfcPhysicalComplexQuantity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcPhysicalComplexQuantity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21127,9 +21127,9 @@ export namespace IFC2X3 {
 			this.ColourComponents = ColourComponents;
 			this.Pixel = Pixel;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPixelTexture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPixelTexture
 		{
-			return new IfcPixelTexture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcPixelTexture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21145,9 +21145,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Location = Location;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlacement
 		{
-			return new IfcPlacement(expressID, type, tape[0]);
+			return new IfcPlacement(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21165,9 +21165,9 @@ export namespace IFC2X3 {
 			this.SizeInX = SizeInX;
 			this.SizeInY = SizeInY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlanarExtent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlanarExtent
 		{
-			return new IfcPlanarExtent(expressID, type, tape[0], tape[1]);
+			return new IfcPlanarExtent(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21181,7 +21181,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPoint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPoint
 		{
 			return new IfcPoint(expressID, type, );
 		}
@@ -21201,9 +21201,9 @@ export namespace IFC2X3 {
 			this.BasisCurve = BasisCurve;
 			this.PointParameter = PointParameter;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPointOnCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPointOnCurve
 		{
-			return new IfcPointOnCurve(expressID, type, tape[0], tape[1]);
+			return new IfcPointOnCurve(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21223,9 +21223,9 @@ export namespace IFC2X3 {
 			this.PointParameterU = PointParameterU;
 			this.PointParameterV = PointParameterV;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPointOnSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPointOnSurface
 		{
-			return new IfcPointOnSurface(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPointOnSurface(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21241,9 +21241,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Polygon = Polygon;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPolyLoop
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPolyLoop
 		{
-			return new IfcPolyLoop(expressID, type, tape[0]);
+			return new IfcPolyLoop(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21261,9 +21261,9 @@ export namespace IFC2X3 {
 			this.Position = Position;
 			this.PolygonalBoundary = PolygonalBoundary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPolygonalBoundedHalfSpace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPolygonalBoundedHalfSpace
 		{
-			return new IfcPolygonalBoundedHalfSpace(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPolygonalBoundedHalfSpace(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21277,9 +21277,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedColour
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedColour
 		{
-			return new IfcPreDefinedColour(expressID, type, tape[0]);
+			return new IfcPreDefinedColour(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21293,9 +21293,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedCurveFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedCurveFont
 		{
-			return new IfcPreDefinedCurveFont(expressID, type, tape[0]);
+			return new IfcPreDefinedCurveFont(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21309,9 +21309,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedDimensionSymbol
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedDimensionSymbol
 		{
-			return new IfcPreDefinedDimensionSymbol(expressID, type, tape[0]);
+			return new IfcPreDefinedDimensionSymbol(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21325,9 +21325,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedPointMarkerSymbol
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedPointMarkerSymbol
 		{
-			return new IfcPreDefinedPointMarkerSymbol(expressID, type, tape[0]);
+			return new IfcPreDefinedPointMarkerSymbol(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21343,9 +21343,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name, Description, Representations);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProductDefinitionShape
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProductDefinitionShape
 		{
-			return new IfcProductDefinitionShape(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcProductDefinitionShape(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21365,9 +21365,9 @@ export namespace IFC2X3 {
 			this.LowerBoundValue = LowerBoundValue;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyBoundedValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyBoundedValue
 		{
-			return new IfcPropertyBoundedValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcPropertyBoundedValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21382,9 +21382,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyDefinition
 		{
-			return new IfcPropertyDefinition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyDefinition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21402,9 +21402,9 @@ export namespace IFC2X3 {
 			this.EnumerationValues = EnumerationValues;
 			this.EnumerationReference = EnumerationReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyEnumeratedValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyEnumeratedValue
 		{
-			return new IfcPropertyEnumeratedValue(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyEnumeratedValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21422,9 +21422,9 @@ export namespace IFC2X3 {
 			this.ListValues = ListValues;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyListValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyListValue
 		{
-			return new IfcPropertyListValue(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyListValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21442,9 +21442,9 @@ export namespace IFC2X3 {
 			this.UsageName = UsageName;
 			this.PropertyReference = PropertyReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyReferenceValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyReferenceValue
 		{
-			return new IfcPropertyReferenceValue(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyReferenceValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21460,9 +21460,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertySetDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertySetDefinition
 		{
-			return new IfcPropertySetDefinition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertySetDefinition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21480,9 +21480,9 @@ export namespace IFC2X3 {
 			this.NominalValue = NominalValue;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertySingleValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertySingleValue
 		{
-			return new IfcPropertySingleValue(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertySingleValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21506,9 +21506,9 @@ export namespace IFC2X3 {
 			this.DefiningUnit = DefiningUnit;
 			this.DefinedUnit = DefinedUnit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyTableValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyTableValue
 		{
-			return new IfcPropertyTableValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcPropertyTableValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21526,9 +21526,9 @@ export namespace IFC2X3 {
 			this.XDim = XDim;
 			this.YDim = YDim;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRectangleProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRectangleProfileDef
 		{
-			return new IfcRectangleProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcRectangleProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21546,9 +21546,9 @@ export namespace IFC2X3 {
 			this.TimeStep = TimeStep;
 			this.Values = Values;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRegularTimeSeries
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRegularTimeSeries
 		{
-			return new IfcRegularTimeSeries(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRegularTimeSeries(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21566,9 +21566,9 @@ export namespace IFC2X3 {
 			this.DefinitionType = DefinitionType;
 			this.ReinforcementSectionDefinitions = ReinforcementSectionDefinitions;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcementDefinitionProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcementDefinitionProperties
 		{
-			return new IfcReinforcementDefinitionProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcReinforcementDefinitionProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21582,9 +21582,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelationship
 		{
-			return new IfcRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21600,9 +21600,9 @@ export namespace IFC2X3 {
 			super(expressID,type,ProfileType, ProfileName, Position, XDim, YDim);
 			this.RoundingRadius = RoundingRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRoundedRectangleProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRoundedRectangleProfileDef
 		{
-			return new IfcRoundedRectangleProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRoundedRectangleProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21622,9 +21622,9 @@ export namespace IFC2X3 {
 			this.CrossSections = CrossSections;
 			this.CrossSectionPositions = CrossSectionPositions;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSectionedSpine
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSectionedSpine
 		{
-			return new IfcSectionedSpine(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSectionedSpine(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21646,9 +21646,9 @@ export namespace IFC2X3 {
 			this.MostUsedValue = MostUsedValue;
 			this.LowerValue = LowerValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcServiceLifeFactor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcServiceLifeFactor
 		{
-			return new IfcServiceLifeFactor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcServiceLifeFactor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21664,9 +21664,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.SbsmBoundary = SbsmBoundary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShellBasedSurfaceModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShellBasedSurfaceModel
 		{
-			return new IfcShellBasedSurfaceModel(expressID, type, tape[0]);
+			return new IfcShellBasedSurfaceModel(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21686,9 +21686,9 @@ export namespace IFC2X3 {
 			this.SlippageY = SlippageY;
 			this.SlippageZ = SlippageZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSlippageConnectionCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSlippageConnectionCondition
 		{
-			return new IfcSlippageConnectionCondition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSlippageConnectionCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21702,7 +21702,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSolidModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSolidModel
 		{
 			return new IfcSolidModel(expressID, type, );
 		}
@@ -21724,9 +21724,9 @@ export namespace IFC2X3 {
 			this.SoundScale = SoundScale;
 			this.SoundValues = SoundValues;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSoundProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSoundProperties
 		{
-			return new IfcSoundProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcSoundProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21746,9 +21746,9 @@ export namespace IFC2X3 {
 			this.Frequency = Frequency;
 			this.SoundLevelSingleValue = SoundLevelSingleValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSoundValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSoundValue
 		{
-			return new IfcSoundValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcSoundValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21782,9 +21782,9 @@ export namespace IFC2X3 {
 			this.UserDefinedPropertySource = UserDefinedPropertySource;
 			this.ThermalLoadType = ThermalLoadType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpaceThermalLoadProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpaceThermalLoadProperties
 		{
-			return new IfcSpaceThermalLoadProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcSpaceThermalLoadProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21810,9 +21810,9 @@ export namespace IFC2X3 {
 			this.LinearMomentY = LinearMomentY;
 			this.LinearMomentZ = LinearMomentZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadLinearForce
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadLinearForce
 		{
-			return new IfcStructuralLoadLinearForce(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralLoadLinearForce(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21832,9 +21832,9 @@ export namespace IFC2X3 {
 			this.PlanarForceY = PlanarForceY;
 			this.PlanarForceZ = PlanarForceZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadPlanarForce
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadPlanarForce
 		{
-			return new IfcStructuralLoadPlanarForce(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcStructuralLoadPlanarForce(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21860,9 +21860,9 @@ export namespace IFC2X3 {
 			this.RotationalDisplacementRY = RotationalDisplacementRY;
 			this.RotationalDisplacementRZ = RotationalDisplacementRZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadSingleDisplacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadSingleDisplacement
 		{
-			return new IfcStructuralLoadSingleDisplacement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralLoadSingleDisplacement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21878,9 +21878,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, DisplacementX, DisplacementY, DisplacementZ, RotationalDisplacementRX, RotationalDisplacementRY, RotationalDisplacementRZ);
 			this.Distortion = Distortion;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadSingleDisplacementDistortion
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadSingleDisplacementDistortion
 		{
-			return new IfcStructuralLoadSingleDisplacementDistortion(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralLoadSingleDisplacementDistortion(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21906,9 +21906,9 @@ export namespace IFC2X3 {
 			this.MomentY = MomentY;
 			this.MomentZ = MomentZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadSingleForce
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadSingleForce
 		{
-			return new IfcStructuralLoadSingleForce(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralLoadSingleForce(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21924,9 +21924,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Name, ForceX, ForceY, ForceZ, MomentX, MomentY, MomentZ);
 			this.WarpingMoment = WarpingMoment;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadSingleForceWarping
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadSingleForceWarping
 		{
-			return new IfcStructuralLoadSingleForceWarping(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralLoadSingleForceWarping(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21972,9 +21972,9 @@ export namespace IFC2X3 {
 			this.CentreOfGravityInX = CentreOfGravityInX;
 			this.CentreOfGravityInY = CentreOfGravityInY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralProfileProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralProfileProperties
 		{
-			return new IfcStructuralProfileProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17], tape[18], tape[19], tape[20], tape[21], tape[22]);
+			return new IfcStructuralProfileProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17], _tape[18], _tape[19], _tape[20], _tape[21], _tape[22]);
 		}
 		ToTape(): unknown[]
 		{
@@ -21996,9 +21996,9 @@ export namespace IFC2X3 {
 			this.PlasticShapeFactorY = PlasticShapeFactorY;
 			this.PlasticShapeFactorZ = PlasticShapeFactorZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSteelProfileProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSteelProfileProperties
 		{
-			return new IfcStructuralSteelProfileProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17], tape[18], tape[19], tape[20], tape[21], tape[22], tape[23], tape[24], tape[25], tape[26]);
+			return new IfcStructuralSteelProfileProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17], _tape[18], _tape[19], _tape[20], _tape[21], _tape[22], _tape[23], _tape[24], _tape[25], _tape[26]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22014,9 +22014,9 @@ export namespace IFC2X3 {
 			super(expressID,type,EdgeStart, EdgeEnd);
 			this.ParentEdge = ParentEdge;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSubedge
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSubedge
 		{
-			return new IfcSubedge(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSubedge(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22030,7 +22030,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurface
 		{
 			return new IfcSurface(expressID, type, );
 		}
@@ -22062,9 +22062,9 @@ export namespace IFC2X3 {
 			this.SpecularHighlight = SpecularHighlight;
 			this.ReflectanceMethod = ReflectanceMethod;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleRendering
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleRendering
 		{
-			return new IfcSurfaceStyleRendering(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSurfaceStyleRendering(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22082,9 +22082,9 @@ export namespace IFC2X3 {
 			this.SweptArea = SweptArea;
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSweptAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSweptAreaSolid
 		{
-			return new IfcSweptAreaSolid(expressID, type, tape[0], tape[1]);
+			return new IfcSweptAreaSolid(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22108,9 +22108,9 @@ export namespace IFC2X3 {
 			this.StartParam = StartParam;
 			this.EndParam = EndParam;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSweptDiskSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSweptDiskSolid
 		{
-			return new IfcSweptDiskSolid(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcSweptDiskSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22128,9 +22128,9 @@ export namespace IFC2X3 {
 			this.SweptCurve = SweptCurve;
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSweptSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSweptSurface
 		{
-			return new IfcSweptSurface(expressID, type, tape[0], tape[1]);
+			return new IfcSweptSurface(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22164,9 +22164,9 @@ export namespace IFC2X3 {
 			this.FlangeSlope = FlangeSlope;
 			this.CentreOfGravityInY = CentreOfGravityInY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTShapeProfileDef
 		{
-			return new IfcTShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcTShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22182,9 +22182,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Item, Styles, Name);
 			this.AnnotatedCurve = AnnotatedCurve;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTerminatorSymbol
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTerminatorSymbol
 		{
-			return new IfcTerminatorSymbol(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcTerminatorSymbol(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22204,9 +22204,9 @@ export namespace IFC2X3 {
 			this.Placement = Placement;
 			this.Path = Path;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextLiteral
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextLiteral
 		{
-			return new IfcTextLiteral(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcTextLiteral(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22224,9 +22224,9 @@ export namespace IFC2X3 {
 			this.Extent = Extent;
 			this.BoxAlignment = BoxAlignment;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextLiteralWithExtent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextLiteralWithExtent
 		{
-			return new IfcTextLiteralWithExtent(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcTextLiteralWithExtent(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22248,9 +22248,9 @@ export namespace IFC2X3 {
 			this.YDim = YDim;
 			this.TopXOffset = TopXOffset;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTrapeziumProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTrapeziumProfileDef
 		{
-			return new IfcTrapeziumProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcTrapeziumProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22266,9 +22266,9 @@ export namespace IFC2X3 {
 			super(expressID,type,RepeatFactor);
 			this.SecondRepeatFactor = SecondRepeatFactor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTwoDirectionRepeatFactor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTwoDirectionRepeatFactor
 		{
-			return new IfcTwoDirectionRepeatFactor(expressID, type, tape[0], tape[1]);
+			return new IfcTwoDirectionRepeatFactor(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22287,9 +22287,9 @@ export namespace IFC2X3 {
 			this.ApplicableOccurrence = ApplicableOccurrence;
 			this.HasPropertySets = HasPropertySets;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTypeObject
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTypeObject
 		{
-			return new IfcTypeObject(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcTypeObject(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22307,9 +22307,9 @@ export namespace IFC2X3 {
 			this.RepresentationMaps = RepresentationMaps;
 			this.Tag = Tag;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTypeProduct
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTypeProduct
 		{
-			return new IfcTypeProduct(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcTypeProduct(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22339,9 +22339,9 @@ export namespace IFC2X3 {
 			this.FlangeSlope = FlangeSlope;
 			this.CentreOfGravityInX = CentreOfGravityInX;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUShapeProfileDef
 		{
-			return new IfcUShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcUShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22359,9 +22359,9 @@ export namespace IFC2X3 {
 			this.Orientation = Orientation;
 			this.Magnitude = Magnitude;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVector
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVector
 		{
-			return new IfcVector(expressID, type, tape[0], tape[1]);
+			return new IfcVector(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22377,9 +22377,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.LoopVertex = LoopVertex;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVertexLoop
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVertexLoop
 		{
-			return new IfcVertexLoop(expressID, type, tape[0]);
+			return new IfcVertexLoop(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22411,9 +22411,9 @@ export namespace IFC2X3 {
 			this.SecondMullionOffset = SecondMullionOffset;
 			this.ShapeAspectStyle = ShapeAspectStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindowLiningProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindowLiningProperties
 		{
-			return new IfcWindowLiningProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcWindowLiningProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22437,9 +22437,9 @@ export namespace IFC2X3 {
 			this.FrameThickness = FrameThickness;
 			this.ShapeAspectStyle = ShapeAspectStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindowPanelProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindowPanelProperties
 		{
-			return new IfcWindowPanelProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcWindowPanelProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22461,9 +22461,9 @@ export namespace IFC2X3 {
 			this.ParameterTakesPrecedence = ParameterTakesPrecedence;
 			this.Sizeable = Sizeable;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindowStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindowStyle
 		{
-			return new IfcWindowStyle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcWindowStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22489,9 +22489,9 @@ export namespace IFC2X3 {
 			this.FilletRadius = FilletRadius;
 			this.EdgeRadius = EdgeRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcZShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcZShapeProfileDef
 		{
-			return new IfcZShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcZShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22505,9 +22505,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Item, Styles, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationCurveOccurrence
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationCurveOccurrence
 		{
-			return new IfcAnnotationCurveOccurrence(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAnnotationCurveOccurrence(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22525,9 +22525,9 @@ export namespace IFC2X3 {
 			this.OuterBoundary = OuterBoundary;
 			this.InnerBoundaries = InnerBoundaries;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationFillArea
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationFillArea
 		{
-			return new IfcAnnotationFillArea(expressID, type, tape[0], tape[1]);
+			return new IfcAnnotationFillArea(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22545,9 +22545,9 @@ export namespace IFC2X3 {
 			this.FillStyleTarget = FillStyleTarget;
 			this.GlobalOrLocal = GlobalOrLocal;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationFillAreaOccurrence
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationFillAreaOccurrence
 		{
-			return new IfcAnnotationFillAreaOccurrence(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcAnnotationFillAreaOccurrence(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22565,9 +22565,9 @@ export namespace IFC2X3 {
 			this.Item = Item;
 			this.TextureCoordinates = TextureCoordinates;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationSurface
 		{
-			return new IfcAnnotationSurface(expressID, type, tape[0], tape[1]);
+			return new IfcAnnotationSurface(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22583,9 +22583,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Location);
 			this.Axis = Axis;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAxis1Placement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAxis1Placement
 		{
-			return new IfcAxis1Placement(expressID, type, tape[0], tape[1]);
+			return new IfcAxis1Placement(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22601,9 +22601,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Location);
 			this.RefDirection = RefDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAxis2Placement2D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAxis2Placement2D
 		{
-			return new IfcAxis2Placement2D(expressID, type, tape[0], tape[1]);
+			return new IfcAxis2Placement2D(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22621,9 +22621,9 @@ export namespace IFC2X3 {
 			this.Axis = Axis;
 			this.RefDirection = RefDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAxis2Placement3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAxis2Placement3D
 		{
-			return new IfcAxis2Placement3D(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAxis2Placement3D(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22643,9 +22643,9 @@ export namespace IFC2X3 {
 			this.FirstOperand = FirstOperand;
 			this.SecondOperand = SecondOperand;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBooleanResult
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBooleanResult
 		{
-			return new IfcBooleanResult(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcBooleanResult(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22659,7 +22659,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundedSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundedSurface
 		{
 			return new IfcBoundedSurface(expressID, type, );
 		}
@@ -22683,9 +22683,9 @@ export namespace IFC2X3 {
 			this.YDim = YDim;
 			this.ZDim = ZDim;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundingBox
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundingBox
 		{
-			return new IfcBoundingBox(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcBoundingBox(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22701,9 +22701,9 @@ export namespace IFC2X3 {
 			super(expressID,type,BaseSurface, AgreementFlag);
 			this.Enclosure = Enclosure;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoxedHalfSpace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoxedHalfSpace
 		{
-			return new IfcBoxedHalfSpace(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcBoxedHalfSpace(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22729,9 +22729,9 @@ export namespace IFC2X3 {
 			this.InternalFilletRadius = InternalFilletRadius;
 			this.CentreOfGravityInX = CentreOfGravityInX;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCShapeProfileDef
 		{
-			return new IfcCShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22747,9 +22747,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Coordinates = Coordinates;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianPoint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianPoint
 		{
-			return new IfcCartesianPoint(expressID, type, tape[0]);
+			return new IfcCartesianPoint(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22771,9 +22771,9 @@ export namespace IFC2X3 {
 			this.LocalOrigin = LocalOrigin;
 			this.Scale = Scale;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator
 		{
-			return new IfcCartesianTransformationOperator(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCartesianTransformationOperator(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22787,9 +22787,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Axis1, Axis2, LocalOrigin, Scale);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator2D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator2D
 		{
-			return new IfcCartesianTransformationOperator2D(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCartesianTransformationOperator2D(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22805,9 +22805,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Axis1, Axis2, LocalOrigin, Scale);
 			this.Scale2 = Scale2;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator2DnonUniform
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator2DnonUniform
 		{
-			return new IfcCartesianTransformationOperator2DnonUniform(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCartesianTransformationOperator2DnonUniform(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22823,9 +22823,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Axis1, Axis2, LocalOrigin, Scale);
 			this.Axis3 = Axis3;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator3D
 		{
-			return new IfcCartesianTransformationOperator3D(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCartesianTransformationOperator3D(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22843,9 +22843,9 @@ export namespace IFC2X3 {
 			this.Scale2 = Scale2;
 			this.Scale3 = Scale3;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator3DnonUniform
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator3DnonUniform
 		{
-			return new IfcCartesianTransformationOperator3DnonUniform(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcCartesianTransformationOperator3DnonUniform(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22861,9 +22861,9 @@ export namespace IFC2X3 {
 			super(expressID,type,ProfileType, ProfileName, Position);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCircleProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCircleProfileDef
 		{
-			return new IfcCircleProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCircleProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22877,9 +22877,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,CfsFaces);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClosedShell
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClosedShell
 		{
-			return new IfcClosedShell(expressID, type, tape[0]);
+			return new IfcClosedShell(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22900,9 +22900,9 @@ export namespace IFC2X3 {
 			this.SameSense = SameSense;
 			this.ParentCurve = ParentCurve;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompositeCurveSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompositeCurveSegment
 		{
-			return new IfcCompositeCurveSegment(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCompositeCurveSegment(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22940,9 +22940,9 @@ export namespace IFC2X3 {
 			this.BaseDepth3 = BaseDepth3;
 			this.CentreOfGravityInY = CentreOfGravityInY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCraneRailAShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCraneRailAShapeProfileDef
 		{
-			return new IfcCraneRailAShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14]);
+			return new IfcCraneRailAShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22974,9 +22974,9 @@ export namespace IFC2X3 {
 			this.BaseDepth2 = BaseDepth2;
 			this.CentreOfGravityInY = CentreOfGravityInY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCraneRailFShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCraneRailFShapeProfileDef
 		{
-			return new IfcCraneRailFShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcCraneRailFShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -22992,9 +22992,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCsgPrimitive3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCsgPrimitive3D
 		{
-			return new IfcCsgPrimitive3D(expressID, type, tape[0]);
+			return new IfcCsgPrimitive3D(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23010,9 +23010,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.TreeRootExpression = TreeRootExpression;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCsgSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCsgSolid
 		{
-			return new IfcCsgSolid(expressID, type, tape[0]);
+			return new IfcCsgSolid(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23026,7 +23026,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurve
 		{
 			return new IfcCurve(expressID, type, );
 		}
@@ -23048,9 +23048,9 @@ export namespace IFC2X3 {
 			this.OuterBoundary = OuterBoundary;
 			this.InnerBoundaries = InnerBoundaries;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveBoundedPlane
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveBoundedPlane
 		{
-			return new IfcCurveBoundedPlane(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCurveBoundedPlane(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23068,9 +23068,9 @@ export namespace IFC2X3 {
 			this.Definition = Definition;
 			this.Target = Target;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDefinedSymbol
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDefinedSymbol
 		{
-			return new IfcDefinedSymbol(expressID, type, tape[0], tape[1]);
+			return new IfcDefinedSymbol(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23085,9 +23085,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Item, Styles, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDimensionCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDimensionCurve
 		{
-			return new IfcDimensionCurve(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcDimensionCurve(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23103,9 +23103,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Item, Styles, Name, AnnotatedCurve);
 			this.Role = Role;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDimensionCurveTerminator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDimensionCurveTerminator
 		{
-			return new IfcDimensionCurveTerminator(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcDimensionCurveTerminator(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23121,9 +23121,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.DirectionRatios = DirectionRatios;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDirection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDirection
 		{
-			return new IfcDirection(expressID, type, tape[0]);
+			return new IfcDirection(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23159,9 +23159,9 @@ export namespace IFC2X3 {
 			this.CasingDepth = CasingDepth;
 			this.ShapeAspectStyle = ShapeAspectStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoorLiningProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoorLiningProperties
 		{
-			return new IfcDoorLiningProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14]);
+			return new IfcDoorLiningProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23185,9 +23185,9 @@ export namespace IFC2X3 {
 			this.PanelPosition = PanelPosition;
 			this.ShapeAspectStyle = ShapeAspectStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoorPanelProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoorPanelProperties
 		{
-			return new IfcDoorPanelProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDoorPanelProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23209,9 +23209,9 @@ export namespace IFC2X3 {
 			this.ParameterTakesPrecedence = ParameterTakesPrecedence;
 			this.Sizeable = Sizeable;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoorStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoorStyle
 		{
-			return new IfcDoorStyle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcDoorStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23229,9 +23229,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Contents = Contents;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDraughtingCallout
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDraughtingCallout
 		{
-			return new IfcDraughtingCallout(expressID, type, tape[0]);
+			return new IfcDraughtingCallout(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23245,9 +23245,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDraughtingPreDefinedColour
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDraughtingPreDefinedColour
 		{
-			return new IfcDraughtingPreDefinedColour(expressID, type, tape[0]);
+			return new IfcDraughtingPreDefinedColour(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23261,9 +23261,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDraughtingPreDefinedCurveFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDraughtingPreDefinedCurveFont
 		{
-			return new IfcDraughtingPreDefinedCurveFont(expressID, type, tape[0]);
+			return new IfcDraughtingPreDefinedCurveFont(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23279,9 +23279,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.EdgeList = EdgeList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEdgeLoop
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEdgeLoop
 		{
-			return new IfcEdgeLoop(expressID, type, tape[0]);
+			return new IfcEdgeLoop(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23299,9 +23299,9 @@ export namespace IFC2X3 {
 			this.MethodOfMeasurement = MethodOfMeasurement;
 			this.Quantities = Quantities;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementQuantity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementQuantity
 		{
-			return new IfcElementQuantity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcElementQuantity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23317,9 +23317,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag);
 			this.ElementType = ElementType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementType
 		{
-			return new IfcElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23335,9 +23335,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementarySurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementarySurface
 		{
-			return new IfcElementarySurface(expressID, type, tape[0]);
+			return new IfcElementarySurface(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23355,9 +23355,9 @@ export namespace IFC2X3 {
 			this.SemiAxis1 = SemiAxis1;
 			this.SemiAxis2 = SemiAxis2;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEllipseProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEllipseProfileDef
 		{
-			return new IfcEllipseProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcEllipseProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23375,9 +23375,9 @@ export namespace IFC2X3 {
 			this.EnergySequence = EnergySequence;
 			this.UserDefinedEnergySequence = UserDefinedEnergySequence;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEnergyProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEnergyProperties
 		{
-			return new IfcEnergyProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcEnergyProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23395,9 +23395,9 @@ export namespace IFC2X3 {
 			this.ExtrudedDirection = ExtrudedDirection;
 			this.Depth = Depth;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExtrudedAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExtrudedAreaSolid
 		{
-			return new IfcExtrudedAreaSolid(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcExtrudedAreaSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23413,9 +23413,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.FbsmFaces = FbsmFaces;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFaceBasedSurfaceModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFaceBasedSurfaceModel
 		{
-			return new IfcFaceBasedSurfaceModel(expressID, type, tape[0]);
+			return new IfcFaceBasedSurfaceModel(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23439,9 +23439,9 @@ export namespace IFC2X3 {
 			this.PatternStart = PatternStart;
 			this.HatchLineAngle = HatchLineAngle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFillAreaStyleHatching
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFillAreaStyleHatching
 		{
-			return new IfcFillAreaStyleHatching(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcFillAreaStyleHatching(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23457,9 +23457,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Symbol = Symbol;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFillAreaStyleTileSymbolWithStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFillAreaStyleTileSymbolWithStyle
 		{
-			return new IfcFillAreaStyleTileSymbolWithStyle(expressID, type, tape[0]);
+			return new IfcFillAreaStyleTileSymbolWithStyle(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23479,9 +23479,9 @@ export namespace IFC2X3 {
 			this.Tiles = Tiles;
 			this.TilingScale = TilingScale;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFillAreaStyleTiles
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFillAreaStyleTiles
 		{
-			return new IfcFillAreaStyleTiles(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcFillAreaStyleTiles(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23525,9 +23525,9 @@ export namespace IFC2X3 {
 			this.VelocitySingleValue = VelocitySingleValue;
 			this.PressureSingleValue = PressureSingleValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFluidFlowProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFluidFlowProperties
 		{
-			return new IfcFluidFlowProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17], tape[18]);
+			return new IfcFluidFlowProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17], _tape[18]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23541,9 +23541,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFurnishingElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFurnishingElementType
 		{
-			return new IfcFurnishingElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFurnishingElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23559,9 +23559,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.AssemblyPlace = AssemblyPlace;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFurnitureType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFurnitureType
 		{
-			return new IfcFurnitureType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFurnitureType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23575,9 +23575,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Elements);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricCurveSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricCurveSet
 		{
-			return new IfcGeometricCurveSet(expressID, type, tape[0]);
+			return new IfcGeometricCurveSet(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23601,9 +23601,9 @@ export namespace IFC2X3 {
 			this.FlangeThickness = FlangeThickness;
 			this.FilletRadius = FilletRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIShapeProfileDef
 		{
-			return new IfcIShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcIShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23633,9 +23633,9 @@ export namespace IFC2X3 {
 			this.CentreOfGravityInX = CentreOfGravityInX;
 			this.CentreOfGravityInY = CentreOfGravityInY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLShapeProfileDef
 		{
-			return new IfcLShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcLShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23653,9 +23653,9 @@ export namespace IFC2X3 {
 			this.Pnt = Pnt;
 			this.Dir = Dir;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLine
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLine
 		{
-			return new IfcLine(expressID, type, tape[0], tape[1]);
+			return new IfcLine(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23671,9 +23671,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Outer = Outer;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcManifoldSolidBrep
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcManifoldSolidBrep
 		{
-			return new IfcManifoldSolidBrep(expressID, type, tape[0]);
+			return new IfcManifoldSolidBrep(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23690,9 +23690,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 			this.ObjectType = ObjectType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcObject
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcObject
 		{
-			return new IfcObject(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcObject(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23712,9 +23712,9 @@ export namespace IFC2X3 {
 			this.Distance = Distance;
 			this.SelfIntersect = SelfIntersect;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOffsetCurve2D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOffsetCurve2D
 		{
-			return new IfcOffsetCurve2D(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcOffsetCurve2D(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23736,9 +23736,9 @@ export namespace IFC2X3 {
 			this.SelfIntersect = SelfIntersect;
 			this.RefDirection = RefDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOffsetCurve3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOffsetCurve3D
 		{
-			return new IfcOffsetCurve3D(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcOffsetCurve3D(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23762,9 +23762,9 @@ export namespace IFC2X3 {
 			this.FrameThickness = FrameThickness;
 			this.ShapeAspectStyle = ShapeAspectStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPermeableCoveringProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPermeableCoveringProperties
 		{
-			return new IfcPermeableCoveringProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPermeableCoveringProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23780,9 +23780,9 @@ export namespace IFC2X3 {
 			super(expressID,type,SizeInX, SizeInY);
 			this.Placement = Placement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlanarBox
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlanarBox
 		{
-			return new IfcPlanarBox(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPlanarBox(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23796,9 +23796,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Position);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlane
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlane
 		{
-			return new IfcPlane(expressID, type, tape[0]);
+			return new IfcPlane(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23815,9 +23815,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProcess
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProcess
 		{
-			return new IfcProcess(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcProcess(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23836,9 +23836,9 @@ export namespace IFC2X3 {
 			this.ObjectPlacement = ObjectPlacement;
 			this.Representation = Representation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProduct
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProduct
 		{
-			return new IfcProduct(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcProduct(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23860,9 +23860,9 @@ export namespace IFC2X3 {
 			this.RepresentationContexts = RepresentationContexts;
 			this.UnitsInContext = UnitsInContext;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProject
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProject
 		{
-			return new IfcProject(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProject(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23876,9 +23876,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Item, Styles, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProjectionCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProjectionCurve
 		{
-			return new IfcProjectionCurve(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcProjectionCurve(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23894,9 +23894,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 			this.HasProperties = HasProperties;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertySet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertySet
 		{
-			return new IfcPropertySet(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcPropertySet(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23914,9 +23914,9 @@ export namespace IFC2X3 {
 			this.ProxyType = ProxyType;
 			this.Tag = Tag;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProxy
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProxy
 		{
-			return new IfcProxy(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProxy(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23936,9 +23936,9 @@ export namespace IFC2X3 {
 			this.InnerFilletRadius = InnerFilletRadius;
 			this.OuterFilletRadius = OuterFilletRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRectangleHollowProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRectangleHollowProfileDef
 		{
-			return new IfcRectangleHollowProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRectangleHollowProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23958,9 +23958,9 @@ export namespace IFC2X3 {
 			this.YLength = YLength;
 			this.Height = Height;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRectangularPyramid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRectangularPyramid
 		{
-			return new IfcRectangularPyramid(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRectangularPyramid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -23988,9 +23988,9 @@ export namespace IFC2X3 {
 			this.Usense = Usense;
 			this.Vsense = Vsense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRectangularTrimmedSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRectangularTrimmedSurface
 		{
-			return new IfcRectangularTrimmedSurface(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRectangularTrimmedSurface(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24008,9 +24008,9 @@ export namespace IFC2X3 {
 			this.RelatedObjects = RelatedObjects;
 			this.RelatedObjectsType = RelatedObjectsType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssigns
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssigns
 		{
-			return new IfcRelAssigns(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssigns(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24028,9 +24028,9 @@ export namespace IFC2X3 {
 			this.RelatingActor = RelatingActor;
 			this.ActingRole = ActingRole;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToActor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToActor
 		{
-			return new IfcRelAssignsToActor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelAssignsToActor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24046,9 +24046,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 			this.RelatingControl = RelatingControl;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToControl
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToControl
 		{
-			return new IfcRelAssignsToControl(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToControl(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24064,9 +24064,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 			this.RelatingGroup = RelatingGroup;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToGroup
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToGroup
 		{
-			return new IfcRelAssignsToGroup(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToGroup(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24084,9 +24084,9 @@ export namespace IFC2X3 {
 			this.RelatingProcess = RelatingProcess;
 			this.QuantityInProcess = QuantityInProcess;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToProcess
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToProcess
 		{
-			return new IfcRelAssignsToProcess(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelAssignsToProcess(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24102,9 +24102,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 			this.RelatingProduct = RelatingProduct;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToProduct
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToProduct
 		{
-			return new IfcRelAssignsToProduct(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToProduct(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24118,9 +24118,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingControl);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToProjectOrder
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToProjectOrder
 		{
-			return new IfcRelAssignsToProjectOrder(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToProjectOrder(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24136,9 +24136,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 			this.RelatingResource = RelatingResource;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToResource
 		{
-			return new IfcRelAssignsToResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24154,9 +24154,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 			this.RelatedObjects = RelatedObjects;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociates
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociates
 		{
-			return new IfcRelAssociates(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcRelAssociates(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24172,9 +24172,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingAppliedValue = RelatingAppliedValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesAppliedValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesAppliedValue
 		{
-			return new IfcRelAssociatesAppliedValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesAppliedValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24190,9 +24190,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingApproval = RelatingApproval;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesApproval
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesApproval
 		{
-			return new IfcRelAssociatesApproval(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesApproval(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24208,9 +24208,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingClassification = RelatingClassification;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesClassification
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesClassification
 		{
-			return new IfcRelAssociatesClassification(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesClassification(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24228,9 +24228,9 @@ export namespace IFC2X3 {
 			this.Intent = Intent;
 			this.RelatingConstraint = RelatingConstraint;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesConstraint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesConstraint
 		{
-			return new IfcRelAssociatesConstraint(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssociatesConstraint(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24246,9 +24246,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingDocument = RelatingDocument;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesDocument
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesDocument
 		{
-			return new IfcRelAssociatesDocument(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesDocument(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24264,9 +24264,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingLibrary = RelatingLibrary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesLibrary
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesLibrary
 		{
-			return new IfcRelAssociatesLibrary(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesLibrary(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24282,9 +24282,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingMaterial = RelatingMaterial;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesMaterial
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesMaterial
 		{
-			return new IfcRelAssociatesMaterial(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesMaterial(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24304,9 +24304,9 @@ export namespace IFC2X3 {
 			this.ProfileSectionLocation = ProfileSectionLocation;
 			this.ProfileOrientation = ProfileOrientation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesProfileProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesProfileProperties
 		{
-			return new IfcRelAssociatesProfileProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelAssociatesProfileProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24320,9 +24320,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnects
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnects
 		{
-			return new IfcRelConnects(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRelConnects(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24342,9 +24342,9 @@ export namespace IFC2X3 {
 			this.RelatingElement = RelatingElement;
 			this.RelatedElement = RelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsElements
 		{
-			return new IfcRelConnectsElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelConnectsElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24366,9 +24366,9 @@ export namespace IFC2X3 {
 			this.RelatedConnectionType = RelatedConnectionType;
 			this.RelatingConnectionType = RelatingConnectionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsPathElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsPathElements
 		{
-			return new IfcRelConnectsPathElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcRelConnectsPathElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24386,9 +24386,9 @@ export namespace IFC2X3 {
 			this.RelatingPort = RelatingPort;
 			this.RelatedElement = RelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsPortToElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsPortToElement
 		{
-			return new IfcRelConnectsPortToElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelConnectsPortToElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24408,9 +24408,9 @@ export namespace IFC2X3 {
 			this.RelatedPort = RelatedPort;
 			this.RealizingElement = RealizingElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsPorts
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsPorts
 		{
-			return new IfcRelConnectsPorts(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelConnectsPorts(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24428,9 +24428,9 @@ export namespace IFC2X3 {
 			this.RelatingElement = RelatingElement;
 			this.RelatedStructuralActivity = RelatedStructuralActivity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsStructuralActivity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsStructuralActivity
 		{
-			return new IfcRelConnectsStructuralActivity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelConnectsStructuralActivity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24448,9 +24448,9 @@ export namespace IFC2X3 {
 			this.RelatingElement = RelatingElement;
 			this.RelatedStructuralMember = RelatedStructuralMember;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsStructuralElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsStructuralElement
 		{
-			return new IfcRelConnectsStructuralElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelConnectsStructuralElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24476,9 +24476,9 @@ export namespace IFC2X3 {
 			this.SupportedLength = SupportedLength;
 			this.ConditionCoordinateSystem = ConditionCoordinateSystem;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsStructuralMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsStructuralMember
 		{
-			return new IfcRelConnectsStructuralMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRelConnectsStructuralMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24494,9 +24494,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatingStructuralMember, RelatedStructuralConnection, AppliedCondition, AdditionalConditions, SupportedLength, ConditionCoordinateSystem);
 			this.ConnectionConstraint = ConnectionConstraint;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsWithEccentricity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsWithEccentricity
 		{
-			return new IfcRelConnectsWithEccentricity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcRelConnectsWithEccentricity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24514,9 +24514,9 @@ export namespace IFC2X3 {
 			this.RealizingElements = RealizingElements;
 			this.ConnectionType = ConnectionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsWithRealizingElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsWithRealizingElements
 		{
-			return new IfcRelConnectsWithRealizingElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRelConnectsWithRealizingElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24534,9 +24534,9 @@ export namespace IFC2X3 {
 			this.RelatedElements = RelatedElements;
 			this.RelatingStructure = RelatingStructure;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelContainedInSpatialStructure
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelContainedInSpatialStructure
 		{
-			return new IfcRelContainedInSpatialStructure(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelContainedInSpatialStructure(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24554,9 +24554,9 @@ export namespace IFC2X3 {
 			this.RelatingBuildingElement = RelatingBuildingElement;
 			this.RelatedCoverings = RelatedCoverings;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelCoversBldgElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelCoversBldgElements
 		{
-			return new IfcRelCoversBldgElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelCoversBldgElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24574,9 +24574,9 @@ export namespace IFC2X3 {
 			this.RelatedSpace = RelatedSpace;
 			this.RelatedCoverings = RelatedCoverings;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelCoversSpaces
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelCoversSpaces
 		{
-			return new IfcRelCoversSpaces(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelCoversSpaces(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24594,9 +24594,9 @@ export namespace IFC2X3 {
 			this.RelatingObject = RelatingObject;
 			this.RelatedObjects = RelatedObjects;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDecomposes
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDecomposes
 		{
-			return new IfcRelDecomposes(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelDecomposes(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24612,9 +24612,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 			this.RelatedObjects = RelatedObjects;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDefines
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDefines
 		{
-			return new IfcRelDefines(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcRelDefines(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24630,9 +24630,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingPropertyDefinition = RelatingPropertyDefinition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDefinesByProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDefinesByProperties
 		{
-			return new IfcRelDefinesByProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelDefinesByProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24648,9 +24648,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingType = RelatingType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDefinesByType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDefinesByType
 		{
-			return new IfcRelDefinesByType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelDefinesByType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24668,9 +24668,9 @@ export namespace IFC2X3 {
 			this.RelatingOpeningElement = RelatingOpeningElement;
 			this.RelatedBuildingElement = RelatedBuildingElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelFillsElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelFillsElement
 		{
-			return new IfcRelFillsElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelFillsElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24688,9 +24688,9 @@ export namespace IFC2X3 {
 			this.RelatedControlElements = RelatedControlElements;
 			this.RelatingFlowElement = RelatingFlowElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelFlowControlElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelFlowControlElements
 		{
-			return new IfcRelFlowControlElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelFlowControlElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24714,9 +24714,9 @@ export namespace IFC2X3 {
 			this.RelatedSpaceProgram = RelatedSpaceProgram;
 			this.RelatingSpaceProgram = RelatingSpaceProgram;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelInteractionRequirements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelInteractionRequirements
 		{
-			return new IfcRelInteractionRequirements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRelInteractionRequirements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24730,9 +24730,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatingObject, RelatedObjects);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelNests
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelNests
 		{
-			return new IfcRelNests(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelNests(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24746,9 +24746,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingActor, ActingRole);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelOccupiesSpaces
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelOccupiesSpaces
 		{
-			return new IfcRelOccupiesSpaces(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelOccupiesSpaces(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24764,9 +24764,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatingPropertyDefinition);
 			this.OverridingProperties = OverridingProperties;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelOverridesProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelOverridesProperties
 		{
-			return new IfcRelOverridesProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelOverridesProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24784,9 +24784,9 @@ export namespace IFC2X3 {
 			this.RelatingElement = RelatingElement;
 			this.RelatedFeatureElement = RelatedFeatureElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelProjectsElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelProjectsElement
 		{
-			return new IfcRelProjectsElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelProjectsElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24804,9 +24804,9 @@ export namespace IFC2X3 {
 			this.RelatedElements = RelatedElements;
 			this.RelatingStructure = RelatingStructure;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelReferencedInSpatialStructure
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelReferencedInSpatialStructure
 		{
-			return new IfcRelReferencedInSpatialStructure(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelReferencedInSpatialStructure(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24820,9 +24820,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingControl);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelSchedulesCostItems
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelSchedulesCostItems
 		{
-			return new IfcRelSchedulesCostItems(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelSchedulesCostItems(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24844,9 +24844,9 @@ export namespace IFC2X3 {
 			this.TimeLag = TimeLag;
 			this.SequenceType = SequenceType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelSequence
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelSequence
 		{
-			return new IfcRelSequence(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelSequence(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24864,9 +24864,9 @@ export namespace IFC2X3 {
 			this.RelatingSystem = RelatingSystem;
 			this.RelatedBuildings = RelatedBuildings;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelServicesBuildings
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelServicesBuildings
 		{
-			return new IfcRelServicesBuildings(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelServicesBuildings(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24890,9 +24890,9 @@ export namespace IFC2X3 {
 			this.PhysicalOrVirtualBoundary = PhysicalOrVirtualBoundary;
 			this.InternalOrExternalBoundary = InternalOrExternalBoundary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelSpaceBoundary
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelSpaceBoundary
 		{
-			return new IfcRelSpaceBoundary(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRelSpaceBoundary(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24910,9 +24910,9 @@ export namespace IFC2X3 {
 			this.RelatingBuildingElement = RelatingBuildingElement;
 			this.RelatedOpeningElement = RelatedOpeningElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelVoidsElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelVoidsElement
 		{
-			return new IfcRelVoidsElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelVoidsElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24927,9 +24927,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcResource
 		{
-			return new IfcResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24947,9 +24947,9 @@ export namespace IFC2X3 {
 			this.Axis = Axis;
 			this.Angle = Angle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRevolvedAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRevolvedAreaSolid
 		{
-			return new IfcRevolvedAreaSolid(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRevolvedAreaSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24967,9 +24967,9 @@ export namespace IFC2X3 {
 			this.Height = Height;
 			this.BottomRadius = BottomRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRightCircularCone
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRightCircularCone
 		{
-			return new IfcRightCircularCone(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcRightCircularCone(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -24987,9 +24987,9 @@ export namespace IFC2X3 {
 			this.Height = Height;
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRightCircularCylinder
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRightCircularCylinder
 		{
-			return new IfcRightCircularCylinder(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcRightCircularCylinder(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25010,9 +25010,9 @@ export namespace IFC2X3 {
 			this.LongName = LongName;
 			this.CompositionType = CompositionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpatialStructureElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpatialStructureElement
 		{
-			return new IfcSpatialStructureElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSpatialStructureElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25026,9 +25026,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpatialStructureElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpatialStructureElementType
 		{
-			return new IfcSpatialStructureElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSpatialStructureElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25044,9 +25044,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Position);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSphere
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSphere
 		{
-			return new IfcSphere(expressID, type, tape[0], tape[1]);
+			return new IfcSphere(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25065,9 +25065,9 @@ export namespace IFC2X3 {
 			this.AppliedLoad = AppliedLoad;
 			this.GlobalOrLocal = GlobalOrLocal;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralActivity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralActivity
 		{
-			return new IfcStructuralActivity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralActivity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25082,9 +25082,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralItem
 		{
-			return new IfcStructuralItem(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralItem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25100,9 +25100,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralMember
 		{
-			return new IfcStructuralMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25117,9 +25117,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralReaction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralReaction
 		{
-			return new IfcStructuralReaction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralReaction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25137,9 +25137,9 @@ export namespace IFC2X3 {
 			this.PredefinedType = PredefinedType;
 			this.Thickness = Thickness;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSurfaceMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSurfaceMember
 		{
-			return new IfcStructuralSurfaceMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralSurfaceMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25157,9 +25157,9 @@ export namespace IFC2X3 {
 			this.SubsequentThickness = SubsequentThickness;
 			this.VaryingThicknessLocation = VaryingThicknessLocation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSurfaceMemberVarying
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSurfaceMemberVarying
 		{
-			return new IfcStructuralSurfaceMemberVarying(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcStructuralSurfaceMemberVarying(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25173,9 +25173,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Contents);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuredDimensionCallout
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuredDimensionCallout
 		{
-			return new IfcStructuredDimensionCallout(expressID, type, tape[0]);
+			return new IfcStructuredDimensionCallout(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25197,9 +25197,9 @@ export namespace IFC2X3 {
 			this.EndParam = EndParam;
 			this.ReferenceSurface = ReferenceSurface;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceCurveSweptAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceCurveSweptAreaSolid
 		{
-			return new IfcSurfaceCurveSweptAreaSolid(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcSurfaceCurveSweptAreaSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25217,9 +25217,9 @@ export namespace IFC2X3 {
 			this.ExtrudedDirection = ExtrudedDirection;
 			this.Depth = Depth;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceOfLinearExtrusion
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceOfLinearExtrusion
 		{
-			return new IfcSurfaceOfLinearExtrusion(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSurfaceOfLinearExtrusion(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25235,9 +25235,9 @@ export namespace IFC2X3 {
 			super(expressID,type,SweptCurve, Position);
 			this.AxisPosition = AxisPosition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceOfRevolution
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceOfRevolution
 		{
-			return new IfcSurfaceOfRevolution(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSurfaceOfRevolution(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25251,9 +25251,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSystemFurnitureElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSystemFurnitureElementType
 		{
-			return new IfcSystemFurnitureElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSystemFurnitureElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25277,9 +25277,9 @@ export namespace IFC2X3 {
 			this.IsMilestone = IsMilestone;
 			this.Priority = Priority;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTask
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTask
 		{
-			return new IfcTask(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTask(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25295,9 +25295,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTransportElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTransportElementType
 		{
-			return new IfcTransportElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTransportElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25314,9 +25314,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 			this.TheActor = TheActor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActor
 		{
-			return new IfcActor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcActor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25331,9 +25331,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotation
 		{
-			return new IfcAnnotation(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcAnnotation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25355,9 +25355,9 @@ export namespace IFC2X3 {
 			this.TopFlangeFilletRadius = TopFlangeFilletRadius;
 			this.CentreOfGravityInY = CentreOfGravityInY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAsymmetricIShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAsymmetricIShapeProfileDef
 		{
-			return new IfcAsymmetricIShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcAsymmetricIShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25377,9 +25377,9 @@ export namespace IFC2X3 {
 			this.YLength = YLength;
 			this.ZLength = ZLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBlock
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBlock
 		{
-			return new IfcBlock(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcBlock(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25393,9 +25393,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Operator, FirstOperand, SecondOperand);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBooleanClippingResult
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBooleanClippingResult
 		{
-			return new IfcBooleanClippingResult(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcBooleanClippingResult(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25409,7 +25409,7 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundedCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundedCurve
 		{
 			return new IfcBoundedCurve(expressID, type, );
 		}
@@ -25431,9 +25431,9 @@ export namespace IFC2X3 {
 			this.ElevationOfTerrain = ElevationOfTerrain;
 			this.BuildingAddress = BuildingAddress;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuilding
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuilding
 		{
-			return new IfcBuilding(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcBuilding(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25447,9 +25447,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementType
 		{
-			return new IfcBuildingElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBuildingElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25465,9 +25465,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType);
 			this.Elevation = Elevation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingStorey
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingStorey
 		{
-			return new IfcBuildingStorey(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBuildingStorey(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25483,9 +25483,9 @@ export namespace IFC2X3 {
 			super(expressID,type,ProfileType, ProfileName, Position, Radius);
 			this.WallThickness = WallThickness;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCircleHollowProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCircleHollowProfileDef
 		{
-			return new IfcCircleHollowProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCircleHollowProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25501,9 +25501,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColumnType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColumnType
 		{
-			return new IfcColumnType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcColumnType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25521,9 +25521,9 @@ export namespace IFC2X3 {
 			this.Segments = Segments;
 			this.SelfIntersect = SelfIntersect;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompositeCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompositeCurve
 		{
-			return new IfcCompositeCurve(expressID, type, tape[0], tape[1]);
+			return new IfcCompositeCurve(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25539,9 +25539,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConic
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConic
 		{
-			return new IfcConic(expressID, type, tape[0]);
+			return new IfcConic(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25563,9 +25563,9 @@ export namespace IFC2X3 {
 			this.ResourceConsumption = ResourceConsumption;
 			this.BaseQuantity = BaseQuantity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionResource
 		{
-			return new IfcConstructionResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcConstructionResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25580,9 +25580,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcControl
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcControl
 		{
-			return new IfcControl(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcControl(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25596,9 +25596,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCostItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCostItem
 		{
-			return new IfcCostItem(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCostItem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25628,9 +25628,9 @@ export namespace IFC2X3 {
 			this.ID = ID;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCostSchedule
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCostSchedule
 		{
-			return new IfcCostSchedule(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcCostSchedule(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25646,9 +25646,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoveringType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoveringType
 		{
-			return new IfcCoveringType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCoveringType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25662,9 +25662,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ResourceIdentifier, ResourceGroup, ResourceConsumption, BaseQuantity);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCrewResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCrewResource
 		{
-			return new IfcCrewResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCrewResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25680,9 +25680,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurtainWallType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurtainWallType
 		{
-			return new IfcCurtainWallType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCurtainWallType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25696,9 +25696,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Contents);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDimensionCurveDirectedCallout
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDimensionCurveDirectedCallout
 		{
-			return new IfcDimensionCurveDirectedCallout(expressID, type, tape[0]);
+			return new IfcDimensionCurveDirectedCallout(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25712,9 +25712,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionElementType
 		{
-			return new IfcDistributionElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDistributionElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25728,9 +25728,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionFlowElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionFlowElementType
 		{
-			return new IfcDistributionFlowElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDistributionFlowElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25760,9 +25760,9 @@ export namespace IFC2X3 {
 			this.RatedPowerInput = RatedPowerInput;
 			this.InputPhase = InputPhase;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricalBaseProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricalBaseProperties
 		{
-			return new IfcElectricalBaseProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcElectricalBaseProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25790,9 +25790,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 			this.Tag = Tag;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElement
 		{
-			return new IfcElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25810,9 +25810,9 @@ export namespace IFC2X3 {
 			this.AssemblyPlace = AssemblyPlace;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementAssembly
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementAssembly
 		{
-			return new IfcElementAssembly(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElementAssembly(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25826,9 +25826,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementComponent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementComponent
 		{
-			return new IfcElementComponent(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcElementComponent(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25842,9 +25842,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementComponentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementComponentType
 		{
-			return new IfcElementComponentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElementComponentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25862,9 +25862,9 @@ export namespace IFC2X3 {
 			this.SemiAxis1 = SemiAxis1;
 			this.SemiAxis2 = SemiAxis2;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEllipse
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEllipse
 		{
-			return new IfcEllipse(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcEllipse(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25878,9 +25878,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEnergyConversionDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEnergyConversionDeviceType
 		{
-			return new IfcEnergyConversionDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcEnergyConversionDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25894,9 +25894,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEquipmentElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEquipmentElement
 		{
-			return new IfcEquipmentElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcEquipmentElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25910,9 +25910,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEquipmentStandard
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEquipmentStandard
 		{
-			return new IfcEquipmentStandard(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcEquipmentStandard(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25928,9 +25928,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEvaporativeCoolerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEvaporativeCoolerType
 		{
-			return new IfcEvaporativeCoolerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcEvaporativeCoolerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25946,9 +25946,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEvaporatorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEvaporatorType
 		{
-			return new IfcEvaporatorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcEvaporatorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25962,9 +25962,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Outer);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFacetedBrep
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFacetedBrep
 		{
-			return new IfcFacetedBrep(expressID, type, tape[0]);
+			return new IfcFacetedBrep(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25980,9 +25980,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Outer);
 			this.Voids = Voids;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFacetedBrepWithVoids
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFacetedBrepWithVoids
 		{
-			return new IfcFacetedBrepWithVoids(expressID, type, tape[0], tape[1]);
+			return new IfcFacetedBrepWithVoids(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -25996,9 +25996,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFastener
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFastener
 		{
-			return new IfcFastener(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFastener(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26012,9 +26012,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFastenerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFastenerType
 		{
-			return new IfcFastenerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFastenerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26028,9 +26028,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFeatureElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFeatureElement
 		{
-			return new IfcFeatureElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFeatureElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26045,9 +26045,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFeatureElementAddition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFeatureElementAddition
 		{
-			return new IfcFeatureElementAddition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFeatureElementAddition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26062,9 +26062,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFeatureElementSubtraction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFeatureElementSubtraction
 		{
-			return new IfcFeatureElementSubtraction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFeatureElementSubtraction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26078,9 +26078,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowControllerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowControllerType
 		{
-			return new IfcFlowControllerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowControllerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26094,9 +26094,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowFittingType
 		{
-			return new IfcFlowFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26112,9 +26112,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowMeterType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowMeterType
 		{
-			return new IfcFlowMeterType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFlowMeterType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26128,9 +26128,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowMovingDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowMovingDeviceType
 		{
-			return new IfcFlowMovingDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowMovingDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26144,9 +26144,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowSegmentType
 		{
-			return new IfcFlowSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26160,9 +26160,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowStorageDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowStorageDeviceType
 		{
-			return new IfcFlowStorageDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowStorageDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26176,9 +26176,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowTerminalType
 		{
-			return new IfcFlowTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26192,9 +26192,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowTreatmentDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowTreatmentDeviceType
 		{
-			return new IfcFlowTreatmentDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowTreatmentDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26208,9 +26208,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFurnishingElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFurnishingElement
 		{
-			return new IfcFurnishingElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFurnishingElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26224,9 +26224,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFurnitureStandard
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFurnitureStandard
 		{
-			return new IfcFurnitureStandard(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcFurnitureStandard(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26242,9 +26242,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGasTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGasTerminalType
 		{
-			return new IfcGasTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcGasTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26265,9 +26265,9 @@ export namespace IFC2X3 {
 			this.VAxes = VAxes;
 			this.WAxes = WAxes;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGrid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGrid
 		{
-			return new IfcGrid(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcGrid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26282,9 +26282,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGroup
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGroup
 		{
-			return new IfcGroup(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcGroup(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26300,9 +26300,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHeatExchangerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHeatExchangerType
 		{
-			return new IfcHeatExchangerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcHeatExchangerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26318,9 +26318,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHumidifierType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHumidifierType
 		{
-			return new IfcHumidifierType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcHumidifierType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26346,9 +26346,9 @@ export namespace IFC2X3 {
 			this.CurrentValue = CurrentValue;
 			this.OriginalValue = OriginalValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcInventory
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcInventory
 		{
-			return new IfcInventory(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcInventory(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26364,9 +26364,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcJunctionBoxType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcJunctionBoxType
 		{
-			return new IfcJunctionBoxType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcJunctionBoxType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26382,9 +26382,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ResourceIdentifier, ResourceGroup, ResourceConsumption, BaseQuantity);
 			this.SkillSet = SkillSet;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLaborResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLaborResource
 		{
-			return new IfcLaborResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcLaborResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26400,9 +26400,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLampType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLampType
 		{
-			return new IfcLampType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcLampType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26418,9 +26418,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightFixtureType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightFixtureType
 		{
-			return new IfcLightFixtureType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcLightFixtureType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26434,9 +26434,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Contents);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLinearDimension
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLinearDimension
 		{
-			return new IfcLinearDimension(expressID, type, tape[0]);
+			return new IfcLinearDimension(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26454,9 +26454,9 @@ export namespace IFC2X3 {
 			this.NominalDiameter = NominalDiameter;
 			this.NominalLength = NominalLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMechanicalFastener
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMechanicalFastener
 		{
-			return new IfcMechanicalFastener(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcMechanicalFastener(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26470,9 +26470,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMechanicalFastenerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMechanicalFastenerType
 		{
-			return new IfcMechanicalFastenerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcMechanicalFastenerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26488,9 +26488,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMemberType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMemberType
 		{
-			return new IfcMemberType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcMemberType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26506,9 +26506,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMotorConnectionType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMotorConnectionType
 		{
-			return new IfcMotorConnectionType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcMotorConnectionType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26528,9 +26528,9 @@ export namespace IFC2X3 {
 			this.MoveTo = MoveTo;
 			this.PunchList = PunchList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMove
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMove
 		{
-			return new IfcMove(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcMove(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26546,9 +26546,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, TheActor);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOccupant
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOccupant
 		{
-			return new IfcOccupant(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcOccupant(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26563,9 +26563,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOpeningElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOpeningElement
 		{
-			return new IfcOpeningElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcOpeningElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26581,9 +26581,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, TaskId, Status, WorkMethod, IsMilestone, Priority);
 			this.ActionID = ActionID;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOrderAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOrderAction
 		{
-			return new IfcOrderAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcOrderAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26599,9 +26599,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOutletType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOutletType
 		{
-			return new IfcOutletType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcOutletType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26617,9 +26617,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 			this.LifeCyclePhase = LifeCyclePhase;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPerformanceHistory
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPerformanceHistory
 		{
-			return new IfcPerformanceHistory(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcPerformanceHistory(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26635,9 +26635,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 			this.PermitID = PermitID;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPermit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPermit
 		{
-			return new IfcPermit(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcPermit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26653,9 +26653,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPipeFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPipeFittingType
 		{
-			return new IfcPipeFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPipeFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26671,9 +26671,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPipeSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPipeSegmentType
 		{
-			return new IfcPipeSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPipeSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26689,9 +26689,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlateType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlateType
 		{
-			return new IfcPlateType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPlateType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26707,9 +26707,9 @@ export namespace IFC2X3 {
 			super(expressID,type);
 			this.Points = Points;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPolyline
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPolyline
 		{
-			return new IfcPolyline(expressID, type, tape[0]);
+			return new IfcPolyline(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26726,9 +26726,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPort
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPort
 		{
-			return new IfcPort(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcPort(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26748,9 +26748,9 @@ export namespace IFC2X3 {
 			this.ProcedureType = ProcedureType;
 			this.UserDefinedProcedureType = UserDefinedProcedureType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProcedure
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProcedure
 		{
-			return new IfcProcedure(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcProcedure(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26770,9 +26770,9 @@ export namespace IFC2X3 {
 			this.PredefinedType = PredefinedType;
 			this.Status = Status;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProjectOrder
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProjectOrder
 		{
-			return new IfcProjectOrder(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcProjectOrder(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26790,9 +26790,9 @@ export namespace IFC2X3 {
 			this.Records = Records;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProjectOrderRecord
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProjectOrderRecord
 		{
-			return new IfcProjectOrderRecord(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcProjectOrderRecord(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26806,9 +26806,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProjectionElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProjectionElement
 		{
-			return new IfcProjectionElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcProjectionElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26824,9 +26824,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProtectiveDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProtectiveDeviceType
 		{
-			return new IfcProtectiveDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcProtectiveDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26842,9 +26842,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPumpType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPumpType
 		{
-			return new IfcPumpType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPumpType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26858,9 +26858,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Contents);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRadiusDimension
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRadiusDimension
 		{
-			return new IfcRadiusDimension(expressID, type, tape[0]);
+			return new IfcRadiusDimension(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26876,9 +26876,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRailingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRailingType
 		{
-			return new IfcRailingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRailingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26894,9 +26894,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRampFlightType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRampFlightType
 		{
-			return new IfcRampFlightType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRampFlightType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26910,9 +26910,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatingObject, RelatedObjects);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAggregates
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAggregates
 		{
-			return new IfcRelAggregates(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAggregates(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26928,9 +26928,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingControl);
 			this.TimeForTask = TimeForTask;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsTasks
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsTasks
 		{
-			return new IfcRelAssignsTasks(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelAssignsTasks(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26946,9 +26946,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSanitaryTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSanitaryTerminalType
 		{
-			return new IfcSanitaryTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSanitaryTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -26999,9 +26999,9 @@ export namespace IFC2X3 {
 			this.FinishFloat = FinishFloat;
 			this.Completion = Completion;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcScheduleTimeControl
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcScheduleTimeControl
 		{
-			return new IfcScheduleTimeControl(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17], tape[18], tape[19], tape[20], tape[21], tape[22]);
+			return new IfcScheduleTimeControl(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17], _tape[18], _tape[19], _tape[20], _tape[21], _tape[22]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27019,9 +27019,9 @@ export namespace IFC2X3 {
 			this.ServiceLifeType = ServiceLifeType;
 			this.ServiceLifeDuration = ServiceLifeDuration;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcServiceLife
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcServiceLife
 		{
-			return new IfcServiceLife(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcServiceLife(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27045,9 +27045,9 @@ export namespace IFC2X3 {
 			this.LandTitleNumber = LandTitleNumber;
 			this.SiteAddress = SiteAddress;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSite
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSite
 		{
-			return new IfcSite(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcSite(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27063,9 +27063,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSlabType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSlabType
 		{
-			return new IfcSlabType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSlabType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27085,9 +27085,9 @@ export namespace IFC2X3 {
 			this.InteriorOrExteriorSpace = InteriorOrExteriorSpace;
 			this.ElevationWithFlooring = ElevationWithFlooring;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpace
 		{
-			return new IfcSpace(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcSpace(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27103,9 +27103,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpaceHeaterType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpaceHeaterType
 		{
-			return new IfcSpaceHeaterType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSpaceHeaterType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27131,9 +27131,9 @@ export namespace IFC2X3 {
 			this.RequestedLocation = RequestedLocation;
 			this.StandardRequiredArea = StandardRequiredArea;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpaceProgram
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpaceProgram
 		{
-			return new IfcSpaceProgram(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSpaceProgram(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27149,9 +27149,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpaceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpaceType
 		{
-			return new IfcSpaceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSpaceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27167,9 +27167,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStackTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStackTerminalType
 		{
-			return new IfcStackTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStackTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27185,9 +27185,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStairFlightType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStairFlightType
 		{
-			return new IfcStairFlightType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStairFlightType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27205,9 +27205,9 @@ export namespace IFC2X3 {
 			this.DestabilizingLoad = DestabilizingLoad;
 			this.CausedBy = CausedBy;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralAction
 		{
-			return new IfcStructuralAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcStructuralAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27224,9 +27224,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 			this.AppliedCondition = AppliedCondition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralConnection
 		{
-			return new IfcStructuralConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27240,9 +27240,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralCurveConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralCurveConnection
 		{
-			return new IfcStructuralCurveConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralCurveConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27258,9 +27258,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralCurveMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralCurveMember
 		{
-			return new IfcStructuralCurveMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralCurveMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27274,9 +27274,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralCurveMemberVarying
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralCurveMemberVarying
 		{
-			return new IfcStructuralCurveMemberVarying(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralCurveMemberVarying(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27292,9 +27292,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, CausedBy);
 			this.ProjectedOrTrue = ProjectedOrTrue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLinearAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLinearAction
 		{
-			return new IfcStructuralLinearAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcStructuralLinearAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27312,9 +27312,9 @@ export namespace IFC2X3 {
 			this.VaryingAppliedLoadLocation = VaryingAppliedLoadLocation;
 			this.SubsequentAppliedLoads = SubsequentAppliedLoads;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLinearActionVarying
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLinearActionVarying
 		{
-			return new IfcStructuralLinearActionVarying(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcStructuralLinearActionVarying(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27340,9 +27340,9 @@ export namespace IFC2X3 {
 			this.Coefficient = Coefficient;
 			this.Purpose = Purpose;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadGroup
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadGroup
 		{
-			return new IfcStructuralLoadGroup(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStructuralLoadGroup(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27358,9 +27358,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, CausedBy);
 			this.ProjectedOrTrue = ProjectedOrTrue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPlanarAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPlanarAction
 		{
-			return new IfcStructuralPlanarAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcStructuralPlanarAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27378,9 +27378,9 @@ export namespace IFC2X3 {
 			this.VaryingAppliedLoadLocation = VaryingAppliedLoadLocation;
 			this.SubsequentAppliedLoads = SubsequentAppliedLoads;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPlanarActionVarying
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPlanarActionVarying
 		{
-			return new IfcStructuralPlanarActionVarying(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcStructuralPlanarActionVarying(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27394,9 +27394,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, CausedBy);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPointAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPointAction
 		{
-			return new IfcStructuralPointAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcStructuralPointAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27410,9 +27410,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPointConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPointConnection
 		{
-			return new IfcStructuralPointConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralPointConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27426,9 +27426,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPointReaction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPointReaction
 		{
-			return new IfcStructuralPointReaction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralPointReaction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27449,9 +27449,9 @@ export namespace IFC2X3 {
 			this.ResultForLoadGroup = ResultForLoadGroup;
 			this.IsLinear = IsLinear;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralResultGroup
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralResultGroup
 		{
-			return new IfcStructuralResultGroup(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralResultGroup(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27465,9 +27465,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSurfaceConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSurfaceConnection
 		{
-			return new IfcStructuralSurfaceConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralSurfaceConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27485,9 +27485,9 @@ export namespace IFC2X3 {
 			this.SubContractor = SubContractor;
 			this.JobDescription = JobDescription;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSubContractResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSubContractResource
 		{
-			return new IfcSubContractResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcSubContractResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27503,9 +27503,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSwitchingDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSwitchingDeviceType
 		{
-			return new IfcSwitchingDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSwitchingDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27520,9 +27520,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSystem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSystem
 		{
-			return new IfcSystem(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcSystem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27538,9 +27538,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTankType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTankType
 		{
-			return new IfcTankType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTankType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27560,9 +27560,9 @@ export namespace IFC2X3 {
 			this.TimeSeriesScheduleType = TimeSeriesScheduleType;
 			this.TimeSeries = TimeSeries;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTimeSeriesSchedule
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTimeSeriesSchedule
 		{
-			return new IfcTimeSeriesSchedule(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcTimeSeriesSchedule(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27578,9 +27578,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTransformerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTransformerType
 		{
-			return new IfcTransformerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTransformerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27600,9 +27600,9 @@ export namespace IFC2X3 {
 			this.CapacityByWeight = CapacityByWeight;
 			this.CapacityByNumber = CapacityByNumber;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTransportElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTransportElement
 		{
-			return new IfcTransportElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcTransportElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27626,9 +27626,9 @@ export namespace IFC2X3 {
 			this.SenseAgreement = SenseAgreement;
 			this.MasterRepresentation = MasterRepresentation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTrimmedCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTrimmedCurve
 		{
-			return new IfcTrimmedCurve(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcTrimmedCurve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27644,9 +27644,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTubeBundleType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTubeBundleType
 		{
-			return new IfcTubeBundleType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTubeBundleType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27662,9 +27662,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUnitaryEquipmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUnitaryEquipmentType
 		{
-			return new IfcUnitaryEquipmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcUnitaryEquipmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27680,9 +27680,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcValveType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcValveType
 		{
-			return new IfcValveType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcValveType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27696,9 +27696,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVirtualElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVirtualElement
 		{
-			return new IfcVirtualElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcVirtualElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27714,9 +27714,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWallType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWallType
 		{
-			return new IfcWallType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcWallType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27732,9 +27732,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWasteTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWasteTerminalType
 		{
-			return new IfcWasteTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcWasteTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27768,9 +27768,9 @@ export namespace IFC2X3 {
 			this.WorkControlType = WorkControlType;
 			this.UserDefinedControlType = UserDefinedControlType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWorkControl
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWorkControl
 		{
-			return new IfcWorkControl(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14]);
+			return new IfcWorkControl(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27784,9 +27784,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identifier, CreationDate, Creators, Purpose, Duration, TotalFloat, StartTime, FinishTime, WorkControlType, UserDefinedControlType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWorkPlan
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWorkPlan
 		{
-			return new IfcWorkPlan(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14]);
+			return new IfcWorkPlan(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27800,9 +27800,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identifier, CreationDate, Creators, Purpose, Duration, TotalFloat, StartTime, FinishTime, WorkControlType, UserDefinedControlType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWorkSchedule
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWorkSchedule
 		{
-			return new IfcWorkSchedule(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14]);
+			return new IfcWorkSchedule(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27816,9 +27816,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcZone
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcZone
 		{
-			return new IfcZone(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcZone(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27832,9 +27832,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Segments, SelfIntersect);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): Ifc2DCompositeCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): Ifc2DCompositeCurve
 		{
-			return new Ifc2DCompositeCurve(expressID, type, tape[0], tape[1]);
+			return new Ifc2DCompositeCurve(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27850,9 +27850,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 			this.RequestID = RequestID;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActionRequest
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActionRequest
 		{
-			return new IfcActionRequest(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcActionRequest(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27868,9 +27868,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirTerminalBoxType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirTerminalBoxType
 		{
-			return new IfcAirTerminalBoxType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAirTerminalBoxType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27886,9 +27886,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirTerminalType
 		{
-			return new IfcAirTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAirTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27904,9 +27904,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirToAirHeatRecoveryType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirToAirHeatRecoveryType
 		{
-			return new IfcAirToAirHeatRecoveryType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAirToAirHeatRecoveryType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27920,9 +27920,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Contents);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAngularDimension
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAngularDimension
 		{
-			return new IfcAngularDimension(expressID, type, tape[0]);
+			return new IfcAngularDimension(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27954,9 +27954,9 @@ export namespace IFC2X3 {
 			this.IncorporationDate = IncorporationDate;
 			this.DepreciatedValue = DepreciatedValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAsset
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAsset
 		{
-			return new IfcAsset(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcAsset(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27980,9 +27980,9 @@ export namespace IFC2X3 {
 			this.ClosedCurve = ClosedCurve;
 			this.SelfIntersect = SelfIntersect;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBSplineCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBSplineCurve
 		{
-			return new IfcBSplineCurve(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcBSplineCurve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -27998,9 +27998,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBeamType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBeamType
 		{
-			return new IfcBeamType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBeamType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28014,9 +28014,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Degree, ControlPointsList, CurveForm, ClosedCurve, SelfIntersect);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBezierCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBezierCurve
 		{
-			return new IfcBezierCurve(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcBezierCurve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28032,9 +28032,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoilerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoilerType
 		{
-			return new IfcBoilerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBoilerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28048,9 +28048,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElement
 		{
-			return new IfcBuildingElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcBuildingElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28064,9 +28064,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementComponent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementComponent
 		{
-			return new IfcBuildingElementComponent(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcBuildingElementComponent(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28080,9 +28080,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementPart
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementPart
 		{
-			return new IfcBuildingElementPart(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcBuildingElementPart(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28098,9 +28098,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.CompositionType = CompositionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementProxy
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementProxy
 		{
-			return new IfcBuildingElementProxy(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBuildingElementProxy(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28116,9 +28116,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementProxyType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementProxyType
 		{
-			return new IfcBuildingElementProxyType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBuildingElementProxyType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28134,9 +28134,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableCarrierFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableCarrierFittingType
 		{
-			return new IfcCableCarrierFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCableCarrierFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28152,9 +28152,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableCarrierSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableCarrierSegmentType
 		{
-			return new IfcCableCarrierSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCableCarrierSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28170,9 +28170,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableSegmentType
 		{
-			return new IfcCableSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCableSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28188,9 +28188,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcChillerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcChillerType
 		{
-			return new IfcChillerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcChillerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28206,9 +28206,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Position);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCircle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCircle
 		{
-			return new IfcCircle(expressID, type, tape[0], tape[1]);
+			return new IfcCircle(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28224,9 +28224,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoilType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoilType
 		{
-			return new IfcCoilType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCoilType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28240,9 +28240,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColumn
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColumn
 		{
-			return new IfcColumn(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcColumn(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28258,9 +28258,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompressorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompressorType
 		{
-			return new IfcCompressorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCompressorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28276,9 +28276,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCondenserType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCondenserType
 		{
-			return new IfcCondenserType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCondenserType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28292,9 +28292,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCondition
 		{
-			return new IfcCondition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28312,9 +28312,9 @@ export namespace IFC2X3 {
 			this.Criterion = Criterion;
 			this.CriterionDateTime = CriterionDateTime;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConditionCriterion
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConditionCriterion
 		{
-			return new IfcConditionCriterion(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcConditionCriterion(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28328,9 +28328,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ResourceIdentifier, ResourceGroup, ResourceConsumption, BaseQuantity);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionEquipmentResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionEquipmentResource
 		{
-			return new IfcConstructionEquipmentResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcConstructionEquipmentResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28348,9 +28348,9 @@ export namespace IFC2X3 {
 			this.Suppliers = Suppliers;
 			this.UsageRatio = UsageRatio;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionMaterialResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionMaterialResource
 		{
-			return new IfcConstructionMaterialResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcConstructionMaterialResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28364,9 +28364,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ResourceIdentifier, ResourceGroup, ResourceConsumption, BaseQuantity);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionProductResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionProductResource
 		{
-			return new IfcConstructionProductResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcConstructionProductResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28382,9 +28382,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCooledBeamType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCooledBeamType
 		{
-			return new IfcCooledBeamType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCooledBeamType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28400,9 +28400,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoolingTowerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoolingTowerType
 		{
-			return new IfcCoolingTowerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCoolingTowerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28420,9 +28420,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCovering
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCovering
 		{
-			return new IfcCovering(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCovering(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28436,9 +28436,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurtainWall
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurtainWall
 		{
-			return new IfcCurtainWall(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcCurtainWall(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28454,9 +28454,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDamperType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDamperType
 		{
-			return new IfcDamperType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDamperType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28470,9 +28470,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,Contents);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDiameterDimension
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDiameterDimension
 		{
-			return new IfcDiameterDimension(expressID, type, tape[0]);
+			return new IfcDiameterDimension(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28486,9 +28486,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDiscreteAccessory
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDiscreteAccessory
 		{
-			return new IfcDiscreteAccessory(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcDiscreteAccessory(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28502,9 +28502,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDiscreteAccessoryType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDiscreteAccessoryType
 		{
-			return new IfcDiscreteAccessoryType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDiscreteAccessoryType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28520,9 +28520,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionChamberElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionChamberElementType
 		{
-			return new IfcDistributionChamberElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDistributionChamberElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28536,9 +28536,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionControlElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionControlElementType
 		{
-			return new IfcDistributionControlElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDistributionControlElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28552,9 +28552,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionElement
 		{
-			return new IfcDistributionElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcDistributionElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28569,9 +28569,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionFlowElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionFlowElement
 		{
-			return new IfcDistributionFlowElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcDistributionFlowElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28587,9 +28587,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 			this.FlowDirection = FlowDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionPort
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionPort
 		{
-			return new IfcDistributionPort(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcDistributionPort(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28607,9 +28607,9 @@ export namespace IFC2X3 {
 			this.OverallHeight = OverallHeight;
 			this.OverallWidth = OverallWidth;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoor
 		{
-			return new IfcDoor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDoor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28625,9 +28625,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctFittingType
 		{
-			return new IfcDuctFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDuctFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28643,9 +28643,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctSegmentType
 		{
-			return new IfcDuctSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDuctSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28661,9 +28661,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctSilencerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctSilencerType
 		{
-			return new IfcDuctSilencerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDuctSilencerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28679,9 +28679,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.FeatureLength = FeatureLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEdgeFeature
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEdgeFeature
 		{
-			return new IfcEdgeFeature(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcEdgeFeature(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28697,9 +28697,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricApplianceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricApplianceType
 		{
-			return new IfcElectricApplianceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricApplianceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28715,9 +28715,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricFlowStorageDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricFlowStorageDeviceType
 		{
-			return new IfcElectricFlowStorageDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricFlowStorageDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28733,9 +28733,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricGeneratorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricGeneratorType
 		{
-			return new IfcElectricGeneratorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricGeneratorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28751,9 +28751,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricHeaterType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricHeaterType
 		{
-			return new IfcElectricHeaterType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricHeaterType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28769,9 +28769,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricMotorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricMotorType
 		{
-			return new IfcElectricMotorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricMotorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28787,9 +28787,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricTimeControlType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricTimeControlType
 		{
-			return new IfcElectricTimeControlType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricTimeControlType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28803,9 +28803,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricalCircuit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricalCircuit
 		{
-			return new IfcElectricalCircuit(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcElectricalCircuit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28819,9 +28819,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricalElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricalElement
 		{
-			return new IfcElectricalElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcElectricalElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28835,9 +28835,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEnergyConversionDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEnergyConversionDevice
 		{
-			return new IfcEnergyConversionDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcEnergyConversionDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28853,9 +28853,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFanType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFanType
 		{
-			return new IfcFanType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFanType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28871,9 +28871,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFilterType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFilterType
 		{
-			return new IfcFilterType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFilterType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28889,9 +28889,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFireSuppressionTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFireSuppressionTerminalType
 		{
-			return new IfcFireSuppressionTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFireSuppressionTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28905,9 +28905,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowController
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowController
 		{
-			return new IfcFlowController(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowController(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28921,9 +28921,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowFitting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowFitting
 		{
-			return new IfcFlowFitting(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowFitting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28939,9 +28939,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowInstrumentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowInstrumentType
 		{
-			return new IfcFlowInstrumentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFlowInstrumentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28955,9 +28955,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowMovingDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowMovingDevice
 		{
-			return new IfcFlowMovingDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowMovingDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28971,9 +28971,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowSegment
 		{
-			return new IfcFlowSegment(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowSegment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -28987,9 +28987,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowStorageDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowStorageDevice
 		{
-			return new IfcFlowStorageDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowStorageDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29003,9 +29003,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowTerminal
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowTerminal
 		{
-			return new IfcFlowTerminal(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowTerminal(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29019,9 +29019,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowTreatmentDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowTreatmentDevice
 		{
-			return new IfcFlowTreatmentDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowTreatmentDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29037,9 +29037,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFooting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFooting
 		{
-			return new IfcFooting(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFooting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29053,9 +29053,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMember
 		{
-			return new IfcMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29073,9 +29073,9 @@ export namespace IFC2X3 {
 			this.PredefinedType = PredefinedType;
 			this.ConstructionType = ConstructionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPile
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPile
 		{
-			return new IfcPile(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPile(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29089,9 +29089,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlate
 		{
-			return new IfcPlate(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcPlate(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29107,9 +29107,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRailing
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRailing
 		{
-			return new IfcRailing(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRailing(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29125,9 +29125,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.ShapeType = ShapeType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRamp
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRamp
 		{
-			return new IfcRamp(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRamp(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29141,9 +29141,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRampFlight
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRampFlight
 		{
-			return new IfcRampFlight(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRampFlight(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29159,9 +29159,9 @@ export namespace IFC2X3 {
 			super(expressID,type,Degree, ControlPointsList, CurveForm, ClosedCurve, SelfIntersect);
 			this.WeightsData = WeightsData;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRationalBezierCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRationalBezierCurve
 		{
-			return new IfcRationalBezierCurve(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRationalBezierCurve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29177,9 +29177,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.SteelGrade = SteelGrade;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingElement
 		{
-			return new IfcReinforcingElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcReinforcingElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29209,9 +29209,9 @@ export namespace IFC2X3 {
 			this.LongitudinalBarSpacing = LongitudinalBarSpacing;
 			this.TransverseBarSpacing = TransverseBarSpacing;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingMesh
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingMesh
 		{
-			return new IfcReinforcingMesh(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16]);
+			return new IfcReinforcingMesh(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29227,9 +29227,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.ShapeType = ShapeType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRoof
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRoof
 		{
-			return new IfcRoof(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRoof(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29245,9 +29245,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, FeatureLength);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRoundedEdgeFeature
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRoundedEdgeFeature
 		{
-			return new IfcRoundedEdgeFeature(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRoundedEdgeFeature(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29263,9 +29263,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSensorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSensorType
 		{
-			return new IfcSensorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSensorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29281,9 +29281,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSlab
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSlab
 		{
-			return new IfcSlab(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSlab(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29299,9 +29299,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.ShapeType = ShapeType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStair
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStair
 		{
-			return new IfcStair(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStair(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29323,9 +29323,9 @@ export namespace IFC2X3 {
 			this.RiserHeight = RiserHeight;
 			this.TreadLength = TreadLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStairFlight
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStairFlight
 		{
-			return new IfcStairFlight(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcStairFlight(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29347,9 +29347,9 @@ export namespace IFC2X3 {
 			this.LoadedBy = LoadedBy;
 			this.HasResults = HasResults;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralAnalysisModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralAnalysisModel
 		{
-			return new IfcStructuralAnalysisModel(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralAnalysisModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29379,9 +29379,9 @@ export namespace IFC2X3 {
 			this.AnchorageSlip = AnchorageSlip;
 			this.MinCurvatureRadius = MinCurvatureRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTendon
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTendon
 		{
-			return new IfcTendon(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16]);
+			return new IfcTendon(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29395,9 +29395,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, SteelGrade);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTendonAnchor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTendonAnchor
 		{
-			return new IfcTendonAnchor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcTendonAnchor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29413,9 +29413,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVibrationIsolatorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVibrationIsolatorType
 		{
-			return new IfcVibrationIsolatorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcVibrationIsolatorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29429,9 +29429,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWall
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWall
 		{
-			return new IfcWall(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcWall(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29445,9 +29445,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWallStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWallStandardCase
 		{
-			return new IfcWallStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcWallStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29465,9 +29465,9 @@ export namespace IFC2X3 {
 			this.OverallHeight = OverallHeight;
 			this.OverallWidth = OverallWidth;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindow
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindow
 		{
-			return new IfcWindow(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcWindow(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29483,9 +29483,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActuatorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActuatorType
 		{
-			return new IfcActuatorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcActuatorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29501,9 +29501,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAlarmType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAlarmType
 		{
-			return new IfcAlarmType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAlarmType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29517,9 +29517,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBeam
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBeam
 		{
-			return new IfcBeam(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcBeam(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29537,9 +29537,9 @@ export namespace IFC2X3 {
 			this.Width = Width;
 			this.Height = Height;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcChamferEdgeFeature
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcChamferEdgeFeature
 		{
-			return new IfcChamferEdgeFeature(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcChamferEdgeFeature(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29555,9 +29555,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcControllerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcControllerType
 		{
-			return new IfcControllerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcControllerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29571,9 +29571,9 @@ export namespace IFC2X3 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionChamberElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionChamberElement
 		{
-			return new IfcDistributionChamberElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcDistributionChamberElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29590,9 +29590,9 @@ export namespace IFC2X3 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.ControlElementId = ControlElementId;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionControlElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionControlElement
 		{
-			return new IfcDistributionControlElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDistributionControlElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29610,9 +29610,9 @@ export namespace IFC2X3 {
 			this.DistributionPointFunction = DistributionPointFunction;
 			this.UserDefinedFunction = UserDefinedFunction;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricDistributionPoint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricDistributionPoint
 		{
-			return new IfcElectricDistributionPoint(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricDistributionPoint(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -29636,9 +29636,9 @@ export namespace IFC2X3 {
 			this.BarRole = BarRole;
 			this.BarSurface = BarSurface;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingBar
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingBar
 		{
-			return new IfcReinforcingBar(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcReinforcingBar(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33708,9 +33708,9 @@ export namespace IFC4 {
 			this.UserDefinedRole = UserDefinedRole;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActorRole
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActorRole
 		{
-			return new IfcActorRole(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcActorRole(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33735,9 +33735,9 @@ export namespace IFC4 {
 			this.Description = Description;
 			this.UserDefinedPurpose = UserDefinedPurpose;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAddress
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAddress
 		{
-			return new IfcAddress(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAddress(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33762,9 +33762,9 @@ export namespace IFC4 {
 			this.ApplicationFullName = ApplicationFullName;
 			this.ApplicationIdentifier = ApplicationIdentifier;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcApplication
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcApplication
 		{
-			return new IfcApplication(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcApplication(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33802,9 +33802,9 @@ export namespace IFC4 {
 			this.ArithmeticOperator = ArithmeticOperator;
 			this.Components = Components;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAppliedValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAppliedValue
 		{
-			return new IfcAppliedValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAppliedValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33844,9 +33844,9 @@ export namespace IFC4 {
 			this.RequestingApproval = RequestingApproval;
 			this.GivingApproval = GivingApproval;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcApproval
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcApproval
 		{
-			return new IfcApproval(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcApproval(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33865,9 +33865,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryCondition
 		{
-			return new IfcBoundaryCondition(expressID, type, tape[0]);
+			return new IfcBoundaryCondition(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33893,9 +33893,9 @@ export namespace IFC4 {
 			this.RotationalStiffnessByLengthY = RotationalStiffnessByLengthY;
 			this.RotationalStiffnessByLengthZ = RotationalStiffnessByLengthZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryEdgeCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryEdgeCondition
 		{
-			return new IfcBoundaryEdgeCondition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcBoundaryEdgeCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33915,9 +33915,9 @@ export namespace IFC4 {
 			this.TranslationalStiffnessByAreaY = TranslationalStiffnessByAreaY;
 			this.TranslationalStiffnessByAreaZ = TranslationalStiffnessByAreaZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryFaceCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryFaceCondition
 		{
-			return new IfcBoundaryFaceCondition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcBoundaryFaceCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33943,9 +33943,9 @@ export namespace IFC4 {
 			this.RotationalStiffnessY = RotationalStiffnessY;
 			this.RotationalStiffnessZ = RotationalStiffnessZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryNodeCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryNodeCondition
 		{
-			return new IfcBoundaryNodeCondition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcBoundaryNodeCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33961,9 +33961,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, TranslationalStiffnessX, TranslationalStiffnessY, TranslationalStiffnessZ, RotationalStiffnessX, RotationalStiffnessY, RotationalStiffnessZ);
 			this.WarpingStiffness = WarpingStiffness;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryNodeConditionWarping
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryNodeConditionWarping
 		{
-			return new IfcBoundaryNodeConditionWarping(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcBoundaryNodeConditionWarping(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -33980,7 +33980,7 @@ export namespace IFC4 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionGeometry
 		{
 			return new IfcConnectionGeometry(expressID, type, );
 		}
@@ -34000,9 +34000,9 @@ export namespace IFC4 {
 			this.PointOnRelatingElement = PointOnRelatingElement;
 			this.PointOnRelatedElement = PointOnRelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionPointGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionPointGeometry
 		{
-			return new IfcConnectionPointGeometry(expressID, type, tape[0], tape[1]);
+			return new IfcConnectionPointGeometry(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34020,9 +34020,9 @@ export namespace IFC4 {
 			this.SurfaceOnRelatingElement = SurfaceOnRelatingElement;
 			this.SurfaceOnRelatedElement = SurfaceOnRelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionSurfaceGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionSurfaceGeometry
 		{
-			return new IfcConnectionSurfaceGeometry(expressID, type, tape[0], tape[1]);
+			return new IfcConnectionSurfaceGeometry(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34040,9 +34040,9 @@ export namespace IFC4 {
 			this.VolumeOnRelatingElement = VolumeOnRelatingElement;
 			this.VolumeOnRelatedElement = VolumeOnRelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionVolumeGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionVolumeGeometry
 		{
-			return new IfcConnectionVolumeGeometry(expressID, type, tape[0], tape[1]);
+			return new IfcConnectionVolumeGeometry(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34075,9 +34075,9 @@ export namespace IFC4 {
 			this.CreationTime = CreationTime;
 			this.UserDefinedGrade = UserDefinedGrade;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstraint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstraint
 		{
-			return new IfcConstraint(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcConstraint(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34098,9 +34098,9 @@ export namespace IFC4 {
 			this.SourceCRS = SourceCRS;
 			this.TargetCRS = TargetCRS;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoordinateOperation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoordinateOperation
 		{
-			return new IfcCoordinateOperation(expressID, type, tape[0], tape[1]);
+			return new IfcCoordinateOperation(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34126,9 +34126,9 @@ export namespace IFC4 {
 			this.GeodeticDatum = GeodeticDatum;
 			this.VerticalDatum = VerticalDatum;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoordinateReferenceSystem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoordinateReferenceSystem
 		{
-			return new IfcCoordinateReferenceSystem(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCoordinateReferenceSystem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34142,9 +34142,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name, Description, AppliedValue, UnitBasis, ApplicableDate, FixedUntilDate, Category, Condition, ArithmeticOperator, Components);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCostValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCostValue
 		{
-			return new IfcCostValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCostValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34167,9 +34167,9 @@ export namespace IFC4 {
 			this.UnitType = UnitType;
 			this.UserDefinedType = UserDefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDerivedUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDerivedUnit
 		{
-			return new IfcDerivedUnit(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcDerivedUnit(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34190,9 +34190,9 @@ export namespace IFC4 {
 			this.Unit = Unit;
 			this.Exponent = Exponent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDerivedUnitElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDerivedUnitElement
 		{
-			return new IfcDerivedUnitElement(expressID, type, tape[0], tape[1]);
+			return new IfcDerivedUnitElement(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34223,9 +34223,9 @@ export namespace IFC4 {
 			this.AmountOfSubstanceExponent = AmountOfSubstanceExponent;
 			this.LuminousIntensityExponent = LuminousIntensityExponent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDimensionalExponents
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDimensionalExponents
 		{
-			return new IfcDimensionalExponents(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcDimensionalExponents(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34242,7 +34242,7 @@ export namespace IFC4 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternalInformation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternalInformation
 		{
 			return new IfcExternalInformation(expressID, type, );
 		}
@@ -34268,9 +34268,9 @@ export namespace IFC4 {
 			this.Identification = Identification;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternalReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternalReference
 		{
-			return new IfcExternalReference(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternalReference(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34284,9 +34284,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Location, Identification, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternallyDefinedHatchStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternallyDefinedHatchStyle
 		{
-			return new IfcExternallyDefinedHatchStyle(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternallyDefinedHatchStyle(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34300,9 +34300,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Location, Identification, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternallyDefinedSurfaceStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternallyDefinedSurfaceStyle
 		{
-			return new IfcExternallyDefinedSurfaceStyle(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternallyDefinedSurfaceStyle(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34316,9 +34316,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Location, Identification, Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternallyDefinedTextFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternallyDefinedTextFont
 		{
-			return new IfcExternallyDefinedTextFont(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExternallyDefinedTextFont(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34345,9 +34345,9 @@ export namespace IFC4 {
 			this.AxisCurve = AxisCurve;
 			this.SameSense = SameSense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGridAxis
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGridAxis
 		{
-			return new IfcGridAxis(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcGridAxis(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34368,9 +34368,9 @@ export namespace IFC4 {
 			this.TimeStamp = TimeStamp;
 			this.ListValues = ListValues;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIrregularTimeSeriesValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIrregularTimeSeriesValue
 		{
-			return new IfcIrregularTimeSeriesValue(expressID, type, tape[0], tape[1]);
+			return new IfcIrregularTimeSeriesValue(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34398,9 +34398,9 @@ export namespace IFC4 {
 			this.Location = Location;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLibraryInformation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLibraryInformation
 		{
-			return new IfcLibraryInformation(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcLibraryInformation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34421,9 +34421,9 @@ export namespace IFC4 {
 			this.Language = Language;
 			this.ReferencedLibrary = ReferencedLibrary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLibraryReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLibraryReference
 		{
-			return new IfcLibraryReference(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcLibraryReference(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34446,9 +34446,9 @@ export namespace IFC4 {
 			this.SecondaryPlaneAngle = SecondaryPlaneAngle;
 			this.LuminousIntensity = LuminousIntensity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightDistributionData
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightDistributionData
 		{
-			return new IfcLightDistributionData(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcLightDistributionData(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34469,9 +34469,9 @@ export namespace IFC4 {
 			this.LightDistributionCurve = LightDistributionCurve;
 			this.DistributionData = DistributionData;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightIntensityDistribution
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightIntensityDistribution
 		{
-			return new IfcLightIntensityDistribution(expressID, type, tape[0], tape[1]);
+			return new IfcLightIntensityDistribution(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34497,9 +34497,9 @@ export namespace IFC4 {
 			this.XAxisOrdinate = XAxisOrdinate;
 			this.Scale = Scale;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMapConversion
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMapConversion
 		{
-			return new IfcMapConversion(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcMapConversion(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34520,9 +34520,9 @@ export namespace IFC4 {
 			this.MaterialClassifications = MaterialClassifications;
 			this.ClassifiedMaterial = ClassifiedMaterial;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialClassificationRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialClassificationRelationship
 		{
-			return new IfcMaterialClassificationRelationship(expressID, type, tape[0], tape[1]);
+			return new IfcMaterialClassificationRelationship(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34542,7 +34542,7 @@ export namespace IFC4 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialDefinition
 		{
 			return new IfcMaterialDefinition(expressID, type, );
 		}
@@ -34573,9 +34573,9 @@ export namespace IFC4 {
 			this.Category = Category;
 			this.Priority = Priority;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialLayer
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialLayer
 		{
-			return new IfcMaterialLayer(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcMaterialLayer(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34595,9 +34595,9 @@ export namespace IFC4 {
 			this.LayerSetName = LayerSetName;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialLayerSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialLayerSet
 		{
-			return new IfcMaterialLayerSet(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcMaterialLayerSet(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34615,9 +34615,9 @@ export namespace IFC4 {
 			this.OffsetDirection = OffsetDirection;
 			this.OffsetValues = OffsetValues;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialLayerWithOffsets
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialLayerWithOffsets
 		{
-			return new IfcMaterialLayerWithOffsets(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcMaterialLayerWithOffsets(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34636,9 +34636,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.Materials = Materials;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialList
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialList
 		{
-			return new IfcMaterialList(expressID, type, tape[0]);
+			return new IfcMaterialList(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34665,9 +34665,9 @@ export namespace IFC4 {
 			this.Priority = Priority;
 			this.Category = Category;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialProfile
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialProfile
 		{
-			return new IfcMaterialProfile(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcMaterialProfile(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34689,9 +34689,9 @@ export namespace IFC4 {
 			this.MaterialProfiles = MaterialProfiles;
 			this.CompositeProfile = CompositeProfile;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialProfileSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialProfileSet
 		{
-			return new IfcMaterialProfileSet(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcMaterialProfileSet(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34707,9 +34707,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, Description, Material, Profile, Priority, Category);
 			this.OffsetValues = OffsetValues;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialProfileWithOffsets
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialProfileWithOffsets
 		{
-			return new IfcMaterialProfileWithOffsets(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcMaterialProfileWithOffsets(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34727,7 +34727,7 @@ export namespace IFC4 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialUsageDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialUsageDefinition
 		{
 			return new IfcMaterialUsageDefinition(expressID, type, );
 		}
@@ -34750,9 +34750,9 @@ export namespace IFC4 {
 			this.ValueComponent = ValueComponent;
 			this.UnitComponent = UnitComponent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMeasureWithUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMeasureWithUnit
 		{
-			return new IfcMeasureWithUnit(expressID, type, tape[0], tape[1]);
+			return new IfcMeasureWithUnit(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34774,9 +34774,9 @@ export namespace IFC4 {
 			this.DataValue = DataValue;
 			this.ReferencePath = ReferencePath;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMetric
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMetric
 		{
-			return new IfcMetric(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcMetric(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34795,9 +34795,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.Currency = Currency;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMonetaryUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMonetaryUnit
 		{
-			return new IfcMonetaryUnit(expressID, type, tape[0]);
+			return new IfcMonetaryUnit(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34818,9 +34818,9 @@ export namespace IFC4 {
 			this.Dimensions = Dimensions;
 			this.UnitType = UnitType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcNamedUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcNamedUnit
 		{
-			return new IfcNamedUnit(expressID, type, tape[0], tape[1]);
+			return new IfcNamedUnit(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34839,7 +34839,7 @@ export namespace IFC4 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcObjectPlacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcObjectPlacement
 		{
 			return new IfcObjectPlacement(expressID, type, );
 		}
@@ -34863,9 +34863,9 @@ export namespace IFC4 {
 			this.ObjectiveQualifier = ObjectiveQualifier;
 			this.UserDefinedQualifier = UserDefinedQualifier;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcObjective
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcObjective
 		{
-			return new IfcObjective(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcObjective(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34895,9 +34895,9 @@ export namespace IFC4 {
 			this.Roles = Roles;
 			this.Addresses = Addresses;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOrganization
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOrganization
 		{
-			return new IfcOrganization(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcOrganization(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34930,9 +34930,9 @@ export namespace IFC4 {
 			this.LastModifyingApplication = LastModifyingApplication;
 			this.CreationDate = CreationDate;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOwnerHistory
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOwnerHistory
 		{
-			return new IfcOwnerHistory(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcOwnerHistory(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34966,9 +34966,9 @@ export namespace IFC4 {
 			this.Roles = Roles;
 			this.Addresses = Addresses;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPerson
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPerson
 		{
-			return new IfcPerson(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcPerson(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -34991,9 +34991,9 @@ export namespace IFC4 {
 			this.TheOrganization = TheOrganization;
 			this.Roles = Roles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPersonAndOrganization
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPersonAndOrganization
 		{
-			return new IfcPersonAndOrganization(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPersonAndOrganization(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35016,9 +35016,9 @@ export namespace IFC4 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPhysicalQuantity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPhysicalQuantity
 		{
-			return new IfcPhysicalQuantity(expressID, type, tape[0], tape[1]);
+			return new IfcPhysicalQuantity(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35034,9 +35034,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, Description);
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPhysicalSimpleQuantity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPhysicalSimpleQuantity
 		{
-			return new IfcPhysicalSimpleQuantity(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPhysicalSimpleQuantity(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35064,9 +35064,9 @@ export namespace IFC4 {
 			this.PostalCode = PostalCode;
 			this.Country = Country;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPostalAddress
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPostalAddress
 		{
-			return new IfcPostalAddress(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPostalAddress(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35083,7 +35083,7 @@ export namespace IFC4 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationItem
 		{
 			return new IfcPresentationItem(expressID, type, );
 		}
@@ -35110,9 +35110,9 @@ export namespace IFC4 {
 			this.AssignedItems = AssignedItems;
 			this.Identifier = Identifier;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationLayerAssignment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationLayerAssignment
 		{
-			return new IfcPresentationLayerAssignment(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPresentationLayerAssignment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35134,9 +35134,9 @@ export namespace IFC4 {
 			this.LayerBlocked = LayerBlocked;
 			this.LayerStyles = LayerStyles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationLayerWithStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationLayerWithStyle
 		{
-			return new IfcPresentationLayerWithStyle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcPresentationLayerWithStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35155,9 +35155,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationStyle
 		{
-			return new IfcPresentationStyle(expressID, type, tape[0]);
+			return new IfcPresentationStyle(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35176,9 +35176,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.Styles = Styles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPresentationStyleAssignment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPresentationStyleAssignment
 		{
-			return new IfcPresentationStyleAssignment(expressID, type, tape[0]);
+			return new IfcPresentationStyleAssignment(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35201,9 +35201,9 @@ export namespace IFC4 {
 			this.Description = Description;
 			this.Representations = Representations;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProductRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProductRepresentation
 		{
-			return new IfcProductRepresentation(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcProductRepresentation(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35226,9 +35226,9 @@ export namespace IFC4 {
 			this.ProfileType = ProfileType;
 			this.ProfileName = ProfileName;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProfileDef
 		{
-			return new IfcProfileDef(expressID, type, tape[0], tape[1]);
+			return new IfcProfileDef(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35248,9 +35248,9 @@ export namespace IFC4 {
 			this.MapZone = MapZone;
 			this.MapUnit = MapUnit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProjectedCRS
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProjectedCRS
 		{
-			return new IfcProjectedCRS(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcProjectedCRS(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35268,7 +35268,7 @@ export namespace IFC4 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyAbstraction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyAbstraction
 		{
 			return new IfcPropertyAbstraction(expressID, type, );
 		}
@@ -35290,9 +35290,9 @@ export namespace IFC4 {
 			this.EnumerationValues = EnumerationValues;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyEnumeration
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyEnumeration
 		{
-			return new IfcPropertyEnumeration(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPropertyEnumeration(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35310,9 +35310,9 @@ export namespace IFC4 {
 			this.AreaValue = AreaValue;
 			this.Formula = Formula;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityArea
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityArea
 		{
-			return new IfcQuantityArea(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcQuantityArea(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35330,9 +35330,9 @@ export namespace IFC4 {
 			this.CountValue = CountValue;
 			this.Formula = Formula;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityCount
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityCount
 		{
-			return new IfcQuantityCount(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcQuantityCount(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35350,9 +35350,9 @@ export namespace IFC4 {
 			this.LengthValue = LengthValue;
 			this.Formula = Formula;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityLength
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityLength
 		{
-			return new IfcQuantityLength(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcQuantityLength(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35370,9 +35370,9 @@ export namespace IFC4 {
 			this.TimeValue = TimeValue;
 			this.Formula = Formula;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityTime
 		{
-			return new IfcQuantityTime(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcQuantityTime(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35390,9 +35390,9 @@ export namespace IFC4 {
 			this.VolumeValue = VolumeValue;
 			this.Formula = Formula;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityVolume
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityVolume
 		{
-			return new IfcQuantityVolume(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcQuantityVolume(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35410,9 +35410,9 @@ export namespace IFC4 {
 			this.WeightValue = WeightValue;
 			this.Formula = Formula;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantityWeight
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantityWeight
 		{
-			return new IfcQuantityWeight(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcQuantityWeight(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35445,9 +35445,9 @@ export namespace IFC4 {
 			this.Occurrences = Occurrences;
 			this.TimePeriods = TimePeriods;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRecurrencePattern
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRecurrencePattern
 		{
-			return new IfcRecurrencePattern(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRecurrencePattern(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35474,9 +35474,9 @@ export namespace IFC4 {
 			this.ListPositions = ListPositions;
 			this.InnerReference = InnerReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReference
 		{
-			return new IfcReference(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcReference(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35504,9 +35504,9 @@ export namespace IFC4 {
 			this.RepresentationType = RepresentationType;
 			this.Items = Items;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRepresentation
 		{
-			return new IfcRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35528,9 +35528,9 @@ export namespace IFC4 {
 			this.ContextIdentifier = ContextIdentifier;
 			this.ContextType = ContextType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRepresentationContext
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRepresentationContext
 		{
-			return new IfcRepresentationContext(expressID, type, tape[0], tape[1]);
+			return new IfcRepresentationContext(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35549,7 +35549,7 @@ export namespace IFC4 {
 			this.expressID = expressID;
 			this.type = type;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRepresentationItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRepresentationItem
 		{
 			return new IfcRepresentationItem(expressID, type, );
 		}
@@ -35574,9 +35574,9 @@ export namespace IFC4 {
 			this.MappingOrigin = MappingOrigin;
 			this.MappedRepresentation = MappedRepresentation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRepresentationMap
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRepresentationMap
 		{
-			return new IfcRepresentationMap(expressID, type, tape[0], tape[1]);
+			return new IfcRepresentationMap(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35597,9 +35597,9 @@ export namespace IFC4 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcResourceLevelRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcResourceLevelRelationship
 		{
-			return new IfcResourceLevelRelationship(expressID, type, tape[0], tape[1]);
+			return new IfcResourceLevelRelationship(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35624,9 +35624,9 @@ export namespace IFC4 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRoot
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRoot
 		{
-			return new IfcRoot(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRoot(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35644,9 +35644,9 @@ export namespace IFC4 {
 			this.Prefix = Prefix;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSIUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSIUnit
 		{
-			return new IfcSIUnit(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSIUnit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35669,9 +35669,9 @@ export namespace IFC4 {
 			this.DataOrigin = DataOrigin;
 			this.UserDefinedDataOrigin = UserDefinedDataOrigin;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSchedulingTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSchedulingTime
 		{
-			return new IfcSchedulingTime(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSchedulingTime(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35698,9 +35698,9 @@ export namespace IFC4 {
 			this.ProductDefinitional = ProductDefinitional;
 			this.PartOfProductDefinitionShape = PartOfProductDefinitionShape;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShapeAspect
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShapeAspect
 		{
-			return new IfcShapeAspect(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcShapeAspect(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35715,9 +35715,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShapeModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShapeModel
 		{
-			return new IfcShapeModel(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcShapeModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35731,9 +35731,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShapeRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShapeRepresentation
 		{
-			return new IfcShapeRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcShapeRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35752,9 +35752,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralConnectionCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralConnectionCondition
 		{
-			return new IfcStructuralConnectionCondition(expressID, type, tape[0]);
+			return new IfcStructuralConnectionCondition(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35773,9 +35773,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoad
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoad
 		{
-			return new IfcStructuralLoad(expressID, type, tape[0]);
+			return new IfcStructuralLoad(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35793,9 +35793,9 @@ export namespace IFC4 {
 			this.Values = Values;
 			this.Locations = Locations;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadConfiguration
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadConfiguration
 		{
-			return new IfcStructuralLoadConfiguration(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcStructuralLoadConfiguration(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35809,9 +35809,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadOrResult
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadOrResult
 		{
-			return new IfcStructuralLoadOrResult(expressID, type, tape[0]);
+			return new IfcStructuralLoadOrResult(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35825,9 +35825,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadStatic
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadStatic
 		{
-			return new IfcStructuralLoadStatic(expressID, type, tape[0]);
+			return new IfcStructuralLoadStatic(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35847,9 +35847,9 @@ export namespace IFC4 {
 			this.DeltaTY = DeltaTY;
 			this.DeltaTZ = DeltaTZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadTemperature
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadTemperature
 		{
-			return new IfcStructuralLoadTemperature(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcStructuralLoadTemperature(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35863,9 +35863,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStyleModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStyleModel
 		{
-			return new IfcStyleModel(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcStyleModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35885,9 +35885,9 @@ export namespace IFC4 {
 			this.Styles = Styles;
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStyledItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStyledItem
 		{
-			return new IfcStyledItem(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcStyledItem(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35901,9 +35901,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStyledRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStyledRepresentation
 		{
-			return new IfcStyledRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcStyledRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35923,9 +35923,9 @@ export namespace IFC4 {
 			this.SurfaceReinforcement2 = SurfaceReinforcement2;
 			this.ShearReinforcement = ShearReinforcement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceReinforcementArea
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceReinforcementArea
 		{
-			return new IfcSurfaceReinforcementArea(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSurfaceReinforcementArea(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35943,9 +35943,9 @@ export namespace IFC4 {
 			this.Side = Side;
 			this.Styles = Styles;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyle
 		{
-			return new IfcSurfaceStyle(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSurfaceStyle(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35967,9 +35967,9 @@ export namespace IFC4 {
 			this.TransmissionColour = TransmissionColour;
 			this.ReflectanceColour = ReflectanceColour;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleLighting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleLighting
 		{
-			return new IfcSurfaceStyleLighting(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSurfaceStyleLighting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -35987,9 +35987,9 @@ export namespace IFC4 {
 			this.RefractionIndex = RefractionIndex;
 			this.DispersionFactor = DispersionFactor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleRefraction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleRefraction
 		{
-			return new IfcSurfaceStyleRefraction(expressID, type, tape[0], tape[1]);
+			return new IfcSurfaceStyleRefraction(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36007,9 +36007,9 @@ export namespace IFC4 {
 			this.SurfaceColour = SurfaceColour;
 			this.Transparency = Transparency;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleShading
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleShading
 		{
-			return new IfcSurfaceStyleShading(expressID, type, tape[0], tape[1]);
+			return new IfcSurfaceStyleShading(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36025,9 +36025,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Textures = Textures;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleWithTextures
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleWithTextures
 		{
-			return new IfcSurfaceStyleWithTextures(expressID, type, tape[0]);
+			return new IfcSurfaceStyleWithTextures(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36053,9 +36053,9 @@ export namespace IFC4 {
 			this.TextureTransform = TextureTransform;
 			this.Parameter = Parameter;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceTexture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceTexture
 		{
-			return new IfcSurfaceTexture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcSurfaceTexture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36078,9 +36078,9 @@ export namespace IFC4 {
 			this.Rows = Rows;
 			this.Columns = Columns;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTable
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTable
 		{
-			return new IfcTable(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcTable(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36107,9 +36107,9 @@ export namespace IFC4 {
 			this.Unit = Unit;
 			this.ReferencePath = ReferencePath;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTableColumn
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTableColumn
 		{
-			return new IfcTableColumn(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcTableColumn(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36130,9 +36130,9 @@ export namespace IFC4 {
 			this.RowCells = RowCells;
 			this.IsHeading = IsHeading;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTableRow
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTableRow
 		{
-			return new IfcTableRow(expressID, type, tape[0], tape[1]);
+			return new IfcTableRow(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36180,9 +36180,9 @@ export namespace IFC4 {
 			this.RemainingTime = RemainingTime;
 			this.Completion = Completion;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTaskTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTaskTime
 		{
-			return new IfcTaskTime(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17], tape[18], tape[19]);
+			return new IfcTaskTime(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17], _tape[18], _tape[19]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36198,9 +36198,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, DataOrigin, UserDefinedDataOrigin, DurationType, ScheduleDuration, ScheduleStart, ScheduleFinish, EarlyStart, EarlyFinish, LateStart, LateFinish, FreeFloat, TotalFloat, IsCritical, StatusTime, ActualDuration, ActualStart, ActualFinish, RemainingTime, Completion);
 			this.Recurrence = Recurrence;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTaskTimeRecurring
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTaskTimeRecurring
 		{
-			return new IfcTaskTimeRecurring(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17], tape[18], tape[19], tape[20]);
+			return new IfcTaskTimeRecurring(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17], _tape[18], _tape[19], _tape[20]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36226,9 +36226,9 @@ export namespace IFC4 {
 			this.WWWHomePageURL = WWWHomePageURL;
 			this.MessagingIDs = MessagingIDs;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTelecomAddress
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTelecomAddress
 		{
-			return new IfcTelecomAddress(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcTelecomAddress(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36250,9 +36250,9 @@ export namespace IFC4 {
 			this.TextFontStyle = TextFontStyle;
 			this.ModelOrDraughting = ModelOrDraughting;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyle
 		{
-			return new IfcTextStyle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcTextStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36270,9 +36270,9 @@ export namespace IFC4 {
 			this.Colour = Colour;
 			this.BackgroundColour = BackgroundColour;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyleForDefinedFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyleForDefinedFont
 		{
-			return new IfcTextStyleForDefinedFont(expressID, type, tape[0], tape[1]);
+			return new IfcTextStyleForDefinedFont(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36300,9 +36300,9 @@ export namespace IFC4 {
 			this.TextTransform = TextTransform;
 			this.LineHeight = LineHeight;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyleTextModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyleTextModel
 		{
-			return new IfcTextStyleTextModel(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcTextStyleTextModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36318,9 +36318,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Maps = Maps;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureCoordinate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureCoordinate
 		{
-			return new IfcTextureCoordinate(expressID, type, tape[0]);
+			return new IfcTextureCoordinate(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36338,9 +36338,9 @@ export namespace IFC4 {
 			this.Mode = Mode;
 			this.Parameter = Parameter;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureCoordinateGenerator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureCoordinateGenerator
 		{
-			return new IfcTextureCoordinateGenerator(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcTextureCoordinateGenerator(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36358,9 +36358,9 @@ export namespace IFC4 {
 			this.Vertices = Vertices;
 			this.MappedTo = MappedTo;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureMap
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureMap
 		{
-			return new IfcTextureMap(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcTextureMap(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36376,9 +36376,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Coordinates = Coordinates;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureVertex
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureVertex
 		{
-			return new IfcTextureVertex(expressID, type, tape[0]);
+			return new IfcTextureVertex(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36394,9 +36394,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.TexCoordsList = TexCoordsList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextureVertexList
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextureVertexList
 		{
-			return new IfcTextureVertexList(expressID, type, tape[0]);
+			return new IfcTextureVertexList(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36417,9 +36417,9 @@ export namespace IFC4 {
 			this.StartTime = StartTime;
 			this.EndTime = EndTime;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTimePeriod
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTimePeriod
 		{
-			return new IfcTimePeriod(expressID, type, tape[0], tape[1]);
+			return new IfcTimePeriod(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36453,9 +36453,9 @@ export namespace IFC4 {
 			this.UserDefinedDataOrigin = UserDefinedDataOrigin;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTimeSeries
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTimeSeries
 		{
-			return new IfcTimeSeries(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcTimeSeries(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36474,9 +36474,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.ListValues = ListValues;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTimeSeriesValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTimeSeriesValue
 		{
-			return new IfcTimeSeriesValue(expressID, type, tape[0]);
+			return new IfcTimeSeriesValue(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36490,7 +36490,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTopologicalRepresentationItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTopologicalRepresentationItem
 		{
 			return new IfcTopologicalRepresentationItem(expressID, type, );
 		}
@@ -36506,9 +36506,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,ContextOfItems, RepresentationIdentifier, RepresentationType, Items);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTopologyRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTopologyRepresentation
 		{
-			return new IfcTopologyRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcTopologyRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36527,9 +36527,9 @@ export namespace IFC4 {
 			this.type = type;
 			this.Units = Units;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUnitAssignment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUnitAssignment
 		{
-			return new IfcUnitAssignment(expressID, type, tape[0]);
+			return new IfcUnitAssignment(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36543,7 +36543,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVertex
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVertex
 		{
 			return new IfcVertex(expressID, type, );
 		}
@@ -36561,9 +36561,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.VertexGeometry = VertexGeometry;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVertexPoint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVertexPoint
 		{
-			return new IfcVertexPoint(expressID, type, tape[0]);
+			return new IfcVertexPoint(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36584,9 +36584,9 @@ export namespace IFC4 {
 			this.IntersectingAxes = IntersectingAxes;
 			this.OffsetDistances = OffsetDistances;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVirtualGridIntersection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVirtualGridIntersection
 		{
-			return new IfcVirtualGridIntersection(expressID, type, tape[0], tape[1]);
+			return new IfcVirtualGridIntersection(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36606,9 +36606,9 @@ export namespace IFC4 {
 			this.Start = Start;
 			this.Finish = Finish;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWorkTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWorkTime
 		{
-			return new IfcWorkTime(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcWorkTime(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36626,9 +36626,9 @@ export namespace IFC4 {
 			this.RelatingApproval = RelatingApproval;
 			this.RelatedApprovals = RelatedApprovals;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcApprovalRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcApprovalRelationship
 		{
-			return new IfcApprovalRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcApprovalRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36644,9 +36644,9 @@ export namespace IFC4 {
 			super(expressID,type,ProfileType, ProfileName);
 			this.OuterCurve = OuterCurve;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcArbitraryClosedProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcArbitraryClosedProfileDef
 		{
-			return new IfcArbitraryClosedProfileDef(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcArbitraryClosedProfileDef(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36662,9 +36662,9 @@ export namespace IFC4 {
 			super(expressID,type,ProfileType, ProfileName);
 			this.Curve = Curve;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcArbitraryOpenProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcArbitraryOpenProfileDef
 		{
-			return new IfcArbitraryOpenProfileDef(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcArbitraryOpenProfileDef(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36680,9 +36680,9 @@ export namespace IFC4 {
 			super(expressID,type,ProfileType, ProfileName, OuterCurve);
 			this.InnerCurves = InnerCurves;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcArbitraryProfileDefWithVoids
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcArbitraryProfileDefWithVoids
 		{
-			return new IfcArbitraryProfileDefWithVoids(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcArbitraryProfileDefWithVoids(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36700,9 +36700,9 @@ export namespace IFC4 {
 			this.RasterFormat = RasterFormat;
 			this.RasterCode = RasterCode;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBlobTexture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBlobTexture
 		{
-			return new IfcBlobTexture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcBlobTexture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36718,9 +36718,9 @@ export namespace IFC4 {
 			super(expressID,type,ProfileType, ProfileName, Curve);
 			this.Thickness = Thickness;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCenterLineProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCenterLineProfileDef
 		{
-			return new IfcCenterLineProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCenterLineProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36750,9 +36750,9 @@ export namespace IFC4 {
 			this.Location = Location;
 			this.ReferenceTokens = ReferenceTokens;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClassification
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClassification
 		{
-			return new IfcClassification(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcClassification(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36774,9 +36774,9 @@ export namespace IFC4 {
 			this.Description = Description;
 			this.Sort = Sort;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClassificationReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClassificationReference
 		{
-			return new IfcClassificationReference(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcClassificationReference(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36792,9 +36792,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.ColourList = ColourList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColourRgbList
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColourRgbList
 		{
-			return new IfcColourRgbList(expressID, type, tape[0]);
+			return new IfcColourRgbList(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36810,9 +36810,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColourSpecification
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColourSpecification
 		{
-			return new IfcColourSpecification(expressID, type, tape[0]);
+			return new IfcColourSpecification(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36830,9 +36830,9 @@ export namespace IFC4 {
 			this.Profiles = Profiles;
 			this.Label = Label;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompositeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompositeProfileDef
 		{
-			return new IfcCompositeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCompositeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36848,9 +36848,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.CfsFaces = CfsFaces;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectedFaceSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectedFaceSet
 		{
-			return new IfcConnectedFaceSet(expressID, type, tape[0]);
+			return new IfcConnectedFaceSet(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36868,9 +36868,9 @@ export namespace IFC4 {
 			this.CurveOnRelatingElement = CurveOnRelatingElement;
 			this.CurveOnRelatedElement = CurveOnRelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionCurveGeometry
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionCurveGeometry
 		{
-			return new IfcConnectionCurveGeometry(expressID, type, tape[0], tape[1]);
+			return new IfcConnectionCurveGeometry(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36890,9 +36890,9 @@ export namespace IFC4 {
 			this.EccentricityInY = EccentricityInY;
 			this.EccentricityInZ = EccentricityInZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConnectionPointEccentricity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConnectionPointEccentricity
 		{
-			return new IfcConnectionPointEccentricity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcConnectionPointEccentricity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36909,9 +36909,9 @@ export namespace IFC4 {
 			super(expressID,type,Dimensions, UnitType);
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcContextDependentUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcContextDependentUnit
 		{
-			return new IfcContextDependentUnit(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcContextDependentUnit(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36930,9 +36930,9 @@ export namespace IFC4 {
 			this.Name = Name;
 			this.ConversionFactor = ConversionFactor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConversionBasedUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConversionBasedUnit
 		{
-			return new IfcConversionBasedUnit(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcConversionBasedUnit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36948,9 +36948,9 @@ export namespace IFC4 {
 			super(expressID,type,Dimensions, UnitType, Name, ConversionFactor);
 			this.ConversionOffset = ConversionOffset;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConversionBasedUnitWithOffset
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConversionBasedUnitWithOffset
 		{
-			return new IfcConversionBasedUnitWithOffset(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcConversionBasedUnitWithOffset(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36974,9 +36974,9 @@ export namespace IFC4 {
 			this.RateDateTime = RateDateTime;
 			this.RateSource = RateSource;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurrencyRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurrencyRelationship
 		{
-			return new IfcCurrencyRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcCurrencyRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -36998,9 +36998,9 @@ export namespace IFC4 {
 			this.CurveColour = CurveColour;
 			this.ModelOrDraughting = ModelOrDraughting;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveStyle
 		{
-			return new IfcCurveStyle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCurveStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37018,9 +37018,9 @@ export namespace IFC4 {
 			this.Name = Name;
 			this.PatternList = PatternList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveStyleFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveStyleFont
 		{
-			return new IfcCurveStyleFont(expressID, type, tape[0], tape[1]);
+			return new IfcCurveStyleFont(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37040,9 +37040,9 @@ export namespace IFC4 {
 			this.CurveFont = CurveFont;
 			this.CurveFontScaling = CurveFontScaling;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveStyleFontAndScaling
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveStyleFontAndScaling
 		{
-			return new IfcCurveStyleFontAndScaling(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCurveStyleFontAndScaling(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37060,9 +37060,9 @@ export namespace IFC4 {
 			this.VisibleSegmentLength = VisibleSegmentLength;
 			this.InvisibleSegmentLength = InvisibleSegmentLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveStyleFontPattern
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveStyleFontPattern
 		{
-			return new IfcCurveStyleFontPattern(expressID, type, tape[0], tape[1]);
+			return new IfcCurveStyleFontPattern(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37082,9 +37082,9 @@ export namespace IFC4 {
 			this.Operator = Operator;
 			this.Label = Label;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDerivedProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDerivedProfileDef
 		{
-			return new IfcDerivedProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcDerivedProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37136,9 +37136,9 @@ export namespace IFC4 {
 			this.Confidentiality = Confidentiality;
 			this.Status = Status;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDocumentInformation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDocumentInformation
 		{
-			return new IfcDocumentInformation(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16]);
+			return new IfcDocumentInformation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37158,9 +37158,9 @@ export namespace IFC4 {
 			this.RelatedDocuments = RelatedDocuments;
 			this.RelationshipType = RelationshipType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDocumentInformationRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDocumentInformationRelationship
 		{
-			return new IfcDocumentInformationRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcDocumentInformationRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37179,9 +37179,9 @@ export namespace IFC4 {
 			this.Description = Description;
 			this.ReferencedDocument = ReferencedDocument;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDocumentReference
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDocumentReference
 		{
-			return new IfcDocumentReference(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcDocumentReference(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37199,9 +37199,9 @@ export namespace IFC4 {
 			this.EdgeStart = EdgeStart;
 			this.EdgeEnd = EdgeEnd;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEdge
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEdge
 		{
-			return new IfcEdge(expressID, type, tape[0], tape[1]);
+			return new IfcEdge(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37219,9 +37219,9 @@ export namespace IFC4 {
 			this.EdgeGeometry = EdgeGeometry;
 			this.SameSense = SameSense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEdgeCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEdgeCurve
 		{
-			return new IfcEdgeCurve(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcEdgeCurve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37243,9 +37243,9 @@ export namespace IFC4 {
 			this.LateDate = LateDate;
 			this.ScheduleDate = ScheduleDate;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEventTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEventTime
 		{
-			return new IfcEventTime(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcEventTime(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37265,9 +37265,9 @@ export namespace IFC4 {
 			this.Description = Description;
 			this.Properties = Properties;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExtendedProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExtendedProperties
 		{
-			return new IfcExtendedProperties(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcExtendedProperties(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37285,9 +37285,9 @@ export namespace IFC4 {
 			this.RelatingReference = RelatingReference;
 			this.RelatedResourceObjects = RelatedResourceObjects;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternalReferenceRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternalReferenceRelationship
 		{
-			return new IfcExternalReferenceRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcExternalReferenceRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37304,9 +37304,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Bounds = Bounds;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFace
 		{
-			return new IfcFace(expressID, type, tape[0]);
+			return new IfcFace(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37324,9 +37324,9 @@ export namespace IFC4 {
 			this.Bound = Bound;
 			this.Orientation = Orientation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFaceBound
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFaceBound
 		{
-			return new IfcFaceBound(expressID, type, tape[0], tape[1]);
+			return new IfcFaceBound(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37340,9 +37340,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Bound, Orientation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFaceOuterBound
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFaceOuterBound
 		{
-			return new IfcFaceOuterBound(expressID, type, tape[0], tape[1]);
+			return new IfcFaceOuterBound(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37360,9 +37360,9 @@ export namespace IFC4 {
 			this.FaceSurface = FaceSurface;
 			this.SameSense = SameSense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFaceSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFaceSurface
 		{
-			return new IfcFaceSurface(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcFaceSurface(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37388,9 +37388,9 @@ export namespace IFC4 {
 			this.CompressionFailureY = CompressionFailureY;
 			this.CompressionFailureZ = CompressionFailureZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFailureConnectionCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFailureConnectionCondition
 		{
-			return new IfcFailureConnectionCondition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcFailureConnectionCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37408,9 +37408,9 @@ export namespace IFC4 {
 			this.FillStyles = FillStyles;
 			this.ModelorDraughting = ModelorDraughting;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFillAreaStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFillAreaStyle
 		{
-			return new IfcFillAreaStyle(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcFillAreaStyle(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37434,9 +37434,9 @@ export namespace IFC4 {
 			this.WorldCoordinateSystem = WorldCoordinateSystem;
 			this.TrueNorth = TrueNorth;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricRepresentationContext
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricRepresentationContext
 		{
-			return new IfcGeometricRepresentationContext(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcGeometricRepresentationContext(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37450,7 +37450,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricRepresentationItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricRepresentationItem
 		{
 			return new IfcGeometricRepresentationItem(expressID, type, );
 		}
@@ -37474,9 +37474,9 @@ export namespace IFC4 {
 			this.TargetView = TargetView;
 			this.UserDefinedTargetView = UserDefinedTargetView;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricRepresentationSubContext
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricRepresentationSubContext
 		{
-			return new IfcGeometricRepresentationSubContext(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcGeometricRepresentationSubContext(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37492,9 +37492,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Elements = Elements;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricSet
 		{
-			return new IfcGeometricSet(expressID, type, tape[0]);
+			return new IfcGeometricSet(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37512,9 +37512,9 @@ export namespace IFC4 {
 			this.PlacementLocation = PlacementLocation;
 			this.PlacementRefDirection = PlacementRefDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGridPlacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGridPlacement
 		{
-			return new IfcGridPlacement(expressID, type, tape[0], tape[1]);
+			return new IfcGridPlacement(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37532,9 +37532,9 @@ export namespace IFC4 {
 			this.BaseSurface = BaseSurface;
 			this.AgreementFlag = AgreementFlag;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHalfSpaceSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHalfSpaceSolid
 		{
-			return new IfcHalfSpaceSolid(expressID, type, tape[0], tape[1]);
+			return new IfcHalfSpaceSolid(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37550,9 +37550,9 @@ export namespace IFC4 {
 			super(expressID,type,RepeatS, RepeatT, Mode, TextureTransform, Parameter);
 			this.URLReference = URLReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcImageTexture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcImageTexture
 		{
-			return new IfcImageTexture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcImageTexture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37574,9 +37574,9 @@ export namespace IFC4 {
 			this.Colours = Colours;
 			this.ColourIndex = ColourIndex;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIndexedColourMap
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIndexedColourMap
 		{
-			return new IfcIndexedColourMap(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcIndexedColourMap(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37594,9 +37594,9 @@ export namespace IFC4 {
 			this.MappedTo = MappedTo;
 			this.TexCoords = TexCoords;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIndexedTextureMap
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIndexedTextureMap
 		{
-			return new IfcIndexedTextureMap(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcIndexedTextureMap(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37612,9 +37612,9 @@ export namespace IFC4 {
 			super(expressID,type,Maps, MappedTo, TexCoords);
 			this.TexCoordIndex = TexCoordIndex;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIndexedTriangleTextureMap
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIndexedTriangleTextureMap
 		{
-			return new IfcIndexedTriangleTextureMap(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcIndexedTriangleTextureMap(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37630,9 +37630,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, Description, StartTime, EndTime, TimeSeriesDataType, DataOrigin, UserDefinedDataOrigin, Unit);
 			this.Values = Values;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIrregularTimeSeries
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIrregularTimeSeries
 		{
-			return new IfcIrregularTimeSeries(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcIrregularTimeSeries(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37650,9 +37650,9 @@ export namespace IFC4 {
 			this.LagValue = LagValue;
 			this.DurationType = DurationType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLagTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLagTime
 		{
-			return new IfcLagTime(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcLagTime(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37674,9 +37674,9 @@ export namespace IFC4 {
 			this.AmbientIntensity = AmbientIntensity;
 			this.Intensity = Intensity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSource
 		{
-			return new IfcLightSource(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcLightSource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37690,9 +37690,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name, LightColour, AmbientIntensity, Intensity);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourceAmbient
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourceAmbient
 		{
-			return new IfcLightSourceAmbient(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcLightSourceAmbient(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37708,9 +37708,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, LightColour, AmbientIntensity, Intensity);
 			this.Orientation = Orientation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourceDirectional
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourceDirectional
 		{
-			return new IfcLightSourceDirectional(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcLightSourceDirectional(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37736,9 +37736,9 @@ export namespace IFC4 {
 			this.LightEmissionSource = LightEmissionSource;
 			this.LightDistributionDataSource = LightDistributionDataSource;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourceGoniometric
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourceGoniometric
 		{
-			return new IfcLightSourceGoniometric(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcLightSourceGoniometric(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37762,9 +37762,9 @@ export namespace IFC4 {
 			this.DistanceAttenuation = DistanceAttenuation;
 			this.QuadricAttenuation = QuadricAttenuation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourcePositional
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourcePositional
 		{
-			return new IfcLightSourcePositional(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcLightSourcePositional(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37786,9 +37786,9 @@ export namespace IFC4 {
 			this.SpreadAngle = SpreadAngle;
 			this.BeamWidthAngle = BeamWidthAngle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightSourceSpot
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightSourceSpot
 		{
-			return new IfcLightSourceSpot(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcLightSourceSpot(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37806,9 +37806,9 @@ export namespace IFC4 {
 			this.PlacementRelTo = PlacementRelTo;
 			this.RelativePlacement = RelativePlacement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLocalPlacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLocalPlacement
 		{
-			return new IfcLocalPlacement(expressID, type, tape[0], tape[1]);
+			return new IfcLocalPlacement(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37822,7 +37822,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLoop
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLoop
 		{
 			return new IfcLoop(expressID, type, );
 		}
@@ -37842,9 +37842,9 @@ export namespace IFC4 {
 			this.MappingSource = MappingSource;
 			this.MappingTarget = MappingTarget;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMappedItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMappedItem
 		{
-			return new IfcMappedItem(expressID, type, tape[0], tape[1]);
+			return new IfcMappedItem(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37867,9 +37867,9 @@ export namespace IFC4 {
 			this.Description = Description;
 			this.Category = Category;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterial
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterial
 		{
-			return new IfcMaterial(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcMaterial(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37894,9 +37894,9 @@ export namespace IFC4 {
 			this.Fraction = Fraction;
 			this.Category = Category;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialConstituent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialConstituent
 		{
-			return new IfcMaterialConstituent(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcMaterialConstituent(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37916,9 +37916,9 @@ export namespace IFC4 {
 			this.Description = Description;
 			this.MaterialConstituents = MaterialConstituents;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialConstituentSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialConstituentSet
 		{
-			return new IfcMaterialConstituentSet(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcMaterialConstituentSet(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37934,9 +37934,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, Description, Representations);
 			this.RepresentedMaterial = RepresentedMaterial;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialDefinitionRepresentation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialDefinitionRepresentation
 		{
-			return new IfcMaterialDefinitionRepresentation(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcMaterialDefinitionRepresentation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37960,9 +37960,9 @@ export namespace IFC4 {
 			this.OffsetFromReferenceLine = OffsetFromReferenceLine;
 			this.ReferenceExtent = ReferenceExtent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialLayerSetUsage
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialLayerSetUsage
 		{
-			return new IfcMaterialLayerSetUsage(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcMaterialLayerSetUsage(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -37982,9 +37982,9 @@ export namespace IFC4 {
 			this.CardinalPoint = CardinalPoint;
 			this.ReferenceExtent = ReferenceExtent;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialProfileSetUsage
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialProfileSetUsage
 		{
-			return new IfcMaterialProfileSetUsage(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcMaterialProfileSetUsage(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38002,9 +38002,9 @@ export namespace IFC4 {
 			this.ForProfileEndSet = ForProfileEndSet;
 			this.CardinalEndPoint = CardinalEndPoint;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialProfileSetUsageTapering
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialProfileSetUsageTapering
 		{
-			return new IfcMaterialProfileSetUsageTapering(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcMaterialProfileSetUsageTapering(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38020,9 +38020,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, Description, Properties);
 			this.Material = Material;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialProperties
 		{
-			return new IfcMaterialProperties(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcMaterialProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38042,9 +38042,9 @@ export namespace IFC4 {
 			this.RelatedMaterials = RelatedMaterials;
 			this.Expression = Expression;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMaterialRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMaterialRelationship
 		{
-			return new IfcMaterialRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcMaterialRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38058,9 +38058,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,ProfileType, ProfileName, ParentProfile, Operator, Label);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMirroredProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMirroredProfileDef
 		{
-			return new IfcMirroredProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcMirroredProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38081,9 +38081,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcObjectDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcObjectDefinition
 		{
-			return new IfcObjectDefinition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcObjectDefinition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38097,9 +38097,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,CfsFaces);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOpenShell
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOpenShell
 		{
-			return new IfcOpenShell(expressID, type, tape[0]);
+			return new IfcOpenShell(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38117,9 +38117,9 @@ export namespace IFC4 {
 			this.RelatingOrganization = RelatingOrganization;
 			this.RelatedOrganizations = RelatedOrganizations;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOrganizationRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOrganizationRelationship
 		{
-			return new IfcOrganizationRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcOrganizationRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38137,9 +38137,9 @@ export namespace IFC4 {
 			this.EdgeElement = EdgeElement;
 			this.Orientation = Orientation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOrientedEdge
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOrientedEdge
 		{
-			return new IfcOrientedEdge(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcOrientedEdge(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38155,9 +38155,9 @@ export namespace IFC4 {
 			super(expressID,type,ProfileType, ProfileName);
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcParameterizedProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcParameterizedProfileDef
 		{
-			return new IfcParameterizedProfileDef(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcParameterizedProfileDef(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38173,9 +38173,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.EdgeList = EdgeList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPath
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPath
 		{
-			return new IfcPath(expressID, type, tape[0]);
+			return new IfcPath(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38197,9 +38197,9 @@ export namespace IFC4 {
 			this.Quality = Quality;
 			this.Usage = Usage;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPhysicalComplexQuantity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPhysicalComplexQuantity
 		{
-			return new IfcPhysicalComplexQuantity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcPhysicalComplexQuantity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38221,9 +38221,9 @@ export namespace IFC4 {
 			this.ColourComponents = ColourComponents;
 			this.Pixel = Pixel;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPixelTexture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPixelTexture
 		{
-			return new IfcPixelTexture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPixelTexture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38239,9 +38239,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Location = Location;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlacement
 		{
-			return new IfcPlacement(expressID, type, tape[0]);
+			return new IfcPlacement(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38259,9 +38259,9 @@ export namespace IFC4 {
 			this.SizeInX = SizeInX;
 			this.SizeInY = SizeInY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlanarExtent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlanarExtent
 		{
-			return new IfcPlanarExtent(expressID, type, tape[0], tape[1]);
+			return new IfcPlanarExtent(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38275,7 +38275,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPoint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPoint
 		{
 			return new IfcPoint(expressID, type, );
 		}
@@ -38295,9 +38295,9 @@ export namespace IFC4 {
 			this.BasisCurve = BasisCurve;
 			this.PointParameter = PointParameter;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPointOnCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPointOnCurve
 		{
-			return new IfcPointOnCurve(expressID, type, tape[0], tape[1]);
+			return new IfcPointOnCurve(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38317,9 +38317,9 @@ export namespace IFC4 {
 			this.PointParameterU = PointParameterU;
 			this.PointParameterV = PointParameterV;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPointOnSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPointOnSurface
 		{
-			return new IfcPointOnSurface(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPointOnSurface(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38335,9 +38335,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Polygon = Polygon;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPolyLoop
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPolyLoop
 		{
-			return new IfcPolyLoop(expressID, type, tape[0]);
+			return new IfcPolyLoop(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38355,9 +38355,9 @@ export namespace IFC4 {
 			this.Position = Position;
 			this.PolygonalBoundary = PolygonalBoundary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPolygonalBoundedHalfSpace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPolygonalBoundedHalfSpace
 		{
-			return new IfcPolygonalBoundedHalfSpace(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPolygonalBoundedHalfSpace(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38373,9 +38373,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Name = Name;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedItem
 		{
-			return new IfcPreDefinedItem(expressID, type, tape[0]);
+			return new IfcPreDefinedItem(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38389,7 +38389,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedProperties
 		{
 			return new IfcPreDefinedProperties(expressID, type, );
 		}
@@ -38405,9 +38405,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedTextFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedTextFont
 		{
-			return new IfcPreDefinedTextFont(expressID, type, tape[0]);
+			return new IfcPreDefinedTextFont(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38423,9 +38423,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name, Description, Representations);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProductDefinitionShape
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProductDefinitionShape
 		{
-			return new IfcProductDefinitionShape(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcProductDefinitionShape(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38441,9 +38441,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, Description, Properties);
 			this.ProfileDefinition = ProfileDefinition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProfileProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProfileProperties
 		{
-			return new IfcProfileProperties(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcProfileProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38467,9 +38467,9 @@ export namespace IFC4 {
 			this.Name = Name;
 			this.Description = Description;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProperty
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProperty
 		{
-			return new IfcProperty(expressID, type, tape[0], tape[1]);
+			return new IfcProperty(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38485,9 +38485,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyDefinition
 		{
-			return new IfcPropertyDefinition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyDefinition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38507,9 +38507,9 @@ export namespace IFC4 {
 			this.DependantProperty = DependantProperty;
 			this.Expression = Expression;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyDependencyRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyDependencyRelationship
 		{
-			return new IfcPropertyDependencyRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcPropertyDependencyRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38526,9 +38526,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertySetDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertySetDefinition
 		{
-			return new IfcPropertySetDefinition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertySetDefinition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38542,9 +38542,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyTemplateDefinition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyTemplateDefinition
 		{
-			return new IfcPropertyTemplateDefinition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyTemplateDefinition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38558,9 +38558,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcQuantitySet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcQuantitySet
 		{
-			return new IfcQuantitySet(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcQuantitySet(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38578,9 +38578,9 @@ export namespace IFC4 {
 			this.XDim = XDim;
 			this.YDim = YDim;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRectangleProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRectangleProfileDef
 		{
-			return new IfcRectangleProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcRectangleProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38598,9 +38598,9 @@ export namespace IFC4 {
 			this.TimeStep = TimeStep;
 			this.Values = Values;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRegularTimeSeries
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRegularTimeSeries
 		{
-			return new IfcRegularTimeSeries(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRegularTimeSeries(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38626,9 +38626,9 @@ export namespace IFC4 {
 			this.NominalBarDiameter = NominalBarDiameter;
 			this.BarCount = BarCount;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcementBarProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcementBarProperties
 		{
-			return new IfcReinforcementBarProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcReinforcementBarProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38642,9 +38642,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelationship
 		{
-			return new IfcRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38662,9 +38662,9 @@ export namespace IFC4 {
 			this.RelatedResourceObjects = RelatedResourceObjects;
 			this.RelatingApproval = RelatingApproval;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcResourceApprovalRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcResourceApprovalRelationship
 		{
-			return new IfcResourceApprovalRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcResourceApprovalRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38682,9 +38682,9 @@ export namespace IFC4 {
 			this.RelatingConstraint = RelatingConstraint;
 			this.RelatedResourceObjects = RelatedResourceObjects;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcResourceConstraintRelationship
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcResourceConstraintRelationship
 		{
-			return new IfcResourceConstraintRelationship(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcResourceConstraintRelationship(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38728,9 +38728,9 @@ export namespace IFC4 {
 			this.RemainingUsage = RemainingUsage;
 			this.Completion = Completion;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcResourceTime
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcResourceTime
 		{
-			return new IfcResourceTime(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17]);
+			return new IfcResourceTime(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38746,9 +38746,9 @@ export namespace IFC4 {
 			super(expressID,type,ProfileType, ProfileName, Position, XDim, YDim);
 			this.RoundingRadius = RoundingRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRoundedRectangleProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRoundedRectangleProfileDef
 		{
-			return new IfcRoundedRectangleProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRoundedRectangleProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38768,9 +38768,9 @@ export namespace IFC4 {
 			this.StartProfile = StartProfile;
 			this.EndProfile = EndProfile;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSectionProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSectionProperties
 		{
-			return new IfcSectionProperties(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSectionProperties(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38796,9 +38796,9 @@ export namespace IFC4 {
 			this.SectionDefinition = SectionDefinition;
 			this.CrossSectionReinforcementDefinitions = CrossSectionReinforcementDefinitions;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSectionReinforcementProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSectionReinforcementProperties
 		{
-			return new IfcSectionReinforcementProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcSectionReinforcementProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38818,9 +38818,9 @@ export namespace IFC4 {
 			this.CrossSections = CrossSections;
 			this.CrossSectionPositions = CrossSectionPositions;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSectionedSpine
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSectionedSpine
 		{
-			return new IfcSectionedSpine(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSectionedSpine(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38836,9 +38836,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.SbsmBoundary = SbsmBoundary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShellBasedSurfaceModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShellBasedSurfaceModel
 		{
-			return new IfcShellBasedSurfaceModel(expressID, type, tape[0]);
+			return new IfcShellBasedSurfaceModel(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38852,9 +38852,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSimpleProperty
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSimpleProperty
 		{
-			return new IfcSimpleProperty(expressID, type, tape[0], tape[1]);
+			return new IfcSimpleProperty(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38874,9 +38874,9 @@ export namespace IFC4 {
 			this.SlippageY = SlippageY;
 			this.SlippageZ = SlippageZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSlippageConnectionCondition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSlippageConnectionCondition
 		{
-			return new IfcSlippageConnectionCondition(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSlippageConnectionCondition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38890,7 +38890,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSolidModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSolidModel
 		{
 			return new IfcSolidModel(expressID, type, );
 		}
@@ -38918,9 +38918,9 @@ export namespace IFC4 {
 			this.LinearMomentY = LinearMomentY;
 			this.LinearMomentZ = LinearMomentZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadLinearForce
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadLinearForce
 		{
-			return new IfcStructuralLoadLinearForce(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralLoadLinearForce(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38940,9 +38940,9 @@ export namespace IFC4 {
 			this.PlanarForceY = PlanarForceY;
 			this.PlanarForceZ = PlanarForceZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadPlanarForce
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadPlanarForce
 		{
-			return new IfcStructuralLoadPlanarForce(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcStructuralLoadPlanarForce(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38968,9 +38968,9 @@ export namespace IFC4 {
 			this.RotationalDisplacementRY = RotationalDisplacementRY;
 			this.RotationalDisplacementRZ = RotationalDisplacementRZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadSingleDisplacement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadSingleDisplacement
 		{
-			return new IfcStructuralLoadSingleDisplacement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralLoadSingleDisplacement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -38986,9 +38986,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, DisplacementX, DisplacementY, DisplacementZ, RotationalDisplacementRX, RotationalDisplacementRY, RotationalDisplacementRZ);
 			this.Distortion = Distortion;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadSingleDisplacementDistortion
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadSingleDisplacementDistortion
 		{
-			return new IfcStructuralLoadSingleDisplacementDistortion(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralLoadSingleDisplacementDistortion(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39014,9 +39014,9 @@ export namespace IFC4 {
 			this.MomentY = MomentY;
 			this.MomentZ = MomentZ;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadSingleForce
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadSingleForce
 		{
-			return new IfcStructuralLoadSingleForce(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralLoadSingleForce(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39032,9 +39032,9 @@ export namespace IFC4 {
 			super(expressID,type,Name, ForceX, ForceY, ForceZ, MomentX, MomentY, MomentZ);
 			this.WarpingMoment = WarpingMoment;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadSingleForceWarping
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadSingleForceWarping
 		{
-			return new IfcStructuralLoadSingleForceWarping(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralLoadSingleForceWarping(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39050,9 +39050,9 @@ export namespace IFC4 {
 			super(expressID,type,EdgeStart, EdgeEnd);
 			this.ParentEdge = ParentEdge;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSubedge
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSubedge
 		{
-			return new IfcSubedge(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSubedge(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39066,7 +39066,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurface
 		{
 			return new IfcSurface(expressID, type, );
 		}
@@ -39096,9 +39096,9 @@ export namespace IFC4 {
 			this.SpecularHighlight = SpecularHighlight;
 			this.ReflectanceMethod = ReflectanceMethod;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceStyleRendering
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceStyleRendering
 		{
-			return new IfcSurfaceStyleRendering(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSurfaceStyleRendering(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39116,9 +39116,9 @@ export namespace IFC4 {
 			this.SweptArea = SweptArea;
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSweptAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSweptAreaSolid
 		{
-			return new IfcSweptAreaSolid(expressID, type, tape[0], tape[1]);
+			return new IfcSweptAreaSolid(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39142,9 +39142,9 @@ export namespace IFC4 {
 			this.StartParam = StartParam;
 			this.EndParam = EndParam;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSweptDiskSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSweptDiskSolid
 		{
-			return new IfcSweptDiskSolid(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcSweptDiskSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39160,9 +39160,9 @@ export namespace IFC4 {
 			super(expressID,type,Directrix, Radius, InnerRadius, StartParam, EndParam);
 			this.FilletRadius = FilletRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSweptDiskSolidPolygonal
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSweptDiskSolidPolygonal
 		{
-			return new IfcSweptDiskSolidPolygonal(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcSweptDiskSolidPolygonal(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39180,9 +39180,9 @@ export namespace IFC4 {
 			this.SweptCurve = SweptCurve;
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSweptSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSweptSurface
 		{
-			return new IfcSweptSurface(expressID, type, tape[0], tape[1]);
+			return new IfcSweptSurface(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39214,9 +39214,9 @@ export namespace IFC4 {
 			this.WebSlope = WebSlope;
 			this.FlangeSlope = FlangeSlope;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTShapeProfileDef
 		{
-			return new IfcTShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcTShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39230,7 +39230,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTessellatedItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTessellatedItem
 		{
 			return new IfcTessellatedItem(expressID, type, );
 		}
@@ -39252,9 +39252,9 @@ export namespace IFC4 {
 			this.Placement = Placement;
 			this.Path = Path;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextLiteral
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextLiteral
 		{
-			return new IfcTextLiteral(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcTextLiteral(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39272,9 +39272,9 @@ export namespace IFC4 {
 			this.Extent = Extent;
 			this.BoxAlignment = BoxAlignment;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextLiteralWithExtent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextLiteralWithExtent
 		{
-			return new IfcTextLiteralWithExtent(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcTextLiteralWithExtent(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39298,9 +39298,9 @@ export namespace IFC4 {
 			this.FontWeight = FontWeight;
 			this.FontSize = FontSize;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTextStyleFontModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTextStyleFontModel
 		{
-			return new IfcTextStyleFontModel(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcTextStyleFontModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39322,9 +39322,9 @@ export namespace IFC4 {
 			this.YDim = YDim;
 			this.TopXOffset = TopXOffset;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTrapeziumProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTrapeziumProfileDef
 		{
-			return new IfcTrapeziumProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcTrapeziumProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39343,9 +39343,9 @@ export namespace IFC4 {
 			this.ApplicableOccurrence = ApplicableOccurrence;
 			this.HasPropertySets = HasPropertySets;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTypeObject
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTypeObject
 		{
-			return new IfcTypeObject(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcTypeObject(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39366,9 +39366,9 @@ export namespace IFC4 {
 			this.LongDescription = LongDescription;
 			this.ProcessType = ProcessType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTypeProcess
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTypeProcess
 		{
-			return new IfcTypeProcess(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcTypeProcess(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39387,9 +39387,9 @@ export namespace IFC4 {
 			this.RepresentationMaps = RepresentationMaps;
 			this.Tag = Tag;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTypeProduct
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTypeProduct
 		{
-			return new IfcTypeProduct(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcTypeProduct(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39410,9 +39410,9 @@ export namespace IFC4 {
 			this.LongDescription = LongDescription;
 			this.ResourceType = ResourceType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTypeResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTypeResource
 		{
-			return new IfcTypeResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcTypeResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39440,9 +39440,9 @@ export namespace IFC4 {
 			this.EdgeRadius = EdgeRadius;
 			this.FlangeSlope = FlangeSlope;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUShapeProfileDef
 		{
-			return new IfcUShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcUShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39460,9 +39460,9 @@ export namespace IFC4 {
 			this.Orientation = Orientation;
 			this.Magnitude = Magnitude;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVector
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVector
 		{
-			return new IfcVector(expressID, type, tape[0], tape[1]);
+			return new IfcVector(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39478,9 +39478,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.LoopVertex = LoopVertex;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVertexLoop
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVertexLoop
 		{
-			return new IfcVertexLoop(expressID, type, tape[0]);
+			return new IfcVertexLoop(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39502,9 +39502,9 @@ export namespace IFC4 {
 			this.ParameterTakesPrecedence = ParameterTakesPrecedence;
 			this.Sizeable = Sizeable;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindowStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindowStyle
 		{
-			return new IfcWindowStyle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcWindowStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39530,9 +39530,9 @@ export namespace IFC4 {
 			this.FilletRadius = FilletRadius;
 			this.EdgeRadius = EdgeRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcZShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcZShapeProfileDef
 		{
-			return new IfcZShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcZShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39546,9 +39546,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Bounds, FaceSurface, SameSense);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAdvancedFace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAdvancedFace
 		{
-			return new IfcAdvancedFace(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAdvancedFace(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39566,9 +39566,9 @@ export namespace IFC4 {
 			this.OuterBoundary = OuterBoundary;
 			this.InnerBoundaries = InnerBoundaries;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotationFillArea
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotationFillArea
 		{
-			return new IfcAnnotationFillArea(expressID, type, tape[0], tape[1]);
+			return new IfcAnnotationFillArea(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39606,9 +39606,9 @@ export namespace IFC4 {
 			this.TopFlangeEdgeRadius = TopFlangeEdgeRadius;
 			this.TopFlangeSlope = TopFlangeSlope;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAsymmetricIShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAsymmetricIShapeProfileDef
 		{
-			return new IfcAsymmetricIShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14]);
+			return new IfcAsymmetricIShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39624,9 +39624,9 @@ export namespace IFC4 {
 			super(expressID,type,Location);
 			this.Axis = Axis;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAxis1Placement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAxis1Placement
 		{
-			return new IfcAxis1Placement(expressID, type, tape[0], tape[1]);
+			return new IfcAxis1Placement(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39642,9 +39642,9 @@ export namespace IFC4 {
 			super(expressID,type,Location);
 			this.RefDirection = RefDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAxis2Placement2D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAxis2Placement2D
 		{
-			return new IfcAxis2Placement2D(expressID, type, tape[0], tape[1]);
+			return new IfcAxis2Placement2D(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39662,9 +39662,9 @@ export namespace IFC4 {
 			this.Axis = Axis;
 			this.RefDirection = RefDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAxis2Placement3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAxis2Placement3D
 		{
-			return new IfcAxis2Placement3D(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcAxis2Placement3D(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39684,9 +39684,9 @@ export namespace IFC4 {
 			this.FirstOperand = FirstOperand;
 			this.SecondOperand = SecondOperand;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBooleanResult
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBooleanResult
 		{
-			return new IfcBooleanResult(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcBooleanResult(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39700,7 +39700,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundedSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundedSurface
 		{
 			return new IfcBoundedSurface(expressID, type, );
 		}
@@ -39724,9 +39724,9 @@ export namespace IFC4 {
 			this.YDim = YDim;
 			this.ZDim = ZDim;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundingBox
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundingBox
 		{
-			return new IfcBoundingBox(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcBoundingBox(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39742,9 +39742,9 @@ export namespace IFC4 {
 			super(expressID,type,BaseSurface, AgreementFlag);
 			this.Enclosure = Enclosure;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoxedHalfSpace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoxedHalfSpace
 		{
-			return new IfcBoxedHalfSpace(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcBoxedHalfSpace(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39768,9 +39768,9 @@ export namespace IFC4 {
 			this.Girth = Girth;
 			this.InternalFilletRadius = InternalFilletRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCShapeProfileDef
 		{
-			return new IfcCShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcCShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39786,9 +39786,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Coordinates = Coordinates;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianPoint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianPoint
 		{
-			return new IfcCartesianPoint(expressID, type, tape[0]);
+			return new IfcCartesianPoint(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39802,7 +39802,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianPointList
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianPointList
 		{
 			return new IfcCartesianPointList(expressID, type, );
 		}
@@ -39820,9 +39820,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.CoordList = CoordList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianPointList2D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianPointList2D
 		{
-			return new IfcCartesianPointList2D(expressID, type, tape[0]);
+			return new IfcCartesianPointList2D(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39838,9 +39838,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.CoordList = CoordList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianPointList3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianPointList3D
 		{
-			return new IfcCartesianPointList3D(expressID, type, tape[0]);
+			return new IfcCartesianPointList3D(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39862,9 +39862,9 @@ export namespace IFC4 {
 			this.LocalOrigin = LocalOrigin;
 			this.Scale = Scale;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator
 		{
-			return new IfcCartesianTransformationOperator(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCartesianTransformationOperator(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39878,9 +39878,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Axis1, Axis2, LocalOrigin, Scale);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator2D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator2D
 		{
-			return new IfcCartesianTransformationOperator2D(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCartesianTransformationOperator2D(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39896,9 +39896,9 @@ export namespace IFC4 {
 			super(expressID,type,Axis1, Axis2, LocalOrigin, Scale);
 			this.Scale2 = Scale2;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator2DnonUniform
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator2DnonUniform
 		{
-			return new IfcCartesianTransformationOperator2DnonUniform(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCartesianTransformationOperator2DnonUniform(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39914,9 +39914,9 @@ export namespace IFC4 {
 			super(expressID,type,Axis1, Axis2, LocalOrigin, Scale);
 			this.Axis3 = Axis3;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator3D
 		{
-			return new IfcCartesianTransformationOperator3D(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCartesianTransformationOperator3D(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39934,9 +39934,9 @@ export namespace IFC4 {
 			this.Scale2 = Scale2;
 			this.Scale3 = Scale3;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCartesianTransformationOperator3DnonUniform
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCartesianTransformationOperator3DnonUniform
 		{
-			return new IfcCartesianTransformationOperator3DnonUniform(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcCartesianTransformationOperator3DnonUniform(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39952,9 +39952,9 @@ export namespace IFC4 {
 			super(expressID,type,ProfileType, ProfileName, Position);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCircleProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCircleProfileDef
 		{
-			return new IfcCircleProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcCircleProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39968,9 +39968,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,CfsFaces);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcClosedShell
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcClosedShell
 		{
-			return new IfcClosedShell(expressID, type, tape[0]);
+			return new IfcClosedShell(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -39990,9 +39990,9 @@ export namespace IFC4 {
 			this.Green = Green;
 			this.Blue = Blue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColourRgb
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColourRgb
 		{
-			return new IfcColourRgb(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcColourRgb(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40010,9 +40010,9 @@ export namespace IFC4 {
 			this.UsageName = UsageName;
 			this.HasProperties = HasProperties;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcComplexProperty
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcComplexProperty
 		{
-			return new IfcComplexProperty(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcComplexProperty(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40033,9 +40033,9 @@ export namespace IFC4 {
 			this.SameSense = SameSense;
 			this.ParentCurve = ParentCurve;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompositeCurveSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompositeCurveSegment
 		{
-			return new IfcCompositeCurveSegment(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCompositeCurveSegment(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40053,9 +40053,9 @@ export namespace IFC4 {
 			this.BaseCosts = BaseCosts;
 			this.BaseQuantity = BaseQuantity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionResourceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionResourceType
 		{
-			return new IfcConstructionResourceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcConstructionResourceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40081,9 +40081,9 @@ export namespace IFC4 {
 			this.RepresentationContexts = RepresentationContexts;
 			this.UnitsInContext = UnitsInContext;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcContext
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcContext
 		{
-			return new IfcContext(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcContext(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40099,9 +40099,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCrewResourceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCrewResourceType
 		{
-			return new IfcCrewResourceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcCrewResourceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40117,9 +40117,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCsgPrimitive3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCsgPrimitive3D
 		{
-			return new IfcCsgPrimitive3D(expressID, type, tape[0]);
+			return new IfcCsgPrimitive3D(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40135,9 +40135,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.TreeRootExpression = TreeRootExpression;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCsgSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCsgSolid
 		{
-			return new IfcCsgSolid(expressID, type, tape[0]);
+			return new IfcCsgSolid(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40151,7 +40151,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurve
 		{
 			return new IfcCurve(expressID, type, );
 		}
@@ -40173,9 +40173,9 @@ export namespace IFC4 {
 			this.OuterBoundary = OuterBoundary;
 			this.InnerBoundaries = InnerBoundaries;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveBoundedPlane
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveBoundedPlane
 		{
-			return new IfcCurveBoundedPlane(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCurveBoundedPlane(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40195,9 +40195,9 @@ export namespace IFC4 {
 			this.Boundaries = Boundaries;
 			this.ImplicitOuter = ImplicitOuter;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurveBoundedSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurveBoundedSurface
 		{
-			return new IfcCurveBoundedSurface(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcCurveBoundedSurface(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40213,9 +40213,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.DirectionRatios = DirectionRatios;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDirection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDirection
 		{
-			return new IfcDirection(expressID, type, tape[0]);
+			return new IfcDirection(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40237,9 +40237,9 @@ export namespace IFC4 {
 			this.ParameterTakesPrecedence = ParameterTakesPrecedence;
 			this.Sizeable = Sizeable;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoorStyle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoorStyle
 		{
-			return new IfcDoorStyle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcDoorStyle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40255,9 +40255,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.EdgeList = EdgeList;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEdgeLoop
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEdgeLoop
 		{
-			return new IfcEdgeLoop(expressID, type, tape[0]);
+			return new IfcEdgeLoop(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40275,9 +40275,9 @@ export namespace IFC4 {
 			this.MethodOfMeasurement = MethodOfMeasurement;
 			this.Quantities = Quantities;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementQuantity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementQuantity
 		{
-			return new IfcElementQuantity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcElementQuantity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40293,9 +40293,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag);
 			this.ElementType = ElementType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementType
 		{
-			return new IfcElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40311,9 +40311,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementarySurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementarySurface
 		{
-			return new IfcElementarySurface(expressID, type, tape[0]);
+			return new IfcElementarySurface(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40331,9 +40331,9 @@ export namespace IFC4 {
 			this.SemiAxis1 = SemiAxis1;
 			this.SemiAxis2 = SemiAxis2;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEllipseProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEllipseProfileDef
 		{
-			return new IfcEllipseProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcEllipseProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40353,9 +40353,9 @@ export namespace IFC4 {
 			this.EventTriggerType = EventTriggerType;
 			this.UserDefinedEventTriggerType = UserDefinedEventTriggerType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEventType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEventType
 		{
-			return new IfcEventType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcEventType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40373,9 +40373,9 @@ export namespace IFC4 {
 			this.ExtrudedDirection = ExtrudedDirection;
 			this.Depth = Depth;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExtrudedAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExtrudedAreaSolid
 		{
-			return new IfcExtrudedAreaSolid(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcExtrudedAreaSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40391,9 +40391,9 @@ export namespace IFC4 {
 			super(expressID,type,SweptArea, Position, ExtrudedDirection, Depth);
 			this.EndSweptArea = EndSweptArea;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExtrudedAreaSolidTapered
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExtrudedAreaSolidTapered
 		{
-			return new IfcExtrudedAreaSolidTapered(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcExtrudedAreaSolidTapered(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40409,9 +40409,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.FbsmFaces = FbsmFaces;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFaceBasedSurfaceModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFaceBasedSurfaceModel
 		{
-			return new IfcFaceBasedSurfaceModel(expressID, type, tape[0]);
+			return new IfcFaceBasedSurfaceModel(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40435,9 +40435,9 @@ export namespace IFC4 {
 			this.PatternStart = PatternStart;
 			this.HatchLineAngle = HatchLineAngle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFillAreaStyleHatching
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFillAreaStyleHatching
 		{
-			return new IfcFillAreaStyleHatching(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcFillAreaStyleHatching(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40457,9 +40457,9 @@ export namespace IFC4 {
 			this.Tiles = Tiles;
 			this.TilingScale = TilingScale;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFillAreaStyleTiles
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFillAreaStyleTiles
 		{
-			return new IfcFillAreaStyleTiles(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcFillAreaStyleTiles(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40481,9 +40481,9 @@ export namespace IFC4 {
 			this.EndParam = EndParam;
 			this.FixedReference = FixedReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFixedReferenceSweptAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFixedReferenceSweptAreaSolid
 		{
-			return new IfcFixedReferenceSweptAreaSolid(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcFixedReferenceSweptAreaSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40497,9 +40497,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFurnishingElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFurnishingElementType
 		{
-			return new IfcFurnishingElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFurnishingElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40517,9 +40517,9 @@ export namespace IFC4 {
 			this.AssemblyPlace = AssemblyPlace;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFurnitureType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFurnitureType
 		{
-			return new IfcFurnitureType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcFurnitureType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40535,9 +40535,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeographicElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeographicElementType
 		{
-			return new IfcGeographicElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcGeographicElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40551,9 +40551,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Elements);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeometricCurveSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeometricCurveSet
 		{
-			return new IfcGeometricCurveSet(expressID, type, tape[0]);
+			return new IfcGeometricCurveSet(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40581,9 +40581,9 @@ export namespace IFC4 {
 			this.FlangeEdgeRadius = FlangeEdgeRadius;
 			this.FlangeSlope = FlangeSlope;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIShapeProfileDef
 		{
-			return new IfcIShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcIShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40600,9 +40600,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.CoordIndex = CoordIndex;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIndexedPolygonalFace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIndexedPolygonalFace
 		{
-			return new IfcIndexedPolygonalFace(expressID, type, tape[0]);
+			return new IfcIndexedPolygonalFace(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40618,9 +40618,9 @@ export namespace IFC4 {
 			super(expressID,type,CoordIndex);
 			this.InnerCoordIndices = InnerCoordIndices;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIndexedPolygonalFaceWithVoids
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIndexedPolygonalFaceWithVoids
 		{
-			return new IfcIndexedPolygonalFaceWithVoids(expressID, type, tape[0], tape[1]);
+			return new IfcIndexedPolygonalFaceWithVoids(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40646,9 +40646,9 @@ export namespace IFC4 {
 			this.EdgeRadius = EdgeRadius;
 			this.LegSlope = LegSlope;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLShapeProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLShapeProfileDef
 		{
-			return new IfcLShapeProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcLShapeProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40664,9 +40664,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLaborResourceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLaborResourceType
 		{
-			return new IfcLaborResourceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcLaborResourceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40684,9 +40684,9 @@ export namespace IFC4 {
 			this.Pnt = Pnt;
 			this.Dir = Dir;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLine
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLine
 		{
-			return new IfcLine(expressID, type, tape[0], tape[1]);
+			return new IfcLine(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40702,9 +40702,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Outer = Outer;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcManifoldSolidBrep
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcManifoldSolidBrep
 		{
-			return new IfcManifoldSolidBrep(expressID, type, tape[0]);
+			return new IfcManifoldSolidBrep(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40724,9 +40724,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 			this.ObjectType = ObjectType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcObject
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcObject
 		{
-			return new IfcObject(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcObject(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40746,9 +40746,9 @@ export namespace IFC4 {
 			this.Distance = Distance;
 			this.SelfIntersect = SelfIntersect;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOffsetCurve2D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOffsetCurve2D
 		{
-			return new IfcOffsetCurve2D(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcOffsetCurve2D(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40770,9 +40770,9 @@ export namespace IFC4 {
 			this.SelfIntersect = SelfIntersect;
 			this.RefDirection = RefDirection;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOffsetCurve3D
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOffsetCurve3D
 		{
-			return new IfcOffsetCurve3D(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcOffsetCurve3D(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40790,9 +40790,9 @@ export namespace IFC4 {
 			this.BasisSurface = BasisSurface;
 			this.ReferenceCurve = ReferenceCurve;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPcurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPcurve
 		{
-			return new IfcPcurve(expressID, type, tape[0], tape[1]);
+			return new IfcPcurve(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40808,9 +40808,9 @@ export namespace IFC4 {
 			super(expressID,type,SizeInX, SizeInY);
 			this.Placement = Placement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlanarBox
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlanarBox
 		{
-			return new IfcPlanarBox(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcPlanarBox(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40824,9 +40824,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Position);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlane
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlane
 		{
-			return new IfcPlane(expressID, type, tape[0]);
+			return new IfcPlane(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40840,9 +40840,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedColour
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedColour
 		{
-			return new IfcPreDefinedColour(expressID, type, tape[0]);
+			return new IfcPreDefinedColour(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40856,9 +40856,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedCurveFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedCurveFont
 		{
-			return new IfcPreDefinedCurveFont(expressID, type, tape[0]);
+			return new IfcPreDefinedCurveFont(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40872,9 +40872,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPreDefinedPropertySet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPreDefinedPropertySet
 		{
-			return new IfcPreDefinedPropertySet(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPreDefinedPropertySet(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40890,9 +40890,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ProcessType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProcedureType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProcedureType
 		{
-			return new IfcProcedureType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcProcedureType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40913,9 +40913,9 @@ export namespace IFC4 {
 			this.Identification = Identification;
 			this.LongDescription = LongDescription;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProcess
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProcess
 		{
-			return new IfcProcess(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcProcess(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40934,9 +40934,9 @@ export namespace IFC4 {
 			this.ObjectPlacement = ObjectPlacement;
 			this.Representation = Representation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProduct
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProduct
 		{
-			return new IfcProduct(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcProduct(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40950,9 +40950,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, Phase, RepresentationContexts, UnitsInContext);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProject
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProject
 		{
-			return new IfcProject(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProject(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40966,9 +40966,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, Phase, RepresentationContexts, UnitsInContext);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProjectLibrary
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProjectLibrary
 		{
-			return new IfcProjectLibrary(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProjectLibrary(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -40990,9 +40990,9 @@ export namespace IFC4 {
 			this.Unit = Unit;
 			this.SetPointValue = SetPointValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyBoundedValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyBoundedValue
 		{
-			return new IfcPropertyBoundedValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcPropertyBoundedValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41010,9 +41010,9 @@ export namespace IFC4 {
 			this.EnumerationValues = EnumerationValues;
 			this.EnumerationReference = EnumerationReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyEnumeratedValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyEnumeratedValue
 		{
-			return new IfcPropertyEnumeratedValue(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyEnumeratedValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41030,9 +41030,9 @@ export namespace IFC4 {
 			this.ListValues = ListValues;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyListValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyListValue
 		{
-			return new IfcPropertyListValue(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyListValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41050,9 +41050,9 @@ export namespace IFC4 {
 			this.UsageName = UsageName;
 			this.PropertyReference = PropertyReference;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyReferenceValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyReferenceValue
 		{
-			return new IfcPropertyReferenceValue(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyReferenceValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41068,9 +41068,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 			this.HasProperties = HasProperties;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertySet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertySet
 		{
-			return new IfcPropertySet(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcPropertySet(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41091,9 +41091,9 @@ export namespace IFC4 {
 			this.ApplicableEntity = ApplicableEntity;
 			this.HasPropertyTemplates = HasPropertyTemplates;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertySetTemplate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertySetTemplate
 		{
-			return new IfcPropertySetTemplate(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcPropertySetTemplate(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41111,9 +41111,9 @@ export namespace IFC4 {
 			this.NominalValue = NominalValue;
 			this.Unit = Unit;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertySingleValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertySingleValue
 		{
-			return new IfcPropertySingleValue(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertySingleValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41139,9 +41139,9 @@ export namespace IFC4 {
 			this.DefinedUnit = DefinedUnit;
 			this.CurveInterpolation = CurveInterpolation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyTableValue
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyTableValue
 		{
-			return new IfcPropertyTableValue(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcPropertyTableValue(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41157,9 +41157,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPropertyTemplate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPropertyTemplate
 		{
-			return new IfcPropertyTemplate(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPropertyTemplate(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41177,9 +41177,9 @@ export namespace IFC4 {
 			this.ProxyType = ProxyType;
 			this.Tag = Tag;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProxy
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProxy
 		{
-			return new IfcProxy(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProxy(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41199,9 +41199,9 @@ export namespace IFC4 {
 			this.InnerFilletRadius = InnerFilletRadius;
 			this.OuterFilletRadius = OuterFilletRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRectangleHollowProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRectangleHollowProfileDef
 		{
-			return new IfcRectangleHollowProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRectangleHollowProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41221,9 +41221,9 @@ export namespace IFC4 {
 			this.YLength = YLength;
 			this.Height = Height;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRectangularPyramid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRectangularPyramid
 		{
-			return new IfcRectangularPyramid(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRectangularPyramid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41251,9 +41251,9 @@ export namespace IFC4 {
 			this.Usense = Usense;
 			this.Vsense = Vsense;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRectangularTrimmedSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRectangularTrimmedSurface
 		{
-			return new IfcRectangularTrimmedSurface(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRectangularTrimmedSurface(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41271,9 +41271,9 @@ export namespace IFC4 {
 			this.DefinitionType = DefinitionType;
 			this.ReinforcementSectionDefinitions = ReinforcementSectionDefinitions;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcementDefinitionProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcementDefinitionProperties
 		{
-			return new IfcReinforcementDefinitionProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcReinforcementDefinitionProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41291,9 +41291,9 @@ export namespace IFC4 {
 			this.RelatedObjects = RelatedObjects;
 			this.RelatedObjectsType = RelatedObjectsType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssigns
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssigns
 		{
-			return new IfcRelAssigns(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssigns(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41311,9 +41311,9 @@ export namespace IFC4 {
 			this.RelatingActor = RelatingActor;
 			this.ActingRole = ActingRole;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToActor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToActor
 		{
-			return new IfcRelAssignsToActor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelAssignsToActor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41329,9 +41329,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 			this.RelatingControl = RelatingControl;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToControl
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToControl
 		{
-			return new IfcRelAssignsToControl(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToControl(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41347,9 +41347,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 			this.RelatingGroup = RelatingGroup;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToGroup
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToGroup
 		{
-			return new IfcRelAssignsToGroup(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToGroup(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41365,9 +41365,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType, RelatingGroup);
 			this.Factor = Factor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToGroupByFactor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToGroupByFactor
 		{
-			return new IfcRelAssignsToGroupByFactor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelAssignsToGroupByFactor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41385,9 +41385,9 @@ export namespace IFC4 {
 			this.RelatingProcess = RelatingProcess;
 			this.QuantityInProcess = QuantityInProcess;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToProcess
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToProcess
 		{
-			return new IfcRelAssignsToProcess(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcRelAssignsToProcess(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41403,9 +41403,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 			this.RelatingProduct = RelatingProduct;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToProduct
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToProduct
 		{
-			return new IfcRelAssignsToProduct(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToProduct(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41421,9 +41421,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects, RelatedObjectsType);
 			this.RelatingResource = RelatingResource;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssignsToResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssignsToResource
 		{
-			return new IfcRelAssignsToResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssignsToResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41439,9 +41439,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 			this.RelatedObjects = RelatedObjects;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociates
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociates
 		{
-			return new IfcRelAssociates(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcRelAssociates(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41457,9 +41457,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingApproval = RelatingApproval;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesApproval
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesApproval
 		{
-			return new IfcRelAssociatesApproval(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesApproval(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41475,9 +41475,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingClassification = RelatingClassification;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesClassification
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesClassification
 		{
-			return new IfcRelAssociatesClassification(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesClassification(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41495,9 +41495,9 @@ export namespace IFC4 {
 			this.Intent = Intent;
 			this.RelatingConstraint = RelatingConstraint;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesConstraint
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesConstraint
 		{
-			return new IfcRelAssociatesConstraint(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelAssociatesConstraint(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41513,9 +41513,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingDocument = RelatingDocument;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesDocument
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesDocument
 		{
-			return new IfcRelAssociatesDocument(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesDocument(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41531,9 +41531,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingLibrary = RelatingLibrary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesLibrary
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesLibrary
 		{
-			return new IfcRelAssociatesLibrary(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesLibrary(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41549,9 +41549,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatedObjects);
 			this.RelatingMaterial = RelatingMaterial;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAssociatesMaterial
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAssociatesMaterial
 		{
-			return new IfcRelAssociatesMaterial(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAssociatesMaterial(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41565,9 +41565,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnects
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnects
 		{
-			return new IfcRelConnects(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRelConnects(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41587,9 +41587,9 @@ export namespace IFC4 {
 			this.RelatingElement = RelatingElement;
 			this.RelatedElement = RelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsElements
 		{
-			return new IfcRelConnectsElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelConnectsElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41611,9 +41611,9 @@ export namespace IFC4 {
 			this.RelatedConnectionType = RelatedConnectionType;
 			this.RelatingConnectionType = RelatingConnectionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsPathElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsPathElements
 		{
-			return new IfcRelConnectsPathElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcRelConnectsPathElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41631,9 +41631,9 @@ export namespace IFC4 {
 			this.RelatingPort = RelatingPort;
 			this.RelatedElement = RelatedElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsPortToElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsPortToElement
 		{
-			return new IfcRelConnectsPortToElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelConnectsPortToElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41653,9 +41653,9 @@ export namespace IFC4 {
 			this.RelatedPort = RelatedPort;
 			this.RealizingElement = RealizingElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsPorts
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsPorts
 		{
-			return new IfcRelConnectsPorts(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcRelConnectsPorts(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41673,9 +41673,9 @@ export namespace IFC4 {
 			this.RelatingElement = RelatingElement;
 			this.RelatedStructuralActivity = RelatedStructuralActivity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsStructuralActivity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsStructuralActivity
 		{
-			return new IfcRelConnectsStructuralActivity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelConnectsStructuralActivity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41701,9 +41701,9 @@ export namespace IFC4 {
 			this.SupportedLength = SupportedLength;
 			this.ConditionCoordinateSystem = ConditionCoordinateSystem;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsStructuralMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsStructuralMember
 		{
-			return new IfcRelConnectsStructuralMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRelConnectsStructuralMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41719,9 +41719,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatingStructuralMember, RelatedStructuralConnection, AppliedCondition, AdditionalConditions, SupportedLength, ConditionCoordinateSystem);
 			this.ConnectionConstraint = ConnectionConstraint;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsWithEccentricity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsWithEccentricity
 		{
-			return new IfcRelConnectsWithEccentricity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcRelConnectsWithEccentricity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41739,9 +41739,9 @@ export namespace IFC4 {
 			this.RealizingElements = RealizingElements;
 			this.ConnectionType = ConnectionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelConnectsWithRealizingElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelConnectsWithRealizingElements
 		{
-			return new IfcRelConnectsWithRealizingElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRelConnectsWithRealizingElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41759,9 +41759,9 @@ export namespace IFC4 {
 			this.RelatedElements = RelatedElements;
 			this.RelatingStructure = RelatingStructure;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelContainedInSpatialStructure
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelContainedInSpatialStructure
 		{
-			return new IfcRelContainedInSpatialStructure(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelContainedInSpatialStructure(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41779,9 +41779,9 @@ export namespace IFC4 {
 			this.RelatingBuildingElement = RelatingBuildingElement;
 			this.RelatedCoverings = RelatedCoverings;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelCoversBldgElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelCoversBldgElements
 		{
-			return new IfcRelCoversBldgElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelCoversBldgElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41799,9 +41799,9 @@ export namespace IFC4 {
 			this.RelatingSpace = RelatingSpace;
 			this.RelatedCoverings = RelatedCoverings;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelCoversSpaces
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelCoversSpaces
 		{
-			return new IfcRelCoversSpaces(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelCoversSpaces(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41819,9 +41819,9 @@ export namespace IFC4 {
 			this.RelatingContext = RelatingContext;
 			this.RelatedDefinitions = RelatedDefinitions;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDeclares
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDeclares
 		{
-			return new IfcRelDeclares(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelDeclares(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41835,9 +41835,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDecomposes
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDecomposes
 		{
-			return new IfcRelDecomposes(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRelDecomposes(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41851,9 +41851,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDefines
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDefines
 		{
-			return new IfcRelDefines(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRelDefines(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41871,9 +41871,9 @@ export namespace IFC4 {
 			this.RelatedObjects = RelatedObjects;
 			this.RelatingObject = RelatingObject;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDefinesByObject
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDefinesByObject
 		{
-			return new IfcRelDefinesByObject(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelDefinesByObject(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41891,9 +41891,9 @@ export namespace IFC4 {
 			this.RelatedObjects = RelatedObjects;
 			this.RelatingPropertyDefinition = RelatingPropertyDefinition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDefinesByProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDefinesByProperties
 		{
-			return new IfcRelDefinesByProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelDefinesByProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41911,9 +41911,9 @@ export namespace IFC4 {
 			this.RelatedPropertySets = RelatedPropertySets;
 			this.RelatingTemplate = RelatingTemplate;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDefinesByTemplate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDefinesByTemplate
 		{
-			return new IfcRelDefinesByTemplate(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelDefinesByTemplate(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41931,9 +41931,9 @@ export namespace IFC4 {
 			this.RelatedObjects = RelatedObjects;
 			this.RelatingType = RelatingType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelDefinesByType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelDefinesByType
 		{
-			return new IfcRelDefinesByType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelDefinesByType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41951,9 +41951,9 @@ export namespace IFC4 {
 			this.RelatingOpeningElement = RelatingOpeningElement;
 			this.RelatedBuildingElement = RelatedBuildingElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelFillsElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelFillsElement
 		{
-			return new IfcRelFillsElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelFillsElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41971,9 +41971,9 @@ export namespace IFC4 {
 			this.RelatedControlElements = RelatedControlElements;
 			this.RelatingFlowElement = RelatingFlowElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelFlowControlElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelFlowControlElements
 		{
-			return new IfcRelFlowControlElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelFlowControlElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -41997,9 +41997,9 @@ export namespace IFC4 {
 			this.InterferenceType = InterferenceType;
 			this.ImpliedOrder = ImpliedOrder;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelInterferesElements
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelInterferesElements
 		{
-			return new IfcRelInterferesElements(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRelInterferesElements(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42017,9 +42017,9 @@ export namespace IFC4 {
 			this.RelatingObject = RelatingObject;
 			this.RelatedObjects = RelatedObjects;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelNests
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelNests
 		{
-			return new IfcRelNests(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelNests(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42037,9 +42037,9 @@ export namespace IFC4 {
 			this.RelatingElement = RelatingElement;
 			this.RelatedFeatureElement = RelatedFeatureElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelProjectsElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelProjectsElement
 		{
-			return new IfcRelProjectsElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelProjectsElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42057,9 +42057,9 @@ export namespace IFC4 {
 			this.RelatedElements = RelatedElements;
 			this.RelatingStructure = RelatingStructure;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelReferencedInSpatialStructure
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelReferencedInSpatialStructure
 		{
-			return new IfcRelReferencedInSpatialStructure(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelReferencedInSpatialStructure(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42083,9 +42083,9 @@ export namespace IFC4 {
 			this.SequenceType = SequenceType;
 			this.UserDefinedSequenceType = UserDefinedSequenceType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelSequence
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelSequence
 		{
-			return new IfcRelSequence(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRelSequence(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42103,9 +42103,9 @@ export namespace IFC4 {
 			this.RelatingSystem = RelatingSystem;
 			this.RelatedBuildings = RelatedBuildings;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelServicesBuildings
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelServicesBuildings
 		{
-			return new IfcRelServicesBuildings(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelServicesBuildings(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42129,9 +42129,9 @@ export namespace IFC4 {
 			this.PhysicalOrVirtualBoundary = PhysicalOrVirtualBoundary;
 			this.InternalOrExternalBoundary = InternalOrExternalBoundary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelSpaceBoundary
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelSpaceBoundary
 		{
-			return new IfcRelSpaceBoundary(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRelSpaceBoundary(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42148,9 +42148,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary);
 			this.ParentBoundary = ParentBoundary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelSpaceBoundary1stLevel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelSpaceBoundary1stLevel
 		{
-			return new IfcRelSpaceBoundary1stLevel(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRelSpaceBoundary1stLevel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42167,9 +42167,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, RelatingSpace, RelatedBuildingElement, ConnectionGeometry, PhysicalOrVirtualBoundary, InternalOrExternalBoundary, ParentBoundary);
 			this.CorrespondingBoundary = CorrespondingBoundary;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelSpaceBoundary2ndLevel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelSpaceBoundary2ndLevel
 		{
-			return new IfcRelSpaceBoundary2ndLevel(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcRelSpaceBoundary2ndLevel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42187,9 +42187,9 @@ export namespace IFC4 {
 			this.RelatingBuildingElement = RelatingBuildingElement;
 			this.RelatedOpeningElement = RelatedOpeningElement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelVoidsElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelVoidsElement
 		{
-			return new IfcRelVoidsElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelVoidsElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42205,9 +42205,9 @@ export namespace IFC4 {
 			super(expressID,type,Transition, SameSense, ParentCurve);
 			this.ParamLength = ParamLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReparametrisedCompositeCurveSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReparametrisedCompositeCurveSegment
 		{
-			return new IfcReparametrisedCompositeCurveSegment(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcReparametrisedCompositeCurveSegment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42226,9 +42226,9 @@ export namespace IFC4 {
 			this.Identification = Identification;
 			this.LongDescription = LongDescription;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcResource
 		{
-			return new IfcResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42246,9 +42246,9 @@ export namespace IFC4 {
 			this.Axis = Axis;
 			this.Angle = Angle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRevolvedAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRevolvedAreaSolid
 		{
-			return new IfcRevolvedAreaSolid(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcRevolvedAreaSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42264,9 +42264,9 @@ export namespace IFC4 {
 			super(expressID,type,SweptArea, Position, Axis, Angle);
 			this.EndSweptArea = EndSweptArea;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRevolvedAreaSolidTapered
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRevolvedAreaSolidTapered
 		{
-			return new IfcRevolvedAreaSolidTapered(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcRevolvedAreaSolidTapered(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42284,9 +42284,9 @@ export namespace IFC4 {
 			this.Height = Height;
 			this.BottomRadius = BottomRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRightCircularCone
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRightCircularCone
 		{
-			return new IfcRightCircularCone(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcRightCircularCone(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42304,9 +42304,9 @@ export namespace IFC4 {
 			this.Height = Height;
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRightCircularCylinder
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRightCircularCylinder
 		{
-			return new IfcRightCircularCylinder(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcRightCircularCylinder(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42336,9 +42336,9 @@ export namespace IFC4 {
 			this.Expression = Expression;
 			this.AccessState = AccessState;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSimplePropertyTemplate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSimplePropertyTemplate
 		{
-			return new IfcSimplePropertyTemplate(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcSimplePropertyTemplate(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42357,9 +42357,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 			this.LongName = LongName;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpatialElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpatialElement
 		{
-			return new IfcSpatialElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcSpatialElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42375,9 +42375,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag);
 			this.ElementType = ElementType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpatialElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpatialElementType
 		{
-			return new IfcSpatialElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSpatialElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42393,9 +42393,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName);
 			this.CompositionType = CompositionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpatialStructureElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpatialStructureElement
 		{
-			return new IfcSpatialStructureElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSpatialStructureElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42409,9 +42409,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpatialStructureElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpatialStructureElementType
 		{
-			return new IfcSpatialStructureElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSpatialStructureElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42427,9 +42427,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpatialZone
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpatialZone
 		{
-			return new IfcSpatialZone(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSpatialZone(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42447,9 +42447,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.LongName = LongName;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpatialZoneType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpatialZoneType
 		{
-			return new IfcSpatialZoneType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcSpatialZoneType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42465,9 +42465,9 @@ export namespace IFC4 {
 			super(expressID,type,Position);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSphere
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSphere
 		{
-			return new IfcSphere(expressID, type, tape[0], tape[1]);
+			return new IfcSphere(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42483,9 +42483,9 @@ export namespace IFC4 {
 			super(expressID,type,Position);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSphericalSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSphericalSurface
 		{
-			return new IfcSphericalSurface(expressID, type, tape[0], tape[1]);
+			return new IfcSphericalSurface(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42504,9 +42504,9 @@ export namespace IFC4 {
 			this.AppliedLoad = AppliedLoad;
 			this.GlobalOrLocal = GlobalOrLocal;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralActivity
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralActivity
 		{
-			return new IfcStructuralActivity(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralActivity(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42521,9 +42521,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralItem
 		{
-			return new IfcStructuralItem(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralItem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42538,9 +42538,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralMember
 		{
-			return new IfcStructuralMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcStructuralMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42554,9 +42554,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralReaction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralReaction
 		{
-			return new IfcStructuralReaction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralReaction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42574,9 +42574,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.Thickness = Thickness;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSurfaceMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSurfaceMember
 		{
-			return new IfcStructuralSurfaceMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralSurfaceMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42590,9 +42590,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, Thickness);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSurfaceMemberVarying
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSurfaceMemberVarying
 		{
-			return new IfcStructuralSurfaceMemberVarying(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralSurfaceMemberVarying(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42608,9 +42608,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSurfaceReaction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSurfaceReaction
 		{
-			return new IfcStructuralSurfaceReaction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStructuralSurfaceReaction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42626,9 +42626,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSubContractResourceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSubContractResourceType
 		{
-			return new IfcSubContractResourceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcSubContractResourceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42648,9 +42648,9 @@ export namespace IFC4 {
 			this.AssociatedGeometry = AssociatedGeometry;
 			this.MasterRepresentation = MasterRepresentation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceCurve
 		{
-			return new IfcSurfaceCurve(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSurfaceCurve(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42672,9 +42672,9 @@ export namespace IFC4 {
 			this.EndParam = EndParam;
 			this.ReferenceSurface = ReferenceSurface;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceCurveSweptAreaSolid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceCurveSweptAreaSolid
 		{
-			return new IfcSurfaceCurveSweptAreaSolid(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcSurfaceCurveSweptAreaSolid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42692,9 +42692,9 @@ export namespace IFC4 {
 			this.ExtrudedDirection = ExtrudedDirection;
 			this.Depth = Depth;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceOfLinearExtrusion
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceOfLinearExtrusion
 		{
-			return new IfcSurfaceOfLinearExtrusion(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcSurfaceOfLinearExtrusion(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42710,9 +42710,9 @@ export namespace IFC4 {
 			super(expressID,type,SweptCurve, Position);
 			this.AxisPosition = AxisPosition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceOfRevolution
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceOfRevolution
 		{
-			return new IfcSurfaceOfRevolution(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSurfaceOfRevolution(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42728,9 +42728,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSystemFurnitureElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSystemFurnitureElementType
 		{
-			return new IfcSystemFurnitureElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSystemFurnitureElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42756,9 +42756,9 @@ export namespace IFC4 {
 			this.TaskTime = TaskTime;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTask
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTask
 		{
-			return new IfcTask(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcTask(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42776,9 +42776,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.WorkMethod = WorkMethod;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTaskType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTaskType
 		{
-			return new IfcTaskType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcTaskType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42796,9 +42796,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Coordinates = Coordinates;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTessellatedFaceSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTessellatedFaceSet
 		{
-			return new IfcTessellatedFaceSet(expressID, type, tape[0]);
+			return new IfcTessellatedFaceSet(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42816,9 +42816,9 @@ export namespace IFC4 {
 			this.MajorRadius = MajorRadius;
 			this.MinorRadius = MinorRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcToroidalSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcToroidalSurface
 		{
-			return new IfcToroidalSurface(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcToroidalSurface(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42834,9 +42834,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTransportElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTransportElementType
 		{
-			return new IfcTransportElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTransportElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42858,9 +42858,9 @@ export namespace IFC4 {
 			this.CoordIndex = CoordIndex;
 			this.PnIndex = PnIndex;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTriangulatedFaceSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTriangulatedFaceSet
 		{
-			return new IfcTriangulatedFaceSet(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcTriangulatedFaceSet(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42898,9 +42898,9 @@ export namespace IFC4 {
 			this.LiningToPanelOffsetX = LiningToPanelOffsetX;
 			this.LiningToPanelOffsetY = LiningToPanelOffsetY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindowLiningProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindowLiningProperties
 		{
-			return new IfcWindowLiningProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15]);
+			return new IfcWindowLiningProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42924,9 +42924,9 @@ export namespace IFC4 {
 			this.FrameThickness = FrameThickness;
 			this.ShapeAspectStyle = ShapeAspectStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindowPanelProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindowPanelProperties
 		{
-			return new IfcWindowPanelProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcWindowPanelProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42943,9 +42943,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 			this.TheActor = TheActor;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActor
 		{
-			return new IfcActor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcActor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42959,9 +42959,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Outer);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAdvancedBrep
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAdvancedBrep
 		{
-			return new IfcAdvancedBrep(expressID, type, tape[0]);
+			return new IfcAdvancedBrep(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42977,9 +42977,9 @@ export namespace IFC4 {
 			super(expressID,type,Outer);
 			this.Voids = Voids;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAdvancedBrepWithVoids
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAdvancedBrepWithVoids
 		{
-			return new IfcAdvancedBrepWithVoids(expressID, type, tape[0], tape[1]);
+			return new IfcAdvancedBrepWithVoids(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -42994,9 +42994,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAnnotation
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAnnotation
 		{
-			return new IfcAnnotation(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcAnnotation(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43024,9 +43024,9 @@ export namespace IFC4 {
 			this.VClosed = VClosed;
 			this.SelfIntersect = SelfIntersect;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBSplineSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBSplineSurface
 		{
-			return new IfcBSplineSurface(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcBSplineSurface(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43050,9 +43050,9 @@ export namespace IFC4 {
 			this.VKnots = VKnots;
 			this.KnotSpec = KnotSpec;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBSplineSurfaceWithKnots
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBSplineSurfaceWithKnots
 		{
-			return new IfcBSplineSurfaceWithKnots(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcBSplineSurfaceWithKnots(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43072,9 +43072,9 @@ export namespace IFC4 {
 			this.YLength = YLength;
 			this.ZLength = ZLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBlock
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBlock
 		{
-			return new IfcBlock(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcBlock(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43088,9 +43088,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Operator, FirstOperand, SecondOperand);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBooleanClippingResult
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBooleanClippingResult
 		{
-			return new IfcBooleanClippingResult(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcBooleanClippingResult(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43104,7 +43104,7 @@ export namespace IFC4 {
 		{
 			super(expressID,type);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundedCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundedCurve
 		{
 			return new IfcBoundedCurve(expressID, type, );
 		}
@@ -43126,9 +43126,9 @@ export namespace IFC4 {
 			this.ElevationOfTerrain = ElevationOfTerrain;
 			this.BuildingAddress = BuildingAddress;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuilding
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuilding
 		{
-			return new IfcBuilding(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcBuilding(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43142,9 +43142,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementType
 		{
-			return new IfcBuildingElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBuildingElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43160,9 +43160,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName, CompositionType);
 			this.Elevation = Elevation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingStorey
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingStorey
 		{
-			return new IfcBuildingStorey(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBuildingStorey(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43178,9 +43178,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcChimneyType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcChimneyType
 		{
-			return new IfcChimneyType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcChimneyType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43196,9 +43196,9 @@ export namespace IFC4 {
 			super(expressID,type,ProfileType, ProfileName, Position, Radius);
 			this.WallThickness = WallThickness;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCircleHollowProfileDef
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCircleHollowProfileDef
 		{
-			return new IfcCircleHollowProfileDef(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcCircleHollowProfileDef(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43212,9 +43212,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCivilElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCivilElementType
 		{
-			return new IfcCivilElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCivilElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43230,9 +43230,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColumnType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColumnType
 		{
-			return new IfcColumnType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcColumnType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43252,9 +43252,9 @@ export namespace IFC4 {
 			this.TemplateType = TemplateType;
 			this.HasPropertyTemplates = HasPropertyTemplates;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcComplexPropertyTemplate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcComplexPropertyTemplate
 		{
-			return new IfcComplexPropertyTemplate(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcComplexPropertyTemplate(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43272,9 +43272,9 @@ export namespace IFC4 {
 			this.Segments = Segments;
 			this.SelfIntersect = SelfIntersect;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompositeCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompositeCurve
 		{
-			return new IfcCompositeCurve(expressID, type, tape[0], tape[1]);
+			return new IfcCompositeCurve(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43288,9 +43288,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Segments, SelfIntersect);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompositeCurveOnSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompositeCurveOnSurface
 		{
-			return new IfcCompositeCurveOnSurface(expressID, type, tape[0], tape[1]);
+			return new IfcCompositeCurveOnSurface(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43306,9 +43306,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Position = Position;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConic
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConic
 		{
-			return new IfcConic(expressID, type, tape[0]);
+			return new IfcConic(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43324,9 +43324,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionEquipmentResourceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionEquipmentResourceType
 		{
-			return new IfcConstructionEquipmentResourceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcConstructionEquipmentResourceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43342,9 +43342,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionMaterialResourceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionMaterialResourceType
 		{
-			return new IfcConstructionMaterialResourceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcConstructionMaterialResourceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43360,9 +43360,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, Identification, LongDescription, ResourceType, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionProductResourceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionProductResourceType
 		{
-			return new IfcConstructionProductResourceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcConstructionProductResourceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43382,9 +43382,9 @@ export namespace IFC4 {
 			this.BaseCosts = BaseCosts;
 			this.BaseQuantity = BaseQuantity;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionResource
 		{
-			return new IfcConstructionResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcConstructionResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43401,9 +43401,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 			this.Identification = Identification;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcControl
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcControl
 		{
-			return new IfcControl(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcControl(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43423,9 +43423,9 @@ export namespace IFC4 {
 			this.CostValues = CostValues;
 			this.CostQuantities = CostQuantities;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCostItem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCostItem
 		{
-			return new IfcCostItem(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCostItem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43447,9 +43447,9 @@ export namespace IFC4 {
 			this.SubmittedOn = SubmittedOn;
 			this.UpdateDate = UpdateDate;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCostSchedule
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCostSchedule
 		{
-			return new IfcCostSchedule(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCostSchedule(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43465,9 +43465,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoveringType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoveringType
 		{
-			return new IfcCoveringType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCoveringType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43483,9 +43483,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCrewResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCrewResource
 		{
-			return new IfcCrewResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcCrewResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43501,9 +43501,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurtainWallType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurtainWallType
 		{
-			return new IfcCurtainWallType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCurtainWallType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43519,9 +43519,9 @@ export namespace IFC4 {
 			super(expressID,type,Position);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCylindricalSurface
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCylindricalSurface
 		{
-			return new IfcCylindricalSurface(expressID, type, tape[0], tape[1]);
+			return new IfcCylindricalSurface(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43535,9 +43535,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionElementType
 		{
-			return new IfcDistributionElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDistributionElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43551,9 +43551,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionFlowElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionFlowElementType
 		{
-			return new IfcDistributionFlowElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDistributionFlowElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43593,9 +43593,9 @@ export namespace IFC4 {
 			this.LiningToPanelOffsetX = LiningToPanelOffsetX;
 			this.LiningToPanelOffsetY = LiningToPanelOffsetY;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoorLiningProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoorLiningProperties
 		{
-			return new IfcDoorLiningProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16]);
+			return new IfcDoorLiningProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43619,9 +43619,9 @@ export namespace IFC4 {
 			this.PanelPosition = PanelPosition;
 			this.ShapeAspectStyle = ShapeAspectStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoorPanelProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoorPanelProperties
 		{
-			return new IfcDoorPanelProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDoorPanelProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43643,9 +43643,9 @@ export namespace IFC4 {
 			this.ParameterTakesPrecedence = ParameterTakesPrecedence;
 			this.UserDefinedOperationType = UserDefinedOperationType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoorType
 		{
-			return new IfcDoorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcDoorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43659,9 +43659,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDraughtingPreDefinedColour
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDraughtingPreDefinedColour
 		{
-			return new IfcDraughtingPreDefinedColour(expressID, type, tape[0]);
+			return new IfcDraughtingPreDefinedColour(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43675,9 +43675,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Name);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDraughtingPreDefinedCurveFont
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDraughtingPreDefinedCurveFont
 		{
-			return new IfcDraughtingPreDefinedCurveFont(expressID, type, tape[0]);
+			return new IfcDraughtingPreDefinedCurveFont(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43705,9 +43705,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 			this.Tag = Tag;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElement
 		{
-			return new IfcElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43725,9 +43725,9 @@ export namespace IFC4 {
 			this.AssemblyPlace = AssemblyPlace;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementAssembly
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementAssembly
 		{
-			return new IfcElementAssembly(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElementAssembly(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43743,9 +43743,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementAssemblyType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementAssemblyType
 		{
-			return new IfcElementAssemblyType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElementAssemblyType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43759,9 +43759,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementComponent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementComponent
 		{
-			return new IfcElementComponent(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcElementComponent(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43775,9 +43775,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElementComponentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElementComponentType
 		{
-			return new IfcElementComponentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElementComponentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43795,9 +43795,9 @@ export namespace IFC4 {
 			this.SemiAxis1 = SemiAxis1;
 			this.SemiAxis2 = SemiAxis2;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEllipse
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEllipse
 		{
-			return new IfcEllipse(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcEllipse(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43811,9 +43811,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEnergyConversionDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEnergyConversionDeviceType
 		{
-			return new IfcEnergyConversionDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcEnergyConversionDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43829,9 +43829,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEngineType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEngineType
 		{
-			return new IfcEngineType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcEngineType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43847,9 +43847,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEvaporativeCoolerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEvaporativeCoolerType
 		{
-			return new IfcEvaporativeCoolerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcEvaporativeCoolerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43865,9 +43865,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEvaporatorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEvaporatorType
 		{
-			return new IfcEvaporatorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcEvaporatorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43889,9 +43889,9 @@ export namespace IFC4 {
 			this.UserDefinedEventTriggerType = UserDefinedEventTriggerType;
 			this.EventOccurenceTime = EventOccurenceTime;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEvent
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEvent
 		{
-			return new IfcEvent(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcEvent(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43905,9 +43905,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternalSpatialStructureElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternalSpatialStructureElement
 		{
-			return new IfcExternalSpatialStructureElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcExternalSpatialStructureElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43921,9 +43921,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Outer);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFacetedBrep
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFacetedBrep
 		{
-			return new IfcFacetedBrep(expressID, type, tape[0]);
+			return new IfcFacetedBrep(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43939,9 +43939,9 @@ export namespace IFC4 {
 			super(expressID,type,Outer);
 			this.Voids = Voids;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFacetedBrepWithVoids
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFacetedBrepWithVoids
 		{
-			return new IfcFacetedBrepWithVoids(expressID, type, tape[0], tape[1]);
+			return new IfcFacetedBrepWithVoids(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43957,9 +43957,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFastener
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFastener
 		{
-			return new IfcFastener(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFastener(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43975,9 +43975,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFastenerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFastenerType
 		{
-			return new IfcFastenerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFastenerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -43991,9 +43991,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFeatureElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFeatureElement
 		{
-			return new IfcFeatureElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFeatureElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44008,9 +44008,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFeatureElementAddition
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFeatureElementAddition
 		{
-			return new IfcFeatureElementAddition(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFeatureElementAddition(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44025,9 +44025,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFeatureElementSubtraction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFeatureElementSubtraction
 		{
-			return new IfcFeatureElementSubtraction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFeatureElementSubtraction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44041,9 +44041,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowControllerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowControllerType
 		{
-			return new IfcFlowControllerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowControllerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44057,9 +44057,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowFittingType
 		{
-			return new IfcFlowFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44075,9 +44075,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowMeterType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowMeterType
 		{
-			return new IfcFlowMeterType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFlowMeterType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44091,9 +44091,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowMovingDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowMovingDeviceType
 		{
-			return new IfcFlowMovingDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowMovingDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44107,9 +44107,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowSegmentType
 		{
-			return new IfcFlowSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44123,9 +44123,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowStorageDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowStorageDeviceType
 		{
-			return new IfcFlowStorageDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowStorageDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44139,9 +44139,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowTerminalType
 		{
-			return new IfcFlowTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44155,9 +44155,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowTreatmentDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowTreatmentDeviceType
 		{
-			return new IfcFlowTreatmentDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowTreatmentDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44173,9 +44173,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFootingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFootingType
 		{
-			return new IfcFootingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFootingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44189,9 +44189,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFurnishingElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFurnishingElement
 		{
-			return new IfcFurnishingElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFurnishingElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44207,9 +44207,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFurniture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFurniture
 		{
-			return new IfcFurniture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFurniture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44225,9 +44225,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGeographicElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGeographicElement
 		{
-			return new IfcGeographicElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcGeographicElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44250,9 +44250,9 @@ export namespace IFC4 {
 			this.WAxes = WAxes;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGrid
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGrid
 		{
-			return new IfcGrid(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcGrid(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44267,9 +44267,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcGroup
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcGroup
 		{
-			return new IfcGroup(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcGroup(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44285,9 +44285,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHeatExchangerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHeatExchangerType
 		{
-			return new IfcHeatExchangerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcHeatExchangerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44303,9 +44303,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHumidifierType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHumidifierType
 		{
-			return new IfcHumidifierType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcHumidifierType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44325,9 +44325,9 @@ export namespace IFC4 {
 			this.Segments = Segments;
 			this.SelfIntersect = SelfIntersect;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIndexedPolyCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIndexedPolyCurve
 		{
-			return new IfcIndexedPolyCurve(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcIndexedPolyCurve(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44343,9 +44343,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcInterceptorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcInterceptorType
 		{
-			return new IfcInterceptorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcInterceptorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44359,9 +44359,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Curve3D, AssociatedGeometry, MasterRepresentation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcIntersectionCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcIntersectionCurve
 		{
-			return new IfcIntersectionCurve(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcIntersectionCurve(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44387,9 +44387,9 @@ export namespace IFC4 {
 			this.CurrentValue = CurrentValue;
 			this.OriginalValue = OriginalValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcInventory
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcInventory
 		{
-			return new IfcInventory(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcInventory(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44405,9 +44405,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcJunctionBoxType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcJunctionBoxType
 		{
-			return new IfcJunctionBoxType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcJunctionBoxType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44423,9 +44423,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLaborResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLaborResource
 		{
-			return new IfcLaborResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcLaborResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44441,9 +44441,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLampType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLampType
 		{
-			return new IfcLampType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcLampType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44459,9 +44459,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightFixtureType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightFixtureType
 		{
-			return new IfcLightFixtureType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcLightFixtureType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44481,9 +44481,9 @@ export namespace IFC4 {
 			this.NominalLength = NominalLength;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMechanicalFastener
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMechanicalFastener
 		{
-			return new IfcMechanicalFastener(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcMechanicalFastener(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44503,9 +44503,9 @@ export namespace IFC4 {
 			this.NominalDiameter = NominalDiameter;
 			this.NominalLength = NominalLength;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMechanicalFastenerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMechanicalFastenerType
 		{
-			return new IfcMechanicalFastenerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcMechanicalFastenerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44521,9 +44521,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMedicalDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMedicalDeviceType
 		{
-			return new IfcMedicalDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcMedicalDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44539,9 +44539,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMemberType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMemberType
 		{
-			return new IfcMemberType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcMemberType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44557,9 +44557,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMotorConnectionType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMotorConnectionType
 		{
-			return new IfcMotorConnectionType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcMotorConnectionType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44575,9 +44575,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, TheActor);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOccupant
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOccupant
 		{
-			return new IfcOccupant(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcOccupant(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44594,9 +44594,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOpeningElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOpeningElement
 		{
-			return new IfcOpeningElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcOpeningElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44610,9 +44610,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOpeningStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOpeningStandardCase
 		{
-			return new IfcOpeningStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcOpeningStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44628,9 +44628,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOutletType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOutletType
 		{
-			return new IfcOutletType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcOutletType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44648,9 +44648,9 @@ export namespace IFC4 {
 			this.LifeCyclePhase = LifeCyclePhase;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPerformanceHistory
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPerformanceHistory
 		{
-			return new IfcPerformanceHistory(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcPerformanceHistory(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44674,9 +44674,9 @@ export namespace IFC4 {
 			this.FrameThickness = FrameThickness;
 			this.ShapeAspectStyle = ShapeAspectStyle;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPermeableCoveringProperties
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPermeableCoveringProperties
 		{
-			return new IfcPermeableCoveringProperties(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPermeableCoveringProperties(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44696,9 +44696,9 @@ export namespace IFC4 {
 			this.Status = Status;
 			this.LongDescription = LongDescription;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPermit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPermit
 		{
-			return new IfcPermit(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPermit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44714,9 +44714,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPileType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPileType
 		{
-			return new IfcPileType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPileType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44732,9 +44732,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPipeFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPipeFittingType
 		{
-			return new IfcPipeFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPipeFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44750,9 +44750,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPipeSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPipeSegmentType
 		{
-			return new IfcPipeSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPipeSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44768,9 +44768,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlateType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlateType
 		{
-			return new IfcPlateType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPlateType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44790,9 +44790,9 @@ export namespace IFC4 {
 			this.Faces = Faces;
 			this.PnIndex = PnIndex;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPolygonalFaceSet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPolygonalFaceSet
 		{
-			return new IfcPolygonalFaceSet(expressID, type, tape[0], tape[1], tape[2], tape[3]);
+			return new IfcPolygonalFaceSet(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44808,9 +44808,9 @@ export namespace IFC4 {
 			super(expressID,type);
 			this.Points = Points;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPolyline
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPolyline
 		{
-			return new IfcPolyline(expressID, type, tape[0]);
+			return new IfcPolyline(expressID, type, _tape[0]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44827,9 +44827,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPort
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPort
 		{
-			return new IfcPort(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcPort(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44845,9 +44845,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProcedure
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProcedure
 		{
-			return new IfcProcedure(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcProcedure(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44867,9 +44867,9 @@ export namespace IFC4 {
 			this.Status = Status;
 			this.LongDescription = LongDescription;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProjectOrder
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProjectOrder
 		{
-			return new IfcProjectOrder(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProjectOrder(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44885,9 +44885,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProjectionElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProjectionElement
 		{
-			return new IfcProjectionElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProjectionElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44903,9 +44903,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProtectiveDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProtectiveDeviceType
 		{
-			return new IfcProtectiveDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcProtectiveDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44921,9 +44921,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPumpType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPumpType
 		{
-			return new IfcPumpType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPumpType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44939,9 +44939,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRailingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRailingType
 		{
-			return new IfcRailingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRailingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44957,9 +44957,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRampFlightType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRampFlightType
 		{
-			return new IfcRampFlightType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRampFlightType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44975,9 +44975,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRampType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRampType
 		{
-			return new IfcRampType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRampType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -44993,9 +44993,9 @@ export namespace IFC4 {
 			super(expressID,type,UDegree, VDegree, ControlPointsList, SurfaceForm, UClosed, VClosed, SelfIntersect, UMultiplicities, VMultiplicities, UKnots, VKnots, KnotSpec);
 			this.WeightsData = WeightsData;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRationalBSplineSurfaceWithKnots
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRationalBSplineSurfaceWithKnots
 		{
-			return new IfcRationalBSplineSurfaceWithKnots(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcRationalBSplineSurfaceWithKnots(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45011,9 +45011,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.SteelGrade = SteelGrade;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingElement
 		{
-			return new IfcReinforcingElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcReinforcingElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45027,9 +45027,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingElementType
 		{
-			return new IfcReinforcingElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcReinforcingElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45061,9 +45061,9 @@ export namespace IFC4 {
 			this.TransverseBarSpacing = TransverseBarSpacing;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingMesh
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingMesh
 		{
-			return new IfcReinforcingMesh(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17]);
+			return new IfcReinforcingMesh(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45099,9 +45099,9 @@ export namespace IFC4 {
 			this.BendingShapeCode = BendingShapeCode;
 			this.BendingParameters = BendingParameters;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingMeshType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingMeshType
 		{
-			return new IfcReinforcingMeshType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16], tape[17], tape[18], tape[19]);
+			return new IfcReinforcingMeshType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16], _tape[17], _tape[18], _tape[19]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45119,9 +45119,9 @@ export namespace IFC4 {
 			this.RelatingObject = RelatingObject;
 			this.RelatedObjects = RelatedObjects;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRelAggregates
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRelAggregates
 		{
-			return new IfcRelAggregates(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcRelAggregates(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45137,9 +45137,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRoofType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRoofType
 		{
-			return new IfcRoofType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcRoofType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45155,9 +45155,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSanitaryTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSanitaryTerminalType
 		{
-			return new IfcSanitaryTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSanitaryTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45171,9 +45171,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Curve3D, AssociatedGeometry, MasterRepresentation);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSeamCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSeamCurve
 		{
-			return new IfcSeamCurve(expressID, type, tape[0], tape[1], tape[2]);
+			return new IfcSeamCurve(expressID, type, _tape[0], _tape[1], _tape[2]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45189,9 +45189,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShadingDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShadingDeviceType
 		{
-			return new IfcShadingDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcShadingDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45215,9 +45215,9 @@ export namespace IFC4 {
 			this.LandTitleNumber = LandTitleNumber;
 			this.SiteAddress = SiteAddress;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSite
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSite
 		{
-			return new IfcSite(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcSite(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45233,9 +45233,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSlabType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSlabType
 		{
-			return new IfcSlabType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSlabType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45251,9 +45251,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSolarDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSolarDeviceType
 		{
-			return new IfcSolarDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSolarDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45273,9 +45273,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.ElevationWithFlooring = ElevationWithFlooring;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpace
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpace
 		{
-			return new IfcSpace(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcSpace(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45291,9 +45291,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpaceHeaterType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpaceHeaterType
 		{
-			return new IfcSpaceHeaterType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSpaceHeaterType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45311,9 +45311,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.LongName = LongName;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpaceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpaceType
 		{
-			return new IfcSpaceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcSpaceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45329,9 +45329,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStackTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStackTerminalType
 		{
-			return new IfcStackTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStackTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45347,9 +45347,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStairFlightType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStairFlightType
 		{
-			return new IfcStairFlightType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStairFlightType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45365,9 +45365,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStairType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStairType
 		{
-			return new IfcStairType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStairType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45383,9 +45383,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 			this.DestabilizingLoad = DestabilizingLoad;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralAction
 		{
-			return new IfcStructuralAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStructuralAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45402,9 +45402,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation);
 			this.AppliedCondition = AppliedCondition;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralConnection
 		{
-			return new IfcStructuralConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45422,9 +45422,9 @@ export namespace IFC4 {
 			this.ProjectedOrTrue = ProjectedOrTrue;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralCurveAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralCurveAction
 		{
-			return new IfcStructuralCurveAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcStructuralCurveAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45440,9 +45440,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 			this.Axis = Axis;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralCurveConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralCurveConnection
 		{
-			return new IfcStructuralCurveConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralCurveConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45460,9 +45460,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.Axis = Axis;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralCurveMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralCurveMember
 		{
-			return new IfcStructuralCurveMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralCurveMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45476,9 +45476,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, PredefinedType, Axis);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralCurveMemberVarying
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralCurveMemberVarying
 		{
-			return new IfcStructuralCurveMemberVarying(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralCurveMemberVarying(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45494,9 +45494,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralCurveReaction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralCurveReaction
 		{
-			return new IfcStructuralCurveReaction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStructuralCurveReaction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45510,9 +45510,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, ProjectedOrTrue, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLinearAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLinearAction
 		{
-			return new IfcStructuralLinearAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcStructuralLinearAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45538,9 +45538,9 @@ export namespace IFC4 {
 			this.Coefficient = Coefficient;
 			this.Purpose = Purpose;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadGroup
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadGroup
 		{
-			return new IfcStructuralLoadGroup(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStructuralLoadGroup(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45554,9 +45554,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPointAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPointAction
 		{
-			return new IfcStructuralPointAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStructuralPointAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45572,9 +45572,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 			this.ConditionCoordinateSystem = ConditionCoordinateSystem;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPointConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPointConnection
 		{
-			return new IfcStructuralPointConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralPointConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45588,9 +45588,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPointReaction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPointReaction
 		{
-			return new IfcStructuralPointReaction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStructuralPointReaction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45611,9 +45611,9 @@ export namespace IFC4 {
 			this.ResultForLoadGroup = ResultForLoadGroup;
 			this.IsLinear = IsLinear;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralResultGroup
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralResultGroup
 		{
-			return new IfcStructuralResultGroup(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralResultGroup(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45631,9 +45631,9 @@ export namespace IFC4 {
 			this.ProjectedOrTrue = ProjectedOrTrue;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSurfaceAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSurfaceAction
 		{
-			return new IfcStructuralSurfaceAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcStructuralSurfaceAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45647,9 +45647,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedCondition);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralSurfaceConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralSurfaceConnection
 		{
-			return new IfcStructuralSurfaceConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcStructuralSurfaceConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45665,9 +45665,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSubContractResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSubContractResource
 		{
-			return new IfcSubContractResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcSubContractResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45683,9 +45683,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSurfaceFeature
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSurfaceFeature
 		{
-			return new IfcSurfaceFeature(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSurfaceFeature(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45701,9 +45701,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSwitchingDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSwitchingDeviceType
 		{
-			return new IfcSwitchingDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSwitchingDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45718,9 +45718,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSystem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSystem
 		{
-			return new IfcSystem(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcSystem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45736,9 +45736,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSystemFurnitureElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSystemFurnitureElement
 		{
-			return new IfcSystemFurnitureElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSystemFurnitureElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45754,9 +45754,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTankType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTankType
 		{
-			return new IfcTankType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTankType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45786,9 +45786,9 @@ export namespace IFC4 {
 			this.AnchorageSlip = AnchorageSlip;
 			this.MinCurvatureRadius = MinCurvatureRadius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTendon
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTendon
 		{
-			return new IfcTendon(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15], tape[16]);
+			return new IfcTendon(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15], _tape[16]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45804,9 +45804,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, SteelGrade);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTendonAnchor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTendonAnchor
 		{
-			return new IfcTendonAnchor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTendonAnchor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45822,9 +45822,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTendonAnchorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTendonAnchorType
 		{
-			return new IfcTendonAnchorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTendonAnchorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45846,9 +45846,9 @@ export namespace IFC4 {
 			this.CrossSectionArea = CrossSectionArea;
 			this.SheathDiameter = SheathDiameter;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTendonType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTendonType
 		{
-			return new IfcTendonType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcTendonType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45864,9 +45864,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTransformerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTransformerType
 		{
-			return new IfcTransformerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTransformerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45882,9 +45882,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTransportElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTransportElement
 		{
-			return new IfcTransportElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcTransportElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45908,9 +45908,9 @@ export namespace IFC4 {
 			this.SenseAgreement = SenseAgreement;
 			this.MasterRepresentation = MasterRepresentation;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTrimmedCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTrimmedCurve
 		{
-			return new IfcTrimmedCurve(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcTrimmedCurve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45926,9 +45926,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTubeBundleType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTubeBundleType
 		{
-			return new IfcTubeBundleType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcTubeBundleType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45944,9 +45944,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUnitaryEquipmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUnitaryEquipmentType
 		{
-			return new IfcUnitaryEquipmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcUnitaryEquipmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45962,9 +45962,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcValveType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcValveType
 		{
-			return new IfcValveType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcValveType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45980,9 +45980,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVibrationIsolator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVibrationIsolator
 		{
-			return new IfcVibrationIsolator(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcVibrationIsolator(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -45998,9 +45998,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVibrationIsolatorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVibrationIsolatorType
 		{
-			return new IfcVibrationIsolatorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcVibrationIsolatorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46014,9 +46014,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVirtualElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVirtualElement
 		{
-			return new IfcVirtualElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcVirtualElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46032,9 +46032,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcVoidingFeature
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcVoidingFeature
 		{
-			return new IfcVoidingFeature(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcVoidingFeature(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46050,9 +46050,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWallType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWallType
 		{
-			return new IfcWallType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcWallType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46068,9 +46068,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWasteTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWasteTerminalType
 		{
-			return new IfcWasteTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcWasteTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46092,9 +46092,9 @@ export namespace IFC4 {
 			this.ParameterTakesPrecedence = ParameterTakesPrecedence;
 			this.UserDefinedPartitioningType = UserDefinedPartitioningType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindowType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindowType
 		{
-			return new IfcWindowType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcWindowType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46114,9 +46114,9 @@ export namespace IFC4 {
 			this.ExceptionTimes = ExceptionTimes;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWorkCalendar
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWorkCalendar
 		{
-			return new IfcWorkCalendar(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcWorkCalendar(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46144,9 +46144,9 @@ export namespace IFC4 {
 			this.StartTime = StartTime;
 			this.FinishTime = FinishTime;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWorkControl
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWorkControl
 		{
-			return new IfcWorkControl(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcWorkControl(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46162,9 +46162,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, CreationDate, Creators, Purpose, Duration, TotalFloat, StartTime, FinishTime);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWorkPlan
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWorkPlan
 		{
-			return new IfcWorkPlan(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcWorkPlan(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46180,9 +46180,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, CreationDate, Creators, Purpose, Duration, TotalFloat, StartTime, FinishTime);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWorkSchedule
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWorkSchedule
 		{
-			return new IfcWorkSchedule(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcWorkSchedule(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46198,9 +46198,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType);
 			this.LongName = LongName;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcZone
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcZone
 		{
-			return new IfcZone(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5]);
+			return new IfcZone(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46220,9 +46220,9 @@ export namespace IFC4 {
 			this.Status = Status;
 			this.LongDescription = LongDescription;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActionRequest
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActionRequest
 		{
-			return new IfcActionRequest(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcActionRequest(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46238,9 +46238,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirTerminalBoxType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirTerminalBoxType
 		{
-			return new IfcAirTerminalBoxType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAirTerminalBoxType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46256,9 +46256,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirTerminalType
 		{
-			return new IfcAirTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAirTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46274,9 +46274,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirToAirHeatRecoveryType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirToAirHeatRecoveryType
 		{
-			return new IfcAirToAirHeatRecoveryType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAirToAirHeatRecoveryType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46308,9 +46308,9 @@ export namespace IFC4 {
 			this.IncorporationDate = IncorporationDate;
 			this.DepreciatedValue = DepreciatedValue;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAsset
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAsset
 		{
-			return new IfcAsset(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcAsset(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46326,9 +46326,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAudioVisualApplianceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAudioVisualApplianceType
 		{
-			return new IfcAudioVisualApplianceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAudioVisualApplianceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46352,9 +46352,9 @@ export namespace IFC4 {
 			this.ClosedCurve = ClosedCurve;
 			this.SelfIntersect = SelfIntersect;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBSplineCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBSplineCurve
 		{
-			return new IfcBSplineCurve(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4]);
+			return new IfcBSplineCurve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46374,9 +46374,9 @@ export namespace IFC4 {
 			this.Knots = Knots;
 			this.KnotSpec = KnotSpec;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBSplineCurveWithKnots
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBSplineCurveWithKnots
 		{
-			return new IfcBSplineCurveWithKnots(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcBSplineCurveWithKnots(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46392,9 +46392,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBeamType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBeamType
 		{
-			return new IfcBeamType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBeamType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46410,9 +46410,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoilerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoilerType
 		{
-			return new IfcBoilerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBoilerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46426,9 +46426,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Segments, SelfIntersect);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoundaryCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoundaryCurve
 		{
-			return new IfcBoundaryCurve(expressID, type, tape[0], tape[1]);
+			return new IfcBoundaryCurve(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46442,9 +46442,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElement
 		{
-			return new IfcBuildingElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcBuildingElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46460,9 +46460,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementPart
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementPart
 		{
-			return new IfcBuildingElementPart(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBuildingElementPart(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46478,9 +46478,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementPartType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementPartType
 		{
-			return new IfcBuildingElementPartType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBuildingElementPartType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46496,9 +46496,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementProxy
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementProxy
 		{
-			return new IfcBuildingElementProxy(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBuildingElementProxy(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46514,9 +46514,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingElementProxyType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingElementProxyType
 		{
-			return new IfcBuildingElementProxyType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBuildingElementProxyType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46534,9 +46534,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.LongName = LongName;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBuildingSystem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBuildingSystem
 		{
-			return new IfcBuildingSystem(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcBuildingSystem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46552,9 +46552,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBurnerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBurnerType
 		{
-			return new IfcBurnerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcBurnerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46570,9 +46570,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableCarrierFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableCarrierFittingType
 		{
-			return new IfcCableCarrierFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCableCarrierFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46588,9 +46588,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableCarrierSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableCarrierSegmentType
 		{
-			return new IfcCableCarrierSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCableCarrierSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46606,9 +46606,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableFittingType
 		{
-			return new IfcCableFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCableFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46624,9 +46624,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableSegmentType
 		{
-			return new IfcCableSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCableSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46642,9 +46642,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcChillerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcChillerType
 		{
-			return new IfcChillerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcChillerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46660,9 +46660,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcChimney
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcChimney
 		{
-			return new IfcChimney(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcChimney(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46678,9 +46678,9 @@ export namespace IFC4 {
 			super(expressID,type,Position);
 			this.Radius = Radius;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCircle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCircle
 		{
-			return new IfcCircle(expressID, type, tape[0], tape[1]);
+			return new IfcCircle(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46694,9 +46694,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCivilElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCivilElement
 		{
-			return new IfcCivilElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcCivilElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46712,9 +46712,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoilType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoilType
 		{
-			return new IfcCoilType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCoilType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46730,9 +46730,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColumn
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColumn
 		{
-			return new IfcColumn(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcColumn(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46746,9 +46746,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcColumnStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcColumnStandardCase
 		{
-			return new IfcColumnStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcColumnStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46764,9 +46764,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCommunicationsApplianceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCommunicationsApplianceType
 		{
-			return new IfcCommunicationsApplianceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCommunicationsApplianceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46782,9 +46782,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompressorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompressorType
 		{
-			return new IfcCompressorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCompressorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46800,9 +46800,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCondenserType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCondenserType
 		{
-			return new IfcCondenserType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCondenserType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46818,9 +46818,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionEquipmentResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionEquipmentResource
 		{
-			return new IfcConstructionEquipmentResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcConstructionEquipmentResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46836,9 +46836,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionMaterialResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionMaterialResource
 		{
-			return new IfcConstructionMaterialResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcConstructionMaterialResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46854,9 +46854,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, Identification, LongDescription, Usage, BaseCosts, BaseQuantity);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcConstructionProductResource
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcConstructionProductResource
 		{
-			return new IfcConstructionProductResource(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcConstructionProductResource(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46872,9 +46872,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCooledBeamType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCooledBeamType
 		{
-			return new IfcCooledBeamType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCooledBeamType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46890,9 +46890,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoolingTowerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoolingTowerType
 		{
-			return new IfcCoolingTowerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcCoolingTowerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46910,9 +46910,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCovering
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCovering
 		{
-			return new IfcCovering(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCovering(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46928,9 +46928,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCurtainWall
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCurtainWall
 		{
-			return new IfcCurtainWall(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCurtainWall(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46946,9 +46946,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDamperType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDamperType
 		{
-			return new IfcDamperType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDamperType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46964,9 +46964,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDiscreteAccessory
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDiscreteAccessory
 		{
-			return new IfcDiscreteAccessory(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDiscreteAccessory(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -46982,9 +46982,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDiscreteAccessoryType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDiscreteAccessoryType
 		{
-			return new IfcDiscreteAccessoryType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDiscreteAccessoryType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47000,9 +47000,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionChamberElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionChamberElementType
 		{
-			return new IfcDistributionChamberElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDistributionChamberElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47016,9 +47016,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionControlElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionControlElementType
 		{
-			return new IfcDistributionControlElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDistributionControlElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47033,9 +47033,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionElement
 		{
-			return new IfcDistributionElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcDistributionElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47050,9 +47050,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionFlowElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionFlowElement
 		{
-			return new IfcDistributionFlowElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcDistributionFlowElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47072,9 +47072,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.SystemType = SystemType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionPort
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionPort
 		{
-			return new IfcDistributionPort(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDistributionPort(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47092,9 +47092,9 @@ export namespace IFC4 {
 			this.LongName = LongName;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionSystem
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionSystem
 		{
-			return new IfcDistributionSystem(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcDistributionSystem(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47118,9 +47118,9 @@ export namespace IFC4 {
 			this.OperationType = OperationType;
 			this.UserDefinedOperationType = UserDefinedOperationType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoor
 		{
-			return new IfcDoor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcDoor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47134,9 +47134,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, OverallHeight, OverallWidth, PredefinedType, OperationType, UserDefinedOperationType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDoorStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDoorStandardCase
 		{
-			return new IfcDoorStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcDoorStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47152,9 +47152,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctFittingType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctFittingType
 		{
-			return new IfcDuctFittingType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDuctFittingType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47170,9 +47170,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctSegmentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctSegmentType
 		{
-			return new IfcDuctSegmentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDuctSegmentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47188,9 +47188,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctSilencerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctSilencerType
 		{
-			return new IfcDuctSilencerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcDuctSilencerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47206,9 +47206,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricApplianceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricApplianceType
 		{
-			return new IfcElectricApplianceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricApplianceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47224,9 +47224,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricDistributionBoardType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricDistributionBoardType
 		{
-			return new IfcElectricDistributionBoardType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricDistributionBoardType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47242,9 +47242,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricFlowStorageDeviceType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricFlowStorageDeviceType
 		{
-			return new IfcElectricFlowStorageDeviceType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricFlowStorageDeviceType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47260,9 +47260,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricGeneratorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricGeneratorType
 		{
-			return new IfcElectricGeneratorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricGeneratorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47278,9 +47278,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricMotorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricMotorType
 		{
-			return new IfcElectricMotorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricMotorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47296,9 +47296,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricTimeControlType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricTimeControlType
 		{
-			return new IfcElectricTimeControlType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcElectricTimeControlType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47312,9 +47312,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEnergyConversionDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEnergyConversionDevice
 		{
-			return new IfcEnergyConversionDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcEnergyConversionDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47330,9 +47330,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEngine
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEngine
 		{
-			return new IfcEngine(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcEngine(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47348,9 +47348,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEvaporativeCooler
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEvaporativeCooler
 		{
-			return new IfcEvaporativeCooler(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcEvaporativeCooler(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47366,9 +47366,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcEvaporator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcEvaporator
 		{
-			return new IfcEvaporator(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcEvaporator(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47385,9 +47385,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, LongName);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcExternalSpatialElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcExternalSpatialElement
 		{
-			return new IfcExternalSpatialElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcExternalSpatialElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47403,9 +47403,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFanType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFanType
 		{
-			return new IfcFanType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFanType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47421,9 +47421,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFilterType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFilterType
 		{
-			return new IfcFilterType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFilterType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47439,9 +47439,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFireSuppressionTerminalType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFireSuppressionTerminalType
 		{
-			return new IfcFireSuppressionTerminalType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFireSuppressionTerminalType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47455,9 +47455,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowController
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowController
 		{
-			return new IfcFlowController(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowController(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47471,9 +47471,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowFitting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowFitting
 		{
-			return new IfcFlowFitting(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowFitting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47489,9 +47489,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowInstrumentType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowInstrumentType
 		{
-			return new IfcFlowInstrumentType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcFlowInstrumentType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47507,9 +47507,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowMeter
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowMeter
 		{
-			return new IfcFlowMeter(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowMeter(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47523,9 +47523,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowMovingDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowMovingDevice
 		{
-			return new IfcFlowMovingDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowMovingDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47539,9 +47539,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowSegment
 		{
-			return new IfcFlowSegment(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowSegment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47555,9 +47555,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowStorageDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowStorageDevice
 		{
-			return new IfcFlowStorageDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowStorageDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47571,9 +47571,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowTerminal
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowTerminal
 		{
-			return new IfcFlowTerminal(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowTerminal(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47587,9 +47587,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowTreatmentDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowTreatmentDevice
 		{
-			return new IfcFlowTreatmentDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcFlowTreatmentDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47605,9 +47605,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFooting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFooting
 		{
-			return new IfcFooting(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFooting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47623,9 +47623,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHeatExchanger
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHeatExchanger
 		{
-			return new IfcHeatExchanger(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcHeatExchanger(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47641,9 +47641,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcHumidifier
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcHumidifier
 		{
-			return new IfcHumidifier(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcHumidifier(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47659,9 +47659,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcInterceptor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcInterceptor
 		{
-			return new IfcInterceptor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcInterceptor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47677,9 +47677,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcJunctionBox
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcJunctionBox
 		{
-			return new IfcJunctionBox(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcJunctionBox(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47695,9 +47695,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLamp
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLamp
 		{
-			return new IfcLamp(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcLamp(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47713,9 +47713,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcLightFixture
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcLightFixture
 		{
-			return new IfcLightFixture(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcLightFixture(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47731,9 +47731,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMedicalDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMedicalDevice
 		{
-			return new IfcMedicalDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcMedicalDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47749,9 +47749,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMember
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMember
 		{
-			return new IfcMember(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcMember(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47765,9 +47765,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMemberStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMemberStandardCase
 		{
-			return new IfcMemberStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcMemberStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47783,9 +47783,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcMotorConnection
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcMotorConnection
 		{
-			return new IfcMotorConnection(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcMotorConnection(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47799,9 +47799,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,Segments, SelfIntersect);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOuterBoundaryCurve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOuterBoundaryCurve
 		{
-			return new IfcOuterBoundaryCurve(expressID, type, tape[0], tape[1]);
+			return new IfcOuterBoundaryCurve(expressID, type, _tape[0], _tape[1]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47817,9 +47817,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcOutlet
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcOutlet
 		{
-			return new IfcOutlet(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcOutlet(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47837,9 +47837,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.ConstructionType = ConstructionType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPile
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPile
 		{
-			return new IfcPile(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcPile(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47855,9 +47855,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPipeFitting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPipeFitting
 		{
-			return new IfcPipeFitting(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPipeFitting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47873,9 +47873,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPipeSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPipeSegment
 		{
-			return new IfcPipeSegment(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPipeSegment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47891,9 +47891,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlate
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlate
 		{
-			return new IfcPlate(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPlate(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47907,9 +47907,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPlateStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPlateStandardCase
 		{
-			return new IfcPlateStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPlateStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47925,9 +47925,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProtectiveDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProtectiveDevice
 		{
-			return new IfcProtectiveDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProtectiveDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47943,9 +47943,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProtectiveDeviceTrippingUnitType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProtectiveDeviceTrippingUnitType
 		{
-			return new IfcProtectiveDeviceTrippingUnitType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcProtectiveDeviceTrippingUnitType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47961,9 +47961,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcPump
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcPump
 		{
-			return new IfcPump(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcPump(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47979,9 +47979,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRailing
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRailing
 		{
-			return new IfcRailing(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRailing(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -47997,9 +47997,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRamp
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRamp
 		{
-			return new IfcRamp(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRamp(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48015,9 +48015,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRampFlight
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRampFlight
 		{
-			return new IfcRampFlight(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRampFlight(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48033,9 +48033,9 @@ export namespace IFC4 {
 			super(expressID,type,Degree, ControlPointsList, CurveForm, ClosedCurve, SelfIntersect, KnotMultiplicities, Knots, KnotSpec);
 			this.WeightsData = WeightsData;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRationalBSplineCurveWithKnots
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRationalBSplineCurveWithKnots
 		{
-			return new IfcRationalBSplineCurveWithKnots(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRationalBSplineCurveWithKnots(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48059,9 +48059,9 @@ export namespace IFC4 {
 			this.PredefinedType = PredefinedType;
 			this.BarSurface = BarSurface;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingBar
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingBar
 		{
-			return new IfcReinforcingBar(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13]);
+			return new IfcReinforcingBar(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48089,9 +48089,9 @@ export namespace IFC4 {
 			this.BendingShapeCode = BendingShapeCode;
 			this.BendingParameters = BendingParameters;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcReinforcingBarType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcReinforcingBarType
 		{
-			return new IfcReinforcingBarType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12], tape[13], tape[14], tape[15]);
+			return new IfcReinforcingBarType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12], _tape[13], _tape[14], _tape[15]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48107,9 +48107,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcRoof
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcRoof
 		{
-			return new IfcRoof(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcRoof(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48125,9 +48125,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSanitaryTerminal
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSanitaryTerminal
 		{
-			return new IfcSanitaryTerminal(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSanitaryTerminal(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48143,9 +48143,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSensorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSensorType
 		{
-			return new IfcSensorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcSensorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48161,9 +48161,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcShadingDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcShadingDevice
 		{
-			return new IfcShadingDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcShadingDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48179,9 +48179,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSlab
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSlab
 		{
-			return new IfcSlab(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSlab(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48195,9 +48195,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSlabElementedCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSlabElementedCase
 		{
-			return new IfcSlabElementedCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSlabElementedCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48211,9 +48211,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSlabStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSlabStandardCase
 		{
-			return new IfcSlabStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSlabStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48229,9 +48229,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSolarDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSolarDevice
 		{
-			return new IfcSolarDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSolarDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48247,9 +48247,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSpaceHeater
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSpaceHeater
 		{
-			return new IfcSpaceHeater(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSpaceHeater(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48265,9 +48265,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStackTerminal
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStackTerminal
 		{
-			return new IfcStackTerminal(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStackTerminal(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48283,9 +48283,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStair
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStair
 		{
-			return new IfcStair(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcStair(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48309,9 +48309,9 @@ export namespace IFC4 {
 			this.TreadLength = TreadLength;
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStairFlight
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStairFlight
 		{
-			return new IfcStairFlight(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcStairFlight(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48335,9 +48335,9 @@ export namespace IFC4 {
 			this.HasResults = HasResults;
 			this.SharedPlacement = SharedPlacement;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralAnalysisModel
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralAnalysisModel
 		{
-			return new IfcStructuralAnalysisModel(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcStructuralAnalysisModel(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48353,9 +48353,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, PredefinedType, ActionType, ActionSource, Coefficient, Purpose);
 			this.SelfWeightCoefficients = SelfWeightCoefficients;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralLoadCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralLoadCase
 		{
-			return new IfcStructuralLoadCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10]);
+			return new IfcStructuralLoadCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48369,9 +48369,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, AppliedLoad, GlobalOrLocal, DestabilizingLoad, ProjectedOrTrue, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcStructuralPlanarAction
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcStructuralPlanarAction
 		{
-			return new IfcStructuralPlanarAction(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11]);
+			return new IfcStructuralPlanarAction(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48387,9 +48387,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSwitchingDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSwitchingDevice
 		{
-			return new IfcSwitchingDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSwitchingDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48405,9 +48405,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTank
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTank
 		{
-			return new IfcTank(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcTank(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48423,9 +48423,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTransformer
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTransformer
 		{
-			return new IfcTransformer(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcTransformer(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48441,9 +48441,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcTubeBundle
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcTubeBundle
 		{
-			return new IfcTubeBundle(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcTubeBundle(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48459,9 +48459,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUnitaryControlElementType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUnitaryControlElementType
 		{
-			return new IfcUnitaryControlElementType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcUnitaryControlElementType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48477,9 +48477,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUnitaryEquipment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUnitaryEquipment
 		{
-			return new IfcUnitaryEquipment(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcUnitaryEquipment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48495,9 +48495,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcValve
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcValve
 		{
-			return new IfcValve(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcValve(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48513,9 +48513,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWall
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWall
 		{
-			return new IfcWall(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcWall(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48529,9 +48529,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWallElementedCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWallElementedCase
 		{
-			return new IfcWallElementedCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcWallElementedCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48545,9 +48545,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWallStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWallStandardCase
 		{
-			return new IfcWallStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcWallStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48563,9 +48563,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWasteTerminal
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWasteTerminal
 		{
-			return new IfcWasteTerminal(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcWasteTerminal(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48589,9 +48589,9 @@ export namespace IFC4 {
 			this.PartitioningType = PartitioningType;
 			this.UserDefinedPartitioningType = UserDefinedPartitioningType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindow
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindow
 		{
-			return new IfcWindow(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcWindow(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48605,9 +48605,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, OverallHeight, OverallWidth, PredefinedType, PartitioningType, UserDefinedPartitioningType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcWindowStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcWindowStandardCase
 		{
-			return new IfcWindowStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9], tape[10], tape[11], tape[12]);
+			return new IfcWindowStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9], _tape[10], _tape[11], _tape[12]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48623,9 +48623,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActuatorType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActuatorType
 		{
-			return new IfcActuatorType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcActuatorType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48641,9 +48641,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirTerminal
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirTerminal
 		{
-			return new IfcAirTerminal(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcAirTerminal(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48659,9 +48659,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirTerminalBox
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirTerminalBox
 		{
-			return new IfcAirTerminalBox(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcAirTerminalBox(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48677,9 +48677,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAirToAirHeatRecovery
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAirToAirHeatRecovery
 		{
-			return new IfcAirToAirHeatRecovery(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcAirToAirHeatRecovery(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48695,9 +48695,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAlarmType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAlarmType
 		{
-			return new IfcAlarmType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcAlarmType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48713,9 +48713,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAudioVisualAppliance
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAudioVisualAppliance
 		{
-			return new IfcAudioVisualAppliance(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcAudioVisualAppliance(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48731,9 +48731,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBeam
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBeam
 		{
-			return new IfcBeam(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBeam(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48747,9 +48747,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBeamStandardCase
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBeamStandardCase
 		{
-			return new IfcBeamStandardCase(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBeamStandardCase(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48765,9 +48765,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBoiler
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBoiler
 		{
-			return new IfcBoiler(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBoiler(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48783,9 +48783,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcBurner
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcBurner
 		{
-			return new IfcBurner(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcBurner(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48801,9 +48801,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableCarrierFitting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableCarrierFitting
 		{
-			return new IfcCableCarrierFitting(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCableCarrierFitting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48819,9 +48819,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableCarrierSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableCarrierSegment
 		{
-			return new IfcCableCarrierSegment(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCableCarrierSegment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48837,9 +48837,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableFitting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableFitting
 		{
-			return new IfcCableFitting(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCableFitting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48855,9 +48855,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCableSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCableSegment
 		{
-			return new IfcCableSegment(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCableSegment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48873,9 +48873,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcChiller
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcChiller
 		{
-			return new IfcChiller(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcChiller(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48891,9 +48891,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoil
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoil
 		{
-			return new IfcCoil(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCoil(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48909,9 +48909,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCommunicationsAppliance
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCommunicationsAppliance
 		{
-			return new IfcCommunicationsAppliance(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCommunicationsAppliance(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48927,9 +48927,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCompressor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCompressor
 		{
-			return new IfcCompressor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCompressor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48945,9 +48945,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCondenser
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCondenser
 		{
-			return new IfcCondenser(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCondenser(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48963,9 +48963,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasPropertySets, RepresentationMaps, Tag, ElementType);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcControllerType
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcControllerType
 		{
-			return new IfcControllerType(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8], tape[9]);
+			return new IfcControllerType(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8], _tape[9]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48981,9 +48981,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCooledBeam
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCooledBeam
 		{
-			return new IfcCooledBeam(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCooledBeam(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -48999,9 +48999,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcCoolingTower
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcCoolingTower
 		{
-			return new IfcCoolingTower(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcCoolingTower(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49017,9 +49017,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDamper
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDamper
 		{
-			return new IfcDamper(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDamper(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49035,9 +49035,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionChamberElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionChamberElement
 		{
-			return new IfcDistributionChamberElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDistributionChamberElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49051,9 +49051,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, LongName, PredefinedType);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionCircuit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionCircuit
 		{
-			return new IfcDistributionCircuit(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6]);
+			return new IfcDistributionCircuit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49068,9 +49068,9 @@ export namespace IFC4 {
 		{
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDistributionControlElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDistributionControlElement
 		{
-			return new IfcDistributionControlElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7]);
+			return new IfcDistributionControlElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49086,9 +49086,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctFitting
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctFitting
 		{
-			return new IfcDuctFitting(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDuctFitting(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49104,9 +49104,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctSegment
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctSegment
 		{
-			return new IfcDuctSegment(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDuctSegment(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49122,9 +49122,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcDuctSilencer
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcDuctSilencer
 		{
-			return new IfcDuctSilencer(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcDuctSilencer(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49140,9 +49140,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricAppliance
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricAppliance
 		{
-			return new IfcElectricAppliance(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElectricAppliance(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49158,9 +49158,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricDistributionBoard
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricDistributionBoard
 		{
-			return new IfcElectricDistributionBoard(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElectricDistributionBoard(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49176,9 +49176,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricFlowStorageDevice
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricFlowStorageDevice
 		{
-			return new IfcElectricFlowStorageDevice(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElectricFlowStorageDevice(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49194,9 +49194,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricGenerator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricGenerator
 		{
-			return new IfcElectricGenerator(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElectricGenerator(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49212,9 +49212,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricMotor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricMotor
 		{
-			return new IfcElectricMotor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElectricMotor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49230,9 +49230,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcElectricTimeControl
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcElectricTimeControl
 		{
-			return new IfcElectricTimeControl(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcElectricTimeControl(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49248,9 +49248,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFan
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFan
 		{
-			return new IfcFan(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFan(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49266,9 +49266,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFilter
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFilter
 		{
-			return new IfcFilter(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFilter(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49284,9 +49284,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFireSuppressionTerminal
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFireSuppressionTerminal
 		{
-			return new IfcFireSuppressionTerminal(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFireSuppressionTerminal(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49302,9 +49302,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcFlowInstrument
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcFlowInstrument
 		{
-			return new IfcFlowInstrument(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcFlowInstrument(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49320,9 +49320,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcProtectiveDeviceTrippingUnit
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcProtectiveDeviceTrippingUnit
 		{
-			return new IfcProtectiveDeviceTrippingUnit(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcProtectiveDeviceTrippingUnit(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49338,9 +49338,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcSensor
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcSensor
 		{
-			return new IfcSensor(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcSensor(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49356,9 +49356,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcUnitaryControlElement
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcUnitaryControlElement
 		{
-			return new IfcUnitaryControlElement(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcUnitaryControlElement(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49374,9 +49374,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcActuator
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcActuator
 		{
-			return new IfcActuator(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcActuator(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49392,9 +49392,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcAlarm
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcAlarm
 		{
-			return new IfcAlarm(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcAlarm(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{
@@ -49410,9 +49410,9 @@ export namespace IFC4 {
 			super(expressID,type,GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Representation, Tag);
 			this.PredefinedType = PredefinedType;
 		}
-		static FromTape(expressID: number, type: number, tape: any[]): IfcController
+		static FromTape(expressID: number, type: number, _tape: any[]): IfcController
 		{
-			return new IfcController(expressID, type, tape[0], tape[1], tape[2], tape[3], tape[4], tape[5], tape[6], tape[7], tape[8]);
+			return new IfcController(expressID, type, _tape[0], _tape[1], _tape[2], _tape[3], _tape[4], _tape[5], _tape[6], _tape[7], _tape[8]);
 		}
 		ToTape(): unknown[]
 		{

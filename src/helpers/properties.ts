@@ -99,15 +99,6 @@ export class Properties {
         }
     }
 
-    private static isRelated(id: number, rel: any, propNames: pName) {
-        const relatedItems = rel[propNames.related];
-        if (Array.isArray(relatedItems)) {
-            const values = relatedItems.map((item) => item.value);
-            return values.includes(id);
-        }
-        return relatedItems.value === id;
-    }
-
     private static newIfcProject(id: number) {
         return {
             expressID: id,
