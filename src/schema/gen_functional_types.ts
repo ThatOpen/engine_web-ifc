@@ -10,29 +10,20 @@ console.log("Starting...");
 
 let tsHelper = [];
 tsHelper.push(`// This is a generated file, please see: gen_functional_types.js`);
-tsHelper.push(`import * as ifc from "./ifc-schema";`);
+tsHelper.push(`import  * as ifc from "./ifc-schema";`);
+tsHelper.push(`import {RawLineData} from "./web-ifc-api";`);
 tsHelper.push();
 tsHelper.push(`export class Handle<T> {`);
 tsHelper.push(`\tvalue: number;`);
 tsHelper.push(`\tconstructor(id: number) { this.value = id; }`);
-tsHelper.push(`\ttoTape(args: any[]){ args.push({ type: 5, value: this.value }); }`);
+tsHelper.push(`\ttoTape(args: unknown[]){ args.push({ type: 5, value: this.value }); }`);
 tsHelper.push(`}`);
 tsHelper.push(``);
-tsHelper.push(`export function Value(type: string, value: any): any { return { t: type, v: value }; }`);
+tsHelper.push(`export function Value(type: string, value: unknown): unknown { return { t: type, v: value }; }`);
 
-tsHelper.push(`const UNKNOWN = 0;`);
-tsHelper.push(`const STRING = 1;`);
-tsHelper.push(`const LABEL = 2;`);
-tsHelper.push(`const ENUM = 3;`);
-tsHelper.push(`const REAL = 4;`);
-tsHelper.push(`const REF = 5;`);
-tsHelper.push(`const EMPTY = 6;`);
-tsHelper.push(`const SET_BEGIN = 7;`);
-tsHelper.push(`const SET_END = 8;`);
-tsHelper.push(`const LINE_END = 9;`);
-tsHelper.push(`export let FromRawLineData = {};`);
-tsHelper.push(`export let InversePropertyDef = {};`);
-tsHelper.push(`export let InheritanceDef = {};`);
+tsHelper.push(`export const FromRawLineData: any = {};`);
+tsHelper.push(`export const InversePropertyDef: any = {};`);
+tsHelper.push(`export const InheritanceDef: any = {};`);
 
 let tsHelperClasses = [];
 
@@ -83,14 +74,14 @@ for (var i = 0; i < files.length; i++) {
           tsHelperClasses.push(`\t\tvalue: string;`)
           tsHelperClasses.push(`\t\tconstructor(v: string) { this.value = v;}`);
           tsHelperClasses.push(type.values.map((v) => `\t\tstatic ${v} = "${v}";`).join("\n"));
-          tsHelperClasses.push(`\t};`);
+          tsHelperClasses.push(`\t}`);
       }
       else
       {
           tsHelperClasses.push(`\texport class ${type.name} {`);
           tsHelperClasses.push(`\t\tvalue: ${type.typeName};`)
           tsHelperClasses.push(`\t\tconstructor(v: ${type.typeName}) { this.value = v;}`);
-          tsHelperClasses.push(`\t};`);
+          tsHelperClasses.push(`\t}`);
       }
   });
   
@@ -110,7 +101,7 @@ for (var i = 0; i < files.length; i++) {
         completeifcElementList.add(entities[x].name);
       }
   
-      tsHelper.push(`FromRawLineData['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (d) => { return ${schemaName}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
+      tsHelper.push(`FromRawLineData['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (d: RawLineData) => { return ${schemaName}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
     
       if (entities[x].children.length > 0)
       {
@@ -139,7 +130,7 @@ for (var i = 0; i < files.length; i++) {
             }
           }
           let type  = `ifc.${prop.type.toUpperCase()}`
-          tsHelper.push(`\t\t ['${prop.name}',${type},${pos},${prop.set}],`);
+          tsHelper.push(`\t\t['${prop.name}',${type},${pos},${prop.set}],`);
         });
         tsHelper.push(`];`);
         

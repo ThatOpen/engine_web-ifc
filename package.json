@@ -75,10 +75,13 @@
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "@types/three": "^0.130.1",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
+    "@typescript-eslint/parser": "^5.46.0",
     "concurrently": "^6.2.0",
     "cpy": "^8.1.2",
     "cpy-cli": "^3.1.1",
     "esbuild": "^0.12.15",
+    "eslint": "^8.29.0",
     "http-server": "^14.1.1",
     "jest": "^27.4.2",
     "monaco-editor": "^0.26.1",
@@ -86,7 +89,7 @@
     "serve": "^12.0.0",
     "three": "^0.130.1",
     "ts-jest": "^27.0.7",
-    "typescript": "^4.3.5"
+    "typescript": "^4.9.4"
   },
   "browser": {
     "crypto": false,
