@@ -160,10 +160,7 @@ async function LoadFile(filename) {
     start = WebIFC.ms();
     fs.writeFileSync("exported.ifc", ifcapi.ExportFileAsIFC(modelID));
     time = WebIFC.ms() - start;
-  console.log(`Exporting took ${time} ms`);
-
-    ifcapi.CreateIfcGuidToExpressIdMapping(modelID)
-    console.log(ifcapi.ifcGuidMap)
+    console.log(`Exporting took ${time} ms`);
 
     ifcapi.CloseModel(modelID);
 }
