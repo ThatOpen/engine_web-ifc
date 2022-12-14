@@ -74,7 +74,7 @@ export class Properties {
     }
 
 
-    private async getRelatedProperties(modelID: number, elementID: number, recursive = false, inversePropname, relationName) {
+    private async getRelatedProperties(modelID: number, elementID: number, recursive: boolean = false, inversePropname:string, relationName:string) {
         const lineData = await this.api.GetLine(modelID, elementID, false, true);
         const result: any[] = [];
         let rels = lineData[inversePropname];
@@ -97,15 +97,6 @@ export class Properties {
             const rel = await this.api.GetLine(modelID, relation.get(i), false);
             this.saveChunk(chunks, propNames, rel);
         }
-    }
-
-    private static isRelated(id: number, rel: any, propNames: pName) {
-        const relatedItems = rel[propNames.related];
-        if (Array.isArray(relatedItems)) {
-            const values = relatedItems.map((item) => item.value);
-            return values.includes(id);
-        }
-        return relatedItems.value === id;
     }
 
     private static newIfcProject(id: number) {

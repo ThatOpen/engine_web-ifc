@@ -19,4 +19,4 @@ let tsContent = `
 
 `;
 
-fs.writeFileSync("ts_src.ts", tsContent);
+fs.writeFileSync("ts_src.js", tsContent);

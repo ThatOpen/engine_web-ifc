@@ -1,5 +1,4 @@
 import * as WebIFC from "../../../dist/web-ifc-api-node.js";
-//import * as WebIFC from "web-ifc";
 import chalk from 'chalk';
 import fs from "fs";
 

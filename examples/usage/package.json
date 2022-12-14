@@ -4,17 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "copy-wasm": "cpy ../../dist/web-ifc.wasm .",
-    "start": "esbuild index.ts --bundle --platform=node --outfile=index.js && node index.js"
+    "start": "ts-node index.ts"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "chalk": "^4.1.1",
-    "cpy-cli": "^3.1.1",
-    "esbuild": "^0.11.20",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.3",
-    "web-ifc": "0.0.18"
-  }
+  "license": "ISC"
 }

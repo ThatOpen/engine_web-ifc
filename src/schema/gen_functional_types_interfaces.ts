@@ -1,5 +1,5 @@
 
-interface Type {
+export interface Type {
     name: string;
     typeName : string;
     isList: boolean;
@@ -8,7 +8,7 @@ interface Type {
     values: string[];
 }
 
-interface Prop {
+export interface Prop {
     name: string;
     type: string;
     primitive: boolean;
@@ -16,25 +16,25 @@ interface Prop {
     set: boolean;
 }
 
-interface InverseProp {
+export interface InverseProp {
     name: string;
     type: string;
     set: boolean;
     for: string;
 }
 
-interface Entity {
+export interface Entity {
     name: string;
     parent: null | string;
     children: string[];
     props: Prop[];
     inverseProps: InverseProp[],
-    derivedProps: Prop[] | null;
-    derivedInverseProps: InverseProp[] | null,
+    derivedProps: Prop[];
+    derivedInverseProps: InverseProp[],
     isIfcProduct: boolean;
 }
 
-interface Param
+export interface Param
 {
     name: string;
     type: string;

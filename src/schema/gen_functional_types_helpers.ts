@@ -1,6 +1,9 @@
-export function sortEntities(entities) {
-  let sortedEntities = [];
-  let unsortedEntities = [];
+import {Entity, Type} from "./gen_functional_types_interfaces";
+
+
+export function sortEntities(entities: Array<Entity>) {
+  let sortedEntities: Array<Entity> = [];
+  let unsortedEntities: Array<Entity> = [];
   entities.forEach(val => unsortedEntities.push(val));
   while (unsortedEntities.length > 0)
   {
@@ -16,7 +19,7 @@ export function sortEntities(entities) {
   return sortedEntities;
 }
 
-export function generateClass(entity, buffer, types, schemaName) 
+export function generateClass(entity:Entity, buffer: Array<string>, types:Type[], schemaName:string) 
 {
 
   if (!entity.parent)
@@ -31,14 +34,14 @@ export function generateClass(entity, buffer, types, schemaName)
   }
   
   entity.props.forEach((param) => {
-    let isType: Type = types.some( x => x.name == param.name);
+    let isType: boolean = types.some( (x:Type) => x.name == param.name);
     let propType = `${(isType || param.primitive) ? param.type : "(Handle<" + schemaName + "."+ param.type + `> | ${schemaName}.${param.type})` }${param.set ? "[]" : ""} ${param.optional ? "| null" : ""}`;
     buffer.push(`\t\t${param.name}: ${propType};`)
   });
   
   entity.inverseProps.forEach((prop) => {
     let type = `${"(Handle<" + schemaName + "."+ prop.type + `> | ${schemaName}.${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
-    buffer.push(`\t\t${prop.name}: ${type};`);
+    buffer.push(`\t\t${prop.name}!: ${type};`);
   });
 
   buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.map((p) => `${p.name}: ${(types.some( x => x.name == p.name) || p.primitive) ? p.type : "(Handle<" + schemaName + "."+ p.type + `> | ${schemaName}.${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
@@ -57,23 +60,22 @@ export function generateClass(entity, buffer, types, schemaName)
   });
   
   buffer.push(`\t\t}`)
-  buffer.push(`\t\tstatic FromTape(expressID: number, type: number, tape: any[]): ${entity.name}`)
+  buffer.push(`\t\tstatic FromTape(expressID: number, type: number, _tape: any[]): ${entity.name}`)
   buffer.push(`\t\t{`);
-  buffer.push(`\t\t\tlet ptr = 0;`);
-  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((p) => 'tape[ptr++]').join(", ")});`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((_, i) => '_tape['+i+']').join(", ")});`);
   buffer.push(`\t\t}`)
-  buffer.push(`\t\tToTape(): any[]`)
+  buffer.push(`\t\tToTape(): unknown[]`)
   buffer.push(`\t\t{`)
-  buffer.push(`\t\t\tlet args: any[] = [];`)
+  buffer.push(`\t\t\tconst args: unknown[] = [];`)
   buffer.push(`\t\t\targs.push(${entity.derivedProps.map((p) => `this.${p.name}`).join(", ")});`);
   buffer.push(`\t\t\treturn args;`)
   buffer.push(`\t\t}`)
-  buffer.push(`\t};`);
+  buffer.push(`\t}`);
 }
 
 export function makeCRCTable(){
     var c;
-    var crcTable = [];
+    var crcTable: Array<number> = [];
     for(var n =0; n < 256; n++){
         c = n;
         for(var k =0; k < 8; k++){
@@ -84,7 +86,7 @@ export function makeCRCTable(){
     return crcTable;
 }
 
-export function crc32(str,crcTable) {
+export function crc32(str:string,crcTable:Array<number> ) {
     var crc = 0 ^ (-1);
 
     for (var i = 0; i < str.length; i++ ) {
@@ -94,7 +96,7 @@ export function crc32(str,crcTable) {
     return (crc ^ (-1)) >>> 0;
 }
 
-export function expTypeToTSType(expTypeName)
+export function expTypeToTSType(expTypeName:string)
 {
     let tsType = expTypeName;
     if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER")
@@ -121,7 +123,7 @@ export function expTypeToTSType(expTypeName)
     return tsType;
 }
 
-export function parseInverse(line,entity) 
+export function parseInverse(line:string,entity:Entity) 
 {
     let split = line.split(" ");
     let name = split[0].replace("INVERSE","").trim();
@@ -137,7 +139,7 @@ export function parseInverse(line,entity)
     });  
 }
 
-export function parseElements(data)
+export function parseElements(data:string)
 {
     let lines = data.split(";");
 
@@ -193,7 +195,7 @@ export function parseElements(data)
             readProps = false;
             readInverse = true;
             // there is one inverse property on this line
-            parseInverse(line,entity);
+            if (entity) parseInverse(line,entity);
         }
         else if (line.indexOf("DERIVE") == 0)
         {
@@ -210,14 +212,14 @@ export function parseElements(data)
             readProps = false;
             readInverse = false;
 
-            let split = line.split(" ").map((s) => s.trim());
+            let split = line.split(" ").map((s:string) => s.trim());
             let name = split[1];
 
 
             let isList = split.indexOf("LIST") != -1 || split.indexOf("SET") != -1 || split.indexOf("ARRAY") != -1;
             let isEnum = split.indexOf("ENUMERATION") != -1;
             let isSelect = split[3].indexOf("SELECT") == 0;
-            let values: null | string[] = null;
+            let values: string[] = [];
 
             let typeName = "";
             if (isList)
@@ -230,7 +232,7 @@ export function parseElements(data)
                 let secondBracket = line.indexOf(")");
 
                 let stringList = line.substring(firstBracket + 1, secondBracket);
-                values = stringList.split(",").map((s) => s.trim());
+                values = stringList.split(",").map((s:string) => s.trim());
             }
             else
             {
@@ -296,7 +298,7 @@ export function parseElements(data)
     };
 }
 
-function findEntity(entityName: String, entityList: Entity[])
+function findEntity(entityName: String | null, entityList: Entity[])
 {
   if (entityName == null) return null;
   for (var i=0; i < entityList.length;i++) 

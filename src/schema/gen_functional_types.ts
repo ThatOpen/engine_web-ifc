@@ -1,46 +1,39 @@
-import {} from "./gen_functional_types_interfaces";
+import {Entity} from "./gen_functional_types_interfaces";
 import {findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
 
 const fs = require("fs");
-const { type } = require("os");
+
 
 let crcTable = makeCRCTable();
 
 console.log("Starting...");
 
-let tsHelper = [];
+let tsHelper: Array<string> = [];
 tsHelper.push(`// This is a generated file, please see: gen_functional_types.js`);
-tsHelper.push(`import * as ifc from "./ifc-schema";`);
+tsHelper.push(`import  * as ifc from "./ifc-schema";`);
+tsHelper.push(`import {RawLineData} from "./web-ifc-api";`);
 tsHelper.push();
-tsHelper.push(`export class Handle<T> {`);
+tsHelper.push(`export class Handle<_> {`);
 tsHelper.push(`\tvalue: number;`);
+tsHelper.push(`\tlabel!: string | null;`)
+tsHelper.push(`\tvalueType!: number | null;`)
 tsHelper.push(`\tconstructor(id: number) { this.value = id; }`);
-tsHelper.push(`\ttoTape(args: any[]){ args.push({ type: 5, value: this.value }); }`);
+tsHelper.push(`\ttoTape(args: unknown[]){ args.push({ type: 5, value: this.value }); }`);
 tsHelper.push(`}`);
 tsHelper.push(``);
-tsHelper.push(`export function Value(type: string, value: any): any { return { t: type, v: value }; }`);
+tsHelper.push(`export function Value(type: string, value: unknown): unknown { return { t: type, v: value }; }`);
 
-tsHelper.push(`const UNKNOWN = 0;`);
-tsHelper.push(`const STRING = 1;`);
-tsHelper.push(`const LABEL = 2;`);
-tsHelper.push(`const ENUM = 3;`);
-tsHelper.push(`const REAL = 4;`);
-tsHelper.push(`const REF = 5;`);
-tsHelper.push(`const EMPTY = 6;`);
-tsHelper.push(`const SET_BEGIN = 7;`);
-tsHelper.push(`const SET_END = 8;`);
-tsHelper.push(`const LINE_END = 9;`);
-tsHelper.push(`export let FromRawLineData = {};`);
-tsHelper.push(`export let InversePropertyDef = {};`);
-tsHelper.push(`export let InheritanceDef = {};`);
+tsHelper.push(`export const FromRawLineData: any = {};`);
+tsHelper.push(`export const InversePropertyDef: any = {};`);
+tsHelper.push(`export const InheritanceDef: any = {};`);
 
-let tsHelperClasses = [];
+let tsHelperClasses: Array<string>  = [];
 
-let completeEntityList = new Set();
+let completeEntityList = new Set<string>();
 completeEntityList.add("FILE_SCHEMA");
 completeEntityList.add("FILE_NAME");
 completeEntityList.add("FILE_DESCRIPTION");
-let completeifcElementList = new Set();
+let completeifcElementList = new Set<string>();
 
 var files = fs.readdirSync("./");
 for (var i = 0; i < files.length; i++) {
@@ -53,19 +46,24 @@ for (var i = 0; i < files.length; i++) {
   tsHelperClasses.push(`export namespace ${schemaName} {`);
   let schemaData = fs.readFileSync("./"+files[i]).toString();
   let parsed = parseElements(schemaData);
-  let entities = sortEntities(parsed.entities);
+  let entities: Array<Entity> = sortEntities(parsed.entities);
   let types = parsed.types;
   
   types.forEach((type) => {
       if (type.isList)
       {
-          tsHelperClasses.push(`\texport type ${type.name} = Array<${type.typeName}>;`);
+          tsHelperClasses.push(`\texport class ${type.name} {`);
+          tsHelperClasses.push(`\t\tvalueType !: number | null;`)
+          tsHelperClasses.push(`\t\tlabel !: string | null;`)
+          tsHelperClasses.push(`\t\tvalue: Array<${type.typeName}>;`)
+          tsHelperClasses.push(`\t\tconstructor(v: Array<${type.typeName}>) { this.value = v;}`);
+          tsHelperClasses.push(`\t};`);
       }
       else if (type.isSelect)
       {
           tsHelperClasses.push(`\texport type ${type.name} = `);
           type.values.forEach(refType => {
-              let isType: Type = types.some( x => x.name == refType.name);
+              let isType: boolean = types.some( x => x.name == refType);
               if (isType)
               {
                   tsHelperClasses.push(`\t\t| ${refType}`);
@@ -80,17 +78,21 @@ for (var i = 0; i < files.length; i++) {
       else if (type.isEnum)
       {
           tsHelperClasses.push(`\texport class ${type.name} {`);
-          tsHelperClasses.push(`\t\tvalue: string;`)
+          tsHelperClasses.push(`\t\tvalue : string;`)
+          tsHelperClasses.push(`\t\tlabel !: string | null;`)
+          tsHelperClasses.push(`\t\tvalueType !: number | null;`)
           tsHelperClasses.push(`\t\tconstructor(v: string) { this.value = v;}`);
           tsHelperClasses.push(type.values.map((v) => `\t\tstatic ${v} = "${v}";`).join("\n"));
-          tsHelperClasses.push(`\t};`);
+          tsHelperClasses.push(`\t}`);
       }
       else
       {
           tsHelperClasses.push(`\texport class ${type.name} {`);
           tsHelperClasses.push(`\t\tvalue: ${type.typeName};`)
+          tsHelperClasses.push(`\t\tlabel !: string| null;`)
+          tsHelperClasses.push(`\t\tvalueType !: number| null;`)
           tsHelperClasses.push(`\t\tconstructor(v: ${type.typeName}) { this.value = v;}`);
-          tsHelperClasses.push(`\t};`);
+          tsHelperClasses.push(`\t}`);
       }
   });
   
@@ -110,7 +112,7 @@ for (var i = 0; i < files.length; i++) {
         completeifcElementList.add(entities[x].name);
       }
   
-      tsHelper.push(`FromRawLineData['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (d) => { return ${schemaName}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
+      tsHelper.push(`FromRawLineData['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (d: RawLineData) => { return ${schemaName}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
     
       if (entities[x].children.length > 0)
       {
@@ -123,7 +125,7 @@ for (var i = 0; i < files.length; i++) {
         entities[x].derivedInverseProps.forEach((prop) => {
           let pos = 0;
           //find the target element
-          for (targetEntity of entities) 
+          for (let targetEntity of entities) 
           {
             if (targetEntity.name == prop.type) 
             {
@@ -139,7 +141,7 @@ for (var i = 0; i < files.length; i++) {
             }
           }
           let type  = `ifc.${prop.type.toUpperCase()}`
-          tsHelper.push(`\t\t ['${prop.name}',${type},${pos},${prop.set}],`);
+          tsHelper.push(`\t\t['${prop.name}',${type},${pos},${prop.set}],`);
         });
         tsHelper.push(`];`);
         
@@ -156,8 +158,8 @@ fs.writeFileSync("../ifc_schema_helper.ts", tsHelper.join("\n"));
 
 console.log(`Writing Global WASM/TS Metadata!...`);
 
-let tsHeader = []
-let cppHeader = [];
+let tsHeader:Array<string> = []
+let cppHeader: Array<string> = [];
 cppHeader.push("#pragma once");
 cppHeader.push("");
 cppHeader.push("#include <vector>");
@@ -178,7 +180,6 @@ cppHeader.push("\t\tswitch(ifcCode) {");
 
 completeifcElementList.forEach(element => {
     let name = element.toUpperCase();
-    let code = crc32(name,crcTable);
     cppHeader.push(`\t\t\tcase ifc::${name}: return true;`);
 });
 
@@ -192,7 +193,6 @@ cppHeader.push("\tstd::vector<unsigned int> IfcElements { ");
 tsHeader.push("export const IfcElements = [")
 completeifcElementList.forEach(element => {
     let name = element.toUpperCase();
-    let code = crc32(name,crcTable);
     cppHeader.push(`\t\t${name},`);
     tsHeader.push(`\t${name},`);
 });

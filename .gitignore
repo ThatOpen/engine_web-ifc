@@ -47,5 +47,9 @@ debug_output
 build
 *.log
 node_modules
+dist/*
 
 .idea/
+
+#Mac Temporary Files
+**/.dstore

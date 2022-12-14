@@ -5,22 +5,21 @@ export default async function() {
     await WithIFCFileLoaded("single_propertyset", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
 
         // this returns a propertyset object at line number 244
-        let propertySetFlattened = ifcapi.GetLine(modelID, 244, true) as WebIFC.IfcPropertySet;
-
+        let propertySetFlattened = ifcapi.GetLine(modelID, 244, true) as WebIFC.IFC2X3.IfcPropertySet;
         // check some relevant fields of ifcpropertyset
         Equals("ID", propertySetFlattened.expressID, 244);
         Equals("Type", propertySetFlattened.type, WebIFC.IFCPROPERTYSET);
-        Equals("GUID", propertySetFlattened.GlobalId.value, "0uNK5AgoP1Vw6UlaHiS$iF");
+        Equals("GUID", propertySetFlattened.GlobalId!.value, "0uNK5AgoP1Vw6UlaHiS$iF");
         Equals("Description", propertySetFlattened.Description, null);
-        Equals("Name", propertySetFlattened.Name.value, "Pset_ColumnCommon");
+        Equals("Name", propertySetFlattened.Name!.value, "Pset_ColumnCommon");
 
         // look at the properties inside
-        let props = propertySetFlattened.HasProperties as WebIFC.IfcPropertySingleValue[];
+        let props = propertySetFlattened.HasProperties as WebIFC.IFC2X3.IfcPropertySingleValue[];
         Equals("Num props", props.length, 3);
 
         // check the value of the first property, should be an identifier of 300x300
-        Equals("Prop 0 label", props[0].NominalValue.label, "IFCIDENTIFIER");
-        Equals("Prop 0 value", props[0].NominalValue.value, "300x300");
+        Equals("Prop 0 label", props[0].NominalValue!.label, "IFCIDENTIFIER");
+        Equals("Prop 0 value", props![0].NominalValue!.value, "300x300");
     });
 
     await WithIFCFileLoaded("all_propertysets", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
@@ -36,7 +35,7 @@ export default async function() {
             let expressID = lines.get(i);
             if (expressID !== 0)
             {
-                let propertySet = ifcapi.GetLine(modelID, expressID) as WebIFC.IfcPropertySet;
+                let propertySet = ifcapi.GetLine(modelID, expressID) as WebIFC.IFC2X3.IfcPropertySet;
                 numPropsCount += propertySet.HasProperties.length;
             }
         }
@@ -55,14 +54,14 @@ export default async function() {
         // grab all propertyset lines in the file
         let lines = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCRELDEFINESBYPROPERTIES);
 
-        let propSetIds = [];
+        let propSetIds: any = [];
         for (let i = 0; i < lines.size(); i++)
         {
             let relID = lines.get(i);
-            let rel = ifcapi.GetLine(modelID, relID) as WebIFC.IfcRelDefinesByProperties;
+            let rel = ifcapi.GetLine(modelID, relID) as WebIFC.IFC2X3.IfcRelDefinesByProperties;
             let foundElement = false;
-            rel.RelatedObjects.forEach((relID: WebIFC.Handle<IfcObjectDefinition>) => {
-                if (relID.value === elementID)
+            rel.RelatedObjects.forEach((relID: any ) => {
+                if (typeof relID.value != "undefined" &&  relID.value === elementID)
                 {
                     foundElement = true;
                 }
@@ -72,20 +71,20 @@ export default async function() {
             {
                 if (!Array.isArray(rel.RelatingPropertyDefinition))
                 {
-                    let handle = rel.RelatingPropertyDefinition as WebIFC.Handle<IfcPropertySetDefinition>;
+                    let handle = rel.RelatingPropertyDefinition as WebIFC.Handle<WebIFC.IFC2X3.IfcPropertySetDefinition>;
                     propSetIds.push(handle.value);
                 }
             }
         }
 
         // count number of properties
-        let propsets = propSetIds.map(id => ifcapi.GetLine(modelID, id, true));
+        let propsets = propSetIds.map((id:number) => ifcapi.GetLine(modelID, id, true));
 
         Equals("num propsets", propsets.length, 5);
 
-        let props = [];
-        propsets.forEach((set) => {
-            set.HasProperties.forEach(p => {
+        let props: any = [];
+        propsets.forEach((set:any) => {
+            set.HasProperties.forEach((p:any) => {
                 console.log(`${set.Name.value}/${p.Name.value}: [${p.NominalValue.label}] ${p.NominalValue.value}`);
                 props.push(p);
             });
