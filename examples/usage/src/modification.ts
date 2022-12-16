@@ -1,8 +1,8 @@
 import * as WebIFC from "../../../dist/web-ifc-api-node.js";
-import { Equals, WithIFCFileLoaded, TestInfo } from "./utils";
+import { Equals, WithIFCFileLoaded } from "./utils";
 
 export default async function() {
-    await WithIFCFileLoaded("modify_single_line", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
+    await WithIFCFileLoaded("modify_single_line", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
 
         let newGuidValue = "<MODIFIED_GUID>";
 
@@ -29,7 +29,7 @@ export default async function() {
 
     });
 
-    await WithIFCFileLoaded("modify_nested_line", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
+    await WithIFCFileLoaded("modify_nested_line", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
 
         let modifiedNameValue = "<MODIFIED_NAME>";
 

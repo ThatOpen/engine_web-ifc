@@ -1,12 +1,12 @@
 import * as WebIFC from "../../../dist/web-ifc-api-node.js";
-import { Equals, WithIFCFileLoaded, TestInfo } from "./utils";
+import { Equals, WithIFCFileLoaded } from "./utils";
 
 let settings: any = {
     COORDINATE_TO_ORIGIN: true
 }
 
 export default async function() {
-    await WithIFCFileLoaded("coordinate_model", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
+    await WithIFCFileLoaded("coordinate_model", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
         // load all geometry so that we have a coordination
         ifcapi.LoadAllGeometry(modelID);
 

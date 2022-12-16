@@ -6,53 +6,41 @@ const FILE_NAME = "../example.ifc";
 
 let clog = console.log.bind(console);
 
-export interface TestInfo
-{
-    rawFileData: Uint8Array;    
-}
-
-export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => void, settings?: WebIFC.LoaderSettings)
-{
+export async function WithIFCFileLoaded(name: string, usageExample: (ifcapi: WebIFC.IfcAPI, modelID: number) => void, settings?: WebIFC.LoaderSettings) {
     console.log("Start " + chalk.green(`${name}`));
 
-    console.log = function() {
+    console.log = function () {
         clog.apply(this, [chalk.gray(`[${name}]:`), ...arguments]);
     }
     const ifcData = fs.readFileSync(FILE_NAME);
 
-
     const ifcapi = new WebIFC.IfcAPI();
-//    ifcapi.SetWasmPath("node_modules/web-ifc/");
+    //    ifcapi.SetWasmPath("node_modules/web-ifc/");
     ifcapi.SetWasmPath("./");
     await ifcapi.Init();
 
-    let info: TestInfo = {
-        rawFileData: new Uint8Array(ifcData)
-    };
+    let rawFileData = new Uint8Array(ifcData)
 
-    let modelID = ifcapi.OpenModel(info.rawFileData, settings);
+    let modelID = ifcapi.OpenModel(rawFileData, settings);
 
     let startTime = WebIFC.ms();
-    usageExample(ifcapi, modelID, info);
+    usageExample(ifcapi, modelID);
     let endTime = WebIFC.ms();
 
     console.log = clog;
-    
+
     console.log("End " + chalk.green(`${name}`) + chalk.yellow(` (${endTime - startTime} ms elapsed)`));
-    
+
     ifcapi.CloseModel(modelID);
 }
 
-export function Equals(name: string, value: any, expectedValue: any)
-{
-    if (value !== expectedValue)
-    {
+export function Equals(name: string, value: any, expectedValue: any) {
+    if (value !== expectedValue) {
         let msg = `[${name}] expected: ${JSON.stringify(expectedValue, null, 4)}, received: ${JSON.stringify(value, null, 4)}`;
         console.log(chalk.redBright(`${msg}`));
         throw new Error(msg)
     }
-    else
-    {
+    else {
         console.log(chalk.green(`${name}`));
     }
 }
