@@ -534,27 +534,22 @@ export class IfcAPI
      * @modelID Model handle retrieved by OpenModel
      */
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
-       const map = new Map<string | number, string | number>();
-
-       for(let x = 0; x < Object().keys(IfcEntities).length; x++){
-
-           const type = x;
-           const lines = this.GetLineIDsWithType(modelID, type);
-           const size = lines.size();
-
-           for(let y = 0; y < size; y++){
-
-               const expressID = lines.get(y);
-               const info = this.GetLine(modelID, expressID);
-               if (info.GlobalId == null) continue;
-               const globalID = info.GlobalId.value;
-
-               map.set(expressID, globalID);
-               map.set(globalID, expressID);
-           }
-       }
-
-       this.ifcGuidMap.set(modelID, map);
+        const map = new Map<string | number, string | number>();
+        for (const typeId in IfcEntities) {
+            const lines = this.GetLineIDsWithType(modelID, Number(typeId));
+            const size = lines.size();
+            for (let y = 0; y < size; y++) {
+                const expressID = lines.get(y);
+                const info = this.GetLine(modelID, expressID);
+                if (info.GlobalId == null) {
+                    continue;
+                }
+                const globalID = info.GlobalId.value;
+                map.set(expressID, globalID);
+                map.set(globalID, expressID);
+            }
+        }
+        this.ifcGuidMap.set(modelID, map);
     }
 
     SetWasmPath(path: string, absolute = false){
