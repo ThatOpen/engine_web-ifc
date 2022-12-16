@@ -515,6 +515,17 @@ export class IfcAPI
     {
         return this.wasmModule.GetMaxExpressID(modelID);
     }
+
+    /**
+         * Returns the maximum ExpressID value in the IFC file after incrementing the maximum ExpressID by the increment size, ex.- #9999999
+         * @param modelID Model handle retrieved by OpenModel
+         * @param incrementSize The value to add to the max ExpressID for the new max ExpressID
+         * @returns ExpressID numerical value
+         */
+    IncrementMaxExpressID(modelID: number, incrementSize: number)
+    {
+        return this.wasmModule.IncrementMaxExpressID(modelID, incrementSize);
+    }
     
     /**
          * Returns the type of a given ifc entity in the fiule.

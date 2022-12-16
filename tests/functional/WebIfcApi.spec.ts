@@ -152,6 +152,12 @@ describe('WebIfcApi reading methods', () => {
     test('returns same expressID if it is the max ID', () => {
         expect(ifcApi.GetNextExpressID(modelID, 14312)).toBe(14312);
     })
+    test('can increment the max expressID', () => {
+        let maxEID = ifcApi.GetMaxExpressID(modelID);
+        let newEID = ifcApi.IncrementMaxExpressID(modelID, 2);
+        ifcApi.IncrementMaxExpressID(modelID, -2);
+        expect(newEID).toBe(maxEID + 2);
+    })
 
 
 })
