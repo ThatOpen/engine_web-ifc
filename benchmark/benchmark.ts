@@ -141,7 +141,7 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
 
 async function GetBenchmarkFiles(): Promise<string[]>
 {
-    return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => f.endsWith(".ifc")).map((f) => path.join(BENCHMARK_FILES_DIR, f)).slice(0, 8);
+    return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => f.endsWith(".ifc.test")).map((f) => path.join(BENCHMARK_FILES_DIR, f)).slice(0, 8);
 }
 
 async function getSystemInformations(): Promise<SystemInfo>
