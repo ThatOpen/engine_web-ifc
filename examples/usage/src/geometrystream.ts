@@ -1,8 +1,8 @@
 import * as WebIFC from "../../../dist/web-ifc-api-node.js";
-import { Equals, WithIFCFileLoaded, TestInfo } from "./utils";
+import { Equals, WithIFCFileLoaded } from "./utils";
 
 export default async function() {
-    await WithIFCFileLoaded("geometrystream", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
+    await WithIFCFileLoaded("geometrystream", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
 
         let totalSizeVerts = 0;
         let totalSizeIndices = 0;
@@ -30,7 +30,7 @@ export default async function() {
         Equals("total num indices", totalSizeIndices, 43998);
     });
 
-    await WithIFCFileLoaded("partialgeometrystream", (ifcapi: WebIFC.IfcAPI, modelID: number, info: TestInfo) => {
+    await WithIFCFileLoaded("partialgeometrystream", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
 
         let totalSizeVerts = 0;
         let totalSizeIndices = 0;

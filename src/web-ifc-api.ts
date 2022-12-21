@@ -515,6 +515,17 @@ export class IfcAPI
     {
         return this.wasmModule.GetMaxExpressID(modelID);
     }
+
+    /**
+         * Returns the maximum ExpressID value in the IFC file after incrementing the maximum ExpressID by the increment size, ex.- #9999999
+         * @param modelID Model handle retrieved by OpenModel
+         * @param incrementSize The value to add to the max ExpressID for the new max ExpressID
+         * @returns ExpressID numerical value
+         */
+    IncrementMaxExpressID(modelID: number, incrementSize: number)
+    {
+        return this.wasmModule.IncrementMaxExpressID(modelID, incrementSize);
+    }
     
     /**
          * Returns the type of a given ifc entity in the fiule.
@@ -534,27 +545,22 @@ export class IfcAPI
      * @modelID Model handle retrieved by OpenModel
      */
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
-       const map = new Map<string | number, string | number>();
-
-       for(let x = 0; x < Object().keys(IfcEntities).length; x++){
-
-           const type = x;
-           const lines = this.GetLineIDsWithType(modelID, type);
-           const size = lines.size();
-
-           for(let y = 0; y < size; y++){
-
-               const expressID = lines.get(y);
-               const info = this.GetLine(modelID, expressID);
-               if (info.GlobalId == null) continue;
-               const globalID = info.GlobalId.value;
-
-               map.set(expressID, globalID);
-               map.set(globalID, expressID);
-           }
-       }
-
-       this.ifcGuidMap.set(modelID, map);
+        const map = new Map<string | number, string | number>();
+        for (const typeId in IfcEntities) {
+            const lines = this.GetLineIDsWithType(modelID, Number(typeId));
+            const size = lines.size();
+            for (let y = 0; y < size; y++) {
+                const expressID = lines.get(y);
+                const info = this.GetLine(modelID, expressID);
+                if (info.GlobalId == null) {
+                    continue;
+                }
+                const globalID = info.GlobalId.value;
+                map.set(expressID, globalID);
+                map.set(globalID, expressID);
+            }
+        }
+        this.ifcGuidMap.set(modelID, map);
     }
 
     SetWasmPath(path: string, absolute = false){

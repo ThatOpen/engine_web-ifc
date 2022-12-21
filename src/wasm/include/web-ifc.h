@@ -573,6 +573,12 @@ namespace webifc
 			return _metaData.expressIDToLine.size() - 1;
 		}
 
+		uint32_t IncreaseMaxExpressId(uint32_t incrementSize)
+		{
+			_metaData.expressIDToLine.resize(GetMaxExpressId() + incrementSize + 1);
+			return GetMaxExpressId();
+		}
+
 		uint32_t CopyTapeForExpressLine(uint32_t expressID, uint8_t *dest)
 		{
 			uint32_t startOffset = _metaData.lines[_metaData.expressIDToLine[expressID]].tapeOffset;
