@@ -64,6 +64,8 @@ See [examples](https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src
 
 The WASM library is built through emscripten, please see [the emscripten installation guide](https://emscripten.org/docs/getting_started/downloads.html) for information on how to set up emscripten. Afterwards `emsdk_env` needs to be in your path.
 
+To build the WASM you also need CMAKE [see here] (https://cmake.org/download/) and (on windows) MINGW [see here] (https://sourceforge.net/projects/mingw/) - when installing MINGW you only need install the msys-make and msys-patch packages.
+
 ### WASM library
 
 Run `npm install` to install all dependencies.
