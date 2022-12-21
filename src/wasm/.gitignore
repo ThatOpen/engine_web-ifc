@@ -4,3 +4,4 @@ ifc2x4.ts
 *.wasm
 *.map
 build
+build_debug

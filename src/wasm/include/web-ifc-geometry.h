@@ -15,14 +15,14 @@
 #include <fstream>
 #include <iostream>
 
-#include "../deps/glm/glm/glm.hpp"
-#include "../deps/glm/glm/gtx/transform.hpp"
-#include "../deps/earcut/include/mapbox/earcut.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <mapbox/earcut.hpp>
 
 #include "math/intersect-mesh-mesh.h"
 #include "math/bool-mesh-mesh.h"
 
-#include "tinynurbs/tinynurbs.h"
+#include <tinynurbs/tinynurbs.h>
 
 #include "ifc-schema.h"
 #include "web-ifc.h"

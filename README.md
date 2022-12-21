@@ -70,7 +70,7 @@ Run `npm install` to install all dependencies.
 
 Run `npm run setup-env` whenever you open a new terminal, this will set up the required emscripten environment variables for you to compile code.
 
-Run `npm run build-release-all` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
+Run `npm run build-release` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
 
 If you wish to build the WASM with debugging enabled you can run `npm run build-debug`. This will enable you to inspect debugging information better when running web-ifc.
 
