@@ -60,7 +60,7 @@ See [examples](https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src
 
 ## Building WASM module
 
-### Setting up emscripten
+### Setting up emscripten and build system
 
 The WASM library is built through emscripten, please see [the emscripten installation guide](https://emscripten.org/docs/getting_started/downloads.html) for information on how to set up emscripten. Afterwards `emsdk_env` needs to be in your path.
 
