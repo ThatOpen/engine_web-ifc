@@ -11,9 +11,9 @@
 
 #ifdef __EMSCRIPTEN__
 #include <manifold/include/manifold.h>
-
-//#define DEBUG_BOOLEAN_INPUT
 #endif
+
+
 
 namespace webifc
 {
@@ -103,13 +103,9 @@ namespace webifc
     }
 
     #ifdef __EMSCRIPTEN__
-    manifold::Mesh geom2mesh(const IfcGeometry& geometry) {
+    manifold::Manifold * geom2manifold(const IfcGeometry& geometry, uint32_t expressID) {
         manifold::Mesh mesh;
-
-        #ifdef DEBUG_BOOLEAN_INPUT
-        puts("# geometry.obj\n");
-        #endif
-
+        
         // unfortunately we cannot just copy geometry indices
         // since duplicate vertices make manifold lib unhappy
         // for now let's just brute-force de-duplication here
@@ -167,11 +163,43 @@ namespace webifc
             printf("f %d %d %d\n", a + 1, b + 1, c + 1);
             #endif
         }
-
-        return mesh;
+        
+        manifold::Manifold * manifold = new manifold::Manifold(mesh);
+        
+        if (manifold->Status() != manifold::Manifold::Error::NO_ERROR) {
+              std::string errorName = "";
+              switch (manifold->Status()) {
+                case manifold::Manifold::Error::NON_FINITE_VERTEX: 
+                  errorName = "NON_FINITE_VERTEX";
+                  break;
+                case manifold::Manifold::Error::NOT_MANIFOLD: 
+                  errorName = "NOT_MANIFOLD";
+                  break;
+                case manifold::Manifold::Error::VERTEX_INDEX_OUT_OF_BOUNDS: 
+                  errorName =  "VERTEX_INDEX_OUT_OF_BOUNDS";
+                  break;
+                case manifold::Manifold::Error::PROPERTIES_WRONG_LENGTH: 
+                  errorName = "PROPERTIES_WRONG_LENGTH";
+                  break;
+                case manifold::Manifold::Error::TRI_PROPERTIES_WRONG_LENGTH: 
+                  errorName = "TRI_PROPERTIES_WRONG_LENGTH";
+                  break;
+                case manifold::Manifold::Error::TRI_PROPERTIES_OUT_OF_BOUNDS:
+                  errorName = "TRI_PROPERTIES_OUT_OF_BOUNDS";
+                  break;
+                case manifold::Manifold::Error::NO_ERROR:
+                  break;
+              }
+              std:: cout << "Input Geometry(#"<<expressID<<") to BooleanFunctions Not Manifold:"+errorName<<std::endl;
+      				
+              
+              return NULL;
+        }
+                
+        return manifold;
     }
 
-    IfcGeometry boolMultiOp_Manifold(const IfcGeometry& firstGeom, const std::vector<IfcGeometry>& secondGeoms)
+    IfcGeometry boolMultiOp_Manifold(const IfcGeometry& firstGeom, const std::vector<IfcGeometry>& secondGeoms,uint32_t expressID)
     {
         #ifdef DEBUG_BOOLEAN_INPUT
         printf("\nboolMultiOp_Manifold, %d holes\n", (int)secondGeoms.size());
@@ -179,50 +207,39 @@ namespace webifc
 
         IfcGeometry resultGeom;
 
-        manifold::Mesh firstMesh = geom2mesh(firstGeom);
+        manifold::Manifold * first = geom2manifold(firstGeom,expressID);
+        //input geometry is not a manifold - let's skip this bool calculatuion so we at least produce a rendering.
+        if (!first) return firstGeom;
+        
+      
+        // collect holes
+        manifold::Manifold combinedHole;
+        bool performedBoolean=false;
 
-        // manifold throws exceptions if unhappy - however
-        // exceptions do not work in emscripten by default
-        // due to the overhead and/or poor browser support
-        // https://emscripten.org/docs/porting/exceptions.html
-        // we have to either build with exceptions or hope
-        // that there will be no errors triggered here :')
-
-        try
+        for (auto& holeGeom : secondGeoms)
         {
-            manifold::Manifold first(firstMesh);
-
-            // collect holes
-            manifold::Manifold combinedHole;
-
-            for (auto& holeGeom : secondGeoms)
-            {
-                manifold::Mesh holeMesh = geom2mesh(holeGeom);
-
-                manifold::Manifold holeManifold(holeMesh);
-
-                combinedHole += holeManifold;
-            }
-
-            // subtract the combined hole
-            if (combinedHole.IsManifold()) {
-                first -= combinedHole;
-            }
-
-            // convert back to IfcGeometry
-            manifold::Mesh resultMesh = first.GetMesh();
-
-            for (int i = 0, n = resultMesh.triVerts.size(); i < n; i++) {
-                resultGeom.AddFace(
-                    resultMesh.vertPos[resultMesh.triVerts[i][0]],
-                    resultMesh.vertPos[resultMesh.triVerts[i][1]],
-                    resultMesh.vertPos[resultMesh.triVerts[i][2]]
-                );
+            manifold::Manifold * holeManifold = geom2manifold(holeGeom,expressID);
+            
+            if (holeManifold) {
+              combinedHole += (*holeManifold);
+              performedBoolean = true;
             }
         }
-        catch (const std::runtime_error& e)
-        {
-            printf("%s\n", e.what());
+        
+        // subtract the combined hole
+        if (combinedHole.IsManifold() && performedBoolean) {
+            (*first) -= combinedHole;
+        }
+        
+        // convert back to IfcGeometry
+        manifold::Mesh resultMesh = first->GetMesh();
+
+        for (int i = 0, n = resultMesh.triVerts.size(); i < n; i++) {
+            resultGeom.AddFace(
+                resultMesh.vertPos[resultMesh.triVerts[i][0]],
+                resultMesh.vertPos[resultMesh.triVerts[i][1]],
+                resultMesh.vertPos[resultMesh.triVerts[i][2]]
+            );
         }
 
         return resultGeom;

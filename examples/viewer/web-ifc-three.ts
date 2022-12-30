@@ -62,8 +62,9 @@ export class IfcThree
             //console.log(this.ifcAPI.wasmModule.HEAPU8.length);
         });
 
+        console.log("Loading "+geometries.length+" geometries and "+transparentGeometries.length+" transparent geometries");
         if (geometries.length > 0)
-        {
+        { 
             const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
             let mat = new THREE.MeshPhongMaterial();
             mat.vertexColors = true;

@@ -390,7 +390,7 @@ namespace webifc
 							voidGeoms.push_back(flatVoidMesh);
 						}
 
-						flatElementMesh = BoolSubtract(flatElementMesh, voidGeoms);
+						flatElementMesh = BoolSubtract(flatElementMesh, voidGeoms, line.expressID);
 					}
 
 					_expressIDToGeometry[line.expressID] = flatElementMesh;
@@ -453,7 +453,7 @@ namespace webifc
 					std::vector<IfcGeometry> flatSecondGeoms;
 					flatSecondGeoms.push_back(flatSecondMesh);
 
-					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondGeoms);
+					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondGeoms, line.expressID);
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
@@ -502,7 +502,7 @@ namespace webifc
 					std::vector<IfcGeometry> flatSecondGeoms;
 					flatSecondGeoms.push_back(flatSecondMesh);
 
-					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondGeoms);
+					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondGeoms, line.expressID);
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
@@ -1182,7 +1182,7 @@ namespace webifc
 			return result;
 		}
 
-		IfcGeometry BoolSubtract(const IfcGeometry &firstGeom, const std::vector<IfcGeometry> &secondGeoms)
+		IfcGeometry BoolSubtract(const IfcGeometry &firstGeom, const std::vector<IfcGeometry> &secondGeoms, uint32_t expressID)
 		{
 			IfcGeometry result;
 			IfcGeometry secondGeom;
@@ -1271,7 +1271,7 @@ namespace webifc
 					return firstGeom;
 				}
 
-				result = boolMultiOp_Manifold(firstGeom, seconds);
+				result = boolMultiOp_Manifold(firstGeom, seconds, expressID);
 			}
 #endif
 
@@ -1593,6 +1593,26 @@ namespace webifc
 
 				return false;
 			}
+			case ifc::IFCFILLAREASTYLE:
+			{
+				_loader.MoveToArgumentOffset(line, 1);
+				auto ifcFillStyleSelects = _loader.GetSetArgument();
+
+				for (auto &styleSelect : ifcFillStyleSelects)
+				{
+					uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
+					
+					glm::dvec4 color;
+					bool foundColor = GetColor(styleSelectID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+
+				return false;
+			}
 			case ifc::IFCMATERIALLIST:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
@@ -1603,6 +1623,81 @@ namespace webifc
 					uint32_t materialID = _loader.GetRefArgument(material);
 					glm::dvec4 color;
 					bool foundColor = GetColor(materialID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALCONSTITUENTSET:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto materialContituents = _loader.GetSetArgument();
+
+				for (auto &materialContituent : materialContituents)
+				{
+					uint32_t materialContituentID = _loader.GetRefArgument(materialContituent);
+					glm::dvec4 color;
+					bool foundColor = GetColor(materialContituentID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALCONSTITUENT:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto material = _loader.GetRefArgument();
+				glm::dvec4 color;
+				bool foundColor = GetColor(material, color);
+				if (foundColor)
+				{
+					outputColor = color;
+					return true;
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALPROFILESETUSAGE:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto profileSet = _loader.GetRefArgument();
+				glm::dvec4 color;
+				bool foundColor = GetColor(profileSet, color);
+				if (foundColor)
+				{
+					outputColor = color;
+					return true;
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALPROFILE:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto profileSet = _loader.GetRefArgument();
+				glm::dvec4 color;
+				bool foundColor = GetColor(profileSet, color);
+				if (foundColor)
+				{
+					outputColor = color;
+					return true;
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALPROFILESET:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto materialProfiles = _loader.GetSetArgument();
+
+				for (auto &materialProfile : materialProfiles)
+				{
+					uint32_t materialProfileID = _loader.GetRefArgument(materialProfile);
+					glm::dvec4 color;
+					bool foundColor = GetColor(materialProfileID, color);
 					if (foundColor)
 					{
 						outputColor = color;
@@ -4665,8 +4760,7 @@ namespace webifc
 				auto selfIntersect = _loader.GetStringArgument();
 				auto knotMultiplicitiesSet = _loader.GetSetArgument(); // The multiplicities of the knots. This list defines the number of times each knot in the knots list is to be repeated in constructing the knot array.
 				auto knotSet = _loader.GetSetArgument();			   // The list of distinct knots used to define the B-spline basis functions.
-				// auto knotSpec = _loader.GetSetArgument(); //The description of the knot type. This is for information only.
-
+				
 				for (auto &token : points)
 				{
 					uint32_t pointId = _loader.GetRefArgument(token);
@@ -4730,7 +4824,6 @@ namespace webifc
 				std::vector<glm::u32> knotMultiplicities;
 				std::vector<glm::f64> knots;
 				std::vector<glm::f64> weights;
-
 				_loader.MoveToArgumentOffset(line, 0);
 				double degree = _loader.GetDoubleArgument();
 				auto points = _loader.GetSetArgument();
@@ -4739,7 +4832,7 @@ namespace webifc
 				auto selfIntersect = _loader.GetStringArgument();
 				auto knotMultiplicitiesSet = _loader.GetSetArgument(); // The multiplicities of the knots. This list defines the number of times each knot in the knots list is to be repeated in constructing the knot array.
 				auto knotSet = _loader.GetSetArgument();
-				auto knotSpec = _loader.GetSetArgument(); // The description of the knot type. This is for information only.
+				auto knotSpec = _loader.GetStringArgument(); // The description of the knot type. This is for information only.
 				auto weightsSet = _loader.GetSetArgument();
 
 				for (auto &token : points)
@@ -4750,7 +4843,7 @@ namespace webifc
 
 				for (auto &token : knotMultiplicitiesSet)
 				{
-					knotMultiplicities.push_back(_loader.GetRefArgument(token));
+					knotMultiplicities.push_back(_loader.GetDoubleArgument(token));
 				}
 
 				for (auto &token : knotSet)
