@@ -53,8 +53,8 @@
     "test": "jest  --runInBand ",
     "test:unit": "jest  --runInBand --testMatch['**/tests/unit/**/*.spec.ts']",
     "test:functional": "jest  --runInBand --testMatch['**/tests/functional/**/*.spec.ts']",
-    "regression-test-build": "esbuild tests/regression/src/index.js --bundle --minify --sourcemap --outfile=tests/regression/public/build/test.js",
-    "regression-test": "npm run regression-test-build && http-server"
+    "regression-test-build": "esbuild tests/regression/src/index.js --bundle --sourcemap --platform=node --outfile=tests/regression/dist/test.js && cd tests/regression && cpy public/*.html dist/ --flat && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../../dist/web-ifc-mt.wasm dist/web-ifc-mt.wasm && cpy ../../dist/web-ifc-mt.worker.js dist/web-ifc-mt-worker.js && cpy ../../dist/web-ifc-mt.js dist/web-ifc-mt.js",
+    "regression-test": "npm run regression-test-build && cd tests/regression/dist && ws -p 8080 --cors.opener-policy same-origin --cors.embedder-policy require-corp"
   },
   "author": "tomvandig",
   "files": [
@@ -75,9 +75,8 @@
     "concurrently": "^6.2.0",
     "cpy-cli": "^4.2.0",
     "esbuild": "^0.12.15",
-    "http-server": "^14.1.1",
+    "local-web-server": "^5.2.1",
     "jest": "^27.4.2",
-    "monaco-editor": "^0.26.1",
     "npm-watch": "^0.10.0",
     "three": "^0.130.1",
     "ts-jest": "^27.0.7",

@@ -81,7 +81,7 @@ export function ConvertIfcToThreeJS (fileUrl, onReady)
     if (ifcApi === null) {
         LogBegin ('Init IfcAPI');
         ifcApi = new WebIFC.IfcAPI ();
-        ifcApi.SetWasmPath ('./../../../../dist/');
+        ifcApi.SetWasmPath ('');
         ifcApi.Init ().then (() => {
             LogEnd ('Init IfcAPI');
             DownloadAndConvertIfcFile (fileUrl, onReady);
