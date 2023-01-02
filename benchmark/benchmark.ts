@@ -144,7 +144,9 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
         console.log("-------------------------------");
         console.log(filename);
         console.log("-------------------------------");
+        console.log("-------------------------------SLOW BOOL---------------------");
         result.results.set(filename, await BenchmarkIfcFile(module, filename,false));
+        console.log("-------------------------------FAST BOOL---------------------");
         result.results.set(filename+"-FASTBOOL", await BenchmarkIfcFile(module, filename,true));
     }
 
