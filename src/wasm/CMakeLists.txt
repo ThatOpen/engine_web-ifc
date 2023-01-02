@@ -17,8 +17,6 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
 	set(DEBUG_FLAG "")
 endif()
-#list(APPEND CMAKE_ARGS_MT ${DEBUG_FLAG})
-#list(APPEND CMAKE_ARGS ${DEBUG_FLAG})
 
 project (web-ifc)
 enable_testing ()
