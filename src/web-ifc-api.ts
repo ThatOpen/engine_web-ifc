@@ -210,7 +210,7 @@ export class IfcAPI
      * Creates a new model and returns a modelID number
      * @data Settings settings for generating data the model
     */
-    CreateModel(settings?: LoaderSettings): number
+    CreateModel(schema: string,settings?: LoaderSettings): number
     {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
@@ -222,6 +222,7 @@ export class IfcAPI
             ...settings
         };
         let result = this.wasmModule.CreateModel(s);
+        this.modelSchemaList[result] = schema;
         return result;
     }
 
@@ -301,7 +302,10 @@ export class IfcAPI
             else lineData[inverseProp[0]] = [];
             
             let targetTypes = [inverseProp[1]];
-            targetTypes=targetTypes.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
+            if (typeof ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]] != "undefined")
+            {
+              targetTypes=targetTypes.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
+            }
             let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, targetTypes, inverseProp[2], inverseProp[3]);
             if (!inverseProp[3] && inverseIDs.size()>0) 
             {
@@ -419,7 +423,7 @@ export class IfcAPI
     {
         let types: Array<number> = [];
         types.push(type);
-        if (includeInherited)
+        if (includeInherited && typeof ifc.InheritanceDef[this.modelSchemaList[modelID]][type] != "undefined")
         {
           types = types.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][type]);
         } 
