@@ -1,22 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as WebIFC from '../../dist/web-ifc-api-node.js';
-import * as IfcElements from "../../src/ifc2x4";
-import type {
-    IfcAPI
-} from '../../dist/web-ifc-api-node.js';
-import type {
-    Properties
-} from '../../dist/helpers/properties.js';
+import {IfcAPI,IFCWALLSTANDARDCASE,LogLevel}  from '../../dist/web-ifc-api-node.js';
+import {Properties} from '../../dist/helpers/properties.js';
 
 let modelID: number
 let ifcApi: IfcAPI
 let properties: Properties
 
 beforeAll(async () => {
-    ifcApi = new WebIFC.IfcAPI();
+    ifcApi = new IfcAPI();
     await ifcApi.Init();
-    ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
+    ifcApi.SetLogLevel(LogLevel.OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
@@ -25,19 +19,19 @@ beforeAll(async () => {
 
 describe('Properties', () => {
     test('can get all IFCWALLSTANDARDCASE items', async () => {
-        const walls: any[] = await properties.getAllItemsOfType(modelID, IfcElements.IFCWALLSTANDARDCASE, false)
-        expect(walls.length).toBe(17)
+        const walls: any = await ifcApi.GetLineIDsWithType(modelID, IFCWALLSTANDARDCASE)
+        expect(walls.size()).toBe(17)
     })
 
     test('can get IFCWALLSTANDARDCASE details', async () => {
-        const allWalls: any[] = await properties.getAllItemsOfType(modelID, IfcElements.IFCWALLSTANDARDCASE, false)
-        const firstWallId = allWalls[0]
+        const allWalls: any = await ifcApi.GetLineIDsWithType(modelID, IFCWALLSTANDARDCASE)
+        const firstWallId = allWalls.get(0);
         const line = await properties.getItemProperties(modelID, firstWallId)
         expect(line.Name.value).toEqual('Basic Wall:150 Concrete:677248')
     })
 
     test('can get IFC type from integer', async () => {
-        const wallsStandard = properties.getIfcType(IfcElements.IFCWALLSTANDARDCASE);
+        const wallsStandard = properties.getIfcType(IFCWALLSTANDARDCASE);
         expect(wallsStandard).toEqual("IFCWALLSTANDARDCASE")
     })
 
@@ -87,14 +81,15 @@ describe('Properties', () => {
     })
 
     test('can get all items of a given type', async () => {
-        const IFCWALLSTANDARDCASEITEMS: number[] = await properties.getAllItemsOfType(modelID, IfcElements.IFCWALLSTANDARDCASE, false);
-        expect(IFCWALLSTANDARDCASEITEMS.length).toEqual(17);
+        const IFCWALLSTANDARDCASEITEMS: any = await ifcApi.GetLineIDsWithType(modelID, IFCWALLSTANDARDCASE);
+        expect(IFCWALLSTANDARDCASEITEMS.size()).toEqual(17);
     })
 
     test('can get all items of a given type with more details ( verbose )', async () => {
-        const IFCWALLSTANDARDCASEITEMS: any = await properties.getAllItemsOfType(modelID, IfcElements.IFCWALLSTANDARDCASE, true);
-        expect(IFCWALLSTANDARDCASEITEMS.length).toEqual(17);
-        expect(IFCWALLSTANDARDCASEITEMS[0].hasOwnProperty("GlobalId")).toBeTruthy();
+        const IFCWALLSTANDARDCASEITEMS: any = await ifcApi.GetLineIDsWithType(modelID, IFCWALLSTANDARDCASE);
+        expect(IFCWALLSTANDARDCASEITEMS.size()).toEqual(17);
+        const IFCWALLSTANDARDCASELINEDATA: any = await ifcApi.GetLine(modelID, IFCWALLSTANDARDCASEITEMS.get(0));
+        expect(IFCWALLSTANDARDCASELINEDATA.hasOwnProperty("GlobalId")).toBeTruthy();
     })
 
 })
