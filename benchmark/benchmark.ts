@@ -19,6 +19,7 @@ class FileResult
     totalNumberOfProducedMesh !: number;
     totalNumberOfGeometries !: number;
     totalNumberOfErrors !: number;
+    fastBool !: boolean;
 }
 
 class SystemInfo{
@@ -88,10 +89,12 @@ class BenchmarkResultFormatter{
     }
 }
 
-async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResult>
+async function BenchmarkIfcFile(module: any, filename: string, fastBool: boolean): Promise<FileResult>
 {
     let result = new FileResult();
     result.filename = filename;
+    result.fastBool = fastBool;
+    
     
     //let modelID = module.OpenModel("example.ifc", new Uint8Array(data.toString()));
 
@@ -99,7 +102,7 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     const ifcFileContent = fs.readFileSync(ifcFilePath);
     
     let startTime = ms();
-    let modelID : number = module.OpenModel(ifcFileContent);
+    let modelID : number = module.OpenModel(ifcFileContent,{ USE_FAST_BOOLS: fastBool });
     let endTime = ms();
     result.timeTakenToOpenModel = endTime - startTime; // time to open and close the file and nothing else
 
@@ -138,7 +141,11 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
     for (let file in files)
     {
         let filename = files[file];
-        result.results.set(filename, await BenchmarkIfcFile(module, filename));
+        console.log("-------------------------------");
+        console.log(filename);
+        console.log("-------------------------------");
+        result.results.set(filename, await BenchmarkIfcFile(module, filename,false));
+        result.results.set(filename+"-FASTBOOL", await BenchmarkIfcFile(module, filename,true));
     }
 
     return result;
@@ -172,6 +179,7 @@ function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string
     let formatter = new BenchmarkResultFormatter();
     formatter.columns = {
         filename: "filename",
+        fastBool: "Fast Bools Enabled",
         fileSize: "Size (mo)",
         timeTakenToOpenModel: "Time to open model (ms)",
         timeSuccess: "Time to execute all (ms)",
@@ -188,6 +196,9 @@ function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string
 async function RunBenchmark()
 {
     let files = await GetBenchmarkFiles();
+    for (let i=0; i < files.length;i++) {
+      console.log(files[i]);
+    }
     let systemInfo = await getSystemInformations();
     console.log(``);
     console.log(systemInfo);
