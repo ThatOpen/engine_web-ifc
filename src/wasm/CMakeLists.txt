@@ -44,7 +44,11 @@ set (
 set (WebIfcTestFiles ${WebIfcTestSourceFiles})
 
 #set the command needed to patch manifold
-set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || true)
+if (WIN32)
+	set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || (exit 0))
+else()
+	set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || true)
+endif()
 
 #download the external projects and save their paths
 ExternalProject_Add(tinynurbs GIT_REPOSITORY "https://github.com/pradeep-pyro/tinynurbs" GIT_TAG "2fc6562d71665312c6298f7c340bace1bcf1b7a1" PREFIX "tinynurbs" CONFIGURE_COMMAND "" BUILD_COMMAND "" INSTALL_COMMAND "")
