@@ -19,6 +19,7 @@ else()
 endif()
 
 project (web-ifc)
+message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 enable_testing ()
 
 set (CMAKE_CXX_STANDARD 17)
@@ -44,11 +45,8 @@ set (
 set (WebIfcTestFiles ${WebIfcTestSourceFiles})
 
 #set the command needed to patch manifold
-if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
-	set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || (exit 0))
-else()
-	set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || true)
-endif()
+set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || cd .)
+
 
 #download the external projects and save their paths
 ExternalProject_Add(tinynurbs GIT_REPOSITORY "https://github.com/pradeep-pyro/tinynurbs" GIT_TAG "2fc6562d71665312c6298f7c340bace1bcf1b7a1" PREFIX "tinynurbs" CONFIGURE_COMMAND "" BUILD_COMMAND "" INSTALL_COMMAND "")
