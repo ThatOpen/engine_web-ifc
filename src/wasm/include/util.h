@@ -187,7 +187,7 @@ namespace webifc
 			if (!computeSafeNormal(a, b, c, normal))
 			{
 				// bail out, zero area triangle
-				printf("zero tri");
+				std::cout << "ZERO:"<<normal[0]<<" " <<normal[1] << " " <<normal[2]<<std::endl;
 				return;
 			}
 
