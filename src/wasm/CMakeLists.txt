@@ -44,7 +44,7 @@ set (
 set (WebIfcTestFiles ${WebIfcTestSourceFiles})
 
 #set the command needed to patch manifold
-if (WIN32)
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 	set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || (exit 0))
 else()
 	set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || true)
