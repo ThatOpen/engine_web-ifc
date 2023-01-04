@@ -1889,6 +1889,8 @@ namespace webifc
 
 		void TriangulateRevolution(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
+			//First we get the revolution data
+
 			glm::dvec3 cent = surface.RevolutionSurface.Direction[3];
 			glm::dvec3 vecX = glm::normalize(surface.RevolutionSurface.Direction[0]);
 			glm::dvec3 vecY = glm::normalize(surface.RevolutionSurface.Direction[1]);
@@ -1908,6 +1910,9 @@ namespace webifc
 			std::vector<double> angleVec;
 			std::vector<double> angleDsp;
 
+			// Now we construct the bounding box of the boundary ...
+			// ... by adding the middle point of all curves
+
 			for (int i = 0; i < bounds.size(); i++)
 			{
 				double xx = 0;
@@ -1917,6 +1922,8 @@ namespace webifc
 				int lastTeam = bounds[i].curve.indices[0];
 				for (int j = 0; j < bounds[i].curve.points.size(); j++)
 				{
+					//If it is the first point of the group we close the previous group ...
+					// ... and create a new one. Else, the point is of the current group
 					if (lastTeam != bounds[i].curve.indices[j] || j == (bounds[i].curve.points.size() - 1))
 					{
 						if (cc > 0)
@@ -1943,6 +1950,16 @@ namespace webifc
 				}
 			}
 
+			//There is a problem when points in the revolution are around 0 degrees
+			//Numerical instabilities can make these points to jump from 0 to 360
+			//It causes lots of trouble when drawing the boundaries in the revolution
+
+			//The method presented here finds the angle of each point, measures the ...
+			// ... angular difference and then, if the difference is bigger than 180 ...
+			// ... corrects it to a lesser value. Finally it gets the first angle and ...
+			// ... adds the angular differences again, reconstructing a corrected boundary.
+
+			//Now we find the angle of each point in the reference plane of the cylinder
 			for (int j = 0; j < bounding.size(); j++)
 			{
 				double xx = bounding[j].x - cent.x;
@@ -1963,6 +1980,8 @@ namespace webifc
 				angleVec.push_back(temp);
 			}
 
+
+
 			for (int i = 0; i < angleVec.size() - 1; i++)
 			{
 				if (angleVec[i] - angleVec[i + 1] > 180)
@@ -1982,6 +2001,8 @@ namespace webifc
 			double startDegrees = angleVec[0];
 			double endDegrees = angleVec[0];
 
+			//Add angular differences starting from the first angle. We also correct the start and end angles
+
 			double temp = angleVec[0];
 			for (int i = 0; i < angleDsp.size(); i++)
 			{
@@ -1995,6 +2016,9 @@ namespace webifc
 					startDegrees = temp;
 				}
 			}
+
+			//Then we use the start and end angles as bounding boxes of the boundary ...
+			// ... we will represent this bounding box.
 
 			double startRad = startDegrees / 180 * CONST_PI;
 			double endRad = endDegrees / 180 * CONST_PI;
@@ -2039,6 +2063,8 @@ namespace webifc
 
 		void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
+			//First we get the cylinder data
+
 			double radius = surface.CylinderSurface.Radius;
 			glm::dvec3 cent = surface.transformation[3];
 			glm::dvec3 vecX = glm::normalize(surface.transformation[0]);
@@ -2051,11 +2077,12 @@ namespace webifc
 			double minZ = 1e+10;
 			double maxZ = -1e+10;
 
+			//Find the relative coordinates of each curve point in the cylinder reference plane
+			//Only retain the max and min relative Z
 			for (int i = 0; i < bounds.size(); i++)
 			{
 				for (int j = 0; j < bounds[i].curve.points.size(); j++)
 				{
-
 					glm::dvec3 vv = bounds[i].curve.points[j] - cent;
 					double dx = glm::dot(vecX, vv);
 					double dy = glm::dot(vecY, vv);
@@ -2081,6 +2108,8 @@ namespace webifc
 			std::vector<double> angleVec;
 			std::vector<double> angleDsp;
 
+			//Find the max. curve index in the boundary
+
 			int maxTeam = 0;
 			for (int i = 0; i < bounds.size(); i++)
 			{
@@ -2092,7 +2121,10 @@ namespace webifc
 					}
 				}
 			}
+
 			std::vector<std::vector<glm::dvec3>> boundingGroups;
+
+			//We group each point with their boundary
 
 			for (int r = 0; r < maxTeam; r++)
 			{
@@ -2115,6 +2147,9 @@ namespace webifc
 			bool end = false;
 			int id = 0;
 
+			//In the case of boundary lines having only 2 endings...
+			//... we omit these lines and add solely curves having > 2 points...
+			//... starting from a 2 point line, by doing it this way we don't have repeated points
 			while (!end && repeats < maxTeam * 3)
 			{
 				if (id >= boundingGroups.size())
@@ -2142,6 +2177,9 @@ namespace webifc
 				id++;
 				repeats++;
 			}
+
+			//If the previous method finds nothing, then we don't have straight lines ...
+			//... then we add all boundary points directly
 			if (bounding.size() == 0)
 			{
 				for (int j = 0; j < boundingGroups.size(); j++)
@@ -2156,6 +2194,17 @@ namespace webifc
 			double startDegrees = 0;
 			double endDegrees = 360;
 
+			//Now we project the points in the cylinder surface
+			//There is a problem when points in the cylinder are around 0 degrees
+			//Numerical instabilities can make these points to jump from 0 to 360
+			//It causes lots of trouble when drawing the boundaries in the cylinder
+
+			//The method presented here finds the angle of each point, measures the ...
+			// ... angular difference and then, if the difference is bigger than 180 ...
+			// ... corrects it to a lesser value. Finally it gets the first angle and ...
+			// ... adds the angular differences again, reconstructing a corrected boundary.
+
+			//Now we find the angle of each point in the reference plane of the cylinder
 			for (int j = 0; j < bounding.size(); j++)
 			{
 				glm::dvec3 vv = bounding[j] - cent;
@@ -2174,6 +2223,7 @@ namespace webifc
 				angleVec.push_back(temp);
 			}
 
+			//Then we find the angular difference
 			for (int i = 0; i < angleVec.size() - 1; i++)
 			{
 				if (angleVec[i] - angleVec[i + 1] > 180)
@@ -2193,6 +2243,8 @@ namespace webifc
 			startDegrees = angleVec[0];
 			endDegrees = angleVec[0];
 
+			//Add angular differences starting from the first angle. We also correct the start and end angles
+
 			double temp = angleVec[0];
 			for (int i = 0; i < angleDsp.size(); i++)
 			{
@@ -2206,6 +2258,9 @@ namespace webifc
 					startDegrees = temp;
 				}
 			}
+
+			//Then we use the start and end angles as bounding boxes of the boundary ...
+			// ... we will represent this bounding box.
 
 			while (startDegrees < -360)
 			{
@@ -2334,6 +2389,8 @@ namespace webifc
 		{
 			double limit = 1e-4;
 
+			//First: We define the Nurbs surface
+
 			tinynurbs::RationalSurface3d srf;
 			srf.degree_u = surface.BSplineSurface.UDegree;
 			srf.degree_v = surface.BSplineSurface.VDegree;
@@ -2367,8 +2424,6 @@ namespace webifc
 			}
 			srf.weights = tinynurbs::array2(num_u, num_v, weights);
 
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 			for (int i = 0; i < surface.BSplineSurface.UMultiplicity.size(); i++)
 			{
 				for (int r = 0; r < surface.BSplineSurface.UMultiplicity[i]; r++)
@@ -2385,14 +2440,15 @@ namespace webifc
 				}
 			}
 
-			////////////////////////////////////////////Find representation boundaries//////////////////////////////////////////////
+			//If the NURBS surface is valid we continue
 
 			if (tinynurbs::surfaceIsValid(srf))
 			{
+
+				// Find projected boundary using NURBS inverse evaluation
+
 				using Point = std::array<double, 2>;
 				std::vector<std::vector<Point>> uvBoundaryValues;
-
-				// Create projected boundary
 
 				std::vector<Point> points;
 				for (int j = 0; j < bounds[0].curve.points.size(); j++)
@@ -2404,11 +2460,11 @@ namespace webifc
 				uvBoundaryValues.push_back(points);
 
 				// Triangulate projected boundary
+				// Subdivide resulting triangles to increase definition
+				// r indicates the level of subdivision, currently 3 you can increase it to 5
 
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(uvBoundaryValues);
-				// std::vector<uint32_t> indices;
-				// Subdivide resulting triangles to increase definition
-				// r indicates the level of subdivision
+
 				for (int r = 0; r < 3; r++)
 				{
 					std::vector<uint32_t> newIndices;
@@ -2455,7 +2511,6 @@ namespace webifc
 					indices = newIndices;
 				}
 
-				////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				for (int i = 0; i < indices.size(); i += 3)
 				{
 					Point p0 = uvBoundaryValues[0][indices[i + 0]];

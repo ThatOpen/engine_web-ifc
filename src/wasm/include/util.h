@@ -726,7 +726,7 @@ namespace webifc
 
 	glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf)
 	{
-		// Dades inicials
+		// Initial data
 
 		glm::highp_dvec3 ptc = tinynurbs::surfacePoint(srf, 0.0, 0.0);
 		glm::highp_dvec3 pth = tinynurbs::surfacePoint(srf, 1.0, 0.0);
@@ -742,7 +742,7 @@ namespace webifc
 		double rotacions = 6;
 		double stepOld = step1;
 
-		// Primera ronda
+		// First approximation
 
 		double fU = 0.5;
 		double fV = 0.5;
@@ -796,6 +796,7 @@ namespace webifc
 		}
 
 		// If first method fails to provide a precise solution we use second slow but reliable method
+
 		double repetition = 0;
 		double maxdis = maxdi;
 		double fUs = fU;
