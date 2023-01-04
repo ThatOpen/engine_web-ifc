@@ -1,7 +1,7 @@
 #set up cmake to download the external projects
 include(ExternalProject)
 cmake_policy(SET CMP0054 NEW)
-cmake_minimum_required (VERSION 3.11)
+cmake_minimum_required (VERSION 3.18)
 
 #transfer the arguments from the emcmake into variables to pass to manifold
 list(APPEND CMAKE_ARGS "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}")
@@ -18,8 +18,7 @@ else()
 	set(DEBUG_FLAG "")
 endif()
 
-project (web-ifc)
-message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+project (web-ifc LANGUAGES CXX)
 enable_testing ()
 
 set (CMAKE_CXX_STANDARD 17)
