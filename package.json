@@ -29,7 +29,7 @@
     "postinstall": "cd examples/viewer && npm install && cd ../browser && npm install && cd ../../benchmark && npm install",
     "gen-schema": "cd src/schema && ts-node gen_functional_types.ts",
     "setup-env": "emsdk_env",
-    "setup-mingw" : "mingw-get instal msys-patch mysys-make gettext",
+    "setup-mingw" : "mingw-get instal msys-patch msys-make gettext",
     "build-release": "npm run build-wasm-release && npm run copy-to-dist && npm run build-api",
     "build-debug": "npm run build-wasm-debug  && npm run copy-debug-to-dist && npm run build-api",
     "publish-repo": "npm run set-version && cd dist && npm publish",
