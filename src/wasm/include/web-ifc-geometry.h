@@ -1590,6 +1590,25 @@ namespace webifc
 
 					return false;
 				}
+				return false;
+			}
+			case ifc::IFCFILLAREASTYLE:
+			{
+				_loader.MoveToArgumentOffset(line, 1);
+				auto ifcFillStyleSelects = _loader.GetSetArgument();
+
+				for (auto &styleSelect : ifcFillStyleSelects)
+				{
+					uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
+
+					glm::dvec4 color;
+					bool foundColor = GetColor(styleSelectID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
 
 				return false;
 			}
@@ -1603,6 +1622,81 @@ namespace webifc
 					uint32_t materialID = _loader.GetRefArgument(material);
 					glm::dvec4 color;
 					bool foundColor = GetColor(materialID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALCONSTITUENTSET:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto materialContituents = _loader.GetSetArgument();
+
+				for (auto &materialContituent : materialContituents)
+				{
+					uint32_t materialContituentID = _loader.GetRefArgument(materialContituent);
+					glm::dvec4 color;
+					bool foundColor = GetColor(materialContituentID, color);
+					if (foundColor)
+					{
+						outputColor = color;
+						return true;
+					}
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALCONSTITUENT:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto material = _loader.GetRefArgument();
+				glm::dvec4 color;
+				bool foundColor = GetColor(material, color);
+				if (foundColor)
+				{
+					outputColor = color;
+					return true;
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALPROFILESETUSAGE:
+			{
+				_loader.MoveToArgumentOffset(line, 0);
+				auto profileSet = _loader.GetRefArgument();
+				glm::dvec4 color;
+				bool foundColor = GetColor(profileSet, color);
+				if (foundColor)
+				{
+					outputColor = color;
+					return true;
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALPROFILE:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto profileSet = _loader.GetRefArgument();
+				glm::dvec4 color;
+				bool foundColor = GetColor(profileSet, color);
+				if (foundColor)
+				{
+					outputColor = color;
+					return true;
+				}
+				return false;
+			}
+			case ifc::IFCMATERIALPROFILESET:
+			{
+				_loader.MoveToArgumentOffset(line, 2);
+				auto materialProfiles = _loader.GetSetArgument();
+
+				for (auto &materialProfile : materialProfiles)
+				{
+					uint32_t materialProfileID = _loader.GetRefArgument(materialProfile);
+					glm::dvec4 color;
+					bool foundColor = GetColor(materialProfileID, color);
 					if (foundColor)
 					{
 						outputColor = color;
@@ -1889,7 +1983,7 @@ namespace webifc
 
 		void TriangulateRevolution(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
-			//First we get the revolution data
+			// First we get the revolution data
 
 			glm::dvec3 cent = surface.RevolutionSurface.Direction[3];
 			glm::dvec3 vecX = glm::normalize(surface.RevolutionSurface.Direction[0]);
@@ -1922,8 +2016,8 @@ namespace webifc
 				int lastTeam = bounds[i].curve.indices[0];
 				for (int j = 0; j < bounds[i].curve.points.size(); j++)
 				{
-					//If it is the first point of the group we close the previous group ...
-					// ... and create a new one. Else, the point is of the current group
+					// If it is the first point of the group we close the previous group ...
+					//  ... and create a new one. Else, the point is of the current group
 					if (lastTeam != bounds[i].curve.indices[j] || j == (bounds[i].curve.points.size() - 1))
 					{
 						if (cc > 0)
@@ -1950,16 +2044,16 @@ namespace webifc
 				}
 			}
 
-			//There is a problem when points in the revolution are around 0 degrees
-			//Numerical instabilities can make these points to jump from 0 to 360
-			//It causes lots of trouble when drawing the boundaries in the revolution
+			// There is a problem when points in the revolution are around 0 degrees
+			// Numerical instabilities can make these points to jump from 0 to 360
+			// It causes lots of trouble when drawing the boundaries in the revolution
 
-			//The method presented here finds the angle of each point, measures the ...
-			// ... angular difference and then, if the difference is bigger than 180 ...
-			// ... corrects it to a lesser value. Finally it gets the first angle and ...
-			// ... adds the angular differences again, reconstructing a corrected boundary.
+			// The method presented here finds the angle of each point, measures the ...
+			//  ... angular difference and then, if the difference is bigger than 180 ...
+			//  ... corrects it to a lesser value. Finally it gets the first angle and ...
+			//  ... adds the angular differences again, reconstructing a corrected boundary.
 
-			//Now we find the angle of each point in the reference plane of the cylinder
+			// Now we find the angle of each point in the reference plane of the cylinder
 			for (int j = 0; j < bounding.size(); j++)
 			{
 				double xx = bounding[j].x - cent.x;
@@ -1980,8 +2074,6 @@ namespace webifc
 				angleVec.push_back(temp);
 			}
 
-
-
 			for (int i = 0; i < angleVec.size() - 1; i++)
 			{
 				if (angleVec[i] - angleVec[i + 1] > 180)
@@ -2001,7 +2093,7 @@ namespace webifc
 			double startDegrees = angleVec[0];
 			double endDegrees = angleVec[0];
 
-			//Add angular differences starting from the first angle. We also correct the start and end angles
+			// Add angular differences starting from the first angle. We also correct the start and end angles
 
 			double temp = angleVec[0];
 			for (int i = 0; i < angleDsp.size(); i++)
@@ -2017,8 +2109,8 @@ namespace webifc
 				}
 			}
 
-			//Then we use the start and end angles as bounding boxes of the boundary ...
-			// ... we will represent this bounding box.
+			// Then we use the start and end angles as bounding boxes of the boundary ...
+			//  ... we will represent this bounding box.
 
 			double startRad = startDegrees / 180 * CONST_PI;
 			double endRad = endDegrees / 180 * CONST_PI;
@@ -2063,7 +2155,7 @@ namespace webifc
 
 		void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
-			//First we get the cylinder data
+			// First we get the cylinder data
 
 			double radius = surface.CylinderSurface.Radius;
 			glm::dvec3 cent = surface.transformation[3];
@@ -2077,8 +2169,8 @@ namespace webifc
 			double minZ = 1e+10;
 			double maxZ = -1e+10;
 
-			//Find the relative coordinates of each curve point in the cylinder reference plane
-			//Only retain the max and min relative Z
+			// Find the relative coordinates of each curve point in the cylinder reference plane
+			// Only retain the max and min relative Z
 			for (int i = 0; i < bounds.size(); i++)
 			{
 				for (int j = 0; j < bounds[i].curve.points.size(); j++)
@@ -2108,7 +2200,7 @@ namespace webifc
 			std::vector<double> angleVec;
 			std::vector<double> angleDsp;
 
-			//Find the max. curve index in the boundary
+			// Find the max. curve index in the boundary
 
 			int maxTeam = 0;
 			for (int i = 0; i < bounds.size(); i++)
@@ -2124,7 +2216,7 @@ namespace webifc
 
 			std::vector<std::vector<glm::dvec3>> boundingGroups;
 
-			//We group each point with their boundary
+			// We group each point with their boundary
 
 			for (int r = 0; r < maxTeam; r++)
 			{
@@ -2147,7 +2239,7 @@ namespace webifc
 			bool end = false;
 			int id = 0;
 
-			//In the case of boundary lines having only 2 endings...
+			// In the case of boundary lines having only 2 endings...
 			//... we omit these lines and add solely curves having > 2 points...
 			//... starting from a 2 point line, by doing it this way we don't have repeated points
 			while (!end && repeats < maxTeam * 3)
@@ -2178,7 +2270,7 @@ namespace webifc
 				repeats++;
 			}
 
-			//If the previous method finds nothing, then we don't have straight lines ...
+			// If the previous method finds nothing, then we don't have straight lines ...
 			//... then we add all boundary points directly
 			if (bounding.size() == 0)
 			{
@@ -2194,17 +2286,17 @@ namespace webifc
 			double startDegrees = 0;
 			double endDegrees = 360;
 
-			//Now we project the points in the cylinder surface
-			//There is a problem when points in the cylinder are around 0 degrees
-			//Numerical instabilities can make these points to jump from 0 to 360
-			//It causes lots of trouble when drawing the boundaries in the cylinder
+			// Now we project the points in the cylinder surface
+			// There is a problem when points in the cylinder are around 0 degrees
+			// Numerical instabilities can make these points to jump from 0 to 360
+			// It causes lots of trouble when drawing the boundaries in the cylinder
 
-			//The method presented here finds the angle of each point, measures the ...
-			// ... angular difference and then, if the difference is bigger than 180 ...
-			// ... corrects it to a lesser value. Finally it gets the first angle and ...
-			// ... adds the angular differences again, reconstructing a corrected boundary.
+			// The method presented here finds the angle of each point, measures the ...
+			//  ... angular difference and then, if the difference is bigger than 180 ...
+			//  ... corrects it to a lesser value. Finally it gets the first angle and ...
+			//  ... adds the angular differences again, reconstructing a corrected boundary.
 
-			//Now we find the angle of each point in the reference plane of the cylinder
+			// Now we find the angle of each point in the reference plane of the cylinder
 			for (int j = 0; j < bounding.size(); j++)
 			{
 				glm::dvec3 vv = bounding[j] - cent;
@@ -2223,7 +2315,7 @@ namespace webifc
 				angleVec.push_back(temp);
 			}
 
-			//Then we find the angular difference
+			// Then we find the angular difference
 			for (int i = 0; i < angleVec.size() - 1; i++)
 			{
 				if (angleVec[i] - angleVec[i + 1] > 180)
@@ -2243,7 +2335,7 @@ namespace webifc
 			startDegrees = angleVec[0];
 			endDegrees = angleVec[0];
 
-			//Add angular differences starting from the first angle. We also correct the start and end angles
+			// Add angular differences starting from the first angle. We also correct the start and end angles
 
 			double temp = angleVec[0];
 			for (int i = 0; i < angleDsp.size(); i++)
@@ -2259,8 +2351,8 @@ namespace webifc
 				}
 			}
 
-			//Then we use the start and end angles as bounding boxes of the boundary ...
-			// ... we will represent this bounding box.
+			// Then we use the start and end angles as bounding boxes of the boundary ...
+			//  ... we will represent this bounding box.
 
 			while (startDegrees < -360)
 			{
@@ -2389,7 +2481,7 @@ namespace webifc
 		{
 			double limit = 1e-4;
 
-			//First: We define the Nurbs surface
+			// First: We define the Nurbs surface
 
 			tinynurbs::RationalSurface3d srf;
 			srf.degree_u = surface.BSplineSurface.UDegree;
@@ -2440,7 +2532,7 @@ namespace webifc
 				}
 			}
 
-			//If the NURBS surface is valid we continue
+			// If the NURBS surface is valid we continue
 
 			if (tinynurbs::surfaceIsValid(srf))
 			{
@@ -2778,7 +2870,7 @@ namespace webifc
 					// TODO: look at holes
 					auto &ppts = profile.curve.points;
 					for (auto &pt2D : ppts)
-					{						
+					{
 						glm::dvec3 pt = -pt2D.x * right + -pt2D.y * left + planeOrigin;
 						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
@@ -3282,7 +3374,7 @@ namespace webifc
 			}
 
 			case ifc::IFCDERIVEDPROFILEDEF:
-			{				
+			{
 				_loader.MoveToArgumentOffset(line, 2);
 				uint32_t profileID = _loader.GetRefArgument();
 				IfcProfile profile = GetProfileByLine(_loader.ExpressIDToLineID(profileID));
