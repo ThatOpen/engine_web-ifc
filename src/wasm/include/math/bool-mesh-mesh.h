@@ -8,12 +8,7 @@
 
 #include "../util.h"
 #include "./is-inside-mesh.h"
-
-#ifdef __EMSCRIPTEN__
 #include <manifold/include/manifold.h>
-#endif
-
-
 
 namespace webifc
 {
@@ -102,7 +97,6 @@ namespace webifc
         return resultingMesh;
     }
 
-    #ifdef __EMSCRIPTEN__
     manifold::Manifold * geom2manifold(const IfcGeometry& geometry, uint32_t expressID) {
         manifold::Mesh mesh;
         
@@ -244,6 +238,5 @@ namespace webifc
 
         return resultGeom;
     }
-    #endif
 
 }
