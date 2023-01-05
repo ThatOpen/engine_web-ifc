@@ -293,8 +293,8 @@ export class IfcAPI {
                     }
                 }
             }
+          }
         }
-
         return lineData;
     }
 
