@@ -1187,10 +1187,8 @@ namespace webifc
 			IfcGeometry result;
 			IfcGeometry secondGeom;
 
-#ifdef __EMSCRIPTEN__
 			if (_loader.GetSettings().USE_FAST_BOOLS)
 			{
-#endif
 				for (auto geom : secondGeoms)
 				{
 					if (geom.numFaces != 0)
@@ -1230,7 +1228,6 @@ namespace webifc
 					DumpIfcGeometry(r2, L"r2.obj");
 				}
 				result = boolSubtract(r1, r2);
-#ifdef __EMSCRIPTEN__
 			}
 			else
 			{
@@ -1273,7 +1270,6 @@ namespace webifc
 
 				result = boolMultiOp_Manifold(firstGeom, seconds, expressID);
 			}
-#endif
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{
@@ -1601,26 +1597,6 @@ namespace webifc
 				{
 					uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
 
-					glm::dvec4 color;
-					bool foundColor = GetColor(styleSelectID, color);
-					if (foundColor)
-					{
-						outputColor = color;
-						return true;
-					}
-				}
-
-				return false;
-			}
-			case ifc::IFCFILLAREASTYLE:
-			{
-				_loader.MoveToArgumentOffset(line, 1);
-				auto ifcFillStyleSelects = _loader.GetSetArgument();
-
-				for (auto &styleSelect : ifcFillStyleSelects)
-				{
-					uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
-					
 					glm::dvec4 color;
 					bool foundColor = GetColor(styleSelectID, color);
 					if (foundColor)

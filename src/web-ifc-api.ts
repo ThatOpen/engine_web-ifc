@@ -292,8 +292,7 @@ export class IfcAPI {
                         else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(x)));
                     }
                 }
-            }
-          }
+           }
         }
         return lineData;
     }
