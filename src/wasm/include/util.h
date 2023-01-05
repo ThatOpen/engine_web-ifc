@@ -12,9 +12,9 @@
 #include <optional>
 #include <functional>
 
-#include "../deps/glm/glm/glm.hpp"
+#include <glm/glm.hpp>
 
-#include "tinynurbs/tinynurbs.h"
+#include <tinynurbs/tinynurbs.h>
 
 #define CONST_PI 3.141592653589793238462643383279502884L
 
@@ -308,7 +308,7 @@ namespace webifc
 				return 0;
 			}
 
-			return (uint32_t)&fvertexData[0];
+			return (uint32_t)(size_t)&fvertexData[0];
 		}
 
 		void AddGeometry(IfcGeometry geom)
@@ -334,7 +334,7 @@ namespace webifc
 
 		uint32_t GetIndexData()
 		{
-			return (uint32_t)&indexData[0];
+			return (uint32_t)(size_t)&indexData[0];
 		}
 
 		uint32_t GetIndexDataSize()

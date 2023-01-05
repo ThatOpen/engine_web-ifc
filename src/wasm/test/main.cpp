@@ -1,4 +1,4 @@
-#include "../deps/tinycpptest/TinyCppTest.hpp"
+#include <TinyCppTest.hpp>
 
 int main (int, char* argv[])
 {

@@ -4,16 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "make-dir dist && node makesrc.js && esbuild --bundle web-ifc-viewer.ts --platform=node --outfile=./dist/web-ifc-viewer.js && del ts_src.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../example.ifc dist/example.ifc && cd dist && cpy web-ifc-viewer.js ../ && cpy web-ifc.js ../ && cpy web-ifc.wasm ../",
-    "start": "http-server -c-1 dist"
+    "build": "make-dir dist && node makesrc.js && esbuild --bundle web-ifc-viewer.ts --platform=node --outfile=./dist/web-ifc-viewer.js && del ts_src.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../../dist/web-ifc-mt.worker.js dist/web-ifc-mt.worker.js && cpy ../../dist/web-ifc-mt.wasm dist/web-ifc-mt.wasm &&  cpy ../../dist/web-ifc-mt.js dist/web-ifc-mt.js && cpy ../example.ifc dist/example.ifc",
+    "start": "cd dist && ws -p 8080 --cors.opener-policy same-origin --cors.embedder-policy require-corp"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "cpy-cli": "^4.2.0",
+    "del-cli": "^5.0.0",
     "esbuild": "^0.12.15",
-    "http-server": "^14.1.1",
     "make-dir-cli": "^3.0.0",
-    "del-cli": "^5.0.0"
+    "local-web-server": "^5.2.1"
   }
 }

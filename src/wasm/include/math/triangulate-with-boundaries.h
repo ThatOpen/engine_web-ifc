@@ -6,8 +6,8 @@
 
 #include <map>
 #include <set>
-#include "../../deps/glm/glm/glm.hpp"
-#include "../../deps/earcut/include/mapbox/earcut.hpp"
+#include <glm/glm.hpp>
+#include <mapbox/earcut.hpp>
 
 #include "../util.h"
 #include "line-segment-intersect.h"

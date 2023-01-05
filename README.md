@@ -60,9 +60,11 @@ See [examples](https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src
 
 ## Building WASM module
 
-### Setting up emscripten
+### Setting up emscripten and build system
 
 The WASM library is built through emscripten, please see [the emscripten installation guide](https://emscripten.org/docs/getting_started/downloads.html) for information on how to set up emscripten. Afterwards `emsdk_env` needs to be in your path.
+
+To build the WASM you also need CMAKE [see here](https://cmake.org/download/) and (on windows) MINGW [see here](https://sourceforge.net/projects/mingw/) - once installed (and in your path) run `npm run setup-mingw` to configure the environment for web-ifc.
 
 ### WASM library
 
@@ -70,7 +72,7 @@ Run `npm install` to install all dependencies.
 
 Run `npm run setup-env` whenever you open a new terminal, this will set up the required emscripten environment variables for you to compile code.
 
-Run `npm run build-release-all` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
+Run `npm run build-release` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
 
 If you wish to build the WASM with debugging enabled you can run `npm run build-debug`. This will enable you to inspect debugging information better when running web-ifc.
 

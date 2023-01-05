@@ -8,23 +8,24 @@ import * as WebIFC from '../dist/web-ifc-api-node';
 let newIfcAPI = new WebIFC.IfcAPI();
 const OUTPUT_FILE = '../benchmark.md';
 const BENCHMARK_FILES_DIR = "./ifcfiles";
+
 class FileResult
 {
-    filename: string;
-    fileSize: number;
-    timeTakenToOpenModel: number;
-    timeSuccess: number;
-    numberOfIfcEntities: number;
-    totalNumberOfProducedMesh: number;
-    totalNumberOfGeometries : number;
-    totalNumberOfErrors: number;
+    filename !: string;
+    fileSize !: number;
+    timeTakenToOpenModel !: number;
+    timeSuccess !: number;
+    numberOfIfcEntities !: number;
+    totalNumberOfProducedMesh !: number;
+    totalNumberOfGeometries !: number;
+    totalNumberOfErrors !: number;
 }
 
 class SystemInfo{
-    gpu: string;
-    cpuName: string;
-    freeRam: number;
-    totalRam: number;
+    gpu !: string;
+    cpuName !: string;
+    freeRam !: number;
+    totalRam !: number;
 }
 
 const ms = (): number => {
@@ -33,10 +34,10 @@ const ms = (): number => {
 };
 
 // hack Object.fromEntries doesn't works
-function mapToObj(inputMap) {
-    let obj = {};
+function mapToObj(inputMap : any) {
+    let obj : any = {};
 
-    inputMap.forEach(function(value, key){
+    inputMap.forEach(function(value: any , key: any){
         obj[key] = value
     });
 
@@ -49,11 +50,11 @@ async function writeResult(content : string){
 }
 class BenchMarkResult
 {
-    results: Map<string, FileResult>;
+    results !: Map<string, FileResult>;
 }
 class BenchmarkResultFormatter{
-    results: Map<string, FileResult>;
-    columns : Object
+    results !: Map<string, FileResult>;
+    columns !: Object
     getMarkdownTable() : string
     {
         let datas =  mapToObj(this.results);
@@ -70,7 +71,7 @@ class BenchmarkResultFormatter{
     {
         let header = "|";
         let separator = "|";
-        for (const [column, value] of columns) {
+        for (const [_, value] of columns) {
             header += ` ${value} |`;
             separator += "-------|"
         }
@@ -79,7 +80,7 @@ class BenchmarkResultFormatter{
     private getMarkdownTableRow(line : any, columns : any) : string 
     {
         let row = "";
-        for (const [column, value] of columns) {
+        for (const [column] of columns) {
             row += ` ${line[column]} |`;
         }
         row += "\n";
@@ -106,7 +107,7 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     result.numberOfIfcEntities = module.GetAllLines(modelID).size();
     
     result.totalNumberOfProducedMesh = 0;
-    module.StreamAllMeshes(modelID, (mesh) => {
+    module.StreamAllMeshes(modelID, () => {
         ++result.totalNumberOfProducedMesh;
     });
 

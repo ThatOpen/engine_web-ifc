@@ -4,7 +4,7 @@
  
  #pragma once
 
-#include "../../deps/glm/glm/glm.hpp"
+#include <glm/glm.hpp>
 #include <iostream>
 
 #include "intersect-ray-tri.h"

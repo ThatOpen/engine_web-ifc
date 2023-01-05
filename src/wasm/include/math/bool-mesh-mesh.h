@@ -4,13 +4,13 @@
  
 #pragma once
 
-#include "../../deps/glm/glm/glm.hpp"
+#include <glm/glm.hpp>
 
 #include "../util.h"
 #include "./is-inside-mesh.h"
 
 #ifdef __EMSCRIPTEN__
-#include "../../deps/manifold/manifold/include/manifold.h"
+#include <manifold/include/manifold.h>
 
 //#define DEBUG_BOOLEAN_INPUT
 #endif

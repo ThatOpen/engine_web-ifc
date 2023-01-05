@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
-#include <stdio.h>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -24,10 +23,6 @@ std::map<uint32_t, std::unique_ptr<webifc::IfcGeometryLoader>> geomLoaders;
 uint32_t GLOBAL_MODEL_ID_COUNTER = 0;
 
 #ifdef __EMSCRIPTEN_PTHREADS__
-#define DEF_MT_ENABLED 
-#endif
-
-#ifdef DEF_MT_ENABLED
     constexpr bool MT_ENABLED = true;
 #else
     constexpr bool MT_ENABLED = false;
