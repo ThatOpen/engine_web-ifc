@@ -44,7 +44,7 @@ set (
 set (WebIfcTestFiles ${WebIfcTestSourceFiles})
 
 #set the command needed to patch manifold
-set(manifold_patch_command patch --forward -p1 < ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || cd .)
+set(manifold_patch_command git apply ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || cd .)
 
 
 #download the external projects and save their paths
