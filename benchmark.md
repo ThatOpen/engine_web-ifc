@@ -1,9 +1,13 @@
 # System informations 
- {"gpu":"","cpuName":"Intel(R) Core(TM) i7-3630QM CPU @ 2.40GHz","freeRam":2567.27734375,"totalRam":8088.74609375}
+ {"gpu":"","cpuName":"","freeRam":0,"totalRam":0}
  _________ 
-| filename | Size (mo) | Time to open model (ms) | Time to execute all (ms) | Total ifc entities | Total meshes | Total geometries | total errors |
-|-------|-------|-------|-------|-------|-------|-------|-------|
-| ifcfiles\advanced_model.ifc | 34.24 | 732 | 11593 | 594374 | 6401 | 14120 | 590 |
- ifcfiles\dental_clinic.ifc | 12.6 | 230 | 1612 | 209259 | 2586 | 2626 | 0 |
- ifcfiles\example.ifc | 0.4 | 12 | 30 | 6487 | 115 | 119 | 0 |
- ifcfiles\tested_sample_project.ifc | 0.69 | 16 | 787 | 14119 | 93 | 98 | 88 |
+| filename | Fast Bools Enabled | Size (mo) | Time to open model (ms) | Time to execute all (ms) | Total ifc entities | Total meshes | Total geometries | total errors |
+|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+ ifcfiles/advanced_model.ifc.test | false | 33.67 | 2459 | 18037 | 594374 | 6401 | 14120 | 0 |
+ ifcfiles/advanced_model.ifc.test | true | 33.67 | 2300 | 21584 | 594374 | 6401 | 14120 | 0 |
+ ifcfiles/dental_clinic.ifc.test | false | 12.4 | 946 | 3050 | 209259 | 2586 | 2626 | 0 |
+ ifcfiles/dental_clinic.ifc.test | true | 12.4 | 952 | 4381 | 209259 | 2586 | 2626 | 0 |
+ ifcfiles/example.ifc.test | false | 0.39 | 231 | 258 | 6487 | 115 | 119 | 0 |
+ ifcfiles/example.ifc.test | true | 0.39 | 232 | 263 | 6487 | 115 | 119 | 0 |
+ ifcfiles/tested_sample_project.ifc.test | false | 0.68 | 247 | 1284 | 14119 | 93 | 98 | 0 |
+ ifcfiles/tested_sample_project.ifc.test | true | 0.68 | 246 | 1322 | 14119 | 93 | 98 | 0 |

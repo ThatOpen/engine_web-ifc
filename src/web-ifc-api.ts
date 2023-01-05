@@ -272,27 +272,32 @@ export class IfcAPI {
         }
 
         let inverseData = ifc.InversePropertyDef[this.modelSchemaList[modelID]][rawLineData.type];
-        if (inverse && inverseData != null) {
-            for (let inverseProp of inverseData) {
-                if (!inverseProp[3]) lineData[inverseProp[0]] = null;
-                else lineData[inverseProp[0]] = [];
-
-                let targetTypes = [inverseProp[1]];
-                if (typeof ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]] != "undefined") {
-                    targetTypes = targetTypes.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
+        if (inverse && inverseData != null) 
+        {
+          for (let inverseProp of inverseData) 
+          {
+            if (!inverseProp[3]) lineData[inverseProp[0]] = null;
+            else lineData[inverseProp[0]] = [];
+            
+            let targetTypes = [inverseProp[1]];
+            if (typeof ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]] != "undefined")
+            {
+              targetTypes=targetTypes.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
+            }
+            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, targetTypes, inverseProp[2], inverseProp[3]);
+            if (!inverseProp[3] && inverseIDs.size()>0) 
+            {
+              if (!flatten) lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
+              else lineData[inverseProp[0]] = this.GetLine(modelID, inverseIDs.get(0));
+            }
+            else 
+            {
+                for (let x = 0; x < inverseIDs.size(); x++) {
+                  if (!flatten) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
+                  else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(x)));
                 }
-                let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, targetTypes, inverseProp[2], inverseProp[3]);
-                if (!inverseProp[3] && inverseIDs.size() > 0) {
-                    if (!flatten) lineData[inverseProp[0]] = { type: 5, value: inverseIDs.get(0) };
-                    else lineData[inverseProp[0]] = this.GetLine(modelID, inverseIDs.get(0));
-                }
-                else {
-                    for (let x = 0; x < inverseIDs.size(); x++) {
-                        if (!flatten) lineData[inverseProp[0]].push({ type: 5, value: inverseIDs.get(x) });
-                        else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(x)));
-                    }
-                }
-           }
+            }
+          }
         }
         return lineData;
     }
