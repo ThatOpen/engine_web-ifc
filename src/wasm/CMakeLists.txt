@@ -45,7 +45,7 @@ set (WebIfcTestFiles ${WebIfcTestSourceFiles})
 
 #set the command needed to patch manifold
 set(manifold_patch_command git apply ${CMAKE_BINARY_DIR}/manifold/src/manifold/thrust.diff || cd .)
-
+set(manifold_mt_patch_command git apply ${CMAKE_BINARY_DIR}/manifold_mt/src/manifold/thrust.diff || cd .)
 
 #download the external projects and save their paths
 ExternalProject_Add(tinynurbs GIT_REPOSITORY "https://github.com/pradeep-pyro/tinynurbs" GIT_TAG "2fc6562d71665312c6298f7c340bace1bcf1b7a1" PREFIX "tinynurbs" CONFIGURE_COMMAND "" BUILD_COMMAND "" INSTALL_COMMAND "")
@@ -65,7 +65,7 @@ if (EMSCRIPTEN)
 	list(APPEND CMAKE_ARGS_MT "-DCMAKE_CXX_FLAGS=-pthread")
 	list(APPEND CMAKE_ARGS_MT "-DCMAKE_EXE_LINKER_FLAGS=-pthread")
 	
-	ExternalProject_Add(manifold_mt GIT_REPOSITORY "https://github.com/elalish/manifold" GIT_TAG "491d7d8045d75b0c0b025d3c8a9a65d121d50786" PREFIX "manifold_mt" PATCH_COMMAND "${manifold_patch_command}" CMAKE_ARGS ${CMAKE_ARGS_MT}  INSTALL_COMMAND "")
+	ExternalProject_Add(manifold_mt GIT_REPOSITORY "https://github.com/elalish/manifold" GIT_TAG "491d7d8045d75b0c0b025d3c8a9a65d121d50786" PREFIX "manifold_mt" PATCH_COMMAND "${manifold_mt_patch_command}" CMAKE_ARGS ${CMAKE_ARGS_MT}  INSTALL_COMMAND "")
 	ExternalProject_Get_property(manifold_mt SOURCE_DIR)
 	set(MANIFOLD_MT_SOURCE_DIR ${SOURCE_DIR})
 	ExternalProject_Get_property(manifold_mt BINARY_DIR)
