@@ -18,7 +18,7 @@ else()
 	set(DEBUG_FLAG "")
 endif()
 
-if (CMAKE_VS_MSBUILD_COMMAND)
+if (CMAKE_VS_MSBUILD_COMMAND MATCHES "Visual Studio")
 	set(LIB_SUFFIX ".lib")
 else()
 	set(LIB_SUFFIX ".a")
