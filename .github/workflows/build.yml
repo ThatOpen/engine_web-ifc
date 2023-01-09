@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        os-type: [windows-latest]
+        os-type: [ubuntu-latest]
         configuration: [Debug, Release, RelWithDebInfo]    
     
     steps:
