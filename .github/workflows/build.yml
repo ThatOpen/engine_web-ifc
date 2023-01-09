@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        os-type: [ubuntu-latest]
+        os-type: [ubuntu-20.04]
         configuration: [Debug, Release, RelWithDebInfo]    
     
     steps:
