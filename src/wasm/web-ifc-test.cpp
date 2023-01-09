@@ -11,7 +11,7 @@
 #include "include/math/triangulate-with-boundaries.h"
 #include "include/ifc-schema.h"
 
-std::string ReadFile(std::wstring filename)
+std::string ReadFile(std::string filename)
 {
     std::ifstream t(filename);
     std::stringstream buffer;
@@ -102,7 +102,7 @@ void Benchmark()
             continue;
         }
 
-        std::wstring filePath = entry.path().wstring();
+        std::string filePath = entry.path().string();
         std::string filename = entry.path().filename().string();
 
         std::string content = ReadFile(filePath);
@@ -397,7 +397,7 @@ int main()
     // return 0;
 
     //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#83 processing/05111002_IFCR2_Geo_Columns_1.ifc");
-    std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
 
     webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
