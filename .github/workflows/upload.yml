@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Publish to Github Pages
 on: [push]
 permissions:
   contents: write
