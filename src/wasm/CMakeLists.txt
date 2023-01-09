@@ -121,6 +121,7 @@ if (NOT EMSCRIPTEN)
 	target_include_directories(web-ifc-test PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
 	target_compile_options(web-ifc-test PUBLIC "-Wall")
 	add_test (web-ifc-test web-ifc-test)
+	set_tests_properties(web-ifc-test PROPERTIES LABELS "web-ifc")
 	
 	#build parameters for web-ifc in testing environment
 	add_executable (web-ifc ${WebIfcTestingMain})
