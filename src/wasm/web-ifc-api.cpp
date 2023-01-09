@@ -305,6 +305,9 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
         return;
     }
 
+    int index = 0;
+    int total = expressIds.size();
+
     for (const auto& id : expressIds)
     {
         // read the mesh from IFC
@@ -320,11 +323,13 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
         if (!mesh.geometries.empty())
         {
             // transfer control to client, geometry data is alive for the time of the callback
-            callback(mesh);
+            callback(mesh, index, total);
         }
 
         // clear geometry, freeing memory, client is expected to have consumed the data
         geomLoader->ClearCachedGeometry();
+
+        index++;
     }
 }
 
