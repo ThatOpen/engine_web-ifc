@@ -1226,7 +1226,7 @@ namespace webifc
 
 		void ReportError(const LoaderError &&error)
 		{
-                        logError(error.message);
+			logError(error.message);
 			_errors.push_back(std::move(error));
 		}
 

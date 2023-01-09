@@ -17,33 +17,8 @@ function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
     let code = monacoEditor.getValue();
     let model = ifcAPI.CreateModel();
 
-    scene.clear();
-    InitBasicScene();
-
     window.localStorage.setItem('code', code);
     console.log("Saved code...");
-
-    let compiled = ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS }})
-
-    // this is where we do evil stuff
-    {
-        console.log(` --- Starting EVAL!`);
-        eval(compiled.outputText + `BuildModel(model, ifcAPI)`);
-        console.log(` --- Ending EVAL!`);
-    }
-
-    let ifcData = ifcAPI.ExportFileAsIFC(model);
-    let ifcDataString = new TextDecoder().decode(ifcData);
-    console.log(ifcDataString);
-
-
-    ifcThree.LoadAllGeometry(scene, model);
-
-
-    ifcAPI.CloseModel(model);
-
-    let m2 = ifcAPI.OpenModel(ifcData);
-    ifcThree.LoadAllGeometry(scene, m2);
 
 }
 
@@ -107,8 +82,38 @@ window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEdit
   fileInput.addEventListener('change', fileInputChanged);
   const codereset = document.getElementById('rcode');
   codereset.addEventListener('click', resetCode);
+  const coderun = document.getElementById('runcode');
+  coderun.addEventListener('click', runCode);
   Init3DView();
 };
+}
+
+async function runCode() {
+  let model = ifcAPI.CreateModel();
+
+  scene.clear();
+  InitBasicScene();
+
+  let code = window.localStorage.getItem('code');
+  let compiled = ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS }})
+
+  // this is where we do evil stuff
+  {
+      console.log(` --- Starting EVAL!`);
+      eval(compiled.outputText + `BuildModel(model, ifcAPI)`);
+      console.log(` --- Ending EVAL!`);
+  }
+
+  let ifcData = ifcAPI.ExportFileAsIFC(model);
+  let ifcDataString = new TextDecoder().decode(ifcData);
+  console.log(ifcDataString);
+
+  ifcThree.LoadAllGeometry(scene, model);
+
+  ifcAPI.CloseModel(model);
+
+  let m2 = ifcAPI.OpenModel(ifcData);
+  ifcThree.LoadAllGeometry(scene, m2);
 }
 
 async function resetCode() {
@@ -146,7 +151,7 @@ function getData(reader : FileReader){
 async function LoadModel(data: Uint8Array) {
     const start = ms();
     //TODO: This needs to be fixed in the future to rely on elalish/manifold
-    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: false, USE_FAST_BOOLS: true }); 
+    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, USE_FAST_BOOLS: false }); 
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);
@@ -162,9 +167,9 @@ async function LoadModel(data: Uint8Array) {
     let types = await ifcAPI.GetAllTypesOfModel(modelID);
     for (let i = 0; i < types.length; i++) {
         let type = types[i];
-        console.log(type);
-        console.log(type.typeID);
-        console.log(type.typeName);
+        //console.log(type);
+        //console.log(type.typeID);
+        //console.log(type.typeName);
     }
 
     ifcAPI.CloseModel(modelID);
