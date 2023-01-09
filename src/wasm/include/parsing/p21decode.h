@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <codecvt>
+#include <locale>
 
 using namespace std;
 
