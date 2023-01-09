@@ -10,6 +10,7 @@
 #include <array>
 #include <unordered_map>
 #include <optional>
+#include <cstring>
 #include <functional>
 
 #include <glm/glm.hpp>
