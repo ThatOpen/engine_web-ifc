@@ -69,7 +69,6 @@ target_compile_options(polygon PUBLIC "-pthread")
 target_compile_options(graphlite PUBLIC "-pthread")
 set_target_properties(samples PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(samplesGPU PROPERTIES EXCLUDE_FROM_ALL TRUE)
-set_target_properties(manifoldjs PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(manifold_test PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(perfTest PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(gtest_main PROPERTIES EXCLUDE_FROM_ALL TRUE)
@@ -82,6 +81,7 @@ Message("Downloads Finished")
 
 
 if (EMSCRIPTEN)
+	set_target_properties(manifoldjs PROPERTIES EXCLUDE_FROM_ALL TRUE)
 	
 	#build parameters for web-ifc
 	add_executable (web-ifc ${WebIfcFiles})
