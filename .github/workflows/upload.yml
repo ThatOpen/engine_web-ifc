@@ -12,6 +12,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: mymindstorm/setup-emsdk@v11
       - name: Checkout 🛎️
         uses: actions/checkout@v3
       - uses: actions/setup-node@v2
