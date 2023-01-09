@@ -67,7 +67,7 @@ target_compile_options(manifold PUBLIC "-pthread")
 target_compile_options(collider PUBLIC "-pthread")
 target_compile_options(polygon PUBLIC "-pthread")
 target_compile_options(graphlite PUBLIC "-pthread")
-target_link_options(manifold PUBLIC "-pthreads")
+target_link_options(manifold PUBLIC "-pthread")
 Message("Downloads Finished")
 
 
