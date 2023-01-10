@@ -10,6 +10,7 @@
 #include <array>
 #include <unordered_map>
 #include <optional>
+#include <cstring>
 #include <functional>
 
 #include <glm/glm.hpp>
@@ -2057,7 +2058,7 @@ namespace webifc
 		inline void push(void *v, unsigned long long size)
 		{
 			CheckChunk(size);
-			memcpy(chunks.back().chunk.data() + chunks[writePtr].size, v, size);
+			std::memcpy(chunks.back().chunk.data() + chunks[writePtr].size, v, size);
 			chunks[writePtr].size += size;
 		}
 
@@ -2101,7 +2102,7 @@ namespace webifc
 
 			T v;
 
-			memcpy(&v, valuePtr, sizeof(T));
+			std::memcpy(&v, valuePtr, sizeof(T));
 
 			AdvanceRead(sizeof(T));
 			return v;
@@ -2259,7 +2260,7 @@ namespace webifc
 			}
 			if (chunkStart == chunkEnd)
 			{
-				memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], chunkEndPos - chunkStartPos);
+				std::memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], chunkEndPos - chunkStartPos);
 				updateChunks();
 
 				return chunkEndPos - chunkStartPos;
@@ -2268,8 +2269,8 @@ namespace webifc
 			{
 				uint32_t startChunkSize = chunks[chunkStart].size;
 				uint32_t partOfStartchunk = startChunkSize - chunkStartPos;
-				memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], partOfStartchunk);
-				memcpy(dest + partOfStartchunk, &chunks[chunkEnd].chunk[0], chunkEndPos);
+				std::memcpy(dest, &chunks[chunkStart].chunk[chunkStartPos], partOfStartchunk);
+				std::memcpy(dest + partOfStartchunk, &chunks[chunkEnd].chunk[0], chunkEndPos);
 				updateChunks();
 
 				return partOfStartchunk + chunkEndPos;

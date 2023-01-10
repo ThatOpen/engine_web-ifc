@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        os-type: [windows-latest]
+        os-type: [ubuntu-20.04]
         configuration: [Debug, Release, RelWithDebInfo]    
     
     steps:
@@ -26,4 +26,4 @@ jobs:
       run: cmake --build ${{github.workspace}}/src/wasm/Build --config ${{matrix.configuration}}
     - name: Test
       working-directory: ${{github.workspace}}/src/wasm/Build
-      run: ctest -VV -C ${{matrix.configuration}}
+      run: ctest -VV -C ${{matrix.configuration}} -L web-ifc
