@@ -1070,6 +1070,56 @@ namespace webifc
 			return IfcComposedMesh();
 		}
 
+		IfcCurve<2> BuildArc3Pt(const glm::dvec2 &p1, const glm::dvec2 &p2, const glm::dvec2 &p3)
+		{
+			double f1 = (p1.x * p1.x - p2.x * p2.x + p1.y * p1.y - p2.y * p2.y);
+			double f2 = (p1.x * p1.x - p3.x * p3.x + p1.y * p1.y - p3.y * p3.y);
+			double v = 2 * (p1.x - p2.x) * (p1.y - p3.y) - 2 * (p1.x - p3.x) * (p1.y - p2.y);
+
+			double cenX = ((p1.y - p3.y) * f1 - (p1.y - p2.y) * f2) / v;
+			double cenYa = (f2 - 2 * cenX * (p1.x - p3.x)) / (2 * (p1.y - p3.y));
+			double cenYb = (f1 - 2 * cenX * (p1.x - p2.x)) / (2 * (p1.y - p2.y));
+			double cenY = cenYa;
+			if (isnanf(cenY))
+			{
+				cenY = cenYb;
+			}
+
+			glm::dvec2 pCen;
+			pCen.x = cenX;
+			pCen.y = cenY;
+
+			double radius = sqrt(pow(cenX - p1.x, 2) + pow(cenY - p1.y, 2));
+
+			//Using geometrical subdivision to avoid complex calculus with angles
+
+			std::vector<glm::dvec2> pointList;
+			pointList.push_back(p1);
+			pointList.push_back(p2);
+			pointList.push_back(p3);
+
+			while(pointList.size() < _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM)
+			{
+				std::vector<glm::dvec2> tempPointList;
+				for (uint32_t j = 0; j < pointList.size() - 1; j++)
+				{
+					glm::dvec2 pt = (pointList[j] + pointList[j + 1]);
+					pt.x /= 2;
+					pt.y /= 2;
+					glm::dvec2 vc = glm::normalize(pt - pCen);
+					pt = pCen + vc * radius;
+					tempPointList.push_back(pointList[j]);
+					tempPointList.push_back(pt);
+				}
+				tempPointList.push_back(pointList[pointList.size() - 1]);
+				pointList = tempPointList;
+			}
+			IfcCurve<2> curve;
+			curve.points = pointList;
+
+			return curve;
+		}
+
 		IfcCurve<3> BuildArc(const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad)
 		{
 			IfcCurve<3> curve;
@@ -1113,9 +1163,10 @@ namespace webifc
 			pos = GetCartesianPoint3D(locationID);
 		}
 
-		std::vector<uint32_t> ReadCurveIndices()
+		std::vector<IfcSegmentIndexSelect>
+		ReadCurveIndices()
 		{
-			std::vector<uint32_t> result;
+			std::vector<IfcSegmentIndexSelect> result;
 
 			IfcTokenType t = _loader.GetTokenType();
 			// If you receive a reference then go to the reference
@@ -1126,43 +1177,40 @@ namespace webifc
 				auto &line = _loader.GetLine(lineID);
 				_loader.MoveToArgumentOffset(line, 0);
 			}
-			// If you receive a text (IFCLINEINDEX) then read the text and go on
-			else if (t == IfcTokenType::LABEL)
-			{
-				_loader.Reverse();
-				string nameElement = _loader.GetStringArgument();
-			}
 
-			// while we don't have line set end
+			_loader.Reverse();
 			while (_loader.GetTokenType() != IfcTokenType::SET_END)
 			{
 				_loader.Reverse();
-				t = _loader.GetTokenType();
-				// If you receive a real then add the real to the list
-				if (t == IfcTokenType::REAL)
+				if (_loader.GetTokenType() == IfcTokenType::LABEL)
 				{
+					IfcSegmentIndexSelect segment;
 					_loader.Reverse();
-					result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
-				}
-				// If you receive a text (IFCLINEINDEX) then read the text and go on
-				else if (t == IfcTokenType::LABEL)
-				{
-					_loader.Reverse();
-					string nameElement = _loader.GetStringArgument();
-				}
-				// If you receive a list then call the function in a recursive way
-				else if (t == IfcTokenType::SET_BEGIN)
-				{
-					_loader.Reverse();
-					std::vector<uint32_t> _result = ReadCurveIndices();
-					result.insert(result.end(), _result.begin(), _result.end());
+					segment.type = _loader.GetStringArgument();
+					while (_loader.GetTokenType() != IfcTokenType::SET_END)
+					{
+						_loader.Reverse();
+						while (_loader.GetTokenType() != IfcTokenType::SET_END)
+						{
+							_loader.Reverse();
+							t = _loader.GetTokenType();
+							// If you receive a real then add the real to the list
+							if (t == IfcTokenType::REAL)
+							{
+								_loader.Reverse();
+								segment.indexs.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+							}
+						}
+					}
+					result.push_back(segment);
 				}
 			}
 
 			return result;
 		}
 
-		std::vector<uint32_t> Read2DArrayOfThreeIndices()
+		std::vector<uint32_t>
+		Read2DArrayOfThreeIndices()
 		{
 			std::vector<uint32_t> result;
 
@@ -1977,6 +2025,7 @@ namespace webifc
 			return IfcCurve<3>();
 		}
 
+		// TODO: review and simplify
 		void TriangulateRevolution(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
 			// First we get the revolution data
@@ -2149,6 +2198,7 @@ namespace webifc
 			}
 		}
 
+		// TODO: review and simplify
 		void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
 			// First we get the cylinder data
@@ -2399,6 +2449,7 @@ namespace webifc
 			}
 		}
 
+		// TODO: review and simplify
 		void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
 			// NO EXAMPLE FILES ABOUT THIS CASE
@@ -2473,6 +2524,7 @@ namespace webifc
 			}
 		}
 
+		// TODO: review and simplify
 		void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
 			double limit = 1e-4;
@@ -4309,6 +4361,8 @@ namespace webifc
 
 				break;
 			}
+
+			// TODO: review and simplify
 			case ifc::IFCLINE:
 			{
 				bool condition = sameSense == 1 || sameSense == -1;
@@ -4438,11 +4492,26 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 1);
 					if (_loader.GetTokenType() != webifc::IfcTokenType::EMPTY)
 					{
-						auto pnIndex = ReadCurveIndices();
-						auto pts = ReadIfcCartesianPointList2D(pts2DRef);
-						for (auto &pt : pnIndex)
+						auto pnSegment = ReadCurveIndices();
+						for (auto &sg : pnSegment)
 						{
-							curve.Add(pts[pt - 1]);
+							if (sg.type == "IFCLINEINDEX")
+							{
+								auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+								for (auto &pt : sg.indexs)
+								{
+									curve.Add(pts[pt - 1]);
+								}
+							}
+							if (sg.type == "IFCARCINDEX")
+							{
+								auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+								IfcCurve<2> arc = BuildArc3Pt(pts[sg.indexs[0] - 1], pts[sg.indexs[1] - 1], pts[sg.indexs[2] - 1]);
+								for (auto &pt : arc.points)
+								{
+									curve.Add(pt);
+								}
+							}
 						}
 					}
 					else
@@ -4461,6 +4530,8 @@ namespace webifc
 
 				break;
 			}
+
+			// TODO: review and simplify
 			case ifc::IFCCIRCLE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
@@ -4589,6 +4660,8 @@ namespace webifc
 
 				break;
 			}
+
+			// TODO: review and simplify
 			case ifc::IFCELLIPSE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
@@ -4808,7 +4881,7 @@ namespace webifc
 				auto selfIntersect = _loader.GetStringArgument();
 				auto knotMultiplicitiesSet = _loader.GetSetArgument(); // The multiplicities of the knots. This list defines the number of times each knot in the knots list is to be repeated in constructing the knot array.
 				auto knotSet = _loader.GetSetArgument();			   // The list of distinct knots used to define the B-spline basis functions.
-				
+
 				for (auto &token : points)
 				{
 					uint32_t pointId = _loader.GetRefArgument(token);
@@ -4943,33 +5016,6 @@ namespace webifc
 					DumpSVGCurve(curve.points, L"partial_curve.html");
 				}
 			}
-		}
-
-		double VectorToAngle(double x, double y)
-		{
-			double dd = sqrt(x * x + y * y);
-			double xx = x / dd;
-			double yy = y / dd;
-			double angle = asin(xx);
-			double cosv = cos(angle);
-			if (glm::abs(yy - cosv) > 1e-5)
-			{
-				angle = acos(yy);
-				double sinv = sin(angle);
-				cosv = cos(angle);
-				if (glm::abs(yy - cosv) > 1e-5 | glm::abs(xx - sinv) > 1e-5)
-				{
-					angle = angle + (CONST_PI - angle) * 2;
-					sinv = sin(angle);
-					cosv = cos(angle);
-					if (glm::abs(yy - cosv) > 1e-5 | glm::abs(xx - sinv) > 1e-5)
-					{
-						angle = angle + CONST_PI;
-					}
-				}
-			}
-
-			return (angle / (2 * CONST_PI)) * 360;
 		}
 
 		glm::dvec3 GetVector(uint32_t expressID)
