@@ -39,11 +39,12 @@ var files = fs.readdirSync("./");
 for (var i = 0; i < files.length; i++) {
   if (!files[i].endsWith(".exp")) continue;
   var schemaName = files[i].replace(".exp","");
+  var schemaNameClean = schemaName.replace(".","_");
   console.log("Generating Schema for:"+schemaName);
   tsHelper.push(`FromRawLineData['${schemaName}'] = {};`);
   tsHelper.push(`InversePropertyDef['${schemaName}'] = {};`);
   tsHelper.push(`InheritanceDef['${schemaName}'] = {};`);
-  tsHelperClasses.push(`export namespace ${schemaName} {`);
+  tsHelperClasses.push(`export namespace ${schemaNameClean} {`);
   let schemaData = fs.readFileSync("./"+files[i]).toString();
   let parsed = parseElements(schemaData);
   let entities: Array<Entity> = sortEntities(parsed.entities);
@@ -105,14 +106,14 @@ for (var i = 0; i < files.length; i++) {
   
   for (var x=0; x < entities.length; x++) 
   {
-      generateClass(entities[x],tsHelperClasses,types, schemaName);
+      generateClass(entities[x],tsHelperClasses,types, schemaNameClean);
       completeEntityList.add(entities[x].name);
       if (entities[x].isIfcProduct)
       {
         completeifcElementList.add(entities[x].name);
       }
   
-      tsHelper.push(`FromRawLineData['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (d: RawLineData) => { return ${schemaName}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
+      tsHelper.push(`FromRawLineData['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (d: RawLineData) => { return ${schemaNameClean}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
     
       if (entities[x].children.length > 0)
       {
