@@ -158,7 +158,7 @@ async function LoadFile(filename) {
     console.log(`Writing ${numLines} lines took ${time} ms`);
 
     start = WebIFC.ms();
-    fs.writeFileSync("exported.ifc", ifcapi.ExportFileAsIFC(modelID));
+    fs.writeFileSync("exported.ifc", ifcapi.SaveModel(modelID));
     time = WebIFC.ms() - start;
     console.log(`Exporting took ${time} ms`);
 

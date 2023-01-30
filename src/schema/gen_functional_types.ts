@@ -217,7 +217,7 @@ cppHeader.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
 cppHeader.push("\t\t}");
 cppHeader.push("\t}");
 
-fs.writeFileSync("../wasm/include/ifc-schema.h", cppHeader.join("\n")); 
+fs.writeFileSync("../wasm/parsing/ifc-schema.h", cppHeader.join("\n")); 
 fs.writeFileSync("../ifc-schema.ts", tsHeader.join("\n")); 
 
 console.log(`...Done!`);

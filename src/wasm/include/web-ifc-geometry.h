@@ -24,8 +24,7 @@
 
 #include <tinynurbs/tinynurbs.h>
 
-#include "ifc-schema.h"
-#include "web-ifc.h"
+#include "../parsing/ifc-schema.h"
 #include "util.h"
 
 const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
@@ -248,7 +247,7 @@ namespace webifc
 		{
 			if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
 			{
-				_loader.Reverse();
+				_loader.StepBack();
 				return _loader.GetDoubleArgument();
 			}
 			return defaultValue;
@@ -329,13 +328,13 @@ namespace webifc
 				uint32_t localPlacement = 0;
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					localPlacement = _loader.GetRefArgument();
 				}
 				uint32_t ifcPresentation = 0;
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					ifcPresentation = _loader.GetRefArgument();
 				}
 
@@ -771,7 +770,7 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 4);
 					if (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						auto pnIndex = Read2DArrayOfThreeIndices();
 
 						// ignore
@@ -817,13 +816,13 @@ namespace webifc
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						startParam = _loader.GetDoubleArgument();
 					}
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						endParam = _loader.GetDoubleArgument();
 					}
 
@@ -890,7 +889,7 @@ namespace webifc
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
 						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", line.expressID});
-						_loader.Reverse();
+						_loader.StepBack();
 						innerRadius = _loader.GetDoubleArgument();
 					}
 
@@ -899,13 +898,13 @@ namespace webifc
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						startParam = _loader.GetDoubleArgument();
 					}
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						endParam = _loader.GetDoubleArgument();
 					}
 
@@ -1106,7 +1105,7 @@ namespace webifc
 			axis = glm::dvec3(0, 0, 1);
 			if (dirToken == IfcTokenType::REF)
 			{
-				_loader.Reverse();
+				_loader.StepBack();
 				axis = GetCartesianPoint3D(_loader.GetRefArgument());
 			}
 
@@ -1121,7 +1120,7 @@ namespace webifc
 			// If you receive a reference then go to the reference
 			if (t == IfcTokenType::REF)
 			{
-				_loader.Reverse();
+				_loader.StepBack();
 				uint32_t lineID = _loader.ExpressIDToLineID(_loader.GetRefArgument());
 				auto &line = _loader.GetLine(lineID);
 				_loader.MoveToArgumentOffset(line, 0);
@@ -1129,31 +1128,31 @@ namespace webifc
 			// If you receive a text (IFCLINEINDEX) then read the text and go on
 			else if (t == IfcTokenType::LABEL)
 			{
-				_loader.Reverse();
-				string nameElement = _loader.GetStringArgument();
+				_loader.StepBack();
+				std::string nameElement = _loader.GetStringArgument();
 			}
 
 			// while we don't have line set end
 			while (_loader.GetTokenType() != IfcTokenType::SET_END)
 			{
-				_loader.Reverse();
+				_loader.StepBack();
 				t = _loader.GetTokenType();
 				// If you receive a real then add the real to the list
 				if (t == IfcTokenType::REAL)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
 				}
 				// If you receive a text (IFCLINEINDEX) then read the text and go on
 				else if (t == IfcTokenType::LABEL)
 				{
-					_loader.Reverse();
-					string nameElement = _loader.GetStringArgument();
+					_loader.StepBack();
+					std::string nameElement = _loader.GetStringArgument();
 				}
 				// If you receive a list then call the function in a recursive way
 				else if (t == IfcTokenType::SET_BEGIN)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					std::vector<uint32_t> _result = ReadCurveIndices();
 					result.insert(result.end(), _result.begin(), _result.end());
 				}
@@ -1378,7 +1377,7 @@ namespace webifc
 
 					while (_loader.GetTokenType() != IfcTokenType::SET_END)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						uint32_t index = static_cast<uint32_t>(_loader.GetDoubleArgument());
 
 						glm::dvec3 point = points[index - 1]; // indices are still 1-based
@@ -1478,7 +1477,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() == IfcTokenType::REAL)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					outputColor.a = 1 - _loader.GetDoubleArgument();
 				}
 
@@ -3255,7 +3254,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
 					placement = GetAxis2Placement2D(placementID);
@@ -3273,7 +3272,7 @@ namespace webifc
 				double filletRadius = 0;
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 
 					hasFillet = true;
 					filletRadius = _loader.GetDoubleArgument();
@@ -3297,7 +3296,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
 					glm::dmat3 placement = GetAxis2Placement2D(placementID);
@@ -3319,7 +3318,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 
 					hasFillet = true;
 					filletRadius = _loader.GetDoubleArgument();
@@ -3343,7 +3342,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
 					glm::dmat3 placement = GetAxis2Placement2D(placementID);
@@ -3411,7 +3410,7 @@ namespace webifc
 				{
 					while (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						uint32_t profileID = _loader.ExpressIDToLineID(_loader.GetRefArgument());
 						lst.push_back(profileID);
 					}
@@ -3841,7 +3840,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 1);
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					uint32_t placementID = _loader.GetRefArgument();
 					surface.transformation = GetLocalPlacement(placementID);
 				}
@@ -3873,7 +3872,7 @@ namespace webifc
 				double length = 0;
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					length = _loader.GetDoubleArgument();
 				}
 
@@ -3917,7 +3916,7 @@ namespace webifc
 				glm::dvec2 xAxis = glm::dvec2(1, 0);
 				if (dirToken == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					xAxis = glm::normalize(GetCartesianPoint2D(_loader.GetRefArgument()));
 				}
 
@@ -3942,13 +3941,13 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					Axis1 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 				_loader.MoveToArgumentOffset(line, 1);
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					Axis2 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
@@ -3959,7 +3958,7 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 3);
 				if (_loader.GetTokenType() == IfcTokenType::REAL)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					scale1 = _loader.GetDoubleArgument();
 				}
 
@@ -3968,7 +3967,7 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 4);
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						scale2 = _loader.GetDoubleArgument();
 					}
 				}
@@ -3992,7 +3991,7 @@ namespace webifc
 		}
 		bool ValidExpressId(uint32_t expressID)
 		{
-			if (_loader.ValidExpressID(expressID))
+			if (_loader.IsValidExpressID(expressID))
 			{
 				return true;
 			}
@@ -4018,7 +4017,7 @@ namespace webifc
 				IfcTokenType zID = _loader.GetTokenType();
 				if (zID == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 				glm::dvec3 pos = GetCartesianPoint3D(posID);
@@ -4047,7 +4046,7 @@ namespace webifc
 				IfcTokenType zID = _loader.GetTokenType();
 				if (zID == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
@@ -4055,7 +4054,7 @@ namespace webifc
 				IfcTokenType xID = _loader.GetTokenType();
 				if (xID == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					xAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
@@ -4078,7 +4077,7 @@ namespace webifc
 				IfcTokenType relPlacementToken = _loader.GetTokenType();
 				if (relPlacementToken == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					relPlacement = GetLocalPlacement(_loader.GetRefArgument());
 				}
 
@@ -4104,13 +4103,13 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 0);
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					Axis1 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 				_loader.MoveToArgumentOffset(line, 1);
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					Axis2 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
@@ -4121,14 +4120,14 @@ namespace webifc
 				_loader.MoveToArgumentOffset(line, 3);
 				if (_loader.GetTokenType() == IfcTokenType::REAL)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					scale1 = _loader.GetDoubleArgument();
 				}
 
 				_loader.MoveToArgumentOffset(line, 4);
 				if (_loader.GetTokenType() == IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					Axis3 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
 				}
 
@@ -4137,14 +4136,14 @@ namespace webifc
 					_loader.MoveToArgumentOffset(line, 5);
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						scale2 = _loader.GetDoubleArgument();
 					}
 
 					_loader.MoveToArgumentOffset(line, 6);
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
-						_loader.Reverse();
+						_loader.StepBack();
 						scale3 = _loader.GetDoubleArgument();
 					}
 				}
@@ -4202,10 +4201,9 @@ namespace webifc
 			*/
 			for (int i = 0; i < tapeOffsets.size(); i++)
 			{
-				_loader.MoveTo(tapeOffsets[i]);
-
-				auto tokenType = _loader.GetTokenType();
-				_loader.Reverse();
+	
+				auto tokenType = _loader.GetTokenType(tapeOffsets[i]);
+				_loader.StepBack();
 
 				if (tokenType == IfcTokenType::REF)
 				{
@@ -4230,8 +4228,7 @@ namespace webifc
 					{
 						ts.hasParam = true;
 						i++;
-						_loader.MoveTo(tapeOffsets[i]);
-						ts.param = _loader.GetDoubleArgument();
+						ts.param = _loader.GetDoubleArgument(tapeOffsets[i]);
 					}
 				}
 			}
@@ -4423,7 +4420,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() != webifc::IfcTokenType::EMPTY)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 					auto selfIntersects = _loader.GetStringArgument();
 
 					if (selfIntersects == "T")

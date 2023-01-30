@@ -1,5 +1,5 @@
 #include "TinyCppTest.hpp"
-#include "../include/parsing/p21decode.h"
+#include "../parsing/helpers/p21decode.h"
 
 using namespace std;
 

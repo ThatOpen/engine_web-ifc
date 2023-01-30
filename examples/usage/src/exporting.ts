@@ -13,7 +13,7 @@ const FILE_NAME = "../example.ifc";
 export default async function() {
     await WithIFCFileLoaded("read_and_export", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
 
-        let data = ifcapi.ExportFileAsIFC(modelID);
+        let data: Uint8Array = ifcapi.SaveModel(modelID);
 
         const ifcData = fs.readFileSync(FILE_NAME);
 

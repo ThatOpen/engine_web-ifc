@@ -105,7 +105,6 @@ export type LocateFileHandlerFn = (path: string, prefix: string) => string;
 
 export class IfcAPI {
     wasmModule: undefined | any = undefined;
-    fs: undefined | any = undefined;
     wasmPath: string = "";
     isWasmPathAbsolute = false;
 
@@ -143,7 +142,6 @@ export class IfcAPI {
 
             //@ts-ignore
             this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler });
-            this.fs = this.wasmModule.FS;
         }
         else {
             this.LogError(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
@@ -165,17 +163,11 @@ export class IfcAPI {
             BOOL_ABORT_THRESHOLD: 10000,
             ...settings
         };
-        let offsetInSrc = 0;
-        let result = this.wasmModule.OpenModel(s, (destPtr: number, destSize: number) => {
+        let result = this.wasmModule.OpenModel(s, (destPtr: number, offsetInSrc: number, destSize: number) => {
             let srcSize = Math.min(data.byteLength - offsetInSrc, destSize);
-
-            let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + destSize);
-            let src = data.subarray(offsetInSrc, offsetInSrc + srcSize);
-
+            let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + srcSize);
+            let src = data.subarray(offsetInSrc, offsetInSrc + srcSize );
             dest.set(src);
-
-            offsetInSrc += srcSize;
-
             return srcSize;
         });
         this.modelSchemaList[result] = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
@@ -210,36 +202,21 @@ export class IfcAPI {
         return result;
     }
 
-    ExportFileAsIFC(modelID: number): Uint8Array {
-        this.wasmModule.ExportFileAsIFC(modelID);
-        //@ts-ignore
-        let result = this.fs.readFile("/export.ifc");
-        this.wasmModule['FS_unlink']("/export.ifc");
-        return result;
+    SaveModel(modelID: number): Uint8Array {
+        let modelSize = this.wasmModule.GetModelSize(modelID);
+        let dataBuffer = new Uint8Array(modelSize);
+        let size = 0; 
+        this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
+            let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
+            size = srcSize;
+            dataBuffer.set(src, 0);
+        });
+        //shrink down to size
+        let newBuffer = new Uint8Array(size);
+        newBuffer.set(dataBuffer.subarray(0,size),0);
+        return newBuffer;
     }
 
-    async Serialize(paths: any, serializedFileName: any, storeSerialized: (buffer: any) => void, ramLimit: number = 200000000): Promise<void> {
-        this.wasmModule.Serialize(paths, serializedFileName, storeSerialized, ramLimit);
-    }
-
-    OpenSerialized(paths: any, settings?: LoaderSettings, ramLimit: number = 200000000): number {
-        let s: LoaderSettings = {
-            COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: true,
-            CIRCLE_SEGMENTS_LOW: 5,
-            CIRCLE_SEGMENTS_MEDIUM: 8,
-            CIRCLE_SEGMENTS_HIGH: 12,
-            BOOL_ABORT_THRESHOLD: 10000,
-            ...settings
-        };
-        return this.wasmModule.OpenSerialized(paths, s, ramLimit);
-    }
-
-    /**
-     * Opens a model and returns a modelID number
-     * @modelID Model handle retrieved by OpenModel, model must not be closed
-     * @data Buffer containing IFC data (bytes)
-    */
     GetGeometry(modelID: number, geometryExpressID: number): IfcGeometry {
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }

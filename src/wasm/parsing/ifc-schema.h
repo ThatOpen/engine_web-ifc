@@ -898,7 +898,8 @@ namespace ifc {
 	static const unsigned int IFCACTUATOR = 4288193352;
 	static const unsigned int IFCALARM = 3087945054;
 	static const unsigned int IFCCONTROLLER = 25142252;
-	bool isIfcElement(unsigned int ifcCode) {
+	
+	inline bool isIfcElement(unsigned int ifcCode) {
 		switch(ifcCode) {
 			case ifc::IFCPRODUCT: return true;
 			case ifc::IFCPROXY: return true;
@@ -1085,7 +1086,7 @@ namespace ifc {
 			default: return false;
 		}
 	}
-	std::vector<unsigned int> IfcElements { 
+	inline std::vector<unsigned int> IfcElements { 
 		IFCPRODUCT,
 		IFCPROXY,
 		IFCSPATIALSTRUCTUREELEMENT,
@@ -1270,7 +1271,8 @@ namespace ifc {
 		IFCCONTROLLER,
 	};
 };
-	const char* GetReadableNameFromTypeCode(unsigned int ifcCode) {
+	
+	inline const char* GetReadableNameFromTypeCode(unsigned int ifcCode) {
 		switch(ifcCode) {
 			case ifc::FILE_SCHEMA: return "FILE_SCHEMA";
 			case ifc::FILE_NAME: return "FILE_NAME";

@@ -19,22 +19,11 @@ set (CMAKE_CXX_EXTENSIONS OFF)
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 #collect source files
-file (GLOB WebIfcCoreFiles include/*.h)
-file (GLOB WebIfcMathFiles include/math/*.h)
-file (GLOB WebIfcParsingFiles include/parsing/*.h)
-file (GLOB WebIfcSourceFiles web-ifc-api.cpp)
+file (GLOB WebIfcParsing parsing/*.cpp)
+file (GLOB WebIfcAPI web-ifc-api.cpp)
+file (GLOB WebIfcUtility utility/*.cpp)
 file (GLOB WebIfcTestSourceFiles test/*.cpp)
 file (GLOB WebIfcTestingMain web-ifc-test.cpp)
-
-set (
-	WebIfcFiles
-	${WebIfcCoreFiles}
-	${WebIfcMathFiles}
-	${WebIfcParsingFiles}
-	${WebIfcSourceFiles}
-)
-
-set (WebIfcTestFiles ${WebIfcTestSourceFiles})
 
 #download the external projects and save their paths
 Message("Downloading TinyNURBS")
@@ -84,7 +73,7 @@ if (EMSCRIPTEN)
 	set_target_properties(manifoldjs PROPERTIES EXCLUDE_FROM_ALL TRUE)
 	
 	#build parameters for web-ifc
-	add_executable (web-ifc ${WebIfcFiles})
+	add_executable (web-ifc ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility})
 	target_include_directories(web-ifc PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc PUBLIC ${manifold_SOURCE_DIR}/src)
 	target_include_directories(web-ifc PUBLIC ${manifold_SOURCE_DIR}/src/utilities/include)
@@ -92,11 +81,11 @@ if (EMSCRIPTEN)
 	target_include_directories(web-ifc PUBLIC ${earcut_SOURCE_DIR}/include)
 	target_link_libraries(web-ifc manifold)
 	target_compile_options(web-ifc PUBLIC "-Wall")
-	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -03 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS, WORKERFS\"] -lworkerfs.js")
+	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -03 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1")
 		
 
 	#multi-treaded versions
-	add_executable (web-ifc-mt ${WebIfcFiles})
+	add_executable (web-ifc-mt ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility})
 	target_include_directories(web-ifc-mt PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc-mt PUBLIC ${manifold_SOURCE_DIR}/src)
 	target_include_directories(web-ifc-mt PUBLIC ${manifold_SOURCE_DIR}/src/utilities/include)
@@ -105,26 +94,27 @@ if (EMSCRIPTEN)
 	target_link_libraries(web-ifc-mt manifold)
 	target_compile_options(web-ifc-mt PUBLIC "-pthread")
 	target_compile_options(web-ifc-mt PUBLIC "-Wall")
-	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -03 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS, WORKERFS\"] -lworkerfs.js")
+	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -03 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1")
 endif()
 
 
 if (NOT EMSCRIPTEN)
 
 	#build parameters for web-ifc-test
-	add_executable (web-ifc-test ${WebIfcTestFiles})
+	add_executable (web-ifc-test ${WebIfcParsing} ${WebIfcUtility} ${WebIfcTestSourceFiles})
 	target_include_directories(web-ifc-test PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc-test PUBLIC ${manifold_SOURCE_DIR}/src)
 	target_include_directories(web-ifc-test PUBLIC ${manifold_SOURCE_DIR}/src/utilities/include)
 	target_include_directories(web-ifc-test PUBLIC ${glm_SOURCE_DIR})
 	target_include_directories(web-ifc-test PUBLIC ${earcut_SOURCE_DIR}/include)
 	target_include_directories(web-ifc-test PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
-	target_compile_options(web-ifc-test PUBLIC "-Wall")
+	target_compile_options(web-ifc-test PUBLIC -O3 -Wall)
+	target_link_libraries(web-ifc-test manifold)
 	add_test (web-ifc-test web-ifc-test)
 	set_tests_properties(web-ifc-test PROPERTIES LABELS "web-ifc")
 	
 	#build parameters for web-ifc in testing environment
-	add_executable (web-ifc ${WebIfcTestingMain})
+	add_executable (web-ifc ${WebIfcParsing} ${WebIfcUtility}	${WebIfcTestingMain})
 	target_include_directories(web-ifc PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc PUBLIC ${manifold_SOURCE_DIR}/src)
 	target_include_directories(web-ifc PUBLIC ${manifold_SOURCE_DIR}/src/utilities/include)
@@ -132,5 +122,5 @@ if (NOT EMSCRIPTEN)
 	target_include_directories(web-ifc PUBLIC ${earcut_SOURCE_DIR}/include)
 	target_include_directories(web-ifc PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
 	target_link_libraries(web-ifc manifold)
-	target_compile_options(web-ifc PUBLIC "-Wall")
+	target_compile_options(web-ifc PUBLIC -O3 -Wall)
 endif()

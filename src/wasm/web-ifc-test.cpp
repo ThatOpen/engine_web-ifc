@@ -6,11 +6,21 @@
 #include <fstream>
 #include <filesystem>
 
-#include "include/web-ifc.h"
+#include "parsing/IfcLoader.h"
 #include "include/web-ifc-geometry.h"
 #include "include/math/triangulate-with-boundaries.h"
-#include "include/ifc-schema.h"
+#include "parsing/ifc-schema.h"
 
+
+long long ms()
+{
+	using namespace std::chrono;
+	milliseconds millis = duration_cast<milliseconds>(
+		system_clock::now().time_since_epoch());
+
+	return millis.count();
+}
+  
 std::string ReadFile(std::string filename)
 {
     std::ifstream t(filename);
@@ -108,11 +118,11 @@ void Benchmark()
         std::string content = ReadFile(filePath);
 
         webifc::IfcLoader loader;
-        auto start = webifc::ms();
+        auto start = ms();
         {
             // loader.LoadFile(content);
         }
-        auto time = webifc::ms() - start;
+        auto time = ms() - start;
 
         BenchMarkResult result;
         result.file = filename;
@@ -216,178 +226,9 @@ void TestTriangleDecompose()
     }
 }
 
-uint32_t openSerialized(std::vector<std::string> paths, webifc::LoaderSettings settings)
-{
-    std::map<uint32_t, std::unique_ptr<webifc::IfcLoader>> loaders;
-    std::map<uint32_t, std::unique_ptr<webifc::IfcGeometryLoader>> geomLoaders;
-
-    uint32_t modelID = 0;
-
-    auto loader = std::make_unique<webifc::IfcLoader>(settings);
-    loaders.emplace(modelID, std::move(loader));
-    auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID]);
-    geomLoaders.emplace(modelID, std::move(geomLoader));
-
-    for (int i(0); i < paths.size(); ++i)
-    {
-        std::cout << paths[i] << std::endl;
-    }
-
-    loaders[modelID]->ActivateSerializer();
-    loaders[modelID]->SetBinPaths(paths);
-    uint32_t numLines = loaders[modelID]->loadMetadata();
-
-    // Continue opening
-    loaders[modelID]->LoadSerializedFileData(numLines);
-
-    // Ensure IsOpen will return true upon successful load.
-    loaders[modelID]->SetOpen();
-
-    ////////////
-
-    std::vector<webifc::IfcFlatMesh> meshes;
-
-    for (auto type : ifc::IfcElements)
-    {
-        auto elements = loaders[modelID]->GetExpressIDsWithType(type);
-
-        for (int i = 0; i < elements.size(); i++)
-        {
-            auto mesh = geomLoaders[modelID]->GetFlatMesh(elements[i]);
-            meshes.push_back(mesh);
-        }
-    }
-
-    loaders[modelID]->DisableSerializer();
-
-    ////////////
-
-    return modelID;
-}
-
-void serialize(std::vector<std::string> filePaths, std::string serializedName)
-{
-    auto settings = webifc::LoaderSettings();
-    auto loader = std::make_unique<webifc::IfcLoader>(settings);
-
-    loader->ActivateSerializer();
-    loader->SetSerializedFileName(serializedName);
-
-    uint32_t numLines = 0;
-
-    for (uint32_t fi = 0; fi < filePaths.size(); fi++)
-    {
-        std::ifstream bigFile(filePaths[fi], std::ios::binary | std::ios::ate);
-        int fileSize = bigFile.tellg();
-        bigFile.seekg(0);
-        constexpr size_t bufferSize = 5000;
-        std::array<char, bufferSize> buffer;
-
-        bool inText = false;
-        std::string prevStringChunk = "";
-        std::string content = "";
-
-        if (bigFile.fail())
-        {
-            std::cout << "ERROR, Could not open " << filePaths[fi] << std::endl;
-            exit(1);
-        }
-
-        uint32_t count = 0;
-        uint32_t update = 0;
-
-        while (bigFile)
-        {
-            content.clear(); // You must clean string this way, otherwise memory leaks in chrome
-            for (int i(0); i < bufferSize; ++i)
-                buffer[i] = '\0';
-            bigFile.read(buffer.data(), bufferSize);
-            content = buffer.data();
-
-            if (content.size() > bufferSize)
-            {
-                content.erase(bufferSize, content.size() - bufferSize);
-            }
-
-            // keep record of quotations
-            for (int j = 0; j < content.size(); j++)
-            {
-                if (content[j] == '\'')
-                {
-                    inText = !inText;
-                }
-            }
-
-            // Add the preovious uncomplete string chunk
-            content = prevStringChunk + content;
-
-            bool doit = true;
-            prevStringChunk.clear(); // You must clean string this way, otherwise memory leaks in chrome
-            uint32_t i = 1;
-            bool inText2 = inText;
-
-            while (true)
-            {
-                uint32_t idx = content.size() - i;
-                // Negative idx is not suposed to happen
-
-                if (content.size() < i)
-                {
-                    doit = false;
-                    break;
-                }
-                if (content[idx] == '\'')
-                {
-                    inText2 = !inText2;
-                }
-                // Only if you are not in a text the ';' indicates end of line
-                if (content[idx] == ';' && !inText2)
-                {
-                    break;
-                }
-                else
-                {
-                    // All the incomplete text is keep in the prevStringChunk
-                    prevStringChunk.push_back(content[idx]);
-                }
-                i++;
-            }
-
-            // Reverse the uncomplete string line
-            reverse(prevStringChunk.begin(), prevStringChunk.end());
-
-            if (doit)
-            {
-                // Remove uncomplete last line
-                content.erase(content.size() - prevStringChunk.size(), prevStringChunk.size());
-                content = content + " ";
-
-                size_t contentOffset = 0;
-                numLines += loader->readFilePart([&](char *dest, size_t destSize)
-                                                 {
-                        uint32_t length = std::min(content.size() - contentOffset, destSize);
-                        memcpy(dest, &content[contentOffset], length);
-
-                        contentOffset += length;
-
-                        return length; });
-            }
-
-            count++;
-            update++;
-        }
-        bigFile.close();
-    }
-
-    loader->storeLastChunk();
-    loader->storeMetadata(numLines);
-    loader->DisableSerializer();
-}
-
 int main()
 {
-    std::cout << "Hello web IFC test!\n";
-
+	  std::cout << "Hello web IFC test!"<< std::endl;
     // TestTriangleDecompose();
 
     // return 0;
@@ -397,30 +238,25 @@ int main()
     // return 0;
 
     //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#83 processing/05111002_IFCR2_Geo_Columns_1.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
-
-    webifc::LoaderSettings set;
+    std::string content = ReadFile("../../../examples/example.ifc");
+		webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
 
     webifc::IfcLoader loader(set);
 
-    auto start = webifc::ms();
-    size_t contentOffset = 0;
-    loader.LoadFile([&](char *dest, size_t destSize)
+    auto start = ms();
+    loader.LoadFile([&](char *dest, size_t sourceOffset, size_t destSize)
                     {
-                        uint32_t length = std::min(content.size() - contentOffset, destSize);
-                        memcpy(dest, &content[contentOffset], length);
-
-                        contentOffset += length;
+                        uint32_t length = std::min(content.size() - sourceOffset, destSize);
+                        memcpy(dest, &content[sourceOffset], length);
 
                         return length; });
-
     // std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
     // outputStream << loader.DumpAsIFC();
     // exit(0);
-    auto time = webifc::ms() - start;
+    auto time = ms() - start;
 
     std::cout << "Reading took " << time << "ms" << std::endl;
 
@@ -430,7 +266,7 @@ int main()
 
     webifc::IfcGeometryLoader geometryLoader(loader);
 
-    start = webifc::ms();
+    start = ms();
     //SpecificLoadTest(loader, geometryLoader, 2591);
     //SpecificLoadTest(loader, geometryLoader, 2837);
     auto meshes = LoadAllTest(loader, geometryLoader);
@@ -443,7 +279,7 @@ int main()
         std::cout << error.expressID << " " << error.ifcType << " " << std::to_string((int)error.type) << " " << error.message << std::endl;
     }
 
-    time = webifc::ms() - start;
+    time = ms() - start;
 
     std::cout << "Generating geometry took " << time << "ms" << std::endl;
 
