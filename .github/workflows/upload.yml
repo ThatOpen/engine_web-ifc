@@ -1,0 +1,33 @@
+name: Publish to Github Pages
+on: [push]
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: mymindstorm/setup-emsdk@v11
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install and Build
+        run: |
+          npm i -g cpy-cli
+          npm ci
+          npm run build-release
+          npm run build-viewer
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './examples/viewer/dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
