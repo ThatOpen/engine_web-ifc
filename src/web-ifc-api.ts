@@ -343,6 +343,10 @@ export class IfcAPI {
                 }
             }
         });
+        
+        if(lineObject.expressID === undefined || lineObject.expressID < 0) {
+            lineObject.expressID = this.IncrementMaxExpressID(modelID, 1);
+        }
 
         // See https://github.com/IFCjs/web-ifc/issues/178 for some pitfalls here.
         if (lineObject.expressID === undefined
