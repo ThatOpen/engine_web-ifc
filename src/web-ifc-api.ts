@@ -36,6 +36,7 @@ export interface LoaderSettings {
     CIRCLE_SEGMENTS_MEDIUM?: number;
     CIRCLE_SEGMENTS_HIGH?: number;
     BOOL_ABORT_THRESHOLD?: number;
+    MEMORY_LIMIT?: number;
 }
 
 
@@ -147,6 +148,24 @@ export class IfcAPI {
             this.LogError(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
         }
     }
+
+     /**
+     * Opens a set of models and returns model IDs 
+     * @data Buffer containing IFC data (bytes)
+     * @data Settings settings for loading the model
+    */
+    OpenModels(dataSets: Array<Uint8Array>, settings?: LoaderSettings): Array<number> {
+        let s: LoaderSettings = {
+            MEMORY_LIMIT :  3221225472,
+            ...settings
+        };
+        s.MEMORY_LIMIT = s.MEMORY_LIMIT! / dataSets.length;
+        let modelIDs:Array<number> = [];
+
+        for (let dataSet of dataSets) modelIDs.push(this.OpenModel(dataSet,s));
+        return modelIDs
+    }
+
 
     /**
      * Opens a model and returns a modelID number
@@ -287,46 +306,35 @@ export class IfcAPI {
         return this.wasmModule.GetAndClearErrors(modelID);
     }
 
-    WriteLine(modelID: number, lineObject: any) {
-        // this is pretty weakly-typed nonsense
-        Object.keys(lineObject).forEach(propertyName => {
-            let property = lineObject[propertyName];
-            if (property && property.expressID !== undefined) {
+    WriteLine<Type extends ifc.IfcLineObject>(modelID: number, lineObject: Type) {
+
+
+        let property: keyof Type;
+        for (property in lineObject)
+        {
+            const lineProperty: any = lineObject[property];
+            if (lineProperty  && (lineProperty as ifc.IfcLineObject).expressID !== undefined) {
                 // this is a real object, we have to write it as well and convert to a handle
                 // TODO: detect if the object needs to be written at all, or if it's unchanged
-                this.WriteLine(modelID, property);
+                this.WriteLine(modelID, lineProperty as ifc.IfcLineObject);
 
                 // overwrite the reference
                 // NOTE: this modifies the parameter
-                lineObject[propertyName] = {
-                    type: 5,
-                    value: property.expressID
-                }
+                (lineObject[property] as any)= new ifc.Handle((lineProperty as ifc.IfcLineObject).expressID);
             }
-            else if (Array.isArray(property) && property.length > 0) {
-                for (let i = 0; i < property.length; i++) {
-                    if (property[i].expressID !== undefined) {
+            else if (Array.isArray(lineProperty) && lineProperty.length > 0) {
+                for (let i = 0; i < lineProperty.length; i++) {
+                    if ((lineProperty[i] as ifc.IfcLineObject).expressID !== undefined) {
                         // this is a real object, we have to write it as well and convert to a handle
                         // TODO: detect if the object needs to be written at all, or if it's unchanged
-                        this.WriteLine(modelID, property[i]);
+                        this.WriteLine(modelID, lineProperty[i] as ifc.IfcLineObject);
 
                         // overwrite the reference
                         // NOTE: this modifies the parameter
-                        lineObject[propertyName][i] = {
-                            type: 5,
-                            value: property[i].expressID
-                        }
+                        ((lineObject[property]as any)[i] as any) = new ifc.Handle((lineProperty[i] as ifc.IfcLineObject).expressID);
                     }
                 }
             }
-        });
-
-        // See https://github.com/IFCjs/web-ifc/issues/178 for some pitfalls here.
-        if (lineObject.expressID === undefined
-            || lineObject.type === undefined
-            || lineObject.ToTape === undefined) {
-            this.LogWarn('Line object cannot be serialized; invalid format:', lineObject)
-            return
         }
 
         let rawLineData: RawLineData = {

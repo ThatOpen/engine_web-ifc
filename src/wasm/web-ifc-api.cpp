@@ -565,7 +565,6 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     loader->Push((void*)ifcName, length);
 
     WriteSet(modelID,parameters);
-
     // end line
     loader->Push<uint8_t>(webifc::IfcTokenType::LINE_END);
 
@@ -610,6 +609,7 @@ emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
 
     valueStack.push(arguments);
     valuePosition.push(0);
+    std::cout << "GETLINE"<<std::endl;
 
     bool endOfLine = false;
     while (!loader->IsAtEnd() && !endOfLine)
@@ -676,8 +676,10 @@ emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
             auto obj = emscripten::val::object(); 
             obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::LABEL)));
             loader->StepBack();
-            std::string s = loader->GetStringArgument();
-            obj.set("label", emscripten::val(s));
+            auto s=loader->GetStringArgument();
+            auto typeCode = loader->IfcTypeToTypeCode(s);
+            obj.set("typecode", emscripten::val(typeCode));
+            std::cout << "typecode"<<s<<":"<< typeCode<<std::endl;
 
             // read set open
             loader->GetTokenType();
@@ -685,7 +687,6 @@ emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
             // read value following label
             webifc::IfcTokenType t = loader->GetTokenType();
             loader->StepBack();
-            obj.set("valueType", emscripten::val(static_cast<uint32_t>(t)));
             obj.set("value", ReadValue(modelID,t));
 
             // read set close

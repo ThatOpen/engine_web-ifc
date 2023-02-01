@@ -1,5 +1,32 @@
-import {Entity, Type} from "./gen_functional_types_interfaces";
+import {Entity, Type, Prop} from "./gen_functional_types_interfaces";
 
+
+export function generatePropAssignment(p: Prop, i:number, types:Type[]) 
+{
+     let isType: boolean = types.some( (x:Type) => x.name == p.type);
+     let type = types.find( (x:Type) => x.name == p.type);
+     
+     let prefix = '';
+     if (p.optional) prefix ='!_tape['+i+'] ? null :'
+     
+     let content:string;
+     if (p.set)
+     {
+        content = '_tape['+i+'].map((p:any) => '
+        if ( (isType && type?.typeName.indexOf('Ifc') !== -1) || type?.isSelect)  content+='TypeInitialiser[p.typecode](p.value)';
+        else if (isType) content+='new '+p.type+'(p.value)';
+        else if (p.primitive) content+='p.value';
+        else content+='new Handle<'+p.type+'>(p.value)';
+        content +=')';
+     }
+     else if ( (isType && type?.typeName.indexOf('Ifc') !== -1 ) || type?.isSelect) content='TypeInitialiser[_tape['+i+'].typecode](_tape['+i+'].value)';
+     else if (isType) content='new '+p.type+'(_tape['+i+'].value)';
+     else if (p.primitive) content='_tape['+i+'].value';
+     else content='new Handle<'+p.type+'>(_tape['+i+'].value)';
+     
+
+     return prefix + content;
+}
 
 export function sortEntities(entities: Array<Entity>) {
   let sortedEntities: Array<Entity> = [];
@@ -19,50 +46,46 @@ export function sortEntities(entities: Array<Entity>) {
   return sortedEntities;
 }
 
-export function generateClass(entity:Entity, buffer: Array<string>, types:Type[], schemaName:string) 
+export function generateClass(entity:Entity, buffer: Array<string>, types:Type[]) 
 {
 
   if (!entity.parent)
   {
-    buffer.push(`\texport class ${entity.name} {`);
-    buffer.push(`\t\texpressID: number;`);
-    buffer.push(`\t\ttype: number;`);
+    buffer.push(`\texport class ${entity.name} extends IfcLineObject {`);
   } 
   else
   {
-    buffer.push(`\texport class ${entity.name} extends ${schemaName}.${entity.parent} {`);
+    buffer.push(`\texport class ${entity.name} extends ${entity.parent} {`);
   }
   
   entity.props.forEach((param) => {
-    let isType: boolean = types.some( (x:Type) => x.name == param.name);
-    let propType = `${(isType || param.primitive) ? param.type : "(Handle<" + schemaName + "."+ param.type + `> | ${schemaName}.${param.type})` }${param.set ? "[]" : ""} ${param.optional ? "| null" : ""}`;
+    let isType: boolean = types.some( (x:Type) => x.name == param.type);
+    let propType = `${(isType || param.primitive) ? param.type : "(Handle<"  +  param.type + `> | ${param.type})` }${param.set ? "[]" : ""} ${param.optional ? "| null" : ""}`;
     buffer.push(`\t\t${param.name}: ${propType};`)
   });
   
   entity.inverseProps.forEach((prop) => {
-    let type = `${"(Handle<" + schemaName + "."+ prop.type + `> | ${schemaName}.${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
+    let type = `${"(Handle<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
     buffer.push(`\t\t${prop.name}!: ${type};`);
   });
 
-  buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.map((p) => `${p.name}: ${(types.some( x => x.name == p.name) || p.primitive) ? p.type : "(Handle<" + schemaName + "."+ p.type + `> | ${schemaName}.${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.map((p) => `${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
   buffer.push(`\t\t{`)
-  if (!entity.parent)
-  {
-    buffer.push(`\t\t\tthis.expressID = expressID;`);
-    buffer.push(`\t\t\tthis.type = type;`);
+  if (!entity.parent) {
+    buffer.push(`\t\t\tsuper(expressID,type);`)
   } else {
     var nonLocalProps = entity.derivedProps.filter(n => !entity.props.includes(n))
     if (nonLocalProps.length ==0) buffer.push(`\t\t\tsuper(expressID,type);`);
     else buffer.push(`\t\t\tsuper(expressID,type,${nonLocalProps.map((p) => `${p.name}`).join(", ")});`)
   }
   entity.props.forEach((param) => {
-      buffer.push(`\t\t\tthis.${param.name} = ${param.name};`)
+      buffer.push(`\t\t\tthis.${param.name} = ${param.name};`);
   });
   
   buffer.push(`\t\t}`)
   buffer.push(`\t\tstatic FromTape(expressID: number, type: number, _tape: any[]): ${entity.name}`)
   buffer.push(`\t\t{`);
-  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((_, i) => '_tape['+i+']').join(", ")});`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((p, i) => generatePropAssignment(p,i,types)).join(", ")});`);
   buffer.push(`\t\t}`)
   buffer.push(`\t\tToTape(): unknown[]`)
   buffer.push(`\t\t{`)
@@ -121,6 +144,16 @@ export function expTypeToTSType(expTypeName:string)
     }
 
     return tsType;
+}
+
+export function expTypeToTypeNum(expTypeName:string) : number
+{
+    if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER") return 4;
+    else if (expTypeName == "STRING") return 1;
+    else if (expTypeName == "BOOLEAN") return 2;
+    else if (expTypeName == "BINARY") return 4;
+    else if (expTypeName == "LOGICAL") return 2;
+    return 0;
 }
 
 export function parseInverse(line:string,entity:Entity) 
@@ -245,11 +278,12 @@ export function parseElements(data:string)
                 typeName = typeName.substr(0, firstBracket);
             }
 
+            let typeNum = expTypeToTypeNum(typeName);
             typeName = expTypeToTSType(typeName);
-            
             type = {
                 name,
                 typeName,
+                typeNum,
                 isList,
                 isEnum,
                 isSelect,

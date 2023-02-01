@@ -12,8 +12,11 @@
  
  namespace webifc {
  
-   IfcLoader::IfcLoader(const LoaderSettings &s): _settings(s)
-   { }  
+    IfcLoader::IfcLoader(const LoaderSettings &s):  _crcTable(256), _settings(s)
+    { 
+     _tokenStream = new IfcTokenStream(_settings.TAPE_SIZE,(_settings.MEMORY_LIMIT/_settings.TAPE_SIZE));
+      makeCRCTable(_crcTable);
+    }  
    
    std::unordered_map<uint32_t, std::vector<uint32_t>> & IfcLoader::GetRelVoids()
    { 
@@ -66,18 +69,23 @@
 
      return ret;
    }
+
+   uint32_t IfcLoader::IfcTypeToTypeCode(std::string name) 
+   {
+    return crc32Simple(name.data(), name.size(),_crcTable);
+   }
    
    void IfcLoader::LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData)
    { 
      _open=true;
-     _tokenStream = new IfcTokenStream(requestData,_settings.TAPE_SIZE,(_settings.MEMORY_LIMIT/_settings.TAPE_SIZE));
+     _tokenStream->SetTokenSource(requestData);
      InitialiseIfcParsing();
    }
    
    void IfcLoader::LoadFile(std::istream &requestData)
    { 
      _open=true;
-     _tokenStream = new IfcTokenStream(requestData,_settings.TAPE_SIZE,(_settings.MEMORY_LIMIT/_settings.TAPE_SIZE));
+     _tokenStream->SetTokenSource(requestData);
      InitialiseIfcParsing();
    }
    
@@ -297,8 +305,6 @@
   
    void IfcLoader::ParseLines() 
    {
-      	std::vector<uint32_t> crcTable(256);
-        makeCRCTable(crcTable);
         uint32_t maxExpressId = 0;
   			uint32_t currentIfcType = 0;
   			uint32_t currentExpressID = 0;
@@ -361,7 +367,7 @@
   					std::string_view s = _tokenStream->ReadString();
   					if (currentIfcType == 0)
   					{
-              currentIfcType = crc32Simple(s.data(), s.size(),crcTable);
+              currentIfcType = crc32Simple(s.data(), s.size(),_crcTable);
   					}
 
   					break;
@@ -386,7 +392,7 @@
   				}
   			}
   			_expressIDToLine.resize(maxExpressId + 1);
-  			for (int i = 0; i < _lines.size(); i++) _expressIDToLine[_lines[i].expressID] = i;
+  			for (int i = 1; i <= _lines.size(); i++) _expressIDToLine[_lines[i-1].expressID] = i;
    }
    
    size_t IfcLoader::GetNumLines()
@@ -418,7 +424,7 @@
    
    uint32_t IfcLoader::ExpressIDToLineID(const uint32_t expressID)
    { 
-      return _expressIDToLine[expressID];
+      return _expressIDToLine[expressID]-1;
    }
    
    uint32_t IfcLoader::LineIDToExpressID(const uint32_t lineID)
@@ -461,7 +467,6 @@
    std::string IfcLoader::GetStringArgument()
    { 
    	 std::string s = std::string(GetStringViewArgument());
-     //std::cout << s<<std::endl;
      return s;
    }
    
@@ -506,7 +511,7 @@
   	// new line?
   	if (expressID >= _expressIDToLine.size() || _expressIDToLine[expressID] == 0)
   	{
-  		// allocate some space
+      // allocate some space
   		_expressIDToLine.resize(expressID * 2);
 
   		// create line object
@@ -514,7 +519,7 @@
   		_lines.emplace_back();
 
   		// create a line ID
-  		_expressIDToLine[expressID] = lineID;
+  		_expressIDToLine[expressID] = lineID+1;
   		auto &line = _lines[lineID];
 
   		// fill line data
@@ -525,7 +530,7 @@
   		_ifcTypeToLineID[type].push_back(lineID);
   	}
 
-  	auto lineID = _expressIDToLine[expressID];
+  	auto lineID = _expressIDToLine[expressID]-1;
   	auto &line = _lines[lineID];
 
   	line.tapeOffset = start;

@@ -2,6 +2,7 @@
 export interface Type {
     name: string;
     typeName : string;
+    typeNum: number;
     isList: boolean;
     isEnum: boolean;
     isSelect: boolean;

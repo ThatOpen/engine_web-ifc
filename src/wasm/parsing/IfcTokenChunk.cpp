@@ -11,13 +11,16 @@ namespace webifc
     
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
-    Load();
+    if (_fileStream!=NULL) Load();
+    else _loaded=true;
   }
   
-  void IfcTokenStream::IfcTokenChunk::Clear()
+  bool IfcTokenStream::IfcTokenChunk::Clear()
   {
+    if (_fileStream==NULL) return false; 
     delete _chunkData;
     _loaded=false;
+    return true;
   }
   
   size_t IfcTokenStream::IfcTokenChunk::GetTokenRef()

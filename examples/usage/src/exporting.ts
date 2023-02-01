@@ -16,7 +16,6 @@ export default async function() {
         let data: Uint8Array = ifcapi.SaveModel(modelID);
 
         const ifcData = fs.readFileSync(FILE_NAME);
-
         let info: TestInfo = {
             rawFileData: new Uint8Array(ifcData)
         };
@@ -30,6 +29,6 @@ export default async function() {
         }
 
         // TODO: exports are NOT lossless, currently losing header and double precision
-        Equals("In eq out", diffBytes, 403929);
+        Equals("In eq out", diffBytes, 404054);
     });
 }

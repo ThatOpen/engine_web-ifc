@@ -9,6 +9,7 @@ export default async function() {
         // check some relevant fields of ifcpropertyset
         Equals("ID", propertySetFlattened.expressID, 244);
         Equals("Type", propertySetFlattened.type, WebIFC.IFCPROPERTYSET);
+        console.log(propertySetFlattened.GlobalId);
         Equals("GUID", propertySetFlattened.GlobalId!.value, "0uNK5AgoP1Vw6UlaHiS$iF");
         Equals("Description", propertySetFlattened.Description, null);
         Equals("Name", propertySetFlattened.Name!.value, "Pset_ColumnCommon");
@@ -18,7 +19,8 @@ export default async function() {
         Equals("Num props", props.length, 3);
 
         // check the value of the first property, should be an identifier of 300x300
-        Equals("Prop 0 label", props[0].NominalValue!.label, "IFCIDENTIFIER");
+        console.log(props[0].NominalValue);
+        Equals("Prop 0 label", typeof props[0].NominalValue, "IFCIDENTIFIER");
         Equals("Prop 0 value", props![0].NominalValue!.value, "300x300");
     });
 

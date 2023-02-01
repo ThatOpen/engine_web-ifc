@@ -29,8 +29,9 @@ namespace webifc
   class IfcTokenStream 
   {
       public:
-        IfcTokenStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, const size_t chunkSize, const size_t maxChunks);
-        IfcTokenStream(std::istream &requestData, const size_t chunkSize, const size_t maxChunks);
+        IfcTokenStream(const size_t chunkSize, const size_t maxChunks);
+        void SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
+        void SetTokenSource(std::istream &requestData);
         template <typename T> T Read()
         {
           T v =  _cChunk->Read<T>(_readPtr);
@@ -83,7 +84,7 @@ namespace webifc
         {
             public:
             	IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *_fileStream);
-              void Clear();
+              bool Clear();
               bool IsLoaded();
               size_t TokenSize();
               size_t GetTokenRef();
@@ -112,7 +113,7 @@ namespace webifc
         };
         std::vector<IfcTokenChunk> _chunks;
         IfcTokenChunk * _cChunk;
-        IfcFileStream _fileStream;
+        IfcFileStream * _fileStream;
   };
   
 }
