@@ -3394,7 +3394,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
 					glm::dmat3 placement = GetAxis2Placement2D(placementID);
@@ -3416,7 +3416,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REAL)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 
 					hasFillet = true;
 					filletRadius = _loader.GetDoubleArgument();
@@ -3479,7 +3479,7 @@ namespace webifc
 
 				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
 				{
-					_loader.Reverse();
+					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
 					glm::dmat3 placement = GetAxis2Placement2D(placementID);
