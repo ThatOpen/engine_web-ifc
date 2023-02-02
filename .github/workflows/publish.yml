@@ -1,4 +1,4 @@
-name: Publish package to GitHub Packages
+name: Publish package to Npm
 on: 
   release:
     types: [created]
@@ -10,11 +10,9 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
-      # Setup .npmrc file to publish to GitHub Packages
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-          #registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           #scope: '@ifcjs'
       - uses: mymindstorm/setup-emsdk@v11
