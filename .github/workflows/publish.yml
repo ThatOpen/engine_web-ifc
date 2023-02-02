@@ -16,11 +16,10 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
+          #scope: '@ifcjs'
           
-      # can it be built in a workflow ? emscripten ?   
-      #- run: npm i
-      #- run: npm run build
       - run: npm ci
-      - run: npm publish
+      # not sure if this will work due to emscripten
+      - run: npm run build-publish-repo
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
