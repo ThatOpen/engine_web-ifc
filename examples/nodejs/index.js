@@ -37,6 +37,11 @@ async function LoadFile(filename) {
     // 	LINE_END
     // };
 
+  const exampleIFCData = fs.readFileSync('school_AR.ifc');
+        let models  = [];
+        for (let i=0; i < 2; i++) models.push(exampleIFCData);
+        let modelIds = ifcapi.OpenModels(models);
+
     console.log(`Modify values`);
 
     //Change units
@@ -47,7 +52,6 @@ async function LoadFile(filename) {
         unit.Prefix = { type: 3, value: 'MILLI' };
         ifcapi.WriteLine(modelID, unit);
     }
-
 
     //IfcProduct edition
     let storeys = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCBUILDINGSTOREY);
@@ -167,6 +171,9 @@ async function LoadFile(filename) {
 
     console.log("Checking we can parse exported model");
     let id = ifcapi.OpenModel(fs.readFileSync("exported.ifc"));
+        
+
+
 }
 
 LoadFile("../example.ifc");

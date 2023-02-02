@@ -480,6 +480,19 @@ describe('some use cases', () => {
     
 })
 
+
+describe('opening large amounts of data', () => {
+    test("open a small model lots of times", async () => {
+        const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/example.ifc.test'));
+        let models: Array<Uint8Array> = [];
+        for (let i=0; i < 100; i++) models.push(exampleIFCData);
+        let modelIds = ifcApi.OpenModels(models);
+        expect(modelIds[modelIds.length-1]).toBe(100);
+    });
+    
+})
+
+
 afterAll(() => {
     ifcApi.CloseModel(modelID);
     const isOpen: boolean = ifcApi.IsModelOpen(modelID);

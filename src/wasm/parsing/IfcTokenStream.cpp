@@ -78,6 +78,7 @@ namespace webifc
         {
           if (_chunks[x].Clear())
           {
+            std::cout << "Clearing Memory"<<std::endl;
             _activeChunks--;
             break;
           }

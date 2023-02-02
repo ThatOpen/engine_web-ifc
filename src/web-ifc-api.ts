@@ -8,7 +8,11 @@ let WebIFCWasm: any;
 
 //@ts-ignore
 if (typeof self !== 'undefined' && self.crossOriginIsolated) {
-    WebIFCWasm = require("./web-ifc-mt");
+    try {
+        WebIFCWasm = require("./web-ifc-mt");
+    } catch (ex){
+        WebIFCWasm = require("./web-ifc");
+    }
 }
 else {
     WebIFCWasm = require("./web-ifc");
@@ -156,10 +160,11 @@ export class IfcAPI {
     */
     OpenModels(dataSets: Array<Uint8Array>, settings?: LoaderSettings): Array<number> {
         let s: LoaderSettings = {
-            MEMORY_LIMIT :  3221225472,
+            MEMORY_LIMIT :  2147483648,
             ...settings
         };
         s.MEMORY_LIMIT = s.MEMORY_LIMIT! / dataSets.length;
+        console.log("Limit Per Model:"+s.MEMORY_LIMIT);
         let modelIDs:Array<number> = [];
 
         for (let dataSet of dataSets) modelIDs.push(this.OpenModel(dataSet,s));
