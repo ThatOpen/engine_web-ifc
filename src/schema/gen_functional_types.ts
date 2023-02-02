@@ -1,5 +1,5 @@
 import {Entity} from "./gen_functional_types_interfaces";
-import {findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
+import {generateInitialiser,findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
 
 const fs = require("fs");
 
@@ -53,7 +53,14 @@ for (var i = 0; i < files.length; i++) {
   tsHelper.push(`InversePropertyDef['${schemaName}'] = {};`);
   tsHelper.push(`InheritanceDef['${schemaName}'] = {};`);
   tsHelperClasses.push(`export namespace ${schemaNameClean} {`);
-  tsHelperClasses.push(`\t let TypeInitialiser: any = {};`)
+  tsHelperClasses.push('\tfunction TypeInitialiser(tapeItem:any) {');
+  tsHelperClasses.push('\t\tif (tapeItem.typecode) return TypeInitialisers[tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
+  tsHelperClasses.push('\t}');
+  tsHelperClasses.push('\tfunction Labelise(tapeItem:any) {');
+  tsHelperClasses.push('\t\t tapeItem.valueType=tapeItem.type; tapeItem.type=2; tapeItem.label=tapeItem.constructor.name.toUpperCase();');
+  tsHelperClasses.push('\t\t return tapeItem;');
+  tsHelperClasses.push('\t}');
+  tsHelperClasses.push(`\t let TypeInitialisers: any = {};`)
   let schemaData = fs.readFileSync("./"+files[i]).toString();
   let parsed = parseElements(schemaData);
   let entities: Array<Entity> = sortEntities(parsed.entities);
@@ -69,10 +76,10 @@ for (var i = 0; i < files.length; i++) {
           tsHelperClasses.push(`\t\tvalue: Array<${type.typeName}>;`)
           tsHelperClasses.push(`\t\tconstructor(v: Array<${type.typeName}>) { this.value = v;}`);
           tsHelperClasses.push(`\t};`);
-          tsHelperClasses.push(`\tTypeInitialiser[${crc32(type.name,crcTable)}] = (v: any) => { return new ${type.name}(v); }`);
       }
       else if (type.isSelect)
       {
+          generateInitialiser(type,initialisersDone,tsHelperClasses,crcTable,types);
           tsHelperClasses.push(`\texport type ${type.name} = `);
           type.values.forEach(refType => {
               let isType: boolean = types.some( x => x.name == refType);
@@ -86,40 +93,12 @@ for (var i = 0; i < files.length; i++) {
               }
           });
           tsHelperClasses.push(`\t;`);
-          type.values.forEach(refType => {
-            if (!initialisersDone.has(refType)) {
-                if (types.some( x => x.name == refType))
-                {
-                  //tsHelperClasses.push(`\tTypeInitialiser[${crc32(refType,crcTable)}] = (v: any) => { return new ${refType}(v); }`);
-                } else {
-                  tsHelperClasses.push(`\tTypeInitialiser[${crc32(refType,crcTable)}] = (v: any) => { return new Handle<${refType}>(v); }`);
-                }
-                initialisersDone.add(refType);
-              }
-          });
       }
       else if (type.isEnum)
       {
-          tsHelperClasses.push(`\texport class ${type.name} {`);
-          tsHelperClasses.push(`\t\tvalue : string;`);
-          tsHelperClasses.push(`\t\ttype: number;`);
-          tsHelperClasses.push(`\t\tconstructor(v: string) { this.type = 3; this.value = v;}`);
-          tsHelperClasses.push(type.values.map((v) => `\t\tstatic ${v} = "${v}";`).join("\n"));
+          tsHelperClasses.push(`\texport enum ${type.name} {`);
+          tsHelperClasses.push('\t\t'+type.values.map((v) => `${v} = "${v}",`).join(''));
           tsHelperClasses.push(`\t}`);
-      }
-      else if (type.typeName.indexOf('Ifc') !== -1 )
-      {
-          tsHelperClasses.push(`\texport type ${type.name} = ${type.typeName};`);
-          if (!initialisersDone.has(type.name)) {
-              if (types.some( x => x.name == type.name))
-              {
-                //tsHelperClasses.push(`\tTypeInitialiser[${crc32(type.name,crcTable)}] = (v: any) => { return new ${type.name}(v); }`);
-              } else {
-                tsHelperClasses.push(`\tTypeInitialiser[${crc32(type.name,crcTable)}] = (v: any) => { return new Handle<${type.name}>(v); }`);
-              }
-              initialisersDone.add(type.name);
-          }
-
       }
       else
       {

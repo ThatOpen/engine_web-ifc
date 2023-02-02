@@ -288,9 +288,13 @@ describe('WebIfcApi writing methods', () => {
                     type: 5,
                     value: 2
                 },
+                [{
+                    type: 5,
+                    value: 3
+                }],
                 {
-                    type: 1,
-                    value: ''
+                    type: 5,
+                    value: 2
                 }
             ]
         })
@@ -322,13 +326,17 @@ describe('WebIfcApi writing methods', () => {
                     type: 1,
                     value: ''
                 },
-                [{
+                {
                     type: 5,
                     value: 2
+                },
+                [{
+                    type: 5,
+                    value: 3
                 }],
                 {
-                    type: 1,
-                    value: ''
+                    type: 5,
+                    value: 2
                 }
             ]
         })

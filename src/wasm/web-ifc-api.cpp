@@ -609,7 +609,6 @@ emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
 
     valueStack.push(arguments);
     valuePosition.push(0);
-    std::cout << "GETLINE"<<std::endl;
 
     bool endOfLine = false;
     while (!loader->IsAtEnd() && !endOfLine)
@@ -679,8 +678,6 @@ emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
             auto s=loader->GetStringArgument();
             auto typeCode = loader->IfcTypeToTypeCode(s);
             obj.set("typecode", emscripten::val(typeCode));
-            std::cout << "typecode"<<s<<":"<< typeCode<<std::endl;
-
             // read set open
             loader->GetTokenType();
             

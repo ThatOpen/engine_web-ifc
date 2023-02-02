@@ -1,31 +1,70 @@
 import {Entity, Type, Prop} from "./gen_functional_types_interfaces";
 
 
+export function generateInitialiser(type: Type, initialisersDone: Set<string>,buffer: Array<string>, crcTable:any,types: Type[]) 
+{
+    if (type.isEnum) return;
+
+    if (type.isList)
+    {
+        if (initialisersDone.has(type.name)) return;
+        buffer.push(`\tTypeInitialisers[${crc32(type.name.toUpperCase(),crcTable)}] = (v: any) => { return new ${type.name}(v); }`);
+        return
+    }
+
+    if (type.isSelect)
+    {
+        type.values.forEach(refType => {
+           let newType = types.find(e => e.name == refType);
+           if (newType) generateInitialiser(newType,initialisersDone,buffer,crcTable,types)
+        });
+        return;
+    }
+
+    if (initialisersDone.has(type.name)) return;
+    initialisersDone.add(type.name);
+    buffer.push(`\tTypeInitialisers[${crc32(type.name.toUpperCase(),crcTable)}] = (v: any) => { return new ${type.name}(v); }`);
+    return;
+}       
+
 export function generatePropAssignment(p: Prop, i:number, types:Type[]) 
 {
-     let isType: boolean = types.some( (x:Type) => x.name == p.type);
-     let type = types.find( (x:Type) => x.name == p.type);
-     
-     let prefix = '';
-     if (p.optional) prefix ='!_tape['+i+'] ? null :'
-     
-     let content:string;
-     if (p.set)
-     {
+    let isType: boolean = types.some( (x:Type) => x.name == p.type);
+    let type = types.find( (x:Type) => x.name == p.type);
+    let content:string;   
+    if (type?.isEnum) 
+    {
+        content='_tape['+i+']';
+        return content;
+    }
+
+    let prefix = '';
+    if (p.optional) prefix ='!_tape['+i+'] ? null :'
+
+    if (p.set)
+    {
         content = '_tape['+i+'].map((p:any) => '
-        if ( (isType && type?.typeName.indexOf('Ifc') !== -1) || type?.isSelect)  content+='TypeInitialiser[p.typecode](p.value)';
+        if (type?.isSelect){
+            let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+            if (isEntitySelect) content+='new Handle(p.value)';
+            else content+='TypeInitialiser(p)';
+        }
         else if (isType) content+='new '+p.type+'(p.value)';
         else if (p.primitive) content+='p.value';
         else content+='new Handle<'+p.type+'>(p.value)';
         content +=')';
-     }
-     else if ( (isType && type?.typeName.indexOf('Ifc') !== -1 ) || type?.isSelect) content='TypeInitialiser[_tape['+i+'].typecode](_tape['+i+'].value)';
-     else if (isType) content='new '+p.type+'(_tape['+i+'].value)';
-     else if (p.primitive) content='_tape['+i+'].value';
-     else content='new Handle<'+p.type+'>(_tape['+i+'].value)';
-     
+    }
+    else if (type?.isSelect)
+    {
+        let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+        if (isEntitySelect) content='new Handle(_tape['+i+'].value)';
+        else content='TypeInitialiser(_tape['+i+'])'
 
-     return prefix + content;
+    }
+    else if (isType) content='new '+p.type+'(_tape['+i+'].value)';
+    else if (p.primitive) content='_tape['+i+'].value';
+    else content='new Handle<'+p.type+'>(_tape['+i+'].value)';
+    return prefix + content;
 }
 
 export function sortEntities(entities: Array<Entity>) {
@@ -45,6 +84,29 @@ export function sortEntities(entities: Array<Entity>) {
   }
   return sortedEntities;
 }
+
+export function generateTapeAssignment(p: Prop, types:Type[]) 
+{
+    let type = types.find( (x:Type) => x.name == p.type);
+    if (p.set && type?.isSelect)
+    {
+        let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+        if (isEntitySelect)  return `this.${p.name}`;
+        let prefix='';
+        if (p.optional) prefix ='!this.'+p.name+' ? null :'
+        return prefix + 'this.'+p.name+'.map((p:any) => Labelise(p))'
+    }
+    else if (type?.isSelect)
+    {
+        let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+        if (isEntitySelect)  return `this.${p.name}`;
+        let prefix='';
+        if (p.optional) prefix ='!this.'+p.name+' ? null :'
+        return prefix + 'Labelise(this.'+p.name+')';
+    }
+    return `this.${p.name}`;
+}
+
 
 export function generateClass(entity:Entity, buffer: Array<string>, types:Type[]) 
 {
@@ -89,9 +151,7 @@ export function generateClass(entity:Entity, buffer: Array<string>, types:Type[]
   buffer.push(`\t\t}`)
   buffer.push(`\t\tToTape(): unknown[]`)
   buffer.push(`\t\t{`)
-  buffer.push(`\t\t\tconst args: unknown[] = [];`)
-  buffer.push(`\t\t\targs.push(${entity.derivedProps.map((p) => `this.${p.name}`).join(", ")});`);
-  buffer.push(`\t\t\treturn args;`)
+  buffer.push(`\t\t\treturn [${entity.derivedProps.map((p) =>generateTapeAssignment(p,types)).join(", ")}];`)
   buffer.push(`\t\t}`)
   buffer.push(`\t}`);
 }
@@ -150,9 +210,9 @@ export function expTypeToTypeNum(expTypeName:string) : number
 {
     if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER") return 4;
     else if (expTypeName == "STRING") return 1;
-    else if (expTypeName == "BOOLEAN") return 2;
+    else if (expTypeName == "BOOLEAN") return 3;
     else if (expTypeName == "BINARY") return 4;
-    else if (expTypeName == "LOGICAL") return 2;
+    else if (expTypeName == "LOGICAL") return 3;
     return 0;
 }
 

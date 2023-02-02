@@ -48,6 +48,7 @@ async function LoadFile(filename) {
         ifcapi.WriteLine(modelID, unit);
     }
 
+
     //IfcProduct edition
     let storeys = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCBUILDINGSTOREY);
     for (let i = 0; i < storeys.size(); i++) {
@@ -66,7 +67,7 @@ async function LoadFile(filename) {
         numLines++;
         let expressID = properties.get(i);
         const single = await ifcapi.properties.getItemProperties(modelID, expressID);
-        if (single.NominalValue.label == "IFCLABEL") {
+        if (single.NominalValue.constructor.name == "IfcLabel") {
             single.NominalValue.value = "new label";
         }
         ifcapi.WriteLine(modelID, single);
@@ -163,6 +164,9 @@ async function LoadFile(filename) {
     console.log(`Exporting took ${time} ms`);
 
     ifcapi.CloseModel(modelID);
+
+    console.log("Checking we can parse exported model");
+    let id = ifcapi.OpenModel(fs.readFileSync("exported.ifc"));
 }
 
 LoadFile("../example.ifc");
