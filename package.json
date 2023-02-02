@@ -1,5 +1,5 @@
 {
-  "name": "web-ifc",
+  "name": "@d4ve-r/web-ifc",
   "version": "0.0.36",
   "description": "ifc loading on the web",
   "main": "web-ifc-api-node.js",
