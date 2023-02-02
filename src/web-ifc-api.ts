@@ -341,6 +341,11 @@ export class IfcAPI {
                 }
             }
         }
+        
+        if(lineObject.expressID === undefined || lineObject.expressID < 0) {
+            lineObject.expressID = this.IncrementMaxExpressID(modelID, 1);
+        }
+
 
         let rawLineData: RawLineData = {
             ID: lineObject.expressID,

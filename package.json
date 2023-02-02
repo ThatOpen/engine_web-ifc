@@ -33,7 +33,7 @@
     "build-release": "npm run build-wasm-release && npm run copy-to-dist && npm run build-api",
     "build-debug": "npm run build-wasm-debug  && npm run copy-debug-to-dist && npm run build-api",
     "publish-repo": "npm run set-version && cd dist && npm publish",
-    "build-publish-repo": "npm run set-version && npm run build-release-all && cd dist && npm publish",
+    "build-publish-repo": "npm run set-version && npm run build-release && cd dist && npm publish",
     "copy-to-dist": "make-dir dist && cpy \"src/wasm/build/*.js\" dist &&  cpy \"src/wasm/build/*.wasm\" dist ",
     "copy-debug-to-dist": "make-dir dist && cpy \"src/wasm/build_debug/*.js\" dist &&  cpy \"src/wasm/build_debug/*.wasm\" dist ",
     "build-wasm-debug": "make-dir src/wasm/build_debug && cd src/wasm/build_debug && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Debug && emmake make",
