@@ -105,11 +105,7 @@ async function runCode() {
 
 
   let ifcData = ifcAPI.SaveModel(model);
-
-    let ifcDataString = new TextDecoder('ascii').decode(ifcData);
-      console.log(String.fromCharCode.apply(null, ifcData));
-
-  //ifcThree.LoadAllGeometry(scene, model);
+  let ifcDataString = new TextDecoder('ascii').decode(ifcData);
 
   ifcAPI.CloseModel(model);
 

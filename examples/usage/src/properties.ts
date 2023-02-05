@@ -9,7 +9,6 @@ export default async function() {
         // check some relevant fields of ifcpropertyset
         Equals("ID", propertySetFlattened.expressID, 244);
         Equals("Type", propertySetFlattened.type, WebIFC.IFCPROPERTYSET);
-        console.log(propertySetFlattened.GlobalId);
         Equals("GUID", propertySetFlattened.GlobalId!.value, "0uNK5AgoP1Vw6UlaHiS$iF");
         Equals("Description", propertySetFlattened.Description, null);
         Equals("Name", propertySetFlattened.Name!.value, "Pset_ColumnCommon");
