@@ -15,7 +15,6 @@ let timeout = undefined;
 function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 {
     let code = monacoEditor.getValue();
-    let model = ifcAPI.CreateModel();
 
     window.localStorage.setItem('code', code);
     console.log("Saved code...");
@@ -89,7 +88,7 @@ window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEdit
 }
 
 async function runCode() {
-  let model = ifcAPI.CreateModel();
+  let model = ifcAPI.CreateModel('IFC4');
 
   scene.clear();
   InitBasicScene();
@@ -104,11 +103,9 @@ async function runCode() {
       console.log(` --- Ending EVAL!`);
   }
 
-  let ifcData = ifcAPI.ExportFileAsIFC(model);
-  let ifcDataString = new TextDecoder().decode(ifcData);
-  console.log(ifcDataString);
 
-  ifcThree.LoadAllGeometry(scene, model);
+  let ifcData = ifcAPI.SaveModel(model);
+  let ifcDataString = new TextDecoder('ascii').decode(ifcData);
 
   ifcAPI.CloseModel(model);
 

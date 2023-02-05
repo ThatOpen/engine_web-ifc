@@ -3,16 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 #include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
 #include <stack>
 #include <memory>
-#include <map>
 
 #include <emscripten/bind.h>
 
-#include "include/web-ifc.h"
+#include "parsing/IfcLoader.h"
+#include "utility/Logging.h"
 #include "include/web-ifc-geometry.h"
 
 #include "version.h"
@@ -22,6 +19,8 @@ std::map<uint32_t, std::unique_ptr<webifc::IfcGeometryLoader>> geomLoaders;
 
 uint32_t GLOBAL_MODEL_ID_COUNTER = 0;
 
+webifc::LogLevel LOG_LEVEL = webifc::LogLevel::ERROR;
+
 #ifdef __EMSCRIPTEN_PTHREADS__
     constexpr bool MT_ENABLED = true;
 #else
@@ -29,31 +28,6 @@ uint32_t GLOBAL_MODEL_ID_COUNTER = 0;
 #endif
 
 bool shown_version_header = false;
-
-// use to construct API placeholders
-int main() {
-    loaders.emplace();
-    geomLoaders.emplace(0, std::make_unique<webifc::IfcGeometryLoader>(*loaders[0]));
-
-    return 0;
-}
-
-std::string ReadFile(const std::string& filename)
-{
-    std::ifstream t("/" + filename);
-    t.seekg(0, std::ios::end);
-    size_t size = t.tellg();
-    std::string buffer(size, ' ');
-    t.seekg(0);
-    t.read(&buffer[0], size);
-    return buffer;
-}
-
-void WriteFile(const std::string& filename, const std::string& contents)
-{
-    std::ofstream t("/" + filename);
-    t << contents;
-}
 
 int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
 {
@@ -69,27 +43,31 @@ int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
     auto loader = std::make_unique<webifc::IfcLoader>(settings);
     loaders.emplace(modelID, std::move(loader));
 
-    // Start the timer.
-    auto start = webifc::ms();
-
-    size_t contentOffset = 0;
-    loaders[modelID]->LoadFile([&](char* dest, size_t destSize)
+    loaders[modelID]->LoadFile([&](char* dest, size_t sourceOffset, size_t destSize)
                     {
-                        emscripten::val retVal = callback((uint32_t)dest, destSize);
+                        emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
                         uint32_t len = retVal.as<uint32_t>();
                         return len;
                     });
 
-    // Ensure IsOpen will return true upon successful load.
-    loaders[modelID]->SetOpen();
-
-    // Stop the timer.
-    auto end = webifc::ms() - start;
 
     auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID]);
     geomLoaders.emplace(modelID, std::move(geomLoader));
-
     return modelID;
+}
+
+void SaveModel(uint32_t modelID, emscripten::val callback)
+{
+    loaders[modelID]->SaveFile([&](char* src, size_t srcSize)
+        {
+            emscripten::val retVal = callback((uint32_t)src, srcSize);
+        }
+    );
+}
+
+int GetModelSize(uint32_t modelID)
+{
+    return loaders[modelID]->GetTotalSize();
 }
 
 int CreateModel(webifc::LoaderSettings settings)
@@ -100,171 +78,6 @@ int CreateModel(webifc::LoaderSettings settings)
     loaders.emplace(modelID, std::move(loader));
     auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID]);
     geomLoaders.emplace(modelID, std::move(geomLoader));
-
-    return modelID;
-}
-
-
-void serialize(std::vector<std::string> filePaths, std::string serializedName, emscripten::val callback, uint32_t ramLimit = 200000000)
-{
-    auto settings = webifc::LoaderSettings();
-    auto loader = std::make_unique<webifc::IfcLoader>(settings);
-
-    loader->ActivateSerializer(ramLimit);
-    loader->SetSerializedFileName(serializedName);
-    loader->SetCallback([&](std::string dest, size_t destSize)
-                        {
-                        emscripten::val retVal = callback(dest, destSize);
-                        return dest; });
-
-    uint32_t numLines = 0;
-
-    for (uint32_t fi = 0; fi < filePaths.size(); fi++)
-    {
-        std::ifstream bigFile(filePaths[fi], std::ios::binary | std::ios::ate);
-        int fileSize = bigFile.tellg();
-        bigFile.seekg(0);
-        constexpr size_t bufferSize = 5000;
-        std::array<char, bufferSize> buffer;
-        
-        bool inText = false;
-        std::string prevStringChunk = "";
-        std::string content = "";
-
-        if (bigFile.fail())
-        {
-            std::cout << "ERROR, Could not open " << filePaths[fi] << std::endl;
-            exit(1);
-        }
-
-        while (bigFile)
-        {
-            content.clear();
-            for (int i(0); i < bufferSize; ++i)
-                buffer[i] = '\0';
-            bigFile.read(buffer.data(), bufferSize);
-            content = buffer.data();
-
-            if (content.size() > bufferSize)
-            {
-                content.erase(bufferSize, content.size() - bufferSize);
-            }
-
-            // keep record of quotations
-            for (int j = 0; j < content.size(); j++)
-            {
-                if (content[j] == '\'')
-                {
-                    inText = !inText;
-                }
-            }
-
-            // Add the preovious uncomplete string chunk
-            content = prevStringChunk + content;
-
-            bool doit = true;
-            prevStringChunk.clear();
-            uint32_t i = 1;
-            bool inText2 = inText;
-
-            while (true)
-            {
-                uint32_t idx = content.size() - i;
-                // Negative idx is not suposed to happen
-
-                if (content.size() < i)
-                {
-                    doit = false;
-                    break;
-                }
-                if (content[idx] == '\'')
-                {
-                    inText2 = !inText2;
-                }
-                // Only if you are not in a text the ';' indicates end of line
-                if (content[idx] == ';' && !inText2)
-                {
-                    break;
-                }
-                else
-                {
-                    // All the incomplete text is keep in the prevStringChunk
-                    prevStringChunk.push_back(content[idx]);
-                }
-                i++;
-            }
-
-            // Reverse the uncomplete string line
-            reverse(prevStringChunk.begin(), prevStringChunk.end());
-
-            if (doit)
-            {
-                // Remove uncomplete last line
-                content.erase(content.size() - prevStringChunk.size(), prevStringChunk.size());
-                content = content + " ";
-
-                size_t contentOffset = 0;
-                numLines += loader->readFilePart([&](char *dest, size_t destSize)
-                                                 {
-                        uint32_t length = std::min(content.size() - contentOffset, destSize);
-                        memcpy(dest, &content[contentOffset], length);
-
-                        contentOffset += length;
-
-                        return length; });
-            }
-        }
-        bigFile.close();
-    }
-
-    loader->storeLastChunk();
-    loader->storeMetadata(numLines);
-    loader->DisableSerializer();
-}
-
-uint32_t openSerialized(std::vector<std::string> paths, webifc::LoaderSettings settings, uint32_t ramLimit = 200000000)
-{
-    for (int i(0); i < paths.size(); ++i)
-    {
-        std::cout << paths[i] << std::endl;
-    }
-    uint32_t modelID = CreateModel(settings);
-
-    loaders[modelID]->ActivateSerializer(ramLimit);
-    loaders[modelID]->SetBinPaths(paths);
-    uint32_t numLines = loaders[modelID]->loadMetadata();
-
-    std::cout << "Metdata loaded..." << std::endl;
-    // Continue opening
-    loaders[modelID]->LoadSerializedFileData(numLines);
-
-    std::cout << "Context data loaded..." << std::endl;
-
-    // Ensure IsOpen will return true upon successful load.
-    loaders[modelID]->SetOpen();
-
-    //testing if it is able to read geometry//
-
-    // std::cout << "Loading geometry..." << std::endl;
-
-    // std::vector<webifc::IfcFlatMesh> meshes;
-
-    // for (auto type : ifc::IfcElements)
-    // {
-    //     auto elements = loaders[modelID]->GetExpressIDsWithType(type);
-
-    //     for (int i = 0; i < elements.size(); i++)
-    //     {
-    //         auto mesh = geomLoaders[modelID]->GetFlatMesh(elements[i]);
-    //         meshes.push_back(mesh);
-    //     }
-    // }
-
-    //End testing//
-
-    loaders[modelID]->DisableSerializer();
-
-    std::cout << "Serialized files successfully loaded" << std::endl;
 
     return modelID;
 }
@@ -519,12 +332,12 @@ std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expre
     {
       auto lineID = loader->ExpressIDToLineID(foundExpressID); 
       loader->MoveToLineArgument(lineID, position);
-      auto& _tape = loader->GetTape();
 
-      webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+      webifc::IfcTokenType t = loader->GetTokenType();
       if (t == webifc::IfcTokenType::REF) 
       {
-        uint32_t val = _tape.template Read<uint32_t>();
+        loader->StepBack();
+        uint32_t val = loader->GetRefArgument();
         if (val == expressID)
         {
           inverseIDs.push_back(foundExpressID);
@@ -533,13 +346,14 @@ std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expre
       }
       else if (t == webifc::IfcTokenType::SET_BEGIN)
       {
-          while (!_tape.AtEnd())
+          while (!loader->IsAtEnd())
           {
-              webifc::IfcTokenType setValueType = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+              webifc::IfcTokenType setValueType = loader->GetTokenType();
               if (setValueType == webifc::IfcTokenType::SET_END) break;
               if (setValueType == webifc::IfcTokenType::REF) 
               {
-                uint32_t val = _tape.template Read<uint32_t>();
+                loader->StepBack();
+                uint32_t val = loader->GetRefArgument();
                 if (val == expressID)
                 {
                   inverseIDs.push_back(foundExpressID);
@@ -560,7 +374,7 @@ bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
         return {};
     }
 
-    return loader->ValidateExpressID(expressId);
+    return loader->IsValidExpressID(expressId);
 }
 
 uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
@@ -584,7 +398,7 @@ uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
             continue;
         }
         currentId++;
-        cont = !(loader->ValidateExpressID(currentId));
+        cont = !(loader->IsValidExpressID(currentId));
     }
 
     return currentId;
@@ -607,22 +421,9 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     return expressIDs;
 }
 
-void ExportFileAsIFC(uint32_t modelID)
+void WriteValue(uint32_t modelID, webifc::IfcTokenType t, emscripten::val value)
 {
     auto& loader = loaders[modelID];
-    if (!loader)
-    {
-        return;
-    }
-
-    std::string exportData = loader->DumpAsIFC();
-    WriteFile("export.ifc", exportData);
-    webifc::logInfo("Exported to export.ifc");
-}
-
-template<uint32_t N>
-void WriteValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t, emscripten::val value)
-{
     switch (t)
     {
     case webifc::IfcTokenType::STRING:
@@ -631,58 +432,47 @@ void WriteValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t, emscripten
         std::string copy = value.as<std::string>();
 
         uint16_t length = copy.size();
-        tape.push2((uint16_t)length);
-        tape.push((void*)copy.c_str(), copy.size());
+        loader->Push<uint16_t>((uint16_t)length);
+        loader->Push((void*)copy.c_str(), copy.size());
 
         break;
     }
     case webifc::IfcTokenType::REF:
     {
         uint32_t val = value.as<uint32_t>();
-        tape.push(&val, sizeof(uint32_t));
+        loader->Push<uint32_t>(val);
 
         break;
     }
     case webifc::IfcTokenType::REAL:
     {
         double val = value.as<double>();
-        tape.push(&val, sizeof(double));
+        loader->Push<double>(val);
 
         break;
     }
     default:
         // use undefined to signal val parse issue
-        tape.push('?');
+        loader->Push<uint8_t>('?');
     }
 }
 
-void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
+void WriteSet(uint32_t modelID, emscripten::val& val)
 {
-    _tape.push(webifc::IfcTokenType::SET_BEGIN);
+    auto& loader = loaders[modelID];
+    loader->Push<uint8_t>(webifc::IfcTokenType::SET_BEGIN);
 
     uint32_t size = val["length"].as<uint32_t>();
-    int index = 0;
-    while (true && index < size)
+    for (size_t i=0; i < size;i++) 
     {
-        emscripten::val child = val[std::to_string(index)];
-        if (child.isArray())
-        {
-            WriteSet(_tape, child);
-        }
-        else if (child.isNull())
-        {
-            _tape.push(webifc::IfcTokenType::EMPTY);
-        }
-        else if (child.isUndefined())
-        {
-            // nothing to do here, possibly mismatch in ifc spec!
-            index++;
-            continue;
-        }
+        emscripten::val child = val[std::to_string(i)];
+        if (child.isNull()) loader->Push<uint8_t>(webifc::IfcTokenType::EMPTY);
+        else if (child.isUndefined()) continue;
+        else if (child.isArray()) WriteSet(modelID,child);
         else if (child["type"].isNumber())
         {
             webifc::IfcTokenType type = static_cast<webifc::IfcTokenType>(child["type"].as<uint32_t>());
-            _tape.push(type);
+            loader->Push(type);
             switch(type)
             {
                 case webifc::IfcTokenType::LINE_END:
@@ -707,15 +497,15 @@ void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
                     std::string copy = label.as<std::string>();
 
                     uint16_t length = copy.size();
-                    _tape.push2((uint16_t)length);
-                    _tape.push((void*)copy.c_str(), copy.size());
+                    loader->Push<uint16_t>((uint16_t)length);
+                    loader->Push((void*)copy.c_str(), copy.size());
 
-                    _tape.push(webifc::IfcTokenType::SET_BEGIN);
+                    loader->Push<uint8_t>(webifc::IfcTokenType::SET_BEGIN);
 
-                    _tape.push(valueType);
-                    WriteValue(_tape, valueType, value);
+                    loader->Push<uint8_t>(valueType);
+                    WriteValue(modelID,valueType, value);
 
-                    _tape.push(webifc::IfcTokenType::SET_END);
+                    loader->Push<uint8_t>(webifc::IfcTokenType::SET_END);
 
                     break;
                 }
@@ -724,7 +514,7 @@ void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
                 case webifc::IfcTokenType::REF:
                 case webifc::IfcTokenType::REAL:
                 {
-                    WriteValue(_tape, type, child["value"]);
+                    WriteValue(modelID,type, child["value"]);
                     break;
                 }
                 default:
@@ -735,11 +525,29 @@ void WriteSet(webifc::DynamicTape<TAPE_SIZE>& _tape, emscripten::val& val)
         {
             webifc::logError("Error in writeline: unknown object received");
         }
-
-        index++;
     }
 
-    _tape.push(webifc::IfcTokenType::SET_END);
+    loader->Push<uint8_t>(webifc::IfcTokenType::SET_END);
+}
+
+void WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return;
+    }
+    uint32_t start = loader->GetTotalSize();
+    std::string ifcName = GetReadableNameFromTypeCode(type);
+    loader->Push<uint8_t>(webifc::IfcTokenType::LABEL);
+    loader->Push<uint16_t>((uint16_t)ifcName.size());
+    loader->Push((void*)ifcName.c_str(), ifcName.size());
+    loader->Push<uint8_t>(webifc::IfcTokenType::SET_BEGIN);
+    WriteSet(modelID,parameters);
+    loader->Push<uint8_t>(webifc::IfcTokenType::SET_END);
+    loader->Push<uint8_t>(webifc::IfcTokenType::LINE_END);
+    uint32_t end = loader->GetTotalSize();
+    loader->AddHeaderLineTape(type, start, end);
 }
 
 void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
@@ -749,57 +557,46 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     {
         return;
     }
-
-    auto& _tape = loader->GetTape();
-
-    _tape.SetWriteAtEnd();
-
-    uint32_t start = _tape.GetTotalSize();
+    uint32_t start = loader->GetTotalSize();
 
     // line ID
-    _tape.push(webifc::IfcTokenType::REF);
-    _tape.push(&expressID, sizeof(uint32_t));
+    loader->Push<uint8_t>(webifc::IfcTokenType::REF);
+    loader->Push<uint32_t>(expressID);
 
     // line TYPE
-    const char* ifcName = GetReadableNameFromTypeCode(type);
-    _tape.push(webifc::IfcTokenType::LABEL);
-    uint16_t length = strlen(ifcName);
-    _tape.push2((uint16_t)length);
-    _tape.push((void*)ifcName, length);
-
-    WriteSet(_tape, parameters);
-
+    std::string ifcName = GetReadableNameFromTypeCode(type);
+    loader->Push<uint8_t>(webifc::IfcTokenType::LABEL);
+    loader->Push<uint16_t>((uint16_t)ifcName.size());
+    loader->Push((void*)ifcName.c_str(), ifcName.size());
+     WriteSet(modelID,parameters);
     // end line
-    _tape.push(webifc::IfcTokenType::LINE_END);
+    loader->Push<uint8_t>(webifc::IfcTokenType::LINE_END);
 
-    uint32_t end = _tape.GetTotalSize();
+    uint32_t end = loader->GetTotalSize();
 
     loader->UpdateLineTape(expressID, type, start, end);
 }
 
-template<uint32_t N>
-emscripten::val ReadValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t)
+
+emscripten::val ReadValue(uint32_t modelID, webifc::IfcTokenType t)
 {
+    auto& loader = loaders[modelID];
     switch (t)
     {
     case webifc::IfcTokenType::STRING:
     case webifc::IfcTokenType::ENUM:
     {
-        webifc::StringView view = tape.ReadStringView();
-        std::string copy(view.data, view.len);
-
-        return emscripten::val(copy);
+        std::string s = loader->GetStringArgument();
+        return emscripten::val(s);
     }
     case webifc::IfcTokenType::REAL:
     {
-        double d = tape.template Read<double>();
-
+        double d = loader->GetDoubleArgument();
         return emscripten::val(d);
     }
     case webifc::IfcTokenType::REF:
     {
-        uint32_t ref = tape.template Read<uint32_t>();
-
+        uint32_t ref = loader->GetRefArgument();
         return emscripten::val(ref);
     }
     default:
@@ -808,10 +605,9 @@ emscripten::val ReadValue(webifc::DynamicTape<N>& tape, webifc::IfcTokenType t)
     }
 }
 
-emscripten::val& GetArgs(const std::unique_ptr<webifc::IfcLoader>& loader, emscripten::val& arguments)
+emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
 {
-    auto& _tape = loader->GetTape();
-
+    auto& loader = loaders[modelID];
     std::stack<emscripten::val> valueStack;
     std::stack<int> valuePosition;
 
@@ -819,9 +615,9 @@ emscripten::val& GetArgs(const std::unique_ptr<webifc::IfcLoader>& loader, emscr
     valuePosition.push(0);
 
     bool endOfLine = false;
-    while (!_tape.AtEnd() && !endOfLine)
+    while (!loader->IsAtEnd() && !endOfLine)
     {
-        webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
+        webifc::IfcTokenType t = loader->GetTokenType();
 
         auto& topValue = valueStack.top();
         auto& topPosition = valuePosition.top();
@@ -880,23 +676,22 @@ emscripten::val& GetArgs(const std::unique_ptr<webifc::IfcLoader>& loader, emscr
         case webifc::IfcTokenType::LABEL:
         {
             // read label
-            webifc::StringView view = _tape.ReadStringView();
-            std::string copy(view.data, view.len);
-
             auto obj = emscripten::val::object(); 
             obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::IfcTokenType::LABEL)));
-            obj.set("label", emscripten::val(copy));
-
+            loader->StepBack();
+            auto s=loader->GetStringArgument();
+            auto typeCode = loader->IfcTypeToTypeCode(s);
+            obj.set("typecode", emscripten::val(typeCode));
             // read set open
-            _tape.Read<char>();
+            loader->GetTokenType();
             
             // read value following label
-            webifc::IfcTokenType t = static_cast<webifc::IfcTokenType>(_tape.Read<char>());
-            obj.set("valueType", emscripten::val(static_cast<uint32_t>(t)));
-            obj.set("value", ReadValue(_tape, t));
+            webifc::IfcTokenType t = loader->GetTokenType();
+            loader->StepBack();
+            obj.set("value", ReadValue(modelID,t));
 
             // read set close
-            _tape.Read<char>();
+            loader->GetTokenType();
 
             topValue.set(topPosition++, obj);
 
@@ -907,9 +702,11 @@ emscripten::val& GetArgs(const std::unique_ptr<webifc::IfcLoader>& loader, emscr
         case webifc::IfcTokenType::REAL:
         case webifc::IfcTokenType::REF:
         {
+            
             auto obj = emscripten::val::object(); 
+            loader->StepBack();
             obj.set("type", emscripten::val(static_cast<uint32_t>(t)));
-            obj.set("value", ReadValue(_tape, t));
+            obj.set("value", ReadValue(modelID,t));
 
             topValue.set(topPosition++, obj);
 
@@ -926,30 +723,25 @@ emscripten::val& GetArgs(const std::unique_ptr<webifc::IfcLoader>& loader, emscr
 emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
 {
     auto& loader = loaders[modelID];
-    
     if (!loader)
     {
         return emscripten::val::undefined();
     }
-
     auto lines = loader->GetHeaderLinesWithType(headerType);
 
     if(lines.size() <= 0){
         return emscripten::val::undefined(); 
     }
     auto line = lines[0];
-    loader->MoveToHeaderArgumentOffset(line, 0);
+    loader->MoveToHeaderLineArgument(line.lineIndex, 0);
 
     auto arguments = emscripten::val::array();
-
-    GetArgs(loader, arguments);
-
     std::string s(GetReadableNameFromTypeCode(line.ifcType));
+    GetArgs(modelID, arguments);
     auto retVal = emscripten::val::object();
     retVal.set(emscripten::val("ID"), line.lineIndex);
     retVal.set(emscripten::val("type"), s);
     retVal.set(emscripten::val("arguments"), arguments);
-
     return retVal;
 }
 
@@ -967,7 +759,7 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 
     auto arguments = emscripten::val::array();
 
-    GetArgs(loader, arguments);
+    GetArgs(modelID, arguments);
 
     auto retVal = emscripten::val::object();
     retVal.set(emscripten::val("ID"), line.expressID);
@@ -1023,11 +815,11 @@ extern "C" bool IsModelOpen(uint32_t modelID)
 void SetLogLevel(int levelArg)
 {
     if (levelArg < static_cast<int>(webifc::LogLevel::DEBUG)) {
-        webifc::LOG_LEVEL = webifc::LogLevel::DEBUG;
+        LOG_LEVEL = webifc::LogLevel::DEBUG;
     } else if (levelArg > static_cast<int>(webifc::LogLevel::OFF)) {
-        webifc::LOG_LEVEL = webifc::LogLevel::OFF;
+        LOG_LEVEL = webifc::LogLevel::OFF;
     } else {
-        webifc::LOG_LEVEL = static_cast<webifc::LogLevel>(levelArg);
+        LOG_LEVEL = static_cast<webifc::LogLevel>(levelArg);
     }
 }
 
@@ -1057,6 +849,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("CIRCLE_SEGMENTS_MEDIUM", &webifc::LoaderSettings::CIRCLE_SEGMENTS_MEDIUM)
         .field("CIRCLE_SEGMENTS_HIGH", &webifc::LoaderSettings::CIRCLE_SEGMENTS_HIGH)
         .field("BOOL_ABORT_THRESHOLD", &webifc::LoaderSettings::BOOL_ABORT_THRESHOLD)
+        .field("TAPE_SIZE", &webifc::LoaderSettings::TAPE_SIZE)
+        .field("MEMORY_LIMIT", &webifc::LoaderSettings::MEMORY_LIMIT)
         ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
@@ -1121,13 +915,12 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<uint32_t>("UintVector");
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
-    emscripten::function("Serialize", &serialize);
-    emscripten::function("OpenSerialized", &openSerialized);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
     emscripten::function("GetMaxExpressID", &GetMaxExpressID);
     emscripten::function("IncrementMaxExpressID", &IncrementMaxExpressID);
     emscripten::function("CloseModel", &CloseModel);
+    emscripten::function("GetModelSize", &GetModelSize);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
@@ -1140,7 +933,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetLineType", &GetLineType);
     emscripten::function("GetHeaderLine", &GetHeaderLine);
     emscripten::function("WriteLine", &WriteLine);
-    emscripten::function("ExportFileAsIFC", &ExportFileAsIFC);
+    emscripten::function("WriteHeaderLine", &WriteHeaderLine);
+    emscripten::function("SaveModel", &SaveModel);
     emscripten::function("ValidateExpressID", &ValidateExpressID);
     emscripten::function("GetNextExpressID", &GetNextExpressID);
     emscripten::function("GetLineIDsWithType", &GetLineIDsWithType);

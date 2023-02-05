@@ -13,10 +13,9 @@ const FILE_NAME = "../example.ifc";
 export default async function() {
     await WithIFCFileLoaded("read_and_export", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
 
-        let data = ifcapi.ExportFileAsIFC(modelID);
+        let data: Uint8Array = ifcapi.SaveModel(modelID);
 
         const ifcData = fs.readFileSync(FILE_NAME);
-
         let info: TestInfo = {
             rawFileData: new Uint8Array(ifcData)
         };
@@ -30,6 +29,6 @@ export default async function() {
         }
 
         // TODO: exports are NOT lossless, currently losing header and double precision
-        Equals("In eq out", diffBytes, 403929);
+        Equals("In eq out", diffBytes, 404054);
     });
 }
