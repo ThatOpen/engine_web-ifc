@@ -463,24 +463,17 @@ void WriteSet(uint32_t modelID, emscripten::val& val)
     loader->Push<uint8_t>(webifc::IfcTokenType::SET_BEGIN);
 
     uint32_t size = val["length"].as<uint32_t>();
-    int index = 0;
-    while (true && index < size)
+    for (size_t i=0; i < size;i++) 
     {
-        emscripten::val child = val[std::to_string(index)];
-        if (child.isArray())
-        {
-            WriteSet(modelID,child);
+        emscripten::val child = val[std::to_string(i)];
+        if (child.isNull()) loader->Push<uint8_t>(webifc::IfcTokenType::EMPTY);
+        else if (child.isUndefined()) continue;
+        else if (child.isString()) {
+            std:: cout <<"IS STRING"<<std::endl;
+        } else if (child.isNumber()) {
+            std:: cout << "IS NUMBER"<<std::endl;
         }
-        else if (child.isNull())
-        {
-            loader->Push<uint8_t>(webifc::IfcTokenType::EMPTY);
-        }
-        else if (child.isUndefined())
-        {
-            // nothing to do here, possibly mismatch in ifc spec!
-            index++;
-            continue;
-        }
+        else if (child.isArray()) WriteSet(modelID,child);
         else if (child["type"].isNumber())
         {
             webifc::IfcTokenType type = static_cast<webifc::IfcTokenType>(child["type"].as<uint32_t>());
@@ -537,11 +530,29 @@ void WriteSet(uint32_t modelID, emscripten::val& val)
         {
             webifc::logError("Error in writeline: unknown object received");
         }
-
-        index++;
     }
 
     loader->Push<uint8_t>(webifc::IfcTokenType::SET_END);
+}
+
+void WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
+{
+    auto& loader = loaders[modelID];
+    if (!loader)
+    {
+        return;
+    }
+    uint32_t start = loader->GetTotalSize();
+    std::string ifcName = GetReadableNameFromTypeCode(type);
+    loader->Push<uint8_t>(webifc::IfcTokenType::LABEL);
+    loader->Push<uint16_t>((uint16_t)ifcName.size());
+    loader->Push((void*)ifcName.c_str(), ifcName.size());
+    loader->Push<uint8_t>(webifc::IfcTokenType::SET_BEGIN);
+    WriteSet(modelID,parameters);
+    loader->Push<uint8_t>(webifc::IfcTokenType::SET_END);
+    loader->Push<uint8_t>(webifc::IfcTokenType::LINE_END);
+    uint32_t end = loader->GetTotalSize();
+    loader->AddHeaderLineTape(type, start, end);
 }
 
 void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
@@ -558,11 +569,29 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     loader->Push<uint32_t>(expressID);
 
     // line TYPE
-    const char* ifcName = GetReadableNameFromTypeCode(type);
+    std::string ifcName = GetReadableNameFromTypeCode(type);
     loader->Push<uint8_t>(webifc::IfcTokenType::LABEL);
-    uint16_t length = strlen(ifcName);
-    loader->Push<uint16_t>((uint16_t)length);
-    loader->Push((void*)ifcName, length);
+    loader->Push<uint16_t>((uint16_t)ifcName.size());
+    loader->Push((void*)ifcName.c_str(), ifcName.size());
+
+    /*std::cout << parameters["length"].as<uint32_t>() << std::endl;
+
+    for (size_t i=0; i< parameters["length"].as<uint32_t>();i++)
+    {
+
+            emscripten::val child = parameters[std::to_string(i)];
+            //emscripten::val keys = child.call<emscripten::val>("keys", child);
+            //std::cout << "KEYS"<< keys["length"].as<uint32_t>()<<std::endl;
+                    std:: cout << child.typeOf().as<std::string>()  << std::endl;
+                    //std:: cout << child.as<std::string>()  << std::endl;
+        if (child.isNull()) std::cout<<"NULL"<<std::endl;
+        else if (child.isUndefined()) std::cout<<"NULL"<<std::endl;
+        else if (child.isArray()) std::cout<<"ARR"<<std::endl;
+        else if (child["type"].isNumber())
+        {
+std::cout<<"GOOD"<<std::endl;
+        }
+    }*/
 
     WriteSet(modelID,parameters);
     // end line
@@ -845,6 +874,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("CIRCLE_SEGMENTS_MEDIUM", &webifc::LoaderSettings::CIRCLE_SEGMENTS_MEDIUM)
         .field("CIRCLE_SEGMENTS_HIGH", &webifc::LoaderSettings::CIRCLE_SEGMENTS_HIGH)
         .field("BOOL_ABORT_THRESHOLD", &webifc::LoaderSettings::BOOL_ABORT_THRESHOLD)
+        .field("TAPE_SIZE", &webifc::LoaderSettings::TAPE_SIZE)
+        .field("MEMORY_LIMIT", &webifc::LoaderSettings::MEMORY_LIMIT)
         ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
@@ -927,6 +958,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetLineType", &GetLineType);
     emscripten::function("GetHeaderLine", &GetHeaderLine);
     emscripten::function("WriteLine", &WriteLine);
+    emscripten::function("WriteHeaderLine", &WriteHeaderLine);
     emscripten::function("SaveModel", &SaveModel);
     emscripten::function("ValidateExpressID", &ValidateExpressID);
     emscripten::function("GetNextExpressID", &GetNextExpressID);

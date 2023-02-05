@@ -13,6 +13,7 @@ namespace webifc
   :  _chunkSize(chunkSize), _maxChunks(maxChunks)
   { 
     _cChunk=NULL;
+    _fileStream=NULL;
   }
 
   void IfcTokenStream::SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData) 
@@ -26,7 +27,7 @@ namespace webifc
           auto cSize = chunk.TokenSize();
           tokenOffset+=cSize;
           if (cSize > _chunkSize) _chunkSize = cSize;
-          _chunks.emplace_back(chunk);
+          _chunks.push_back(chunk);
           _activeChunks++;
       }
       _cChunk = &_chunks.front();
@@ -78,7 +79,6 @@ namespace webifc
         {
           if (_chunks[x].Clear())
           {
-            std::cout << "Clearing Memory"<<std::endl;
             _activeChunks--;
             break;
           }
@@ -89,21 +89,18 @@ namespace webifc
   
   void IfcTokenStream::Push(void *v, const size_t size)
   {
-      if (_cChunk == NULL)
+      if (_chunks.empty())
       {
-        _chunks.emplace_back(IfcTokenChunk(_chunkSize,0,0,_fileStream));
-        _currentChunk=0;
+        _chunks.emplace_back(_chunkSize,0,0,_fileStream);
         _activeChunks++;
-        _cChunk = &_chunks.back();
       }
-      if ( _cChunk->TokenSize() + size > _chunkSize)
+      if ( _chunks.back().TokenSize() + size > _chunkSize)
       {
         checkMemory();
-        _chunks.emplace_back(IfcTokenChunk(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),0,_fileStream));
+        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),0,_fileStream);
         _activeChunks++;
-        _cChunk = &_chunks[++_currentChunk];
       }
-      _cChunk->Push(v,size);
+      _chunks.back().Push(v,size);
   }
   
   size_t IfcTokenStream::GetTotalSize()

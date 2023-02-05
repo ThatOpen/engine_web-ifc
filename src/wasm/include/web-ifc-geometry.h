@@ -161,7 +161,12 @@ namespace webifc
 			}
 			else
 			{
-				return GetMeshByLine(_loader.ExpressIDToLineID(expressID));
+				
+				auto foundMesh = _loader.ExpressIDToLineID(expressID);
+				std::cout << foundMesh << std::endl;
+				std::cout << "HERE11"<<std::endl;
+				return GetMeshByLine(foundMesh);
+
 			}
 		}
 
@@ -255,6 +260,7 @@ namespace webifc
 
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
+			std::cout << "HERE"<<std::endl;
 			auto &line = _loader.GetLine(lineID);
 
 			bool hasColor = false;

@@ -537,6 +537,18 @@
   	line.tapeEnd = end;
   }
 
+  void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start, const uint32_t end)
+  {
+    
+      IfcHeaderLine l;
+      l.ifcType = type;
+      l.lineIndex = static_cast<uint32_t>(_headerLines.size());
+      l.tapeOffset = start;
+      l.tapeEnd = end;
+      _ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
+      _headerLines.push_back(std::move(l));
+  }
+
   
   IfcTokenType IfcLoader::GetTokenType(uint32_t tapeOffset)
   {

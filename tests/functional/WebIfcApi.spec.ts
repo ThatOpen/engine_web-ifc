@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as WebIFC from '../../dist/web-ifc-api-node.js';
 import {IFC2X3} from '../../dist/web-ifc-api-node.js';
+import {LoaderSettings,IfcLineObject} from '../../dist/web-ifc-api-node.js';
 /**
  * Should be somewhere else.
  */
@@ -480,14 +481,36 @@ describe('some use cases', () => {
     
 })
 
+describe('creating objects', () => {
+    test("create an IFC object from Typecode", () => {
+        
+        let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
+        expect(entity.constructor.name).toBe('IfcCartesianPoint');
+    });
+
+    
+})
 
 describe('opening large amounts of data', () => {
-    test("open a small model lots of times", async () => {
+    test("open a small model but with a heavy memory restriction", () => {
+        let s: LoaderSettings = {
+            MEMORY_LIMIT :  10485760,
+            TAPE_SIZE : 104857
+        };
+        const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test'));
+        let modelId = ifcApi.OpenModel(exampleIFCData,s);
+        expect(modelId).toBe(5);
+    });
+
+     test("open a small model but many times", () => {
+        let s: LoaderSettings = {
+            TAPE_SIZE : 104857
+        };
         const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/example.ifc.test'));
-        let models: Array<Uint8Array> = [];
-        for (let i=0; i < 100; i++) models.push(exampleIFCData);
-        let modelIds = ifcApi.OpenModels(models);
-        expect(modelIds[modelIds.length-1]).toBe(100);
+        let exampleIFCDatas : Array<Uint8Array> = [];
+        for (let i=0; i < 100; i++) exampleIFCDatas.push(exampleIFCData); 
+        let modelIds = ifcApi.OpenModels(exampleIFCDatas,s);
+        expect(modelIds.length).toBe(100);
     });
     
 })

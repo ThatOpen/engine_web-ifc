@@ -1250,7 +1250,7 @@ namespace ifc {
 			default: return false;
 		}
 	}
-	inline std::vector<unsigned int> IfcElements { 
+	inline std::vector<uint32_t> IfcElements { 
 		IFCPRODUCT,
 		IFCPROXY,
 		IFCSPATIALSTRUCTUREELEMENT,
@@ -1488,7 +1488,7 @@ namespace ifc {
 		IFCBEAMSTANDARDCASE,
 	};
 };
-	inline const char* GetReadableNameFromTypeCode(unsigned int ifcCode) {
+	inline std::string GetReadableNameFromTypeCode(uint32_t ifcCode) {
 		switch(ifcCode) {
 			case ifc::FILE_SCHEMA: return "FILE_SCHEMA";
 			case ifc::FILE_NAME: return "FILE_NAME";

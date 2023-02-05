@@ -107,6 +107,29 @@ export function generateTapeAssignment(p: Prop, types:Type[])
     return `this.${p.name}`;
 }
 
+export function generateSuperAssignment(p:Prop, ifcDerivedProps: string[],types:Type[])
+{
+    if (ifcDerivedProps.includes(p.name))
+    {
+        if (p.optional) return "null";
+        let type = types.find( (x:Type) => x.name == p.type);
+        let isType: boolean = types.some( (x:Type) => x.name == p.type);
+        if (p.set) return "[]";
+        else if (type?.isSelect)
+        {
+            let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+            if (isEntitySelect) return 'new Handle(0)';
+            else return '0'
+        }
+        else if (isType) return 'new '+p.type+'(0)';
+        else if (p.primitive) return '0';
+        else return "new Handle(0)";
+    }
+    else
+    {
+        return p.name;
+    }
+}
 
 export function generateClass(entity:Entity, buffer: Array<string>, types:Type[]) 
 {
@@ -131,24 +154,33 @@ export function generateClass(entity:Entity, buffer: Array<string>, types:Type[]
     buffer.push(`\t\t${prop.name}!: ${type};`);
   });
 
-  buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.map((p) => `${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
   buffer.push(`\t\t{`)
   if (!entity.parent) {
     buffer.push(`\t\t\tsuper(expressID,type);`)
   } else {
     var nonLocalProps = entity.derivedProps.filter(n => !entity.props.includes(n))
     if (nonLocalProps.length ==0) buffer.push(`\t\t\tsuper(expressID,type);`);
-    else buffer.push(`\t\t\tsuper(expressID,type,${nonLocalProps.map((p) => `${p.name}`).join(", ")});`)
+    else buffer.push(`\t\t\tsuper(expressID,type,${nonLocalProps.map((p) => generateSuperAssignment(p,entity.ifcDerivedProps,types)).join(", ")});`)
   }
   entity.props.forEach((param) => {
       buffer.push(`\t\t\tthis.${param.name} = ${param.name};`);
   });
   
+    //remove any props that may have been marked as derived further down the inheritance
+    entity.derivedProps = entity.derivedProps
+
+
   buffer.push(`\t\t}`)
   buffer.push(`\t\tstatic FromTape(expressID: number, type: number, _tape: any[]): ${entity.name}`)
   buffer.push(`\t\t{`);
-  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((p, i) => generatePropAssignment(p,i,types)).join(", ")});`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types)).join(", ")});`);
   buffer.push(`\t\t}`)
+  buffer.push(`\t\tstatic FromConstructor(expressID: number, type: number, _args: any[]): ${entity.name}`)
+  buffer.push(`\t\t{`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((_, i) => '_args['+i+']').join(", ")});`);
+  buffer.push(`\t\t}`)
+ 
   buffer.push(`\t\tToTape(): unknown[]`)
   buffer.push(`\t\t{`)
   buffer.push(`\t\t\treturn [${entity.derivedProps.map((p) =>generateTapeAssignment(p,types)).join(", ")}];`)
@@ -232,6 +264,18 @@ export function parseInverse(line:string,entity:Entity)
     });  
 }
 
+
+export function parseDerived(line:string,entity:Entity) 
+{
+    let lineStart = line.split(" ")[0];
+    lineStart = lineStart.replace("DERIVE","").trim();
+    if (lineStart.trim().startsWith("SELF"))
+    {
+        let split = lineStart.split(".");
+        entity.ifcDerivedProps.push(split[1]);
+    }
+}
+
 export function parseElements(data:string)
 {
     let lines = data.split(";");
@@ -242,6 +286,7 @@ export function parseElements(data:string)
     let entity: Entity | false = false;
     let readProps = false;
     let readInverse = false;
+    let readIfcDerived = false;
 
     for (let i = 0; i < lines.length; i++)
     {
@@ -259,11 +304,13 @@ export function parseElements(data:string)
                 derivedProps: [],
                 inverseProps: [],
                 derivedInverseProps: [],
-                isIfcProduct: false
+                isIfcProduct: false,
+                ifcDerivedProps: []
             };
             if (name === "IfcProduct") entity.isIfcProduct = true;
             readProps = true;
             readInverse = false;
+            readIfcDerived = false;
 
             let subIndex = split.indexOf("SUBTYPE");
             if (subIndex != -1)
@@ -277,16 +324,19 @@ export function parseElements(data:string)
             if (entity) entities.push(entity);
             readProps = false;
             readInverse = false;
+            readIfcDerived = false;
         }
         else if (line.indexOf("WHERE") == 0)
         {
             readProps = false;
             readInverse = false;
+            readIfcDerived = false;
         }
         else if (line.indexOf("INVERSE") == 0)
         {
             readProps = false;
             readInverse = true;
+            readIfcDerived = false;
             // there is one inverse property on this line
             if (entity) parseInverse(line,entity);
         }
@@ -294,16 +344,20 @@ export function parseElements(data:string)
         {
             readProps = false;
             readInverse = false;
+            readIfcDerived = true;
+            if (entity) parseDerived(line,entity);
         }
         else if (line.indexOf("UNIQUE") == 0)
         {
             readProps = false;
             readInverse = false;
+            readIfcDerived = false;
         }
         else if (line.indexOf("TYPE") == 0)
         {
             readProps = false;
             readInverse = false;
+            readIfcDerived = false;
 
             let split = line.split(" ").map((s:string) => s.trim());
             let name = split[1];
@@ -383,7 +437,8 @@ export function parseElements(data:string)
                 optional,
                 set
             })
-        }
+        }  
+        else if (entity && readIfcDerived && hasColon) parseDerived(line,entity);
     }
 
     return {

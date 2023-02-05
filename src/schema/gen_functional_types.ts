@@ -24,6 +24,7 @@ tsHelper.push(`export function Value(type: string, value: unknown): unknown { re
 tsHelper.push(`export const FromRawLineData: any = {};`);
 tsHelper.push(`export const InversePropertyDef: any = {};`);
 tsHelper.push(`export const InheritanceDef: any = {};`);
+tsHelper.push(`export const Constructors: any = {};`);
 tsHelper.push('export abstract class IfcLineObject {');
 tsHelper.push(`\texpressID: number;`);
 tsHelper.push(`\ttype: number;`);
@@ -50,6 +51,7 @@ for (var i = 0; i < files.length; i++) {
   var schemaNameClean = schemaName.replace(".","_");
   console.log("Generating Schema for:"+schemaName);
   tsHelper.push(`FromRawLineData['${schemaName}'] = {};`);
+  tsHelper.push(`Constructors['${schemaName}'] = {};`);
   tsHelper.push(`InversePropertyDef['${schemaName}'] = {};`);
   tsHelper.push(`InheritanceDef['${schemaName}'] = {};`);
   tsHelperClasses.push(`export namespace ${schemaNameClean} {`);
@@ -96,16 +98,25 @@ for (var i = 0; i < files.length; i++) {
       }
       else if (type.isEnum)
       {
-          tsHelperClasses.push(`\texport enum ${type.name} {`);
-          tsHelperClasses.push('\t\t'+type.values.map((v) => `${v} = "${v}",`).join(''));
+          tsHelperClasses.push(`\texport class ${type.name} {`);
+          tsHelperClasses.push('\t\t'+type.values.map((v) => `static ${v} : any =  { type:3, value:'${v}'}; `).join(''));
           tsHelperClasses.push(`\t}`);
       }
       else
       {
+          let typeName = type.typeName;
+          let typeNum = type.typeNum;
+          if (type.typeName.search('Ifc') != -1) 
+          {
+            let rawType = types.find(x=> x.name == type.typeName);
+            typeName = rawType!.typeName;
+            typeNum = rawType!.typeNum;
+          } 
+
           tsHelperClasses.push(`\texport class ${type.name} {`);
-          tsHelperClasses.push(`\t\tvalue: ${type.typeName};`)
+          tsHelperClasses.push(`\t\tvalue: ${typeName};`)
           tsHelperClasses.push(`\t\ttype: number;`);
-          tsHelperClasses.push(`\t\tconstructor(v: ${type.typeName}) { this.type=${type.typeNum}; this.value = v;}`);
+          tsHelperClasses.push(`\t\tconstructor(v: ${typeName}) { this.type=${typeNum}; this.value = v;}`);
           tsHelperClasses.push(`\t}`);
       }
   });
@@ -127,7 +138,9 @@ for (var i = 0; i < files.length; i++) {
       }
   
       tsHelper.push(`FromRawLineData['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (d: RawLineData) => { return ${schemaNameClean}.${entities[x].name}.FromTape(d.ID, d.type, d.arguments); }`);
+      tsHelper.push(`Constructors['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = (type:number,expressID:number, args: any[]) => { return ${schemaNameClean}.${entities[x].name}.FromConstructor(expressID, type, args); }`);
     
+
       if (entities[x].children.length > 0)
       {
         tsHelper.push(`InheritanceDef['${schemaName}'][ifc.${entities[x].name.toUpperCase()}] = [${entities[x].children.map((c) => `ifc.${c.toUpperCase()}`).join(",")}];`);
@@ -203,7 +216,7 @@ cppHeader.push("\t\t}");
 cppHeader.push("\t}");
 
 
-cppHeader.push("\tinline std::vector<unsigned int> IfcElements { ");
+cppHeader.push("\tinline std::vector<uint32_t> IfcElements { ");
 tsHeader.push("export const IfcElements = [")
 completeifcElementList.forEach(element => {
     let name = element.toUpperCase();
@@ -215,7 +228,7 @@ tsHeader.push("];")
 
 cppHeader.push("};");
 
-cppHeader.push("\tinline const char* GetReadableNameFromTypeCode(unsigned int ifcCode) {");
+cppHeader.push("\tinline std::string GetReadableNameFromTypeCode(uint32_t ifcCode) {");
 cppHeader.push("\t\tswitch(ifcCode) {");
 tsHeader.push("export const IfcEntities: {[key: number]: string} = {");
 completeEntityList.forEach(entity => {

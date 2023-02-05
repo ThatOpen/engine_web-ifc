@@ -51,6 +51,7 @@ namespace webifc
           uint8_t * tmp = _chunkData;
           _chunkData = new uint8_t[_currentSize];
           std::memcpy(_chunkData, tmp, _currentSize-size);
+          _chunkSize = _currentSize;
           delete tmp;
       }
       std::memcpy(_chunkData + _currentSize-size, v, size);
@@ -58,10 +59,11 @@ namespace webifc
   
   void IfcTokenStream::IfcTokenChunk::Load()
   {
-      _chunkData = new uint8_t[_currentSize > _chunkSize? _currentSize : _chunkSize];
+      _chunkData = new uint8_t[_chunkSize];
       _loaded=true;
       if (_fileStream->GetRef()!=_fileStartRef) _fileStream->Go(_fileStartRef);
       std::vector<char> temp;
+      _currentSize = 0;
       while ( !_fileStream->IsAtEnd() && _currentSize < _chunkSize)
       {
         const char c = _fileStream->Get();
@@ -204,5 +206,6 @@ namespace webifc
         }
         _fileStream->Forward();  
       }
+      _chunkSize=_currentSize;
     }
 }
