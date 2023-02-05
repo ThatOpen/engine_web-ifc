@@ -92,7 +92,7 @@ if (EMSCRIPTEN)
 	target_include_directories(web-ifc PUBLIC ${earcut_SOURCE_DIR}/include)
 	target_link_libraries(web-ifc manifold)
 	target_compile_options(web-ifc PUBLIC "-Wall")
-	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -03 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS, WORKERFS\"] -lworkerfs.js")
+	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -03 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS, WORKERFS\"] -lworkerfs.js")
 		
 
 	#multi-treaded versions
@@ -105,7 +105,7 @@ if (EMSCRIPTEN)
 	target_link_libraries(web-ifc-mt manifold)
 	target_compile_options(web-ifc-mt PUBLIC "-pthread")
 	target_compile_options(web-ifc-mt PUBLIC "-Wall")
-	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -03 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS, WORKERFS\"] -lworkerfs.js")
+	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -03 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s DEFAULT_PTHREAD_STACK_SIZE=2MB -s FORCE_FILESYSTEM=1 -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=[\"FS, WORKERFS\"] -lworkerfs.js")
 endif()
 
 
