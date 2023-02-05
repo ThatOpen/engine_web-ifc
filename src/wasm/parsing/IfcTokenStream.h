@@ -8,6 +8,7 @@
 #include <istream>
 #include <iostream>
 #include <functional>
+#include <cstring>
  
 namespace webifc
 {
