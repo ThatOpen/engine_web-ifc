@@ -7,6 +7,7 @@
 #include <vector>
 #include <istream>
 #include <iostream>
+#include <functional>
  
 namespace webifc
 {
