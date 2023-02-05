@@ -163,8 +163,6 @@ namespace webifc
 			{
 				
 				auto foundMesh = _loader.ExpressIDToLineID(expressID);
-				std::cout << foundMesh << std::endl;
-				std::cout << "HERE11"<<std::endl;
 				return GetMeshByLine(foundMesh);
 
 			}

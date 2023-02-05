@@ -386,10 +386,7 @@ export class IfcAPI {
     }
 
     WriteRawLineData(modelID: number, data: RawLineData) {
-        console.log(data);
-       // data.arguments = data.arguments.map(x=> !x ? null : Object.assign({}, x));
         this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
-        console.log(data.arguments);
     }
 
     GetLineIDsWithType(modelID: number, type: number, includeInherited: boolean = false): Vector<number> {

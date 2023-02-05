@@ -96,8 +96,6 @@ function CircleProfile(model: number, api: IfcAPI, rad: number, o: pt2D)
 
 function StandardColumn(model: number, api: IfcAPI, pos: pt)
 {
-
-    let pos: pt =  { x: -2, y: 0, z: -1 };
     let dir: pt =  { x: 0, y: 0, z: 1 };
     let rad: number = 0.25;
     let len: number = 2;
@@ -105,7 +103,7 @@ function StandardColumn(model: number, api: IfcAPI, pos: pt)
     let placement = AxisPlacement(model, api, pos)
     let direction = Dir(model, api, dir)
 
-    let pt = api.CreateIfcEntity(model,
+    let solid = api.CreateIfcEntity(model,
         IFCEXTRUDEDAREASOLID,
         profile,
         placement,
@@ -113,7 +111,7 @@ function StandardColumn(model: number, api: IfcAPI, pos: pt)
         new IFC4.IfcPositiveLengthMeasure(len)
     );
         
-    let pt = api.CreateIfcEntity(model,
+    let column = api.CreateIfcEntity(model,
         IFCCOLUMN,
         new IFC4.IfcGloballyUniqueId("GUID"),
         null,
@@ -121,13 +119,12 @@ function StandardColumn(model: number, api: IfcAPI, pos: pt)
         null,
         new IFC4.IfcLabel("label"),
         Placement(model, api, pos),
-        pt,
+        solid,
         new IFC4.IfcIdentifier("sadf"),
         null
     );
     
-    api.WriteLine<Ifc§  !!!!!!Q§(model, pt);
-    return pt;
+    api.WriteLine(model, column);
 }
 
 function BuildModel(model: number, api: IfcAPI)

@@ -468,11 +468,6 @@ void WriteSet(uint32_t modelID, emscripten::val& val)
         emscripten::val child = val[std::to_string(i)];
         if (child.isNull()) loader->Push<uint8_t>(webifc::IfcTokenType::EMPTY);
         else if (child.isUndefined()) continue;
-        else if (child.isString()) {
-            std:: cout <<"IS STRING"<<std::endl;
-        } else if (child.isNumber()) {
-            std:: cout << "IS NUMBER"<<std::endl;
-        }
         else if (child.isArray()) WriteSet(modelID,child);
         else if (child["type"].isNumber())
         {
@@ -573,27 +568,7 @@ void WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     loader->Push<uint8_t>(webifc::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
     loader->Push((void*)ifcName.c_str(), ifcName.size());
-
-    /*std::cout << parameters["length"].as<uint32_t>() << std::endl;
-
-    for (size_t i=0; i< parameters["length"].as<uint32_t>();i++)
-    {
-
-            emscripten::val child = parameters[std::to_string(i)];
-            //emscripten::val keys = child.call<emscripten::val>("keys", child);
-            //std::cout << "KEYS"<< keys["length"].as<uint32_t>()<<std::endl;
-                    std:: cout << child.typeOf().as<std::string>()  << std::endl;
-                    //std:: cout << child.as<std::string>()  << std::endl;
-        if (child.isNull()) std::cout<<"NULL"<<std::endl;
-        else if (child.isUndefined()) std::cout<<"NULL"<<std::endl;
-        else if (child.isArray()) std::cout<<"ARR"<<std::endl;
-        else if (child["type"].isNumber())
-        {
-std::cout<<"GOOD"<<std::endl;
-        }
-    }*/
-
-    WriteSet(modelID,parameters);
+     WriteSet(modelID,parameters);
     // end line
     loader->Push<uint8_t>(webifc::IfcTokenType::LINE_END);
 
