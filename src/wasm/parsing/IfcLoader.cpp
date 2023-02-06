@@ -508,16 +508,19 @@
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end)
   {
-  	// new line?
+  	
+
   	if (expressID >= _expressIDToLine.size())
     {
        // allocate some space
-      _expressIDToLine.resize(expressID * 2);
+      _expressIDToLine.resize(expressID+10);
     }
 
+    // new line?
     if (_expressIDToLine[expressID] == 0)
   	{
-  		// create line object
+
+      // create line object
   		int lineID = _lines.size();
   		_lines.emplace_back();
 

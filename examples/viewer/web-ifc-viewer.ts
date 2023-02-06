@@ -106,6 +106,7 @@ async function runCode() {
 
   let ifcData = ifcAPI.SaveModel(model);
   let ifcDataString = new TextDecoder('ascii').decode(ifcData);
+  console.log(ifcDataString);
 
   ifcAPI.CloseModel(model);
 
