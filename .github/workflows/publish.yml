@@ -16,6 +16,8 @@ jobs:
           # Defaults to the user or organization that owns the workflow file
           #scope: '@ifcjs'
       - uses: mymindstorm/setup-emsdk@v11
+        with:
+          version: 3.1.31
       - run: npm ci
       - run: npm run build-publish-repo
         env:
