@@ -258,7 +258,6 @@ namespace webifc
 
 		IfcComposedMesh GetMeshByLine(uint32_t lineID)
 		{
-			std::cout << "HERE"<<std::endl;
 			auto &line = _loader.GetLine(lineID);
 
 			bool hasColor = false;

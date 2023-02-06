@@ -13,6 +13,7 @@ namespace webifc
   {
     if (_fileStream!=NULL) Load();
     else _loaded=true;
+    _chunkData = NULL;
   }
   
   bool IfcTokenStream::IfcTokenChunk::Clear()
@@ -47,6 +48,10 @@ namespace webifc
   void IfcTokenStream::IfcTokenChunk::Push(void *v, const size_t size)
   {
       _currentSize+=size;
+      if (_chunkData == NULL ) 
+      {
+         _chunkData = new uint8_t[_chunkSize];
+      }
       if (_currentSize > _chunkSize) {
           uint8_t * tmp = _chunkData;
           _chunkData = new uint8_t[_currentSize];
@@ -54,7 +59,7 @@ namespace webifc
           _chunkSize = _currentSize;
           delete tmp;
       }
-      std::memcpy(_chunkData + _currentSize-size, v, size);
+      std::memcpy(_chunkData + _currentSize - size, v, size);
   }
   
   void IfcTokenStream::IfcTokenChunk::Load()

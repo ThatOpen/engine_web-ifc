@@ -407,7 +407,7 @@
    
    uint32_t IfcLoader::GetMaxExpressId()
    { 
-      return _expressIDToLine.size() - 1;
+      return _expressIDToLine.size();
    }
    
    uint32_t IfcLoader::IncreaseMaxExpressId(const uint32_t incrementSize)
