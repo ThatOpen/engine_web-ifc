@@ -854,7 +854,31 @@ namespace webifc
 		return c;
 	}
 
+	IfcCurve<2> GetZShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, double filletRadius, double edgeRadius, glm::dmat3 placement = glm::dmat3(1))
+	{
+		IfcCurve<2> c;
+		double hw = flangeWidth / 2;
+		double hd = depth / 2;
+		double hweb = webThickness / 2;
+		// double hfla = flangeThickness / 2;
 
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(hweb, hd, 1));
+		c.points.push_back(placement * glm::dvec3(hweb, -hd + flangeThickness, 1));
+		c.points.push_back(placement * glm::dvec3(hw, -hd + flangeThickness, 1));
+		c.points.push_back(placement * glm::dvec3(hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hweb, hd - flangeThickness, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, hd - flangeThickness, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
 
 	// TODO: review and simplify
 	glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf)
