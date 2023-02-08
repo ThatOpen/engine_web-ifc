@@ -1,7 +1,7 @@
 const WebIFC = require("../../dist/web-ifc-api-node.js");
 const fs = require("fs");
 const { Console } = require("console");
-const { Handle,IFC2X3, IFCPROPERTYSINGLEVALUE, EMPTY, IFCPROPERTYSET, IFCRELDEFINESBYPROPERTIES, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
+const { Reference,IFC2X3, IFCPROPERTYSINGLEVALUE, EMPTY, IFCPROPERTYSET, IFCRELDEFINESBYPROPERTIES, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
 
 console.log("Hello web-ifc-node!");
 

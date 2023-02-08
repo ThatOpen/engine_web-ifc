@@ -1,7 +1,7 @@
 import {
-    IfcAPI, IfcEntities,
+    IfcAPI,
     IFCPROJECT, IFCRELAGGREGATES,
-    IFCRELCONTAINEDINSPATIALSTRUCTURE,
+    IFCRELCONTAINEDINSPATIALSTRUCTURE
 } from "../web-ifc-api";
 
 interface pName {
@@ -37,10 +37,7 @@ export class Properties {
     constructor(private api: IfcAPI) {
     }
 
-    getIfcType(type: number) {
-       return IfcEntities[type];
-    }
-
+   
     async getItemProperties(modelID: number, id: number, recursive = false, inverse = false) {
         return this.api.GetLine(modelID, id, recursive, inverse);
     }
@@ -133,7 +130,7 @@ export class Properties {
     private newNode(id: number, type: number) {
         return {
             expressID: id,
-            type: IfcEntities[type],
+            type: this.api.GetNameFromTypeCode(type),
             children: []
         };
     }

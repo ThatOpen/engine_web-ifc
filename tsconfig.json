@@ -13,7 +13,8 @@
     "noUnusedParameters": true,                           
     "strictFunctionTypes": true,                 
     "strictPropertyInitialization": true,        
-    "alwaysStrict": true,                        
+    "alwaysStrict": true,       
+    "tsBuildInfoFile": "./.tsbuildinfo"                 
   },
   "files": [
     "src/web-ifc-api.ts"
