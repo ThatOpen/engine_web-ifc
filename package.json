@@ -50,7 +50,7 @@
     "docker-run": "npm run docker-run-container && npm run docker-get-compiled-files ",
     "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
     "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
-    "set-version": "node src/setversion.js",
+    "postversion": "node src/setversion.js",
     "test": "jest  --runInBand ",
     "test:unit": "jest  --runInBand --testMatch['**/tests/unit/**/*.spec.ts']",
     "test:functional": "jest  --runInBand --testMatch['**/tests/functional/**/*.spec.ts']",
