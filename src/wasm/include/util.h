@@ -780,6 +780,82 @@ namespace webifc
 		return c;
 	}
 
+	IfcCurve<2> GetTShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
+	{
+		IfcCurve<2> c;
+
+		double hw = width / 2;
+		double hd = depth / 2;
+		double hweb = thickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+
+		if (hasFillet)
+		{
+			// TODO: Create interpolation and sloped lines
+		}
+		else
+		{
+			 c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hweb, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hweb, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		}
+
+		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+	IfcCurve<2> GetCShapedCurve(double width, double depth, double girth, double thickness, bool hasFillet, double filletRadius, glm::dmat3 placement = glm::dmat3(1))
+	{
+		IfcCurve<2> c;
+
+		double hw = width / 2;
+		double hd = depth / 2;
+		double hweb = thickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+
+		if (hasFillet)
+		{
+			// TODO: Create interpolation and sloped lines
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(hw, hd - girth, 1));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, hd - girth, 1));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, -hd + girth, 1));
+			c.points.push_back(placement * glm::dvec3(hw, -hd + girth, 1));
+			c.points.push_back(placement * glm::dvec3(hw, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+		}
+
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+
+
 	// TODO: review and simplify
 	glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf)
 	{

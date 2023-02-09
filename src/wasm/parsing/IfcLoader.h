@@ -82,6 +82,7 @@ namespace webifc
       void Push(void *v, const uint64_t size);
       uint64_t GetTotalSize();
       void UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end);
+      void AddHeaderLineTape(const uint32_t type, const uint32_t start, const uint32_t end);
       uint32_t IfcTypeToTypeCode(std::string name);
       template <typename T> void Push(T input)
       {

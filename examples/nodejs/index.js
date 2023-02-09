@@ -1,7 +1,7 @@
 const WebIFC = require("../../dist/web-ifc-api-node.js");
 const fs = require("fs");
 const { Console } = require("console");
-const { IFC2X3, IFCPROPERTYSINGLEVALUE, EMPTY, IFCPROPERTYSET, IFCRELDEFINESBYPROPERTIES, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
+const { Handle,IFC2X3, IFCPROPERTYSINGLEVALUE, EMPTY, IFCPROPERTYSET, IFCRELDEFINESBYPROPERTIES, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
 
 console.log("Hello web-ifc-node!");
 
@@ -48,15 +48,16 @@ async function LoadFile(filename) {
         ifcapi.WriteLine(modelID, unit);
     }
 
+
     //IfcProduct edition
     let storeys = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCBUILDINGSTOREY);
     for (let i = 0; i < storeys.size(); i++) {
         numLines++;
         let expressID = storeys.get(i);
         const storey = await ifcapi.properties.getItemProperties(modelID, expressID);
-        storey.Description = { type: 1, value: 'Description' }; //Value type is 1 -> STRING
-        storey.Name = { type: 1, value: 'Name' }; //Use always '
-        storey.LongName = { type: 1, value: 'Long name' };
+        storey.Description = new IFC2X3.IfcText('Description')
+        storey.Name = new IFC2X3.IfcLabel('Name')
+        storey.LongName = new IFC2X3.IfcText('Long name');
         ifcapi.WriteLine(modelID, storey);
     }
 
@@ -66,7 +67,7 @@ async function LoadFile(filename) {
         numLines++;
         let expressID = properties.get(i);
         const single = await ifcapi.properties.getItemProperties(modelID, expressID);
-        if (single.NominalValue.label == "IFCLABEL") {
+        if (single.NominalValue.constructor.name == "IfcLabel") {
             single.NominalValue.value = "new label";
         }
         ifcapi.WriteLine(modelID, single);
@@ -85,14 +86,9 @@ async function LoadFile(filename) {
     let property = new IFC2X3.IfcPropertySingleValue(
         maxEID,
         IFCPROPERTYSINGLEVALUE,
-        { type: 1, value: 'Classification' },
+        new IFC2X3.IfcIdentifier('Classification'),
         null,
-        {
-            type: 2, //Property content is type 2 -> LABEL
-            label: 'IFCLABEL',
-            valueType: 1, //Value is type 1 -> STRING
-            value: 'New value'
-        },
+        new IFC2X3.IfcLabel('New value'),
         null);
     ifcapi.WriteLine(modelID, property);
 
@@ -103,11 +99,11 @@ async function LoadFile(filename) {
     let pSet = new IFC2X3.IfcPropertySet(
         maxEID,
         IFCPROPERTYSET,
-        { type: 1, value: '350fFD9fjAtPfVihcqa4Yn' },
-        { type: 5, value: owHs.get(0) }, //Reference is type 5 -> REF
-        { type: 1, value: 'Classification' },
-        { type: 1, value: 'Description' },
-        [{ type: 5, value: propID }]);
+        new IFC2X3.IfcGloballyUniqueId('350fFD9fjAtPfVihcqa4Yn'),
+        new Handle(owHs.get(0)), 
+        new IFC2X3.IfcLabel('Classification'),
+        new IFC2X3.IfcText('Description'),
+        [new Handle(propID)]);
     ifcapi.WriteLine(modelID, pSet);
 
     //Add relationship
@@ -117,12 +113,12 @@ async function LoadFile(filename) {
     let psetRel = new IFC2X3.IfcRelDefinesByProperties(
         maxEID,
         IFCRELDEFINESBYPROPERTIES,
-        { type: 1, value: '53sfET9fjfyPfVi4cqa7Yn' },
-        { type: 5, value: owHs.get(0) },
-        { type: 1, value: 'Name' },
-        { type: 1, value: 'Description' },
-        [{ type: 5, value: storeys.get(0) }],
-        { type: 5, value: pSetID }
+        new IFC2X3.IfcGloballyUniqueId('53sfET9fjfyPfVi4cqa7Yn'),
+        new Handle(owHs.get(0)),
+        new IFC2X3.IfcLabel('Name'),
+        new IFC2X3.IfcText('Description'),
+        [new Handle(storeys.get(0))],
+        new Handle(pSetID)
     );
     ifcapi.WriteLine(modelID, psetRel);
 
@@ -134,10 +130,10 @@ async function LoadFile(filename) {
     let newUnits = new IFC2X3.IfcSIUnit(
         unitID,
         IFCSIUNIT,
-        { type: 0, value: '*' },
-        { type: 3, value: 'LENGTHUNIT' },
-        { type: 3, value: 'MILLI' },
-        { type: 3, value: 'METRE' }
+        new Handle(1),
+        IFC2X3.IfcUnitEnum.LENGTHUNIT,
+        IFC2X3.IfcSIPrefix.MILLI,
+        IFC2X3.IfcSIUnitName.METRE
     )
     ifcapi.WriteLine(modelID, newUnits);
 
@@ -147,12 +143,12 @@ async function LoadFile(filename) {
     let newUnits2 = new IFC2X3.IfcSIUnit(
         unitID2,
         IFCSIUNIT,
-        { type: 0, value: '*' },
-        { type: 3, value: 'LENGTHUNIT' },
+        new Handle(1),
+        IFC2X3.IfcUnitEnum.LENGTHUNIT,
         null,
-        { type: 3, value: 'METRE' }
+        IFC2X3.IfcSIUnitName.METRE
     )
-    ifcapi.WriteLine(modelID, newUnits2);
+    //ifcapi.WriteLine(modelID, newUnits2);
 
     let time = WebIFC.ms() - start;
     console.log(`Writing ${numLines} lines took ${time} ms`);
@@ -163,6 +159,12 @@ async function LoadFile(filename) {
     console.log(`Exporting took ${time} ms`);
 
     ifcapi.CloseModel(modelID);
+
+    console.log("Checking we can parse exported model");
+    let id = ifcapi.OpenModel(fs.readFileSync("exported.ifc"));
+        
+
+
 }
 
 LoadFile("../example.ifc");

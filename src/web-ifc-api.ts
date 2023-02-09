@@ -8,7 +8,11 @@ let WebIFCWasm: any;
 
 //@ts-ignore
 if (typeof self !== 'undefined' && self.crossOriginIsolated) {
-    WebIFCWasm = require("./web-ifc-mt");
+    try {
+        WebIFCWasm = require("./web-ifc-mt");
+    } catch (ex){
+        WebIFCWasm = require("./web-ifc");
+    }
 }
 else {
     WebIFCWasm = require("./web-ifc");
@@ -37,6 +41,7 @@ export interface LoaderSettings {
     CIRCLE_SEGMENTS_HIGH?: number;
     BOOL_ABORT_THRESHOLD?: number;
     MEMORY_LIMIT?: number;
+    TAPE_SIZE? : number;
 }
 
 
@@ -180,6 +185,8 @@ export class IfcAPI {
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
             BOOL_ABORT_THRESHOLD: 10000,
+            TAPE_SIZE: 67108864,
+            MEMORY_LIMIT: 3221225472,
             ...settings
         };
         let result = this.wasmModule.OpenModel(s, (destPtr: number, offsetInSrc: number, destSize: number) => {
@@ -214,10 +221,13 @@ export class IfcAPI {
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
             BOOL_ABORT_THRESHOLD: 10000,
+            TAPE_SIZE: 67108864,
+            MEMORY_LIMIT: 3221225472,
             ...settings
         };
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = schema;
+        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[{type:1,'value':schema}]);
         return result;
     }
 
@@ -306,8 +316,14 @@ export class IfcAPI {
         return this.wasmModule.GetAndClearErrors(modelID);
     }
 
-    WriteLine<Type extends ifc.IfcLineObject>(modelID: number, lineObject: Type) {
+    CreateIfcEntity(modelID: number, type:number, ...args: any[] ): ifc.IfcLineObject
+    {
+        let expressID: number = this.IncrementMaxExpressID(modelID, 1);
+        let p = ifc.Constructors[this.modelSchemaList[modelID]][type](type,expressID,args);
+        return p;
+    }
 
+    WriteLine<Type extends ifc.IfcLineObject>(modelID: number, lineObject: Type) {
 
         let property: keyof Type;
         for (property in lineObject)
@@ -336,6 +352,11 @@ export class IfcAPI {
                 }
             }
         }
+        
+        if(lineObject.expressID === undefined || lineObject.expressID < 0) {
+            lineObject.expressID = this.IncrementMaxExpressID(modelID, 1);
+        }
+
 
         let rawLineData: RawLineData = {
             ID: lineObject.expressID,
@@ -350,11 +371,11 @@ export class IfcAPI {
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
             if (property && property.type === 5) {
-                line[propertyName] = this.GetLine(modelID, property.value, true);
+                if (property.value) line[propertyName] = this.GetLine(modelID, property.value, true);
             }
             else if (Array.isArray(property) && property.length > 0 && property[0].type === 5) {
                 for (let i = 0; i < property.length; i++) {
-                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
+                    if (property[i].value) line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
                 }
             }
         });
@@ -365,7 +386,7 @@ export class IfcAPI {
     }
 
     WriteRawLineData(modelID: number, data: RawLineData) {
-        return this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
+        this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
     }
 
     GetLineIDsWithType(modelID: number, type: number, includeInherited: boolean = false): Vector<number> {

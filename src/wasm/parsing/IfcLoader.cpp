@@ -407,7 +407,7 @@
    
    uint32_t IfcLoader::GetMaxExpressId()
    { 
-      return _expressIDToLine.size() - 1;
+      return _expressIDToLine.size()-1;
    }
    
    uint32_t IfcLoader::IncreaseMaxExpressId(const uint32_t incrementSize)
@@ -508,13 +508,19 @@
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end)
   {
-  	// new line?
-  	if (expressID >= _expressIDToLine.size() || _expressIDToLine[expressID] == 0)
-  	{
-      // allocate some space
-  		_expressIDToLine.resize(expressID * 2);
+  	
 
-  		// create line object
+  	if (expressID >= _expressIDToLine.size())
+    {
+       // allocate some space
+      _expressIDToLine.resize(expressID+10);
+    }
+
+    // new line?
+    if (_expressIDToLine[expressID] == 0)
+  	{
+
+      // create line object
   		int lineID = _lines.size();
   		_lines.emplace_back();
 
@@ -535,6 +541,18 @@
 
   	line.tapeOffset = start;
   	line.tapeEnd = end;
+  }
+
+  void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start, const uint32_t end)
+  {
+    
+      IfcHeaderLine l;
+      l.ifcType = type;
+      l.lineIndex = static_cast<uint32_t>(_headerLines.size());
+      l.tapeOffset = start;
+      l.tapeEnd = end;
+      _ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
+      _headerLines.push_back(std::move(l));
   }
 
   

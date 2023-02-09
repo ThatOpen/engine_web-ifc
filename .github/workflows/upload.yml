@@ -1,5 +1,7 @@
 name: Publish to Github Pages
-on: [push]
+on:
+  push:
+    branches: [ main ]
 permissions:
   contents: write
   pages: write
@@ -13,6 +15,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: mymindstorm/setup-emsdk@v11
+        with:
+          version: 3.1.31
       - name: Checkout 🛎️
         uses: actions/checkout@v3
       - uses: actions/setup-node@v2

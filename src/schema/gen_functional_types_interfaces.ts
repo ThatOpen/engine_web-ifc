@@ -31,6 +31,7 @@ export interface Entity {
     props: Prop[];
     inverseProps: InverseProp[],
     derivedProps: Prop[];
+    ifcDerivedProps: string[];
     derivedInverseProps: InverseProp[],
     isIfcProduct: boolean;
 }

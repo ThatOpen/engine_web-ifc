@@ -15,7 +15,7 @@ namespace webifc
 		int CIRCLE_SEGMENTS_HIGH = 12;
 		bool MESH_CACHE = false;
 		int BOOL_ABORT_THRESHOLD = 10000; // 10k verts
-    	long long TAPE_SIZE = 6.4e+7; // probably no need for anyone other than web-ifc devs to change this
-    	long long MEMORY_LIMIT =  3221225472;
+    	uint32_t TAPE_SIZE = 67108864 ; // probably no need for anyone other than web-ifc devs to change this
+    	uint32_t MEMORY_LIMIT =  3221225472;
 	};
 }

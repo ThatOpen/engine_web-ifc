@@ -11,8 +11,10 @@ namespace webifc
     
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
+    _chunkData = NULL;
     if (_fileStream!=NULL) Load();
     else _loaded=true;
+   
   }
   
   bool IfcTokenStream::IfcTokenChunk::Clear()
@@ -47,21 +49,27 @@ namespace webifc
   void IfcTokenStream::IfcTokenChunk::Push(void *v, const size_t size)
   {
       _currentSize+=size;
+      if (_chunkData == NULL ) 
+      {
+         _chunkData = new uint8_t[_chunkSize];
+      }
       if (_currentSize > _chunkSize) {
           uint8_t * tmp = _chunkData;
           _chunkData = new uint8_t[_currentSize];
           std::memcpy(_chunkData, tmp, _currentSize-size);
+          _chunkSize = _currentSize;
           delete tmp;
       }
-      std::memcpy(_chunkData + _currentSize-size, v, size);
+      std::memcpy(_chunkData + _currentSize - size, v, size);
   }
   
   void IfcTokenStream::IfcTokenChunk::Load()
   {
-      _chunkData = new uint8_t[_currentSize > _chunkSize? _currentSize : _chunkSize];
+      _chunkData = new uint8_t[_chunkSize];
       _loaded=true;
       if (_fileStream->GetRef()!=_fileStartRef) _fileStream->Go(_fileStartRef);
       std::vector<char> temp;
+      _currentSize = 0;
       while ( !_fileStream->IsAtEnd() && _currentSize < _chunkSize)
       {
         const char c = _fileStream->Get();
@@ -204,5 +212,6 @@ namespace webifc
         }
         _fileStream->Forward();  
       }
+      _chunkSize=_currentSize;
     }
 }
