@@ -69,12 +69,6 @@ namespace webifc
 			return _expressIDToGeometry.find(expressID) != _expressIDToGeometry.end();
 		}
 
-		IfcGeometry GetFlattenedGeometry(uint32_t expressID)
-		{
-			auto mesh = GetMesh(expressID);
-			return flatten(mesh, _expressIDToGeometry, NormalizeIFC);
-		}
-
 		void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false)
 		{
 			glm::dvec4 newParentColor = color;
@@ -375,27 +369,27 @@ namespace webifc
 
 					auto origin = GetOrigin(mesh, _expressIDToGeometry);
 					auto normalizeMat = glm::translate(-origin);
-					auto flatElementMesh = flatten(mesh, _expressIDToGeometry, normalizeMat);
+					auto flatElementMeshes = flatten(mesh, _expressIDToGeometry, normalizeMat);
 					auto elementColor = mesh.GetColor();
 
-					if (!flatElementMesh.IsEmpty())
+					IfcGeometry finalGeometry;
+
+					if (!flatElementMeshes.size() == 0)
 					{
 
-						// TODO: this is inefficient, better make one-to-many subtraction in bool logic
 						std::vector<IfcGeometry> voidGeoms;
 
 						for (auto relVoidExpressID : relVoidsIt->second)
 						{
 							IfcComposedMesh voidGeom = GetMesh(relVoidExpressID);
 							auto flatVoidMesh = flatten(voidGeom, _expressIDToGeometry, normalizeMat);
-
-							voidGeoms.push_back(flatVoidMesh);
+							voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
 						}
 
-						flatElementMesh = BoolSubtract(flatElementMesh, voidGeoms, line.expressID);
+						finalGeometry = BoolSubtract(flatElementMeshes, voidGeoms, line.expressID);
 					}
 
-					_expressIDToGeometry[line.expressID] = flatElementMesh;
+					_expressIDToGeometry[line.expressID] = finalGeometry;
 					resultMesh.transformation = glm::translate(origin);
 					resultMesh.expressID = line.expressID;
 					resultMesh.hasGeometry = true;
@@ -449,13 +443,10 @@ namespace webifc
 					auto origin = GetOrigin(firstMesh, _expressIDToGeometry);
 					auto normalizeMat = glm::translate(-origin);
 
-					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
-					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
+					auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
+					auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
-					std::vector<IfcGeometry> flatSecondGeoms;
-					flatSecondGeoms.push_back(flatSecondMesh);
-
-					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondGeoms, line.expressID);
+					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes, line.expressID);
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
@@ -491,20 +482,17 @@ namespace webifc
 					auto origin = GetOrigin(firstMesh, _expressIDToGeometry);
 					auto normalizeMat = glm::translate(-origin);
 
-					auto flatFirstMesh = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
-					auto flatSecondMesh = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
+					auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
+					auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
-					if (flatFirstMesh.numFaces == 0)
+					if (flatFirstMeshes.size() == 0)
 					{
 						// bail out because we will get strange meshes
 						// if this happens, probably there's an issue parsing the first mesh
 						return mesh;
 					}
 
-					std::vector<IfcGeometry> flatSecondGeoms;
-					flatSecondGeoms.push_back(flatSecondMesh);
-
-					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMesh, flatSecondGeoms, line.expressID);
+					webifc::IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes, line.expressID);
 
 					_expressIDToGeometry[line.expressID] = resultMesh;
 					mesh.hasGeometry = true;
@@ -1232,94 +1220,118 @@ namespace webifc
 			return result;
 		}
 
-		IfcGeometry BoolSubtract(const IfcGeometry &firstGeom, const std::vector<IfcGeometry> &secondGeoms, uint32_t expressID)
+		IfcGeometry BoolJoin(const std::vector<IfcGeometry> &Geoms, uint32_t expressID)
 		{
 			IfcGeometry result;
-			IfcGeometry secondGeom;
 
-			if (_loader.GetSettings().USE_FAST_BOOLS)
+			if (Geoms.size() == 0)
 			{
-				for (auto geom : secondGeoms)
-				{
-					if (geom.numFaces != 0)
-					{
-						if (secondGeom.numFaces == 0)
-						{
-							secondGeom = geom;
-						}
-						else
-						{
-							secondGeom = boolJoin(secondGeom, geom);
-						}
-
-						if (_loader.GetSettings().DUMP_CSG_MESHES)
-						{
-							DumpIfcGeometry(geom, L"geom.obj");
-						}
-					}
-				}
-				if (firstGeom.numFaces == 0 || secondGeom.numFaces == 0)
-				{
-					_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
-
-					// bail out because we will get strange meshes
-					// if this happens, probably there's an issue parsing the mesh that occurred earlier
-					return firstGeom;
-				}
-
-				IfcGeometry r1;
-				IfcGeometry r2;
-
-				intersectMeshMesh(firstGeom, secondGeom, r1, r2);
-
-				if (_loader.GetSettings().DUMP_CSG_MESHES)
-				{
-					DumpIfcGeometry(r1, L"r1.obj");
-					DumpIfcGeometry(r2, L"r2.obj");
-				}
-				result = boolSubtract(r1, r2);
+				return result;
+			}
+			else if (Geoms.size() == 1)
+			{
+				return Geoms[0];
 			}
 			else
 			{
-				const int threshold = LoaderSettings().BOOL_ABORT_THRESHOLD;
-				std::vector<IfcGeometry> seconds;
-
-				for (auto &geom : secondGeoms)
+				bool first = true;
+				for (auto &geom : Geoms)
 				{
-					if (geom.numPoints < threshold)
+					if (first)
 					{
-						seconds.push_back(geom);
+						first = false;
+						result = geom;
 					}
 					else
 					{
-						_loader.ReportError({LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD"});
+						glm::dvec3 center;
+						glm::dvec3 extents;
+						result.GetCenterExtents(center, extents);
+
+						auto first = result.Normalize(center, extents);
+						auto second = geom.Normalize(center, extents);
+
+						if (first.numFaces > 0 && second.numFaces > 0)
+						{
+							if (_loader.GetSettings().DUMP_CSG_MESHES)
+							{
+								DumpIfcGeometry(first, L"first.obj");
+								DumpIfcGeometry(second, L"second.obj");
+							}
+
+							IfcGeometry r1;
+							IfcGeometry r2;
+
+							BVH bvh1;
+							BVH bvh2;
+
+							intersectMeshMesh(first, second, r1, r2, bvh1, bvh2);
+
+							if (_loader.GetSettings().DUMP_CSG_MESHES)
+							{
+								DumpIfcGeometry(r1, L"r1.obj");
+								DumpIfcGeometry(r2, L"r2.obj");
+							}
+
+							result = boolJoin(r1, r2, bvh1, bvh2);
+
+							if (_loader.GetSettings().DUMP_CSG_MESHES)
+							{
+								DumpIfcGeometry(result, L"first.obj");
+								DumpIfcGeometry(geom, L"second.obj");
+								DumpIfcGeometry(result, L"result.obj");
+							}
+						}
+						result = result.DeNormalize(center, extents);
 					}
-
-					if (_loader.GetSettings().DUMP_CSG_MESHES)
-					{
-						DumpIfcGeometry(geom, L"geom.obj");
-					}
 				}
-
-				if (firstGeom.numPoints > threshold)
-				{
-					_loader.ReportError({LoaderErrorType::BOOL_ERROR, "complex bool aborted due to BOOL_ABORT_THRESHOLD"});
-
-					// bail out because we expect this operation to take too long
-					return firstGeom;
-				}
-
-				if (firstGeom.numFaces == 0 || seconds.size() == 0)
-				{
-					_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
-
-					// bail out because we will get strange meshes
-					// if this happens, probably there's an issue parsing the mesh that occurred earlier
-					return firstGeom;
-				}
-
-				result = boolMultiOp_Manifold(firstGeom, seconds, expressID);
+				return result;
 			}
+		}
+
+		IfcGeometry BoolSubtract(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, uint32_t expressID)
+		{
+			IfcGeometry firstGeom = BoolJoin(firstGeoms, expressID);
+			IfcGeometry secondGeom = BoolJoin(secondGeoms, expressID);
+			IfcGeometry result;
+
+			glm::dvec3 center;
+			glm::dvec3 extents;
+			firstGeom.GetCenterExtents(center, extents);
+
+			auto first = firstGeom.Normalize(center, extents);
+			auto second = secondGeom.Normalize(center, extents);
+
+			if (first.numFaces == 0 || second.numFaces == 0)
+			{
+				_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
+
+				// bail out because we will get strange meshes
+				// if this happens, probably there's an issue parsing the mesh that occurred earlier
+				return firstGeom;
+			}
+
+			if (_loader.GetSettings().DUMP_CSG_MESHES)
+			{
+				DumpIfcGeometry(first, L"first.obj");
+				DumpIfcGeometry(second, L"second.obj");
+			}
+
+			IfcGeometry r1;
+			IfcGeometry r2;
+
+			BVH bvh1;
+			BVH bvh2;
+
+			intersectMeshMesh(first, second, r1, r2, bvh1, bvh2);
+
+			if (_loader.GetSettings().DUMP_CSG_MESHES)
+			{
+				DumpIfcGeometry(r1, L"r1.obj");
+				DumpIfcGeometry(r2, L"r2.obj");
+			}
+
+			result = boolSubtract(r1, r2, bvh1, bvh2);
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{
@@ -1328,7 +1340,7 @@ namespace webifc
 				DumpIfcGeometry(result, L"result.obj");
 			}
 
-			return result;
+			return result.DeNormalize(center, extents);
 		}
 
 		std::vector<glm::dvec3> ReadIfcCartesianPointList3D(uint32_t expressID)

@@ -208,7 +208,8 @@ void TestTriangleDecompose()
         std::cout << "Start test " << i << std::endl;
 
         bool swapped = false;
-        auto triangles = webifc::triangulate(a, b, c, loops, swapped);
+        webifc::TriangulateWithBoundaries twb;
+        auto triangles = twb.triangulate(a, b, c, loops, swapped);
 
         // webifc::IsValidTriangulation(triangles, points);
 
@@ -237,9 +238,9 @@ int main()
 
     // return 0;
 
-    //std::string content = ReadFile(L"C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#83 processing/05111002_IFCR2_Geo_Columns_1.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/v41.ifc");
 
-    std::string content = ReadFile("../../../examples/example.ifc");
+    //std::string content = ReadFile("../../../examples/example.ifc");
 		webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.DUMP_CSG_MESHES = false;
@@ -268,8 +269,8 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = ms();
-    //SpecificLoadTest(loader, geometryLoader, 2591);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    SpecificLoadTest(loader, geometryLoader, 96049);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = loader.GetAndClearErrors();
