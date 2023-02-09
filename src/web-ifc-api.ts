@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {TypeInitialisers, FILE_SCHEMA, RawLineData,IfcLineObject,FromRawLineData,Constructors,InheritanceDef,Reference,InversePropertyDef,ToRawLineData} from "./schema/ifc-schema_core";
+import {TypeInitialisers, FILE_SCHEMA, RawLineData,IfcLineObject,FromRawLineData,Constructors,InheritanceDef,Reference,InversePropertyDef,ToRawLineData} from "./ifc-schema";
 
 let WebIFCWasm: any;
 
@@ -17,7 +17,7 @@ if (typeof self !== 'undefined' && self.crossOriginIsolated) {
 else {
     WebIFCWasm = require("./web-ifc");
 }
-export * from "./schema/ifc-schema_core";
+export * from "./ifc-schema";
 import { Properties } from "./helpers/properties";
 
 
@@ -52,6 +52,22 @@ export enum LogLevel {
     WARN = 2,
     ERROR = 3,
     OFF = 4,
+}
+
+export interface RawLineData { 
+    ID: number; 
+    type: number; 
+    arguments: any[]
+};
+
+export class Reference<_> { 
+    type: number=5; 
+    constructor(public value: number) {}
+}
+
+export abstract class IfcLineObject { 
+    type: number=0; 
+    constructor(public expressID: number) {}
 }
 
 export interface Vector<T> {
@@ -264,6 +280,7 @@ export class IfcAPI {
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
+console.log(rawLineData);
         let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData);
 
         if (flatten) {

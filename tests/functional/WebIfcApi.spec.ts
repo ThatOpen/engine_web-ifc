@@ -348,16 +348,15 @@ describe('WebIfcApi writing methods', () => {
         let projectBeforeWriting: any = ifcApi.GetAllLines(modelID);
         let payload = new IFC2X3.IfcBuildingElementProxy(
             9999999,
-            WebIFC.IFCBUILDINGELEMENTPROXY,
             new IFC2X3.IfcGloballyUniqueId('GUID'),
-            new WebIFC.Handle(41),
+            new WebIFC.Reference(41),
             new IFC2X3.IfcLabel('NZ-SHS beam:100x6.0SHS:823947'),
             null,
             new IFC2X3.IfcLabel('NZ-SHS beam:100x6.0SHS'),
-            new WebIFC.Handle(9750),
-            new WebIFC.Handle(9987),
+            new WebIFC.Reference(9750),
+            new WebIFC.Reference(9987),
             null,
-            null,
+            null
         );
         ifcApi.WriteLine(modelID, payload);
         let projectAfterWriting: any = ifcApi.GetAllLines(modelID);

@@ -1,14 +1,14 @@
 import {Entity, Type, Prop} from "./gen_functional_types_interfaces";
 
 
-export function generateInitialiser(type: Type, initialisersDone: Set<string>,buffer: Array<string>, crcTable:any,types: Type[],schemaName:string) 
+export function generateInitialiser(type: Type, initialisersDone: Set<string>,buffer: Array<string>, crcTable:any,types: Type[],schemaName:string,schemaNo: number) 
 {
     if (type.isEnum) return;
 
     if (type.isList)
     {
         if (initialisersDone.has(type.name)) return;
-        buffer.push(`TypeInitialisers['${schemaName}'][${crc32(type.name.toUpperCase(),crcTable)}] = (v: any) => { return new ${schemaName}.${type.name}(v); }`);
+        buffer.push(`TypeInitialisers[${schemaNo}][${crc32(type.name.toUpperCase(),crcTable)}]=(v:any)=>return new ${schemaName}.${type.name}(v);`);
         return
     }
 
@@ -16,14 +16,14 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
     {
         type.values.forEach(refType => {
            let newType = types.find(e => e.name == refType);
-           if (newType) generateInitialiser(newType,initialisersDone,buffer,crcTable,types,schemaName)
+           if (newType) generateInitialiser(newType,initialisersDone,buffer,crcTable,types,schemaName,schemaNo)
         });
         return;
     }
 
     if (initialisersDone.has(type.name)) return;
     initialisersDone.add(type.name);
-    buffer.push(`TypeInitialisers['${schemaName}'][${crc32(type.name.toUpperCase(),crcTable)}] = (v: any) => { return new ${schemaName}.${type.name}(v); }`);
+    buffer.push(`TypeInitialisers[${schemaNo}][${crc32(type.name.toUpperCase(),crcTable)}]=(v:any)=>return new ${schemaName}.${type.name}(v);`);
     return;
 }       
 
@@ -131,42 +131,42 @@ export function generateSuperAssignment(p:Prop, ifcDerivedProps: string[],types:
     }
 }
 
-export function generateClass(entity:Entity, schemaName:string, buffer: Array<string>, coreBuffer: Array<string>, types:Type[],crcTable:any) 
+export function generateClass(entity:Entity, schemaName:string, buffer: Array<string>, classBuffer: Array<string>, types:Type[],crcTable:any,schemaNo:number) 
 {
 
-  coreBuffer.push(`FromRawLineData['${schemaName}'][${entity.name.toUpperCase()}] = (d: RawLineData) => { new ${schemaName}.${entity.name}(d.ID, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName)).join(", ")}); }`);
+  buffer.push(`FromRawLineData[${schemaNo}][${entity.name.toUpperCase()}]=(d:RawLineData)=>new ${schemaName}.${entity.name}(d.ID, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName)).join(", ")});`);
   let constructorArray = entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name));
-  coreBuffer.push(`Constructors['${schemaName}'][${entity.name.toUpperCase()}] = (expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'}) => { return new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")}); }`);
-  coreBuffer.push(`ToRawLineData['${schemaName}'][${entity.name.toUpperCase()}] = (${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[] => { return [${entity.derivedProps.map((p) =>generateTapeAssignment(p,types)).join(", ")}]; }`);
+  buffer.push(`Constructors[${schemaNo}][${entity.name.toUpperCase()}]=(expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'})=>return new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")});`);
+  buffer.push(`ToRawLineData[${schemaNo}][${entity.name.toUpperCase()}]=(${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[]=>return[${entity.derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}];`);
 
 
   if (!entity.parent)
   {
-    buffer.push(`export class ${entity.name} extends IfcLineObject {`);
+    classBuffer.push(`export class ${entity.name} extends IfcLineObject {`);
   } 
   else
   {
-    buffer.push(`export class ${entity.name} extends ${entity.parent} {`);
+    classBuffer.push(`export class ${entity.name} extends ${entity.parent} {`);
   }
-  buffer.push("\texpressID:number="+crc32(entity.name.toUpperCase(),crcTable)+";");
+  classBuffer.push("\texpressID:number="+crc32(entity.name.toUpperCase(),crcTable)+";");
   
 
   entity.inverseProps.forEach((prop) => {
     let type = `${"(Reference<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
-    buffer.push(`\t${prop.name}!: ${type};`);
+    classBuffer.push(`\t${prop.name}!: ${type};`);
   });
 
-  buffer.push(`\tconstructor(expressID: number, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Reference<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
-  buffer.push(`\t{`)
+  classBuffer.push(`\tconstructor(expressID: number, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Reference<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  classBuffer.push(`\t{`)
   if (!entity.parent) {
-    buffer.push(`\t\tsuper(expressID);`)
+    classBuffer.push(`\t\tsuper(expressID);`)
   } else {
     var nonLocalProps = entity.derivedProps.filter(n => !entity.props.includes(n))
-    if (nonLocalProps.length ==0) buffer.push(`\t\t\tsuper(expressID);`);
-    else buffer.push(`\t\tsuper(expressID,${nonLocalProps.map((p) => generateSuperAssignment(p,entity.ifcDerivedProps,types)).join(", ")});`)
+    if (nonLocalProps.length ==0) classBuffer.push(`\t\t\tsuper(expressID);`);
+    else classBuffer.push(`\t\tsuper(expressID,${nonLocalProps.map((p) => generateSuperAssignment(p,entity.ifcDerivedProps,types)).join(", ")});`)
   }
-   buffer.push("\t}");
-   buffer.push("}");
+   classBuffer.push("\t}");
+   classBuffer.push("}");
 }
 
 export function makeCRCTable(){

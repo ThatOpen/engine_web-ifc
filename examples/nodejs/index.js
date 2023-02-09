@@ -1,11 +1,11 @@
-const WebIFC = require("../../dist/web-ifc-api-node.js");
+
 const fs = require("fs");
 const { Console } = require("console");
-const { Reference,IFC2X3, IFCPROPERTYSINGLEVALUE, EMPTY, IFCPROPERTYSET, IFCRELDEFINESBYPROPERTIES, IFCSIUNIT } = require("../../dist/web-ifc-api-node.js");
+const { IfcAPI, Reference, IFC2X3, IFCBUILDINGSTOREY, IFCPROPERTYSINGLEVALUE, IFCSIUNIT, EMPTY, IFCPROPERTYSET, IFCOWNERHISTORY, IFCRELDEFINESBYPROPERTIES } = require("../../dist/web-ifc-api-node.js");
 
 console.log("Hello web-ifc-node!");
 
-const ifcapi = new WebIFC.IfcAPI();
+const ifcapi = new IfcAPI();
 
 async function LoadFile(filename) {
     // load model data as a string
@@ -19,7 +19,6 @@ async function LoadFile(filename) {
 
     let numLines = 0;
 
-    let start = WebIFC.ms();
 
     //Data types
 
@@ -40,17 +39,19 @@ async function LoadFile(filename) {
     console.log(`Modify values`);
 
     //Change units
-    let units = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCSIUNIT);
+    let units = ifcapi.GetLineIDsWithType(modelID, IFCSIUNIT);
     for (let i = 0; i < units.size(); i++) {
         let expressID = units.get(i);
+        console.log(expressID);
         const unit = await ifcapi.properties.getItemProperties(modelID, expressID);
+        console.log(unit);
         unit.Prefix = { type: 3, value: 'MILLI' };
         ifcapi.WriteLine(modelID, unit);
     }
 
 
     //IfcProduct edition
-    let storeys = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCBUILDINGSTOREY);
+    let storeys = ifcapi.GetLineIDsWithType(modelID, IFCBUILDINGSTOREY);
     for (let i = 0; i < storeys.size(); i++) {
         numLines++;
         let expressID = storeys.get(i);
@@ -62,7 +63,7 @@ async function LoadFile(filename) {
     }
 
     //IfcProperty edition
-    let properties = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCPROPERTYSINGLEVALUE)
+    let properties = ifcapi.GetLineIDsWithType(modelID, IFCPROPERTYSINGLEVALUE)
     for (let i = 0; i < properties.size(); i++) {
         numLines++;
         let expressID = properties.get(i);
@@ -79,7 +80,7 @@ async function LoadFile(filename) {
     let maxEID = ifcapi.GetMaxExpressID(modelID);
 
     //Find ownerHistory
-    let owHs = ifcapi.GetLineIDsWithType(modelID, WebIFC.IFCOWNERHISTORY);
+    let owHs = ifcapi.GetLineIDsWithType(modelID, IFCOWNERHISTORY);
 
     maxEID++;
     numLines++;

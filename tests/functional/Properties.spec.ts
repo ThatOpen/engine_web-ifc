@@ -31,7 +31,7 @@ describe('Properties', () => {
     })
 
     test('can get IFC type from integer', async () => {
-        const wallsStandard = properties.getIfcType(IFCWALLSTANDARDCASE);
+        const wallsStandard = ifcApi.GetNameFromTypeCode(IFCWALLSTANDARDCASE);
         expect(wallsStandard).toEqual("IFCWALLSTANDARDCASE")
     })
 
