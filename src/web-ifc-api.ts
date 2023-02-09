@@ -8,7 +8,11 @@ let WebIFCWasm: any;
 
 //@ts-ignore
 if (typeof self !== 'undefined' && self.crossOriginIsolated) {
-    WebIFCWasm = require("./web-ifc-mt");
+    try {
+        WebIFCWasm = require("./web-ifc-mt");
+    } catch (ex){
+        WebIFCWasm = require("./web-ifc");
+    }
 }
 else {
     WebIFCWasm = require("./web-ifc");
@@ -36,6 +40,8 @@ export interface LoaderSettings {
     CIRCLE_SEGMENTS_MEDIUM?: number;
     CIRCLE_SEGMENTS_HIGH?: number;
     BOOL_ABORT_THRESHOLD?: number;
+    MEMORY_LIMIT?: number;
+    TAPE_SIZE? : number;
 }
 
 
@@ -105,7 +111,6 @@ export type LocateFileHandlerFn = (path: string, prefix: string) => string;
 
 export class IfcAPI {
     wasmModule: undefined | any = undefined;
-    fs: undefined | any = undefined;
     wasmPath: string = "";
     isWasmPathAbsolute = false;
 
@@ -143,12 +148,29 @@ export class IfcAPI {
 
             //@ts-ignore
             this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler });
-            this.fs = this.wasmModule.FS;
         }
         else {
             this.LogError(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
         }
     }
+
+     /**
+     * Opens a set of models and returns model IDs 
+     * @data Buffer containing IFC data (bytes)
+     * @data Settings settings for loading the model
+    */
+    OpenModels(dataSets: Array<Uint8Array>, settings?: LoaderSettings): Array<number> {
+        let s: LoaderSettings = {
+            MEMORY_LIMIT :  3221225472,
+            ...settings
+        };
+        s.MEMORY_LIMIT = s.MEMORY_LIMIT! / dataSets.length;
+        let modelIDs:Array<number> = [];
+
+        for (let dataSet of dataSets) modelIDs.push(this.OpenModel(dataSet,s));
+        return modelIDs
+    }
+
 
     /**
      * Opens a model and returns a modelID number
@@ -163,19 +185,15 @@ export class IfcAPI {
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
             BOOL_ABORT_THRESHOLD: 10000,
+            TAPE_SIZE: 67108864,
+            MEMORY_LIMIT: 3221225472,
             ...settings
         };
-        let offsetInSrc = 0;
-        let result = this.wasmModule.OpenModel(s, (destPtr: number, destSize: number) => {
+        let result = this.wasmModule.OpenModel(s, (destPtr: number, offsetInSrc: number, destSize: number) => {
             let srcSize = Math.min(data.byteLength - offsetInSrc, destSize);
-
-            let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + destSize);
-            let src = data.subarray(offsetInSrc, offsetInSrc + srcSize);
-
+            let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + srcSize);
+            let src = data.subarray(offsetInSrc, offsetInSrc + srcSize );
             dest.set(src);
-
-            offsetInSrc += srcSize;
-
             return srcSize;
         });
         this.modelSchemaList[result] = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
@@ -203,43 +221,31 @@ export class IfcAPI {
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
             BOOL_ABORT_THRESHOLD: 10000,
+            TAPE_SIZE: 67108864,
+            MEMORY_LIMIT: 3221225472,
             ...settings
         };
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = schema;
+        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[{type:1,'value':schema}]);
         return result;
     }
 
-    ExportFileAsIFC(modelID: number): Uint8Array {
-        this.wasmModule.ExportFileAsIFC(modelID);
-        //@ts-ignore
-        let result = this.fs.readFile("/export.ifc");
-        this.wasmModule['FS_unlink']("/export.ifc");
-        return result;
+    SaveModel(modelID: number): Uint8Array {
+        let modelSize = this.wasmModule.GetModelSize(modelID);
+        let dataBuffer = new Uint8Array(modelSize);
+        let size = 0; 
+        this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
+            let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
+            size = srcSize;
+            dataBuffer.set(src, 0);
+        });
+        //shrink down to size
+        let newBuffer = new Uint8Array(size);
+        newBuffer.set(dataBuffer.subarray(0,size),0);
+        return newBuffer;
     }
 
-    async Serialize(paths: any, serializedFileName: any, storeSerialized: (buffer: any) => void, ramLimit: number = 200000000): Promise<void> {
-        this.wasmModule.Serialize(paths, serializedFileName, storeSerialized, ramLimit);
-    }
-
-    OpenSerialized(paths: any, settings?: LoaderSettings, ramLimit: number = 200000000): number {
-        let s: LoaderSettings = {
-            COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: true,
-            CIRCLE_SEGMENTS_LOW: 5,
-            CIRCLE_SEGMENTS_MEDIUM: 8,
-            CIRCLE_SEGMENTS_HIGH: 12,
-            BOOL_ABORT_THRESHOLD: 10000,
-            ...settings
-        };
-        return this.wasmModule.OpenSerialized(paths, s, ramLimit);
-    }
-
-    /**
-     * Opens a model and returns a modelID number
-     * @modelID Model handle retrieved by OpenModel, model must not be closed
-     * @data Buffer containing IFC data (bytes)
-    */
     GetGeometry(modelID: number, geometryExpressID: number): IfcGeometry {
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
@@ -310,51 +316,47 @@ export class IfcAPI {
         return this.wasmModule.GetAndClearErrors(modelID);
     }
 
-    WriteLine(modelID: number, lineObject: any) {
-        // this is pretty weakly-typed nonsense
-        Object.keys(lineObject).forEach(propertyName => {
-            let property = lineObject[propertyName];
-            if (property && property.expressID !== undefined) {
+    CreateIfcEntity(modelID: number, type:number, ...args: any[] ): ifc.IfcLineObject
+    {
+        let expressID: number = this.IncrementMaxExpressID(modelID, 1);
+        let p = ifc.Constructors[this.modelSchemaList[modelID]][type](type,expressID,args);
+        return p;
+    }
+
+    WriteLine<Type extends ifc.IfcLineObject>(modelID: number, lineObject: Type) {
+
+        let property: keyof Type;
+        for (property in lineObject)
+        {
+            const lineProperty: any = lineObject[property];
+            if (lineProperty  && (lineProperty as ifc.IfcLineObject).expressID !== undefined) {
                 // this is a real object, we have to write it as well and convert to a handle
                 // TODO: detect if the object needs to be written at all, or if it's unchanged
-                this.WriteLine(modelID, property);
+                this.WriteLine(modelID, lineProperty as ifc.IfcLineObject);
 
                 // overwrite the reference
                 // NOTE: this modifies the parameter
-                lineObject[propertyName] = {
-                    type: 5,
-                    value: property.expressID
-                }
+                (lineObject[property] as any)= new ifc.Handle((lineProperty as ifc.IfcLineObject).expressID);
             }
-            else if (Array.isArray(property) && property.length > 0) {
-                for (let i = 0; i < property.length; i++) {
-                    if (property[i].expressID !== undefined) {
+            else if (Array.isArray(lineProperty) && lineProperty.length > 0) {
+                for (let i = 0; i < lineProperty.length; i++) {
+                    if ((lineProperty[i] as ifc.IfcLineObject).expressID !== undefined) {
                         // this is a real object, we have to write it as well and convert to a handle
                         // TODO: detect if the object needs to be written at all, or if it's unchanged
-                        this.WriteLine(modelID, property[i]);
+                        this.WriteLine(modelID, lineProperty[i] as ifc.IfcLineObject);
 
                         // overwrite the reference
                         // NOTE: this modifies the parameter
-                        lineObject[propertyName][i] = {
-                            type: 5,
-                            value: property[i].expressID
-                        }
+                        ((lineObject[property]as any)[i] as any) = new ifc.Handle((lineProperty[i] as ifc.IfcLineObject).expressID);
                     }
                 }
             }
-        });
+        }
         
         if(lineObject.expressID === undefined || lineObject.expressID < 0) {
             lineObject.expressID = this.IncrementMaxExpressID(modelID, 1);
         }
 
-        // See https://github.com/IFCjs/web-ifc/issues/178 for some pitfalls here.
-        if (lineObject.expressID === undefined
-            || lineObject.type === undefined
-            || lineObject.ToTape === undefined) {
-            this.LogWarn('Line object cannot be serialized; invalid format:', lineObject)
-            return
-        }
 
         let rawLineData: RawLineData = {
             ID: lineObject.expressID,
@@ -369,11 +371,11 @@ export class IfcAPI {
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
             if (property && property.type === 5) {
-                line[propertyName] = this.GetLine(modelID, property.value, true);
+                if (property.value) line[propertyName] = this.GetLine(modelID, property.value, true);
             }
             else if (Array.isArray(property) && property.length > 0 && property[0].type === 5) {
                 for (let i = 0; i < property.length; i++) {
-                    line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
+                    if (property[i].value) line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
                 }
             }
         });
@@ -384,7 +386,7 @@ export class IfcAPI {
     }
 
     WriteRawLineData(modelID: number, data: RawLineData) {
-        return this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
+        this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
     }
 
     GetLineIDsWithType(modelID: number, type: number, includeInherited: boolean = false): Vector<number> {

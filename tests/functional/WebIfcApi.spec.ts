@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as WebIFC from '../../dist/web-ifc-api-node.js';
 import {IFC2X3} from '../../dist/web-ifc-api-node.js';
+import {LoaderSettings,IfcLineObject} from '../../dist/web-ifc-api-node.js';
 /**
  * Should be somewhere else.
  */
@@ -96,8 +97,6 @@ beforeAll(async () => {
 describe('WebIfcApi reading methods', () => {
     test('can retrieve a modelID', () => {
         expect(modelID).toBe(0);
-
-
     })
     test('can ensure model is open', () => {
         const isOpen : boolean = ifcApi.IsModelOpen(modelID);
@@ -159,8 +158,6 @@ describe('WebIfcApi reading methods', () => {
         let newEID = ifcApi.IncrementMaxExpressID(tmpModelID, 2);
         expect(newEID).toBe(maxEID + 2);
     })
-
-
 })
 describe('WebIfcApi geometries', () => {
     test('can return the correct number geometries', () => {
@@ -224,7 +221,6 @@ describe('WebIfcApi geometries', () => {
         let geometryVertexArrayString = geometryVertexArray.join(",");
         expect(geometryIndexDatasString).toEqual(expectedVertexAndIndexDatas.indexDatas);
         expect(geometryVertexArrayString).toEqual(expectedVertexAndIndexDatas.vertexDatas);
-
     })
     test('can ensure the corret number of all streamed meshes ', () => {
         let count: number = 0;
@@ -282,20 +278,24 @@ describe('WebIfcApi writing methods', () => {
                 },
                 null,
                 {
-                    type: 1,
-                    value: ''
+                    type: 5,
+                    value: 1
                 },
                 {
                     type: 1,
                     value: ''
                 },
                 {
-                    type: 1,
-                    value: ''
+                    type: 5,
+                    value: 2
                 },
+                [{
+                    type: 5,
+                    value: 3
+                }],
                 {
-                    type: 1,
-                    value: ''
+                    type: 5,
+                    value: 2
                 }
             ]
         })
@@ -327,13 +327,17 @@ describe('WebIfcApi writing methods', () => {
                     type: 1,
                     value: ''
                 },
-                [{
+                {
                     type: 5,
                     value: 2
+                },
+                [{
+                    type: 5,
+                    value: 3
                 }],
                 {
-                    type: 1,
-                    value: ''
+                    type: 5,
+                    value: 2
                 }
             ]
         })
@@ -346,12 +350,12 @@ describe('WebIfcApi writing methods', () => {
             9999999,
             WebIFC.IFCBUILDINGELEMENTPROXY,
             new IFC2X3.IfcGloballyUniqueId('GUID'),
-            new WebIFC.Handle<IFC2X3.IfcOwnerHistory> (41),
+            new WebIFC.Handle(41),
             new IFC2X3.IfcLabel('NZ-SHS beam:100x6.0SHS:823947'),
             null,
             new IFC2X3.IfcLabel('NZ-SHS beam:100x6.0SHS'),
-            new WebIFC.Handle<IFC2X3.IfcObjectPlacement>(9750),
-            new WebIFC.Handle<IFC2X3.IfcProductRepresentation>(9987),
+            new WebIFC.Handle(9750),
+            new WebIFC.Handle(9987),
             null,
             null,
         );
@@ -368,16 +372,14 @@ describe('WebIfcApi writing methods', () => {
     })
 
     test('can Export File As IFC', () => {
-        let ifcDatas = ifcApi.ExportFileAsIFC(modelID);
+        let ifcDatas = ifcApi.SaveModel(modelID);
         let exportModelID = ifcApi.OpenModel(ifcDatas);
         const line: any = ifcApi.GetLine(exportModelID, expressId);
         expect(exportModelID).toEqual(3);
         expect(line.expressID).toEqual(expressId);
-
-
     })
 
-})
+});
 
 describe('WebIfcApi known failures', () => {
     describe("issue:#212", () => {
@@ -397,8 +399,8 @@ describe('WebIfcApi known failures', () => {
             }
 
             ifcApi.CloseModel(failModelID);
-        });
-    })
+        })
+    });
 
     describe("issue:#209", () => {
         test("OpenModel fails when USE_FAST_BOOLS is disabled issue:#209", async () => {
@@ -421,14 +423,14 @@ describe('WebIfcApi known failures', () => {
         })
     });
     describe("issue:#214", () => {
-        test("REAL numbers written by ExportFileAsIFC() are in an invalid format", async () => {
+        test("REAL numbers written by SaveModel() are in an invalid format", async () => {
             let ifcApi = new WebIFC.IfcAPI();
             await ifcApi.Init();
             let failModelID = 0;
             const exampleIFCPath: string = path.join(__dirname, '../artifacts/example.ifc_issue_214.test');
             const exampleIFCData = fs.readFileSync(exampleIFCPath);
             failModelID = ifcApi.OpenModel(exampleIFCData);
-            let ifcDatas = ifcApi.ExportFileAsIFC(failModelID);
+            let ifcDatas = ifcApi.SaveModel(failModelID);
             let rawIfcString = Utf8ArrayToStr(ifcDatas);
 
             expect(rawIfcString.indexOf("#6=IFCCARTESIANPOINT((0.,0.,0.));") == -1).toBeTruthy();
@@ -436,14 +438,14 @@ describe('WebIfcApi known failures', () => {
 
             ifcApi.CloseModel(failModelID);
         });
-        test("when ExportFileAsIFC() exponents need to be written with a 'E' not 'e'", async () => {
+        test("when SaveModel() exponents need to be written with a 'E' not 'e'", async () => {
             let ifcApi = new WebIFC.IfcAPI();
             await ifcApi.Init();
             let failModelID = 0;
             const exampleIFCPath: string = path.join(__dirname, '../artifacts/example.ifc_issue_214.test');
             const exampleIFCData = fs.readFileSync(exampleIFCPath);
             failModelID = ifcApi.OpenModel(exampleIFCData);
-            let ifcDatas = ifcApi.ExportFileAsIFC(failModelID);
+            let ifcDatas = ifcApi.SaveModel(failModelID);
             let rawIfcString = Utf8ArrayToStr(ifcDatas);
             expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);") == -1).toBeTruthy();
             ifcApi.CloseModel(failModelID);
@@ -453,7 +455,6 @@ describe('WebIfcApi known failures', () => {
             expect(true).toBeTruthy();
         });
     });
-
 })
 
 describe('some use cases', () => {
@@ -472,7 +473,7 @@ describe('some use cases', () => {
           storey = await ifcApi.properties.getItemProperties(modelID, storeyId);
           expect(storey.LongName.value).toBe(newStoreyName);
       
-          const writtenData = await ifcApi.ExportFileAsIFC(modelID);
+          const writtenData = await ifcApi.SaveModel(modelID);
           let modelId = ifcApi.OpenModel(writtenData);
           [storey, storeyId] = await getFirstStorey(ifcApi, modelId);
           expect(storey.LongName.value).toBe(newStoreyName);
@@ -480,8 +481,42 @@ describe('some use cases', () => {
     
 })
 
-afterAll(() => {
+describe('creating objects', () => {
+    test("create an IFC object from Typecode", () => {
+        
+        let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
+        expect(entity.constructor.name).toBe('IfcCartesianPoint');
+    });
 
+    
+})
+
+describe('opening large amounts of data', () => {
+    test("open a small model but with a heavy memory restriction", () => {
+        let s: LoaderSettings = {
+            MEMORY_LIMIT :  10485760,
+            TAPE_SIZE : 104857
+        };
+        const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test'));
+        let modelId = ifcApi.OpenModel(exampleIFCData,s);
+        expect(modelId).toBe(5);
+    });
+
+     test("open a small model but many times", () => {
+        let s: LoaderSettings = {
+            TAPE_SIZE : 104857
+        };
+        const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/example.ifc.test'));
+        let exampleIFCDatas : Array<Uint8Array> = [];
+        for (let i=0; i < 100; i++) exampleIFCDatas.push(exampleIFCData); 
+        let modelIds = ifcApi.OpenModels(exampleIFCDatas,s);
+        expect(modelIds.length).toBe(100);
+    });
+    
+})
+
+
+afterAll(() => {
     ifcApi.CloseModel(modelID);
     const isOpen: boolean = ifcApi.IsModelOpen(modelID);
     const isOpenEmptyFileModelID: boolean = ifcApi.IsModelOpen(emptyFileModelID);

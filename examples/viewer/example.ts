@@ -1,31 +1,6 @@
 export let exampleCode = `
 let EID = 1;
 
-function real(v: number): any
-{
-    return { type: 4, value: v}
-}
-
-function ref(v: number): any
-{
-    return { type: 5, value: v}
-}
-
-function empty(): any
-{
-    return { type: 6}
-}
-
-function str(v: string): any
-{
-    return { type: 1, value: v}
-}
-
-function enm(v: string): any
-{
-    return { type: 3, value: v}
-}
-
 interface pt
 {
     x: number, y: number, z: number;
@@ -36,121 +11,120 @@ interface pt2D
     x: number, y: number;
 }
 
-function Point(model: number, api: IfcAPI, o: pt): any
+function Point(model: number, api: IfcAPI, o: pt): IFC4.IfcCartesianPoint
 {
-    let ID = EID++;
-    let pt = new IFC4.IfcCartesianPoint(ID, 
-                    IFCCARTESIANPOINT, 
-                    [real(o.x), real(o.y), real(o.z)]);
-    api.WriteLine(model, pt);
-    return ref(ID);
+    let pt = api.CreateIfcEntity(model,
+        IFCCARTESIANPOINT, 
+        [new IFC4.IfcLengthMeasure(o.x), new IFC4.IfcLengthMeasure(o.y), new IFC4.IfcLengthMeasure(o.z)]
+    );
+
+    return pt;
 }
 
 function Dir(model: number, api: IfcAPI, o: pt): any
 {
-    let ID = EID++;
-    let pt = new IFC4.IfcDirection(ID, 
-                    IFCDIRECTION, 
-                    [real(o.x), real(o.y), real(o.z)]);
-    api.WriteLine(model, pt);
-    return ref(ID);
+    let pt = api.CreateIfcEntity(model,
+        IFCDIRECTION, 
+        [new IFC4.IfcReal(o.x), new IFC4.IfcReal(o.y), new IFC4.IfcReal(o.z)]
+    );
+    
+    return pt;
 }
 
 function Point2D(model: number, api: IfcAPI, o: pt2D): any
 {
-    let ID = EID++;
-    let pt = new IFC4.IfcCartesianPoint(ID, 
-                    IFCCARTESIANPOINT, 
-                    [real(o.x), real(o.y)]);
-    api.WriteLine(model, pt);
-    return ref(ID);
+    let pt = api.CreateIfcEntity(model,
+        IFCCARTESIANPOINT, 
+        [new IFC4.IfcLengthMeasure(o.x), new IFC4.IfcLengthMeasure(o.y)]
+    );
+    
+    return pt;
 }
 
 function AxisPlacement(model: number, api: IfcAPI, o: pt): any
 {
     let locationID = Point(model, api, o);
-    let ID = EID++;
-    let pt = new IFC4.IfcAxis2Placement3D(ID, 
-                    IFCAXIS2PLACEMENT3D, 
-                    locationID, 
-                    empty(),
-                    empty());
-    api.WriteLine(model, pt);
-    return ref(ID);
+    
+    let pt = api.CreateIfcEntity(model,
+        IFCAXIS2PLACEMENT3D, 
+        locationID, 
+        null,
+        null
+    );
+    
+    return pt;
 }
 
 function AxisPlacement2D(model: number, api: IfcAPI, o: pt2D): any
 {
     let locationID = Point2D(model, api, o);
-    let ID = EID++;
-    let pt = new IFC4.IfcAxis2Placement2D(ID, 
-                    IFCAXIS2PLACEMENT2D,
-                    locationID, 
-                    empty());
-    api.WriteLine(model, pt);
-    return ref(ID);
+    
+    let pt = api.CreateIfcEntity(model,
+        IFCAXIS2PLACEMENT2D,
+        locationID, 
+        null
+    );
+    
+    return pt;
 }
 
 function Placement(model: number, api: IfcAPI, o: pt)
 {
     let axisID = AxisPlacement(model, api, o);
-    let ID = EID++;
-    let pt = new IFC4.IfcLocalPlacement(ID, 
-                    IFCLOCALPLACEMENT,
-                    empty(),
-                    axisID);
-    api.WriteLine(model, pt);
-    return ref(ID);
+    
+    let pt = api.CreateIfcEntity(model,
+        IFCLOCALPLACEMENT,
+        null,
+        axisID
+    );
+
+    return pt;
 }
 
 function CircleProfile(model: number, api: IfcAPI, rad: number, o: pt2D)
 {
-    let ID = EID++;
-    let pt = new IFC4.IfcCircleProfileDef(ID,
-                    IFCCIRCLEPROFILEDEF,
-                    enm(IFC4.IfcProfileTypeEnum.AREA),
-                    str('column-prefab'),
-                    AxisPlacement2D(model, api, o),
-                    real(rad));
-    api.WriteLine(model, pt);
-    return ref(ID);
+    let pt = api.CreateIfcEntity(model,
+        IFCCIRCLEPROFILEDEF,
+        IFC4.IfcProfileTypeEnum.AREA,
+        new IFC4.IfcLabel('column-prefab'),
+        AxisPlacement2D(model, api, o),
+        new IFC4.IfcPositiveLengthMeasure(rad)
+    );
+    return pt;
 }
 
-function ExtrudedAreaSolid(model: number, api: IfcAPI, pos: pt, dir: pt, rad: number, len: number)
-{
-    let ID = EID++;
-    let pt = new IFC4.IfcExtrudedAreaSolid(ID, 
-                    IFCEXTRUDEDAREASOLID,
-                    CircleProfile(model, api, rad, { x: 0, y: 0 }),
-                    AxisPlacement(model, api, pos),
-                    Dir(model, api, dir),
-                    real(len));
-    api.WriteLine(model, pt);
-    return ref(ID);
-}
 
 function StandardColumn(model: number, api: IfcAPI, pos: pt)
 {
-    let shapeID = ExtrudedAreaSolid(model, api, 
-        { x: -2, y: 0, z: -1 }, 
-        { x: 0, y: 0, z: 1 },
-        0.25,
-        2);
+    let dir: pt =  { x: 0, y: 0, z: 1 };
+    let rad: number = 0.25;
+    let len: number = 2;
+    let profile = CircleProfile(model, api, rad, { x: 0, y: 0 })
+    let placement = AxisPlacement(model, api, pos)
+    let direction = Dir(model, api, dir)
 
-    let ID = EID++;
-    let pt = new IFC4.IfcColumn(ID, 
-                    IFCCOLUMN,
-                    str("GUID"),
-                    empty(),
-                    str("name"),
-                    empty(),
-                    str("label"),
-                    Placement(model, api, pos),
-                    shapeID,
-                    str("sadf"),
-                    empty());
-    api.WriteLine(model, pt);
-    return ref(ID);
+    let solid = api.CreateIfcEntity(model,
+        IFCEXTRUDEDAREASOLID,
+        profile,
+        placement,
+        direction
+        new IFC4.IfcPositiveLengthMeasure(len)
+    );
+        
+    let column = api.CreateIfcEntity(model,
+        IFCCOLUMN,
+        new IFC4.IfcGloballyUniqueId("GUID"),
+        null,
+        new IFC4.IfcLabel("name"),
+        null,
+        new IFC4.IfcLabel("label"),
+        Placement(model, api, pos),
+        solid,
+        new IFC4.IfcIdentifier("sadf"),
+        null
+    );
+    
+    api.WriteLine(model, column);
 }
 
 function BuildModel(model: number, api: IfcAPI)

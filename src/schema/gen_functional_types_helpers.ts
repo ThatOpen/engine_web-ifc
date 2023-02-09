@@ -1,5 +1,71 @@
-import {Entity, Type} from "./gen_functional_types_interfaces";
+import {Entity, Type, Prop} from "./gen_functional_types_interfaces";
 
+
+export function generateInitialiser(type: Type, initialisersDone: Set<string>,buffer: Array<string>, crcTable:any,types: Type[]) 
+{
+    if (type.isEnum) return;
+
+    if (type.isList)
+    {
+        if (initialisersDone.has(type.name)) return;
+        buffer.push(`\tTypeInitialisers[${crc32(type.name.toUpperCase(),crcTable)}] = (v: any) => { return new ${type.name}(v); }`);
+        return
+    }
+
+    if (type.isSelect)
+    {
+        type.values.forEach(refType => {
+           let newType = types.find(e => e.name == refType);
+           if (newType) generateInitialiser(newType,initialisersDone,buffer,crcTable,types)
+        });
+        return;
+    }
+
+    if (initialisersDone.has(type.name)) return;
+    initialisersDone.add(type.name);
+    buffer.push(`\tTypeInitialisers[${crc32(type.name.toUpperCase(),crcTable)}] = (v: any) => { return new ${type.name}(v); }`);
+    return;
+}       
+
+export function generatePropAssignment(p: Prop, i:number, types:Type[]) 
+{
+    let isType: boolean = types.some( (x:Type) => x.name == p.type);
+    let type = types.find( (x:Type) => x.name == p.type);
+    let content:string;   
+    if (type?.isEnum) 
+    {
+        content='_tape['+i+']';
+        return content;
+    }
+
+    let prefix = '';
+    if (p.optional) prefix ='!_tape['+i+'] ? null :'
+
+    if (p.set)
+    {
+        content = '_tape['+i+'].map((p:any) => '
+        if (type?.isSelect){
+            let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+            if (isEntitySelect) content+='new Handle(p.value)';
+            else content+='TypeInitialiser(p)';
+        }
+        else if (isType) content+='new '+p.type+'(p.value)';
+        else if (p.primitive) content+='p.value';
+        else content+='new Handle<'+p.type+'>(p.value)';
+        content +=')';
+    }
+    else if (type?.isSelect)
+    {
+        let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+        if (isEntitySelect) content='new Handle(_tape['+i+'].value)';
+        else content='TypeInitialiser(_tape['+i+'])'
+
+    }
+    else if (isType) content='new '+p.type+'(_tape['+i+'].value)';
+    else if (p.primitive) content='_tape['+i+'].value';
+    else content='new Handle<'+p.type+'>(_tape['+i+'].value)';
+    return prefix + content;
+}
 
 export function sortEntities(entities: Array<Entity>) {
   let sortedEntities: Array<Entity> = [];
@@ -19,56 +85,105 @@ export function sortEntities(entities: Array<Entity>) {
   return sortedEntities;
 }
 
-export function generateClass(entity:Entity, buffer: Array<string>, types:Type[], schemaName:string) 
+export function generateTapeAssignment(p: Prop, types:Type[]) 
+{
+    let type = types.find( (x:Type) => x.name == p.type);
+    if (p.set && type?.isSelect)
+    {
+        let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+        if (isEntitySelect)  return `this.${p.name}`;
+        let prefix='';
+        if (p.optional) prefix ='!this.'+p.name+' ? null :'
+        return prefix + 'this.'+p.name+'.map((p:any) => Labelise(p))'
+    }
+    else if (type?.isSelect)
+    {
+        let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+        if (isEntitySelect)  return `this.${p.name}`;
+        let prefix='';
+        if (p.optional) prefix ='!this.'+p.name+' ? null :'
+        return prefix + 'Labelise(this.'+p.name+')';
+    }
+    return `this.${p.name}`;
+}
+
+export function generateSuperAssignment(p:Prop, ifcDerivedProps: string[],types:Type[])
+{
+    if (ifcDerivedProps.includes(p.name))
+    {
+        if (p.optional) return "null";
+        let type = types.find( (x:Type) => x.name == p.type);
+        let isType: boolean = types.some( (x:Type) => x.name == p.type);
+        if (p.set) return "[]";
+        else if (type?.isSelect)
+        {
+            let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
+            if (isEntitySelect) return 'new Handle(0)';
+            else return '0'
+        }
+        else if (isType) return 'new '+p.type+'(0)';
+        else if (p.primitive) return '0';
+        else return "new Handle(0)";
+    }
+    else
+    {
+        return p.name;
+    }
+}
+
+export function generateClass(entity:Entity, buffer: Array<string>, types:Type[]) 
 {
 
   if (!entity.parent)
   {
-    buffer.push(`\texport class ${entity.name} {`);
-    buffer.push(`\t\texpressID: number;`);
-    buffer.push(`\t\ttype: number;`);
+    buffer.push(`\texport class ${entity.name} extends IfcLineObject {`);
   } 
   else
   {
-    buffer.push(`\texport class ${entity.name} extends ${schemaName}.${entity.parent} {`);
+    buffer.push(`\texport class ${entity.name} extends ${entity.parent} {`);
   }
   
   entity.props.forEach((param) => {
-    let isType: boolean = types.some( (x:Type) => x.name == param.name);
-    let propType = `${(isType || param.primitive) ? param.type : "(Handle<" + schemaName + "."+ param.type + `> | ${schemaName}.${param.type})` }${param.set ? "[]" : ""} ${param.optional ? "| null" : ""}`;
+    let isType: boolean = types.some( (x:Type) => x.name == param.type);
+    let propType = `${(isType || param.primitive) ? param.type : "(Handle<"  +  param.type + `> | ${param.type})` }${param.set ? "[]" : ""} ${param.optional ? "| null" : ""}`;
     buffer.push(`\t\t${param.name}: ${propType};`)
   });
   
   entity.inverseProps.forEach((prop) => {
-    let type = `${"(Handle<" + schemaName + "."+ prop.type + `> | ${schemaName}.${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
+    let type = `${"(Handle<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
     buffer.push(`\t\t${prop.name}!: ${type};`);
   });
 
-  buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.map((p) => `${p.name}: ${(types.some( x => x.name == p.name) || p.primitive) ? p.type : "(Handle<" + schemaName + "."+ p.type + `> | ${schemaName}.${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  buffer.push(`\t\tconstructor(expressID: number, type: number, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
   buffer.push(`\t\t{`)
-  if (!entity.parent)
-  {
-    buffer.push(`\t\t\tthis.expressID = expressID;`);
-    buffer.push(`\t\t\tthis.type = type;`);
+  if (!entity.parent) {
+    buffer.push(`\t\t\tsuper(expressID,type);`)
   } else {
     var nonLocalProps = entity.derivedProps.filter(n => !entity.props.includes(n))
     if (nonLocalProps.length ==0) buffer.push(`\t\t\tsuper(expressID,type);`);
-    else buffer.push(`\t\t\tsuper(expressID,type,${nonLocalProps.map((p) => `${p.name}`).join(", ")});`)
+    else buffer.push(`\t\t\tsuper(expressID,type,${nonLocalProps.map((p) => generateSuperAssignment(p,entity.ifcDerivedProps,types)).join(", ")});`)
   }
   entity.props.forEach((param) => {
-      buffer.push(`\t\t\tthis.${param.name} = ${param.name};`)
+      buffer.push(`\t\t\tthis.${param.name} = ${param.name};`);
   });
   
+    //remove any props that may have been marked as derived further down the inheritance
+    entity.derivedProps = entity.derivedProps
+
+
   buffer.push(`\t\t}`)
   buffer.push(`\t\tstatic FromTape(expressID: number, type: number, _tape: any[]): ${entity.name}`)
   buffer.push(`\t\t{`);
-  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.map((_, i) => '_tape['+i+']').join(", ")});`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types)).join(", ")});`);
   buffer.push(`\t\t}`)
+  buffer.push(`\t\tstatic FromConstructor(expressID: number, type: number, _args: any[]): ${entity.name}`)
+  buffer.push(`\t\t{`);
+  buffer.push(`\t\t\treturn new ${entity.name}(expressID, type, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((_, i) => '_args['+i+']').join(", ")});`);
+  buffer.push(`\t\t}`)
+ 
   buffer.push(`\t\tToTape(): unknown[]`)
   buffer.push(`\t\t{`)
-  buffer.push(`\t\t\tconst args: unknown[] = [];`)
-  buffer.push(`\t\t\targs.push(${entity.derivedProps.map((p) => `this.${p.name}`).join(", ")});`);
-  buffer.push(`\t\t\treturn args;`)
+  buffer.push(`\t\t\treturn [${entity.derivedProps.map((p) =>generateTapeAssignment(p,types)).join(", ")}];`)
   buffer.push(`\t\t}`)
   buffer.push(`\t}`);
 }
@@ -123,6 +238,16 @@ export function expTypeToTSType(expTypeName:string)
     return tsType;
 }
 
+export function expTypeToTypeNum(expTypeName:string) : number
+{
+    if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER") return 4;
+    else if (expTypeName == "STRING") return 1;
+    else if (expTypeName == "BOOLEAN") return 3;
+    else if (expTypeName == "BINARY") return 4;
+    else if (expTypeName == "LOGICAL") return 3;
+    return 0;
+}
+
 export function parseInverse(line:string,entity:Entity) 
 {
     let split = line.split(" ");
@@ -139,6 +264,18 @@ export function parseInverse(line:string,entity:Entity)
     });  
 }
 
+
+export function parseDerived(line:string,entity:Entity) 
+{
+    let lineStart = line.split(" ")[0];
+    lineStart = lineStart.replace("DERIVE","").trim();
+    if (lineStart.trim().startsWith("SELF"))
+    {
+        let split = lineStart.split(".");
+        entity.ifcDerivedProps.push(split[1]);
+    }
+}
+
 export function parseElements(data:string)
 {
     let lines = data.split(";");
@@ -149,6 +286,7 @@ export function parseElements(data:string)
     let entity: Entity | false = false;
     let readProps = false;
     let readInverse = false;
+    let readIfcDerived = false;
 
     for (let i = 0; i < lines.length; i++)
     {
@@ -166,11 +304,13 @@ export function parseElements(data:string)
                 derivedProps: [],
                 inverseProps: [],
                 derivedInverseProps: [],
-                isIfcProduct: false
+                isIfcProduct: false,
+                ifcDerivedProps: []
             };
             if (name === "IfcProduct") entity.isIfcProduct = true;
             readProps = true;
             readInverse = false;
+            readIfcDerived = false;
 
             let subIndex = split.indexOf("SUBTYPE");
             if (subIndex != -1)
@@ -184,16 +324,19 @@ export function parseElements(data:string)
             if (entity) entities.push(entity);
             readProps = false;
             readInverse = false;
+            readIfcDerived = false;
         }
         else if (line.indexOf("WHERE") == 0)
         {
             readProps = false;
             readInverse = false;
+            readIfcDerived = false;
         }
         else if (line.indexOf("INVERSE") == 0)
         {
             readProps = false;
             readInverse = true;
+            readIfcDerived = false;
             // there is one inverse property on this line
             if (entity) parseInverse(line,entity);
         }
@@ -201,16 +344,20 @@ export function parseElements(data:string)
         {
             readProps = false;
             readInverse = false;
+            readIfcDerived = true;
+            if (entity) parseDerived(line,entity);
         }
         else if (line.indexOf("UNIQUE") == 0)
         {
             readProps = false;
             readInverse = false;
+            readIfcDerived = false;
         }
         else if (line.indexOf("TYPE") == 0)
         {
             readProps = false;
             readInverse = false;
+            readIfcDerived = false;
 
             let split = line.split(" ").map((s:string) => s.trim());
             let name = split[1];
@@ -245,11 +392,12 @@ export function parseElements(data:string)
                 typeName = typeName.substr(0, firstBracket);
             }
 
+            let typeNum = expTypeToTypeNum(typeName);
             typeName = expTypeToTSType(typeName);
-            
             type = {
                 name,
                 typeName,
+                typeNum,
                 isList,
                 isEnum,
                 isSelect,
@@ -289,7 +437,8 @@ export function parseElements(data:string)
                 optional,
                 set
             })
-        }
+        }  
+        else if (entity && readIfcDerived && hasColon) parseDerived(line,entity);
     }
 
     return {
