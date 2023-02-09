@@ -202,7 +202,7 @@ export class Properties {
 		const relations = this.api.GetLineIDsWithType(modelID, propsName.name);
 		for (let i = 0; i < relations.size(); ++i) {
 			const rel = await this.api.GetLine(modelID, relations.get(i));
-			if (propID.includes(rel[propsName.relating].value)) {
+			if (propID.includes(Number(rel[propsName.relating].value))) {
 				rels.push(rel);	
 				foundRel++;
 			}
