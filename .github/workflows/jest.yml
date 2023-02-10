@@ -13,14 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: mymindstorm/setup-emsdk@v11
-        with:
+      with:
           version: 3.1.31
     - name: Install modules
       run: npm i
     - name: Build
       run: npm run build-release
     - uses: actions/setup-node@v3
-        with:
+      with:
           node-version: '16.x'
     - name: Run all tests
       run: npm t
