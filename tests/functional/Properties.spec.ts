@@ -162,7 +162,6 @@ describe('Setting material & propertySets on IfcElements', () => {
 
 		materialProps = await properties.getMaterialsProperties(modelID, 917);
 		const rel = await ifcApi.GetLine(modelID, 14050);
-		console.log(rel['RelatedObjects'])
 		const element = await ifcApi.GetLine(modelID, 917, false, true);
 		expect(materialProps.length - matLength).toEqual(0);	// no changes
 		expect(rel['RelatedObjects'].length).toEqual(2);
