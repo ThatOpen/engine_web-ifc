@@ -4,7 +4,7 @@ import {
     IFCRELCONTAINEDINSPATIALSTRUCTURE,
     IFCRELDEFINESBYPROPERTIES,
     IFCRELASSOCIATESMATERIAL,
-    IFCRELDEFINESBYTYPE
+    IFCRELDEFINESBYTYPE,
 } from "../web-ifc-api";
 
 interface pName {
@@ -156,8 +156,12 @@ export class Properties {
         let rels = null;
         if (elementID !== 0)
             rels = await this.api.GetLine(modelID, elementID, false, true)[propsName.key];
-        else
-            rels = this.api.GetLineIDsWithType(modelID, propsName.name);
+        else {
+			let vec = this.api.GetLineIDsWithType(modelID, propsName.name);
+			rels = [];
+			for (let i = 0; i<vec.size(); ++i)
+				rels.push({value: vec.get(i)});
+		}
             
         if (rels == null ) return result;
         if (!Array.isArray(rels)) rels = [rels];
@@ -258,9 +262,14 @@ export class Properties {
 		}
 		for (const element of elements) {
 			for (const rel of rels) {
-				rel[propsName.related].push({ type: 5, value: element.expressID });
-				element[propsName.key].push({ type: 5, value: rel.expressID });
-				this.api.WriteLine(modelID, rel);
+				// @ts-ignore
+				if (!element[propsName.key].some(e => e.value === rel.expressID))
+					element[propsName.key].push({ type: 5, value: rel.expressID });
+				// @ts-ignore
+				if (!rel[propsName.related].some(e => e.value === element.expressID)) {
+					rel[propsName.related].push({ type: 5, value: element.expressID });
+					this.api.WriteLine(modelID, rel);
+				}
 			}
 			this.api.WriteLine(modelID, element);
 		}
