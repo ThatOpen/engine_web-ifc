@@ -44,7 +44,7 @@ namespace webifc
 		out.close();
 	}
 
-struct AABB
+	struct AABB
 	{
 		uint32_t index;
 		glm::dvec3 min = glm::dvec3(DBL_MAX, DBL_MAX, DBL_MAX);
@@ -299,8 +299,8 @@ struct AABB
 
 		void GetCenterExtents(glm::dvec3 &center, glm::dvec3 &extents) const
 		{
-			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
-			glm::dvec3 max(DBL_MIN, DBL_MIN, DBL_MIN);
+			glm::dvec3 min = glm::dvec3(DBL_MAX, DBL_MAX, DBL_MAX);
+			glm::dvec3 max = glm::dvec3(-DBL_MAX, -DBL_MAX, -DBL_MAX);
 
 			for (size_t i = 0; i < numPoints; i++)
 			{
@@ -311,13 +311,6 @@ struct AABB
 
 			extents = (max - min);
 			center = min + extents / 2.0;
-		}
-
-		inline void AssignPoint(uint32_t index, glm::dvec3 pt)
-		{
-			vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
-			vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
-			vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
 		}
 
 		IfcGeometry Normalize(glm::dvec3 center, glm::dvec3 extents) const
@@ -690,9 +683,9 @@ struct AABB
 		return (angle / (2 * CONST_PI)) * 360;
 	}
 
-	double mirrorAngle(double angle) //in degrees
+	double mirrorAngle(double angle) // in degrees
 	{
-		if(angle < 180)
+		if (angle < 180)
 		{
 			return 180 - angle;
 		}
@@ -872,7 +865,7 @@ struct AABB
 		}
 		else
 		{
-			 c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
 			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 1));
 			c.points.push_back(placement * glm::dvec3(hweb, -hd, 1));
 			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
@@ -929,8 +922,6 @@ struct AABB
 
 		return c;
 	}
-
-
 
 	// TODO: review and simplify
 	glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf)

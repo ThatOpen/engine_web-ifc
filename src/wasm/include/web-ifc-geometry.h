@@ -155,10 +155,9 @@ namespace webifc
 			}
 			else
 			{
-				
+
 				auto foundMesh = _loader.ExpressIDToLineID(expressID);
 				return GetMeshByLine(foundMesh);
-
 			}
 		}
 
@@ -1081,14 +1080,14 @@ namespace webifc
 
 			double radius = sqrt(pow(cenX - p1.x, 2) + pow(cenY - p1.y, 2));
 
-			//Using geometrical subdivision to avoid complex calculus with angles
+			// Using geometrical subdivision to avoid complex calculus with angles
 
 			std::vector<glm::dvec2> pointList;
 			pointList.push_back(p1);
 			pointList.push_back(p2);
 			pointList.push_back(p3);
 
-			while(pointList.size() < _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM)
+			while (pointList.size() < _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM)
 			{
 				std::vector<glm::dvec2> tempPointList;
 				for (uint32_t j = 0; j < pointList.size() - 1; j++)
@@ -1220,6 +1219,40 @@ namespace webifc
 			return result;
 		}
 
+		double normalDiff(glm::dvec3 extents)
+		{
+			double a = extents.x;
+
+			if (a < extents.y)
+			{
+				a = extents.y;
+			}
+			if (a < extents.z)
+			{
+				a = extents.z;
+			}
+
+			double b = extents.x;
+
+			if (b > extents.y)
+			{
+				b = extents.y;
+			}
+			if (b > extents.z)
+			{
+				b = extents.z;
+			}
+
+			if (a > 0)
+			{
+				return b / a;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+
 		IfcGeometry BoolJoin(const std::vector<IfcGeometry> &Geoms, uint32_t expressID)
 		{
 			IfcGeometry result;
@@ -1248,16 +1281,28 @@ namespace webifc
 						glm::dvec3 extents;
 						result.GetCenterExtents(center, extents);
 
-						auto first = result.Normalize(center, extents);
-						auto second = geom.Normalize(center, extents);
+						glm::dvec3 s_center;
+						glm::dvec3 s_extents;
+						geom.GetCenterExtents(s_center, s_extents);
 
-						if (first.numFaces > 0 && second.numFaces > 0)
+						if (normalDiff(extents) < EPS_BIG)
+						{
+							result = geom;
+						}
+						else if (normalDiff(s_extents) < EPS_BIG)
+						{
+							result = result;
+						}
+						else if (result.numFaces > 0 && geom.numFaces > 0)
 						{
 							if (_loader.GetSettings().DUMP_CSG_MESHES)
 							{
-								DumpIfcGeometry(first, L"first.obj");
-								DumpIfcGeometry(second, L"second.obj");
+								DumpIfcGeometry(result, L"first.obj");
+								DumpIfcGeometry(geom, L"second.obj");
 							}
+
+							auto first = result.Normalize(center, extents);
+							auto second = geom.Normalize(center, extents);
 
 							IfcGeometry r1;
 							IfcGeometry r2;
@@ -1273,7 +1318,7 @@ namespace webifc
 								DumpIfcGeometry(r2, L"r2.obj");
 							}
 
-							result = boolJoin(r1, r2, bvh1, bvh2);
+							result = (boolJoin(r1, r2, bvh1, bvh2)).DeNormalize(center, extents);
 
 							if (_loader.GetSettings().DUMP_CSG_MESHES)
 							{
@@ -1282,7 +1327,6 @@ namespace webifc
 								DumpIfcGeometry(result, L"result.obj");
 							}
 						}
-						result = result.DeNormalize(center, extents);
 					}
 				}
 				return result;
@@ -1293,16 +1337,18 @@ namespace webifc
 		{
 			IfcGeometry firstGeom = BoolJoin(firstGeoms, expressID);
 			IfcGeometry secondGeom = BoolJoin(secondGeoms, expressID);
+
 			IfcGeometry result;
 
 			glm::dvec3 center;
 			glm::dvec3 extents;
 			firstGeom.GetCenterExtents(center, extents);
 
-			auto first = firstGeom.Normalize(center, extents);
-			auto second = secondGeom.Normalize(center, extents);
+			glm::dvec3 s_center;
+			glm::dvec3 s_extents;
+			secondGeom.GetCenterExtents(s_center, s_extents);
 
-			if (first.numFaces == 0 || second.numFaces == 0)
+			if (secondGeom.numFaces == 0 || normalDiff(s_extents) < EPS_BIG)
 			{
 				_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
 
@@ -1311,11 +1357,26 @@ namespace webifc
 				return firstGeom;
 			}
 
+			if (firstGeom.numFaces == 0 || normalDiff(extents) < EPS_BIG)
+			{
+				_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
+
+				// bail out because we will get strange meshes
+				// if this happens, probably there's an issue parsing the mesh that occurred earlier
+				return secondGeom;
+			}
+
+			auto first = firstGeom.Normalize(center, extents);
+			auto second = secondGeom.Normalize(center, extents);
+
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{
 				DumpIfcGeometry(first, L"first.obj");
 				DumpIfcGeometry(second, L"second.obj");
 			}
+
+			DumpIfcGeometry(first, L"first.obj");
+			DumpIfcGeometry(second, L"second.obj");
 
 			IfcGeometry r1;
 			IfcGeometry r2;
@@ -3424,7 +3485,7 @@ namespace webifc
 				double flangeEdgeRadius = _loader.GetDoubleArgument();
 				double webEdgeRadius = _loader.GetDoubleArgument();
 				double webSlope = _loader.GetDoubleArgument();
-				double flangeSlope = _loader.GetDoubleArgument();			
+				double flangeSlope = _loader.GetDoubleArgument();
 
 				// optional fillet
 				bool hasFillet = false;

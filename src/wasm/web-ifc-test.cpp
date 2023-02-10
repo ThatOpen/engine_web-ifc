@@ -238,7 +238,7 @@ int main()
 
     // return 0;
 
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/v41.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/VW2020-openings.ifc");
 
     //std::string content = ReadFile("../../../examples/example.ifc");
 		webifc::LoaderSettings set;
@@ -269,7 +269,8 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = ms();
-    SpecificLoadTest(loader, geometryLoader, 96049);
+    // SpecificLoadTest(loader, geometryLoader, 2112);
+    SpecificLoadTest(loader, geometryLoader, 2198);
     // auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
