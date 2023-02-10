@@ -58,18 +58,46 @@ export class Properties {
     constructor(private api: IfcAPI) {
     }
 
+	/**
+	 * Map IfcType number to string
+	 * @param type IfcType as number
+	 * @returns IfcType as string
+	 * @see /src/web-ifc-api/ifc-schema.ts
+	 */
     getIfcType(type: number) {
        return IfcEntities[type];
     }
 
+	/**
+	 * 
+	 * @param modelID model handle
+	 * @param id  expressID of IfcElement
+	 * @param recursive default false, if true get all nested properties recursively
+	 * @param inverse default false, if true get all inverse properties recursively
+	 * @returns IfcElement
+	 */
     async getItemProperties(modelID: number, id: number, recursive = false, inverse = false) {
         return this.api.GetLine(modelID, id, recursive, inverse);
     }
 
+	/**
+	 * Get IfcPropertySets of IfcElements
+	 * @param modelID model handle
+	 * @param elementID expressID of IfcElement, default 0 (all psets in model)
+	 * @param recursive default false, if true get all nested properties recursively
+	 * @returns array of IfcElements inheriting from IfcPropertySetDefinition
+	 */
     async getPropertySets(modelID: number, elementID = 0, recursive = false) {
         return await this.getRelatedProperties(modelID, elementID, PropsNames.psets, recursive);
     }
 
+	/**
+	 * Set IfcRelDefinesByProperties relations of IfcElements and IfcPropertySets
+	 * @param modelID model handle
+	 * @param elementID expressID or array of expressIDs of IfcElements
+	 * @param psetID expressID or array of expressIDs of IfcPropertySets
+	 * @returns true if success or false if error
+	 */
 	async setPropertySets(modelID: number, elementID: number|number[], psetID: number|number[]) {
 		return this.setItemProperties(modelID, elementID,  psetID, PropsNames.psets);
 	}
@@ -85,15 +113,35 @@ export class Properties {
         }
     }
 
+	/**
+	 * Get materials of IfcElement
+	 * @param modelID model handle
+	 * @param elementID expressID of IfcElement, default 0 (all materials in model)
+	 * @param recursive default false, if true get all nested properties recursively
+	 * @returns array of IfcElements inheriting from IfcMaterialDefinition
+	 */
     async getMaterialsProperties(modelID: number, elementID = 0, recursive = false) {
         return await this.getRelatedProperties(modelID, elementID, PropsNames.materials, recursive);
     }
 
+	/**
+	 * Set IfcRelAssociatesMaterial relations of IfcElements and IfcMaterialDefinitions
+	 * @param modelID model handle
+	 * @param elementID expressID or array of expressIDs of IfcElements
+	 * @param materialID expressID or array of expressIDs of IfcMaterialDefinitions
+	 * @returns true if success or false if error
+	 */
 	async setMaterialsProperties(modelID: number, elementID: number|number[], materialID: number|number[]) {
 		return this.setItemProperties(modelID, elementID,  materialID, PropsNames.materials);
 	}
 
-    async getSpatialStructure(modelID: number, includeProperties?: boolean): Promise<Node> {
+	/**
+	 * Get Spatial Structure of IfcProject
+	 * @param modelID model handle
+	 * @param includeProperties default false
+	 * @returns IfcProject as Node
+	 */
+    async getSpatialStructure(modelID: number, includeProperties = false): Promise<Node> {
         const chunks = await this.getSpatialTreeChunks(modelID);
         const allLines = await this.api.GetLineIDsWithType(modelID, IFCPROJECT);
         const projectID = allLines.get(0);

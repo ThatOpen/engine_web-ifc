@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import {IfcAPI,IFCWALLSTANDARDCASE,LogLevel}  from '../../dist/web-ifc-api-node.js';
-import {Properties} from '../../dist/helpers/properties.js';
+import { IfcAPI, IFCWALLSTANDARDCASE, LogLevel } from '../../dist/web-ifc-api-node.js';
+import type { Properties } from '../../dist/helpers/properties.js';
 
 let modelID: number
 let ifcApi: IfcAPI
@@ -93,6 +93,45 @@ describe('Properties', () => {
     })
 
 })
+
+describe('Setting material & propertySets on IfcElements', () => {
+	test('can set material on an element', async () => {
+		// #14047= IFCRELASSOCIATESMATERIAL('3xRpPFCPD3cwCupbS83ngR',#41,$,$,(#917),#926);
+		// #14050= IFCRELASSOCIATESMATERIAL('2kcWWB4wHAhQ3YG$4Zv5JK',#41,$,$,(#1469),#1476);
+		const ascLength = await ifcApi.GetLine(modelID, 917, false, true)['HasAssociations'].length;
+		let materialProps = await properties.getMaterialsProperties(modelID, 917);
+		const matLength = materialProps.length;
+
+		await properties.setMaterialsProperties(modelID, 917, 1476);
+
+		materialProps = await properties.getMaterialsProperties(modelID, 917);
+		const rel = await ifcApi.GetLine(modelID, 14050);
+		const element = await ifcApi.GetLine(modelID, 917, false, true);
+
+		expect(materialProps.length - matLength).toEqual(1);
+		expect(rel['RelatedObjects'].length).toEqual(2);
+		expect(rel['RelatedObjects'].includes(917)).toBe(true);
+		expect(element['HasAssociations'].length - ascLength).toEqual(1);
+		expect(element['HasAssociations'].includes(14050)).toBe(true);
+	});
+
+	test('can set propertyset on an element', async () => {
+		// #158= IFCRELDEFINESBYPROPERTIES('2V77wsE0r5MQR$Rh7MmJbX',#41,$,$,(#148),#153);
+		let propSets = await properties.getPropertySets(modelID, 9989);
+		const length = propSets.length;
+		await properties.setPropertySets(modelID, 9989, 153);
+		propSets = await properties.getPropertySets(modelID, 9989);
+		expect(propSets.length - length).toEqual(1);
+	});
+
+	test('can not set materials on IfcEntities who inherit from IfcRelationships', async () => {
+		expect(await properties.setMaterialsProperties(modelID, 14050, 1476)).toEqual(false);
+	});
+
+	test('can not set psets on IfcEntities who inherit from IfcRelationships', async () => {
+		expect(await properties.setPropertySets(modelID, 14050, 153)).toEqual(false);
+	});
+});
 
 afterAll(() => {
     ifcApi.CloseModel(modelID);
