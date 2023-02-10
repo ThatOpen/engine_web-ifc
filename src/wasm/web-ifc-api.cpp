@@ -19,7 +19,7 @@ std::map<uint32_t, std::unique_ptr<webifc::IfcGeometryLoader>> geomLoaders;
 
 uint32_t GLOBAL_MODEL_ID_COUNTER = 0;
 
-webifc::LogLevel LOG_LEVEL = webifc::LogLevel::ERROR;
+webifc::LogLevel LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_ERROR;
 
 #ifdef __EMSCRIPTEN_PTHREADS__
     constexpr bool MT_ENABLED = true;
@@ -814,10 +814,10 @@ extern "C" bool IsModelOpen(uint32_t modelID)
  */
 void SetLogLevel(int levelArg)
 {
-    if (levelArg < static_cast<int>(webifc::LogLevel::DEBUG)) {
-        LOG_LEVEL = webifc::LogLevel::DEBUG;
-    } else if (levelArg > static_cast<int>(webifc::LogLevel::OFF)) {
-        LOG_LEVEL = webifc::LogLevel::OFF;
+    if (levelArg < static_cast<int>(webifc::LogLevel::LOG_LEVEL_DEBUG)) {
+        LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_DEBUG;
+    } else if (levelArg > static_cast<int>(webifc::LogLevel::LOG_LEVEL_OFF)) {
+        LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_OFF;
     } else {
         LOG_LEVEL = static_cast<webifc::LogLevel>(levelArg);
     }
@@ -879,11 +879,11 @@ EMSCRIPTEN_BINDINGS(my_module) {
         ;
 
     emscripten::enum_<webifc::LogLevel>("LogLevel")
-        .value("DEBUG", webifc::LogLevel::DEBUG)
-        .value("INFO", webifc::LogLevel::INFO)
-        .value("WARN", webifc::LogLevel::WARN)
-        .value("ERROR", webifc::LogLevel::ERROR)
-        .value("OFF", webifc::LogLevel::OFF)
+        .value("DEBUG", webifc::LogLevel::LOG_LEVEL_DEBUG)
+        .value("INFO", webifc::LogLevel::LOG_LEVEL_INFO)
+        .value("WARN", webifc::LogLevel::LOG_LEVEL_WARN)
+        .value("ERROR", webifc::LogLevel::LOG_LEVEL_ERROR)
+        .value("OFF", webifc::LogLevel::LOG_LEVEL_OFF)
         ;
 
     emscripten::enum_<webifc::LoaderErrorType>("LoaderErrorType")
