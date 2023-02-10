@@ -1,11 +1,42 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import {IfcAPI,IFCWALLSTANDARDCASE,LogLevel}  from '../../dist/web-ifc-api-node.js';
-import {Properties} from '../../dist/helpers/properties.js';
+import { IfcAPI, IFCRELASSOCIATESMATERIAL, IFCRELDEFINESBYPROPERTIES, IFCWALLSTANDARDCASE, LogLevel } from '../../dist/web-ifc-api-node.js';
+import type { Properties } from '../../dist/helpers/properties';
+
+declare global {
+	namespace jest {
+	  interface Matchers<R> {
+		toContainHandle(arg: {type: number, value:number}): R;
+	  }
+	}
+}
+
+expect.extend({
+	toContainHandle(received, argument) {
+		const pass = this.equals(received,
+			expect.arrayContaining([
+				expect.objectContaining(argument)
+			])
+		);
+		if (pass) {
+			return {
+				message: () => `expected ${this.utils.printReceived(received)} not to contain object ${this.utils.printExpected(argument)}`,
+				pass: true,
+			};
+		} else {
+			return {
+				message: () => `expected ${this.utils.printReceived(received)} to contain object ${this.utils.printExpected(argument)}`,
+				pass: false,
+			};
+		}
+	},
+});
 
 let modelID: number
 let ifcApi: IfcAPI
 let properties: Properties
+let totalPsets: number;
+let totalMaterials: number;
 
 beforeAll(async () => {
     ifcApi = new IfcAPI();
@@ -14,7 +45,9 @@ beforeAll(async () => {
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
-    properties = ifcApi.properties
+    properties = ifcApi.properties;
+	totalPsets = ifcApi.GetLineIDsWithType(modelID, IFCRELDEFINESBYPROPERTIES).size();
+	totalMaterials = ifcApi.GetLineIDsWithType(modelID, IFCRELASSOCIATESMATERIAL).size();
 })
 
 describe('Properties', () => {
@@ -40,10 +73,9 @@ describe('Properties', () => {
         expect(propertySets.length).toEqual(4);
     })
 
-    test('can get property sets with children datas', async () => {
-        const propertySets = await properties.getPropertySets(modelID, 9989, true);
-        let HasProperties = propertySets[0]["HasProperties"].length;
-        expect(HasProperties > 0).toBe(true);
+	test('can get all property sets in project', async () => {
+        const propertySets = await properties.getPropertySets(modelID);
+        expect(propertySets.length).toEqual(totalPsets);
     })
 
     test('can get property sets with children datas ', async () => {
@@ -55,6 +87,11 @@ describe('Properties', () => {
     test('can get property materials on one given element', async () => {
         const propertyMaterials = await properties.getMaterialsProperties(modelID, 10258);
         expect(propertyMaterials[0]["Name"]["value"]).toEqual('Metal - Steel - 345 MPa');
+    })
+
+	test('can get all property materials in project', async () => {
+        const propertyMaterials = await properties.getMaterialsProperties(modelID);
+        expect(propertyMaterials.length).toEqual(totalMaterials);
     })
 
     // this test stink it needs to be reviewed
@@ -93,6 +130,88 @@ describe('Properties', () => {
     })
 
 })
+
+describe('Setting material & propertySets on IfcElements', () => {
+	test('can set one material on one element', async () => {
+		// #14047= IFCRELASSOCIATESMATERIAL('3xRpPFCPD3cwCupbS83ngR',#41,$,$,(#917),#926);
+		// #14050= IFCRELASSOCIATESMATERIAL('2kcWWB4wHAhQ3YG$4Zv5JK',#41,$,$,(#1469),#1476);
+		const ascLength = await ifcApi.GetLine(modelID, 917, false, true)['HasAssociations'].length;
+		let materialProps = await properties.getMaterialsProperties(modelID, 917);
+		const matLength = materialProps.length;
+
+		await properties.setMaterialsProperties(modelID, 917, 1476);
+
+		materialProps = await properties.getMaterialsProperties(modelID, 917);
+		const rel = await ifcApi.GetLine(modelID, 14050);
+		const element = await ifcApi.GetLine(modelID, 917, false, true);
+		expect(materialProps.length - matLength).toEqual(1);
+		expect(rel['RelatedObjects'].length).toEqual(2);
+		expect(element['HasAssociations'].length - ascLength).toEqual(1);
+		expect(element['HasAssociations']).toContainHandle({type:5, value:14050});
+		expect(rel['RelatedObjects']).toContainHandle({type:5, value:917});
+	});
+
+	test('can not set existing material on element', async () => {
+		// #14047= IFCRELASSOCIATESMATERIAL('3xRpPFCPD3cwCupbS83ngR',#41,$,$,(#917),#926);
+		// #14050= IFCRELASSOCIATESMATERIAL('2kcWWB4wHAhQ3YG$4Zv5JK',#41,$,$,(#1469),#1476);
+		const ascLength = await ifcApi.GetLine(modelID, 917, false, true)['HasAssociations'].length;
+		let materialProps = await properties.getMaterialsProperties(modelID, 917);
+		const matLength = materialProps.length;
+
+		await properties.setMaterialsProperties(modelID, 917, 1476);
+
+		materialProps = await properties.getMaterialsProperties(modelID, 917);
+		const rel = await ifcApi.GetLine(modelID, 14050);
+		const element = await ifcApi.GetLine(modelID, 917, false, true);
+		expect(materialProps.length - matLength).toEqual(0);	// no changes
+		expect(rel['RelatedObjects'].length).toEqual(2);
+		expect(element['HasAssociations'].length - ascLength).toEqual(0);	// no changes	
+		expect(element['HasAssociations']).toContainHandle({type:5, value:14050});
+		expect(rel['RelatedObjects']).toContainHandle({type:5, value:917});
+	});
+
+	test('can set many materials on many elements', async () => {
+		// #14047= IFCRELASSOCIATESMATERIAL('3xRpPFCPD3cwCupbS83ngR',#41,$,$,(#917),#926);
+		// #14050= IFCRELASSOCIATESMATERIAL('2kcWWB4wHAhQ3YG$4Zv5JK',#41,$,$,(#1469),#1476);
+		// #14052= IFCRELASSOCIATESMATERIAL('3BvHT8u3T52eiBSaJrrWo0',#41,$,$,(#1477),#1473);
+		const ascLength = await ifcApi.GetLine(modelID, 1469, false, true)['HasAssociations'].length;
+		let materialProps = await properties.getMaterialsProperties(modelID, 1469);
+		const matLength = materialProps.length;
+
+		await properties.setMaterialsProperties(modelID, [1469], [926, 1473]);
+
+		materialProps = await properties.getMaterialsProperties(modelID, 1469);
+		const rel = await ifcApi.GetLine(modelID, 14052);
+		const rel1 = await ifcApi.GetLine(modelID, 14047);
+		const element = await ifcApi.GetLine(modelID, 1469, false, true);
+		expect(materialProps.length - matLength).toEqual(2);
+		expect(rel['RelatedObjects'].length).toEqual(2);
+		expect(element['HasAssociations'].length - ascLength).toEqual(2);
+		expect(element['HasAssociations']).toContainHandle({type:5, value:14052});
+		expect(element['HasAssociations']).toContainHandle({type:5, value:14047});
+		expect(rel['RelatedObjects']).toContainHandle({type:5, value:1469});
+		expect(rel1['RelatedObjects']).toContainHandle({type:5, value:1469});
+	});
+
+	test('can set propertyset on an element', async () => {
+		// #158= IFCRELDEFINESBYPROPERTIES('2V77wsE0r5MQR$Rh7MmJbX',#41,$,$,(#148),#153);
+		let propSets = await properties.getPropertySets(modelID, 9989);
+		const length = propSets.length;
+
+		await properties.setPropertySets(modelID, 9989, 153);
+
+		propSets = await properties.getPropertySets(modelID, 9989);
+		expect(propSets.length - length).toEqual(1);
+	});
+
+	test('can not set materials on IfcEntities who inherit from IfcRelationships', async () => {
+		expect(await properties.setMaterialsProperties(modelID, 14050, 1476)).toEqual(false);
+	});
+
+	test('can not set psets on IfcEntities who inherit from IfcRelationships', async () => {
+		expect(await properties.setPropertySets(modelID, 14050, 153)).toEqual(false);
+	});
+});
 
 afterAll(() => {
     ifcApi.CloseModel(modelID);
