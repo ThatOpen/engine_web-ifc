@@ -48,11 +48,11 @@ export interface LoaderSettings {
 // TODO(pablo): Don't know how to get static refs to the values, so
 // manually keeping in-sync with src/wasm/include/web-ifc.h.
 export enum LogLevel {
-    DEBUG = 0,
-    INFO = 1,
-    WARN = 2,
-    ERROR = 3,
-    OFF = 4,
+    LOG_LEVEL_DEBUG = 0,
+    LOG_LEVEL_INFO = 1,
+    LOG_LEVEL_WARN = 2,
+    LOG_LEVEL_ERROR = 3,
+    LOG_LEVEL_OFF = 4,
 }
 
 export interface Vector<T> {
@@ -123,7 +123,7 @@ export class IfcAPI {
      */
     properties = new Properties(this);
 
-    logLevel = LogLevel.INFO
+    logLevel = LogLevel.LOG_LEVEL_INFO
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
@@ -532,25 +532,25 @@ export class IfcAPI {
     }
 
     LogDebug(...msg: string[]): void {
-        if (this.logLevel >= LogLevel.DEBUG) {
+        if (this.logLevel >= LogLevel.LOG_LEVEL_DEBUG) {
             console.log('DEBUG:', ...msg);
         }
     }
 
     LogInfo(...msg: string[]): void {
-        if (this.logLevel >= LogLevel.INFO) {
+        if (this.logLevel >= LogLevel.LOG_LEVEL_INFO) {
             console.log('INFO:', ...msg);
         }
     }
 
     LogWarn(...msg: string[]): void {
-        if (this.logLevel >= LogLevel.WARN) {
+        if (this.logLevel >= LogLevel.LOG_LEVEL_WARN) {
             console.warn('WARN:', ...msg);
         }
     }
 
     LogError(...msg: string[]): void {
-        if (this.logLevel >= LogLevel.ERROR) {
+        if (this.logLevel >= LogLevel.LOG_LEVEL_ERROR) {
             console.error('ERROR:', ...msg);
         }
     }

@@ -41,7 +41,7 @@ let totalMaterials: number;
 beforeAll(async () => {
     ifcApi = new IfcAPI();
     await ifcApi.Init();
-    ifcApi.SetLogLevel(LogLevel.OFF);
+    ifcApi.SetLogLevel(LogLevel.LOG_LEVEL_OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
