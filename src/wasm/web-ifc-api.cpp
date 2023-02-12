@@ -167,7 +167,7 @@ void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, ems
     std::vector<uint32_t> types;
 
     uint32_t size = typesVal["length"].as<uint32_t>();
-    int index = 0;
+    uint32_t index = 0;
     while (index < size)
     {
         emscripten::val typeVal = typesVal[std::to_string(index++)];
@@ -225,7 +225,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
             continue;
         }
 
-        for (int i = 0; i < elements.size(); i++)
+        for (uint32_t i = 0; i < elements.size(); i++)
         {
             webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(elements[i]);
             for (auto& geom : mesh.geometries)
@@ -307,7 +307,7 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types
     std::vector<uint32_t> expressIDs;
 
     uint32_t size = types["length"].as<uint32_t>();
-    for (int i=0; i < size; i++) {
+    for (uint32_t i=0; i < size; i++) {
     
         uint32_t type = types[std::to_string(i)].as<uint32_t>();
         auto lineIDs = loader->GetLineIDsWithType(type);
@@ -414,7 +414,7 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
 
     std::vector<uint32_t> expressIDs;
     auto numLines = loader->GetNumLines();
-    for (int i = 0; i < numLines; i++)
+    for (uint32_t i = 0; i < numLines; i++)
     {
         expressIDs.push_back(loader->GetLine(i).expressID);
     }
