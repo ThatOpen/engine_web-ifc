@@ -22,6 +22,7 @@ import * as ifc from "./ifc_schema_helper";
 import { Properties } from "./helpers/properties";
 import { Log, LogLevel } from "./helpers/log";
 export * from "./ifc_schema_helper";
+export { LogLevel };
 
 export const UNKNOWN = 0;
 export const STRING = 1;
