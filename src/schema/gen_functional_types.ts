@@ -192,7 +192,15 @@ cppHeader.push("");
 cppHeader.push("#include <vector>");
 cppHeader.push("");
 cppHeader.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
-tsHeader.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
+tsHeader.push("// supported ifc schemas - this is a generated file - please see schema generator in src/schema");
+tsHeader.push(`export enum Schemas {`);
+for (var i = 0; i < files.length; i++) {
+	if (!files[i].endsWith(".exp")) continue;
+	const schemaName = files[i].replace(".exp","");
+	tsHeader.push(`\t${schemaName.replace(".", "_")} = "${schemaName}",`);
+}
+tsHeader.push(`};`)
+tsHeader.push("// unique list of crc32 codes for ifc classes");
 cppHeader.push("");
 cppHeader.push("namespace ifc {");
 completeEntityList.forEach(entity => {

@@ -1,4 +1,10 @@
-// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema
+// supported ifc schemas - this is a generated file - please see schema generator in src/schema
+export enum Schemas {
+	IFC2X3 = "IFC2X3",
+	IFC4_3 = "IFC4.3",
+	IFC4 = "IFC4",
+};
+// unique list of crc32 codes for ifc classes
 export const FILE_SCHEMA = 1109904537;
 export const FILE_NAME = 1390159747;
 export const FILE_DESCRIPTION = 599546466;
