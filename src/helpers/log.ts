@@ -15,16 +15,15 @@ export abstract class Log {
 		this.logLevel = level;
 	}
 
-	static log(msg: string, ...args: any[]) {
-		if(args.length > 0)
+	public static log(msg: string, ...args: any[]) {
+		if (this.logLevel <= LogLevel.LOG_LEVEL_ERROR) {
 			console.log(msg, ...args);
-		else
-			console.log(msg);
+		}
 	}
-
+	
 	public static debug(msg: string, ...args: any[]) {
 		if (this.logLevel <= LogLevel.LOG_LEVEL_DEBUG) {
-			this.log('DEBUG: ', msg, ...args);
+			console.trace('DEBUG: ', msg, ...args);
 		}
 	}
 
