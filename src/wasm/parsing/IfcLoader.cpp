@@ -94,11 +94,11 @@
    { 
       std::ostringstream output;
       output << "ISO-10303-21;"<<std::endl<<"HEADER;"<<std::endl;
-      output << "/***********************************************************************" << std::endl;
-      output << "* STEP Physical File produced by: IFCjs WebIfc " + WEB_IFC_VERSION_NUMBER << std::endl;
+      output << "/******************************************************" << std::endl;
+      output << "* STEP Physical File produced by: IFCjs WebIfc " << WEB_IFC_VERSION_NUMBER << std::endl;
       output << "* Module: web-ifc-api/IfcLoader" << std::endl;
       output << "* Source: https://github.com/IFCjs/web-ifc" << std::endl;
-      output << "***********************************************************************/" << std::endl;
+      output << "******************************************************/" << std::endl;
       for(uint32_t i=0; i < _headerLines.size();i++) 
       {
         _tokenStream->MoveTo(_headerLines[i].tapeOffset);

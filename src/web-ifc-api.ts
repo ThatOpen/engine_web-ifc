@@ -2,7 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { IfcEntities, FILE_SCHEMA } from "./ifc-schema";
+import { 
+    IfcEntities, 
+    FILE_SCHEMA,
+} from "./ifc-schema";
+import { Properties } from "./helpers/properties";
+import { ModelManager } from "./helpers/ModelManager";
+import { Log, LogLevel } from "./helpers/log";
 
 let WebIFCWasm: any;
 
@@ -19,8 +25,6 @@ else {
 }
 export * from "./ifc-schema";
 import * as ifc from "./ifc_schema_helper";
-import { Properties } from "./helpers/properties";
-import { Log, LogLevel } from "./helpers/log";
 export * from "./ifc_schema_helper";
 export { LogLevel };
 
@@ -126,6 +130,11 @@ export class IfcAPI {
     properties = new Properties(this);
 
     /**
+     * Contains all the logic and methods regarding creating models.
+     */
+    modelManager = new ModelManager(this);
+
+    /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
      *
      * @param customLocateFileHandler An optional locateFile function that let's
@@ -217,7 +226,7 @@ export class IfcAPI {
      * @param schema ifc schema version
 	 * @returns ModelID
     */
-    CreateModel(schema: string, settings?: LoaderSettings): number {
+    CreateModel(schema: string, settings?: LoaderSettings, modelName?: string): number {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
             USE_FAST_BOOLS: true, //TODO: This needs to be fixed in the future to rely on elalish/manifold
@@ -231,7 +240,9 @@ export class IfcAPI {
         };
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = schema;
-        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[{type:1,'value':schema}]);
+        this.modelManager.InitModel(result, modelName);
+        //this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[{type: STRING, value: schema}]);
+        //this.InitIFCModel(result, modelName);
         return result;
     }
 
@@ -254,6 +265,19 @@ export class IfcAPI {
         newBuffer.set(dataBuffer.subarray(0,size),0);
         return newBuffer;
     }
+
+    /**
+     * Export a model to IFC
+     * @param modelID model ID
+     * @returns blob with mimetype application/x-step containing the model data 
+     * 
+     * @deprecated Use SaveModel instead
+     */
+    ExportFileAsIFC(modelID: number) {
+        Log.warn("ExportFileAsIFC is deprecated, use SaveModel instead");
+        return this.SaveModel(modelID);
+    }
+
 
     GetGeometry(modelID: number, geometryExpressID: number): IfcGeometry {
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);

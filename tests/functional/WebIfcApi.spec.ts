@@ -481,7 +481,21 @@ describe('some use cases', () => {
     
 })
 
-describe('creating objects', () => {
+describe('creating ifc', () => {
+    test('can create new ifc model', () => {
+        let createdID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
+        expect(createdID).toBe(5);
+        expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
+        ifcApi.CloseModel(createdID);
+    });
+
+    test('can create & save new ifc model', () => {
+        let createdID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
+        const buffer = ifcApi.SaveModel(createdID);
+        fs.writeFileSync(path.join(__dirname, '../artifacts/created.ifc'), buffer);
+        ifcApi.CloseModel(createdID);
+    });
+
     test("create an IFC object from Typecode", () => {
         
         let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
@@ -499,7 +513,7 @@ describe('opening large amounts of data', () => {
         };
         const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test'));
         let modelId = ifcApi.OpenModel(exampleIFCData,s);
-        expect(modelId).toBe(5);
+        expect(modelId).toBe(7);
     });
 
      test("open a small model but many times", () => {
