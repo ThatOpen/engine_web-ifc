@@ -240,14 +240,14 @@ export class IfcAPI {
         const timestamp = new Date().toISOString();
         
         this.wasmModule.WriteHeaderLine(result,FILE_DESCRIPTION,[
-            {type: STRING, value: modelName}, 
+            [{type: STRING, value: modelName}], 
             {type: STRING, value: '2;1'}
         ]);
         this.wasmModule.WriteHeaderLine(result,FILE_NAME,[
             {type: STRING, value: modelName},
             {type: STRING, value: timestamp},
-            null,
-            null,
+            [null],
+            [null],
             {type: STRING, value: "ifcjs/web-ifc-api"},
             {type: STRING, value: "ifcjs/web-ifc-api"},
             null,
