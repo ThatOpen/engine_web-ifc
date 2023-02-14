@@ -86,7 +86,7 @@ let givenCoordinationMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
-    ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
+    ifcApi.SetLogLevel(WebIFC.LogLevel.LOG_LEVEL_OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);

@@ -28,7 +28,7 @@
 
 Although it is quite stable and fast already, web-ifc is in **pre-alpha status** until ifc support matures. The list of currently supported ifc elements, or level of support for different ifc types, is an undocumented work in progress. 
 
-Depending on your models, web-ifc may be quick and correct, or slow and broken, please share any problematic models so I can take a look :)
+Depending on your models, web-ifc may be quick and correct, or slow and broken. If your model does not work as expected please raise an issue and attach the model if possible, or contact us and we can discuss passing the model confidentially.
 
 ## Install
 
@@ -57,6 +57,15 @@ ifcApi.CloseModel(modelID);
 ```
 
 See [examples](https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src) for more details on how to use web-ifc.
+
+## Requirements
+
+These are the requirements needed to build web-ifc (only for those that wish to build their own version).
+
+1. Node v16 or later
+2. NPM v7 or later
+3. EMSCRIPTEN v3.1.27 or later
+4. CMAKE v3.18 or later
 
 ## Building WASM module
 
