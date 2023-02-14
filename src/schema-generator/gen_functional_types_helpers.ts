@@ -8,7 +8,7 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
     if (type.isList)
     {
         if (initialisersDone.has(type.name)) return;
-        buffer.push(`TypeInitialisers[${schemaNo}][${crc32(type.name.toUpperCase(),crcTable)}]=(v:any)=>return new ${schemaName}.${type.name}(v);`);
+        buffer.push(`TypeInitialisers[${schemaNo}][${crc32(type.name.toUpperCase(),crcTable)}]=(v:any) => new ${schemaName}.${type.name}(v);`);
         return
     }
 
@@ -23,7 +23,7 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
 
     if (initialisersDone.has(type.name)) return;
     initialisersDone.add(type.name);
-    buffer.push(`TypeInitialisers[${schemaNo}][${crc32(type.name.toUpperCase(),crcTable)}]=(v:any)=>return new ${schemaName}.${type.name}(v);`);
+    buffer.push(`TypeInitialisers[${schemaNo}][${crc32(type.name.toUpperCase(),crcTable)}]=(v:any) => new ${schemaName}.${type.name}(v);`);
     return;
 }       
 
@@ -134,10 +134,10 @@ export function generateSuperAssignment(p:Prop, ifcDerivedProps: string[],types:
 export function generateClass(entity:Entity, schemaName:string, buffer: Array<string>, classBuffer: Array<string>, types:Type[],crcTable:any,schemaNo:number) 
 {
 
-  buffer.push(`FromRawLineData[${schemaNo}][${entity.name.toUpperCase()}]=(d:RawLineData)=>new ${schemaName}.${entity.name}(d.ID, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName)).join(", ")});`);
+  buffer.push(`FromRawLineData[${schemaNo}][${entity.name.toUpperCase()}]=(d:RawLineData) => new ${schemaName}.${entity.name}(d.ID, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName)).join(", ")});`);
   let constructorArray = entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name));
-  buffer.push(`Constructors[${schemaNo}][${entity.name.toUpperCase()}]=(expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'})=>return new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")});`);
-  buffer.push(`ToRawLineData[${schemaNo}][${entity.name.toUpperCase()}]=(${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[]=>return[${entity.derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}];`);
+  buffer.push(`Constructors[${schemaNo}][${entity.name.toUpperCase()}]=(expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'}) => new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")});`);
+  buffer.push(`ToRawLineData[${schemaNo}][${entity.name.toUpperCase()}]=(${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[] => [${entity.derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}];`);
 
 
   if (!entity.parent)

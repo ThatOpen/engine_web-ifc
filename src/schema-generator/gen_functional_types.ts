@@ -132,7 +132,7 @@ for (var i = 0; i < files.length; i++) {
   
       if (entities[x].children.length > 0)
       {
-        //tsSchema.push(`InheritanceDef[${i}][${entities[x].name.toUpperCase()}] = [${entities[x].children.map((c) => `${c.toUpperCase()}`).join(",")}];`);
+        tsSchema.push(`InheritanceDef[${i}][${entities[x].name.toUpperCase()}] = [${entities[x].children.map((c) => `${c.toUpperCase()}`).join(",")}];`);
       }
       
       if (entities[x].derivedInverseProps.length > 0)

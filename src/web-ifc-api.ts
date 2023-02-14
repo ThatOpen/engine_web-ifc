@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {TypeInitialisers, FILE_SCHEMA, RawLineData,IfcLineObject,FromRawLineData,Constructors,InheritanceDef,Reference,InversePropertyDef,ToRawLineData} from "./ifc-schema";
+import {TypeInitialisers,FILE_SCHEMA,FromRawLineData,Constructors,InheritanceDef,Reference,InversePropertyDef,ToRawLineData,SchemaNames} from "./ifc-schema";
 
 let WebIFCWasm: any;
 
@@ -125,7 +125,7 @@ export class IfcAPI {
     wasmPath: string = "";
     isWasmPathAbsolute = false;
 
-    modelSchemaList: string[] = [];
+    modelSchemaList: Array<number>;
 
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
@@ -207,8 +207,8 @@ export class IfcAPI {
             dest.set(src);
             return srcSize;
         });
-        this.modelSchemaList[result] = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
-        Log.info("Parsing Model using " + this.modelSchemaList[result] + " Schema");
+        this.modelSchemaList[result] = SchemaNames.indexOf(this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value);
+        console.log("Parsing Model using " + this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value + " Schema");
         return result;
     }
 
@@ -297,7 +297,6 @@ export class IfcAPI {
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-console.log(rawLineData);
         let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData);
 
         if (flatten) {
