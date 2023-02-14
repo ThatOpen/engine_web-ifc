@@ -27,7 +27,7 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
     return;
 }       
 
-export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaName:string) 
+export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaName:string,schemaNo:number) 
 {
     let isType: boolean = types.some( (x:Type) => x.name == p.type);
     let type = types.find( (x:Type) => x.name == p.type);
@@ -46,24 +46,24 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
         content = 'd.arguments['+i+'].map((p:any) => '
         if (type?.isSelect){
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-            if (isEntitySelect) content+='new Reference(p.value)';
-            else content+='TypeInitialiser(\''+schemaName+'\',p)';
+            if (isEntitySelect) content+='new Handle(p.value)';
+            else content+='TypeInitialiser('+schemaNo+',p)';
         }
         else if (isType) content+='new '+schemaName+'.'+p.type+'(p.value)';
         else if (p.primitive) content+='p.value';
-        else content+='new Reference<'+schemaName+'.'+p.type+'>(p.value)';
+        else content+='new Handle<'+schemaName+'.'+p.type+'>(p.value)';
         content +=')';
     }
     else if (type?.isSelect)
     {
         let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-        if (isEntitySelect) content='new Reference(d.arguments['+i+'].value)';
-        else content='TypeInitialiser(\''+schemaName+'\',d.arguments['+i+'])'
+        if (isEntitySelect) content='new Handle(d.arguments['+i+'].value)';
+        else content='TypeInitialiser('+schemaNo+',d.arguments['+i+'])'
 
     }
     else if (isType) content='new '+schemaName+'.'+p.type+'(d.arguments['+i+'].value)';
     else if (p.primitive) content='d.arguments['+i+'].value';
-    else content='new Reference<'+schemaName+'.'+p.type+'>(d.arguments['+i+'].value)';
+    else content='new Handle<'+schemaName+'.'+p.type+'>(d.arguments['+i+'].value)';
     return prefix + content;
 }
 
@@ -118,12 +118,12 @@ export function generateSuperAssignment(p:Prop, ifcDerivedProps: string[],types:
         else if (type?.isSelect)
         {
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-            if (isEntitySelect) return 'new Reference(0)';
+            if (isEntitySelect) return 'new Handle(0)';
             else return '0'
         }
         else if (isType) return 'new '+p.type+'(0)';
         else if (p.primitive) return '0';
-        else return "new Reference(0)";
+        else return "new Handle(0)";
     }
     else
     {
@@ -134,10 +134,10 @@ export function generateSuperAssignment(p:Prop, ifcDerivedProps: string[],types:
 export function generateClass(entity:Entity, schemaName:string, buffer: Array<string>, classBuffer: Array<string>, types:Type[],crcTable:any,schemaNo:number) 
 {
 
-  buffer.push(`FromRawLineData[${schemaNo}][${entity.name.toUpperCase()}]=(d:RawLineData) => new ${schemaName}.${entity.name}(d.ID, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName)).join(", ")});`);
+  buffer.push(`FromRawLineData[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(d:RawLineData) => new ${schemaName}.${entity.name}(d.ID, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName,schemaNo)).join(", ")});`);
   let constructorArray = entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name));
-  buffer.push(`Constructors[${schemaNo}][${entity.name.toUpperCase()}]=(expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'}) => new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")});`);
-  buffer.push(`ToRawLineData[${schemaNo}][${entity.name.toUpperCase()}]=(${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[] => [${entity.derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}];`);
+  buffer.push(`Constructors[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'}) => new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")});`);
+  buffer.push(`ToRawLineData[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[] => [${entity.derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}];`);
 
 
   if (!entity.parent)
@@ -148,15 +148,15 @@ export function generateClass(entity:Entity, schemaName:string, buffer: Array<st
   {
     classBuffer.push(`export class ${entity.name} extends ${entity.parent} {`);
   }
-  classBuffer.push("\texpressID:number="+crc32(entity.name.toUpperCase(),crcTable)+";");
+  classBuffer.push("\ttype:number="+crc32(entity.name.toUpperCase(),crcTable)+";");
   
 
   entity.inverseProps.forEach((prop) => {
-    let type = `${"(Reference<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
+    let type = `${"(Handle<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
     classBuffer.push(`\t${prop.name}!: ${type};`);
   });
 
-  classBuffer.push(`\tconstructor(expressID: number, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Reference<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  classBuffer.push(`\tconstructor(expressID: number, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
   classBuffer.push(`\t{`)
   if (!entity.parent) {
     classBuffer.push(`\t\tsuper(expressID);`)

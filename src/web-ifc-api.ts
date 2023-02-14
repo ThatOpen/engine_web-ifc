@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {TypeInitialisers,FILE_SCHEMA,FromRawLineData,Constructors,InheritanceDef,Reference,InversePropertyDef,ToRawLineData,SchemaNames} from "./ifc-schema";
+import {Handle,RawLineData,IfcLineObject,TypeInitialisers,FILE_SCHEMA,FromRawLineData,Constructors,InheritanceDef,InversePropertyDef,ToRawLineData,SchemaNames} from "./ifc-schema";
 
 let WebIFCWasm: any;
 
@@ -54,22 +54,6 @@ export interface LoaderSettings {
     BOOL_ABORT_THRESHOLD?: number;
     MEMORY_LIMIT?: number;
     TAPE_SIZE? : number;
-}
-
-export interface RawLineData { 
-    ID: number; 
-    type: number; 
-    arguments: any[]
-};
-
-export class Reference<_> { 
-    type: number=5; 
-    constructor(public value: number) {}
-}
-
-export abstract class IfcLineObject { 
-    type: number=0; 
-    constructor(public expressID: number) {}
 }
 
 export interface Vector<T> {
@@ -125,7 +109,7 @@ export class IfcAPI {
     wasmPath: string = "";
     isWasmPathAbsolute = false;
 
-    modelSchemaList: Array<number>;
+    modelSchemaList: Array<number> = [];
 
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
@@ -218,7 +202,7 @@ export class IfcAPI {
 	 * @returns IFC Schema version
     */
     GetModelSchema(modelID: number) {
-        return this.modelSchemaList[modelID];
+        return SchemaNames[this.modelSchemaList[modelID]];
     }
 
     /**
@@ -239,7 +223,7 @@ export class IfcAPI {
             ...settings
         };
         let result = this.wasmModule.CreateModel(s);
-        this.modelSchemaList[result] = schema;
+        this.modelSchemaList[result] = SchemaNames.indexOf(schema);
         this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[{type:1,'value':schema}]);
         return result;
     }
@@ -363,13 +347,17 @@ export class IfcAPI {
         return this.wasmModule.IsIfcElement(type);
     }
 
-    WriteLine<Type extends IfcLineObject>(modelID: number, lineObject: Type) {
+    GetIfcEntityList(modelID: number) : Array<number>
+    {
+        return Array.from(FromRawLineData[this.modelSchemaList[modelID]].keys());
+    }
+
 	/**
 	 * Writes a line to the model, can be used to write new lines or to update existing lines
 	 * @param modelID model ID
 	 * @param lineObject line object to write
 	 */
-    WriteLine<Type extends ifc.IfcLineObject>(modelID: number, lineObject: Type) {
+    WriteLine<Type extends IfcLineObject>(modelID: number, lineObject: Type) {
         let property: keyof Type;
         for (property in lineObject)
         {
@@ -381,7 +369,7 @@ export class IfcAPI {
 
                 // overwrite the reference
                 // NOTE: this modifies the parameter
-                (lineObject[property] as any)= new Reference((lineProperty as IfcLineObject).expressID);
+                (lineObject[property] as any)= new Handle((lineProperty as IfcLineObject).expressID);
             }
             else if (Array.isArray(lineProperty) && lineProperty.length > 0) {
                 for (let i = 0; i < lineProperty.length; i++) {
@@ -392,7 +380,7 @@ export class IfcAPI {
 
                         // overwrite the reference
                         // NOTE: this modifies the parameter
-                        ((lineObject[property]as any)[i] as any) = new Reference((lineProperty[i] as IfcLineObject).expressID);
+                        ((lineObject[property]as any)[i] as any) = new Handle((lineProperty[i] as IfcLineObject).expressID);
                     }
                 }
             }
@@ -408,7 +396,6 @@ export class IfcAPI {
             type: lineObject.type,
             arguments: ToRawLineData[this.modelSchemaList[modelID]][lineObject.type](lineObject) as any[]
         }
-
         this.WriteRawLineData(modelID, rawLineData);
     }
 
@@ -591,7 +578,8 @@ export class IfcAPI {
      */
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
         const map = new Map<string | number, string | number>();
-        for (const typeId in Object.keys(FromRawLineData[this.modelSchemaList[modelID]])) {
+        for (const typeId in this.GetIfcEntityList(modelID)) {
+            console.log(typeId);
             const lines = this.GetLineIDsWithType(modelID, Number(typeId));
             const size = lines.size();
             for (let y = 0; y < size; y++) {

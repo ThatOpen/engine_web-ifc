@@ -36,7 +36,7 @@ export default async function() {
         let totalSizeIndices = 0;
 
         // grab all types except IFCCOLUMN
-        let types = WebIFC.IfcElements.filter((f) => (f !== WebIFC.IFCCOLUMN));
+        let types = ifcapi.GetIfcEntityList(modelID).filter((f) => (f !== WebIFC.IFCCOLUMN && ifcapi.IsIfcElement(f)));
 
         ifcapi.StreamAllMeshesWithTypes(modelID, types, (mesh: WebIFC.FlatMesh) => {
             

@@ -20,17 +20,33 @@ completeEntityList.add("FILE_DESCRIPTION");
 let typeList = new Set<string>();
 
 tsSchema.push(`// This is a generated file, please see: gen_functional_types.js`);
-tsSchema.push(`import type {Reference} from '../web-ifc-api';`);
-tsSchema.push(`export const FromRawLineData: any = {};`);
+
+tsSchema.push(`export interface RawLineData { `);
+tsSchema.push(`\tID: number;`);
+tsSchema.push(`\ttype: number;`);
+tsSchema.push(`\targuments: any[]`);
+tsSchema.push(`};`);
+
+tsSchema.push(`export class Handle<_> {`);
+tsSchema.push(`\ttype: number=5;`);
+tsSchema.push(`\tconstructor(public value: number) {}`);
+tsSchema.push(`}`);
+
+tsSchema.push(`export abstract class IfcLineObject {`);
+tsSchema.push(`\ttype: number=0;`);
+tsSchema.push(`\tconstructor(public expressID: number) {}`);
+tsSchema.push(`}`);
+
+tsSchema.push(`export const FromRawLineData: Array<Array<any>> = [];`);
 tsSchema.push(`export const InversePropertyDef: any = {};`);
 tsSchema.push(`export const InheritanceDef: any = {};`);
 tsSchema.push(`export const Constructors: any = {};`);
 tsSchema.push(`export const ToRawLineData: any = {};`);
 tsSchema.push(`export const TypeInitialisers: any = {};`);
-tsSchema.push(`export const SchemaNames: Array<string>;`);
+tsSchema.push(`export const SchemaNames: Array<string> = [];`);
 
 
-tsSchema.push('function TypeInitialiser(schema:string,tapeItem:any) {');
+tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
 tsSchema.push('\tif (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
 tsSchema.push('}');
 tsSchema.push('function Labelise(tapeItem:any) {');
@@ -46,7 +62,7 @@ for (var i = 0; i < files.length; i++) {
   var schemaNameClean = schemaName.replace(".","_");
   console.log("Generating Schema for:"+schemaName);
   tsSchema.push(`SchemaNames[${i}]='${schemaNameClean}';`);
-  tsSchema.push(`FromRawLineData[${i}] = {};`);
+  tsSchema.push(`FromRawLineData[${i}] = [];`);
   tsSchema.push(`Constructors[${i}] = {};`);
   tsSchema.push(`InversePropertyDef[${i}] = {};`);
   tsSchema.push(`InheritanceDef[${i}] = {};`);
@@ -83,7 +99,7 @@ for (var i = 0; i < files.length; i++) {
               }
               else
               {
-                  selectOutput+=` | (Reference<${refType}> | ${refType})`;
+                  selectOutput+=` | (Handle<${refType}> | ${refType})`;
               }
           });
           selectOutput+=";";
@@ -132,12 +148,12 @@ for (var i = 0; i < files.length; i++) {
   
       if (entities[x].children.length > 0)
       {
-        tsSchema.push(`InheritanceDef[${i}][${entities[x].name.toUpperCase()}] = [${entities[x].children.map((c) => `${c.toUpperCase()}`).join(",")}];`);
+        tsSchema.push(`InheritanceDef[${i}][${crc32(entities[x].name.toUpperCase(),crcTable)}] = [${entities[x].children.map((c) => `${c.toUpperCase()}`).join(",")}];`);
       }
       
       if (entities[x].derivedInverseProps.length > 0)
       {
-        let inverseProp:string =`InversePropertyDef[${i}][${entities[x].name.toUpperCase()}]=[`;
+        let inverseProp:string =`InversePropertyDef[${i}][${crc32(entities[x].name.toUpperCase(),crcTable)}]=[`;
         entities[x].derivedInverseProps.forEach((prop) => {
           let pos = 0;
           //find the target element
