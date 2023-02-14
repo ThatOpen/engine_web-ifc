@@ -542,9 +542,7 @@ void WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
     loader->Push<uint8_t>(webifc::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
     loader->Push((void*)ifcName.c_str(), ifcName.size());
-    loader->Push<uint8_t>(webifc::IfcTokenType::SET_BEGIN);
     WriteSet(modelID,parameters);
-    loader->Push<uint8_t>(webifc::IfcTokenType::SET_END);
     loader->Push<uint8_t>(webifc::IfcTokenType::LINE_END);
     uint32_t end = loader->GetTotalSize();
     loader->AddHeaderLineTape(type, start, end);
@@ -739,9 +737,9 @@ emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
     std::string s(GetReadableNameFromTypeCode(line.ifcType));
     GetArgs(modelID, arguments);
     auto retVal = emscripten::val::object();
-    retVal.set(emscripten::val("ID"), line.lineIndex);
-    retVal.set(emscripten::val("type"), s);
-    retVal.set(emscripten::val("arguments"), arguments);
+    retVal.set("ID", line.lineIndex);
+    retVal.set("type", s);
+    retVal.set("arguments", arguments);
     return retVal;
 }
 

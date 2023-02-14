@@ -5,9 +5,17 @@
 import { 
     IfcEntities, 
     FILE_SCHEMA,
+    FILE_NAME, 
+    FILE_DESCRIPTION,
+//    IFCPROJECT,
+//    IFCORGANIZATION,
+//    IFCAPPLICATION,
+//    IFCCARTESIANPOINT,
+//    IFCPERSON,
+//    IFCPERSONANDORGANIZATION,
+//    IFCOWNERHISTORY
 } from "./ifc-schema";
 import { Properties } from "./helpers/properties";
-import { ModelManager } from "./helpers/ModelManager";
 import { Log, LogLevel } from "./helpers/log";
 
 let WebIFCWasm: any;
@@ -130,11 +138,6 @@ export class IfcAPI {
     properties = new Properties(this);
 
     /**
-     * Contains all the logic and methods regarding creating models.
-     */
-    modelManager = new ModelManager(this);
-
-    /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
      *
      * @param customLocateFileHandler An optional locateFile function that let's
@@ -240,9 +243,32 @@ export class IfcAPI {
         };
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = schema;
-        this.modelManager.InitModel(result, modelName);
-        //this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[{type: STRING, value: schema}]);
-        //this.InitIFCModel(result, modelName);
+        modelName = modelName || "web-ifc-model-"+result+".ifc";
+        const timestamp = new Date().toISOString();
+        
+        this.wasmModule.WriteHeaderLine(result,FILE_DESCRIPTION,[
+            {type: STRING, value: modelName}, 
+            {type: STRING, value: '2;1'}
+        ]);
+        this.wasmModule.WriteHeaderLine(result,FILE_NAME,[
+            {type: STRING, value: modelName},
+            {type: STRING, value: timestamp},
+            null,
+            null,
+            {type: STRING, value: "ifcjs/web-ifc-api"},
+            {type: STRING, value: "ifcjs/web-ifc-api"},
+            null,
+        ]);
+        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: schema}]]);
+        
+        //this.WriteLine(result, this.CreateIfcEntity(result, IFCORGANIZATION, [{type: EMPTY}, {type: LABEL, value: 'IFCjs WebIFC'}, {type: EMPTY}, {type: EMPTY}, {type: EMPTY}]));
+        //this.WriteLine(result, this.CreateIfcEntity(result, IFCAPPLICATION, {type:REF, value: 1}, {type: LABEL, value: ''}, {type:LABEL, value: 'IFCjs WebIFC'}, {type:STRING, value: 'web-ifc'}));
+        //this.WriteLine(result, this.CreateIfcEntity(result, IFCPERSON, null, null, null, null, null, null, [], null));
+        //this.WriteLine(result, this.CreateIfcEntity(result, IFCPERSONANDORGANIZATION, {type: REF, value: 3}, {type: REF, value: 1}, null));
+        //this.WriteLine(result, this.CreateIfcEntity(result, IFCOWNERHISTORY, {type: REF, value: 4}, {type: REF, value: 2}, null, {type:3}, null,null, null, {type: REAL, value: Date.now()}));
+        //this.WriteLine(result, this.CreateIfcEntity(result, IFCCARTESIANPOINT, {type: REAL, value: 0.0},{type: REAL, value: 0.0},{type: REAL, value: 0.0}));
+        //this.WriteLine(result, this.CreateIfcEntity(result, IFCPROJECT, {type: STRING, value: 'Default Project'}, {type: REF, value: 5}, null, null, null, null, null, [], {type: REF, value: 1}));
+        
         return result;
     }
 
@@ -253,7 +279,8 @@ export class IfcAPI {
 	 */
     SaveModel(modelID: number): Uint8Array {
         let modelSize = this.wasmModule.GetModelSize(modelID);
-        let dataBuffer = new Uint8Array(modelSize);
+        const headerBytes = 512;
+        let dataBuffer = new Uint8Array(modelSize + headerBytes);
         let size = 0; 
         this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
             let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);

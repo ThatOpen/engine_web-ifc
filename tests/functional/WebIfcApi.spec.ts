@@ -486,20 +486,35 @@ describe('creating ifc', () => {
         let createdID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
         expect(createdID).toBe(5);
         expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
+        expect(ifcApi.wasmModule.GetModelSize(createdID)).toBeGreaterThan(0);
+        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBeGreaterThan(6);
+        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_DESCRIPTION)['arguments'].length).toBeGreaterThan(1);
+        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_SCHEMA)['arguments'].length).toBeGreaterThan(0);
+        //const orgs = ifcApi.GetLineIDsWithType(createdID, IFCORGANIZATION);
+        //expect(orgs.size()).toBeGreaterThan(0);
+        //expect(orgs.get(0)).toBe(1);
         ifcApi.CloseModel(createdID);
     });
 
     test('can create & save new ifc model', () => {
         let createdID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
+        expect(createdID).toBe(6);
         const buffer = ifcApi.SaveModel(createdID);
         fs.writeFileSync(path.join(__dirname, '../artifacts/created.ifc'), buffer);
         ifcApi.CloseModel(createdID);
     });
 
     test("create an IFC object from Typecode", () => {
-        
+        const maxExpressID = ifcApi.GetMaxExpressID(modelID);
         let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
+        expect(entity.expressID).toBe(maxExpressID + 1);
+        expect(entity.type).toBe(WebIFC.IFCCARTESIANPOINT);
         expect(entity.constructor.name).toBe('IfcCartesianPoint');
+    });
+
+    test('can write new ifc entity', () => {
+        let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
+        ifcApi.WriteLine(modelID, entity);
     });
 
     
