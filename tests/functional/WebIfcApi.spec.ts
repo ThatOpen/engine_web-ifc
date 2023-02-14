@@ -490,9 +490,6 @@ describe('creating ifc', () => {
         expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBeGreaterThan(6);
         expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_DESCRIPTION)['arguments'].length).toBeGreaterThan(1);
         expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_SCHEMA)['arguments'].length).toBeGreaterThan(0);
-        //const orgs = ifcApi.GetLineIDsWithType(createdID, IFCORGANIZATION);
-        //expect(orgs.size()).toBeGreaterThan(0);
-        //expect(orgs.get(0)).toBe(1);
         ifcApi.CloseModel(createdID);
     });
 

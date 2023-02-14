@@ -7,13 +7,6 @@ import {
     FILE_SCHEMA,
     FILE_NAME, 
     FILE_DESCRIPTION,
-//    IFCPROJECT,
-//    IFCORGANIZATION,
-//    IFCAPPLICATION,
-//    IFCCARTESIANPOINT,
-//    IFCPERSON,
-//    IFCPERSONANDORGANIZATION,
-//    IFCOWNERHISTORY
 } from "./ifc-schema";
 import { Properties } from "./helpers/properties";
 import { Log, LogLevel } from "./helpers/log";
@@ -260,15 +253,7 @@ export class IfcAPI {
             null,
         ]);
         this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: schema}]]);
-        
-        //this.WriteLine(result, this.CreateIfcEntity(result, IFCORGANIZATION, [{type: EMPTY}, {type: LABEL, value: 'IFCjs WebIFC'}, {type: EMPTY}, {type: EMPTY}, {type: EMPTY}]));
-        //this.WriteLine(result, this.CreateIfcEntity(result, IFCAPPLICATION, {type:REF, value: 1}, {type: LABEL, value: ''}, {type:LABEL, value: 'IFCjs WebIFC'}, {type:STRING, value: 'web-ifc'}));
-        //this.WriteLine(result, this.CreateIfcEntity(result, IFCPERSON, null, null, null, null, null, null, [], null));
-        //this.WriteLine(result, this.CreateIfcEntity(result, IFCPERSONANDORGANIZATION, {type: REF, value: 3}, {type: REF, value: 1}, null));
-        //this.WriteLine(result, this.CreateIfcEntity(result, IFCOWNERHISTORY, {type: REF, value: 4}, {type: REF, value: 2}, null, {type:3}, null,null, null, {type: REAL, value: Date.now()}));
-        //this.WriteLine(result, this.CreateIfcEntity(result, IFCCARTESIANPOINT, {type: REAL, value: 0.0},{type: REAL, value: 0.0},{type: REAL, value: 0.0}));
-        //this.WriteLine(result, this.CreateIfcEntity(result, IFCPROJECT, {type: STRING, value: 'Default Project'}, {type: REF, value: 5}, null, null, null, null, null, [], {type: REF, value: 1}));
-        
+
         return result;
     }
 
