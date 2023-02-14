@@ -90,7 +90,7 @@ beforeAll(async () => {
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
-    emptyFileModelID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
+    emptyFileModelID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
     tmpModelID = ifcApi.OpenModel(exampleIFCData);
 })
 
@@ -483,7 +483,7 @@ describe('some use cases', () => {
 
 describe('creating ifc', () => {
     test('can create new ifc model', () => {
-        let createdID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
+        let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
         expect(createdID).toBe(5);
         expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
         expect(ifcApi.wasmModule.GetModelSize(createdID)).toBeGreaterThan(0);
@@ -494,7 +494,7 @@ describe('creating ifc', () => {
     });
 
     test('can create & save new ifc model', () => {
-        let createdID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
+        let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
         expect(createdID).toBe(6);
         const buffer = ifcApi.SaveModel(createdID);
         fs.writeFileSync(path.join(__dirname, '../artifacts/created.ifc'), buffer);

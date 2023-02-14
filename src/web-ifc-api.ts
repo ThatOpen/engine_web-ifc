@@ -110,6 +110,15 @@ export interface ifcType {
     typeName: string;
 }
 
+export interface NewIfcModel {
+    schema: string;
+    name?: string;
+    description?: string[];
+    authors?: string[];
+    organizations?: string[];
+    authorization?: string;
+}
+
 export function ms() {
     return new Date().getTime();
 }
@@ -222,7 +231,7 @@ export class IfcAPI {
      * @param schema ifc schema version
 	 * @returns ModelID
     */
-    CreateModel(schema: string, settings?: LoaderSettings, modelName?: string): number {
+    CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
             USE_FAST_BOOLS: true, //TODO: This needs to be fixed in the future to rely on elalish/manifold
@@ -235,24 +244,28 @@ export class IfcAPI {
             ...settings
         };
         let result = this.wasmModule.CreateModel(s);
-        this.modelSchemaList[result] = schema;
-        modelName = modelName || "web-ifc-model-"+result+".ifc";
-        const timestamp = new Date().toISOString();
+        this.modelSchemaList[result] = model.schema;
+        const modelName = model.name || "web-ifc-model-"+result+".ifc";
+        const timestamp = new Date().toISOString().slice(0,19);
+        const description = model.description?.map((d) => ({type: STRING, value: d})) || [{type: STRING, value: 'ViewDefinition [CoordinationView]'}];
+        const authors = model.authors?.map((a) => ({type: STRING, value: a})) || [null];
+        const orgs = model.organizations?.map((o) => ({type: STRING, value: o})) || [null];
+        const auth = model.authorization ? {type: STRING, value: model.authorization} : null;
         
         this.wasmModule.WriteHeaderLine(result,FILE_DESCRIPTION,[
-            [{type: STRING, value: modelName}], 
+            description, 
             {type: STRING, value: '2;1'}
         ]);
         this.wasmModule.WriteHeaderLine(result,FILE_NAME,[
             {type: STRING, value: modelName},
             {type: STRING, value: timestamp},
-            [null],
-            [null],
+            authors,
+            orgs,
             {type: STRING, value: "ifcjs/web-ifc-api"},
             {type: STRING, value: "ifcjs/web-ifc-api"},
-            null,
+            auth,
         ]);
-        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: schema}]]);
+        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);
 
         return result;
     }
