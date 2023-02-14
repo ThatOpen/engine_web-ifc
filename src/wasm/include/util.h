@@ -24,6 +24,7 @@ namespace webifc
 	constexpr double EPS_MINISCULE = 1e-12; // what?
 	constexpr double EPS_TINY = 1e-9;
 	constexpr double EPS_SMALL = 1e-6;
+	constexpr double EPS_MED = 1e-5;
 	constexpr double EPS_BIG = 1e-4;
 
 	bool MatrixFlipsTriangles(const glm::dmat4 &mat)

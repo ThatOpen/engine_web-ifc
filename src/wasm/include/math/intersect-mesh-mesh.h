@@ -1037,7 +1037,6 @@ namespace webifc
             {
                 if (visited[cur])
                 {
-                    PrintEdgesAndLoop(L"loop", loop);
                     printf("Loop in findLoop ... how ironic \n");
                     return {};
                 }
@@ -1056,7 +1055,6 @@ namespace webifc
                 if (nbs.empty())
                 {
                     // broken poly
-                    PrintEdgesAndLoop(L"loop", loop);
                     printf("Found vert without neighbours\n");
                     loop.clear();
                     return loop;
@@ -1745,6 +1743,46 @@ namespace webifc
         std::vector<Polygon3D> polygons;
     };
 
+    static void normalizeTriangle(glm::dvec3 &aa, glm::dvec3 &bb, glm::dvec3 &cc)
+    {
+        glm::dvec3 v1 = aa - bb;
+        glm::dvec3 v2 = aa - cc;
+        glm::dvec3 v3 = bb - cc;
+
+        double d1 = glm::length(v1);
+        double d2 = glm::length(v2);
+        double d3 = glm::length(v3);
+
+        double lim = std::max(d1, std::max(d2, d3));
+
+        if (glm::length(v1) < lim)
+        {
+            v1 = glm::normalize(v1) * lim;
+            bb = aa - v1;
+            v1 = aa - bb;
+            v2 = aa - cc;
+            v3 = bb - cc;
+        }
+
+        if (glm::length(v2) < lim)
+        {
+            v2 = glm::normalize(v2) * lim;
+            cc = aa - v2;
+            v1 = aa - bb;
+            v2 = aa - cc;
+            v3 = bb - cc;
+        }
+
+        if (glm::length(v3) < lim)
+        {
+            v3 = glm::normalize(v3) * lim;
+            cc = bb - v3;
+            v1 = aa - bb;
+            v2 = aa - cc;
+            v3 = bb - cc;
+        }
+    }
+
     static BrepMesh MeshToBReps(const IfcGeometry& mesh, size_t meshIndex)
     {
         BrepMesh brep;
@@ -1777,9 +1815,16 @@ namespace webifc
                 Polygon3D poly;
                 poly.index = polygonIndex;
                 poly.meshIndex = meshIndex;
-                poly.a = a;
-                poly.b = b;
-                poly.c = c;
+                glm::dvec3 aa = glm::dvec3(a.x, a.y, a.z);
+                glm::dvec3 bb = glm::dvec3(b.x, b.y, b.z);
+                glm::dvec3 cc = glm::dvec3(c.x, c.y, c.z);
+
+                // Correct the initial vertices to prevent undesirable situations
+                normalizeTriangle(aa, bb, cc);
+
+                poly.a = aa;
+                poly.b = bb;
+                poly.c = cc;
                 poly.plane = p;
                 brep.polygons.push_back(poly);
             }

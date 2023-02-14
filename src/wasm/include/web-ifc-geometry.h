@@ -1348,7 +1348,7 @@ namespace webifc
 			glm::dvec3 s_extents;
 			secondGeom.GetCenterExtents(s_center, s_extents);
 
-			if (secondGeom.numFaces == 0 || normalDiff(s_extents) < EPS_BIG)
+			if (secondGeom.numFaces == 0 || normalDiff(s_extents) < EPS_MED)
 			{
 				_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
 
@@ -1357,13 +1357,13 @@ namespace webifc
 				return firstGeom;
 			}
 
-			if (firstGeom.numFaces == 0 || normalDiff(extents) < EPS_BIG)
+			if (firstGeom.numFaces == 0 || normalDiff(extents) < EPS_MED)
 			{
 				_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
 
 				// bail out because we will get strange meshes
 				// if this happens, probably there's an issue parsing the mesh that occurred earlier
-				return secondGeom;
+				return firstGeom;
 			}
 
 			auto first = firstGeom.Normalize(center, extents);
@@ -1374,9 +1374,6 @@ namespace webifc
 				DumpIfcGeometry(first, L"first.obj");
 				DumpIfcGeometry(second, L"second.obj");
 			}
-
-			DumpIfcGeometry(first, L"first.obj");
-			DumpIfcGeometry(second, L"second.obj");
 
 			IfcGeometry r1;
 			IfcGeometry r2;
