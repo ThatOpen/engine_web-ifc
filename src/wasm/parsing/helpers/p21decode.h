@@ -146,7 +146,7 @@ private:
         }
 
         // bytes swap. convert little endian to big
-        for (int i = 0; i < bytes.size(); i+=2) {
+        for (uint32_t i = 0; i < bytes.size(); i+=2) {
             char c = bytes[i];
             bytes[i] = bytes[i+1];
             bytes[i+1] = c;
@@ -167,7 +167,7 @@ private:
         }
 
         // bytes swap. convert little endian to big
-        for (int i = 0; i < bytes.size(); i+=4) {
+        for (uint32_t i = 0; i < bytes.size(); i+=4) {
             char c = bytes[i];
             bytes[i] = bytes[i+3];
             bytes[i+3] = c;
@@ -241,7 +241,7 @@ private:
 private:
     const vector<char> & p21;
     vector<char> result;
-    int index;
+    uint32_t index;
     bool error;
     unsigned char codepage;
 };
@@ -257,7 +257,7 @@ inline string p21decode(const char * str) {
 }
 
 inline bool need_to_decode(vector<char> & str) {
-    for (int i = 0; i < str.size(); i++) {
+    for (uint32_t i = 0; i < str.size(); i++) {
         switch (str[i]) {
             case '\\':
             case '\'':

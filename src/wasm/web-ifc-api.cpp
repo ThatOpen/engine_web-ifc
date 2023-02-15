@@ -19,7 +19,7 @@ std::map<uint32_t, std::unique_ptr<webifc::IfcGeometryLoader>> geomLoaders;
 
 uint32_t GLOBAL_MODEL_ID_COUNTER = 0;
 
-webifc::LogLevel LOG_LEVEL = webifc::LogLevel::ERROR;
+webifc::LogLevel LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_ERROR;
 
 #ifdef __EMSCRIPTEN_PTHREADS__
     constexpr bool MT_ENABLED = true;
@@ -167,7 +167,7 @@ void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, ems
     std::vector<uint32_t> types;
 
     uint32_t size = typesVal["length"].as<uint32_t>();
-    int index = 0;
+    uint32_t index = 0;
     while (index < size)
     {
         emscripten::val typeVal = typesVal[std::to_string(index++)];
@@ -225,7 +225,7 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
             continue;
         }
 
-        for (int i = 0; i < elements.size(); i++)
+        for (uint32_t i = 0; i < elements.size(); i++)
         {
             webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(elements[i]);
             for (auto& geom : mesh.geometries)
@@ -307,7 +307,7 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types
     std::vector<uint32_t> expressIDs;
 
     uint32_t size = types["length"].as<uint32_t>();
-    for (int i=0; i < size; i++) {
+    for (uint32_t i=0; i < size; i++) {
     
         uint32_t type = types[std::to_string(i)].as<uint32_t>();
         auto lineIDs = loader->GetLineIDsWithType(type);
@@ -414,7 +414,7 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
 
     std::vector<uint32_t> expressIDs;
     auto numLines = loader->GetNumLines();
-    for (int i = 0; i < numLines; i++)
+    for (uint32_t i = 0; i < numLines; i++)
     {
         expressIDs.push_back(loader->GetLine(i).expressID);
     }
@@ -814,10 +814,10 @@ extern "C" bool IsModelOpen(uint32_t modelID)
  */
 void SetLogLevel(int levelArg)
 {
-    if (levelArg < static_cast<int>(webifc::LogLevel::DEBUG)) {
-        LOG_LEVEL = webifc::LogLevel::DEBUG;
-    } else if (levelArg > static_cast<int>(webifc::LogLevel::OFF)) {
-        LOG_LEVEL = webifc::LogLevel::OFF;
+    if (levelArg < static_cast<int>(webifc::LogLevel::LOG_LEVEL_DEBUG)) {
+        LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_DEBUG;
+    } else if (levelArg > static_cast<int>(webifc::LogLevel::LOG_LEVEL_OFF)) {
+        LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_OFF;
     } else {
         LOG_LEVEL = static_cast<webifc::LogLevel>(levelArg);
     }
@@ -879,11 +879,11 @@ EMSCRIPTEN_BINDINGS(my_module) {
         ;
 
     emscripten::enum_<webifc::LogLevel>("LogLevel")
-        .value("DEBUG", webifc::LogLevel::DEBUG)
-        .value("INFO", webifc::LogLevel::INFO)
-        .value("WARN", webifc::LogLevel::WARN)
-        .value("ERROR", webifc::LogLevel::ERROR)
-        .value("OFF", webifc::LogLevel::OFF)
+        .value("DEBUG", webifc::LogLevel::LOG_LEVEL_DEBUG)
+        .value("INFO", webifc::LogLevel::LOG_LEVEL_INFO)
+        .value("WARN", webifc::LogLevel::LOG_LEVEL_WARN)
+        .value("ERROR", webifc::LogLevel::LOG_LEVEL_ERROR)
+        .value("OFF", webifc::LogLevel::LOG_LEVEL_OFF)
         ;
 
     emscripten::enum_<webifc::LoaderErrorType>("LoaderErrorType")

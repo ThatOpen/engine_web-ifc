@@ -9,11 +9,11 @@ namespace webifc
   
   enum class LogLevel : int
   {
-    DEBUG = 0,
-    INFO,
-    WARN,
-    ERROR,
-    OFF
+    LOG_LEVEL_DEBUG = 0,
+    LOG_LEVEL_INFO,
+    LOG_LEVEL_WARN,
+    LOG_LEVEL_ERROR,
+    LOG_LEVEL_OFF
   };
   
   void log(const std::string& msg, const LogLevel& level);
