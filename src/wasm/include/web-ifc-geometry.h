@@ -1069,7 +1069,7 @@ namespace webifc
 			double cenYa = (f2 - 2 * cenX * (p1.x - p3.x)) / (2 * (p1.y - p3.y));
 			double cenYb = (f1 - 2 * cenX * (p1.x - p2.x)) / (2 * (p1.y - p2.y));
 			double cenY = cenYa;
-			if (isnanf(cenY))
+			if (std::isnan(cenY))
 			{
 				cenY = cenYb;
 			}
