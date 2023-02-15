@@ -6,7 +6,7 @@
   |
   <a href="https://ifcjs.github.io/web-ifc/demo">demo</a>
   |
-  <a href="https://ifcjs.github.io/web-ifc/examples">demo</a>
+  <a href="https://ifcjs.github.io/web-ifc/examples">example models</a>
   |
   <a href="https://discord.gg/FXfyR4XrKT">discord</a>
   |
