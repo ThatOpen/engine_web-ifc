@@ -584,7 +584,6 @@ export class IfcAPI {
      */
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
         const map = new Map<string | number, string | number>();
-        console.log(this.GetIfcEntityList(modelID));
         let entities = this.GetIfcEntityList(modelID);
         for (const typeId of entities) {
             const lines = this.GetLineIDsWithType(modelID, typeId);

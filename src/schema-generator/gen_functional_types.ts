@@ -81,8 +81,8 @@ for (var i = 0; i < files.length; i++) {
   tsSchema.push(`FromRawLineData[${i}]={`)
   for (var x=0; x < entities.length; x++) 
   {
-    let constructorArray = entities[x].derivedProps.filter(i => !entities[x].ifcDerivedProps.includes(i.name));
-    tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(id:number, ${constructorArray.length==0? '_:any' :'v:any[]'}) => new ${schemaNameClean}.${entities[x].name}(id, ${entities[x].derivedProps.filter(i => !entities[x].ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaNameClean,i)).join(", ")}),`);
+    let constructorArray = entities[x].derivedProps.filter(j => !entities[x].ifcDerivedProps.includes(j.name));
+    tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(id:number, ${constructorArray.length==0? '_:any' :'v:any[]'}) => new ${schemaNameClean}.${entities[x].name}(id, ${entities[x].derivedProps.filter(j => !entities[x].ifcDerivedProps.includes(j.name)).map((p, j) => generatePropAssignment(p,j,types,schemaNameClean,i)).join(", ")}),`);
   }
   tsSchema.push('}');
   
@@ -108,11 +108,11 @@ for (var i = 0; i < files.length; i++) {
           {
             if (targetEntity.name == prop.type) 
             {
-              for (let i=0; i < targetEntity.derivedProps.length;i++)
+              for (let j=0; j < targetEntity.derivedProps.length;j++)
               {
-                  if (targetEntity.derivedProps[i].name == prop.for) 
+                  if (targetEntity.derivedProps[j].name == prop.for) 
                   {
-                    pos = i;
+                    pos = j;
                     break;
                   }
               }
@@ -132,7 +132,7 @@ for (var i = 0; i < files.length; i++) {
   tsSchema.push(`Constructors[${i}]={`)
   for (var x=0; x < entities.length; x++) 
   {
-    let constructorArray = entities[x].derivedProps.filter(i => !entities[x].ifcDerivedProps.includes(i.name));
+    let constructorArray = entities[x].derivedProps.filter(j => !entities[x].ifcDerivedProps.includes(j.name));
     tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(ID:number, ${constructorArray.length==0? '_:any':'a: any[]'}) => new ${schemaNameClean}.${entities[x].name}(ID, ${constructorArray.map((_, i) => 'a['+i+']').join(", ")}),`);
   
   }
@@ -147,7 +147,7 @@ for (var i = 0; i < files.length; i++) {
   let initialisersDone: Set<string> = new Set<string>();
   tsSchema.push(`TypeInitialisers[${i}]={`)
   types.forEach((type) => {
-     if (type.isSelect) generateInitialiser(type,initialisersDone,new Array<string>,crcTable,types,schemaNameClean,i);
+     if (type.isSelect) generateInitialiser(type,initialisersDone,tsSchema,crcTable,types,schemaNameClean,i);
   });
   tsSchema.push(`};`)
 
