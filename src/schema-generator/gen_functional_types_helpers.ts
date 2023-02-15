@@ -135,12 +135,6 @@ export function generateSuperAssignment(p:Prop, ifcDerivedProps: string[],types:
 export function generateClass(entity:Entity, classBuffer: Array<string>, types:Type[],crcTable:any) 
 {
 
-  //let constructorArray = entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name));
-  //buffer.push(`FromRawLineData[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(id:number, ${constructorArray.length==0? '_:any' :'v:any[]'}) => new ${schemaName}.${entity.name}(id, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName,schemaNo)).join(", ")});`);
-  //buffer.push(`Constructors[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'}) => new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")});`);
-  //buffer.push(`ToRawLineData[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[] => [${entity.derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}];`);
-
-
   if (!entity.parent)
   {
     classBuffer.push(`export class ${entity.name} extends IfcLineObject {`);
