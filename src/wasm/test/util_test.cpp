@@ -15,8 +15,8 @@ TEST(TriangleWalkInnerEdge)
 	std::vector<glm::dvec2> vec;
 	vec.push_back(d);
 	vec.push_back(e);
-
-	auto tris = triangulate(a, b, c, vec);
+ 	webifc::TriangulateWithBoundaries twb;
+	auto tris = twb.triangulate(a, b, c, vec);
 
 	ASSERT_EQ(tris.size(), 4);
 }
@@ -30,8 +30,8 @@ TEST(TriangleWalkOuterEdge)
 	glm::dvec2 d(0.25, 0);
 	std::vector<glm::dvec2> vec;
 	vec.push_back(d);
-
-	auto tris = triangulate(a, b, c, vec);
+	webifc::TriangulateWithBoundaries twb;
+	auto tris = twb.triangulate(a, b, c, vec);
 
 	ASSERT_EQ(tris.size(), 2);
 }
@@ -53,8 +53,8 @@ TEST(TriangleWalkCenter)
 	glm::dvec2 d(0.25, 0.25);
 	std::vector<glm::dvec2> vec;
 	vec.push_back(d);
-
-	auto tris = triangulate(a, b, c, vec);
+ 	webifc::TriangulateWithBoundaries twb;
+	auto tris = twb.triangulate(a, b, c, vec);
 
 	ASSERT_EQ(tris.size(), 3);
 }
