@@ -28,10 +28,16 @@ jobs:
           npm ci
           npm run build-release
           npm run build-viewer
+          npm run regression-test-build
+          mkdir ./dist/pages
+          mkdir ./dist/pages/demo
+          mkdir ./dist/pages/examples
+          cp -R ./examples/viewer/dist/* ./dist/pages/demo
+          cp -R ./tests/regression/dist/* ./dist/pages/examples
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: './examples/viewer/dist'
+          path: './dist/pages'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1

@@ -4,7 +4,9 @@
   |
   <a href="https://ifcjs.github.io/info/docs/Guide/web-ifc/Introduction">documentation</a>
   |
-  <a href="https://ifcjs.github.io/web-ifc/">demo</a>
+  <a href="https://ifcjs.github.io/web-ifc/demo">demo</a>
+  |
+  <a href="https://ifcjs.github.io/web-ifc/examples">demo</a>
   |
   <a href="https://discord.gg/FXfyR4XrKT">discord</a>
   |
