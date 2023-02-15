@@ -67,7 +67,6 @@
     "web-ifc-api-browser.js",
     "web-ifc-api.d.ts",
     "ifc_schema.d.ts",
-    "ifc_schema_helper.d.ts",
     "helpers/properties.d.ts",
     "web-ifc-mt-worker.js"
   ],
