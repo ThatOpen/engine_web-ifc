@@ -1,5 +1,5 @@
 import {
-    IfcAPI, IfcEntities,
+    IfcAPI,
     IFCPROJECT, IFCRELAGGREGATES,
     IFCRELCONTAINEDINSPATIALSTRUCTURE,
     IFCRELDEFINESBYPROPERTIES,
@@ -56,16 +56,6 @@ const PropsNames = {
 export class Properties {
 
     constructor(private api: IfcAPI) {
-    }
-
-	/**
-	 * Map IfcType number to string
-	 * @param type IfcType as number
-	 * @returns IfcType as string
-	 * @see /src/web-ifc-api/ifc-schema.ts
-	 */
-    getIfcType(type: number) {
-       return IfcEntities[type];
     }
 
 	/**
@@ -218,7 +208,7 @@ export class Properties {
     private newNode(id: number, type: number) {
         return {
             expressID: id,
-            type: IfcEntities[type],
+            type: this.api.GetNameFromTypeCode(type),
             children: []
         };
     }

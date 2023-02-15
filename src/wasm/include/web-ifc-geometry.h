@@ -317,7 +317,7 @@ namespace webifc
 			mesh.color = styledItemColor;
 			mesh.transformation = glm::dmat4(1);
 
-			bool isIfcElement = ifc::isIfcElement(line.ifcType);
+			bool isIfcElement = ifc::IfcElements.find(line.ifcType) != ifc::IfcElements.end();
 			if (isIfcElement)
 			{
 				_loader.MoveToArgumentOffset(line, 5);
