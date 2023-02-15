@@ -1,5 +1,5 @@
 import {Entity} from "./gen_functional_types_interfaces";
-import {generateInitialiser,findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
+import {generatePropAssignment,generateTapeAssignment,generateInitialiser,findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
 
 const fs = require("fs");
 
@@ -21,12 +21,6 @@ let typeList = new Set<string>();
 
 tsSchema.push(`// This is a generated file, please see: gen_functional_types.js`);
 
-tsSchema.push(`export interface RawLineData { `);
-tsSchema.push(`\tID: number;`);
-tsSchema.push(`\ttype: number;`);
-tsSchema.push(`\targuments: any[]`);
-tsSchema.push(`};`);
-
 tsSchema.push(`export class Handle<_> {`);
 tsSchema.push(`\ttype: number=5;`);
 tsSchema.push(`\tconstructor(public value: number) {}`);
@@ -37,7 +31,7 @@ tsSchema.push(`\ttype: number=0;`);
 tsSchema.push(`\tconstructor(public expressID: number) {}`);
 tsSchema.push(`}`);
 
-tsSchema.push(`export const FromRawLineData: Array<Array<any>> = [];`);
+tsSchema.push(`export const FromRawLineData: any = [];`);
 tsSchema.push(`export const InversePropertyDef: any = {};`);
 tsSchema.push(`export const InheritanceDef: any = {};`);
 tsSchema.push(`export const Constructors: any = {};`);
@@ -62,74 +56,13 @@ for (var i = 0; i < files.length; i++) {
   var schemaNameClean = schemaName.replace(".","_");
   console.log("Generating Schema for:"+schemaName);
   tsSchema.push(`SchemaNames[${i}]='${schemaNameClean}';`);
-  tsSchema.push(`FromRawLineData[${i}] = [];`);
-  tsSchema.push(`Constructors[${i}] = {};`);
-  tsSchema.push(`InversePropertyDef[${i}] = {};`);
-  tsSchema.push(`InheritanceDef[${i}] = {};`);
-  tsSchema.push(`ToRawLineData[${i}] = {};`);
-  tsSchema.push(`TypeInitialisers[${i}] = {};`);
-  
-  let tsClasses: Array<string> = [];
 
   let schemaData = fs.readFileSync("./"+files[i]).toString();
   let parsed = parseElements(schemaData);
   let entities: Array<Entity> = sortEntities(parsed.entities);
   let types = parsed.types;
-  let initialisersDone: Set<string> = new Set<string>();
 
 
-  types.forEach((type) => {
-
-      if (type.isList)
-      {
-          tsClasses.push(`export class ${type.name} {`);
-          tsClasses.push(`\tconstructor(public value: Array<${type.typeName}>) {}`);
-          tsClasses.push(`};`);
-          typeList.add(type.name);
-      }
-      else if (type.isSelect)
-      {
-          generateInitialiser(type,initialisersDone,tsSchema,crcTable,types,schemaNameClean,i);
-          let selectOutput: string = `export type ${type.name} = `;
-          type.values.forEach(refType => {
-              let isType: boolean = types.some( x => x.name == refType);
-              if (isType)
-              {
-                  selectOutput+=` | ${refType}`;
-              }
-              else
-              {
-                  selectOutput+=` | (Handle<${refType}> | ${refType})`;
-              }
-          });
-          selectOutput+=";";
-          tsClasses.push(selectOutput);
-      }
-      else if (type.isEnum)
-      {
-          tsClasses.push(`export class ${type.name} {`);
-          tsClasses.push('\t'+type.values.map((v) => `static ${v} : any =  { type:3, value:'${v}'}; `).join(''));
-          tsClasses.push(`}`);
-      }
-      else
-      {
-          let typeName = type.typeName;
-          let typeNum = type.typeNum;
-          if (type.typeName.search('Ifc') != -1) 
-          {
-            let rawType = types.find(x=> x.name == type.typeName);
-            typeName = rawType!.typeName;
-            typeNum = rawType!.typeNum;
-          } 
-
-          typeList.add(type.name);
-          tsClasses.push(`export class ${type.name} {`);
-          tsClasses.push(`\ttype: number=${typeNum};`);
-          tsClasses.push(`\tconstructor(public value: ${typeName}) {}`);
-          tsClasses.push(`}`);
-      }
-  });
-  
   entities.forEach((e) => {
       walkParents(e,entities);
   });
@@ -139,21 +72,35 @@ for (var i = 0; i < files.length; i++) {
   
   for (var x=0; x < entities.length; x++) 
   {
-      generateClass(entities[x],schemaNameClean, tsSchema,tsClasses,types,crcTable,i);
       completeEntityList.add(entities[x].name);
-      if (entities[x].isIfcProduct)
-      {
-        completeifcElementList.add(entities[x].name);
-      }
+      if (entities[x].isIfcProduct) completeifcElementList.add(entities[x].name);
+  }
   
-      if (entities[x].children.length > 0)
+
+  //generate FromRawLineData
+  tsSchema.push(`FromRawLineData[${i}]={`)
+  for (var x=0; x < entities.length; x++) 
+  {
+    let constructorArray = entities[x].derivedProps.filter(i => !entities[x].ifcDerivedProps.includes(i.name));
+    tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(id:number, ${constructorArray.length==0? '_:any' :'v:any[]'}) => new ${schemaNameClean}.${entities[x].name}(id, ${entities[x].derivedProps.filter(i => !entities[x].ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaNameClean,i)).join(", ")}),`);
+  }
+  tsSchema.push('}');
+  
+  //generate InheritanceDef
+  tsSchema.push(`InheritanceDef[${i}]={`)
+  for (var x=0; x < entities.length; x++) 
+  {
+      if (entities[x].children.length > 0) tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}: [${entities[x].children.map((c) => `${c.toUpperCase()}`).join(",")}],`);
+  }
+  tsSchema.push('}');
+  
+  //generate InversePropertyDef
+  tsSchema.push(`InversePropertyDef[${i}]={`)
+  for (var x=0; x < entities.length; x++) 
+  {
+    if (entities[x].derivedInverseProps.length > 0)
       {
-        tsSchema.push(`InheritanceDef[${i}][${crc32(entities[x].name.toUpperCase(),crcTable)}] = [${entities[x].children.map((c) => `${c.toUpperCase()}`).join(",")}];`);
-      }
-      
-      if (entities[x].derivedInverseProps.length > 0)
-      {
-        let inverseProp:string =`InversePropertyDef[${i}][${crc32(entities[x].name.toUpperCase(),crcTable)}]=[`;
+        let inverseProp:string =`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:[`;
         entities[x].derivedInverseProps.forEach((prop) => {
           let pos = 0;
           //find the target element
@@ -175,13 +122,91 @@ for (var i = 0; i < files.length; i++) {
           let type  = `${prop.type.toUpperCase()}`
           inverseProp+=`['${prop.name}',${type},${pos},${prop.set}],`;
         });
-        inverseProp+='];';
+        inverseProp+='],';
         tsSchema.push(inverseProp); 
       }
-  } 
-    tsSchema.push("export namespace "+schemaNameClean+" {")
-    for (let i=0; i < tsClasses.length;i++) tsSchema.push(tsClasses[i]);
-    tsSchema.push("}");
+  }
+  tsSchema.push('}');
+  
+  //generate Constructors
+  tsSchema.push(`Constructors[${i}]={`)
+  for (var x=0; x < entities.length; x++) 
+  {
+    let constructorArray = entities[x].derivedProps.filter(i => !entities[x].ifcDerivedProps.includes(i.name));
+    tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(ID:number, ${constructorArray.length==0? '_:any':'a: any[]'}) => new ${schemaNameClean}.${entities[x].name}(ID, ${constructorArray.map((_, i) => 'a['+i+']').join(", ")}),`);
+  
+  }
+  tsSchema.push('}');
+  
+  //generate ToRawLineData
+  tsSchema.push(`ToRawLineData[${i}]={`)
+  for (var x=0; x < entities.length; x++) tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(${entities[x].derivedProps.length==0?'_:any': `i:${schemaNameClean}.${entities[x].name}`}):unknown[] => [${entities[x].derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}],`);
+  tsSchema.push('}');
+
+  //initialisers
+  let initialisersDone: Set<string> = new Set<string>();
+  tsSchema.push(`TypeInitialisers[${i}]={`)
+  types.forEach((type) => {
+     if (type.isSelect) generateInitialiser(type,initialisersDone,new Array<string>,crcTable,types,schemaNameClean,i);
+  });
+  tsSchema.push(`};`)
+
+  //generate Classes
+  tsSchema.push("export namespace "+schemaNameClean+" {")
+  types.forEach((type) => {
+
+      if (type.isList)
+      {
+          tsSchema.push(`\texport class ${type.name} {`);
+          tsSchema.push(`\t\tconstructor(public value: Array<${type.typeName}>) {}`);
+          tsSchema.push(`\t};`);
+          typeList.add(type.name);
+      }
+      else if (type.isSelect)
+      {
+          let selectOutput: string = `\texport type ${type.name} = `;
+          type.values.forEach(refType => {
+              let isType: boolean = types.some( x => x.name == refType);
+              if (isType)
+              {
+                  selectOutput+=` | ${refType}`;
+              }
+              else
+              {
+                  selectOutput+=` | (Handle<${refType}> | ${refType})`;
+              }
+          });
+          selectOutput+=";";
+          tsSchema.push(selectOutput);
+      }
+      else if (type.isEnum)
+      {
+          tsSchema.push(`\texport class ${type.name} {`);
+          tsSchema.push('\t\t'+type.values.map((v) => `static ${v} : any =  { type:3, value:'${v}'}; `).join(''));
+          tsSchema.push(`\t}`);
+      }
+      else
+      {
+          let typeName = type.typeName;
+          let typeNum = type.typeNum;
+          if (type.typeName.search('Ifc') != -1) 
+          {
+            let rawType = types.find(x=> x.name == type.typeName);
+            typeName = rawType!.typeName;
+            typeNum = rawType!.typeNum;
+          } 
+
+          typeList.add(type.name);
+          tsSchema.push(`\texport class ${type.name} {`);
+          tsSchema.push(`\t\ttype: number=${typeNum};`);
+          tsSchema.push(`\t\tconstructor(public value: ${typeName}) {}`);
+          tsSchema.push(`\t}`);
+      }
+  });
+  
+  for (var x=0; x < entities.length; x++) generateClass(entities[x], tsSchema,types,crcTable);
+  tsSchema.push("}"); 
+   
 
 }
 

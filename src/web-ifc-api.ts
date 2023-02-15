@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {Handle,RawLineData,IfcLineObject,TypeInitialisers,FILE_SCHEMA,FromRawLineData,Constructors,InheritanceDef,InversePropertyDef,ToRawLineData,SchemaNames} from "./ifc-schema";
+import {Handle,IfcLineObject,TypeInitialisers,FILE_SCHEMA,FromRawLineData,Constructors,InheritanceDef,InversePropertyDef,ToRawLineData,SchemaNames} from "./ifc-schema";
 
 let WebIFCWasm: any;
 
@@ -66,6 +66,12 @@ export interface Color {
     y: number;
     z: number;
     w: number;
+}
+
+export interface RawLineData {
+    ID: number;
+    type: number;
+    arguments: any[];
 }
 
 export interface PlacedGeometry {
@@ -281,7 +287,7 @@ export class IfcAPI {
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData);
+        let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
 
         if (flatten) {
             this.FlattenLine(modelID, lineData);
@@ -349,7 +355,7 @@ export class IfcAPI {
 
     GetIfcEntityList(modelID: number) : Array<number>
     {
-        return Array.from(FromRawLineData[this.modelSchemaList[modelID]].keys());
+        return Object.keys(FromRawLineData[this.modelSchemaList[modelID]]).map(x=>parseInt(x));
     }
 
 	/**
@@ -578,9 +584,10 @@ export class IfcAPI {
      */
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
         const map = new Map<string | number, string | number>();
-        for (const typeId in this.GetIfcEntityList(modelID)) {
-            console.log(typeId);
-            const lines = this.GetLineIDsWithType(modelID, Number(typeId));
+        console.log(this.GetIfcEntityList(modelID));
+        let entities = this.GetIfcEntityList(modelID);
+        for (const typeId of entities) {
+            const lines = this.GetLineIDsWithType(modelID, typeId);
             const size = lines.size();
             for (let y = 0; y < size; y++) {
                 const expressID = lines.get(y);

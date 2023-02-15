@@ -8,7 +8,8 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
     if (type.isList)
     {
         if (initialisersDone.has(type.name)) return;
-        buffer.push(`TypeInitialisers[${schemaNo}][${crc32(type.name.toUpperCase(),crcTable)}]=(v:any) => new ${schemaName}.${type.name}(v);`);
+        buffer.push(`\t${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v),`);
+        initialisersDone.add(type.name);
         return
     }
 
@@ -23,7 +24,7 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
 
     if (initialisersDone.has(type.name)) return;
     initialisersDone.add(type.name);
-    buffer.push(`TypeInitialisers[${schemaNo}][${crc32(type.name.toUpperCase(),crcTable)}]=(v:any) => new ${schemaName}.${type.name}(v);`);
+    buffer.push(`\t${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v),`);
     return;
 }       
 
@@ -34,16 +35,16 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     let content:string;   
     if (type?.isEnum) 
     {
-        content='d.arguments['+i+']';
+        content='v['+i+']';
         return content;
     }
 
     let prefix = '';
-    if (p.optional) prefix ='!d.arguments['+i+'] ? null :'
+    if (p.optional) prefix ='!v['+i+'] ? null :'
 
     if (p.set)
     {
-        content = 'd.arguments['+i+'].map((p:any) => '
+        content = 'v['+i+'].map((p:any) => '
         if (type?.isSelect){
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
             if (isEntitySelect) content+='new Handle(p.value)';
@@ -57,13 +58,13 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     else if (type?.isSelect)
     {
         let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-        if (isEntitySelect) content='new Handle(d.arguments['+i+'].value)';
-        else content='TypeInitialiser('+schemaNo+',d.arguments['+i+'])'
+        if (isEntitySelect) content='new Handle(v['+i+'].value)';
+        else content='TypeInitialiser('+schemaNo+',v['+i+'])'
 
     }
-    else if (isType) content='new '+schemaName+'.'+p.type+'(d.arguments['+i+'].value)';
-    else if (p.primitive) content='d.arguments['+i+'].value';
-    else content='new Handle<'+schemaName+'.'+p.type+'>(d.arguments['+i+'].value)';
+    else if (isType) content='new '+schemaName+'.'+p.type+'(v['+i+'].value)';
+    else if (p.primitive) content='v['+i+'].value';
+    else content='new Handle<'+schemaName+'.'+p.type+'>(v['+i+'].value)';
     return prefix + content;
 }
 
@@ -131,13 +132,13 @@ export function generateSuperAssignment(p:Prop, ifcDerivedProps: string[],types:
     }
 }
 
-export function generateClass(entity:Entity, schemaName:string, buffer: Array<string>, classBuffer: Array<string>, types:Type[],crcTable:any,schemaNo:number) 
+export function generateClass(entity:Entity, classBuffer: Array<string>, types:Type[],crcTable:any) 
 {
 
-  buffer.push(`FromRawLineData[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(d:RawLineData) => new ${schemaName}.${entity.name}(d.ID, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName,schemaNo)).join(", ")});`);
-  let constructorArray = entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name));
-  buffer.push(`Constructors[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'}) => new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")});`);
-  buffer.push(`ToRawLineData[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[] => [${entity.derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}];`);
+  //let constructorArray = entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name));
+  //buffer.push(`FromRawLineData[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(id:number, ${constructorArray.length==0? '_:any' :'v:any[]'}) => new ${schemaName}.${entity.name}(id, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p, i) => generatePropAssignment(p,i,types,schemaName,schemaNo)).join(", ")});`);
+  //buffer.push(`Constructors[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(expressID:number, ${constructorArray.length==0? '_:any':'args: any[]'}) => new ${schemaName}.${entity.name}(expressID, ${constructorArray.map((_, i) => 'args['+i+']').join(", ")});`);
+  //buffer.push(`ToRawLineData[${schemaNo}][${crc32(entity.name.toUpperCase(),crcTable)}]=(${entity.derivedProps.length==0?'_:any': `i:${schemaName}.${entity.name}`}):unknown[] => [${entity.derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}];`);
 
 
   if (!entity.parent)
