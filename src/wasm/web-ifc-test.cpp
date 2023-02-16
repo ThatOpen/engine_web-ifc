@@ -229,7 +229,8 @@ void TestTriangleDecompose()
 
 int main()
 {
-	  std::cout << "Hello web IFC test!"<< std::endl;
+	std::cout << "Hello web IFC test!"<< std::endl;
+
     // TestTriangleDecompose();
 
     // return 0;
@@ -238,10 +239,11 @@ int main()
 
     // return 0;
 
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.2/IFC_FILES/AA--ABA-A_001_Amsterdam ArenA_totaal.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
 
     //std::string content = ReadFile("../../../examples/example.ifc");
-		webifc::LoaderSettings set;
+
+	webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
@@ -269,7 +271,7 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = ms();
-    SpecificLoadTest(loader, geometryLoader, 3927810);
+    SpecificLoadTest(loader, geometryLoader, 8765);
     //auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
