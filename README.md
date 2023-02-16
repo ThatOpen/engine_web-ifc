@@ -4,6 +4,8 @@
   |
   <a href="https://ifcjs.github.io/info/docs/Guide/web-ifc/Introduction">documentation</a>
   |
+  <a href="ttps://ifcjs.github.io/web-ifc/docs">API Docs</a>
+  |
   <a href="https://ifcjs.github.io/web-ifc/demo">demo</a>
   |
   <a href="https://ifcjs.github.io/web-ifc/examples">example models</a>
