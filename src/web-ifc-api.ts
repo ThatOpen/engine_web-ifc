@@ -145,7 +145,8 @@ export class IfcAPI {
 
     private modelSchemaList: Array<number> = [];
 
-    private ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
+    /** @ignore */
+    ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
     /**
      * Contains all the logic and methods regarding properties, psets, qsets, etc.
