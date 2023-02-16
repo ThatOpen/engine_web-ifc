@@ -183,6 +183,20 @@ describe('WebIfcApi reading methods', () => {
         expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCWALL)).toBe("IFCWALL");
         expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCRELASSOCIATESMATERIAL)).toBe("IFCRELASSOCIATESMATERIAL");
     });
+    test('can check if is ifcelement', () => {
+        expect(ifcApi.IsIfcElement(WebIFC.IFCWALL)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCDOOR)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCWINDOW)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCROOF)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCSTAIRFLIGHT)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCSTAIR)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCSLAB)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCRECTANGULARPYRAMID)).toBeFalsy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCPROPERTYSET)).toBeFalsy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCRELDEFINESBYOBJECT)).toBeFalsy();
+        expect(ifcApi.IsIfcElement(-1)).toBeFalsy();
+        expect(ifcApi.IsIfcElement(-5)).toBeFalsy();
+    });
 });
 
 describe('WebIfcApi geometries', () => {
