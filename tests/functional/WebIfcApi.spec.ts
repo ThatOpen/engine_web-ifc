@@ -356,7 +356,7 @@ describe('WebIfcApi writing methods', () => {
             new WebIFC.Handle(9750),
             new WebIFC.Handle(9987),
             null,
-            null
+            null,
         );
         ifcApi.WriteLine(modelID, payload);
         let projectAfterWriting: any = ifcApi.GetAllLines(modelID);

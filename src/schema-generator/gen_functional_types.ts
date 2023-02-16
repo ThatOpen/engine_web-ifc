@@ -48,8 +48,16 @@ tsSchema.push('\ttapeItem.valueType=tapeItem.type; tapeItem.type=2; tapeItem.lab
 tsSchema.push('\treturn tapeItem;');
 tsSchema.push('}')
 
-
 var files = fs.readdirSync("./");
+tsSchema.push("// supported ifc schemas");
+  tsSchema.push(`export enum Schemas {`);
+  for (var i = 0; i < files.length; i++) {
+	  if (!files[i].endsWith(".exp")) continue;
+	  const schemaName = files[i].replace(".exp","");
+	  tsSchema.push(`\t${schemaName.replace(".", "_")} = "${schemaName}",`);
+  }
+tsSchema.push(`};`);
+
 for (var i = 0; i < files.length; i++) {
   if (!files[i].endsWith(".exp")) continue;
   var schemaName = files[i].replace(".exp","");
