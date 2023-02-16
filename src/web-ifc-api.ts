@@ -220,7 +220,7 @@ export class IfcAPI {
             return srcSize;
         });
         this.modelSchemaList[result] = SchemaNames.indexOf(this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value);
-        console.log("Parsing Model using " + this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value + " Schema");
+        Log.info("Parsing Model using " + this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value + " Schema");
         return result;
     }
 
@@ -392,7 +392,7 @@ export class IfcAPI {
     CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
         let expressID: number = this.IncrementMaxExpressID(modelID, 1);
-        return Constructors[this.modelSchemaList[modelID]][type](type,expressID,args);
+        return Constructors[this.modelSchemaList[modelID]][type](expressID,args);
     }
 
     CreateIfcType(modelID: number, type:number, value: any) 
@@ -675,5 +675,6 @@ export class IfcAPI {
 	 */
     SetLogLevel(level: LogLevel): void {
         Log.setLogLevel(level);
+        this.wasmModule.SetLogLevel(level);
     }
 }

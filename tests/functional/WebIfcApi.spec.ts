@@ -69,6 +69,8 @@ let totalLineNumber : number = 6487;
 let emptyFileModelID: number;
 let lastExpressId : number = 14312;
 let expectedFileDescription : string = "ViewDefinition [CoordinationView_V2.0]";
+let expectedFileSchema = "IFC2X3";
+let expectedFileName = "3458";
 let expressIDMatchingGuid: any = {
     expressID: 2863,
     guid: "0VNYAWfXv8JvIRVfOzYH1j"
@@ -153,12 +155,36 @@ describe('WebIfcApi reading methods', () => {
     test('returns same expressID if it is the max ID', () => {
         expect(ifcApi.GetNextExpressID(modelID, 14312)).toBe(14312);
     })
+    test('Can get max expressID', () => {
+        const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
+        expect(maxExpressId).toEqual(lastExpressId);
+    })
     test('can increment the max expressID', () => {
         let maxEID = ifcApi.GetMaxExpressID(tmpModelID);
         let newEID = ifcApi.IncrementMaxExpressID(tmpModelID, 2);
         expect(newEID).toBe(maxEID + 2);
-    })
-})
+    });
+    test('Can get header information', () => {
+        const descriptionLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_DESCRIPTION );
+        const nameLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_NAME );
+        const schemaLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_SCHEMA );
+        expect(descriptionLine.type).toEqual("FILE_DESCRIPTION");
+        expect(descriptionLine.arguments.length).toBeGreaterThan(1);
+        expect(descriptionLine.arguments[0][0].value).toEqual(expectedFileDescription);
+        expect(nameLine.type).toEqual("FILE_NAME");
+        expect(nameLine.arguments.length).toBe(7);
+        expect(nameLine.arguments[0].value).toEqual(expectedFileName);
+        expect(schemaLine.type).toEqual("FILE_SCHEMA");
+        expect(schemaLine.arguments.length).toBe(1);
+        expect(schemaLine.arguments[0][0].value).toEqual(expectedFileSchema);
+    });
+    test('can get name for type code', () => {
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCPROPERTYSINGLEVALUE)).toBe("IFCPROPERTYSINGLEVALUE");
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCWALL)).toBe("IFCWALL");
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCRELASSOCIATESMATERIAL)).toBe("IFCRELASSOCIATESMATERIAL");
+    });
+});
+
 describe('WebIfcApi geometries', () => {
     test('can return the correct number geometries', () => {
         geometries = ifcApi.LoadAllGeometry(modelID);
@@ -236,16 +262,8 @@ describe('WebIfcApi geometries', () => {
         });
         expect(count).toEqual(IFCEXTRUDEDAREASOLIDMeshesCount);
     })
-    test('Can get max expressID', () => {
-        const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
-        expect(maxExpressId).toEqual(lastExpressId);
-    })
-    test('Can get header information', () => {
-        const headerLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_DESCRIPTION );
-        expect(headerLine.type).toEqual("FILE_DESCRIPTION");
-        expect(headerLine.arguments[0][0].value).toEqual(expectedFileDescription);
-    })
 });
+
 describe('WebIfcApi geometry transformation', () => {
     test('should throw with message \'invalid matrix size\' when matrix size != 16', () => {
         expect(() => {
@@ -253,6 +271,7 @@ describe('WebIfcApi geometry transformation', () => {
         }).toThrow("invalid matrix size: 1");
     })
 });
+
 describe('WebIfcApi writing methods', () => {
     test('Can create an empty model', () => {
         expect(emptyFileModelID).toBe(1);
@@ -486,9 +505,9 @@ describe('creating ifc', () => {
         expect(createdID).toBe(5);
         expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
         expect(ifcApi.wasmModule.GetModelSize(createdID)).toBeGreaterThan(0);
-        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBeGreaterThan(6);
+        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBe(7);
         expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_DESCRIPTION)['arguments'].length).toBeGreaterThan(1);
-        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_SCHEMA)['arguments'].length).toBeGreaterThan(0);
+        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_SCHEMA)['arguments'].length).toBe(1);
         ifcApi.CloseModel(createdID);
     });
 
@@ -501,9 +520,9 @@ describe('creating ifc', () => {
     });
 
     test("create an IFC object from Typecode", () => {
-        const maxExpressID = ifcApi.GetMaxExpressID(modelID);
+        const maxExpressId = ifcApi.GetMaxExpressID(modelID);
         let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
-        expect(entity.expressID).toBe(maxExpressID + 1);
+        expect(entity.expressID).toBe(maxExpressId + 1);
         expect(entity.type).toBe(WebIFC.IFCCARTESIANPOINT);
         expect(entity.constructor.name).toBe('IfcCartesianPoint');
     });
@@ -513,8 +532,15 @@ describe('creating ifc', () => {
         ifcApi.WriteLine(modelID, entity);
     });
 
+    test('can create ifc type', () => {
+        let type = ifcApi.CreateIfcType(modelID, WebIFC.IFCREAL, 1.0);
+        expect(type.type).toBe(WebIFC.REAL);
+        expect(type.constructor.name).toBe('IfcReal');
+        expect(type.value).toBe(1.0);
+    });
+
     
-})
+});
 
 describe('opening large amounts of data', () => {
     test("open a small model but with a heavy memory restriction", () => {
