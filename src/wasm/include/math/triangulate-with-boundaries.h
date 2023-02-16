@@ -84,7 +84,7 @@ namespace webifc
             glm::dvec2 apt;
             glm::dvec2 bpt;
 
-            for (int i = 0; i < triangles.size(); i++)
+            for (size_t i = 0; i < triangles.size(); i++)
             {
                 Triangle& t = triangles[i];
 
@@ -215,7 +215,7 @@ namespace webifc
         // TODO: slow
         int32_t FindTriangleWithEdge(int32_t a, int32_t b, std::vector<Triangle>& triangles)
         {
-            for (int i = 0; i < triangles.size(); i++)
+            for (size_t i = 0; i < triangles.size(); i++)
             {
                 Triangle& t = triangles[i];
 
@@ -258,7 +258,7 @@ namespace webifc
                 // see: http://www.ams.sunysb.edu/~jsbm/courses/345/13/triangulating-monotone-mountains.pdf
                 // for an incomplete description
                 int iteration = 0;
-                for (int i = 1; i < boundary.size() - 1;)
+                for (size_t i = 1; i < boundary.size() - 1;)
                 {
                     iteration++;
                     if (iteration > 1000)
@@ -298,7 +298,7 @@ namespace webifc
             {
                 result.push_back(pts[0]);
             }
-            for (int i = 1; i < pts.size(); i++)
+            for (size_t i = 1; i < pts.size(); i++)
             {
                 Point& p = pts[i];
                 Point& prev = pts[i - 1];
@@ -368,7 +368,7 @@ namespace webifc
 
         void DeleteTriangle(int id, std::vector<Triangle>& triangles)
         {
-            auto t = triangles[id];
+            //auto t = triangles[id];
      
             /*
             int a = 17;
@@ -758,30 +758,30 @@ namespace webifc
                         }
 
                         // delete triangles encountered during the walk
-                        int deleteTriOffset = -1;
-                        for (int i = 0; i < trianglePath.size(); i++)
+                        size_t deleteTriOffset = 0;
+                        for (size_t i = 0; i < trianglePath.size(); i++)
                         {
                             bool hasA = HasPoint(triangles[trianglePath[i]], a.id);
                             if (hasA)
                             {
                                 // we want to start deleting from the last triangle including A
-                                deleteTriOffset = i;
+                                deleteTriOffset = i+1;
                             }
                         }
 
-                        if (deleteTriOffset == trianglePath.size())
+                        if (deleteTriOffset-1 == trianglePath.size())
                         {
                             // nothing to delete, so also nothing to triangulate
                             return;
                         }
 
-                        if (deleteTriOffset == -1)
+                        if (deleteTriOffset == 0)
                         {
                             printf("no A in triangle path!");
                             return;
                         }
 
-                        for (int i = deleteTriOffset; i < trianglePath.size(); i++)
+                        for (size_t i = deleteTriOffset-1; i < trianglePath.size(); i++)
                         {
                             triangles[trianglePath[i]].id = -1;
                             if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"before_monotone.svg", points);
@@ -815,7 +815,7 @@ namespace webifc
         Point& getPoint(const glm::dvec2& min, const glm::dvec2& dim, const glm::dvec2& pt, std::vector<Point>& points, bool& added)
         {
             added = false;
-            for (int i = 0; i < points.size(); i++)
+            for (size_t i = 0; i < points.size(); i++)
             {
 
                 //if (equals2d(toGrid(min, dim, pt), toGrid(min, dim, points[i]()), EPS_SMALL))
@@ -1008,7 +1008,7 @@ namespace webifc
                 Point& pt = getPoint(min, dim, p, points, added);
                 if (added)
                 {
-                    bool ptInside = PointInTriangle(triangles[0], pt);
+                    //bool ptInside = PointInTriangle(triangles[0], pt);
                     //if (ptInside)
                     {
                         //addPoint(pt, prev, triangles);
@@ -1029,8 +1029,8 @@ namespace webifc
                     Point pt2 = getPoint(min, dim, loop.v2, points, added);
 
 
-                    bool pt1Inside = PointInTriangle(triangles[0], pt1);
-                    bool pt2Inside = PointInTriangle(triangles[0], pt2);
+                    //bool pt1Inside = PointInTriangle(triangles[0], pt1);
+                    //bool pt2Inside = PointInTriangle(triangles[0], pt2);
 
                     //if (pt1Inside && pt2Inside)
                     {

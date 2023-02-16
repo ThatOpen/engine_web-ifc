@@ -143,9 +143,9 @@ namespace webifc
                 glm::dvec2 pb = glm::dvec2(1, 0);//projectOnTriangle(b, a, b, c);
                 glm::dvec2 pc = glm::dvec2(0, 1);//projectOnTriangle(c, a, b, c);
 
-                glm::dvec3 uupa = FromBary(a, b, c, ToBary2(pa));//unProjectFromTriangle(pa, a, b, c);
-                glm::dvec3 uupb = FromBary(a, b, c, ToBary2(pb));//unProjectFromTriangle(pb, a, b, c);
-                glm::dvec3 uupc = FromBary(a, b, c, ToBary2(pc));//unProjectFromTriangle(pc, a, b, c);
+                //glm::dvec3 uupa = FromBary(a, b, c, ToBary2(pa));//unProjectFromTriangle(pa, a, b, c);
+                //glm::dvec3 uupb = FromBary(a, b, c, ToBary2(pb));//unProjectFromTriangle(pb, a, b, c);
+                //glm::dvec3 uupc = FromBary(a, b, c, ToBary2(pc));//unProjectFromTriangle(pc, a, b, c);
 
                 auto loops = makeLoops2(a, b, c, pa, pb, pc, ints);
 
@@ -694,7 +694,7 @@ namespace webifc
                         numCrosses++;
                         if (clipLines[clipLines.size() - 2].type == ClipType::ON)
                         {
-                            clipLines[clipLines.size() - 2].type == ClipType::CROSS;
+                            clipLines[clipLines.size() - 2].type = ClipType::CROSS;
                         }
                     }
                     else
@@ -704,7 +704,7 @@ namespace webifc
                         numCrosses++;
                         if (clipLines.back().type == ClipType::ON)
                         {
-                            clipLines.back().type == ClipType::CROSS;
+                            clipLines.back().type = ClipType::CROSS;
                         }
                     }
                 }
@@ -719,7 +719,7 @@ namespace webifc
             clipLines.back().cross = true;
             if (clipLines.back().type == ClipType::ON)
             {
-                clipLines.back().type == ClipType::CROSS;
+                clipLines.back().type = ClipType::CROSS;
             }
         }
 
@@ -908,7 +908,7 @@ namespace webifc
         {
             for (auto& contour : contours)
             {
-                for (int i = 0; i < contour.size(); i++)
+                for (size_t i = 0; i < contour.size(); i++)
                 {
                     vecs.push_back({ points[contour[i]], points[contour[(i + 1) % contour.size()]] });
                 }
@@ -947,7 +947,7 @@ namespace webifc
 
             std::vector<std::vector<glm::dvec2>> loops;
 
-            for (int i = 1; i < loop.size(); i++)
+            for (size_t i = 1; i < loop.size(); i++)
             {
                 loops.push_back({ points[loop[i-1]], points[loop[i]] });
             }
@@ -970,12 +970,12 @@ namespace webifc
         {
             std::vector<std::vector<glm::dvec2>> loop1;
 
-            for (int i = 0; i < loop.size(); i++)
+            for (size_t i = 0; i < loop.size(); i++)
             {
                 loop1.push_back({ points[loop[i]], points[loop[(i + 1) % loop.size()]] });
             }
 
-            for (int i = 0; i < loopb.size(); i++)
+            for (size_t i = 0; i < loopb.size(); i++)
             {
                 loop1.push_back({ points[loopb[i]], points[loopb[(i + 1) % loopb.size()]] });
             }
@@ -997,9 +997,9 @@ namespace webifc
 
         glm::dvec3 Unproject2D(const glm::dvec2& pt) const
         {
-            glm::dvec2 pa = glm::dvec2(0, 0);
-            glm::dvec2 pb = glm::dvec2(1, 0);
-            glm::dvec2 pc = glm::dvec2(0, 1);
+            //glm::dvec2 pa = glm::dvec2(0, 0);
+            //glm::dvec2 pb = glm::dvec2(1, 0);
+            //glm::dvec2 pc = glm::dvec2(0, 1);
 
             glm::dvec3 bpt = ToBary2(pt);
             return FromBary(a, b, c, bpt);
@@ -1223,7 +1223,7 @@ namespace webifc
         {
             // find point of A not in B
             int pt = -1;
-            bool anyPointOnB = false;
+            //bool anyPointOnB = false;
             for (auto& ptA : A)
             {
                 bool found = false;
@@ -1232,7 +1232,7 @@ namespace webifc
                     if (ptB == ptA)
                     {
                         found = true;
-                        anyPointOnB = true;
+                        //anyPointOnB = true;
                         break;
                     }
                 }
@@ -1449,7 +1449,7 @@ namespace webifc
 
                 std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(cutPolygons);
 
-                for (int i = 0; i < indices.size(); i += 3)
+                for (size_t i = 0; i < indices.size(); i += 3)
                 {
                     auto a2d = points[cutPolygonIndices[indices[i + 0]]];
                     auto b2d = points[cutPolygonIndices[indices[i + 1]]];
@@ -1500,7 +1500,7 @@ namespace webifc
                 // point is added to the list, but we need to potentially break up some edges to add the point
                 
                 int edgeToSplit = -1;
-                for (int i = 0; i < edges.size(); i++)
+                for (size_t i = 0; i < edges.size(); i++)
                 {
                     auto& e = edges[i];
                     auto& ea = points[e.first];
@@ -1539,10 +1539,10 @@ namespace webifc
         {
             size_t size = points.size();
             size_t ia = AddPoint(a, glm::dvec3(0), checkIntersect);
-            bool addedA = points.size() != size;
+            //bool addedA = points.size() != size;
             size = points.size();
             size_t ib = AddPoint(b, glm::dvec3(0), checkIntersect);
-            bool addedB = points.size() != size;
+            //bool addedB = points.size() != size;
 
             if (ia == ib)
             {
@@ -1701,7 +1701,7 @@ namespace webifc
             while (true)
             {
                 bool newProcessed = false;
-                for (int i = 0; i < contourEdges.size(); i++)
+                for (size_t i = 0; i < contourEdges.size(); i++)
                 {
                     if (!processed[i])
                     {
@@ -1787,7 +1787,7 @@ namespace webifc
     {
         BrepMesh brep;
 
-        for (int fi = 0; fi < mesh.numFaces; fi++)
+        for (size_t fi = 0; fi < mesh.numFaces; fi++)
         {
             const Face& f = mesh.GetFace(fi);
 
@@ -1795,12 +1795,12 @@ namespace webifc
             const glm::dvec3& b = mesh.GetPoint(f.i1);
             const glm::dvec3& c = mesh.GetPoint(f.i2);
 
-            double area = areaOfTriangle(a, b, c);
+            //double area = areaOfTriangle(a, b, c);
 
             Plane p = FaceToPlane(a, b, c);
 
             int polygonIndex = -1;
-            for (int pi = 0; pi < brep.polygons.size(); pi++)
+            for (size_t pi = 0; pi < brep.polygons.size(); pi++)
             {
                 if (brep.polygons[pi].plane.Equals(p, EPS_SMALL))
                 {
@@ -1851,12 +1851,13 @@ namespace webifc
         // project 2 onto 1, resolve collisions
         std::vector<glm::dvec2> projPoly2(poly2.points.size());
 
-        for (int i = 0; i < poly2.points.size(); i++)
+        for (size_t i = 0; i < poly2.points.size(); i++)
         {
             projPoly2[i] = poly1.Project2D(poly2.sourcePoints[i]);
         }
 
-        // we reason from the perspective of poly vs contours
+        // we reason from the perspective of poly vs contours 
+        /*
         for (auto& c1 : poly1.contours)
         {
             for (int i = 0; i < c1.size(); i++)
@@ -1872,7 +1873,7 @@ namespace webifc
 
                 }
             }
-        }
+        }*/
     }
 
     static std::vector<ClipSegment> IntersectClipSegments(const std::vector<ClipSegment>& segA, const std::vector<ClipSegment>& segB)
@@ -2123,7 +2124,7 @@ namespace webifc
 
             std::vector<double> distances(contour.size());
 
-            for (int cpi = 0; cpi < contour.size(); cpi++)
+            for (size_t cpi = 0; cpi < contour.size(); cpi++)
             {
                 const auto& pt3D = source.sourcePoints[contour[cpi]];
 
@@ -2185,7 +2186,7 @@ namespace webifc
         glm::dvec3 lineDir = glm::cross(poly1.plane.norm, poly2.plane.norm);
         double det = glm::length(lineDir);
 
-        double det2 = glm::determinant(glm::dmat3(poly1.plane.norm, poly2.plane.norm, lineDir));
+       // double det2 = glm::determinant(glm::dmat3(poly1.plane.norm, poly2.plane.norm, lineDir));
         det *= det;
         glm::dvec3 linePos((glm::cross(lineDir, poly2.plane.norm) * -poly1.plane.d +
                            glm::cross(poly1.plane.norm, lineDir) * -poly2.plane.d) / det);
@@ -2378,7 +2379,7 @@ namespace webifc
 
         return;
 
-        static int NUM_CHECKS = 0;
+        //static int NUM_CHECKS = 0;
         MeshIntersections meshIntersections1;
         MeshIntersections meshIntersections2;
 
@@ -2439,7 +2440,7 @@ namespace webifc
                            }
                            else
                            {
-                               NUM_CHECKS++;
+                               //NUM_CHECKS++;
 
                                // 2, 3
                                //if (j == 2 && ndef == glm::dvec3(0, -1, 0) && nabc == glm::dvec3(0, 0, -1))
@@ -2490,7 +2491,7 @@ namespace webifc
         DumpIfcGeometry(m1, L"mesh1ints.obj");
         DumpIfcGeometry(m2, L"mesh2ints.obj");
 
-        result1 = std::move(retriangulateMesh(mesh1, meshIntersections1));
-        result2 = std::move(retriangulateMesh(mesh2, meshIntersections2));
+        result1 = retriangulateMesh(mesh1, meshIntersections1);
+        result2 = retriangulateMesh(mesh2, meshIntersections2);
     }
 }

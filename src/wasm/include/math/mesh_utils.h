@@ -207,7 +207,7 @@ namespace webifc
 		{
 			if (line.size() > 1)
 			{
-				for (int i = 1; i < line.size(); i++)
+				for (size_t i = 1; i < line.size(); i++)
 				{
 					glm::dvec2 a = rescale(line[i], bounds, size, offset);
 					glm::dvec2 b = rescale(line[i - 1], bounds, size, offset);
@@ -269,8 +269,8 @@ namespace webifc
 
 	static void DumpIfcGeometryToPath(const IfcGeometry &geom, std::wstring path, double inputScale)
 	{
-		size_t offset = 0;
 #ifdef _MSC_VER
+		size_t offset = 0;
 		std::ofstream out(path);
 		out << ToObj(geom, offset, glm::dmat4(1), inputScale);
 #endif

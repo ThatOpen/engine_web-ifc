@@ -470,7 +470,7 @@ namespace webifc
 		{
 			double sum = 0;
 
-			for (int i = 0; i < points.size(); i++)
+			for (size_t i = 0; i < points.size(); i++)
 			{
 				glm::dvec2 pt1 = points[(i - 1) % points.size()];
 				glm::dvec2 pt2 = points[i];
@@ -787,10 +787,10 @@ namespace webifc
 
 		double hd = depth / 2;
 		double hw = flangeWidth / 2;
-		double hweb = webThickness / 2;
+//		double hweb = webThickness / 2;
 		double slopeOffsetRight = flangeSlope * hw;
 		double slopeOffsetLeft = flangeSlope * (hw - webThickness);
-		double flangeReferencePointY = hd - flangeThickness;
+		//double flangeReferencePointY = hd - flangeThickness;
 
 		// TODO: implement the radius
 
@@ -891,7 +891,7 @@ namespace webifc
 
 		double hw = width / 2;
 		double hd = depth / 2;
-		double hweb = thickness / 2;
+		//double hweb = thickness / 2;
 
 		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
 		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
@@ -941,7 +941,7 @@ namespace webifc
 		double minError = 0.0001;
 		double maxError = 0.01;
 		double rotacions = 6;
-		double stepOld = step1;
+		//double stepOld = step1;
 
 		// First approximation
 
@@ -949,7 +949,7 @@ namespace webifc
 		double fV = 0.5;
 		double divisor = 100;
 		double maxdi = 1e+100;
-		double extension = 0;
+		//double extension = 0;
 
 		while (maxdi > maxError && divisor < 10000)
 		{
@@ -1231,7 +1231,7 @@ namespace webifc
 		// TODO: this should be done before calling the function, instead of calling it for each t
 		// convert points to homogeneous coordinates
 		std::vector<glm::dvec3> homogeneousPoints;
-		for (int i = 0; i < points.size(); i++)
+		for (size_t i = 0; i < points.size(); i++)
 		{
 			glm::dvec2 p = points[i];
 			glm::dvec3 h = glm::dvec3(p.x * weights[i], p.y * weights[i], weights[i]);
@@ -1313,7 +1313,7 @@ namespace webifc
 		// TODO: this should be done before calling the function, instead of calling it for each t
 		// convert points to homogeneous coordinates
 		std::vector<glm::dvec4> homogeneousPoints;
-		for (int i = 0; i < points.size(); i++)
+		for (size_t i = 0; i < points.size(); i++)
 		{
 			glm::dvec3 p = points[i];
 			glm::dvec4 h = glm::dvec4(p.x * weights[i], p.y * weights[i], p.z * weights[i], weights[i]);
@@ -1667,7 +1667,7 @@ namespace webifc
 				svg << "style = \"stroke:rgb(0,255,0);stroke-width:2\" />";
 			}
 
-			for (int i = 2; i < rescaled.size() - 1; i++)
+			for (size_t i = 2; i < rescaled.size() - 1; i++)
 			{
 				auto &start = rescaled[i - 1];
 				auto &end = rescaled[i];
@@ -1676,7 +1676,7 @@ namespace webifc
 				svg << "style = \"stroke:rgb(0,0,0);stroke-width:2\" />";
 			}
 
-			for (int i = rescaled.size() - 1; i < rescaled.size(); i++)
+			for (size_t i = rescaled.size() - 1; i < rescaled.size(); i++)
 			{
 				auto &start = rescaled[i - 1];
 				auto &end = rescaled[i];
@@ -1686,7 +1686,7 @@ namespace webifc
 			}
 		}
 
-		for (int i = 0; i < indices.size(); i += 3)
+		for (size_t i = 0; i < indices.size(); i += 3)
 		{
 			glm::dvec2 a = rescaled[indices[i + 0]];
 			glm::dvec2 b = rescaled[indices[i + 1]];
@@ -1942,7 +1942,7 @@ namespace webifc
 		{
 			if (line.size() > 1)
 			{
-				for (int i = 1; i < line.size(); i++)
+				for (size_t i = 1; i < line.size(); i++)
 				{
 					glm::dvec2 a = rescale(line[i], bounds, size, offset);
 					glm::dvec2 b = rescale(line[i - 1], bounds, size, offset);

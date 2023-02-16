@@ -39,7 +39,6 @@ window.InitMonaco = (monaco: any) => {
     });
     //@ts-ignore
     console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc_schema));
-    console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.ifc_schema_helper));
     console.log(monaco.languages.typescript.typescriptDefaults.addExtraLib(ts_decl.wifcapi));
 }
 }
