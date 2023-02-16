@@ -15,11 +15,17 @@ namespace webifc
     LOG_LEVEL_ERROR,
     LOG_LEVEL_OFF
   };
+
+  static LogLevel LOG_LEVEL = LogLevel::LOG_LEVEL_ERROR;
+
+  void setLogLevel(const int level);
+  void setLogLevel(const LogLevel level);
   
-  void log(const std::string& msg, const LogLevel& level);
-  void logDebug(const std::string& msg);
-  void logInfo(const std::string& msg);
-  void logWarn(const std::string& msg);
-  void logError(const std::string& msg);
-  
+  namespace log {
+    void debug(const std::string& msg);
+    void info(const std::string& msg);
+    void warn(const std::string& msg);
+    void error(const std::string& msg);
+    void log(const std::string& msg, const LogLevel& level);
+  }
 }

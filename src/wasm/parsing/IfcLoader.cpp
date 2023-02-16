@@ -728,7 +728,7 @@
    
    void IfcLoader::ReportError(const LoaderError &&error)
    { 
-     logError(error.message);
+     log::error(error.message);
    	 _errors.push_back(std::move(error));
    }
    
