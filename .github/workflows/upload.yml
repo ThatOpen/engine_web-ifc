@@ -29,11 +29,15 @@ jobs:
           npm run build-release
           npm run build-viewer
           npm run regression-test-build
+          npm run gen-docs
           mkdir ./dist/pages
           mkdir ./dist/pages/demo
           mkdir ./dist/pages/examples
+          mkdir ./dist/pages/docs
           cp -R ./examples/viewer/dist/* ./dist/pages/demo
           cp -R ./tests/regression/dist/* ./dist/pages/examples
+          cp -R ./dist/docs/* ./dist/pages/docs
+          cp ./banner.png ./dist/pages/docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:

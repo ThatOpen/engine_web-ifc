@@ -49,8 +49,7 @@ namespace webifc
 	class IfcGeometryLoader
 	{
 	public:
-		IfcGeometryLoader(IfcLoader &l) : _loader(l),
-										  _transformation(1)
+		IfcGeometryLoader(IfcLoader &l) : _transformation(1), _loader(l)
 		{
 		}
 
@@ -259,7 +258,7 @@ namespace webifc
 			auto &relMaterials = _loader.GetRelMaterials();
 			auto &materialDefinitions = _loader.GetMaterialDefinitions();
 			auto &relVoids = _loader.GetRelVoids();
-			auto &relAggregates = _loader.GetRelAggregates();
+			//auto &relAggregates = _loader.GetRelAggregates();
 
 			auto styledItem = styledItems.find(line.expressID);
 			if (styledItem != styledItems.end())
@@ -373,7 +372,7 @@ namespace webifc
 
 					IfcGeometry finalGeometry;
 
-					if (!flatElementMeshes.size() == 0)
+					if (flatElementMeshes.size() != 0)
 					{
 
 						std::vector<IfcGeometry> voidGeoms;
@@ -767,7 +766,7 @@ namespace webifc
 						// std::cout << "Unsupported IFCTRIANGULATEDFACESET with PnIndex!" << std::endl;
 					}
 
-					for (int i = 0; i < indices.size(); i += 3)
+					for (size_t i = 0; i < indices.size(); i += 3)
 					{
 						int i1 = indices[i + 0] - 1;
 						int i2 = indices[i + 1] - 1;
@@ -874,28 +873,28 @@ namespace webifc
 					auto directrixRef = _loader.GetRefArgument();
 
 					double radius = _loader.GetDoubleArgument();
-					double innerRadius = 0.0;
+					//double innerRadius = 0.0;
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
 						_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", line.expressID});
 						_loader.StepBack();
-						innerRadius = _loader.GetDoubleArgument();
+						_loader.GetDoubleArgument();
 					}
 
-					double startParam = 0;
-					double endParam = 0;
+					//double startParam = 0;
+					//double endParam = 0;
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
 						_loader.StepBack();
-						startParam = _loader.GetDoubleArgument();
+						_loader.GetDoubleArgument();
 					}
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
 						_loader.StepBack();
-						endParam = _loader.GetDoubleArgument();
+						_loader.GetDoubleArgument();
 					}
 
 					IfcCurve<3> directrix = GetCurve<3>(directrixRef);
@@ -1087,7 +1086,7 @@ namespace webifc
 			pointList.push_back(p2);
 			pointList.push_back(p3);
 
-			while (pointList.size() < _loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM)
+			while (pointList.size() < (size_t)_loader.GetSettings().CIRCLE_SEGMENTS_MEDIUM)
 			{
 				std::vector<glm::dvec2> tempPointList;
 				for (uint32_t j = 0; j < pointList.size() - 1; j++)
@@ -1113,7 +1112,7 @@ namespace webifc
 		{
 			IfcCurve<3> curve;
 
-			double radius = glm::length(pos);
+			//double radius = glm::length(pos);
 
 			// project pos onto axis
 			double pdota = glm::dot(axis, pos);
@@ -1203,7 +1202,7 @@ namespace webifc
 		{
 			std::vector<uint32_t> result;
 
-			IfcTokenType t = _loader.GetTokenType();
+			_loader.GetTokenType();
 
 			// while we have point set begin
 			while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
@@ -1291,7 +1290,7 @@ namespace webifc
 						}
 						else if (normalDiff(s_extents) < EPS_BIG)
 						{
-							result = result;
+							//result = result;
 						}
 						else if (result.numFaces > 0 && geom.numFaces > 0)
 						{
@@ -1410,7 +1409,7 @@ namespace webifc
 
 			std::vector<glm::dvec3> result;
 
-			IfcTokenType t = _loader.GetTokenType();
+			_loader.GetTokenType();
 
 			// while we have point set begin
 			while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
@@ -1438,7 +1437,7 @@ namespace webifc
 
 			std::vector<glm::dvec2> result;
 
-			IfcTokenType t = _loader.GetTokenType();
+			_loader.GetTokenType();
 
 			// while we have point set begin
 			while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
@@ -1488,8 +1487,8 @@ namespace webifc
 				// case IFCINDEXEDPOLYGONALFACEWITHVOIDS
 				_loader.MoveToArgumentOffset(line, 1);
 
-				// guaranteed to be set begin
-				IfcTokenType t = _loader.GetTokenType();
+				// guaranteed to be set begin 
+				_loader.GetTokenType();
 
 				// while we have hole-index set begin
 				while (_loader.GetTokenType() == IfcTokenType::SET_BEGIN)
@@ -1843,7 +1842,7 @@ namespace webifc
 
 				std::vector<IfcBound3D> bounds3D(bounds.size());
 
-				for (int i = 0; i < bounds.size(); i++)
+				for (size_t i = 0; i < bounds.size(); i++)
 				{
 					uint32_t boundID = _loader.GetRefArgument(bounds[i]);
 					bounds3D[i] = GetBound(boundID);
@@ -1859,7 +1858,7 @@ namespace webifc
 
 				std::vector<IfcBound3D> bounds3D(bounds.size());
 
-				for (int i = 0; i < bounds.size(); i++)
+				for (size_t i = 0; i < bounds.size(); i++)
 				{
 					uint32_t boundID = _loader.GetRefArgument(bounds[i]);
 					bounds3D[i] = GetBound(boundID);
@@ -2079,10 +2078,12 @@ namespace webifc
 			case ifc::IFCEDGECURVE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
-				uint32_t vertex1Ref = _loader.GetRefArgument();
+				//uint32_t vertex1Ref = 
+				_loader.GetRefArgument();
 
 				_loader.MoveToArgumentOffset(line, 1);
-				uint32_t vertex2Ref = _loader.GetRefArgument();
+				//uint32_t vertex2Ref =
+				 _loader.GetRefArgument();
 
 				_loader.MoveToArgumentOffset(line, 2);
 				uint32_t CurveRef = _loader.GetRefArgument();
@@ -2124,14 +2125,14 @@ namespace webifc
 			// Now we construct the bounding box of the boundary ...
 			// ... by adding the middle point of all curves
 
-			for (int i = 0; i < bounds.size(); i++)
+			for (size_t i = 0; i < bounds.size(); i++)
 			{
 				double xx = 0;
 				double yy = 0;
 				double zz = 0;
 				double cc = 0;
 				int lastTeam = bounds[i].curve.indices[0];
-				for (int j = 0; j < bounds[i].curve.points.size(); j++)
+				for (size_t j = 0; j < bounds[i].curve.points.size(); j++)
 				{
 					// If it is the first point of the group we close the previous group ...
 					//  ... and create a new one. Else, the point is of the current group
@@ -2171,14 +2172,14 @@ namespace webifc
 			//  ... adds the angular differences again, reconstructing a corrected boundary.
 
 			// Now we find the angle of each point in the reference plane of the cylinder
-			for (int j = 0; j < bounding.size(); j++)
+			for (size_t j = 0; j < bounding.size(); j++)
 			{
 				double xx = bounding[j].x - cent.x;
 				double yy = bounding[j].y - cent.y;
 				double zz = bounding[j].z - cent.z;
 				double dx = vecX.x * xx + vecX.y * yy + vecX.z * zz;
 				double dy = vecY.x * xx + vecY.y * yy + vecY.z * zz;
-				double dz = vecZ.x * xx + vecZ.y * yy + vecZ.z * zz;
+//				double dz = vecZ.x * xx + vecZ.y * yy + vecZ.z * zz;
 				double temp = VectorToAngle(dx, dy);
 				while (temp < 0)
 				{
@@ -2191,7 +2192,7 @@ namespace webifc
 				angleVec.push_back(temp);
 			}
 
-			for (int i = 0; i < angleVec.size() - 1; i++)
+			for (size_t i = 0; i < angleVec.size() - 1; i++)
 			{
 				if (angleVec[i] - angleVec[i + 1] > 180)
 				{
@@ -2213,7 +2214,7 @@ namespace webifc
 			// Add angular differences starting from the first angle. We also correct the start and end angles
 
 			double temp = angleVec[0];
-			for (int i = 0; i < angleDsp.size(); i++)
+			for (size_t i = 0; i < angleDsp.size(); i++)
 			{
 				temp += angleDsp[i];
 				if (endDegrees < temp)
@@ -2234,7 +2235,7 @@ namespace webifc
 			double radSpan = endRad - startRad;
 			double radStep = radSpan / (numRots - 1);
 
-			for (int i = 0; i < surface.RevolutionSurface.Profile.curve.points.size(); i++)
+			for (size_t i = 0; i < surface.RevolutionSurface.Profile.curve.points.size(); i++)
 			{
 				double xx = surface.RevolutionSurface.Profile.curve.points[i].x - cent.x;
 				double yy = surface.RevolutionSurface.Profile.curve.points[i].y - cent.y;
@@ -2262,7 +2263,7 @@ namespace webifc
 			for (int r = 0; r < numRots - 1; r++)
 			{
 				int r1 = r + 1;
-				for (int s = 0; s < newPoints[r].size() - 1; s++)
+				for (size_t s = 0; s < newPoints[r].size() - 1; s++)
 				{
 					geometry.AddFace(newPoints[r][s], newPoints[r][s + 1], newPoints[r1][s]);
 					geometry.AddFace(newPoints[r1][s], newPoints[r][s + 1], newPoints[r1][s + 1]);
@@ -2289,13 +2290,13 @@ namespace webifc
 
 			// Find the relative coordinates of each curve point in the cylinder reference plane
 			// Only retain the max and min relative Z
-			for (int i = 0; i < bounds.size(); i++)
+			for (size_t i = 0; i < bounds.size(); i++)
 			{
-				for (int j = 0; j < bounds[i].curve.points.size(); j++)
+				for (size_t j = 0; j < bounds[i].curve.points.size(); j++)
 				{
 					glm::dvec3 vv = bounds[i].curve.points[j] - cent;
-					double dx = glm::dot(vecX, vv);
-					double dy = glm::dot(vecY, vv);
+//					double dx = glm::dot(vecX, vv);
+//					double dy = glm::dot(vecY, vv);
 					double dz = glm::dot(vecZ, vv);
 					if (maxZ < dz)
 					{
@@ -2321,9 +2322,9 @@ namespace webifc
 			// Find the max. curve index in the boundary
 
 			int maxTeam = 0;
-			for (int i = 0; i < bounds.size(); i++)
+			for (size_t i = 0; i < bounds.size(); i++)
 			{
-				for (int j = 0; j < bounds[i].curve.indices.size(); j++)
+				for (size_t j = 0; j < bounds[i].curve.indices.size(); j++)
 				{
 					if (bounds[i].curve.indices[j] > maxTeam)
 					{
@@ -2339,9 +2340,9 @@ namespace webifc
 			for (int r = 0; r < maxTeam; r++)
 			{
 				std::vector<glm::dvec3> boundingTemp = std::vector<glm::dvec3>();
-				for (int i = 0; i < bounds.size(); i++)
+				for (size_t i = 0; i < bounds.size(); i++)
 				{
-					for (int j = 0; j < bounds[i].curve.points.size(); j++)
+					for (size_t j = 0; j < bounds[i].curve.points.size(); j++)
 					{
 						if (bounds[i].curve.indices[j] == r)
 						{
@@ -2355,7 +2356,7 @@ namespace webifc
 			int repeats = 0;
 			bool start = false;
 			bool end = false;
-			int id = 0;
+			size_t id = 0;
 
 			// In the case of boundary lines having only 2 endings...
 			//... we omit these lines and add solely curves having > 2 points...
@@ -2379,7 +2380,7 @@ namespace webifc
 				}
 				if (boundingGroups[id].size() > 2 && start)
 				{
-					for (int i = 0; i < boundingGroups[id].size(); i++)
+					for (size_t i = 0; i < boundingGroups[id].size(); i++)
 					{
 						bounding.push_back(boundingGroups[id][i]);
 					}
@@ -2392,9 +2393,9 @@ namespace webifc
 			//... then we add all boundary points directly
 			if (bounding.size() == 0)
 			{
-				for (int j = 0; j < boundingGroups.size(); j++)
+				for (size_t j = 0; j < boundingGroups.size(); j++)
 				{
-					for (int i = 0; i < boundingGroups[j].size(); i++)
+					for (size_t i = 0; i < boundingGroups[j].size(); i++)
 					{
 						bounding.push_back(boundingGroups[j][i]);
 					}
@@ -2415,12 +2416,12 @@ namespace webifc
 			//  ... adds the angular differences again, reconstructing a corrected boundary.
 
 			// Now we find the angle of each point in the reference plane of the cylinder
-			for (int j = 0; j < bounding.size(); j++)
+			for (size_t j = 0; j < bounding.size(); j++)
 			{
 				glm::dvec3 vv = bounding[j] - cent;
 				double dx = glm::dot(vecX, vv);
 				double dy = glm::dot(vecY, vv);
-				double dz = glm::dot(vecZ, vv);
+				//double dz = glm::dot(vecZ, vv);
 				double temp = VectorToAngle(dx, dy);
 				while (temp < 0)
 				{
@@ -2434,7 +2435,7 @@ namespace webifc
 			}
 
 			// Then we find the angular difference
-			for (int i = 0; i < angleVec.size() - 1; i++)
+			for (size_t i = 0; i < angleVec.size() - 1; i++)
 			{
 				if (angleVec[i] - angleVec[i + 1] > 180)
 				{
@@ -2456,7 +2457,7 @@ namespace webifc
 			// Add angular differences starting from the first angle. We also correct the start and end angles
 
 			double temp = angleVec[0];
-			for (int i = 0; i < angleDsp.size(); i++)
+			for (size_t i = 0; i < angleDsp.size(); i++)
 			{
 				temp += angleDsp[i];
 				if (endDegrees < temp)
@@ -2513,7 +2514,7 @@ namespace webifc
 			for (int r = 0; r < numRots - 1; r++)
 			{
 				int r1 = r + 1;
-				for (int s = 0; s < newPoints[r].size() - 1; s++)
+				for (size_t s = 0; s < newPoints[r].size() - 1; s++)
 				{
 					geometry.AddFace(newPoints[r][s], newPoints[r][s + 1], newPoints[r1][s]);
 					geometry.AddFace(newPoints[r1][s], newPoints[r][s + 1], newPoints[r1][s + 1]);
@@ -2533,7 +2534,7 @@ namespace webifc
 
 			if (!surface.ExtrusionSurface.Profile.isComposite)
 			{
-				for (int j = 0; j < surface.ExtrusionSurface.Profile.curve.points.size() - 1; j++)
+				for (size_t j = 0; j < surface.ExtrusionSurface.Profile.curve.points.size() - 1; j++)
 				{
 					int j2 = j + 1;
 
@@ -2563,9 +2564,9 @@ namespace webifc
 			}
 			else
 			{
-				for (uint32_t i = 0; i < surface.ExtrusionSurface.Profile.profiles.size(); i++)
+				for (size_t i = 0; i < surface.ExtrusionSurface.Profile.profiles.size(); i++)
 				{
-					for (int j = 0; j < surface.ExtrusionSurface.Profile.profiles[i].curve.points.size() - 1; j++)
+					for (size_t j = 0; j < surface.ExtrusionSurface.Profile.profiles[i].curve.points.size() - 1; j++)
 					{
 						int j2 = j + 1;
 
@@ -2599,7 +2600,7 @@ namespace webifc
 		// TODO: review and simplify
 		void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
-			double limit = 1e-4;
+//			double limit = 1e-4;
 
 			// First: We define the Nurbs surface
 
@@ -2629,14 +2630,14 @@ namespace webifc
 			}
 			if (weights.size() != num_u * num_v)
 			{
-				for (int i = 0; i < num_u * num_v; i++)
+				for (size_t i = 0; i < num_u * num_v; i++)
 				{
 					weights.push_back(1.0);
 				}
 			}
 			srf.weights = tinynurbs::array2(num_u, num_v, weights);
 
-			for (int i = 0; i < surface.BSplineSurface.UMultiplicity.size(); i++)
+			for (size_t i = 0; i < surface.BSplineSurface.UMultiplicity.size(); i++)
 			{
 				for (int r = 0; r < surface.BSplineSurface.UMultiplicity[i]; r++)
 				{
@@ -2644,7 +2645,7 @@ namespace webifc
 				}
 			}
 
-			for (int i = 0; i < surface.BSplineSurface.VMultiplicity.size(); i++)
+			for (size_t i = 0; i < surface.BSplineSurface.VMultiplicity.size(); i++)
 			{
 				for (int r = 0; r < surface.BSplineSurface.VMultiplicity[i]; r++)
 				{
@@ -2663,7 +2664,7 @@ namespace webifc
 				std::vector<std::vector<Point>> uvBoundaryValues;
 
 				std::vector<Point> points;
-				for (int j = 0; j < bounds[0].curve.points.size(); j++)
+				for (size_t j = 0; j < bounds[0].curve.points.size(); j++)
 				{
 					glm::dvec3 pt = bounds[0].curve.points[j];
 					glm::dvec2 pInv = BSplineInverseEvaluation(pt, srf);
@@ -2677,12 +2678,12 @@ namespace webifc
 
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(uvBoundaryValues);
 
-				for (int r = 0; r < 3; r++)
+				for (size_t r = 0; r < 3; r++)
 				{
 					std::vector<uint32_t> newIndices;
 					std::vector<Point> newUVPoints;
 
-					for (int i = 0; i < indices.size(); i += 3)
+					for (size_t i = 0; i < indices.size(); i += 3)
 					{
 						Point p0 = uvBoundaryValues[0][indices[i + 0]];
 						Point p1 = uvBoundaryValues[0][indices[i + 1]];
@@ -2723,7 +2724,7 @@ namespace webifc
 					indices = newIndices;
 				}
 
-				for (int i = 0; i < indices.size(); i += 3)
+				for (size_t i = 0; i < indices.size(); i += 3)
 				{
 					Point p0 = uvBoundaryValues[0][indices[i + 0]];
 					Point p1 = uvBoundaryValues[0][indices[i + 1]];
@@ -2742,7 +2743,7 @@ namespace webifc
 			{
 				auto c = bounds[0].curve;
 
-				size_t offset = geometry.numPoints;
+				//size_t offset = geometry.numPoints;
 
 				geometry.AddFace(c.points[0], c.points[1], c.points[2]);
 			}
@@ -2760,7 +2761,7 @@ namespace webifc
 				{
 					// locate the outer bound index
 					int outerIndex = -1;
-					for (int i = 0; i < bounds.size(); i++)
+					for (size_t i = 0; i < bounds.size(); i++)
 					{
 						if (bounds[i].type == IfcBoundType::OUTERBOUND)
 						{
@@ -2801,7 +2802,7 @@ namespace webifc
 
 				// check winding of outer bound
 				IfcCurve<2> test;
-				for (int i = 0; i < bounds[0].curve.points.size(); i++)
+				for (size_t i = 0; i < bounds[0].curve.points.size(); i++)
 				{
 					glm::dvec3 pt = bounds[0].curve.points[i];
 					glm::dvec3 pt2 = pt - v1;
@@ -2823,7 +2824,7 @@ namespace webifc
 				for (auto &bound : bounds)
 				{
 					std::vector<Point> points;
-					for (int i = 0; i < bound.curve.points.size(); i++)
+					for (size_t i = 0; i < bound.curve.points.size(); i++)
 					{
 						glm::dvec3 pt = bound.curve.points[i];
 						geometry.AddPoint(pt, n);
@@ -2843,7 +2844,7 @@ namespace webifc
 
 				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
-				for (int i = 0; i < indices.size(); i += 3)
+				for (size_t i = 0; i < indices.size(); i += 3)
 				{
 					geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
 				}
@@ -2862,7 +2863,7 @@ namespace webifc
 			std::vector<glm::vec<3, glm::f64>> dpts;
 
 			// Remove repeated points
-			for (int i = 0; i < directrix.points.size(); i++)
+			for (size_t i = 0; i < directrix.points.size(); i++)
 			{
 				if (i < directrix.points.size() - 1)
 				{
@@ -2883,7 +2884,7 @@ namespace webifc
 				glm::vec<3, glm::f64> dirEnd = dpts[1] - dpts[0];
 				std::vector<glm::vec<3, glm::f64>> newDpts;
 				newDpts.push_back(dpts[0] + dirStart);
-				for (int i = 0; i < dpts.size(); i++)
+				for (size_t i = 0; i < dpts.size(); i++)
 				{
 					newDpts.push_back(dpts[i]);
 				}
@@ -2900,7 +2901,7 @@ namespace webifc
 			// compute curve for each part of the directrix
 			std::vector<IfcCurve<3>> curves;
 
-			for (int i = 0; i < dpts.size(); i++)
+			for (size_t i = 0; i < dpts.size(); i++)
 			{
 				IfcCurve<3> segmentForCurve;
 
@@ -2927,7 +2928,7 @@ namespace webifc
 					glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
 					glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
 
-					double prod = glm::dot(n1, n2);
+					//double prod = glm::dot(n1, n2);
 
 					if (std::isnan(p.x))
 					{
@@ -3024,14 +3025,14 @@ namespace webifc
 			}
 
 			// connect the curves
-			for (int i = 1; i < dpts.size(); i++)
+			for (size_t i = 1; i < dpts.size(); i++)
 			{
 
 				const auto &c1 = curves[i - 1].points;
 				const auto &c2 = curves[i].points;
 
 				uint32_t capSize = c1.size();
-				for (int j = 1; j < capSize; j++)
+				for (size_t j = 1; j < capSize; j++)
 				{
 					glm::dvec3 bl = c1[j - 1];
 					glm::dvec3 br = c1[j - 0];
@@ -3063,7 +3064,7 @@ namespace webifc
 
 				glm::dvec3 normal = dir;
 
-				for (int i = 0; i < profile.curve.points.size(); i++)
+				for (size_t i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
@@ -3072,12 +3073,12 @@ namespace webifc
 					polygon[0].push_back({pt.x, pt.y});
 				}
 
-				for (int i = 0; i < profile.curve.points.size(); i++)
+				for (size_t i = 0; i < profile.curve.points.size(); i++)
 				{
 					holesIndicesHash.push_back(false);
 				}
 
-				for (int i = 0; i < profile.holes.size(); i++)
+				for (size_t i = 0; i < profile.holes.size(); i++)
 				{
 					IfcCurve<2> hole = profile.holes[i];
 					int pointCount = hole.points.size();
@@ -3108,7 +3109,7 @@ namespace webifc
 				bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
 				bool flipWinding = !winding;
 
-				for (int i = 0; i < indices.size(); i += 3)
+				for (size_t i = 0; i < indices.size(); i += 3)
 				{
 					if (flipWinding)
 					{
@@ -3124,7 +3125,7 @@ namespace webifc
 
 				normal = -dir;
 
-				for (int i = 0; i < profile.curve.points.size(); i++)
+				for (size_t i = 0; i < profile.curve.points.size(); i++)
 				{
 					glm::dvec2 pt = profile.curve.points[i];
 					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0), 1);
@@ -3152,7 +3153,7 @@ namespace webifc
 					geom.AddPoint(et, normal);
 				}
 
-				for (int i = 0; i < indices.size(); i += 3)
+				for (size_t i = 0; i < indices.size(); i += 3)
 				{
 					if (flipWinding)
 					{
@@ -3166,7 +3167,7 @@ namespace webifc
 			}
 
 			uint32_t capSize = profile.curve.points.size();
-			for (int i = 1; i < capSize; i++)
+			for (size_t i = 1; i < capSize; i++)
 			{
 				// https://github.com/tomvandig/web-ifc/issues/5
 				if (holesIndicesHash[i])
@@ -3195,7 +3196,7 @@ namespace webifc
 
 		bool IsCurveConvex(IfcCurve<2> &curve)
 		{
-			for (int i = 2; i < curve.points.size(); i++)
+			for (size_t i = 2; i < curve.points.size(); i++)
 			{
 				glm::dvec2 a = curve.points[i - 2];
 				glm::dvec2 b = curve.points[i - 1];
@@ -3424,7 +3425,7 @@ namespace webifc
 					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
-					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+					placement = GetAxis2Placement2D(placementID);
 				}
 
 				_loader.MoveToArgumentOffset(line, 3);
@@ -3435,8 +3436,10 @@ namespace webifc
 				filletRadius = _loader.GetDoubleArgument();
 				double edgeRadius = _loader.GetDoubleArgument();
 				double legSlope = _loader.GetDoubleArgument();
-				double centreOfGravityInX = _loader.GetDoubleArgument();
-				double centreOfGravityInY = _loader.GetDoubleArgument();
+				//double centreOfGravityInX = 
+				_loader.GetDoubleArgument();
+				//double centreOfGravityInY = 
+				_loader.GetDoubleArgument();
 
 				// optional fillet
 				bool hasFillet = false;
@@ -3470,18 +3473,21 @@ namespace webifc
 					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
-					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+					placement = GetAxis2Placement2D(placementID);
 				}
 
 				_loader.MoveToArgumentOffset(line, 3);
 				double depth = _loader.GetDoubleArgument();
 				double width = _loader.GetDoubleArgument();
 				double webThickness = _loader.GetDoubleArgument();
-				double flangeThickness = _loader.GetDoubleArgument();
+				//double flangeThickness = 
+				_loader.GetDoubleArgument();
 				double filletRadius = _loader.GetDoubleArgument();
 				double flangeEdgeRadius = _loader.GetDoubleArgument();
-				double webEdgeRadius = _loader.GetDoubleArgument();
-				double webSlope = _loader.GetDoubleArgument();
+				//double webEdgeRadius = 
+				_loader.GetDoubleArgument();
+				//double webSlope =
+				 _loader.GetDoubleArgument();
 				double flangeSlope = _loader.GetDoubleArgument();
 
 				// optional fillet
@@ -3516,7 +3522,7 @@ namespace webifc
 					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
-					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+					placement = GetAxis2Placement2D(placementID);
 				}
 
 				_loader.MoveToArgumentOffset(line, 3);
@@ -3555,7 +3561,7 @@ namespace webifc
 					_loader.StepBack();
 
 					uint32_t placementID = _loader.GetRefArgument();
-					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+					placement = GetAxis2Placement2D(placementID);
 				}
 
 				bool hasFillet = false;
@@ -4403,7 +4409,7 @@ namespace webifc
 				ts.pos = GetCartesianPoint2D(cartesianPointRef);
 			}
 			*/
-			for (int i = 0; i < tapeOffsets.size(); i++)
+			for (size_t i = 0; i < tapeOffsets.size(); i++)
 			{
 				auto tokenType = _loader.GetTokenType(tapeOffsets[i]);
 				_loader.StepBack();
@@ -4734,11 +4740,11 @@ namespace webifc
 
 							double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
 							double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
-							double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
+							//double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
 
 							double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
 							double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
-							double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
+							//double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
 
 							endDegrees = VectorToAngle(dxS, dyS) - 90;
 							startDegrees = VectorToAngle(dxE, dyE) - 90;
@@ -4865,11 +4871,11 @@ namespace webifc
 
 							double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
 							double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
-							double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
+							//double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
 
 							double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
 							double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
-							double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
+							//double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
 
 							endDegrees = VectorToAngle(dxS, dyS) - 90;
 							startDegrees = VectorToAngle(dxE, dyE) - 90;
@@ -4983,13 +4989,13 @@ namespace webifc
 				}
 
 				// build default weights vector
-				for (int i = 0; i < ctrolPts.size(); i++)
+				for (size_t i = 0; i < ctrolPts.size(); i++)
 				{
 					weights.push_back(1);
 				}
 
 				std::vector<glm::vec<DIM, glm::f64>> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
-				for (int i = 0; i < tempPoints.size(); i++)
+				for (size_t i = 0; i < tempPoints.size(); i++)
 				{
 					curve.Add(tempPoints[i]);
 				}
@@ -5046,7 +5052,7 @@ namespace webifc
 					distinctKnots.push_back(_loader.GetDoubleArgument(token));
 				}
 
-				for (int k = 0; k < distinctKnots.size(); k++)
+				for (size_t k = 0; k < distinctKnots.size(); k++)
 				{
 					double knot = distinctKnots[k];
 					for (int i = 0; i < knotMultiplicities[k]; i++)
@@ -5061,13 +5067,13 @@ namespace webifc
 				}
 
 				// build default weights vector
-				for (int i = 0; i < ctrolPts.size(); i++)
+				for (size_t i = 0; i < ctrolPts.size(); i++)
 				{
 					weights.push_back(1);
 				}
 
 				std::vector<glm::vec<DIM, glm::f64>> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
-				for (int i = 0; i < tempPoints.size(); i++)
+				for (size_t i = 0; i < tempPoints.size(); i++)
 				{
 					curve.Add(tempPoints[i]);
 				}
@@ -5125,10 +5131,10 @@ namespace webifc
 					weights.push_back(_loader.GetDoubleArgument(token));
 				}
 
-				for (int k = 0; k < distinctKnots.size(); k++)
+				for (size_t k = 0; k < distinctKnots.size(); k++)
 				{
 					double knot = distinctKnots[k];
-					for (int i = 0; i < knotMultiplicities[k]; i++)
+					for (size_t i = 0; i < knotMultiplicities[k]; i++)
 					{
 						knots.push_back(knot);
 					}
@@ -5140,7 +5146,7 @@ namespace webifc
 				}
 
 				std::vector<glm::vec<DIM, glm::f64>> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
-				for (int i = 0; i < tempPoints.size(); i++)
+				for (size_t i = 0; i < tempPoints.size(); i++)
 				{
 					curve.Add(tempPoints[i]);
 				}
@@ -5216,7 +5222,7 @@ namespace webifc
 
 			// we should do the above, but its slow, so we do this:
 			_loader.MoveToArgumentOffset(line, 0);
-			IfcTokenType t = _loader.GetTokenType();
+			_loader.GetTokenType();
 
 			// because these calls cannot be reordered we have to use intermediate variables
 			double x = _loader.GetDoubleArgument();
@@ -5234,7 +5240,7 @@ namespace webifc
 			auto &line = _loader.GetLine(lineID);
 
 			_loader.MoveToArgumentOffset(line, 0);
-			IfcTokenType t = _loader.GetTokenType();
+			_loader.GetTokenType();
 
 			glm::vec<DIM, glm::f64> point;
 			for (uint32_t i = 0; i < DIM; i++)
