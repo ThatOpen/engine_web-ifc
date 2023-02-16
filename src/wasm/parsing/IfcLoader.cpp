@@ -9,6 +9,7 @@
 #include "ifc-schema.h"
 #include "helpers/loader_helpers.h"
 #include "helpers/crc_tables.h"
+#include "../version.h"
  
  namespace webifc {
  
@@ -93,6 +94,13 @@
    { 
       std::ostringstream output;
       output << "ISO-10303-21;"<<std::endl<<"HEADER;"<<std::endl;
+      output << "/******************************************************" << std::endl;
+      output << "* STEP Physical File produced by: IFCjs WebIfc " << WEB_IFC_VERSION_NUMBER << std::endl;
+      output << "* Module: web-ifc/IfcLoader" << std::endl;
+      output << "* Version: " << WEB_IFC_VERSION_NUMBER << std::endl;
+      output << "* Source: https://github.com/IFCjs/web-ifc" << std::endl;
+      output << "* Issues: https://github.com/IFCjs/web-ifc/issues" << std::endl;
+      output << "******************************************************/" << std::endl;
       for(uint32_t i=0; i < _headerLines.size();i++) 
       {
         _tokenStream->MoveTo(_headerLines[i].tapeOffset);
@@ -720,7 +728,7 @@
    
    void IfcLoader::ReportError(const LoaderError &&error)
    { 
-     logError(error.message);
+     log::error(error.message);
    	 _errors.push_back(std::move(error));
    }
    

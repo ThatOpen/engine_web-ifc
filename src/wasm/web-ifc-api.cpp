@@ -19,8 +19,6 @@ std::map<uint32_t, std::unique_ptr<webifc::IfcGeometryLoader>> geomLoaders;
 
 uint32_t GLOBAL_MODEL_ID_COUNTER = 0;
 
-webifc::LogLevel LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_ERROR;
-
 #ifdef __EMSCRIPTEN_PTHREADS__
     constexpr bool MT_ENABLED = true;
 #else
@@ -33,7 +31,7 @@ int OpenModel(webifc::LoaderSettings settings, emscripten::val callback)
 {
     if (!shown_version_header)
     {
-        webifc::logInfo("web-ifc: " + WEB_IFC_VERSION_NUMBER +
+        webifc::log::info("web-ifc: " + WEB_IFC_VERSION_NUMBER +
                         " threading: " + (MT_ENABLED ? "enabled" : "disabled"));
         shown_version_header = true;
     }
@@ -523,7 +521,7 @@ void WriteSet(uint32_t modelID, emscripten::val& val)
         }
         else
         {
-            webifc::logError("Error in writeline: unknown object received");
+            webifc::log::error("Error in writeline: unknown object received");
         }
     }
 
@@ -553,9 +551,7 @@ void WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
     loader->Push<uint8_t>(webifc::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
     loader->Push((void*)ifcName.c_str(), ifcName.size());
-    loader->Push<uint8_t>(webifc::IfcTokenType::SET_BEGIN);
     WriteSet(modelID,parameters);
-    loader->Push<uint8_t>(webifc::IfcTokenType::SET_END);
     loader->Push<uint8_t>(webifc::IfcTokenType::LINE_END);
     uint32_t end = loader->GetTotalSize();
     loader->AddHeaderLineTape(type, start, end);
@@ -750,9 +746,9 @@ emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
     std::string s(GetReadableNameFromTypeCode(line.ifcType));
     GetArgs(modelID, arguments);
     auto retVal = emscripten::val::object();
-    retVal.set(emscripten::val("ID"), line.lineIndex);
-    retVal.set(emscripten::val("type"), s);
-    retVal.set(emscripten::val("arguments"), arguments);
+    retVal.set("ID", line.lineIndex);
+    retVal.set("type", s);
+    retVal.set("arguments", arguments);
     return retVal;
 }
 
@@ -825,13 +821,7 @@ extern "C" bool IsModelOpen(uint32_t modelID)
  */
 void SetLogLevel(int levelArg)
 {
-    if (levelArg < static_cast<int>(webifc::LogLevel::LOG_LEVEL_DEBUG)) {
-        LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_DEBUG;
-    } else if (levelArg > static_cast<int>(webifc::LogLevel::LOG_LEVEL_OFF)) {
-        LOG_LEVEL = webifc::LogLevel::LOG_LEVEL_OFF;
-    } else {
-        LOG_LEVEL = static_cast<webifc::LogLevel>(levelArg);
-    }
+    webifc::setLogLevel(levelArg);
 }
 
 EMSCRIPTEN_BINDINGS(my_module) {

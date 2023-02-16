@@ -2,7 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {Handle,IfcLineObject,TypeInitialisers,FILE_SCHEMA,FromRawLineData,Constructors,InheritanceDef,InversePropertyDef,ToRawLineData,SchemaNames} from "./ifc-schema";
+import {
+    Handle,
+    IfcLineObject,
+    TypeInitialisers,
+    FILE_SCHEMA,
+    FILE_NAME, 
+    FILE_DESCRIPTION,
+    FromRawLineData,
+    Constructors,
+    InheritanceDef,
+    InversePropertyDef,
+    ToRawLineData,
+    SchemaNames
+} from "./ifc-schema";
 
 let WebIFCWasm: any;
 
@@ -104,6 +117,15 @@ export interface ifcType {
     typeName: string;
 }
 
+export interface NewIfcModel {
+    schema: string;
+    name?: string;
+    description?: string[];
+    authors?: string[];
+    organizations?: string[];
+    authorization?: string;
+}
+
 export function ms() {
     return new Date().getTime();
 }
@@ -198,7 +220,7 @@ export class IfcAPI {
             return srcSize;
         });
         this.modelSchemaList[result] = SchemaNames.indexOf(this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value);
-        console.log("Parsing Model using " + this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value + " Schema");
+        Log.info("Parsing Model using " + this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value + " Schema");
         return result;
     }
 
@@ -216,7 +238,7 @@ export class IfcAPI {
      * @param schema ifc schema version
 	 * @returns ModelID
     */
-    CreateModel(schema: string, settings?: LoaderSettings): number {
+    CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
             USE_FAST_BOOLS: true, //TODO: This needs to be fixed in the future to rely on elalish/manifold
@@ -229,8 +251,29 @@ export class IfcAPI {
             ...settings
         };
         let result = this.wasmModule.CreateModel(s);
-        this.modelSchemaList[result] = SchemaNames.indexOf(schema);
-        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[{type:1,'value':schema}]);
+        this.modelSchemaList[result] = SchemaNames.indexOf(model.schema);
+        const modelName = model.name || "web-ifc-model-"+result+".ifc";
+        const timestamp = new Date().toISOString().slice(0,19);
+        const description = model.description?.map((d) => ({type: STRING, value: d})) || [{type: STRING, value: 'ViewDefinition [CoordinationView]'}];
+        const authors = model.authors?.map((a) => ({type: STRING, value: a})) || [null];
+        const orgs = model.organizations?.map((o) => ({type: STRING, value: o})) || [null];
+        const auth = model.authorization ? {type: STRING, value: model.authorization} : null;
+        
+        this.wasmModule.WriteHeaderLine(result,FILE_DESCRIPTION,[
+            description, 
+            {type: STRING, value: '2;1'}
+        ]);
+        this.wasmModule.WriteHeaderLine(result,FILE_NAME,[
+            {type: STRING, value: modelName},
+            {type: STRING, value: timestamp},
+            authors,
+            orgs,
+            {type: STRING, value: "ifcjs/web-ifc-api"},
+            {type: STRING, value: "ifcjs/web-ifc-api"},
+            auth,
+        ]);
+        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);
+
         return result;
     }
 
@@ -241,7 +284,8 @@ export class IfcAPI {
 	 */
     SaveModel(modelID: number): Uint8Array {
         let modelSize = this.wasmModule.GetModelSize(modelID);
-        let dataBuffer = new Uint8Array(modelSize);
+        const headerBytes = 512;
+        let dataBuffer = new Uint8Array(modelSize + headerBytes);
         let size = 0; 
         this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
             let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
@@ -253,6 +297,19 @@ export class IfcAPI {
         newBuffer.set(dataBuffer.subarray(0,size),0);
         return newBuffer;
     }
+
+    /**
+     * Export a model to IFC
+     * @param modelID model ID
+     * @returns blob with mimetype application/x-step containing the model data 
+     * 
+     * @deprecated Use SaveModel instead
+     */
+    ExportFileAsIFC(modelID: number) {
+        Log.warn("ExportFileAsIFC is deprecated, use SaveModel instead");
+        return this.SaveModel(modelID);
+    }
+
 
     GetGeometry(modelID: number, geometryExpressID: number): IfcGeometry {
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
@@ -335,7 +392,7 @@ export class IfcAPI {
     CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
         let expressID: number = this.IncrementMaxExpressID(modelID, 1);
-        return Constructors[this.modelSchemaList[modelID]][type](type,expressID,args);
+        return Constructors[this.modelSchemaList[modelID]][type](expressID,args);
     }
 
     CreateIfcType(modelID: number, type:number, value: any) 
@@ -618,5 +675,6 @@ export class IfcAPI {
 	 */
     SetLogLevel(level: LogLevel): void {
         Log.setLogLevel(level);
+        this.wasmModule.SetLogLevel(level);
     }
 }
