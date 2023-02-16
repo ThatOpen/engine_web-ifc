@@ -27,7 +27,7 @@
   "pckg-gui": {},
   "scripts": {
     "postinstall": "cd examples/viewer && npm install && cd ../browser && npm install && cd ../../benchmark && npm install",
-    "gen-schema": "cd src/schema && ts-node gen_functional_types.ts",
+    "gen-schema": "cd src/schema-generator && ts-node gen_functional_types.ts",
     "setup-env": "emsdk_env",
     "setup-mingw": "mingw-get instal msys-make gettext",
     "build-release": "npm run build-wasm-release && npm run build-api",
@@ -67,7 +67,6 @@
     "web-ifc-api-browser.js",
     "web-ifc-api.d.ts",
     "ifc_schema.d.ts",
-    "ifc_schema_helper.d.ts",
     "helpers/properties.d.ts",
     "web-ifc-mt-worker.js"
   ],

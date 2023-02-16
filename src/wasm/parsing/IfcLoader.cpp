@@ -973,15 +973,15 @@
    
    void IfcLoader::ArgumentOffset(const uint32_t argumentIndex)
    {
-   	int movedOver = -1;
-   	int setDepth = 0;
+   	uint32_t movedOver = 0;
+   	uint32_t setDepth = 0;
    	while (true)
    	{
    		if (setDepth == 1)
    		{
    			movedOver++;
 
-   			if (movedOver == argumentIndex)
+   			if (movedOver-1 == argumentIndex)
    			{
    				return;
    			}

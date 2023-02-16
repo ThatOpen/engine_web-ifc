@@ -530,6 +530,17 @@ void WriteSet(uint32_t modelID, emscripten::val& val)
     loader->Push<uint8_t>(webifc::IfcTokenType::SET_END);
 }
 
+
+std::string GetNameFromTypeCode(uint32_t type) 
+{
+    return GetReadableNameFromTypeCode(type);
+}
+
+bool IsIfcElement(uint32_t type) 
+{
+    return ifc::IfcElements.find(type) != ifc::IfcElements.end();
+}
+
 void WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
 {
     auto& loader = loaders[modelID];
@@ -940,4 +951,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetAllLines", &GetAllLines);
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
     emscripten::function("SetLogLevel", &SetLogLevel);
+    emscripten::function("GetNameFromTypeCode", &GetNameFromTypeCode);
+    emscripten::function("IsIfcElement", &IsIfcElement);
 }
