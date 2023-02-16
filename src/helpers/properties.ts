@@ -1,3 +1,8 @@
+/**
+ * Web-IFC Properties
+ * @module Properties
+ */
+
 import {
     IfcAPI,
     IFCPROJECT, IFCRELAGGREGATES,
@@ -55,6 +60,7 @@ const PropsNames = {
 
 export class Properties {
 
+    /** @ignore */
     constructor(private api: IfcAPI) {
     }
 

@@ -19,7 +19,14 @@ completeEntityList.add("FILE_DESCRIPTION");
 
 let typeList = new Set<string>();
 
+tsSchema.push('/**');
+tsSchema.push(' * Web-IFC IFC Schema Representation');
+tsSchema.push(' * @module ifc-schema');
+tsSchema.push('*/');
+
 tsSchema.push(`// This is a generated file, please see: gen_functional_types.js`);
+
+
 
 tsSchema.push(`export class Handle<_> {`);
 tsSchema.push(`\ttype: number=5;`);
@@ -30,13 +37,19 @@ tsSchema.push(`export abstract class IfcLineObject {`);
 tsSchema.push(`\ttype: number=0;`);
 tsSchema.push(`\tconstructor(public expressID: number) {}`);
 tsSchema.push(`}`);
-
+tsSchema.push('/** @ignore */');
 tsSchema.push(`export const FromRawLineData: any = [];`);
+tsSchema.push('/** @ignore */');
 tsSchema.push(`export const InversePropertyDef: any = {};`);
+tsSchema.push('/** @ignore */');
 tsSchema.push(`export const InheritanceDef: any = {};`);
+tsSchema.push('/** @ignore */');
 tsSchema.push(`export const Constructors: any = {};`);
+tsSchema.push('/** @ignore */');
 tsSchema.push(`export const ToRawLineData: any = {};`);
+tsSchema.push('/** @ignore */');
 tsSchema.push(`export const TypeInitialisers: any = {};`);
+tsSchema.push('/** @ignore */');
 tsSchema.push(`export const SchemaNames: Array<string> = [];`);
 
 

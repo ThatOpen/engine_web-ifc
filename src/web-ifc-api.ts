@@ -2,6 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+/**
+ * Web-IFC Main API Class
+ * @module web-ifc
+ */
+
 import {
     Handle,
     IfcLineObject,
@@ -126,6 +131,7 @@ export interface NewIfcModel {
     authorization?: string;
 }
 
+/** @ignore */
 export function ms() {
     return new Date().getTime();
 }
@@ -133,13 +139,13 @@ export function ms() {
 export type LocateFileHandlerFn = (path: string, prefix: string) => string;
 
 export class IfcAPI {
-    wasmModule: undefined | any = undefined;
-    wasmPath: string = "";
-    isWasmPathAbsolute = false;
+    private wasmModule: undefined | any = undefined;
+    private wasmPath: string = "";
+    private isWasmPathAbsolute = false;
 
-    modelSchemaList: Array<number> = [];
+    private modelSchemaList: Array<number> = [];
 
-    ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
+    private ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
     /**
      * Contains all the logic and methods regarding properties, psets, qsets, etc.
@@ -463,7 +469,7 @@ export class IfcAPI {
     }
 
     /**
-     * Returns a list with all entities that exist in the model
+     * Returns a list with all entity types that are present in the current schema
      * @param modelID Model handle retrieved by OpenModel
      * @returns Array of type codes
      */

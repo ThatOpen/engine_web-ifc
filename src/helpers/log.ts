@@ -1,5 +1,8 @@
-// TODO(pablo): Don't know how to get static refs to the values, so
-// manually keeping in-sync with src/wasm/include/web-ifc.h.
+/**
+ * Web-IFC Logging Helper
+ * @module Logging
+ */
+
 export enum LogLevel {
     LOG_LEVEL_DEBUG = 0,
     LOG_LEVEL_INFO,

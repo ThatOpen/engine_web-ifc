@@ -1,0 +1,29 @@
+{
+	"sidebarLinks": {
+	},
+	 "entryPoints": ["./src/ifc-schema.ts","./src/web-ifc-api.ts","./src/helpers/properties.ts","./src/helpers/log.ts"],
+	 "navigationLinks":{
+	 	"ifc.js":"https://ifcjs.github.io/info/",
+	 	"web-ifc":"https://github.com/ifcjs/web-ifc",
+	 	"demo":"https://ifcjs.github.io/web-ifc/demo",
+	 	"example models":"https://ifcjs.github.io/web-ifc/examples"
+	 },
+	 "titleLink":"https://github.com/ifcjs/web-ifc",
+	 "name":"ifc.js | web-ifc",
+	 "excludePrivate":true,
+	 "excludeProtected":true,
+	 "excludeExternals":true,
+	 "visibilityFilters": {
+        "protected": false,
+        "private": false,
+        "external": false
+    },
+    "readme":"apidocs.md",
+    "excludeNotDocumented": true,
+    "excludeNotDocumentedKinds": [
+        "Reference"
+    ],
+    "sidebarLinks": {
+        "Main Web-IFC API": "classes/web_ifc.IfcAPI.html"
+    }
+}

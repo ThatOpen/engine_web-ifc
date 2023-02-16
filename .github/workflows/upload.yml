@@ -37,7 +37,6 @@ jobs:
           cp -R ./examples/viewer/dist/* ./dist/pages/demo
           cp -R ./tests/regression/dist/* ./dist/pages/examples
           cp -R ./dist/docs/* ./dist/pages/docs
-          cp ./banner.png ./dist/pages/docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
