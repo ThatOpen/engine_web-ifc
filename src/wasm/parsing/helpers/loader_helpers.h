@@ -47,7 +47,7 @@ std::string getAsStringWithBigE(double theNumber)
 {
     std::stringstream stream;
     stream << theNumber;
-    if (floor(theNumber) == theNumber) stream <<".";
+    if (std::floor(theNumber) == theNumber) stream <<".";
     std::string s = stream.str();
 
     for (unsigned int j = 0; j < s.length(); j++)

@@ -97,7 +97,7 @@ async function LoadFile(filename) {
         maxEID,
         new IFC2X3.IfcIdentifier('Special Number'),
         null,
-        new IFC2X3.IfcReal(5.031),
+        new IFC2X3.IfcReal(0.16),
         null);
     let numberId = maxEID;
     ifcapi.WriteLine(modelID, property);
