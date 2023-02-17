@@ -9,6 +9,7 @@
 #include <string>
 #include <locale>
 #include <codecvt>
+#include <cmath>
 
 std::string p21encode(std::string_view input) 
 {   

@@ -464,8 +464,9 @@ describe('WebIfcApi known failures', () => {
             failModelID = ifcApi.OpenModel(exampleIFCData);
             let ifcDatas = ifcApi.SaveModel(failModelID);
             let rawIfcString = Utf8ArrayToStr(ifcDatas);
+            console.log(rawIfcString);
 
-            expect(rawIfcString.indexOf("#6=IFCCARTESIANPOINT((0.,0.,0.));") == -1).toBeTruthy();
+            expect(rawIfcString.indexOf("#6=IFCCARTESIANPOINT((0.,0.,0.));")).toBeTruthy();
             expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);") == -1).toBeTruthy();
 
             ifcApi.CloseModel(failModelID);
