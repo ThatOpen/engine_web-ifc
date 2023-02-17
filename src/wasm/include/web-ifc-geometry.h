@@ -3578,6 +3578,41 @@ namespace webifc
 
 				return profile;
 			}
+			case ifc::IFCZSHAPEPROFILEDEF:
+			{
+				IfcProfile profile;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				profile.type = _loader.GetStringArgument();
+				profile.isConvex = true;
+
+				_loader.MoveToArgumentOffset(line, 2);
+
+				glm::dmat3 placement(1);
+
+				if (_loader.GetTokenType() == webifc::IfcTokenType::REF)
+				{
+					_loader.StepBack();
+
+					uint32_t placementID = _loader.GetRefArgument();
+					glm::dmat3 placement = GetAxis2Placement2D(placementID);
+				}
+
+				bool hasFillet = false;
+
+				_loader.MoveToArgumentOffset(line, 3);
+
+				double depth = _loader.GetDoubleArgument();
+				double flangeWidth = _loader.GetDoubleArgument();
+				double webThickness = _loader.GetDoubleArgument();
+				double flangeThickness = _loader.GetDoubleArgument();
+				double filletRadius = _loader.GetDoubleArgument();
+				double edgeRadius = _loader.GetDoubleArgument();
+
+				profile.curve = GetZShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, placement);
+
+				return profile;
+			}
 			case ifc::IFCDERIVEDPROFILEDEF:
 			{
 				_loader.MoveToArgumentOffset(line, 2);
