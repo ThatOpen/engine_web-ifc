@@ -42,9 +42,7 @@ async function LoadFile(filename) {
     let units = ifcapi.GetLineIDsWithType(modelID, IFCSIUNIT);
     for (let i = 0; i < units.size(); i++) {
         let expressID = units.get(i);
-        console.log(expressID);
         const unit = await ifcapi.properties.getItemProperties(modelID, expressID);
-        console.log(unit);
         unit.Prefix = { type: 3, value: 'MILLI' };
         ifcapi.WriteLine(modelID, unit);
     }
@@ -90,6 +88,26 @@ async function LoadFile(filename) {
         new IFC2X3.IfcIdentifier('Classification'),
         null,
         new IFC2X3.IfcLabel('New value'),
+        null);
+    ifcapi.WriteLine(modelID, property);
+
+    maxEID++;
+    numLines++;
+    property = new IFC2X3.IfcPropertySingleValue(
+        maxEID,
+        new IFC2X3.IfcIdentifier('Special Number'),
+        null,
+        new IFC2X3.IfcReal(5.031),
+        null);
+    let numberId = maxEID;
+    ifcapi.WriteLine(modelID, property);
+    maxEID++;   
+    numLines++;
+    property = new IFC2X3.IfcPropertySingleValue(
+        maxEID,
+        new IFC2X3.IfcIdentifier('Unicode'),
+        null,
+        new IFC2X3.IfcLabel('Phäsen'),
         null);
     ifcapi.WriteLine(modelID, property);
 
@@ -159,7 +177,8 @@ async function LoadFile(filename) {
 
     console.log("Checking we can parse exported model");
     let id = ifcapi.OpenModel(fs.readFileSync("exported.ifc"));
-        
+    let numberline = ifcapi.GetLine(id,numberId);
+    console.log(numberline);
 
 
 }

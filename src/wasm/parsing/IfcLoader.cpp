@@ -241,7 +241,7 @@
             }
             case IfcTokenType::STRING:
             {
-              output << "'" << _tokenStream->ReadString() << "'";
+              output << "'" << p21encode(_tokenStream->ReadString()) << "'";
               break;
             }
             case IfcTokenType::ENUM:

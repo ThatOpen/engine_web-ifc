@@ -4,10 +4,50 @@
 
 #pragma once 
 
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <locale>
+#include <codecvt>
+
+std::string p21encode(std::string_view input) 
+{   
+    std::stringstream stream;
+    std::string stringInput(input);
+    std::string tmp;
+    bool inEncode=false;
+    for (char c : stringInput) {
+        if (c > 126 || c < 32) { 
+            if (!inEncode) 
+            {
+                inEncode = true;
+                tmp=c;
+                continue;
+            } else {
+                tmp+=c;
+                continue;
+            }
+        } else {
+            if (inEncode) {
+                std::u16string utf16 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.from_bytes(tmp.data());
+                stream << "\\X2\\" << std::hex <<std::setw(4)<<std::setfill('0') << std::uppercase;
+                for (char16_t uC : utf16) stream << uC;
+                stream << std::dec<< std::setw(1) << "\\X0\\";
+                inEncode=false;
+                tmp="";
+                continue;
+            }
+        }
+        stream << c;
+    }
+    return stream.str();
+}
+
 std::string getAsStringWithBigE(double theNumber)
 {
     std::stringstream stream;
     stream << theNumber;
+    if (floor(theNumber) == theNumber) stream <<".";
     std::string s = stream.str();
 
     for (unsigned int j = 0; j < s.length(); j++)
@@ -18,7 +58,6 @@ std::string getAsStringWithBigE(double theNumber)
             break;
         }
     }
-
     return s;
 }
 
