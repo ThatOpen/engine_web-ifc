@@ -18,10 +18,11 @@ jobs:
           version: 3.1.31
       - run: npm install -g npm@latest
       - run: npm ci
+      - run: npm whoami
       - run: npm version ${{ github.event.release.tag_name }} --git-tag-version false
       - run: npm run build-publish-repo
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
+          NP<_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Automated Version Number Setting
