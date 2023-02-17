@@ -9,6 +9,7 @@
 #include "ifc-schema.h"
 #include "helpers/loader_helpers.h"
 #include "helpers/crc_tables.h"
+#include "../version.h"
  
  namespace webifc {
  
@@ -93,7 +94,14 @@
    { 
       std::ostringstream output;
       output << "ISO-10303-21;"<<std::endl<<"HEADER;"<<std::endl;
-      for(auto i=0; i < _headerLines.size();i++) 
+      output << "/******************************************************" << std::endl;
+      output << "* STEP Physical File produced by: IFCjs WebIfc " << WEB_IFC_VERSION_NUMBER << std::endl;
+      output << "* Module: web-ifc/IfcLoader" << std::endl;
+      output << "* Version: " << WEB_IFC_VERSION_NUMBER << std::endl;
+      output << "* Source: https://github.com/IFCjs/web-ifc" << std::endl;
+      output << "* Issues: https://github.com/IFCjs/web-ifc/issues" << std::endl;
+      output << "******************************************************/" << std::endl;
+      for(uint32_t i=0; i < _headerLines.size();i++) 
       {
         _tokenStream->MoveTo(_headerLines[i].tapeOffset);
         bool newLine = true;
@@ -184,7 +192,7 @@
 
       }
       output << "ENDSEC;"<<std::endl<<"DATA;"<<std::endl;
-      for(auto i=0; i < _lines.size();i++)
+      for(uint32_t i=0; i < _lines.size();i++)
       {
         _tokenStream->MoveTo(_lines[i].tapeOffset);
         bool newLine = true;
@@ -392,7 +400,7 @@
   				}
   			}
   			_expressIDToLine.resize(maxExpressId + 1);
-  			for (int i = 1; i <= _lines.size(); i++) _expressIDToLine[_lines[i-1].expressID] = i;
+  			for (uint32_t i = 1; i <= _lines.size(); i++) _expressIDToLine[_lines[i-1].expressID] = i;
    }
    
    size_t IfcLoader::GetNumLines()
@@ -407,7 +415,7 @@
    
    uint32_t IfcLoader::GetMaxExpressId()
    { 
-      return _expressIDToLine.size();
+      return _expressIDToLine.size()-1;
    }
    
    uint32_t IfcLoader::IncreaseMaxExpressId(const uint32_t incrementSize)
@@ -720,7 +728,7 @@
    
    void IfcLoader::ReportError(const LoaderError &&error)
    { 
-     logError(error.message);
+     log::error(error.message);
    	 _errors.push_back(std::move(error));
    }
    
@@ -965,15 +973,15 @@
    
    void IfcLoader::ArgumentOffset(const uint32_t argumentIndex)
    {
-   	int movedOver = -1;
-   	int setDepth = 0;
+   	uint32_t movedOver = 0;
+   	uint32_t setDepth = 0;
    	while (true)
    	{
    		if (setDepth == 1)
    		{
    			movedOver++;
 
-   			if (movedOver == argumentIndex)
+   			if (movedOver-1 == argumentIndex)
    			{
    				return;
    			}

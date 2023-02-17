@@ -1,0 +1,29 @@
+name: Publish package to Npm
+on: 
+  release:
+    types: [created]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          # Defaults to the user or organization that owns the workflow file
+          #scope: '@ifcjs'
+      - uses: mymindstorm/setup-emsdk@v11
+        with:
+          version: 3.1.31
+      - run: npm ci
+      - run: npm version ${{ github.event.release.tag_name }} --git-tag-version false
+      - run: npm run build-publish-repo
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Automated Version Number Setting
+          

@@ -26,8 +26,8 @@ export default async function() {
             }
         });
 
-        Equals("total num vertices", totalSizeVerts, 181656);
-        Equals("total num indices", totalSizeIndices, 43998);
+        Equals("total num vertices", totalSizeVerts, 181548);
+        Equals("total num indices", totalSizeIndices, 43980);
     });
 
     await WithIFCFileLoaded("partialgeometrystream", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
@@ -36,7 +36,7 @@ export default async function() {
         let totalSizeIndices = 0;
 
         // grab all types except IFCCOLUMN
-        let types = WebIFC.IfcElements.filter((f) => (f !== WebIFC.IFCCOLUMN));
+        let types = ifcapi.GetIfcEntityList(modelID).filter((f) => (f !== WebIFC.IFCCOLUMN && ifcapi.IsIfcElement(f)));
 
         ifcapi.StreamAllMeshesWithTypes(modelID, types, (mesh: WebIFC.FlatMesh) => {
             
@@ -56,7 +56,7 @@ export default async function() {
             }
         });
 
-        Equals("total num vertices", totalSizeVerts, 132168);
-        Equals("total num indices", totalSizeIndices, 32214);
+        Equals("total num vertices", totalSizeVerts, 132060);
+        Equals("total num indices", totalSizeIndices, 32196);
     });
 }

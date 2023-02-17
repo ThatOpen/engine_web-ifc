@@ -27,7 +27,7 @@ namespace webifc
         double det = 1.0 / d;
         double u = det * glm::dot(E2, (Q * -1.0));
         double v = det * glm::dot(E1, Q);
-        double w = 1 - u - v;
+        //double w = 1 - u - v;
         t = det * glm::dot(ROV0, (N * -1.0));
 
         // TODO: this fuzz is quite serious

@@ -27,19 +27,19 @@
   "pckg-gui": {},
   "scripts": {
     "postinstall": "cd examples/viewer && npm install && cd ../browser && npm install && cd ../../benchmark && npm install",
-    "gen-schema": "cd src/schema && ts-node gen_functional_types.ts",
+    "gen-schema": "cd src/schema-generator && ts-node gen_functional_types.ts",
     "setup-env": "emsdk_env",
-    "setup-mingw" : "mingw-get instal msys-make gettext",
-    "build-release": "npm run build-wasm-release && npm run copy-to-dist && npm run build-api",
-    "build-debug": "npm run build-wasm-debug  && npm run copy-debug-to-dist && npm run build-api",
+    "setup-mingw": "mingw-get instal msys-make gettext",
+    "build-release": "npm run build-wasm-release && npm run build-api",
+    "build-debug": "npm run build-wasm-debug && npm run build-api",
     "publish-repo": "npm run set-version && cd dist && npm publish",
-    "build-publish-repo": "npm run set-version && npm run build-release && cd dist && npm publish",
+    "build-publish-repo": "npm run build-release && cd dist && npm publish",
     "copy-to-dist": "make-dir dist && cpy \"src/wasm/build/*.js\" dist &&  cpy \"src/wasm/build/*.wasm\" dist ",
     "copy-debug-to-dist": "make-dir dist && cpy \"src/wasm/build_debug/*.js\" dist &&  cpy \"src/wasm/build_debug/*.wasm\" dist ",
-    "build-wasm-debug": "make-dir src/wasm/build_debug && cd src/wasm/build_debug && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Debug && emmake make",
-    "build-wasm-release": "make-dir src/wasm/build && cd src/wasm/build && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Release && emmake make",
+    "build-wasm-debug": "make-dir src/wasm/build_debug && cd src/wasm/build_debug && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Debug && emmake make && npm run copy-debug-to-dist",
+    "build-wasm-release": "make-dir src/wasm/build && cd src/wasm/build && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Release && emmake make && npm run copy-to-dist",
     "build-api": "make-dir dist/helpers && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-browser && npm run build-web-ifc-api-node && cpy README.md dist && cpy package.json dist",
-    "build-ts-api": "make-dir dist/helpers && cpy \"src/*.ts\" dist && cpy \"src/helpers/*\" dist/helpers --flat && tsc --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts . --rename=web-ifc-api-node.d.ts",
+    "build-ts-api": "make-dir dist/helpers && cpy \"src/*.ts\" dist && cpy \"src/helpers/*\" dist/helpers --flat && tsc  --incremental --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts . --rename=web-ifc-api-node.d.ts",
     "build-web-ifc-api-mjs": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=esm --external:path --external:fs --external:os --external:perf_hooks --outfile=./dist/web-ifc-api.js",
     "build-web-ifc-api-browser": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=iife --global-name=WebIFC --external:os --external:path --external:fs --external:perf_hooks --outfile=./dist/web-ifc-api-browser.js",
     "build-web-ifc-api-node": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --platform=node --outfile=./dist/web-ifc-api-node.js",
@@ -50,12 +50,13 @@
     "docker-run": "npm run docker-run-container && npm run docker-get-compiled-files ",
     "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
     "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
-    "set-version": "node src/setversion.js",
+    "postversion": "node src/setversion.js",
     "test": "jest  --runInBand ",
     "test:unit": "jest  --runInBand --testMatch['**/tests/unit/**/*.spec.ts']",
     "test:functional": "jest  --runInBand --testMatch['**/tests/functional/**/*.spec.ts']",
     "regression-test-build": "esbuild tests/regression/src/index.js --bundle --sourcemap --platform=node --outfile=tests/regression/dist/test.js && cd tests/regression && cpy public/*.html dist/ --flat && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../../dist/web-ifc-mt.wasm dist/web-ifc-mt.wasm && cpy ../../dist/web-ifc-mt.worker.js dist/web-ifc-mt-worker.js && cpy ../../dist/web-ifc-mt.js dist/web-ifc-mt.js",
-    "regression-test": "npm run regression-test-build && cd tests/regression/dist && ws -p 8080 --cors.opener-policy same-origin --cors.embedder-policy require-corp"
+    "regression-test": "npm run regression-test-build && cd tests/regression/dist && ws -p 8080 --cors.opener-policy same-origin --cors.embedder-policy require-corp",
+    "gen-docs": "typedoc --out dist/docs && cpy ./banner.png ./dist/docs"
   },
   "author": "tomvandig",
   "files": [
@@ -67,8 +68,8 @@
     "web-ifc-api-browser.js",
     "web-ifc-api.d.ts",
     "ifc_schema.d.ts",
-    "ifc_schema_helper.d.ts",
-    "helpers/properties.d.ts"
+    "helpers/properties.d.ts",
+    "web-ifc-mt-worker.js"
   ],
   "devDependencies": {
     "@types/jest": "^27.0.3",
@@ -76,14 +77,15 @@
     "concurrently": "^6.2.0",
     "cpy-cli": "^4.2.0",
     "esbuild": "^0.12.15",
-    "local-web-server": "^5.2.1",
     "jest": "^27.4.2",
+    "local-web-server": "^5.2.1",
+    "make-dir-cli": "^3.0.0",
     "npm-watch": "^0.10.0",
     "three": "^0.130.1",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.9.1",
-    "typescript": "^4.3.5",
-    "make-dir-cli": "^3.0.0"
+    "typedoc": "^0.23.25",
+    "typescript": "^4.3.5"
   },
   "browser": {
     "crypto": false,

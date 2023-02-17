@@ -2,7 +2,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { IfcEntities, FILE_SCHEMA } from "./ifc-schema";
+/**
+ * Web-IFC Main API Class
+ * @module web-ifc
+ */
+
+import {
+    Handle,
+    IfcLineObject,
+    TypeInitialisers,
+    FILE_SCHEMA,
+    FILE_NAME, 
+    FILE_DESCRIPTION,
+    FromRawLineData,
+    Constructors,
+    InheritanceDef,
+    InversePropertyDef,
+    ToRawLineData,
+    SchemaNames
+} from "./ifc-schema";
 
 let WebIFCWasm: any;
 
@@ -18,9 +36,10 @@ else {
     WebIFCWasm = require("./web-ifc");
 }
 export * from "./ifc-schema";
-import * as ifc from "./ifc_schema_helper";
 import { Properties } from "./helpers/properties";
-export * from "./ifc_schema_helper";
+import { Log, LogLevel } from "./helpers/log";
+export { LogLevel };
+
 
 export const UNKNOWN = 0;
 export const STRING = 1;
@@ -33,6 +52,17 @@ export const SET_BEGIN = 7;
 export const SET_END = 8;
 export const LINE_END = 9;
 
+/**
+ * Settings for the IFCLoader
+ * @property {boolean} COORDINATE_TO_ORIGIN - If true, the model will be translated to the origin.
+ * @property {boolean} USE_FAST_BOOLS - Deprecated option, will be removed in next releases.
+ * @property {number} CIRCLE_SEGMENTS_LOW - Number of segments for low quality circles.
+ * @property {number} CIRCLE_SEGMENTS_MEDIUM - Number of segments for medium quality circles.
+ * @property {number} CIRCLE_SEGMENTS_HIGH - Number of segments for high quality circles.
+ * @property {number} BOOL_ABORT_THRESHOLD - Threshold for aborting boolean operations.
+ * @property {number} MEMORY_LIMIT - Memory limit for the loader.
+ * @property {number} TAPE_SIZE - Size of the tape for the loader.
+ */
 export interface LoaderSettings {
     COORDINATE_TO_ORIGIN?: boolean;
     USE_FAST_BOOLS?: boolean;
@@ -42,17 +72,6 @@ export interface LoaderSettings {
     BOOL_ABORT_THRESHOLD?: number;
     MEMORY_LIMIT?: number;
     TAPE_SIZE? : number;
-}
-
-
-// TODO(pablo): Don't know how to get static refs to the values, so
-// manually keeping in-sync with src/wasm/include/web-ifc.h.
-export enum LogLevel {
-    DEBUG = 0,
-    INFO = 1,
-    WARN = 2,
-    ERROR = 3,
-    OFF = 4,
 }
 
 export interface Vector<T> {
@@ -67,6 +86,12 @@ export interface Color {
     w: number;
 }
 
+export interface RawLineData {
+    ID: number;
+    type: number;
+    arguments: any[];
+}
+
 export interface PlacedGeometry {
     color: Color;
     geometryExpressID: number;
@@ -76,12 +101,6 @@ export interface PlacedGeometry {
 export interface FlatMesh {
     geometries: Vector<PlacedGeometry>;
     expressID: number;
-}
-
-export interface RawLineData {
-    ID: number;
-    type: number;
-    arguments: any[];
 }
 
 export interface LoaderError {
@@ -103,6 +122,16 @@ export interface ifcType {
     typeName: string;
 }
 
+export interface NewIfcModel {
+    schema: string;
+    name?: string;
+    description?: string[];
+    authors?: string[];
+    organizations?: string[];
+    authorization?: string;
+}
+
+/** @ignore */
 export function ms() {
     return new Date().getTime();
 }
@@ -110,20 +139,20 @@ export function ms() {
 export type LocateFileHandlerFn = (path: string, prefix: string) => string;
 
 export class IfcAPI {
+    /** @ignore */
     wasmModule: undefined | any = undefined;
-    wasmPath: string = "";
-    isWasmPathAbsolute = false;
+    private wasmPath: string = "";
+    private isWasmPathAbsolute = false;
 
-    modelSchemaList: string[] = [];
+    private modelSchemaList: Array<number> = [];
 
+    /** @ignore */
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
     /**
      * Contains all the logic and methods regarding properties, psets, qsets, etc.
      */
     properties = new Properties(this);
-
-    logLevel = LogLevel.INFO
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
@@ -150,14 +179,15 @@ export class IfcAPI {
             this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler });
         }
         else {
-            this.LogError(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
+			Log.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
         }
     }
 
      /**
      * Opens a set of models and returns model IDs 
-     * @data Buffer containing IFC data (bytes)
-     * @data Settings settings for loading the model
+     * @param dataSets Array of Buffers containing IFC data (bytes)
+     * @param settings Settings for loading the model @see LoaderSettings
+	 * @returns Array of model IDs
     */
     OpenModels(dataSets: Array<Uint8Array>, settings?: LoaderSettings): Array<number> {
         let s: LoaderSettings = {
@@ -174,8 +204,9 @@ export class IfcAPI {
 
     /**
      * Opens a model and returns a modelID number
-     * @data Buffer containing IFC data (bytes)
-     * @data Settings settings for loading the model
+     * @param data Buffer containing IFC data (bytes)
+     * @param settings Settings for loading the model @see LoaderSettings
+	 * @returns ModelID
     */
     OpenModel(data: Uint8Array, settings?: LoaderSettings): number {
         let s: LoaderSettings = {
@@ -196,24 +227,26 @@ export class IfcAPI {
             dest.set(src);
             return srcSize;
         });
-        this.modelSchemaList[result] = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
-        console.log("Parsing Model using " + this.modelSchemaList[result] + " Schema");
+        this.modelSchemaList[result] = SchemaNames.indexOf(this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value);
+        Log.info("Parsing Model using " + this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value + " Schema");
         return result;
     }
 
     /**
-     * Fetches the schema version of a given model
-     *
+     * Fetches the ifc schema version of a given model
+     * @param modelID Model ID
+	 * @returns IFC Schema version
     */
     GetModelSchema(modelID: number) {
-        return this.modelSchemaList[modelID];
+        return SchemaNames[this.modelSchemaList[modelID]];
     }
 
     /**
      * Creates a new model and returns a modelID number
-     * @data Settings settings for generating data the model
+     * @param schema ifc schema version
+	 * @returns ModelID
     */
-    CreateModel(schema: string, settings?: LoaderSettings): number {
+    CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
             USE_FAST_BOOLS: true, //TODO: This needs to be fixed in the future to rely on elalish/manifold
@@ -226,14 +259,41 @@ export class IfcAPI {
             ...settings
         };
         let result = this.wasmModule.CreateModel(s);
-        this.modelSchemaList[result] = schema;
-        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[{type:1,'value':schema}]);
+        this.modelSchemaList[result] = SchemaNames.indexOf(model.schema);
+        const modelName = model.name || "web-ifc-model-"+result+".ifc";
+        const timestamp = new Date().toISOString().slice(0,19);
+        const description = model.description?.map((d) => ({type: STRING, value: d})) || [{type: STRING, value: 'ViewDefinition [CoordinationView]'}];
+        const authors = model.authors?.map((a) => ({type: STRING, value: a})) || [null];
+        const orgs = model.organizations?.map((o) => ({type: STRING, value: o})) || [null];
+        const auth = model.authorization ? {type: STRING, value: model.authorization} : null;
+        
+        this.wasmModule.WriteHeaderLine(result,FILE_DESCRIPTION,[
+            description, 
+            {type: STRING, value: '2;1'}
+        ]);
+        this.wasmModule.WriteHeaderLine(result,FILE_NAME,[
+            {type: STRING, value: modelName},
+            {type: STRING, value: timestamp},
+            authors,
+            orgs,
+            {type: STRING, value: "ifcjs/web-ifc-api"},
+            {type: STRING, value: "ifcjs/web-ifc-api"},
+            auth,
+        ]);
+        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);
+
         return result;
     }
 
+	/**
+	 * Saves a model to a Buffer
+	 * @param modelID Model ID
+	 * @returns Buffer containing the model data
+	 */
     SaveModel(modelID: number): Uint8Array {
         let modelSize = this.wasmModule.GetModelSize(modelID);
-        let dataBuffer = new Uint8Array(modelSize);
+        const headerBytes = 512;
+        let dataBuffer = new Uint8Array(modelSize + headerBytes);
         let size = 0; 
         this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
             let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
@@ -246,38 +306,76 @@ export class IfcAPI {
         return newBuffer;
     }
 
+    /**
+     * Export a model to IFC
+     * @param modelID model ID
+     * @returns blob with mimetype application/x-step containing the model data 
+     * 
+     * @deprecated Use SaveModel instead
+     */
+    ExportFileAsIFC(modelID: number) {
+        Log.warn("ExportFileAsIFC is deprecated, use SaveModel instead");
+        return this.SaveModel(modelID);
+    }
+    
+    /**
+    * Retrieves the geometry of an element
+    * @param modelID Model handle retrieved by OpenModel
+    * @param geometryExpressID express ID of the element
+    * @returns Geometry of the element as a list of vertices and indices
+    */
     GetGeometry(modelID: number, geometryExpressID: number): IfcGeometry {
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
     }
 
+    /**
+     * Gets the header information required by the user
+     * @param modelID Model handle retrieved by OpenModel
+     * @param headerType Type of header data you want to retrieve
+     * ifc.FILE_NAME, ifc.FILE_DESCRIPTION or ifc.FILE_SCHEMA
+     * @returns An object with parameters ID, type and arguments
+     */
     GetHeaderLine(modelID: number, headerType: number) {
         return this.wasmModule.GetHeaderLine(modelID, headerType);
     }
 
+    /**
+     * Gets the list of all ifcTypes contained in the model
+     * @param modelID Model handle retrieved by OpenModel
+     * @returns Array of objects containing typeID and typeName
+     */
     GetAllTypesOfModel(modelID: number): ifcType[] {
         let typesNames: ifcType[] = [];
-        const elements = Object.keys(IfcEntities).map((e) => parseInt(e));
+        const elements = Object.keys(FromRawLineData[this.modelSchemaList[modelID]]).map((e) => parseInt(e));
         for (let i = 0; i < elements.length; i++) {
             const lines = this.GetLineIDsWithType(modelID, elements[i]);
-            if (lines.size() > 0) typesNames.push({ typeID: elements[i], typeName: IfcEntities[elements[i]] });
+            if (lines.size() > 0) typesNames.push({ typeID: elements[i], typeName: this.wasmModule.GetNameFromTypeCode(elements[i]) });
         }
         return typesNames;
     }
 
-    GetLine(modelID: number, expressID: number, flatten: boolean = false, inverse: boolean = false) {
+	/**
+	 * Gets the ifc line data for a given express ID
+	 * @param modelID Model handle retrieved by OpenModel
+	 * @param expressID express ID of the line
+	 * @param flatten recursively flatten the line, default false
+	 * @param inverse get the inverse properties of the line, default false
+	 * @returns lineObject
+	 */
+    GetLine(modelID: number, expressID: number, flatten = false, inverse = false) {
         let expressCheck = this.wasmModule.ValidateExpressID(modelID, expressID);
         if (!expressCheck) {
             return;
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = ifc.FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData);
+        let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
 
         if (flatten) {
             this.FlattenLine(modelID, lineData);
         }
 
-        let inverseData = ifc.InversePropertyDef[this.modelSchemaList[modelID]][rawLineData.type];
+        let inverseData = InversePropertyDef[this.modelSchemaList[modelID]][rawLineData.type];
         if (inverse && inverseData != null) 
         {
           for (let inverseProp of inverseData) 
@@ -286,9 +384,9 @@ export class IfcAPI {
             else lineData[inverseProp[0]] = [];
             
             let targetTypes = [inverseProp[1]];
-            if (typeof ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]] != "undefined")
+            if (typeof InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]] != "undefined")
             {
-              targetTypes=targetTypes.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
+              targetTypes=targetTypes.concat(InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
             }
             let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, targetTypes, inverseProp[2], inverseProp[3]);
             if (!inverseProp[3] && inverseIDs.size()>0) 
@@ -308,46 +406,109 @@ export class IfcAPI {
         return lineData;
     }
 
+    /**
+     * Gets the next unused expressID
+     * @param modelID Model handle retrieved by OpenModel
+     * @param expressID Starting expressID value 
+     * @returns The next unused expressID starting from the value provided
+     */
     GetNextExpressID(modelID: number, expressID: number): number {
         return this.wasmModule.GetNextExpressID(modelID, expressID);
     }
 
+    /**
+     * Returns the list of errors generated by the parser and clears it
+     * @param modelID Model handle retrieved by OpenModel
+     * @returns Vector containing the list of errors
+     */
     GetAndClearErrors(modelID: number): Vector<LoaderError> {
         return this.wasmModule.GetAndClearErrors(modelID);
     }
 
-    CreateIfcEntity(modelID: number, type:number, ...args: any[] ): ifc.IfcLineObject
+    /**
+     * Creates a new ifc entity
+     * @param modelID Model handle retrieved by OpenModel
+     * @param type Type code
+     * @param args Arguments required by the entity
+     * @returns An object contining the parameters of the new entity
+     */
+    CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
         let expressID: number = this.IncrementMaxExpressID(modelID, 1);
-        let p = ifc.Constructors[this.modelSchemaList[modelID]][type](type,expressID,args);
-        return p;
+        return Constructors[this.modelSchemaList[modelID]][type](expressID,args);
     }
 
-    WriteLine<Type extends ifc.IfcLineObject>(modelID: number, lineObject: Type) {
+    /**
+     * Creates a new ifc type i.e. IfcLabel, IfcReal, ...
+     * @param modelID Model handle retrieved by OpenModel
+     * @param type Type code
+     * @param value Type value
+     * @returns An object with the parameters of the type
+     */
+    CreateIfcType(modelID: number, type:number, value: any) 
+    {
+        return TypeInitialisers[this.modelSchemaList[modelID]][type](value);
+    }
 
+    /**
+     * Gets the name from a type code
+     * @param type Code
+     * @returns Name
+     */
+    GetNameFromTypeCode(type:number): string 
+    {
+       return this.wasmModule.GetNameFromTypeCode(type);
+    }
+
+    /**
+     * Evaluates if a type is subtype of IfcElement 
+     * @param type Type code
+     * @returns True if subtype of Ifcelement, False if it is not subtype
+     */
+    IsIfcElement(type:number) : boolean
+    {
+        return this.wasmModule.IsIfcElement(type);
+    }
+
+    /**
+     * Returns a list with all entity types that are present in the current schema
+     * @param modelID Model handle retrieved by OpenModel
+     * @returns Array of type codes
+     */
+    GetIfcEntityList(modelID: number) : Array<number>
+    {
+        return Object.keys(FromRawLineData[this.modelSchemaList[modelID]]).map(x=>parseInt(x));
+    }
+
+	/**
+	 * Writes a line to the model, can be used to write new lines or to update existing lines
+	 * @param modelID Model handle retrieved by OpenModel
+	 * @param lineObject line object to write
+	 */
+    WriteLine<Type extends IfcLineObject>(modelID: number, lineObject: Type) {
         let property: keyof Type;
         for (property in lineObject)
         {
             const lineProperty: any = lineObject[property];
-            if (lineProperty  && (lineProperty as ifc.IfcLineObject).expressID !== undefined) {
+            if (lineProperty  && (lineProperty as IfcLineObject).expressID !== undefined) {
                 // this is a real object, we have to write it as well and convert to a handle
                 // TODO: detect if the object needs to be written at all, or if it's unchanged
-                this.WriteLine(modelID, lineProperty as ifc.IfcLineObject);
+                this.WriteLine(modelID, lineProperty as IfcLineObject);
 
                 // overwrite the reference
                 // NOTE: this modifies the parameter
-                (lineObject[property] as any)= new ifc.Handle((lineProperty as ifc.IfcLineObject).expressID);
+                (lineObject[property] as any)= new Handle((lineProperty as IfcLineObject).expressID);
             }
             else if (Array.isArray(lineProperty) && lineProperty.length > 0) {
                 for (let i = 0; i < lineProperty.length; i++) {
-                    if ((lineProperty[i] as ifc.IfcLineObject).expressID !== undefined) {
+                    if ((lineProperty[i] as IfcLineObject).expressID !== undefined) {
                         // this is a real object, we have to write it as well and convert to a handle
                         // TODO: detect if the object needs to be written at all, or if it's unchanged
-                        this.WriteLine(modelID, lineProperty[i] as ifc.IfcLineObject);
+                        this.WriteLine(modelID, lineProperty[i] as IfcLineObject);
 
                         // overwrite the reference
                         // NOTE: this modifies the parameter
-                        ((lineObject[property]as any)[i] as any) = new ifc.Handle((lineProperty[i] as ifc.IfcLineObject).expressID);
+                        ((lineObject[property]as any)[i] as any) = new Handle((lineProperty[i] as IfcLineObject).expressID);
                     }
                 }
             }
@@ -361,12 +522,16 @@ export class IfcAPI {
         let rawLineData: RawLineData = {
             ID: lineObject.expressID,
             type: lineObject.type,
-            arguments: lineObject.ToTape() as any[]
+            arguments: ToRawLineData[this.modelSchemaList[modelID]][lineObject.type](lineObject) as any[]
         }
-
         this.WriteRawLineData(modelID, rawLineData);
     }
 
+	/**
+	 * Recursively flattens a line object
+	 * @param modelID Model handle retrieved by OpenModel
+	 * @param line line object to flatten
+	 */
     FlattenLine(modelID: number, line: any) {
         Object.keys(line).forEach(propertyName => {
             let property = line[propertyName];
@@ -381,28 +546,56 @@ export class IfcAPI {
         });
     }
 
+    /**
+     * Gets all parameters contained in a line of model
+     * @param modelID Model handle retrieved by OpenModel
+     * @param expressID ID of the line to retrieve
+     * @returns An object containing the ID, type and arguments of the line
+     */
     GetRawLineData(modelID: number, expressID: number): RawLineData {
         return this.wasmModule.GetLine(modelID, expressID) as RawLineData;
     }
 
+    /**
+     * Writes a line in the model
+     * @param modelID Model handle retrieved by OpenModel
+     * @param data RawLineData containing the ID, type and arguments of the line
+     */
     WriteRawLineData(modelID: number, data: RawLineData) {
         this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
     }
 
+	/**
+	 * Get all line IDs of a specific ifc type
+	 * @param modelID model ID
+	 * @param type ifc type, @see IfcEntities
+	 * @param includeInherited if true, also returns all inherited types 
+	 * @returns vector of line IDs
+	 */
     GetLineIDsWithType(modelID: number, type: number, includeInherited: boolean = false): Vector<number> {
         let types: Array<number> = [];
         types.push(type);
-        if (includeInherited && typeof ifc.InheritanceDef[this.modelSchemaList[modelID]][type] != "undefined")
+        if (includeInherited && typeof InheritanceDef[this.modelSchemaList[modelID]][type] != "undefined")
         {
-          types = types.concat(ifc.InheritanceDef[this.modelSchemaList[modelID]][type]);
+          types = types.concat(InheritanceDef[this.modelSchemaList[modelID]][type]);
         } 
         return this.wasmModule.GetLineIDsWithType(modelID, types);
     }
 
+	/**
+	 * Get all line IDs of a model
+	 * @param modelID model ID
+	 * @returns vector of all line IDs
+	 */
     GetAllLines(modelID: Number): Vector<number> {
         return this.wasmModule.GetAllLines(modelID);
     }
 
+	/**
+	 * Set the transformation matrix
+	 * @param modelID model ID
+	 * @param transformationMatrix transformation matrix, flat 4x4 matrix as array[16] 
+	 */
     SetGeometryTransformation(modelID: number, transformationMatrix: Array<number>) {
         if (transformationMatrix.length != 16) {
             throw new Error(`invalid matrix size: ${transformationMatrix.length}`);
@@ -410,6 +603,11 @@ export class IfcAPI {
         this.wasmModule.SetGeometryTransformation(modelID, transformationMatrix);
     }
 
+	/**
+	 * Get the coordination matrix
+	 * @param modelID model ID
+	 * @returns flat 4x4 matrix as array[16]
+	 */
     GetCoordinationMatrix(modelID: number): Array<number> {
         return this.wasmModule.GetCoordinationMatrix(modelID) as Array<number>;
     }
@@ -428,24 +626,36 @@ export class IfcAPI {
 
     /**
      * Closes a model and frees all related memory
-     * @modelID Model handle retrieved by OpenModel, model must not be closed
+     * @param modelID Model handle retrieved by OpenModel, model must not be closed
     */
     CloseModel(modelID: number) {
         this.ifcGuidMap.delete(modelID);
         this.wasmModule.CloseModel(modelID);
     }
 
+	/**
+	 * Streams all meshes of a model
+	 * @param modelID Model handle retrieved by OpenModel
+	 * @param meshCallback callback function that is called for each mesh
+	 */
     StreamAllMeshes(modelID: number, meshCallback: (mesh: FlatMesh) => void) {
         this.wasmModule.StreamAllMeshes(modelID, meshCallback);
     }
 
+	/**
+	 * Streams all meshes of a model with a specific ifc type
+	 * @param modelID Model handle retrieved by OpenModel
+	 * @param types types of elements to stream
+	 * @param meshCallback callback function that is called for each mesh
+	 */
     StreamAllMeshesWithTypes(modelID: number, types: Array<number>, meshCallback: (mesh: FlatMesh) => void) {
         this.wasmModule.StreamAllMeshesWithTypes(modelID, types, meshCallback);
     }
 
     /**
      * Checks if a specific model ID is open or closed
-     * @modelID Model handle retrieved by OpenModel
+     * @param modelID Model handle retrieved by OpenModel
+	 * @returns true if model is open, false if model is closed
     */
     IsModelOpen(modelID: number): boolean {
         return this.wasmModule.IsModelOpen(modelID);
@@ -453,7 +663,8 @@ export class IfcAPI {
 
     /**
      * Load all geometry in a model
-     * @modelID Model handle retrieved by OpenModel
+     * @param modelID Model handle retrieved by OpenModel
+	 * @returns Vector of FlatMesh objects
     */
     LoadAllGeometry(modelID: number): Vector<FlatMesh> {
         return this.wasmModule.LoadAllGeometry(modelID);
@@ -461,7 +672,9 @@ export class IfcAPI {
 
     /**
      * Load geometry for a single element
-     * @modelID Model handle retrieved by OpenModel
+     * @param modelID Model handle retrieved by OpenModel
+	 * @param expressID ExpressID of the element
+	 * @returns FlatMesh object
     */
     GetFlatMesh(modelID: number, expressID: number): FlatMesh {
         return this.wasmModule.GetFlatMesh(modelID, expressID);
@@ -500,12 +713,13 @@ export class IfcAPI {
     /**
      * Creates a map between element ExpressIDs and GlobalIDs.
      * Each element has two entries, (ExpressID -> GlobalID) and (GlobalID -> ExpressID).
-     * @modelID Model handle retrieved by OpenModel
+     * @param modelID Model handle retrieved by OpenModel
      */
     CreateIfcGuidToExpressIdMapping(modelID: number): void {
         const map = new Map<string | number, string | number>();
-        for (const typeId in IfcEntities) {
-            const lines = this.GetLineIDsWithType(modelID, Number(typeId));
+        let entities = this.GetIfcEntityList(modelID);
+        for (const typeId of entities) {
+            const lines = this.GetLineIDsWithType(modelID, typeId);
             const size = lines.size();
             for (let y = 0; y < size; y++) {
                 const expressID = lines.get(y);
@@ -521,37 +735,22 @@ export class IfcAPI {
         this.ifcGuidMap.set(modelID, map);
     }
 
+	/**
+	 * Sets the path to the wasm file
+	 * @param path path to the wasm file
+	 * @param absolute if true, path is absolute, otherwise it is relative to executing script
+	 */
     SetWasmPath(path: string, absolute = false) {
         this.wasmPath = path;
         this.isWasmPathAbsolute = absolute;
     }
 
+	/**
+	 * Sets the log level
+	 * @param level Log level to set
+	 */
     SetLogLevel(level: LogLevel): void {
-        this.logLevel = level;
+        Log.setLogLevel(level);
         this.wasmModule.SetLogLevel(level);
-    }
-
-    LogDebug(...msg: string[]): void {
-        if (this.logLevel >= LogLevel.DEBUG) {
-            console.log('DEBUG:', ...msg);
-        }
-    }
-
-    LogInfo(...msg: string[]): void {
-        if (this.logLevel >= LogLevel.INFO) {
-            console.log('INFO:', ...msg);
-        }
-    }
-
-    LogWarn(...msg: string[]): void {
-        if (this.logLevel >= LogLevel.WARN) {
-            console.warn('WARN:', ...msg);
-        }
-    }
-
-    LogError(...msg: string[]): void {
-        if (this.logLevel >= LogLevel.ERROR) {
-            console.error('ERROR:', ...msg);
-        }
     }
 }

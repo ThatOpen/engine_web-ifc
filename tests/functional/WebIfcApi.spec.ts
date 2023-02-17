@@ -69,6 +69,8 @@ let totalLineNumber : number = 6487;
 let emptyFileModelID: number;
 let lastExpressId : number = 14312;
 let expectedFileDescription : string = "ViewDefinition [CoordinationView_V2.0]";
+let expectedFileSchema = "IFC2X3";
+let expectedFileName = "3458";
 let expressIDMatchingGuid: any = {
     expressID: 2863,
     guid: "0VNYAWfXv8JvIRVfOzYH1j"
@@ -76,7 +78,7 @@ let expressIDMatchingGuid: any = {
 let expectedVertexAndIndexDatas: any = {
     geometryIndex: 4,
     indexDatas: "3,0,1,1,2,3,8,6,5,6,8,7,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33",
-    vertexDatas: "0,0,609.5999755859375,0,0,1,304.79998779296875,0,609.5999755859375,0,0,1,304.79998779296875,6110.9111328125,609.5999755859375,0,0,1,1.6996182239381596e-11,6182.7158203125,609.5999755859375,0,0,1,0,0,609.5999755859375,0,0,1,0,0,0,0,0,-1,304.79998779296875,0,0,0,0,-1,304.79998779296875,6110.9111328125,0,0,0,-1,1.6996182239381596e-11,6182.7158203125,0,0,0,-1,0,0,0,0,0,-1,0,0,0,0,-1,0,304.79998779296875,0,609.5999755859375,0,-1,0,0,0,609.5999755859375,0,-1,0,0,0,0,0,-1,0,304.79998779296875,0,0,0,-1,0,304.79998779296875,0,609.5999755859375,0,-1,0,304.79998779296875,0,0,1,-2.7812843513192777e-15,0,304.79998779296875,6110.9111328125,609.5999755859375,1,-2.7812843513192777e-15,0,304.79998779296875,0,609.5999755859375,1,-2.7812843513192777e-15,0,304.79998779296875,0,0,1,-2.7812843513192777e-15,0,304.79998779296875,6110.9111328125,0,1,-2.7812843513192777e-15,0,304.79998779296875,6110.9111328125,609.5999755859375,1,-2.7812843513192777e-15,0,304.79998779296875,6110.9111328125,0,0.22930225729942322,0.9733552932739258,0,1.6996182239381596e-11,6182.7158203125,609.5999755859375,0.22930225729942322,0.9733552932739258,0,304.79998779296875,6110.9111328125,609.5999755859375,0.22930225729942322,0.9733552932739258,0,304.79998779296875,6110.9111328125,0,0.22930225729942322,0.9733552932739258,0,1.6996182239381596e-11,6182.7158203125,0,0.22930225729942322,0.9733552932739258,0,1.6996182239381596e-11,6182.7158203125,609.5999755859375,0.22930225729942322,0.9733552932739258,0,1.6996182239381596e-11,6182.7158203125,0,-1,2.7489831733922086e-15,0,0,0,609.5999755859375,-1,2.7489831733922086e-15,0,1.6996182239381596e-11,6182.7158203125,609.5999755859375,-1,2.7489831733922086e-15,0,1.6996182239381596e-11,6182.7158203125,0,-1,2.7489831733922086e-15,0,0,0,0,-1,2.7489831733922086e-15,0,0,0,609.5999755859375,-1,2.7489831733922086e-15,0"
+    vertexDatas: "0,304.79998779296875,3195.199951171875,0,0,1,0,0,3195.199951171875,0,0,1,304.79998779296875,0,3195.199951171875,0,0,1,304.79998779296875,304.79998779296875,3195.199951171875,0,0,1,0,304.79998779296875,3195.199951171875,0,0,1,0,304.79998779296875,0,0,0,-1,0,0,0,0,0,-1,304.79998779296875,0,0,0,0,-1,304.79998779296875,304.79998779296875,0,0,0,-1,0,304.79998779296875,0,0,0,-1,0,304.79998779296875,0,-1,0,0,0,0,3195.199951171875,-1,0,0,0,304.79998779296875,3195.199951171875,-1,0,0,0,304.79998779296875,0,-1,0,0,0,0,0,-1,0,0,0,0,3195.199951171875,-1,0,0,0,0,0,0,-1,0,304.79998779296875,0,3195.199951171875,0,-1,0,0,0,3195.199951171875,0,-1,0,0,0,0,0,-1,0,304.79998779296875,0,0,0,-1,0,304.79998779296875,0,3195.199951171875,0,-1,0,304.79998779296875,0,0,1,0,0,304.79998779296875,304.79998779296875,3195.199951171875,1,0,0,304.79998779296875,0,3195.199951171875,1,0,0,304.79998779296875,0,0,1,0,0,304.79998779296875,304.79998779296875,0,1,0,0,304.79998779296875,304.79998779296875,3195.199951171875,1,0,0,304.79998779296875,304.79998779296875,0,0,1,0,0,304.79998779296875,3195.199951171875,0,1,0,304.79998779296875,304.79998779296875,3195.199951171875,0,1,0,304.79998779296875,304.79998779296875,0,0,1,0,0,304.79998779296875,0,0,1,0,0,304.79998779296875,3195.199951171875,0,1,0"
 }
 let IFCEXTRUDEDAREASOLIDMeshesCount = 97;
 let givenCoordinationMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
@@ -86,11 +88,11 @@ let givenCoordinationMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 
 beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
-    ifcApi.SetLogLevel(WebIFC.LogLevel.OFF);
+    ifcApi.SetLogLevel(WebIFC.LogLevel.LOG_LEVEL_OFF);
     const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
-    emptyFileModelID = ifcApi.CreateModel('IFC2X3');
+    emptyFileModelID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
     tmpModelID = ifcApi.OpenModel(exampleIFCData);
 })
 
@@ -153,12 +155,50 @@ describe('WebIfcApi reading methods', () => {
     test('returns same expressID if it is the max ID', () => {
         expect(ifcApi.GetNextExpressID(modelID, 14312)).toBe(14312);
     })
+    test('Can get max expressID', () => {
+        const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
+        expect(maxExpressId).toEqual(lastExpressId);
+    })
     test('can increment the max expressID', () => {
         let maxEID = ifcApi.GetMaxExpressID(tmpModelID);
         let newEID = ifcApi.IncrementMaxExpressID(tmpModelID, 2);
         expect(newEID).toBe(maxEID + 2);
-    })
-})
+    });
+    test('Can get header information', () => {
+        const descriptionLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_DESCRIPTION );
+        const nameLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_NAME );
+        const schemaLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_SCHEMA );
+        expect(descriptionLine.type).toEqual("FILE_DESCRIPTION");
+        expect(descriptionLine.arguments.length).toBeGreaterThan(1);
+        expect(descriptionLine.arguments[0][0].value).toEqual(expectedFileDescription);
+        expect(nameLine.type).toEqual("FILE_NAME");
+        expect(nameLine.arguments.length).toBe(7);
+        expect(nameLine.arguments[0].value).toEqual(expectedFileName);
+        expect(schemaLine.type).toEqual("FILE_SCHEMA");
+        expect(schemaLine.arguments.length).toBe(1);
+        expect(schemaLine.arguments[0][0].value).toEqual(expectedFileSchema);
+    });
+    test('can get name for type code', () => {
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCPROPERTYSINGLEVALUE)).toBe("IFCPROPERTYSINGLEVALUE");
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCWALL)).toBe("IFCWALL");
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCRELASSOCIATESMATERIAL)).toBe("IFCRELASSOCIATESMATERIAL");
+    });
+    test('can check if is ifcelement', () => {
+        expect(ifcApi.IsIfcElement(WebIFC.IFCWALL)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCDOOR)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCWINDOW)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCROOF)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCSTAIRFLIGHT)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCSTAIR)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCSLAB)).toBeTruthy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCRECTANGULARPYRAMID)).toBeFalsy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCPROPERTYSET)).toBeFalsy();
+        expect(ifcApi.IsIfcElement(WebIFC.IFCRELDEFINESBYOBJECT)).toBeFalsy();
+        expect(ifcApi.IsIfcElement(-1)).toBeFalsy();
+        expect(ifcApi.IsIfcElement(-5)).toBeFalsy();
+    });
+});
+
 describe('WebIfcApi geometries', () => {
     test('can return the correct number geometries', () => {
         geometries = ifcApi.LoadAllGeometry(modelID);
@@ -236,16 +276,8 @@ describe('WebIfcApi geometries', () => {
         });
         expect(count).toEqual(IFCEXTRUDEDAREASOLIDMeshesCount);
     })
-    test('Can get max expressID', () => {
-        const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
-        expect(maxExpressId).toEqual(lastExpressId);
-    })
-    test('Can get header information', () => {
-        const headerLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_DESCRIPTION );
-        expect(headerLine.type).toEqual("FILE_DESCRIPTION");
-        expect(headerLine.arguments[0][0].value).toEqual(expectedFileDescription);
-    })
 });
+
 describe('WebIfcApi geometry transformation', () => {
     test('should throw with message \'invalid matrix size\' when matrix size != 16', () => {
         expect(() => {
@@ -253,6 +285,7 @@ describe('WebIfcApi geometry transformation', () => {
         }).toThrow("invalid matrix size: 1");
     })
 });
+
 describe('WebIfcApi writing methods', () => {
     test('Can create an empty model', () => {
         expect(emptyFileModelID).toBe(1);
@@ -348,7 +381,6 @@ describe('WebIfcApi writing methods', () => {
         let projectBeforeWriting: any = ifcApi.GetAllLines(modelID);
         let payload = new IFC2X3.IfcBuildingElementProxy(
             9999999,
-            WebIFC.IFCBUILDINGELEMENTPROXY,
             new IFC2X3.IfcGloballyUniqueId('GUID'),
             new WebIFC.Handle(41),
             new IFC2X3.IfcLabel('NZ-SHS beam:100x6.0SHS:823947'),
@@ -481,15 +513,48 @@ describe('some use cases', () => {
     
 })
 
-describe('creating objects', () => {
+describe('creating ifc', () => {
+    test('can create new ifc model', () => {
+        let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
+        expect(createdID).toBe(5);
+        expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
+        expect(ifcApi.wasmModule.GetModelSize(createdID)).toBeGreaterThan(0);
+        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBe(7);
+        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_DESCRIPTION)['arguments'].length).toBeGreaterThan(1);
+        expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_SCHEMA)['arguments'].length).toBe(1);
+        ifcApi.CloseModel(createdID);
+    });
+
+    test('can create & save new ifc model', () => {
+        let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
+        expect(createdID).toBe(6);
+        const buffer = ifcApi.SaveModel(createdID);
+        fs.writeFileSync(path.join(__dirname, '../artifacts/created.ifc'), buffer);
+        ifcApi.CloseModel(createdID);
+    });
+
     test("create an IFC object from Typecode", () => {
-        
+        const maxExpressId = ifcApi.GetMaxExpressID(modelID);
         let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
+        expect(entity.expressID).toBe(maxExpressId + 1);
+        expect(entity.type).toBe(WebIFC.IFCCARTESIANPOINT);
         expect(entity.constructor.name).toBe('IfcCartesianPoint');
     });
 
+    test('can write new ifc entity', () => {
+        let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
+        ifcApi.WriteLine(modelID, entity);
+    });
+
+    test('can create ifc type', () => {
+        let type = ifcApi.CreateIfcType(modelID, WebIFC.IFCREAL, 1.0);
+        expect(type.type).toBe(WebIFC.REAL);
+        expect(type.constructor.name).toBe('IfcReal');
+        expect(type.value).toBe(1.0);
+    });
+
     
-})
+});
 
 describe('opening large amounts of data', () => {
     test("open a small model but with a heavy memory restriction", () => {
@@ -499,7 +564,7 @@ describe('opening large amounts of data', () => {
         };
         const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test'));
         let modelId = ifcApi.OpenModel(exampleIFCData,s);
-        expect(modelId).toBe(5);
+        expect(modelId).toBe(7);
     });
 
      test("open a small model but many times", () => {

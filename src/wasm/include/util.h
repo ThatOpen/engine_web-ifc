@@ -21,10 +21,11 @@
 
 namespace webifc
 {
-	const double EPS_MINISCULE = 1e-12; // what?
-	const double EPS_TINY = 1e-9;
-	const double EPS_SMALL = 1e-6;
-	const double EPS_BIG = 1e-4;
+	constexpr double EPS_MINISCULE = 1e-12; // what?
+	constexpr double EPS_TINY = 1e-9;
+	constexpr double EPS_SMALL = 1e-6;
+	constexpr double EPS_MED = 1e-5;
+	constexpr double EPS_BIG = 1e-4;
 
 	bool MatrixFlipsTriangles(const glm::dmat4 &mat)
 	{
@@ -43,6 +44,58 @@ namespace webifc
 		out << data;
 		out.close();
 	}
+
+	struct AABB
+	{
+		uint32_t index;
+		glm::dvec3 min = glm::dvec3(DBL_MAX, DBL_MAX, DBL_MAX);
+		glm::dvec3 max = glm::dvec3(-DBL_MAX, -DBL_MAX, -DBL_MAX);
+		glm::dvec3 center = glm::dvec3();
+		bool intersects(const AABB &other) const
+		{
+			constexpr double eps = EPS_BIG;
+			return (max.x + eps >= other.min.x && other.max.x + eps >= min.x &&
+					max.y + eps >= other.min.y && other.max.y + eps >= min.y &&
+					max.z + eps >= other.min.z && other.max.z + eps >= min.z);
+		}
+		void merge(const AABB &other)
+		{
+			min = glm::min(min, other.min);
+			max = glm::max(max, other.max);
+		}
+		// https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
+		bool Intersect(const glm::dvec3 &origin, const glm::dvec3 &dir) const
+		{ // r.dir is unit direction vector of ray
+			glm::dvec3 dirfrac;
+			dirfrac.x = 1.0f / dir.x;
+			dirfrac.y = 1.0f / dir.y;
+			dirfrac.z = 1.0f / dir.z;
+			// lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
+			// r.org is origin of ray
+			double t1 = (min.x - origin.x) * dirfrac.x;
+			double t2 = (max.x - origin.x) * dirfrac.x;
+			double t3 = (min.y - origin.y) * dirfrac.y;
+			double t4 = (max.y - origin.y) * dirfrac.y;
+			double t5 = (min.z - origin.z) * dirfrac.z;
+			double t6 = (max.z - origin.z) * dirfrac.z;
+			double tmin = std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
+			double tmax = std::min(std::min(std::max(t1, t2), std::max(t3, t4)), std::max(t5, t6));
+			// if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
+			if (tmax < -EPS_BIG)
+			{
+				// t = tmax;
+				return false;
+			}
+			// if tmin > tmax, ray doesn't intersect AABB
+			if (tmin > tmax + EPS_BIG)
+			{
+				// t = tmax;
+				return false;
+			}
+			// t = tmin;
+			return true;
+		}
+	};
 
 	// for some reason std::string_view is not compiling...
 	struct StringView
@@ -187,7 +240,7 @@ namespace webifc
 			if (!computeSafeNormal(a, b, c, normal))
 			{
 				// bail out, zero area triangle
-				printf("zero tri");
+				printf("zero tri\n");
 				return;
 			}
 
@@ -220,6 +273,23 @@ namespace webifc
 			return f;
 		}
 
+		inline AABB GetFaceBox(uint32_t index) const
+		{
+			AABB aabb;
+			aabb.index = index;
+			glm::dvec3 a = GetPoint(indexData[index * 3 + 0]);
+			glm::dvec3 b = GetPoint(indexData[index * 3 + 1]);
+			glm::dvec3 c = GetPoint(indexData[index * 3 + 2]);
+			aabb.min = glm::min(a, aabb.min);
+			aabb.min = glm::min(b, aabb.min);
+			aabb.min = glm::min(c, aabb.min);
+			aabb.max = glm::max(a, aabb.max);
+			aabb.max = glm::max(b, aabb.max);
+			aabb.max = glm::max(c, aabb.max);
+			aabb.center = (aabb.max + aabb.min) / 2.0;
+			return aabb;
+		}
+
 		inline glm::dvec3 GetPoint(uint32_t index) const
 		{
 			return glm::dvec3(
@@ -230,8 +300,8 @@ namespace webifc
 
 		void GetCenterExtents(glm::dvec3 &center, glm::dvec3 &extents) const
 		{
-			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
-			glm::dvec3 max(DBL_MIN, DBL_MIN, DBL_MIN);
+			glm::dvec3 min = glm::dvec3(DBL_MAX, DBL_MAX, DBL_MAX);
+			glm::dvec3 max = glm::dvec3(-DBL_MAX, -DBL_MAX, -DBL_MAX);
 
 			for (size_t i = 0; i < numPoints; i++)
 			{
@@ -400,7 +470,7 @@ namespace webifc
 		{
 			double sum = 0;
 
-			for (int i = 0; i < points.size(); i++)
+			for (size_t i = 0; i < points.size(); i++)
 			{
 				glm::dvec2 pt1 = points[(i - 1) % points.size()];
 				glm::dvec2 pt2 = points[i];
@@ -614,9 +684,9 @@ namespace webifc
 		return (angle / (2 * CONST_PI)) * 360;
 	}
 
-	double mirrorAngle(double angle) //in degrees
+	double mirrorAngle(double angle) // in degrees
 	{
-		if(angle < 180)
+		if (angle < 180)
 		{
 			return 180 - angle;
 		}
@@ -717,10 +787,10 @@ namespace webifc
 
 		double hd = depth / 2;
 		double hw = flangeWidth / 2;
-		double hweb = webThickness / 2;
+//		double hweb = webThickness / 2;
 		double slopeOffsetRight = flangeSlope * hw;
 		double slopeOffsetLeft = flangeSlope * (hw - webThickness);
-		double flangeReferencePointY = hd - flangeThickness;
+		//double flangeReferencePointY = hd - flangeThickness;
 
 		// TODO: implement the radius
 
@@ -796,7 +866,7 @@ namespace webifc
 		}
 		else
 		{
-			 c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
 			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 1));
 			c.points.push_back(placement * glm::dvec3(hweb, -hd, 1));
 			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
@@ -821,7 +891,7 @@ namespace webifc
 
 		double hw = width / 2;
 		double hd = depth / 2;
-		double hweb = thickness / 2;
+		//double hweb = thickness / 2;
 
 		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
 		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
@@ -897,7 +967,7 @@ namespace webifc
 		double minError = 0.0001;
 		double maxError = 0.01;
 		double rotacions = 6;
-		double stepOld = step1;
+		//double stepOld = step1;
 
 		// First approximation
 
@@ -905,7 +975,7 @@ namespace webifc
 		double fV = 0.5;
 		double divisor = 100;
 		double maxdi = 1e+100;
-		double extension = 0;
+		//double extension = 0;
 
 		while (maxdi > maxError && divisor < 10000)
 		{
@@ -1187,7 +1257,7 @@ namespace webifc
 		// TODO: this should be done before calling the function, instead of calling it for each t
 		// convert points to homogeneous coordinates
 		std::vector<glm::dvec3> homogeneousPoints;
-		for (int i = 0; i < points.size(); i++)
+		for (size_t i = 0; i < points.size(); i++)
 		{
 			glm::dvec2 p = points[i];
 			glm::dvec3 h = glm::dvec3(p.x * weights[i], p.y * weights[i], weights[i]);
@@ -1269,7 +1339,7 @@ namespace webifc
 		// TODO: this should be done before calling the function, instead of calling it for each t
 		// convert points to homogeneous coordinates
 		std::vector<glm::dvec4> homogeneousPoints;
-		for (int i = 0; i < points.size(); i++)
+		for (size_t i = 0; i < points.size(); i++)
 		{
 			glm::dvec3 p = points[i];
 			glm::dvec4 h = glm::dvec4(p.x * weights[i], p.y * weights[i], p.z * weights[i], weights[i]);
@@ -1512,7 +1582,7 @@ namespace webifc
 		}
 	}
 
-	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, IfcGeometry &geom, glm::dmat4 mat)
+	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
@@ -1526,6 +1596,8 @@ namespace webifc
 
 			if (meshGeom.numFaces)
 			{
+				IfcGeometry newGeom;
+
 				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 				{
 					Face f = meshGeom.GetFace(i);
@@ -1535,27 +1607,29 @@ namespace webifc
 
 					if (transformationBreaksWinding)
 					{
-						geom.AddFace(b, a, c);
+						newGeom.AddFace(b, a, c);
 					}
 					else
 					{
-						geom.AddFace(a, b, c);
+						newGeom.AddFace(a, b, c);
 					}
 				}
+
+				geoms.push_back(newGeom);
 			}
 		}
 
 		for (auto &c : mesh.children)
 		{
-			flattenRecursive(c, geometryMap, geom, newMat);
+			flattenRecursive(c, geometryMap, geoms, newMat);
 		}
 	}
 
-	IfcGeometry flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
+	std::vector<IfcGeometry> flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
 	{
-		IfcGeometry geom;
-		flattenRecursive(mesh, geometryMap, geom, mat);
-		return geom;
+		std::vector<IfcGeometry> geoms;
+		flattenRecursive(mesh, geometryMap, geoms, mat);
+		return geoms;
 	}
 
 	std::vector<glm::dvec2> rescale(std::vector<glm::dvec2> input, glm::dvec2 size, glm::dvec2 offset)
@@ -1619,7 +1693,7 @@ namespace webifc
 				svg << "style = \"stroke:rgb(0,255,0);stroke-width:2\" />";
 			}
 
-			for (int i = 2; i < rescaled.size() - 1; i++)
+			for (size_t i = 2; i < rescaled.size() - 1; i++)
 			{
 				auto &start = rescaled[i - 1];
 				auto &end = rescaled[i];
@@ -1628,7 +1702,7 @@ namespace webifc
 				svg << "style = \"stroke:rgb(0,0,0);stroke-width:2\" />";
 			}
 
-			for (int i = rescaled.size() - 1; i < rescaled.size(); i++)
+			for (size_t i = rescaled.size() - 1; i < rescaled.size(); i++)
 			{
 				auto &start = rescaled[i - 1];
 				auto &end = rescaled[i];
@@ -1638,7 +1712,7 @@ namespace webifc
 			}
 		}
 
-		for (int i = 0; i < indices.size(); i += 3)
+		for (size_t i = 0; i < indices.size(); i += 3)
 		{
 			glm::dvec2 a = rescaled[indices[i + 0]];
 			glm::dvec2 b = rescaled[indices[i + 1]];
@@ -1716,6 +1790,12 @@ namespace webifc
 	{
 		glm::dvec2 min;
 		glm::dvec2 max;
+
+		void Merge(const Bounds &other)
+		{
+			min = glm::min(min, other.min);
+			max = glm::max(max, other.max);
+		}
 	};
 
 	glm::dvec2 cmin(glm::dvec2 m, Point p)
@@ -1888,7 +1968,7 @@ namespace webifc
 		{
 			if (line.size() > 1)
 			{
-				for (int i = 1; i < line.size(); i++)
+				for (size_t i = 1; i < line.size(); i++)
 				{
 					glm::dvec2 a = rescale(line[i], bounds, size, offset);
 					glm::dvec2 b = rescale(line[i - 1], bounds, size, offset);
