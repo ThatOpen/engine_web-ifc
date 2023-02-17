@@ -139,7 +139,8 @@ export function ms() {
 export type LocateFileHandlerFn = (path: string, prefix: string) => string;
 
 export class IfcAPI {
-    private wasmModule: undefined | any = undefined;
+    /** @ignore */
+    wasmModule: undefined | any = undefined;
     private wasmPath: string = "";
     private isWasmPathAbsolute = false;
 
