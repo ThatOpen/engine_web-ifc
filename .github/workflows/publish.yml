@@ -1,4 +1,6 @@
 name: Publish package to Npm
+env:
+  NPM_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
 on: 
   release:
     types: [created]
@@ -19,12 +21,9 @@ jobs:
       - run: npm install -g npm@latest
       - run: npm ci
       - run: npm whoami
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
       - run: npm version ${{ github.event.release.tag_name }} --git-tag-version false
+      - run: npm adduser
       - run: npm run build-publish-repo
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Automated Version Number Setting
