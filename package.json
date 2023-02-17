@@ -56,7 +56,7 @@
     "test:functional": "jest  --runInBand --testMatch['**/tests/functional/**/*.spec.ts']",
     "regression-test-build": "esbuild tests/regression/src/index.js --bundle --sourcemap --platform=node --outfile=tests/regression/dist/test.js && cd tests/regression && cpy public/*.html dist/ --flat && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../../dist/web-ifc-mt.wasm dist/web-ifc-mt.wasm && cpy ../../dist/web-ifc-mt.worker.js dist/web-ifc-mt-worker.js && cpy ../../dist/web-ifc-mt.js dist/web-ifc-mt.js",
     "regression-test": "npm run regression-test-build && cd tests/regression/dist && ws -p 8080 --cors.opener-policy same-origin --cors.embedder-policy require-corp",
-    "gen-docs": "typedoc --out dist/docs && cpy ./banner.png ./dist/docs/banner.png"
+    "gen-docs": "typedoc --out dist/docs && cpy ./banner.png ./dist/docs"
   },
   "author": "tomvandig",
   "files": [
