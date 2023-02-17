@@ -1,4 +1,6 @@
 name: Publish to Github Pages
+env:
+   NPM_TOKEN: ' '
 on:
   push:
     branches: [ main ]

@@ -1,4 +1,6 @@
 name: CI Jest Tests
+env:
+   NPM_TOKEN: ' '
 on: 
   push:
     paths:
