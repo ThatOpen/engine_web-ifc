@@ -10,14 +10,13 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v2
         with:
           node-version: 18
-          # Defaults to the user or organization that owns the workflow file
-          #scope: '@ifcjs'
       - uses: mymindstorm/setup-emsdk@v11
         with:
           version: 3.1.31
+      - run: npm install -g npm@latest
       - run: npm ci
       - run: npm version ${{ github.event.release.tag_name }} --git-tag-version false
       - run: npm run build-publish-repo
