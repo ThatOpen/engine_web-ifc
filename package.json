@@ -1,6 +1,6 @@
 {
   "name": "web-ifc",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "ifc loading on the web",
   "main": "web-ifc-api-node.js",
   "module": "web-ifc-api.js",
