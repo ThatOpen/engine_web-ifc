@@ -1,4 +1,4 @@
-import { IfcAPI, ms } from '../../dist/web-ifc-api';
+import { IfcAPI, ms, Schemas, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER } from '../../dist/web-ifc-api';
 import { IfcThree } from './web-ifc-three';
 import { Init3DView, InitBasicScene, scene } from './web-ifc-scene';
 import * as Monaco from 'monaco-editor';
@@ -27,13 +27,13 @@ if (typeof window != 'undefined')
 window.InitMonaco = (monaco: any) => {
     console.log(ts_decl.ifc_schema);
     // validation settings
-    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
         noSemanticValidation: true,
-        noSyntaxValidation: false
+        noSyntaxValidation: true
     });
     
     // compiler options
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
         target: monaco.languages.typescript.ScriptTarget.ES6,
         allowNonTsExtensions: true
     });
@@ -87,7 +87,7 @@ window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEdit
 }
 
 async function runCode() {
-  let model = ifcAPI.CreateModel('IFC4');
+  let model = ifcAPI.CreateModel({schema: Schemas.IFC4});
 
   scene.clear();
   InitBasicScene();
@@ -98,7 +98,7 @@ async function runCode() {
   // this is where we do evil stuff
   {
       console.log(` --- Starting EVAL!`);
-      eval(compiled.outputText + `BuildModel(model, ifcAPI)`);
+      eval("(function (ifcAPI,IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER) {"+compiled.outputText+"})")(ifcAPI,IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER);
       console.log(` --- Ending EVAL!`);
   }
 

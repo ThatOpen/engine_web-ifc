@@ -152,8 +152,8 @@ describe('WebIfcApi reading methods', () => {
     test('can return the next highest expressID if the ID is not sequential', () => {
         expect(ifcApi.GetNextExpressID(modelID, 9)).toBe(11);
     })
-    test('returns same expressID if it is the max ID', () => {
-        expect(ifcApi.GetNextExpressID(modelID, 14312)).toBe(14312);
+    test('returns next expressID if it is the max ID', () => {
+        expect(ifcApi.GetNextExpressID(modelID, 14312)).toBe(14313);
     })
     test('Can get max expressID', () => {
         const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
@@ -464,7 +464,6 @@ describe('WebIfcApi known failures', () => {
             failModelID = ifcApi.OpenModel(exampleIFCData);
             let ifcDatas = ifcApi.SaveModel(failModelID);
             let rawIfcString = Utf8ArrayToStr(ifcDatas);
-            console.log(rawIfcString);
 
             expect(rawIfcString.indexOf("#6=IFCCARTESIANPOINT((0.,0.,0.));")).toBeTruthy();
             expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);") == -1).toBeTruthy();
@@ -535,9 +534,7 @@ describe('creating ifc', () => {
     });
 
     test("create an IFC object from Typecode", () => {
-        const maxExpressId = ifcApi.GetMaxExpressID(modelID);
         let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
-        expect(entity.expressID).toBe(maxExpressId + 1);
         expect(entity.type).toBe(WebIFC.IFCCARTESIANPOINT);
         expect(entity.constructor.name).toBe('IfcCartesianPoint');
     });

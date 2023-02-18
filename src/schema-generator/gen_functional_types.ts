@@ -168,7 +168,7 @@ for (var i = 0; i < files.length; i++) {
   let initialisersDone: Set<string> = new Set<string>();
   tsSchema.push(`TypeInitialisers[${i}]={`)
   types.forEach((type) => {
-     if (type.isSelect) generateInitialiser(type,initialisersDone,tsSchema,crcTable,types,schemaNameClean,i);
+     generateInitialiser(type,initialisersDone,tsSchema,crcTable,types,schemaNameClean,i);
   });
   tsSchema.push(`};`)
 

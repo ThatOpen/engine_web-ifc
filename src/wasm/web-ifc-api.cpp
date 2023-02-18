@@ -390,7 +390,7 @@ uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
 
     while(cont)
     {
-        if(currentId >= maxId)
+        if(currentId > maxId)
         {
             cont = false;
             continue;
@@ -398,7 +398,6 @@ uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
         currentId++;
         cont = !(loader->IsValidExpressID(currentId));
     }
-
     return currentId;
 }
 
@@ -794,12 +793,6 @@ uint32_t GetMaxExpressID(uint32_t modelID)
     return loader->GetMaxExpressId();
 }
 
-uint32_t IncrementMaxExpressID(uint32_t modelID, uint32_t incrementSize)
-{
-    auto &loader = loaders[modelID];
-    return loader->IncreaseMaxExpressId(incrementSize);
-}
-
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
     auto& loader = loaders[modelID];
@@ -919,7 +912,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
     emscripten::function("GetMaxExpressID", &GetMaxExpressID);
-    emscripten::function("IncrementMaxExpressID", &IncrementMaxExpressID);
     emscripten::function("CloseModel", &CloseModel);
     emscripten::function("GetModelSize", &GetModelSize);
     emscripten::function("IsModelOpen", &IsModelOpen);

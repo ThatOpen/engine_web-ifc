@@ -311,7 +311,7 @@ export class IfcAPI {
      * @param modelID model ID
      * @returns blob with mimetype application/x-step containing the model data 
      * 
-     * @deprecated Use SaveModel instead
+     * @deprecated Use SaveModel instead - will be removed in next version
      */
     ExportFileAsIFC(modelID: number) {
         Log.warn("ExportFileAsIFC is deprecated, use SaveModel instead");
@@ -434,8 +434,7 @@ export class IfcAPI {
      */
     CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
-        let expressID: number = this.IncrementMaxExpressID(modelID, 1);
-        return Constructors[this.modelSchemaList[modelID]][type](expressID,args);
+        return Constructors[this.modelSchemaList[modelID]][type](-1,args);
     }
 
     /**
@@ -515,7 +514,7 @@ export class IfcAPI {
         }
         
         if(lineObject.expressID === undefined || lineObject.expressID < 0) {
-            lineObject.expressID = this.IncrementMaxExpressID(modelID, 1);
+            lineObject.expressID = this.GetMaxExpressID(modelID)+1;
         }
 
 
@@ -694,9 +693,11 @@ export class IfcAPI {
          * @param modelID Model handle retrieved by OpenModel
          * @param incrementSize The value to add to the max ExpressID for the new max ExpressID
          * @returns ExpressID numerical value
+         * @deprecated Use SaveModel instead - will be removed in next version
          */
     IncrementMaxExpressID(modelID: number, incrementSize: number) {
-        return this.wasmModule.IncrementMaxExpressID(modelID, incrementSize);
+        Log.warn("IncrementMaxExpressID is deprecated, use GetNextExpressID or GetMaxExpressID instead");
+        return this.wasmModule.GetMaxExpressID(modelID)+incrementSize;
     }
 
     /**

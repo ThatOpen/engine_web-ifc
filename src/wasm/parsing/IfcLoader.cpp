@@ -415,13 +415,8 @@
    
    uint32_t IfcLoader::GetMaxExpressId()
    { 
+      if (_expressIDToLine.size()==0) return 0;
       return _expressIDToLine.size()-1;
-   }
-   
-   uint32_t IfcLoader::IncreaseMaxExpressId(const uint32_t incrementSize)
-   { 
-     _expressIDToLine.resize(GetMaxExpressId() + incrementSize + 1);
-   	 return GetMaxExpressId();
    }
    
    bool IfcLoader::IsValidExpressID(const uint32_t expressID)
@@ -521,8 +516,9 @@
   	if (expressID >= _expressIDToLine.size())
     {
        // allocate some space
-      _expressIDToLine.resize(expressID+10);
+      _expressIDToLine.resize(expressID+1);
     }
+
 
     // new line?
     if (_expressIDToLine[expressID] == 0)

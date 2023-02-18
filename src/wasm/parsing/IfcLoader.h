@@ -52,7 +52,6 @@ namespace webifc
       size_t GetNumLines();
       std::vector<uint32_t> &GetLineIDsWithType(const uint32_t type);
       uint32_t GetMaxExpressId();
-      uint32_t IncreaseMaxExpressId(const uint32_t incrementSize);
       bool IsValidExpressID(const uint32_t expressID);
       uint32_t ExpressIDToLineID(const uint32_t expressID);
       uint32_t LineIDToExpressID(const uint32_t lineID);
