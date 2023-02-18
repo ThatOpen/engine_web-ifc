@@ -26,7 +26,7 @@
   },
   "pckg-gui": {},
   "scripts": {
-    "postinstall": "cd examples/viewer && npm install && cd ../browser && npm install && cd ../../benchmark && npm install",
+    "prepare": "cd examples/viewer && npm install && cd ../browser && npm install && cd ../../benchmark && npm install",
     "gen-schema": "cd src/schema-generator && ts-node gen_functional_types.ts",
     "setup-env": "emsdk_env",
     "setup-mingw": "mingw-get instal msys-make gettext",
