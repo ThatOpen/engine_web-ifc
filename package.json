@@ -68,6 +68,7 @@
     "web-ifc-api.d.ts",
     "ifc-schema.d.ts",
     "helpers/properties.d.ts",
+    "helpers/log.d.ts",
     "web-ifc-mt-worker.js"
   ],
   "devDependencies": {
