@@ -533,6 +533,13 @@ std::string GetNameFromTypeCode(uint32_t type)
     return GetReadableNameFromTypeCode(type);
 }
 
+uint32_t GetTypeCodeFromName(uint32_t modelID,std::string typeName) 
+{
+    auto& loader = loaders[modelID];
+    if (!loader) return 0;
+    return loader->IfcTypeToTypeCode(typeName);
+}
+
 bool IsIfcElement(uint32_t type) 
 {
     return ifc::IfcElements.find(type) != ifc::IfcElements.end();
@@ -936,5 +943,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("SetGeometryTransformation", &SetGeometryTransformation);
     emscripten::function("SetLogLevel", &SetLogLevel);
     emscripten::function("GetNameFromTypeCode", &GetNameFromTypeCode);
+    emscripten::function("GetTypeCodeFromName", &GetTypeCodeFromName);
     emscripten::function("IsIfcElement", &IsIfcElement);
 }

@@ -460,6 +460,17 @@ export class IfcAPI {
     }
 
     /**
+     * Gets the type code  from a name code
+     * @param modelID Model handle retrieved by OpenModel
+     * @param name
+     * @returns type code
+     */
+    GetTypeCodeFromName(modelID: number,typeName:string): number 
+    {
+       return this.wasmModule.GetTypeCodeFromName(modelID,typeName);
+    }
+
+    /**
      * Evaluates if a type is subtype of IfcElement 
      * @param type Type code
      * @returns True if subtype of Ifcelement, False if it is not subtype

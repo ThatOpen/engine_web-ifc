@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - uses: actions/checkout@v3
@@ -20,6 +20,7 @@ jobs:
           version: 3.1.31
       - run: npm install -g npm@latest
       - run: npm ci
+      - run: npm unpublish ${{ github.event.release.tag_name }}
       - run: npm version ${{ github.event.release.tag_name }} --git-tag-version false
       - run: npm run build-publish-repo
       - uses: stefanzweifel/git-auto-commit-action@v4
