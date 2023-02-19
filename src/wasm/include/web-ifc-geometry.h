@@ -14,6 +14,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <cmath>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -25,6 +26,7 @@
 #include <tinynurbs/tinynurbs.h>
 
 #include "../parsing/ifc-schema.h"
+#include "../parsing/IfcLoader.h"
 #include "util.h"
 
 const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
