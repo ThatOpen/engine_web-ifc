@@ -220,7 +220,12 @@ for (var i = 0; i < files.length; i++) {
           typeList.add(type.name);
           tsSchema.push(`\texport class ${type.name} {`);
           tsSchema.push(`\t\ttype: number=${typeNum};`);
-          tsSchema.push(`\t\tconstructor(public value: ${typeName}) {}`);
+          if (typeName=="number") {
+            tsSchema.push(`\t\tpublic value: number;`);
+            tsSchema.push(`\t\tconstructor(v: any) { this.value = parseFloat(v);}`);
+          } else {
+            tsSchema.push(`\t\tconstructor(public value: ${typeName}) {}`);
+          }
           tsSchema.push(`\t}`);
       }
   });

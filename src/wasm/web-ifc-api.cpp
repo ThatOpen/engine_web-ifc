@@ -605,7 +605,7 @@ emscripten::val ReadValue(uint32_t modelID, webifc::IfcTokenType t)
     case webifc::IfcTokenType::REAL:
     {
         double d = loader->GetDoubleArgument();
-        return emscripten::val(d);
+        return emscripten::val(std::to_string(d));
     }
     case webifc::IfcTokenType::REF:
     {
