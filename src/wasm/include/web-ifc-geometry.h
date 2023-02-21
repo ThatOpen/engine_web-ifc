@@ -260,7 +260,7 @@ namespace webifc
 			auto &relMaterials = _loader.GetRelMaterials();
 			auto &materialDefinitions = _loader.GetMaterialDefinitions();
 			auto &relVoids = _loader.GetRelVoids();
-			//auto &relAggregates = _loader.GetRelAggregates();
+			// auto &relAggregates = _loader.GetRelAggregates();
 
 			auto styledItem = styledItems.find(line.expressID);
 			if (styledItem != styledItems.end())
@@ -875,7 +875,7 @@ namespace webifc
 					auto directrixRef = _loader.GetRefArgument();
 
 					double radius = _loader.GetDoubleArgument();
-					//double innerRadius = 0.0;
+					// double innerRadius = 0.0;
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
@@ -884,8 +884,8 @@ namespace webifc
 						_loader.GetDoubleArgument();
 					}
 
-					//double startParam = 0;
-					//double endParam = 0;
+					// double startParam = 0;
+					// double endParam = 0;
 
 					if (_loader.GetTokenType() == IfcTokenType::REAL)
 					{
@@ -1114,7 +1114,7 @@ namespace webifc
 		{
 			IfcCurve<3> curve;
 
-			//double radius = glm::length(pos);
+			// double radius = glm::length(pos);
 
 			// project pos onto axis
 			double pdota = glm::dot(axis, pos);
@@ -1220,186 +1220,109 @@ namespace webifc
 			return result;
 		}
 
-		double normalDiff(glm::dvec3 extents)
+		IfcGeometry BoolSubtract(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, uint32_t expressID)
 		{
-			double a = extents.x;
+			std::vector<IfcGeometry> results;
 
-			if (a < extents.y)
+			std::vector<IfcGeometry> firstGeoms;
+			for (auto &firsts : firstGroups)
 			{
-				a = extents.y;
-			}
-			if (a < extents.z)
-			{
-				a = extents.z;
-			}
-
-			double b = extents.x;
-
-			if (b > extents.y)
-			{
-				b = extents.y;
-			}
-			if (b > extents.z)
-			{
-				b = extents.z;
-			}
-
-			if (a > 0)
-			{
-				return b / a;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-
-		IfcGeometry BoolJoin(const std::vector<IfcGeometry> &Geoms, uint32_t expressID)
-		{
-			IfcGeometry result;
-
-			if (Geoms.size() == 0)
-			{
-				return result;
-			}
-			else if (Geoms.size() == 1)
-			{
-				return Geoms[0];
-			}
-			else
-			{
-				bool first = true;
-				for (auto &geom : Geoms)
+				if (firsts.components.size() < 2)
 				{
-					if (first)
+					firstGeoms.push_back(firsts);
+				}
+				else
+				{
+					firstGeoms.insert(firstGeoms.end(), firsts.components.begin(), firsts.components.end());
+				}
+			}
+
+			std::vector<IfcGeometry> secondGeoms;
+			for (auto &seconds : secondGroups)
+			{
+				if (seconds.components.size() < 2)
+				{
+					secondGeoms.push_back(seconds);
+				}
+				else
+				{
+					secondGeoms.insert(secondGeoms.end(), seconds.components.begin(), seconds.components.end());
+				}
+			}
+
+			for (auto &firstGeom : firstGeoms)
+			{
+				IfcGeometry result = firstGeom;
+				for (auto &secondGeom : secondGeoms)
+				{
+					bool doit = true;
+					glm::dvec3 center;
+					glm::dvec3 extents;
+					result.GetCenterExtents(center, extents);
+
+					glm::dvec3 s_center;
+					glm::dvec3 s_extents;
+					secondGeom.GetCenterExtents(s_center, s_extents);
+
+					if (secondGeom.numFaces == 0)
 					{
-						first = false;
-						result = geom;
+						_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
+
+						// bail out because we will get strange meshes
+						// if this happens, probably there's an issue parsing the mesh that occurred earlier
+						doit = false;
 					}
-					else
+
+					if (result.numFaces == 0)
 					{
-						glm::dvec3 center;
-						glm::dvec3 extents;
-						result.GetCenterExtents(center, extents);
+						_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
 
-						glm::dvec3 s_center;
-						glm::dvec3 s_extents;
-						geom.GetCenterExtents(s_center, s_extents);
+						// bail out because we will get strange meshes
+						// if this happens, probably there's an issue parsing the mesh that occurred earlier
+						break;
+					}
 
-						if (normalDiff(extents) < EPS_BIG)
+					if (doit)
+					{
+						auto first = result.Normalize(center, extents);
+						auto second = secondGeom.Normalize(center, extents);
+
+						if (_loader.GetSettings().DUMP_CSG_MESHES)
 						{
-							result = geom;
+							DumpIfcGeometry(first, L"first.obj");
+							DumpIfcGeometry(second, L"second.obj");
 						}
-						else if (normalDiff(s_extents) < EPS_BIG)
+
+						IfcGeometry r1;
+						IfcGeometry r2;
+
+						BVH bvh1;
+						BVH bvh2;
+
+						intersectMeshMesh(first, second, r1, r2, bvh1, bvh2);
+
+						if (_loader.GetSettings().DUMP_CSG_MESHES)
 						{
-							//result = result;
+							DumpIfcGeometry(r1, L"r1.obj");
+							DumpIfcGeometry(r2, L"r2.obj");
 						}
-						else if (result.numFaces > 0 && geom.numFaces > 0)
+
+						result = boolSubtract(r1, r2, bvh1, bvh2);
+
+						if (_loader.GetSettings().DUMP_CSG_MESHES)
 						{
-							if (_loader.GetSettings().DUMP_CSG_MESHES)
-							{
-								DumpIfcGeometry(result, L"first.obj");
-								DumpIfcGeometry(geom, L"second.obj");
-							}
-
-							auto first = result.Normalize(center, extents);
-							auto second = geom.Normalize(center, extents);
-
-							IfcGeometry r1;
-							IfcGeometry r2;
-
-							BVH bvh1;
-							BVH bvh2;
-
-							intersectMeshMesh(first, second, r1, r2, bvh1, bvh2);
-
-							if (_loader.GetSettings().DUMP_CSG_MESHES)
-							{
-								DumpIfcGeometry(r1, L"r1.obj");
-								DumpIfcGeometry(r2, L"r2.obj");
-							}
-
-							result = (boolJoin(r1, r2, bvh1, bvh2)).DeNormalize(center, extents);
-
-							if (_loader.GetSettings().DUMP_CSG_MESHES)
-							{
-								DumpIfcGeometry(result, L"first.obj");
-								DumpIfcGeometry(geom, L"second.obj");
-								DumpIfcGeometry(result, L"result.obj");
-							}
+							DumpIfcGeometry(firstGeom, L"first.obj");
+							DumpIfcGeometry(secondGeom, L"second.obj");
+							DumpIfcGeometry(result, L"result.obj");
 						}
+
+						result = result.DeNormalize(center, extents);
 					}
 				}
-				return result;
-			}
-		}
-
-		IfcGeometry BoolSubtract(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, uint32_t expressID)
-		{
-			IfcGeometry firstGeom = BoolJoin(firstGeoms, expressID);
-			IfcGeometry secondGeom = BoolJoin(secondGeoms, expressID);
-
-			IfcGeometry result;
-
-			glm::dvec3 center;
-			glm::dvec3 extents;
-			firstGeom.GetCenterExtents(center, extents);
-
-			glm::dvec3 s_center;
-			glm::dvec3 s_extents;
-			secondGeom.GetCenterExtents(s_center, s_extents);
-
-			if (secondGeom.numFaces == 0 || normalDiff(s_extents) < EPS_MED)
-			{
-				_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
-
-				// bail out because we will get strange meshes
-				// if this happens, probably there's an issue parsing the mesh that occurred earlier
-				return firstGeom;
+				results.push_back(result);
 			}
 
-			if (firstGeom.numFaces == 0 || normalDiff(extents) < EPS_MED)
-			{
-				_loader.ReportError({LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target"});
-
-				// bail out because we will get strange meshes
-				// if this happens, probably there's an issue parsing the mesh that occurred earlier
-				return firstGeom;
-			}
-
-			auto first = firstGeom.Normalize(center, extents);
-			auto second = secondGeom.Normalize(center, extents);
-
-			if (_loader.GetSettings().DUMP_CSG_MESHES)
-			{
-				DumpIfcGeometry(first, L"first.obj");
-				DumpIfcGeometry(second, L"second.obj");
-			}
-
-			IfcGeometry r1;
-			IfcGeometry r2;
-
-			BVH bvh1;
-			BVH bvh2;
-
-			intersectMeshMesh(first, second, r1, r2, bvh1, bvh2);
-
-			if (_loader.GetSettings().DUMP_CSG_MESHES)
-			{
-				DumpIfcGeometry(r1, L"r1.obj");
-				DumpIfcGeometry(r2, L"r2.obj");
-			}
-
-			result = boolSubtract(r1, r2, bvh1, bvh2);
-
-			if (_loader.GetSettings().DUMP_CSG_MESHES)
-			{
-				DumpIfcGeometry(firstGeom, L"first.obj");
-				DumpIfcGeometry(secondGeom, L"second.obj");
-				DumpIfcGeometry(result, L"result.obj");
-			}
-
-			return result.DeNormalize(center, extents);
+			return flattenGeometry(results);
 		}
 
 		std::vector<glm::dvec3> ReadIfcCartesianPointList3D(uint32_t expressID)
@@ -1489,7 +1412,7 @@ namespace webifc
 				// case IFCINDEXEDPOLYGONALFACEWITHVOIDS
 				_loader.MoveToArgumentOffset(line, 1);
 
-				// guaranteed to be set begin 
+				// guaranteed to be set begin
 				_loader.GetTokenType();
 
 				// while we have hole-index set begin
@@ -2080,12 +2003,12 @@ namespace webifc
 			case ifc::IFCEDGECURVE:
 			{
 				_loader.MoveToArgumentOffset(line, 0);
-				//uint32_t vertex1Ref = 
+				// uint32_t vertex1Ref =
 				_loader.GetRefArgument();
 
 				_loader.MoveToArgumentOffset(line, 1);
-				//uint32_t vertex2Ref =
-				 _loader.GetRefArgument();
+				// uint32_t vertex2Ref =
+				_loader.GetRefArgument();
 
 				_loader.MoveToArgumentOffset(line, 2);
 				uint32_t CurveRef = _loader.GetRefArgument();
@@ -2181,7 +2104,7 @@ namespace webifc
 				double zz = bounding[j].z - cent.z;
 				double dx = vecX.x * xx + vecX.y * yy + vecX.z * zz;
 				double dy = vecY.x * xx + vecY.y * yy + vecY.z * zz;
-//				double dz = vecZ.x * xx + vecZ.y * yy + vecZ.z * zz;
+				//				double dz = vecZ.x * xx + vecZ.y * yy + vecZ.z * zz;
 				double temp = VectorToAngle(dx, dy);
 				while (temp < 0)
 				{
@@ -2297,8 +2220,8 @@ namespace webifc
 				for (size_t j = 0; j < bounds[i].curve.points.size(); j++)
 				{
 					glm::dvec3 vv = bounds[i].curve.points[j] - cent;
-//					double dx = glm::dot(vecX, vv);
-//					double dy = glm::dot(vecY, vv);
+					//					double dx = glm::dot(vecX, vv);
+					//					double dy = glm::dot(vecY, vv);
 					double dz = glm::dot(vecZ, vv);
 					if (maxZ < dz)
 					{
@@ -2423,7 +2346,7 @@ namespace webifc
 				glm::dvec3 vv = bounding[j] - cent;
 				double dx = glm::dot(vecX, vv);
 				double dy = glm::dot(vecY, vv);
-				//double dz = glm::dot(vecZ, vv);
+				// double dz = glm::dot(vecZ, vv);
 				double temp = VectorToAngle(dx, dy);
 				while (temp < 0)
 				{
@@ -2602,7 +2525,7 @@ namespace webifc
 		// TODO: review and simplify
 		void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, webifc::IfcSurface &surface)
 		{
-//			double limit = 1e-4;
+			//			double limit = 1e-4;
 
 			// First: We define the Nurbs surface
 
@@ -2745,7 +2668,7 @@ namespace webifc
 			{
 				auto c = bounds[0].curve;
 
-				//size_t offset = geometry.numPoints;
+				// size_t offset = geometry.numPoints;
 
 				geometry.AddFace(c.points[0], c.points[1], c.points[2]);
 			}
@@ -2930,7 +2853,7 @@ namespace webifc
 					glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
 					glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
 
-					//double prod = glm::dot(n1, n2);
+					// double prod = glm::dot(n1, n2);
 
 					if (std::isnan(p.x))
 					{
@@ -3438,9 +3361,9 @@ namespace webifc
 				filletRadius = _loader.GetDoubleArgument();
 				double edgeRadius = _loader.GetDoubleArgument();
 				double legSlope = _loader.GetDoubleArgument();
-				//double centreOfGravityInX = 
+				// double centreOfGravityInX =
 				_loader.GetDoubleArgument();
-				//double centreOfGravityInY = 
+				// double centreOfGravityInY =
 				_loader.GetDoubleArgument();
 
 				// optional fillet
@@ -3482,14 +3405,14 @@ namespace webifc
 				double depth = _loader.GetDoubleArgument();
 				double width = _loader.GetDoubleArgument();
 				double webThickness = _loader.GetDoubleArgument();
-				//double flangeThickness = 
+				// double flangeThickness =
 				_loader.GetDoubleArgument();
 				double filletRadius = _loader.GetDoubleArgument();
 				double flangeEdgeRadius = _loader.GetDoubleArgument();
-				//double webEdgeRadius = 
+				// double webEdgeRadius =
 				_loader.GetDoubleArgument();
-				//double webSlope =
-				 _loader.GetDoubleArgument();
+				// double webSlope =
+				_loader.GetDoubleArgument();
 				double flangeSlope = _loader.GetDoubleArgument();
 
 				// optional fillet
@@ -4777,11 +4700,11 @@ namespace webifc
 
 							double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
 							double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
-							//double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
+							// double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
 
 							double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
 							double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
-							//double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
+							// double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
 
 							endDegrees = VectorToAngle(dxS, dyS) - 90;
 							startDegrees = VectorToAngle(dxE, dyE) - 90;
@@ -4908,11 +4831,11 @@ namespace webifc
 
 							double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
 							double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
-							//double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
+							// double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
 
 							double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
 							double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
-							//double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
+							// double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
 
 							endDegrees = VectorToAngle(dxS, dyS) - 90;
 							startDegrees = VectorToAngle(dxE, dyE) - 90;

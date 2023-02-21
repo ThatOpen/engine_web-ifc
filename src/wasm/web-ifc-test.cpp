@@ -239,9 +239,11 @@ int main()
 
     // return 0;
 
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
-
-    //std::string content = ReadFile("../../../examples/example.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
+    
+    // std::string content = ReadFile("../../../examples/example.ifc");
 
 	webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -271,7 +273,9 @@ int main()
     webifc::IfcGeometryLoader geometryLoader(loader);
 
     start = ms();
-    SpecificLoadTest(loader, geometryLoader, 8765);
+    // SpecificLoadTest(loader, geometryLoader, 8765);
+    // SpecificLoadTest(loader, geometryLoader, 122);
+     SpecificLoadTest(loader, geometryLoader,469706);
     //auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 

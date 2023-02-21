@@ -24,7 +24,6 @@ namespace webifc
 	constexpr double EPS_MINISCULE = 1e-12; // what?
 	constexpr double EPS_TINY = 1e-9;
 	constexpr double EPS_SMALL = 1e-6;
-	constexpr double EPS_MED = 1e-5;
 	constexpr double EPS_BIG = 1e-4;
 
 	bool MatrixFlipsTriangles(const glm::dmat4 &mat)
@@ -166,6 +165,7 @@ namespace webifc
 
 	struct IfcGeometry
 	{
+		std::vector<IfcGeometry> components;
 		std::vector<float> fvertexData;
 		std::vector<double> vertexData;
 		std::vector<uint32_t> indexData;
@@ -192,6 +192,11 @@ namespace webifc
 			}
 
 			normalized = true;
+		}
+
+		inline void AddComponent(IfcGeometry &g)
+		{
+			components.push_back(g);
 		}
 
 		inline void AddPoint(glm::dvec4 &pt, glm::dvec3 &n)
@@ -787,10 +792,10 @@ namespace webifc
 
 		double hd = depth / 2;
 		double hw = flangeWidth / 2;
-//		double hweb = webThickness / 2;
+		//		double hweb = webThickness / 2;
 		double slopeOffsetRight = flangeSlope * hw;
 		double slopeOffsetLeft = flangeSlope * (hw - webThickness);
-		//double flangeReferencePointY = hd - flangeThickness;
+		// double flangeReferencePointY = hd - flangeThickness;
 
 		// TODO: implement the radius
 
@@ -891,7 +896,7 @@ namespace webifc
 
 		double hw = width / 2;
 		double hd = depth / 2;
-		//double hweb = thickness / 2;
+		// double hweb = thickness / 2;
 
 		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
 		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
@@ -967,7 +972,7 @@ namespace webifc
 		double minError = 0.0001;
 		double maxError = 0.01;
 		double rotacions = 6;
-		//double stepOld = step1;
+		// double stepOld = step1;
 
 		// First approximation
 
@@ -975,7 +980,7 @@ namespace webifc
 		double fV = 0.5;
 		double divisor = 100;
 		double maxdi = 1e+100;
-		//double extension = 0;
+		// double extension = 0;
 
 		while (maxdi > maxError && divisor < 10000)
 		{
@@ -1580,6 +1585,26 @@ namespace webifc
 		{
 			return glm::dvec3(0);
 		}
+	}
+
+	IfcGeometry flattenGeometry(std::vector<IfcGeometry> &geoms)
+	{
+		IfcGeometry newGeom;
+
+		for (auto meshGeom : geoms)
+		{
+			for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+			{
+				Face f = meshGeom.GetFace(i);
+				glm::dvec3 a = meshGeom.GetPoint(f.i0);
+				glm::dvec3 b = meshGeom.GetPoint(f.i1);
+				glm::dvec3 c = meshGeom.GetPoint(f.i2);
+				newGeom.AddFace(a, b, c);
+			}
+			newGeom.AddComponent(meshGeom);
+		}
+
+		return newGeom;
 	}
 
 	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
