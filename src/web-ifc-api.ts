@@ -103,6 +103,25 @@ export interface FlatMesh {
     expressID: number;
 }
 
+export interface point {
+    x: number;
+    y: number;
+}
+
+export interface curve {
+    curves: Array<point>;
+}
+
+export interface IfcAlignmentSegment {
+    curves: Array<curve>;
+}
+
+export interface IfcAlignment {
+    FlatCoordinationMatrix: Array<number>;
+    Horizontal: IfcAlignmentSegment;
+    Vertical: IfcAlignmentSegment;
+}
+
 export interface LoaderError {
     type: string;
     message: string;
@@ -599,6 +618,11 @@ export class IfcAPI {
 	 */
     GetAllLines(modelID: Number): Vector<number> {
         return this.wasmModule.GetAllLines(modelID);
+    }
+
+    GetAllAlignments(modelID: Number): Vector<IfcAlignment>
+    {
+        return this.wasmModule.GetAllAlignments(modelID);
     }
 
 	/**

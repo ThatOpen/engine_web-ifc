@@ -249,6 +249,32 @@ webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
     return geomLoader->GetCachedGeometry(expressID);
 }
 
+std::vector<webifc::IfcAlignment> LoadAllAlignments(uint32_t modelID)
+{
+    auto &loader = loaders[modelID];
+    auto &geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return {};
+    }
+
+    auto type = ifc::IFCALIGNMENT;
+
+    auto elements = loader->GetExpressIDsWithType(type);
+
+    std::vector<webifc::IfcAlignment> alignments;
+
+    for (int i = 0; i < elements.size(); i++)
+    {
+        webifc::IfcAlignment alignment = geomLoader->GetAlignment(elements[i]);
+        alignment.flatTransformation = webifc::FlattenTransformation(geomLoader->GetCoordinationMatrix());
+        alignments.push_back(alignment);
+    }
+
+    return alignments;
+}
+
 std::vector<webifc::LoaderError> GetAndClearErrors(uint32_t modelID)
 {
     auto& loader = loaders[modelID];
@@ -842,7 +868,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("w", &glm::dvec4::w)
         ;
 
-
     emscripten::value_object<webifc::LoaderSettings>("LoaderSettings")
         .field("COORDINATE_TO_ORIGIN", &webifc::LoaderSettings::COORDINATE_TO_ORIGIN)
         .field("USE_FAST_BOOLS", &webifc::LoaderSettings::USE_FAST_BOOLS)
@@ -914,6 +939,34 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::register_vector<webifc::IfcFlatMesh>("IfcFlatMeshVector");
     emscripten::register_vector<uint32_t>("UintVector");
+
+    emscripten::register_vector<webifc::IfcAlignment>("IfcAlignmentVector");
+
+    emscripten::value_object<webifc::IfcAlignment>("IfcAlignment")
+        .field("FlatCoordinationMatrix", &webifc::IfcAlignment::flatTransformation)
+        .field("Horizontal", &webifc::IfcAlignment::Horizontal)
+        .field("Vertical", &webifc::IfcAlignment::Vertical);
+
+    emscripten::value_object<glm::dvec3>("glmDvec3")
+        .field("x", &glm::dvec3::x)
+        .field("y", &glm::dvec3::y)
+        .field("z", &glm::dvec3::z);
+
+    emscripten::value_object<webifc::IfcAlignmentSegment>("IfcAlignmentSegment")
+        .field("curves", &webifc::IfcAlignmentSegment::curves);
+
+    emscripten::register_vector<webifc::IfcCurve<2>>("IfcCurve<2>Vector");
+
+    emscripten::value_object<webifc::IfcCurve<2>>("IfcCurve<2>")
+        .field("points", &webifc::IfcCurve<2>::points);
+
+    emscripten::register_vector<glm::vec<2, glm::f64>>("vector2doubleVector");
+
+    emscripten::value_object<glm::vec<2, glm::f64>>("vector2double")
+        .field("x", &glm::vec<2, glm::f64>::x)
+        .field("y", &glm::vec<2, glm::f64>::y);
+
+    emscripten::register_vector<double>("DoubleVector");
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("OpenModel", &OpenModel);
