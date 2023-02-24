@@ -178,8 +178,8 @@ namespace webifc
 					transform_t = GetLocalPlacement(localPlacement);
 				}
 
-				auto &relNests = (_loader.GetRelNests())[line.expressID];
-				for (auto expressID : relNests)
+				auto &relAgg = (_loader.GetRelAggregates())[line.expressID];
+				for (auto expressID : relAgg)
 				{
 					alignment = GetAlignment(expressID, alignment, transform * transform_t);
 				}
@@ -202,8 +202,8 @@ namespace webifc
 					transform_t = GetLocalPlacement(localPlacement);
 				}
 
-				auto &relNests = (_loader.GetRelNests())[line.expressID];
-				for (auto expressID : relNests)
+				auto &relAgg = (_loader.GetRelAggregates())[line.expressID];
+				for (auto expressID : relAgg)
 				{
 					alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID));
 				}
@@ -235,8 +235,8 @@ namespace webifc
 					transform_t = GetLocalPlacement(localPlacement);
 				}
 
-				auto &relNests = (_loader.GetRelNests())[line.expressID];
-				for (auto expressID : relNests)
+				auto &relAgg = (_loader.GetRelAggregates())[line.expressID];
+				for (auto expressID : relAgg)
 				{
 					alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID));
 				}
@@ -694,6 +694,13 @@ namespace webifc
 		{
 			size_t offset = 0;
 			writeFile(filename, ToObj(mesh, _expressIDToGeometry, offset, NormalizeIFC));
+		}
+
+		void DumpAlignment(std::vector<webifc::IfcAlignment> &align, std::wstring filenameV, std::wstring filenameH)
+		{
+			size_t offset = 0;
+			writeFile(filenameV, VAlignmentToObj(align));
+			writeFile(filenameH, HAlignmentToObj(align));
 		}
 
 		void SetTransformation(const glm::dmat4 &val)
@@ -4818,7 +4825,7 @@ namespace webifc
 				break;
 			}
 
-			return glm::dmat4();
+			return glm::dmat4(1);
 		}
 
 		IfcTrimmingSelect ParseTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets)

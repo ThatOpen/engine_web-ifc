@@ -620,9 +620,45 @@ export class IfcAPI {
         return this.wasmModule.GetAllLines(modelID);
     }
 
-    GetAllAlignments(modelID: Number): Vector<IfcAlignment>
+    /**
+     * Returns all alignments contained in the IFC model (IFC4x3 or superior)
+     * @param modelID model ID
+     * @returns Lists with horizontal and vertical curves as sets of points
+     */
+    GetAllAlignments(modelID: Number): any
     {
-        return this.wasmModule.GetAllAlignments(modelID);
+        const alignments =  this.wasmModule.GetAllAlignments(modelID);
+        const alignmentList = [];
+        for (let i = 0; i < alignments.size(); i++) {
+            const alignment = alignments.get(i);
+            const horList = [];
+            for (let j = 0; j < alignment.Horizontal.curves.size(); j++) {
+                const curve = alignment.Horizontal.curves.get(j);
+                const ptList = [];
+                for (let p = 0; p < curve.points.size(); p++) {
+                const pt = curve.points.get(p);
+                const newPoint = { x: pt.x, y: pt.y };
+                ptList.push(newPoint);
+                }
+                const newCurve = { points: ptList };
+                horList.push(newCurve);
+            }
+            const verList = [];
+            for (let j = 0; j < alignment.Vertical.curves.size(); j++) {
+                const curve = alignment.Vertical.curves.get(j);
+                const ptList = [];
+                for (let p = 0; p < curve.points.size(); p++) {
+                const pt = curve.points.get(p);
+                const newPoint = { x: pt.x, y: pt.y };
+                ptList.push(newPoint);
+                }
+                const newCurve = { points: ptList };
+                verList.push(newCurve);
+            }
+            const align = { origin, horizontal: horList, vertical: verList };
+            alignmentList.push(align);
+        }
+        return alignmentList;
     }
 
 	/**

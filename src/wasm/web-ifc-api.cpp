@@ -249,7 +249,7 @@ webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
     return geomLoader->GetCachedGeometry(expressID);
 }
 
-std::vector<webifc::IfcAlignment> LoadAllAlignments(uint32_t modelID)
+std::vector<webifc::IfcAlignment> GetAllAlignments(uint32_t modelID)
 {
     auto &loader = loaders[modelID];
     auto &geomLoader = geomLoaders[modelID];
@@ -268,7 +268,7 @@ std::vector<webifc::IfcAlignment> LoadAllAlignments(uint32_t modelID)
     for (int i = 0; i < elements.size(); i++)
     {
         webifc::IfcAlignment alignment = geomLoader->GetAlignment(elements[i]);
-        alignment.flatTransformation = webifc::FlattenTransformation(geomLoader->GetCoordinationMatrix());
+        alignment.transform(geomLoader->GetCoordinationMatrix());
         alignments.push_back(alignment);
     }
 
@@ -943,7 +943,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<webifc::IfcAlignment>("IfcAlignmentVector");
 
     emscripten::value_object<webifc::IfcAlignment>("IfcAlignment")
-        .field("FlatCoordinationMatrix", &webifc::IfcAlignment::flatTransformation)
         .field("Horizontal", &webifc::IfcAlignment::Horizontal)
         .field("Vertical", &webifc::IfcAlignment::Vertical);
 
@@ -969,6 +968,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<double>("DoubleVector");
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
+    emscripten::function("GetAllAlignments", &GetAllAlignments);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
     emscripten::function("GetMaxExpressID", &GetMaxExpressID);

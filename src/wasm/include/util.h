@@ -519,7 +519,37 @@ namespace webifc
 	{
 		IfcAlignmentSegment Horizontal;
 		IfcAlignmentSegment Vertical;
-		std::array<double, 16> flatTransformation;
+
+		void transform(glm::dmat4 coordinationMatrix)
+		{
+			uint32_t ic = 0;
+			for (auto curve : Horizontal.curves)
+			{
+				if (ic > 0)
+				{
+					uint32_t lastId1 = Horizontal.curves[ic - 1].points.size() - 1;
+					uint32_t lastId2 = Horizontal.curves[ic].points.size() - 1;
+					double d1 = glm::distance(Horizontal.curves[ic].points[0], Horizontal.curves[ic - 1].points[lastId1]);
+					double d2 = glm::distance(Horizontal.curves[ic].points[lastId2], Horizontal.curves[ic - 1].points[lastId1]);
+					if(d1 > d2){
+						std::reverse(Horizontal.curves[ic].points.begin(), Horizontal.curves[ic].points.end());
+					}
+				}
+				ic++;
+			}
+
+			ic = 0;
+			for (auto curve : Horizontal.curves)
+			{
+				uint32_t ip = 0;
+				for (auto pt : curve.points)
+				{
+					Horizontal.curves[ic].points[ip] = coordinationMatrix * glm::dvec4(pt, 0, 1);
+					ip++;
+				}
+				ic++;
+			}
+		}
 	};
 
 	struct Cylinder

@@ -11,16 +11,15 @@
 #include "include/math/triangulate-with-boundaries.h"
 #include "parsing/ifc-schema.h"
 
-
 long long ms()
 {
-	using namespace std::chrono;
-	milliseconds millis = duration_cast<milliseconds>(
-		system_clock::now().time_since_epoch());
+    using namespace std::chrono;
+    milliseconds millis = duration_cast<milliseconds>(
+        system_clock::now().time_since_epoch());
 
-	return millis.count();
+    return millis.count();
 }
-  
+
 std::string ReadFile(std::string filename)
 {
     std::ifstream t(filename);
@@ -41,6 +40,31 @@ void SpecificLoadTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geom
     {
         geometryLoader.DumpMesh(mesh, L"TEST.obj");
     }
+}
+
+std::vector<webifc::IfcAlignment> GetAlignments(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
+{
+    std::vector<webifc::IfcAlignment> alignments;
+
+    auto type = ifc::IFCALIGNMENT;
+
+    auto elements = loader.GetExpressIDsWithType(type);
+
+    for (int i = 0; i < elements.size(); i++)
+    {
+        auto alignment = geometryLoader.GetAlignment(elements[i]);
+        alignment.transform(geometryLoader.GetCoordinationMatrix());
+        alignments.push_back(alignment);
+    }
+
+    bool writeFiles = true;
+
+    if (writeFiles)
+    {
+        geometryLoader.DumpAlignment(alignments, L"V_ALIGN.obj", L"H_ALIGN.obj");
+    }
+
+    return alignments;
 }
 
 std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
@@ -68,11 +92,9 @@ std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader &loader, webifc::
             */
 
             meshes.push_back(mesh);
-
-            
         }
     }
-    
+
     return meshes;
 }
 
@@ -229,7 +251,7 @@ void TestTriangleDecompose()
 
 int main()
 {
-	std::cout << "Hello web IFC test!"<< std::endl;
+    std::cout << "Hello web IFC test!" << std::endl;
 
     // TestTriangleDecompose();
 
@@ -242,11 +264,11 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/cono.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/Q2.ifc");
 
     // std::string content = ReadFile("../../../examples/example.ifc");
 
-	webifc::LoaderSettings set;
+    webifc::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
@@ -277,7 +299,8 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 8765);
     // SpecificLoadTest(loader, geometryLoader, 122);
     // SpecificLoadTest(loader, geometryLoader,469706);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
+    auto alignments = GetAlignments(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = loader.GetAndClearErrors();
