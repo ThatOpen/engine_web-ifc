@@ -7,9 +7,11 @@
 #include <filesystem>
 
 #include "parsing/IfcLoader.h"
+#include "schema/IfcSchemaManager.h"
+#include "utility/LoaderError.h"
 #include "include/web-ifc-geometry.h"
 #include "include/math/triangulate-with-boundaries.h"
-#include "parsing/ifc-schema.h"
+#include "schema/ifc-schema.h"
 
 
 long long ms()
@@ -29,9 +31,9 @@ std::string ReadFile(std::string filename)
     return buffer.str();
 }
 
-void SpecificLoadTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader, uint64_t num)
+void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader, uint64_t num)
 {
-    auto walls = loader.GetExpressIDsWithType(ifc::IFCSLAB);
+    auto walls = loader.GetExpressIDsWithType(webifc::schema::IFCSLAB);
 
     bool writeFiles = true;
 
@@ -43,11 +45,12 @@ void SpecificLoadTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geom
     }
 }
 
-std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
+std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
 {
     std::vector<webifc::IfcFlatMesh> meshes;
+    webifc::schema::IfcSchemaManager schema;
 
-    for (auto type : ifc::IfcElements)
+    for (auto type : schema.GetIfcElementList())
     {
         auto elements = loader.GetExpressIDsWithType(type);
 
@@ -117,7 +120,6 @@ void Benchmark()
 
         std::string content = ReadFile(filePath);
 
-        webifc::IfcLoader loader;
         auto start = ms();
         {
             // loader.LoadFile(content);
@@ -245,12 +247,14 @@ int main()
     
     // std::string content = ReadFile("../../../examples/example.ifc");
 
-	webifc::LoaderSettings set;
+	webifc::utility::  LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
 
-    webifc::IfcLoader loader(set);
+    webifc::utility::LoaderErrorHandler errorHandler;
+    webifc::schema::IfcSchemaManager schemaManager;
+    webifc::parsing::IfcLoader loader(set.TAPE_SIZE,set.MEMORY_LIMIT,errorHandler,schemaManager);
 
     auto start = ms();
     loader.LoadFile([&](char *dest, size_t sourceOffset, size_t destSize)
@@ -270,7 +274,7 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::IfcGeometryLoader geometryLoader(loader);
+    webifc::IfcGeometryLoader geometryLoader(loader,set,errorHandler,schemaManager);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);
@@ -279,7 +283,8 @@ int main()
     //auto meshes = LoadAllTest(loader, geometryLoader);
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
-    auto errors = loader.GetAndClearErrors();
+    auto errors = errorHandler.GetErrors();
+    errorHandler.ClearErrors();
 
     for (auto error : errors)
     {

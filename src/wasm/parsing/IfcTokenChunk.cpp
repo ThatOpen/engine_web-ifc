@@ -2,12 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
-#include "helpers/p21decode.h"
-#include "helpers/crack_atof.h"
+
 #include "IfcTokenStream.h"
 
-namespace webifc
+namespace webifc::parsing
 {
+
+  std::vector<char> p21decode(std::vector<char> & str);
+  bool need_to_decode(std::vector<char> & str);
+  double crack_atof(const char*& num, const char* const end);
+
     
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
@@ -114,7 +118,7 @@ namespace webifc
             
           }
 
-          if (need_to_decode(temp)) temp = p21decoder(temp).unescape();
+          if (need_to_decode(temp)) temp = p21decode(temp);
 
           Push<uint8_t>(IfcTokenType::STRING);
           Push<uint16_t>(temp.size());

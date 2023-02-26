@@ -3,22 +3,26 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 #include <sstream>
+#include <string>
+#include <cmath>
 #include <algorithm>
 #include "IfcLoader.h"
-#include "LoaderError.h"
+#include "../utility/LoaderError.h"
 #include "../utility/Logging.h"
-#include "ifc-schema.h"
-#include "helpers/loader_helpers.h"
-#include "helpers/crc_tables.h"
 #include "../version.h"
+#include "../schema/IfcSchemaManager.h" 
+
+namespace webifc::parsing {
+
+   std::string getAsStringWithBigE(double theNumber);
+   double ConvertPrefix(const std::string &prefix);
+   std::string p21encode(std::string_view input);
+
  
- namespace webifc {
- 
-    IfcLoader::IfcLoader(const LoaderSettings &s):  _crcTable(256), _settings(s)
-    { 
-     _tokenStream = new IfcTokenStream(_settings.TAPE_SIZE,(_settings.MEMORY_LIMIT/_settings.TAPE_SIZE));
-      makeCRCTable(_crcTable);
-    }  
+   IfcLoader::IfcLoader(size_t tapeSize, size_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
+   { 
+   _tokenStream = new IfcTokenStream(tapeSize,(memoryLimit/tapeSize));
+   }  
    
    std::unordered_map<uint32_t, std::vector<uint32_t>> & IfcLoader::GetRelVoids()
    { 
@@ -70,11 +74,6 @@
               { return _headerLines[lineID]; });
 
      return ret;
-   }
-
-   uint32_t IfcLoader::IfcTypeToTypeCode(std::string name) 
-   {
-    return crc32Simple(name.data(), name.size(),_crcTable);
    }
    
    void IfcLoader::LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData)
@@ -340,7 +339,7 @@
   					}
   					else if (currentIfcType != 0)
   					{
-  						if(currentIfcType == ifc::FILE_DESCRIPTION || currentIfcType == ifc::FILE_NAME||currentIfcType == ifc::FILE_SCHEMA )
+  						if(currentIfcType == webifc::schema::FILE_DESCRIPTION || currentIfcType == webifc::schema::FILE_NAME||currentIfcType == webifc::schema::FILE_SCHEMA )
   						{
   							IfcHeaderLine l;
   							l.ifcType = currentIfcType;
@@ -376,7 +375,7 @@
   					std::string_view s = _tokenStream->ReadString();
   					if (currentIfcType == 0)
   					{
-              currentIfcType = crc32Simple(s.data(), s.size(),_crcTable);
+              currentIfcType = _schemaManager.IfcTypeToTypeCode(s);
   					}
 
   					break;
@@ -491,7 +490,7 @@
    { 
       if (_tokenStream->Read<char>() != IfcTokenType::REF)
      	{
-     		ReportError({LoaderErrorType::PARSING, "unexpected token type, expected REF"});
+     		_errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected token type, expected REF"});
      		return 0;
      	}
      	return _tokenStream->Read<uint32_t>();
@@ -509,17 +508,13 @@
 		return GetDoubleArgument();
 	}
   
-  
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end)
   {
-  	
-
   	if (expressID >= _expressIDToLine.size())
     {
        // allocate some space
       _expressIDToLine.resize(expressID+1);
     }
-
 
     // new line?
     if (_expressIDToLine[expressID] == 0)
@@ -559,7 +554,6 @@
       _ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
       _headerLines.push_back(std::move(l));
   }
-
   
   IfcTokenType IfcLoader::GetTokenType(uint32_t tapeOffset)
   {
@@ -580,7 +574,7 @@
      	}
      	else
      	{
-     		ReportError({LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY"});
+     		_errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY"});
      		return 0;
      	}
    }
@@ -642,7 +636,7 @@
          }
          else
          {
-           ReportError({LoaderErrorType::PARSING, "unexpected token"});
+           _errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected token"});
          }
        }
 
@@ -705,7 +699,7 @@
      			}
      			else
      			{
-     				ReportError({LoaderErrorType::PARSING, "unexpected token"});
+     				_errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected token"});
      			}
      		}
 
@@ -718,27 +712,9 @@
      	return tapeOffsets;
    }
    
-   const LoaderSettings &IfcLoader::GetSettings()
-   { 
-      return _settings;
-   }
-   
-   void IfcLoader::ReportError(const LoaderError &&error)
-   { 
-     log::error(error.message);
-   	 _errors.push_back(std::move(error));
-   }
-   
-   std::vector<LoaderError> IfcLoader::GetAndClearErrors()
-   {
-     auto temp = _errors;
-     _errors = {};
-     return temp;
-   }
-   
    void IfcLoader::PopulateRelVoidsMap()
    {
-     auto relVoids = GetExpressIDsWithType(ifc::IFCRELVOIDSELEMENT);
+     auto relVoids = GetExpressIDsWithType(schema::IFCRELVOIDSELEMENT);
 
      for (uint32_t relVoidID : relVoids)
      {
@@ -757,7 +733,7 @@
    
    void IfcLoader::PopulateRelAggregatesMap()
    {
-      auto relVoids = GetExpressIDsWithType(ifc::IFCRELAGGREGATES);
+      auto relVoids = GetExpressIDsWithType(schema::IFCRELAGGREGATES);
 
      	for (uint32_t relVoidID : relVoids)
      	{
@@ -780,7 +756,7 @@
    
    void IfcLoader::PopulateStyledItemMap()
    {
-     auto styledItems = GetExpressIDsWithType(ifc::IFCSTYLEDITEM);
+     auto styledItems = GetExpressIDsWithType(schema::IFCSTYLEDITEM);
 
      for (uint32_t styledItemID : styledItems)
      {
@@ -808,7 +784,7 @@
    
    void IfcLoader::PopulateRelMaterialsMap()
    {
-     auto styledItems = GetExpressIDsWithType(ifc::IFCRELASSOCIATESMATERIAL);
+     auto styledItems = GetExpressIDsWithType(schema::IFCRELASSOCIATESMATERIAL);
 
      for (uint32_t styledItemID : styledItems)
      {
@@ -831,7 +807,7 @@
        }
      }
 
-     auto matDefs = GetExpressIDsWithType(ifc::IFCMATERIALDEFINITIONREPRESENTATION);
+     auto matDefs = GetExpressIDsWithType(schema::IFCMATERIALDEFINITIONREPRESENTATION);
 
      for (uint32_t styledItemID : matDefs)
      {
@@ -857,11 +833,11 @@
    
    void IfcLoader::ReadLinearScalingFactor()
    {
-     auto projects = GetExpressIDsWithType(ifc::IFCPROJECT);
+     auto projects = GetExpressIDsWithType(schema::IFCPROJECT);
 
      if (projects.size() != 1)
      {
-       ReportError({LoaderErrorType::PARSING, "unexpected empty ifc project"});
+       _errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected empty ifc project"});
        return;
      }
 
@@ -884,7 +860,7 @@
 
        auto &line = GetLine(ExpressIDToLineID(unitRef));
 
-       if (line.ifcType == ifc::IFCSIUNIT)
+       if (line.ifcType == schema::IFCSIUNIT)
        {
          MoveToArgumentOffset(line, 1);
          std::string unitType = GetStringArgument();
@@ -907,7 +883,7 @@
            _linearScalingFactor *= prefix;
          }
        }
-       if(line.ifcType == ifc::IFCCONVERSIONBASEDUNIT)
+       if(line.ifcType == schema::IFCCONVERSIONBASEDUNIT)
        {
          MoveToArgumentOffset(line, 1);
          std::string unitType = GetStringArgument();
@@ -990,7 +966,7 @@
    		{
    		case IfcTokenType::LINE_END:
    		{
-   			ReportError({LoaderErrorType::PARSING, "unexpected line end"});
+   			_errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected line end"});
    			break;
    		}
    		case IfcTokenType::UNKNOWN:
@@ -1039,5 +1015,15 @@
    void IfcLoader::StepBack() {
      _tokenStream->Back();
    }
-   
+
+   double IfcLoader::GetOptionalDoubleParam(double defaultValue = 0)
+    {
+      if (GetTokenType() ==IfcTokenType::REAL)
+      {
+        StepBack();
+        return GetDoubleArgument();
+      }
+      return defaultValue;
+    }
+
 }

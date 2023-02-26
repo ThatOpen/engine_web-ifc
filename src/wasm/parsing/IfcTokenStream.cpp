@@ -6,7 +6,7 @@
 #include <istream>
 #include "IfcTokenStream.h"
 
-namespace webifc
+namespace webifc::parsing
 {
 
   IfcTokenStream::IfcTokenStream(const size_t chunkSize, const size_t maxChunks) 

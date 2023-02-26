@@ -461,13 +461,12 @@ export class IfcAPI {
 
     /**
      * Gets the type code  from a name code
-     * @param modelID Model handle retrieved by OpenModel
      * @param name
      * @returns type code
      */
-    GetTypeCodeFromName(modelID: number,typeName:string): number 
+    GetTypeCodeFromName(typeName:string): number 
     {
-       return this.wasmModule.GetTypeCodeFromName(modelID,typeName);
+       return this.wasmModule.GetTypeCodeFromName(typeName);
     }
 
     /**

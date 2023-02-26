@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Logging.h"
  
-namespace webifc
+namespace webifc::utility
 {
 
   void setLogLevel(const int level) { LOG_LEVEL = static_cast<LogLevel>(level); }

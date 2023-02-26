@@ -4,7 +4,11 @@
 
 #pragma once 
 
-namespace webifc
+#include <vector>
+#include <string>
+#include "Logging.h"
+
+namespace webifc::utility
 {
 
 	enum class LoaderErrorType
@@ -15,7 +19,6 @@ namespace webifc
 	UNSUPPORTED_TYPE
 	};
 
-
 	class LoaderError
 	{
     public:
@@ -24,10 +27,18 @@ namespace webifc
   		uint32_t expressID;
   		uint32_t ifcType;
 
-  		LoaderError(LoaderErrorType t = LoaderErrorType::UNSPECIFIED, std::string m = "", uint32_t e = 0,uint32_t type = 0) 
-  			: type(t), message(m), expressID(e), ifcType(type)
-  		{
-  		}
-		
+  		LoaderError(const LoaderErrorType t = LoaderErrorType::UNSPECIFIED, const std::string m = "", const uint32_t e = 0, const uint32_t type = 0);
   };
+
+  class LoaderErrorHandler
+	{
+		public:
+			void ReportError(const LoaderError &&error);
+			void ClearErrors();
+			std::vector<LoaderError> GetErrors();
+		private:
+			std::vector<LoaderError> _errors;
+	};
+
+
 }

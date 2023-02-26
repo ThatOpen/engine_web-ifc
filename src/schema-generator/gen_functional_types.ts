@@ -9,6 +9,7 @@ console.log("Starting...");
 
 let tsSchema: Array<string> = [];
 let cppSchema: Array<string> = [];
+let chSchema: Array<string> = [];
 
 let completeifcElementList = new Set<string>();
 
@@ -241,39 +242,50 @@ for (var i = 0; i < files.length; i++) {
 console.log(`Writing Global WASM/TS Metadata!...`);
 
 
-cppSchema.push("#pragma once");
-cppSchema.push("");
-cppSchema.push("#include <unordered_set>");
-cppSchema.push("");
-cppSchema.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
-cppSchema.push("");
-cppSchema.push("namespace ifc {");
+
+chSchema.push("#pragma once");
+chSchema.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
+chSchema.push("");
+chSchema.push("namespace webifc::schema {");
 new Set([...completeEntityList,...typeList]).forEach(entity => {
     let name = entity.toUpperCase();
     let code = crc32(name,crcTable);
-    cppSchema.push(`\tstatic const unsigned int ${name} = ${code};`);
+    chSchema.push(`\tstatic const unsigned int ${name} = ${code};`);
     tsSchema.unshift(`export const ${name} = ${code};`)
 });
 
-cppSchema.push("\tinline std::unordered_set<uint32_t> IfcElements { ");
+chSchema.push("}");
+
+cppSchema.push("#include <unordered_set>");
+cppSchema.push("#include \"ifc-schema.h\"");
+cppSchema.push("#include \"IfcSchemaManager.h\"");
+cppSchema.push("namespace webifc::schema {")
+cppSchema.push("\tvoid IfcSchemaManager::initSchemaData() {");
 completeifcElementList.forEach(element => {
-    cppSchema.push(`\t\t${element.toUpperCase()},`);
+    cppSchema.push(`\t\t_ifcElements.insert(${element.toUpperCase()});`);
 });
+for (var i = 0; i < files.length; i++) {
+  if (!files[i].endsWith(".exp")) continue;
+  var schemaName = files[i].replace(".exp","");
+  var schemaNameClean = schemaName.replace(".","_");
+  cppSchema.push(`\t\t_schemas.push_back("${schemaNameClean}");`);
+}
 cppSchema.push("\t};");
 
-cppSchema.push("};");
 
-cppSchema.push("\tinline std::string GetReadableNameFromTypeCode(uint32_t ifcCode) {");
-cppSchema.push("\t\tswitch(ifcCode) {");
+cppSchema.push("\tstd::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) {");
+cppSchema.push("\t\tswitch(typeCode) {");
 new Set([...completeEntityList,...typeList]).forEach(entity => {
-    cppSchema.push(`\t\t\tcase ifc::${entity.toUpperCase()}: return "${entity.toUpperCase()}";`);
+    cppSchema.push(`\t\t\tcase schema::${entity.toUpperCase()}: return "${entity.toUpperCase()}";`);
 });
 
 cppSchema.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
 cppSchema.push("\t\t}");
 cppSchema.push("\t}");
+cppSchema.push("};");
 
-fs.writeFileSync("../wasm/parsing/ifc-schema.h", cppSchema.join("\n")); 
+fs.writeFileSync("../wasm/schema/ifc-schema.h", chSchema.join("\n")); 
+fs.writeFileSync("../wasm/schema/schema-functions.cpp", cppSchema.join("\n")); 
 fs.writeFileSync("../ifc-schema.ts", tsSchema.join("\n")); 
 
 console.log(`...Done!`);

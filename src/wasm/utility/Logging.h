@@ -4,7 +4,7 @@
  
 #pragma once
  
-namespace webifc
+namespace webifc::utility
 {
   
   enum class LogLevel : int

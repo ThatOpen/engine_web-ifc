@@ -10,7 +10,7 @@
 #include <functional>
 #include <cstring>
  
-namespace webifc
+namespace webifc::parsing
 {
   
   enum IfcTokenType : char
@@ -72,6 +72,7 @@ namespace webifc
             char Prev();
             bool IsAtEnd() ;
             char Get();
+            void Clear();
           private:
             void load();
             std::function<uint32_t(char *, size_t, size_t)> _dataSource;

@@ -9,11 +9,11 @@
 #include <istream>
 #include <set>
 
-#include "../utility/LoaderSettings.h"
 #include "IfcTokenStream.h"
-#include "LoaderError.h"
+#include "../utility/LoaderError.h"
+#include "../schema/IfcSchemaManager.h"
 
-namespace webifc
+namespace webifc::parsing
 {
   
   struct IfcLine 
@@ -36,7 +36,7 @@ namespace webifc
 	class IfcLoader {
   
     public:
-      IfcLoader(const LoaderSettings &s = {});  
+      IfcLoader(size_t tapeSize, size_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager);  
       std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids();
       std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoidRels();
       std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelAggregates();
@@ -65,6 +65,7 @@ namespace webifc
       std::string GetStringArgument();
       std::string_view GetStringViewArgument();
       double GetDoubleArgument();
+      double GetOptionalDoubleParam(double defaultValue);
       double GetDoubleArgument(const uint32_t tapeOffset);
       uint32_t GetRefArgument();
       uint32_t GetRefArgument(const uint32_t tapeOffset);
@@ -73,27 +74,22 @@ namespace webifc
       IfcTokenType GetTokenType(const uint32_t tapeOffset);
       std::vector<uint32_t> GetSetArgument();
       std::vector<std::vector<uint32_t>> GetSetListArgument();
-      const LoaderSettings &GetSettings();
-      void ReportError(const LoaderError &&error);
-      std::vector<LoaderError> GetAndClearErrors();
       void MoveToArgumentOffset(IfcLine &line, const uint32_t argumentIndex);
       void StepBack();
       void Push(void *v, const uint64_t size);
       uint64_t GetTotalSize();
       void UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end);
       void AddHeaderLineTape(const uint32_t type, const uint32_t start, const uint32_t end);
-      uint32_t IfcTypeToTypeCode(std::string name);
       template <typename T> void Push(T input)
       {
         _tokenStream->Push(input);
       }
 
     private:
+      schema::IfcSchemaManager _schemaManager;
+      utility::LoaderErrorHandler _errorHandler;
       IfcTokenStream * _tokenStream;
-      std::vector<uint32_t> _crcTable;
       bool _open = false;
-      std::vector<LoaderError> _errors;
-      LoaderSettings _settings;
       double _linearScalingFactor = 1;
       double _squaredScalingFactor = 1;
       double _cubicScalingFactor = 1;
