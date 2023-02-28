@@ -6,7 +6,7 @@
 
 namespace webifc::schema {
    
-    IfcSchemaManager::IfcSchemaManager()
+    IfcSchemaManager::IfcSchemaManager() : _crcTable(256)
     {
         uint32_t c;
         for (uint32_t n = 0; n < 256; n++) {
@@ -19,7 +19,12 @@ namespace webifc::schema {
         initSchemaData();
     }
 
-    std::vector<std::string> IfcSchemaManager::GetAvailableSchemas()
+    std::string IfcSchemaManager::GetSchemaName(IFC_SCHEMA schema) 
+    {
+        return _schemaNames[schema];
+    }
+
+    std::vector<IFC_SCHEMA> IfcSchemaManager::GetAvailableSchemas()
     {
         return _schemas;
     }

@@ -1143,3 +1143,8 @@ namespace webifc::schema {
 	static const unsigned int IFCTIME = 4075327185;
 	static const unsigned int IFCURIREFERENCE = 950732822;
 }
+enum IFC_SCHEMA {
+	IFC2X3,
+	IFC4_3,
+	IFC4,
+};

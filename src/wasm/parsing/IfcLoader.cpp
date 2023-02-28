@@ -82,6 +82,28 @@ namespace webifc::parsing {
      _tokenStream->SetTokenSource(requestData);
      InitialiseIfcParsing();
    }
+
+   IFC_SCHEMA IfcLoader::GetSchema() 
+   { 
+      auto line = GetHeaderLinesWithType(schema::FILE_SCHEMA)[0];
+      MoveToHeaderLineArgument(line.lineIndex, 0);
+      auto schemas = _schemaManager.GetAvailableSchemas();
+
+      while (!_tokenStream->IsAtEnd()) {
+          IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
+          if (t == IfcTokenType::LINE_END) break;
+          if (t == IfcTokenType::LABEL) 
+          {
+            std::string_view schemaName = _tokenStream->ReadString();
+            for (size_t i = 0; i < schemas.size();i++) 
+            {
+              if (_schemaManager.GetSchemaName(schemas[i]) == schemaName) return schemas[i];
+            }
+          }
+      }
+      return IFC2X3;
+
+   }
    
    void IfcLoader::LoadFile(std::istream &requestData)
    { 

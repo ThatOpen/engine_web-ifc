@@ -14,7 +14,8 @@ namespace webifc::schema {
     class IfcSchemaManager {
         public:
             IfcSchemaManager();
-            std::vector<std::string> GetAvailableSchemas();
+            std::vector<IFC_SCHEMA> GetAvailableSchemas();
+            std::string GetSchemaName(IFC_SCHEMA schema);
             uint32_t IfcTypeToTypeCode(const std::string name);
             uint32_t IfcTypeToTypeCode(const std::string_view name);
             std::string IfcTypeCodeToType(const uint32_t typeCode);
@@ -23,7 +24,8 @@ namespace webifc::schema {
         private: 
             std::vector<uint32_t> _crcTable;
             std::unordered_set<uint32_t> _ifcElements;
-            std::vector<std::string> _schemas;
+            std::vector<IFC_SCHEMA> _schemas;
+            std::vector<std::string> _schemaNames;
             void initSchemaData();
             uint32_t IfcTypeToTypeCode(const void * name, const size_t len);
     };

@@ -238,9 +238,12 @@ namespace webifc::schema {
 		_ifcElements.insert(IFCWALLELEMENTEDCASE);
 		_ifcElements.insert(IFCWINDOWSTANDARDCASE);
 		_ifcElements.insert(IFCBEAMSTANDARDCASE);
-		_schemas.push_back("IFC2X3");
-		_schemas.push_back("IFC4_3");
-		_schemas.push_back("IFC4");
+		_schemaNames.push_back("IFC2X3");
+		_schemas.push_back(IFC2X3);
+		_schemaNames.push_back("IFC4_3");
+		_schemas.push_back(IFC4_3);
+		_schemaNames.push_back("IFC4");
+		_schemas.push_back(IFC4);
 	};
 	std::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) {
 		switch(typeCode) {

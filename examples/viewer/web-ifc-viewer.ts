@@ -1,4 +1,4 @@
-import { IfcAPI, ms, Schemas, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER } from '../../dist/web-ifc-api';
+import { IfcAPI, LogLevel,ms, Schemas, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER } from '../../dist/web-ifc-api';
 import { IfcThree } from './web-ifc-three';
 import { Init3DView, InitBasicScene, scene } from './web-ifc-scene';
 import * as Monaco from 'monaco-editor';
@@ -46,8 +46,6 @@ window.InitMonaco = (monaco: any) => {
 function initMonacoEditor(monacoEditor: Monaco.editor.IStandaloneCodeEditor)
 {
     let item = window.localStorage.getItem("code");
-    console.log(item);
-
     if (item)
     {
         monacoEditor.setValue(item);
@@ -75,6 +73,7 @@ if (typeof window != 'undefined')
 //@ts-ignore
 window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEditor) => {
   await ifcAPI.Init();
+  ifcAPI.SetLogLevel(LogLevel.LOG_LEVEL_INFO);
   initMonacoEditor(monacoEditor);
   const fileInput = document.getElementById('finput');
   fileInput.addEventListener('change', fileInputChanged);

@@ -264,14 +264,17 @@ cppSchema.push("\tvoid IfcSchemaManager::initSchemaData() {");
 completeifcElementList.forEach(element => {
     cppSchema.push(`\t\t_ifcElements.insert(${element.toUpperCase()});`);
 });
+chSchema.push(`enum IFC_SCHEMA {`)
 for (var i = 0; i < files.length; i++) {
   if (!files[i].endsWith(".exp")) continue;
   var schemaName = files[i].replace(".exp","");
   var schemaNameClean = schemaName.replace(".","_");
-  cppSchema.push(`\t\t_schemas.push_back("${schemaNameClean}");`);
+  chSchema.push(`\t${schemaNameClean},`)
+  cppSchema.push(`\t\t_schemaNames.push_back("${schemaNameClean}");`);
+  cppSchema.push(`\t\t_schemas.push_back(${schemaNameClean});`);
 }
 cppSchema.push("\t};");
-
+chSchema.push(`};`)
 
 cppSchema.push("\tstd::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) {");
 cppSchema.push("\t\tswitch(typeCode) {");

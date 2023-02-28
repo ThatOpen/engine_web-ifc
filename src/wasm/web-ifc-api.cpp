@@ -39,13 +39,14 @@ int OpenModel(webifc::utility::LoaderSettings settings, emscripten::val callback
         std::stringstream str;
         str << "web-ifc: "<< WEB_IFC_VERSION_NUMBER << " threading: " << (MT_ENABLED ? "enabled" : "disabled");
         str << " schemas available [";
-        for (std::string schema : schemaManager.GetAvailableSchemas())  str << schema<<",";
+        for (auto schema : schemaManager.GetAvailableSchemas())  str << schemaManager.GetSchemaName(schema)<<",";
         str << "]";
         webifc::utility::log::info(str.str());
         shown_version_header = true;
     }
 
     uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
+    errorHandlers.emplace( modelID, std::make_unique<webifc::utility::LoaderErrorHandler>());
 
     auto loader = std::make_unique<webifc::parsing::IfcLoader>(settings.TAPE_SIZE,settings.MEMORY_LIMIT,*errorHandlers[modelID],schemaManager);
     loaders.emplace(modelID, std::move(loader));
@@ -80,7 +81,7 @@ int GetModelSize(uint32_t modelID)
 int CreateModel(webifc::utility::LoaderSettings settings)
 {
     uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
-    
+    errorHandlers.emplace(modelID,std::make_unique<webifc::utility::LoaderErrorHandler>()); 
     auto loader = std::make_unique<webifc::parsing::IfcLoader>(settings.TAPE_SIZE,settings.MEMORY_LIMIT,*errorHandlers[modelID],schemaManager);
     loaders.emplace(modelID, std::move(loader));
     auto geomLoader = std::make_unique<webifc::IfcGeometryLoader>(*loaders[modelID],settings,*errorHandlers[modelID],schemaManager);
@@ -268,6 +269,7 @@ std::vector<webifc::utility::LoaderError> GetAndClearErrors(uint32_t modelID)
     }
     
     auto errors = errorHandler->GetErrors();
+    std::cout << "ERORRS"<<errors.size()<<std::endl;
     errorHandler->ClearErrors();
     return errors;
 }

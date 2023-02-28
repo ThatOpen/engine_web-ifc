@@ -11,6 +11,7 @@ namespace webifc::utility {
     { 
         log::error(error.message);
         _errors.push_back(std::move(error));
+        std::cout << "ERRORLOGGED"<<std::endl;
     }
             
     void LoaderErrorHandler::ClearErrors()
@@ -20,7 +21,8 @@ namespace webifc::utility {
 
     std::vector<LoaderError> LoaderErrorHandler::GetErrors()
     {
-        return _errors;
+        std::vector<LoaderError> output(_errors);
+        return output;
     }
 
     LoaderError::LoaderError(const LoaderErrorType t, const std::string m, const uint32_t e, const uint32_t type) 
