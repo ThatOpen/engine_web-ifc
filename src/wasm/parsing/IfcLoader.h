@@ -88,8 +88,8 @@ namespace webifc::parsing
       }
 
     private:
-      schema::IfcSchemaManager _schemaManager;
-      utility::LoaderErrorHandler _errorHandler;
+      schema::IfcSchemaManager &_schemaManager;
+      utility::LoaderErrorHandler &_errorHandler;
       IfcTokenStream * _tokenStream;
       bool _open = false;
       double _linearScalingFactor = 1;

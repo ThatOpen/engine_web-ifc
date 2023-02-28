@@ -512,7 +512,7 @@ namespace webifc::parsing {
    { 
       if (_tokenStream->Read<char>() != IfcTokenType::REF)
      	{
-     		_errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected token type, expected REF"});
+     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF");
      		return 0;
      	}
      	return _tokenStream->Read<uint32_t>();
@@ -596,7 +596,7 @@ namespace webifc::parsing {
      	}
      	else
      	{
-     		_errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY"});
+     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY");
      		return 0;
      	}
    }
@@ -658,7 +658,7 @@ namespace webifc::parsing {
          }
          else
          {
-           _errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected token"});
+           _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token");
          }
        }
 
@@ -721,7 +721,7 @@ namespace webifc::parsing {
      			}
      			else
      			{
-     				_errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected token"});
+     				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token");
      			}
      		}
 
@@ -859,7 +859,7 @@ namespace webifc::parsing {
 
      if (projects.size() != 1)
      {
-       _errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected empty ifc project"});
+       _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected empty ifc project");
        return;
      }
 
@@ -988,7 +988,7 @@ namespace webifc::parsing {
    		{
    		case IfcTokenType::LINE_END:
    		{
-   			_errorHandler.ReportError({utility::LoaderErrorType::PARSING, "unexpected line end"});
+   			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected line end");
    			break;
    		}
    		case IfcTokenType::UNKNOWN:

@@ -31,6 +31,7 @@ namespace webifc::parsing
           _activeChunks++;
       }
       _cChunk = &_chunks.front();
+      _fileStream->Clear();
   }
 
   void IfcTokenStream::SetTokenSource(std::istream &requestData)

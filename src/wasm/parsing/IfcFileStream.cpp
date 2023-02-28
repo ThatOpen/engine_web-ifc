@@ -49,6 +49,7 @@
    void IfcTokenStream::IfcFileStream::Clear() 
    {
       delete _buffer;
+      _buffer=nullptr;
    }
    
    char IfcTokenStream::IfcFileStream::Prev() 

@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 #include <iostream>
+#include <string>
 #include "Logging.h"
  
 namespace webifc::utility
