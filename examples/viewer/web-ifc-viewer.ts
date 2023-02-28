@@ -159,14 +159,21 @@ async function LoadModel(data: Uint8Array) {
         console.log(errors.get(i));
     }
 
-    //Example to get all types used in the model
-    let types = await ifcAPI.GetAllTypesOfModel(modelID);
-    for (let i = 0; i < types.length; i++) {
-        let type = types[i];
-        //console.log(type);
-        //console.log(type.typeID);
-        //console.log(type.typeName);
-    }
+    // //Example to get all types used in the model
+    // let types = await ifcAPI.GetAllTypesOfModel(modelID);
+    // if(types)
+    // {
+    //     for (let i = 0; i < types.length; i++) {
+    //         let type = types[i];
+    //         //console.log(type);
+    //         //console.log(type.typeID);
+    //         //console.log(type.typeName);
+    //     }
+    // }
+
+    let alignments = await ifcAPI.GetAllAlignments(modelID);
+
+    console.log("Alignments: ", alignments);
 
     ifcAPI.CloseModel(modelID);
 }

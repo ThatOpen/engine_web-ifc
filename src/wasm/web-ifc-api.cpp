@@ -259,7 +259,33 @@ webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
     return geomLoader->GetCachedGeometry(expressID);
 }
 
-std::vector<webifc::utility::LoaderError> GetAndClearErrors(uint32_t modelID)
+std::vector<webifc::IfcAlignment> GetAllAlignments(uint32_t modelID)
+{
+    auto &loader = loaders[modelID];
+    auto &geomLoader = geomLoaders[modelID];
+
+    if (!loader || !geomLoader)
+    {
+        return {};
+    }
+
+    auto type = ifc::IFCALIGNMENT;
+
+    auto elements = loader->GetExpressIDsWithType(type);
+
+    std::vector<webifc::IfcAlignment> alignments;
+
+    for (int i = 0; i < elements.size(); i++)
+    {
+        webifc::IfcAlignment alignment = geomLoader->GetAlignment(elements[i]);
+        alignment.transform(geomLoader->GetCoordinationMatrix());
+        alignments.push_back(alignment);
+    }
+
+    return alignments;
+}
+
+std::vector<webifc::LoaderError> GetAndClearErrors(uint32_t modelID)
 {
     auto& errorHandler = errorHandlers[modelID];
 
@@ -861,7 +887,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("w", &glm::dvec4::w)
         ;
 
-
     emscripten::value_object<webifc::utility::LoaderSettings>("LoaderSettings")
         .field("COORDINATE_TO_ORIGIN", &webifc::utility::LoaderSettings::COORDINATE_TO_ORIGIN)
         .field("USE_FAST_BOOLS", &webifc::utility::LoaderSettings::USE_FAST_BOOLS)
@@ -871,7 +896,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("BOOL_ABORT_THRESHOLD", &webifc::utility::LoaderSettings::BOOL_ABORT_THRESHOLD)
         .field("TAPE_SIZE", &webifc::utility::LoaderSettings::TAPE_SIZE)
         .field("MEMORY_LIMIT", &webifc::utility::LoaderSettings::MEMORY_LIMIT)
-        ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
             .element(emscripten::index<0>())
@@ -934,7 +958,35 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<webifc::IfcFlatMesh>("IfcFlatMeshVector");
     emscripten::register_vector<uint32_t>("UintVector");
 
+    emscripten::register_vector<webifc::IfcAlignment>("IfcAlignmentVector");
+
+    emscripten::value_object<webifc::IfcAlignment>("IfcAlignment")
+        .field("Horizontal", &webifc::IfcAlignment::Horizontal)
+        .field("Vertical", &webifc::IfcAlignment::Vertical);
+
+    emscripten::value_object<glm::dvec3>("glmDvec3")
+        .field("x", &glm::dvec3::x)
+        .field("y", &glm::dvec3::y)
+        .field("z", &glm::dvec3::z);
+
+    emscripten::value_object<webifc::IfcAlignmentSegment>("IfcAlignmentSegment")
+        .field("curves", &webifc::IfcAlignmentSegment::curves);
+
+    emscripten::register_vector<webifc::IfcCurve<2>>("IfcCurve<2>Vector");
+
+    emscripten::value_object<webifc::IfcCurve<2>>("IfcCurve<2>")
+        .field("points", &webifc::IfcCurve<2>::points);
+
+    emscripten::register_vector<glm::vec<2, glm::f64>>("vector2doubleVector");
+
+    emscripten::value_object<glm::vec<2, glm::f64>>("vector2double")
+        .field("x", &glm::vec<2, glm::f64>::x)
+        .field("y", &glm::vec<2, glm::f64>::y);
+
+    emscripten::register_vector<double>("DoubleVector");
+
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
+    emscripten::function("GetAllAlignments", &GetAllAlignments);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
     emscripten::function("GetMaxExpressID", &GetMaxExpressID);

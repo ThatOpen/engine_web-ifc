@@ -38,6 +38,7 @@ namespace webifc::parsing
     public:
       IfcLoader(size_t tapeSize, size_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager);  
       std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids();
+      std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelNests();
       std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoidRels();
       std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelAggregates();
       std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetStyledItems();
@@ -101,6 +102,7 @@ namespace webifc::parsing
       std::unordered_map<uint32_t, std::vector<uint32_t>> _ifcTypeToLineID;
       std::unordered_map<uint32_t, std::vector<uint32_t>> _ifcTypeToHeaderLineID;
       std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoidRel;
+      std::unordered_map<uint32_t, std::vector<uint32_t>> _relNests;
       std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
       std::unordered_map<uint32_t, std::vector<uint32_t>> _relAggregates;
       std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;
@@ -110,6 +112,7 @@ namespace webifc::parsing
       std::set<uint32_t> GetLineDependencies(uint32_t expressID);
       std::vector<IfcLine> GetLinesForExpressIDs(const std::set<uint32_t> &expressIDs);
       void PopulateRelVoidsMap();
+      void PopulateRelNestsMap();
       void PopulateRelAggregatesMap();
       void PopulateStyledItemMap();
       void PopulateRelMaterialsMap();

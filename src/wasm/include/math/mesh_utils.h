@@ -244,6 +244,72 @@ namespace webifc
 		return svg.str();
 	}
 
+	static std::string HAlignmentToObj(const std::vector<webifc::IfcAlignment> &geom)
+	{
+		std::stringstream obj;
+
+		for (uint32_t ia = 0; ia < geom.size(); ia++)
+		{
+			for (uint32_t ic = 0; ic < geom[ia].Horizontal.curves.size(); ic++)
+			{
+				for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size(); ip++)
+				{
+					glm::dvec3 t = glm::dvec4(geom[ia].Horizontal.curves[ic].points[ip], 0, 1);
+					obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+				}
+			}
+		}
+
+		uint32_t idx = 0;
+
+		for (uint32_t ia = 0; ia < geom.size(); ia++)
+		{
+			for (uint32_t ic = 0; ic < geom[ia].Horizontal.curves.size(); ic++)
+			{
+				for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size() - 1; ip++)
+				{
+					obj << "l " << (idx) << " " << (idx + 1) << "\n";;
+					idx++;
+				}
+			}
+		}
+
+		return obj.str();
+	}
+
+	static std::string VAlignmentToObj(const std::vector<webifc::IfcAlignment> &geom)
+	{
+		std::stringstream obj;
+
+		for (uint32_t ia = 0; ia < geom.size(); ia++)
+		{
+			for (uint32_t ic = 0; ic < geom[ia].Vertical.curves.size(); ic++)
+			{
+				for (uint32_t ip = 0; ip < geom[ia].Vertical.curves[ic].points.size(); ip++)
+				{
+					glm::dvec3 t = glm::dvec4(geom[ia].Vertical.curves[ic].points[ip], 0, 1);
+					obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+				}
+			}
+		}
+
+		uint32_t idx = 0;
+
+		for (uint32_t ia = 0; ia < geom.size(); ia++)
+		{
+			for (uint32_t ic = 0; ic < geom[ia].Vertical.curves.size(); ic++)
+			{
+				for (uint32_t ip = 0; ip < geom[ia].Vertical.curves[ic].points.size() - 1; ip++)
+				{
+					obj << "l " << (idx) << " " << (idx + 1) << "\n";;
+					idx++;
+				}
+			}
+		}
+
+		return obj.str();
+	}
+
 	static std::string ToObj(const IfcGeometry &geom, size_t &offset, glm::dmat4 transform = glm::dmat4(1), double inputScale = 1.0)
 	{
 		std::stringstream obj;
