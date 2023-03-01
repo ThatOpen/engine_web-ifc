@@ -45,11 +45,11 @@ void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoa
 }
 
 
-std::vector<webifc::IfcAlignment> GetAlignments(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
+std::vector<webifc::IfcAlignment> GetAlignments(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
 {
     std::vector<webifc::IfcAlignment> alignments;
 
-    auto type = ifc::IFCALIGNMENT;
+    auto type = webifc::schema::IFCALIGNMENT;
 
     auto elements = loader.GetExpressIDsWithType(type);
 
@@ -70,7 +70,7 @@ std::vector<webifc::IfcAlignment> GetAlignments(webifc::IfcLoader &loader, webif
     return alignments;
 }
 
-std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
+std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
 {
     std::vector<webifc::IfcFlatMesh> meshes;
     webifc::schema::IfcSchemaManager schema;
