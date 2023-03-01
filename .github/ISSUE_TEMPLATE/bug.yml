@@ -20,7 +20,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: What version of our software are you running?
+      description: What version of web-ifc are you running?
     validations:
       required: true
   - type: dropdown
@@ -44,15 +44,9 @@ body:
     attributes:
       label: Anything else?
       description: |
-        Files? Links? References? Anything that will give us more context about the issue you are encountering!
+        Model? Links? Screenshots? Anything that will give us more context about the issue you are encountering!
+        It is very useful to understand how the model should look - so screenshots of this are very helpful.
+        Please attach the model if you can. If you want to exchange it privately please contact us on discord.
         Tip: You can attach files by clicking this area to highlight it and then dragging files in.
     validations:
       required: false
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
