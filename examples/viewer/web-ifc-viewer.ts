@@ -160,6 +160,7 @@ async function LoadModel(data: Uint8Array) {
         console.log(errors.get(i));
     }
 
+    // This function should activate only if we are not in IFC4X3
     // //Example to get all types used in the model
     // let types = await ifcAPI.GetAllTypesOfModel(modelID);
     // if(types)
@@ -172,6 +173,7 @@ async function LoadModel(data: Uint8Array) {
     //     }
     // }
 
+    // This function should activate only if we are in IFC4X3
     let alignments = await ifcAPI.GetAllAlignments(modelID);
 
     console.log("Alignments: ", alignments);
