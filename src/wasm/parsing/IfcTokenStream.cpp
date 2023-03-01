@@ -6,7 +6,7 @@
 #include <istream>
 #include "IfcTokenStream.h"
 
-namespace webifc
+namespace webifc::parsing
 {
 
   IfcTokenStream::IfcTokenStream(const size_t chunkSize, const size_t maxChunks) 
@@ -31,6 +31,7 @@ namespace webifc
           _activeChunks++;
       }
       _cChunk = &_chunks.front();
+      _fileStream->Clear();
   }
 
   void IfcTokenStream::SetTokenSource(std::istream &requestData)

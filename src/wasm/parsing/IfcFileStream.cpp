@@ -4,16 +4,17 @@
  
  #include "IfcTokenStream.h"
  
- namespace webifc {
+ namespace webifc::parsing {
 
    IfcTokenStream::IfcFileStream::IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, uint32_t size) : _dataSource(requestData), _size(size)
    {
-     _buffer = new char[_size];
+     _buffer = nullptr;
      load();
    }
    
    void IfcTokenStream::IfcFileStream::load()
    {
+     if (_buffer == nullptr) _buffer = new char[_size];
      prev=_buffer[_currentSize-1];
      _currentSize = _dataSource(_buffer, _startRef, _size);
      _pointer = 0;
@@ -44,6 +45,12 @@
         load();
       }
    } 
+
+   void IfcTokenStream::IfcFileStream::Clear() 
+   {
+      delete _buffer;
+      _buffer=nullptr;
+   }
    
    char IfcTokenStream::IfcFileStream::Prev() 
    {

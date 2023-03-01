@@ -3,8 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 #pragma once
+
+#include <string>
  
-namespace webifc
+namespace webifc::utility
 {
   
   enum class LogLevel : int

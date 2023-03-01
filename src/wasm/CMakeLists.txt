@@ -22,6 +22,7 @@ set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 #collect source files
 file (GLOB WebIfcParsing parsing/*.cpp)
+file (GLOB WebIfcSchema schema/*.cpp)
 file (GLOB WebIfcAPI web-ifc-api.cpp)
 file (GLOB WebIfcUtility utility/*.cpp)
 file (GLOB WebIfcTestSourceFiles test/*.cpp)
@@ -57,7 +58,7 @@ Message("Downloads Finished")
 
 if (EMSCRIPTEN)
 	#build parameters for web-ifc
-	add_executable (web-ifc ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility})
+	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility})
 	target_include_directories(web-ifc PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc PUBLIC ${glm_SOURCE_DIR})
 	target_include_directories(web-ifc PUBLIC ${earcut_SOURCE_DIR}/include)
@@ -73,7 +74,7 @@ if (EMSCRIPTEN)
 
 
 	#multi-treaded versions
-	add_executable (web-ifc-mt ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility})
+	add_executable (web-ifc-mt ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility})
 	target_include_directories(web-ifc-mt PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc-mt PUBLIC ${glm_SOURCE_DIR})
 	target_include_directories(web-ifc-mt PUBLIC ${earcut_SOURCE_DIR}/include)
@@ -93,7 +94,7 @@ endif()
 if (NOT EMSCRIPTEN)
 
 	#build parameters for web-ifc-test
-	add_executable (web-ifc-test ${WebIfcParsing} ${WebIfcUtility} ${WebIfcTestSourceFiles})
+	add_executable (web-ifc-test ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcTestSourceFiles})
 	target_include_directories(web-ifc-test PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc-test PUBLIC ${cdt_SOURCE_DIR}/CDT/include)
 	target_include_directories(web-ifc-test PUBLIC ${glm_SOURCE_DIR})
@@ -110,7 +111,7 @@ if (NOT EMSCRIPTEN)
 	set_tests_properties(web-ifc-test PROPERTIES LABELS "web-ifc")
 	
 	#build parameters for web-ifc in testing environment
-	add_executable (web-ifc ${WebIfcParsing} ${WebIfcUtility}	${WebIfcTestingMain})
+	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility}	${WebIfcTestingMain})
 	target_include_directories(web-ifc PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc PUBLIC ${cdt_SOURCE_DIR}/CDT/include)
 	target_include_directories(web-ifc PUBLIC ${glm_SOURCE_DIR})
