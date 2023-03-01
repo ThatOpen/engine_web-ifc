@@ -293,7 +293,6 @@ std::vector<webifc::utility::LoaderError> GetAndClearErrors(uint32_t modelID)
     }
     
     auto errors = errorHandler->GetErrors();
-    std::cout << "ERORRS("<<modelID<<")"<<errors.size()<<std::endl;
     errorHandler->ClearErrors();
     return errors;
 }

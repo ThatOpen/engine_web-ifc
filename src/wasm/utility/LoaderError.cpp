@@ -4,7 +4,6 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
 #include "LoaderError.h"
 
 namespace webifc::utility 
@@ -14,20 +13,15 @@ namespace webifc::utility
     { 
         log::error(m);
         _errors.emplace_back(t,m,e,type);
-        std::cout << "ERRORLOGGED"<<std::endl;
-        std::cout << "SIZE"<<_errors.size()<<std::endl;
     }
             
     void LoaderErrorHandler::ClearErrors()
     {
-        std::cout << "SIZE"<<_errors.size()<<std::endl;
-        std::cout << "CLEAR"<<std::endl;
         _errors.clear();
     }
 
     std::vector<LoaderError>& LoaderErrorHandler::GetErrors()
     {
-        std::cout << "ERRORLOGGED"<<_errors.size()<<std::endl;
         std::vector<LoaderError> output(_errors);
         return _errors;
     }
