@@ -44,7 +44,6 @@ void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoa
     }
 }
 
-
 std::vector<webifc::IfcAlignment> GetAlignments(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
 {
     std::vector<webifc::IfcAlignment> alignments;
@@ -265,20 +264,21 @@ int main()
     // return 0;
 
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/Q2.ifc");
-
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/Q2.ifc");
     // std::string content = ReadFile("../../../examples/example.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#278 pending/extrusions.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
 
-	webifc::utility::  LoaderSettings set;
+    webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
 
     webifc::utility::LoaderErrorHandler errorHandler;
     webifc::schema::IfcSchemaManager schemaManager;
-    webifc::parsing::IfcLoader loader(set.TAPE_SIZE,set.MEMORY_LIMIT,errorHandler,schemaManager);
+    webifc::parsing::IfcLoader loader(set.TAPE_SIZE, set.MEMORY_LIMIT, errorHandler, schemaManager);
 
     auto start = ms();
     loader.LoadFile([&](char *dest, size_t sourceOffset, size_t destSize)
@@ -298,14 +298,17 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::IfcGeometryLoader geometryLoader(loader,set,errorHandler,schemaManager);
+    webifc::IfcGeometryLoader geometryLoader(loader, set, errorHandler, schemaManager);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);
     // SpecificLoadTest(loader, geometryLoader, 122);
     // SpecificLoadTest(loader, geometryLoader,469706);
-    // auto meshes = LoadAllTest(loader, geometryLoader);
-    auto alignments = GetAlignments(loader, geometryLoader);
+    // SpecificLoadTest(loader, geometryLoader, 15);
+    // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
+    auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto alignments = GetAlignments(loader, geometryLoader);
+
     auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = errorHandler.GetErrors();

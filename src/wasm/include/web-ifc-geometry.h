@@ -32,21 +32,21 @@
 #include "util.h"
 
 const static std::unordered_map<std::string, int> Horizontal_alignment_type{
-	{"LINE", 1},		
-	{"CIRCULARARC", 2},	
-	{"CLOTHOID", 3},	
-	{"CUBICSPIRAL", 4},				//ToDo
-	{"BIQUADRATICPARABOLA", 5},		//ToDo
-	{"BLOSSCURVE", 6},				//ToDo
-	{"COSINECURVE", 7},				//ToDo
-	{"SINECURVE", 8},				//ToDo
-	{"VIENNESEBEND", 9}};			//ToDo
+	{"LINE", 1},
+	{"CIRCULARARC", 2},
+	{"CLOTHOID", 3},
+	{"CUBICSPIRAL", 4},			// ToDo
+	{"BIQUADRATICPARABOLA", 5}, // ToDo
+	{"BLOSSCURVE", 6},			// ToDo
+	{"COSINECURVE", 7},			// ToDo
+	{"SINECURVE", 8},			// ToDo
+	{"VIENNESEBEND", 9}};		// ToDo
 
 const static std::unordered_map<std::string, int> Vertical_alignment_type{
-	{"CONSTANTGRADIENT", 1},	
-	{"CIRCULARARC", 2},			
-	{"PARABOLICARC", 3},		
-	{"CLOTHOID", 4}};				//ToDo
+	{"CONSTANTGRADIENT", 1},
+	{"CIRCULARARC", 2},
+	{"PARABOLICARC", 3},
+	{"CLOTHOID", 4}}; // ToDo
 
 const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
 
@@ -70,7 +70,7 @@ namespace webifc
 	class IfcGeometryLoader
 	{
 	public:
-		IfcGeometryLoader(parsing::IfcLoader &l,utility::LoaderSettings &settings, utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) : _transformation(1), _loader(l), _settings(settings), _errorHandler(errorHandler), _schemaManager(schemaManager)
+		IfcGeometryLoader(parsing::IfcLoader &l, utility::LoaderSettings &settings, utility::LoaderErrorHandler &errorHandler, schema::IfcSchemaManager &schemaManager) : _transformation(1), _loader(l), _settings(settings), _errorHandler(errorHandler), _schemaManager(schemaManager)
 		{
 		}
 
@@ -131,6 +131,11 @@ namespace webifc
 				geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(geom.min);
 				geometry.SetFlatTransformation();
 				geometry.geometryExpressID = composedMesh.expressID;
+
+				if(geometry.testReverse())
+				{
+					geom.ReverseFaces();
+				}
 
 				flatMesh.geometries.push_back(geometry);
 			}
@@ -1342,8 +1347,9 @@ namespace webifc
 						break;
 					}
 
-					IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal());
+					std::reverse(profile.curve.points.begin(), profile.curve.points.end());
 
+					IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal());
 					_expressIDToGeometry[line.expressID] = geom;
 					mesh.expressID = line.expressID;
 					mesh.hasGeometry = true;

@@ -207,20 +207,11 @@ namespace webifc
 
 		inline void AddPoint(glm::dvec3 &pt, glm::dvec3 &n)
 		{
-			// vertexData.reserve((numPoints + 1) * VERTEX_FORMAT_SIZE_FLOATS);
-			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
-			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
-			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
-			vertexData.push_back(pt.x);
-			vertexData.push_back(pt.y);
-			vertexData.push_back(pt.z);
+			auto const source = std::vector<double>{pt.x, pt.y, pt.z, n.x, n.y, n.z};
+			vertexData.insert(vertexData.end(), source.begin(), source.end());
 
 			min = glm::min(min, pt);
 			max = glm::max(max, pt);
-
-			vertexData.push_back(n.x);
-			vertexData.push_back(n.y);
-			vertexData.push_back(n.z);
 
 			if (std::isnan(pt.x) || std::isnan(pt.y) || std::isnan(pt.z))
 			{
@@ -231,10 +222,6 @@ namespace webifc
 			{
 				printf("NaN in geom!\n");
 			}
-
-			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
-			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
-			// vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
 
 			numPoints += 1;
 		}
@@ -258,13 +245,8 @@ namespace webifc
 
 		inline void AddFace(uint32_t a, uint32_t b, uint32_t c)
 		{
-			// indexData.reserve((numFaces + 1) * 3);
-			// indexData[numFaces * 3 + 0] = a;
-			// indexData[numFaces * 3 + 1] = b;
-			// indexData[numFaces * 3 + 2] = c;
-			indexData.push_back(a);
-			indexData.push_back(b);
-			indexData.push_back(c);
+			auto const source = std::vector<uint32_t>{a, b, c};
+			indexData.insert(indexData.end(), source.begin(), source.end());
 
 			numFaces++;
 		}
@@ -276,6 +258,14 @@ namespace webifc
 			f.i1 = indexData[index * 3 + 1];
 			f.i2 = indexData[index * 3 + 2];
 			return f;
+		}
+
+		inline void ReverseFace(uint32_t index)
+		{
+			Face f = GetFace(index);
+			indexData[index * 3 + 0] = f.i2;
+			indexData[index * 3 + 1] = f.i1;
+			indexData[index * 3 + 2] = f.i0;
 		}
 
 		inline AABB GetFaceBox(uint32_t index) const
@@ -355,6 +345,14 @@ namespace webifc
 			}
 
 			return newGeom;
+		}
+
+		void ReverseFaces()
+		{
+			for (size_t i = 0; i < numFaces; i++)
+			{
+				ReverseFace(i);
+			}
 		}
 
 		uint32_t GetVertexData()
@@ -531,7 +529,8 @@ namespace webifc
 					uint32_t lastId2 = Horizontal.curves[ic].points.size() - 1;
 					double d1 = glm::distance(Horizontal.curves[ic].points[0], Horizontal.curves[ic - 1].points[lastId1]);
 					double d2 = glm::distance(Horizontal.curves[ic].points[lastId2], Horizontal.curves[ic - 1].points[lastId1]);
-					if(d1 > d2){
+					if (d1 > d2)
+					{
 						std::reverse(Horizontal.curves[ic].points.begin(), Horizontal.curves[ic].points.end());
 					}
 				}
@@ -1539,6 +1538,23 @@ namespace webifc
 		void SetFlatTransformation()
 		{
 			flatTransformation = FlattenTransformation(transformation);
+		}
+
+		bool testReverse()
+		{
+			glm::dvec3 cx = glm::dvec3(transformation[0].x, transformation[0].y, transformation[0].z);
+			glm::dvec3 cy = glm::dvec3(transformation[1].x, transformation[1].y, transformation[1].z);
+			glm::dvec3 cz = glm::dvec3(transformation[2].x, transformation[2].y, transformation[2].z);
+
+			glm::dvec3 dx = glm::cross(cy, cz);
+			glm::dvec3 dy = glm::cross(cx, cz);
+			glm::dvec3 dz = glm::cross(cx, cy);
+
+			double fac1 = glm::dot(cx, dx);
+			double fac2 = -glm::dot(cy, dy);
+			double fac3 = glm::dot(cz, dz);
+
+			return fac1 * fac2 * fac3 < 0;
 		}
 	};
 
