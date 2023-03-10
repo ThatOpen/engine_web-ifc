@@ -6,8 +6,10 @@
 
 #include <glm/glm.hpp>
 
-namespace webifc
+namespace webifc::geometry
 {
+
+
 
     // https://www.iquilezles.org/www/articles/intersectors/intersectors.htm
     bool intersect_ray_triangle(

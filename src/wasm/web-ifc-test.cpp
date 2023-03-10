@@ -6,11 +6,13 @@
 #include <fstream>
 #include <filesystem>
 
+#include "geometry/operations/mesh_utils.h"
 #include "parsing/IfcLoader.h"
 #include "schema/IfcSchemaManager.h"
+#include "geometry/IfcGeometryProcessor.h"
 #include "utility/LoaderError.h"
-#include "include/web-ifc-geometry.h"
-#include "include/math/triangulate-with-boundaries.h"
+#include "utility/LoaderSettings.h"
+#include "geometry/operations/triangulate-with-boundaries.h"
 #include "schema/ifc-schema.h"
 
 long long ms()
@@ -30,7 +32,7 @@ std::string ReadFile(std::string filename)
     return buffer.str();
 }
 
-void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader, uint64_t num)
+void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint64_t num)
 {
     auto walls = loader.GetExpressIDsWithType(webifc::schema::IFCSLAB);
 
@@ -45,17 +47,17 @@ void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoa
 }
 
 
-std::vector<webifc::IfcAlignment> GetAlignments(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
+std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
 {
-    std::vector<webifc::IfcAlignment> alignments;
+    std::vector<webifc::geometry::IfcAlignment> alignments;
 
     auto type = webifc::schema::IFCALIGNMENT;
 
     auto elements = loader.GetExpressIDsWithType(type);
 
-    for (int i = 0; i < elements.size(); i++)
+    for (unsigned int i = 0; i < elements.size(); i++)
     {
-        auto alignment = geometryLoader.GetAlignment(elements[i]);
+        auto alignment = geometryLoader.GetLoader().GetAlignment(elements[i]);
         alignment.transform(geometryLoader.GetCoordinationMatrix());
         alignments.push_back(alignment);
     }
@@ -64,36 +66,38 @@ std::vector<webifc::IfcAlignment> GetAlignments(webifc::parsing::IfcLoader &load
 
     if (writeFiles)
     {
-        geometryLoader.DumpAlignment(alignments, L"V_ALIGN.obj", L"H_ALIGN.obj");
+        DumpAlignment(alignments, L"V_ALIGN.obj", L"H_ALIGN.obj");
     }
 
     return alignments;
 }
 
-std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
+std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
 {
-    std::vector<webifc::IfcFlatMesh> meshes;
+    std::vector<webifc::geometry::IfcFlatMesh> meshes;
     webifc::schema::IfcSchemaManager schema;
 
     for (auto type : schema.GetIfcElementList())
     {
         auto elements = loader.GetExpressIDsWithType(type);
 
-        for (int i = 0; i < elements.size(); i++)
+        for (unsigned int i = 0; i < elements.size(); i++)
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
 
-            /*
+            
             for (auto& geom : mesh.geometries)
             {
-                if (!geometryLoader.HasCachedGeometry(geom.geometryExpressID))
+                std::cout << "GEOM"<<std::endl;
+                auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
+                std::cout << flatGeom.GetVertexData() << std::endl;
+                for (uint32_t x = 0; x < flatGeom.fvertexData.size();x++)
                 {
-                    printf("asdf");
+                    std::cout << flatGeom.fvertexData[x] << ",";
                 }
-                auto flatGeom = geometryLoader.GetCachedGeometry(geom.geometryExpressID);
-                flatGeom.GetVertexData();
+                std::cout << std::endl;
             }
-            */
+            
 
             meshes.push_back(mesh);
         }
@@ -199,31 +203,31 @@ void TestTriangleDecompose()
         std::vector<glm::dvec2> points;
 
         // random points
-        for (int j = 0; j < PTS_PER_TEST; j++)
+        for (unsigned int j = 0; j < PTS_PER_TEST; j++)
         {
-            points.push_back({webifc::RandomDouble(0, scaleX),
-                              webifc::RandomDouble(0, scaleY)});
+            points.push_back({webifc::geometry::RandomDouble(0, scaleX),
+                              webifc::geometry::RandomDouble(0, scaleY)});
         }
 
         // points along the edges
-        for (int j = 0; j < EDGE_PTS_PER_TEST; j++)
+        for (unsigned int j = 0; j < EDGE_PTS_PER_TEST; j++)
         {
             glm::dvec2 e1 = b - a;
             glm::dvec2 e2 = c - a;
             glm::dvec2 e3 = b - c;
 
-            points.push_back(a + e1 * webifc::RandomDouble(0, 1));
-            points.push_back(a + e2 * webifc::RandomDouble(0, 1));
-            points.push_back(c + e3 * webifc::RandomDouble(0, 1));
+            points.push_back(a + e1 * webifc::geometry::RandomDouble(0, 1));
+            points.push_back(a + e2 * webifc::geometry::RandomDouble(0, 1));
+            points.push_back(c + e3 * webifc::geometry::RandomDouble(0, 1));
         }
 
-        std::vector<webifc::Loop> loops;
+        std::vector<webifc::geometry::Loop> loops;
 
         for (auto &pt : points)
         {
             // if (pt.x > scaleX / 2)
             {
-                webifc::Loop l;
+                webifc::geometry::Loop l;
                 l.hasOne = true;
                 l.v1 = pt;
                 loops.push_back(l);
@@ -233,22 +237,22 @@ void TestTriangleDecompose()
         std::cout << "Start test " << i << std::endl;
 
         bool swapped = false;
-        webifc::TriangulateWithBoundaries twb;
+        webifc::geometry::TriangulateWithBoundaries twb;
         auto triangles = twb.triangulate(a, b, c, loops, swapped);
 
         // webifc::IsValidTriangulation(triangles, points);
 
-        std::vector<webifc::Point> pts;
+        std::vector<webifc::geometry::Point> pts;
 
         for (auto &pt : points)
         {
-            webifc::Point p;
+            webifc::geometry::Point p;
             p.x = pt.x;
             p.y = pt.y;
             pts.push_back(p);
         }
 
-        webifc::DumpSVGTriangles(triangles, webifc::Point(), webifc::Point(), L"triangles.svg", pts);
+        webifc::geometry::DumpSVGTriangles(triangles, webifc::geometry::Point(), webifc::geometry::Point(), L"triangles.svg", pts);
     }
 }
 
@@ -267,11 +271,11 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/Q2.ifc");
+    std::string content = ReadFile("../../../examples/example.ifc");
 
     // std::string content = ReadFile("../../../examples/example.ifc");
 
-	webifc::utility::  LoaderSettings set;
+	webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
@@ -298,15 +302,15 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::IfcGeometryLoader geometryLoader(loader,set,errorHandler,schemaManager);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS_HIGH,set.COORDINATE_TO_ORIGIN);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);
     // SpecificLoadTest(loader, geometryLoader, 122);
     // SpecificLoadTest(loader, geometryLoader,469706);
-    // auto meshes = LoadAllTest(loader, geometryLoader);
+     auto meshes = LoadAllTest(loader, geometryLoader);
     auto alignments = GetAlignments(loader, geometryLoader);
-    auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
+    auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = errorHandler.GetErrors();
     errorHandler.ClearErrors();

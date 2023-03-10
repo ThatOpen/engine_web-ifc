@@ -20,7 +20,7 @@ namespace webifc::utility
         _errors.clear();
     }
 
-    std::vector<LoaderError>& LoaderErrorHandler::GetErrors()
+    const std::vector<LoaderError>& LoaderErrorHandler::GetErrors() const
     {
         std::vector<LoaderError> output(_errors);
         return _errors;

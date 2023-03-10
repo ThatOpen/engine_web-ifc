@@ -2,15 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#pragma once
-
 #include <glm/glm.hpp>
 
-#include "../util.h"
 #include "./is-inside-mesh.h"
 
-namespace webifc
+namespace webifc::geometry
 {
+
+
     static void clipMesh(IfcGeometry& source, IfcGeometry& target, BVH& targetBVH, IfcGeometry& result, bool invert, bool flip, bool keepBoundary)
     {
         glm::dvec3 targetCenter;

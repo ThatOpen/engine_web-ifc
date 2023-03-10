@@ -276,7 +276,7 @@ for (var i = 0; i < files.length; i++) {
 cppSchema.push("\t};");
 chSchema.push(`};`)
 
-cppSchema.push("\tstd::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) {");
+cppSchema.push("\tstd::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {");
 cppSchema.push("\t\tswitch(typeCode) {");
 new Set([...completeEntityList,...typeList]).forEach(entity => {
     cppSchema.push(`\t\t\tcase schema::${entity.toUpperCase()}: return "${entity.toUpperCase()}";`);

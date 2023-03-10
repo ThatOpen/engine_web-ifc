@@ -12,9 +12,10 @@
 #include "mesh_utils.h"
 #include "intersect-ray-tri.h"
 #include "triangulate-with-boundaries.h"
+#include "geometryutils.h"
 #include <CDT.h>
 
-namespace webifc
+namespace webifc::geometry
 {
 
     static glm::dvec2 projectOnTriangle(const glm::dvec3& pt, const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c)
@@ -1837,7 +1838,8 @@ namespace webifc
         {
             if (CSG_DEBUG_OUTPUT)
             {
-                DumpIfcGeometry(poly3D.ToGeom(), L"poly3D.obj");
+                auto geom = poly3D.ToGeom();
+                DumpIfcGeometry(geom, L"poly3D.obj");
             }
             poly3D.FindContoursInFaces();
         }
@@ -2307,8 +2309,10 @@ namespace webifc
             {
                 if (CSG_DEBUG_OUTPUT)
                 {
-                    DumpIfcGeometry(poly1.ToGeom(), L"poly1.obj");
-                    DumpIfcGeometry(poly2.ToGeom(), L"poly2.obj");
+                    auto geom = poly1.ToGeom();
+                    DumpIfcGeometry(geom, L"poly1.obj");
+                    geom = poly2.ToGeom();
+                    DumpIfcGeometry(geom, L"poly2.obj");
                 }
 
                 if (poly1.plane.IsCoplanarWith(poly2.plane, EPS_SMALL))

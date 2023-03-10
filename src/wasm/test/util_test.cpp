@@ -1,8 +1,7 @@
 #include <TinyCppTest.hpp>
-#include "../include/util.h"
-#include "../include/math/triangulate-with-boundaries.h"
+#include <glm/glm.hpp>
+#include "../geometry/operations/triangulate-with-boundaries.h"
 
-using namespace webifc;
 
 TEST(TriangleWalkInnerEdge)
 {
@@ -15,7 +14,7 @@ TEST(TriangleWalkInnerEdge)
 	std::vector<glm::dvec2> vec;
 	vec.push_back(d);
 	vec.push_back(e);
- 	webifc::TriangulateWithBoundaries twb;
+ 	webifc::geometry::TriangulateWithBoundaries twb;
 	auto tris = twb.triangulate(a, b, c, vec);
 
 	ASSERT_EQ(tris.size(), 4);
@@ -30,7 +29,7 @@ TEST(TriangleWalkOuterEdge)
 	glm::dvec2 d(0.25, 0);
 	std::vector<glm::dvec2> vec;
 	vec.push_back(d);
-	webifc::TriangulateWithBoundaries twb;
+	webifc::geometry::TriangulateWithBoundaries twb;
 	auto tris = twb.triangulate(a, b, c, vec);
 
 	ASSERT_EQ(tris.size(), 2);
@@ -41,7 +40,7 @@ TEST (TriangleAreaTest)
 	glm::dvec3 a (0.0, 0.0, 0.0);
 	glm::dvec3 b (1.0, 0.0, 0.0);
 	glm::dvec3 c (0.0, 1.0, 0.0);
-	ASSERT_EQ_EPS (areaOfTriangle (a, b, c), 0.5, EPS_TINY);
+	ASSERT_EQ_EPS (webifc::geometry::areaOfTriangle (a, b, c), 0.5, webifc::geometry::EPS_TINY);
 }
 
 TEST(TriangleWalkCenter)
@@ -53,7 +52,7 @@ TEST(TriangleWalkCenter)
 	glm::dvec2 d(0.25, 0.25);
 	std::vector<glm::dvec2> vec;
 	vec.push_back(d);
- 	webifc::TriangulateWithBoundaries twb;
+ 	webifc::geometry::TriangulateWithBoundaries twb;
 	auto tris = twb.triangulate(a, b, c, vec);
 
 	ASSERT_EQ(tris.size(), 3);
