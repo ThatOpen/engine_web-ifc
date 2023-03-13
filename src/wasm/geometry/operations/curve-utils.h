@@ -62,7 +62,7 @@ inline bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
 				pointList = tempPointList;
 			}
 			IfcCurve curve;
-			for (uint32_t j = 0; j < pointList.size() - 1; j++) curve.Add(pointList.at(j));
+			for (uint32_t j = 0; j < pointList.size(); j++) curve.Add(pointList.at(j));
 			return curve;
 		}
 
@@ -293,7 +293,7 @@ inline void DumpSVGCurve(std::vector<glm::dvec3> points, std::wstring filename, 
 					radiusY * std::cos(angle));
 			}
 			glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
-			c.Add(pos);
+			c.points.push_back(glm::dvec3(pos,0));
 		}
 
 		// check for a closed curve

@@ -15,7 +15,7 @@
 namespace webifc::geometry
 {
     IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments, bool coordinateToOrigin)
-    :  _geometryLoader(loader, errorHandler,schemaManager,circleSegments), _loader(loader), _errorHandler(errorHandler), _schemaManager(schemaManager), _isCoordinated(coordinateToOrigin), _circleSegments(circleSegments)
+    :  _geometryLoader(loader, errorHandler,schemaManager,circleSegments), _loader(loader), _errorHandler(errorHandler), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _circleSegments(circleSegments)
     {}
 
     IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
@@ -1334,7 +1334,7 @@ namespace webifc::geometry
         {
             IfcPlacedGeometry geometry;
 
-            if (_isCoordinated)
+            if (!_isCoordinated && _coordinateToOrigin)
             {
                 auto &geom = _expressIDToGeometry[composedMesh.expressID];
                 auto pt = geom.GetPoint(0);

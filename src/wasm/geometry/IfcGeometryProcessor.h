@@ -39,11 +39,12 @@ namespace webifc::geometry
         IfcComposedMesh GetMeshByLine(uint32_t lineID);
         IfcSurface GetSurface(uint32_t expressID);
         const IfcGeometryLoader _geometryLoader;
-        glm::dmat4 _transformation;
+        glm::dmat4 _transformation = glm::dmat4(1.0);
         const parsing::IfcLoader &_loader;
         utility::LoaderErrorHandler &_errorHandler;
         const schema::IfcSchemaManager &_schemaManager;
-        bool _isCoordinated;
+        bool _isCoordinated = false;
+        bool _coordinateToOrigin;
         uint16_t _circleSegments;
         glm::dmat4 _coordinationMatrix = glm::dmat4(1.0);
         void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false);

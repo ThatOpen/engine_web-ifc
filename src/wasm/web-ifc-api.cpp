@@ -22,7 +22,7 @@
 struct ModelInfo
 {
     public:
-        ModelInfo(webifc::utility::LoaderSettings &_settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
+        ModelInfo(webifc::utility::LoaderSettings _settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
         {
             errorHandler = new webifc::utility::LoaderErrorHandler();
             loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,*errorHandler,schemaManager);
@@ -56,7 +56,7 @@ struct ModelInfo
 
     private:
         webifc::schema::IfcSchemaManager &schemaManager;
-        webifc::utility::LoaderSettings &settings;
+        webifc::utility::LoaderSettings settings;
         webifc::parsing::IfcLoader * loader=nullptr;
         webifc::geometry::IfcGeometryProcessor * geometryLoader=nullptr;
         webifc::utility::LoaderErrorHandler * errorHandler=nullptr;

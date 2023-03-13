@@ -15,7 +15,7 @@ namespace webifc::geometry {
 	
 	glm::dvec2 IfcCurve::Get2d(size_t i) const 
 	{
-		glm::dvec3 ret;
+		glm::dvec2 ret;
 		ret.x = points.at(i).x;
 		ret.y = points.at(i).y;
 		return ret;
@@ -29,7 +29,7 @@ namespace webifc::geometry {
 	void IfcCurve::Add(glm::dvec3 pt)
 	{
 		if (points.empty()) points.push_back(pt);
-		if (!equals(pt,points.back(),EPS_TINY)) points.push_back(pt);
+		else if (!equals(pt,points.back(),EPS_TINY)) points.push_back(pt);
 	}
 	
 	void IfcCurve::Add(glm::dvec2 pt)
