@@ -1024,6 +1024,9 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("x", &glm::vec<2, glm::f64>::x)
         .field("y", &glm::vec<2, glm::f64>::y);
 
+    emscripten::register_vector<glm::vec<3, glm::f64>>("vector3doubleVector");
+
+
     emscripten::register_vector<double>("DoubleVector");
 
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);

@@ -88,14 +88,7 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
             
             for (auto& geom : mesh.geometries)
             {
-                std::cout << "GEOM"<<std::endl;
                 auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
-                std::cout << flatGeom.GetVertexData() << std::endl;
-                for (uint32_t x = 0; x < flatGeom.fvertexData.size();x++)
-                {
-                    std::cout << flatGeom.fvertexData[x] << ",";
-                }
-                std::cout << std::endl;
             }
             
 
@@ -271,7 +264,7 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
-    std::string content = ReadFile("../../../examples/example.ifc");
+    std::string content = ReadFile("Q2.ifc");
 
     // std::string content = ReadFile("../../../examples/example.ifc");
 
@@ -308,7 +301,7 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 8765);
     // SpecificLoadTest(loader, geometryLoader, 122);
     // SpecificLoadTest(loader, geometryLoader,469706);
-     auto meshes = LoadAllTest(loader, geometryLoader);
+     //auto meshes = LoadAllTest(loader, geometryLoader);
     auto alignments = GetAlignments(loader, geometryLoader);
     auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
