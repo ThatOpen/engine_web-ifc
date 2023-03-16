@@ -4,6 +4,11 @@
 
 #include "IfcGeometryLoader.h"
 #include "operations/curve-utils.h"
+#include "operations/geometryutils.h"
+#ifdef DEBUG_DUMP_SVG
+    #include "../test/io_helpers.h"
+#endif
+
 
 namespace webifc::geometry
 {
@@ -493,7 +498,7 @@ namespace webifc::geometry
     }
 
 
-  bool IfcGeometryLoader::GetColor(uint32_t expressID, glm::dvec4 &outputColor) const
+  std::optional<glm::dvec4> IfcGeometryLoader::GetColor(uint32_t expressID) const
     {
       auto lineID = _loader.ExpressIDToLineID(expressID);
       auto &line = _loader.GetLine(lineID);
@@ -508,15 +513,11 @@ namespace webifc::geometry
         {
           uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
           glm::dvec4 color;
-          bool foundColor = GetColor(styleSelectID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(styleSelectID);
+          if (foundColor) return foundColor;
         }
 
-        return false;
+        return {};
       }
       case schema::IFCSURFACESTYLE:
       {
@@ -527,36 +528,30 @@ namespace webifc::geometry
         {
           uint32_t styleElementSelectID = _loader.GetRefArgument(styleElementSelect);
           glm::dvec4 color;
-          bool foundColor = GetColor(styleElementSelectID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(styleElementSelectID);
+          if (foundColor) return foundColor;
         }
 
-        return false;
+        return {};
       }
       case schema::IFCSURFACESTYLERENDERING:
       {
         _loader.MoveToArgumentOffset(line, 0);
-        GetColor(_loader.GetRefArgument(), outputColor);
+        auto outputColor = GetColor(_loader.GetRefArgument());
         _loader.MoveToArgumentOffset(line, 1);
 
         if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
         {
           _loader.StepBack();
-          outputColor.a = 1 - _loader.GetDoubleArgument();
+          outputColor.value().a = 1 - _loader.GetDoubleArgument();
         }
 
-        return true;
+        return outputColor;
       }
       case schema::IFCSURFACESTYLESHADING:
       {
         _loader.MoveToArgumentOffset(line, 0);
-        GetColor(_loader.GetRefArgument(), outputColor);
-
-        return true;
+        return GetColor(_loader.GetRefArgument());
       }
       case schema::IFCSTYLEDREPRESENTATION:
       {
@@ -566,16 +561,11 @@ namespace webifc::geometry
         for (auto &repItem : repItems)
         {
           uint32_t repItemID = _loader.GetRefArgument(repItem);
-          glm::dvec4 color;
-          bool foundColor = GetColor(repItemID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(repItemID);
+          if (foundColor) return foundColor;
         }
 
-        return false;
+        return {};
       }
       case schema::IFCSTYLEDITEM:
       {
@@ -585,32 +575,28 @@ namespace webifc::geometry
         for (auto &styledItem : styledItems)
         {
           uint32_t styledItemID = _loader.GetRefArgument(styledItem);
-          glm::dvec4 color;
-          bool foundColor = GetColor(styledItemID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(styledItemID);
+          if (foundColor)  return foundColor;
         }
 
-        return false;
+        return {};
       }
       case schema::IFCCOLOURRGB:
       {
         _loader.MoveToArgumentOffset(line, 1);
+        glm::dvec4 outputColor;
         outputColor.r = _loader.GetDoubleArgument();
         outputColor.g = _loader.GetDoubleArgument();
         outputColor.b = _loader.GetDoubleArgument();
         outputColor.a = 1;
 
-        return true;
+        return outputColor;
       }
       case schema::IFCMATERIALLAYERSETUSAGE:
       {
         _loader.MoveToArgumentOffset(line, 0);
         uint32_t layerSetID = _loader.GetRefArgument();
-        return GetColor(layerSetID, outputColor);
+        return GetColor(layerSetID);
       }
       case schema::IFCMATERIALLAYERSET:
       {
@@ -620,22 +606,17 @@ namespace webifc::geometry
         for (auto &layer : layers)
         {
           uint32_t layerID = _loader.GetRefArgument(layer);
-          glm::dvec4 color;
-          bool foundColor = GetColor(layerID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(layerID);
+          if (foundColor)  return foundColor;
         }
 
-        return false;
+        return {};
       }
       case schema::IFCMATERIALLAYER:
       {
         _loader.MoveToArgumentOffset(line, 0);
         uint32_t matRepID = _loader.GetRefArgument();
-        return GetColor(matRepID, outputColor);
+        return GetColor(matRepID);
       }
       case schema::IFCMATERIAL:
       {
@@ -644,16 +625,13 @@ namespace webifc::geometry
           auto &defs = GetMaterialDefinitions().at(line.expressID);
           for (auto def : defs)
           {
-            bool success = GetColor(def.second, outputColor);
-            if (success)
-            {
-              return true;
-            }
+            auto success = GetColor(def.second);
+            if (success) return success;
           }
 
-          return false;
+          return {};
         }
-        return false;
+        return {};
       }
       case schema::IFCFILLAREASTYLE:
       {
@@ -663,17 +641,11 @@ namespace webifc::geometry
         for (auto &styleSelect : ifcFillStyleSelects)
         {
           uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
-
-          glm::dvec4 color;
-          bool foundColor = GetColor(styleSelectID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(styleSelectID);
+          if (foundColor) return foundColor;
         }
 
-        return false;
+        return {};
       }
       case schema::IFCMATERIALLIST:
       {
@@ -683,15 +655,10 @@ namespace webifc::geometry
         for (auto &material : materials)
         {
           uint32_t materialID = _loader.GetRefArgument(material);
-          glm::dvec4 color;
-          bool foundColor = GetColor(materialID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(materialID);
+          if (foundColor) return foundColor;
         }
-        return false;
+        return {};
       }
       case schema::IFCMATERIALCONSTITUENTSET:
       {
@@ -701,54 +668,34 @@ namespace webifc::geometry
         for (auto &materialContituent : materialContituents)
         {
           uint32_t materialContituentID = _loader.GetRefArgument(materialContituent);
-          glm::dvec4 color;
-          bool foundColor = GetColor(materialContituentID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(materialContituentID);
+          if (foundColor) return foundColor;
         }
-        return false;
+        return {};
       }
       case schema::IFCMATERIALCONSTITUENT:
       {
         _loader.MoveToArgumentOffset(line, 2);
         auto material = _loader.GetRefArgument();
-        glm::dvec4 color;
-        bool foundColor = GetColor(material, color);
-        if (foundColor)
-        {
-          outputColor = color;
-          return true;
-        }
-        return false;
+        auto foundColor = GetColor(material);
+        if (foundColor) return foundColor;
+        return {};
       }
       case schema::IFCMATERIALPROFILESETUSAGE:
       {
         _loader.MoveToArgumentOffset(line, 0);
         auto profileSet = _loader.GetRefArgument();
-        glm::dvec4 color;
-        bool foundColor = GetColor(profileSet, color);
-        if (foundColor)
-        {
-          outputColor = color;
-          return true;
-        }
-        return false;
+        auto foundColor = GetColor(profileSet);
+        if (foundColor) return foundColor;
+        return {};
       }
       case schema::IFCMATERIALPROFILE:
       {
         _loader.MoveToArgumentOffset(line, 2);
         auto profileSet = _loader.GetRefArgument();
-        glm::dvec4 color;
-        bool foundColor = GetColor(profileSet, color);
-        if (foundColor)
-        {
-          outputColor = color;
-          return true;
-        }
-        return false;
+        auto foundColor = GetColor(profileSet);
+        if (foundColor) return foundColor;
+        return {};
       }
       case schema::IFCMATERIALPROFILESET:
       {
@@ -758,22 +705,17 @@ namespace webifc::geometry
         for (auto &materialProfile : materialProfiles)
         {
           uint32_t materialProfileID = _loader.GetRefArgument(materialProfile);
-          glm::dvec4 color;
-          bool foundColor = GetColor(materialProfileID, color);
-          if (foundColor)
-          {
-            outputColor = color;
-            return true;
-          }
+          auto foundColor = GetColor(materialProfileID);
+          if (foundColor) return foundColor;
         }
-        return false;
+        return {};
       }
       default:
         _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", line.expressID, line.ifcType);
         break;
       }
 
-      return false;
+      return {};
     }
 
 
@@ -1163,13 +1105,9 @@ namespace webifc::geometry
 
         for (auto &token : segments)
         {
-          if (DEBUG_DUMP_SVG)
-          {
-            if (dimensions == 2)
-            {
-              DumpSVGCurve(curve.points, L"partial_curve.html");
-            }
-          }
+          #ifdef DEBUG_DUMP_SVG
+              io::DumpSVGCurve(curve.points, L"partial_curve.html");
+          #endif
 
           uint32_t segmentId = _loader.GetRefArgument(token);
 
@@ -1856,16 +1794,12 @@ default:
   _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", line.expressID, line.ifcType);
   break;
 }
+  
+  #ifdef DEBUG_DUMP_SVG
+      io::DumpSVGCurve(curve.points, L"partial_curve.html");
+  #endif
 
-if (DEBUG_DUMP_SVG)
-{
-  if (dimensions == 2)
-  {
-    DumpSVGCurve(curve.points, L"partial_curve.html");
-  }
 }
-}
-
 
 
 IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const

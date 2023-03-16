@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+#if defined(DEBUG_DUMP_SVG)  || defined(DUMP_CSG_MESHES)
+    #include "../test/io_helpers.h"
+#endif
 
 #include "IfcGeometryProcessor.h"
 #include <glm/gtx/transform.hpp>
@@ -21,13 +24,7 @@ namespace webifc::geometry
     IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
     {
         return _geometryLoader;
-    }
-
-    void IfcGeometryProcessor::DumpMesh(IfcComposedMesh &mesh, std::wstring filename)
-    {
-        size_t offset = 0;
-        writeFile(filename, ToObj(mesh, _expressIDToGeometry, offset, NormalizeIFC));
-    }
+    }   
 
     void IfcGeometryProcessor::SetTransformation(const glm::dmat4 &val)
     {
@@ -54,8 +51,7 @@ namespace webifc::geometry
     {
         auto &line = _loader.GetLine(lineID);
 
-        bool hasColor = false;
-        glm::dvec4 styledItemColor(1);
+        std::optional<glm::dvec4> styledItemColor;
         auto &styledItems = _geometryLoader.GetStyledItems();
         auto &relMaterials = _geometryLoader.GetRelMaterials();
         auto &materialDefinitions = _geometryLoader.GetMaterialDefinitions();
@@ -68,16 +64,12 @@ namespace webifc::geometry
             auto items = styledItem->second;
             for (auto item : items)
             {
-                bool success = _geometryLoader.GetColor(item.second, styledItemColor);
-                if (success)
-                {
-                    hasColor = true;
-                    break;
-                }
+                styledItemColor = _geometryLoader.GetColor(item.second);
+                if (styledItemColor) break;
             }
         }
 
-        if (!hasColor)
+        if (!styledItemColor)
         {
             auto material = relMaterials.find(line.expressID);
             if (material != relMaterials.end())
@@ -90,23 +82,16 @@ namespace webifc::geometry
                         auto &defs = materialDefinitions.at(item.second);
                         for (auto def : defs)
                         {
-                            bool success = _geometryLoader.GetColor(def.second, styledItemColor);
-                            if (success)
-                            {
-                                hasColor = true;
-                                break;
-                            }
+                            styledItemColor = _geometryLoader.GetColor(def.second);
+                            if (styledItemColor) break;
                         }
                     }
 
                         // if no color found, check material itself
-                    if (!hasColor)
+                    if (!styledItemColor)
                     {
-                        bool success = _geometryLoader.GetColor(item.second, styledItemColor);
-                        if (success)
-                        {
-                            hasColor = true;
-                        }
+                        styledItemColor = _geometryLoader.GetColor(item.second);
+                        if (styledItemColor) break;
                     }
                 }
             }
@@ -114,8 +99,9 @@ namespace webifc::geometry
 
         IfcComposedMesh mesh;
         mesh.expressID = line.expressID;
-        mesh.hasColor = hasColor;
-        mesh.color = styledItemColor;
+        mesh.hasColor = styledItemColor.has_value();
+        if (!styledItemColor) mesh.color = glm::dvec4(1.0);
+        else mesh.color = styledItemColor.value();
         mesh.transformation = glm::dmat4(1);
 
         if (_schemaManager.IsIfcElement(line.ifcType))
@@ -193,9 +179,9 @@ namespace webifc::geometry
                 resultMesh.expressID = line.expressID;
                 resultMesh.hasGeometry = true;
                     // If there is no styledItemcolor apply color of the object
-                if (hasColor)
+                if (styledItemColor)
                 {
-                    resultMesh.color = styledItemColor;
+                    resultMesh.color = styledItemColor.value();
                     resultMesh.hasColor = true;
                 }
                 else if (elementColor.has_value())
@@ -748,10 +734,9 @@ namespace webifc::geometry
                     mesh.transformation = placement;
                     _expressIDToGeometry[line.expressID] = geom;
                     mesh.expressID = line.expressID;
-                    mesh.hasGeometry = true;
-
-                    mesh.hasColor = hasColor;
-                    mesh.color = styledItemColor;
+                    mesh.hasGeometry = styledItemColor.has_value();
+                    if (!styledItemColor) mesh.color = glm::dvec4(1.0);
+                    else mesh.color = styledItemColor.value();
                     _expressIDToMesh[line.expressID] = mesh;
                     return mesh;
                 }
@@ -793,10 +778,9 @@ namespace webifc::geometry
                     bool flipWinding = dirDot < 0; // can't be perp according to spec
 
                     // TODO: correct dump in case of compositeProfile
-                    if (DEBUG_DUMP_SVG)
-                    {
-                        DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
-                    }
+                    #ifdef CSG_DEBUG_OUTPUT
+                        io::DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
+                    #endif
 
                     IfcGeometry geom;
 
@@ -834,10 +818,9 @@ namespace webifc::geometry
                     }
 
                     // TODO: correct dump in case of compositeProfile
-                    if (DEBUG_DUMP_SVG)
-                    {
-                        DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
-                    }
+                    #ifdef CSG_DEBUG_OUTPUT
+                        io::DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
+                    #endif
 
                     _expressIDToGeometry[line.expressID] = geom;
                     mesh.expressID = line.expressID;

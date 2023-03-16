@@ -9,10 +9,8 @@
 namespace webifc::geometry
 {
 
-
-
     // https://www.iquilezles.org/www/articles/intersectors/intersectors.htm
-    bool intersect_ray_triangle(
+    inline bool intersect_ray_triangle(
         const glm::dvec3& origin, const glm::dvec3& end, const glm::dvec3& A, const glm::dvec3& B, const glm::dvec3& C, glm::dvec3& out, double& t, bool infiniteLength = false
     ) {
         glm::dvec3 dir = end - origin;
@@ -78,7 +76,7 @@ namespace webifc::geometry
         glm::dvec3 end;
     };
 
-    TriTriResult intersect_triangle_triangle(
+    inline TriTriResult intersect_triangle_triangle(
         const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c,
         const glm::dvec3& d, const glm::dvec3& e, const glm::dvec3& f)
     {

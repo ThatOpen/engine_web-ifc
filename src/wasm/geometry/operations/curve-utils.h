@@ -4,71 +4,68 @@
 
 #pragma once
 
-#include <sstream>
-
 #include "../representation/IfcCurve.h"
-#include "geometryutils.h"
 
 namespace webifc::geometry {
 
-inline bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
+	inline bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
+	{
+		return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) >= 0;
+	}
+
+
+	inline IfcCurve BuildArc3Pt(const glm::dvec2 &p1, const glm::dvec2 &p2, const glm::dvec2 &p3,uint16_t circleSegments)
+	{
+		double f1 = (p1.x * p1.x - p2.x * p2.x + p1.y * p1.y - p2.y * p2.y);
+		double f2 = (p1.x * p1.x - p3.x * p3.x + p1.y * p1.y - p3.y * p3.y);
+		double v = 2 * (p1.x - p2.x) * (p1.y - p3.y) - 2 * (p1.x - p3.x) * (p1.y - p2.y);
+
+		double cenX = ((p1.y - p3.y) * f1 - (p1.y - p2.y) * f2) / v;
+		double cenYa = (f2 - 2 * cenX * (p1.x - p3.x)) / (2 * (p1.y - p3.y));
+		double cenYb = (f1 - 2 * cenX * (p1.x - p2.x)) / (2 * (p1.y - p2.y));
+		double cenY = cenYa;
+		if (std::isnan(cenY))
 		{
-			return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) >= 0;
+			cenY = cenYb;
 		}
 
+		glm::dvec2 pCen;
+		pCen.x = cenX;
+		pCen.y = cenY;
 
-		inline IfcCurve BuildArc3Pt(const glm::dvec2 &p1, const glm::dvec2 &p2, const glm::dvec2 &p3,uint16_t circleSegments)
-		{
-			double f1 = (p1.x * p1.x - p2.x * p2.x + p1.y * p1.y - p2.y * p2.y);
-			double f2 = (p1.x * p1.x - p3.x * p3.x + p1.y * p1.y - p3.y * p3.y);
-			double v = 2 * (p1.x - p2.x) * (p1.y - p3.y) - 2 * (p1.x - p3.x) * (p1.y - p2.y);
-
-			double cenX = ((p1.y - p3.y) * f1 - (p1.y - p2.y) * f2) / v;
-			double cenYa = (f2 - 2 * cenX * (p1.x - p3.x)) / (2 * (p1.y - p3.y));
-			double cenYb = (f1 - 2 * cenX * (p1.x - p2.x)) / (2 * (p1.y - p2.y));
-			double cenY = cenYa;
-			if (std::isnan(cenY))
-			{
-				cenY = cenYb;
-			}
-
-			glm::dvec2 pCen;
-			pCen.x = cenX;
-			pCen.y = cenY;
-
-			double radius = sqrt(pow(cenX - p1.x, 2) + pow(cenY - p1.y, 2));
+		double radius = sqrt(pow(cenX - p1.x, 2) + pow(cenY - p1.y, 2));
 
 			// Using geometrical subdivision to avoid complex calculus with angles
 
-			std::vector<glm::dvec2> pointList;
-			pointList.push_back(p1);
-			pointList.push_back(p2);
-			pointList.push_back(p3);
+		std::vector<glm::dvec2> pointList;
+		pointList.push_back(p1);
+		pointList.push_back(p2);
+		pointList.push_back(p3);
 
-			while (pointList.size() < (size_t)circleSegments)
+		while (pointList.size() < (size_t)circleSegments)
+		{
+			std::vector<glm::dvec2> tempPointList;
+			for (uint32_t j = 0; j < pointList.size() - 1; j++)
 			{
-				std::vector<glm::dvec2> tempPointList;
-				for (uint32_t j = 0; j < pointList.size() - 1; j++)
-				{
-					glm::dvec2 pt = (pointList[j] + pointList[j + 1]);
-					pt.x /= 2;
-					pt.y /= 2;
-					glm::dvec2 vc = glm::normalize(pt - pCen);
-					pt = pCen + vc * radius;
-					tempPointList.push_back(pointList[j]);
-					tempPointList.push_back(pt);
-				}
-				tempPointList.push_back(pointList[pointList.size() - 1]);
-				pointList = tempPointList;
+				glm::dvec2 pt = (pointList[j] + pointList[j + 1]);
+				pt.x /= 2;
+				pt.y /= 2;
+				glm::dvec2 vc = glm::normalize(pt - pCen);
+				pt = pCen + vc * radius;
+				tempPointList.push_back(pointList[j]);
+				tempPointList.push_back(pt);
 			}
-			IfcCurve curve;
-			for (uint32_t j = 0; j < pointList.size(); j++) curve.Add(pointList.at(j));
-			return curve;
+			tempPointList.push_back(pointList[pointList.size() - 1]);
+			pointList = tempPointList;
 		}
+		IfcCurve curve;
+		for (uint32_t j = 0; j < pointList.size(); j++) curve.Add(pointList.at(j));
+			return curve;
+	}
 
 
-		
-inline	glm::dvec3 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
+	
+	inline	glm::dvec3 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
 	{
 		glm::dvec3 point;
 
@@ -131,7 +128,7 @@ inline	glm::dvec3 InterpolateRationalBSplineCurveWithKnots(double t, int degree,
 		return point;
 	}
 
-inline	glm::dvec2 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
+	inline	glm::dvec2 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
 	{
 
 		glm::dvec2 point;
@@ -197,7 +194,7 @@ inline	glm::dvec2 InterpolateRationalBSplineCurveWithKnots(double t, int degree,
 
 
 
-inline	std::vector<glm::dvec3> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
+	inline	std::vector<glm::dvec3> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
 	{
 
 		std::vector<glm::dvec3> c;
@@ -219,7 +216,7 @@ inline	std::vector<glm::dvec3> GetRationalBSplineCurveWithKnots(int degree, std:
 		return c;
 	}
 
-inline	std::vector<glm::dvec2> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
+	inline	std::vector<glm::dvec2> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
 	{
 		std::vector<glm::dvec2> c;
 
@@ -238,32 +235,22 @@ inline	std::vector<glm::dvec2> GetRationalBSplineCurveWithKnots(int degree, std:
 		return c;
 	}
 
-inline bool IsCurveConvex(IfcCurve &curve)
+	inline bool IsCurveConvex(IfcCurve &curve)
+	{
+		for (size_t i = 2; i < curve.points.size(); i++)
 		{
-			for (size_t i = 2; i < curve.points.size(); i++)
+			glm::dvec2 a = curve.points[i - 2];
+			glm::dvec2 b = curve.points[i - 1];
+			glm::dvec2 c = curve.points[i - 0];
+
+			if (!isConvexOrColinear(a, b, c))
 			{
-				glm::dvec2 a = curve.points[i - 2];
-				glm::dvec2 b = curve.points[i - 1];
-				glm::dvec2 c = curve.points[i - 0];
-
-				if (!isConvexOrColinear(a, b, c))
-				{
-					return false;
-				}
+				return false;
 			}
-
-			return true;
 		}
 
-inline void DumpSVGCurve(std::vector<glm::dvec3> points, std::wstring filename, std::vector<uint32_t> indices = {})
-		{
-			std::vector<glm::dvec2> points2D;
-			for (auto &pt : points)
-			{
-				points2D.emplace_back(pt.x, pt.z);
-			}
-			writeFile(filename, makeSVGLines(points2D, indices));
-		}
+		return true;
+	}
 
 	inline bool MatrixFlipsTriangles(const glm::dmat3 &mat)
 	{
@@ -570,27 +557,27 @@ inline void DumpSVGCurve(std::vector<glm::dvec3> points, std::wstring filename, 
 	}
 
 	inline IfcCurve BuildArc(const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad,uint16_t _circleSegments)
-		{
-			IfcCurve curve;
+	{
+		IfcCurve curve;
 
 			// double radius = glm::length(pos);
 
 			// project pos onto axis
-			double pdota = glm::dot(axis, pos);
-			glm::dvec3 pproja = pdota * axis;
+		double pdota = glm::dot(axis, pos);
+		glm::dvec3 pproja = pdota * axis;
 
-			glm::dvec3 right = -(pos - pproja);
-			glm::dvec3 up = glm::cross(axis, right);
+		glm::dvec3 right = -(pos - pproja);
+		glm::dvec3 up = glm::cross(axis, right);
 
-			auto curve2D = GetEllipseCurve(1, 1, _circleSegments, glm::dmat3(1), 0, angleRad, true);
+		auto curve2D = GetEllipseCurve(1, 1, _circleSegments, glm::dmat3(1), 0, angleRad, true);
 
-			for (auto &pt2D : curve2D.points)
-			{
-				glm::dvec3 pt3D = pos + pt2D.x * right + pt2D.y * up;
-				curve.Add(pt3D);
-			}
-
-			return curve;
+		for (auto &pt2D : curve2D.points)
+		{
+			glm::dvec3 pt3D = pos + pt2D.x * right + pt2D.y * up;
+			curve.Add(pt3D);
 		}
+
+		return curve;
+	}
 
 }

@@ -1,5 +1,6 @@
 #include <TinyCppTest.hpp>
 #include <glm/glm.hpp>
+#include "io_helpers.h"
 #include "../geometry/operations/triangulate-with-boundaries.h"
 
 

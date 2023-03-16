@@ -7,6 +7,8 @@
 #pragma once
 
 #include <array>
+#include <string>
+#include <cstdio>
 #include <unordered_map>
 #include <glm/glm.hpp>
 
@@ -42,8 +44,6 @@ namespace webifc::geometry {
 			{"CLOTHOID", 4}};				//ToDo
 
 		const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
-
-		const bool DEBUG_DUMP_SVG = false;
 
 		struct Face
 		{

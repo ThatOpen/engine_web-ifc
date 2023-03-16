@@ -112,7 +112,7 @@ if (NOT EMSCRIPTEN)
 	set_tests_properties(web-ifc-test PROPERTIES LABELS "web-ifc")
 	
 	#build parameters for web-ifc in testing environment
-	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestingMain})
+	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestingMain} "./test/io_helpers.cpp")
 	target_include_directories(web-ifc PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc PUBLIC ${cdt_SOURCE_DIR}/CDT/include)
 	target_include_directories(web-ifc PUBLIC ${glm_SOURCE_DIR})
@@ -122,6 +122,9 @@ if (NOT EMSCRIPTEN)
 	target_compile_options(web-ifc PUBLIC "-Wextra")
 	target_compile_options(web-ifc PUBLIC "-Wpedantic")
 	target_compile_options(web-ifc PUBLIC "-pedantic")
+	#comment these to prevent debug files being generated
+	target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
+	target_compile_options(web-ifc PUBLIC "-DDEBUG_DUMP_SVG")
 	if (release)
 		target_compile_options(web-ifc PUBLIC "-O3")
 	endif()

@@ -6,6 +6,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <optional>
 #include <glm/glm.hpp>
 
 #include "../parsing/IfcLoader.h"
@@ -39,7 +40,7 @@ namespace webifc::geometry
     IfcCurve GetEdge(uint32_t expressID) const;
     IfcBound3D GetBound(const uint32_t expressID) const;
     IfcCurve GetLoop(const uint32_t expressID) const;
-    bool GetColor(uint32_t expressID, glm::dvec4 &outputColor) const;
+    std::optional<glm::dvec4> GetColor(uint32_t expressID) const;
     IfcAlignment GetAlignment(uint32_t expressID, IfcAlignment alignment = IfcAlignment(), glm::dmat4 transform = glm::dmat4(1)) const;
     bool GetColor(const uint32_t expressID, const glm::dvec4 &outputColor) const; 
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids() const;

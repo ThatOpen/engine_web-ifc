@@ -5,11 +5,6 @@
 
 #pragma once
 
-#include <iostream>
-#include <strstream>
-#include <fstream>
-#include <sstream>
-
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include "../../utility/LoaderError.h"
@@ -651,15 +646,6 @@ namespace webifc::geometry {
 			return glm::determinant(mat) < 0;
 		}
 
-		inline	void writeFile(std::wstring filename, std::string data)
-		{
-			std::string newFileName(filename.begin(), filename.end());
-			std::ofstream out(newFileName);
-			out << data;
-			out.close();
-		}
-
-
 		inline	bool IsInsideCenterExtents(const glm::dvec3 &pt, const glm::dvec3 &center, const glm::dvec3 &extents)
 		{
 			glm::dvec3 delta = pt - center;
@@ -679,39 +665,7 @@ namespace webifc::geometry {
 			return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
 		}
 
-		inline	std::string ToObj(IfcGeometry &geom, size_t &offset, glm::dmat4 transform = glm::dmat4(1))
-		{
-			std::stringstream obj;
-
-			double scale = 1.0;
-
-			for (uint32_t i = 0; i < geom.numPoints; i++)
-			{
-				glm::dvec4 t = transform * glm::dvec4(geom.GetPoint(i), 1);
-				obj << "v " << t.x * scale << " " << t.y * scale << " " << t.z * scale << "\n";
-			}
-
-			for (uint32_t i = 0; i < geom.numFaces; i++)
-			{
-				Face f = geom.GetFace(i);
-				obj << "f " << (f.i0 + 1 + offset) << "// " << (f.i1 + 1 + offset) << "// " << (f.i2 + 1 + offset) << "//\n";
-			}
-
-			offset += geom.numPoints;
-
-			return obj.str();
-		}
-
-		inline	void DumpIfcGeometry(IfcGeometry &geom, std::wstring filename)
-		{
-			size_t offset = 0;
-			writeFile(filename, ToObj(geom, offset));
-		}
-
-
-
-
-		inline		double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		inline	double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 		{
 			glm::dvec3 ab = b - a;
 			glm::dvec3 ac = c - a;
@@ -720,12 +674,12 @@ namespace webifc::geometry {
 			return glm::length(norm) / 2;
 		}
 
-		inline		double cross2d(const glm::dvec2 &point1, const glm::dvec2 &point2)
+		inline	double cross2d(const glm::dvec2 &point1, const glm::dvec2 &point2)
 		{
 			return point1.x * point2.y - point1.y * point2.x;
 		}
 
-		inline		double areaOfTriangle(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
+		inline	double areaOfTriangle(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
 		{
 			glm::dvec2 ab = b - a;
 			glm::dvec2 ac = c - a;
@@ -735,7 +689,7 @@ namespace webifc::geometry {
 		}
 
 		// https://en.wikipedia.org/wiki/Barycentric_coordinate_system
-		inline		glm::dvec3 ToBary(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dvec3 &pt)
+		inline	glm::dvec3 ToBary(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dvec3 &pt)
 		{
 			glm::dvec3 E1 = b - a;
 			glm::dvec3 E2 = c - a;
@@ -758,13 +712,13 @@ namespace webifc::geometry {
 			return glm::dvec3(w, u, v);
 		}
 
-		inline		glm::dvec2 FromBary(const glm::dvec2 &a, const glm::dvec2 &b, const glm::dvec2 &c, const glm::dvec3 &pt)
+		inline	glm::dvec2 FromBary(const glm::dvec2 &a, const glm::dvec2 &b, const glm::dvec2 &c, const glm::dvec3 &pt)
 		{
 			return pt.x * a + pt.y * b + pt.z * c;
 		}
 
 		// assume 0,0 1,0 0,1 triangle
-		inline		glm::dvec3 ToBary2(const glm::dvec2 &pt)
+		inline	glm::dvec3 ToBary2(const glm::dvec2 &pt)
 		{
 			double v = pt.x;
 			double w = pt.y;
@@ -773,12 +727,12 @@ namespace webifc::geometry {
 			return glm::dvec3(u, v, w);
 		}
 
-		inline		glm::dvec3 FromBary(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dvec3 &pt)
+		inline	glm::dvec3 FromBary(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dvec3 &pt)
 		{
 			return pt.x * a + pt.y * b + pt.z * c;
 		}
 
-		inline		void CheckTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		inline	void CheckTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 		{
 			if (areaOfTriangle(a, b, c) == 0)
 			{
@@ -786,7 +740,7 @@ namespace webifc::geometry {
 			}
 		}
 
-		inline		void CheckTriangle(Face &f, std::vector<glm::dvec3> &pts)
+		inline	void CheckTriangle(Face &f, std::vector<glm::dvec3> &pts)
 		{
 			if (areaOfTriangle(pts[f.i0], pts[f.i1], pts[f.i2]) == 0)
 			{
@@ -794,439 +748,205 @@ namespace webifc::geometry {
 			}
 		}
 
-		inline		double RandomDouble(double lo, double hi)
+		inline	double RandomDouble(double lo, double hi)
 		{
 			return lo + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (hi - lo)));
 		}
 
 
-		inline		glm::dvec2 cmin(glm::dvec2 m, Point p)
+		inline	glm::dvec2 cmin(glm::dvec2 m, Point p)
 		{
 			return glm::dvec2(
 				std::min(m.x, p.x),
 				std::min(m.y, p.y));
 		}
 
-		inline		glm::dvec2 cmax(glm::dvec2 m, Point p)
+		inline	glm::dvec2 cmax(glm::dvec2 m, Point p)
 		{
 			return glm::dvec2(
 				std::max(m.x, p.x),
 				std::max(m.y, p.y));
 		}
 
-		inline		Bounds getBounds(std::vector<Triangle> input, glm::dvec2 size, glm::dvec2 offset)
+		inline	glm::dvec2 rescale(Point p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
 		{
-			std::vector<glm::dvec2> retval;
+			return glm::dvec2(
+				((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
+				((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
+		}
 
-			glm::dvec2 min(
-				DBL_MAX,
-				DBL_MAX);
+		inline	glm::dvec2 rescale(glm::dvec2 p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
+		{
+			return glm::dvec2(
+				((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
+				((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
+		}
 
-			glm::dvec2 max(
-				-DBL_MAX,
-				-DBL_MAX);
 
-			for (auto &tri : input)
+		inline	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
+		{
+			glm::dmat4 newMat = mat * mesh.transformation;
+
+			bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
+
+			auto geomIt = geometryMap.find(mesh.expressID);
+
+			if (geomIt != geometryMap.end())
 			{
-				min = cmin(min, tri.a);
-				max = cmax(max, tri.a);
+				auto meshGeom = geomIt->second;
 
-				min = cmin(min, tri.b);
-				max = cmax(max, tri.b);
+				if (meshGeom.numFaces)
+				{
+					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+					{
+						Face f = meshGeom.GetFace(i);
+						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 
-				min = cmin(min, tri.c);
-				max = cmax(max, tri.c);
+						return a;
+					}
+				}
 			}
 
-			double width = max.x - min.x;
-			double height = max.y - min.y;
-
-			if (width == 0 && height == 0)
+			for (auto &c : mesh.children)
 			{
-				printf("asdf");
+				auto v = GetOriginRec(c, geometryMap, newMat);
+				if (v.has_value())
+				{
+					return v;
+				}
 			}
 
-			return {
-				min,
-				max};
+			return std::nullopt;
+		}
+
+		inline	glm::dvec3 GetOrigin(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap)
+		{
+			auto v = GetOriginRec(mesh, geometryMap, glm::dmat4(1));
+
+			if (v.has_value())
+			{
+				return *v;
+			}
+			else
+			{
+				return glm::dvec3(0);
+			}
+		}
+
+		inline	IfcGeometry flattenGeometry(std::vector<IfcGeometry> &geoms)
+		{
+			IfcGeometry newGeom;
+
+			for (auto meshGeom : geoms)
+			{
+				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+				{
+					Face f = meshGeom.GetFace(i);
+					glm::dvec3 a = meshGeom.GetPoint(f.i0);
+					glm::dvec3 b = meshGeom.GetPoint(f.i1);
+					glm::dvec3 c = meshGeom.GetPoint(f.i2);
+					newGeom.AddFace(a, b, c);
+				}
+				newGeom.AddComponent(meshGeom);
 			}
 
-			inline		Bounds getBounds(std::vector<std::vector<glm::dvec2>> input, glm::dvec2 size, glm::dvec2 offset)
+			return newGeom;
+		}
+
+		inline	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
+		{
+			glm::dmat4 newMat = mat * mesh.transformation;
+
+			bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
+
+			auto geomIt = geometryMap.find(mesh.expressID);
+
+			if (geomIt != geometryMap.end())
 			{
-				std::vector<glm::dvec2> retval;
+				auto meshGeom = geomIt->second;
 
-				glm::dvec2 min(
-					DBL_MAX,
-					DBL_MAX);
-
-				glm::dvec2 max(
-					-DBL_MAX,
-					-DBL_MAX);
-
-				for (auto &loop : input)
-				{
-					for (auto &point : loop)
-					{
-						min = glm::min(min, point);
-						max = glm::max(max, point);
-					}
-				}
-
-				double width = max.x - min.x;
-				double height = max.y - min.y;
-
-				if (width == 0 && height == 0)
-				{
-					printf("asdf");
-				}
-
-				return {
-					min,
-					max};
-				}
-
-				inline	glm::dvec2 rescale(Point p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
-				{
-					return glm::dvec2(
-						((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
-						((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
-				}
-
-				inline		void svgMakeLine(glm::dvec2 a, glm::dvec2 b, std::stringstream &svg)
-				{
-					svg << "<line x1=\"" << a.x << "\" y1=\"" << a.y << "\" ";
-					svg << "x2=\"" << b.x << "\" y2=\"" << b.y << "\" ";
-					svg << "style = \"stroke:rgb(255,0,0);stroke-width:1\" />";
-				}
-
-				inline	std::string makeSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev, std::vector<Point> pts = {})
-				{
-					glm::dvec2 size(512, 512);
-					glm::dvec2 offset(5, 5);
-
-					Bounds bounds = getBounds(triangles, size, offset);
-
-					std::stringstream svg;
-
-					svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "  \" xmlns=\"http://www.w3.org/2000/svg\" >";
-
-					for (auto &t : triangles)
-					{
-						if (t.id != -1)
-						{
-							glm::dvec2 a = rescale(t.a, bounds, size, offset);
-							glm::dvec2 b = rescale(t.b, bounds, size, offset);
-							glm::dvec2 c = rescale(t.c, bounds, size, offset);
-
-							svgMakeLine(a, b, svg);
-							svgMakeLine(b, c, svg);
-							svgMakeLine(c, a, svg);
-						}
-					}
-
-					glm::dvec2 rp = rescale(p, bounds, size, offset);
-					glm::dvec2 rprev = rescale(prev, bounds, size, offset);
-
-					if (p.id != -1)
-					{
-						svg << "<circle cx = \"" << rp.x << "\" cy = \"" << rp.y << "\" r = \"3\" style = \"stroke:rgb(0,0,255);stroke-width:2\" />";
-					}
-
-					if (prev.id != -1)
-					{
-						svg << "<circle cx = \"" << rprev.x << "\" cy = \"" << rprev.y << "\" r = \"3\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
-					}
-
-					for (auto &pt : pts)
-					{
-						glm::dvec2 p = rescale(pt, bounds, size, offset);
-						svg << "<circle cx = \"" << p.x << "\" cy = \"" << p.y << "\" r = \"1\" style = \"stroke:rgb(0,0,100);stroke-width:2\" />";
-					}
-
-					svg << "</svg>";
-
-					return svg.str();
-				}
-
-				inline	glm::dvec2 rescale(glm::dvec2 p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
-				{
-					return glm::dvec2(
-						((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
-						((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
-				}
-
-				inline		std::string makeSVGLines(std::vector<std::vector<glm::dvec2>> lines)
-				{
-					glm::dvec2 size(2048, 2048);
-					glm::dvec2 offset(5, 5);
-
-					Bounds bounds = getBounds(lines, size, offset);
-
-					std::stringstream svg;
-
-					svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << " \" xmlns=\"http://www.w3.org/2000/svg\">";
-
-					for (auto &line : lines)
-					{
-						if (line.size() > 1)
-						{
-							for (size_t i = 1; i < line.size(); i++)
-							{
-								glm::dvec2 a = rescale(line[i], bounds, size, offset);
-								glm::dvec2 b = rescale(line[i - 1], bounds, size, offset);
-
-								svgMakeLine(a, b, svg);
-							}
-						}
-						else
-						{
-							glm::dvec2 a = rescale(line[0], bounds, size, offset);
-							svg << "<circle cx = \"" << a.x << "\" cy = \"" << a.y << "\" r = \"3\" style = \"stroke:rgb(0,0,255);stroke-width:2\" />";
-						}
-					}
-
-					svg << "</svg>";
-
-					return svg.str();
-				}
-
-				inline		void DumpSVGTriangles(std::vector<Triangle> triangles, Point p, Point prev, std::wstring filename, std::vector<Point> pts = {})
-				{
-					writeFile(filename, makeSVGTriangles(triangles, p, prev, pts));
-				}
-
-				inline		void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::wstring filename)
-				{
-					writeFile(filename, makeSVGLines(lines));
-				}
-
-				inline		std::string makeSVGLines(std::vector<glm::dvec2> input, std::vector<uint32_t> indices)
-				{
-					glm::dvec2 size(512, 512);
-					glm::dvec2 offset(5, 5);
-
-					auto rescaled = rescale(input, size, offset);
-
-					std::stringstream svg;
-
-					svg << "<svg width=\"" << size.x + offset.x * 2 << "\" height=\"" << size.y + offset.y * 2 << "\" xmlns=\"http://www.w3.org/2000/svg\" >";
-
-					if (!rescaled.empty())
-					{
-						for (int i = 1; i < 2; i++)
-						{
-							auto &start = rescaled[i - 1];
-							auto &end = rescaled[i];
-							svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
-							svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
-							svg << "style = \"stroke:rgb(0,255,0);stroke-width:2\" />";
-						}
-
-						for (size_t i = 2; i < rescaled.size() - 1; i++)
-						{
-							auto &start = rescaled[i - 1];
-							auto &end = rescaled[i];
-							svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
-							svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
-							svg << "style = \"stroke:rgb(0,0,0);stroke-width:2\" />";
-						}
-
-						for (size_t i = rescaled.size() - 1; i < rescaled.size(); i++)
-						{
-							auto &start = rescaled[i - 1];
-							auto &end = rescaled[i];
-							svg << "<line x1=\"" << start.x << "\" y1=\"" << start.y << "\" ";
-							svg << "x2=\"" << end.x << "\" y2=\"" << end.y << "\" ";
-							svg << "style = \"stroke:rgb(255,0,0);stroke-width:2\" />";
-						}
-					}
-
-					for (size_t i = 0; i < indices.size(); i += 3)
-					{
-						glm::dvec2 a = rescaled[indices[i + 0]];
-						glm::dvec2 b = rescaled[indices[i + 1]];
-						glm::dvec2 c = rescaled[indices[i + 2]];
-
-						svg << "<polygon points=\"" << a.x << "," << a.y << " " << b.x << "," << b.y << " " << c.x << "," << c.y << "\" style=\"fill:gray; stroke:none; stroke - width:0\" />`;";
-					}
-
-					svg << "</svg>";
-
-					return svg.str();
-				}
-
-				
-
-				
-
-				inline	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
-				{
-					glm::dmat4 newMat = mat * mesh.transformation;
-
-					bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
-
-					auto geomIt = geometryMap.find(mesh.expressID);
-
-					if (geomIt != geometryMap.end())
-					{
-						auto meshGeom = geomIt->second;
-
-						if (meshGeom.numFaces)
-						{
-							for (uint32_t i = 0; i < meshGeom.numFaces; i++)
-							{
-								Face f = meshGeom.GetFace(i);
-								glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
-
-								return a;
-							}
-						}
-					}
-
-					for (auto &c : mesh.children)
-					{
-						auto v = GetOriginRec(c, geometryMap, newMat);
-						if (v.has_value())
-						{
-							return v;
-						}
-					}
-
-					return std::nullopt;
-				}
-
-				inline	glm::dvec3 GetOrigin(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap)
-				{
-					auto v = GetOriginRec(mesh, geometryMap, glm::dmat4(1));
-
-					if (v.has_value())
-					{
-						return *v;
-					}
-					else
-					{
-						return glm::dvec3(0);
-					}
-				}
-
-				inline	IfcGeometry flattenGeometry(std::vector<IfcGeometry> &geoms)
+				if (meshGeom.numFaces)
 				{
 					IfcGeometry newGeom;
 
-					for (auto meshGeom : geoms)
+					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 					{
-						for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+						Face f = meshGeom.GetFace(i);
+						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
+						glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
+						glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
+
+						if (transformationBreaksWinding)
 						{
-							Face f = meshGeom.GetFace(i);
-							glm::dvec3 a = meshGeom.GetPoint(f.i0);
-							glm::dvec3 b = meshGeom.GetPoint(f.i1);
-							glm::dvec3 c = meshGeom.GetPoint(f.i2);
+							newGeom.AddFace(b, a, c);
+						}
+						else
+						{
 							newGeom.AddFace(a, b, c);
 						}
-						newGeom.AddComponent(meshGeom);
 					}
 
-					return newGeom;
+					geoms.push_back(newGeom);
 				}
+			}
 
-				inline	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
-				{
-					glm::dmat4 newMat = mat * mesh.transformation;
-
-					bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
-
-					auto geomIt = geometryMap.find(mesh.expressID);
-
-					if (geomIt != geometryMap.end())
-					{
-						auto meshGeom = geomIt->second;
-
-						if (meshGeom.numFaces)
-						{
-							IfcGeometry newGeom;
-
-							for (uint32_t i = 0; i < meshGeom.numFaces; i++)
-							{
-								Face f = meshGeom.GetFace(i);
-								glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
-								glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
-								glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
-
-								if (transformationBreaksWinding)
-								{
-									newGeom.AddFace(b, a, c);
-								}
-								else
-								{
-									newGeom.AddFace(a, b, c);
-								}
-							}
-
-							geoms.push_back(newGeom);
-						}
-					}
-
-					for (auto &c : mesh.children)
-					{
-						flattenRecursive(c, geometryMap, geoms, newMat);
-					}
-				}
-
-				
-
-				inline			std::vector<IfcGeometry> flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
-				{
-					std::vector<IfcGeometry> geoms;
-					flattenRecursive(mesh, geometryMap, geoms, mat);
-					return geoms;
-				}
+			for (auto &c : mesh.children)
+			{
+				flattenRecursive(c, geometryMap, geoms, newMat);
+			}
+		}
 
 
 
-				inline		std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)
-				{
-					std::array<double, 16> flatTransformation;
-
-					for (int i = 0; i < 4; i++)
-					{
-						for (int j = 0; j < 4; j++)
-						{
-							flatTransformation[i * 4 + j] = transformation[i][j];
-						}
-					}
-
-					return flatTransformation;
-				}
-
-				inline		bool TriangleIsCW(const glm::dvec2 &a, const glm::dvec2 &b, const glm::dvec2 &c)
-				{
-					auto norm = computeNormal(glm::dvec3(a, 0), glm::dvec3(b, 0), glm::dvec3(c, 0));
-					return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
-				}
-
-				
-
-inline		double mirrorAngle(double angle) // in degrees
-{
-	if (angle < 180)
-	{
-		return 180 - angle;
-	}
-	else
-	{
-		return 180 + (360 - angle);
-	}
-}
-
-inline		 bool notPresent(glm::dvec3 pt, std::vector<glm::dvec3> points)
-{
-	for (auto &pt2 : points)
-	{
-		if (pt.x == pt2.x && pt.y == pt2.y && pt.z == pt2.z)
+		inline	std::vector<IfcGeometry> flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
 		{
-			return false;
+			std::vector<IfcGeometry> geoms;
+			flattenRecursive(mesh, geometryMap, geoms, mat);
+			return geoms;
+		}
+
+		inline	std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)
+		{
+			std::array<double, 16> flatTransformation;
+
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					flatTransformation[i * 4 + j] = transformation[i][j];
+				}
+			}
+
+			return flatTransformation;
+		}
+
+		inline	bool TriangleIsCW(const glm::dvec2 &a, const glm::dvec2 &b, const glm::dvec2 &c)
+		{
+			auto norm = computeNormal(glm::dvec3(a, 0), glm::dvec3(b, 0), glm::dvec3(c, 0));
+			return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
+		}	
+
+		inline	double mirrorAngle(double angle) // in degrees
+		{
+			if (angle < 180)
+			{
+				return 180 - angle;
+			}
+			else
+			{
+				return 180 + (360 - angle);
+			}
+		}
+
+		inline	bool notPresent(glm::dvec3 pt, std::vector<glm::dvec3> points)
+		{
+			for (auto &pt2 : points)
+			{
+				if (pt.x == pt2.x && pt.y == pt2.y && pt.z == pt2.z)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 	}
-	return true;
-}
-}

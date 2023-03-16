@@ -5,8 +5,6 @@
  #pragma once
 
 #include <glm/glm.hpp>
-#include <iostream>
-#include <stack>
 
 #include "geometryutils.h"
 #include "intersect-ray-tri.h"

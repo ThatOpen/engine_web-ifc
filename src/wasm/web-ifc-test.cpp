@@ -2,9 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+// define these to enable debugging output
+#define DEBUG_DUMP_SVG
+#define CSG_DEBUG_OUTPUT
+
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include "test/io_helpers.h"
 
 #include "geometry/operations/mesh_utils.h"
 #include "parsing/IfcLoader.h"
@@ -14,6 +19,9 @@
 #include "utility/LoaderSettings.h"
 #include "geometry/operations/triangulate-with-boundaries.h"
 #include "schema/ifc-schema.h"
+
+
+using namespace webifc::io;
 
 long long ms()
 {
@@ -42,7 +50,7 @@ void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcG
 
     if (writeFiles)
     {
-        geometryLoader.DumpMesh(mesh, L"TEST.obj");
+        DumpMesh(mesh, geometryLoader, L"TEST.obj");
     }
 }
 
@@ -245,7 +253,7 @@ void TestTriangleDecompose()
             pts.push_back(p);
         }
 
-        webifc::geometry::DumpSVGTriangles(triangles, webifc::geometry::Point(), webifc::geometry::Point(), L"triangles.svg", pts);
+        webifc::io::DumpSVGTriangles(triangles, webifc::geometry::Point(), webifc::geometry::Point(), L"triangles.svg", pts);
     }
 }
 
@@ -270,7 +278,6 @@ int main()
 
 	webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
-    set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
 
     webifc::utility::LoaderErrorHandler errorHandler;

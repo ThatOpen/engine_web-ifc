@@ -27,7 +27,6 @@ namespace webifc::geometry
         IfcComposedMesh GetMesh(uint32_t expressID);
         void SetTransformation(const glm::dmat4 &val);
         glm::dmat4 GetCoordinationMatrix();
-        void DumpMesh(IfcComposedMesh &mesh, std::wstring filename);
         void Clear();
         
       private:
