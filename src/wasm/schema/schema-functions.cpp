@@ -245,7 +245,7 @@ namespace webifc::schema {
 		_schemaNames.push_back("IFC4");
 		_schemas.push_back(IFC4);
 	};
-	std::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {
+	std::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) {
 		switch(typeCode) {
 			case schema::FILE_SCHEMA: return "FILE_SCHEMA";
 			case schema::FILE_NAME: return "FILE_NAME";

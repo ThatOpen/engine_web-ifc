@@ -15,6 +15,7 @@
 namespace webifc::parsing {
 
    std::string getAsStringWithBigE(double theNumber);
+   double ConvertPrefix(const std::string &prefix);
    std::string p21encode(std::string_view input);
 
  
@@ -23,10 +24,39 @@ namespace webifc::parsing {
    _tokenStream = new IfcTokenStream(tapeSize,(memoryLimit/tapeSize));
    }  
    
-   const std::vector<uint32_t> IfcLoader::GetExpressIDsWithType(const uint32_t type) const
+   std::unordered_map<uint32_t, std::vector<uint32_t>> & IfcLoader::GetRelVoids()
    { 
-      if (_ifcTypeToLineID.count(type)==0) return {};
-      auto &list = _ifcTypeToLineID.at(type);
+     return _relVoids;
+   }
+   
+   std::unordered_map<uint32_t, std::vector<uint32_t>> & IfcLoader::GetRelVoidRels()
+   { 
+     return _relVoidRel;
+   }
+   
+   std::unordered_map<uint32_t, std::vector<uint32_t>> & IfcLoader::GetRelAggregates()
+   { 
+     return _relAggregates;
+   }
+   
+   std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> & IfcLoader::GetStyledItems()
+   { 
+      return _styledItems;
+   }
+   
+   std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> & IfcLoader::GetRelMaterials()
+   { 
+     return _relMaterials;
+   }
+   
+   std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> & IfcLoader::GetMaterialDefinitions()
+   { 
+     return _materialDefinitions;
+   }
+   
+   std::vector<uint32_t> IfcLoader::GetExpressIDsWithType(const uint32_t type)
+   { 
+      auto &list = _ifcTypeToLineID[type];
       std::vector<uint32_t> ret(list.size());
 
       std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
@@ -35,10 +65,9 @@ namespace webifc::parsing {
       return ret;
    }
    
-   const std::vector<IfcHeaderLine> IfcLoader::GetHeaderLinesWithType(const uint32_t type) const
+   std::vector<IfcHeaderLine> IfcLoader::GetHeaderLinesWithType(const uint32_t type)
    { 
-     if (_ifcTypeToHeaderLineID.count(type)==0) return {};
-     auto &list = _ifcTypeToHeaderLineID.at(type);
+     auto &list = _ifcTypeToHeaderLineID[type];
      std::vector<IfcHeaderLine> ret(list.size());
 
      std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
@@ -51,10 +80,10 @@ namespace webifc::parsing {
    { 
      _open=true;
      _tokenStream->SetTokenSource(requestData);
-     ParseLines();
+     InitialiseIfcParsing();
    }
 
-   IFC_SCHEMA IfcLoader::GetSchema() const
+   IFC_SCHEMA IfcLoader::GetSchema() 
    { 
       auto line = GetHeaderLinesWithType(schema::FILE_SCHEMA)[0];
       MoveToHeaderLineArgument(line.lineIndex, 0);
@@ -80,10 +109,10 @@ namespace webifc::parsing {
    { 
      _open=true;
      _tokenStream->SetTokenSource(requestData);
-     ParseLines();
+     InitialiseIfcParsing();
    }
    
-   void IfcLoader::SaveFile(const std::function<void(char *, size_t)> &outputData) const
+   void IfcLoader::SaveFile(const std::function<void(char *, size_t)> &outputData)
    { 
       std::ostringstream output;
       output << "ISO-10303-21;"<<std::endl<<"HEADER;"<<std::endl;
@@ -280,7 +309,7 @@ namespace webifc::parsing {
       outputData((char*)outputString,tmp.size());
    }
    
-   void IfcLoader::SaveFile(std::ostream &outputData) const
+   void IfcLoader::SaveFile(std::ostream &outputData)
    { 
      SaveFile([&](char* src, size_t srcSize)
       {
@@ -288,8 +317,18 @@ namespace webifc::parsing {
       }
     );
    }
-      
-   bool IfcLoader::IsAtEnd() const
+   
+   void IfcLoader::InitialiseIfcParsing()
+   {
+     ParseLines();
+     PopulateRelVoidsMap();
+     PopulateRelAggregatesMap();
+     PopulateStyledItemMap();
+   	 PopulateRelMaterialsMap();
+     ReadLinearScalingFactor();
+   }
+   
+   bool IfcLoader::IsAtEnd()
    {
      return _tokenStream->IsAtEnd();
    }
@@ -386,45 +425,49 @@ namespace webifc::parsing {
   			for (uint32_t i = 1; i <= _lines.size(); i++) _expressIDToLine[_lines[i-1].expressID] = i;
    }
    
-   size_t IfcLoader::GetNumLines() const
+   size_t IfcLoader::GetNumLines()
    { 
      return _lines.size();
    }
    
-   const std::vector<uint32_t> IfcLoader::GetLineIDsWithType(const uint32_t type) const
+   std::vector<uint32_t> &IfcLoader::GetLineIDsWithType(const uint32_t type)
    { 
-      if (_ifcTypeToLineID.count(type)==0) return {};
-      return _ifcTypeToLineID.at(type);
+      return _ifcTypeToLineID[type];
    }
    
-   uint32_t IfcLoader::GetMaxExpressId() const
+   uint32_t IfcLoader::GetMaxExpressId()
    { 
       if (_expressIDToLine.size()==0) return 0;
       return _expressIDToLine.size()-1;
    }
    
-   bool IfcLoader::IsValidExpressID(const uint32_t expressID) const
+   bool IfcLoader::IsValidExpressID(const uint32_t expressID)
    {  
    	 if (_expressIDToLine[expressID]==0) return false;
      else return true;
    }
    
-   uint32_t IfcLoader::ExpressIDToLineID(const uint32_t expressID) const
+   uint32_t IfcLoader::ExpressIDToLineID(const uint32_t expressID)
    { 
       return _expressIDToLine[expressID]-1;
    }
    
-   uint32_t IfcLoader::LineIDToExpressID(const uint32_t lineID) const
+   uint32_t IfcLoader::LineIDToExpressID(const uint32_t lineID)
    { 
       return _lines[lineID].expressID;
    }
    
-   const IfcLine &IfcLoader::GetLine(const uint32_t lineID) const
+   IfcLine &IfcLoader::GetLine(const uint32_t lineID)
    { 
       return _lines[lineID];
    }
    
-   bool IfcLoader::IsOpen() const
+   double IfcLoader::GetLinearScalingFactor()
+   { 
+      return _linearScalingFactor;
+   }
+   
+   bool IfcLoader::IsOpen()
    { 
       return _open;
    }
@@ -435,37 +478,37 @@ namespace webifc::parsing {
      delete _tokenStream;
    }
    
-   void IfcLoader::MoveToLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const
+   void IfcLoader::MoveToLineArgument(const uint32_t lineID, const uint32_t argumentIndex)
    { 
      MoveToArgumentOffset(_lines[lineID], argumentIndex);
    }
    
-   void IfcLoader::MoveToHeaderLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const
+   void IfcLoader::MoveToHeaderLineArgument(const uint32_t lineID, const uint32_t argumentIndex)
    { 
      _tokenStream->MoveTo(_headerLines[lineID].tapeOffset);
    	 ArgumentOffset(argumentIndex);	
    }
    
-   std::string IfcLoader::GetStringArgument() const
+   std::string IfcLoader::GetStringArgument()
    { 
    	 std::string s = std::string(GetStringViewArgument());
      return s;
    }
    
-   std::string_view IfcLoader::GetStringViewArgument() const
+   std::string_view IfcLoader::GetStringViewArgument()
    { 
      _tokenStream->Read<char>(); // string type
    	 std::string_view s = _tokenStream->ReadString();
      return s;
    }
    
-   double IfcLoader::GetDoubleArgument() const
+   double IfcLoader::GetDoubleArgument()
    { 
        _tokenStream->Read<char>(); // real type
        return _tokenStream->Read<double>();
    }
    
-   uint32_t IfcLoader::GetRefArgument() const
+   uint32_t IfcLoader::GetRefArgument()
    { 
       if (_tokenStream->Read<char>() != IfcTokenType::REF)
      	{
@@ -475,13 +518,13 @@ namespace webifc::parsing {
      	return _tokenStream->Read<uint32_t>();
    }
    
-  uint32_t IfcLoader::GetRefArgument(const uint32_t tapeOffset) const
+  uint32_t IfcLoader::GetRefArgument(const uint32_t tapeOffset)
 	{
 			_tokenStream->MoveTo(tapeOffset);
 			return GetRefArgument();
 	}
     
-  double IfcLoader::GetDoubleArgument(const uint32_t tapeOffset) const
+  double IfcLoader::GetDoubleArgument(const uint32_t tapeOffset)
 	{
 		_tokenStream->MoveTo(tapeOffset);
 		return GetDoubleArgument();
@@ -534,13 +577,13 @@ namespace webifc::parsing {
       _headerLines.push_back(std::move(l));
   }
   
-  IfcTokenType IfcLoader::GetTokenType(uint32_t tapeOffset) const
+  IfcTokenType IfcLoader::GetTokenType(uint32_t tapeOffset)
   {
     _tokenStream->MoveTo(tapeOffset);
     return GetTokenType();
   }
    
-   uint32_t IfcLoader::GetOptionalRefArgument() const
+   uint32_t IfcLoader::GetOptionalRefArgument()
    { 
       IfcTokenType t = GetTokenType();
      	if (t == IfcTokenType::EMPTY)
@@ -558,7 +601,7 @@ namespace webifc::parsing {
      	}
    }
    
-   IfcTokenType IfcLoader::GetTokenType() const
+   IfcTokenType IfcLoader::GetTokenType()
    { 
      return static_cast<IfcTokenType>(_tokenStream->Read<char>());
    }
@@ -568,12 +611,12 @@ namespace webifc::parsing {
      _tokenStream->Push(v,size);
    }
    
-   uint64_t IfcLoader::GetTotalSize()  const
+   uint64_t IfcLoader::GetTotalSize() 
    {
      return _tokenStream->GetTotalSize();
    }
      
-   const std::vector<uint32_t> IfcLoader::GetSetArgument() const
+   std::vector<uint32_t> IfcLoader::GetSetArgument()
    { 
      std::vector<uint32_t> tapeOffsets;
      _tokenStream->Read<char>(); // set begin
@@ -628,7 +671,7 @@ namespace webifc::parsing {
      return tapeOffsets;
    }
    
-   const std::vector<std::vector<uint32_t>> IfcLoader::GetSetListArgument() const
+   std::vector<std::vector<uint32_t>> IfcLoader::GetSetListArgument()
    { 
      std::vector<std::vector<uint32_t>> tapeOffsets;
    	 _tokenStream->Read<char>(); // set begin
@@ -690,8 +733,240 @@ namespace webifc::parsing {
 
      	return tapeOffsets;
    }
-    
-   void IfcLoader::ArgumentOffset(const uint32_t argumentIndex) const
+   
+   void IfcLoader::PopulateRelVoidsMap()
+   {
+     auto relVoids = GetExpressIDsWithType(schema::IFCRELVOIDSELEMENT);
+
+     for (uint32_t relVoidID : relVoids)
+     {
+       uint32_t lineID = ExpressIDToLineID(relVoidID);
+       auto &line = GetLine(lineID);
+
+       MoveToArgumentOffset(line, 4);
+
+       uint32_t relatingBuildingElement = GetRefArgument();
+       uint32_t relatedOpeningElement = GetRefArgument();
+
+       _relVoids[relatingBuildingElement].push_back(relatedOpeningElement);
+       _relVoidRel[relatingBuildingElement].push_back(relVoidID);
+     }
+   }
+   
+   void IfcLoader::PopulateRelAggregatesMap()
+   {
+      auto relVoids = GetExpressIDsWithType(schema::IFCRELAGGREGATES);
+
+     	for (uint32_t relVoidID : relVoids)
+     	{
+     		uint32_t lineID = ExpressIDToLineID(relVoidID);
+     		auto &line = GetLine(lineID);
+
+     		MoveToArgumentOffset(line, 4);
+
+     		uint32_t relatingBuildingElement = GetRefArgument();
+     		auto aggregates = GetSetArgument();
+
+     		for (auto &aggregate : aggregates)
+     		{
+          _tokenStream->MoveTo(aggregate);
+     			uint32_t aggregateID = GetRefArgument();
+     			_relAggregates[relatingBuildingElement].push_back(aggregateID);
+     		}
+     	}
+   }
+   
+   void IfcLoader::PopulateStyledItemMap()
+   {
+     auto styledItems = GetExpressIDsWithType(schema::IFCSTYLEDITEM);
+
+     for (uint32_t styledItemID : styledItems)
+     {
+       uint32_t lineID = ExpressIDToLineID(styledItemID);
+       auto &line = GetLine(lineID);
+
+       MoveToArgumentOffset(line, 0);
+
+       if (GetTokenType() == IfcTokenType::REF)
+       {
+         _tokenStream->Back();
+         uint32_t representationItem = GetRefArgument();
+
+         auto styleAssignments = GetSetArgument();
+
+         for (auto &styleAssignment : styleAssignments)
+         {
+            _tokenStream->MoveTo(styleAssignment);
+           uint32_t styleAssignmentID = GetRefArgument();
+           _styledItems[representationItem].emplace_back(styledItemID, styleAssignmentID);
+         }
+       }
+     }
+   }
+   
+   void IfcLoader::PopulateRelMaterialsMap()
+   {
+     auto styledItems = GetExpressIDsWithType(schema::IFCRELASSOCIATESMATERIAL);
+
+     for (uint32_t styledItemID : styledItems)
+     {
+       uint32_t lineID = ExpressIDToLineID(styledItemID);
+       auto &line = GetLine(lineID);
+
+       MoveToArgumentOffset(line, 5);
+
+       uint32_t materialSelect = GetRefArgument();
+
+       MoveToArgumentOffset(line, 4);
+
+       auto RelatedObjects = GetSetArgument();
+
+       for (auto &ifcRoot : RelatedObjects)
+       {
+         _tokenStream->MoveTo(ifcRoot);
+         uint32_t ifcRootID = GetRefArgument();
+         _relMaterials[ifcRootID].emplace_back(styledItemID, materialSelect);
+       }
+     }
+
+     auto matDefs = GetExpressIDsWithType(schema::IFCMATERIALDEFINITIONREPRESENTATION);
+
+     for (uint32_t styledItemID : matDefs)
+     {
+       uint32_t lineID = ExpressIDToLineID(styledItemID);
+       auto &line = GetLine(lineID);
+
+       MoveToArgumentOffset(line, 2);
+
+       auto representations = GetSetArgument();
+
+       MoveToArgumentOffset(line, 3);
+
+       uint32_t material = GetRefArgument();
+
+       for (auto &representation : representations)
+       {
+         _tokenStream->MoveTo(representation);
+         uint32_t representationID = GetRefArgument();
+         _materialDefinitions[material].emplace_back(styledItemID, representationID);
+       }
+     }
+   }
+   
+   void IfcLoader::ReadLinearScalingFactor()
+   {
+     auto projects = GetExpressIDsWithType(schema::IFCPROJECT);
+
+     if (projects.size() != 1)
+     {
+       _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected empty ifc project");
+       return;
+     }
+
+     auto projectEID = projects[0];
+
+     auto &line = GetLine(ExpressIDToLineID(projectEID));
+     MoveToArgumentOffset(line, 8);
+
+     auto unitsID = GetRefArgument();
+
+     auto &unitsLine = GetLine(ExpressIDToLineID(unitsID));
+     MoveToArgumentOffset(unitsLine, 0);
+
+     auto unitIds = GetSetArgument();
+
+     for (auto &unitID : unitIds)
+     {
+       _tokenStream->MoveTo(unitID);
+       auto unitRef = GetRefArgument();
+
+       auto &line = GetLine(ExpressIDToLineID(unitRef));
+
+       if (line.ifcType == schema::IFCSIUNIT)
+       {
+         MoveToArgumentOffset(line, 1);
+         std::string unitType = GetStringArgument();
+
+         std::string unitPrefix;
+
+         MoveToArgumentOffset(line, 2);
+         if (GetTokenType() == IfcTokenType::ENUM)
+         {
+           _tokenStream->Back();
+           unitPrefix = GetStringArgument();
+         }
+
+         MoveToArgumentOffset(line, 3);
+         std::string unitName = GetStringArgument();
+
+         if (unitType == "LENGTHUNIT" && unitName == "METRE")
+         {
+           double prefix = ConvertPrefix(unitPrefix);
+           _linearScalingFactor *= prefix;
+         }
+       }
+       if(line.ifcType == schema::IFCCONVERSIONBASEDUNIT)
+       {
+         MoveToArgumentOffset(line, 1);
+         std::string unitType = GetStringArgument();
+         MoveToArgumentOffset(line, 3);
+         auto unitRefLine = GetRefArgument();
+         auto &unitLine = GetLine(ExpressIDToLineID(unitRefLine));
+         
+         MoveToArgumentOffset(unitLine, 1);
+         auto ratios = GetSetArgument();
+
+         ///Scale Correction
+
+         MoveToArgumentOffset(unitLine, 2);
+         auto scaleRefLine = GetRefArgument();
+
+         auto &scaleLine = GetLine(ExpressIDToLineID(scaleRefLine));
+
+         MoveToArgumentOffset(scaleLine, 1);
+         std::string unitTypeScale = GetStringArgument();
+
+         std::string unitPrefix;
+
+         MoveToArgumentOffset(scaleLine, 2);
+         if (GetTokenType() == IfcTokenType::ENUM)
+         {
+           _tokenStream->Back();
+           unitPrefix = GetStringArgument();
+         }
+
+         MoveToArgumentOffset(scaleLine, 3);
+         std::string unitName = GetStringArgument();
+
+         if (unitTypeScale == "LENGTHUNIT" && unitName == "METRE")
+         {
+           double prefix = ConvertPrefix(unitPrefix);
+           _linearScalingFactor *= prefix;
+         }
+
+         _tokenStream->MoveTo(ratios[0]);
+         double ratio = GetDoubleArgument();
+         if(unitType == "LENGTHUNIT")
+         {
+           _linearScalingFactor *= ratio;
+         }
+         else if (unitType == "AREAUNIT")
+         {
+           _squaredScalingFactor *= ratio;
+         }
+         else if (unitType == "VOLUMEUNIT")
+         {
+           _cubicScalingFactor *= ratio;
+         }
+         else if (unitType == "PLANEANGLEUNIT")
+         {
+           _angularScalingFactor *= ratio;
+         }
+       }		
+     }
+   }
+   
+   void IfcLoader::ArgumentOffset(const uint32_t argumentIndex)
    {
    	uint32_t movedOver = 0;
    	uint32_t setDepth = 0;
@@ -753,17 +1028,17 @@ namespace webifc::parsing {
    	}
    }
    
-   void IfcLoader::MoveToArgumentOffset(const IfcLine &line, const uint32_t argumentIndex) const
+   void IfcLoader::MoveToArgumentOffset(IfcLine &line, const uint32_t argumentIndex)
    {
     _tokenStream->MoveTo(line.tapeOffset);
    	ArgumentOffset(argumentIndex);
    }
    
-   void IfcLoader::StepBack() const {
+   void IfcLoader::StepBack() {
      _tokenStream->Back();
    }
 
-   double IfcLoader::GetOptionalDoubleParam(double defaultValue = 0) const
+   double IfcLoader::GetOptionalDoubleParam(double defaultValue = 0)
     {
       if (GetTokenType() ==IfcTokenType::REAL)
       {

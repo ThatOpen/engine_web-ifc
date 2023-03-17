@@ -70,7 +70,7 @@ namespace webifc::parsing
             size_t GetRef();
             char Next();
             char Prev();
-            bool IsAtEnd();
+            bool IsAtEnd() ;
             char Get();
             void Clear();
           private:

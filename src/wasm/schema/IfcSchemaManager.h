@@ -14,19 +14,19 @@ namespace webifc::schema {
     class IfcSchemaManager {
         public:
             IfcSchemaManager();
-            const std::vector<IFC_SCHEMA> GetAvailableSchemas() const;
-            std::string GetSchemaName(IFC_SCHEMA schema) const;
-            uint32_t IfcTypeToTypeCode(const std::string name) const;
-            uint32_t IfcTypeToTypeCode(const std::string_view name) const;
-            std::string IfcTypeCodeToType(const uint32_t typeCode) const; 
-            bool IsIfcElement(const uint32_t typeCode) const;
-            const std::unordered_set<uint32_t> & GetIfcElementList() const;
+            std::vector<IFC_SCHEMA> GetAvailableSchemas();
+            std::string GetSchemaName(IFC_SCHEMA schema);
+            uint32_t IfcTypeToTypeCode(const std::string name);
+            uint32_t IfcTypeToTypeCode(const std::string_view name);
+            std::string IfcTypeCodeToType(const uint32_t typeCode);
+            bool IsIfcElement(const uint32_t typeCode);
+            std::unordered_set<uint32_t> & GetIfcElementList();
         private: 
             std::vector<uint32_t> _crcTable;
             std::unordered_set<uint32_t> _ifcElements;
             std::vector<IFC_SCHEMA> _schemas;
             std::vector<std::string> _schemaNames;
             void initSchemaData();
-            uint32_t IfcTypeToTypeCode(const void * name, const size_t len) const;
+            uint32_t IfcTypeToTypeCode(const void * name, const size_t len);
     };
 }

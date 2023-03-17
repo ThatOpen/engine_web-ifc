@@ -2,22 +2,21 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
-#pragma once
+ #pragma once
 
 #include <glm/glm.hpp>
 
-#include "../representation/IfcGeometry.h"
-#include "geometryutils.h"
+#include "../util.h"
 
-namespace webifc::geometry
+namespace webifc
 {
 
-	inline bool allEqual(bool b1, bool b2, bool b3, bool b4)
+	bool allEqual(bool b1, bool b2, bool b3, bool b4)
 	{
 		return b1 == b2 && b1 == b3 && b1 == b4;
 	}
 
-	inline bool doLineSegmentsIntersect(const glm::dvec2& p, const glm::dvec2& p2, const glm::dvec2& q, const glm::dvec2& q2, bool extendQ = false) {
+	bool doLineSegmentsIntersect(const glm::dvec2& p, const glm::dvec2& p2, const glm::dvec2& q, const glm::dvec2& q2, bool extendQ = false) {
 		glm::dvec2 r = p2 - p;
 		glm::dvec2 s = q2 - q;
 

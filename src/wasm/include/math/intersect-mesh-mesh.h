@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
+ 
  #pragma once
 
 #include <map>
@@ -12,11 +12,51 @@
 #include "mesh_utils.h"
 #include "intersect-ray-tri.h"
 #include "triangulate-with-boundaries.h"
-#include "geometryutils.h"
 #include <CDT.h>
 
-namespace webifc::geometry
+namespace webifc
 {
+
+    static glm::dvec2 projectOnTriangle(const glm::dvec3& pt, const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c)
+    {
+        glm::dvec3 v1 = glm::normalize(b - a);
+        glm::dvec3 v2 = glm::normalize(c - a);
+
+        glm::dvec3 norm = glm::normalize(glm::cross(v1, v2));
+        v2 = glm::normalize(glm::cross(norm, v1));
+
+        double scale = std::max(glm::length(b - a), glm::length(c - a));
+
+        glm::dvec3 rel = pt - a;
+        double d1 = glm::dot(v1, rel);
+        double d2 = glm::dot(v2, rel);
+
+        d1 = d1 / scale;
+        d2 = d2 / scale;
+
+        return {
+            d1,
+            d2
+        };
+    }
+
+    static glm::dvec3 unProjectFromTriangle(glm::dvec2& pt, const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c)
+    {
+        glm::dvec3 v1 = glm::normalize(b - a);
+        glm::dvec3 v2 = glm::normalize(c - a);
+
+        glm::dvec3 norm = glm::normalize(glm::cross(v1, v2));
+        v2 = glm::normalize(glm::cross(norm, v1));
+
+        double scale = std::max(glm::length(b - a), glm::length(c - a));
+
+        double d1 = pt.x * scale;
+        double d2 = pt.y * scale;
+
+        glm::dvec3 p = v1 * d1 + v2 * d2;
+
+        return p + a;
+    }
 
     struct MeshIntersection
     {
@@ -25,6 +65,31 @@ namespace webifc::geometry
     };
 
     typedef std::map<uint32_t, std::vector<MeshIntersection>> MeshIntersections;
+
+    static std::vector<Loop> makeLoops(const glm::dvec3& a, const glm::dvec3& b, const glm::dvec3& c, const std::vector<MeshIntersection>& intersections)
+    {
+        std::vector<Loop> loops;
+
+        for (auto& i : intersections)
+        {
+            glm::dvec2 ps = projectOnTriangle(i.result.start, a, b, c);
+            glm::dvec2 pe = projectOnTriangle(i.result.end, a, b, c);
+
+            // single point
+            if (equals2d(ps, pe, EPS_SMALL))
+            {
+                loops.push_back({ true, ps, ps });
+            }
+            else
+            {
+                // TODO: stupid implementation, too many triangle checks needed
+                // TODO: flipped this because of the triangle winding, but is probably not a general solution!
+                loops.push_back({ false, pe, ps });
+            }
+        }
+
+        return loops;
+    }
 
     static std::vector<Loop> makeLoops2(const glm::dvec3& A, const glm::dvec3& B, const glm::dvec3& C, const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c, const std::vector<MeshIntersection>& intersections)
     {
@@ -88,17 +153,18 @@ namespace webifc::geometry
                 {
                     std::vector<std::vector<glm::dvec2>> vecs;
                     std::transform(loops.begin(), loops.end(), std::back_inserter(vecs), [](const Loop& l) -> std::vector<glm::dvec2>
-                    {
-                     return { l.v1, l.v2 };
-                 });
+                                   {
+                                       return { l.v1, l.v2 };
+                                   });
 
                     vecs.push_back({ { pa.x, pa.y } });
                     vecs.push_back({ { pb.x, pb.y } });
                     vecs.push_back({ { pc.x, pc.y } });
 
-                    #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpSVGLines(vecs, "loops.html");
-                    #endif
+                    if (CSG_DEBUG_OUTPUT)
+                    {
+                        DumpSVGLines(vecs, L"loops.html");
+                    }
                 }
 
 
@@ -125,9 +191,10 @@ namespace webifc::geometry
                 lines.push_back({ pb, pc });
                 lines.push_back({ pc, pa });
 
-                #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpSVGLines(lines, "lines.html");
-                #endif
+                if (CSG_DEBUG_OUTPUT)
+                {
+                    DumpSVGLines(lines, L"lines.html");
+                }
 
                 // drawInSVG(loops, pa, pb, pc);
 
@@ -337,9 +404,9 @@ namespace webifc::geometry
         int middle = (end + start) / 2;
 
         std::nth_element(boxes.begin() + start, boxes.begin() + middle, boxes.begin() + end, [&](const AABB& first, const AABB& second)
-        {
-           return first.center[axis] > second.center[axis];
-       });
+                         {
+                             return first.center[axis] > second.center[axis];
+                         });
 
         nodes[nodeID].left = MakeBVH(boxes, nodes, start, middle, (axis + 1) % 3, depth + 1, offset);
         nodes[nodeID].right = MakeBVH(boxes, nodes, middle, end, (axis + 1) % 3, depth + 1, offset);
@@ -377,14 +444,14 @@ namespace webifc::geometry
         bool IsCoplanarWith(const Plane& other, double eps) const
         {
             return (equals(d, other.d, eps) && equals(norm, other.norm, eps)) ||
-            (equals(d, -other.d, eps) && equals(norm, -other.norm, eps));
+                (equals(d, -other.d, eps) && equals(norm, -other.norm, eps));
         }
     };
 
     static std::vector<size_t> findContour(const std::pair<size_t, size_t>& initial,
-        const size_t initialIndex,
-        const std::vector<std::pair<size_t, size_t>>& contourEdges,
-        const std::unordered_map<size_t, size_t>& edgeMap)
+                                    const size_t initialIndex,
+                                    const std::vector<std::pair<size_t, size_t>>& contourEdges,
+                                    const std::unordered_map<size_t, size_t>& edgeMap)
     {
         std::vector<size_t> contourIndices;
         std::unordered_map<size_t, bool> visited;
@@ -497,12 +564,12 @@ namespace webifc::geometry
     };
 
     static std::vector<ClipSegment> LineDistancesToClipSegments(size_t meshIndex,
-       size_t polygonIndex,
-       const std::vector<double>& distances,
-       const std::vector<size_t>& contour,
-       const std::vector<glm::dvec3>& sourcePoints,
-       const glm::dvec3& linePos,
-       const glm::dvec3& lineDir)
+                                                         size_t polygonIndex,
+                                                         const std::vector<double>& distances,
+                                                         const std::vector<size_t>& contour,
+                                                         const std::vector<glm::dvec3>& sourcePoints,
+                                                         const glm::dvec3& linePos,
+                                                         const glm::dvec3& lineDir)
     {
         std::vector<ClipLine> clipLines;
 
@@ -674,9 +741,9 @@ namespace webifc::geometry
         }
 
         std::sort(clipLines.begin(), clipLines.end(), [&](const ClipLine& a, const ClipLine& b)
-        {
-          return a.startLineDist > b.startLineDist;
-      });
+                  {
+                      return a.startLineDist > b.startLineDist;
+                  });
 
         std::vector<ClipSegment> segments;
 
@@ -787,15 +854,26 @@ namespace webifc::geometry
 
 
         return LineDistancesToClipSegments(0,
-         0,
-         distances,
-         pointIndices,
-         sourcePoints,
-         linePos,
-         lineDir);
+                                           0,
+                                           distances,
+                                           pointIndices,
+                                           sourcePoints,
+                                           linePos,
+                                           lineDir);
     }
 
-  
+    static std::vector<ClipSegment> LineDistancesToClipSegments2D(const std::vector<glm::dvec2>& points, glm::dvec2 linePos2D = glm::dvec2(0, 0), glm::dvec2 lineDir2D = glm::dvec2(1, 0))
+    {
+        std::vector<size_t> contour(points.size());
+
+        for (size_t i = 0; i < points.size(); i++)
+        {
+            contour[i] = i;
+        }
+
+        return LineDistancesToClipSegments2D(points, contour, linePos2D, lineDir2D);
+    }
+
 
     struct Polygon3D
     {
@@ -819,11 +897,92 @@ namespace webifc::geometry
             for (auto& face : faces)
             {
                 geom.AddFace(sourcePoints[face.i0],
-                   sourcePoints[face.i1],
-                   sourcePoints[face.i2]);
+                             sourcePoints[face.i1],
+                             sourcePoints[face.i2]);
             }
 
             return geom;
+        }
+
+        void GetExportableEdges(std::vector<std::vector<glm::dvec2>>& vecs) const
+        {
+            for (auto& contour : contours)
+            {
+                for (size_t i = 0; i < contour.size(); i++)
+                {
+                    vecs.push_back({ points[contour[i]], points[contour[(i + 1) % contour.size()]] });
+                }
+            }
+        }
+
+        void Print(const std::wstring& filename) const
+        {
+            std::vector<std::vector<glm::dvec2>> vecs;
+
+            GetExportableEdges(vecs);
+
+            DumpSVGLines(vecs, filename);
+        }
+
+        void PrintEdges(const std::wstring& filename) const
+        {
+            std::vector<std::vector<glm::dvec2>> vecs;
+
+            for (auto& e : edges)
+            {
+                vecs.push_back({ points[e.first], points[e.second] });           
+            }
+
+            DumpSVGLines(vecs, filename);
+        }
+
+        void PrintEdgesAndLoop(const std::wstring& filename, const std::vector<size_t>& loop) const
+        {
+            std::vector<std::vector<glm::dvec2>> vecs;
+
+            for (auto& e : edges)
+            {
+                vecs.push_back({ points[e.first], points[e.second] });
+            }
+
+            std::vector<std::vector<glm::dvec2>> loops;
+
+            for (size_t i = 1; i < loop.size(); i++)
+            {
+                loops.push_back({ points[loop[i-1]], points[loop[i]] });
+            }
+
+            SVGLineSet set;
+            set.lines = vecs;
+            set.color = "rgb(255, 0, 0)";
+
+            SVGLineSet set2;
+            set2.lines = loops;
+            set2.color = "rgb(0, 0, 255)";
+
+            SVGDrawing drawing;
+            drawing.sets.push_back(set);
+            drawing.sets.push_back(set2);
+            writeFile(filename + L".html", makeSVGLines(drawing));
+        }
+
+        void PrintLoops(const std::wstring& filename, const std::vector<size_t>& loop, const std::vector<size_t>& loopb, glm::dvec2 horLinePos) const
+        {
+            std::vector<std::vector<glm::dvec2>> loop1;
+
+            for (size_t i = 0; i < loop.size(); i++)
+            {
+                loop1.push_back({ points[loop[i]], points[loop[(i + 1) % loop.size()]] });
+            }
+
+            for (size_t i = 0; i < loopb.size(); i++)
+            {
+                loop1.push_back({ points[loopb[i]], points[loopb[(i + 1) % loopb.size()]] });
+            }
+
+            loop1.push_back({ horLinePos + glm::dvec2(1, 0), horLinePos - glm::dvec2(1, 0) });
+
+            DumpSVGLines(loop1, filename + L"1.html");
         }
 
         glm::dvec2 Project2D(const glm::dvec3& pt) const
@@ -977,16 +1136,18 @@ namespace webifc::geometry
                     return {};
                 }
 
-                #ifdef CSG_DEBUG_OUTPUT
-                    io::PrintEdgesAndLoop(edges,points,"loop", loop);
-                #endif
+                if (CSG_DEBUG_OUTPUT)
+                {
+                    PrintEdgesAndLoop(L"loop", loop);
+                }
 
                 if (!IsLoopCCW(loop)) // if we end up finding a counterclockwise loop, try again with edge direction inverted
                 {
                     loop = FindLoop(edge.first, edge.second);
-                    #ifdef CSG_DEBUG_OUTPUT
-                        io::PrintEdgesAndLoop(edges,points,"loop", loop);
-                    #endif
+                    if (CSG_DEBUG_OUTPUT)
+                    {
+                        PrintEdgesAndLoop(L"loop", loop);
+                    }
                 }
 
                 if (!IsLoopCCW(loop))
@@ -1091,9 +1252,10 @@ namespace webifc::geometry
 
             auto pt2D = points[pt];
 
-            #ifdef CSG_DEBUG_OUTPUT
-                io::PrintLoops(points,"pair", A, B, pt2D);
-            #endif
+            if (CSG_DEBUG_OUTPUT)
+            {
+                PrintLoops(L"pair", A, B, pt2D);
+            }
 
             // pt is not on B, see if its inside B
             bool ptInsideB = CountIntersectionsWithXLine(B, pt2D.x, pt2D.y, EPS_SMALL);
@@ -1257,7 +1419,7 @@ namespace webifc::geometry
                     outputGeom.AddFace(a, b, c);
                 }
 
-//                DumpIfcGeometry(outputGeom, "output.obj");
+//                DumpIfcGeometry(outputGeom, L"output.obj");
             }
         }
 
@@ -1519,17 +1681,15 @@ namespace webifc::geometry
                         edge.push_back({ points[contourEdges[i].first], points[contourEdges[i].second] });
                         edge.push_back({ points[contourEdges[i].first], points[contourEdges[edgeID].second] });
 
-                        #ifdef CSG_DEBUG_OUTPUT
-                            io::SVGLineSet set;
-                            set.lines = vecs;
-                            io::SVGLineSet set2;
-                            set2.lines = edge;
-                            set2.color = "rgb(0, 0, 255)";
-                            io::SVGDrawing drawing;
-                            drawing.sets ={ set, set2 };
-                            io::writeFile("edges.html", makeSVGLines(drawing));
-                        #endif
-                        }
+                        SVGLineSet set;
+                        set.lines = vecs;
+                        SVGLineSet set2;
+                        set2.lines = edge;
+                        set2.color = "rgb(0, 0, 255)";
+                        SVGDrawing drawing;
+                        drawing.sets ={ set, set2 };
+                        writeFile(L"edges.html", makeSVGLines(drawing));
+                    }
 
                     printf("Double contour edges!\n");
                     return;
@@ -1675,10 +1835,10 @@ namespace webifc::geometry
 
         for (auto& poly3D : brep.polygons)
         {
-           #ifdef CSG_DEBUG_OUTPUT
-                auto geom = poly3D.ToGeom();
-                io::DumpIfcGeometry(geom, "poly3D.obj");
-            #endif
+            if (CSG_DEBUG_OUTPUT)
+            {
+                DumpIfcGeometry(poly3D.ToGeom(), L"poly3D.obj");
+            }
             poly3D.FindContoursInFaces();
         }
 
@@ -1731,9 +1891,9 @@ namespace webifc::geometry
         }
 
         std::sort(combined.begin(), combined.end(), [&](const std::pair<ClipSegment, bool>& a, const std::pair<ClipSegment, bool>& b)
-        {
-          return a.first.pos > b.first.pos;
-      });
+                  {
+                      return a.first.pos > b.first.pos;
+                  });
 
         std::vector<ClipSegment> output;
 
@@ -1835,9 +1995,9 @@ namespace webifc::geometry
     static std::vector<ClipSegment> MergeClipSegments(std::vector<ClipSegment>& inputSegments)
     {
         std::sort(inputSegments.begin(), inputSegments.end(), [&](const ClipSegment& a, const ClipSegment& b)
-        {
-          return a.pos > b.pos;
-      });
+                  {
+                      return a.pos > b.pos;
+                  });
 
         std::vector<ClipSegment> outputSegments;
 
@@ -1957,10 +2117,10 @@ namespace webifc::geometry
 
         for (auto& contour : source.contours)
         {
-            #ifdef CSG_DEBUG_OUTPUT
-                Polygon3D poly = source;
-                io::Print(poly,"poly.html");
-            #endif
+            if (CSG_DEBUG_OUTPUT)
+            {
+                source.Print(L"poly.html");
+            }
 
             std::vector<double> distances(contour.size());
 
@@ -1974,12 +2134,12 @@ namespace webifc::geometry
             }
 
             auto segs = LineDistancesToClipSegments(source.meshIndex, 
-                source.index, 
-                distances, 
-                contour, 
-                source.sourcePoints,
-                linePos,
-                lineDir);
+                                                    source.index, 
+                                                    distances, 
+                                                    contour, 
+                                                    source.sourcePoints,
+                                                    linePos,
+                                                    lineDir);
 
             for (auto& s : segs)
             {
@@ -2029,7 +2189,7 @@ namespace webifc::geometry
        // double det2 = glm::determinant(glm::dmat3(poly1.plane.norm, poly2.plane.norm, lineDir));
         det *= det;
         glm::dvec3 linePos((glm::cross(lineDir, poly2.plane.norm) * -poly1.plane.d +
-         glm::cross(poly1.plane.norm, lineDir) * -poly2.plane.d) / det);
+                           glm::cross(poly1.plane.norm, lineDir) * -poly2.plane.d) / det);
 
         lineDir = glm::normalize(lineDir);
 
@@ -2055,6 +2215,27 @@ namespace webifc::geometry
         // reproject and add to original polys
         ClipToClip2D(projAStart, projADir, intersect, segmentsA);
         ClipToClip2D(projBStart, projBDir, intersect, segmentsB);
+    }
+
+    static void DumpPolygonWithClipsegments(const Polygon3D& poly, const std::vector<ClipSegment2D>& segments, const std::wstring& filename)
+    {
+        std::vector<std::vector<glm::dvec2>> vecs;
+
+        poly.GetExportableEdges(vecs);
+
+        for (auto& clip : segments)
+        {
+            if (clip.type == ClipSegment2DType::LINE)
+            {
+                vecs.push_back({ clip.pos, clip.pos2 });
+            }
+            else if (clip.type == ClipSegment2DType::POINT)
+            {
+                //vecs.push_back({ clip.pos });
+            }
+        }
+
+        DumpSVGLines(vecs, filename);
     }
 
     static BrepMesh ComputeNewBrepMesh(const BrepMesh& mesh, const std::vector<std::vector<ClipSegment2D>>& clipSegments)
@@ -2093,9 +2274,10 @@ namespace webifc::geometry
             // add new lines
             for (auto& seg : segs)
             {
-                #ifdef CSG_DEBUG_OUTPUT
-                    io::PrintEdges(newPolygon,"polies2.html");
-                #endif
+                if (CSG_DEBUG_OUTPUT)
+                {
+                    newPolygon.PrintEdges(L"polies2.html");
+                }
 
                 if (seg.type == ClipSegment2DType::LINE)
                 {
@@ -2123,12 +2305,11 @@ namespace webifc::geometry
         {
             for (auto& poly2 : mesh2.polygons)
             {
-               #ifdef CSG_DEBUG_OUTPUT
-                    auto geom = poly1.ToGeom();
-                    io::DumpIfcGeometry(geom, "poly1.obj");
-                    geom = poly2.ToGeom();
-                    io::DumpIfcGeometry(geom, "poly2.obj");
-                #endif
+                if (CSG_DEBUG_OUTPUT)
+                {
+                    DumpIfcGeometry(poly1.ToGeom(), L"poly1.obj");
+                    DumpIfcGeometry(poly2.ToGeom(), L"poly2.obj");
+                }
 
                 if (poly1.plane.IsCoplanarWith(poly2.plane, EPS_SMALL))
                 {
@@ -2147,17 +2328,18 @@ namespace webifc::geometry
             }
         }
 
-        #ifdef CSG_DEBUG_OUTPUT
+        if (CSG_DEBUG_OUTPUT)
+        {
             // print polies
             for (auto& poly1 : mesh1.polygons)
             {
                 auto& segs = segments1[poly1.index];
                 if (!segs.empty())
                 {
-                    io::DumpPolygonWithClipsegments(poly1, segs, "polies.html");
+                    DumpPolygonWithClipsegments(poly1, segs, L"polies.html");
                 }
             }
-        #endif
+        }
 
         // resolve polygon intersections
         BrepMesh newMesh1 = ComputeNewBrepMesh(mesh1, segments1);
@@ -2166,18 +2348,20 @@ namespace webifc::geometry
         // compute new contours
         for (auto& poly1 : newMesh1.polygons)
         {
-            #ifdef CSG_DEBUG_OUTPUT
-             io::PrintEdges(poly1,"polies.html");
-            #endif
+            if (CSG_DEBUG_OUTPUT)
+            {
+                poly1.PrintEdges(L"polies.html");
+            }
             // TODO: true based on SUBTRACT, does not apply to any bool op!
             poly1.Retriangulate(outputMesh1, true);
         }
 
         for (auto& poly2 : newMesh2.polygons)
         {
-            #ifdef CSG_DEBUG_OUTPUT
-                io::PrintEdges(poly2,"polies.html");
-            #endif
+            if (CSG_DEBUG_OUTPUT)
+            {
+                poly2.PrintEdges(L"polies.html");
+            }
             // TODO: false based on SUBTRACT, does not apply to any bool op!
             poly2.Retriangulate(outputMesh2, false);
         }
@@ -2203,26 +2387,26 @@ namespace webifc::geometry
         bvh2 = MakeBVH(mesh2);
 
         bvh1.Intersect(bvh2, [&](uint32_t i, uint32_t j)
-        {
-         Face t1 = mesh1.GetFace(i);
-         Face t2 = mesh2.GetFace(j);
+                       {
+                           Face t1 = mesh1.GetFace(i);
+                           Face t2 = mesh2.GetFace(j);
 
-         const glm::dvec3& a = mesh1.GetPoint(t1.i0);
-         const glm::dvec3& b = mesh1.GetPoint(t1.i1);
-         const glm::dvec3& c = mesh1.GetPoint(t1.i2);
+                           const glm::dvec3& a = mesh1.GetPoint(t1.i0);
+                           const glm::dvec3& b = mesh1.GetPoint(t1.i1);
+                           const glm::dvec3& c = mesh1.GetPoint(t1.i2);
 
-         const glm::dvec3& d = mesh2.GetPoint(t2.i0);
-         const glm::dvec3& e = mesh2.GetPoint(t2.i1);
-         const glm::dvec3& f = mesh2.GetPoint(t2.i2);
+                           const glm::dvec3& d = mesh2.GetPoint(t2.i0);
+                           const glm::dvec3& e = mesh2.GetPoint(t2.i1);
+                           const glm::dvec3& f = mesh2.GetPoint(t2.i2);
 
-         glm::dvec3 nabc = computeNormal(a, b, c);
-         glm::dvec3 ndef = computeNormal(d, e, f);
+                           glm::dvec3 nabc = computeNormal(a, b, c);
+                           glm::dvec3 ndef = computeNormal(d, e, f);
 
-         std::vector<TriTriResult> intersectionLines;
+                           std::vector<TriTriResult> intersectionLines;
 
-         double dot = glm::dot(nabc, ndef);
-         if (glm::abs(dot) - 1 < EPS_SMALL && glm::abs(dot) - 1 > -EPS_SMALL)
-         {
+                           double dot = glm::dot(nabc, ndef);
+                           if (glm::abs(dot) - 1 < EPS_SMALL && glm::abs(dot) - 1 > -EPS_SMALL)
+                           {
                                /*
                                // project abc and def to 2D, taking abc as unit triangle
                                glm::dvec2 pabc[3];
@@ -2253,35 +2437,35 @@ namespace webifc::geometry
                                    }
                                }
                                */
-         }
-         else
-         {
+                           }
+                           else
+                           {
                                //NUM_CHECKS++;
 
                                // 2, 3
                                //if (j == 2 && ndef == glm::dvec3(0, -1, 0) && nabc == glm::dvec3(0, 0, -1))
-             {
-                 intersectionLines.push_back(intersect_triangle_triangle(a, b, c, d, e, f));
-             }
+                               {
+                                   intersectionLines.push_back(intersect_triangle_triangle(a, b, c, d, e, f));
+                               }
 
-         }
+                           }
 
-         for (const auto& intersectionLine : intersectionLines)
-         {
-             if (intersectionLine.hasIntersection)
-             {
-                 meshIntersections1[i].push_back(MeshIntersection{
-                     intersectionLine,
-                     j
-                 });
+                           for (const auto& intersectionLine : intersectionLines)
+                           {
+                               if (intersectionLine.hasIntersection)
+                               {
+                                   meshIntersections1[i].push_back(MeshIntersection{
+                                       intersectionLine,
+                                       j
+                                                                   });
 
-                 meshIntersections2[j].push_back(MeshIntersection{
-                     intersectionLine,
-                     i
-                 });
-             }
-         }
-     });
+                                   meshIntersections2[j].push_back(MeshIntersection{
+                                       intersectionLine,
+                                       i
+                                                                   });
+                               }
+                           }
+                       });
 
         IfcGeometry m1;
         IfcGeometry m2;
@@ -2304,10 +2488,8 @@ namespace webifc::geometry
             }
         }
 
-        #ifdef CSG_DEBUG_OUTPUT
-            io::DumpIfcGeometry(m1, "mesh1ints.obj");
-            io::DumpIfcGeometry(m2, "mesh2ints.obj");
-        #endif
+        DumpIfcGeometry(m1, L"mesh1ints.obj");
+        DumpIfcGeometry(m2, L"mesh2ints.obj");
 
         result1 = retriangulateMesh(mesh1, meshIntersections1);
         result2 = retriangulateMesh(mesh2, meshIntersections2);

@@ -35,7 +35,7 @@ namespace webifc::utility
 		public:
 			void ReportError(const LoaderErrorType t = LoaderErrorType::UNSPECIFIED, const std::string m = "", const uint32_t e = 0, const uint32_t type = 0);
 			void ClearErrors();
-			const std::vector<LoaderError> &GetErrors() const;
+			std::vector<LoaderError> &GetErrors();
 		private:
 			std::vector<LoaderError> _errors;
 	};
