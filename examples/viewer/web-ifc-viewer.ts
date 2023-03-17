@@ -181,7 +181,5 @@ async function LoadModel(data: Uint8Array) {
         console.log("Alignments: ", alignments);
     }
 
-
-
     ifcAPI.CloseModel(modelID);
 }

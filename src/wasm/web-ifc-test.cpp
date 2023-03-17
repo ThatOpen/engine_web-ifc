@@ -54,7 +54,6 @@ void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcG
     }
 }
 
-
 std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
 {
     std::vector<webifc::geometry::IfcAlignment> alignments;
@@ -270,11 +269,13 @@ int main()
     // return 0;
 
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
+   // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
     std::string content = ReadFile("Q2.ifc");
 
     // std::string content = ReadFile("../../../examples/example.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#278 pending/extrusions.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
 
 	webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -282,7 +283,7 @@ int main()
 
     webifc::utility::LoaderErrorHandler errorHandler;
     webifc::schema::IfcSchemaManager schemaManager;
-    webifc::parsing::IfcLoader loader(set.TAPE_SIZE,set.MEMORY_LIMIT,errorHandler,schemaManager);
+    webifc::parsing::IfcLoader loader(set.TAPE_SIZE, set.MEMORY_LIMIT, errorHandler, schemaManager);
 
     auto start = ms();
     loader.LoadFile([&](char *dest, size_t sourceOffset, size_t destSize)
@@ -311,6 +312,11 @@ int main()
      //auto meshes = LoadAllTest(loader, geometryLoader);
     auto alignments = GetAlignments(loader, geometryLoader);
     auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
+    // SpecificLoadTest(loader, geometryLoader, 15);
+    // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
+    auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto alignments = GetAlignments(loader, geometryLoader);
+
 
     auto errors = errorHandler.GetErrors();
     errorHandler.ClearErrors();
