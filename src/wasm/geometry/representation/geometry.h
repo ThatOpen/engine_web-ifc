@@ -264,6 +264,23 @@ namespace webifc::geometry {
 				return flatTransformation;
 			}
 
+			bool testReverse()
+			{
+				glm::dvec3 cx = glm::dvec3(transformation[0].x, transformation[0].y, transformation[0].z);
+				glm::dvec3 cy = glm::dvec3(transformation[1].x, transformation[1].y, transformation[1].z);
+				glm::dvec3 cz = glm::dvec3(transformation[2].x, transformation[2].y, transformation[2].z);
+
+				glm::dvec3 dx = glm::cross(cy, cz);
+				glm::dvec3 dy = glm::cross(cx, cz);
+				glm::dvec3 dz = glm::cross(cx, cy);
+
+				double fac1 = glm::dot(cx, dx);
+				double fac2 = -glm::dot(cy, dy);
+				double fac3 = glm::dot(cz, dz);
+
+				return fac1 * fac2 * fac3 < 0;
+			}
+
 		};
 
 		struct IfcFlatMesh

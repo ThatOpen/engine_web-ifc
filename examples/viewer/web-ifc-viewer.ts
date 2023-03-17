@@ -159,23 +159,29 @@ async function LoadModel(data: Uint8Array) {
         console.log(errors.get(i));
     }
 
-    // This function should activate only if we are not in IFC4X3
-    // //Example to get all types used in the model
-    // let types = await ifcAPI.GetAllTypesOfModel(modelID);
-    // if(types)
-    // {
-    //     for (let i = 0; i < types.length; i++) {
-    //         let type = types[i];
-    //         //console.log(type);
-    //         //console.log(type.typeID);
-    //         //console.log(type.typeName);
-    //     }
-    // }
+    if(ifcAPI.GetModelSchema(modelID) == 'IFC2X3' || ifcAPI.GetModelSchema(modelID) == 'IFC4')
+    {   
+        //Example to get all types used in the model
+        let types = await ifcAPI.GetAllTypesOfModel(modelID);
+        if(types)
+        {
+            for (let i = 0; i < types.length; i++) {
+                let type = types[i];
+                //console.log(type);
+                //console.log(type.typeID);
+                //console.log(type.typeName);
+            }
+        }
+    }
 
-    // This function should activate only if we are in IFC4X3
-    let alignments = await ifcAPI.GetAllAlignments(modelID);
+    if( ifcAPI.GetModelSchema(modelID) == 'IFC4X3_RC4')
+    {
+        // This function should activate only if we are in IFC4X3
+        let alignments = await ifcAPI.GetAllAlignments(modelID);
+        console.log("Alignments: ", alignments);
+    }
 
-    console.log("Alignments: ", alignments);
+
 
     ifcAPI.CloseModel(modelID);
 }

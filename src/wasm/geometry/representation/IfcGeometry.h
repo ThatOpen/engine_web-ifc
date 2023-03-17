@@ -35,6 +35,8 @@ namespace webifc::geometry {
 		void AddPoint(glm::dvec3 &pt, glm::dvec3 &n);
 		void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c);
 		void AddFace(uint32_t a, uint32_t b, uint32_t c);
+		void ReverseFace(uint32_t index);
+		void ReverseFaces();
 		Face GetFace(uint32_t index) const;
 		AABB GetFaceBox(uint32_t index) const;
 		glm::dvec3 GetPoint(uint32_t index) const;

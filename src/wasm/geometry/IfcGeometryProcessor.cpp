@@ -641,8 +641,9 @@ namespace webifc::geometry
                         break;
                     }
 
+                    std::reverse(profile.curve.points.begin(), profile.curve.points.end());
                     IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal());
-
+                    
                     _expressIDToGeometry[line.expressID] = geom;
                     mesh.expressID = line.expressID;
                     mesh.hasGeometry = true;
@@ -1343,6 +1344,10 @@ namespace webifc::geometry
             geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(geom.min);
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
+            if(geometry.testReverse())
+            {
+                geom.ReverseFaces();
+            }
 
             flatMesh.geometries.push_back(geometry);
         }
