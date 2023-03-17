@@ -129,7 +129,7 @@ void DumpAlignment(std::vector<webifc::geometry::IfcAlignment> &align, std::wstr
 void DumpIfcGeometryToPath(const webifc::geometry::IfcGeometry &geom, std::wstring path, double inputScale)
 {
     size_t offset = 0;
-    std::ofstream out(path);
+    std::ofstream out(path.c_str());
     out << ToObj(geom, offset, glm::dmat4(1), inputScale);
 }
 
