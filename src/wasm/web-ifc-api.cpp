@@ -5,31 +5,65 @@
 #include <string>
 #include <vector>
 #include <stack>
-#include <strstream>
+#include <sstream>
 #include <memory>
-#include <map>
 
 #include <emscripten/bind.h>
 
 #include "parsing/IfcLoader.h"
 #include "schema/IfcSchemaManager.h"
+#include "utility/LoaderSettings.h"
 #include "utility/Logging.h"
-#include "include/web-ifc-geometry.h"
+#include "geometry/IfcGeometryProcessor.h"
 
 #include "version.h"
 
 
 struct ModelInfo
 {
-    webifc::parsing::IfcLoader * loader;
-    webifc::IfcGeometryLoader * geometryLoader;
-    webifc::utility::LoaderErrorHandler * errorHandler;
+    public:
+        ModelInfo(webifc::utility::LoaderSettings _settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
+        {
+            errorHandler = new webifc::utility::LoaderErrorHandler();
+            loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,*errorHandler,schemaManager);
+        }
+        
+        webifc::geometry::IfcGeometryProcessor * GetGeometryLoader()
+        {
+            if (geometryLoader==nullptr)
+            {
+                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS_HIGH,settings.COORDINATE_TO_ORIGIN);
+            }
+            return geometryLoader;
+        }
+        
+        webifc::utility::LoaderErrorHandler * GetErrorHanlder()
+        {
+            return errorHandler;
+        }
+        
+        webifc::parsing::IfcLoader * GetLoader()
+        {
+            return loader;
+        }
+
+        void Close()
+        {
+            geometryLoader=nullptr;
+            loader->SetClosed();
+            loader=nullptr;
+        }
+
+    private:
+        webifc::schema::IfcSchemaManager &schemaManager;
+        webifc::utility::LoaderSettings settings;
+        webifc::parsing::IfcLoader * loader=nullptr;
+        webifc::geometry::IfcGeometryProcessor * geometryLoader=nullptr;
+        webifc::utility::LoaderErrorHandler * errorHandler=nullptr;
 };
 
-std::map<size_t,ModelInfo> models;
+std::vector<ModelInfo> models;
 webifc::schema::IfcSchemaManager schemaManager;
-
-uint32_t GLOBAL_MODEL_ID_COUNTER = 0;
 
 #ifdef __EMSCRIPTEN_PTHREADS__
     constexpr bool MT_ENABLED = true;
@@ -52,20 +86,15 @@ int CreateModel(webifc::utility::LoaderSettings settings)
         shown_version_header = true;
     }
 
-    uint32_t modelID = GLOBAL_MODEL_ID_COUNTER++;
-    auto errorHandler = new webifc::utility::LoaderErrorHandler();
-    auto loader = new webifc::parsing::IfcLoader(settings.TAPE_SIZE,settings.MEMORY_LIMIT,*errorHandler,schemaManager);
-    auto geomLoader = new webifc::IfcGeometryLoader(*loader,settings,*errorHandler,schemaManager);
-    models[modelID]=ModelInfo{std::move(loader),std::move(geomLoader),std::move(errorHandler)};
-   
-    return modelID;
+    models.emplace_back(settings,schemaManager);
+    return models.size()-1;
 }
 
 int OpenModel(webifc::utility::LoaderSettings settings, emscripten::val callback)
 {
     auto modelID = CreateModel(settings);
     
-    models[modelID].loader->LoadFile([&](char* dest, size_t sourceOffset, size_t destSize)
+    models[modelID].GetLoader()->LoadFile([&](char* dest, size_t sourceOffset, size_t destSize)
                     {
                         emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
                         uint32_t len = retVal.as<uint32_t>();
@@ -77,7 +106,7 @@ int OpenModel(webifc::utility::LoaderSettings settings, emscripten::val callback
 
 void SaveModel(uint32_t modelID, emscripten::val callback)
 {
-    models[modelID].loader->SaveFile([&](char* src, size_t srcSize)
+    models[modelID].GetLoader()->SaveFile([&](char* src, size_t srcSize)
         {
             emscripten::val retVal = callback((uint32_t)src, srcSize);
         }
@@ -86,29 +115,28 @@ void SaveModel(uint32_t modelID, emscripten::val callback)
 
 int GetModelSize(uint32_t modelID)
 {
-    return models[modelID].loader->GetTotalSize();
+    return models[modelID].GetLoader()->GetTotalSize();
 }
 
 void CloseModel(uint32_t modelID)
 {
-    models[modelID].loader->SetClosed();
-    models.erase(modelID);
+    models[modelID].Close();
 }
 
-webifc::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
+webifc::geometry::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
 {
-    auto& geomLoader = models[modelID].geometryLoader;
+    auto geomLoader = models[modelID].GetGeometryLoader();
 
     if (!geomLoader)
     {
         return {};
     }
 
-    webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(expressID);
+    webifc::geometry::IfcFlatMesh mesh = geomLoader->GetFlatMesh(expressID);
     
     for (auto& geom : mesh.geometries)
     {
-        auto& flatGeom = geomLoader->GetCachedGeometry(geom.geometryExpressID);
+        auto& flatGeom = geomLoader->GetGeometry(geom.geometryExpressID);
         flatGeom.GetVertexData();
     }
 
@@ -116,8 +144,8 @@ webifc::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
 }
 
 void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten::val callback) {
-    auto& loader = models[modelID].loader;
-    auto& geomLoader = models[modelID].geometryLoader;
+    auto loader = models[modelID].GetLoader();
+    auto geomLoader = models[modelID].GetGeometryLoader();
 
     if (!loader || !geomLoader)
     {
@@ -130,12 +158,12 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
     for (const auto& id : expressIds)
     {
         // read the mesh from IFC
-        webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(id);
+        webifc::geometry::IfcFlatMesh mesh = geomLoader->GetFlatMesh(id);
 
         // prepare the geometry data
         for (auto& geom : mesh.geometries)
         {
-            auto& flatGeom = geomLoader->GetCachedGeometry(geom.geometryExpressID);
+            auto& flatGeom = geomLoader->GetGeometry(geom.geometryExpressID);
             flatGeom.GetVertexData();
         }   
 
@@ -146,7 +174,7 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
         }
 
         // clear geometry, freeing memory, client is expected to have consumed the data
-        geomLoader->ClearCachedGeometry();
+        geomLoader->Clear();
 
         index++;
     }
@@ -154,7 +182,7 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
 
 void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t>& types, emscripten::val callback)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
 
     if (!loader)
     {
@@ -187,8 +215,8 @@ void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, ems
 }
 
 void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
-    auto& loader = models[modelID].loader;
-    auto& geomLoader = models[modelID].geometryLoader;
+    auto loader = models[modelID].GetLoader();
+    auto geomLoader = models[modelID].GetGeometryLoader();
 
     if (!loader || !geomLoader)
     {
@@ -210,17 +238,17 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
     StreamAllMeshesWithTypes(modelID, types, callback);
 }
 
-std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
+std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 {
-    auto& loader = models[modelID].loader;
-    auto& geomLoader = models[modelID].geometryLoader;
+    auto loader = models[modelID].GetLoader();
+    auto geomLoader = models[modelID].GetGeometryLoader();
 
     if (!loader || !geomLoader)
     {
         return {};
     }
 
-    std::vector<webifc::IfcFlatMesh> meshes;
+    std::vector<webifc::geometry::IfcFlatMesh> meshes;
 
     for (auto type : schemaManager.GetIfcElementList())
     {
@@ -233,10 +261,10 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 
         for (uint32_t i = 0; i < elements.size(); i++)
         {
-            webifc::IfcFlatMesh mesh = geomLoader->GetFlatMesh(elements[i]);
+            webifc::geometry::IfcFlatMesh mesh = geomLoader->GetFlatMesh(elements[i]);
             for (auto& geom : mesh.geometries)
             {
-                auto& flatGeom = geomLoader->GetCachedGeometry(geom.geometryExpressID);
+                auto& flatGeom = geomLoader->GetGeometry(geom.geometryExpressID);
                 flatGeom.GetVertexData();
             }   
             meshes.push_back(std::move(mesh));
@@ -246,21 +274,21 @@ std::vector<webifc::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
     return meshes;
 }
 
-webifc::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
+webifc::geometry::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
 {
-    auto& geomLoader = models[modelID].geometryLoader;
+    auto geomLoader = models[modelID].GetGeometryLoader();
     if (!geomLoader)
     {
         return {};
     }
 
-    return geomLoader->GetCachedGeometry(expressID);
+    return geomLoader->GetGeometry(expressID);
 }
 
-std::vector<webifc::IfcAlignment> GetAllAlignments(uint32_t modelID)
+std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
 {
-    auto &loader = models[modelID].loader;
-    auto &geomLoader = models[modelID].geometryLoader;
+    auto loader = models[modelID].GetLoader();
+    auto geomLoader = models[modelID].GetGeometryLoader();
 
     if (!loader || !geomLoader)
     {
@@ -271,11 +299,11 @@ std::vector<webifc::IfcAlignment> GetAllAlignments(uint32_t modelID)
 
     auto elements = loader->GetExpressIDsWithType(type);
 
-    std::vector<webifc::IfcAlignment> alignments;
+    std::vector<webifc::geometry::IfcAlignment> alignments;
 
     for (size_t i = 0; i < elements.size(); i++)
     {
-        webifc::IfcAlignment alignment = geomLoader->GetAlignment(elements[i]);
+        webifc::geometry::IfcAlignment alignment = geomLoader->GetLoader().GetAlignment(elements[i]);
         alignment.transform(geomLoader->GetCoordinationMatrix());
         alignments.push_back(alignment);
     }
@@ -285,7 +313,7 @@ std::vector<webifc::IfcAlignment> GetAllAlignments(uint32_t modelID)
 
 std::vector<webifc::utility::LoaderError> GetAndClearErrors(uint32_t modelID)
 {
-    auto& errorHandler = models[modelID].errorHandler;
+    auto errorHandler = models[modelID].GetErrorHanlder();
 
     if (!errorHandler)
     {
@@ -299,7 +327,7 @@ std::vector<webifc::utility::LoaderError> GetAndClearErrors(uint32_t modelID)
 
 void SetGeometryTransformation(uint32_t modelID, std::array<double, 16> m)
 {
-    auto& geomLoader = models[modelID].geometryLoader;
+    auto geomLoader = models[modelID].GetGeometryLoader();
     if (!geomLoader)
     {
         return;
@@ -319,20 +347,35 @@ void SetGeometryTransformation(uint32_t modelID, std::array<double, 16> m)
     geomLoader->SetTransformation(transformation);
 }
 
+std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)
+{
+    std::array<double, 16> flatTransformation;
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            flatTransformation[i * 4 + j] = transformation[i][j];
+        }
+    }
+
+    return flatTransformation;
+}
+
 std::array<double, 16> GetCoordinationMatrix(uint32_t modelID)
 {
-    auto& geomLoader = models[modelID].geometryLoader;
+    auto geomLoader = models[modelID].GetGeometryLoader();
     if (!geomLoader)
     {
         return {};
     }
 
-    return webifc::FlattenTransformation(geomLoader->GetCoordinationMatrix());
+    return FlattenTransformation(geomLoader->GetCoordinationMatrix());
 }
 
 std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return {};
@@ -355,7 +398,7 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types
 
 std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expressID, emscripten::val targetTypes, uint32_t position, bool set)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return {};
@@ -402,7 +445,7 @@ std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expre
 
 bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return {};
@@ -413,7 +456,7 @@ bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
 
 uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if(!loader)
     {
         return {};
@@ -439,7 +482,7 @@ uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
 
 std::vector<uint32_t> GetAllLines(uint32_t modelID)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return {};
@@ -457,7 +500,7 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
 bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::val value)
 {
     bool responseCode = true;
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     switch (t)
     {
     case webifc::parsing::IfcTokenType::STRING:
@@ -496,7 +539,7 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
 bool WriteSet(uint32_t modelID, emscripten::val& val)
 {
     bool responseCode = true;
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::SET_BEGIN);
 
     uint32_t size = val["length"].as<uint32_t>();
@@ -587,7 +630,7 @@ bool IsIfcElement(uint32_t type)
 
 bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return false;
@@ -606,7 +649,7 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
 
 bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return false;
@@ -635,7 +678,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 
 emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     switch (t)
     {
     case webifc::parsing::IfcTokenType::STRING:
@@ -662,7 +705,7 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
 
 emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     std::stack<emscripten::val> valueStack;
     std::stack<int> valuePosition;
 
@@ -777,7 +820,7 @@ emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
 
 emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return emscripten::val::undefined();
@@ -802,7 +845,7 @@ emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
 
 emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return emscripten::val::undefined();
@@ -826,7 +869,7 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 
 uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return -1;
@@ -838,13 +881,13 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
 
 uint32_t GetMaxExpressID(uint32_t modelID)
 {
-    auto &loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     return loader->GetMaxExpressId();
 }
 
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
-    auto& loader = models[modelID].loader;
+    auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return false;
@@ -868,12 +911,12 @@ void SetLogLevel(int levelArg)
 
 EMSCRIPTEN_BINDINGS(my_module) {
 
-    emscripten::class_<webifc::IfcGeometry>("IfcGeometry")
+    emscripten::class_<webifc::geometry::IfcGeometry>("IfcGeometry")
         .constructor<>()
-        .function("GetVertexData", &webifc::IfcGeometry::GetVertexData)
-        .function("GetVertexDataSize", &webifc::IfcGeometry::GetVertexDataSize)
-        .function("GetIndexData", &webifc::IfcGeometry::GetIndexData)
-        .function("GetIndexDataSize", &webifc::IfcGeometry::GetIndexDataSize)
+        .function("GetVertexData", &webifc::geometry::IfcGeometry::GetVertexData)
+        .function("GetVertexDataSize", &webifc::geometry::IfcGeometry::GetVertexDataSize)
+        .function("GetIndexData", &webifc::geometry::IfcGeometry::GetIndexData)
+        .function("GetIndexDataSize", &webifc::geometry::IfcGeometry::GetIndexDataSize)
         ;
 
 
@@ -914,10 +957,10 @@ EMSCRIPTEN_BINDINGS(my_module) {
             .element(emscripten::index<15>())
             ;
 
-    emscripten::value_object<webifc::IfcPlacedGeometry>("IfcPlacedGeometry")
-        .field("color", &webifc::IfcPlacedGeometry::color)
-        .field("flatTransformation", &webifc::IfcPlacedGeometry::flatTransformation)
-        .field("geometryExpressID", &webifc::IfcPlacedGeometry::geometryExpressID)
+    emscripten::value_object<webifc::geometry::IfcPlacedGeometry>("IfcPlacedGeometry")
+        .field("color", &webifc::geometry::IfcPlacedGeometry::color)
+        .field("flatTransformation", &webifc::geometry::IfcPlacedGeometry::flatTransformation)
+        .field("geometryExpressID", &webifc::geometry::IfcPlacedGeometry::geometryExpressID)
         ;
 
     emscripten::enum_<webifc::utility::LogLevel>("LogLevel")
@@ -946,40 +989,43 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::register_vector<webifc::utility::LoaderError>("LoaderErrorVector");
 
-    emscripten::register_vector<webifc::IfcPlacedGeometry>("IfcPlacedGeometryVector");
+    emscripten::register_vector<webifc::geometry::IfcPlacedGeometry>("IfcPlacedGeometryVector");
 
-    emscripten::value_object<webifc::IfcFlatMesh>("IfcFlatMesh")
-        .field("geometries", &webifc::IfcFlatMesh::geometries)
-        .field("expressID", &webifc::IfcFlatMesh::expressID)
+    emscripten::value_object<webifc::geometry::IfcFlatMesh>("IfcFlatMesh")
+        .field("geometries", &webifc::geometry::IfcFlatMesh::geometries)
+        .field("expressID", &webifc::geometry::IfcFlatMesh::expressID)
         ;
 
-    emscripten::register_vector<webifc::IfcFlatMesh>("IfcFlatMeshVector");
+    emscripten::register_vector<webifc::geometry::IfcFlatMesh>("IfcFlatMeshVector");
     emscripten::register_vector<uint32_t>("UintVector");
 
-    emscripten::register_vector<webifc::IfcAlignment>("IfcAlignmentVector");
+    emscripten::register_vector<webifc::geometry::IfcAlignment>("IfcAlignmentVector");
 
-    emscripten::value_object<webifc::IfcAlignment>("IfcAlignment")
-        .field("Horizontal", &webifc::IfcAlignment::Horizontal)
-        .field("Vertical", &webifc::IfcAlignment::Vertical);
+    emscripten::value_object<webifc::geometry::IfcAlignment>("IfcAlignment")
+        .field("Horizontal", &webifc::geometry::IfcAlignment::Horizontal)
+        .field("Vertical", &webifc::geometry::IfcAlignment::Vertical);
 
     emscripten::value_object<glm::dvec3>("glmDvec3")
         .field("x", &glm::dvec3::x)
         .field("y", &glm::dvec3::y)
         .field("z", &glm::dvec3::z);
 
-    emscripten::value_object<webifc::IfcAlignmentSegment>("IfcAlignmentSegment")
-        .field("curves", &webifc::IfcAlignmentSegment::curves);
+    emscripten::value_object<webifc::geometry::IfcAlignmentSegment>("IfcAlignmentSegment")
+        .field("curves", &webifc::geometry::IfcAlignmentSegment::curves);
 
-    emscripten::register_vector<webifc::IfcCurve<2>>("IfcCurve<2>Vector");
+    emscripten::register_vector<webifc::geometry::IfcCurve>("IfcCurveVector");
 
-    emscripten::value_object<webifc::IfcCurve<2>>("IfcCurve<2>")
-        .field("points", &webifc::IfcCurve<2>::points);
+    emscripten::value_object<webifc::geometry::IfcCurve>("IfcCurve")
+        .field("points", &webifc::geometry::IfcCurve::points);
 
     emscripten::register_vector<glm::vec<2, glm::f64>>("vector2doubleVector");
 
     emscripten::value_object<glm::vec<2, glm::f64>>("vector2double")
         .field("x", &glm::vec<2, glm::f64>::x)
         .field("y", &glm::vec<2, glm::f64>::y);
+
+    emscripten::register_vector<glm::vec<3, glm::f64>>("vector3doubleVector");
+
 
     emscripten::register_vector<double>("DoubleVector");
 

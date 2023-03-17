@@ -2,15 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#pragma once
-
 #include <glm/glm.hpp>
 
-#include "../util.h"
 #include "./is-inside-mesh.h"
 
-namespace webifc
+namespace webifc::geometry
 {
+
     static void clipMesh(IfcGeometry& source, IfcGeometry& target, BVH& targetBVH, IfcGeometry& result, bool invert, bool flip, bool keepBoundary)
     {
         glm::dvec3 targetCenter;
@@ -54,26 +52,6 @@ namespace webifc
         }
     }
 
-    static IfcGeometry boolIntersect(IfcGeometry& mesh1, IfcGeometry& mesh2, BVH bvh1, BVH bvh2)
-    {
-        IfcGeometry resultingMesh;
-
-        clipMesh(mesh1, mesh2, bvh2, resultingMesh, false, false, true);
-        clipMesh(mesh2, mesh1, bvh1, resultingMesh, false, false, false);
-
-        return resultingMesh;
-    }
-
-    static IfcGeometry boolJoin(IfcGeometry& mesh1, IfcGeometry& mesh2, BVH bvh1, BVH bvh2)
-    {
-        IfcGeometry resultingMesh;
-
-        clipMesh(mesh1, mesh2, bvh2, resultingMesh, true, false, true);
-        clipMesh(mesh2, mesh1, bvh1, resultingMesh, true, false, false);
-
-        return resultingMesh;
-    }
-
     static IfcGeometry boolSubtract(IfcGeometry& mesh1, IfcGeometry& mesh2, BVH bvh1, BVH bvh2)
     {
 
@@ -85,14 +63,4 @@ namespace webifc
         return resultingMesh;
     }
 
-    // TODO: I don't think XOR works right now...
-    static IfcGeometry boolXOR(IfcGeometry& mesh1, IfcGeometry& mesh2, BVH bvh1, BVH bvh2)
-    {
-        IfcGeometry resultingMesh;
-
-        clipMesh(mesh1, mesh2, bvh2, resultingMesh, true, false, false);
-        clipMesh(mesh2, mesh1, bvh1, resultingMesh, true, false, false);
-
-        return resultingMesh;
-    }
 }

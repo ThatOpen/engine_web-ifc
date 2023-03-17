@@ -22,26 +22,27 @@ namespace webifc::schema {
         initSchemaData();
     }
 
-    std::string IfcSchemaManager::GetSchemaName(IFC_SCHEMA schema) 
+    std::string IfcSchemaManager::GetSchemaName(IFC_SCHEMA schema)  const
     {
         return _schemaNames[schema];
     }
 
-    std::vector<IFC_SCHEMA> IfcSchemaManager::GetAvailableSchemas()
+    const std::vector<IFC_SCHEMA> IfcSchemaManager::GetAvailableSchemas() const
     {
         return _schemas;
     }
 
-    uint32_t IfcSchemaManager::IfcTypeToTypeCode(std::string name)
+    uint32_t IfcSchemaManager::IfcTypeToTypeCode(std::string name) const
     {
         return IfcTypeToTypeCode(name.data(),name.size());
     }
 
-    uint32_t IfcSchemaManager::IfcTypeToTypeCode(std::string_view name)
+    uint32_t IfcSchemaManager::IfcTypeToTypeCode(std::string_view name) const
     {
         return IfcTypeToTypeCode(name.data(),name.size());
     }
-    uint32_t IfcSchemaManager::IfcTypeToTypeCode(const void * name, size_t len)
+    
+    uint32_t IfcSchemaManager::IfcTypeToTypeCode(const void * name, size_t len) const
     {
         uint32_t c = 0 ^ 0xFFFFFFFF;
         const uint8_t* u = static_cast<const uint8_t*>(name);
@@ -52,12 +53,12 @@ namespace webifc::schema {
         return c ^ 0xFFFFFFFF;
     }
 
-    bool IfcSchemaManager::IsIfcElement(uint32_t typeCode)
+    bool IfcSchemaManager::IsIfcElement(uint32_t typeCode) const
     {
         return _ifcElements.find(typeCode) != _ifcElements.end();
     }
 
-    std::unordered_set<uint32_t> & IfcSchemaManager::GetIfcElementList()
+    const std::unordered_set<uint32_t> & IfcSchemaManager::GetIfcElementList() const
     {
         return _ifcElements;
     }

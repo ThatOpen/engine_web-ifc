@@ -22,6 +22,7 @@ set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 #collect source files
 file (GLOB WebIfcParsing parsing/*.cpp)
+file (GLOB_RECURSE WebIfcGeometry geometry/*.cpp)
 file (GLOB WebIfcSchema schema/*.cpp)
 file (GLOB WebIfcAPI web-ifc-api.cpp)
 file (GLOB WebIfcUtility utility/*.cpp)
@@ -58,7 +59,7 @@ Message("Downloads Finished")
 
 if (EMSCRIPTEN)
 	#build parameters for web-ifc
-	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility})
+	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
 	target_include_directories(web-ifc PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc PUBLIC ${glm_SOURCE_DIR})
 	target_include_directories(web-ifc PUBLIC ${earcut_SOURCE_DIR}/include)
@@ -74,7 +75,7 @@ if (EMSCRIPTEN)
 
 
 	#multi-treaded versions
-	add_executable (web-ifc-mt ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility})
+	add_executable (web-ifc-mt ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
 	target_include_directories(web-ifc-mt PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc-mt PUBLIC ${glm_SOURCE_DIR})
 	target_include_directories(web-ifc-mt PUBLIC ${earcut_SOURCE_DIR}/include)
@@ -94,7 +95,7 @@ endif()
 if (NOT EMSCRIPTEN)
 
 	#build parameters for web-ifc-test
-	add_executable (web-ifc-test ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcTestSourceFiles})
+	add_executable (web-ifc-test ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestSourceFiles})
 	target_include_directories(web-ifc-test PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc-test PUBLIC ${cdt_SOURCE_DIR}/CDT/include)
 	target_include_directories(web-ifc-test PUBLIC ${glm_SOURCE_DIR})
@@ -111,7 +112,7 @@ if (NOT EMSCRIPTEN)
 	set_tests_properties(web-ifc-test PROPERTIES LABELS "web-ifc")
 	
 	#build parameters for web-ifc in testing environment
-	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility}	${WebIfcTestingMain})
+	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestingMain} "./test/io_helpers.cpp")
 	target_include_directories(web-ifc PUBLIC ${tinynurbs_SOURCE_DIR}/include)
 	target_include_directories(web-ifc PUBLIC ${cdt_SOURCE_DIR}/CDT/include)
 	target_include_directories(web-ifc PUBLIC ${glm_SOURCE_DIR})
@@ -121,6 +122,9 @@ if (NOT EMSCRIPTEN)
 	target_compile_options(web-ifc PUBLIC "-Wextra")
 	target_compile_options(web-ifc PUBLIC "-Wpedantic")
 	target_compile_options(web-ifc PUBLIC "-pedantic")
+	#comment these to prevent debug files being generated
+	target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
+	target_compile_options(web-ifc PUBLIC "-DDEBUG_DUMP_SVG")
 	if (release)
 		target_compile_options(web-ifc PUBLIC "-O3")
 	endif()
