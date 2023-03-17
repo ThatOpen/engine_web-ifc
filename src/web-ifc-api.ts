@@ -782,6 +782,14 @@ export class IfcAPI {
     }
 
     /**
+         * Returns the version number of web-ifc
+         * @returns The current version number as a string
+    */
+    GetVersion() {
+        return this.wasmModule.GetVersion();
+    }
+
+    /**
      * Creates a map between element ExpressIDs and GlobalIDs.
      * Each element has two entries, (ExpressID -> GlobalID) and (GlobalID -> ExpressID).
      * @param modelID Model handle retrieved by OpenModel
@@ -790,6 +798,7 @@ export class IfcAPI {
         const map = new Map<string | number, string | number>();
         let entities = this.GetIfcEntityList(modelID);
         for (const typeId of entities) {
+            if (!this.IsIfcElement(typeId)) continue;
             const lines = this.GetLineIDsWithType(modelID, typeId);
             const size = lines.size();
             for (let y = 0; y < size; y++) {

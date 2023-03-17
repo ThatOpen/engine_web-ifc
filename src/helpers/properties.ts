@@ -98,8 +98,15 @@ export class Properties {
 		return this.setItemProperties(modelID, elementID,  psetID, PropsNames.psets);
 	}
 
-    async getTypeProperties(modelID: number, elementID: number, recursive = false) {
-        if (this.api.GetModelSchema(modelID) == 'IFX2X3')
+    /**
+     * Get TypeObject of IfcElements
+     * @param modelID model handle
+     * @param elementID expressID of IfcElement, default 0 (all type objects in model)
+     * @param recursive default false, if true get all nested properties of the type object recursively
+     * @returns array of objects inheriting from IfcTypeObject
+     */
+    async getTypeProperties(modelID: number, elementID: number = 0, recursive = false) {
+        if (this.api.GetModelSchema(modelID) == 'IFC2X3')
         {
           return await this.getRelatedProperties(modelID, elementID, PropsNames.type, recursive);
         } 

@@ -879,6 +879,11 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
     return line.ifcType;
 }
 
+std::string GetVersion() 
+{
+    return WEB_IFC_VERSION_NUMBER;
+}
+
 uint32_t GetMaxExpressID(uint32_t modelID)
 {
     auto loader = models[modelID].GetLoader();
@@ -1060,4 +1065,5 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetNameFromTypeCode", &GetNameFromTypeCode);
     emscripten::function("GetTypeCodeFromName", &GetTypeCodeFromName);
     emscripten::function("IsIfcElement", &IsIfcElement);
+    emscripten::function("GetVersion", &GetVersion);
 }
