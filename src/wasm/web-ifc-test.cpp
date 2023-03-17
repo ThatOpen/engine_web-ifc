@@ -50,7 +50,7 @@ void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcG
 
     if (writeFiles)
     {
-        DumpMesh(mesh, geometryLoader, L"TEST.obj");
+        DumpMesh(mesh, geometryLoader, "TEST.obj");
     }
 }
 
@@ -73,7 +73,7 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
 
     if (writeFiles)
     {
-        DumpAlignment(alignments, L"V_ALIGN.obj", L"H_ALIGN.obj");
+        DumpAlignment(alignments, "V_ALIGN.obj", "H_ALIGN.obj");
     }
 
     return alignments;
@@ -252,7 +252,7 @@ void TestTriangleDecompose()
             pts.push_back(p);
         }
 
-        webifc::io::DumpSVGTriangles(triangles, webifc::geometry::Point(), webifc::geometry::Point(), L"triangles.svg", pts);
+        webifc::io::DumpSVGTriangles(triangles, webifc::geometry::Point(), webifc::geometry::Point(), "triangles.svg", pts);
     }
 }
 
@@ -292,7 +292,7 @@ int main()
                         memcpy(dest, &content[sourceOffset], length);
 
                         return length; });
-    // std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
+    // std::ofstream outputStream("D:/web-ifc/benchmark/ifcfiles/output.ifc");
     // outputStream << loader.DumpAsIFC();
     // exit(0);
     auto time = ms() - start;

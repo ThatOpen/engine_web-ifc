@@ -239,8 +239,8 @@ namespace webifc::geometry {
 				}
 			}
 
-			// DumpSVGCurve(directrix.points, glm::dvec3(), L"directrix.html");
-			// DumpIfcGeometry(geom, L"sweep.obj");
+			// DumpSVGCurve(directrix.points, glm::dvec3(), "directrix.html");
+			// DumpIfcGeometry(geom, "sweep.obj");
 
 			return geom;
 		}

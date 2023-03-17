@@ -1106,7 +1106,7 @@ namespace webifc::geometry
         for (auto &token : segments)
         {
           #ifdef DEBUG_DUMP_SVG
-              io::DumpSVGCurve(curve.points, L"partial_curve.html");
+              io::DumpSVGCurve(curve.points, "partial_curve.html");
           #endif
 
           uint32_t segmentId = _loader.GetRefArgument(token);
@@ -1796,7 +1796,7 @@ default:
 }
   
   #ifdef DEBUG_DUMP_SVG
-      io::DumpSVGCurve(curve.points, L"partial_curve.html");
+      io::DumpSVGCurve(curve.points, "partial_curve.html");
   #endif
 
 }

@@ -393,7 +393,7 @@ namespace webifc::geometry
                     }
 
                     #ifdef DUMP_CSG_MESHES
-                    DumpIfcGeometry(geom, L"pbhs.obj");
+                    DumpIfcGeometry(geom, "pbhs.obj");
                     #endif
 
                     // TODO: this is getting problematic.....
@@ -561,7 +561,7 @@ namespace webifc::geometry
                         geom.AddFace(points[i1], points[i2], points[i3]);
                     }
 
-                    // DumpIfcGeometry(geom, L"test.obj");
+                    // DumpIfcGeometry(geom, "test.obj");
 
                     _expressIDToGeometry[line.expressID] = geom;
                     mesh.expressID = line.expressID;
@@ -780,7 +780,7 @@ namespace webifc::geometry
 
                     // TODO: correct dump in case of compositeProfile
                     #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpSVGCurve(profile.curve.points, L"IFCEXTRUDEDAREASOLID_curve.html");
+                        io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
                     #endif
 
                     IfcGeometry geom;
@@ -820,7 +820,7 @@ namespace webifc::geometry
 
                     // TODO: correct dump in case of compositeProfile
                     #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpIfcGeometry(geom, L"IFCEXTRUDEDAREASOLID_geom.obj");
+                        io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
                     #endif
 
                     _expressIDToGeometry[line.expressID] = geom;
@@ -1427,8 +1427,8 @@ namespace webifc::geometry
                     auto second = secondGeom.Normalize(center, extents);
 
                     #ifdef DUMP_CSG_MESHES
-                        DumpIfcGeometry(first, L"first.obj");
-                        DumpIfcGeometry(second, L"second.obj");
+                        DumpIfcGeometry(first, "first.obj");
+                        DumpIfcGeometry(second, "second.obj");
                     #endif
 
                     IfcGeometry r1;
@@ -1440,16 +1440,16 @@ namespace webifc::geometry
                     intersectMeshMesh(first, second, r1, r2, bvh1, bvh2);
 
                     #ifdef DUMP_CSG_MESHES
-                        DumpIfcGeometry(r1, L"r1.obj");
-                        DumpIfcGeometry(r2, L"r2.obj");
+                        DumpIfcGeometry(r1, "r1.obj");
+                        DumpIfcGeometry(r2, "r2.obj");
                     #endif
 
                     result = boolSubtract(r1, r2, bvh1, bvh2);
 
                   #ifdef DUMP_CSG_MESHES
-                        DumpIfcGeometry(firstGeom, L"first.obj");
-                        DumpIfcGeometry(secondGeom, L"second.obj");
-                        DumpIfcGeometry(result, L"result.obj");
+                        DumpIfcGeometry(firstGeom, "first.obj");
+                        DumpIfcGeometry(secondGeom, "second.obj");
+                        DumpIfcGeometry(result, "result.obj");
                    #endif
 
                     result = result.DeNormalize(center, extents);

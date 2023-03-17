@@ -10,7 +10,7 @@
 namespace webifc::io 
 {
 
-  void writeFile(std::wstring filename, std::string data)
+  void writeFile(std::string filename, std::string data)
   {
     std::string newFileName(filename.begin(), filename.end());
     std::ofstream out(newFileName);
@@ -18,7 +18,7 @@ namespace webifc::io
     out.close();
 }
 
-void DumpSVGCurve(std::vector<glm::dvec3> points, std::wstring filename, std::vector<uint32_t> indices)
+void DumpSVGCurve(std::vector<glm::dvec3> points, std::string filename, std::vector<uint32_t> indices)
 {
     std::vector<glm::dvec2> points2D;
     for (auto &pt : points)
@@ -120,13 +120,13 @@ std::string ToObj(webifc::geometry::IfcComposedMesh &mesh, webifc::geometry::Ifc
 }
 
 
-void DumpAlignment(std::vector<webifc::geometry::IfcAlignment> &align, std::wstring filenameV, std::wstring filenameH)
+void DumpAlignment(std::vector<webifc::geometry::IfcAlignment> &align, std::string filenameV, std::string filenameH)
 {
     writeFile(filenameV, VAlignmentToObj(align));
     writeFile(filenameH, HAlignmentToObj(align));
 }
 
-void DumpIfcGeometryToPath(const webifc::geometry::IfcGeometry &geom, std::wstring path, double inputScale)
+void DumpIfcGeometryToPath(const webifc::geometry::IfcGeometry &geom, std::string path, double inputScale)
 {
     size_t offset = 0;
     std::ofstream out(path.c_str());
@@ -236,7 +236,7 @@ void CheckTriangleEdges(webifc::geometry::Triangle& t, std::vector<webifc::geome
 }
 
 
-void DumpIfcGeometry(webifc::geometry::IfcGeometry &geom, std::wstring filename)
+void DumpIfcGeometry(webifc::geometry::IfcGeometry &geom, std::string filename)
 {
     size_t offset = 0;
     writeFile(filename, ToObj(geom, offset));
@@ -291,12 +291,12 @@ std::string makeSVGTriangles(std::vector<webifc::geometry::Triangle> triangles, 
     return svg.str();
 }
 
-void DumpSVGTriangles(std::vector<webifc::geometry::Triangle> triangles, webifc::geometry::Point p, webifc::geometry::Point prev, std::wstring filename, std::vector<webifc::geometry::Point> pts)
+void DumpSVGTriangles(std::vector<webifc::geometry::Triangle> triangles, webifc::geometry::Point p, webifc::geometry::Point prev, std::string filename, std::vector<webifc::geometry::Point> pts)
 {
     writeFile(filename, makeSVGTriangles(triangles, p, prev, pts));
 }
 
-void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::wstring filename)
+void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::string filename)
 {
     writeFile(filename, makeSVGLines(lines));
 }
@@ -402,7 +402,7 @@ void DumpPrevTriangles(size_t num, webifc::geometry::Point& p, webifc::geometry:
         t.id = 0;
         temp.push_back(t);
     }
-    DumpSVGTriangles(temp, p, prev, L"triangles.svg");
+    DumpSVGTriangles(temp, p, prev, "triangles.svg");
 }
 
 void DumpTriangleID(int num, webifc::geometry::Point& p, webifc::geometry::Point& prev, std::vector<webifc::geometry::Triangle>& triangles)
@@ -411,10 +411,10 @@ void DumpTriangleID(int num, webifc::geometry::Point& p, webifc::geometry::Point
     webifc::geometry::Triangle t = triangles[num];
     t.id = 0;
     temp.push_back(t);
-    DumpSVGTriangles(temp, p, prev, L"triangle.svg");
+    DumpSVGTriangles(temp, p, prev, "triangle.svg");
 }
 
-void Print(webifc::geometry::Polygon3D &poly,const std::wstring& filename)
+void Print(webifc::geometry::Polygon3D &poly,const std::string& filename)
 {
     std::vector<std::vector<glm::dvec2>> vecs;
 
@@ -423,7 +423,7 @@ void Print(webifc::geometry::Polygon3D &poly,const std::wstring& filename)
     DumpSVGLines(vecs, filename);
 }
 
-void PrintEdges(webifc::geometry::Polygon3D &poly,const std::wstring& filename)
+void PrintEdges(webifc::geometry::Polygon3D &poly,const std::string& filename)
 {
     std::vector<std::vector<glm::dvec2>> vecs;
 
@@ -435,7 +435,7 @@ void PrintEdges(webifc::geometry::Polygon3D &poly,const std::wstring& filename)
     DumpSVGLines(vecs, filename);
 }
 
-void PrintEdgesAndLoop(std::vector<std::pair<size_t, size_t>> edges,std::vector<glm::dvec2> points,const std::wstring& filename, const std::vector<size_t>& loop)
+void PrintEdgesAndLoop(std::vector<std::pair<size_t, size_t>> edges,std::vector<glm::dvec2> points,const std::string& filename, const std::vector<size_t>& loop)
 {
     std::vector<std::vector<glm::dvec2>> vecs;
 
@@ -462,10 +462,10 @@ void PrintEdgesAndLoop(std::vector<std::pair<size_t, size_t>> edges,std::vector<
     SVGDrawing drawing;
     drawing.sets.push_back(set);
     drawing.sets.push_back(set2);
-    writeFile(filename + L".html", makeSVGLines(drawing));
+    writeFile(filename + ".html", makeSVGLines(drawing));
 }
 
-void PrintLoops(std::vector<glm::dvec2> points,const std::wstring& filename, const std::vector<size_t>& loop, const std::vector<size_t>& loopb, glm::dvec2 horLinePos)
+void PrintLoops(std::vector<glm::dvec2> points,const std::string& filename, const std::vector<size_t>& loop, const std::vector<size_t>& loopb, glm::dvec2 horLinePos)
 {
     std::vector<std::vector<glm::dvec2>> loop1;
 
@@ -481,16 +481,16 @@ void PrintLoops(std::vector<glm::dvec2> points,const std::wstring& filename, con
 
     loop1.push_back({ horLinePos + glm::dvec2(1, 0), horLinePos - glm::dvec2(1, 0) });
 
-    DumpSVGLines(loop1, filename + L"1.html");
+    DumpSVGLines(loop1, filename + "1.html");
 }
 
-void DumpMesh(webifc::geometry::IfcComposedMesh &mesh, webifc::geometry::IfcGeometryProcessor &processor, std::wstring filename)
+void DumpMesh(webifc::geometry::IfcComposedMesh &mesh, webifc::geometry::IfcGeometryProcessor &processor, std::string filename)
 {
     size_t offset = 0;
     writeFile(filename, ToObj(mesh, processor, offset, webifc::geometry::NormalizeIFC));
 }
 
-void DumpPolygonWithClipsegments(const webifc::geometry::Polygon3D& poly, const std::vector<webifc::geometry::ClipSegment2D>& segments, const std::wstring& filename)
+void DumpPolygonWithClipsegments(const webifc::geometry::Polygon3D& poly, const std::vector<webifc::geometry::ClipSegment2D>& segments, const std::string& filename)
 {
     std::vector<std::vector<glm::dvec2>> vecs;
 

@@ -547,18 +547,18 @@ namespace webifc::geometry
             size_t start = triangles.size();
 
             #ifdef DEBUG_DUMP_SVG
-                webifc::io::DumpSVGTriangles(triangles, p, prev, L"triangles1.svg");
+                webifc::io::DumpSVGTriangles(triangles, p, prev, "triangles1.svg");
             #endif
 
             triangulateBoundary(boundaryUp, triangles);
             #ifdef DEBUG_DUMP_SVG
-                 webifc::io::DumpSVGTriangles(triangles, p, prev, L"triangles2.svg");
+                 webifc::io::DumpSVGTriangles(triangles, p, prev, "triangles2.svg");
             #endif
 
             triangulateBoundary(boundaryDown, triangles);
             
             #ifdef DEBUG_DUMP_SVG
-                webifc::io::DumpSVGTriangles(triangles, p, prev, L"triangles3.svg");
+                webifc::io::DumpSVGTriangles(triangles, p, prev, "triangles3.svg");
             #endif
             
             size_t size = triangles.size() - start;
@@ -626,7 +626,7 @@ namespace webifc::geometry
                     if (HasPoint(triangles[i], a.id))
                     {
                         #ifdef DEBUG_DUMP_SVG
-                            webifc::io::DumpSVGTriangles(triangles, b, a, L"before_connect.svg", points);
+                            webifc::io::DumpSVGTriangles(triangles, b, a, "before_connect.svg", points);
                         #endif
 
                         // triangle contains A, lets walk from this triangle to B
@@ -694,18 +694,18 @@ namespace webifc::geometry
                         {
                             triangles[trianglePath[i]].id = -1;
                             #ifdef DEBUG_DUMP_SVG
-                                webifc::io::DumpSVGTriangles(triangles, b, a, L"before_monotone.svg", points);
+                                webifc::io::DumpSVGTriangles(triangles, b, a, "before_monotone.svg", points);
                             #endif
                         }
 
                         #ifdef DEBUG_DUMP_SVG
-                            webifc::io::DumpSVGTriangles(triangles, b, a, L"before_monotone.svg", points);
+                            webifc::io::DumpSVGTriangles(triangles, b, a, "before_monotone.svg", points);
                         #endif
 
                         TriangulateBoundary(a, b, triangles, boundary);
 
                         #ifdef DEBUG_DUMP_SVG
-                            webifc::io::DumpSVGTriangles(triangles, b, a, L"after_monotone.svg", points);
+                            webifc::io::DumpSVGTriangles(triangles, b, a, "after_monotone.svg", points);
                         #endif
 
                         return;
@@ -928,13 +928,13 @@ namespace webifc::geometry
                     {
                         //addPoint(pt, prev, triangles);
                         #ifdef DEBUG_DUMP_SVG
-                           webifc::io::DumpSVGTriangles(triangles, pt, prev, L"before_walk.svg");
+                           webifc::io::DumpSVGTriangles(triangles, pt, prev, "before_walk.svg");
                         #endif
                         
                         addPointWalk(pt, triangles);
                         
                         #ifdef DEBUG_DUMP_SVG
-                            webifc::io::DumpSVGTriangles(triangles, pt, prev, L"after_walk.svg");
+                            webifc::io::DumpSVGTriangles(triangles, pt, prev, "after_walk.svg");
                             IsValidTriangulation(triangles, points);
                         #endif
                     }

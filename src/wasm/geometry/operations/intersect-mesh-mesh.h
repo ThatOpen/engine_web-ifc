@@ -97,7 +97,7 @@ namespace webifc::geometry
                     vecs.push_back({ { pc.x, pc.y } });
 
                     #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpSVGLines(vecs, L"loops.html");
+                        io::DumpSVGLines(vecs, "loops.html");
                     #endif
                 }
 
@@ -126,7 +126,7 @@ namespace webifc::geometry
                 lines.push_back({ pc, pa });
 
                 #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpSVGLines(lines, L"lines.html");
+                    io::DumpSVGLines(lines, "lines.html");
                 #endif
 
                 // drawInSVG(loops, pa, pb, pc);
@@ -978,14 +978,14 @@ namespace webifc::geometry
                 }
 
                 #ifdef CSG_DEBUG_OUTPUT
-                    io::PrintEdgesAndLoop(edges,points,L"loop", loop);
+                    io::PrintEdgesAndLoop(edges,points,"loop", loop);
                 #endif
 
                 if (!IsLoopCCW(loop)) // if we end up finding a counterclockwise loop, try again with edge direction inverted
                 {
                     loop = FindLoop(edge.first, edge.second);
                     #ifdef CSG_DEBUG_OUTPUT
-                        io::PrintEdgesAndLoop(edges,points,L"loop", loop);
+                        io::PrintEdgesAndLoop(edges,points,"loop", loop);
                     #endif
                 }
 
@@ -1092,7 +1092,7 @@ namespace webifc::geometry
             auto pt2D = points[pt];
 
             #ifdef CSG_DEBUG_OUTPUT
-                io::PrintLoops(points,L"pair", A, B, pt2D);
+                io::PrintLoops(points,"pair", A, B, pt2D);
             #endif
 
             // pt is not on B, see if its inside B
@@ -1257,7 +1257,7 @@ namespace webifc::geometry
                     outputGeom.AddFace(a, b, c);
                 }
 
-//                DumpIfcGeometry(outputGeom, L"output.obj");
+//                DumpIfcGeometry(outputGeom, "output.obj");
             }
         }
 
@@ -1527,7 +1527,7 @@ namespace webifc::geometry
                             set2.color = "rgb(0, 0, 255)";
                             io::SVGDrawing drawing;
                             drawing.sets ={ set, set2 };
-                            io::writeFile(L"edges.html", makeSVGLines(drawing));
+                            io::writeFile("edges.html", makeSVGLines(drawing));
                         #endif
                         }
 
@@ -1677,7 +1677,7 @@ namespace webifc::geometry
         {
            #ifdef CSG_DEBUG_OUTPUT
                 auto geom = poly3D.ToGeom();
-                io::DumpIfcGeometry(geom, L"poly3D.obj");
+                io::DumpIfcGeometry(geom, "poly3D.obj");
             #endif
             poly3D.FindContoursInFaces();
         }
@@ -1959,7 +1959,7 @@ namespace webifc::geometry
         {
             #ifdef CSG_DEBUG_OUTPUT
                 Polygon3D poly = source;
-                io::Print(poly,L"poly.html");
+                io::Print(poly,"poly.html");
             #endif
 
             std::vector<double> distances(contour.size());
@@ -2094,7 +2094,7 @@ namespace webifc::geometry
             for (auto& seg : segs)
             {
                 #ifdef CSG_DEBUG_OUTPUT
-                    io::PrintEdges(newPolygon,L"polies2.html");
+                    io::PrintEdges(newPolygon,"polies2.html");
                 #endif
 
                 if (seg.type == ClipSegment2DType::LINE)
@@ -2125,9 +2125,9 @@ namespace webifc::geometry
             {
                #ifdef CSG_DEBUG_OUTPUT
                     auto geom = poly1.ToGeom();
-                    io::DumpIfcGeometry(geom, L"poly1.obj");
+                    io::DumpIfcGeometry(geom, "poly1.obj");
                     geom = poly2.ToGeom();
-                    io::DumpIfcGeometry(geom, L"poly2.obj");
+                    io::DumpIfcGeometry(geom, "poly2.obj");
                 #endif
 
                 if (poly1.plane.IsCoplanarWith(poly2.plane, EPS_SMALL))
@@ -2154,7 +2154,7 @@ namespace webifc::geometry
                 auto& segs = segments1[poly1.index];
                 if (!segs.empty())
                 {
-                    io::DumpPolygonWithClipsegments(poly1, segs, L"polies.html");
+                    io::DumpPolygonWithClipsegments(poly1, segs, "polies.html");
                 }
             }
         #endif
@@ -2167,7 +2167,7 @@ namespace webifc::geometry
         for (auto& poly1 : newMesh1.polygons)
         {
             #ifdef CSG_DEBUG_OUTPUT
-             io::PrintEdges(poly1,L"polies.html");
+             io::PrintEdges(poly1,"polies.html");
             #endif
             // TODO: true based on SUBTRACT, does not apply to any bool op!
             poly1.Retriangulate(outputMesh1, true);
@@ -2176,7 +2176,7 @@ namespace webifc::geometry
         for (auto& poly2 : newMesh2.polygons)
         {
             #ifdef CSG_DEBUG_OUTPUT
-                io::PrintEdges(poly2,L"polies.html");
+                io::PrintEdges(poly2,"polies.html");
             #endif
             // TODO: false based on SUBTRACT, does not apply to any bool op!
             poly2.Retriangulate(outputMesh2, false);
@@ -2305,8 +2305,8 @@ namespace webifc::geometry
         }
 
         #ifdef CSG_DEBUG_OUTPUT
-            io::DumpIfcGeometry(m1, L"mesh1ints.obj");
-            io::DumpIfcGeometry(m2, L"mesh2ints.obj");
+            io::DumpIfcGeometry(m1, "mesh1ints.obj");
+            io::DumpIfcGeometry(m2, "mesh2ints.obj");
         #endif
 
         result1 = retriangulateMesh(mesh1, meshIntersections1);
