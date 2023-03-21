@@ -17,7 +17,6 @@
 #include <cmath>
 
 #include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
 #include <mapbox/earcut.hpp>
 
 #include "math/intersect-mesh-mesh.h"
@@ -30,6 +29,8 @@
 #include "../utility/LoaderSettings.h"
 #include "../utility/LoaderError.h"
 #include "util.h"
+
+#include "fuzzy/fuzzy-bools.h"
 
 const static std::unordered_map<std::string, int> Horizontal_alignment_type{
 	{"LINE", 1},
@@ -730,6 +731,43 @@ namespace webifc
 		glm::dmat4 GetCoordinationMatrix()
 		{
 			return _coordinationMatrix;
+		}
+		
+
+		fuzzybools::Geometry GeomToFBGeom(const IfcGeometry& geom)
+		{
+			fuzzybools::Geometry fbGeom;
+
+			for (size_t i = 0; i < geom.numFaces; i++)
+			{
+				const Face& f = geom.GetFace(i);
+
+				auto a = geom.GetPoint(f.i0);
+				auto b = geom.GetPoint(f.i1);
+				auto c = geom.GetPoint(f.i2);
+
+				fbGeom.AddFace(a, b, c);
+			}
+
+			return fbGeom;
+		}
+
+		IfcGeometry FBGeomToGeom(const fuzzybools::Geometry& fbGeom)
+		{
+			IfcGeometry geom;
+
+			for (size_t i = 0; i < fbGeom.numFaces; i++)
+			{
+				const fuzzybools::Face& f = fbGeom.GetFace(i);
+
+				auto a = fbGeom.GetPoint(f.i0);
+				auto b = fbGeom.GetPoint(f.i1);
+				auto c = fbGeom.GetPoint(f.i2);
+
+				geom.AddFace(a, b, c);
+			}
+
+			return geom;
 		}
 
 	private:
@@ -1775,39 +1813,10 @@ namespace webifc
 
 					if (doit)
 					{
-						auto first = result.Normalize(center, extents);
-						auto second = secondGeom.Normalize(center, extents);
+						auto fb1 = GeomToFBGeom(result);
+						auto fb2 = GeomToFBGeom(secondGeom);
 
-						if (_settings.DUMP_CSG_MESHES)
-						{
-							DumpIfcGeometry(first, L"first.obj");
-							DumpIfcGeometry(second, L"second.obj");
-						}
-
-						IfcGeometry r1;
-						IfcGeometry r2;
-
-						BVH bvh1;
-						BVH bvh2;
-
-						intersectMeshMesh(first, second, r1, r2, bvh1, bvh2);
-
-						if (_settings.DUMP_CSG_MESHES)
-						{
-							DumpIfcGeometry(r1, L"r1.obj");
-							DumpIfcGeometry(r2, L"r2.obj");
-						}
-
-						result = boolSubtract(r1, r2, bvh1, bvh2);
-
-						if (_settings.DUMP_CSG_MESHES)
-						{
-							DumpIfcGeometry(firstGeom, L"first.obj");
-							DumpIfcGeometry(secondGeom, L"second.obj");
-							DumpIfcGeometry(result, L"result.obj");
-						}
-
-						result = result.DeNormalize(center, extents);
+						result = FBGeomToGeom(fuzzybools::Subtract(fb1, fb2));
 					}
 				}
 				results.push_back(result);
