@@ -17,6 +17,7 @@
 #include <cmath>
 
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include <mapbox/earcut.hpp>
 
 #include "math/intersect-mesh-mesh.h"
