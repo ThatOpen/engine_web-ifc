@@ -8,9 +8,14 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "IfcCurve.h"
-#include "../operations/geometryutils.h"
 
 namespace webifc::geometry {
+
+
+	inline	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
+	}
 
 	
 	glm::dvec2 IfcCurve::Get2d(size_t i) const 

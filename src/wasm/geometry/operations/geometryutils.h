@@ -596,15 +596,9 @@ namespace webifc::geometry {
 			return (angle / (2 * CONST_PI)) * 360;
 		}
 
-
 		inline	bool MatrixFlipsTriangles(const glm::dmat4 &mat)
 		{
 			return glm::determinant(mat) < 0;
-		}
-
-		inline	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
-		{
-			return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
 		}
 
 		inline	double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
