@@ -2,22 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// define these to enable debugging output
-#define DEBUG_DUMP_SVG
-#define CSG_DEBUG_OUTPUT
 
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 #include "test/io_helpers.h"
 
-#include "geometry/operations/mesh_utils.h"
 #include "parsing/IfcLoader.h"
 #include "schema/IfcSchemaManager.h"
 #include "geometry/IfcGeometryProcessor.h"
 #include "utility/LoaderError.h"
 #include "utility/LoaderSettings.h"
-#include "geometry/operations/triangulate-with-boundaries.h"
 #include "schema/ifc-schema.h"
 
 
@@ -237,22 +232,19 @@ void TestTriangleDecompose()
         std::cout << "Start test " << i << std::endl;
 
         bool swapped = false;
-        webifc::geometry::TriangulateWithBoundaries twb;
-        auto triangles = twb.triangulate(a, b, c, loops, swapped);
-
+      
         // webifc::IsValidTriangulation(triangles, points);
 
-        std::vector<webifc::geometry::Point> pts;
+        std::vector<webifc::io::Point> pts;
 
         for (auto &pt : points)
         {
-            webifc::geometry::Point p;
+            webifc::io::Point p;
             p.x = pt.x;
             p.y = pt.y;
             pts.push_back(p);
         }
 
-        webifc::io::DumpSVGTriangles(triangles, webifc::geometry::Point(), webifc::geometry::Point(), "triangles.svg", pts);
     }
 }
 

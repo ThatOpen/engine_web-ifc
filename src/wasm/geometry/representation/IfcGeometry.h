@@ -11,7 +11,6 @@
 #include <glm/glm.hpp>
 
 #include "geometry.h"
-#include "AABB.h"
 
 namespace webifc::geometry {
 
@@ -38,7 +37,6 @@ namespace webifc::geometry {
 		void ReverseFace(uint32_t index);
 		void ReverseFaces();
 		Face GetFace(uint32_t index) const;
-		AABB GetFaceBox(uint32_t index) const;
 		glm::dvec3 GetPoint(uint32_t index) const;
 		void GetCenterExtents(glm::dvec3 &center, glm::dvec3 &extents) const;
 		IfcGeometry Normalize(glm::dvec3 center, glm::dvec3 extents) const;
@@ -48,7 +46,6 @@ namespace webifc::geometry {
 		uint32_t GetVertexDataSize();
 		uint32_t GetIndexData();
 		uint32_t GetIndexDataSize();
-		bool IsEmpty();
 
 		private:
 			bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3 &normal, double eps);

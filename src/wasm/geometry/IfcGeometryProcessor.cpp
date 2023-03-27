@@ -12,7 +12,6 @@
 #include "operations/geometryutils.h"
 #include "operations/curve-utils.h"
 #include "operations/mesh_utils.h"
-#include "operations/bool-mesh-mesh.h"
 #include "fuzzy/fuzzy-bools.h"
 
 

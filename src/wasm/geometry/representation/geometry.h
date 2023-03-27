@@ -19,11 +19,8 @@
 
 namespace webifc::geometry {
 
-
-
 	inline constexpr int VERTEX_FORMAT_SIZE_FLOATS = 6;
 
-	inline constexpr double EPS_MINISCULE = 1e-12; // what?
 	inline constexpr double EPS_SMALL = 1e-6;
 	inline static constexpr double EPS_TINY = 1e-9;
 
@@ -179,64 +176,6 @@ namespace webifc::geometry {
 			IfcTrimmingSelect start;
 			IfcTrimmingSelect end;
 		};
-
-		struct Point
-		{
-			double x;
-			double y;
-			int32_t id = -1;
-			bool isBoundary = false;
-
-			Point()
-			{
-			}
-
-			Point(double xx, double yy)
-			{
-				x = xx;
-				y = yy;
-			}
-
-			Point(glm::dvec2 p)
-			{
-				x = p.x;
-				y = p.y;
-			}
-
-			glm::dvec2 operator()() const
-			{
-				return glm::dvec2(
-					x, y);
-			}
-		};
-
-		struct Triangle
-		{
-			Point a;
-			Point b;
-			Point c;
-
-			int32_t id = -1;
-		};
-
-		struct Edge
-		{
-			int32_t a = -1;
-			int32_t b = -1;
-		};
-
-		struct Bounds
-		{
-			glm::dvec2 min;
-			glm::dvec2 max;
-
-			void Merge(const Bounds &other)
-			{
-				min = glm::min(min, other.min);
-				max = glm::max(max, other.max);
-			}
-		};
-
 
 		struct IfcPlacedGeometry
 		{

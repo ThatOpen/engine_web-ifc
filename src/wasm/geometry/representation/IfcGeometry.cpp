@@ -131,23 +131,6 @@ namespace webifc::geometry {
 		return f;
 	}
 
-	AABB IfcGeometry::GetFaceBox(uint32_t index) const
-	{
-		AABB aabb;
-		aabb.index = index;
-		glm::dvec3 a = GetPoint(indexData[index * 3 + 0]);
-		glm::dvec3 b = GetPoint(indexData[index * 3 + 1]);
-		glm::dvec3 c = GetPoint(indexData[index * 3 + 2]);
-		aabb.min = glm::min(a, aabb.min);
-		aabb.min = glm::min(b, aabb.min);
-		aabb.min = glm::min(c, aabb.min);
-		aabb.max = glm::max(a, aabb.max);
-		aabb.max = glm::max(b, aabb.max);
-		aabb.max = glm::max(c, aabb.max);
-		aabb.center = (aabb.max + aabb.min) / 2.0;
-		return aabb;
-	}
-
 	glm::dvec3 IfcGeometry::GetPoint(uint32_t index) const
 	{
 		return glm::dvec3(
@@ -270,8 +253,4 @@ namespace webifc::geometry {
 		return (uint32_t)indexData.size();
 	}
 
-	bool IfcGeometry::IsEmpty()
-	{
-		return vertexData.empty();
-	}
 }
