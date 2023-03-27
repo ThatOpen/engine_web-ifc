@@ -8,12 +8,13 @@
 
 #include <glm/glm.hpp>
 
-constexpr double EPS_BIG = 1e-4;
-
 namespace webifc::geometry {
+
+	constexpr double EPS_BIG = 1e-4;
 
 	struct AABB
 	{
+	
 		uint32_t index;
 		glm::dvec3 min = glm::dvec3(DBL_MAX, DBL_MAX, DBL_MAX);
 		glm::dvec3 max = glm::dvec3(-DBL_MAX, -DBL_MAX, -DBL_MAX);
