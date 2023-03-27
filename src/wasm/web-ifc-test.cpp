@@ -2,26 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// define these to enable debugging output
-#define DEBUG_DUMP_SVG
-#define CSG_DEBUG_OUTPUT
-
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include "test/io_helpers.h"
 
-#include "geometry/operations/mesh_utils.h"
 #include "parsing/IfcLoader.h"
 #include "schema/IfcSchemaManager.h"
-#include "geometry/IfcGeometryProcessor.h"
 #include "utility/LoaderError.h"
-#include "utility/LoaderSettings.h"
-#include "geometry/operations/triangulate-with-boundaries.h"
+#include "include/web-ifc-geometry.h"
+#include "include/math/triangulate-with-boundaries.h"
 #include "schema/ifc-schema.h"
-
-
-using namespace webifc::io;
 
 long long ms()
 {
@@ -40,7 +30,7 @@ std::string ReadFile(std::string filename)
     return buffer.str();
 }
 
-void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint64_t num)
+void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader, uint64_t num)
 {
     auto walls = loader.GetExpressIDsWithType(webifc::schema::IFCSLAB);
 
@@ -50,21 +40,21 @@ void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcG
 
     if (writeFiles)
     {
-        DumpMesh(mesh, geometryLoader, "TEST.obj");
+        geometryLoader.DumpMesh(mesh, L"TEST.obj");
     }
 }
 
-std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
+std::vector<webifc::IfcAlignment> GetAlignments(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
 {
-    std::vector<webifc::geometry::IfcAlignment> alignments;
+    std::vector<webifc::IfcAlignment> alignments;
 
     auto type = webifc::schema::IFCALIGNMENT;
 
     auto elements = loader.GetExpressIDsWithType(type);
 
-    for (unsigned int i = 0; i < elements.size(); i++)
+    for (int i = 0; i < elements.size(); i++)
     {
-        auto alignment = geometryLoader.GetLoader().GetAlignment(elements[i]);
+        auto alignment = geometryLoader.GetAlignment(elements[i]);
         alignment.transform(geometryLoader.GetCoordinationMatrix());
         alignments.push_back(alignment);
     }
@@ -73,31 +63,36 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
 
     if (writeFiles)
     {
-        DumpAlignment(alignments, "V_ALIGN.obj", "H_ALIGN.obj");
+        geometryLoader.DumpAlignment(alignments, L"V_ALIGN.obj", L"H_ALIGN.obj");
     }
 
     return alignments;
 }
 
-std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
+std::vector<webifc::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::IfcGeometryLoader &geometryLoader)
 {
-    std::vector<webifc::geometry::IfcFlatMesh> meshes;
+    std::vector<webifc::IfcFlatMesh> meshes;
     webifc::schema::IfcSchemaManager schema;
 
     for (auto type : schema.GetIfcElementList())
     {
         auto elements = loader.GetExpressIDsWithType(type);
 
-        for (unsigned int i = 0; i < elements.size(); i++)
+        for (int i = 0; i < elements.size(); i++)
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
 
-            
+            /*
             for (auto& geom : mesh.geometries)
             {
-                auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
+                if (!geometryLoader.HasCachedGeometry(geom.geometryExpressID))
+                {
+                    printf("asdf");
+                }
+                auto flatGeom = geometryLoader.GetCachedGeometry(geom.geometryExpressID);
+                flatGeom.GetVertexData();
             }
-            
+            */
 
             meshes.push_back(mesh);
         }
@@ -203,31 +198,31 @@ void TestTriangleDecompose()
         std::vector<glm::dvec2> points;
 
         // random points
-        for (unsigned int j = 0; j < PTS_PER_TEST; j++)
+        for (int j = 0; j < PTS_PER_TEST; j++)
         {
-            points.push_back({webifc::geometry::RandomDouble(0, scaleX),
-                              webifc::geometry::RandomDouble(0, scaleY)});
+            points.push_back({webifc::RandomDouble(0, scaleX),
+                              webifc::RandomDouble(0, scaleY)});
         }
 
         // points along the edges
-        for (unsigned int j = 0; j < EDGE_PTS_PER_TEST; j++)
+        for (int j = 0; j < EDGE_PTS_PER_TEST; j++)
         {
             glm::dvec2 e1 = b - a;
             glm::dvec2 e2 = c - a;
             glm::dvec2 e3 = b - c;
 
-            points.push_back(a + e1 * webifc::geometry::RandomDouble(0, 1));
-            points.push_back(a + e2 * webifc::geometry::RandomDouble(0, 1));
-            points.push_back(c + e3 * webifc::geometry::RandomDouble(0, 1));
+            points.push_back(a + e1 * webifc::RandomDouble(0, 1));
+            points.push_back(a + e2 * webifc::RandomDouble(0, 1));
+            points.push_back(c + e3 * webifc::RandomDouble(0, 1));
         }
 
-        std::vector<webifc::geometry::Loop> loops;
+        std::vector<webifc::Loop> loops;
 
         for (auto &pt : points)
         {
             // if (pt.x > scaleX / 2)
             {
-                webifc::geometry::Loop l;
+                webifc::Loop l;
                 l.hasOne = true;
                 l.v1 = pt;
                 loops.push_back(l);
@@ -237,22 +232,22 @@ void TestTriangleDecompose()
         std::cout << "Start test " << i << std::endl;
 
         bool swapped = false;
-        webifc::geometry::TriangulateWithBoundaries twb;
+        webifc::TriangulateWithBoundaries twb;
         auto triangles = twb.triangulate(a, b, c, loops, swapped);
 
         // webifc::IsValidTriangulation(triangles, points);
 
-        std::vector<webifc::geometry::Point> pts;
+        std::vector<webifc::Point> pts;
 
         for (auto &pt : points)
         {
-            webifc::geometry::Point p;
+            webifc::Point p;
             p.x = pt.x;
             p.y = pt.y;
             pts.push_back(p);
         }
 
-        webifc::io::DumpSVGTriangles(triangles, webifc::geometry::Point(), webifc::geometry::Point(), "triangles.svg", pts);
+        webifc::DumpSVGTriangles(triangles, webifc::Point(), webifc::Point(), L"triangles.svg", pts);
     }
 }
 
@@ -269,16 +264,16 @@ int main()
     // return 0;
 
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
-   // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
-    std::string content = ReadFile("Q2.ifc");
-
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/Q2.ifc");
     // std::string content = ReadFile("../../../examples/example.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#278 pending/extrusions.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
 
-	webifc::utility::LoaderSettings set;
+    webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
+    set.DUMP_CSG_MESHES = false;
     set.USE_FAST_BOOLS = true;
 
     webifc::utility::LoaderErrorHandler errorHandler;
@@ -292,7 +287,7 @@ int main()
                         memcpy(dest, &content[sourceOffset], length);
 
                         return length; });
-    // std::ofstream outputStream("D:/web-ifc/benchmark/ifcfiles/output.ifc");
+    // std::ofstream outputStream(L"D:/web-ifc/benchmark/ifcfiles/output.ifc");
     // outputStream << loader.DumpAsIFC();
     // exit(0);
     auto time = ms() - start;
@@ -303,20 +298,18 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS_HIGH,set.COORDINATE_TO_ORIGIN);
+    webifc::IfcGeometryLoader geometryLoader(loader, set, errorHandler, schemaManager);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);
     // SpecificLoadTest(loader, geometryLoader, 122);
     // SpecificLoadTest(loader, geometryLoader,469706);
-     //auto meshes = LoadAllTest(loader, geometryLoader);
-    auto alignments = GetAlignments(loader, geometryLoader);
-    auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
     // SpecificLoadTest(loader, geometryLoader, 15);
     // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
     auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
 
+    auto trans = webifc::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
 
     auto errors = errorHandler.GetErrors();
     errorHandler.ClearErrors();

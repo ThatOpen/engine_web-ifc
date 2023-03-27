@@ -1,21 +1,22 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
-#pragma once
+ 
+ #pragma once
 
 #include <map>
 #include <set>
 #include <glm/glm.hpp>
 #include <mapbox/earcut.hpp>
-#include "../representation/geometry.h"
 
+#include "../util.h"
 #include "line-segment-intersect.h"
 
-namespace webifc::geometry
+namespace webifc
 {
     struct TriangulateWithBoundaries
     {
+        bool DUMP_SVG_TRIANGLES = false;
 
         uint32_t pointID = 0;
         uint32_t triangleID = 0;
@@ -73,6 +74,86 @@ namespace webifc::geometry
             p.y = y;
 
             return p;
+        }
+
+        // TODO: slow
+        std::vector<int32_t> FindTrianglesWithEdge(int32_t a, int32_t b, std::vector<Triangle>& triangles)
+        {
+            std::vector<int32_t> result;
+            std::vector<int32_t> deleted;
+            glm::dvec2 apt;
+            glm::dvec2 bpt;
+
+            for (size_t i = 0; i < triangles.size(); i++)
+            {
+                Triangle& t = triangles[i];
+
+                bool found = false;
+                if (t.a.id == a && t.b.id == b)
+                {
+                    found = true;
+                    apt = t.a();
+                    bpt = t.b();
+                }
+                else if (t.b.id == a && t.c.id == b)
+                {
+                    found = true;
+                    apt = t.b();
+                    bpt = t.c();
+                }
+                else if (t.c.id == a && t.a.id == b)
+                {
+                    found = true;
+                    apt = t.c();
+                    bpt = t.a();
+                }
+                else if (t.a.id == b && t.b.id == a)
+                {
+                    found = true;
+                    apt = t.b();
+                    bpt = t.a();
+                }
+                else if (t.b.id == b && t.c.id == a)
+                {
+                    found = true;
+                    apt = t.c();
+                    bpt = t.b();
+                }
+                else if (t.c.id == b && t.a.id == a)
+                {
+                    found = true;
+                    apt = t.a();
+                    bpt = t.c();
+                }
+
+                if (found)
+                {
+                    if (t.id == -1)
+                    {
+                        deleted.push_back(i);
+                    }
+                    else
+                    {
+                        result.push_back(i);
+                    }
+                }
+            }
+
+            // every edge must be replaced by a new edge, whether it has 1 or 2 adjacent triangles
+            // a mismatch here means we made a mistake
+            if (result.size() > 2)
+            {
+                printf("Triangle with this edge already deleted!");
+            }
+
+            return result;
+        }
+
+        void CheckTriangleEdges(Triangle& t, std::vector<Triangle>& triangles)
+        {
+            FindTrianglesWithEdge(t.a.id, t.b.id, triangles);
+            FindTrianglesWithEdge(t.b.id, t.c.id, triangles);
+            FindTrianglesWithEdge(t.c.id, t.a.id, triangles);
         }
 
         // ccw
@@ -262,10 +343,33 @@ namespace webifc::geometry
             return (e.a == a.id && e.b == b.id) || (e.b == a.id && e.a == b.id);
         }
 
+        void DumpPrevTriangles(size_t num, Point& p, Point& prev, std::vector<Triangle>& triangles)
+        {
+            std::vector<Triangle> temp;
+            for (size_t i = 0; i < num; i++)
+            {
+                Triangle t = triangles[triangles.size() - 1 - i];
+                CheckTriangleEdges(t, triangles);
+
+                t.id = 0;
+                temp.push_back(t);
+            }
+            DumpSVGTriangles(temp, p, prev, L"triangles.svg");
+        }
+
+        void DumpTriangleID(int num, Point& p, Point& prev, std::vector<Triangle>& triangles)
+        {
+            std::vector<Triangle> temp;
+            Triangle t = triangles[num];
+            t.id = 0;
+            temp.push_back(t);
+            DumpSVGTriangles(temp, p, prev, L"triangle.svg");
+        }
+
         void DeleteTriangle(int id, std::vector<Triangle>& triangles)
         {
             //auto t = triangles[id];
-
+     
             /*
             int a = 17;
             int b = 18;
@@ -445,7 +549,7 @@ namespace webifc::geometry
                         Point second1 = GetOtherPoint(triangles[current.id], prevEdge.b, tri1p.id);
                         makeTriangle(triangles, p, first1, tri1p);
                         makeTriangle(triangles, second1, p, tri1p);
-
+                    
                         // make tri 3, 4
                         Point tri2p = GetOtherPoint(triangles[adjacentTriangle.id], prevEdge.a, prevEdge.b);
                         Point first2 = GetOtherPoint(triangles[adjacentTriangle.id], tri2p.id, prevEdge.a);
@@ -461,7 +565,7 @@ namespace webifc::geometry
                     }
 
                     path.push_back(newEdge);
-
+                
                     return WalkToPoint(adjacentTriangle, newEdge, p, triangles, visited, path, trianglePath);
                 }
                 else
@@ -497,7 +601,7 @@ namespace webifc::geometry
                 Point second = GetOtherPoint(triangles[current.id], edge.first, tri1p.id);
                 makeTriangle(triangles, p, first, tri1p);
                 makeTriangle(triangles, second, p, tri1p);
-
+            
                 DeleteTriangle(current.id, triangles);
             }
             else
@@ -546,26 +650,15 @@ namespace webifc::geometry
 
             size_t start = triangles.size();
 
-            #ifdef DEBUG_DUMP_SVG
-                webifc::io::DumpSVGTriangles(triangles, p, prev, "triangles1.svg");
-            #endif
-
+            if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles1.svg");
             triangulateBoundary(boundaryUp, triangles);
-            #ifdef DEBUG_DUMP_SVG
-                 webifc::io::DumpSVGTriangles(triangles, p, prev, "triangles2.svg");
-            #endif
-
+            if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles2.svg");
             triangulateBoundary(boundaryDown, triangles);
-            
-            #ifdef DEBUG_DUMP_SVG
-                webifc::io::DumpSVGTriangles(triangles, p, prev, "triangles3.svg");
-            #endif
-            
+            if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, p, prev, L"triangles3.svg");
+
             size_t size = triangles.size() - start;
 
-            #ifdef DEBUG_DUMP_SVG
-                webifc::io::DumpPrevTriangles(size, p, prev, triangles);
-            #endif
+            if (DUMP_SVG_TRIANGLES) DumpPrevTriangles(size, p, prev, triangles);
         }
 
         void addPointWalk(Point& p, std::vector<Triangle>& triangles)
@@ -625,9 +718,7 @@ namespace webifc::geometry
                 {
                     if (HasPoint(triangles[i], a.id))
                     {
-                        #ifdef DEBUG_DUMP_SVG
-                            webifc::io::DumpSVGTriangles(triangles, b, a, "before_connect.svg", points);
-                        #endif
+                        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"before_connect.svg", points);
 
                         // triangle contains A, lets walk from this triangle to B
                         Edge e;
@@ -693,20 +784,14 @@ namespace webifc::geometry
                         for (size_t i = deleteTriOffset-1; i < trianglePath.size(); i++)
                         {
                             triangles[trianglePath[i]].id = -1;
-                            #ifdef DEBUG_DUMP_SVG
-                                webifc::io::DumpSVGTriangles(triangles, b, a, "before_monotone.svg", points);
-                            #endif
+                            if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"before_monotone.svg", points);
                         }
 
-                        #ifdef DEBUG_DUMP_SVG
-                            webifc::io::DumpSVGTriangles(triangles, b, a, "before_monotone.svg", points);
-                        #endif
+                        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"before_monotone.svg", points);
 
                         TriangulateBoundary(a, b, triangles, boundary);
 
-                        #ifdef DEBUG_DUMP_SVG
-                            webifc::io::DumpSVGTriangles(triangles, b, a, "after_monotone.svg", points);
-                        #endif
+                        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, b, a, L"after_monotone.svg", points);
 
                         return;
                     }
@@ -833,8 +918,8 @@ namespace webifc::geometry
                             std::set<int> overlap;
 
                             std::set_intersection(e1.begin(), e1.end(),
-                              e2.begin(), e2.end(),
-                              std::inserter(overlap, overlap.begin()));
+                                                  e2.begin(), e2.end(),
+                                                  std::inserter(overlap, overlap.begin()));
 
                             if (overlap.empty())
                             {
@@ -927,16 +1012,10 @@ namespace webifc::geometry
                     //if (ptInside)
                     {
                         //addPoint(pt, prev, triangles);
-                        #ifdef DEBUG_DUMP_SVG
-                           webifc::io::DumpSVGTriangles(triangles, pt, prev, "before_walk.svg");
-                        #endif
-                        
+                        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"before_walk.svg");
                         addPointWalk(pt, triangles);
-                        
-                        #ifdef DEBUG_DUMP_SVG
-                            webifc::io::DumpSVGTriangles(triangles, pt, prev, "after_walk.svg");
-                            IsValidTriangulation(triangles, points);
-                        #endif
+                        if (DUMP_SVG_TRIANGLES) DumpSVGTriangles(triangles, pt, prev, L"after_walk.svg");
+                        if (DUMP_SVG_TRIANGLES) IsValidTriangulation(triangles, points);
                     }
                 }
             }
@@ -956,17 +1035,17 @@ namespace webifc::geometry
                     //if (pt1Inside && pt2Inside)
                     {
                         connectPointWalk(pt1, pt2, triangles, points);
-       
+                        if (DUMP_SVG_TRIANGLES) IsValidTriangulation(triangles, points);
                         // connectPoints(pt1, pt2, triangles);
 
 
-                        #ifdef DEBUG_DUMP_SVG
-                            IsValidTriangulation(triangles, points);
+                        if (DUMP_SVG_TRIANGLES)
+                        {
                             if (!ListHasPoint(triangles, 0) || !ListHasPoint(triangles, 1) || !ListHasPoint(triangles, 2))
                             {
                                 printf("missing points!");
                             }
-                        #endif
+                        }
                     }
 
                 }
