@@ -14,7 +14,7 @@ namespace webifc::geometry
 
 	bool AABB::intersects(const AABB &other) const
 	{
-		constexpr double eps = EPS_BIG;
+		double eps = EPS_BIG;
 		return (max.x + eps >= other.min.x && other.max.x + eps >= min.x &&
 			max.y + eps >= other.min.y && other.max.y + eps >= min.y &&
 			max.z + eps >= other.min.z && other.max.z + eps >= min.z);

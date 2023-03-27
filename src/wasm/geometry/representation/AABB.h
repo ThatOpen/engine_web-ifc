@@ -8,9 +8,10 @@
 
 #include <glm/glm.hpp>
 
-constexpr double EPS_BIG = 1e-4;
 
 namespace webifc::geometry {
+
+	inline double EPS_BIG = 1e-4;
 
 	struct AABB
 	{
