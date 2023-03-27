@@ -5,13 +5,12 @@
  #pragma once
 
 #include <glm/glm.hpp>
-#include <iostream>
-#include <stack>
 
+#include "geometryutils.h"
 #include "intersect-ray-tri.h"
-#include "../util.h"
+#include "intersect-mesh-mesh.h"
 
-namespace webifc
+namespace webifc::geometry
 {
     enum class MeshLocation
     {
