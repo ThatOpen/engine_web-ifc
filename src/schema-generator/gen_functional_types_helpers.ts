@@ -108,6 +108,10 @@ export function generateTapeAssignment(p: Prop, types:Type[])
         if (p.optional) prefix ='!i.'+p.name+' ? null :'
         return prefix + 'Labelise(i.'+p.name+')';
     }
+    else if (type?.typeName == "boolean") 
+    {
+        return `i.${p.name}?.toString()`;
+    }
     return `i.${p.name}`;
 }
 
@@ -402,6 +406,11 @@ export function parseElements(data:string)
             let name = split[0];
             let optional = split.indexOf("OPTIONAL") != -1;
             let set = split.indexOf("SET") != -1 || split.indexOf("LIST") != -1;
+            if (set && !optional) 
+            {
+                let setLoc = split.indexOf("SET");
+                if (split[setLoc+1].includes("[0:")) optional=true;
+            }
             let type = split[split.length - 1].replace(";", "");
             let firstBracket = type.indexOf("(");
             if (firstBracket != -1)

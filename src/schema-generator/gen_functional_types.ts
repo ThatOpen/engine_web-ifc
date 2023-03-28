@@ -58,7 +58,7 @@ tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
 tsSchema.push('\tif (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
 tsSchema.push('}');
 tsSchema.push('function Labelise(tapeItem:any) {');
-tsSchema.push('\ttapeItem.valueType=tapeItem.type; tapeItem.type=2; tapeItem.label=tapeItem.constructor.name.toUpperCase();');
+tsSchema.push('\ttapeItem.value=tapeItem.value.toString(); tapeItem.valueType=tapeItem.type; tapeItem.type=2; tapeItem.label=tapeItem.constructor.name.toUpperCase();');
 tsSchema.push('\treturn tapeItem;');
 tsSchema.push('}')
 
@@ -224,6 +224,9 @@ for (var i = 0; i < files.length; i++) {
           if (typeName=="number") {
             tsSchema.push(`\t\tpublic value: number;`);
             tsSchema.push(`\t\tconstructor(v: any) { this.value = parseFloat(v);}`);
+          } else if (typeName=="boolean") {
+             tsSchema.push(`\t\tpublic value: boolean;`);
+              tsSchema.push(`\t\tconstructor(v: any) { this.value = v == "true" ? true : false; }`);
           } else {
             tsSchema.push(`\t\tconstructor(public value: ${typeName}) {}`);
           }
