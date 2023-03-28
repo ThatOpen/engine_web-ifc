@@ -9,102 +9,13 @@
 #include <unordered_map>
 #include <optional>
 #include <tinynurbs/tinynurbs.h>
-
 #include "geometryutils.h"
-
-
 #include <glm/glm.hpp>
 
 #define CONST_PI 3.141592653589793238462643383279502884L
 
 namespace webifc::geometry
 {
-	inline static AABB GetAABB(const IfcGeometry &mesh)
-	{
-		AABB aabb;
-
-		for (uint32_t i = 0; i < mesh.numPoints; i++)
-		{
-			aabb.min = glm::min(aabb.min, mesh.GetPoint(i));
-			aabb.max = glm::max(aabb.max, mesh.GetPoint(i));
-		}
-
-		return aabb;
-	}
-
-	inline static bool equals(double A, double B, double eps = 0)
-	{
-		return std::fabs(A - B) <= eps;
-	}
-
-	inline static double sign2D(const glm::dvec2 &p, const glm::dvec2 &a, const glm::dvec2 &b)
-	{
-		return (p.x - b.x) * (a.y - b.y) - (a.x - b.x) * (p.y - b.y);
-	}
-
-	// https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
-	inline static double signOneZero(double x)
-	{
-		return (x > 0) - (x < 0);
-	}
-
-	inline static double ComparableAngle(const glm::dvec2 &p, const glm::dvec2 &a, const glm::dvec2 &b)
-	{
-		double upDown = sign2D(p, a, b) >= 0 ? 1 : -1;
-		double dot = (1 + glm::dot(glm::normalize(a - b), glm::normalize(p - b))) / 2.0;
-		return upDown * dot;
-	}
-
-	// https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
-	inline static double DistancePointToLineSegment2D(const glm::dvec2 &v, const glm::dvec2 &w, const glm::dvec2 &p)
-	{
-		// Return minimum distance between line segment vw and point p
-		const double l2 = glm::length(v - w); // i.e. |w-v|^2 -  avoid a sqrt
-		if (l2 == 0.0)
-			return glm::distance(p, v); // v == w case
-		// Consider the line extending the segment, parameterized as v + t (w - v).
-		// We find projection of point p onto the line.
-		// It falls where t = [(p-v) . (w-v)] / |w-v|^2
-		// We clamp t from [0,1] to handle points outside the segment vw.
-		const double t = std::max(0.0, std::min(1.0, dot(p - v, w - v) / (l2 * l2)));
-		const glm::dvec2 projection = v + t * (w - v); // Projection falls on the segment
-		return glm::distance(p, projection);
-	}
-
-	inline static bool PointOnLineSegment2D(const glm::dvec2 &v, const glm::dvec2 &w, const glm::dvec2 &p, double EPS)
-	{
-		double dist = DistancePointToLineSegment2D(v, w, p);
-		return dist <= EPS;
-	}
-
-	inline static bool onEdge2D(const glm::dvec2 &p, const glm::dvec2 &a, const glm::dvec2 &b, double EPS)
-	{
-		double dist = std::fabs(sign2D(p, a, b));
-		return dist <= EPS;
-	}
-
-	inline static bool IsVectorCCW(const std::vector<glm::dvec2> &points)
-	{
-		double sum = 0;
-
-		for (size_t i = 0; i < points.size(); i++)
-		{
-			glm::dvec2 pt1 = points[i];
-			glm::dvec2 pt2 = points[(i + 1) % points.size()];
-
-			sum += (pt2.x - pt1.x) * (pt2.y + pt1.y);
-		}
-
-		return sum < 0;
-	}
-
-	inline static double DistanceToLine(const glm::dvec3 &pt, const glm::dvec3 &lpos, const glm::dvec3 &ldir)
-	{
-		glm::dvec3 x2 = lpos + ldir;
-		double l = glm::length(glm::cross(pt - lpos, pt - x2));
-		double s = glm::length(ldir);
-		return l / s;
-	}
 
 	inline static std::optional<glm::dmat4> GetOrientationRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
 	{

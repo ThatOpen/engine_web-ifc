@@ -30,8 +30,6 @@ namespace webifc::geometry {
 		}
 	}
 
-
-
 	inline glm::dvec3 computeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3)
 	{
 		glm::dvec3 v12(v2 - v1);
@@ -569,9 +567,6 @@ namespace webifc::geometry {
 			return geom;
 		}
 
-
-
-
 		inline double VectorToAngle(double x, double y)
 		{
 			double dd = sqrt(x * x + y * y);
@@ -601,63 +596,10 @@ namespace webifc::geometry {
 			return (angle / (2 * CONST_PI)) * 360;
 		}
 
-		inline	std::vector<glm::dvec2> rescale(std::vector<glm::dvec2> input, glm::dvec2 size, glm::dvec2 offset)
-		{
-			std::vector<glm::dvec2> retval;
-
-			glm::dvec2 min(
-				DBL_MAX,
-				DBL_MAX);
-
-			glm::dvec2 max(
-				-DBL_MAX,
-				-DBL_MAX);
-
-			for (auto &pt : input)
-			{
-				min = glm::min(min, pt);
-				max = glm::max(max, pt);
-			}
-
-			double width = max.x - min.x;
-			double height = max.y - min.y;
-
-			double maxSize = std::max(width, height);
-
-			if (width == 0 && height == 0)
-			{
-				printf("asdf\n");
-			}
-
-			for (auto &pt : input)
-			{
-				// here we invert Y, since the canvas +y is down, but makes more sense to think about +y as up
-				retval.emplace_back(
-					((pt.x - min.x) / (maxSize)) * size.x + offset.x,
-					(size.y - ((pt.y - min.y) / (maxSize)) * size.y) + offset.y);
-			}
-
-			return retval;
-		}
-
 
 		inline	bool MatrixFlipsTriangles(const glm::dmat4 &mat)
 		{
 			return glm::determinant(mat) < 0;
-		}
-
-		inline	bool IsInsideCenterExtents(const glm::dvec3 &pt, const glm::dvec3 &center, const glm::dvec3 &extents)
-		{
-			glm::dvec3 delta = pt - center;
-			delta = glm::abs(delta);
-			glm::dvec3 offset = delta - extents;
-
-			return offset.x < EPS_SMALL && offset.y < EPS_SMALL && offset.z < EPS_SMALL;
-		}
-
-		inline	bool equals2d(glm::dvec2 A, glm::dvec2 B, double eps = 0)
-		{
-			return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps;
 		}
 
 		inline	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
@@ -688,100 +630,10 @@ namespace webifc::geometry {
 			return std::fabs(norm);
 		}
 
-		// https://en.wikipedia.org/wiki/Barycentric_coordinate_system
-		inline	glm::dvec3 ToBary(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dvec3 &pt)
-		{
-			glm::dvec3 E1 = b - a;
-			glm::dvec3 E2 = c - a;
-			glm::dvec3 ROV0 = pt - a;
-			glm::dvec3 N = glm::cross(E1, E2);
-			glm::dvec3 dir = -N;
-			glm::dvec3 Q = glm::cross(ROV0, dir);
-			double d = dot(dir, N);
-
-			if (d == 0)
-			{
-				printf("bary conversion perp");
-			}
-
-			double det = 1.0 / d;
-			double u = det * glm::dot(E2, (Q * -1.0));
-			double v = det * glm::dot(E1, Q);
-			double w = 1 - u - v;
-
-			return glm::dvec3(w, u, v);
-		}
-
-		inline	glm::dvec2 FromBary(const glm::dvec2 &a, const glm::dvec2 &b, const glm::dvec2 &c, const glm::dvec3 &pt)
-		{
-			return pt.x * a + pt.y * b + pt.z * c;
-		}
-
-		// assume 0,0 1,0 0,1 triangle
-		inline	glm::dvec3 ToBary2(const glm::dvec2 &pt)
-		{
-			double v = pt.x;
-			double w = pt.y;
-			double u = 1 - v - w;
-
-			return glm::dvec3(u, v, w);
-		}
-
-		inline	glm::dvec3 FromBary(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dvec3 &pt)
-		{
-			return pt.x * a + pt.y * b + pt.z * c;
-		}
-
-		inline	void CheckTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
-		{
-			if (areaOfTriangle(a, b, c) == 0)
-			{
-				printf("0 triangle\n");
-			}
-		}
-
-		inline	void CheckTriangle(Face &f, std::vector<glm::dvec3> &pts)
-		{
-			if (areaOfTriangle(pts[f.i0], pts[f.i1], pts[f.i2]) == 0)
-			{
-				printf("0 triangle\n");
-			}
-		}
-
 		inline	double RandomDouble(double lo, double hi)
 		{
 			return lo + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (hi - lo)));
 		}
-
-
-		inline	glm::dvec2 cmin(glm::dvec2 m, Point p)
-		{
-			return glm::dvec2(
-				std::min(m.x, p.x),
-				std::min(m.y, p.y));
-		}
-
-		inline	glm::dvec2 cmax(glm::dvec2 m, Point p)
-		{
-			return glm::dvec2(
-				std::max(m.x, p.x),
-				std::max(m.y, p.y));
-		}
-
-		inline	glm::dvec2 rescale(Point p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
-		{
-			return glm::dvec2(
-				((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
-				((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
-		}
-
-		inline	glm::dvec2 rescale(glm::dvec2 p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
-		{
-			return glm::dvec2(
-				((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
-				((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
-		}
-
 
 		inline	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
 		{
@@ -896,8 +748,6 @@ namespace webifc::geometry {
 			}
 		}
 
-
-
 		inline	std::vector<IfcGeometry> flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
 		{
 			std::vector<IfcGeometry> geoms;
@@ -918,24 +768,6 @@ namespace webifc::geometry {
 			}
 
 			return flatTransformation;
-		}
-
-		inline	bool TriangleIsCW(const glm::dvec2 &a, const glm::dvec2 &b, const glm::dvec2 &c)
-		{
-			auto norm = computeNormal(glm::dvec3(a, 0), glm::dvec3(b, 0), glm::dvec3(c, 0));
-			return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
-		}	
-
-		inline	double mirrorAngle(double angle) // in degrees
-		{
-			if (angle < 180)
-			{
-				return 180 - angle;
-			}
-			else
-			{
-				return 180 + (360 - angle);
-			}
 		}
 
 		inline	bool notPresent(glm::dvec3 pt, std::vector<glm::dvec3> points)
