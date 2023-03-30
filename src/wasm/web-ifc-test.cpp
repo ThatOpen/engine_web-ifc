@@ -261,13 +261,13 @@ int main()
     // return 0;
 
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
-   // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
-    std::string content = ReadFile("Q2.ifc");
-
+    // std::string content = ReadFile("Q2.ifc");
     // std::string content = ReadFile("../../../examples/example.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#278 pending/extrusions.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/15.ifc");
 
 	webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -301,9 +301,9 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 8765);
     // SpecificLoadTest(loader, geometryLoader, 122);
     // SpecificLoadTest(loader, geometryLoader,469706);
-     //auto meshes = LoadAllTest(loader, geometryLoader);
-    auto alignments = GetAlignments(loader, geometryLoader);
-    auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
+    // auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto alignments = GetAlignments(loader, geometryLoader);
+    // auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
     // SpecificLoadTest(loader, geometryLoader, 15);
     // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
     auto meshes = LoadAllTest(loader, geometryLoader);

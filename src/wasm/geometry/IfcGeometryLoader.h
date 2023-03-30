@@ -31,8 +31,8 @@ namespace webifc::geometry
     glm::dvec3 GetCartesianPoint3D(const uint32_t expressID) const;
     glm::dvec2 GetCartesianPoint2D(const uint32_t expressID) const;
     glm::dvec3 GetVector(const uint32_t expressID) const;
-    IfcProfile3D GetProfile3D(const uint32_t expressID) const;
     IfcProfile GetProfile(uint32_t expressID) const;
+    IfcProfile3D GetProfile3D(uint32_t expressID) const;
     IfcCurve GetCurve(uint32_t expressID,uint8_t dimensions, bool edge=false) const;
     std::vector<glm::dvec3> ReadIfcCartesianPointList3D(const uint32_t expressID) const;
     std::vector<glm::dvec2> ReadIfcCartesianPointList2D(const uint32_t expressID) const;

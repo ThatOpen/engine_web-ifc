@@ -1255,7 +1255,7 @@ namespace webifc::geometry
 
                 _loader.MoveToArgumentOffset(line, 0);
                 uint32_t profileID = _loader.GetRefArgument();
-                IfcProfile3D profile =  _geometryLoader.GetProfile3D(profileID);
+                IfcProfile3D profile =  _geometryLoader.GetProfile3D(_loader.ExpressIDToLineID(profileID));
 
                 _loader.MoveToArgumentOffset(line, 1);
                 if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
