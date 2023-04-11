@@ -645,7 +645,7 @@ namespace webifc::geometry {
 				{
 					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 					{
-						Face f = meshGeom.GetFace(i);
+						fuzzybools::Face f = meshGeom.GetFace(i);
 						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 
 						return a;
@@ -679,26 +679,6 @@ namespace webifc::geometry {
 			}
 		}
 
-		inline	IfcGeometry flattenGeometry(std::vector<IfcGeometry> &geoms)
-		{
-			IfcGeometry newGeom;
-
-			for (auto meshGeom : geoms)
-			{
-				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
-				{
-					Face f = meshGeom.GetFace(i);
-					glm::dvec3 a = meshGeom.GetPoint(f.i0);
-					glm::dvec3 b = meshGeom.GetPoint(f.i1);
-					glm::dvec3 c = meshGeom.GetPoint(f.i2);
-					newGeom.AddFace(a, b, c);
-				}
-				newGeom.AddComponent(meshGeom);
-			}
-
-			return newGeom;
-		}
-
 		inline	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
 		{
 			glm::dmat4 newMat = mat * mesh.transformation;
@@ -717,7 +697,7 @@ namespace webifc::geometry {
 
 					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 					{
-						Face f = meshGeom.GetFace(i);
+						fuzzybools::Face f = meshGeom.GetFace(i);
 						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 						glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
 						glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);

@@ -54,9 +54,6 @@ namespace webifc::geometry
         void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false);
         std::vector<uint32_t> Read2DArrayOfThreeIndices();
         void ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points);
-        fuzzybools::Geometry GeomToFBGeom(const IfcGeometry& geom);
-        IfcGeometry FBGeomToGeom(const fuzzybools::Geometry& fbGeom);
-
   };
   
 }

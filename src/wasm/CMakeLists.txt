@@ -56,7 +56,7 @@ FetchContent_MakeAvailable(cdt)
 FetchContent_GetProperties(cdt)
 
 Message("Downloading FUZZY")
-FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/tomvandig/fuzzy-bools" GIT_TAG "65f9eb4ee5b477f95dd9476d937a5d5aeb31c33f" SOURCE_SUBDIR "../")
+FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/tomvandig/fuzzy-bools" GIT_TAG "a52c0f0c0667b7c875ae44e91e63a33c1813be64" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(fuzzy)
 FetchContent_GetProperties(fuzzy)
 file(RENAME ${fuzzy_SOURCE_DIR}/src ${fuzzy_SOURCE_DIR}/fuzzy RESULT $res)

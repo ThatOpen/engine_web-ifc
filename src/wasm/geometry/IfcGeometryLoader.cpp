@@ -2312,14 +2312,14 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t lineID) const
 
 
 
-IfcProfile3D IfcGeometryLoader::GetProfile3D(uint32_t lineID) const
+IfcProfile IfcGeometryLoader::GetProfile3D(uint32_t lineID) const
 {
   auto &line = _loader.GetLine(lineID);
   switch (line.ifcType)
   {
   case schema::IFCARBITRARYOPENPROFILEDEF:
     {
-      IfcProfile3D profile;
+      IfcProfile profile;
 
       _loader.MoveToArgumentOffset(line, 0);
       profile.type = _loader.GetStringArgument();
@@ -2333,7 +2333,7 @@ IfcProfile3D IfcGeometryLoader::GetProfile3D(uint32_t lineID) const
     break;
   }
 
-  return IfcProfile3D();
+  return IfcProfile();
 }
 
 glm::dvec3 IfcGeometryLoader::GetVector(uint32_t expressID) const

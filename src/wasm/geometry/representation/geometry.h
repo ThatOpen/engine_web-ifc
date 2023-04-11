@@ -19,8 +19,6 @@
 
 namespace webifc::geometry {
 
-	inline constexpr int VERTEX_FORMAT_SIZE_FLOATS = 6;
-
 	inline constexpr double EPS_SMALL = 1e-6;
 	inline static constexpr double EPS_TINY = 1e-9;
 
@@ -43,20 +41,6 @@ namespace webifc::geometry {
 
 		const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
 
-		struct Face
-		{
-			int i0;
-			int i1;
-			int i2;
-		};
-
-		struct Loop
-		{
-			bool hasOne;
-			glm::dvec2 v1;
-			glm::dvec2 v2;
-		};
-
 		struct IfcSegmentIndexSelect
 		{
 			std::string type;
@@ -71,14 +55,6 @@ namespace webifc::geometry {
 			bool isConvex;
 			bool isComposite = false;
 			std::vector<IfcProfile> profiles;
-		};
-
-
-		struct IfcProfile3D
-		{
-			std::string type;
-			IfcCurve curve;
-			bool isConvex;
 		};
 
 		struct IfcAlignmentSegment
@@ -113,7 +89,7 @@ namespace webifc::geometry {
 		{
 			bool Active = false;
 			glm::dmat4 Direction;
-			IfcProfile3D Profile;
+			IfcProfile Profile;
 		};
 
 		struct Extrusion
