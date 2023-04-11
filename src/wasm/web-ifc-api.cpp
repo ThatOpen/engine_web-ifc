@@ -49,8 +49,9 @@ struct ModelInfo
 
         void Close()
         {
+            delete geometryLoader;
             geometryLoader=nullptr;
-            loader->SetClosed();
+            delete loader;
             loader=nullptr;
         }
 
@@ -892,13 +893,14 @@ uint32_t GetMaxExpressID(uint32_t modelID)
 
 extern "C" bool IsModelOpen(uint32_t modelID)
 {
+    if (modelID >= models.size()) return false;
     auto loader = models[modelID].GetLoader();
     if (!loader)
     {
         return false;
     }
 
-    return loader->IsOpen();
+    return true;
 }
 
 // TODO(pablo): the level param ought to be LogLevel, but I couldn't

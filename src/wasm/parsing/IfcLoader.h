@@ -37,6 +37,7 @@ namespace webifc::parsing
   
     public:
       IfcLoader(size_t tapeSize, size_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager);  
+      ~IfcLoader();
       const std::vector<uint32_t> GetExpressIDsWithType(const uint32_t type) const;
       const std::vector<IfcHeaderLine> GetHeaderLinesWithType(const uint32_t type) const;
       void LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
@@ -83,7 +84,6 @@ namespace webifc::parsing
       const schema::IfcSchemaManager &_schemaManager;
       utility::LoaderErrorHandler &_errorHandler;
       IfcTokenStream * _tokenStream;
-      bool _open = false;
       std::vector<IfcLine> _lines;
       std::vector<IfcHeaderLine> _headerLines;
       std::vector<uint32_t> _expressIDToLine;

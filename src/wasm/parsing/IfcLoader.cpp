@@ -49,7 +49,6 @@ namespace webifc::parsing {
    
    void IfcLoader::LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData)
    { 
-     _open=true;
      _tokenStream->SetTokenSource(requestData);
      ParseLines();
    }
@@ -78,7 +77,6 @@ namespace webifc::parsing {
    
    void IfcLoader::LoadFile(std::istream &requestData)
    { 
-     _open=true;
      _tokenStream->SetTokenSource(requestData);
      ParseLines();
    }
@@ -424,14 +422,8 @@ namespace webifc::parsing {
       return _lines[lineID];
    }
    
-   bool IfcLoader::IsOpen() const
+   IfcLoader::~IfcLoader()
    { 
-      return _open;
-   }
-    
-   void IfcLoader::SetClosed()
-   { 
-     _open=false;
      delete _tokenStream;
    }
    
