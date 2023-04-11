@@ -601,34 +601,6 @@ namespace webifc::geometry {
 			return glm::determinant(mat) < 0;
 		}
 
-		inline	double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
-		{
-			glm::dvec3 ab = b - a;
-			glm::dvec3 ac = c - a;
-
-			glm::dvec3 norm = glm::cross(ab, ac);
-			return glm::length(norm) / 2;
-		}
-
-		inline	double cross2d(const glm::dvec2 &point1, const glm::dvec2 &point2)
-		{
-			return point1.x * point2.y - point1.y * point2.x;
-		}
-
-		inline	double areaOfTriangle(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
-		{
-			glm::dvec2 ab = b - a;
-			glm::dvec2 ac = c - a;
-
-			double norm = cross2d(ab, ac) / 2;
-			return std::fabs(norm);
-		}
-
-		inline	double RandomDouble(double lo, double hi)
-		{
-			return lo + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (hi - lo)));
-		}
-
 		inline	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
 		{
 			glm::dmat4 newMat = mat * mesh.transformation;
