@@ -581,6 +581,7 @@ describe('opening large amounts of data', () => {
 
 afterAll(() => {
     ifcApi.CloseModel(modelID);
+    ifcApi.CloseModel(emptyFileModelID);
     const isOpen: boolean = ifcApi.IsModelOpen(modelID);
     const isOpenEmptyFileModelID: boolean = ifcApi.IsModelOpen(emptyFileModelID);
 
