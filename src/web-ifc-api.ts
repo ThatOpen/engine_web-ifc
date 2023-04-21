@@ -225,12 +225,12 @@ export class IfcAPI {
      * Opens a model and returns a modelID number
      * @param data Buffer containing IFC data (bytes)
      * @param settings Settings for loading the model @see LoaderSettings
-	 * @returns ModelID
+	 * @returns ModelID or -1 if model fails to open
     */
     OpenModel(data: Uint8Array, settings?: LoaderSettings): number {
         let s: LoaderSettings = {
             COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: true, //TODO: This needs to be fixed in the future to rely on elalish/manifold
+            USE_FAST_BOOLS: true,
             CIRCLE_SEGMENTS_LOW: 5,
             CIRCLE_SEGMENTS_MEDIUM: 8,
             CIRCLE_SEGMENTS_HIGH: 12,
@@ -247,6 +247,12 @@ export class IfcAPI {
             return srcSize;
         });
         this.modelSchemaList[result] = SchemaNames.indexOf(this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value);
+        if (this.modelSchemaList[result] == -1) 
+        {
+            Log.error("Unsupported Schema:"+this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value);
+            this.CloseModel(result)
+            return -1;
+        } 
         Log.info("Parsing Model using " + this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value + " Schema");
         return result;
     }

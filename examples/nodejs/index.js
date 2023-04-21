@@ -183,4 +183,4 @@ async function LoadFile(filename) {
 
 }
 
-LoadFile("../example.ifc");
+LoadFile("./Q2.ifc");
