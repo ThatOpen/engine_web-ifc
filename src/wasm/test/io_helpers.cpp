@@ -6,38 +6,38 @@
 #include <fstream>
 #include "../geometry/representation/geometry.h"
 
-namespace webifc::io 
+namespace webifc::io
 {
 
-    inline  glm::dvec2 cmin(glm::dvec2 m, Point p)
+    inline glm::dvec2 cmin(glm::dvec2 m, Point p)
     {
         return glm::dvec2(
             std::min(m.x, p.x),
             std::min(m.y, p.y));
     }
 
-    inline  glm::dvec2 cmax(glm::dvec2 m, Point p)
+    inline glm::dvec2 cmax(glm::dvec2 m, Point p)
     {
         return glm::dvec2(
             std::max(m.x, p.x),
             std::max(m.y, p.y));
     }
 
-    inline  glm::dvec2 rescale(Point p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
+    inline glm::dvec2 rescale(Point p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
     {
         return glm::dvec2(
             ((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
             ((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
     }
 
-    inline  glm::dvec2 rescale(glm::dvec2 p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
+    inline glm::dvec2 rescale(glm::dvec2 p, Bounds b, glm::dvec2 size, glm::dvec2 offset)
     {
         return glm::dvec2(
             ((p.x - b.min.x) / (b.max.x - b.min.x)) * size.x + offset.x,
             ((p.y - b.min.y) / (b.max.y - b.min.y)) * size.y + offset.y);
     }
 
-    inline  std::vector<glm::dvec2> rescale(std::vector<glm::dvec2> input, glm::dvec2 size, glm::dvec2 offset)
+    inline std::vector<glm::dvec2> rescale(std::vector<glm::dvec2> input, glm::dvec2 size, glm::dvec2 offset)
     {
         std::vector<glm::dvec2> retval;
 
@@ -67,7 +67,7 @@ namespace webifc::io
 
         for (auto &pt : input)
         {
-                // here we invert Y, since the canvas +y is down, but makes more sense to think about +y as up
+            // here we invert Y, since the canvas +y is down, but makes more sense to think about +y as up
             retval.emplace_back(
                 ((pt.x - min.x) / (maxSize)) * size.x + offset.x,
                 (size.y - ((pt.y - min.y) / (maxSize)) * size.y) + offset.y);
@@ -185,11 +185,26 @@ namespace webifc::io
         return complete;
     }
 
+    void DumpGradientCurve(std::vector<webifc::geometry::IfcCurve> &curves, webifc::geometry::IfcCurve &curve, std::string filenameV, std::string filenameH)
+    {
+        writeFile(filenameV, GradientHorizontalToObj(curves));
+        writeFile(filenameH, GradientVerticalToObj(curve));
+    }
+
+    void DumpSectionCurves(std::vector<webifc::geometry::IfcCurve> &curves, std::string filename)
+    {
+        writeFile(filename, GradientHorizontalToObj(curves));
+    }
 
     void DumpAlignment(std::vector<webifc::geometry::IfcAlignment> &align, std::string filenameV, std::string filenameH)
     {
         writeFile(filenameV, VAlignmentToObj(align));
         writeFile(filenameH, HAlignmentToObj(align));
+    }
+
+    void DumpCrossSections(std::vector<webifc::geometry::IfcCrossSections> &crossSection, std::string filename)
+    {
+        writeFile(filename, CrossSectionToObj(crossSection));
     }
 
     void DumpIfcGeometryToPath(const webifc::geometry::IfcGeometry &geom, std::string path, double inputScale)
@@ -329,6 +344,54 @@ namespace webifc::io
         writeFile(filename, ToObj(mesh, processor, offset, webifc::geometry::NormalizeIFC));
     }
 
+    std::string GradientHorizontalToObj(const std::vector<webifc::geometry::IfcCurve> &geom)
+    {
+        std::stringstream obj;
+
+        for (uint32_t ia = 0; ia < geom.size(); ia++)
+        {
+            for (uint32_t ic = 0; ic < geom[ia].points.size(); ic++)
+            {
+                glm::dvec3 t = glm::dvec4(geom[ia].points[ic].x, geom[ia].points[ic].y, 0, 1);
+                obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+            }
+        }
+
+        uint32_t idx = 0;
+
+        for (uint32_t ia = 0; ia < geom.size(); ia++)
+        {
+            for (uint32_t ic = 0; ic < geom[ia].points.size() - 1; ic++)
+            {
+                obj << "l " << (idx) << " " << (idx + 1) << "\n";
+                idx++;
+            }
+        }
+
+        return obj.str();
+    }
+
+    std::string GradientVerticalToObj(const webifc::geometry::IfcCurve &geom)
+    {
+        std::stringstream obj;
+
+        for (uint32_t ic = 0; ic < geom.points.size(); ic++)
+        {
+            glm::dvec3 t = glm::dvec4(geom.points[ic].x, geom.points[ic].y, 0, 1);
+            obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+        }
+
+        uint32_t idx = 0;
+
+        for (uint32_t ic = 0; ic < geom.points.size() - 1; ic++)
+        {
+            obj << "l " << (idx) << " " << (idx + 1) << "\n";
+            idx++;
+        }
+
+        return obj.str();
+    }
+
     std::string VAlignmentToObj(const std::vector<webifc::geometry::IfcAlignment> &geom)
     {
         std::stringstream obj;
@@ -339,7 +402,7 @@ namespace webifc::io
             {
                 for (uint32_t ip = 0; ip < geom[ia].Vertical.curves[ic].points.size(); ip++)
                 {
-                    glm::dvec3 t = glm::dvec4(geom[ia].Vertical.curves[ic].points[ip].x,geom[ia].Vertical.curves[ic].points[ip].y, 0, 1);
+                    glm::dvec3 t = glm::dvec4(geom[ia].Vertical.curves[ic].points[ip].x, geom[ia].Vertical.curves[ic].points[ip].y, 0, 1);
                     obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
                 }
             }
@@ -353,7 +416,8 @@ namespace webifc::io
             {
                 for (uint32_t ip = 0; ip < geom[ia].Vertical.curves[ic].points.size() - 1; ip++)
                 {
-                    obj << "l " << (idx) << " " << (idx + 1) << "\n";;
+                    obj << "l " << (idx) << " " << (idx + 1) << "\n";
+                    ;
                     idx++;
                 }
             }
@@ -372,7 +436,7 @@ namespace webifc::io
             {
                 for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size(); ip++)
                 {
-                    glm::dvec3 t = glm::dvec4(geom[ia].Horizontal.curves[ic].points[ip].x,geom[ia].Horizontal.curves[ic].points[ip].y, 0, 1);
+                    glm::dvec3 t = glm::dvec4(geom[ia].Horizontal.curves[ic].points[ip].x, geom[ia].Horizontal.curves[ic].points[ip].y, 0, 1);
                     obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
                 }
             }
@@ -386,11 +450,45 @@ namespace webifc::io
             {
                 for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size() - 1; ip++)
                 {
-                    obj << "l " << (idx) << " " << (idx + 1) << "\n";;
+                    obj << "l " << (idx) << " " << (idx + 1) << "\n";
+                    ;
                     idx++;
                 }
             }
         }
+
+        return obj.str();
+    }
+
+    std::string CrossSectionToObj(const std::vector<webifc::geometry::IfcCrossSections> &geom)
+    {
+        std::stringstream obj;
+
+        // for (uint32_t ia = 0; ia < geom.size(); ia++)
+        // {
+        //     for (uint32_t ic = 0; ic < geom[ia].Horizontal.curves.size(); ic++)
+        //     {
+        //         for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size(); ip++)
+        //         {
+        //             glm::dvec3 t = glm::dvec4(geom[ia].Horizontal.curves[ic].points[ip].x,geom[ia].Horizontal.curves[ic].points[ip].y, 0, 1);
+        //             obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+        //         }
+        //     }
+        // }
+
+        // uint32_t idx = 0;
+
+        // for (uint32_t ia = 0; ia < geom.size(); ia++)
+        // {
+        //     for (uint32_t ic = 0; ic < geom[ia].Horizontal.curves.size(); ic++)
+        //     {
+        //         for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size() - 1; ip++)
+        //         {
+        //             obj << "l " << (idx) << " " << (idx + 1) << "\n";;
+        //             idx++;
+        //         }
+        //     }
+        // }
 
         return obj.str();
     }

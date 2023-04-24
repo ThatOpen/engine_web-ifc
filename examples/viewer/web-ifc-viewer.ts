@@ -1,3 +1,4 @@
+import { IfcApplication } from './../../src/ifc-schema';
 import { IfcAPI, LogLevel,ms, Schemas, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER } from '../../dist/web-ifc-api';
 import { IfcThree } from './web-ifc-three';
 import { Init3DView, InitBasicScene, scene } from './web-ifc-scene';
@@ -159,7 +160,9 @@ async function LoadModel(data: Uint8Array) {
         console.log(errors.get(i));
     }
 
-    if(ifcAPI.GetModelSchema(modelID) == 'IFC2X3' || ifcAPI.GetModelSchema(modelID) == 'IFC4')
+    if(ifcAPI.GetModelSchema(modelID) == 'IFC2X3' || 
+    ifcAPI.GetModelSchema(modelID) == 'IFC4' ||
+    ifcAPI.GetModelSchema(modelID) == 'IFC4X3_RC4')
     {   
         //Example to get all types used in the model
         let types = await ifcAPI.GetAllTypesOfModel(modelID);
@@ -167,12 +170,15 @@ async function LoadModel(data: Uint8Array) {
         {
             for (let i = 0; i < types.length; i++) {
                 let type = types[i];
-                //console.log(type);
-                //console.log(type.typeID);
-                //console.log(type.typeName);
+                console.log(type);
+                console.log(type.typeID);
+                console.log(type.typeName);
             }
         }
     }
+
+    let line = ifcAPI.GetLine(0, 1);
+    console.log(line);
 
     if( ifcAPI.GetModelSchema(modelID) == 'IFC4X3_RC4')
     {

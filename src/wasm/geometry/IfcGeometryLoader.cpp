@@ -20,6 +20,22 @@ namespace webifc::geometry
     ReadLinearScalingFactor();
   }
 
+  IfcCrossSections IfcGeometryLoader::GetCrossSections(uint32_t expressID) const
+  {
+    auto lineID = _loader.ExpressIDToLineID(expressID);
+    auto &line = _loader.GetLine(lineID);
+
+    std::vector<webifc::geometry::IfcCrossSections> crossSections;
+
+    // switch (line.ifcType)
+    // {
+
+    // default:
+    // {
+    //   break;
+    // }
+    // }
+  }
 
   IfcAlignment IfcGeometryLoader::GetAlignment(uint32_t expressID, IfcAlignment alignment, glm::dmat4 transform) const
     {
@@ -1198,6 +1214,30 @@ namespace webifc::geometry
               curve.Add(trim.start.pos3D);
             }
           }
+          else if (trim.start.hasParam && trim.end.hasParam)
+          {
+            _loader.MoveToArgumentOffset(line, 0);
+            auto positionID = _loader.GetRefArgument();
+            auto vectorID = _loader.GetRefArgument();
+            glm::dvec3 placement = GetCartesianPoint3D(positionID);
+            glm::dvec3 vector;
+            vector = GetVector(vectorID);
+
+            if (condition)
+            {
+              glm::dvec3 p1 = placement + vector * trim.start.param;
+              glm::dvec3 p2 = placement + vector * trim.end.param;
+              curve.Add(p1);
+              curve.Add(p2);
+            }
+            else
+            {
+              glm::dvec3 p2 = placement + vector * trim.start.param;
+              glm::dvec3 p1 = placement + vector * trim.end.param;
+              curve.Add(p1);
+              curve.Add(p2);
+            }
+          }
           else
           {
             _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
@@ -1285,6 +1325,42 @@ namespace webifc::geometry
           else
           {
             auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+            for (auto &pt : pts)
+            {
+              curve.Add(pt);
+            }
+          }
+        }
+        else if (dimensions == 3)
+        {
+          _loader.MoveToArgumentOffset(line, 1);
+          if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
+          {
+            auto pnSegment = ReadCurveIndices();
+            for (auto &sg : pnSegment)
+            {
+              if (sg.type == "IFCLINEINDEX")
+              {
+                auto pts = ReadIfcCartesianPointList3D(pts2DRef);
+                for (auto &pt : sg.indexs)
+                {
+                  curve.Add(pts[pt - 1]);
+                }
+              }
+              if (sg.type == "IFCARCINDEX")
+              {
+                auto pts = ReadIfcCartesianPointList3D(pts2DRef);
+                IfcCurve arc = BuildArc3Pt(pts[sg.indexs[0] - 1], pts[sg.indexs[1] - 1], pts[sg.indexs[2] - 1],_circleSegments);
+                for (auto &pt : arc.points)
+                {
+                  curve.Add(pt);
+                }
+              }
+            }
+          }
+          else
+          {
+            auto pts = ReadIfcCartesianPointList3D(pts2DRef);
             for (auto &pt : pts)
             {
               curve.Add(pt);
@@ -1543,6 +1619,54 @@ namespace webifc::geometry
           curve.Add(curve.points[startIndex]);
         }
 
+        break;
+      }
+    case schema::IFCGRADIENTCURVE:
+    {
+      _loader.MoveToArgumentOffset(line, 0);
+      auto tokens = _loader.GetSetArgument();
+      auto u = _loader.GetStringArgument();
+      auto masterCurveID = _loader.GetRefArgument();
+      curve = GetCurve(masterCurveID, 3, false);
+      
+      std::vector<IfcCurve> curveList;
+      for(auto token : tokens)
+      {
+        auto curveID = _loader.GetRefArgument(token);
+        IfcCurve gradientCurve = GetCurve(curveID, 3, false);
+        curveList.push_back(gradientCurve);
+      }
+      // #ifdef DEBUG_DUMP_SVG
+      //   webifc::io::DumpGradientCurve(curveList, curve,"V_gradient.obj", "H_gradient.obj");
+      // #endif
+      break;
+    }
+    case schema::IFCCURVESEGMENT:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+        auto type = _loader.GetStringArgument();
+        _loader.MoveToArgumentOffset(line, 1);
+        auto placementID = _loader.GetRefArgument();
+        _loader.MoveToArgumentOffset(line, 2);
+        double SegmentStart = ReadLenghtMeasure();
+        _loader.MoveToArgumentOffset(line, 4);
+        double SegmentEnd = ReadLenghtMeasure();
+        _loader.MoveToArgumentOffset(line, 6);
+        auto curveID = _loader.GetRefArgument();
+
+        IfcTrimmingArguments trim = IfcTrimmingArguments();
+        trim.start.param = SegmentStart;
+        trim.end.param = SegmentEnd;
+        trim.start.hasParam = true;
+        trim.end.hasParam = true;
+        ComputeCurve(curveID, curve, 3, false, -1, -1, trim);
+
+        glm::dmat3 placement = GetAxis2Placement2D(placementID);
+
+        for (size_t j = 0; j < curve.points.size(); j++)
+        {
+          curve.points[j] = placement * glm::dvec3(curve.points[j].x,curve.points[j].y, curve.points[j].z) ;
+        }
         break;
       }
     case schema::IFCBSPLINECURVE:
@@ -2301,6 +2425,72 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t lineID) const
 
       return profile;
     }
+  case schema::IFCOPENCROSSPROFILEDEF:
+    {
+      IfcProfile profile = IfcProfile();
+
+      _loader.MoveToArgumentOffset(line, 2);
+      auto horizontalWidth = _loader.GetStringArgument(); 
+      _loader.MoveToArgumentOffset(line, 3);
+      auto widthsTokens = _loader.GetSetListArgument();
+      _loader.MoveToArgumentOffset(line, 4);
+      auto slopesTokens = _loader.GetSetListArgument();
+      _loader.MoveToArgumentOffset(line, 5);
+      auto tagsTokens = _loader.GetSetListArgument();
+
+      std::vector<double> listWidths;
+      for (auto &set : widthsTokens)
+      {    
+        for (auto &token : set)
+        {
+          listWidths.push_back(_loader.GetDoubleArgument(token));
+        }
+      }
+
+      std::vector<double> listSlopes;
+      for (auto &set : slopesTokens)
+      {    
+        for (auto &token : set)
+        {
+          listSlopes.push_back(_loader.GetDoubleArgument(token));
+        }
+      }
+
+      std::vector<double> listTags;
+      for (auto &set : tagsTokens)
+      {    
+        for (auto &token : set)
+        {
+          listTags.push_back(_loader.GetDoubleArgument(token));
+        }
+      }
+
+      // Initialize starting point of profile curve at origin
+      double x = 0.0;
+      double y = 0.0;
+
+      // Iterate over each width and slope in the lists
+      for (size_t i = 0; i < listWidths.size(); ++i) {
+          double width = listWidths[i];
+          double slope_degrees = listSlopes[i];
+
+          // Convert slope from degrees to radians
+          double slope_radians = slope_degrees * (CONST_PI / 180.0);
+
+          // Calculate the change in x and y based on the width and slope
+          double dx = width * cos(slope_radians);
+          double dy = width * sin(slope_radians);
+
+          // Add the new (x,y) coordinate to the profile curve vector
+          profile.curve.Add(glm::dvec2(x, y));
+
+          // Update the (x,y) coordinates for the next line segment
+          x += dx;
+          y += dy;
+      }
+
+      return profile;
+    }
   default:
     _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", line.expressID, line.ifcType);
     break;
@@ -2445,12 +2635,42 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
   return glm::dmat3();
 }
 
-glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
+glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID, glm::dvec3 vector) const
 {
   uint32_t lineID = _loader.ExpressIDToLineID(expressID);
   auto &line = _loader.GetLine(lineID);
   switch (line.ifcType)
   {
+  case schema::IFCPOINTBYDISTANCEEXPRESSION:
+    {
+      _loader.MoveToArgumentOffset(line, 0);
+      IfcCurve curve;
+      auto lnSegment = 0;
+
+      if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
+      {
+        _loader.StepBack();
+        lnSegment = ReadLenghtMeasure();           
+      }
+
+      _loader.MoveToArgumentOffset(line, 5);
+      auto t = _loader.GetTokenType();
+      if (t == parsing::IfcTokenType::REF)
+      {
+        _loader.StepBack();
+        auto curveId = _loader.GetRefArgument();
+        curve = GetCurve(curveId, 3, false);
+      }
+      else
+      {
+        curve.points.push_back(glm::dvec3(0,0,0));
+        curve.points.push_back(glm::dvec3(1e+10,0,0));
+      }
+
+      glm::dmat4 result = curve.getPlacementAtDistance(lnSegment);
+
+      return result;
+    }
   case schema::IFCAXIS1PLACEMENT:
     {
       glm::dvec3 zAxis(0, 0, 1);
@@ -2494,6 +2714,33 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
       }
 
       _loader.MoveToArgumentOffset(line, 2);
+      parsing::IfcTokenType xID = _loader.GetTokenType();
+      if (xID == parsing::IfcTokenType::REF)
+      {
+        _loader.StepBack();
+        xAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+      }
+
+      glm::dvec3 pos = GetCartesianPoint3D(posID);
+
+      glm::dvec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+      xAxis = glm::normalize(glm::cross(yAxis, zAxis));
+
+      return glm::dmat4(
+        glm::dvec4(xAxis, 0),
+        glm::dvec4(yAxis, 0),
+        glm::dvec4(zAxis, 0),
+        glm::dvec4(pos, 1));
+    }
+  case schema::IFCAXIS2PLACEMENT2D:
+    {
+      glm::dvec3 xAxis(1, 0, 0);
+      glm::dvec3 zAxis(0, 0, 1);
+
+      _loader.MoveToArgumentOffset(line, 0);
+      uint32_t posID = _loader.GetRefArgument();
+
+      _loader.MoveToArgumentOffset(line, 1);
       parsing::IfcTokenType xID = _loader.GetTokenType();
       if (xID == parsing::IfcTokenType::REF)
       {
@@ -2603,6 +2850,24 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
         glm::dvec4(Axis3 * scale3, 0),
         glm::dvec4(pos, 1));
     }
+  case schema::IFCAXIS2PLACEMENTLINEAR:
+    {    
+        glm::dvec3 vector = glm::dvec3(0,0,1);
+        _loader.MoveToArgumentOffset(line, 0);
+        uint32_t posID = _loader.GetRefArgument();
+        if (_loader.GetRefArgument() == parsing::IfcTokenType::REF) 
+        {
+          _loader.StepBack();
+          glm::dvec3 vector = GetCartesianPoint3D(_loader.GetRefArgument());
+        }
+        return GetLocalPlacement(posID, vector);
+    }
+  case schema::IFCLINEARPLACEMENT:
+    {
+        _loader.MoveToArgumentOffset(line, 1);
+        uint32_t posID = _loader.GetRefArgument();
+        return GetLocalPlacement(posID);
+    } 
   default:
     _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", line.expressID, line.ifcType);
     break;
@@ -2949,6 +3214,20 @@ const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &
 double IfcGeometryLoader::GetLinearScalingFactor() const
 { 
   return _linearScalingFactor;
+}
+
+double IfcGeometryLoader::ReadLenghtMeasure() const
+{
+  parsing::IfcTokenType t = _loader.GetTokenType();
+  if (t == parsing::IfcTokenType::LABEL)
+  {
+    _loader.StepBack();
+    if (_loader.GetStringArgument() == "IFCNONNEGATIVELENGTHMEASURE")
+    {
+      _loader.GetTokenType();
+      return _loader.GetDoubleArgument();
+    }
+  }
 }
 
 std::vector<IfcSegmentIndexSelect> IfcGeometryLoader::ReadCurveIndices() const

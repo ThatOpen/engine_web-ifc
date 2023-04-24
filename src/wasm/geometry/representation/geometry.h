@@ -71,6 +71,7 @@ namespace webifc::geometry {
 			bool isConvex;
 			bool isComposite = false;
 			std::vector<IfcProfile> profiles;
+			std::vector<double> tags;
 		};
 
 
@@ -122,6 +123,11 @@ namespace webifc::geometry {
 			glm::dvec3 Direction;
 			IfcProfile Profile;
 			double Length;
+		};
+
+		struct IfcCrossSections
+		{
+			std::vector<IfcProfile> Profiles;
 		};
 
 		struct IfcAlignment

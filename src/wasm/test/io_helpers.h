@@ -118,7 +118,10 @@ namespace webifc::io
     std::string makeSVGLines(SVGDrawing drawing);
     std::string ToObj(const webifc::geometry::IfcGeometry &geom, size_t &offset, glm::dmat4 transform = glm::dmat4(1), double inputScale = 1.0);
     std::string ToObj(webifc::geometry::IfcComposedMesh &mesh, webifc::geometry::IfcGeometryProcessor &processor, size_t &offset, glm::dmat4 mat = glm::dmat4(1));
+    void DumpGradientCurve(std::vector<webifc::geometry::IfcCurve> &curves, webifc::geometry::IfcCurve &curve, std::string filenameV, std::string filenameH);
+    void DumpSectionCurves(std::vector<webifc::geometry::IfcCurve> &curves, std::string filename);
     void DumpAlignment(std::vector<webifc::geometry::IfcAlignment> &align, std::string filenameV, std::string filenameH);
+    void DumpCrossSections(std::vector<webifc::geometry::IfcCrossSections> &crossSection, std::string filename);
     void DumpIfcGeometryToPath(const webifc::geometry::IfcGeometry &geom, std::string path, double inputScale);
     std::string ToObj(webifc::geometry::IfcGeometry &geom, size_t &offset, glm::dmat4 transform = glm::dmat4(1));
     void DumpIfcGeometry(webifc::geometry::IfcGeometry &geom, std::string filename);
@@ -126,6 +129,9 @@ namespace webifc::io
     std::string makeSVGLines(std::vector<glm::dvec2> input, std::vector<uint32_t> indices);
     std::string makeSVGLines(std::vector<std::vector<glm::dvec2>> lines);
     void DumpMesh(webifc::geometry::IfcComposedMesh &mesh, webifc::geometry::IfcGeometryProcessor &processor, std::string filename);
+    std::string GradientHorizontalToObj(const std::vector<webifc::geometry::IfcCurve> &geom);
+    std::string GradientVerticalToObj(const webifc::geometry::IfcCurve &geom);
     std::string VAlignmentToObj(const std::vector<webifc::geometry::IfcAlignment> &geom);
     std::string HAlignmentToObj(const std::vector<webifc::geometry::IfcAlignment> &geom);
+    std::string CrossSectionToObj(const std::vector<webifc::geometry::IfcCrossSections> &geom);
 }

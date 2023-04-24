@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-
 #include <iostream>
 #include <fstream>
 #include <filesystem>
@@ -14,7 +13,6 @@
 #include "utility/LoaderError.h"
 #include "utility/LoaderSettings.h"
 #include "schema/ifc-schema.h"
-
 
 using namespace webifc::io;
 
@@ -74,6 +72,36 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
     return alignments;
 }
 
+std::vector<webifc::geometry::IfcCrossSections> GetCrossSections(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
+{
+    std::vector<webifc::geometry::IfcCrossSections> crossSections;
+
+    std::vector<uint32_t> typeList;
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLID);
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLIDHORIZONTAL);
+
+    for (auto &type : typeList)
+    {
+
+        auto elements = loader.GetExpressIDsWithType(type);
+
+        for (unsigned int i = 0; i < elements.size(); i++)
+        {
+            auto crossSection = geometryLoader.GetLoader().GetCrossSections(elements[i]);
+            crossSections.push_back(crossSection);
+        }
+    }
+
+    bool writeFiles = true;
+
+    if (writeFiles)
+    {
+        DumpCrossSections(crossSections, "CrossSection.obj");
+    }
+
+    return crossSections;
+}
+
 std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
 {
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
@@ -87,12 +115,10 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
 
-            
-            for (auto& geom : mesh.geometries)
+            for (auto &geom : mesh.geometries)
             {
                 auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
             }
-            
 
             meshes.push_back(mesh);
         }
@@ -232,7 +258,7 @@ void TestTriangleDecompose()
         std::cout << "Start test " << i << std::endl;
 
         bool swapped = false;
-      
+
         // webifc::IsValidTriangulation(triangles, points);
 
         std::vector<webifc::io::Point> pts;
@@ -244,7 +270,6 @@ void TestTriangleDecompose()
             p.y = pt.y;
             pts.push_back(p);
         }
-
     }
 }
 
@@ -260,16 +285,10 @@ int main()
 
     // return 0;
 
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
-    // std::string content = ReadFile("Q2.ifc");
-    // std::string content = ReadFile("../../../examples/example.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#278 pending/extrusions.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/15.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Corridor-5a_renamedProfiles_4x3.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/Q2.ifc");
 
-	webifc::utility::LoaderSettings set;
+    webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.USE_FAST_BOOLS = true;
 
@@ -295,7 +314,7 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS_HIGH,set.COORDINATE_TO_ORIGIN);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, errorHandler, schemaManager, set.CIRCLE_SEGMENTS_HIGH, set.COORDINATE_TO_ORIGIN);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);
@@ -306,9 +325,12 @@ int main()
     // auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
     // SpecificLoadTest(loader, geometryLoader, 15);
     // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
+    // SpecificLoadTest(loader, geometryLoader,616888); // (E28)_CARRETERA_10.94_4X3
+    // SpecificLoadTest(loader, geometryLoader, 22716); // Corridor-5a_renamedProfiles_4x3
+    GetLine(loader, 2);
     auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
-
+    auto CrossSections = GetCrossSections(loader, geometryLoader);
 
     auto errors = errorHandler.GetErrors();
     errorHandler.ClearErrors();

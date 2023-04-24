@@ -27,7 +27,7 @@ namespace webifc::geometry
     IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments);
     std::array<glm::dvec3,2> GetAxis1Placement(const uint32_t expressID) const;
     glm::dmat3 GetAxis2Placement2D(const uint32_t expressID) const;
-    glm::dmat4 GetLocalPlacement(const uint32_t expressID) const;
+    glm::dmat4 GetLocalPlacement(const uint32_t expressID, glm::dvec3 vector = glm::dvec3(1)) const;
     glm::dvec3 GetCartesianPoint3D(const uint32_t expressID) const;
     glm::dvec2 GetCartesianPoint2D(const uint32_t expressID) const;
     glm::dvec3 GetVector(const uint32_t expressID) const;
@@ -41,6 +41,7 @@ namespace webifc::geometry
     IfcBound3D GetBound(const uint32_t expressID) const;
     IfcCurve GetLoop(const uint32_t expressID) const;
     std::optional<glm::dvec4> GetColor(uint32_t expressID) const;
+    IfcCrossSections GetCrossSections(uint32_t expressID) const;
     IfcAlignment GetAlignment(uint32_t expressID, IfcAlignment alignment = IfcAlignment(), glm::dmat4 transform = glm::dmat4(1)) const;
     bool GetColor(const uint32_t expressID, const glm::dvec4 &outputColor) const; 
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids() const;
@@ -55,6 +56,7 @@ namespace webifc::geometry
     IfcProfile GetProfileByLine(uint32_t lineID) const;
     IfcTrimmingSelect GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const;
     void ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool edge, int sameSense = -1, int trimSense = -1, IfcTrimmingArguments trim = {}) const;
+    double ReadLenghtMeasure() const;
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
     const webifc::parsing::IfcLoader &_loader;
     webifc::utility::LoaderErrorHandler &_errorHandler;

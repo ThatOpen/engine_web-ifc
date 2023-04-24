@@ -286,6 +286,36 @@ webifc::geometry::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
     return geomLoader->GetGeometry(expressID);
 }
 
+std::vector<webifc::geometry::IfcCrossSections> GetAllSections(uint32_t modelID)
+{
+    auto loader = models[modelID].GetLoader();
+    auto geomLoader = models[modelID].GetGeometryLoader();
+
+    if (!loader || !geomLoader)
+    {
+        return {};
+    }
+
+    std::vector<uint32_t> typeList;
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLID);
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLIDHORIZONTAL);  
+
+    std::vector<webifc::geometry::IfcCrossSections> crossSections;
+
+    for(auto& type: typeList)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+
+        for (size_t i = 0; i < elements.size(); i++)
+        {
+            webifc::geometry::IfcCrossSections crossSection = geomLoader->GetLoader().GetCrossSections(elements[i]);
+            crossSections.push_back(crossSection);
+        }
+    }
+
+    return crossSections;
+}
+
 std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
 {
     auto loader = models[modelID].GetLoader();
@@ -857,7 +887,7 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     loader->MoveToArgumentOffset(line, 0);
 
     auto arguments = emscripten::val::array();
-
+    std::cout << "data in" << std::endl;
     GetArgs(modelID, arguments);
 
     auto retVal = emscripten::val::object();
