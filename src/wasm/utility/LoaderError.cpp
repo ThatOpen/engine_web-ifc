@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "LoaderError.h"
+#include "Logging.h"
 
 namespace webifc::utility 
 {

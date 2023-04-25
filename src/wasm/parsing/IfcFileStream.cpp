@@ -38,11 +38,17 @@
 
    void IfcTokenStream::IfcFileStream::Back()
    {
-      _pointer--;
-      if (_pointer < 0)
+      if (_pointer == 0)
       {
-        _startRef--;
-        load();
+        if (_startRef > 0) {
+          _startRef--;
+          load();
+          _pointer = _currentSize - 1;
+        }
+      } 
+      else
+      {
+        _pointer--;
       }
    } 
 

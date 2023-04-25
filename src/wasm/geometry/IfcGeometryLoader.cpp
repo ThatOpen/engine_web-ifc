@@ -420,7 +420,6 @@ namespace webifc::geometry
 
           glm::dvec3 iPoint = glm::dvec3(StartDistAlong, StartHeight, 1);
           glm::dvec3 jPoint = glm::dvec3(StartDistAlong + HorizontalLength, StartHeight + HorizontalLength * StartGradient, 1);
-          glm::dvec3 Normal = glm::dvec3(0, 0, 1);
 
           curve.Add(iPoint);
           curve.Add(jPoint);
@@ -512,7 +511,6 @@ namespace webifc::geometry
         for (auto &styleSelect : ifcPresentationStyleSelects)
         {
           uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
-          glm::dvec4 color;
           auto foundColor = GetColor(styleSelectID);
           if (foundColor) return foundColor;
         }
@@ -527,7 +525,6 @@ namespace webifc::geometry
         for (auto &styleElementSelect : ifcSurfaceStyleElementSelects)
         {
           uint32_t styleElementSelectID = _loader.GetRefArgument(styleElementSelect);
-          glm::dvec4 color;
           auto foundColor = GetColor(styleElementSelectID);
           if (foundColor) return foundColor;
         }
@@ -2312,14 +2309,14 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t lineID) const
 
 
 
-IfcProfile3D IfcGeometryLoader::GetProfile3D(uint32_t lineID) const
+IfcProfile IfcGeometryLoader::GetProfile3D(uint32_t lineID) const
 {
   auto &line = _loader.GetLine(lineID);
   switch (line.ifcType)
   {
   case schema::IFCARBITRARYOPENPROFILEDEF:
     {
-      IfcProfile3D profile;
+      IfcProfile profile;
 
       _loader.MoveToArgumentOffset(line, 0);
       profile.type = _loader.GetStringArgument();
@@ -2333,7 +2330,7 @@ IfcProfile3D IfcGeometryLoader::GetProfile3D(uint32_t lineID) const
     break;
   }
 
-  return IfcProfile3D();
+  return IfcProfile();
 }
 
 glm::dvec3 IfcGeometryLoader::GetVector(uint32_t expressID) const

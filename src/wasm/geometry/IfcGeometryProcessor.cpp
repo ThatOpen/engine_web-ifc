@@ -12,7 +12,7 @@
 #include "operations/geometryutils.h"
 #include "operations/curve-utils.h"
 #include "operations/mesh_utils.h"
-#include "fuzzy/fuzzy-bools.h"
+#include <fuzzy/fuzzy-bools.h>
 
 
 namespace webifc::geometry
@@ -39,42 +39,6 @@ namespace webifc::geometry
     void IfcGeometryProcessor::Clear()
     {
         _expressIDToGeometry = {};
-    }
-
-    fuzzybools::Geometry IfcGeometryProcessor::GeomToFBGeom(const IfcGeometry& geom)
-    {
-        fuzzybools::Geometry fbGeom;
-
-        for (size_t i = 0; i < geom.numFaces; i++)
-        {
-            const Face& f = geom.GetFace(i);
-
-            auto a = geom.GetPoint(f.i0);
-            auto b = geom.GetPoint(f.i1);
-            auto c = geom.GetPoint(f.i2);
-
-            fbGeom.AddFace(a, b, c);
-        }
-
-        return fbGeom;
-    }
-
-    IfcGeometry IfcGeometryProcessor::FBGeomToGeom(const fuzzybools::Geometry& fbGeom)
-    {
-        IfcGeometry geom;
-
-        for (size_t i = 0; i < fbGeom.numFaces; i++)
-        {
-            const fuzzybools::Face& f = fbGeom.GetFace(i);
-
-            auto a = fbGeom.GetPoint(f.i0);
-            auto b = fbGeom.GetPoint(f.i1);
-            auto c = fbGeom.GetPoint(f.i2);
-
-            geom.AddFace(a, b, c);
-        }
-
-        return geom;
     }
 
 
@@ -207,7 +171,7 @@ namespace webifc::geometry
                         voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
                     }
 
-                    finalGeometry = BoolSubtract(flatElementMeshes, voidGeoms, line.expressID);
+                    finalGeometry = BoolSubtract(flatElementMeshes, voidGeoms);
                 }
 
                 _expressIDToGeometry[line.expressID] = finalGeometry;
@@ -267,7 +231,7 @@ namespace webifc::geometry
                     auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
                     auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
-                    IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes, line.expressID);
+                    IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes);
 
                     _expressIDToGeometry[line.expressID] = resultMesh;
                     mesh.hasGeometry = true;
@@ -313,7 +277,7 @@ namespace webifc::geometry
                         return mesh;
                     }
 
-                    IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes, line.expressID);
+                    IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes);
 
                     _expressIDToGeometry[line.expressID] = resultMesh;
                     mesh.hasGeometry = true;
@@ -1255,7 +1219,7 @@ namespace webifc::geometry
 
                 _loader.MoveToArgumentOffset(line, 0);
                 uint32_t profileID = _loader.GetRefArgument();
-                IfcProfile3D profile =  _geometryLoader.GetProfile3D(_loader.ExpressIDToLineID(profileID));
+                IfcProfile profile =  _geometryLoader.GetProfile3D(_loader.ExpressIDToLineID(profileID));
 
                 _loader.MoveToArgumentOffset(line, 1);
                 if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
@@ -1363,9 +1327,13 @@ namespace webifc::geometry
                 _isCoordinated = true;
             }
 
-            auto &geom = _expressIDToGeometry[composedMesh.expressID];
-            if (!geom.normalized)
-                geom.Normalize();
+            glm::dvec3 center;
+            glm::dvec3 extents;
+            auto geom = _expressIDToGeometry[composedMesh.expressID];
+            if(geometry.testReverse()) geom.ReverseFaces();
+            geom.GetCenterExtents(center,extents);
+            auto normalizedGeom = geom.Normalize(center,extents);
+            _expressIDToGeometry[composedMesh.expressID]=*static_cast<IfcGeometry*>(&normalizedGeom);
 
             if (!composedMesh.hasColor)
             {
@@ -1377,13 +1345,10 @@ namespace webifc::geometry
                 newParentColor = composedMesh.color;
                 newHasColor = composedMesh.hasColor;
             }
-            geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(geom.min);
+      
+            geometry.transformation = _coordinationMatrix * newMatrix;
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
-            if(geometry.testReverse())
-            {
-                geom.ReverseFaces();
-            }
 
             flatMesh.geometries.push_back(geometry);
         }
@@ -1395,50 +1360,16 @@ namespace webifc::geometry
     }
 
 
-    IfcGeometry IfcGeometryProcessor::BoolSubtract(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, uint32_t expressID)
+    IfcGeometry IfcGeometryProcessor::BoolSubtract(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms)
     {
-        std::vector<IfcGeometry> results;
-
-        std::vector<IfcGeometry> firstGeoms;
-        for (auto &firsts : firstGroups)
-        {
-            if (firsts.components.size() < 2)
-            {
-                firstGeoms.push_back(firsts);
-            }
-            else
-            {
-                firstGeoms.insert(firstGeoms.end(), firsts.components.begin(), firsts.components.end());
-            }
-        }
-
-        std::vector<IfcGeometry> secondGeoms;
-        for (auto &seconds : secondGroups)
-        {
-            if (seconds.components.size() < 2)
-            {
-                secondGeoms.push_back(seconds);
-            }
-            else
-            {
-                secondGeoms.insert(secondGeoms.end(), seconds.components.begin(), seconds.components.end());
-            }
-        }
+        IfcGeometry finalResult;
 
         for (auto &firstGeom : firstGeoms)
         {
-            IfcGeometry result = firstGeom;
+            fuzzybools::Geometry result = firstGeom;
             for (auto &secondGeom : secondGeoms)
             {
                 bool doit = true;
-                glm::dvec3 center;
-                glm::dvec3 extents;
-                result.GetCenterExtents(center, extents);
-
-                glm::dvec3 s_center;
-                glm::dvec3 s_extents;
-                secondGeom.GetCenterExtents(s_center, s_extents);
-
                 if (secondGeom.numFaces == 0)
                 {
                     _errorHandler.ReportError(utility::LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target");
@@ -1459,17 +1390,13 @@ namespace webifc::geometry
 
                 if (doit)
                 {
-                   
-                    auto fb1 = GeomToFBGeom(result);
-                    auto fb2 = GeomToFBGeom(secondGeom);
-
-                    result = FBGeomToGeom(fuzzybools::Subtract(fb1, fb2));
+                    result = fuzzybools::Subtract(result, secondGeom);
                 }
             }
-            results.push_back(result);
+            finalResult.AddGeometry(result);
         }
 
-        return flattenGeometry(results);
+        return finalResult;
     }
 
     std::vector<uint32_t> IfcGeometryProcessor::Read2DArrayOfThreeIndices()
