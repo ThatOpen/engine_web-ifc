@@ -6,6 +6,7 @@
 //Curve Implementation of a Curve
 
 #include <vector>
+#include <algorithm>
 #include <glm/glm.hpp>
 #include "IfcCurve.h"
 

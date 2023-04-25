@@ -6,7 +6,6 @@
 
 #include <vector>
 #include <string>
-#include "Logging.h"
 
 namespace webifc::utility
 {

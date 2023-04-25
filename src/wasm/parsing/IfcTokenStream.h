@@ -76,7 +76,7 @@ namespace webifc::parsing
           private:
             void load();
             std::function<uint32_t(char *, size_t, size_t)> _dataSource;
-            size_t _pointer=0;
+            int16_t _pointer=0;
             size_t _size;
             char prev;
             size_t _currentSize=0;

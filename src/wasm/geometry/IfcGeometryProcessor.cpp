@@ -171,7 +171,7 @@ namespace webifc::geometry
                         voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
                     }
 
-                    finalGeometry = BoolSubtract(flatElementMeshes, voidGeoms, line.expressID);
+                    finalGeometry = BoolSubtract(flatElementMeshes, voidGeoms);
                 }
 
                 _expressIDToGeometry[line.expressID] = finalGeometry;
@@ -231,7 +231,7 @@ namespace webifc::geometry
                     auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
                     auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
-                    IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes, line.expressID);
+                    IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes);
 
                     _expressIDToGeometry[line.expressID] = resultMesh;
                     mesh.hasGeometry = true;
@@ -277,7 +277,7 @@ namespace webifc::geometry
                         return mesh;
                     }
 
-                    IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes, line.expressID);
+                    IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes);
 
                     _expressIDToGeometry[line.expressID] = resultMesh;
                     mesh.hasGeometry = true;
@@ -1360,7 +1360,7 @@ namespace webifc::geometry
     }
 
 
-    IfcGeometry IfcGeometryProcessor::BoolSubtract(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, uint32_t expressID)
+    IfcGeometry IfcGeometryProcessor::BoolSubtract(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms)
     {
         IfcGeometry finalResult;
 
