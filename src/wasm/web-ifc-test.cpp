@@ -265,7 +265,6 @@ int main()
 
 	webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
-    set.USE_FAST_BOOLS = true;
 
     webifc::utility::LoaderErrorHandler errorHandler;
     webifc::schema::IfcSchemaManager schemaManager;
@@ -289,7 +288,7 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS_HIGH,set.COORDINATE_TO_ORIGIN);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS,set.COORDINATE_TO_ORIGIN);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);
