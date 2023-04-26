@@ -32,7 +32,7 @@ struct ModelInfo
         {
             if (geometryLoader==nullptr)
             {
-                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS_HIGH,settings.COORDINATE_TO_ORIGIN);
+                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN);
             }
             return geometryLoader;
         }
@@ -936,11 +936,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<webifc::utility::LoaderSettings>("LoaderSettings")
         .field("COORDINATE_TO_ORIGIN", &webifc::utility::LoaderSettings::COORDINATE_TO_ORIGIN)
-        .field("USE_FAST_BOOLS", &webifc::utility::LoaderSettings::USE_FAST_BOOLS)
-        .field("CIRCLE_SEGMENTS_LOW", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS_LOW)
-        .field("CIRCLE_SEGMENTS_MEDIUM", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS_MEDIUM)
-        .field("CIRCLE_SEGMENTS_HIGH", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS_HIGH)
-        .field("BOOL_ABORT_THRESHOLD", &webifc::utility::LoaderSettings::BOOL_ABORT_THRESHOLD)
+        .field("CIRCLE_SEGMENTS", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &webifc::utility::LoaderSettings::TAPE_SIZE)
         .field("MEMORY_LIMIT", &webifc::utility::LoaderSettings::MEMORY_LIMIT)
     ;

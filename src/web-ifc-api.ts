@@ -55,11 +55,7 @@ export const LINE_END = 9;
 /**
  * Settings for the IFCLoader
  * @property {boolean} COORDINATE_TO_ORIGIN - If true, the model will be translated to the origin.
- * @property {boolean} USE_FAST_BOOLS - Deprecated option, will be removed in next releases.
- * @property {number} CIRCLE_SEGMENTS_LOW - Number of segments for low quality circles.
- * @property {number} CIRCLE_SEGMENTS_MEDIUM - Number of segments for medium quality circles.
- * @property {number} CIRCLE_SEGMENTS_HIGH - Number of segments for high quality circles.
- * @property {number} BOOL_ABORT_THRESHOLD - Threshold for aborting boolean operations.
+ * @property {number} CIRCLE_SEGMENTS - Number of segments for circles. 
  * @property {number} MEMORY_LIMIT - Memory limit for the loader.
  * @property {number} TAPE_SIZE - Size of the tape for the loader.
  */
@@ -69,6 +65,7 @@ export interface LoaderSettings {
     CIRCLE_SEGMENTS_LOW?: number;
     CIRCLE_SEGMENTS_MEDIUM?: number;
     CIRCLE_SEGMENTS_HIGH?: number;
+    CIRCLE_SEGMENTS?: number;
     BOOL_ABORT_THRESHOLD?: number;
     MEMORY_LIMIT?: number;
     TAPE_SIZE? : number;
@@ -221,6 +218,25 @@ export class IfcAPI {
     }
 
 
+    private CreateSettings(settings?: LoaderSettings) {
+        let s: LoaderSettings = {
+            COORDINATE_TO_ORIGIN: false,
+            CIRCLE_SEGMENTS: 12,
+            TAPE_SIZE: 67108864,
+            MEMORY_LIMIT: 3221225472,
+            ...settings
+        };
+        let deprecated = ['USE_FAST_BOOLS','CIRCLE_SEGMENTS_LOW','CIRCLE_SEGMENTS_MEDIUM','CIRCLE_SEGMENTS_HIGH'];
+        for (let d in deprecated) 
+        {
+            if (d in s)
+            {
+                Log.info('Use of deprecated settings '+d+' detected');
+            }
+        }
+        return s;
+    }
+
     /**
      * Opens a model and returns a modelID number
      * @param data Buffer containing IFC data (bytes)
@@ -228,17 +244,7 @@ export class IfcAPI {
 	 * @returns ModelID or -1 if model fails to open
     */
     OpenModel(data: Uint8Array, settings?: LoaderSettings): number {
-        let s: LoaderSettings = {
-            COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: true,
-            CIRCLE_SEGMENTS_LOW: 5,
-            CIRCLE_SEGMENTS_MEDIUM: 8,
-            CIRCLE_SEGMENTS_HIGH: 12,
-            BOOL_ABORT_THRESHOLD: 10000,
-            TAPE_SIZE: 67108864,
-            MEMORY_LIMIT: 3221225472,
-            ...settings
-        };
+        let s = this.CreateSettings(settings);
         let result = this.wasmModule.OpenModel(s, (destPtr: number, offsetInSrc: number, destSize: number) => {
             let srcSize = Math.min(data.byteLength - offsetInSrc, destSize);
             let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + srcSize);
@@ -272,17 +278,7 @@ export class IfcAPI {
 	 * @returns ModelID
     */
     CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
-        let s: LoaderSettings = {
-            COORDINATE_TO_ORIGIN: false,
-            USE_FAST_BOOLS: true, //TODO: This needs to be fixed in the future to rely on elalish/manifold
-            CIRCLE_SEGMENTS_LOW: 5,
-            CIRCLE_SEGMENTS_MEDIUM: 8,
-            CIRCLE_SEGMENTS_HIGH: 12,
-            BOOL_ABORT_THRESHOLD: 10000,
-            TAPE_SIZE: 67108864,
-            MEMORY_LIMIT: 3221225472,
-            ...settings
-        };
+        let s = this.CreateSettings(settings);
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = SchemaNames.indexOf(model.schema);
         const modelName = model.name || "web-ifc-model-"+result+".ifc";
