@@ -728,15 +728,6 @@ emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
             endOfLine = true;
             break;
         }
-        case webifc::parsing::IfcTokenType::UNKNOWN:
-        {
-            auto obj = emscripten::val::object(); 
-            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::parsing::IfcTokenType::UNKNOWN))); 
-
-            topValue.set(topPosition++, obj);
-            
-            break;
-        }
         case webifc::parsing::IfcTokenType::EMPTY:
         {
             topValue.set(topPosition++, emscripten::val::null());
