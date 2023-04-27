@@ -472,11 +472,6 @@ namespace webifc::geometry
                     _loader.MoveToArgumentOffset(line, 1);
                     auto type = _loader.GetStringArgument();
 
-                    if (type != "Body" && type != "Facetation")
-                    {
-                        return mesh;
-                    }
-
                     _loader.MoveToArgumentOffset(line, 3);
                     auto repItems = _loader.GetSetArgument();
 
