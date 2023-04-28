@@ -55,6 +55,7 @@ tsSchema.push(`export const SchemaNames: Array<string> = [];`);
 
 
 tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
+tsSchema.push('\tif (Array.isArray(tapeItem)) tapeItem.map((p:any) => TypeInitialiser(schema,p));');
 tsSchema.push('\tif (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
 tsSchema.push('}');
 tsSchema.push('function Labelise(tapeItem:any) {');

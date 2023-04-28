@@ -252,14 +252,15 @@ export class IfcAPI {
             dest.set(src);
             return srcSize;
         });
-        this.modelSchemaList[result] = SchemaNames.indexOf(this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value);
+        var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
+        this.modelSchemaList[result] = SchemaNames.indexOf(schemaName);
         if (this.modelSchemaList[result] == -1) 
         {
-            Log.error("Unsupported Schema:"+this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value);
+            Log.error("Unsupported Schema:"+schemaName);
             this.CloseModel(result)
             return -1;
         } 
-        Log.info("Parsing Model using " + this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value + " Schema");
+        Log.info("Parsing Model using " + schemaName + " Schema");
         return result;
     }
 
