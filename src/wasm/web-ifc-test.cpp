@@ -78,6 +78,7 @@ std::vector<webifc::geometry::IfcCrossSections> GetCrossSections(webifc::parsing
 
     std::vector<uint32_t> typeList;
     typeList.push_back(webifc::schema::IFCSECTIONEDSOLID);
+    typeList.push_back(webifc::schema::IFCSECTIONEDSURFACE);
     typeList.push_back(webifc::schema::IFCSECTIONEDSOLIDHORIZONTAL);
 
     for (auto &type : typeList)
@@ -285,8 +286,10 @@ int main()
 
     // return 0;
 
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/(E28)_CARRETERA_10.94_4X3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Corridor-5a_renamedProfiles_4x3.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/Q2.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/Q2.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/muysimple.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -327,8 +330,10 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
     // SpecificLoadTest(loader, geometryLoader,616888); // (E28)_CARRETERA_10.94_4X3
     // SpecificLoadTest(loader, geometryLoader, 22716); // Corridor-5a_renamedProfiles_4x3
-    GetLine(loader, 2);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    // SpecificLoadTest(loader, geometryLoader, 24943); // Corridor-5a_renamedProfiles_4x3
+    SpecificLoadTest(loader, geometryLoader, 4035); // muysimple
+    // GetLine(loader, 2);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
     auto CrossSections = GetCrossSections(loader, geometryLoader);
 

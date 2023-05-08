@@ -187,13 +187,13 @@ namespace webifc::io
 
     void DumpGradientCurve(std::vector<webifc::geometry::IfcCurve> &curves, webifc::geometry::IfcCurve &curve, std::string filenameV, std::string filenameH)
     {
-        writeFile(filenameV, GradientHorizontalToObj(curves));
-        writeFile(filenameH, GradientVerticalToObj(curve));
+        writeFile(filenameV, GradientVerticalToObj(curves));
+        writeFile(filenameH, GradientHorizontalToObj(curve));
     }
 
     void DumpSectionCurves(std::vector<webifc::geometry::IfcCurve> &curves, std::string filename)
     {
-        writeFile(filename, GradientHorizontalToObj(curves));
+        writeFile(filename, GradientVerticalToObj(curves));
     }
 
     void DumpAlignment(std::vector<webifc::geometry::IfcAlignment> &align, std::string filenameV, std::string filenameH)
@@ -344,16 +344,19 @@ namespace webifc::io
         writeFile(filename, ToObj(mesh, processor, offset, webifc::geometry::NormalizeIFC));
     }
 
-    std::string GradientHorizontalToObj(const std::vector<webifc::geometry::IfcCurve> &geom)
+    std::string GradientVerticalToObj(const std::vector<webifc::geometry::IfcCurve> &geom)
     {
         std::stringstream obj;
 
         for (uint32_t ia = 0; ia < geom.size(); ia++)
         {
-            for (uint32_t ic = 0; ic < geom[ia].points.size(); ic++)
+            if (geom[ia].points.size() > 0)
             {
-                glm::dvec3 t = glm::dvec4(geom[ia].points[ic].x, geom[ia].points[ic].y, 0, 1);
-                obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+                for (uint32_t ic = 0; ic < geom[ia].points.size(); ic++)
+                {
+                    glm::dvec3 t = glm::dvec4(geom[ia].points[ic].x, geom[ia].points[ic].y, 0, 1);
+                    obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+                }
             }
         }
 
@@ -361,17 +364,20 @@ namespace webifc::io
 
         for (uint32_t ia = 0; ia < geom.size(); ia++)
         {
-            for (uint32_t ic = 0; ic < geom[ia].points.size() - 1; ic++)
+            if (geom[ia].points.size() > 0)
             {
-                obj << "l " << (idx) << " " << (idx + 1) << "\n";
-                idx++;
+                for (uint32_t ic = 0; ic < geom[ia].points.size() - 1; ic++)
+                {
+                    obj << "l " << (idx) << " " << (idx + 1) << "\n";
+                    idx++;
+                }
             }
         }
 
         return obj.str();
     }
 
-    std::string GradientVerticalToObj(const webifc::geometry::IfcCurve &geom)
+    std::string GradientHorizontalToObj(const webifc::geometry::IfcCurve &geom)
     {
         std::stringstream obj;
 
@@ -464,31 +470,31 @@ namespace webifc::io
     {
         std::stringstream obj;
 
-        // for (uint32_t ia = 0; ia < geom.size(); ia++)
-        // {
-        //     for (uint32_t ic = 0; ic < geom[ia].Horizontal.curves.size(); ic++)
-        //     {
-        //         for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size(); ip++)
-        //         {
-        //             glm::dvec3 t = glm::dvec4(geom[ia].Horizontal.curves[ic].points[ip].x,geom[ia].Horizontal.curves[ic].points[ip].y, 0, 1);
-        //             obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
-        //         }
-        //     }
-        // }
+        for (uint32_t ia = 0; ia < geom.size(); ia++)
+        {
+            for (uint32_t ic = 0; ic < geom[ia].curves.size(); ic++)
+            {
+                for (uint32_t ip = 0; ip < geom[ia].curves[ic].points.size(); ip++)
+                {
+                    glm::dvec3 t = glm::dvec4(geom[ia].curves[ic].points[ip].x,geom[ia].curves[ic].points[ip].y, 0, 1);
+                    obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+                }
+            }
+        }
 
-        // uint32_t idx = 0;
+        uint32_t idx = 0;
 
-        // for (uint32_t ia = 0; ia < geom.size(); ia++)
-        // {
-        //     for (uint32_t ic = 0; ic < geom[ia].Horizontal.curves.size(); ic++)
-        //     {
-        //         for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size() - 1; ip++)
-        //         {
-        //             obj << "l " << (idx) << " " << (idx + 1) << "\n";;
-        //             idx++;
-        //         }
-        //     }
-        // }
+        for (uint32_t ia = 0; ia < geom.size(); ia++)
+        {
+            for (uint32_t ic = 0; ic < geom[ia].curves.size(); ic++)
+            {
+                for (uint32_t ip = 0; ip < geom[ia].curves[ic].points.size() - 1; ip++)
+                {
+                    obj << "l " << (idx) << " " << (idx + 1) << "\n";;
+                    idx++;
+                }
+            }
+        }
 
         return obj.str();
     }

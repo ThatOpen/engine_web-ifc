@@ -422,18 +422,18 @@ namespace webifc::geometry
 		}
 	}
 
-	inline IfcGeometry SectionedSurface(std::vector<IfcProfile> profiles, webifc::utility::LoaderErrorHandler _errorHandler)
+	inline IfcGeometry SectionedSurface(IfcCrossSections profiles, webifc::utility::LoaderErrorHandler _errorHandler)
 	{
 		IfcGeometry geom;
 
 		// Iterate over each profile, and create a surface by connecting the corresponding points with faces.
-		for (size_t i = 0; i < profiles.size() - 1; i++)
+		for (size_t i = 0; i < profiles.curves.size() - 1; i++)
 		{
-			IfcProfile &profile1 = profiles[i];
-			IfcProfile &profile2 = profiles[i + 1];
+			IfcCurve &profile1 = profiles.curves[i];
+			IfcCurve &profile2 = profiles.curves[i + 1];
 
 			// Check that the profiles have the same number of points
-			if (profile1.curve.points.size() != profile2.curve.points.size())
+			if (profile1.points.size() != profile2.points.size())
 			{
 				_errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "profiles must have the same number of points in SectionedSurface");
 				return geom;
@@ -442,10 +442,10 @@ namespace webifc::geometry
 			std::vector<uint32_t> indices;
 
 			// Create faces by connecting corresponding points from the two profiles
-			for (size_t j = 0; j < profile1.curve.points.size(); j++)
+			for (size_t j = 0; j < profile1.points.size(); j++)
 			{
-				glm::dvec3 &p1 = profile1.curve.points[j];
-				glm::dvec3 &p2 = profile2.curve.points[j];
+				glm::dvec3 &p1 = profile1.points[j];
+				glm::dvec3 &p2 = profile2.points[j];
 
 				if (glm::distance(p1, p2) > 1E-5)
 				{

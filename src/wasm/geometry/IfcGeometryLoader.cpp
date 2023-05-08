@@ -23,18 +23,139 @@ namespace webifc::geometry
   IfcCrossSections IfcGeometryLoader::GetCrossSections(uint32_t expressID) const
   {
     auto lineID = _loader.ExpressIDToLineID(expressID);
-    auto &line = _loader.GetLine(lineID);
+        auto &line = _loader.GetLine(lineID);
+        IfcCrossSections sections;
 
-    std::vector<webifc::geometry::IfcCrossSections> crossSections;
+        switch (line.ifcType)
+            {
+            case schema::IFCSECTIONEDSOLIDHORIZONTAL:
+            {
+                _loader.MoveToArgumentOffset(line, 0);
+                auto curveId = _loader.GetRefArgument();
 
-    // switch (line.ifcType)
-    // {
+                // faces
+                _loader.MoveToArgumentOffset(line, 1);
+                auto faces = _loader.GetSetArgument();
 
-    // default:
-    // {
-    //   break;
-    // }
-    // }
+                // linear position
+                _loader.MoveToArgumentOffset(line, 2);
+                auto linearPositions = _loader.GetSetArgument();
+
+                IfcCurve curve = GetCurve(curveId, 3);
+
+                std::vector<IfcProfile> profiles;
+                std::vector<IfcCurve> curves;
+
+                std::vector<glm::dmat4> transform;
+                for (auto &linearPosition : linearPositions)
+                {
+                    auto expressID = _loader.GetRefArgument(linearPosition);
+                    glm::dmat4 linearPlacement = GetLocalPlacement(expressID);
+                    transform.push_back(linearPlacement);
+                }
+
+                uint32_t id = 0;
+                for (auto &face : faces)
+                {
+                    auto expressID = _loader.GetRefArgument(face);
+                    IfcProfile profile = GetProfile(expressID);
+                    for(uint32_t i = 0; i < profile.curve.points.size(); i++)
+                    {
+                        profile.curve.points[i] = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+                    }
+                    profiles.push_back(profile);
+                    curves.push_back(profile.curve);
+                    id++;
+                }
+
+                sections.curves = curves;
+                return sections;
+
+                break;
+            }
+            case schema::IFCSECTIONEDSOLID:
+            {
+                _loader.MoveToArgumentOffset(line, 0);
+                auto curveId = _loader.GetRefArgument();
+
+                // faces
+                _loader.MoveToArgumentOffset(line, 1);
+                auto faces = _loader.GetSetArgument();
+
+                // linear position
+                _loader.MoveToArgumentOffset(line, 2);
+                auto linearPositions = _loader.GetSetArgument();
+
+                IfcCurve curve = GetCurve(curveId, 3);
+
+                std::vector<IfcProfile> profiles;
+                std::vector<IfcCurve> curves;
+
+                std::vector<glm::dmat4> transform;
+                for (auto &linearPosition : linearPositions)
+                {
+                    auto expressID = _loader.GetRefArgument(linearPosition);
+                    glm::dmat4 linearPlacement = GetLocalPlacement(expressID);
+                    transform.push_back(linearPlacement);
+                }
+
+                uint32_t id = 0;
+                for (auto &face : faces)
+                {
+                    auto expressID = _loader.GetRefArgument(face);
+                    IfcProfile profile = GetProfile(expressID);
+                    for(uint32_t i = 0; i < profile.curve.points.size(); i++)
+                    {
+                        profile.curve.points[i] = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+                    }
+                    profiles.push_back(profile);
+                    curves.push_back(profile.curve);
+                    id++;
+                }
+
+                sections.curves = curves;
+                return sections;
+
+                break;
+            }
+            case schema::IFCSECTIONEDSURFACE:
+            {
+                // faces
+                _loader.MoveToArgumentOffset(line, 1);
+                auto linearPositions = _loader.GetSetArgument();
+
+                // linear position
+                _loader.MoveToArgumentOffset(line, 2);
+                auto faces = _loader.GetSetArgument();
+
+                std::vector<glm::dmat4> transform;
+                for (auto &linearPosition : linearPositions)
+                {
+                    auto expressID = _loader.GetRefArgument(linearPosition);
+                    glm::dmat4 linearPlacement = GetLocalPlacement(expressID);
+                    transform.push_back(linearPlacement);
+                }
+
+                uint32_t id = 0;
+                std::vector<IfcProfile> profiles;
+                std::vector<IfcCurve> curves;
+                for (auto &face : faces)
+                {
+                    auto expressID = _loader.GetRefArgument(face);
+                    IfcProfile profile = GetProfile(expressID);
+                    for(uint32_t i = 0; i < profile.curve.points.size(); i++)
+                    {
+                        profile.curve.points[i] = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+                    }
+                    profiles.push_back(profile);
+                    curves.push_back(profile.curve);
+                    id++;
+                }
+
+                sections.curves = curves;
+                return sections;
+            }
+            }
   }
 
   IfcAlignment IfcGeometryLoader::GetAlignment(uint32_t expressID, IfcAlignment alignment, glm::dmat4 transform) const
@@ -1170,7 +1291,7 @@ namespace webifc::geometry
               curve.Add(trim.start.pos);
             }
           }
-          else if (trim.start.hasParam && trim.end.hasParam)
+          else if (trim.start.hasLenght && trim.end.hasLenght)
           {
             _loader.MoveToArgumentOffset(line, 0);
             auto positionID = _loader.GetRefArgument();
@@ -1214,7 +1335,7 @@ namespace webifc::geometry
               curve.Add(trim.start.pos3D);
             }
           }
-          else if (trim.start.hasParam && trim.end.hasParam)
+          else if (trim.start.hasLenght && trim.end.hasLenght)
           {
             _loader.MoveToArgumentOffset(line, 0);
             auto positionID = _loader.GetRefArgument();
@@ -1387,10 +1508,17 @@ namespace webifc::geometry
 
         if (trim.exist)
         {
-          if (trim.start.hasParam && trim.end.hasParam)
+          if (trim.start.hasAng && trim.end.hasAng)
           {
             startDegrees = trim.start.param;
             endDegrees = trim.end.param;
+          }
+          if (trim.start.hasLenght && trim.end.hasLenght)
+          {
+            double startLenght = trim.start.param;
+            double endLenght = trim.end.param;
+            startDegrees = (startLenght / radius) * (180 / CONST_PI) - 90;
+            endDegrees = (endLenght / radius) * (180 / CONST_PI) - 90;
           }
           else if (trim.start.hasPos && trim.end.hasPos)
           {
@@ -1636,9 +1764,9 @@ namespace webifc::geometry
         IfcCurve gradientCurve = GetCurve(curveID, 3, false);
         curveList.push_back(gradientCurve);
       }
-      // #ifdef DEBUG_DUMP_SVG
-      //   webifc::io::DumpGradientCurve(curveList, curve,"V_gradient.obj", "H_gradient.obj");
-      // #endif
+      #ifdef DEBUG_DUMP_SVG
+        webifc::io::DumpGradientCurve(curveList, curve,"V_gradient.obj", "H_gradient.obj");
+      #endif
       break;
     }
     case schema::IFCCURVESEGMENT:
@@ -1655,10 +1783,11 @@ namespace webifc::geometry
         auto curveID = _loader.GetRefArgument();
 
         IfcTrimmingArguments trim = IfcTrimmingArguments();
+        trim.exist = true;
         trim.start.param = SegmentStart;
         trim.end.param = SegmentEnd;
-        trim.start.hasParam = true;
-        trim.end.hasParam = true;
+        trim.start.hasLenght = true;
+        trim.end.hasLenght = true;
         ComputeCurve(curveID, curve, 3, false, -1, -1, trim);
 
         glm::dmat3 placement = GetAxis2Placement2D(placementID);
@@ -2660,16 +2789,15 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID, glm::dvec3 v
         _loader.StepBack();
         auto curveId = _loader.GetRefArgument();
         curve = GetCurve(curveId, 3, false);
+        glm::dmat4 result = curve.getPlacementAtDistance(lnSegment);
+        return result;
       }
       else
       {
-        curve.points.push_back(glm::dvec3(0,0,0));
-        curve.points.push_back(glm::dvec3(1e+10,0,0));
+        curve.Add(glm::dvec3(0,0,0));
+        curve.Add(glm::dvec3(0,10000,0));
+        return curve.getPlacementAtDistance(lnSegment);;
       }
-
-      glm::dmat4 result = curve.getPlacementAtDistance(lnSegment);
-
-      return result;
     }
   case schema::IFCAXIS1PLACEMENT:
     {

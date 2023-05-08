@@ -242,86 +242,10 @@ namespace webifc::geometry
             switch (line.ifcType)
             {
             case schema::IFCSECTIONEDSOLIDHORIZONTAL:
-            {
-                _loader.MoveToArgumentOffset(line, 0);
-                auto curveId = _loader.GetRefArgument();
-
-                // faces
-                _loader.MoveToArgumentOffset(line, 1);
-                auto faces = _loader.GetSetArgument();
-
-                // linear position
-                _loader.MoveToArgumentOffset(line, 2);
-                auto linearPositions = _loader.GetSetArgument();
-
-                IfcCurve curve = _geometryLoader.GetCurve(curveId, 3);
-
-                std::vector<IfcProfile> profiles;
-                for (auto &face : faces)
-                {
-                    auto expressID = _loader.GetRefArgument(face);
-                    IfcProfile profile = _geometryLoader.GetProfile(expressID);
-                    profiles.push_back(profile);
-                }
-
-                std::vector<glm::dmat4> placements;
-                for (auto &linearPosition : linearPositions)
-                {
-                    auto expressID = _loader.GetRefArgument(linearPosition);
-                    glm::dmat4 linearPlacement = _geometryLoader.GetLocalPlacement(expressID);
-                    placements.push_back(linearPlacement);
-                }
-
-
-                IfcGeometry geom = SectionedSurface(profiles, _errorHandler);
-                    
-                _expressIDToGeometry[line.expressID] = geom;
-                mesh.expressID = line.expressID;
-                mesh.hasGeometry = true;
-
-                break;
-            }
             case schema::IFCSECTIONEDSOLID:
-            {
-                break;
-            }
             case schema::IFCSECTIONEDSURFACE:
             {
-                // faces
-                _loader.MoveToArgumentOffset(line, 1);
-                auto linearPositions = _loader.GetSetArgument();
-
-                // linear position
-                _loader.MoveToArgumentOffset(line, 2);
-                auto faces = _loader.GetSetArgument();
-
-                std::vector<glm::dmat4> transform;
-                for (auto &linearPosition : linearPositions)
-                {
-                    auto expressID = _loader.GetRefArgument(linearPosition);
-                    glm::dmat4 linearPlacement = _geometryLoader.GetLocalPlacement(expressID);
-                    transform.push_back(linearPlacement);
-                    
-                }
-
-                uint32_t id = 0;
-                std::vector<IfcProfile> profiles;
-                std::vector<IfcCurve> curves;
-                for (auto &face : faces)
-                {
-                    auto expressID = _loader.GetRefArgument(face);
-                    IfcProfile profile = _geometryLoader.GetProfile(expressID);
-                    for(uint32_t i = 0; i < profile.curve.points.size(); i++)
-                    {
-                        profile.curve.points[i] = transform[id] * glm::dvec4(profile.curve.points[i], 1);
-                    }
-                    profiles.push_back(profile);
-                    curves.push_back(profile.curve);
-                    id++;
-                }
-
-                auto geom = SectionedSurface(profiles, _errorHandler);
-
+                auto geom = SectionedSurface(_geometryLoader.GetCrossSections(line.expressID), _errorHandler);
                 mesh.transformation = glm::dmat4(1);
                 // TODO: this is getting problematic.....
                 _expressIDToGeometry[line.expressID] = geom;

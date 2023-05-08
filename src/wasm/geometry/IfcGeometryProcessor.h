@@ -34,7 +34,7 @@ namespace webifc::geometry
         glm::dmat4 GetCoordinationMatrix();
         void Clear();
         
-      private:
+        private:
         void AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry);
         IfcGeometry GetBrep(uint32_t expressID);
         IfcGeometry BoolSubtract(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, uint32_t expressID);

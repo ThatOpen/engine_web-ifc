@@ -127,7 +127,7 @@ namespace webifc::geometry {
 
 		struct IfcCrossSections
 		{
-			std::vector<IfcProfile> Profiles;
+			std::vector<IfcCurve> curves;
 		};
 
 		struct IfcAlignment
@@ -171,6 +171,8 @@ namespace webifc::geometry {
 		{
 			bool hasParam = false;
 			bool hasPos = false;
+			bool hasAng = false;
+			bool hasLenght = false;
 			double param;
 			glm::dvec2 pos;
 			glm::dvec3 pos3D;
