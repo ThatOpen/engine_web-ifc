@@ -824,6 +824,19 @@ namespace webifc::geometry
 
                     return mesh;
                 }
+            case schema::IFCGEOMETRICSET:
+                { 
+                    _loader.MoveToArgumentOffset(line, 0);
+                    auto items = _loader.GetSetArgument();
+
+                    for (auto &item : items)
+                    {
+                        uint32_t itemID = _loader.GetRefArgument(item);
+                        mesh.children.push_back(GetMesh(itemID));
+                    }
+
+                    return mesh;
+                }
             case schema::IFCPOLYLINE:
                     // ignore polylines as meshes
                 return mesh;

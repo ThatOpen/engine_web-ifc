@@ -874,6 +874,23 @@ namespace webifc::geometry
       return curveEdge;
     }
 
+    glm::dvec3 IfcGeometryLoader::GetVertexPoint(uint32_t expressID) const 
+    {
+        auto &vertex = _loader.GetLine(_loader.ExpressIDToLineID(expressID));
+        _loader.MoveToArgumentOffset(vertex, 0);
+        uint32_t pointRef = _loader.GetRefArgument();
+        auto &point = _loader.GetLine(_loader.ExpressIDToLineID(pointRef));
+        if (point.ifcType == schema::IFCCARTESIANPOINT)
+        {
+          return GetCartesianPoint3D(pointRef);
+        }
+        else
+        {
+          _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", point.expressID, point.ifcType);
+        }
+        
+    }
+
     IfcCurve IfcGeometryLoader::GetEdge(uint32_t expressID) const
     {
       auto edgeID = _loader.ExpressIDToLineID(expressID);
@@ -883,19 +900,23 @@ namespace webifc::geometry
       {
       case schema::IFCEDGECURVE:
       {
+        IfcTrimmingArguments ts;
+        ts.exist = true;
         _loader.MoveToArgumentOffset(line, 0);
-        // uint32_t vertex1Ref =
-        _loader.GetRefArgument();
-
+        glm::dvec3 p1 = GetVertexPoint(_loader.GetRefArgument());
         _loader.MoveToArgumentOffset(line, 1);
-        // uint32_t vertex2Ref =
-        _loader.GetRefArgument();
-
+        glm::dvec3 p2 = GetVertexPoint(_loader.GetRefArgument());
+        ts.start.pos3D = p1;
+        ts.start.hasPos = true;
+        ts.end.hasPos = true;
+        ts.end.pos3D = p2;
+       
         _loader.MoveToArgumentOffset(line, 2);
         uint32_t CurveRef = _loader.GetRefArgument();
-        IfcCurve curveEdge = GetCurve(CurveRef,3,true);
-
-        return curveEdge;
+        IfcCurve curve;
+        ComputeCurve(CurveRef, curve, 3, true, -1, -1, ts);
+        
+        return curve;
       }
       default:
         _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", line.expressID, line.ifcType);
@@ -908,38 +929,11 @@ namespace webifc::geometry
   {
     IfcTrimmingSelect ts;
 
-    /*
-    if (tapeOffsets.size() == 2)
-    {
-      _loader.MoveTo(tapeOffsets[0]);
-      std::string type = _loader.GetStringArgument();
-
-      if (type == "IFCPARAMETERVALUE")
-      {
-        ts.hasParam = true;
-        _loader.MoveTo(tapeOffsets[1]);
-        ts.param = _loader.GetDoubleArgument();
-      }
-      else
-      {
-        printf("Unsupported IfcTrimmingSelect type: IfcCartesianPoint");
-      }
-    }
-    else if (tapeOffsets.size() == 1)
-    {
-      _loader.MoveTo(tapeOffsets[0]);
-      uint32_t cartesianPointRef = _loader.GetRefArgument();
-
-      ts.hasPos = true;
-      // TODO: assuming cartesian point
-      ts.pos = GetCartesianPoint2D(cartesianPointRef);
-    }
-    */
     for (size_t i = 0; i < tapeOffsets.size(); i++)
     {
       auto tokenType = _loader.GetTokenType(tapeOffsets[i]);
-      _loader.StepBack();
 
+      _loader.StepBack();
       if (tokenType == parsing::IfcTokenType::REF)
       {
         // caresian point
@@ -1135,7 +1129,7 @@ namespace webifc::geometry
         {
           condition = !condition;
         }
-        if (dimensions== 2)
+        if (dimensions== 2 && trim.exist)
         {
           if (trim.start.hasPos && trim.end.hasPos)
           {
@@ -1180,7 +1174,7 @@ namespace webifc::geometry
             _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
           }
         }
-        else if (dimensions == 3)
+        else if (dimensions == 3 && trim.exist)
         {
           if (trim.start.hasPos && trim.end.hasPos)
           {
@@ -1200,8 +1194,7 @@ namespace webifc::geometry
             _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
           }
         }
-
-        break;
+      break;
       }
     case schema::IFCTRIMMEDCURVE:
       {
