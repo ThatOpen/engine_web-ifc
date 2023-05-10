@@ -504,7 +504,7 @@ namespace webifc::geometry
                         uint32_t faceID = _loader.GetRefArgument(face);
                         ReadIndexedPolygonalFace(faceID, bounds, points);
 
-                        TriangulateBounds(geom, bounds,_errorHandler);
+                        TriangulateBounds(geom, bounds,_errorHandler,line.expressID);
 
                         bounds.clear();
                     }
@@ -838,6 +838,7 @@ namespace webifc::geometry
                     return mesh;
                 }
             case schema::IFCPOLYLINE:
+            case schema::IFCTRIMMEDCURVE:
                     // ignore polylines as meshes
                 return mesh;
             default:
@@ -1539,7 +1540,7 @@ namespace webifc::geometry
                 bounds3D[i] = _geometryLoader.GetBound(boundID);
             }
 
-            TriangulateBounds(geometry, bounds3D,_errorHandler);
+            TriangulateBounds(geometry, bounds3D,_errorHandler,expressID);
             break;
         }
         case schema::IFCADVANCEDFACE:
@@ -1580,7 +1581,7 @@ namespace webifc::geometry
             }
             else
             {
-                TriangulateBounds(geometry, bounds3D,_errorHandler);
+                TriangulateBounds(geometry, bounds3D,_errorHandler,expressID);
             }
             break;
         }

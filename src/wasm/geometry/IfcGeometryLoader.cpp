@@ -517,6 +517,35 @@ namespace webifc::geometry
 
         return {};
       }
+      case schema::IFCDRAUGHTINGPREDEFINEDCOLOUR:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+         std::string color = _loader.GetStringArgument();
+         if (color == "black") return glm::dvec4(0.0,0.0,0.0,1.0);
+         else if (color == "red") return glm::dvec4(1.0,0,0,1.0);
+         else if (color == "green") return glm::dvec4(0,1.0,0,1.0);
+         else if (color == "blue") return glm::dvec4(0,0,1.0,1.0);
+         else if (color == "yellow") return glm::dvec4(1.0,1.0,0,1.0);
+         else if (color == "magenta") return glm::dvec4(1.0,0,1.0,1.0);
+         else if (color == "cyan")  return glm::dvec4(0,1.0,1.0,1.0);
+         else if (color == "white") return glm::dvec4(1.0,1.0,1.0,1.0);
+         return {};
+      }
+      case schema::IFCCURVESTYLE:
+      {
+         _loader.MoveToArgumentOffset(line, 3);
+         auto foundColor = GetColor(_loader.GetRefArgument());
+         if (foundColor) return foundColor;
+         return {};
+      }
+      case schema::IFCFILLAREASTYLEHATCHING:
+      {
+          //we cannot properly support this but for now use its colour as solid
+         _loader.MoveToArgumentOffset(line, 0);
+         auto foundColor = GetColor(_loader.GetRefArgument());
+         if (foundColor) return foundColor;
+         return {};
+      }
       case schema::IFCSURFACESTYLE:
       {
         _loader.MoveToArgumentOffset(line, 2);
