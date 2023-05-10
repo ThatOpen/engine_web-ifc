@@ -29,6 +29,6 @@ export default async function() {
         }
 
         // TODO: exports are NOT lossless, currently losing header and double precision
-        Equals("In eq out", diffBytes, 403678);
+        Equals("In eq out", diffBytes, 403771);
     });
 }

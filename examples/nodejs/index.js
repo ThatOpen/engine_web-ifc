@@ -101,6 +101,15 @@ async function LoadFile(filename) {
         null);
     let numberId = maxEID;
     ifcapi.WriteLine(modelID, property);
+     maxEID++;
+    numLines++;
+    property = new IFC2X3.IfcPropertySingleValue(
+        maxEID,
+        new IFC2X3.IfcIdentifier('Special Number'),
+        null,
+        new IFC2X3.IfcReal(100000000),
+        null);
+    ifcapi.WriteLine(modelID, property);
     maxEID++;   
     numLines++;
     property = new IFC2X3.IfcPropertySingleValue(
