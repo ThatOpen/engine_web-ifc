@@ -279,9 +279,9 @@ int main()
     // Benchmark();
 
     // return 0;
-
+std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.2/IFC_FILES/01097-Tungasletta-2-Hovedbygg-RC2-prelim.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/(E28)_CARRETERA_10.94_4X3.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Corridor-5a_renamedProfiles_4x3.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Corridor-5a_renamedProfiles_4x3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/Q2.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/muysimple.ifc");
 
@@ -325,8 +325,10 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 22716); // Corridor-5a_renamedProfiles_4x3
     // SpecificLoadTest(loader, geometryLoader, 24943); // Corridor-5a_renamedProfiles_4x3
     // SpecificLoadTest(loader, geometryLoader, 4035); // muysimple
+    SpecificLoadTest(loader, geometryLoader, 292780); //01097-Tungasletta-2-Hovedbygg-RC2-prelim
+
     // GetLine(loader, 2);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
     auto CrossSections = GetCrossSections(loader, geometryLoader);
 
