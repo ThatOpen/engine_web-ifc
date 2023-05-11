@@ -1549,6 +1549,11 @@ namespace webifc::geometry
           startDegrees = trim.start.param;
           endDegrees = trim.end.param;
         }
+        if (trim.start.hasParam && trim.end.hasParam)
+        {
+          startDegrees = trim.start.param;
+          endDegrees = trim.end.param;
+        }
         if (trim.start.hasLenght && trim.end.hasLenght)
         {
           double startLenght = trim.start.param;
