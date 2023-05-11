@@ -642,227 +642,241 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(line, 0);
       auto ifcPresentationStyleSelects = _loader.GetSetArgument();
 
-      for (auto &styleSelect : ifcPresentationStyleSelects)
-      {
-        uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
-        glm::dvec4 color;
-        auto foundColor = GetColor(styleSelectID);
-        if (foundColor)
-          return foundColor;
-      }
-
-      return {};
-    }
-    case schema::IFCSURFACESTYLE:
-    {
-      _loader.MoveToArgumentOffset(line, 2);
-      auto ifcSurfaceStyleElementSelects = _loader.GetSetArgument();
-
-      for (auto &styleElementSelect : ifcSurfaceStyleElementSelects)
-      {
-        uint32_t styleElementSelectID = _loader.GetRefArgument(styleElementSelect);
-        glm::dvec4 color;
-        auto foundColor = GetColor(styleElementSelectID);
-        if (foundColor)
-          return foundColor;
-      }
-
-      return {};
-    }
-    case schema::IFCSURFACESTYLERENDERING:
-    {
-      _loader.MoveToArgumentOffset(line, 0);
-      auto outputColor = GetColor(_loader.GetRefArgument());
-      _loader.MoveToArgumentOffset(line, 1);
-
-      if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-      {
-        _loader.StepBack();
-        outputColor.value().a = 1 - _loader.GetDoubleArgument();
-      }
-
-      return outputColor;
-    }
-    case schema::IFCSURFACESTYLESHADING:
-    {
-      _loader.MoveToArgumentOffset(line, 0);
-      return GetColor(_loader.GetRefArgument());
-    }
-    case schema::IFCSTYLEDREPRESENTATION:
-    {
-      _loader.MoveToArgumentOffset(line, 3);
-      auto repItems = _loader.GetSetArgument();
-
-      for (auto &repItem : repItems)
-      {
-        uint32_t repItemID = _loader.GetRefArgument(repItem);
-        auto foundColor = GetColor(repItemID);
-        if (foundColor)
-          return foundColor;
-      }
-
-      return {};
-    }
-    case schema::IFCSTYLEDITEM:
-    {
-      _loader.MoveToArgumentOffset(line, 1);
-      auto styledItems = _loader.GetSetArgument();
-
-      for (auto &styledItem : styledItems)
-      {
-        uint32_t styledItemID = _loader.GetRefArgument(styledItem);
-        auto foundColor = GetColor(styledItemID);
-        if (foundColor)
-          return foundColor;
-      }
-
-      return {};
-    }
-    case schema::IFCCOLOURRGB:
-    {
-      _loader.MoveToArgumentOffset(line, 1);
-      glm::dvec4 outputColor;
-      outputColor.r = _loader.GetDoubleArgument();
-      outputColor.g = _loader.GetDoubleArgument();
-      outputColor.b = _loader.GetDoubleArgument();
-      outputColor.a = 1;
-
-      return outputColor;
-    }
-    case schema::IFCMATERIALLAYERSETUSAGE:
-    {
-      _loader.MoveToArgumentOffset(line, 0);
-      uint32_t layerSetID = _loader.GetRefArgument();
-      return GetColor(layerSetID);
-    }
-    case schema::IFCMATERIALLAYERSET:
-    {
-      _loader.MoveToArgumentOffset(line, 0);
-      auto layers = _loader.GetSetArgument();
-
-      for (auto &layer : layers)
-      {
-        uint32_t layerID = _loader.GetRefArgument(layer);
-        auto foundColor = GetColor(layerID);
-        if (foundColor)
-          return foundColor;
-      }
-
-      return {};
-    }
-    case schema::IFCMATERIALLAYER:
-    {
-      _loader.MoveToArgumentOffset(line, 0);
-      uint32_t matRepID = _loader.GetRefArgument();
-      return GetColor(matRepID);
-    }
-    case schema::IFCMATERIAL:
-    {
-      if (GetMaterialDefinitions().count(line.expressID) != 0)
-      {
-        auto &defs = GetMaterialDefinitions().at(line.expressID);
-        for (auto def : defs)
+        for (auto &styleSelect : ifcPresentationStyleSelects)
         {
-          auto success = GetColor(def.second);
-          if (success)
-            return success;
+          uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
+          auto foundColor = GetColor(styleSelectID);
+          if (foundColor) return foundColor;
         }
 
         return {};
       }
-      return {};
-    }
-    case schema::IFCFILLAREASTYLE:
-    {
-      _loader.MoveToArgumentOffset(line, 1);
-      auto ifcFillStyleSelects = _loader.GetSetArgument();
-
-      for (auto &styleSelect : ifcFillStyleSelects)
+      case schema::IFCDRAUGHTINGPREDEFINEDCOLOUR:
       {
-        uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
-        auto foundColor = GetColor(styleSelectID);
-        if (foundColor)
-          return foundColor;
+        _loader.MoveToArgumentOffset(line, 0);
+         std::string color = _loader.GetStringArgument();
+         if (color == "black") return glm::dvec4(0.0,0.0,0.0,1.0);
+         else if (color == "red") return glm::dvec4(1.0,0,0,1.0);
+         else if (color == "green") return glm::dvec4(0,1.0,0,1.0);
+         else if (color == "blue") return glm::dvec4(0,0,1.0,1.0);
+         else if (color == "yellow") return glm::dvec4(1.0,1.0,0,1.0);
+         else if (color == "magenta") return glm::dvec4(1.0,0,1.0,1.0);
+         else if (color == "cyan")  return glm::dvec4(0,1.0,1.0,1.0);
+         else if (color == "white") return glm::dvec4(1.0,1.0,1.0,1.0);
+         return {};
+      }
+      case schema::IFCCURVESTYLE:
+      {
+         _loader.MoveToArgumentOffset(line, 3);
+         auto foundColor = GetColor(_loader.GetRefArgument());
+         if (foundColor) return foundColor;
+         return {};
+      }
+      case schema::IFCFILLAREASTYLEHATCHING:
+      {
+          //we cannot properly support this but for now use its colour as solid
+         _loader.MoveToArgumentOffset(line, 0);
+         auto foundColor = GetColor(_loader.GetRefArgument());
+         if (foundColor) return foundColor;
+         return {};
+      }
+      case schema::IFCSURFACESTYLE:
+      {
+        _loader.MoveToArgumentOffset(line, 2);
+        auto ifcSurfaceStyleElementSelects = _loader.GetSetArgument();
+
+        for (auto &styleElementSelect : ifcSurfaceStyleElementSelects)
+        {
+          uint32_t styleElementSelectID = _loader.GetRefArgument(styleElementSelect);
+          auto foundColor = GetColor(styleElementSelectID);
+          if (foundColor) return foundColor;
+        }
+
+        return {};
+      }
+      case schema::IFCSURFACESTYLERENDERING:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+        auto outputColor = GetColor(_loader.GetRefArgument());
+        _loader.MoveToArgumentOffset(line, 1);
+
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+        {
+          _loader.StepBack();
+          outputColor.value().a = 1 - _loader.GetDoubleArgument();
+        }
+
+        return outputColor;
+      }
+      case schema::IFCSURFACESTYLESHADING:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+        return GetColor(_loader.GetRefArgument());
+      }
+      case schema::IFCSTYLEDREPRESENTATION:
+      {
+        _loader.MoveToArgumentOffset(line, 3);
+        auto repItems = _loader.GetSetArgument();
+
+        for (auto &repItem : repItems)
+        {
+          uint32_t repItemID = _loader.GetRefArgument(repItem);
+          auto foundColor = GetColor(repItemID);
+          if (foundColor) return foundColor;
+        }
+
+        return {};
+      }
+      case schema::IFCSTYLEDITEM:
+      {
+        _loader.MoveToArgumentOffset(line, 1);
+        auto styledItems = _loader.GetSetArgument();
+
+        for (auto &styledItem : styledItems)
+        {
+          uint32_t styledItemID = _loader.GetRefArgument(styledItem);
+          auto foundColor = GetColor(styledItemID);
+          if (foundColor)  return foundColor;
+        }
+
+        return {};
+      }
+      case schema::IFCCOLOURRGB:
+      {
+        _loader.MoveToArgumentOffset(line, 1);
+        glm::dvec4 outputColor;
+        outputColor.r = _loader.GetDoubleArgument();
+        outputColor.g = _loader.GetDoubleArgument();
+        outputColor.b = _loader.GetDoubleArgument();
+        outputColor.a = 1;
+
+        return outputColor;
+      }
+      case schema::IFCMATERIALLAYERSETUSAGE:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+        uint32_t layerSetID = _loader.GetRefArgument();
+        return GetColor(layerSetID);
+      }
+      case schema::IFCMATERIALLAYERSET:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+        auto layers = _loader.GetSetArgument();
+
+        for (auto &layer : layers)
+        {
+          uint32_t layerID = _loader.GetRefArgument(layer);
+          auto foundColor = GetColor(layerID);
+          if (foundColor)  return foundColor;
+        }
+
+        return {};
+      }
+      case schema::IFCMATERIALLAYER:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+        uint32_t matRepID = _loader.GetRefArgument();
+        return GetColor(matRepID);
+      }
+      case schema::IFCMATERIAL:
+      {
+        if (GetMaterialDefinitions().count(line.expressID) != 0)
+        {
+          auto &defs = GetMaterialDefinitions().at(line.expressID);
+          for (auto def : defs)
+          {
+            auto success = GetColor(def.second);
+            if (success) return success;
+          }
+
+          return {};
+        }
+        return {};
+      }
+      case schema::IFCFILLAREASTYLE:
+      {
+        _loader.MoveToArgumentOffset(line, 1);
+        auto ifcFillStyleSelects = _loader.GetSetArgument();
+
+        for (auto &styleSelect : ifcFillStyleSelects)
+        {
+          uint32_t styleSelectID = _loader.GetRefArgument(styleSelect);
+          auto foundColor = GetColor(styleSelectID);
+          if (foundColor) return foundColor;
+        }
+
+        return {};
+      }
+      case schema::IFCMATERIALLIST:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+        auto materials = _loader.GetSetArgument();
+
+        for (auto &material : materials)
+        {
+          uint32_t materialID = _loader.GetRefArgument(material);
+          auto foundColor = GetColor(materialID);
+          if (foundColor) return foundColor;
+        }
+        return {};
+      }
+      case schema::IFCMATERIALCONSTITUENTSET:
+      {
+        _loader.MoveToArgumentOffset(line, 2);
+        auto materialContituents = _loader.GetSetArgument();
+
+        for (auto &materialContituent : materialContituents)
+        {
+          uint32_t materialContituentID = _loader.GetRefArgument(materialContituent);
+          auto foundColor = GetColor(materialContituentID);
+          if (foundColor) return foundColor;
+        }
+        return {};
+      }
+      case schema::IFCMATERIALCONSTITUENT:
+      {
+        _loader.MoveToArgumentOffset(line, 2);
+        auto material = _loader.GetRefArgument();
+        auto foundColor = GetColor(material);
+        if (foundColor) return foundColor;
+        return {};
+      }
+      case schema::IFCMATERIALPROFILESETUSAGE:
+      {
+        _loader.MoveToArgumentOffset(line, 0);
+        auto profileSet = _loader.GetRefArgument();
+        auto foundColor = GetColor(profileSet);
+        if (foundColor) return foundColor;
+        return {};
+      }
+      case schema::IFCMATERIALPROFILE:
+      {
+        _loader.MoveToArgumentOffset(line, 2);
+        auto profileSet = _loader.GetRefArgument();
+        auto foundColor = GetColor(profileSet);
+        if (foundColor) return foundColor;
+        return {};
+      }
+      case schema::IFCMATERIALPROFILESET:
+      {
+        _loader.MoveToArgumentOffset(line, 2);
+        auto materialProfiles = _loader.GetSetArgument();
+
+        for (auto &materialProfile : materialProfiles)
+        {
+          uint32_t materialProfileID = _loader.GetRefArgument(materialProfile);
+          auto foundColor = GetColor(materialProfileID);
+          if (foundColor) return foundColor;
+        }
+        return {};
+      }
+      default:
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", line.expressID, line.ifcType);
+        break;
       }
 
       return {};
     }
-    case schema::IFCMATERIALLIST:
-    {
-      _loader.MoveToArgumentOffset(line, 0);
-      auto materials = _loader.GetSetArgument();
-
-      for (auto &material : materials)
-      {
-        uint32_t materialID = _loader.GetRefArgument(material);
-        auto foundColor = GetColor(materialID);
-        if (foundColor)
-          return foundColor;
-      }
-      return {};
-    }
-    case schema::IFCMATERIALCONSTITUENTSET:
-    {
-      _loader.MoveToArgumentOffset(line, 2);
-      auto materialContituents = _loader.GetSetArgument();
-
-      for (auto &materialContituent : materialContituents)
-      {
-        uint32_t materialContituentID = _loader.GetRefArgument(materialContituent);
-        auto foundColor = GetColor(materialContituentID);
-        if (foundColor)
-          return foundColor;
-      }
-      return {};
-    }
-    case schema::IFCMATERIALCONSTITUENT:
-    {
-      _loader.MoveToArgumentOffset(line, 2);
-      auto material = _loader.GetRefArgument();
-      auto foundColor = GetColor(material);
-      if (foundColor)
-        return foundColor;
-      return {};
-    }
-    case schema::IFCMATERIALPROFILESETUSAGE:
-    {
-      _loader.MoveToArgumentOffset(line, 0);
-      auto profileSet = _loader.GetRefArgument();
-      auto foundColor = GetColor(profileSet);
-      if (foundColor)
-        return foundColor;
-      return {};
-    }
-    case schema::IFCMATERIALPROFILE:
-    {
-      _loader.MoveToArgumentOffset(line, 2);
-      auto profileSet = _loader.GetRefArgument();
-      auto foundColor = GetColor(profileSet);
-      if (foundColor)
-        return foundColor;
-      return {};
-    }
-    case schema::IFCMATERIALPROFILESET:
-    {
-      _loader.MoveToArgumentOffset(line, 2);
-      auto materialProfiles = _loader.GetSetArgument();
-
-      for (auto &materialProfile : materialProfiles)
-      {
-        uint32_t materialProfileID = _loader.GetRefArgument(materialProfile);
-        auto foundColor = GetColor(materialProfileID);
-        if (foundColor)
-          return foundColor;
-      }
-      return {};
-    }
-    default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", line.expressID, line.ifcType);
-      break;
-    }
-
-    return {};
-  }
 
   IfcBound3D IfcGeometryLoader::GetBound(uint32_t expressID) const
   {
@@ -1021,72 +1035,68 @@ namespace webifc::geometry
     return curveEdge;
   }
 
-  IfcCurve IfcGeometryLoader::GetEdge(uint32_t expressID) const
-  {
-    auto edgeID = _loader.ExpressIDToLineID(expressID);
-    auto &line = _loader.GetLine(edgeID);
 
-    switch (line.ifcType)
+
+    glm::dvec3 IfcGeometryLoader::GetVertexPoint(uint32_t expressID) const 
     {
-    case schema::IFCEDGECURVE:
+        auto &vertex = _loader.GetLine(_loader.ExpressIDToLineID(expressID));
+        _loader.MoveToArgumentOffset(vertex, 0);
+        uint32_t pointRef = _loader.GetRefArgument();
+        auto &point = _loader.GetLine(_loader.ExpressIDToLineID(pointRef));
+        if (point.ifcType == schema::IFCCARTESIANPOINT)
+        {
+          return GetCartesianPoint3D(pointRef);
+        }
+        else
+        {
+          _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", point.expressID, point.ifcType);
+        }
+        
+    }
+
+    IfcCurve IfcGeometryLoader::GetEdge(uint32_t expressID) const
     {
-      _loader.MoveToArgumentOffset(line, 0);
-      // uint32_t vertex1Ref =
-      _loader.GetRefArgument();
+      auto edgeID = _loader.ExpressIDToLineID(expressID);
+      auto &line = _loader.GetLine(edgeID);
 
-      _loader.MoveToArgumentOffset(line, 1);
-      // uint32_t vertex2Ref =
-      _loader.GetRefArgument();
-
-      _loader.MoveToArgumentOffset(line, 2);
-      uint32_t CurveRef = _loader.GetRefArgument();
-      IfcCurve curveEdge = GetCurve(CurveRef, 3, true);
-
-      return curveEdge;
+      switch (line.ifcType)
+      {
+      case schema::IFCEDGECURVE:
+      {
+        IfcTrimmingArguments ts;
+        ts.exist = true;
+        _loader.MoveToArgumentOffset(line, 0);
+        glm::dvec3 p1 = GetVertexPoint(_loader.GetRefArgument());
+        _loader.MoveToArgumentOffset(line, 1);
+        glm::dvec3 p2 = GetVertexPoint(_loader.GetRefArgument());
+        ts.start.pos3D = p1;
+        ts.start.hasPos = true;
+        ts.end.hasPos = true;
+        ts.end.pos3D = p2;
+       
+        _loader.MoveToArgumentOffset(line, 2);
+        uint32_t CurveRef = _loader.GetRefArgument();
+        IfcCurve curve;
+        ComputeCurve(CurveRef, curve, 3, true, -1, -1, ts);
+        
+        return curve;
+      }
+      default:
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", line.expressID, line.ifcType);
+        break;
+      }
+      return IfcCurve();
     }
-    default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", line.expressID, line.ifcType);
-      break;
-    }
-    return IfcCurve();
-  }
 
   IfcTrimmingSelect IfcGeometryLoader::GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const
   {
     IfcTrimmingSelect ts;
 
-    /*
-    if (tapeOffsets.size() == 2)
-    {
-      _loader.MoveTo(tapeOffsets[0]);
-      std::string type = _loader.GetStringArgument();
-
-      if (type == "IFCPARAMETERVALUE")
-      {
-        ts.hasParam = true;
-        _loader.MoveTo(tapeOffsets[1]);
-        ts.param = _loader.GetDoubleArgument();
-      }
-      else
-      {
-        printf("Unsupported IfcTrimmingSelect type: IfcCartesianPoint");
-      }
-    }
-    else if (tapeOffsets.size() == 1)
-    {
-      _loader.MoveTo(tapeOffsets[0]);
-      uint32_t cartesianPointRef = _loader.GetRefArgument();
-
-      ts.hasPos = true;
-      // TODO: assuming cartesian point
-      ts.pos = GetCartesianPoint2D(cartesianPointRef);
-    }
-    */
     for (size_t i = 0; i < tapeOffsets.size(); i++)
     {
       auto tokenType = _loader.GetTokenType(tapeOffsets[i]);
-      _loader.StepBack();
 
+      _loader.StepBack();
       if (tokenType == parsing::IfcTokenType::REF)
       {
         // caresian point
@@ -1277,133 +1287,108 @@ namespace webifc::geometry
       // TODO: review and simplify
     case schema::IFCLINE:
     {
-      bool condition = sameSense == 1 || sameSense == -1;
-      if (edge)
-      {
-        condition = !condition;
-      }
-      if (dimensions == 2)
-      {
-        if (trim.start.hasPos && trim.end.hasPos)
+        bool condition = sameSense == 1 || sameSense == -1;
+        if (edge)
         {
-
-          if (condition)
+          condition = !condition;
+        }
+        if (dimensions== 2 && trim.exist)
+        {
+          if (trim.start.hasPos && trim.end.hasPos)
           {
-            curve.Add(trim.start.pos);
-            curve.Add(trim.end.pos);
+
+            if (condition)
+            {
+              curve.Add(trim.start.pos);
+              curve.Add(trim.end.pos);
+            }
+            else
+            {
+              curve.Add(trim.end.pos);
+              curve.Add(trim.start.pos);
+            }
+          }
+          else if (trim.start.hasParam && trim.end.hasParam)
+          {
+            _loader.MoveToArgumentOffset(line, 0);
+            auto positionID = _loader.GetRefArgument();
+            auto vectorID = _loader.GetRefArgument();
+            glm::dvec3 placement = glm::dvec3(GetCartesianPoint2D(positionID), 0);
+            glm::dvec3 vector;
+            vector = GetVector(vectorID);
+
+            if (condition)
+            {
+              glm::dvec3 p1 = placement + vector * trim.start.param;
+              glm::dvec3 p2 = placement + vector * trim.end.param;
+              curve.Add(p1);
+              curve.Add(p2);
+            }
+            else
+            {
+              glm::dvec3 p2 = placement + vector * trim.start.param;
+              glm::dvec3 p1 = placement + vector * trim.end.param;
+              curve.Add(p1);
+              curve.Add(p2);
+            }
           }
           else
           {
-            curve.Add(trim.end.pos);
-            curve.Add(trim.start.pos);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
           }
         }
-        else if (trim.start.hasLenght && trim.end.hasLenght)
+        else if (dimensions == 3 && trim.exist)
         {
-          _loader.MoveToArgumentOffset(line, 0);
-          auto positionID = _loader.GetRefArgument();
-          auto vectorID = _loader.GetRefArgument();
-          glm::dvec3 placement = glm::dvec3(GetCartesianPoint2D(positionID), 0);
-          glm::dvec3 vector;
-          vector = GetVector(vectorID);
-
-          if (condition)
+          if (trim.start.hasPos && trim.end.hasPos)
           {
-            glm::dvec3 p1 = placement + vector * trim.start.param;
-            glm::dvec3 p2 = placement + vector * trim.end.param;
-            curve.Add(p1);
-            curve.Add(p2);
+            if (condition)
+            {
+              curve.Add(trim.start.pos3D);
+              curve.Add(trim.end.pos3D);
+            }
+            else
+            {
+              curve.Add(trim.end.pos3D);
+              curve.Add(trim.start.pos3D);
+            }
           }
           else
           {
-            glm::dvec3 p2 = placement + vector * trim.start.param;
-            glm::dvec3 p1 = placement + vector * trim.end.param;
-            curve.Add(p1);
-            curve.Add(p2);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
           }
         }
-        else
-        {
-          _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
-        }
-      }
-      else if (dimensions == 3)
-      {
-        if (trim.start.hasPos && trim.end.hasPos)
-        {
-          if (condition)
-          {
-            curve.Add(trim.start.pos3D);
-            curve.Add(trim.end.pos3D);
-          }
-          else
-          {
-            curve.Add(trim.end.pos3D);
-            curve.Add(trim.start.pos3D);
-          }
-        }
-        else if (trim.start.hasLenght && trim.end.hasLenght)
-        {
-          _loader.MoveToArgumentOffset(line, 0);
-          auto positionID = _loader.GetRefArgument();
-          auto vectorID = _loader.GetRefArgument();
-          glm::dvec3 placement = GetCartesianPoint3D(positionID);
-          glm::dvec3 vector;
-          vector = GetVector(vectorID);
-
-          if (condition)
-          {
-            glm::dvec3 p1 = placement + vector * trim.start.param;
-            glm::dvec3 p2 = placement + vector * trim.end.param;
-            curve.Add(p1);
-            curve.Add(p2);
-          }
-          else
-          {
-            glm::dvec3 p2 = placement + vector * trim.start.param;
-            glm::dvec3 p1 = placement + vector * trim.end.param;
-            curve.Add(p1);
-            curve.Add(p2);
-          }
-        }
-        else
-        {
-          _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
-        }
-      }
-
       break;
-    }
+      }
     case schema::IFCTRIMMEDCURVE:
-    {
-      _loader.MoveToArgumentOffset(line, 0);
-      auto basisCurveID = _loader.GetRefArgument();
-      auto trim1Set = _loader.GetSetArgument();
-      auto trim2Set = _loader.GetSetArgument();
-
-      auto senseAgreementS = _loader.GetStringArgument();
-      auto trimmingPreference = _loader.GetStringArgument();
-
-      auto trim1 = GetTrimSelect(dimensions, trim1Set);
-      auto trim2 = GetTrimSelect(dimensions, trim2Set);
-
-      IfcTrimmingArguments trim;
-
-      trim.exist = true;
-      trim.start = trim1;
-      trim.end = trim2;
-
-      bool senseAgreement = senseAgreementS == "T";
-
-      if (trimSense == 0)
       {
-        senseAgreement = !senseAgreement;
+        _loader.MoveToArgumentOffset(line, 0);
+        auto basisCurveID = _loader.GetRefArgument();
+        auto trim1Set = _loader.GetSetArgument();
+        auto trim2Set = _loader.GetSetArgument();
+
+        auto senseAgreementS = _loader.GetStringArgument();
+        auto trimmingPreference = _loader.GetStringArgument();
+
+        auto trim1 = GetTrimSelect(dimensions, trim1Set);
+        auto trim2 = GetTrimSelect(dimensions, trim2Set);
+
+        IfcTrimmingArguments trim;
+
+        trim.exist = true;
+        trim.start = trim1;
+        trim.end = trim2;
+
+        bool senseAgreement = senseAgreementS == "T";
+
+        if (trimSense == 0)
+        {
+          senseAgreement = !senseAgreement;
+        }
+
+        ComputeCurve(basisCurveID, curve, dimensions,  edge, sameSense, senseAgreement, trim);
+
+        break;
       }
-
-      ComputeCurve(basisCurveID, curve, dimensions, edge, sameSense, senseAgreement, trim);
-
-      break;
-    }
     case schema::IFCINDEXEDPOLYCURVE:
     {
       _loader.MoveToArgumentOffset(line, 0);
@@ -2647,30 +2632,6 @@ namespace webifc::geometry
     }
 
     return IfcProfile();
-  }
-
-  IfcProfile3D IfcGeometryLoader::GetProfile3D(uint32_t lineID) const
-  {
-    auto &line = _loader.GetLine(lineID);
-    switch (line.ifcType)
-    {
-    case schema::IFCARBITRARYOPENPROFILEDEF:
-    {
-      IfcProfile3D profile;
-
-      _loader.MoveToArgumentOffset(line, 0);
-      profile.type = _loader.GetStringArgument();
-      _loader.MoveToArgumentOffset(line, 2);
-      profile.curve = GetCurve(_loader.GetRefArgument(), 3);
-
-      return profile;
-    }
-    default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 3D profile type", line.expressID, line.ifcType);
-      break;
-    }
-
-    return IfcProfile3D();
   }
 
   glm::dvec3 IfcGeometryLoader::GetVector(uint32_t expressID) const

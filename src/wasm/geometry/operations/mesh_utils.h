@@ -17,56 +17,6 @@
 namespace webifc::geometry
 {
 
-	inline static std::optional<glm::dmat4> GetOrientationRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
-	{
-		glm::dmat4 newMat = mat * mesh.transformation;
-
-		bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
-
-		auto geomIt = geometryMap.find(mesh.expressID);
-
-		if (geomIt != geometryMap.end())
-		{
-			auto meshGeom = geomIt->second;
-
-			if (meshGeom.numFaces)
-			{
-				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
-				{
-					// Face f = meshGeom.GetFace(i);
-					// glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
-
-					return newMat;
-				}
-			}
-		}
-
-		for (auto &c : mesh.children)
-		{
-			auto v = GetOrientationRec(c, geometryMap, newMat);
-			if (v.has_value())
-			{
-				return v;
-			}
-		}
-
-		return std::nullopt;
-	}
-
-	inline static glm::dmat4 GetOrientation(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap)
-	{
-		auto v = GetOrientationRec(mesh, geometryMap, glm::dmat4(1));
-
-		if (v.has_value())
-		{
-			return *v;
-		}
-		else
-		{
-			return glm::dmat4(1);
-		}
-	}
-
 	// TODO: review and simplify
 	inline void TriangulateRevolution(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
 	{

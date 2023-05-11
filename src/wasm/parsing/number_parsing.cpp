@@ -18,6 +18,7 @@
 #include <string>
 #include <cmath>
 #include <sstream>
+#include <iomanip>
 
 namespace webifc::parsing {
   
@@ -116,19 +117,25 @@ namespace webifc::parsing {
   std::string getAsStringWithBigE(double theNumber)
     {
       std::stringstream stream;
-      stream << theNumber;
-      if (std::floor(theNumber) == theNumber) stream <<".";
-      std::string s = stream.str();
-
-      for (unsigned int j = 0; j < s.length(); j++)
-      {
-        if (s[j] == 'e')
+      if (std::floor(theNumber) == theNumber) {
+        // integer
+        long theActualNumber = (long) theNumber;
+        stream << theActualNumber << ".";
+        return stream.str();
+      } else {
+        //decimal
+        stream << theNumber;
+        std::string s = stream.str();
+        for (unsigned int j = 0; j < s.length(); j++)
         {
-          s[j] = 'E';
-          break;
+          if (s[j] == 'e')
+          {
+            s[j] = 'E';
+            break;
+          }
         }
+        return s;
       }
-      return s;
     }
 
   }

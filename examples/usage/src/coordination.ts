@@ -17,8 +17,8 @@ export default async function() {
         console.log(position);
 
         // TODO: exports are NOT lossless, currently losing header and double precision
-        Equals("X coordinate", position[0], 33.60232501322153);
-        Equals("Y coordinate", position[1], -3.1952);
-        Equals("Z coordinate", position[2], 104.564338432165 );
+        Equals("X coordinate", position[0], 36.52331501322146);
+        Equals("Y coordinate", position[1], 0.125);
+        Equals("Z coordinate", position[2], 104.56433843213091 );
     }, settings);
 }

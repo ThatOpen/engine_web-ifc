@@ -32,7 +32,7 @@ namespace webifc::geometry
     glm::dvec2 GetCartesianPoint2D(const uint32_t expressID) const;
     glm::dvec3 GetVector(const uint32_t expressID) const;
     IfcProfile GetProfile(uint32_t expressID) const;
-    IfcProfile3D GetProfile3D(uint32_t expressID) const;
+    IfcProfile GetProfile3D(uint32_t expressID) const;
     IfcCurve GetCurve(uint32_t expressID,uint8_t dimensions, bool edge=false) const;
     std::vector<glm::dvec3> ReadIfcCartesianPointList3D(const uint32_t expressID) const;
     std::vector<glm::dvec2> ReadIfcCartesianPointList2D(const uint32_t expressID) const;
@@ -54,6 +54,7 @@ namespace webifc::geometry
   private:
     IfcCurve GetAlignmentCurve(uint32_t expressID) const;
     IfcProfile GetProfileByLine(uint32_t lineID) const;
+    glm::dvec3 GetVertexPoint(uint32_t expressID) const;
     IfcTrimmingSelect GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const;
     void ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool edge, int sameSense = -1, int trimSense = -1, IfcTrimmingArguments trim = {}) const;
     double ReadLenghtMeasure() const;

@@ -25,6 +25,11 @@ long long ms()
     return millis.count();
 }
 
+double RandomDouble(double lo, double hi)
+{
+    return lo + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (hi - lo)));
+}
+
 std::string ReadFile(std::string filename)
 {
     std::ifstream t(filename);
@@ -227,8 +232,8 @@ void TestTriangleDecompose()
         // random points
         for (unsigned int j = 0; j < PTS_PER_TEST; j++)
         {
-            points.push_back({webifc::geometry::RandomDouble(0, scaleX),
-                              webifc::geometry::RandomDouble(0, scaleY)});
+            points.push_back({RandomDouble(0, scaleX),
+                              RandomDouble(0, scaleY)});
         }
 
         // points along the edges
@@ -238,23 +243,12 @@ void TestTriangleDecompose()
             glm::dvec2 e2 = c - a;
             glm::dvec2 e3 = b - c;
 
-            points.push_back(a + e1 * webifc::geometry::RandomDouble(0, 1));
-            points.push_back(a + e2 * webifc::geometry::RandomDouble(0, 1));
-            points.push_back(c + e3 * webifc::geometry::RandomDouble(0, 1));
+            points.push_back(a + e1 * RandomDouble(0, 1));
+            points.push_back(a + e2 * RandomDouble(0, 1));
+            points.push_back(c + e3 * RandomDouble(0, 1));
         }
 
-        std::vector<webifc::geometry::Loop> loops;
-
-        for (auto &pt : points)
-        {
-            // if (pt.x > scaleX / 2)
-            {
-                webifc::geometry::Loop l;
-                l.hasOne = true;
-                l.v1 = pt;
-                loops.push_back(l);
-            }
-        }
+       
 
         std::cout << "Start test " << i << std::endl;
 
@@ -293,7 +287,6 @@ int main()
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
-    set.USE_FAST_BOOLS = true;
 
     webifc::utility::LoaderErrorHandler errorHandler;
     webifc::schema::IfcSchemaManager schemaManager;
@@ -317,7 +310,7 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, errorHandler, schemaManager, set.CIRCLE_SEGMENTS_HIGH, set.COORDINATE_TO_ORIGIN);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS,set.COORDINATE_TO_ORIGIN);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);

@@ -304,7 +304,7 @@ namespace webifc::geometry
 		return false;
 	}
 
-	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, utility::LoaderErrorHandler &_errorHandler)
+	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, utility::LoaderErrorHandler &_errorHandler, uint32_t expressID)
 	{
 		if (bounds.size() == 1 && bounds[0].curve.points.size() == 3)
 		{
@@ -339,7 +339,7 @@ namespace webifc::geometry
 
 				if (outerIndex == -1)
 				{
-					_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound!");
+					_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound!", expressID);
 				}
 				else
 				{
@@ -351,14 +351,14 @@ namespace webifc::geometry
 			// if the first bound is not an outer bound now, this is unexpected
 			if (bounds[0].type != IfcBoundType::OUTERBOUND)
 			{
-				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound first!");
+				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound first!", expressID);
 			}
 
 			glm::dvec3 v1, v2, v3;
 			if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
 			{
 				// these points are on a line
-				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "No basis found for brep!");
+				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "No basis found for brep!", expressID);
 				return;
 			}
 
@@ -418,7 +418,7 @@ namespace webifc::geometry
 		}
 		else
 		{
-			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "bad bound");
+			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "bad bound", expressID);
 		}
 	}
 
@@ -699,7 +699,7 @@ namespace webifc::geometry
 			{
 				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 				{
-					Face f = meshGeom.GetFace(i);
+					fuzzybools::Face f = meshGeom.GetFace(i);
 					glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 
 					return a;
@@ -733,26 +733,6 @@ namespace webifc::geometry
 		}
 	}
 
-	inline IfcGeometry flattenGeometry(std::vector<IfcGeometry> &geoms)
-	{
-		IfcGeometry newGeom;
-
-		for (auto meshGeom : geoms)
-		{
-			for (uint32_t i = 0; i < meshGeom.numFaces; i++)
-			{
-				Face f = meshGeom.GetFace(i);
-				glm::dvec3 a = meshGeom.GetPoint(f.i0);
-				glm::dvec3 b = meshGeom.GetPoint(f.i1);
-				glm::dvec3 c = meshGeom.GetPoint(f.i2);
-				newGeom.AddFace(a, b, c);
-			}
-			newGeom.AddComponent(meshGeom);
-		}
-
-		return newGeom;
-	}
-
 	inline void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
@@ -771,7 +751,7 @@ namespace webifc::geometry
 
 				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 				{
-					Face f = meshGeom.GetFace(i);
+					fuzzybools::Face f = meshGeom.GetFace(i);
 					glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 					glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
 					glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);

@@ -55,6 +55,7 @@ tsSchema.push(`export const SchemaNames: Array<string> = [];`);
 
 
 tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
+tsSchema.push('\tif (Array.isArray(tapeItem)) tapeItem.map((p:any) => TypeInitialiser(schema,p));');
 tsSchema.push('\tif (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
 tsSchema.push('}');
 tsSchema.push('function Labelise(tapeItem:any) {');
@@ -276,7 +277,7 @@ for (var i = 0; i < files.length; i++) {
   cppSchema.push(`\t\t_schemaNames.push_back("${schemaNameClean}");`);
   cppSchema.push(`\t\t_schemas.push_back(${schemaNameClean});`);
 }
-cppSchema.push("\t};");
+cppSchema.push("\t}");
 chSchema.push(`};`)
 
 cppSchema.push("\tstd::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {");
@@ -288,7 +289,7 @@ new Set([...completeEntityList,...typeList]).forEach(entity => {
 cppSchema.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
 cppSchema.push("\t\t}");
 cppSchema.push("\t}");
-cppSchema.push("};");
+cppSchema.push("}");
 
 fs.writeFileSync("../wasm/schema/ifc-schema.h", chSchema.join("\n")); 
 fs.writeFileSync("../wasm/schema/schema-functions.cpp", cppSchema.join("\n")); 

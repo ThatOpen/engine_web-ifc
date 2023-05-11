@@ -32,7 +32,7 @@ struct ModelInfo
         {
             if (geometryLoader==nullptr)
             {
-                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS_HIGH,settings.COORDINATE_TO_ORIGIN);
+                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN);
             }
             return geometryLoader;
         }
@@ -735,118 +735,75 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     }
 }
 
-emscripten::val& GetArgs(uint32_t modelID, emscripten::val& arguments)
+emscripten::val GetArgs(uint32_t modelID, bool inObject=false)
 {
     auto loader = models[modelID].GetLoader();
-    std::stack<emscripten::val> valueStack;
-    std::stack<int> valuePosition;
-
-    valueStack.push(arguments);
-    valuePosition.push(0);
-
+    auto arguments = emscripten::val::array();
+    size_t size = 0;
     bool endOfLine = false;
     while (!loader->IsAtEnd() && !endOfLine)
     {
         webifc::parsing::IfcTokenType t = loader->GetTokenType();
 
-        auto& topValue = valueStack.top();
-        auto& topPosition = valuePosition.top();
-
         switch (t)
         {
-        case webifc::parsing::IfcTokenType::LINE_END:
-        {
-            endOfLine = true;
-            break;
-        }
-        case webifc::parsing::IfcTokenType::UNKNOWN:
-        {
-            auto obj = emscripten::val::object(); 
-            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::parsing::IfcTokenType::UNKNOWN))); 
-
-            topValue.set(topPosition++, obj);
-            
-            break;
-        }
-        case webifc::parsing::IfcTokenType::EMPTY:
-        {
-            topValue.set(topPosition++, emscripten::val::null());
-            
-            break;
-        }
-        case webifc::parsing::IfcTokenType::SET_BEGIN:
-        {
-            auto newValue = emscripten::val::array();
-
-            valueStack.push(newValue);
-            valuePosition.push(0);
-
-            break;
-        }
-        case webifc::parsing::IfcTokenType::SET_END:
-        {
-            if (valueStack.size() == 1)
+            case webifc::parsing::IfcTokenType::LINE_END:
             {
-                // this is a pop just before endline, so ignore
                 endOfLine = true;
+                break;
             }
-            else
+            case webifc::parsing::IfcTokenType::EMPTY:
             {
-                auto topCopy = valueStack.top();
-
-                valueStack.pop();
-                valuePosition.pop();
-                auto& parent = valueStack.top();
-                int& parentCount = valuePosition.top();
-                parent.set(parentCount++, topCopy);
+                arguments.set(size++,emscripten::val::null());
+                break;
             }
-
-            break;
-        }
-        case webifc::parsing::IfcTokenType::LABEL:
-        {
-            // read label
-            auto obj = emscripten::val::object(); 
-            obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::parsing::IfcTokenType::LABEL)));
-            loader->StepBack();
-            auto s=loader->GetStringArgument();
-            auto typeCode = schemaManager.IfcTypeToTypeCode(s);
-            obj.set("typecode", emscripten::val(typeCode));
-            // read set open
-            loader->GetTokenType();
-            
-            // read value following label
-            webifc::parsing::IfcTokenType t = loader->GetTokenType();
-            loader->StepBack();
-            obj.set("value", ReadValue(modelID,t));
-
-            // read set close
-            loader->GetTokenType();
-
-            topValue.set(topPosition++, obj);
-
-            break;
-        }
-        case webifc::parsing::IfcTokenType::STRING:
-        case webifc::parsing::IfcTokenType::ENUM:
-        case webifc::parsing::IfcTokenType::REAL:
-        case webifc::parsing::IfcTokenType::REF:
-        {
-            
-            auto obj = emscripten::val::object(); 
-            loader->StepBack();
-            obj.set("type", emscripten::val(static_cast<uint32_t>(t)));
-            obj.set("value", ReadValue(modelID,t));
-
-            topValue.set(topPosition++, obj);
-
-            break;
-        }
-        default:
-            break;
+            case webifc::parsing::IfcTokenType::SET_BEGIN:
+            {
+                arguments.set(size++,GetArgs(modelID));
+                break;
+            }
+            case webifc::parsing::IfcTokenType::SET_END:
+            {
+                endOfLine = true;
+                break;
+            }
+            case webifc::parsing::IfcTokenType::LABEL:
+            {
+                // read label
+                auto obj = emscripten::val::object(); 
+                obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::parsing::IfcTokenType::LABEL)));
+                loader->StepBack();
+                auto s=loader->GetStringArgument();
+                auto typeCode = schemaManager.IfcTypeToTypeCode(s);
+                obj.set("typecode", emscripten::val(typeCode));
+                // read set open
+                loader->GetTokenType();
+                obj.set("value", GetArgs(modelID,true));
+                arguments.set(size++, obj);
+                break;
+            }
+            case webifc::parsing::IfcTokenType::STRING:
+            case webifc::parsing::IfcTokenType::ENUM:
+            case webifc::parsing::IfcTokenType::REAL:
+            case webifc::parsing::IfcTokenType::REF:
+            {
+                loader->StepBack();
+                emscripten::val obj;
+                if (inObject) obj = ReadValue(modelID,t);
+                else {
+                    obj = emscripten::val::object(); 
+                    obj.set("type", emscripten::val(static_cast<uint32_t>(t)));
+                    obj.set("value", ReadValue(modelID,t));
+                }
+                arguments.set(size++, obj);
+                break;
+            }
+            default:
+                break;
         }
     }
-
+    if (size == 0) return emscripten::val::null();
+    if (size == 1 && inObject) return arguments[0];
     return arguments;
 }
 
@@ -865,9 +822,8 @@ emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
     auto line = lines[0];
     loader->MoveToHeaderLineArgument(line.lineIndex, 0);
 
-    auto arguments = emscripten::val::array();
     std::string s(schemaManager.IfcTypeCodeToType(line.ifcType));
-    GetArgs(modelID, arguments);
+    auto arguments = GetArgs(modelID);
     auto retVal = emscripten::val::object();
     retVal.set("ID", line.lineIndex);
     retVal.set("type", s);
@@ -887,9 +843,7 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 
     loader->MoveToArgumentOffset(line, 0);
 
-    auto arguments = emscripten::val::array();
-    std::cout << "data in" << std::endl;
-    GetArgs(modelID, arguments);
+    auto arguments = GetArgs(modelID);
 
     auto retVal = emscripten::val::object();
     retVal.set(emscripten::val("ID"), line.expressID);
@@ -967,11 +921,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<webifc::utility::LoaderSettings>("LoaderSettings")
         .field("COORDINATE_TO_ORIGIN", &webifc::utility::LoaderSettings::COORDINATE_TO_ORIGIN)
-        .field("USE_FAST_BOOLS", &webifc::utility::LoaderSettings::USE_FAST_BOOLS)
-        .field("CIRCLE_SEGMENTS_LOW", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS_LOW)
-        .field("CIRCLE_SEGMENTS_MEDIUM", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS_MEDIUM)
-        .field("CIRCLE_SEGMENTS_HIGH", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS_HIGH)
-        .field("BOOL_ABORT_THRESHOLD", &webifc::utility::LoaderSettings::BOOL_ABORT_THRESHOLD)
+        .field("CIRCLE_SEGMENTS", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &webifc::utility::LoaderSettings::TAPE_SIZE)
         .field("MEMORY_LIMIT", &webifc::utility::LoaderSettings::MEMORY_LIMIT)
     ;

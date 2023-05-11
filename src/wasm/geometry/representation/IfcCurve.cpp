@@ -6,14 +6,21 @@
 // Curve Implementation of a Curve
 
 #include <vector>
+#include <algorithm>
 #include <glm/glm.hpp>
 #include "IfcCurve.h"
-#include "../operations/geometryutils.h"
 
 namespace webifc::geometry
 {
 
-	glm::dvec2 IfcCurve::Get2d(size_t i) const
+
+	inline	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
+	}
+
+	
+	glm::dvec2 IfcCurve::Get2d(size_t i) const 
 	{
 		glm::dvec2 ret;
 		ret.x = points.at(i).x;

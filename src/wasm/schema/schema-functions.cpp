@@ -244,7 +244,7 @@ namespace webifc::schema {
 		_schemas.push_back(IFC4);
 		_schemaNames.push_back("IFC4X3");
 		_schemas.push_back(IFC4X3);
-	};
+	}
 	std::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {
 		switch(typeCode) {
 			case schema::FILE_SCHEMA: return "FILE_SCHEMA";
@@ -1390,4 +1390,4 @@ namespace webifc::schema {
 			default: return "<web-ifc-type-unknown>";
 		}
 	}
-};
+}
