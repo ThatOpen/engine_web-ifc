@@ -33,6 +33,7 @@ namespace webifc::geometry
     glm::dvec3 GetVector(const uint32_t expressID) const;
     IfcProfile GetProfile(uint32_t expressID) const;
     IfcProfile GetProfile3D(uint32_t expressID) const;
+    IfcCurve GetLocalCurve(uint32_t expressID) const;
     IfcCurve GetCurve(uint32_t expressID,uint8_t dimensions, bool edge=false) const;
     std::vector<glm::dvec3> ReadIfcCartesianPointList3D(const uint32_t expressID) const;
     std::vector<glm::dvec2> ReadIfcCartesianPointList2D(const uint32_t expressID) const;
@@ -73,6 +74,8 @@ namespace webifc::geometry
     double _cubicScalingFactor = 1;
     double _angularScalingFactor = 1;
     uint16_t _circleSegments;
+    mutable std::vector<IfcCurve> LocalCurvesList;
+    mutable std::vector<uint32_t> LocalcurvesIndices;
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsMap();
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsRelMap();
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelAggregatesMap();

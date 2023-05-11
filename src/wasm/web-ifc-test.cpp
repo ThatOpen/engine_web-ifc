@@ -322,11 +322,11 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 15);
     // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
     // SpecificLoadTest(loader, geometryLoader,616888); // (E28)_CARRETERA_10.94_4X3
-    SpecificLoadTest(loader, geometryLoader, 22716); // Corridor-5a_renamedProfiles_4x3
+    // SpecificLoadTest(loader, geometryLoader, 22716); // Corridor-5a_renamedProfiles_4x3
     // SpecificLoadTest(loader, geometryLoader, 24943); // Corridor-5a_renamedProfiles_4x3
     // SpecificLoadTest(loader, geometryLoader, 4035); // muysimple
     // GetLine(loader, 2);
-    // auto meshes = LoadAllTest(loader, geometryLoader);
+    auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
     auto CrossSections = GetCrossSections(loader, geometryLoader);
 

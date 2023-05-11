@@ -436,7 +436,6 @@ namespace webifc::geometry
 			if (profile1.points.size() != profile2.points.size())
 			{
 				_errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "profiles must have the same number of points in SectionedSurface");
-				return geom;
 			}
 
 			std::vector<uint32_t> indices;
@@ -445,24 +444,32 @@ namespace webifc::geometry
 			for (size_t j = 0; j < profile1.points.size(); j++)
 			{
 				glm::dvec3 &p1 = profile1.points[j];
-				glm::dvec3 &p2 = profile2.points[j];
+				int j2 = 0;
+				if (profile1.points.size() > 1)
+				{
+					double pr = (double)j / (double)(profile1.points.size() - 1);
+					j2 = pr * (profile2.points.size() - 1);
+				}
+				glm::dvec3 &p2 = profile2.points[j2];
+
+				glm::dvec3 normal = glm::dvec3(0.0, 0.0, 1.0);
 
 				if (glm::distance(p1, p2) > 1E-5)
 				{
-					glm::dvec3 normal = glm::normalize(glm::cross(p2 - p1, glm::cross(p2 - p1, glm::dvec3(0.0, 0.0, 1.0))));
-
-					geom.AddPoint(p1, normal);
-					geom.AddPoint(p2, normal);
-
-					indices.push_back(geom.numPoints - 2);
-					indices.push_back(geom.numPoints - 1);
+					normal = glm::normalize(glm::cross(p2 - p1, glm::cross(p2 - p1, glm::dvec3(0.0, 0.0, 1.0))));
 				}
+
+				geom.AddPoint(p1, normal);
+				geom.AddPoint(p2, normal);
+
+				indices.push_back(geom.numPoints - 2);
+				indices.push_back(geom.numPoints - 1);
 			}
 
 			// Create the faces
 			if (indices.size() > 0)
 			{
-				for (size_t j = 0; j < indices.size() - 1; j += 4)
+				for (size_t j = 0; j < indices.size() - 2; j += 4)
 				{
 					geom.AddFace(indices[j], indices[j + 1], indices[j + 2]);
 					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3]);
