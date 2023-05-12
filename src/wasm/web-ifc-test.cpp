@@ -248,8 +248,6 @@ void TestTriangleDecompose()
             points.push_back(c + e3 * RandomDouble(0, 1));
         }
 
-       
-
         std::cout << "Start test " << i << std::endl;
 
         bool swapped = false;
@@ -279,11 +277,15 @@ int main()
     // Benchmark();
 
     // return 0;
-std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.2/IFC_FILES/01097-Tungasletta-2-Hovedbygg-RC2-prelim.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.2/IFC_FILES/01097-Tungasletta-2-Hovedbygg-RC2-prelim.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/(E28)_CARRETERA_10.94_4X3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Corridor-5a_renamedProfiles_4x3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/Q2.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/muysimple.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Ferrocarril_4x3_crosssec.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
+
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -310,26 +312,22 @@ std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.2/IFC_FILES/0109
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS,set.COORDINATE_TO_ORIGIN);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, errorHandler, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN);
 
     start = ms();
-    // SpecificLoadTest(loader, geometryLoader, 8765);
-    // SpecificLoadTest(loader, geometryLoader, 122);
-    // SpecificLoadTest(loader, geometryLoader,469706);
-    // auto meshes = LoadAllTest(loader, geometryLoader);
-    // auto alignments = GetAlignments(loader, geometryLoader);
-    // auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
-    // SpecificLoadTest(loader, geometryLoader, 15);
+
     // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
     // SpecificLoadTest(loader, geometryLoader,616888); // (E28)_CARRETERA_10.94_4X3
     // SpecificLoadTest(loader, geometryLoader, 22716); // Corridor-5a_renamedProfiles_4x3
     // SpecificLoadTest(loader, geometryLoader, 24943); // Corridor-5a_renamedProfiles_4x3
     // SpecificLoadTest(loader, geometryLoader, 4035); // muysimple
-    SpecificLoadTest(loader, geometryLoader, 292780); //01097-Tungasletta-2-Hovedbygg-RC2-prelim
+    // SpecificLoadTest(loader, geometryLoader, 292780); //01097-Tungasletta-2-Hovedbygg-RC2-prelim
+    // SpecificLoadTest(loader, geometryLoader, 377148); // Solibri Building.ifc
 
     // GetLine(loader, 2);
-    // auto meshes = LoadAllTest(loader, geometryLoader);
+    auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
+    // auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
     auto CrossSections = GetCrossSections(loader, geometryLoader);
 
     auto errors = errorHandler.GetErrors();

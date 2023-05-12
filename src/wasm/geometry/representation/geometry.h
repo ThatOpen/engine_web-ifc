@@ -147,7 +147,6 @@ namespace webifc::geometry {
 		{
 			bool hasParam = false;
 			bool hasPos = false;
-			bool hasAng = false;
 			bool hasLenght = false;
 			double param;
 			glm::dvec2 pos;
