@@ -838,6 +838,7 @@ namespace webifc::geometry
                     return mesh;
                 }
             case schema::IFCPOLYLINE:
+            case schema::IFCINDEXEDPOLYCURVE:
             case schema::IFCTRIMMEDCURVE:
                     // ignore polylines as meshes
                 return mesh;
