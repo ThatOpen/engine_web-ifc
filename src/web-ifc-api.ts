@@ -24,21 +24,11 @@ import {
 
 let WebIFCWasm: any;
 
-//@ts-ignore
-if (typeof self !== 'undefined' && self.crossOriginIsolated) {
-    try {
-        WebIFCWasm = require("./web-ifc-mt");
-    } catch (ex){
-        WebIFCWasm = require("./web-ifc");
-    }
-}
-else {
-    WebIFCWasm = require("./web-ifc");
-}
 export * from "./ifc-schema";
 import { Properties } from "./helpers/properties";
 import { Log, LogLevel } from "./helpers/log";
 export { LogLevel };
+
 
 
 export const UNKNOWN = 0;

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+     "extends": "./tsconfig"          
+  },
+  "files": [
+    "src/web-ifc-api.ts",
+    "src/web-ifc-api-loader-browser.ts",
+  ]
+}
