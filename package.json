@@ -37,7 +37,7 @@
     "setup-env": "emsdk_env",
     "setup-mingw": "mingw-get instal msys-make gettext",
     "build-release": "npm run build-wasm-release && npm run build-api && npm run build-cleanup",
-    "build-cleanup": "rimraf dist/helpers/properties.ts && rimraf dist/web-ifc-api.ts",
+    "build-cleanup": "rimraf dist/helpers/properties.ts && rimraf dist/web-ifc-api.ts && rimraf dist/ifc-schema.ts",
     "build-debug": "npm run build-wasm-debug && npm run build-api",
     "publish-repo": "npm run set-version && cd dist && npm publish",
     "build-publish-repo": "npm run build-release && cpy ./npmrc ./dist/  --rename=.npmrc && cd dist && npm publish",
