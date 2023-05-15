@@ -67,10 +67,11 @@
   "files": [
     "web-ifc.wasm",
     "web-ifc-mt.wasm",
+    "web-ifc-node.wasm",
     "web-ifc-api-node.js",
+    "web-ifc-api-node.mjs",
     "web-ifc-api-node.d.ts",
     "web-ifc-api.js",
-    "web-ifc-api-browser.js",
     "web-ifc-api.d.ts",
     "ifc-schema.d.ts",
     "helpers/properties.d.ts",
