@@ -22,10 +22,23 @@ import {
     SchemaNames
 } from "./ifc-schema";
 
+declare var __WASM_PATH__:string;
+
+if (typeof __WASM_PATH__ === "undefined") __WASM_PATH__ = "./web-ifc";
+
 let WebIFCWasm: any;
+
+if (typeof self !== 'undefined' && self.crossOriginIsolated) {
+    try {
+      WebIFCWasm = require("./web-ifc-mt");
+    } catch (ex){
+        WebIFCWASM = require(__WASM_PATH__);
+    }
+} else WebIFCWasm = require(__WASM_PATH__);
 
 export * from "./ifc-schema";
 import { Properties } from "./helpers/properties";
+export { Properties };
 import { Log, LogLevel } from "./helpers/log";
 export { LogLevel };
 
@@ -167,6 +180,7 @@ export class IfcAPI {
      * you override the path from which the wasm module is loaded.
      */
     async Init(customLocateFileHandler?: LocateFileHandlerFn) {
+        console.log(WebIFCWasm);
         if (WebIFCWasm) {
             let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
