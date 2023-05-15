@@ -79,7 +79,23 @@ if (EMSCRIPTEN)
 	if (release)
 		target_compile_options(web-ifc PUBLIC "-O3")
 	endif()
-	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1")
+	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web")
+
+	add_executable (web-ifc-node ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
+	target_include_directories(web-ifc-node PUBLIC ${tinynurbs_SOURCE_DIR}/include)
+	target_include_directories(web-ifc-node PUBLIC ${glm_SOURCE_DIR}/)
+	target_include_directories(web-ifc-node PUBLIC ${glm_SOURCE_DIR}/glm)
+	target_include_directories(web-ifc-node PUBLIC ${earcut_SOURCE_DIR}/include)
+	target_include_directories(web-ifc-node PUBLIC ${cdt_SOURCE_DIR}/CDT/include)
+	target_include_directories(web-ifc-node PUBLIC ${fuzzy_SOURCE_DIR}/)
+	target_compile_options(web-ifc-node PUBLIC "-Wall")
+	target_compile_options(web-ifc-node PUBLIC "-Wextra")
+	target_compile_options(web-ifc-node PUBLIC "-Wpedantic")
+	target_compile_options(web-ifc-node PUBLIC "-pedantic")
+	if (release)
+		target_compile_options(web-ifc-node PUBLIC "-O3")
+	endif()
+	set_target_properties(web-ifc-node PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 ")
 
 
 	#multi-treaded versions
@@ -98,7 +114,7 @@ if (EMSCRIPTEN)
 	if (release)
 		target_compile_options(web-ifc-mt PUBLIC "-O3")
 	endif()
-	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -flto --define-macro=REAL_T_IS_DOUBLE -sSTACK_SIZE=5MB -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1")
+	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -flto --define-macro=REAL_T_IS_DOUBLE -sSTACK_SIZE=5MB -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web,worker")
 endif()
 
 

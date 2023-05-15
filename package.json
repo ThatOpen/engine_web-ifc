@@ -2,7 +2,6 @@
   "name": "web-ifc",
   "version": "0.0.41",
   "description": "ifc loading on the web",
-  "main": "web-ifc-api-node.js",
   "module": "web-ifc-api.js",
   "exports": {
     ".": {
@@ -19,7 +18,7 @@
       ],
       "extensions": "ts"
     },
-    "build-web-ifc-api-mjs": {
+    "build-web-ifc-api-node": {
       "patterns": [
         "./src"
       ],
@@ -46,7 +45,7 @@
     "copy-debug-to-dist": "make-dir dist && cpy \"src/wasm/build_debug/*.js\" dist &&  cpy \"src/wasm/build_debug/*.wasm\" dist ",
     "build-wasm-debug": "make-dir src/wasm/build_debug && cd src/wasm/build_debug && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Debug && emmake make && npm run copy-debug-to-dist",
     "build-wasm-release": "make-dir src/wasm/build && cd src/wasm/build && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Release && emmake make && npm run copy-to-dist",
-    "build-api": "make-dir dist/helpers && npm run build-ts-api && npm run build-web-ifc-api-mjs && npm run build-web-ifc-api-browser && npm run build-web-ifc-api-node && cpy README.md dist && cpy package.json dist",
+    "build-api": "make-dir dist/helpers && npm run build-ts-api && npm run build-web-ifc-api-browser && npm run build-web-ifc-api-node && cpy README.md dist && cpy package.json dist",
     "build-ts-api": "make-dir dist/helpers && cpy \"src/*.ts\" dist && cpy \"src/helpers/*\" dist/helpers --flat && tsc  --incremental --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts . --rename=web-ifc-api-node.d.ts",
     "build-web-ifc-api-node": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=esm --external:path --define:__WASM_PATH__=\\\"./web-ifc-node\\\" --external:fs --external:os --external:perf_hooks --outfile=./dist/web-ifc-api-node.mjs && esbuild dist/web-ifc-api.ts --define:__WASM_PATH__=\\\"./web-ifc-node\\\" --bundle --platform=node --outfile=./dist/web-ifc-api-node.js",
     "build-web-ifc-api-browser": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=esm --define:__WASM_PATH__=\\\"./web-ifc\\\" --outfile=./dist/web-ifc-api.js",
@@ -69,10 +68,11 @@
   "files": [
     "web-ifc.wasm",
     "web-ifc-mt.wasm",
+    "web-ifc-node.wasm",
     "web-ifc-api-node.js",
+    "web-ifc-api-node.mjs",
     "web-ifc-api-node.d.ts",
     "web-ifc-api.js",
-    "web-ifc-api-browser.js",
     "web-ifc-api.d.ts",
     "ifc-schema.d.ts",
     "helpers/properties.d.ts",

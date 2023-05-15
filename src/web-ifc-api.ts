@@ -22,23 +22,26 @@ import {
     SchemaNames
 } from "./ifc-schema";
 
+declare var __WASM_PATH__:string;
+
+if (typeof __WASM_PATH__ === "undefined") __WASM_PATH__ = "./web-ifc";
+
 let WebIFCWasm: any;
 
-//@ts-ignore
 if (typeof self !== 'undefined' && self.crossOriginIsolated) {
     try {
         WebIFCWasm = require("./web-ifc-mt");
     } catch (ex){
-        WebIFCWasm = require("./web-ifc");
+        WebIFCWasm = require(__WASM_PATH__);
     }
-}
-else {
-    WebIFCWasm = require("./web-ifc");
-}
+} else WebIFCWasm = require(__WASM_PATH__);
+
 export * from "./ifc-schema";
 import { Properties } from "./helpers/properties";
+export { Properties };
 import { Log, LogLevel } from "./helpers/log";
 export { LogLevel };
+
 
 
 export const UNKNOWN = 0;
