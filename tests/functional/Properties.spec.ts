@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Properties, IfcAPI, IFCRELASSOCIATESMATERIAL, IFCRELDEFINESBYPROPERTIES, IFCWALLSTANDARDCASE, LogLevel } from '../../dist/web-ifc-api-node.js';
+import { IfcAPI, IFCRELASSOCIATESMATERIAL, IFCRELDEFINESBYPROPERTIES, IFCWALLSTANDARDCASE, LogLevel } from '../../dist/web-ifc-api-node.js';
+import type { Properties } from '../../dist/helpers/properties';
 
 declare global {
 	namespace jest {
