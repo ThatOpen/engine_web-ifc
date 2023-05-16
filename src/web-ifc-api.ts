@@ -840,12 +840,11 @@ export class IfcAPI {
             for (let y = 0; y < size; y++) {
                 const expressID = lines.get(y);
                 const info = this.GetLine(modelID, expressID);
-                if (info.GlobalId == null) {
-                    continue;
+                if ('GlobalId' in info) {
+                    const globalID = info.GlobalId.value;
+                    map.set(expressID, globalID);
+                    map.set(globalID, expressID);
                 }
-                const globalID = info.GlobalId.value;
-                map.set(expressID, globalID);
-                map.set(globalID, expressID);
             }
         }
         this.ifcGuidMap.set(modelID, map);
