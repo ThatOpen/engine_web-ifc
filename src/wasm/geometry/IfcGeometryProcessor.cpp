@@ -172,6 +172,10 @@ namespace webifc::geometry
                     }
 
                     finalGeometry = BoolSubtract(flatElementMeshes, voidGeoms);
+                    
+                    #ifdef CSG_DEBUG_OUTPUT
+                        io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
+                    #endif
                 }
 
                 _expressIDToGeometry[line.expressID] = finalGeometry;
@@ -715,15 +719,15 @@ namespace webifc::geometry
                     uint32_t profileID = _loader.GetRefArgument();
                     uint32_t placementID = _loader.GetRefArgument();
                     uint32_t axis1PlacementID = _loader.GetRefArgument();
-                    double angle = _loader.GetDoubleArgument();
-
+                    double angle = angleConversion(_loader.GetDoubleArgument());
+                    
                     IfcProfile profile = _geometryLoader.GetProfile(profileID);
                     glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID);
-                    glm::dvec3 axis;
+                    glm::dvec3 axis= _geometryLoader.GetAxis1Placement(axis1PlacementID)[0];
 
                     bool closed = false;
 
-                    glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[0];
+                    glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[1];
 
                     IfcCurve directrix = BuildArc(pos, axis, angle,_circleSegments);
 
@@ -745,7 +749,7 @@ namespace webifc::geometry
                     mesh.transformation = placement;
                     _expressIDToGeometry[line.expressID] = geom;
                     mesh.expressID = line.expressID;
-                    mesh.hasGeometry = styledItemColor.has_value();
+                    mesh.hasGeometry = true;
                     if (!styledItemColor) mesh.color = glm::dvec4(1.0);
                     else mesh.color = styledItemColor.value();
                     _expressIDToMesh[line.expressID] = mesh;
@@ -787,6 +791,7 @@ namespace webifc::geometry
 
                     double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
                     bool flipWinding = dirDot < 0; // can't be perp according to spec
+
 
                     // TODO: correct dump in case of compositeProfile
                     #ifdef CSG_DEBUG_OUTPUT

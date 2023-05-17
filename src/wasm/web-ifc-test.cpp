@@ -283,7 +283,8 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/Q2.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/muysimple.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Ferrocarril_4x3_crosssec.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#394/394.ifc");
 
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
 
@@ -323,12 +324,17 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 4035); // muysimple
     // SpecificLoadTest(loader, geometryLoader, 292780); //01097-Tungasletta-2-Hovedbygg-RC2-prelim
     // SpecificLoadTest(loader, geometryLoader, 377148); // Solibri Building.ifc
-
+    // SpecificLoadTest(loader, geometryLoader, 1342624); //384
+    // SpecificLoadTest(loader, geometryLoader, 3843); //394
+    // SpecificLoadTest(loader, geometryLoader, 5046); //394
+    // SpecificLoadTest(loader, geometryLoader, 4123); //394
+    SpecificLoadTest(loader, geometryLoader, 6131); //394
+       
     // GetLine(loader, 2);
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
     // auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
-    auto CrossSections = GetCrossSections(loader, geometryLoader);
+    // auto CrossSections = GetCrossSections(loader, geometryLoader);
 
     auto errors = errorHandler.GetErrors();
     errorHandler.ClearErrors();

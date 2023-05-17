@@ -560,9 +560,8 @@ namespace webifc::geometry {
 	{
 		IfcCurve curve;
 
-			// double radius = glm::length(pos);
+		// project pos onto axis
 
-			// project pos onto axis
 		double pdota = glm::dot(axis, pos);
 		glm::dvec3 pproja = pdota * axis;
 

@@ -13,6 +13,15 @@
 namespace webifc::geometry
 {
 
+	inline double angleConversion(double angle)
+	{
+		if(abs(angle > 2) - EPS_SMALL * CONST_PI)
+		{
+			angle = (angle / 360) * 2 * CONST_PI;
+		}
+		return angle;
+	}
+
 	inline glm::dvec3 projectOntoPlane(const glm::dvec3 &origin, const glm::dvec3 &normal, const glm::dvec3 &point, const glm::dvec3 &dir)
 	{
 		// project {et} onto the plane, following the extrusion normal
@@ -58,7 +67,7 @@ namespace webifc::geometry
 		{
 			if (i < directrix.points.size() - 1)
 			{
-				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > 10e-5)
+				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_SMALL)
 				{
 					dpts.push_back(directrix.points[i]);
 				}
@@ -183,7 +192,7 @@ namespace webifc::geometry
 				auto &ppts = profile.curve.points;
 				for (auto &pt2D : ppts)
 				{
-					glm::dvec3 pt = -pt2D.x * right + -pt2D.y * left + planeOrigin;
+					glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
 					glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
 					segmentForCurve.Add(proj);
