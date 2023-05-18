@@ -13,6 +13,15 @@
 
 namespace webifc::geometry {
 
+	inline double angleConversion(double angle)
+	{
+		if(abs(angle > 2) - EPS_SMALL * CONST_PI)
+		{
+			angle = (angle / 360) * 2 * CONST_PI;
+		}
+		return angle;
+	}
+
 	inline 	glm::dvec3 projectOntoPlane(const glm::dvec3 &origin, const glm::dvec3 &normal, const glm::dvec3 &point, const glm::dvec3 &dir)
 	{
 		// project {et} onto the plane, following the extrusion normal

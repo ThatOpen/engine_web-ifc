@@ -555,14 +555,13 @@ namespace webifc::geometry {
 
 		return c;
 	}
-
+	
 	inline IfcCurve BuildArc(const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad,uint16_t _circleSegments)
 	{
 		IfcCurve curve;
 
-			// double radius = glm::length(pos);
+		// project pos onto axis
 
-			// project pos onto axis
 		double pdota = glm::dot(axis, pos);
 		glm::dvec3 pproja = pdota * axis;
 
