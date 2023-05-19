@@ -165,6 +165,7 @@ namespace webifc::geometry {
 				{
 					// construct initial curve
 					glm::dvec3 left;
+					glm::dvec3 right;
 					if (initialDirectrixNormal == glm::dvec3(0))
 					{
 						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.y, directrixSegmentNormal.x, directrixSegmentNormal.z));
@@ -176,10 +177,16 @@ namespace webifc::geometry {
 						{
 							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.z, directrixSegmentNormal.y, directrixSegmentNormal.x));
 						}
+						right = glm::normalize(glm::cross(directrixSegmentNormal, left));
+						left = glm::normalize(glm::cross(directrixSegmentNormal, right));
 					}
 					else
 					{
 						left = glm::cross(directrixSegmentNormal, initialDirectrixNormal);
+						glm::dvec3 side = glm::normalize(initialDirectrixNormal);
+						right = glm::normalize(glm::cross(directrixSegmentNormal, left));
+						left = glm::normalize(glm::cross(directrixSegmentNormal, right));
+						right *= side;
 					}
 
 					if (left == glm::dvec3(0, 0, 0))
@@ -187,19 +194,15 @@ namespace webifc::geometry {
 						printf("0 left vec in sweep!\n");
 					}
 
-					glm::dvec3 right = glm::normalize(glm::cross(directrixSegmentNormal, left));
-					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
-
 					// project profile onto planeNormal, place on planeOrigin
 					// TODO: look at holes
 					auto &ppts = profile.curve.points;
 					for (auto &pt2D : ppts)
-					{
-						glm::dvec3 side = glm::normalize(initialDirectrixNormal);
-						glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right * side + planeOrigin;
+					{				
+						glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
 						if(rotate90)
 						{
-							pt = -pt2D.x * right * side - pt2D.y * left + planeOrigin;
+							pt = -pt2D.x * right - pt2D.y * left + planeOrigin;
 						}
 						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
