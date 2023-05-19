@@ -62,6 +62,10 @@ ifcApi.CloseModel(modelID);
 
 See [examples](https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src) for more details on how to use web-ifc.
 
+## Current Build
+
+The current live build of web-ifc is avaialble [here](https://ifcjs.github.io/web-ifc/build.zip). Using this allows you to test newest fixes before we make a release. If you wish to use this version then download the zip file and place the contents of the dist folder manually into your node_modules/web-ifc folder. I.e if you are using web-ifc-three then it will be node_modules/web-ifc-three/node_modules/web-ifc. Please not you must replace the javascript and the WASM.
+
 ## Requirements
 
 These are the requirements needed to build web-ifc (only for those that wish to build their own version).

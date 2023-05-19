@@ -15,7 +15,7 @@ namespace webifc::geometry
 
 	inline double angleConversion(double angle)
 	{
-		if(abs(angle > 2) - EPS_SMALL * CONST_PI)
+		if (abs(angle > 2) - EPS_SMALL * CONST_PI)
 		{
 			angle = (angle / 360) * 2 * CONST_PI;
 		}
@@ -56,7 +56,9 @@ namespace webifc::geometry
 	}
 
 	//! This implementation generates much more vertices than needed, and does not have smoothed normals
-	inline IfcGeometry Sweep(const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0))
+	// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
+	// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
+	inline IfcGeometry Sweep(const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		IfcGeometry geom;
 
@@ -162,6 +164,7 @@ namespace webifc::geometry
 			{
 				// construct initial curve
 				glm::dvec3 left;
+				glm::dvec3 right;
 				if (initialDirectrixNormal == glm::dvec3(0))
 				{
 					left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.y, directrixSegmentNormal.x, directrixSegmentNormal.z));
@@ -173,10 +176,16 @@ namespace webifc::geometry
 					{
 						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.z, directrixSegmentNormal.y, directrixSegmentNormal.x));
 					}
+					right = glm::normalize(glm::cross(directrixSegmentNormal, left));
+					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
 				}
 				else
 				{
 					left = glm::cross(directrixSegmentNormal, initialDirectrixNormal);
+					glm::dvec3 side = glm::normalize(initialDirectrixNormal);
+					right = glm::normalize(glm::cross(directrixSegmentNormal, left));
+					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
+					right *= side;
 				}
 
 				if (left == glm::dvec3(0, 0, 0))

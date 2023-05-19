@@ -656,7 +656,8 @@ namespace webifc::geometry
                     }
 
                     std::reverse(profile.curve.points.begin(), profile.curve.points.end());
-                    IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal());
+                    
+                    IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal(), true);
                     
                     _expressIDToGeometry[line.expressID] = geom;
                     mesh.expressID = line.expressID;
@@ -711,7 +712,7 @@ namespace webifc::geometry
 
                     return mesh;
                 }
-            case schema::IFCREVOLVEDAREASOLID:
+	case schema::IFCREVOLVEDAREASOLID:
                 {
                     IfcComposedMesh mesh;
 
@@ -858,6 +859,7 @@ namespace webifc::geometry
                     return mesh;
                 }
             case schema::IFCPOLYLINE:
+            case schema::IFCINDEXEDPOLYCURVE:
             case schema::IFCTRIMMEDCURVE:
                     // ignore polylines as meshes
                 return mesh;

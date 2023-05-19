@@ -632,6 +632,14 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
                 default:
                     break;
             }
+        } 
+        else if (child.isNumber() || child.isTrue() || child.isFalse() || child.isString())
+        {
+            webifc::parsing::IfcTokenType type;
+            if (child.isNumber()) type = webifc::parsing::IfcTokenType::REAL;
+            else if (child.isString()) type = webifc::parsing::IfcTokenType::STRING;
+            else type = webifc::parsing::IfcTokenType::ENUM;
+            WriteValue(modelID, type, child);
         }
         else
         {

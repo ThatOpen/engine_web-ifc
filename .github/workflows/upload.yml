@@ -30,6 +30,12 @@ jobs:
           npm ci
           npm --prefix ./examples/viewer ci
           npm run build-release
+      - name: Archive Build
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r build.zip dist/
+      - name: Build Viewer
+        run: |
           npm run build-viewer
           npm run regression-test-build
           npm run gen-docs
@@ -40,6 +46,7 @@ jobs:
           cp -R ./examples/viewer/dist/* ./dist/pages/demo
           cp -R ./tests/regression/dist/* ./dist/pages/examples
           cp -R ./dist/docs/* ./dist/pages/docs
+          cp -R ./build.zip ./dist/pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:

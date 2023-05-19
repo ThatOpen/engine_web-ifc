@@ -7,6 +7,7 @@
 #pragma once
 
 #include <array>
+#include <optional>
 #include <string>
 #include <cstdio>
 #include <algorithm>

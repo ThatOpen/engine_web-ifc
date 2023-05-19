@@ -555,7 +555,7 @@ namespace webifc::geometry {
 
 		return c;
 	}
-
+	
 	inline IfcCurve BuildArc(const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad,uint16_t _circleSegments)
 	{
 		IfcCurve curve;
