@@ -2,13 +2,13 @@
   "name": "web-ifc",
   "version": "0.0.41",
   "description": "ifc loading on the web",
-  "module": "web-ifc-api.js",
+  "module": "./web-ifc-api.js",
   "exports": {
     ".": {
-      "require": "web-ifc-api-node.cjs",
-      "node": "web-ifc-api-node.mjs",
-      "import": "web-ifc-api.js",
-      "browser": "web-ifc-api.js"
+      "require": "./web-ifc-api-node.cjs",
+      "node": "./web-ifc-api-node.mjs",
+      "import": "./web-ifc-api.js",
+      "browser": "./web-ifc-api.js"
     }
   },
   "watch": {
