@@ -199,8 +199,11 @@ namespace webifc::geometry
 				for (auto &pt2D : ppts)
 				{
 					glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
+					if(rotate90)
+					{
+						pt = -pt2D.x * right - pt2D.y * left + planeOrigin;
+					}
 					glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
-
 					segmentForCurve.Add(proj);
 				}
 			}
