@@ -284,9 +284,11 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/muysimple.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Ferrocarril_4x3_crosssec.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#394/394.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
-
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/394.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/IfcSurfaceCurveSweptAreaSolid.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/v41.ifc");
+	
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
 
@@ -327,8 +329,13 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 3843); //394
     // SpecificLoadTest(loader, geometryLoader, 5046); //394
     // SpecificLoadTest(loader, geometryLoader, 4123); //394
-    SpecificLoadTest(loader, geometryLoader, 6131); //394
-       
+    // SpecificLoadTest(loader, geometryLoader, 6131); //394
+    // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
+    // SpecificLoadTest(loader, geometryLoader, 4822); // 394 upsideown
+    // SpecificLoadTest(loader, geometryLoader, 2736); // 394
+    SpecificLoadTest(loader, geometryLoader, 2837); // IfcSurfaceCurveSweptAreaSolid
+    // SpecificLoadTest(loader, geometryLoader, 112077); // v41
+
     // GetLine(loader, 2);
     // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);

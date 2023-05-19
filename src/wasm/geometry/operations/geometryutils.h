@@ -193,9 +193,6 @@ namespace webifc::geometry
 					printf("0 left vec in sweep!\n");
 				}
 
-				glm::dvec3 right = glm::normalize(glm::cross(directrixSegmentNormal, left));
-				left = glm::normalize(glm::cross(directrixSegmentNormal, right));
-
 				// project profile onto planeNormal, place on planeOrigin
 				// TODO: look at holes
 				auto &ppts = profile.curve.points;
