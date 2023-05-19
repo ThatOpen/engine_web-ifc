@@ -57,7 +57,9 @@ namespace webifc::geometry {
 
 
 		//! This implementation generates much more vertices than needed, and does not have smoothed normals
-	inline	IfcGeometry Sweep(const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0))
+		// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
+		// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
+	inline	IfcGeometry Sweep(const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		IfcGeometry geom;
 
@@ -68,7 +70,7 @@ namespace webifc::geometry {
 		{
 			if (i < directrix.points.size() - 1)
 			{
-				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > 10e-5)
+				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_SMALL)
 				{
 					dpts.push_back(directrix.points[i]);
 				}
@@ -193,7 +195,12 @@ namespace webifc::geometry {
 					auto &ppts = profile.curve.points;
 					for (auto &pt2D : ppts)
 					{
-						glm::dvec3 pt = -pt2D.x * right + -pt2D.y * left + planeOrigin;
+						glm::dvec3 side = glm::normalize(initialDirectrixNormal);
+						glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right * side + planeOrigin;
+						if(rotate90)
+						{
+							pt = -pt2D.x * right * side - pt2D.y * left + planeOrigin;
+						}
 						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
 						segmentForCurve.Add(proj);

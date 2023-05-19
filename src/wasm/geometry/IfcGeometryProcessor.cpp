@@ -637,7 +637,8 @@ namespace webifc::geometry
                     }
 
                     std::reverse(profile.curve.points.begin(), profile.curve.points.end());
-                    IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal());
+                    
+                    IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal(), true);
                     
                     _expressIDToGeometry[line.expressID] = geom;
                     mesh.expressID = line.expressID;
@@ -704,7 +705,7 @@ namespace webifc::geometry
                     
                     IfcProfile profile = _geometryLoader.GetProfile(profileID);
                     glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID);
-                    glm::dvec3 axis= _geometryLoader.GetAxis1Placement(axis1PlacementID)[0];
+                    glm::dvec3 axis = _geometryLoader.GetAxis1Placement(axis1PlacementID)[0];
 
                     bool closed = false;
 
