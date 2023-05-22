@@ -19,12 +19,22 @@ namespace webifc::geometry
     ReadLinearScalingFactor();
   }
 
-  IfcCrossSections IfcGeometryLoader::GetCrossSections(uint32_t expressID) const
+  IfcCrossSections IfcGeometryLoader::GetCrossSections(uint32_t expressID, bool scaled, glm::dmat4 coordination) const
   {
     auto lineID = _loader.ExpressIDToLineID(expressID);
     auto &line = _loader.GetLine(lineID);
     IfcCrossSections sections;
-
+    double scale = 1;
+    if (scaled)
+    {
+      scale = GetLinearScalingFactor();
+      glm::dvec4 ps = coordination[3];
+      double y = ps[1];
+      double z = -ps[2];
+      ps[1] = z;
+      ps[2] = y;
+      coordination[3] = ps;
+    }
     switch (line.ifcType)
     {
     case schema::IFCSECTIONEDSOLIDHORIZONTAL:
@@ -49,7 +59,7 @@ namespace webifc::geometry
       for (auto &linearPosition : linearPositions)
       {
         auto expressID = _loader.GetRefArgument(linearPosition);
-        glm::dmat4 linearPlacement = GetLocalPlacement(expressID);
+        glm::dmat4 linearPlacement = GetLocalPlacement(expressID) * scale;
         transform.push_back(linearPlacement);
       }
 
@@ -60,7 +70,8 @@ namespace webifc::geometry
         IfcProfile profile = GetProfile(expressID);
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
-          profile.curve.points[i] = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+          glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+          profile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
         }
         profiles.push_back(profile);
         curves.push_back(profile.curve);
@@ -94,7 +105,7 @@ namespace webifc::geometry
       for (auto &linearPosition : linearPositions)
       {
         auto expressID = _loader.GetRefArgument(linearPosition);
-        glm::dmat4 linearPlacement = GetLocalPlacement(expressID);
+        glm::dmat4 linearPlacement = GetLocalPlacement(expressID) * scale;
         transform.push_back(linearPlacement);
       }
 
@@ -105,7 +116,8 @@ namespace webifc::geometry
         IfcProfile profile = GetProfile(expressID);
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
-          profile.curve.points[i] = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+          glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+          profile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
         }
         profiles.push_back(profile);
         curves.push_back(profile.curve);
@@ -131,7 +143,7 @@ namespace webifc::geometry
       for (auto &linearPosition : linearPositions)
       {
         auto expressID = _loader.GetRefArgument(linearPosition);
-        glm::dmat4 linearPlacement = GetLocalPlacement(expressID);
+        glm::dmat4 linearPlacement = GetLocalPlacement(expressID) * scale;
         transform.push_back(linearPlacement);
       }
 
@@ -144,7 +156,8 @@ namespace webifc::geometry
         IfcProfile profile = GetProfile(expressID);
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
-          profile.curve.points[i] = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+          glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
+          profile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
         }
         profiles.push_back(profile);
         curves.push_back(profile.curve);
@@ -2816,9 +2829,9 @@ namespace webifc::geometry
 
   IfcCurve IfcGeometryLoader::GetLocalCurve(uint32_t expressID) const
   {
-    for(uint32_t i = 0; i < LocalcurvesIndices.size(); i++)
+    for (uint32_t i = 0; i < LocalcurvesIndices.size(); i++)
     {
-      if(LocalcurvesIndices[i] == expressID)
+      if (LocalcurvesIndices[i] == expressID)
       {
         return LocalCurvesList[i];
       }

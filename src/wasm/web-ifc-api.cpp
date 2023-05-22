@@ -309,7 +309,7 @@ std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections(uint32_t mod
 
         for (size_t i = 0; i < elements.size(); i++)
         {
-            webifc::geometry::IfcCrossSections crossSection = geomLoader->GetLoader().GetCrossSections(elements[i]);
+            webifc::geometry::IfcCrossSections crossSection = geomLoader->GetLoader().GetCrossSections(elements[i], true, geomLoader->GetCoordinationMatrix());
             crossSections.push_back(crossSection);
         }
     }
