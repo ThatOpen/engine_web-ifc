@@ -1,5 +1,5 @@
 import { IfcApplication } from './../../src/ifc-schema';
-import { IfcAPI, LogLevel,ms, Schemas, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER } from '../../dist/web-ifc-api';
+import { IfcAPI, LogLevel,ms, Schemas, IFCUNITASSIGNMENT, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER } from '../../dist/web-ifc-api';
 import { IfcThree } from './web-ifc-three';
 import { Init3DView, InitBasicScene, scene } from './web-ifc-scene';
 import * as Monaco from 'monaco-editor';
@@ -186,6 +186,18 @@ async function LoadModel(data: Uint8Array) {
         let alignments = await ifcAPI.GetAllAlignments(modelID);
         console.log("Alignments: ", alignments);
     }
-
+    let lines = ifcAPI.GetLineIDsWithType(modelID,  IFCUNITASSIGNMENT);
+    console.log(lines.size());
+    for(let l = 0; l < lines.size(); l++)
+    {
+        console.log(lines.get(l));
+        let unitList = ifcAPI.GetLine(modelID, lines.get(l));
+        console.log(unitList);
+        console.log(unitList.Units);
+        console.log(unitList.Units.length);
+        for(let u = 0; u < unitList.Units.length; u++) {
+            console.log(ifcAPI.GetLine(modelID, unitList.Units[u].value));
+        }
+    }
     ifcAPI.CloseModel(modelID);
 }
