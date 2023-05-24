@@ -19,7 +19,120 @@ namespace webifc::geometry
     ReadLinearScalingFactor();
   }
 
-  IfcCrossSections IfcGeometryLoader::GetCrossSections(uint32_t expressID, bool scaled, glm::dmat4 coordination) const
+ IfcCrossSections IfcGeometryLoader::GetCrossSections2D(uint32_t expressID) const
+  {
+    auto lineID = _loader.ExpressIDToLineID(expressID);
+    auto &line = _loader.GetLine(lineID);
+    IfcCrossSections sections;
+    switch (line.ifcType)
+    {
+    case schema::IFCSECTIONEDSOLIDHORIZONTAL:
+    {
+      _loader.MoveToArgumentOffset(line, 0);
+      auto curveId = _loader.GetRefArgument();
+
+      // faces
+      _loader.MoveToArgumentOffset(line, 1);
+      auto faces = _loader.GetSetArgument();
+
+      // linear position
+      _loader.MoveToArgumentOffset(line, 2);
+      auto linearPositions = _loader.GetSetArgument();
+
+      IfcCurve curve = GetCurve(curveId, 3);
+
+      std::vector<IfcProfile> profiles;
+      std::vector<IfcCurve> curves;
+      std::vector<uint32_t> expressIds;
+
+      uint32_t id = 0;
+      for (auto &face : faces)
+      {
+        auto expressID = _loader.GetRefArgument(face);
+        IfcProfile profile = GetProfile(expressID);
+        profiles.push_back(profile);
+        curves.push_back(profile.curve);
+        expressIds.push_back(expressID);
+        id++;
+      }
+
+      sections.curves = curves;
+      sections.expressID = expressIds;
+
+      return sections;
+
+      break;
+    }
+    case schema::IFCSECTIONEDSOLID:
+    {
+      _loader.MoveToArgumentOffset(line, 0);
+      auto curveId = _loader.GetRefArgument();
+
+      // faces
+      _loader.MoveToArgumentOffset(line, 1);
+      auto faces = _loader.GetSetArgument();
+
+      // linear position
+      _loader.MoveToArgumentOffset(line, 2);
+      auto linearPositions = _loader.GetSetArgument();
+
+      IfcCurve curve = GetCurve(curveId, 3);
+
+      std::vector<IfcProfile> profiles;
+      std::vector<IfcCurve> curves;
+      std::vector<uint32_t> expressIds;
+
+      uint32_t id = 0;
+      for (auto &face : faces)
+      {
+        auto expressID = _loader.GetRefArgument(face);
+        IfcProfile profile = GetProfile(expressID);
+        profiles.push_back(profile);
+        curves.push_back(profile.curve);
+        expressIds.push_back(expressID);
+        id++;
+      }
+
+      sections.curves = curves;
+      sections.expressID = expressIds;
+      
+      return sections;
+
+      break;
+    }
+    case schema::IFCSECTIONEDSURFACE:
+    {
+      // faces
+      _loader.MoveToArgumentOffset(line, 1);
+      auto linearPositions = _loader.GetSetArgument();
+
+      // linear position
+      _loader.MoveToArgumentOffset(line, 2);
+      auto faces = _loader.GetSetArgument();
+
+      std::vector<IfcProfile> profiles;
+      std::vector<IfcCurve> curves;
+      std::vector<uint32_t> expressIds;
+
+      uint32_t id = 0;
+      for (auto &face : faces)
+      {
+        auto expressID = _loader.GetRefArgument(face);
+        IfcProfile profile = GetProfile(expressID);
+        profiles.push_back(profile);
+        curves.push_back(profile.curve);
+        expressIds.push_back(expressID);
+        id++;
+      }
+
+      sections.curves = curves;
+      sections.expressID = expressIds;
+      return sections;
+    }
+    }
+  }
+
+  IfcCrossSections IfcGeometryLoader::GetCrossSections3D(uint32_t expressID, bool scaled, glm::dmat4 coordination) const
   {
     auto lineID = _loader.ExpressIDToLineID(expressID);
     auto &line = _loader.GetLine(lineID);
@@ -54,6 +167,7 @@ namespace webifc::geometry
 
       std::vector<IfcProfile> profiles;
       std::vector<IfcCurve> curves;
+      std::vector<uint32_t> expressIds;
 
       std::vector<glm::dmat4> transform;
       for (auto &linearPosition : linearPositions)
@@ -75,10 +189,13 @@ namespace webifc::geometry
         }
         profiles.push_back(profile);
         curves.push_back(profile.curve);
+        expressIds.push_back(expressID);
         id++;
       }
 
       sections.curves = curves;
+      sections.expressID = expressIds;
+
       return sections;
 
       break;
@@ -98,8 +215,10 @@ namespace webifc::geometry
 
       IfcCurve curve = GetCurve(curveId, 3);
 
+
       std::vector<IfcProfile> profiles;
       std::vector<IfcCurve> curves;
+      std::vector<uint32_t> expressIds;
 
       std::vector<glm::dmat4> transform;
       for (auto &linearPosition : linearPositions)
@@ -121,10 +240,12 @@ namespace webifc::geometry
         }
         profiles.push_back(profile);
         curves.push_back(profile.curve);
+        expressIds.push_back(expressID);
         id++;
       }
 
       sections.curves = curves;
+      sections.expressID = expressIds;
       return sections;
 
       break;
@@ -150,6 +271,8 @@ namespace webifc::geometry
       uint32_t id = 0;
       std::vector<IfcProfile> profiles;
       std::vector<IfcCurve> curves;
+      std::vector<uint32_t> expressIds;
+
       for (auto &face : faces)
       {
         auto expressID = _loader.GetRefArgument(face);
@@ -161,10 +284,12 @@ namespace webifc::geometry
         }
         profiles.push_back(profile);
         curves.push_back(profile.curve);
+        expressIds.push_back(expressID);
         id++;
       }
 
       sections.curves = curves;
+      sections.expressID = expressIds;
       return sections;
     }
     }

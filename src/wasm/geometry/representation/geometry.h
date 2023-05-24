@@ -105,6 +105,7 @@ namespace webifc::geometry {
 		struct IfcCrossSections
 		{
 			std::vector<IfcCurve> curves;
+			std::vector<uint32_t> expressID;
 		};
 
 		struct IfcAlignment

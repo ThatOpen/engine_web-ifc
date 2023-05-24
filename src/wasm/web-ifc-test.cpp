@@ -77,7 +77,7 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
     return alignments;
 }
 
-std::vector<webifc::geometry::IfcCrossSections> GetCrossSections(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
+std::vector<webifc::geometry::IfcCrossSections> GetCrossSections3D(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
 {
     std::vector<webifc::geometry::IfcCrossSections> crossSections;
 
@@ -93,7 +93,7 @@ std::vector<webifc::geometry::IfcCrossSections> GetCrossSections(webifc::parsing
 
         for (unsigned int i = 0; i < elements.size(); i++)
         {
-            auto crossSection = geometryLoader.GetLoader().GetCrossSections(elements[i]);
+            auto crossSection = geometryLoader.GetLoader().GetCrossSections3D(elements[i]);
             crossSections.push_back(crossSection);
         }
     }
@@ -342,7 +342,7 @@ int main()
     auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
     // auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
-    // auto CrossSections = GetCrossSections(loader, geometryLoader);
+    // auto CrossSections = GetCrossSections3D(loader, geometryLoader);
 
     auto errors = errorHandler.GetErrors();
     errorHandler.ClearErrors();
