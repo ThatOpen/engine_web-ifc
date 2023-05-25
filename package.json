@@ -1,9 +1,9 @@
 {
   "name": "web-ifc",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "description": "ifc loading on the web",
   "module": "./web-ifc-api.js",
-  "main" : "./web-ifc-api-node.js",
+  "main": "./web-ifc-api-node.js",
   "exports": {
     ".": {
       "require": "./web-ifc-api-node.js",
