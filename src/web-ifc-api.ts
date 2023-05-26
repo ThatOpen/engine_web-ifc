@@ -164,6 +164,7 @@ export class IfcAPI {
     private isWasmPathAbsolute = false;
 
     private modelSchemaList: Array<number> = [];
+    private modelSchemaNameList: Array<string> = [];
 
     /** @ignore */
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
@@ -240,6 +241,19 @@ export class IfcAPI {
         return s;
     }
 
+    private LookupSchemaId(schemaName: string) {
+        for (var i=0; i < SchemaNames.length;i++)
+        {
+            if (typeof SchemaNames[i] !== "undefined") {
+                for (var j=0; j < SchemaNames[i].length;j++) 
+                {
+                    if (SchemaNames[i][j] == schemaName) return i;
+                }
+            }
+        }
+        return -1;
+    }
+
     /**
      * Opens a model and returns a modelID number
      * @param data Buffer containing IFC data (bytes)
@@ -256,7 +270,7 @@ export class IfcAPI {
             return srcSize;
         });
         var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
-        this.modelSchemaList[result] = SchemaNames.indexOf(schemaName);
+        this.modelSchemaList[result] = this.LookupSchemaId(schemaName);
         if (this.modelSchemaList[result] == -1) 
         {
             Log.error("Unsupported Schema:"+schemaName);
@@ -273,7 +287,7 @@ export class IfcAPI {
 	 * @returns IFC Schema version
     */
     GetModelSchema(modelID: number) {
-        return SchemaNames[this.modelSchemaList[modelID]];
+        return this.modelSchemaNameList[modelID];
     }
 
     /**
@@ -284,7 +298,15 @@ export class IfcAPI {
     CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
         let s = this.CreateSettings(settings);
         let result = this.wasmModule.CreateModel(s);
-        this.modelSchemaList[result] = SchemaNames.indexOf(model.schema);
+        this.modelSchemaList[result] = this.LookupSchemaId(model.schema);
+        this.modelSchemaNameList[result] = model.schema;
+        if (this.modelSchemaList[result] == -1) 
+        {
+            Log.error("Unsupported Schema:"+model.schema);
+            this.CloseModel(result)
+            return -1;
+        } 
+
         const modelName = model.name || "web-ifc-model-"+result+".ifc";
         const timestamp = new Date().toISOString().slice(0,19);
         const description = model.description?.map((d) => ({type: STRING, value: d})) || [{type: STRING, value: 'ViewDefinition [CoordinationView]'}];

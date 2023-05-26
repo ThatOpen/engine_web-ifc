@@ -1,6 +1,8 @@
 import {Entity} from "./gen_functional_types_interfaces";
 import {generatePropAssignment,generateTapeAssignment,generateInitialiser,findSubClasses,sortEntities,generateClass,crc32,makeCRCTable, parseElements, walkParents} from "./gen_functional_types_helpers"
 
+import schemaAliases from "./schema_aliases";
+
 const fs = require("fs");
 
 let crcTable = makeCRCTable();
@@ -51,7 +53,7 @@ tsSchema.push(`export const ToRawLineData: any = {};`);
 tsSchema.push('/** @ignore */');
 tsSchema.push(`export const TypeInitialisers: any = {};`);
 tsSchema.push('/** @ignore */');
-tsSchema.push(`export const SchemaNames: Array<string> = [];`);
+tsSchema.push(`export const SchemaNames: Array<Array<string>> = [];`);
 
 
 tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
@@ -78,7 +80,13 @@ for (var i = 0; i < files.length; i++) {
   var schemaName = files[i].replace(".exp","");
   var schemaNameClean = schemaName.replace(".","_");
   console.log("Generating Schema for:"+schemaName);
-  tsSchema.push(`SchemaNames[${i}]='${schemaNameClean}';`);
+  let schemaAssignments: string = `SchemaNames[${i}]=['${schemaNameClean}'`;
+  for (const schemaAlias of schemaAliases)
+  {
+    if (schemaAlias.alias==schemaNameClean) schemaAssignments+=`,'${schemaAlias.schemaName}'`;
+  }
+  schemaAssignments+='];'
+  tsSchema.push(schemaAssignments);
 
   let schemaData = fs.readFileSync("./"+files[i]).toString();
   let parsed = parseElements(schemaData);
