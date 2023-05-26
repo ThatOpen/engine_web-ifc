@@ -591,7 +591,7 @@ namespace webifc::geometry
 		return glm::dvec2(fUs, fVs);
 	}
 
-	// TODO: review and simplify
+		// TODO: review and simplify
 	inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
 	{
 			//			double limit = 1e-4;
