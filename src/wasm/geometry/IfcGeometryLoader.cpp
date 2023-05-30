@@ -2935,6 +2935,11 @@ double IfcGeometryLoader::ConvertPrefix(const std::string &prefix)
   else return 1;
 }
 
+bool IfcGeometryLoader::AddExceptionGeometry(uint32_t expressID)
+{
+  ExceptionGeometries.push_back(expressID);
+}
+
 const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelVoids() const
 { 
   return _relVoids;
