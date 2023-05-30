@@ -24,7 +24,6 @@ namespace webifc::geometry
   class IfcGeometryLoader 
   {
   public:
-    bool AddExceptionGeometry(uint32_t expressID);
     IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments);
     std::array<glm::dvec3,2> GetAxis1Placement(const uint32_t expressID) const;
     glm::dmat3 GetAxis2Placement2D(const uint32_t expressID) const;
@@ -58,7 +57,6 @@ namespace webifc::geometry
     IfcTrimmingSelect GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const;
     void ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool edge, int sameSense = -1, int trimSense = -1, IfcTrimmingArguments trim = {}) const;
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
-    std::vector<uint32_t> ExceptionGeometries;
     const webifc::parsing::IfcLoader &_loader;
     webifc::utility::LoaderErrorHandler &_errorHandler;
     const webifc::schema::IfcSchemaManager &_schemaManager;
