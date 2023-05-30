@@ -19,13 +19,7 @@
       ],
       "extensions": "ts"
     },
-    "build-web-ifc-api-node": {
-      "patterns": [
-        "./src"
-      ],
-      "extensions": "ts"
-    },
-    "build-web-ifc-api-browser": {
+    "build-api": {
       "patterns": [
         "./src"
       ],
