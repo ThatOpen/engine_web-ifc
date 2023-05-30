@@ -35,7 +35,6 @@ namespace webifc::geometry
         void Clear();
         
       private:
-        std::set<uint32_t> excludedGeometries;
         void AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry);
         IfcGeometry GetBrep(uint32_t expressID);
         IfcGeometry BoolSubtract(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups);

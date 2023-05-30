@@ -167,7 +167,7 @@ namespace webifc::geometry
                         auto positiveMesh = GetMesh(expressID);
                         auto flattenPositiveMesh = flatten(positiveMesh, _expressIDToGeometry, glm::dmat4(1));
                         flatElementMeshes.insert(flatElementMeshes.end(), flattenPositiveMesh.begin(), flattenPositiveMesh.end());
-                        excludedGeometries.insert(expressID);
+                        _geometryLoader.ExceptionGeometries.push_back(expressID);
                     }
                 }
 
