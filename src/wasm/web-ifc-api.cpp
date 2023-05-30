@@ -184,6 +184,7 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
 void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t>& types, emscripten::val callback)
 {
     auto loader = models[modelID].GetLoader();
+    auto geomLoader = models[modelID].GetGeometryLoader();
 
     if (!loader)
     {
@@ -193,6 +194,13 @@ void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t>& typ
     for (auto& type : types)
     {
         auto elements = loader->GetExpressIDsWithType(type);
+        for (size_t i=0; i < elements.size();i++)  {
+            if (geomLoader->IsAggregatedElement(elements[i])) {
+                elements.erase(elements.begin()+i,elements.begin()+i+1);
+                i--;
+            }
+
+        }
         StreamMeshes(modelID, elements, callback);
     }
 }
