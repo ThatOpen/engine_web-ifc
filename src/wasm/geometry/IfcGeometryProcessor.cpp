@@ -157,21 +157,6 @@ namespace webifc::geometry
                 auto flatElementMeshes = flatten(mesh, _expressIDToGeometry, normalizeMat);
                 auto elementColor = mesh.GetColor();
 
-
-                auto &relAggVector = _geometryLoader.GetRelAggregates();
-                if (relAggVector.count(line.expressID) == 1) 
-                {
-                    auto &relAgg = relAggVector.at(line.expressID);
-                    for (auto expressID : relAgg)
-                    {
-                        auto positiveMesh = GetMesh(expressID);
-                        auto flattenPositiveMesh = flatten(positiveMesh, _expressIDToGeometry, glm::dmat4(1));
-                        flatElementMeshes.insert(flatElementMeshes.end(), flattenPositiveMesh.begin(), flattenPositiveMesh.end());
-                        _geometryLoader.ExceptionGeometries.push_back(expressID);
-                    }
-                }
-
-
                 IfcGeometry finalGeometry;
 
                 if (flatElementMeshes.size() != 0)
