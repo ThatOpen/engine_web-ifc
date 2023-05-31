@@ -12,9 +12,9 @@
 namespace webifc::geometry
 {
 
-  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments)
-      : _loader(loader), _errorHandler(errorHandler), _schemaManager(schemaManager), _relVoidRel(PopulateRelVoidsRelMap()), _relVoids(PopulateRelVoidsMap()), _relAggregates(PopulateRelAggregatesMap()),
-        _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
+  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments) 
+    :_loader(loader),_errorHandler(errorHandler),_schemaManager(schemaManager), _relVoidRel(PopulateRelVoidsRelMap()), _relVoids(PopulateRelVoidsMap()), _relAggregates(PopulateRelAggregatesMap()), 
+    _relElementAggregates(PopulateRelElementAggregatesMap()),_styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
   {
     ReadLinearScalingFactor();
   }
@@ -3227,6 +3227,36 @@ namespace webifc::geometry
     glm::dvec3 pos = GetCartesianPoint3D(locationID);
 
     return {axis, pos};
+  }
+
+  std::unordered_map<uint32_t, std::vector<uint32_t>>  IfcGeometryLoader::PopulateRelElementAggregatesMap()
+  {
+    std::unordered_map<uint32_t, std::vector<uint32_t>>  resultVector;
+    auto relElements = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
+
+    for (uint32_t relElementID : relElements)
+    {
+      uint32_t lineID = _loader.ExpressIDToLineID(relElementID);
+      auto &line = _loader.GetLine(lineID);
+
+      _loader.MoveToArgumentOffset(line, 4);
+
+      uint32_t relatingBuildingElement = _loader.GetRefArgument();
+      auto aggregates = _loader.GetSetArgument();
+
+      uint32_t lineID2 = _loader.ExpressIDToLineID(relatingBuildingElement);
+      auto &line2 = _loader.GetLine(lineID2);
+
+      if(_schemaManager.IsIfcElement(line2.ifcType))
+      {
+        for (auto &aggregate : aggregates)
+        {
+          uint32_t aggregateID = _loader.GetRefArgument(aggregate);
+          resultVector[aggregateID].push_back(relatingBuildingElement);
+        }
+      }
+    }
+    return resultVector;
   }
 
   std::unordered_map<uint32_t, std::vector<uint32_t>> IfcGeometryLoader::PopulateRelVoidsMap()

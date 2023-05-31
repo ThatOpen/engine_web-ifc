@@ -39,10 +39,15 @@ namespace webifc::parsing {
               stream << std::dec<< std::setw(1) << "\\X0\\";
               inEncode=false;
               tmp="";
-              continue;
             }
           }
           stream << c;
+        }
+        if (inEncode) {
+            std::u16string utf16 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.from_bytes(tmp.data());
+            stream << "\\X2\\" << std::hex <<std::setw(4)<<std::setfill('0') << std::uppercase;
+            for (char16_t uC : utf16) stream << uC;
+            stream << std::dec<< std::setw(1) << "\\X0\\";
         }
       return stream.str();
     }

@@ -41,7 +41,6 @@ namespace webifc::geometry
         _expressIDToGeometry = {};
     }
 
-
     glm::dmat4 IfcGeometryProcessor::GetCoordinationMatrix()
     {
         return _coordinationMatrix;
@@ -55,8 +54,8 @@ namespace webifc::geometry
         auto &styledItems = _geometryLoader.GetStyledItems();
         auto &relMaterials = _geometryLoader.GetRelMaterials();
         auto &materialDefinitions = _geometryLoader.GetMaterialDefinitions();
-        auto &relVoids = _geometryLoader.GetRelVoids();
-            // auto &relAggregates = _loader.GetRelAggregates();
+        auto relVoids = _geometryLoader.GetRelVoids();
+        auto &relElementAggregates = _geometryLoader.GetRelElementAggregates();
 
         auto styledItem = styledItems.find(line.expressID);
         if (styledItem != styledItems.end())
@@ -130,23 +129,28 @@ namespace webifc::geometry
                 mesh.children.push_back(GetMesh(ifcPresentation));
             }
 
-                /*
-                // not sure if aggregates are needed here...
-                // add aggregates before applying voids!
-                auto relAggIt = relAggregates.find(line.expressID);
-                if (relAggIt != relAggregates.end() && !relAggIt->second.empty())
-                {
-                    for (auto relAggExpressID : relAggIt->second)
-                    {
-                        // hacky fix to avoid double application of the parent matrix
-                        auto aggMesh = GetMesh(relAggExpressID);
-                        aggMesh.transformation *= glm::inverse(mesh.transformation);
-                        mesh.children.push_back(aggMesh);
-                    }
-                }
-                */
 
             auto relVoidsIt = relVoids.find(line.expressID);
+
+            auto relAggIt = relElementAggregates.find(line.expressID);
+            if (relAggIt != relElementAggregates.end() && !relAggIt->second.empty())
+            {
+                for (auto relAggExpressID : relAggIt->second)
+                {
+                    auto relVoidsIt2 = relVoids.find(relAggExpressID);
+                    if (relVoidsIt2 != relVoids.end() && !relVoidsIt2->second.empty())
+                    {
+                        if(relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
+                        {
+                            relVoidsIt->second.insert(relVoidsIt->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
+                        }
+                        else
+                        {
+                            relVoidsIt = relVoidsIt2;
+                        }
+                    }
+                }
+            }
 
             if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
             {
