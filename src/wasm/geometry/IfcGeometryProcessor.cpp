@@ -55,8 +55,8 @@ namespace webifc::geometry
         auto &styledItems = _geometryLoader.GetStyledItems();
         auto &relMaterials = _geometryLoader.GetRelMaterials();
         auto &materialDefinitions = _geometryLoader.GetMaterialDefinitions();
-        auto &relVoids = _geometryLoader.GetRelVoids();
-            // auto &relAggregates = _loader.GetRelAggregates();
+        auto relVoids = _geometryLoader.GetRelVoids();
+        auto &relElementAggregates = _geometryLoader.GetRelElementAggregates();
 
         auto styledItem = styledItems.find(line.expressID);
         if (styledItem != styledItems.end())
@@ -147,6 +147,26 @@ namespace webifc::geometry
                 */
 
             auto relVoidsIt = relVoids.find(line.expressID);
+
+            auto relAggIt = relElementAggregates.find(line.expressID);
+            if (relAggIt != relElementAggregates.end() && !relAggIt->second.empty())
+            {
+                for (auto relAggExpressID : relAggIt->second)
+                {
+                    auto relVoidsIt2 = relVoids.find(relAggExpressID);
+                    if (relVoidsIt2 != relVoids.end() && !relVoidsIt2->second.empty())
+                    {
+                        if(relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
+                        {
+                            relVoidsIt->second.insert(relVoidsIt->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
+                        }
+                        else
+                        {
+                            relVoidsIt = relVoidsIt2;
+                        }
+                    }
+                }
+            }
 
             if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
             {

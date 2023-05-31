@@ -46,6 +46,7 @@ namespace webifc::geometry
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids() const;
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoidRels() const;
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelAggregates() const;
+    const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelElementAggregates() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetStyledItems() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetRelMaterials() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetMaterialDefinitions() const;
@@ -63,6 +64,7 @@ namespace webifc::geometry
     const std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoidRel;
     const std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
     const std::unordered_map<uint32_t, std::vector<uint32_t>> _relAggregates;
+    const std::unordered_map<uint32_t, std::vector<uint32_t>> _relElementAggregates;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _relMaterials;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _materialDefinitions;
@@ -74,6 +76,7 @@ namespace webifc::geometry
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsMap();
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsRelMap();
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelAggregatesMap();
+    std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelElementAggregatesMap();
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateStyledItemMap();
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateRelMaterialsMap();
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateMaterialDefinitionsMap();
