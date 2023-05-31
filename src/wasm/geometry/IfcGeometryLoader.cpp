@@ -3569,8 +3569,12 @@ namespace webifc::geometry
 
   const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelAggregates() const
   {
-    ;
     return _relAggregates;
+  }
+
+  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelElementAggregates() const
+  {
+    return _relElementAggregates;
   }
 
   const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetStyledItems() const
