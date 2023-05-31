@@ -15,7 +15,7 @@ namespace webifc::geometry
 
   IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments) 
     :_loader(loader),_errorHandler(errorHandler),_schemaManager(schemaManager), _relVoidRel(PopulateRelVoidsRelMap()), _relVoids(PopulateRelVoidsMap()), _relAggregates(PopulateRelAggregatesMap()), 
-    _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
+    _relElementAggregates(PopulateRelElementAggregatesMap()),_styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
   {
     ReadLinearScalingFactor();
   }
@@ -2717,6 +2717,36 @@ std::unordered_map<uint32_t, std::vector<uint32_t>>  IfcGeometryLoader::Populate
   return resultVector;
 }
 
+std::unordered_map<uint32_t, std::vector<uint32_t>>  IfcGeometryLoader::PopulateRelElementAggregatesMap()
+{
+  std::unordered_map<uint32_t, std::vector<uint32_t>>  resultVector;
+  auto relElements = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
+
+  for (uint32_t relElementID : relElements)
+  {
+    uint32_t lineID = _loader.ExpressIDToLineID(relElementID);
+    auto &line = _loader.GetLine(lineID);
+
+    _loader.MoveToArgumentOffset(line, 4);
+
+    uint32_t relatingBuildingElement = _loader.GetRefArgument();
+    auto aggregates = _loader.GetSetArgument();
+
+    uint32_t lineID2 = _loader.ExpressIDToLineID(relatingBuildingElement);
+    auto &line2 = _loader.GetLine(lineID2);
+
+    if(_schemaManager.IsIfcElement(line2.ifcType))
+    {
+      for (auto &aggregate : aggregates)
+      {
+        uint32_t aggregateID = _loader.GetRefArgument(aggregate);
+        resultVector[aggregateID].push_back(relatingBuildingElement);
+      }
+    }
+  }
+  return resultVector;
+}
+
 std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> IfcGeometryLoader::PopulateStyledItemMap()
 {
    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> returnVector;
@@ -2946,8 +2976,13 @@ const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::Ge
 }
 
 const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelAggregates() const
-{ ;
+{ 
   return _relAggregates;
+}
+
+const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelElementAggregates() const
+{ 
+  return _relElementAggregates;
 }
 
 const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetStyledItems() const
