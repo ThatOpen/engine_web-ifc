@@ -817,6 +817,31 @@ export class IfcAPI {
         return this.wasmModule.GetVersion();
     }
 
+     /**
+     * Looks up an entities express ID from its GlobalID.
+     * @param modelID Model handle retrieved by OpenModel
+     * @param guid GobalID to be looked up
+     * @returns expressID numerical value
+     */
+    GetExpressIdFromGuid(modelID: number, guid: string)
+    {
+        if (!this.ifcGuidMap.has(modelID)) this.CreateIfcGuidToExpressIdMapping(modelID);
+        return this.ifcGuidMap.get(modelID)?.get(guid);
+    }
+
+    /**
+     * Looks up an entities GlobalID from its ExpressID.
+     * @param modelID Model handle retrieved by OpenModel
+     * @param expressID express ID to be looked up
+     * @returns globalID string value
+     */
+    GetGuidFromExpressId(modelID: number, expressID: number)
+    {
+        if (!this.ifcGuidMap.has(modelID)) this.CreateIfcGuidToExpressIdMapping(modelID);
+        return this.ifcGuidMap.get(modelID)?.get(expressID);
+    }
+
+
     /**
      * Creates a map between element ExpressIDs and GlobalIDs.
      * Each element has two entries, (ExpressID -> GlobalID) and (GlobalID -> ExpressID).
