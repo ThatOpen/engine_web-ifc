@@ -266,9 +266,9 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/IfcSurfaceCurveSweptAreaSolid.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/v41.ifc");
     std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#398/398.ifc");
-	
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
+    
 
     webifc::utility::LoaderErrorHandler errorHandler;
     webifc::schema::IfcSchemaManager schemaManager;

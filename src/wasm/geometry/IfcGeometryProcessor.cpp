@@ -41,6 +41,14 @@ namespace webifc::geometry
         _expressIDToGeometry = {};
     }
 
+    bool IfcGeometryProcessor::IsAggregatedElement(size_t expressID) const
+    {
+        std::unordered_map<uint32_t, std::vector<uint32_t>> aggregates = _geometryLoader.GetRelAggregates();
+        for (auto id : aggregates) {
+            if (std::find(id.second.begin(), id.second.end(), expressID) != id.second.end()) return true;
+        }
+        return false;
+    }
 
     glm::dmat4 IfcGeometryProcessor::GetCoordinationMatrix()
     {
@@ -130,21 +138,18 @@ namespace webifc::geometry
                 mesh.children.push_back(GetMesh(ifcPresentation));
             }
 
-                /*
-                // not sure if aggregates are needed here...
-                // add aggregates before applying voids!
-                auto relAggIt = relAggregates.find(line.expressID);
-                if (relAggIt != relAggregates.end() && !relAggIt->second.empty())
+                
+            auto relAggIt = _geometryLoader.GetRelAggregates().find(line.expressID);
+            if (relAggIt != _geometryLoader.GetRelAggregates().end() && !relAggIt->second.empty())
+            {
+                for (auto relAggExpressID : relAggIt->second)
                 {
-                    for (auto relAggExpressID : relAggIt->second)
-                    {
-                        // hacky fix to avoid double application of the parent matrix
-                        auto aggMesh = GetMesh(relAggExpressID);
-                        aggMesh.transformation *= glm::inverse(mesh.transformation);
-                        mesh.children.push_back(aggMesh);
-                    }
+                    auto aggMesh = GetMesh(relAggExpressID);
+                    aggMesh.transformation *= glm::inverse(mesh.transformation);
+                    mesh.children.push_back(aggMesh);
                 }
-                */
+            }
+            
 
             auto relVoidsIt = relVoids.find(line.expressID);
 

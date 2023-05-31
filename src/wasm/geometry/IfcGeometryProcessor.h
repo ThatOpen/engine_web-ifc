@@ -32,6 +32,7 @@ namespace webifc::geometry
         IfcComposedMesh GetMesh(uint32_t expressID);
         void SetTransformation(const glm::dmat4 &val);
         glm::dmat4 GetCoordinationMatrix();
+        bool IsAggregatedElement(size_t expressID) const;
         void Clear();
         
       private:
