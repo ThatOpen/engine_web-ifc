@@ -19,8 +19,16 @@ import {
     InheritanceDef,
     InversePropertyDef,
     ToRawLineData,
-    SchemaNames
+    SchemaNames,
+    Schemas,
+    IFCORGANIZATION,
+    IFCAPPLICATION,
+    IFCCARTESIANPOINT,
+    IFCDIRECTION,
+    IFCPROJECT
 } from "./ifc-schema";
+
+import { guid } from "./helpers/guid";
 
 declare var __WASM_PATH__:string;
 
@@ -292,10 +300,12 @@ export class IfcAPI {
 
     /**
      * Creates a new model and returns a modelID number
+     * establishes the bare minimum of an IFC file
      * @param schema ifc schema version
 	 * @returns ModelID
     */
-    CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
+    CreateModel(model: NewIfcModel | null = null, settings?: LoaderSettings): number {
+        if(!model) model = { schema: Schemas.IFC4 };
         let s = this.CreateSettings(settings);
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = this.LookupSchemaId(model.schema);
@@ -313,6 +323,7 @@ export class IfcAPI {
         const authors = model.authors?.map((a) => ({type: STRING, value: a})) || [null];
         const orgs = model.organizations?.map((o) => ({type: STRING, value: o})) || [null];
         const auth = model.authorization ? {type: STRING, value: model.authorization} : null;
+        const appName = "ifcjs/web-ifc-api";
         
         this.wasmModule.WriteHeaderLine(result,FILE_DESCRIPTION,[
             description, 
@@ -323,11 +334,62 @@ export class IfcAPI {
             {type: STRING, value: timestamp},
             authors,
             orgs,
-            {type: STRING, value: "ifcjs/web-ifc-api"},
-            {type: STRING, value: "ifcjs/web-ifc-api"},
+            {type: STRING, value: appName},
+            {type: STRING, value: appName},
             auth,
         ]);
         this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);
+
+        // minimum of an IFC file @see https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/annex_e/ProjectSetup_1.html
+        
+        // 3D origin
+        this.WriteLine(result, this.CreateIfcEntity(result, IFCCARTESIANPOINT, [
+            {type: REAL, value: 0},
+            {type: REAL, value: 0},
+            {type: REAL, value: 0}
+        ]));
+        // 2D origin
+        this.WriteLine(result, this.CreateIfcEntity(result, IFCCARTESIANPOINT, [
+            {type: REAL, value: 0},
+            {type: REAL, value: 0},
+        ]));
+        // x direction
+        this.WriteLine(result, this.CreateIfcEntity(result, IFCDIRECTION, [
+            {type: REAL, value: 1},
+            {type: REAL, value: 0},
+            {type: REAL, value: 0}
+        ]));
+        // y direction
+        this.WriteLine(result, this.CreateIfcEntity(result, IFCDIRECTION, [
+            {type: REAL, value: 0},
+            {type: REAL, value: 1},
+            {type: REAL, value: 0}
+        ]));
+        // z direction
+        this.WriteLine(result, this.CreateIfcEntity(result, IFCDIRECTION, [
+            {type: REAL, value: 0},
+            {type: REAL, value: 0},
+            {type: REAL, value: 1}
+        ]));
+
+        this.WriteLine(result,this.CreateIfcEntity(result, IFCORGANIZATION, null, {type:1, value: appName}, null, null, null));
+        this.WriteLine(result, this.CreateIfcEntity(result, IFCAPPLICATION,
+                                                    {type: REF, value: 3},
+                                                    {type: STRING, value: new Date().getFullYear().toString()}, 
+                                                    {type: STRING, value: appName}, {type: STRING, value: 'web-ifc'}
+        ));
+
+        this.WriteLine(result, this.CreateIfcEntity(result, IFCPROJECT, 
+            {type: STRING, value: guid()},
+            null,
+            {type: STRING, value: modelName},
+            {type: STRING, value: description[0].value},
+            null,
+            null,
+            null,
+            [{type: REF, value: 1}],
+            {type: REF, value: 2},
+        ));
 
         return result;
     }
