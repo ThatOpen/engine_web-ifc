@@ -21,10 +21,10 @@ import {
     ToRawLineData,
     SchemaNames
 } from "./ifc-schema";
-
-import {
-    ModelApi
-} from "./components/modelApi";
+import { ModelApi } from "./components/modelApi";
+import { PropsApi } from "./components/propsApi";
+import { Properties } from "./helpers/properties";
+import { Log, LogLevel } from "./helpers/log";
 
 declare var __WASM_PATH__:string;
 
@@ -40,14 +40,8 @@ if (typeof self !== 'undefined' && self.crossOriginIsolated) {
     }
 } else WebIFCWasm = require(__WASM_PATH__);
 
+export { ModelApi, PropsApi, LogLevel, Properties };
 export * from "./ifc-schema";
-import { Properties } from "./helpers/properties";
-export { Properties };
-import { Log, LogLevel } from "./helpers/log";
-export { LogLevel };
-
-
-
 export const UNKNOWN = 0;
 export const STRING = 1;
 export const LABEL = 2;
@@ -175,8 +169,14 @@ export class IfcAPI {
 
     /**
      * Contains all the logic and methods regarding properties, psets, qsets, etc.
+     * @deprecated Use propsApi instead - will be removed in next version
      */
-    properties = new Properties(this);
+    properties = new Properties(this)
+
+    /**
+     * Contains high level api to interact with the properties
+     */
+    public propsApi: PropsApi | null = null;
 
     /**
      * Contains high level api to interact with the model
@@ -212,6 +212,7 @@ export class IfcAPI {
         }
 
         this.modelApi = new ModelApi(this);
+        this.propsApi = new PropsApi(this);
     }
 
      /**
