@@ -19,16 +19,12 @@ import {
     InheritanceDef,
     InversePropertyDef,
     ToRawLineData,
-    SchemaNames,
-    Schemas,
-    IFCORGANIZATION,
-    IFCAPPLICATION,
-    IFCCARTESIANPOINT,
-    IFCDIRECTION,
-    IFCPROJECT
+    SchemaNames
 } from "./ifc-schema";
 
-import { guid } from "./helpers/guid";
+import {
+    ModelApi
+} from "./components/modelApi";
 
 declare var __WASM_PATH__:string;
 
@@ -183,6 +179,11 @@ export class IfcAPI {
     properties = new Properties(this);
 
     /**
+     * Contains high level api to interact with the model
+     */
+    public modelApi: ModelApi | null = null;
+
+    /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
      *
      * @param customLocateFileHandler An optional locateFile function that let's
@@ -209,6 +210,8 @@ export class IfcAPI {
         else {
 			Log.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
         }
+
+        this.modelApi = new ModelApi(this);
     }
 
      /**
@@ -304,8 +307,7 @@ export class IfcAPI {
      * @param schema ifc schema version
 	 * @returns ModelID
     */
-    CreateModel(model: NewIfcModel | null = null, settings?: LoaderSettings): number {
-        if(!model) model = { schema: Schemas.IFC4 };
+    CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
         let s = this.CreateSettings(settings);
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = this.LookupSchemaId(model.schema);
@@ -339,57 +341,6 @@ export class IfcAPI {
             auth,
         ]);
         this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);
-
-        // minimum of an IFC file @see https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/annex_e/ProjectSetup_1.html
-        
-        // 3D origin
-        this.WriteLine(result, this.CreateIfcEntity(result, IFCCARTESIANPOINT, [
-            {type: REAL, value: 0},
-            {type: REAL, value: 0},
-            {type: REAL, value: 0}
-        ]));
-        // 2D origin
-        this.WriteLine(result, this.CreateIfcEntity(result, IFCCARTESIANPOINT, [
-            {type: REAL, value: 0},
-            {type: REAL, value: 0},
-        ]));
-        // x direction
-        this.WriteLine(result, this.CreateIfcEntity(result, IFCDIRECTION, [
-            {type: REAL, value: 1},
-            {type: REAL, value: 0},
-            {type: REAL, value: 0}
-        ]));
-        // y direction
-        this.WriteLine(result, this.CreateIfcEntity(result, IFCDIRECTION, [
-            {type: REAL, value: 0},
-            {type: REAL, value: 1},
-            {type: REAL, value: 0}
-        ]));
-        // z direction
-        this.WriteLine(result, this.CreateIfcEntity(result, IFCDIRECTION, [
-            {type: REAL, value: 0},
-            {type: REAL, value: 0},
-            {type: REAL, value: 1}
-        ]));
-
-        this.WriteLine(result,this.CreateIfcEntity(result, IFCORGANIZATION, null, {type:1, value: appName}, null, null, null));
-        this.WriteLine(result, this.CreateIfcEntity(result, IFCAPPLICATION,
-                                                    {type: REF, value: 3},
-                                                    {type: STRING, value: new Date().getFullYear().toString()}, 
-                                                    {type: STRING, value: appName}, {type: STRING, value: 'web-ifc'}
-        ));
-
-        this.WriteLine(result, this.CreateIfcEntity(result, IFCPROJECT, 
-            {type: STRING, value: guid()},
-            null,
-            {type: STRING, value: modelName},
-            {type: STRING, value: description[0].value},
-            null,
-            null,
-            null,
-            [{type: REF, value: 1}],
-            {type: REF, value: 2},
-        ));
 
         return result;
     }
