@@ -164,6 +164,12 @@ describe('WebIfcApi reading methods', () => {
         let newEID = ifcApi.IncrementMaxExpressID(tmpModelID, 2);
         expect(newEID).toBe(maxEID + 2);
     });
+     test('can use the guid->expressID map', () => {
+        let eid = ifcApi.GetExpressIdFromGuid(modelID,'39ashYNBDEDR$HhFzW6w9a');
+        expect(eid).toBe(138);
+        let guid = ifcApi.GetGuidFromExpressId(modelID,138);
+        expect(guid).toBe('39ashYNBDEDR$HhFzW6w9a');
+    });
     test('Can get header information', () => {
         const descriptionLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_DESCRIPTION );
         const nameLine : any = ifcApi.GetHeaderLine(modelID, WebIFC.FILE_NAME );
