@@ -12,8 +12,6 @@ import {
     IfcLineObject,
     TypeInitialisers,
     FILE_SCHEMA,
-    FILE_NAME, 
-    FILE_DESCRIPTION,
     FromRawLineData,
     Constructors,
     InheritanceDef,
@@ -21,8 +19,8 @@ import {
     ToRawLineData,
     SchemaNames
 } from "./ifc-schema";
-import { ModelApi } from "./components/modelApi";
-import { PropsApi } from "./components/propsApi";
+import { ModelApi } from "./api/modelApi";
+import { PropsApi } from "./api/propsApi";
 import { Properties } from "./helpers/properties";
 import { Log, LogLevel } from "./helpers/log";
 
@@ -176,12 +174,12 @@ export class IfcAPI {
     /**
      * Contains high level api to interact with the properties
      */
-    public propsApi: PropsApi | null = null;
+    propsApi = new PropsApi(this);
 
     /**
      * Contains high level api to interact with the model
      */
-    public modelApi: ModelApi | null = null;
+    modelApi = new ModelApi(this);
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
@@ -210,9 +208,6 @@ export class IfcAPI {
         else {
 			Log.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
         }
-
-        this.modelApi = new ModelApi(this);
-        this.propsApi = new PropsApi(this);
     }
 
      /**
@@ -308,41 +303,17 @@ export class IfcAPI {
      * @param schema ifc schema version
 	 * @returns ModelID
     */
-    CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
+    CreateModel(schema: string, settings?: LoaderSettings): number {
         let s = this.CreateSettings(settings);
         let result = this.wasmModule.CreateModel(s);
-        this.modelSchemaList[result] = this.LookupSchemaId(model.schema);
-        this.modelSchemaNameList[result] = model.schema;
+        this.modelSchemaList[result] = this.LookupSchemaId(schema);
+        this.modelSchemaNameList[result] = schema;
         if (this.modelSchemaList[result] == -1) 
         {
-            Log.error("Unsupported Schema:"+model.schema);
+            Log.error("Unsupported Schema:"+schema);
             this.CloseModel(result)
             return -1;
         } 
-
-        const modelName = model.name || "web-ifc-model-"+result+".ifc";
-        const timestamp = new Date().toISOString().slice(0,19);
-        const description = model.description?.map((d) => ({type: STRING, value: d})) || [{type: STRING, value: 'ViewDefinition [CoordinationView]'}];
-        const authors = model.authors?.map((a) => ({type: STRING, value: a})) || [null];
-        const orgs = model.organizations?.map((o) => ({type: STRING, value: o})) || [null];
-        const auth = model.authorization ? {type: STRING, value: model.authorization} : null;
-        const appName = "ifcjs/web-ifc-api";
-        
-        this.wasmModule.WriteHeaderLine(result,FILE_DESCRIPTION,[
-            description, 
-            {type: STRING, value: '2;1'}
-        ]);
-        this.wasmModule.WriteHeaderLine(result,FILE_NAME,[
-            {type: STRING, value: modelName},
-            {type: STRING, value: timestamp},
-            authors,
-            orgs,
-            {type: STRING, value: appName},
-            {type: STRING, value: appName},
-            auth,
-        ]);
-        this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);
-
         return result;
     }
 
@@ -595,6 +566,7 @@ export class IfcAPI {
             arguments: ToRawLineData[this.modelSchemaList[modelID]][lineObject.type](lineObject) as any[]
         }
         this.WriteRawLineData(modelID, rawLineData);
+        return lineObject.expressID;
     }
 
 	/**
