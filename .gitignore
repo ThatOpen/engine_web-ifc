@@ -44,7 +44,9 @@ ifcPrune.vcxproj.user
 output
 debug_output
 .bin
-build
+# keep top level build directory
+!build/
+*/build
 *.log
 node_modules
 dist/*

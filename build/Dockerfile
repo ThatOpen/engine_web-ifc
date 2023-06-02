@@ -1,7 +1,7 @@
 FROM emscripten/emsdk:3.1.31
 WORKDIR /web-ifc
-COPY . .
+COPY .. .
 RUN npm i -g cpy-cli
 RUN npm i
 VOLUME [ "/web-ifc" ]
-CMD [ "/bin/bash" ]
+CMD [ "npm","run","build-release" ]
