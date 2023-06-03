@@ -13,7 +13,7 @@ describe('ModelApi', () => {
     })
 
     test('Create', () => {
-        modelId = ifcApi.modelApi.Create() || -1;
+        modelId = ifcApi.modelApi.Create();
         expect(modelId).toBeGreaterThan(-1);
         const buffer = ifcApi.SaveModel(modelId);
         fs.writeFileSync(path.join(__dirname, '../artifacts/modelApi.ifc'), buffer);

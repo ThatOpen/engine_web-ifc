@@ -299,7 +299,6 @@ export class IfcAPI {
 
     /**
      * Creates a new model and returns a modelID number
-     * establishes the bare minimum of an IFC file
      * @param schema ifc schema version
 	 * @returns ModelID
     */
@@ -526,9 +525,13 @@ export class IfcAPI {
 	 * @param modelID Model handle retrieved by OpenModel
 	 * @param lineObject line object to write
 	 */
-    WriteLine<Type extends IfcLineObject>(modelID: number, lineObject: Type) {
+    WriteLine<Type extends IfcLineObject>(modelID: number, lineObjects: Type | Type[]) {
         let property: keyof Type;
-        for (property in lineObject)
+        const lineIds: number[] = [];
+        if(!Array.isArray(lineObjects)) lineObjects = [lineObjects];
+
+        for(const lineObject of lineObjects) {
+            for (property in lineObject)
         {
             const lineProperty: any = lineObject[property];
             if (lineProperty  && (lineProperty as IfcLineObject).expressID !== undefined) {
@@ -553,20 +556,22 @@ export class IfcAPI {
                     }
                 }
             }
-        }
-        
-        if(lineObject.expressID === undefined || lineObject.expressID < 0) {
-            lineObject.expressID = this.GetMaxExpressID(modelID)+1;
-        }
+            }
+
+            if(lineObject.expressID === undefined || lineObject.expressID < 0) {
+                lineObject.expressID = this.GetMaxExpressID(modelID)+1;
+            }
 
 
-        let rawLineData: RawLineData = {
-            ID: lineObject.expressID,
-            type: lineObject.type,
-            arguments: ToRawLineData[this.modelSchemaList[modelID]][lineObject.type](lineObject) as any[]
+            let rawLineData: RawLineData = {
+                ID: lineObject.expressID,
+                type: lineObject.type,
+                arguments: ToRawLineData[this.modelSchemaList[modelID]][lineObject.type](lineObject) as any[]
+            }
+            this.WriteRawLineData(modelID, rawLineData);
+            lineIds.push(lineObject.expressID);
         }
-        this.WriteRawLineData(modelID, rawLineData);
-        return lineObject.expressID;
+        return lineIds;
     }
 
 	/**
