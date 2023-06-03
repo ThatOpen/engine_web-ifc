@@ -84,7 +84,7 @@ export class GeomApi {
 
         point.forEach((pt) => {
             const _points = [ {type: REAL, value: pt.x}, {type: REAL, value: pt.y} ];
-            if (pt.z) _points.push({type: REAL, value: pt.z});
+            if (pt.z !== undefined) _points.push({type: REAL, value: pt.z});
             const line = api.CreateIfcEntity(modelId, IFCCARTESIANPOINT, _points);
             pointLines.push(line);
         });
@@ -105,12 +105,11 @@ export class GeomApi {
         const directionLines: IfcLineObject[] = [];
 
         direction.forEach((dir) => {
-            const _direction = [ {type: REAL, value: dir.x}, {type: REAL, value: dir.y} ];
-            if (dir.z) _direction.push({type: REAL, value: dir.z});
+            const _direction = [{type: REAL, value: dir.x}, {type: REAL, value: dir.y}];
+            if (dir.z !== undefined) _direction.push({type: REAL, value: dir.z});
             const line = api.CreateIfcEntity(modelId, IFCDIRECTION, _direction);
             directionLines.push(line);
         });
-
         return api.WriteLine(modelId, directionLines);
     }
 
