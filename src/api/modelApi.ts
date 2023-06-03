@@ -9,7 +9,9 @@ import {
     LoaderSettings,
     REAL,
     STRING,
-    REF
+    REF,
+    ENUM,
+    EMPTY
 } from "../web-ifc-api";
 import { 
     FILE_DESCRIPTION,
@@ -22,9 +24,11 @@ import {
     IFCPROJECT,
     IFCSIUNIT,
     IFCUNITASSIGNMENT,
-    //IFCOWNERHISTORY,
+    IFCOWNERHISTORY,
     IFCPERSON,
-    IFCPOSTALADDRESS
+    IFCPOSTALADDRESS,
+    IFCPERSONANDORGANIZATION,
+    IFCACTORROLE
 } from "../ifc-schema";
 import { guid } from "../helpers/guid";
 //import { Log } from "../helpers/log";
@@ -33,7 +37,7 @@ export interface Model {
     schema: string;
     name?: string;
     description?: string[];
-    authors?: Author[];
+    authors?: Person[];
     organizations?: string[];
     authorization?: string;
 }
@@ -64,8 +68,14 @@ export interface IfcGeoRef {
 }
 
 export interface OwnerHistory {
-    owningUserId: number;
-    owningApplicationId: number;
+    owningUser: number;
+    owningApplication: number;
+    creationDate: number;
+    lastModifyingApplication?: number;
+    lastModifyingUser?: number;
+    lastModifiedDate?: number;
+    changeAction?: string;
+    state?: string;
 }
 
 export interface PostalAddress {
@@ -78,23 +88,26 @@ export interface PostalAddress {
     internalLocation?: string;
 }
 
-export interface Role {
-    name: string;
+export interface ActorRole {
+    role: string;
+    userDefinedRole?: string;
+    description?: string;
 }
 
-export interface Author {
+export interface Person {
     name: string;
-    address: PostalAddress;
+    organization?: number | Organization;
+    address?: number | PostalAddress;
     surname?: string;
-    roles?: Role[];
+    roles?: number [] | ActorRole[];
 }
 
 export interface Organization {
     name: string;
     id?: string;
     description?: string;
-    roles?: Role[];
-    addresses?: PostalAddress[];
+    roles?: number [] | ActorRole[];
+    addresses?: number [] | PostalAddress[];
 }
 
 /**
@@ -143,13 +156,12 @@ export class ModelApi {
         // minimum of an IFC file @see https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/annex_e/ProjectSetup_1.html
         api.geomApi.AddCartesianPoint(modelId,[
             { x: 0, y: 0, z: 0 },  // 3D origin
-            { x: 0, y: 0 },     // 2D origin
+            { x: 0, y: 0 }     // 2D origin
         ]);
-        api.geomApi.AddCartesianPoint(modelId, { x: 0, y: 0 });
         api.geomApi.AddDirection(modelId, [
             { x: 1, y: 0, z: 0 },   // x direction
             { x: 0, y: 1, z: 0 },   // y direction, up
-            { x: 0, y: 0, z: 1 },   // z direction
+            { x: 0, y: 0, z: 1 }    // z direction
         ]);
 
         api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCDIMENSIONALEXPONENTS,
@@ -164,32 +176,24 @@ export class ModelApi {
 
         this.AddOrganization(modelId, { name: 'ifcjs', description: 'https://ifcjs.io' });
 
-        this.AddApplication(modelId, {
+        const appId = this.AddApplication(modelId, {
             applicationDev: 7,
             version: new Date().getFullYear().toString(),
             applicationFullName: appName,
             applicationIdentifier: 'web-ifc'
         });
 
-        this.AddProject(modelId, { 
-            ownerHistory: 9999,
-            name: modelName,
-            description: description[0].value,
-            representationContexts: [10],
-            unitAssignment: 17,
-        });
-
-        api.geomApi.AddGeometricRepresentationContext(modelId, {
-            contextType: 'Model_View',
-            coordinateSpaceDimension: 3,
-            worldCoordinateSystem: 11,
-            trueNorth: 4,
-        });
-
-        api.geomApi.AddAxis2Placement3D(modelId, {
+        const [ axisId ] = api.geomApi.AddAxis2Placement3D(modelId, {
             location: 1,
             axis: 5,
             refDirection: 3,
+        });
+
+        const geoRepCtxIds = api.geomApi.AddGeometricRepresentationContext(modelId, {
+            contextType: 'Model_View',
+            coordinateSpaceDimension: 3,
+            worldCoordinateSystem: axisId,
+            trueNorth: 4,
         });
 
         api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT));
@@ -198,13 +202,33 @@ export class ModelApi {
         api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT));
         api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT));
         api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCUNITASSIGNMENT, [
+               {type: REF, value: 11},
                {type: REF, value: 12},
                {type: REF, value: 13},
                {type: REF, value: 14},
-               {type: REF, value: 15},
-               {type: REF, value: 16}
+               {type: REF, value: 15}
            ]));
-        this.AddAuthor(modelId, model.authors || []);
+
+        this.AddProject(modelId, { 
+            ownerHistory: 9999,
+            name: modelName,
+            description: description[0].value,
+            representationContexts: geoRepCtxIds,
+            unitAssignment: 16,
+        });
+
+        const [ authorId ] = this.AddPerson(modelId, model.authors || []);
+        this.AddOwnerHistory(modelId, {
+            owningUser: authorId,
+            owningApplication: appId,
+            creationDate: Date.now(),
+            lastModifyingApplication: appId,
+            lastModifyingUser: authorId,
+            lastModifiedDate: Date.now(),
+            changeAction: 'ADDED',
+            state: 'READWRITE'
+        });
+
         return modelId;
     }
 
@@ -216,7 +240,8 @@ export class ModelApi {
      */
     AddProject(modelId: number, project: Project) {
         const api = this.api;
-        const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCPROJECT, 
+        
+        const projectLine = api.CreateIfcEntity(modelId, IFCPROJECT, 
             {type: STRING, value: project.guid || guid()},
             {type: REF, value: project.ownerHistory},
             project.name ? {type: STRING, value: project.name} : null,
@@ -226,7 +251,14 @@ export class ModelApi {
             project.phase ? {type: STRING, value: project.phase} : null,
             project.representationContexts?.map((context) => ({type: REF, value: context})) || null,
             project.unitAssignment ? {type: REF, value: project.unitAssignment} : null,
-        ));
+        );
+
+        // single project per model rule
+        const projectIds = this.api.GetLineIDsWithType(modelId, IFCPROJECT);
+        if(projectIds && projectIds.size() > 0)
+            projectLine.expressID = projectIds.get(0);
+
+        const [ id ] = api.WriteLine(modelId, projectLine);
         return id;
     }
 
@@ -241,34 +273,54 @@ export class ModelApi {
         return id;
     }
 
-    AddAuthor(modelID: number, authors: Author | Author[]) {
+    AddPerson(modelID: number, authors: Person | Person[]) {
         const authorIds = [];
         if(!Array.isArray(authors)) authors = [authors];
         for(const author of authors) {
-            const { name, surname, address } = author;
-            const addressId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPOSTALADDRESS,
-                null,
-                null,
-                null,
-                null,
-                address.addressLines?.map(line => ({type: STRING, value: line})) || null,
-                null,
-                address.town ? {type: STRING, value: address.town} : null,
-                address.region ? {type: STRING, value: address.region} : null,
-                address.postalCode ? {type: STRING, value: address.postalCode} : null,
-                {type: STRING, value: address.country}
-            ));
+            const { name, surname, address, organization } = author;
+            let addressIds;
+            if(address) {
+                if(typeof address === 'number') addressIds = [address];
+                else
+                    addressIds = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPOSTALADDRESS,
+                        null,
+                        null,
+                        null,
+                        null,
+                        address.addressLines?.map(line => ({type: STRING, value: line})) || [{type: EMPTY}],
+                        null,
+                        address.town ? {type: STRING, value: address.town} : null,
+                        address.region ? {type: STRING, value: address.region} : null,
+                        address.postalCode ? {type: STRING, value: address.postalCode} : null,
+                        {type: STRING, value: address.country}
+                    ));
+            }
 
-            const authorId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSON,
+            let [ authorId ] = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSON,
                 null, 
-                {type: STRING, value: name},
+                {type: STRING, value: name + (surname ? ' ' + surname : '')},
                 surname ? {type: STRING, value: surname} : null,
                 null,
                 null,
                 null,
-                [], // refs to actor roles
-                [{type: REF, value: addressId}]
+                [{type: EMPTY}], // refs to actor roles
+                addressIds ? [{type: REF, value: addressIds[0]}] : [{type: EMPTY}]
             ));
+
+            if(organization) {
+                let organizationId;
+                if(typeof organization === 'number')
+                    organizationId = organization;
+                else
+                    organizationId = this.AddOrganization(modelID, organization)[0];
+
+                authorId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSONANDORGANIZATION,
+                    {type: REF, value: authorId},
+                    {type: REF, value: organizationId},
+                    [{type: EMPTY}] // refs to actor roles
+                ))[0];
+            }
+            
             authorIds.push(authorId);
         }
 
@@ -292,6 +344,31 @@ export class ModelApi {
         }
 
         return organizationIds;
+    }
+
+    AddOwnerHistory(modelId: number, ownerHistory: OwnerHistory) {
+        const api = this.api;
+        const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCOWNERHISTORY,
+            {type: REF, value: ownerHistory.owningUser},
+            {type: REF, value: ownerHistory.owningApplication},
+            ownerHistory.state ? {type: ENUM, value: ownerHistory.state} : null,
+            ownerHistory.changeAction ? {type: ENUM, value: ownerHistory.changeAction} : null,
+            {type: REAL, value: ownerHistory.creationDate},
+            ownerHistory.lastModifyingUser ? {type: REF, value: ownerHistory.lastModifyingUser} : null,
+            ownerHistory.lastModifyingApplication ? {type: REF, value: ownerHistory.lastModifyingApplication} : null,
+            ownerHistory.lastModifiedDate ? {type: REAL, value: ownerHistory.lastModifiedDate} : null
+        ));
+        return id;
+    }
+
+    AddActorRole(modelId: number, role: ActorRole) {
+        const api = this.api;
+        const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCACTORROLE,
+            {type: ENUM, value: role.role},
+            role.userDefinedRole ? {type: STRING, value: role.userDefinedRole} : null,
+            role.description ? {type: STRING, value: role.description} : null
+        ));
+        return id;
     }
 
 
