@@ -13,9 +13,31 @@ describe('ModelApi', () => {
     })
 
     test('Create', () => {
-        modelId = ifcApi.modelApi.Create();
+        const model = {
+            schema: WebIFC.Schemas.IFC4,
+            name: 'ModelApi',
+            description: ['ViewDefinition [CoordinationView]'],
+            organizations: ['Acme'],
+            authors: [{
+                name: 'Schmitz',
+                address: {
+                    country: 'DE',
+                }
+            }],
+        }
+        modelId = ifcApi.modelApi.Create(model);
         expect(modelId).toBeGreaterThan(-1);
         const buffer = ifcApi.SaveModel(modelId);
         fs.writeFileSync(path.join(__dirname, '../artifacts/modelApi.ifc'), buffer);
+    });
+
+    test('Add author', () => {
+        const author = {
+            name: 'Meijer',
+            address: {
+                country: 'NL',
+            }
+        };
+        ifcApi.modelApi.AddAuthor(modelId, author);
     });
 });
