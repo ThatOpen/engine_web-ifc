@@ -21,6 +21,7 @@ import {
 } from "./ifc-schema";
 import { ModelApi } from "./api/modelApi";
 import { PropsApi } from "./api/propsApi";
+import { GeomApi } from "./api/geomApi";
 import { Properties } from "./helpers/properties";
 import { Log, LogLevel } from "./helpers/log";
 
@@ -180,6 +181,11 @@ export class IfcAPI {
      * Contains high level api to interact with the model
      */
     modelApi = new ModelApi(this);
+
+    /**
+     * Contains high level api to interact with the geometry
+     */
+    geomApi = new GeomApi(this);
 
     /**
      * Initializes the WASM module (WebIFCWasm), required before using any other functionality.
