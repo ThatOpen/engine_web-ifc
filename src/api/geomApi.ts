@@ -1,14 +1,16 @@
 import { 
     IfcAPI,
-    IFCGEOMETRICREPRESENTATIONCONTEXT,
-    IFCCARTESIANPOINT,
     REAL,
     STRING,
     REF,
-    IfcLineObject,
+    IfcLineObject
+} from "../web-ifc-api";
+import { 
+    IFCGEOMETRICREPRESENTATIONCONTEXT,
+    IFCCARTESIANPOINT,
     IFCDIRECTION,
     IFCAXIS2PLACEMENT3D
-} from "../web-ifc-api";
+} from "../ifc-schema";
 
 
 export interface GeometricRepresentationContext {

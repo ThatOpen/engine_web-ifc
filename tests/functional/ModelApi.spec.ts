@@ -16,7 +16,7 @@ describe('ModelApi', () => {
         const model = {
             schema: WebIFC.Schemas.IFC4,
             name: 'ModelApi',
-            description: ['ViewDefinition [CoordinationView]'],
+            description: ['ViewDefinition []'],
             organizations: ['Acme'],
             authors: [{
                 name: 'Schmitz',
@@ -27,8 +27,6 @@ describe('ModelApi', () => {
         }
         modelId = ifcApi.modelApi.Create(model);
         expect(modelId).toBeGreaterThan(-1);
-        const buffer = ifcApi.SaveModel(modelId);
-        fs.writeFileSync(path.join(__dirname, '../artifacts/modelApi.ifc'), buffer);
     });
 
     test('Add author', () => {
@@ -39,5 +37,11 @@ describe('ModelApi', () => {
             }
         };
         ifcApi.modelApi.AddAuthor(modelId, author);
+    });
+
+    afterAll(() => {
+        const buffer = ifcApi.SaveModel(modelId);
+        fs.writeFileSync(path.join(__dirname, '../artifacts/modelApi.ifc'), buffer);
+        ifcApi.CloseModel(modelId);
     });
 });
