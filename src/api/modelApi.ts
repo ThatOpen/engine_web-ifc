@@ -38,6 +38,24 @@ export interface Model {
     authorization?: string;
 }
 
+export interface Project {
+    ownerHistory: number;
+    guid?: string;
+    name?: string;
+    longName?: string;
+    phase?: string;
+    description?: string;
+    unitAssignment?: number;
+    representationContexts?: number[];
+}
+
+export interface Application {
+    applicationDev: number;
+    version: string;
+    applicationFullName: string;
+    applicationIdentifier: string;
+}
+
 export interface IfcGeoRef {
     longitude: number;
     latitude: number;
@@ -108,8 +126,8 @@ export class ModelApi {
         const auth = model.authorization ? {type: STRING, value: model.authorization} : null;
         
         api.wasmModule.WriteHeaderLine(modelId,FILE_DESCRIPTION,[
-               description, 
-               {type: STRING, value: '2;1'}
+                model.description?.map((d) => ({type: STRING, value: d})) || [{type: STRING, value: 'ViewDefinition []'}], 
+                {type: STRING, value: '2;1'}
            ]);
         api.wasmModule.WriteHeaderLine(modelId,FILE_NAME,[
                {type: STRING, value: modelName+'.ifc'},
@@ -123,16 +141,16 @@ export class ModelApi {
         api.wasmModule.WriteHeaderLine(modelId,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);
 
         // minimum of an IFC file @see https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/annex_e/ProjectSetup_1.html
-        // 3D origin
-        api.geomApi.AddCartesianPoint(modelId, { x: 0, y: 0, z: 0 });
-        // 2D origin
+        api.geomApi.AddCartesianPoint(modelId,[
+            { x: 0, y: 0, z: 0 },  // 3D origin
+            { x: 0, y: 0 },     // 2D origin
+        ]);
         api.geomApi.AddCartesianPoint(modelId, { x: 0, y: 0 });
-        // x direction
-        api.geomApi.AddDirection(modelId, { x: 1, y: 0, z: 0 });
-        // y direction, up
-        api.geomApi.AddDirection(modelId, { x: 0, y: 1, z: 0 });
-        // z direction
-        api.geomApi.AddDirection(modelId, { x: 0, y: 0, z: 1 });
+        api.geomApi.AddDirection(modelId, [
+            { x: 1, y: 0, z: 0 },   // x direction
+            { x: 0, y: 1, z: 0 },   // y direction, up
+            { x: 0, y: 0, z: 1 },   // z direction
+        ]);
 
         api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCDIMENSIONALEXPONENTS,
                 {type: REAL, value: 0},
@@ -146,24 +164,20 @@ export class ModelApi {
 
         this.AddOrganization(modelId, { name: 'ifcjs', description: 'https://ifcjs.io' });
 
-        api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCAPPLICATION,
-                {type: REF, value: 7},
-                {type: STRING, value: new Date().getFullYear().toString()}, 
-                {type: STRING, value: appName},
-                {type: STRING, value: 'web-ifc'}
-        ));
+        this.AddApplication(modelId, {
+            applicationDev: 7,
+            version: new Date().getFullYear().toString(),
+            applicationFullName: appName,
+            applicationIdentifier: 'web-ifc'
+        });
 
-        api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCPROJECT, 
-               {type: STRING, value: guid()},
-               null,
-               {type: STRING, value: modelName},
-               description[0],
-               null,
-               null,
-               null,
-               [{type: REF, value: 10}],
-               {type: REF, value: 17},
-           ));
+        this.AddProject(modelId, { 
+            ownerHistory: 9999,
+            name: modelName,
+            description: description[0].value,
+            representationContexts: [10],
+            unitAssignment: 17,
+        });
 
         api.geomApi.AddGeometricRepresentationContext(modelId, {
             contextType: 'Model_View',
@@ -192,6 +206,39 @@ export class ModelApi {
            ]));
         this.AddAuthor(modelId, model.authors || []);
         return modelId;
+    }
+
+    /**
+     * Adds a project to the model
+     * @param modelID model id
+     * @param project 
+     * @returns project id
+     */
+    AddProject(modelId: number, project: Project) {
+        const api = this.api;
+        const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCPROJECT, 
+            {type: STRING, value: project.guid || guid()},
+            {type: REF, value: project.ownerHistory},
+            project.name ? {type: STRING, value: project.name} : null,
+            project.description ? {type: STRING, value: project.description} : null,
+            null,
+            project.longName ? {type: STRING, value: project.longName} : null,
+            project.phase ? {type: STRING, value: project.phase} : null,
+            project.representationContexts?.map((context) => ({type: REF, value: context})) || null,
+            project.unitAssignment ? {type: REF, value: project.unitAssignment} : null,
+        ));
+        return id;
+    }
+
+    AddApplication(modelId: number, application: Application) {
+        const api = this.api;
+        const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCAPPLICATION,
+            {type: REF, value: application.applicationDev},
+            {type: STRING, value: application.version},
+            {type: STRING, value: application.applicationFullName},
+            {type: STRING, value: application.applicationIdentifier}
+        ));
+        return id;
     }
 
     AddAuthor(modelID: number, authors: Author | Author[]) {
