@@ -70,7 +70,21 @@ describe('GeomApi', () => {
                 {x: 1, y: 1, z: 0},
             ],
         };
-        ifcApi.geomApi.AddPolyline(modelId, polyline);
+        const polyline2 = {
+            points: [ 28, 29, 30 ]
+        };
+
+        ifcApi.geomApi.AddPolyline(modelId, [polyline, polyline2]);
+    });
+
+    test('Add Block', () => {
+        const block = {
+            position: 26,
+            xLength: 1,
+            yLength: 1,
+            zLength: 1,
+        };
+        ifcApi.geomApi.AddCsgPrimitive3D(modelId, block);
     });
 
     afterAll(() => {

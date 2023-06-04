@@ -43,6 +43,8 @@ export interface CartesianPoint {
     z?: number;
 }
 
+export interface Direction extends CartesianPoint {}
+
 export interface CartesianPointList {
     coordList: number[][] | CartesianPoint[];
     placeholder?: string;
@@ -63,6 +65,7 @@ export interface GridPlacement {
     placementRefDirection?: number | Direction;
 }
 */
+
 export interface LocalPlacement {
     relativePlacement: number | Axis2Placement3D;
     placementRelTo?: number | ObjectPlacement;
@@ -115,8 +118,6 @@ export interface FacetedBrep extends ManifoldSolidBrep {}
 export interface Polyline {
     points: number[] | CartesianPoint[];
 }
-
-export interface Direction extends CartesianPoint {}
 
 /**
  * GeomApi class,

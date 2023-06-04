@@ -31,6 +31,9 @@ import {
     IFCPERSONANDORGANIZATION,
     IFCACTORROLE,
     IFCBUILDING,
+    IFCBUILDINGSTOREY,
+    IFCSITE,
+    IFCSPACE,
 } from "../ifc-schema";
 import { guid } from "../helpers/guid";
 //import { Log } from "../helpers/log";
@@ -40,7 +43,7 @@ import { LocalPlacement } from "./geomApi";
 interface Root {
     globalId?: string;
     name?: string;
-    description?: string[];
+    description?: string;
     ownerHistory?: number | OwnerHistory;
 }
 
@@ -505,6 +508,12 @@ export class ModelApi extends BaseApi {
         )) as number;
     }
 
+    /**
+     * Adds one or multiple building to the model
+     * @param modelId model id
+     * @param building building or array of buildings
+     * @returns building id or array of building ids
+     */
     AddBuilding(modelId: number, building: Building | Building[]) {
         const api = this.api;
         if(!Array.isArray(building)) building = [building];
@@ -527,14 +536,14 @@ export class ModelApi extends BaseApi {
                 {type: STRING, value: b.globalId || guid()},
                 b.ownerHistory ? {type: REF, value: b.ownerHistory} : null,
                 b.name ? {type: STRING, value: b.name} : null,
-                b.description ? {type: STRING, value: b.description} : null,
+                b.description? {type: STRING, value: b.description} : null,
                 null,
                 b.objectPlacement ? {type: REF, value: b.objectPlacement} : null,
                 null,
                 b.longName ? {type: STRING, value: b.longName} : null,
                 b.compositionType ? {type: ENUM, value: b.compositionType} : null,
-                null,
-                null,
+                b.elevationOfRefHeight !== undefined ? {type: REAL, value: b.elevationOfRefHeight} : null,
+                b.elevationOfTerrain !== undefined ? {type: REAL, value: b.elevationOfTerrain} : null,
                 b.buildingAddress ? {type: REF, value: b.buildingAddress} : null,
             ));
         }
@@ -542,6 +551,12 @@ export class ModelApi extends BaseApi {
         return api.WriteLine(modelId, buildingLines);
     }
 
+    /**
+     * Adds one or multiple building storey to the model
+     * @param modelId model id
+     * @param storey storey or array of storeys
+     * @returns storey id or array of storey ids
+     */
     AddBuildingStorey(modelId: number, storey: BuildingStorey | BuildingStorey[]) {
         const api = this.api;
         if(!Array.isArray(storey)) storey = [storey];
@@ -556,7 +571,7 @@ export class ModelApi extends BaseApi {
                 s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
             }
 
-            storeyLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
+            storeyLines.push(api.CreateIfcEntity(modelId, IFCBUILDINGSTOREY,
                 {type: STRING, value: s.globalId || guid()},
                 s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
                 s.name ? {type: STRING, value: s.name} : null,
@@ -566,13 +581,19 @@ export class ModelApi extends BaseApi {
                 null,
                 s.longName ? {type: STRING, value: s.longName} : null,
                 s.compositionType ? {type: ENUM, value: s.compositionType} : null,
-                s.elevation ? {type: REAL, value: s.elevation} : null,
+                s.elevation !== undefined ? {type: REAL, value: s.elevation} : null,
             ));
         }
 
         return api.WriteLine(modelId, storeyLines);
     }
 
+    /**
+     * Adds one or multiple site to the model
+     * @param modelId model id
+     * @param site site or array of sites
+     * @returns site id or array of site ids
+     */
     AddSite(modelId: number, site: Site | Site[]) {
         const api = this.api;
         if(!Array.isArray(site)) site = [site];
@@ -587,7 +608,7 @@ export class ModelApi extends BaseApi {
                 s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
             }
 
-            siteLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
+            siteLines.push(api.CreateIfcEntity(modelId, IFCSITE,
                 {type: STRING, value: s.globalId || guid()},
                 s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
                 s.name ? {type: STRING, value: s.name} : null,
@@ -599,7 +620,7 @@ export class ModelApi extends BaseApi {
                 s.compositionType ? {type: ENUM, value: s.compositionType} : null,
                 s.refLatitude ? s.refLatitude.map(lat => ({type: REAL, value: lat})) : null,
                 s.refLongitude ? s.refLongitude.map(lon => ({type: REAL, value: lon})) : null,
-                s.refElevation ? {type: REAL, value: s.refElevation} : null,
+                s.refElevation !== undefined ? {type: REAL, value: s.refElevation} : null,
                 s.landTitleNumber ? {type: STRING, value: s.landTitleNumber} : null,
                 s.siteAddress ? {type: REF, value: s.siteAddress} : null,
             ));
@@ -608,6 +629,12 @@ export class ModelApi extends BaseApi {
         return api.WriteLine(modelId, siteLines);
     }
 
+    /**
+     * Adds one or multiple space to the model
+     * @param modelId model id
+     * @param space space or array of spaces
+     * @returns space id or array of space ids
+     */
     AddSpace(modelId: number, space: Space | Space[]) {
         const api = this.api;
         if(!Array.isArray(space)) space = [space];
@@ -622,7 +649,7 @@ export class ModelApi extends BaseApi {
                 s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
             }
 
-            spaceLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
+            spaceLines.push(api.CreateIfcEntity(modelId, IFCSPACE,
                 {type: STRING, value: s.globalId || guid()},
                 s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
                 s.name ? {type: STRING, value: s.name} : null,
