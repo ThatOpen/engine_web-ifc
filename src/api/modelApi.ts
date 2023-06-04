@@ -203,7 +203,7 @@ export class ModelApi {
         });
 
         const geoRepCtxId = api.geomApi.AddGeometricRepresentationContext(modelId, {
-            contextType: 'Model_View',
+            contextType: 'Model',
             coordinateSpaceDimension: 3,
             worldCoordinateSystem: axisId as number,
             trueNorth: 4,
