@@ -10,6 +10,7 @@ import {
     STRING,
     REF,
     IfcLineObject,
+    ENUM,
 } from "../web-ifc-api";
 import { 
     IFCGEOMETRICREPRESENTATIONCONTEXT,
@@ -24,7 +25,8 @@ import {
     IFCPOLYLINE,
     IFCSPHERE,
     IFCBLOCK,
-    IFCRIGHTCIRCULARCYLINDER
+    IFCRIGHTCIRCULARCYLINDER,
+    IFCTRIANGULATEDFACESET
 } from "../ifc-schema";
 import { BaseApi } from "./baseApi";
 
@@ -117,6 +119,17 @@ export interface FacetedBrep extends ManifoldSolidBrep {}
 
 export interface Polyline {
     points: number[] | CartesianPoint[];
+}
+
+export interface TesselatedFaceSet {
+    coordinates: number | CartesianPointList;
+    closed: boolean;
+    normals?: number[] | Direction[];
+}
+
+export interface TriangulatedFaceSet extends TesselatedFaceSet {
+    coordIndex?: number[][];
+    normalIndex?: number[][];
 }
 
 /**
@@ -388,8 +401,8 @@ export class GeomApi extends BaseApi {
 
             shapeRepresentationLines.push(api.CreateIfcEntity(modelId, IFCSHAPEREPRESENTATION,
                 {type: REF, value: contextOfItems},
-                shapeRepresentation.representationType ? {type: STRING, value: shapeRepresentation.representationType} : null,
                 shapeRepresentation.representationId ? {type: STRING, value: shapeRepresentation.representationId} : null,
+                shapeRepresentation.representationType ? {type: STRING, value: shapeRepresentation.representationType} : null,
                 items ? items.map((id) => ({type: REF, value: id})) : null,
             ));
         });
@@ -451,5 +464,33 @@ export class GeomApi extends BaseApi {
         } else throw new Error('Invalid primitive');
 
         return api.WriteLine(modelId, api.CreateIfcEntity(modelId, entityType, ...args));
+    }
+
+    AddTriangulatedFaceSet(modelId: number, faceSet: TriangulatedFaceSet | TriangulatedFaceSet[]) {
+        const api = this.api;
+        if (!Array.isArray(faceSet)) faceSet = [faceSet];
+        const faceSetLines: IfcLineObject[] = [];
+
+        faceSet.forEach((face) => {
+            let coordinates: number;
+            let normals: number[] | undefined;
+
+            if(typeof face.coordinates !== 'number') {
+                coordinates = this.AddCartesianPointList3D(modelId, face.coordinates) as number;
+            } else coordinates = face.coordinates;
+            if(face.normals && typeof face.normals[0] !== 'number') {
+                normals = this.AddDirection(modelId, face.normals as Direction[]) as number[];
+            } else normals = face.normals as number[];
+
+            faceSetLines.push(api.CreateIfcEntity(modelId, IFCTRIANGULATEDFACESET,
+                {type: REF, value: coordinates},
+                normals?.map((id) => ({type: REF, value: id})) || null,
+                {type: ENUM, value: face.closed ? 'T' : 'F'},
+                face.coordIndex ? face.coordIndex.map((tri) => tri.map((id) => ({type: REAL, value: id}))) : null,
+                face.normalIndex ? face.normalIndex.map((tri) => tri.map((id) => ({type: REAL, value: id}))) : null,
+            ));
+        });
+
+        return api.WriteLine(modelId, faceSetLines);
     }
 }

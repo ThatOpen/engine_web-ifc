@@ -5,6 +5,7 @@ import {
     Axis2Placement3D,
     LocalPlacement,
     CartesianPointList,
+    Polyline,
 } from './geomApi';
 
 import {
@@ -34,6 +35,7 @@ export {
     Axis2Placement3D,
     LocalPlacement,
     CartesianPointList,
+    Polyline,
     Model,
     Project,
     Organization,

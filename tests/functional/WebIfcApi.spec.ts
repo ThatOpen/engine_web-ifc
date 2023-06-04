@@ -545,15 +545,15 @@ describe('creating ifc', () => {
         expect(entity.constructor.name).toBe('IfcCartesianPoint');
     });
 
+    // this works in IFC4X3 
     test('create IfcSIUnit', () => {
         let entity = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCSIUNIT,
             {type: WebIFC.UNKNOWN},
-            ifcApi.CreateIfcType(modelID, WebIFC.ENUM, 'LENGTHUNIT'),
+            {type: WebIFC.ENUM, value: 'LENGTHUNIT'},
             {type: WebIFC.ENUM, value: 'MILLI'},
             {type: WebIFC.ENUM, value: 'METRE'}
         ) as any;
-        
-        console.log(entity)
+
         expect(entity.type).toBe(WebIFC.IFCSIUNIT);
         expect(entity.constructor.name).toBe('IfcSIUnit');
         expect(entity['UnitType'].value).toBe('LENGTHUNIT');

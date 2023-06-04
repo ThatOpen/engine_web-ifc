@@ -45,21 +45,54 @@ describe('GeomApi', () => {
     });
 
     test('Add CartesianPointList3D', () => {
-        // cube
-        const coordList = [
-            {x: 0, y: 0, z: 0},
-            {x: 1, y: 0, z: 0},
-            {x: 1, y: 1, z: 0},
-            {x: 0, y: 1, z: 0},
-            {x: 0, y: 0, z: 1},
-            {x: 1, y: 0, z: 1},
-            {x: 1, y: 1, z: 1},
-            {x: 0, y: 1, z: 1},
-        ];
         const cartesianPointList3D = {
-            coordList,
+            coordList: [
+                {x: 0, y: 0, z: 0},
+                {x: 1, y: 0, z: 0},
+                {x: 1, y: 1, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 1, y: 0, z: 1},
+                {x: 1, y: 1, z: 1},
+                {x: 0, y: 1, z: 1},
+            ],
         };
         ifcApi.geomApi.AddCartesianPointList3D(modelId, cartesianPointList3D);
+    });
+
+    test('Add TriangulatedFaceSet', () => {
+        const triangulatedFaceSet = {
+            coordinates: 27,
+            closed: true,
+            coordIndex: [
+                [0, 1, 2],
+                [0, 2, 3],
+                [0, 1, 5],
+                [0, 5, 4],
+                [0, 3, 7],
+                [0, 7, 4],
+                [1, 2, 6],
+                [1, 6, 5],
+                [2, 6, 7],
+                [2, 7, 3],
+                [4, 5, 6],
+                [4, 6, 7],
+            ]
+        };
+
+        ifcApi.geomApi.AddTriangulatedFaceSet(modelId, triangulatedFaceSet);
+    });
+
+    test('Add shape representation & product definition shape', () => {
+        const shapeId = ifcApi.geomApi.AddShapeRepresentation(modelId, {
+            contextOfItems: 10,
+            representationId: 'Body',
+            representationType: 'Tessellation',
+            items: [28],
+        }) as number;
+        ifcApi.geomApi.AddProductDefShape(modelId, {
+            representations: [shapeId],
+        });
     });
 
     test('Add Polyline', () => {
@@ -70,11 +103,8 @@ describe('GeomApi', () => {
                 {x: 1, y: 1, z: 0},
             ],
         };
-        const polyline2 = {
-            points: [ 28, 29, 30 ]
-        };
 
-        ifcApi.geomApi.AddPolyline(modelId, [polyline, polyline2]);
+        ifcApi.geomApi.AddPolyline(modelId, polyline);
     });
 
     test('Add Block', () => {
