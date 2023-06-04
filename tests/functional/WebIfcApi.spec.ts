@@ -545,6 +545,22 @@ describe('creating ifc', () => {
         expect(entity.constructor.name).toBe('IfcCartesianPoint');
     });
 
+    test('create IfcSIUnit', () => {
+        let entity = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCSIUNIT,
+            {type: WebIFC.UNKNOWN},
+            ifcApi.CreateIfcType(modelID, WebIFC.ENUM, 'LENGTHUNIT'),
+            {type: WebIFC.ENUM, value: 'MILLI'},
+            {type: WebIFC.ENUM, value: 'METRE'}
+        ) as any;
+        
+        console.log(entity)
+        expect(entity.type).toBe(WebIFC.IFCSIUNIT);
+        expect(entity.constructor.name).toBe('IfcSIUnit');
+        expect(entity['UnitType'].value).toBe('LENGTHUNIT');
+        expect(entity['Prefix'].value).toBe('MILLI');
+        expect(entity['Name'].value).toBe('METRE');
+    });
+
     test('can write new ifc entity', () => {
         let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
         ifcApi.WriteLine(modelID, entity);

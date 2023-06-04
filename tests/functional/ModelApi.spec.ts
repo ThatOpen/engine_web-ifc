@@ -20,9 +20,9 @@ describe('ModelApi', () => {
             organizations: ['Acme'],
             authors: [{
                 name: 'Schmitz',
-                address: {
-                    country: 'DE',
-                }
+                organization: {
+                    name: 'Acme',
+                },
             }],
         }
         modelId = ifcApi.modelApi.Create(model);
@@ -34,9 +34,10 @@ describe('ModelApi', () => {
             name: 'Meijer',
             address: {
                 country: 'NL',
-            }
+            },
+            organization: 19,
         };
-        ifcApi.modelApi.AddAuthor(modelId, author);
+        ifcApi.modelApi.AddPerson(modelId, author);
     });
 
     afterAll(() => {
