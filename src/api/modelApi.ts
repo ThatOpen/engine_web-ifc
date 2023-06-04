@@ -61,13 +61,6 @@ export interface Application {
     applicationIdentifier: string;
 }
 
-export interface IfcGeoRef {
-    longitude: number;
-    latitude: number;
-    elevation: number;
-    angle: number;
-}
-
 export interface OwnerHistory {
     owningUser: number;
     owningApplication: number;

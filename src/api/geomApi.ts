@@ -9,14 +9,19 @@ import {
     REAL,
     STRING,
     REF,
-    IfcLineObject
+    IfcLineObject,
+    EMPTY
 } from "../web-ifc-api";
 import { 
     IFCGEOMETRICREPRESENTATIONCONTEXT,
     IFCCARTESIANPOINT,
     IFCDIRECTION,
     IFCAXIS2PLACEMENT3D,
-    IFCLOCALPLACEMENT
+    IFCLOCALPLACEMENT,
+    IFCPRODUCTDEFINITIONSHAPE,
+    IFCSHAPEREPRESENTATION,
+    IFCCARTESIANPOINTLIST3D,
+    IFCCARTESIANPOINTLIST2D,
 } from "../ifc-schema";
 
 
@@ -32,6 +37,11 @@ export interface CartesianPoint {
     x: number;
     y: number;
     z?: number;
+}
+
+export interface CartesianPointList {
+    coordList: number[][] | CartesianPoint[];
+    placeholder?: string;
 }
 
 export interface Placement {
@@ -66,9 +76,12 @@ export interface ShapeRepresentation {
     items: number[];
 }
 
-
 export interface Direction extends CartesianPoint {}
 
+/**
+ * GeomApi class,
+ * create geometric entities
+ */
 export class GeomApi {
     constructor(private api: IfcAPI) {}
 
@@ -124,6 +137,48 @@ export class GeomApi {
         return api.WriteLine(modelId, pointLines);
     }
 
+    AddCartesianPointList3D(modelId: number, pointList: CartesianPointList | CartesianPointList[]) {
+        const api = this.api;
+        if (!Array.isArray(pointList)) pointList = [pointList];
+        const pointListLines: IfcLineObject[] = [];
+
+        pointList.forEach((ptList) => {
+            let points;
+            points = ptList.coordList.map((tri) => {
+                if ('x' in tri)
+                    return [{type: REAL, value: tri.x}, {type: REAL, value: tri.y}, {type: REAL, value: tri.z}];
+                return [{type: REAL, value: tri[0]}, {type: REAL, value: tri[1]}, {type: REAL, value: tri[2]}];
+            });
+            pointListLines.push(api.CreateIfcEntity(modelId, IFCCARTESIANPOINTLIST3D,
+                points,
+                ptList.placeholder ? {type: STRING, value: ptList.placeholder} : null,
+            ));
+        });
+
+        return api.WriteLine(modelId, pointListLines);
+    }
+
+    AddCartesianPointList2D(modelId: number, pointList: CartesianPointList | CartesianPointList[]) {
+        const api = this.api;
+        if (!Array.isArray(pointList)) pointList = [pointList];
+        const pointListLines: IfcLineObject[] = [];
+
+        pointList.forEach((ptList) => {
+            let points;
+            points = ptList.coordList.map((tri) => {
+                if ('x' in tri)
+                    return [{type: REAL, value: tri.x}, {type: REAL, value: tri.y}];
+                return [{type: REAL, value: tri[0]}, {type: REAL, value: tri[1]}];
+            });
+            pointListLines.push(api.CreateIfcEntity(modelId, IFCCARTESIANPOINTLIST2D, 
+                points,
+                ptList.placeholder ? {type: STRING, value: ptList.placeholder} : null
+            ));
+        });
+
+        return api.WriteLine(modelId, pointListLines);
+    }
+
     /**
      * Adds one or multiple IfcDirection to the model.
      * @param modelId model id
@@ -144,6 +199,12 @@ export class GeomApi {
         return api.WriteLine(modelId, directionLines);
     }
 
+    /**
+     * Adds one or multiple IfcAxis2Placement3D to the model.
+     * @param modelId model id
+     * @param axis2Placement3D axis2Placement3D to add, can be one or multiple axis2Placement3D 
+     * @returns axis2Placement3D id or ids
+     */
     AddAxis2Placement3D(modelId: number, axis2Placement3D: Axis2Placement3D | Axis2Placement3D[]) {
         const api = this.api;
         if (!Array.isArray(axis2Placement3D)) axis2Placement3D = [axis2Placement3D];
@@ -174,6 +235,12 @@ export class GeomApi {
         return api.WriteLine(modelId, axis2Placement3DLines);
     }
 
+    /**
+     * Adds one or multiple IfcLocalPlacement to the model.
+     * @param modelId model id
+     * @param localPlacement localPlacement to add, can be one or multiple localPlacement
+     * @returns localPlacement id or ids
+     */
     AddLocalPlacement(modelId: number, localPlacement: LocalPlacement | LocalPlacement[]) {
         const api = this.api;
         if (!Array.isArray(localPlacement)) localPlacement = [localPlacement];
@@ -198,6 +265,12 @@ export class GeomApi {
         return api.WriteLine(modelId, localPlacementLines);
     }
 
+    /**
+     * Adds one or multiple IfcObjectPlacement to the model.
+     * @param modelId model id
+     * @param objectPlacement objectPlacement to add, can be one or multiple objectPlacement
+     * @returns objectPlacement id or ids
+     */
     AddObjectPlacement(modelId: number, objectPlacement: ObjectPlacement | ObjectPlacement[]) {
         const api = this.api;
         if (!Array.isArray(objectPlacement)) objectPlacement = [objectPlacement];
@@ -223,6 +296,12 @@ export class GeomApi {
         return api.WriteLine(modelId, objectPlacementLines);
     }
 
+    /**
+     * Adds one or multiple IfcProductDefShape to the model.
+     * @param modelId model id
+     * @param productDefShapes productDefShapes to add, can be one or multiple productDefShapes 
+     * @returns productDefShape id or ids
+     */
     AddProductDefShape(modelId: number, productDefShapes: ProductDefShape | ProductDefShape[]) {
         const api = this.api;
         if (!Array.isArray(productDefShapes)) productDefShapes = [productDefShapes];
@@ -235,7 +314,7 @@ export class GeomApi {
                 representations = this.AddShapeRepresentation(modelId, productDefShape.representations as ShapeRepresentation[]) as number[];
             } else representations = productDefShape.representations as number[];
 
-            productDefShapeLines.push(api.CreateIfcEntity(modelId, IFCLOCALPLACEMENT,
+            productDefShapeLines.push(api.CreateIfcEntity(modelId, IFCPRODUCTDEFINITIONSHAPE,
                 productDefShape.name ? {type: STRING, value: productDefShape.name} : null,
                 productDefShape.description ? {type: STRING, value: productDefShape.description} : null,
                 representations ? representations.map((id) => ({type: REF, value: id})) : null,
@@ -245,6 +324,12 @@ export class GeomApi {
         return api.WriteLine(modelId, productDefShapeLines);
     }
 
+    /**
+     * Adds one or multiple IfcShapeRepresentation to the model.
+     * @param modelId model id
+     * @param shapeRepresentations shapeRepresentations to add, can be one or multiple shapeRepresentations
+     * @returns shapeRepresentation id or ids
+     */
     AddShapeRepresentation(modelId: number, shapeRepresentations: ShapeRepresentation | ShapeRepresentation[]) {
         const api = this.api;
         if (!Array.isArray(shapeRepresentations)) shapeRepresentations = [shapeRepresentations];
@@ -258,7 +343,7 @@ export class GeomApi {
                 contextOfItems = this.AddGeometricRepresentationContext(modelId, shapeRepresentation.contextOfItems as GeometricRepresentationContext) as number;
             } else contextOfItems = shapeRepresentation.contextOfItems;
 
-            shapeRepresentationLines.push(api.CreateIfcEntity(modelId, IFCLOCALPLACEMENT,
+            shapeRepresentationLines.push(api.CreateIfcEntity(modelId, IFCSHAPEREPRESENTATION,
                 {type: REF, value: contextOfItems},
                 shapeRepresentation.representationType ? {type: STRING, value: shapeRepresentation.representationType} : null,
                 shapeRepresentation.representationId ? {type: STRING, value: shapeRepresentation.representationId} : null,

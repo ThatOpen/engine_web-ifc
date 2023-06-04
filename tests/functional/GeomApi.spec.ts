@@ -44,6 +44,24 @@ describe('GeomApi', () => {
         ifcApi.geomApi.AddAxis2Placement3D(modelId, axis2Placement3D);
     });
 
+    test('Add CartesianPointList3D', () => {
+        // cube
+        const coordList = [
+            {x: 0, y: 0, z: 0},
+            {x: 1, y: 0, z: 0},
+            {x: 1, y: 1, z: 0},
+            {x: 0, y: 1, z: 0},
+            {x: 0, y: 0, z: 1},
+            {x: 1, y: 0, z: 1},
+            {x: 1, y: 1, z: 1},
+            {x: 0, y: 1, z: 1},
+        ];
+        const cartesianPointList3D = {
+            coordList,
+        };
+        ifcApi.geomApi.AddCartesianPointList3D(modelId, cartesianPointList3D);
+    });
+
     afterAll(() => {
         const buffer = ifcApi.SaveModel(modelId);
         fs.writeFileSync(path.join(__dirname, '../artifacts/geomApi.ifc'), buffer);
