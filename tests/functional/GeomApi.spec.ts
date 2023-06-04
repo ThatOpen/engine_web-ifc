@@ -16,7 +16,7 @@ describe('GeomApi', () => {
             description: ['ViewDefinition []'],
             organizations: ['Acme'],
             authors: [{
-                name: 'Schmitz',
+                familyName: 'Schmitz',
                 organization: {
                     name: 'Acme',
                 },

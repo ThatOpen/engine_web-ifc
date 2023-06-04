@@ -11,7 +11,6 @@ import {
     STRING,
     REF,
     ENUM,
-    EMPTY,
     UNKNOWN
 } from "../web-ifc-api";
 import { 
@@ -34,6 +33,7 @@ import {
     IFCBUILDINGSTOREY,
     IFCSITE,
     IFCSPACE,
+    //IFCWALLSTANDARDCASE,
 } from "../ifc-schema";
 import { guid } from "../helpers/guid";
 //import { Log } from "../helpers/log";
@@ -56,7 +56,7 @@ export interface Model {
     authorization?: string;
 }
 
-export interface Project {
+export interface Project extends Object {
     ownerHistory: number;
     guid?: string;
     name?: string;
@@ -108,11 +108,14 @@ export interface ActorRole {
 }
 
 export interface Person {
-    name: string;
+    familyName: string;
+    givenName?: string;
+    middleNames?: string[];
     organization?: number | Organization;
-    address?: number | PostalAddress;
-    surname?: string;
-    roles?: number [] | ActorRole[];
+    prefixTitles?: string[];
+    suffixTitles?: string[];
+    address?: number[] | PostalAddress[];
+    roles?: number[] | ActorRole[];
 }
 
 export interface Organization {
@@ -129,7 +132,11 @@ export interface Unit {
     prefix?: string;
 }
 
-export interface Product extends Root {
+export interface Object extends Root {
+    objectType?: string;
+}
+
+export interface Product extends Object {
     objectPlacement?: number | LocalPlacement; // TODO: | GridPlacement;
 }
 
@@ -200,7 +207,7 @@ export class ModelApi extends BaseApi {
         api.wasmModule.WriteHeaderLine(modelId,FILE_NAME,[
                {type: STRING, value: modelName+'.ifc'},
                {type: STRING, value: timestamp},
-               model.authors?.map(a=>({type: STRING, value: a.name })) || [null],
+               model.authors?.map(a=>({type: STRING, value: a.familyName })) || [null],
                orgs,
                {type: STRING, value: appName},
                {type: STRING, value: appName},
@@ -298,7 +305,7 @@ export class ModelApi extends BaseApi {
             {type: REF, value: project.ownerHistory},
             project.name ? {type: STRING, value: project.name} : null,
             project.description ? {type: STRING, value: project.description} : null,
-            null,
+            project.objectType ? {type: ENUM, value: project.objectType} : null,
             project.longName ? {type: STRING, value: project.longName} : null,
             project.phase ? {type: STRING, value: project.phase} : null,
             project.representationContexts?.map((context) => ({type: REF, value: context})) || null,
@@ -342,12 +349,12 @@ export class ModelApi extends BaseApi {
 
         for(const addr of address) {
             addressLines.push(api.CreateIfcEntity(modelId, IFCPOSTALADDRESS,
-                {type: ENUM, value: addr.purpose || 'OFFICE'},
+                {type: ENUM, value: addr.purpose || 'USERDEFINED'},
                 addr.description ? {type: STRING, value: addr.description} : null,
                 addr.userDefinedPurpose ? {type: STRING, value: addr.userDefinedPurpose} : null,
-                null,
-                addr.addressLines?.map(line => ({type: STRING, value: line})) || [{type: EMPTY}],
-                null,
+                addr.internalLocation ? {type: STRING, value: addr.internalLocation} : null,
+                addr.addressLines?.map(line => ({type: STRING, value: line})) || null,
+                addr.postalBox ? {type: STRING, value: addr.postalBox} : null,
                 addr.town ? {type: STRING, value: addr.town} : null,
                 addr.region ? {type: STRING, value: addr.region} : null,
                 addr.postalCode ? {type: STRING, value: addr.postalCode} : null,
@@ -367,37 +374,33 @@ export class ModelApi extends BaseApi {
         const authorIds = [];
         if(!Array.isArray(authors)) authors = [authors];
         for(const author of authors) {
-            const { name, surname, address, organization } = author;
-            let addressId;
-            if(address) {
-                if(typeof address === 'number') addressId = address;
-                else
-                    addressId = this.AddPostalAddress(modelID, address) as number;
+            let { familyName, givenName, middleNames, prefixTitles, suffixTitles, roles, address, organization } = author;
+            if(address && typeof address[0] !== 'number') {
+                address = this.AddPostalAddress(modelID, address as PostalAddress[]) as number[];
             }
+            
+            if(address && !Array.isArray(address)) address = [address];
 
             let authorId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSON,
                 null, 
-                {type: STRING, value: name + (surname ? ' ' + surname : '')},
-                surname ? {type: STRING, value: surname} : null,
-                null,
-                null,
-                null,
-                [{type: EMPTY}], // refs to actor roles
-                addressId ? [{type: REF, value: addressId}] : [{type: EMPTY}]
-            ));
+                {type: STRING, value: familyName},
+                givenName ? {type: STRING, value: givenName} : null,
+                middleNames?.map((name) => ({type: STRING, value: name})) || null,
+                prefixTitles?.map((title) => ({type: STRING, value: title})) || null,
+                suffixTitles?.map((title) => ({type: STRING, value: title})) || null,
+                roles?.map((role) => ({type: REF, value: role})) || null,
+                address?.map((addr) => ({type: REF, value: addr})) || null,
+            )) as number;
 
             if(organization) {
-                let organizationId;
-                if(typeof organization === 'number')
-                    organizationId = organization;
-                else
-                    organizationId = this.AddOrganization(modelID, organization);
+                if(typeof organization !== 'number')
+                    organization = this.AddOrganization(modelID, organization) as number;
 
                 authorId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSONANDORGANIZATION,
-                    {type: REF, value: authorId as number},
-                    {type: REF, value: organizationId as number},
-                    [{type: EMPTY}] // refs to actor roles
-                ));
+                    {type: REF, value: authorId},
+                    {type: REF, value: organization},
+                    null // refs to actor roles
+                )) as number;
             }
 
             authorIds.push(authorId as number);
@@ -537,7 +540,7 @@ export class ModelApi extends BaseApi {
                 b.ownerHistory ? {type: REF, value: b.ownerHistory} : null,
                 b.name ? {type: STRING, value: b.name} : null,
                 b.description? {type: STRING, value: b.description} : null,
-                null,
+                b.objectType ? {type: ENUM, value: b.objectType} : null,
                 b.objectPlacement ? {type: REF, value: b.objectPlacement} : null,
                 null,
                 b.longName ? {type: STRING, value: b.longName} : null,
@@ -575,8 +578,8 @@ export class ModelApi extends BaseApi {
                 {type: STRING, value: s.globalId || guid()},
                 s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
                 s.name ? {type: STRING, value: s.name} : null,
-                null,
                 s.description ? {type: STRING, value: s.description} : null,
+                s.objectType ? {type: ENUM, value: s.objectType} : null,
                 s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
                 null,
                 s.longName ? {type: STRING, value: s.longName} : null,
@@ -612,8 +615,8 @@ export class ModelApi extends BaseApi {
                 {type: STRING, value: s.globalId || guid()},
                 s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
                 s.name ? {type: STRING, value: s.name} : null,
-                null,
                 s.description ? {type: STRING, value: s.description} : null,
+                s.objectType ? {type: ENUM, value: s.objectType} : null,
                 s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
                 null,
                 s.longName ? {type: STRING, value: s.longName} : null,
@@ -653,8 +656,8 @@ export class ModelApi extends BaseApi {
                 {type: STRING, value: s.globalId || guid()},
                 s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
                 s.name ? {type: STRING, value: s.name} : null,
-                null,
                 s.description ? {type: STRING, value: s.description} : null,
+                s.objectType ? {type: ENUM, value: s.objectType} : null,
                 s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
                 null,
                 s.longName ? {type: STRING, value: s.longName} : null,
