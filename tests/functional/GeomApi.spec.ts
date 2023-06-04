@@ -11,7 +11,7 @@ describe('GeomApi', () => {
         await ifcApi.Init();
         ifcApi.SetLogLevel(WebIFC.LogLevel.LOG_LEVEL_OFF);
         const model = {
-            schema: WebIFC.Schemas.IFC4,
+            schema: WebIFC.Schemas.IFC4X3,
             name: 'ModelApi',
             description: ['ViewDefinition []'],
             organizations: ['Acme'],

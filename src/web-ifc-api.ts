@@ -19,9 +19,7 @@ import {
     ToRawLineData,
     SchemaNames
 } from "./ifc-schema";
-import { ModelApi } from "./api/modelApi";
-import { PropsApi } from "./api/propsApi";
-import { GeomApi } from "./api/geomApi";
+import { ModelApi, PropsApi, GeomApi } from "./api";
 import { Properties } from "./helpers/properties";
 import { Log, LogLevel } from "./helpers/log";
 

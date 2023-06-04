@@ -10,7 +10,6 @@ import {
     STRING,
     REF,
     IfcLineObject,
-    EMPTY
 } from "../web-ifc-api";
 import { 
     IFCGEOMETRICREPRESENTATIONCONTEXT,
@@ -23,6 +22,7 @@ import {
     IFCCARTESIANPOINTLIST3D,
     IFCCARTESIANPOINTLIST2D,
 } from "../ifc-schema";
+import { BaseApi } from "./baseApi";
 
 
 export interface GeometricRepresentationContext {
@@ -82,8 +82,10 @@ export interface Direction extends CartesianPoint {}
  * GeomApi class,
  * create geometric entities
  */
-export class GeomApi {
-    constructor(private api: IfcAPI) {}
+export class GeomApi extends BaseApi {
+    constructor(api: IfcAPI) {
+        super(api);
+    }
 
     /**
      * Adds one or multiple IfcGeometricRepresentationContext to the model.

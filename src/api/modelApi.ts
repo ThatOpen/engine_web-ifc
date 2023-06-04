@@ -33,6 +33,7 @@ import {
 } from "../ifc-schema";
 import { guid } from "../helpers/guid";
 //import { Log } from "../helpers/log";
+import { BaseApi } from "./baseApi";
 
 export interface Model {
     schema: string;
@@ -119,8 +120,10 @@ export interface Unit {
 /**
  * ModelApi class
  */
-export class ModelApi {
-    constructor(private api: IfcAPI) {}
+export class ModelApi extends BaseApi {
+    constructor(api: IfcAPI) {
+        super(api);
+    }
 
     /**
      * Creates a new model and returns a modelID number
