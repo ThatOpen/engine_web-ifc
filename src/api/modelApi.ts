@@ -11,7 +11,8 @@ import {
     STRING,
     REF,
     ENUM,
-    EMPTY
+    EMPTY,
+    UNKNOWN
 } from "../web-ifc-api";
 import { 
     FILE_DESCRIPTION,
@@ -78,7 +79,13 @@ export interface OwnerHistory {
     state?: string;
 }
 
-export interface PostalAddress {
+export interface Address {
+    purpose?: string;
+    description?: string;
+    userDefinedPurpose?: string;
+}
+
+export interface PostalAddress extends Address {
     country: string;
     addressLines?: string[];
     postalBox?: string;
@@ -108,6 +115,12 @@ export interface Organization {
     description?: string;
     roles?: number [] | ActorRole[];
     addresses?: number [] | PostalAddress[];
+}
+
+export interface Unit {
+    unitType: string;
+    name: string;
+    prefix?: string;
 }
 
 /**
@@ -178,55 +191,52 @@ export class ModelApi {
 
         const appId = this.AddApplication(modelId, {
             applicationDev: 7,
-            version: new Date().getFullYear().toString(),
+            version: api.GetVersion(),
             applicationFullName: appName,
             applicationIdentifier: 'web-ifc'
         });
 
-        const [ axisId ] = api.geomApi.AddAxis2Placement3D(modelId, {
+        const axisId = api.geomApi.AddAxis2Placement3D(modelId, {
             location: 1,
             axis: 5,
             refDirection: 3,
         });
 
-        const geoRepCtxIds = api.geomApi.AddGeometricRepresentationContext(modelId, {
+        const geoRepCtxId = api.geomApi.AddGeometricRepresentationContext(modelId, {
             contextType: 'Model_View',
             coordinateSpaceDimension: 3,
-            worldCoordinateSystem: axisId,
+            worldCoordinateSystem: axisId as number,
             trueNorth: 4,
         });
 
-        api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT));
-        api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT));
-        api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT));
-        api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT));
-        api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT));
-        api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCUNITASSIGNMENT, [
-               {type: REF, value: 11},
-               {type: REF, value: 12},
-               {type: REF, value: 13},
-               {type: REF, value: 14},
-               {type: REF, value: 15}
-           ]));
+        const siUnitIds = this.AddSIUnit(modelId, [
+            { unitType: 'LENGTHUNIT', name: 'METRE' },
+            { unitType: 'AREAUNIT', name: 'SQUARE_METRE' },
+            { unitType: 'VOLUMEUNIT', name: 'CUBIC_METRE' },
+            { unitType: 'PLANEANGLEUNIT', name: 'RADIAN' },
+            { unitType: 'MASSUNIT', name: 'GRAM' , prefix: 'KILO' },
+            { unitType: 'TIMEUNIT', name: 'SECOND' },
+        ]);
+        const unitAssignmentId = this.AddUnitAssignment(modelId, siUnitIds as number[]);
 
-        this.AddProject(modelId, { 
-            ownerHistory: 9999,
-            name: modelName,
-            description: description[0].value,
-            representationContexts: geoRepCtxIds,
-            unitAssignment: 16,
-        });
-
-        const [ authorId ] = this.AddPerson(modelId, model.authors || []);
-        this.AddOwnerHistory(modelId, {
-            owningUser: authorId,
-            owningApplication: appId,
+        const authorId = this.AddPerson(modelId, model.authors || []);
+        const ownerHistoryId = this.AddOwnerHistory(modelId, {
+            owningUser: authorId as number,
+            owningApplication: appId as number,
             creationDate: Date.now(),
-            lastModifyingApplication: appId,
-            lastModifyingUser: authorId,
+            lastModifyingApplication: appId as number,
+            lastModifyingUser: authorId as number,
             lastModifiedDate: Date.now(),
             changeAction: 'ADDED',
             state: 'READWRITE'
+        });
+
+        this.AddProject(modelId, { 
+            ownerHistory: ownerHistoryId,
+            name: modelName,
+            description: description[0].value,
+            representationContexts: [geoRepCtxId as number],
+            unitAssignment: unitAssignmentId as number
         });
 
         return modelId;
@@ -258,45 +268,75 @@ export class ModelApi {
         if(projectIds && projectIds.size() > 0)
             projectLine.expressID = projectIds.get(0);
 
-        const [ id ] = api.WriteLine(modelId, projectLine);
+        const id = api.WriteLine(modelId, projectLine);
         return id;
     }
 
+    /**
+     * Adds an application to the model
+     * @param modelId model id
+     * @param application application
+     * @returns application id
+     */
     AddApplication(modelId: number, application: Application) {
         const api = this.api;
-        const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCAPPLICATION,
+        const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCAPPLICATION,
             {type: REF, value: application.applicationDev},
             {type: STRING, value: application.version},
             {type: STRING, value: application.applicationFullName},
             {type: STRING, value: application.applicationIdentifier}
         ));
-        return id;
+        return id as number;
     }
 
+    /**
+     * Adds one or multiple postal address to the model
+     * @param modelId model id
+     * @param address address or array of addresses
+     * @returns address id or array of address ids
+     */
+    AddPostalAddress(modelId: number, address: PostalAddress | PostalAddress[]) {
+        const api = this.api;
+        if(!Array.isArray(address)) address = [address];
+        const addressIds = [];
+
+        for(const addr of address) {
+            const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCPOSTALADDRESS,
+                {type: ENUM, value: addr.purpose || 'OFFICE'},
+                addr.description ? {type: STRING, value: addr.description} : null,
+                addr.userDefinedPurpose ? {type: STRING, value: addr.userDefinedPurpose} : null,
+                null,
+                addr.addressLines?.map(line => ({type: STRING, value: line})) || [{type: EMPTY}],
+                null,
+                addr.town ? {type: STRING, value: addr.town} : null,
+                addr.region ? {type: STRING, value: addr.region} : null,
+                addr.postalCode ? {type: STRING, value: addr.postalCode} : null,
+                addr.country ? {type: STRING, value: addr.country} : null
+            ));
+            addressIds.push(id as number);
+        }
+        return addressIds.length > 1 ? addressIds : addressIds[0];
+    }
+
+    /**
+     * Adds one or multiple person to the model
+     * @param modelID model id
+     * @param authors author or array of authors
+     * @returns author id or array of author ids
+     */
     AddPerson(modelID: number, authors: Person | Person[]) {
         const authorIds = [];
         if(!Array.isArray(authors)) authors = [authors];
         for(const author of authors) {
             const { name, surname, address, organization } = author;
-            let addressIds;
+            let addressId;
             if(address) {
-                if(typeof address === 'number') addressIds = [address];
+                if(typeof address === 'number') addressId = address;
                 else
-                    addressIds = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPOSTALADDRESS,
-                        null,
-                        null,
-                        null,
-                        null,
-                        address.addressLines?.map(line => ({type: STRING, value: line})) || [{type: EMPTY}],
-                        null,
-                        address.town ? {type: STRING, value: address.town} : null,
-                        address.region ? {type: STRING, value: address.region} : null,
-                        address.postalCode ? {type: STRING, value: address.postalCode} : null,
-                        {type: STRING, value: address.country}
-                    ));
+                    addressId = this.AddPostalAddress(modelID, address) as number;
             }
 
-            let [ authorId ] = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSON,
+            let authorId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSON,
                 null, 
                 {type: STRING, value: name + (surname ? ' ' + surname : '')},
                 surname ? {type: STRING, value: surname} : null,
@@ -304,7 +344,7 @@ export class ModelApi {
                 null,
                 null,
                 [{type: EMPTY}], // refs to actor roles
-                addressIds ? [{type: REF, value: addressIds[0]}] : [{type: EMPTY}]
+                addressId ? [{type: REF, value: addressId}] : [{type: EMPTY}]
             ));
 
             if(organization) {
@@ -312,43 +352,69 @@ export class ModelApi {
                 if(typeof organization === 'number')
                     organizationId = organization;
                 else
-                    organizationId = this.AddOrganization(modelID, organization)[0];
+                    organizationId = this.AddOrganization(modelID, organization);
 
                 authorId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSONANDORGANIZATION,
-                    {type: REF, value: authorId},
-                    {type: REF, value: organizationId},
+                    {type: REF, value: authorId as number},
+                    {type: REF, value: organizationId as number},
                     [{type: EMPTY}] // refs to actor roles
-                ))[0];
+                ));
             }
-            
-            authorIds.push(authorId);
+
+            authorIds.push(authorId as number);
         }
 
-        return authorIds;
+        return authorIds.length > 1 ? authorIds : authorIds[0];
     }
 
+    /**
+     * Adds one or multiple organization to the model
+     * @param modelId model id
+     * @param organizations organization or array of organizations
+     * @returns organization id or array of organization ids
+     */
     AddOrganization(modelId: number, organizations: Organization | Organization[]) {
         const api = this.api;
         const organizationIds = [];
         if(!Array.isArray(organizations)) organizations = [organizations];
 
         for(const organization of organizations) {
-            const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCORGANIZATION,
-                null, 
+            if(organization.addresses) {
+                if(typeof organization.addresses[0] === 'number')
+                    organization.addresses = organization.addresses as number[];
+                else
+                    organization.addresses = this.AddPostalAddress(modelId, organization.addresses as PostalAddress[]) as number[];
+            }
+
+            if(organization.roles) {
+                if(typeof organization.roles[0] === 'number')
+                    organization.roles = organization.roles as number[];
+                else
+                    organization.roles = this.AddActorRole(modelId, organization.roles as ActorRole[]) as number[];
+            }
+
+            const id  = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCORGANIZATION,
+                organization.id ? {type: STRING, value: organization.id} : null, 
                 {type: STRING, value: organization.name}, 
                 organization.description ? {type: STRING, value: organization.description} : null,
-                null,
-                null
+                organization.roles ? organization.roles.map((role) => ({type: REF, value: role})) : null,
+                organization.addresses ? organization.addresses.map((address) => ({type: REF, value: address})) : null,
             ));
-            organizationIds.push(id);
+            organizationIds.push(id as number);
         }
 
-        return organizationIds;
+        return organizationIds.length > 1 ? organizationIds : organizationIds[0];
     }
 
+    /**
+     * Adds an owner history to the model
+     * @param modelId model id
+     * @param ownerHistory owner history
+     * @returns owner history id
+     */
     AddOwnerHistory(modelId: number, ownerHistory: OwnerHistory) {
         const api = this.api;
-        const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCOWNERHISTORY,
+        const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCOWNERHISTORY,
             {type: REF, value: ownerHistory.owningUser},
             {type: REF, value: ownerHistory.owningApplication},
             ownerHistory.state ? {type: ENUM, value: ownerHistory.state} : null,
@@ -358,19 +424,55 @@ export class ModelApi {
             ownerHistory.lastModifyingApplication ? {type: REF, value: ownerHistory.lastModifyingApplication} : null,
             ownerHistory.lastModifiedDate ? {type: REAL, value: ownerHistory.lastModifiedDate} : null
         ));
-        return id;
+        return id as number;
     }
 
-    AddActorRole(modelId: number, role: ActorRole) {
+    /**
+     * Adds one or multiple actor role to the model
+     * @param modelId model id
+     * @param role actor role or array of actor roles
+     * @returns actor role id or array of actor role ids
+     */
+    AddActorRole(modelId: number, role: ActorRole | ActorRole[]) {
         const api = this.api;
-        const [ id ] = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCACTORROLE,
-            {type: ENUM, value: role.role},
-            role.userDefinedRole ? {type: STRING, value: role.userDefinedRole} : null,
-            role.description ? {type: STRING, value: role.description} : null
-        ));
-        return id;
+        if(!Array.isArray(role)) role = [role];
+        const roleIds = [];
+
+        for(const r of role) {
+            const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCACTORROLE,
+                {type: ENUM, value: r.role},
+                r.userDefinedRole ? {type: STRING, value: r.userDefinedRole} : null,
+                r.description ? {type: STRING, value: r.description} : null
+            ));
+            roleIds.push(id as number);
+        }
+        return roleIds.length > 1 ? roleIds : roleIds[0];
     }
 
+    AddSIUnit(modelId: number, units: Unit | Unit[]) {
+        const api = this.api;
+        if(!Array.isArray(units)) units = [units];
+        const unitIds = [];
+
+        for(const unit of units) {
+            const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT,
+                {type: UNKNOWN},
+                {type: ENUM, value: unit.unitType},
+                unit.prefix ? {type: ENUM, value: unit.prefix} : null,
+                {type: ENUM, value: unit.name},
+            ));
+            unitIds.push(id as number);
+        }
+        return unitIds.length > 1 ? unitIds : unitIds[0];
+    }
+
+    AddUnitAssignment(modelId: number, unitIds: number[]) {
+        const api = this.api;
+        const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCUNITASSIGNMENT,
+            unitIds.map((unit) => ({type: REF, value: unit}))
+        ));
+        return id as number;
+    }
 
     /*
     AddGeoReference(modelID: number, geoRef: IfcGeoRef): void {

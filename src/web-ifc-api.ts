@@ -577,7 +577,7 @@ export class IfcAPI {
             this.WriteRawLineData(modelID, rawLineData);
             lineIds.push(lineObject.expressID);
         }
-        return lineIds;
+        return lineIds.length > 1 ? lineIds : lineIds[0];
     }
 
 	/**
