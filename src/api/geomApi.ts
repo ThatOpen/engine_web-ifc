@@ -21,7 +21,10 @@ import {
     IFCSHAPEREPRESENTATION,
     IFCCARTESIANPOINTLIST3D,
     IFCCARTESIANPOINTLIST2D,
-    IFCPOLYLINE
+    IFCPOLYLINE,
+    IFCSPHERE,
+    IFCBLOCK,
+    IFCRIGHTCIRCULARCYLINDER
 } from "../ifc-schema";
 import { BaseApi } from "./baseApi";
 
@@ -54,6 +57,12 @@ export interface Axis2Placement3D extends Placement {
     refDirection?: number | Direction; 
 }
 
+/*
+export interface GridPlacement {
+    placementLocation: number | Axis2Placement3D;
+    placementRefDirection?: number | Direction;
+}
+*/
 export interface LocalPlacement {
     relativePlacement: number | Axis2Placement3D;
     placementRelTo?: number | ObjectPlacement;
@@ -415,4 +424,31 @@ export class GeomApi extends BaseApi {
         return api.WriteLine(modelId, polylineLines);
     }
 
+    AddCsgPrimitive3D(modelId: number, primitive: CsgPrimitive3D) {
+        const api = this.api;
+        let position: number;
+        const args = [];
+        let entityType: number;
+
+        if(typeof primitive.position !== 'number') {
+            position = this.AddAxis2Placement3D(modelId, primitive.position) as number;
+        } else position = primitive.position;
+        args.push({type: REF, value: position});
+
+        if('xLength' in primitive && 'yLength' in primitive && 'zLength' in primitive) {
+            args.push({type: REAL, value: primitive.xLength});
+            args.push({type: REAL, value: primitive.yLength});
+            args.push({type: REAL, value: primitive.zLength});
+            entityType =  IFCBLOCK;
+        } else if('radius' in primitive && 'height' in primitive) {
+            args.push({type: REAL, value: primitive.radius});
+            args.push({type: REAL, value: primitive.height});
+            entityType =  IFCRIGHTCIRCULARCYLINDER;
+        } else if('radius' in primitive) {
+            args.push({type: REAL, value: primitive.radius});
+            entityType =  IFCSPHERE;
+        } else throw new Error('Invalid primitive');
+
+        return api.WriteLine(modelId, api.CreateIfcEntity(modelId, entityType, ...args));
+    }
 }
