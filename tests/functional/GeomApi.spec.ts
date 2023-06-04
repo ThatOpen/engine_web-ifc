@@ -62,6 +62,17 @@ describe('GeomApi', () => {
         ifcApi.geomApi.AddCartesianPointList3D(modelId, cartesianPointList3D);
     });
 
+    test('Add Polyline', () => {
+        const polyline = {
+            points: [
+                {x: 0, y: 0, z: 0,}, 
+                {x: 1, y: 0, z: 0},
+                {x: 1, y: 1, z: 0},
+            ],
+        };
+        ifcApi.geomApi.AddPolyline(modelId, polyline);
+    });
+
     afterAll(() => {
         const buffer = ifcApi.SaveModel(modelId);
         fs.writeFileSync(path.join(__dirname, '../artifacts/geomApi.ifc'), buffer);

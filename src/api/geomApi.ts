@@ -21,6 +21,7 @@ import {
     IFCSHAPEREPRESENTATION,
     IFCCARTESIANPOINTLIST3D,
     IFCCARTESIANPOINTLIST2D,
+    IFCPOLYLINE
 } from "../ifc-schema";
 import { BaseApi } from "./baseApi";
 
@@ -74,6 +75,36 @@ export interface ShapeRepresentation {
     representationType?: string;
     representationId?: string;
     items: number[];
+}
+
+interface CsgPrimitive3D {
+    position: number | Axis2Placement3D;
+}
+
+export interface Sphere extends CsgPrimitive3D {
+    radius: number;
+}
+
+export interface Block extends CsgPrimitive3D {
+    xLength: number;
+    yLength: number;
+    zLength: number;
+}
+
+export interface Cylinder extends CsgPrimitive3D {
+    radius: number;
+    height: number;
+}
+
+interface ManifoldSolidBrep {
+    outer: number;
+}
+
+export interface AdvancedBrep extends ManifoldSolidBrep {}
+export interface FacetedBrep extends ManifoldSolidBrep {}
+
+export interface Polyline {
+    points: number[] | CartesianPoint[];
 }
 
 export interface Direction extends CartesianPoint {}
@@ -355,4 +386,33 @@ export class GeomApi extends BaseApi {
         
         return api.WriteLine(modelId, shapeRepresentationLines);
     }
+
+    /**
+     * Adds one or multiple IfcPolyline to the model.
+     * @param modelId model id
+     * @param polyline polyline to add, can be one or multiple polylines
+     * @returns polyline id or ids
+     */
+    AddPolyline(modelId: number, polyline: Polyline | Polyline[]) {
+        const api = this.api;
+        if (!Array.isArray(polyline)) polyline = [polyline];
+        const polylineLines: IfcLineObject[] = [];
+
+        polyline.forEach((poly) => {
+            let points: number[];
+
+            if(poly.points && typeof poly.points[0] !== 'number') {
+                points = this.AddCartesianPoint(modelId, poly.points as CartesianPoint[]) as number[];
+            } else points = poly.points as number[];
+
+            if(points.length < 2) throw new Error('Polyline must have at least 2 points');
+
+            polylineLines.push(api.CreateIfcEntity(modelId, IFCPOLYLINE,
+                points.map((id) => ({type: REF, value: id})),
+            ));
+        });
+
+        return api.WriteLine(modelId, polylineLines);
+    }
+
 }
