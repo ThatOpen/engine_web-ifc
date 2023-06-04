@@ -29,11 +29,20 @@ import {
     IFCPERSON,
     IFCPOSTALADDRESS,
     IFCPERSONANDORGANIZATION,
-    IFCACTORROLE
+    IFCACTORROLE,
+    IFCBUILDING,
 } from "../ifc-schema";
 import { guid } from "../helpers/guid";
 //import { Log } from "../helpers/log";
 import { BaseApi } from "./baseApi";
+import { LocalPlacement } from "./geomApi";
+
+interface Root {
+    globalId?: string;
+    name?: string;
+    description?: string[];
+    ownerHistory?: number | OwnerHistory;
+}
 
 export interface Model {
     schema: string;
@@ -115,6 +124,40 @@ export interface Unit {
     unitType: string;
     name: string;
     prefix?: string;
+}
+
+export interface Product extends Root {
+    objectPlacement?: number | LocalPlacement; // TODO: | GridPlacement;
+}
+
+export interface SpatialElement extends Product {
+    longName?: string;
+}
+
+export interface SpatialStructureElement extends SpatialElement {
+    compositionType?: string;
+}
+
+export interface Building extends SpatialStructureElement {
+    buildingAddress?: number | PostalAddress;
+    elevationOfRefHeight?: number;
+    elevationOfTerrain?: number;
+}
+
+export interface BuildingStorey extends SpatialStructureElement {
+    elevation?: number;
+}
+
+export interface Site extends SpatialStructureElement {
+    refLatitude?: number[];
+    refLongitude?: number[];
+    refElevation?: number;
+    landTitleNumber?: string;
+    siteAddress?: number | PostalAddress;
+}
+
+export interface Space extends SpatialStructureElement {
+    elevationWithFlooring?: number;
 }
 
 /**
@@ -372,18 +415,12 @@ export class ModelApi extends BaseApi {
         if(!Array.isArray(organizations)) organizations = [organizations];
 
         for(const organization of organizations) {
-            if(organization.addresses) {
-                if(typeof organization.addresses[0] === 'number')
-                    organization.addresses = organization.addresses as number[];
-                else
-                    organization.addresses = this.AddPostalAddress(modelId, organization.addresses as PostalAddress[]) as number[];
+            if(organization.addresses && typeof organization.addresses[0] !== 'number') {
+                organization.addresses = this.AddPostalAddress(modelId, organization.addresses as PostalAddress[]) as number[];
             }
 
-            if(organization.roles) {
-                if(typeof organization.roles[0] === 'number')
-                    organization.roles = organization.roles as number[];
-                else
-                    organization.roles = this.AddActorRole(modelId, organization.roles as ActorRole[]) as number[];
+            if(organization.roles && typeof organization.roles[0] !== 'number') {
+                organization.roles = this.AddActorRole(modelId, organization.roles as ActorRole[]) as number[];
             }
 
             organizationLines.push(api.CreateIfcEntity(modelId, IFCORGANIZATION,
@@ -466,6 +503,140 @@ export class ModelApi extends BaseApi {
         return api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCUNITASSIGNMENT,
             unitIds.map((unit) => ({type: REF, value: unit}))
         )) as number;
+    }
+
+    AddBuilding(modelId: number, building: Building | Building[]) {
+        const api = this.api;
+        if(!Array.isArray(building)) building = [building];
+        const buildingLines = [];
+
+        for(const b of building) {
+            if(b.buildingAddress && typeof b.buildingAddress !== 'number') {
+                b.buildingAddress = this.AddPostalAddress(modelId, b.buildingAddress) as number;
+            }
+
+            if(b.ownerHistory && typeof b.ownerHistory !== 'number') {
+                b.ownerHistory = this.AddOwnerHistory(modelId, b.ownerHistory) as number;
+            }
+
+            if(b.objectPlacement && typeof b.objectPlacement !== 'number') {
+                b.objectPlacement = api.geomApi.AddLocalPlacement(modelId, b.objectPlacement) as number;
+            }
+
+            buildingLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
+                {type: STRING, value: b.globalId || guid()},
+                b.ownerHistory ? {type: REF, value: b.ownerHistory} : null,
+                b.name ? {type: STRING, value: b.name} : null,
+                b.description ? {type: STRING, value: b.description} : null,
+                null,
+                b.objectPlacement ? {type: REF, value: b.objectPlacement} : null,
+                null,
+                b.longName ? {type: STRING, value: b.longName} : null,
+                b.compositionType ? {type: ENUM, value: b.compositionType} : null,
+                null,
+                null,
+                b.buildingAddress ? {type: REF, value: b.buildingAddress} : null,
+            ));
+        }
+
+        return api.WriteLine(modelId, buildingLines);
+    }
+
+    AddBuildingStorey(modelId: number, storey: BuildingStorey | BuildingStorey[]) {
+        const api = this.api;
+        if(!Array.isArray(storey)) storey = [storey];
+        const storeyLines = [];
+
+        for(const s of storey) {
+            if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
+                s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
+            }
+
+            if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
+                s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
+            }
+
+            storeyLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
+                {type: STRING, value: s.globalId || guid()},
+                s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
+                s.name ? {type: STRING, value: s.name} : null,
+                null,
+                s.description ? {type: STRING, value: s.description} : null,
+                s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
+                null,
+                s.longName ? {type: STRING, value: s.longName} : null,
+                s.compositionType ? {type: ENUM, value: s.compositionType} : null,
+                s.elevation ? {type: REAL, value: s.elevation} : null,
+            ));
+        }
+
+        return api.WriteLine(modelId, storeyLines);
+    }
+
+    AddSite(modelId: number, site: Site | Site[]) {
+        const api = this.api;
+        if(!Array.isArray(site)) site = [site];
+        const siteLines = [];
+
+        for(const s of site) {
+            if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
+                s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
+            }
+
+            if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
+                s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
+            }
+
+            siteLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
+                {type: STRING, value: s.globalId || guid()},
+                s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
+                s.name ? {type: STRING, value: s.name} : null,
+                null,
+                s.description ? {type: STRING, value: s.description} : null,
+                s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
+                null,
+                s.longName ? {type: STRING, value: s.longName} : null,
+                s.compositionType ? {type: ENUM, value: s.compositionType} : null,
+                s.refLatitude ? s.refLatitude.map(lat => ({type: REAL, value: lat})) : null,
+                s.refLongitude ? s.refLongitude.map(lon => ({type: REAL, value: lon})) : null,
+                s.refElevation ? {type: REAL, value: s.refElevation} : null,
+                s.landTitleNumber ? {type: STRING, value: s.landTitleNumber} : null,
+                s.siteAddress ? {type: REF, value: s.siteAddress} : null,
+            ));
+        }
+
+        return api.WriteLine(modelId, siteLines);
+    }
+
+    AddSpace(modelId: number, space: Space | Space[]) {
+        const api = this.api;
+        if(!Array.isArray(space)) space = [space];
+        const spaceLines = [];
+
+        for(const s of space) {
+            if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
+                s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
+            }
+
+            if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
+                s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
+            }
+
+            spaceLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
+                {type: STRING, value: s.globalId || guid()},
+                s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
+                s.name ? {type: STRING, value: s.name} : null,
+                null,
+                s.description ? {type: STRING, value: s.description} : null,
+                s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
+                null,
+                s.longName ? {type: STRING, value: s.longName} : null,
+                s.compositionType ? {type: ENUM, value: s.compositionType} : null,
+                s.elevationWithFlooring ? {type: REAL, value: s.elevationWithFlooring} : null,
+            ));
+        }
+
+        return api.WriteLine(modelId, spaceLines);
     }
 
     /*
