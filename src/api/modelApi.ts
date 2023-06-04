@@ -236,7 +236,7 @@ export class ModelApi {
             name: modelName,
             description: description[0].value,
             representationContexts: [geoRepCtxId as number],
-            unitAssignment: unitAssignmentId as number
+            unitAssignment: unitAssignmentId
         });
 
         return modelId;
@@ -268,8 +268,7 @@ export class ModelApi {
         if(projectIds && projectIds.size() > 0)
             projectLine.expressID = projectIds.get(0);
 
-        const id = api.WriteLine(modelId, projectLine);
-        return id;
+        return api.WriteLine(modelId, projectLine) as number;
     }
 
     /**
@@ -280,13 +279,12 @@ export class ModelApi {
      */
     AddApplication(modelId: number, application: Application) {
         const api = this.api;
-        const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCAPPLICATION,
+        return api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCAPPLICATION,
             {type: REF, value: application.applicationDev},
             {type: STRING, value: application.version},
             {type: STRING, value: application.applicationFullName},
             {type: STRING, value: application.applicationIdentifier}
-        ));
-        return id as number;
+        )) as number;
     }
 
     /**
@@ -298,10 +296,10 @@ export class ModelApi {
     AddPostalAddress(modelId: number, address: PostalAddress | PostalAddress[]) {
         const api = this.api;
         if(!Array.isArray(address)) address = [address];
-        const addressIds = [];
+        const addressLines = [];
 
         for(const addr of address) {
-            const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCPOSTALADDRESS,
+            addressLines.push(api.CreateIfcEntity(modelId, IFCPOSTALADDRESS,
                 {type: ENUM, value: addr.purpose || 'OFFICE'},
                 addr.description ? {type: STRING, value: addr.description} : null,
                 addr.userDefinedPurpose ? {type: STRING, value: addr.userDefinedPurpose} : null,
@@ -313,9 +311,8 @@ export class ModelApi {
                 addr.postalCode ? {type: STRING, value: addr.postalCode} : null,
                 addr.country ? {type: STRING, value: addr.country} : null
             ));
-            addressIds.push(id as number);
         }
-        return addressIds.length > 1 ? addressIds : addressIds[0];
+        return api.WriteLine(modelId, addressLines);
     }
 
     /**
@@ -375,7 +372,7 @@ export class ModelApi {
      */
     AddOrganization(modelId: number, organizations: Organization | Organization[]) {
         const api = this.api;
-        const organizationIds = [];
+        const organizationLines = [];
         if(!Array.isArray(organizations)) organizations = [organizations];
 
         for(const organization of organizations) {
@@ -393,17 +390,16 @@ export class ModelApi {
                     organization.roles = this.AddActorRole(modelId, organization.roles as ActorRole[]) as number[];
             }
 
-            const id  = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCORGANIZATION,
+            organizationLines.push(api.CreateIfcEntity(modelId, IFCORGANIZATION,
                 organization.id ? {type: STRING, value: organization.id} : null, 
                 {type: STRING, value: organization.name}, 
                 organization.description ? {type: STRING, value: organization.description} : null,
                 organization.roles ? organization.roles.map((role) => ({type: REF, value: role})) : null,
                 organization.addresses ? organization.addresses.map((address) => ({type: REF, value: address})) : null,
             ));
-            organizationIds.push(id as number);
         }
 
-        return organizationIds.length > 1 ? organizationIds : organizationIds[0];
+        return api.WriteLine(modelId, organizationLines);
     }
 
     /**
@@ -414,7 +410,7 @@ export class ModelApi {
      */
     AddOwnerHistory(modelId: number, ownerHistory: OwnerHistory) {
         const api = this.api;
-        const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCOWNERHISTORY,
+        return api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCOWNERHISTORY,
             {type: REF, value: ownerHistory.owningUser},
             {type: REF, value: ownerHistory.owningApplication},
             ownerHistory.state ? {type: ENUM, value: ownerHistory.state} : null,
@@ -423,8 +419,7 @@ export class ModelApi {
             ownerHistory.lastModifyingUser ? {type: REF, value: ownerHistory.lastModifyingUser} : null,
             ownerHistory.lastModifyingApplication ? {type: REF, value: ownerHistory.lastModifyingApplication} : null,
             ownerHistory.lastModifiedDate ? {type: REAL, value: ownerHistory.lastModifiedDate} : null
-        ));
-        return id as number;
+        )) as number;
     }
 
     /**
@@ -436,59 +431,50 @@ export class ModelApi {
     AddActorRole(modelId: number, role: ActorRole | ActorRole[]) {
         const api = this.api;
         if(!Array.isArray(role)) role = [role];
-        const roleIds = [];
+        const roleLines = [];
 
         for(const r of role) {
-            const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCACTORROLE,
+            roleLines.push(api.CreateIfcEntity(modelId, IFCACTORROLE,
                 {type: ENUM, value: r.role},
                 r.userDefinedRole ? {type: STRING, value: r.userDefinedRole} : null,
                 r.description ? {type: STRING, value: r.description} : null
             ));
-            roleIds.push(id as number);
         }
-        return roleIds.length > 1 ? roleIds : roleIds[0];
+        return api.WriteLine(modelId, roleLines);
     }
 
     AddSIUnit(modelId: number, units: Unit | Unit[]) {
         const api = this.api;
         if(!Array.isArray(units)) units = [units];
-        const unitIds = [];
+        const unitLines = [];
 
         for(const unit of units) {
-            const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCSIUNIT,
+            unitLines.push(api.CreateIfcEntity(modelId, IFCSIUNIT,
                 {type: UNKNOWN},
                 {type: ENUM, value: unit.unitType},
                 unit.prefix ? {type: ENUM, value: unit.prefix} : null,
                 {type: ENUM, value: unit.name},
             ));
-            unitIds.push(id as number);
         }
-        return unitIds.length > 1 ? unitIds : unitIds[0];
+        return api.WriteLine(modelId, unitLines);
     }
 
+    /**
+     * Adds a unit assignment to the model
+     * @param modelId model id
+     * @param unitIds unit ids
+     * @returns unit assignment id
+     */
     AddUnitAssignment(modelId: number, unitIds: number[]) {
         const api = this.api;
-        const id = api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCUNITASSIGNMENT,
+        return api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCUNITASSIGNMENT,
             unitIds.map((unit) => ({type: REF, value: unit}))
-        ));
-        return id as number;
+        )) as number;
     }
 
     /*
     AddGeoReference(modelID: number, geoRef: IfcGeoRef): void {
 
     }
-
-    OwnerHistory(modelID: number, ownerHistoryID: number) {
-        const this.api = this this.api;
-        // TODO: handle existing owner history
-        const lines = this.api.GetLineIDsWithType(modelID, IFCOWNERHISTORY);
-        let ownerHistory;
-        if(lines && lines.size() > 0){
-            ownerHistory = this.api.GetLine(modelID, lines.get(0));
-        }
-     this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPROJECT));
-    }
-
     */
 }
