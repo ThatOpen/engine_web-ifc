@@ -456,12 +456,25 @@ namespace webifc::parsing {
        _tokenStream->Read<char>(); // real type
        return _tokenStream->Read<double>();
    }
+
+  uint32_t IfcLoader::GetCurrentLineExpressID() const
+  {
+      if (_lines.size()==0) return 0;
+      uint32_t pos = _tokenStream->GetReadOffset();
+      IfcLine prevLine;
+      for (auto &line: _lines)
+      {
+        if (line.tapeOffset > pos) break;
+        prevLine = line;
+      }
+      return prevLine.expressID;
+  }
    
    uint32_t IfcLoader::GetRefArgument() const
    { 
       if (_tokenStream->Read<char>() != IfcTokenType::REF)
      	{
-     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF");
+     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF", GetCurrentLineExpressID());
      		return 0;
      	}
      	return _tokenStream->Read<uint32_t>();
@@ -545,7 +558,7 @@ namespace webifc::parsing {
      	}
      	else
      	{
-     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY");
+     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY", GetCurrentLineExpressID());
      		return 0;
      	}
    }
@@ -607,7 +620,7 @@ namespace webifc::parsing {
          }
          else
          {
-           _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token");
+           _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token", GetCurrentLineExpressID());
          }
        }
 
@@ -670,7 +683,7 @@ namespace webifc::parsing {
      			}
      			else
      			{
-     				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token");
+     				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token", GetCurrentLineExpressID());
      			}
      		}
 
@@ -705,7 +718,7 @@ namespace webifc::parsing {
    		{
    		case IfcTokenType::LINE_END:
    		{
-   			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected line end");
+   			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected line end", GetCurrentLineExpressID());
    			break;
    		}
    		case IfcTokenType::UNKNOWN:
