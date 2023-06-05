@@ -468,7 +468,7 @@ export class IfcAPI {
      * @param args Arguments required by the entity
      * @returns An object contining the parameters of the new entity
      */
-    CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
+    CreateIfcEntity(modelID: number, type:number, ...args: any[] ): T extends IfcLineObject
     {
         return Constructors[this.modelSchemaList[modelID]][type](-1,args);
     }
@@ -617,7 +617,7 @@ export class IfcAPI {
      * @param modelID Model handle retrieved by OpenModel
      * @param data RawLineData containing the ID, type and arguments of the line
      */
-    WriteRawLineData(modelID: number, data: RawLineData) {
+    protected WriteRawLineData(modelID: number, data: RawLineData) {
         this.wasmModule.WriteLine(modelID, data.ID, data.type, data.arguments);
     }
 

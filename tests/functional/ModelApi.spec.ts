@@ -18,11 +18,11 @@ describe('ModelApi', () => {
             schema: WebIFC.Schemas.IFC4X3,
             name: 'ModelApi',
             author:  {
-                FamilyName: 'Schmitz',
-                GivenName: 'Jeroen',
-                MiddleNames: ['Peter'],
-                PrefixTitles: ['Ing.'],
-                SuffixTitles: ['MSc'],
+                FamilyName: {type: WebIFC.IFCLABEL, value: 'Meijer'},
+                GivenName: {type: WebIFC.IFCLABEL, value: 'Jeroen'},
+                MiddleNames: [{type: WebIFC.IFCLABEL, value: 'Peter'}],
+                PrefixTitles: [{type: WebIFC.IFCLABEL, value: 'Ing.'}],
+                SuffixTitles: [{type: WebIFC.IFCLABEL, value: 'MSc'}],
                 EngagedIn: null,
                 type: WebIFC.IFCPERSON
             },

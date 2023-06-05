@@ -370,10 +370,12 @@ export class GeomApi extends BaseApi {
                 representations = this.AddShapeRepresentation(modelId, productDefShape.representations as ShapeRepresentation[]) as number[];
             } else representations = productDefShape.representations as number[];
 
+            if(!Array.isArray(representations)) representations = [representations];
+
             productDefShapeLines.push(api.CreateIfcEntity(modelId, IFCPRODUCTDEFINITIONSHAPE,
                 productDefShape.name ? {type: STRING, value: productDefShape.name} : null,
                 productDefShape.description ? {type: STRING, value: productDefShape.description} : null,
-                representations ? representations.map((id) => ({type: REF, value: id})) : null,
+                representations?.map((id) => ({type: REF, value: id})) || null,
             ));
         });
 

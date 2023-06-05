@@ -21,6 +21,7 @@ completeEntityList.add("FILE_NAME");
 completeEntityList.add("FILE_DESCRIPTION");
 
 let typeList = new Set<string>();
+let stringTypes = new Set<string>();
 
 tsSchema.push('/**');
 tsSchema.push(' * Web-IFC IFC Schema Representation');
@@ -226,6 +227,9 @@ for (var i = 0; i < files.length; i++) {
           } 
 
           typeList.add(type.name);
+          if(typeNum === 1) {
+            stringTypes.add(type.name);
+          }
           tsSchema.push(`export class ${type.name} {`);
           tsSchema.push(`type: number=${typeNum};`);
           if (typeName=="number") {
@@ -243,8 +247,6 @@ for (var i = 0; i < files.length; i++) {
   
   for (var x=0; x < entities.length; x++) generateClass(entities[x], tsSchema,types,crcTable);
   tsSchema.push("}"); 
-   
-
 }
 
 // now write out the global c++/ts metadata. All the WASM needs to know about is a list of all entities
