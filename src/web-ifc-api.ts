@@ -404,7 +404,8 @@ export class IfcAPI {
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
+        let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
+        lineData.expressID = rawLineData.ID;
 
         if (flatten) {
             this.FlattenLine(modelID, lineData);
@@ -535,37 +536,41 @@ export class IfcAPI {
         if(!Array.isArray(lineObjects)) lineObjects = [lineObjects];
 
         for(const lineObject of lineObjects) {
-            for (property in lineObject)
-        {
-            const lineProperty: any = lineObject[property];
-            if (lineProperty  && (lineProperty as IfcLineObject).expressID !== undefined) {
+            for (property in lineObject) {
+                const lineProperty: any = lineObject[property];
+                if (lineProperty  && (lineProperty as IfcLineObject).expressID !== undefined) {
                 // this is a real object, we have to write it as well and convert to a handle
                 // TODO: detect if the object needs to be written at all, or if it's unchanged
                 this.WriteLine(modelID, lineProperty as IfcLineObject);
 
                 // overwrite the reference
                 // NOTE: this modifies the parameter
-                (lineObject[property] as any)= new Handle((lineProperty as IfcLineObject).expressID);
-            }
-            else if (Array.isArray(lineProperty) && lineProperty.length > 0) {
-                for (let i = 0; i < lineProperty.length; i++) {
-                    if ((lineProperty[i] as IfcLineObject).expressID !== undefined) {
-                        // this is a real object, we have to write it as well and convert to a handle
-                        // TODO: detect if the object needs to be written at all, or if it's unchanged
-                        this.WriteLine(modelID, lineProperty[i] as IfcLineObject);
+                // no check for undefined because of above if
+                (lineObject[property] as any)= new Handle((lineProperty as IfcLineObject).expressID as number);
+                }
+                else if (Array.isArray(lineProperty) && lineProperty.length > 0) {
+                    for (let i = 0; i < lineProperty.length; i++) {
+                        if ((lineProperty[i] as IfcLineObject).expressID !== undefined) {
+                            // this is a real object, we have to write it as well and convert to a handle
+                            // TODO: detect if the object needs to be written at all, or if it's unchanged
+                            this.WriteLine(modelID, lineProperty[i] as IfcLineObject);
 
-                        // overwrite the reference
-                        // NOTE: this modifies the parameter
-                        ((lineObject[property]as any)[i] as any) = new Handle((lineProperty[i] as IfcLineObject).expressID);
+                            // overwrite the reference
+                            // NOTE: this modifies the parameter
+                            ((lineObject[property]as any)[i] as any) = new Handle((lineProperty[i] as IfcLineObject).expressID as number);
+                        }
                     }
                 }
-            }
             }
 
             if(lineObject.expressID === undefined || lineObject.expressID < 0) {
                 lineObject.expressID = this.GetMaxExpressID(modelID)+1;
             }
 
+            if(lineObject.type === undefined) {
+                Log.error("Trying to write a line without type");
+                continue;
+            }
 
             let rawLineData: RawLineData = {
                 ID: lineObject.expressID,
@@ -778,7 +783,7 @@ export class IfcAPI {
          * @returns Express numerical value
          */
     GetMaxExpressID(modelID: number) {
-        return this.wasmModule.GetMaxExpressID(modelID);
+        return this.wasmModule.GetMaxExpressID(modelID) as number;
     }
 
     /**

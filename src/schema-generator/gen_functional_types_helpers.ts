@@ -1,6 +1,5 @@
 import {Entity, Type, Prop} from "./gen_functional_types_interfaces";
 
-
 export function generateInitialiser(type: Type, initialisersDone: Set<string>,buffer: Array<string>, crcTable:any,types: Type[],schemaName:string,schemaNo: number) 
 {
     if (type.isEnum) return;
@@ -8,7 +7,7 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
     if (type.isList)
     {
         if (initialisersDone.has(type.name)) return;
-        buffer.push(`\t${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v),`);
+        buffer.push(`${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v),`);
         initialisersDone.add(type.name);
         return
     }
@@ -24,7 +23,7 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
 
     if (initialisersDone.has(type.name)) return;
     initialisersDone.add(type.name);
-    buffer.push(`\t${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v),`);
+    buffer.push(`${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v),`);
     return;
 }       
 
@@ -63,8 +62,9 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
 
     }
     else if (isType) {
-        if (type?.isList) content='new '+schemaName+'.'+p.type+'(v['+i+'])';
-        else content='new '+schemaName+'.'+p.type+'(v['+i+'].value)';
+        let schemaNameType = 'new '+schemaName+'.'+p.type;
+        if (type?.isList) content= schemaNameType+'(v['+i+'])';
+        else content= schemaNameType+'(v['+i+'].value)';
     }
     else if (p.primitive) content='v['+i+'].value';
     else content='new Handle<'+schemaName+'.'+p.type+'>(v['+i+'].value)';
@@ -150,24 +150,32 @@ export function generateClass(entity:Entity, classBuffer: Array<string>, types:T
   {
     classBuffer.push(`export class ${entity.name} extends ${entity.parent} {`);
   }
-  classBuffer.push("\ttype:number="+crc32(entity.name.toUpperCase(),crcTable)+";");
   
 
   entity.inverseProps.forEach((prop) => {
-    let type = `${"(Handle<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
-    classBuffer.push(`\t${prop.name}!: ${type};`);
+    let type = `${"(Handle<" + prop.type + `>|${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
+    classBuffer.push(`${prop.name}!: ${type};`);
   });
 
-  classBuffer.push(`\tconstructor(expressID: number, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
-  classBuffer.push(`\t{`)
+  entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => {
+        if(!p.optional) return;
+        classBuffer.push(`${p.name}?:${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})`}${p.set ? "[]" : ""}|null;`)
+    });
+  classBuffer.push(`constructor(${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `${p.optional ? "" : "public"} ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})`}${p.set ? "[]" : ""}${p.optional ? "|null=null" : ""}`).join(", ")})`)
+  classBuffer.push(`{`)
   if (!entity.parent) {
-    classBuffer.push(`\t\tsuper(expressID);`)
+    classBuffer.push(`super();`)
   } else {
     var nonLocalProps = entity.derivedProps.filter(n => !entity.props.includes(n))
-    if (nonLocalProps.length ==0) classBuffer.push(`\t\t\tsuper(expressID);`);
-    else classBuffer.push(`\t\tsuper(expressID,${nonLocalProps.map((p) => generateSuperAssignment(p,entity.ifcDerivedProps,types)).join(", ")});`)
+    if (nonLocalProps.length ==0) classBuffer.push(`super();`);
+    else classBuffer.push(`super(${nonLocalProps.map((p) => generateSuperAssignment(p,entity.ifcDerivedProps,types)).join(", ")});`)
   }
-   classBuffer.push("\t}");
+  classBuffer.push("this.type="+crc32(entity.name.toUpperCase(),crcTable)+";");
+  entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => {
+    if(!p.optional) return;
+        classBuffer.push(`this.${p.name}=${p.name};`);
+    });
+   classBuffer.push("}");
    classBuffer.push("}");
 }
 

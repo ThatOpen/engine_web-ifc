@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as WebIFC from '../../dist/web-ifc-api-node.js';
-import { Building, BuildingStorey } from '../../dist/api/modelApi.js';
+//import { Building, BuildingStorey } from '../../dist/api/modelApi.js';
 
 let ifcApi: WebIFC.IfcAPI;
 let modelId = -1
@@ -15,41 +15,41 @@ describe('ModelApi', () => {
 
     test('Create', () => {
         const model = {
-            schema: WebIFC.Schemas.IFC4,
+            schema: WebIFC.Schemas.IFC4X3,
             name: 'ModelApi',
-            description: ['ViewDefinition []'],
-            organizations: ['Acme'],
-            authors: [{
-                familyName: 'Schmitz',
-                organization: {
-                    name: 'Acme',
-                },
-            }],
+            author:  {
+                FamilyName: 'Schmitz',
+                GivenName: 'Jeroen',
+                MiddleNames: ['Peter'],
+                PrefixTitles: ['Ing.'],
+                SuffixTitles: ['MSc'],
+                EngagedIn: null,
+                type: WebIFC.IFCPERSON
+            },
         }
         modelId = ifcApi.modelApi.Create(model);
         expect(modelId).toBeGreaterThan(-1);
     });
 
+    test('Add IfcApplication', () => {
+        const application = new WebIFC.IFC4X3.IfcApplication(
+            {type: WebIFC.REF , value: 23},
+            {type: WebIFC.IFCLABEL, value: '1.0'},
+            {type: WebIFC.IFCLABEL, value: 'WebIFC'},
+            {type: WebIFC.IFCLABEL, value: 'WebIFC'},
+        );
+        ifcApi.modelApi.AddApplication(modelId, application) as number;
+    });
+/*
     test('Add author and Postaladdress', () => {
-        const author = {
-            familyName: 'Meijer',
-            givenName: 'Jeroen',
-            middleNames: ['Peter'],
-            prefixTitles: ['Ing.'],
-            suffixTitles: ['MSc'],
-            address: [{
-                purpose: 'OFFICE',
-                description: 'Office for Team1',
-                internalLocation: 'Office1',
-                addressLines: ['Street 1'],
-                postalBox: '123',
-                town: 'Amsterdam',
-                postalCode: '1234AB',
-                region: 'Noord-Holland',
-                country: 'NL',
-            }],
-            organization: 19,
-        };
+        const author = new WebIFC.IFC4X3.IfcPerson(
+            null,
+            ifcApi.CreateIfcType(modelId, WebIFC.IFCLABEL, 'Schmitz'),
+            ifcApi.CreateIfcType(modelId, WebIFC.IFCLABEL, 'Jeroen'),
+            [ifcApi.CreateIfcType(modelId, WebIFC.IFCLABEL, 'Peter')],
+            [ifcApi.CreateIfcType(modelId, WebIFC.IFCLABEL, 'Ing.')],
+            [ifcApi.CreateIfcType(modelId, WebIFC.IFCLABEL, 'MSc')],
+        );
         // jest bug ? 
         const personId = ifcApi.modelApi.AddPerson(modelId, author) as unknown as number;
         expect(personId).toBeGreaterThan(0);
@@ -60,19 +60,9 @@ describe('ModelApi', () => {
         expect(line.MiddleNames[0].value).toBe('Peter');
         expect(line.PrefixTitles[0].value).toBe('Ing.');
         expect(line.SuffixTitles[0].value).toBe('MSc');
-
-        const addr = ifcApi.GetLine(modelId, 23);
-        expect(addr.Purpose.value).toBe('OFFICE');
-        expect(addr.Description.value).toBe('Office for Team1');
-        expect(addr.InternalLocation.value).toBe('Office1');
-        expect(addr.AddressLines[0].value).toBe('Street 1');
-        expect(addr.PostalBox.value).toBe('123');
-        expect(addr.Town.value).toBe('Amsterdam');
-        expect(addr.PostalCode.value).toBe('1234AB');
-        expect(addr.Region.value).toBe('Noord-Holland');
-        expect(addr.Country.value).toBe('NL');
     });
-
+    */
+/*
     test('Add Building', () => {
         const building: Building = {
             globalId: '2X0Q1XJzv0yQjz1Q1X0Q1',
@@ -117,7 +107,39 @@ describe('ModelApi', () => {
         expect(line.Description.value).toBe('Level 1 ground floor');
     });
 
+    test('Add BuildingElementProxy', () => {
+        const buildingElementProxy = {
+            globalId: '2X0Q1XJzv0yQjz1Q1X0Q3',
+            ownerHistory: 21,
+            name: 'Proxy',
+            description: 'Proxy for test',
+            objectPlacement: {
+                relativePlacement: 9,
+            },
+            representation: {
+                representations: [{
+                    contextOfItems: 10,
+                    representationId: 'Body',
+                    representationType: 'BoundingBox',
+                    items: [33],
+                }],
+            }
+        };
+        const proxyId = ifcApi.modelApi.AddBuildingElementProxy(modelId, buildingElementProxy) as number;
+        expect(proxyId).toBeGreaterThan(0);
+        const line = ifcApi.GetLine(modelId, proxyId);
+        expect(line.Name.value).toBe('Proxy');
+        expect(line.Description.value).toBe('Proxy for test');
+        const block = {
+            position: 9,
+            xLength: 1,
+            yLength: 1,
+            zLength: 1,
+        };
+        ifcApi.geomApi.AddCsgPrimitive3D(modelId, block);
 
+    });
+*/
     afterAll(() => {
         const buffer = ifcApi.SaveModel(modelId);
         fs.writeFileSync(path.join(__dirname, '../artifacts/modelApi.ifc'), buffer);

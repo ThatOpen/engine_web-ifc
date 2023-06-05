@@ -25,20 +25,48 @@ import {
     IFCSIUNIT,
     IFCUNITASSIGNMENT,
     IFCOWNERHISTORY,
-    IFCPERSON,
     IFCPOSTALADDRESS,
-    IFCPERSONANDORGANIZATION,
     IFCACTORROLE,
     IFCBUILDING,
     IFCBUILDINGSTOREY,
     IFCSITE,
     IFCSPACE,
-    //IFCWALLSTANDARDCASE,
+    IFCPERSON,
+    IFCGLOBALLYUNIQUEID,
+    // IFCBEAM,
+    // IFCBEARING,
+    IFCBUILDINGELEMENTPROXY,
+    IFC2X3,
+    IFC4,
+    IFC4X3,
+    IFCIDENTIFIER,
+    IFCLABEL,
+    IFCTEXT,
+    IFCPERSONANDORGANIZATION,
+    IFCTIMESTAMP,
+    // IFCCHIMNEY,
+    // IFCCOLUMN,
+    // IFCCOVERING,
+    // IFCCURTAINWALL,
+    // IFCDOOR,
+    // IFCFOOTING,
+    // IFCMEMBER,
+    // IFCPLATE,
+    // IFCRAILING,
+    // IFCRAMP,
+    // IFCRAMPFLIGHT,
+    // IFCROOF,
+    // IFCSHADINGDEVICE,
+    // IFCSLAB,
+    // IFCSTAIR,
+    // IFCSTAIRFLIGHT,
+    // IFCWALL,
+    // IFCWINDOW,
 } from "../ifc-schema";
 import { guid } from "../helpers/guid";
 //import { Log } from "../helpers/log";
 import { BaseApi } from "./baseApi";
-import { LocalPlacement } from "./geomApi";
+import { LocalPlacement, ProductDefShape } from "./geomApi";
 
 interface Root {
     globalId?: string;
@@ -51,7 +79,7 @@ export interface Model {
     schema: string;
     name?: string;
     description?: string[];
-    authors?: Person[];
+    author?: Person;
     organizations?: string[];
     authorization?: string;
 }
@@ -108,14 +136,14 @@ export interface ActorRole {
 }
 
 export interface Person {
-    familyName: string;
-    givenName?: string;
-    middleNames?: string[];
-    organization?: number | Organization;
-    prefixTitles?: string[];
-    suffixTitles?: string[];
-    address?: number[] | PostalAddress[];
-    roles?: number[] | ActorRole[];
+    FamilyName: string;
+    GivenName?: string;
+    MiddleNames?: string[];
+    Organization?: number | Organization;
+    PrefixTitles?: string[];
+    SuffixTitles?: string[];
+    Address?: number[] | PostalAddress[];
+    Roles?: number[] | null
 }
 
 export interface Organization {
@@ -138,6 +166,10 @@ export interface Object extends Root {
 
 export interface Product extends Object {
     objectPlacement?: number | LocalPlacement; // TODO: | GridPlacement;
+}
+
+export interface Element extends Product {
+    tag?: string;
 }
 
 export interface SpatialElement extends Product {
@@ -170,10 +202,59 @@ export interface Space extends SpatialStructureElement {
     elevationWithFlooring?: number;
 }
 
+export interface BuildingElement extends Element {
+    predefinedType?: string;
+    representation?: number | ProductDefShape;
+}
+
+class Test {
+    optional?:number|null = null;
+    constructor(optional:number|null=null){
+        this.optional=optional;
+    }
+}
+
+let c: Test = { };
+
+export interface Beam extends BuildingElement {}
+export interface Bearing extends BuildingElement {}
+export interface BuildingElementProxy extends BuildingElement {}
+export interface Chimney extends BuildingElement {}
+export interface Column extends BuildingElement {}
+export interface Covering extends BuildingElement {}
+export interface CurtainWall extends BuildingElement {}
+//export interface DeepFoundation extends BuildingElement {}
+export interface Footing extends BuildingElement {}
+export interface Member extends BuildingElement {}
+export interface Plate extends BuildingElement {}
+export interface Railing extends BuildingElement {}
+export interface Ramp extends BuildingElement {}
+export interface RampFlight extends BuildingElement {}
+export interface Roof extends BuildingElement {}
+export interface ShadingDevice extends BuildingElement {}
+export interface Slab extends BuildingElement {}
+export interface Stair extends BuildingElement {}
+export interface StairFlight extends BuildingElement {}
+export interface Wall extends BuildingElement {}
+
+export interface Door extends BuildingElement {
+    overallHeight?: number;
+    overallWidth?: number;
+    userDefinedOperationType?: string;
+}
+
+export interface Window extends BuildingElement {
+    overallHeight?: number;
+    overallWidth?: number;
+    userDefinedPartitionType?: string;
+    partitioningType?: string;
+}
+
 /**
  * ModelApi class
  */
 export class ModelApi extends BaseApi {
+    ownerHistories: number[] = [];
     constructor(api: IfcAPI) {
         super(api);
     }
@@ -207,14 +288,13 @@ export class ModelApi extends BaseApi {
         api.wasmModule.WriteHeaderLine(modelId,FILE_NAME,[
                {type: STRING, value: modelName+'.ifc'},
                {type: STRING, value: timestamp},
-               model.authors?.map(a=>({type: STRING, value: a.familyName })) || [null],
+               model.author ? {type: STRING, value: model.author.FamilyName } : [null],
                orgs,
                {type: STRING, value: appName},
                {type: STRING, value: appName},
                auth,
            ]);
         api.wasmModule.WriteHeaderLine(modelId,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);
-
         // minimum of an IFC file @see https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/annex_e/ProjectSetup_1.html
         api.geomApi.AddCartesianPoint(modelId,[
             { x: 0, y: 0, z: 0 },  // 3D origin
@@ -236,14 +316,23 @@ export class ModelApi extends BaseApi {
                 {type: REAL, value: 0}
         ));
 
-        this.AddOrganization(modelId, { name: 'ifcjs', description: 'https://ifcjs.io' });
+        const orgId = this.AddOrganization(modelId, {
+            type: IFCORGANIZATION,
+            Id: api.CreateIfcType(modelId, IFCIDENTIFIER, 'ifcjs'),
+            Name: api.CreateIfcType(modelId, IFCLABEL, 'ifcjs'),
+            Description: api.CreateIfcType(modelId, IFCTEXT, 'https://ifcjs.io'),
+            Engages: null,
+            IsRelatedBy: null,
+            Relates: null
+        }) as number;
 
         const appId = this.AddApplication(modelId, {
-            applicationDev: 7,
-            version: api.GetVersion(),
-            applicationFullName: appName,
-            applicationIdentifier: 'web-ifc'
-        });
+            type: IFCAPPLICATION,
+            ApplicationDeveloper: {type: REF, value: orgId},
+            Version: api.CreateIfcType(modelId, IFCLABEL, api.GetVersion()),
+            ApplicationFullName: api.CreateIfcType(modelId, IFCLABEL, 'ifcjs/web-ifc' + api.GetVersion()),
+            ApplicationIdentifier: api.CreateIfcType(modelId, IFCIDENTIFIER, 'web-ifc'),
+        }) as number;
 
         const axisId = api.geomApi.AddAxis2Placement3D(modelId, {
             location: 1,
@@ -267,27 +356,61 @@ export class ModelApi extends BaseApi {
             { unitType: 'TIMEUNIT', name: 'SECOND' },
         ]);
         const unitAssignmentId = this.AddUnitAssignment(modelId, siUnitIds as number[]);
-
-        const authorId = this.AddPerson(modelId, model.authors || []);
+        
+        const authorId = this.AddPerson(modelId, {
+            FamilyName: model.author ? api.CreateIfcType(modelId, IFCLABEL, model.author.FamilyName) : null,
+            GivenName: model.author ? api.CreateIfcType(modelId, IFCLABEL, model.author.GivenName) : null,
+            MiddleNames: model.author?.MiddleNames?.map((name) => api.CreateIfcType(modelId, IFCLABEL, name)) || null,
+            PrefixTitles: model.author?.PrefixTitles?.map((title) => api.CreateIfcType(modelId, IFCLABEL, title)) || null,
+            SuffixTitles: model.author?.SuffixTitles?.map((title) => api.CreateIfcType(modelId, IFCLABEL, title)) || null,
+            Roles: null,
+            Addresses: null,
+            EngagedIn: null,
+            Identification: null,
+            expressID: -1,
+            type: IFCPERSON
+        }) as number;
+        
+        const personAndOrgId = this.AddPersonAndOrganization(modelId, {
+            type: IFCPERSONANDORGANIZATION,
+            expressID: -1,
+            ThePerson: {type: REF, value: authorId},
+            TheOrganization: {type: REF, value: orgId},
+            Roles: null,
+        }) as number;
+        
         const ownerHistoryId = this.AddOwnerHistory(modelId, {
-            owningUser: authorId as number,
-            owningApplication: appId as number,
-            creationDate: Date.now(),
-            lastModifyingApplication: appId as number,
-            lastModifyingUser: authorId as number,
-            lastModifiedDate: Date.now(),
-            changeAction: 'ADDED',
-            state: 'READWRITE'
-        });
+            expressID: -1,
+            type: IFCOWNERHISTORY,
+            OwningUser: {type: REF, value: personAndOrgId},
+            OwningApplication: {type: REF, value: appId},
+            CreationDate: api.CreateIfcType(modelId, IFCTIMESTAMP, Date.now()),
+            LastModifyingApplication: {type: REF, value: appId},
+            LastModifyingUser: {type: REF, value: personAndOrgId},
+            LastModifiedDate: api.CreateIfcType(modelId, IFCTIMESTAMP, Date.now()),
+            State: null,
+            ChangeAction: null,
+        }) as number;
+        this.ownerHistories.push(ownerHistoryId);
 
         this.AddProject(modelId, { 
-            ownerHistory: ownerHistoryId,
-            name: modelName,
-            description: description[0].value,
-            representationContexts: [geoRepCtxId as number],
-            unitAssignment: unitAssignmentId
+            expressID: -1,
+            type: IFCPROJECT,
+            OwnerHistory: {type: REF, value: ownerHistoryId},
+            Name: api.CreateIfcType(modelId, IFCLABEL, model.name || 'Default Project'),
+            GlobalId: api.CreateIfcType(modelId, IFCGLOBALLYUNIQUEID, guid()),
+            LongName: null,
+            Phase: null,
+            RepresentationContexts: [{type: REF, value: geoRepCtxId as number}],
+            Description: api.CreateIfcType(modelId, IFCTEXT, model.description?.join(';') || 'Default Project'),
+            UnitsInContext: {type: REF, value: unitAssignmentId},
+            ObjectType: null,
+            IsDefinedBy: null,
+            HasAssignments: null,
+            HasAssociations: null,
+            IsDecomposedBy: null,
+            Decomposes: null,
         });
-
         return modelId;
     }
 
@@ -297,27 +420,8 @@ export class ModelApi extends BaseApi {
      * @param project 
      * @returns project id
      */
-    AddProject(modelId: number, project: Project) {
-        const api = this.api;
-        
-        const projectLine = api.CreateIfcEntity(modelId, IFCPROJECT, 
-            {type: STRING, value: project.guid || guid()},
-            {type: REF, value: project.ownerHistory},
-            project.name ? {type: STRING, value: project.name} : null,
-            project.description ? {type: STRING, value: project.description} : null,
-            project.objectType ? {type: ENUM, value: project.objectType} : null,
-            project.longName ? {type: STRING, value: project.longName} : null,
-            project.phase ? {type: STRING, value: project.phase} : null,
-            project.representationContexts?.map((context) => ({type: REF, value: context})) || null,
-            project.unitAssignment ? {type: REF, value: project.unitAssignment} : null,
-        );
-
-        // single project per model rule
-        const projectIds = this.api.GetLineIDsWithType(modelId, IFCPROJECT);
-        if(projectIds && projectIds.size() > 0)
-            projectLine.expressID = projectIds.get(0);
-
-        return api.WriteLine(modelId, projectLine) as number;
+    AddProject(modelId: number, project: IFC2X3.IfcProject | IFC4.IfcProject | IFC4X3.IfcProject | (IFC2X3.IfcProject | IFC4.IfcProject | IFC4X3.IfcProject)[]) {
+        return this.api.WriteLine(modelId, project);
     }
 
     /**
@@ -326,14 +430,8 @@ export class ModelApi extends BaseApi {
      * @param application application
      * @returns application id
      */
-    AddApplication(modelId: number, application: Application) {
-        const api = this.api;
-        return api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCAPPLICATION,
-            {type: REF, value: application.applicationDev},
-            {type: STRING, value: application.version},
-            {type: STRING, value: application.applicationFullName},
-            {type: STRING, value: application.applicationIdentifier}
-        )) as number;
+    AddApplication(modelId: number, application: IFC2X3.IfcApplication | IFC4.IfcApplication | IFC4X3.IfcApplication | (IFC2X3.IfcApplication | IFC4.IfcApplication | IFC4X3.IfcApplication)[]) {
+        return this.api.WriteLine(modelId, application);
     }
 
     /**
@@ -342,103 +440,38 @@ export class ModelApi extends BaseApi {
      * @param address address or array of addresses
      * @returns address id or array of address ids
      */
-    AddPostalAddress(modelId: number, address: PostalAddress | PostalAddress[]) {
-        const api = this.api;
-        if(!Array.isArray(address)) address = [address];
-        const addressLines = [];
+    // AddPostalAddress(modelId: number, address: PostalAddress | PostalAddress[]) {
+    //     const api = this.api;
+    //     if(!Array.isArray(address)) address = [address];
+    //     const addressLines = [];
 
-        for(const addr of address) {
-            addressLines.push(api.CreateIfcEntity(modelId, IFCPOSTALADDRESS,
-                {type: ENUM, value: addr.purpose || 'USERDEFINED'},
-                addr.description ? {type: STRING, value: addr.description} : null,
-                addr.userDefinedPurpose ? {type: STRING, value: addr.userDefinedPurpose} : null,
-                addr.internalLocation ? {type: STRING, value: addr.internalLocation} : null,
-                addr.addressLines?.map(line => ({type: STRING, value: line})) || null,
-                addr.postalBox ? {type: STRING, value: addr.postalBox} : null,
-                addr.town ? {type: STRING, value: addr.town} : null,
-                addr.region ? {type: STRING, value: addr.region} : null,
-                addr.postalCode ? {type: STRING, value: addr.postalCode} : null,
-                addr.country ? {type: STRING, value: addr.country} : null
-            ));
-        }
-        return api.WriteLine(modelId, addressLines);
+    //     for(const addr of address) {
+    //         addressLines.push(api.CreateIfcEntity(modelId, IFCPOSTALADDRESS,
+    //             {type: ENUM, value: addr.purpose || 'USERDEFINED'},
+    //             addr.description ? {type: STRING, value: addr.description} : null,
+    //             addr.userDefinedPurpose ? {type: STRING, value: addr.userDefinedPurpose} : null,
+    //             addr.internalLocation ? {type: STRING, value: addr.internalLocation} : null,
+    //             addr.addressLines?.map(line => ({type: STRING, value: line})) || null,
+    //             addr.postalBox ? {type: STRING, value: addr.postalBox} : null,
+    //             addr.town ? {type: STRING, value: addr.town} : null,
+    //             addr.region ? {type: STRING, value: addr.region} : null,
+    //             addr.postalCode ? {type: STRING, value: addr.postalCode} : null,
+    //             addr.country ? {type: STRING, value: addr.country} : null
+    //         ));
+    //     }
+    //     return api.WriteLine(modelId, addressLines);
+    // }
+
+    AddPerson(modelId: number, person: IFC2X3.IfcPerson | IFC4.IfcPerson | IFC4X3.IfcPerson | (IFC2X3.IfcPerson | IFC4.IfcPerson | IFC4X3.IfcPerson)[]) {
+        return this.api.WriteLine(modelId, person);
     }
 
-    /**
-     * Adds one or multiple person to the model
-     * @param modelID model id
-     * @param authors author or array of authors
-     * @returns author id or array of author ids
-     */
-    AddPerson(modelID: number, authors: Person | Person[]) {
-        const authorIds = [];
-        if(!Array.isArray(authors)) authors = [authors];
-        for(const author of authors) {
-            let { familyName, givenName, middleNames, prefixTitles, suffixTitles, roles, address, organization } = author;
-            if(address && typeof address[0] !== 'number') {
-                address = this.AddPostalAddress(modelID, address as PostalAddress[]) as number[];
-            }
-            
-            if(address && !Array.isArray(address)) address = [address];
-
-            let authorId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSON,
-                null, 
-                {type: STRING, value: familyName},
-                givenName ? {type: STRING, value: givenName} : null,
-                middleNames?.map((name) => ({type: STRING, value: name})) || null,
-                prefixTitles?.map((title) => ({type: STRING, value: title})) || null,
-                suffixTitles?.map((title) => ({type: STRING, value: title})) || null,
-                roles?.map((role) => ({type: REF, value: role})) || null,
-                address?.map((addr) => ({type: REF, value: addr})) || null,
-            )) as number;
-
-            if(organization) {
-                if(typeof organization !== 'number')
-                    organization = this.AddOrganization(modelID, organization) as number;
-
-                authorId = this.api.WriteLine(modelID, this.api.CreateIfcEntity(modelID, IFCPERSONANDORGANIZATION,
-                    {type: REF, value: authorId},
-                    {type: REF, value: organization},
-                    null // refs to actor roles
-                )) as number;
-            }
-
-            authorIds.push(authorId as number);
-        }
-
-        return authorIds.length > 1 ? authorIds : authorIds[0];
+    AddPersonAndOrganization(modelId: number, personAndOrganization: IFC2X3.IfcPersonAndOrganization | IFC4.IfcPersonAndOrganization | IFC4X3.IfcPersonAndOrganization | (IFC2X3.IfcPersonAndOrganization | IFC4.IfcPersonAndOrganization | IFC4X3.IfcPersonAndOrganization)[]) {
+        return this.api.WriteLine(modelId, personAndOrganization);
     }
 
-    /**
-     * Adds one or multiple organization to the model
-     * @param modelId model id
-     * @param organizations organization or array of organizations
-     * @returns organization id or array of organization ids
-     */
-    AddOrganization(modelId: number, organizations: Organization | Organization[]) {
-        const api = this.api;
-        const organizationLines = [];
-        if(!Array.isArray(organizations)) organizations = [organizations];
-
-        for(const organization of organizations) {
-            if(organization.addresses && typeof organization.addresses[0] !== 'number') {
-                organization.addresses = this.AddPostalAddress(modelId, organization.addresses as PostalAddress[]) as number[];
-            }
-
-            if(organization.roles && typeof organization.roles[0] !== 'number') {
-                organization.roles = this.AddActorRole(modelId, organization.roles as ActorRole[]) as number[];
-            }
-
-            organizationLines.push(api.CreateIfcEntity(modelId, IFCORGANIZATION,
-                organization.id ? {type: STRING, value: organization.id} : null, 
-                {type: STRING, value: organization.name}, 
-                organization.description ? {type: STRING, value: organization.description} : null,
-                organization.roles ? organization.roles.map((role) => ({type: REF, value: role})) : null,
-                organization.addresses ? organization.addresses.map((address) => ({type: REF, value: address})) : null,
-            ));
-        }
-
-        return api.WriteLine(modelId, organizationLines);
+    AddOrganization(modelId: number, organization: IFC2X3.IfcOrganization | IFC4.IfcOrganization | IFC4X3.IfcOrganization | (IFC2X3.IfcOrganization | IFC4.IfcOrganization | IFC4X3.IfcOrganization)[]) {
+        return this.api.WriteLine(modelId, organization);
     }
 
     /**
@@ -447,18 +480,8 @@ export class ModelApi extends BaseApi {
      * @param ownerHistory owner history
      * @returns owner history id
      */
-    AddOwnerHistory(modelId: number, ownerHistory: OwnerHistory) {
-        const api = this.api;
-        return api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCOWNERHISTORY,
-            {type: REF, value: ownerHistory.owningUser},
-            {type: REF, value: ownerHistory.owningApplication},
-            ownerHistory.state ? {type: ENUM, value: ownerHistory.state} : null,
-            ownerHistory.changeAction ? {type: ENUM, value: ownerHistory.changeAction} : null,
-            {type: REAL, value: ownerHistory.creationDate},
-            ownerHistory.lastModifyingUser ? {type: REF, value: ownerHistory.lastModifyingUser} : null,
-            ownerHistory.lastModifyingApplication ? {type: REF, value: ownerHistory.lastModifyingApplication} : null,
-            ownerHistory.lastModifiedDate ? {type: REAL, value: ownerHistory.lastModifiedDate} : null
-        )) as number;
+    AddOwnerHistory(modelId: number, ownerHistory: IFC2X3.IfcOwnerHistory | IFC4.IfcOwnerHistory | IFC4X3.IfcOwnerHistory | (IFC2X3.IfcOwnerHistory | IFC4.IfcOwnerHistory | IFC4X3.IfcOwnerHistory)[]) {
+        return this.api.WriteLine(modelId, ownerHistory);
     }
 
     /**
@@ -467,36 +490,36 @@ export class ModelApi extends BaseApi {
      * @param role actor role or array of actor roles
      * @returns actor role id or array of actor role ids
      */
-    AddActorRole(modelId: number, role: ActorRole | ActorRole[]) {
-        const api = this.api;
-        if(!Array.isArray(role)) role = [role];
-        const roleLines = [];
+    // AddActorRole(modelId: number, role: ActorRole | ActorRole[]) {
+    //     const api = this.api;
+    //     if(!Array.isArray(role)) role = [role];
+    //     const roleLines = [];
 
-        for(const r of role) {
-            roleLines.push(api.CreateIfcEntity(modelId, IFCACTORROLE,
-                {type: ENUM, value: r.role},
-                r.userDefinedRole ? {type: STRING, value: r.userDefinedRole} : null,
-                r.description ? {type: STRING, value: r.description} : null
-            ));
-        }
-        return api.WriteLine(modelId, roleLines);
-    }
+    //     for(const r of role) {
+    //         roleLines.push(api.CreateIfcEntity(modelId, IFCACTORROLE,
+    //             {type: ENUM, value: r.role},
+    //             r.userDefinedRole ? {type: STRING, value: r.userDefinedRole} : null,
+    //             r.description ? {type: STRING, value: r.description} : null
+    //         ));
+    //     }
+    //     return api.WriteLine(modelId, roleLines);
+    // }
 
-    AddSIUnit(modelId: number, units: Unit | Unit[]) {
-        const api = this.api;
-        if(!Array.isArray(units)) units = [units];
-        const unitLines = [];
+    // AddSIUnit(modelId: number, units: Unit | Unit[]) {
+    //     const api = this.api;
+    //     if(!Array.isArray(units)) units = [units];
+    //     const unitLines = [];
 
-        for(const unit of units) {
-            unitLines.push(api.CreateIfcEntity(modelId, IFCSIUNIT,
-                {type: UNKNOWN},
-                {type: ENUM, value: unit.unitType},
-                unit.prefix ? {type: ENUM, value: unit.prefix} : null,
-                {type: ENUM, value: unit.name},
-            ));
-        }
-        return api.WriteLine(modelId, unitLines);
-    }
+    //     for(const unit of units) {
+    //         unitLines.push(api.CreateIfcEntity(modelId, IFCSIUNIT,
+    //             {type: UNKNOWN},
+    //             {type: ENUM, value: unit.unitType},
+    //             unit.prefix ? {type: ENUM, value: unit.prefix} : null,
+    //             {type: ENUM, value: unit.name},
+    //         ));
+    //     }
+    //     return api.WriteLine(modelId, unitLines);
+    // }
 
     /**
      * Adds a unit assignment to the model
@@ -504,12 +527,12 @@ export class ModelApi extends BaseApi {
      * @param unitIds unit ids
      * @returns unit assignment id
      */
-    AddUnitAssignment(modelId: number, unitIds: number[]) {
-        const api = this.api;
-        return api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCUNITASSIGNMENT,
-            unitIds.map((unit) => ({type: REF, value: unit}))
-        )) as number;
-    }
+    // AddUnitAssignment(modelId: number, unitIds: number[]) {
+    //     const api = this.api;
+    //     return api.WriteLine(modelId, api.CreateIfcEntity(modelId, IFCUNITASSIGNMENT,
+    //         unitIds.map((unit) => ({type: REF, value: unit}))
+    //     )) as number;
+    // }
 
     /**
      * Adds one or multiple building to the model
@@ -517,42 +540,42 @@ export class ModelApi extends BaseApi {
      * @param building building or array of buildings
      * @returns building id or array of building ids
      */
-    AddBuilding(modelId: number, building: Building | Building[]) {
-        const api = this.api;
-        if(!Array.isArray(building)) building = [building];
-        const buildingLines = [];
+    // AddBuilding(modelId: number, building: Building | Building[]) {
+    //     const api = this.api;
+    //     if(!Array.isArray(building)) building = [building];
+    //     const buildingLines = [];
 
-        for(const b of building) {
-            if(b.buildingAddress && typeof b.buildingAddress !== 'number') {
-                b.buildingAddress = this.AddPostalAddress(modelId, b.buildingAddress) as number;
-            }
+    //     for(const b of building) {
+    //         if(b.buildingAddress && typeof b.buildingAddress !== 'number') {
+    //             b.buildingAddress = this.AddPostalAddress(modelId, b.buildingAddress) as number;
+    //         }
 
-            if(b.ownerHistory && typeof b.ownerHistory !== 'number') {
-                b.ownerHistory = this.AddOwnerHistory(modelId, b.ownerHistory) as number;
-            }
+    //         if(b.ownerHistory && typeof b.ownerHistory !== 'number') {
+    //             b.ownerHistory = this.AddOwnerHistory(modelId, b.ownerHistory) as number;
+    //         }
 
-            if(b.objectPlacement && typeof b.objectPlacement !== 'number') {
-                b.objectPlacement = api.geomApi.AddLocalPlacement(modelId, b.objectPlacement) as number;
-            }
+    //         if(b.objectPlacement && typeof b.objectPlacement !== 'number') {
+    //             b.objectPlacement = api.geomApi.AddLocalPlacement(modelId, b.objectPlacement) as number;
+    //         }
 
-            buildingLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
-                {type: STRING, value: b.globalId || guid()},
-                b.ownerHistory ? {type: REF, value: b.ownerHistory} : null,
-                b.name ? {type: STRING, value: b.name} : null,
-                b.description? {type: STRING, value: b.description} : null,
-                b.objectType ? {type: ENUM, value: b.objectType} : null,
-                b.objectPlacement ? {type: REF, value: b.objectPlacement} : null,
-                null,
-                b.longName ? {type: STRING, value: b.longName} : null,
-                b.compositionType ? {type: ENUM, value: b.compositionType} : null,
-                b.elevationOfRefHeight !== undefined ? {type: REAL, value: b.elevationOfRefHeight} : null,
-                b.elevationOfTerrain !== undefined ? {type: REAL, value: b.elevationOfTerrain} : null,
-                b.buildingAddress ? {type: REF, value: b.buildingAddress} : null,
-            ));
-        }
+    //         buildingLines.push(api.CreateIfcEntity(modelId, IFCBUILDING,
+    //             {type: STRING, value: b.globalId || guid()},
+    //             b.ownerHistory ? {type: REF, value: b.ownerHistory} : null,
+    //             b.name ? {type: STRING, value: b.name} : null,
+    //             b.description? {type: STRING, value: b.description} : null,
+    //             b.objectType ? {type: ENUM, value: b.objectType} : null,
+    //             b.objectPlacement ? {type: REF, value: b.objectPlacement} : null,
+    //             null,
+    //             b.longName ? {type: STRING, value: b.longName} : null,
+    //             b.compositionType ? {type: ENUM, value: b.compositionType} : null,
+    //             b.elevationOfRefHeight !== undefined ? {type: REAL, value: b.elevationOfRefHeight} : null,
+    //             b.elevationOfTerrain !== undefined ? {type: REAL, value: b.elevationOfTerrain} : null,
+    //             b.buildingAddress ? {type: REF, value: b.buildingAddress} : null,
+    //         ));
+    //     }
 
-        return api.WriteLine(modelId, buildingLines);
-    }
+    //     return api.WriteLine(modelId, buildingLines);
+    // }
 
     /**
      * Adds one or multiple building storey to the model
@@ -560,36 +583,36 @@ export class ModelApi extends BaseApi {
      * @param storey storey or array of storeys
      * @returns storey id or array of storey ids
      */
-    AddBuildingStorey(modelId: number, storey: BuildingStorey | BuildingStorey[]) {
-        const api = this.api;
-        if(!Array.isArray(storey)) storey = [storey];
-        const storeyLines = [];
+    // AddBuildingStorey(modelId: number, storey: BuildingStorey | BuildingStorey[]) {
+    //     const api = this.api;
+    //     if(!Array.isArray(storey)) storey = [storey];
+    //     const storeyLines = [];
 
-        for(const s of storey) {
-            if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
-                s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
-            }
+    //     for(const s of storey) {
+    //         if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
+    //             s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
+    //         }
 
-            if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
-                s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
-            }
+    //         if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
+    //             s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
+    //         }
 
-            storeyLines.push(api.CreateIfcEntity(modelId, IFCBUILDINGSTOREY,
-                {type: STRING, value: s.globalId || guid()},
-                s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
-                s.name ? {type: STRING, value: s.name} : null,
-                s.description ? {type: STRING, value: s.description} : null,
-                s.objectType ? {type: ENUM, value: s.objectType} : null,
-                s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
-                null,
-                s.longName ? {type: STRING, value: s.longName} : null,
-                s.compositionType ? {type: ENUM, value: s.compositionType} : null,
-                s.elevation !== undefined ? {type: REAL, value: s.elevation} : null,
-            ));
-        }
+    //         storeyLines.push(api.CreateIfcEntity(modelId, IFCBUILDINGSTOREY,
+    //             {type: STRING, value: s.globalId || guid()},
+    //             s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
+    //             s.name ? {type: STRING, value: s.name} : null,
+    //             s.description ? {type: STRING, value: s.description} : null,
+    //             s.objectType ? {type: ENUM, value: s.objectType} : null,
+    //             s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
+    //             null,
+    //             s.longName ? {type: STRING, value: s.longName} : null,
+    //             s.compositionType ? {type: ENUM, value: s.compositionType} : null,
+    //             s.elevation !== undefined ? {type: REAL, value: s.elevation} : null,
+    //         ));
+    //     }
 
-        return api.WriteLine(modelId, storeyLines);
-    }
+    //     return api.WriteLine(modelId, storeyLines);
+    // }
 
     /**
      * Adds one or multiple site to the model
@@ -597,40 +620,40 @@ export class ModelApi extends BaseApi {
      * @param site site or array of sites
      * @returns site id or array of site ids
      */
-    AddSite(modelId: number, site: Site | Site[]) {
-        const api = this.api;
-        if(!Array.isArray(site)) site = [site];
-        const siteLines = [];
+    // AddSite(modelId: number, site: Site | Site[]) {
+    //     const api = this.api;
+    //     if(!Array.isArray(site)) site = [site];
+    //     const siteLines = [];
 
-        for(const s of site) {
-            if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
-                s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
-            }
+    //     for(const s of site) {
+    //         if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
+    //             s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
+    //         }
 
-            if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
-                s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
-            }
+    //         if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
+    //             s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
+    //         }
 
-            siteLines.push(api.CreateIfcEntity(modelId, IFCSITE,
-                {type: STRING, value: s.globalId || guid()},
-                s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
-                s.name ? {type: STRING, value: s.name} : null,
-                s.description ? {type: STRING, value: s.description} : null,
-                s.objectType ? {type: ENUM, value: s.objectType} : null,
-                s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
-                null,
-                s.longName ? {type: STRING, value: s.longName} : null,
-                s.compositionType ? {type: ENUM, value: s.compositionType} : null,
-                s.refLatitude ? s.refLatitude.map(lat => ({type: REAL, value: lat})) : null,
-                s.refLongitude ? s.refLongitude.map(lon => ({type: REAL, value: lon})) : null,
-                s.refElevation !== undefined ? {type: REAL, value: s.refElevation} : null,
-                s.landTitleNumber ? {type: STRING, value: s.landTitleNumber} : null,
-                s.siteAddress ? {type: REF, value: s.siteAddress} : null,
-            ));
-        }
+    //         siteLines.push(api.CreateIfcEntity(modelId, IFCSITE,
+    //             {type: STRING, value: s.globalId || guid()},
+    //             s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
+    //             s.name ? {type: STRING, value: s.name} : null,
+    //             s.description ? {type: STRING, value: s.description} : null,
+    //             s.objectType ? {type: ENUM, value: s.objectType} : null,
+    //             s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
+    //             null,
+    //             s.longName ? {type: STRING, value: s.longName} : null,
+    //             s.compositionType ? {type: ENUM, value: s.compositionType} : null,
+    //             s.refLatitude ? s.refLatitude.map(lat => ({type: REAL, value: lat})) : null,
+    //             s.refLongitude ? s.refLongitude.map(lon => ({type: REAL, value: lon})) : null,
+    //             s.refElevation !== undefined ? {type: REAL, value: s.refElevation} : null,
+    //             s.landTitleNumber ? {type: STRING, value: s.landTitleNumber} : null,
+    //             s.siteAddress ? {type: REF, value: s.siteAddress} : null,
+    //         ));
+    //     }
 
-        return api.WriteLine(modelId, siteLines);
-    }
+    //     return api.WriteLine(modelId, siteLines);
+    // }
 
     /**
      * Adds one or multiple space to the model
@@ -638,36 +661,70 @@ export class ModelApi extends BaseApi {
      * @param space space or array of spaces
      * @returns space id or array of space ids
      */
-    AddSpace(modelId: number, space: Space | Space[]) {
-        const api = this.api;
-        if(!Array.isArray(space)) space = [space];
-        const spaceLines = [];
+    // AddSpace(modelId: number, space: Space | Space[]) {
+    //     const api = this.api;
+    //     if(!Array.isArray(space)) space = [space];
+    //     const spaceLines = [];
 
-        for(const s of space) {
-            if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
-                s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
-            }
+    //     for(const s of space) {
+    //         if(s.ownerHistory && typeof s.ownerHistory !== 'number') {
+    //             s.ownerHistory = this.AddOwnerHistory(modelId, s.ownerHistory) as number;
+    //         }
 
-            if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
-                s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
-            }
+    //         if(s.objectPlacement && typeof s.objectPlacement !== 'number') {
+    //             s.objectPlacement = api.geomApi.AddLocalPlacement(modelId, s.objectPlacement) as number;
+    //         }
 
-            spaceLines.push(api.CreateIfcEntity(modelId, IFCSPACE,
-                {type: STRING, value: s.globalId || guid()},
-                s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
-                s.name ? {type: STRING, value: s.name} : null,
-                s.description ? {type: STRING, value: s.description} : null,
-                s.objectType ? {type: ENUM, value: s.objectType} : null,
-                s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
-                null,
-                s.longName ? {type: STRING, value: s.longName} : null,
-                s.compositionType ? {type: ENUM, value: s.compositionType} : null,
-                s.elevationWithFlooring ? {type: REAL, value: s.elevationWithFlooring} : null,
-            ));
-        }
+    //         spaceLines.push(api.CreateIfcEntity(modelId, IFCSPACE,
+    //             {type: STRING, value: s.globalId || guid()},
+    //             s.ownerHistory ? {type: REF, value: s.ownerHistory} : null,
+    //             s.name ? {type: STRING, value: s.name} : null,
+    //             s.description ? {type: STRING, value: s.description} : null,
+    //             s.objectType ? {type: ENUM, value: s.objectType} : null,
+    //             s.objectPlacement ? {type: REF, value: s.objectPlacement} : null,
+    //             null,
+    //             s.longName ? {type: STRING, value: s.longName} : null,
+    //             s.compositionType ? {type: ENUM, value: s.compositionType} : null,
+    //             s.elevationWithFlooring ? {type: REAL, value: s.elevationWithFlooring} : null,
+    //         ));
+    //     }
 
-        return api.WriteLine(modelId, spaceLines);
-    }
+    //     return api.WriteLine(modelId, spaceLines);
+    // }
+
+    // AddBuildingElementProxy(modelId: number, buildingElementProxy: BuildingElementProxy | BuildingElementProxy[]) {
+    //     const api = this.api;
+    //     if(!Array.isArray(buildingElementProxy)) buildingElementProxy = [buildingElementProxy];
+    //     const buildingElementProxyLines = [];
+
+    //     for(const b of buildingElementProxy) {
+    //         if(b.ownerHistory && typeof b.ownerHistory !== 'number') {
+    //             b.ownerHistory = this.AddOwnerHistory(modelId, b.ownerHistory) as number;
+    //         }
+
+    //         if(b.objectPlacement && typeof b.objectPlacement !== 'number') {
+    //             b.objectPlacement = api.geomApi.AddLocalPlacement(modelId, b.objectPlacement) as number;
+    //         }
+
+    //         if(b.representation && typeof b.representation !== 'number') {
+    //             b.representation = api.geomApi.AddProductDefShape(modelId, b.representation) as number;
+    //         }
+
+    //         buildingElementProxyLines.push(api.CreateIfcEntity(modelId, IFCBUILDINGELEMENTPROXY,
+    //             {type: STRING, value: b.globalId || guid()},
+    //             b.ownerHistory ? {type: REF, value: b.ownerHistory} : null,
+    //             b.name ? {type: STRING, value: b.name} : null,
+    //             b.description ? {type: STRING, value: b.description} : null,
+    //             b.objectType ? {type: ENUM, value: b.objectType} : null,
+    //             b.objectPlacement ? {type: REF, value: b.objectPlacement} : null,
+    //             b.representation ? {type: REF, value: b.representation} : null,
+    //             b.predefinedType ? {type: ENUM, value: b.predefinedType} : null,
+    //             null
+    //         ));
+    //     }
+
+    //     return api.WriteLine(modelId, buildingElementProxyLines);
+    // }
 
     /*
     AddGeoReference(modelID: number, geoRef: IfcGeoRef): void {
