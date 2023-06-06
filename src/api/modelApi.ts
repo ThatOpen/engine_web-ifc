@@ -144,8 +144,8 @@ export class ModelApi extends BaseApi {
         });
         
         const authorId = this.AddPerson(modelId, {
-            FamilyName: model.author ? api.CreateIfcType(modelId, IFCLABEL, model.author.FamilyName.value) : null,
-            GivenName: model.author ? api.CreateIfcType(modelId, IFCLABEL, model.author.GivenName.value) : null,
+            FamilyName: model.author ? api.CreateIfcType(modelId, IFCLABEL, model.author.FamilyName?.value || '') : null,
+            GivenName: model.author ? api.CreateIfcType(modelId, IFCLABEL, model.author.GivenName?.value || '') : null,
             MiddleNames: model.author?.MiddleNames?.map((name) => api.CreateIfcType(modelId, IFCLABEL, name.value)) || null,
             PrefixTitles: model.author?.PrefixTitles?.map((title) => api.CreateIfcType(modelId, IFCLABEL, title.value)) || null,
             SuffixTitles: model.author?.SuffixTitles?.map((title) => api.CreateIfcType(modelId, IFCLABEL, title.value)) || null,

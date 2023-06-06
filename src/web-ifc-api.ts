@@ -22,6 +22,7 @@ import {
 import { ModelApi, PropsApi, GeomApi } from "./api";
 import { Properties } from "./helpers/properties";
 import { Log, LogLevel } from "./helpers/log";
+import { guid } from "./helpers/guid";
 
 declare var __WASM_PATH__:string;
 
@@ -468,7 +469,7 @@ export class IfcAPI {
      * @param args Arguments required by the entity
      * @returns An object contining the parameters of the new entity
      */
-    CreateIfcEntity(modelID: number, type:number, ...args: any[] ): T extends IfcLineObject
+    CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
         return Constructors[this.modelSchemaList[modelID]][type](-1,args);
     }
@@ -884,5 +885,20 @@ export class IfcAPI {
     SetLogLevel(level: LogLevel): void {
         Log.setLogLevel(level);
         this.wasmModule.SetLogLevel(level);
+    }
+
+    /**
+     * Creates a new GUID
+     * @param modelId Model ID
+     * @returns A new GUID
+     */
+    CreateIfcGuid(modelId: number): string {
+        const id = guid();
+        if(!this.ifcGuidMap.has(modelId)) this.CreateIfcGuidToExpressIdMapping(modelId);
+        
+        if(this.ifcGuidMap.get(modelId)?.has(id))
+            return this.CreateIfcGuid(modelId);
+
+        return id;
     }
 }
