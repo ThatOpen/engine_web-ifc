@@ -20,14 +20,13 @@ import {
     IFCORGANIZATION,
     IFCAPPLICATION,
     IFCPROJECT,
-    // IFCSIUNIT,
-    IFCUNITASSIGNMENT,
     IFCOWNERHISTORY,
     IFCPERSON,
     IFCGLOBALLYUNIQUEID,
-    IFC2X3,
-    IFC4,
-    IFC4X3,
+    IfcPerson,
+    IfcProject,
+    IfcApplication,
+    IfcPersonAndOrganization,
     IFCIDENTIFIER,
     IFCLABEL,
     IFCTEXT,
@@ -41,7 +40,7 @@ export interface Model {
     schema: string;
     name?: string;
     description?: string[];
-    author?: IFC2X3.IfcPerson | IFC4.IfcPerson | IFC4X3.IfcPerson;
+    author?: IfcPerson;
     organizations?: string[];
     authorization?: string;
 }
@@ -114,19 +113,21 @@ export class ModelApi extends BaseApi {
 
         const orgId = this.AddOrganization(modelId, {
             type: IFCORGANIZATION,
-            Id: api.CreateIfcType(modelId, IFCIDENTIFIER, 'ifcjs'),
-            Name: api.CreateIfcType(modelId, IFCLABEL, 'ifcjs'),
+            Identification: api.CreateIfcType(modelId, IFCIDENTIFIER, 'ifcjs'),
+            Name: api.CreateIfcType(modelId, IFCLABEL, 'ifcjs/web-ifc'),
             Description: api.CreateIfcType(modelId, IFCTEXT, 'https://ifcjs.io'),
+            Roles: null,
+            Addresses: null,
             Engages: null,
             IsRelatedBy: null,
-            Relates: null
+            Relates: null,
         }) as number;
 
         const appId = this.AddApplication(modelId, {
             type: IFCAPPLICATION,
             ApplicationDeveloper: {type: REF, value: orgId},
             Version: api.CreateIfcType(modelId, IFCLABEL, api.GetVersion()),
-            ApplicationFullName: api.CreateIfcType(modelId, IFCLABEL, 'ifcjs/web-ifc' + api.GetVersion()),
+            ApplicationFullName: api.CreateIfcType(modelId, IFCLABEL, 'ifcjs/web-ifc v' + api.GetVersion()),
             ApplicationIdentifier: api.CreateIfcType(modelId, IFCIDENTIFIER, 'web-ifc'),
         }) as number;
 
@@ -182,7 +183,7 @@ export class ModelApi extends BaseApi {
             Phase: null,
             RepresentationContexts: [{type: REF, value: geoRepCtxId as number}],
             Description: api.CreateIfcType(modelId, IFCTEXT, model.description?.join(';') || 'Default Project'),
-            UnitsInContext: {type: IFCUNITASSIGNMENT, value: 9999}, // TODO: add units
+            UnitsInContext: {type: REF, value: 9999}, // TODO: add units
             ObjectType: null,
             IsDefinedBy: null,
             HasAssignments: null,
@@ -199,7 +200,7 @@ export class ModelApi extends BaseApi {
      * @param project 
      * @returns project id
      */
-    AddProject(modelId: number, project: IFC2X3.IfcProject | IFC4.IfcProject | IFC4X3.IfcProject | (IFC2X3.IfcProject | IFC4.IfcProject | IFC4X3.IfcProject)[]) {
+    AddProject(modelId: number, project: IfcProject | IfcProject[]) {
         return this.api.WriteLine(modelId, project);
     }
 
@@ -209,19 +210,19 @@ export class ModelApi extends BaseApi {
      * @param application application
      * @returns application id
      */
-    AddApplication(modelId: number, application: IFC2X3.IfcApplication | IFC4.IfcApplication | IFC4X3.IfcApplication | (IFC2X3.IfcApplication | IFC4.IfcApplication | IFC4X3.IfcApplication)[]) {
+    AddApplication(modelId: number, application: IfcApplication | IfcApplication[]) {
         return this.api.WriteLine(modelId, application);
     }
 
-    AddPerson(modelId: number, person: IFC2X3.IfcPerson | IFC4.IfcPerson | IFC4X3.IfcPerson | (IFC2X3.IfcPerson | IFC4.IfcPerson | IFC4X3.IfcPerson)[]) {
+    AddPerson(modelId: number, person: IfcPerson | IfcPerson[]) {
         return this.api.WriteLine(modelId, person);
     }
 
-    AddPersonAndOrganization(modelId: number, personAndOrganization: IFC2X3.IfcPersonAndOrganization | IFC4.IfcPersonAndOrganization | IFC4X3.IfcPersonAndOrganization | (IFC2X3.IfcPersonAndOrganization | IFC4.IfcPersonAndOrganization | IFC4X3.IfcPersonAndOrganization)[]) {
+    AddPersonAndOrganization(modelId: number, personAndOrganization: IfcPersonAndOrganization | IfcPersonAndOrganization[]) {
         return this.api.WriteLine(modelId, personAndOrganization);
     }
 
-    AddOrganization(modelId: number, organization: IFC2X3.IfcOrganization | IFC4.IfcOrganization | IFC4X3.IfcOrganization | (IFC2X3.IfcOrganization | IFC4.IfcOrganization | IFC4X3.IfcOrganization)[]) {
+    AddOrganization(modelId: number, organization: IfcOrganization | IfcOrganization[]) {
         return this.api.WriteLine(modelId, organization);
     }
 
@@ -231,7 +232,7 @@ export class ModelApi extends BaseApi {
      * @param ownerHistory owner history
      * @returns owner history id
      */
-    AddOwnerHistory(modelId: number, ownerHistory: IFC2X3.IfcOwnerHistory | IFC4.IfcOwnerHistory | IFC4X3.IfcOwnerHistory | (IFC2X3.IfcOwnerHistory | IFC4.IfcOwnerHistory | IFC4X3.IfcOwnerHistory)[]) {
+    AddOwnerHistory(modelId: number, ownerHistory: IfcOwnerHistory | IfcOwnerHistory[]) {
         return this.api.WriteLine(modelId, ownerHistory);
     }
 }
