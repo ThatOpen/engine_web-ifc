@@ -341,6 +341,9 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 112077); // v41
     // SpecificLoadTest(loader, geometryLoader, 527); // 398
     // SpecificLoadTest(loader, geometryLoader, 1342624); //384
+    // SpecificLoadTest(loader, geometryLoader, 10567); //359
+    // SpecificLoadTest(loader, geometryLoader, 10333); //359
+    // SpecificLoadTest(loader, geometryLoader, 10340); //359
     SpecificLoadTest(loader, geometryLoader, 10349); //359
 
     // GetLine(loader, 2);

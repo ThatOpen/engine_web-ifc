@@ -44,7 +44,7 @@
     "build-ts-api": "make-dir dist/helpers && cpy \"src/*.ts\" dist && cpy \"src/helpers/*\" dist/helpers --flat && tsc  --incremental --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts . --rename=web-ifc-api-node.d.ts",
     "build-web-ifc-api-node": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=esm --external:path --define:__WASM_PATH__=\\\"./web-ifc-node\\\" --external:fs --external:os --external:perf_hooks --outfile=./dist/web-ifc-api-node.mjs && esbuild dist/web-ifc-api.ts --define:__WASM_PATH__=\\\"./web-ifc-node\\\" --bundle --platform=node --outfile=./dist/web-ifc-api-node.js",
     "build-web-ifc-api-browser": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=esm --define:__WASM_PATH__=\\\"./web-ifc\\\" --outfile=./dist/web-ifc-api.js",
-    "build-web-ifc-api-umd": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=iife --define:__WASM_PATH__=\\\"./web-ifc\\\" --outfile=./dist/web-ifc-api-umd.js",
+    "build-web-ifc-api-umd": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=iife --define:__WASM_PATH__=\\\"./web-ifc\\\" --global-name=WebIFC --outfile=./dist/web-ifc-api-umd.js",
     "build-viewer": "cd examples/viewer/ && npm run build",
     "serve-viewer": "npm run build-viewer && cd examples/viewer/ && npm run start",
     "dev": "npm run build-viewer && concurrently --kill-others \"npm-watch\" \"cd examples/viewer && npm run start\"",

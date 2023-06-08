@@ -173,6 +173,8 @@ export class IfcAPI {
     /** @ignore */
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
+    private deletedLines: Map<number,Set<number>> = new Map<number,Set<number>>();
+
     /**
      * Contains all the logic and methods regarding properties, psets, qsets, etc.
      */
@@ -273,6 +275,7 @@ export class IfcAPI {
             dest.set(src);
             return srcSize;
         });
+        this.deletedLines.set(result,new Set());
         var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
         this.modelSchemaList[result] = this.LookupSchemaId(schemaName);
         if (this.modelSchemaList[result] == -1) 
@@ -310,7 +313,7 @@ export class IfcAPI {
             this.CloseModel(result)
             return -1;
         } 
-
+        this.deletedLines.set(result,new Set());
         const modelName = model.name || "web-ifc-model-"+result+".ifc";
         const timestamp = new Date().toISOString().slice(0,19);
         const description = model.description?.map((d) => ({type: STRING, value: d})) || [{type: STRING, value: 'ViewDefinition [CoordinationView]'}];
@@ -420,7 +423,13 @@ export class IfcAPI {
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
+        let lineData;
+        try {
+            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
+        } catch (e) {
+             Log.error("Invalid IFC Line:"+expressID);
+             return;
+        }
 
         if (flatten) {
             this.FlattenLine(modelID, lineData);
@@ -540,12 +549,35 @@ export class IfcAPI {
         return Object.keys(FromRawLineData[this.modelSchemaList[modelID]]).map(x=>parseInt(x));
     }
 
+
+    /**
+     * Deletes an IFC line from the model
+     * @param modelID Model handle retrieved by OpenModel
+     * @param expressID express ID of the line to remove
+     */
+    DeleteLine(modelID: number, expressID: number) {
+        this.wasmModule.RemoveLine(modelID,expressID);
+        this.deletedLines.get(modelID)!.add(expressID);
+    }
+
 	/**
 	 * Writes a line to the model, can be used to write new lines or to update existing lines
 	 * @param modelID Model handle retrieved by OpenModel
 	 * @param lineObject line object to write
 	 */
     WriteLine<Type extends IfcLineObject>(modelID: number, lineObject: Type) {
+        if (this.deletedLines.get(modelID)!.has(lineObject.expressID)) 
+        {
+            Log.error(`Cannot re-use deleted express ID`);
+            return;
+        }
+
+        if (this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
+        {
+            Log.error(`Cannot change type of existing IFC Line`);
+            return;
+        }
+
         let property: keyof Type;
         for (property in lineObject)
         {
