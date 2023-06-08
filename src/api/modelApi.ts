@@ -25,6 +25,8 @@ import {
     IFCGLOBALLYUNIQUEID,
     IfcPerson,
     IfcProject,
+    IfcOwnerHistory,
+    IfcOrganization,
     IfcApplication,
     IfcPersonAndOrganization,
     IFCIDENTIFIER,

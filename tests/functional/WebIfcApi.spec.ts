@@ -203,6 +203,14 @@ describe('WebIfcApi reading methods', () => {
         expect(ifcApi.IsIfcElement(-1)).toBeFalsy();
         expect(ifcApi.IsIfcElement(-5)).toBeFalsy();
     });
+    test('can read all lines', () => {
+        let lines: any = ifcApi.GetAllLines(modelID);
+        for(let i = 0; i < lines.size(); i++) {
+            let line = ifcApi.GetLine(modelID, lines.get(i));
+            expect(line).not.toBeNull();
+            expect(line.expressID).toEqual(lines.get(i));
+        }
+    });
 });
 
 describe('WebIfcApi geometries', () => {
@@ -416,27 +424,34 @@ describe('WebIfcApi writing methods', () => {
         const line: any = ifcApi.GetLine(exportModelID, expressId);
         expect(exportModelID).toEqual(3);
         expect(line.expressID).toEqual(expressId);
+        ifcApi.CloseModel(exportModelID);
     })
+
+    test('can read & write all lines', () => {
+        let lines: any = ifcApi.GetAllLines(modelID);
+        for(let i = 0; i < lines.size(); i++) {
+            const lineId = lines.get(i);
+            let line = ifcApi.GetLine(modelID, lineId);
+            expect(line).not.toBeNull();
+            expect(line.expressID).toEqual(lineId);
+            const id = ifcApi.WriteLine(modelID, line);
+            expect(id).toEqual(lineId);
+        }
+    });
 
 });
 
 describe('WebIfcApi known failures', () => {
     describe("issue:#212", () => {
-        test("GetLine doesn't support all entity types (only IFC4?) issue:#212", async () => {
-            let ifcApi = new WebIFC.IfcAPI();
-            await ifcApi.Init();
+        test("GetLine support all entity types issue:#212", async () => {
             let failModelID = 0;
             const exampleIFCPath: string = path.join(__dirname, '../artifacts/Sample_entities.ifc.test');
             const exampleIFCData = fs.readFileSync(exampleIFCPath);
             failModelID = ifcApi.OpenModel(exampleIFCData);
             const IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID = 237;
-            try {
-                ifcApi.GetLine(failModelID, IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID);
-                expect(false).toBeTruthy();
-            } catch (error) {
-                expect(true).toBeTruthy();
-            }
-
+            const l = ifcApi.GetLine(failModelID, IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID);
+            expect(l).not.toBeNull();
+            expect(l.expressID).toEqual(IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID);
             ifcApi.CloseModel(failModelID);
         })
     });
@@ -449,15 +464,12 @@ describe('WebIfcApi known failures', () => {
                 USE_FAST_BOOLS: false
             };
             await ifcApi.Init();
-            let failModelID = 0;
+            let failModelID: any;
             const exampleIFCPath: string = path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test');
             const exampleIFCData = fs.readFileSync(exampleIFCPath);
-            try {
-                ifcApi.OpenModel(exampleIFCData, config);
-                expect(true).toBeFalsy();
-            } catch (error) {
-                expect(true).toBeTruthy();
-            }
+            //expect(failModelID = ifcApi.OpenModel(exampleIFCData, config)).toThrowError();
+            failModelID = ifcApi.OpenModel(exampleIFCData, config);
+            expect(typeof failModelID).toBe("number");
             ifcApi.CloseModel(failModelID);
         })
     });
@@ -523,7 +535,7 @@ describe('some use cases', () => {
 describe('creating ifc', () => {
     test('can create new ifc model', () => {
         let createdID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
-        expect(createdID).toBe(5);
+        expect(typeof createdID).toBe('number');
         expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
         //expect(ifcApi.wasmModule.GetModelSize(createdID)).toBeGreaterThan(0);
         //expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBe(7);
@@ -534,7 +546,7 @@ describe('creating ifc', () => {
 
     test('can create & save new ifc model', () => {
         let createdID = ifcApi.CreateModel(WebIFC.Schemas.IFC2X3);
-        expect(createdID).toBe(6);
+        expect(typeof createdID).toBe('number');
         const buffer = ifcApi.SaveModel(createdID);
         fs.writeFileSync(path.join(__dirname, '../artifacts/created.ifc'), buffer);
         ifcApi.CloseModel(createdID);
@@ -557,7 +569,12 @@ describe('creating ifc', () => {
         expect(type.constructor.name).toBe('IfcReal');
         expect(type.value).toBe(1.0);
     });
-
+    
+    test('create guid', () => {
+        const id = ifcApi.CreateIfcGuid(modelID);
+        expect(typeof id).toBe('string');
+        expect(id.length).toBe(22);
+    });
     
 });
 
@@ -569,7 +586,7 @@ describe('opening large amounts of data', () => {
         };
         const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test'));
         let modelId = ifcApi.OpenModel(exampleIFCData,s);
-        expect(modelId).toBe(7);
+        expect(typeof modelId).toBe('number');
     });
 
      test("open a small model but many times", () => {
