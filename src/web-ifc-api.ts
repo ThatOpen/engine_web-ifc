@@ -416,7 +416,13 @@ export class IfcAPI {
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
+        let lineData;
+        try {
+            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
+        } catch (e) {
+             Log.error("Invalid IFC Line:"+expressID);
+             return;
+        }
 
         if (flatten) {
             this.FlattenLine(modelID, lineData);
