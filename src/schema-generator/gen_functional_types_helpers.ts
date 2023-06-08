@@ -43,7 +43,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
 
     if (p.set)
     {
-        content = 'v['+i+'].map((p:any) => '
+        content = 'v['+i+']?.map((p:any) => p?.value ? '
         if (type?.isSelect){
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
             if (isEntitySelect) content+='new Handle(p.value)';
@@ -52,7 +52,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
         else if (isType) content+='new '+schemaName+'.'+p.type+'(p.value)';
         else if (p.primitive) content+='p.value';
         else content+='new Handle<'+schemaName+'.'+p.type+'>(p.value)';
-        content +=')';
+        content +=' : null) || []';
     }
     else if (type?.isSelect)
     {

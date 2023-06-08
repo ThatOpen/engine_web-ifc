@@ -471,7 +471,7 @@ export class IfcAPI {
      */
     CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
-        return Constructors[this.modelSchemaList[modelID]][type](-1,args);
+        return Constructors[this.modelSchemaList[modelID]][type](args);
     }
 
     /**
@@ -540,14 +540,14 @@ export class IfcAPI {
             for (property in lineObject) {
                 const lineProperty: any = lineObject[property];
                 if (lineProperty  && (lineProperty as IfcLineObject).expressID !== undefined) {
-                // this is a real object, we have to write it as well and convert to a handle
-                // TODO: detect if the object needs to be written at all, or if it's unchanged
-                this.WriteLine(modelID, lineProperty as IfcLineObject);
-
-                // overwrite the reference
-                // NOTE: this modifies the parameter
-                // no check for undefined because of above if
-                (lineObject[property] as any)= new Handle((lineProperty as IfcLineObject).expressID as number);
+                    // this is a real object, we have to write it as well and convert to a handle
+                    // TODO: detect if the object needs to be written at all, or if it's unchanged
+                    this.WriteLine(modelID, lineProperty as IfcLineObject);
+                    
+                    // overwrite the reference
+                    // NOTE: this modifies the parameter
+                    // no check for undefined because of above if
+                    (lineObject[property] as any)= new Handle((lineProperty as IfcLineObject).expressID as number);
                 }
                 else if (Array.isArray(lineProperty) && lineProperty.length > 0) {
                     for (let i = 0; i < lineProperty.length; i++) {
