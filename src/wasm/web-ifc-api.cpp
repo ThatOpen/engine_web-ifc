@@ -493,6 +493,7 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     auto numLines = loader->GetNumLines();
     for (uint32_t i = 0; i < numLines; i++)
     {
+        if (loader->GetLine(i).expressID==0) continue;
         expressIDs.push_back(loader->GetLine(i).expressID);
     }
     return expressIDs;
@@ -656,6 +657,13 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
     return responseCode;
 }
 
+void RemoveLine(uint32_t modelID, uint32_t expressID)
+{
+    auto loader = models[modelID].GetLoader();
+    if (!loader) return;
+    loader->RemoveLine(expressID);
+}
+
 bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
 {
     auto loader = models[modelID].GetLoader();
@@ -817,6 +825,7 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     }
 
     auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
+    if (line.expressID==0) return emscripten::val::object();
 
     loader->MoveToArgumentOffset(line, 0);
 
@@ -835,8 +844,9 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
     auto loader = models[modelID].GetLoader();
     if (!loader)
     {
-        return -1;
+        return 0;
     }
+    if (loader->GetMaxExpressId() < expressID || !loader->IsValidExpressID(expressID)) return 0;
 
     auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
     return line.ifcType;
@@ -1013,6 +1023,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetLineType", &GetLineType);
     emscripten::function("GetHeaderLine", &GetHeaderLine);
     emscripten::function("WriteLine", &WriteLine);
+    emscripten::function("RemoveLine", &RemoveLine);
     emscripten::function("WriteHeaderLine", &WriteHeaderLine);
     emscripten::function("SaveModel", &SaveModel);
     emscripten::function("ValidateExpressID", &ValidateExpressID);

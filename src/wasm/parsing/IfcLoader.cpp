@@ -185,6 +185,7 @@ namespace webifc::parsing {
       output << "ENDSEC;"<<std::endl<<"DATA;"<<std::endl;
       for(uint32_t i=0; i < _lines.size();i++)
       {
+        if (_lines[i].expressID == 0 || _lines[i].ifcType == 0) continue;
         _tokenStream->MoveTo(_lines[i].tapeOffset);
         bool newLine = true;
         bool insideSet = false;
@@ -491,6 +492,13 @@ namespace webifc::parsing {
 		_tokenStream->MoveTo(tapeOffset);
 		return GetDoubleArgument();
 	}
+
+  void IfcLoader::RemoveLine(const uint32_t expressID)
+  {
+     uint32_t lineId = ExpressIDToLineID(expressID);
+      _lines[lineId].expressID = 0;
+      _lines[lineId].ifcType = 0;
+  }
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end)
   {
