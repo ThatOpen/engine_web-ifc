@@ -17,7 +17,9 @@ import {
     InheritanceDef,
     InversePropertyDef,
     ToRawLineData,
-    SchemaNames
+    SchemaNames,
+    FILE_DESCRIPTION,
+    FILE_NAME,
 } from "./ifc-schema";
 import { ModelApi, PropsApi, GeomApi } from "./api";
 import { Properties } from "./helpers/properties";
@@ -311,7 +313,7 @@ export class IfcAPI {
      * @param schema ifc schema version
 	 * @returns ModelID
     */
-    CreateModel(schema: string, settings?: LoaderSettings): number {
+    CreateModel(schema: string, settings?: LoaderSettings, writeHeader = true): number {
         let s = this.CreateSettings(settings);
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = this.LookupSchemaId(schema);
@@ -321,7 +323,26 @@ export class IfcAPI {
             Log.error("Unsupported Schema:"+schema);
             this.CloseModel(result)
             return -1;
-        } 
+        }
+
+        if(writeHeader) {
+            this.wasmModule.WriteHeaderLine(result, FILE_DESCRIPTION,[
+                [{type: STRING, value: 'ViewDefinition []'}], 
+                {type: STRING, value: '2;1'}
+            ]);
+            const appName = 'ifcjs/web-ifc ' + this.GetVersion();
+            this.wasmModule.WriteHeaderLine(result, FILE_NAME,[
+               {type: STRING, value: 'IfcModel.ifc'},
+               {type: STRING, value: new Date().toISOString().slice(0,19)},
+               [{type: STRING, value: '' }],
+               [{type: STRING, value: appName}],
+               {type: STRING, value: appName},
+               {type: STRING, value: appName},
+               null,
+            ]);
+            this.wasmModule.WriteHeaderLine(result, FILE_SCHEMA,[[{type: STRING, value: schema}]]);
+        }
+
         return result;
     }
 
