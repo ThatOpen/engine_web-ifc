@@ -40,7 +40,7 @@ namespace webifc::geometry {
 			{"PARABOLICARC", 3},		
 			{"CLOTHOID", 4}};				//ToDo
 
-		const double EXTRUSION_DISTANCE_HALFSPACE_M = 50;
+		const double EXTRUSION_DISTANCE_HALFSPACE_M = 100;
 
 		struct IfcSegmentIndexSelect
 		{

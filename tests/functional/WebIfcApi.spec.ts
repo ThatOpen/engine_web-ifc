@@ -569,11 +569,20 @@ describe('creating ifc', () => {
         expect(type.constructor.name).toBe('IfcReal');
         expect(type.value).toBe(1.0);
     });
+
     
     test('create guid', () => {
         const id = ifcApi.CreateIfcGuid(modelID);
         expect(typeof id).toBe('string');
         expect(id.length).toBe(22);
+    });
+
+
+    test('can delete ifc line', () => {
+        let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
+        ifcApi.WriteLine(modelID, entity);
+        ifcApi.DeleteLine(modelID,entity.expressID);
+        expect(ifcApi.GetLine(modelID,entity.expressID)).toBe(undefined);
     });
     
 });

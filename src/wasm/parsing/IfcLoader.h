@@ -75,6 +75,8 @@ namespace webifc::parsing
       uint64_t GetTotalSize() const;
       void UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end);
       void AddHeaderLineTape(const uint32_t type, const uint32_t start, const uint32_t end);
+      uint32_t GetCurrentLineExpressID() const;
+      void RemoveLine(const uint32_t expressID);
       template <typename T> void Push(T input)
       {
         _tokenStream->Push(input);

@@ -166,6 +166,8 @@ export class IfcAPI {
     /** @ignore */
     ifcGuidMap: Map<number, Map<string | number, string | number>> = new Map<number, Map<string | number, string | number>>();
 
+    private deletedLines: Map<number,Set<number>> = new Map<number,Set<number>>();
+
     /**
      * Contains all the logic and methods regarding properties, psets, qsets, etc.
      * @deprecated Use propsApi instead - will be removed in next version
@@ -282,6 +284,7 @@ export class IfcAPI {
             dest.set(src);
             return srcSize;
         });
+        this.deletedLines.set(result,new Set());
         var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
         this.modelSchemaList[result] = this.LookupSchemaId(schemaName);
         if (this.modelSchemaList[result] == -1) 
@@ -527,6 +530,17 @@ export class IfcAPI {
         return Object.keys(FromRawLineData[this.modelSchemaList[modelID]]).map(x=>parseInt(x));
     }
 
+
+    /**
+     * Deletes an IFC line from the model
+     * @param modelID Model handle retrieved by OpenModel
+     * @param expressID express ID of the line to remove
+     */
+    DeleteLine(modelID: number, expressID: number) {
+        this.wasmModule.RemoveLine(modelID,expressID);
+        this.deletedLines.get(modelID)!.add(expressID);
+    }
+
 	/**
 	 * Writes a line to the model, can be used to write new lines or to update existing lines
 	 * @param modelID Model handle retrieved by OpenModel
@@ -538,6 +552,17 @@ export class IfcAPI {
         if(!Array.isArray(lineObjects)) lineObjects = [lineObjects];
 
         for(const lineObject of lineObjects) {
+            if (this.deletedLines.get(modelID)!.has(lineObject.expressID)) 
+            {
+              Log.error(`Cannot re-use deleted express ID`);
+              continue;
+            }
+
+            if (this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
+            {
+              Log.error(`Cannot change type of existing IFC Line`);
+              continue;
+            }
             for (property in lineObject) {
                 const lineProperty: any = lineObject[property];
                 if (lineProperty  && (lineProperty as IfcLineObject).expressID !== undefined) {
