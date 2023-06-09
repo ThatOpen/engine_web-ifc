@@ -38,7 +38,7 @@ if (typeof self !== 'undefined' && self.crossOriginIsolated) {
     }
 } else WebIFCWasm = require(__WASM_PATH__);
 
-export { ModelApi, PropsApi, LogLevel, Properties };
+export { ModelApi, PropsApi, LogLevel, Properties, guid };
 export * from "./ifc-schema";
 export const UNKNOWN = 0;
 export const STRING = 1;
@@ -50,6 +50,7 @@ export const EMPTY = 6;
 export const SET_BEGIN = 7;
 export const SET_END = 8;
 export const LINE_END = 9;
+export const INTEGER = 10;
 
 /**
  * Settings for the IFCLoader
