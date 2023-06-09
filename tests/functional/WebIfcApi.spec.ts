@@ -580,9 +580,9 @@ describe('creating ifc', () => {
 
     test('can delete ifc line', () => {
         let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
-        ifcApi.WriteLine(modelID, entity);
-        ifcApi.DeleteLine(modelID,entity.expressID);
-        expect(ifcApi.GetLine(modelID,entity.expressID)).toBe(undefined);
+        const id = ifcApi.WriteLine(modelID, entity) as number;
+        ifcApi.DeleteLine(modelID, id);
+        expect(ifcApi.GetLine(modelID, id)).toBeNull();
     });
     
 });

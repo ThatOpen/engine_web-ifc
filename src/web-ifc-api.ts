@@ -409,6 +409,10 @@ export class IfcAPI {
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
+        
+        if(!rawLineData || !rawLineData.type)
+            return null;
+
         let lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
         lineData.expressID = rawLineData.ID;
 
@@ -552,13 +556,13 @@ export class IfcAPI {
         if(!Array.isArray(lineObjects)) lineObjects = [lineObjects];
 
         for(const lineObject of lineObjects) {
-            if (this.deletedLines.get(modelID)!.has(lineObject.expressID)) 
+            if (lineObject.expressID !== undefined && this.deletedLines.get(modelID)?.has(lineObject.expressID)) 
             {
               Log.error(`Cannot re-use deleted express ID`);
               continue;
             }
 
-            if (this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
+            if (lineObject.expressID !== undefined && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
             {
               Log.error(`Cannot change type of existing IFC Line`);
               continue;
