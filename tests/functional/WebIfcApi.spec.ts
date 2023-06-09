@@ -510,24 +510,25 @@ describe('WebIfcApi known failures', () => {
 
 describe('some use cases', () => {
     test("can write a new property value and read it back in", async () => {
-        async function getFirstStorey(api:any, mId:any) {
-            const storeyIds = await api.GetLineIDsWithType(mId, WebIFC.IFCBUILDINGSTOREY);
-            expect(storeyIds.size()).toBe(2);
-            const storeyId = storeyIds.get(0);
-            const storey = await api.properties.getItemProperties(mId, storeyId);
-            return [storey, storeyId];
-          }
-          let [storey, storeyId] = await getFirstStorey(ifcApi, modelID);
-          const newStoreyName = 'Nivel 1 - Editado'
-          storey.LongName.value = newStoreyName;
-          ifcApi.WriteLine(modelID, storey);
-          storey = await ifcApi.properties.getItemProperties(modelID, storeyId);
-          expect(storey.LongName.value).toBe(newStoreyName);
-      
-          const writtenData = await ifcApi.SaveModel(modelID);
-          let modelId = ifcApi.OpenModel(writtenData);
-          [storey, storeyId] = await getFirstStorey(ifcApi, modelId);
-          expect(storey.LongName.value).toBe(newStoreyName);
+        let storeyIds = await ifcApi.GetLineIDsWithType(modelID, WebIFC.IFCBUILDINGSTOREY);
+        expect(storeyIds.size()).toBe(2);
+        let storeyId = storeyIds.get(0);
+        let storey = await ifcApi.properties.getItemProperties(modelID, storeyId);
+        const newStoreyName = 'Nivel 1 - Editado'
+        storey.LongName.value = newStoreyName;
+        ifcApi.WriteLine(modelID, storey);
+        storey = await ifcApi.properties.getItemProperties(modelID, storeyId);
+        expect(storey.LongName.value).toBe(newStoreyName);
+        const writtenData = await ifcApi.SaveModel(modelID);
+        expect(writtenData.length).toBeGreaterThan(0);
+        
+        let testModelId = ifcApi.OpenModel(writtenData);
+        console.log(testModelId)
+        storeyIds = await ifcApi.GetLineIDsWithType(testModelId, WebIFC.IFCBUILDINGSTOREY);
+        expect(storeyIds.size()).toBe(2);
+        storeyId = storeyIds.get(0);
+        storey = await ifcApi.properties.getItemProperties(testModelId, storeyId);
+        expect(storey.LongName.value).toBe(newStoreyName);
     });
     
 })
