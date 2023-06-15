@@ -409,6 +409,7 @@ export function parseElements(data:string)
             if (set && !optional) 
             {
                 let setLoc = split.indexOf("SET");
+                if (setLoc == -1) setLoc = split.indexOf("LIST")
                 if (split[setLoc+1].includes("[0:")) optional=true;
             }
             let type = split[split.length - 1].replace(";", "");
