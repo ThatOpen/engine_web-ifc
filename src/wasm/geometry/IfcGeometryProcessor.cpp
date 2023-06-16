@@ -17,9 +17,18 @@
 
 namespace webifc::geometry
 {
-    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments, bool coordinateToOrigin)
-    :  _geometryLoader(loader, errorHandler,schemaManager,circleSegments), _loader(loader), _errorHandler(errorHandler), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _circleSegments(circleSegments)
-    {}
+    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments, bool coordinateToOrigin, bool optimizeprofiles)
+    :  _geometryLoader(loader, errorHandler,schemaManager,circleSegments), _loader(loader), _errorHandler(errorHandler), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _optimize_profiles(optimizeprofiles), _circleSegments(circleSegments)
+    {
+        IfcProfile profile;
+        double scaling = 1;
+        profile.curve = GetCircleCurve(scaling, _circleSegments, glm::dmat3(1));
+        predefinedCylinder = Extrude(profile, glm::dvec3(0, 0, 1), scaling, _errorHandler);
+
+        IfcProfile profileCube;
+        profileCube.curve = GetRectangleCurve(scaling, scaling, glm::dmat3(1));
+        predefinedCube = Extrude(profileCube, glm::dvec3(0, 0, 1), scaling, _errorHandler);
+    }
 
     IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
     {
@@ -748,6 +757,121 @@ namespace webifc::geometry
                     uint32_t placementID = _loader.GetOptionalRefArgument();
                     uint32_t directionID = _loader.GetRefArgument();
                     double depth = _loader.GetDoubleArgument();
+
+                    auto foundProfile = _loader.ExpressIDToLineID(profileID);
+                    auto &lineProfile = _loader.GetLine(foundProfile);
+                    if(_optimize_profiles)
+                    {
+                        if(lineProfile.ifcType == schema::IFCCIRCLEHOLLOWPROFILEDEF)
+                        {
+
+                            _loader.MoveToArgumentOffset(lineProfile, 0);
+                            _loader.MoveToArgumentOffset(lineProfile, 2);
+                            uint32_t placementID = _loader.GetRefArgument();
+                            double radius = _loader.GetDoubleArgument();
+                            double thickness = _loader.GetDoubleArgument();
+                            glm::dmat3 placement = _geometryLoader.GetAxis2Placement2D(placementID);
+
+                            if (placementID)
+                            {
+                                mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
+                            }
+
+                            glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
+
+                            double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
+                            bool flipWinding = dirDot < 0; // can't be perp according to spec
+
+                            glm::dvec3 dx = glm::dvec3(1,0,0);
+                            glm::dvec3 dy = glm::dvec3(0,1,0);
+                            glm::dvec3 dz = glm::normalize(dir);
+                            if(glm::abs(dirDot) < EPS_BIG)
+                            {
+                                dx = glm::normalize(glm::cross(dz, glm::dvec3(0,0,1)));
+                            }
+                            else
+                            {
+                                dx = glm::normalize(glm::cross(dz, glm::dvec3(0,1,0)));
+                            }
+
+                            dy = glm::normalize(glm::cross(dir, dx));
+                            
+                            glm::dmat4 rot = glm::dmat4(
+                                                    glm::dvec4(0, 0, 1, 0),
+                                                    glm::dvec4(0, 1, 0, 0),
+                                                    glm::dvec4(-1, 0, 0, 0),
+                                                    glm::dvec4(0, 0, 0, 1));        
+
+                            glm::dmat4 trans = glm::dmat4(
+                                                    glm::dvec4(dx * depth, 0),
+                                                    glm::dvec4(dy * radius, 0),
+                                                    glm::dvec4(dz * radius, 0),
+                                                    glm::dvec4(0, 0, 0, 1));
+                            trans = trans * rot;
+
+                            _expressIDToGeometry[-1] = predefinedCylinder;
+                            mesh.transformation =  mesh.transformation * trans;
+                            
+                            mesh.expressID = -1;
+                            mesh.hasGeometry = true;
+                            return mesh;
+                        }
+                        else if (lineProfile.ifcType == schema::IFCRECTANGLEHOLLOWPROFILEDEF)
+                        {
+                            _loader.MoveToArgumentOffset(lineProfile, 0);
+                            _loader.MoveToArgumentOffset(lineProfile, 2);
+                            uint32_t placementID = _loader.GetRefArgument();
+                            double dimx = _loader.GetDoubleArgument();
+                            double dimy = _loader.GetDoubleArgument();
+                            double thickness = _loader.GetDoubleArgument();
+                            glm::dmat3 placement = _geometryLoader.GetAxis2Placement2D(placementID);
+
+                            if (placementID)
+                            {
+                                mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
+                            }
+
+                            glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
+
+                            double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
+                            bool flipWinding = dirDot < 0; // can't be perp according to spec
+
+                            glm::dvec3 dx = glm::dvec3(1,0,0);
+                            glm::dvec3 dy = glm::dvec3(0,1,0);
+                            glm::dvec3 dz = glm::normalize(dir);
+                            if(glm::abs(dirDot) < EPS_BIG)
+                            {
+                                dx = glm::normalize(glm::cross(dz, glm::dvec3(0,0,1)));
+                            }
+                            else
+                            {
+                                dx = glm::normalize(glm::cross(dz, glm::dvec3(0,1,0)));
+                            }
+
+                            dy = glm::normalize(glm::cross(dir, dx));
+                            
+                            glm::dmat4 rot = glm::dmat4(
+                                                    glm::dvec4(0, 0, 1, 0),
+                                                    glm::dvec4(0, 1, 0, 0),
+                                                    glm::dvec4(-1, 0, 0, 0),
+                                                    glm::dvec4(0, 0, 0, 1));        
+
+                            glm::dmat4 trans = glm::dmat4(
+                                                    glm::dvec4(dx * depth, 0),
+                                                    glm::dvec4(dy * dimx, 0),
+                                                    glm::dvec4(dz * dimy, 0),
+                                                    glm::dvec4(0, 0, 0, 1));
+                            trans = trans * rot;
+
+                            _expressIDToGeometry[-2] = predefinedCube;
+                            mesh.transformation =  mesh.transformation * trans;
+                            
+                            mesh.expressID = -2;
+                            mesh.hasGeometry = true;
+                            return mesh;
+
+                        }
+                    }
 
                     IfcProfile profile = _geometryLoader.GetProfile(profileID);
                     if (!profile.isComposite)

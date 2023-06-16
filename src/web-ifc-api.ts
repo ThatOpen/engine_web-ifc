@@ -57,12 +57,14 @@ export const LINE_END = 9;
 
 /**
  * Settings for the IFCLoader
+ * @property {boolean} OPTIMIZE_PROFILES - If true, the model will return all circular and rectangular profiles as a single geometry.
  * @property {boolean} COORDINATE_TO_ORIGIN - If true, the model will be translated to the origin.
  * @property {number} CIRCLE_SEGMENTS - Number of segments for circles. 
  * @property {number} MEMORY_LIMIT - Memory limit for the loader.
  * @property {number} TAPE_SIZE - Size of the tape for the loader.
  */
 export interface LoaderSettings {
+    OPTIMIZE_PROFILES?: boolean;
     COORDINATE_TO_ORIGIN?: boolean;
     USE_FAST_BOOLS?: boolean;
     CIRCLE_SEGMENTS_LOW?: number;
@@ -226,6 +228,7 @@ export class IfcAPI {
 
     private CreateSettings(settings?: LoaderSettings) {
         let s: LoaderSettings = {
+            OPTIMIZE_PROFILES: false,
             COORDINATE_TO_ORIGIN: false,
             CIRCLE_SEGMENTS: 12,
             TAPE_SIZE: 67108864,
