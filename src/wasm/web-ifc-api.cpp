@@ -32,7 +32,7 @@ struct ModelInfo
         {
             if (geometryLoader==nullptr)
             {
-                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN);
+                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN, settings.OPTIMIZE_PROFILES);
             }
             return geometryLoader;
         }
@@ -969,6 +969,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
         ;
 
     emscripten::value_object<webifc::utility::LoaderSettings>("LoaderSettings")
+        .field("OPTIMIZE_PROFILES", &webifc::utility::LoaderSettings::OPTIMIZE_PROFILES)
         .field("COORDINATE_TO_ORIGIN", &webifc::utility::LoaderSettings::COORDINATE_TO_ORIGIN)
         .field("CIRCLE_SEGMENTS", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &webifc::utility::LoaderSettings::TAPE_SIZE)
