@@ -60,7 +60,7 @@ export const LINE_END = 9;
  * @property {boolean} OPTIMIZE_PROFILES - If true, the model will return all circular and rectangular profiles as a single geometry.
  * @property {boolean} COORDINATE_TO_ORIGIN - If true, the model will be translated to the origin.
  * @property {number} CIRCLE_SEGMENTS - Number of segments for circles. 
- * @property {number} MEMORY_LIMIT - Memory limit for the loader.
+ * @property {number} NO_CHUNKS - The maximum number of chunks of (TAPE_SIZE) that are kept in memory
  * @property {number} TAPE_SIZE - Size of the tape for the loader.
  */
 export interface LoaderSettings {
@@ -72,7 +72,7 @@ export interface LoaderSettings {
     CIRCLE_SEGMENTS_HIGH?: number;
     CIRCLE_SEGMENTS?: number;
     BOOL_ABORT_THRESHOLD?: number;
-    MEMORY_LIMIT?: number;
+    NO_CHUNKS?: number;
     TAPE_SIZE? : number;
 }
 
@@ -215,10 +215,10 @@ export class IfcAPI {
     */
     OpenModels(dataSets: Array<Uint8Array>, settings?: LoaderSettings): Array<number> {
         let s: LoaderSettings = {
-            MEMORY_LIMIT :  3221225472,
+            NO_CHUNKS :  25,
             ...settings
         };
-        s.MEMORY_LIMIT = s.MEMORY_LIMIT! / dataSets.length;
+        s.NO_CHUNKS = s.NO_CHUNKS! / dataSets.length;
         let modelIDs:Array<number> = [];
 
         for (let dataSet of dataSets) modelIDs.push(this.OpenModel(dataSet,s));
@@ -232,7 +232,7 @@ export class IfcAPI {
             COORDINATE_TO_ORIGIN: false,
             CIRCLE_SEGMENTS: 12,
             TAPE_SIZE: 67108864,
-            MEMORY_LIMIT: 3221225472,
+            NO_CHUNKS: 25,
             ...settings
         };
         let deprecated = ['USE_FAST_BOOLS','CIRCLE_SEGMENTS_LOW','CIRCLE_SEGMENTS_MEDIUM','CIRCLE_SEGMENTS_HIGH'];

@@ -18,9 +18,9 @@ namespace webifc::parsing {
    std::string p21encode(std::string_view input);
 
  
-   IfcLoader::IfcLoader(size_t tapeSize, size_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
+   IfcLoader::IfcLoader(size_t tapeSize, uint8_t noChunks,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
    { 
-   _tokenStream = new IfcTokenStream(tapeSize,(memoryLimit/tapeSize));
+   _tokenStream = new IfcTokenStream(tapeSize,noChunks);
    }  
    
    const std::vector<uint32_t> IfcLoader::GetExpressIDsWithType(const uint32_t type) const
@@ -311,10 +311,8 @@ namespace webifc::parsing {
   						IfcLine l;
   						l.expressID = currentExpressID;
   						l.ifcType = currentIfcType;
-  						l.lineIndex = static_cast<uint32_t>(_lines.size());
   						l.tapeOffset = currentTapeOffset;
-  						l.tapeEnd = _tokenStream->GetReadOffset();
-  						_ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
+  						_ifcTypeToLineID[l.ifcType].push_back(_lines.size());
   						maxExpressId = std::max(maxExpressId, l.expressID);
 
   						_lines.push_back(std::move(l));
@@ -327,7 +325,6 @@ namespace webifc::parsing {
   							l.ifcType = currentIfcType;
   							l.lineIndex = static_cast<uint32_t>(_headerLines.size());
   							l.tapeOffset = currentTapeOffset;
-  							l.tapeEnd = _tokenStream->GetReadOffset();
   							_ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
   							_headerLines.push_back(std::move(l));
   						}
@@ -500,7 +497,7 @@ namespace webifc::parsing {
       _lines[lineId].ifcType = 0;
   }
   
-  void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end)
+  void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
   {
   	if (expressID >= _expressIDToLine.size())
     {
@@ -522,7 +519,6 @@ namespace webifc::parsing {
 
   		// fill line data
   		line.expressID = expressID;
-  		line.lineIndex = lineID;
   		line.ifcType = type;
 
   		_ifcTypeToLineID[type].push_back(lineID);
@@ -532,17 +528,15 @@ namespace webifc::parsing {
   	auto &line = _lines[lineID];
 
   	line.tapeOffset = start;
-  	line.tapeEnd = end;
   }
 
-  void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start, const uint32_t end)
+  void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start)
   {
     
       IfcHeaderLine l;
       l.ifcType = type;
       l.lineIndex = static_cast<uint32_t>(_headerLines.size());
       l.tapeOffset = start;
-      l.tapeEnd = end;
       _ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
       _headerLines.push_back(std::move(l));
   }

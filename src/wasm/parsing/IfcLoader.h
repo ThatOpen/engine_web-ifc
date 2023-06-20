@@ -20,9 +20,7 @@ namespace webifc::parsing
   {
     uint32_t expressID;
     uint32_t ifcType;
-    uint32_t lineIndex;
     uint32_t tapeOffset;
-    uint32_t tapeEnd;
   };
 
   struct IfcHeaderLine
@@ -30,13 +28,12 @@ namespace webifc::parsing
     uint32_t ifcType;
     uint32_t lineIndex;
     uint32_t tapeOffset;
-    uint32_t tapeEnd;
   };
   
 	class IfcLoader {
   
     public:
-      IfcLoader(size_t tapeSize, size_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager);  
+      IfcLoader(size_t tapeSize, uint8_t noChunks,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager);  
       ~IfcLoader();
       const std::vector<uint32_t> GetExpressIDsWithType(const uint32_t type) const;
       const std::vector<IfcHeaderLine> GetHeaderLinesWithType(const uint32_t type) const;
@@ -73,8 +70,8 @@ namespace webifc::parsing
       IFC_SCHEMA GetSchema() const;
       void Push(void *v, const uint64_t size);
       uint64_t GetTotalSize() const;
-      void UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end);
-      void AddHeaderLineTape(const uint32_t type, const uint32_t start, const uint32_t end);
+      void UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start);
+      void AddHeaderLineTape(const uint32_t type, const uint32_t start);
       uint32_t GetCurrentLineExpressID() const;
       void RemoveLine(const uint32_t expressID);
       template <typename T> void Push(T input)

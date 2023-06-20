@@ -25,7 +25,7 @@ struct ModelInfo
         ModelInfo(webifc::utility::LoaderSettings _settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
         {
             errorHandler = new webifc::utility::LoaderErrorHandler();
-            loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,*errorHandler,schemaManager);
+            loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.NO_CHUNKS,*errorHandler,schemaManager);
         }
         
         webifc::geometry::IfcGeometryProcessor * GetGeometryLoader()
@@ -652,8 +652,7 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
     loader->Push((void*)ifcName.c_str(), ifcName.size());
     bool responseCode = WriteSet(modelID,parameters);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
-    uint32_t end = loader->GetTotalSize();
-    loader->AddHeaderLineTape(type, start, end);
+    loader->AddHeaderLineTape(type, start);
     return responseCode;
 }
 
@@ -686,9 +685,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     // end line
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
 
-    uint32_t end = loader->GetTotalSize();
-
-    loader->UpdateLineTape(expressID, type, start, end);
+    loader->UpdateLineTape(expressID, type, start);
     return responseCode;
 }
 
@@ -911,7 +908,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("COORDINATE_TO_ORIGIN", &webifc::utility::LoaderSettings::COORDINATE_TO_ORIGIN)
         .field("CIRCLE_SEGMENTS", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &webifc::utility::LoaderSettings::TAPE_SIZE)
-        .field("MEMORY_LIMIT", &webifc::utility::LoaderSettings::MEMORY_LIMIT)
+        .field("NO_CHUNKS", &webifc::utility::LoaderSettings::NO_CHUNKS)
     ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
