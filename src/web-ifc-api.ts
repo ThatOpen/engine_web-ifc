@@ -765,6 +765,16 @@ export class IfcAPI {
         this.wasmModule.CloseModel(modelID);
     }
 
+    /**
+	 * Streams meshes of a model with specific express id
+	 * @param modelID Model handle retrieved by OpenModel
+     * @param expressIDs expressIDs of elements to stream
+	 * @param meshCallback callback function that is called for each mesh
+	 */
+    StreamMeshes(modelID: number, expressIDs: Array<number>, meshCallback: (mesh: FlatMesh) => void) {
+        this.wasmModule.StreamMeshes(modelID, expressIDs,meshCallback);
+    }
+
 	/**
 	 * Streams all meshes of a model
 	 * @param modelID Model handle retrieved by OpenModel
