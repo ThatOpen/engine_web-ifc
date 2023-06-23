@@ -55,9 +55,9 @@ namespace webifc::geometry
         return _coordinationMatrix;
     }
 
-    IfcComposedMesh IfcGeometryProcessor::GetMeshByLine(uint32_t lineID)
+    IfcComposedMesh IfcGeometryProcessor::GetMeshByLine(uint32_t expressID)
     {
-        auto &line = _loader.GetLine(lineID);
+        auto &line = _loader.GetLine(expressID);
 
         std::optional<glm::dvec4> styledItemColor;
         auto &styledItems = _geometryLoader.GetStyledItems();
@@ -758,8 +758,7 @@ namespace webifc::geometry
                     uint32_t directionID = _loader.GetRefArgument();
                     double depth = _loader.GetDoubleArgument();
 
-                    auto foundProfile = _loader.ExpressIDToLineID(profileID);
-                    auto &lineProfile = _loader.GetLine(foundProfile);
+                    auto &lineProfile = _loader.GetLine(profileID);
                     if(_optimize_profiles)
                     {
                         if(lineProfile.ifcType == schema::IFCCIRCLEHOLLOWPROFILEDEF)
@@ -983,8 +982,7 @@ namespace webifc::geometry
 
     IfcSurface IfcGeometryProcessor::GetSurface(uint32_t expressID)
     {
-        uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-        auto &line = _loader.GetLine(lineID);
+        auto &line = _loader.GetLine(expressID);
 
         // TODO: IfcSweptSurface and IfcBSplineSurface still missing
         switch (line.ifcType)
@@ -1358,7 +1356,7 @@ namespace webifc::geometry
 
                 _loader.MoveToArgumentOffset(line, 0);
                 uint32_t profileID = _loader.GetRefArgument();
-                IfcProfile profile =  _geometryLoader.GetProfile3D(_loader.ExpressIDToLineID(profileID));
+                IfcProfile profile =  _geometryLoader.GetProfile3D(profileID);
 
                 _loader.MoveToArgumentOffset(line, 1);
                 if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
@@ -1422,8 +1420,7 @@ namespace webifc::geometry
 
     IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID) 
     {
-        auto foundMesh = _loader.ExpressIDToLineID(expressID);
-        return GetMeshByLine(foundMesh);
+        return GetMeshByLine(expressID);
     }
 
 
@@ -1560,8 +1557,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points)
     {
-        auto lineID = _loader.ExpressIDToLineID(expressID);
-        auto &line = _loader.GetLine(lineID);
+        auto &line = _loader.GetLine(expressID);
 
         bounds.emplace_back();
 
@@ -1622,8 +1618,7 @@ namespace webifc::geometry
 
     IfcGeometry IfcGeometryProcessor::GetBrep(uint32_t expressID)
     {
-        auto lineID = _loader.ExpressIDToLineID(expressID);
-        auto &line = _loader.GetLine(lineID);
+        auto &line = _loader.GetLine(expressID);
         switch (line.ifcType)
         {
         case schema::IFCCONNECTEDFACESET:
@@ -1652,8 +1647,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry)
     {
-        auto lineID = _loader.ExpressIDToLineID(expressID);
-        auto &line = _loader.GetLine(lineID);
+        auto &line = _loader.GetLine(expressID);
 
         switch (line.ifcType)
         {

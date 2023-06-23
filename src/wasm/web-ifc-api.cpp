@@ -388,11 +388,8 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types
     for (uint32_t i=0; i < size; i++) {
     
         uint32_t type = types[std::to_string(i)].as<uint32_t>();
-        auto lineIDs = loader->GetLineIDsWithType(type);
-        for (auto lineID : lineIDs)
-        {
-          expressIDs.push_back(loader->LineIDToExpressID(lineID));
-        }
+        auto ids = loader->GetExpressIDsWithType(type);
+        expressIDs.insert(expressIDs.end(),ids.begin(),ids.end());    
     }
     return expressIDs;
 }
@@ -408,8 +405,7 @@ std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expre
     auto expressIDs = GetLineIDsWithType(modelID,targetTypes);
     for (auto foundExpressID : expressIDs)
     {
-      auto lineID = loader->ExpressIDToLineID(foundExpressID); 
-      loader->MoveToLineArgument(lineID, position);
+      loader->MoveToLineArgument(foundExpressID, position);
 
       webifc::parsing::IfcTokenType t = loader->GetTokenType();
       if (t == webifc::parsing::IfcTokenType::REF) 
@@ -490,10 +486,10 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     }
 
     std::vector<uint32_t> expressIDs;
-    auto numLines = loader->GetNumLines();
-    for (uint32_t i = 0; i < numLines; i++)
+    auto numLines = loader->GetMaxExpressId();
+    for (uint32_t i = 1; i <= numLines; i++)
     {
-        if (loader->GetLine(i).expressID==0) continue;
+        if (!loader->IsValidExpressID(i) || loader->GetLine(i).expressID==0) continue;
         expressIDs.push_back(loader->GetLine(i).expressID);
     }
     return expressIDs;
@@ -821,7 +817,8 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
         return emscripten::val::undefined();
     }
 
-    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
+    if (!loader->IsValidExpressID(expressID)) return emscripten::val::object();
+    auto& line = loader->GetLine(expressID);
     if (line.expressID==0) return emscripten::val::object();
 
     loader->MoveToArgumentOffset(line, 0);
@@ -832,7 +829,6 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     retVal.set(emscripten::val("ID"), line.expressID);
     retVal.set(emscripten::val("type"), line.ifcType);
     retVal.set(emscripten::val("arguments"), arguments);
-
     return retVal;
 }
 
@@ -845,7 +841,7 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
     }
     if (loader->GetMaxExpressId() < expressID || !loader->IsValidExpressID(expressID)) return 0;
 
-    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
+    auto& line = loader->GetLine(expressID);
     return line.ifcType;
 }
 

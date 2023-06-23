@@ -565,13 +565,12 @@ export class IfcAPI {
 	 * @param lineObject line object to write
 	 */
     WriteLine<Type extends IfcLineObject>(modelID: number, lineObject: Type) {
-        if (this.deletedLines.get(modelID)!.has(lineObject.expressID)) 
+        if (lineObject.expressID!= -1 && this.deletedLines.get(modelID)!.has(lineObject.expressID)) 
         {
             Log.error(`Cannot re-use deleted express ID`);
             return;
         }
-
-        if (this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
+        if (lineObject.expressID != -1 && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
         {
             Log.error(`Cannot change type of existing IFC Line`);
             return;
