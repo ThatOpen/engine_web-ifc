@@ -18,7 +18,6 @@ namespace webifc::parsing
   
   struct IfcLine 
   {
-    uint32_t expressID;
     uint32_t ifcType;
     uint32_t tapeOffset;
   };
@@ -79,6 +78,7 @@ namespace webifc::parsing
       const schema::IfcSchemaManager &_schemaManager;
       utility::LoaderErrorHandler &_errorHandler;
       IfcTokenStream * _tokenStream;
+      IfcLine * _nullLine;
       std::vector<IfcLine*> _lines;
       std::vector<IfcHeaderLine> _headerLines;
       std::unordered_map<uint32_t, std::vector<uint32_t>> _ifcTypeToExpressID;

@@ -489,8 +489,8 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     auto numLines = loader->GetMaxExpressId();
     for (uint32_t i = 1; i <= numLines; i++)
     {
-        if (!loader->IsValidExpressID(i) || loader->GetLine(i).expressID==0) continue;
-        expressIDs.push_back(loader->GetLine(i).expressID);
+        if (!loader->IsValidExpressID(i) || loader->GetLine(i).ifcType==0) continue;
+        expressIDs.push_back(i);
     }
     return expressIDs;
 }
@@ -819,14 +819,14 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 
     if (!loader->IsValidExpressID(expressID)) return emscripten::val::object();
     auto& line = loader->GetLine(expressID);
-    if (line.expressID==0) return emscripten::val::object();
+    if (line.ifcType==0) return emscripten::val::object();
 
     loader->MoveToArgumentOffset(line, 0);
 
     auto arguments = GetArgs(modelID);
 
     auto retVal = emscripten::val::object();
-    retVal.set(emscripten::val("ID"), line.expressID);
+    retVal.set(emscripten::val("ID"), expressID);
     retVal.set(emscripten::val("type"), line.ifcType);
     retVal.set(emscripten::val("arguments"), arguments);
     return retVal;

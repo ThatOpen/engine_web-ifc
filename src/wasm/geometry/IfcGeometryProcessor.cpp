@@ -66,7 +66,7 @@ namespace webifc::geometry
         auto relVoids = _geometryLoader.GetRelVoids();
         auto &relElementAggregates = _geometryLoader.GetRelElementAggregates();
 
-        auto styledItem = styledItems.find(line.expressID);
+        auto styledItem = styledItems.find(expressID);
         if (styledItem != styledItems.end())
         {
             auto items = styledItem->second;
@@ -79,7 +79,7 @@ namespace webifc::geometry
 
         if (!styledItemColor)
         {
-            auto material = relMaterials.find(line.expressID);
+            auto material = relMaterials.find(expressID);
             if (material != relMaterials.end())
             {
                 auto &materials = material->second;
@@ -106,7 +106,7 @@ namespace webifc::geometry
         }
 
         IfcComposedMesh mesh;
-        mesh.expressID = line.expressID;
+        mesh.expressID = expressID;
         mesh.hasColor = styledItemColor.has_value();
         if (!styledItemColor) mesh.color = glm::dvec4(1.0);
         else mesh.color = styledItemColor.value();
@@ -139,9 +139,9 @@ namespace webifc::geometry
             }
 
 
-            auto relVoidsIt = relVoids.find(line.expressID);
+            auto relVoidsIt = relVoids.find(expressID);
 
-            auto relAggIt = relElementAggregates.find(line.expressID);
+            auto relAggIt = relElementAggregates.find(expressID);
             if (relAggIt != relElementAggregates.end() && !relAggIt->second.empty())
             {
                 for (auto relAggExpressID : relAggIt->second)
@@ -187,9 +187,9 @@ namespace webifc::geometry
                     finalGeometry = BoolSubtract(flatElementMeshes, voidGeoms);
                 }
 
-                _expressIDToGeometry[line.expressID] = finalGeometry;
+                _expressIDToGeometry[expressID] = finalGeometry;
                 resultMesh.transformation = glm::translate(origin);
-                resultMesh.expressID = line.expressID;
+                resultMesh.expressID = expressID;
                 resultMesh.hasGeometry = true;
                     // If there is no styledItemcolor apply color of the object
                 if (styledItemColor)
@@ -246,7 +246,7 @@ namespace webifc::geometry
 
                     IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes);
 
-                    _expressIDToGeometry[line.expressID] = resultMesh;
+                    _expressIDToGeometry[expressID] = resultMesh;
                     mesh.hasGeometry = true;
                     mesh.transformation = glm::translate(origin);
 
@@ -267,7 +267,7 @@ namespace webifc::geometry
 
                     if (op != "DIFFERENCE")
                     {
-                        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported boolean op " + op, line.expressID);
+                        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported boolean op " + op, expressID);
                         return mesh;
                     }
 
@@ -292,7 +292,7 @@ namespace webifc::geometry
 
                     IfcGeometry resultMesh = BoolSubtract(flatFirstMeshes, flatSecondMeshes);
 
-                    _expressIDToGeometry[line.expressID] = resultMesh;
+                    _expressIDToGeometry[expressID] = resultMesh;
                     mesh.hasGeometry = true;
                     mesh.transformation = glm::translate(origin);
                     if (!mesh.hasColor && firstMesh.hasColor)
@@ -342,7 +342,7 @@ namespace webifc::geometry
 
                     mesh.transformation = surface.transformation;
                     // TODO: this is getting problematic.....
-                    _expressIDToGeometry[line.expressID] = geom;
+                    _expressIDToGeometry[expressID] = geom;
                     mesh.hasGeometry = true;
 
                     return mesh;
@@ -410,7 +410,7 @@ namespace webifc::geometry
                     #endif
 
                     // TODO: this is getting problematic.....
-                    _expressIDToGeometry[line.expressID] = geom;
+                    _expressIDToGeometry[expressID] = geom;
                     mesh.hasGeometry = true;
                     mesh.transformation = position;
 
@@ -451,7 +451,7 @@ namespace webifc::geometry
                     _loader.MoveToArgumentOffset(line, 0);
                     uint32_t ifcPresentation = _loader.GetRefArgument();
 
-                    _expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
+                    _expressIDToGeometry[expressID] = GetBrep(ifcPresentation);
                     mesh.hasGeometry = true;
 
                     return mesh;
@@ -461,7 +461,7 @@ namespace webifc::geometry
                     _loader.MoveToArgumentOffset(line, 0);
                     uint32_t ifcPresentation = _loader.GetRefArgument();
 
-                    _expressIDToGeometry[line.expressID] = GetBrep(ifcPresentation);
+                    _expressIDToGeometry[expressID] = GetBrep(ifcPresentation);
                     mesh.hasGeometry = true;
 
                     return mesh;
@@ -517,7 +517,7 @@ namespace webifc::geometry
                         uint32_t faceID = _loader.GetRefArgument(face);
                         ReadIndexedPolygonalFace(faceID, bounds, points);
 
-                        TriangulateBounds(geom, bounds,_errorHandler,line.expressID);
+                        TriangulateBounds(geom, bounds,_errorHandler,expressID);
 
                         bounds.clear();
                     }
@@ -525,11 +525,11 @@ namespace webifc::geometry
                     _loader.MoveToArgumentOffset(line, 3);
                     if (_loader.GetTokenType() == parsing::IfcTokenType::SET_BEGIN)
                     {
-                        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported IFCPOLYGONALFACESET with PnIndex", line.expressID);
+                        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported IFCPOLYGONALFACESET with PnIndex", expressID);
                     }
 
-                    _expressIDToGeometry[line.expressID] = geom;
-                    mesh.expressID = line.expressID;
+                    _expressIDToGeometry[expressID] = geom;
+                    mesh.expressID = expressID;
                     mesh.hasGeometry = true;
 
                     return mesh;
@@ -571,8 +571,8 @@ namespace webifc::geometry
 
                     // DumpIfcGeometry(geom, "test.obj");
 
-                    _expressIDToGeometry[line.expressID] = geom;
-                    mesh.expressID = line.expressID;
+                    _expressIDToGeometry[expressID] = geom;
+                    mesh.expressID = expressID;
                     mesh.hasGeometry = true;
 
                     return mesh;
@@ -653,8 +653,8 @@ namespace webifc::geometry
                     
                     IfcGeometry geom = Sweep(closed, profile, directrix, surface.normal(), true);
                     
-                    _expressIDToGeometry[line.expressID] = geom;
-                    mesh.expressID = line.expressID;
+                    _expressIDToGeometry[expressID] = geom;
+                    mesh.expressID = expressID;
                     mesh.hasGeometry = true;
 
                     return mesh;
@@ -673,7 +673,7 @@ namespace webifc::geometry
 
                     if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
                     {
-                        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", line.expressID);
+                        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", expressID);
                         _loader.StepBack();
                         _loader.GetDoubleArgument();
                     }
@@ -700,8 +700,8 @@ namespace webifc::geometry
 
                     IfcGeometry geom = Sweep(closed, profile, directrix);
 
-                    _expressIDToGeometry[line.expressID] = geom;
-                    mesh.expressID = line.expressID;
+                    _expressIDToGeometry[expressID] = geom;
+                    mesh.expressID = expressID;
                     mesh.hasGeometry = true;
 
                     return mesh;
@@ -742,12 +742,12 @@ namespace webifc::geometry
                     }
 
                     mesh.transformation = placement;
-                    _expressIDToGeometry[line.expressID] = geom;
-                    mesh.expressID = line.expressID;
+                    _expressIDToGeometry[expressID] = geom;
+                    mesh.expressID = expressID;
                     mesh.hasGeometry = true;
                     if (!styledItemColor) mesh.color = glm::dvec4(1.0);
                     else mesh.color = styledItemColor.value();
-                    _expressIDToMesh[line.expressID] = mesh;
+                    _expressIDToMesh[expressID] = mesh;
                     return mesh;
                 }
             case schema::IFCEXTRUDEDAREASOLID:
@@ -946,8 +946,8 @@ namespace webifc::geometry
                         io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
                     #endif
 
-                    _expressIDToGeometry[line.expressID] = geom;
-                    mesh.expressID = line.expressID;
+                    _expressIDToGeometry[expressID] = geom;
+                    mesh.expressID = expressID;
                     mesh.hasGeometry = true;
 
                     return mesh;
@@ -971,7 +971,7 @@ namespace webifc::geometry
                     // ignore polylines as meshes
                 return mesh;
             default:
-                _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected mesh type", line.expressID, line.ifcType);
+                _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected mesh type", expressID, line.ifcType);
                 break;
             }
         }
@@ -1411,7 +1411,7 @@ namespace webifc::geometry
                 break;
             }
         default:
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected surface type", line.expressID, line.ifcType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected surface type", expressID, line.ifcType);
             break;
         }
 
@@ -1610,7 +1610,7 @@ namespace webifc::geometry
             break;
         }
         default:
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected indexedface type", line.expressID, line.ifcType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected indexedface type", expressID, line.ifcType);
             break;
         }
     }
@@ -1638,7 +1638,7 @@ namespace webifc::geometry
             return geometry;
         }
         default:
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected shell type", line.expressID, line.ifcType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected shell type", expressID, line.ifcType);
             break;
         }
 
@@ -1710,7 +1710,7 @@ namespace webifc::geometry
             break;
         }
         default:
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected face type", line.expressID, line.ifcType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected face type", expressID, line.ifcType);
             break;
         }
     }

@@ -45,9 +45,9 @@ namespace webifc::geometry
 
         
         auto &relAggVector = GetRelAggregates();
-        if (relAggVector.count(line.expressID) == 1) 
+        if (relAggVector.count(expressID) == 1) 
         {
-          auto &relAgg = relAggVector.at(line.expressID);
+          auto &relAgg = relAggVector.at(expressID);
           for (auto expressID : relAgg)
           {
             alignment = GetAlignment(expressID, alignment, transform * transform_t);
@@ -73,9 +73,9 @@ namespace webifc::geometry
         }
 
         auto &relAggVector = GetRelAggregates();
-        if (relAggVector.count(line.expressID) == 1)
+        if (relAggVector.count(expressID) == 1)
         { 
-          auto &relAgg = relAggVector.at(line.expressID);
+          auto &relAgg = relAggVector.at(expressID);
           for (auto expressID : relAgg)
           {
             alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID));
@@ -110,9 +110,9 @@ namespace webifc::geometry
         }
 
         auto &relAggVector = GetRelAggregates();
-        if (relAggVector.count(line.expressID) == 1) 
+        if (relAggVector.count(expressID) == 1) 
         {
-          auto &relAgg = relAggVector.at(line.expressID);
+          auto &relAgg = relAggVector.at(expressID);
           for (auto expressID : relAgg)
           {
             alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID));
@@ -643,9 +643,9 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIAL:
       {
-        if (GetMaterialDefinitions().count(line.expressID) != 0)
+        if (GetMaterialDefinitions().count(expressID) != 0)
         {
-          auto &defs = GetMaterialDefinitions().at(line.expressID);
+          auto &defs = GetMaterialDefinitions().at(expressID);
           for (auto def : defs)
           {
             auto success = GetColor(def.second);
@@ -734,7 +734,7 @@ namespace webifc::geometry
         return {};
       }
       default:
-        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", line.expressID, line.ifcType);
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", expressID, line.ifcType);
         break;
       }
 
@@ -789,7 +789,7 @@ namespace webifc::geometry
         return bound;
       }
       default:
-        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", line.expressID, line.ifcType);
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", expressID, line.ifcType);
         break;
       }
 
@@ -867,7 +867,7 @@ namespace webifc::geometry
         return curve;
       }
       default:
-        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", line.expressID, line.ifcType);
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", expressID, line.ifcType);
         break;
       }
 
@@ -909,7 +909,7 @@ namespace webifc::geometry
         }
         else
         {
-          _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", point.expressID, point.ifcType);
+          _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", pointRef, point.ifcType);
         }
         
     }
@@ -941,7 +941,7 @@ namespace webifc::geometry
         return curve;
       }
       default:
-        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", line.expressID, line.ifcType);
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", expressID, line.ifcType);
         break;
       }
       return IfcCurve();
@@ -1108,7 +1108,7 @@ namespace webifc::geometry
         if (selfIntersects == "T")
         {
           // TODO: this is probably bad news
-          _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Self intersecting composite curve", line.expressID);
+          _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Self intersecting composite curve", expressID);
         }
 
         for (auto &token : segments)
@@ -1188,7 +1188,7 @@ namespace webifc::geometry
           }
           else
           {
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", expressID, line.ifcType);
           }
         }
         else if (dimensions == 3 && trim.exist)
@@ -1208,7 +1208,7 @@ namespace webifc::geometry
           }
           else
           {
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", line.expressID, line.ifcType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", expressID, line.ifcType);
           }
         }
       break;
@@ -1258,7 +1258,7 @@ namespace webifc::geometry
           if (selfIntersects == "T")
           {
             // TODO: this is probably bad news
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Self intersecting ifcindexedpolycurve", line.expressID);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Self intersecting ifcindexedpolycurve", expressID);
           }
         }
 
@@ -1300,7 +1300,7 @@ namespace webifc::geometry
         }
         else
         {
-          _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Parsing ifcindexedpolycurve in 3D is not possible", line.expressID);
+          _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Parsing ifcindexedpolycurve in 3D is not possible", expressID);
         }
 
         break;
@@ -1798,7 +1798,7 @@ case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
     break;
   }
 default:
-  _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", line.expressID, line.ifcType);
+  _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", expressID, line.ifcType);
   break;
 }
   
@@ -2309,7 +2309,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
       return profile;
     }
   default:
-    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", line.expressID, line.ifcType);
+    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", expressID, line.ifcType);
     break;
   }
 
@@ -2336,7 +2336,7 @@ IfcProfile IfcGeometryLoader::GetProfile3D(uint32_t expressID) const
       return profile;
     }
   default:
-    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 3D profile type", line.expressID, line.ifcType);
+    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 3D profile type", expressID, line.ifcType);
     break;
   }
 
@@ -2443,7 +2443,7 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
         glm::dvec3(pos, 1));
     }
   default:
-    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 2D placement type", line.expressID, line.ifcType);
+    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 2D placement type", expressID, line.ifcType);
     break;
   }
   return glm::dmat3();
@@ -2607,7 +2607,7 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
         glm::dvec4(pos, 1));
     }
   default:
-    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", line.expressID, line.ifcType);
+    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", expressID, line.ifcType);
     break;
   }
 
