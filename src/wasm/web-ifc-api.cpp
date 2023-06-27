@@ -25,7 +25,7 @@ struct ModelInfo
         ModelInfo(webifc::utility::LoaderSettings _settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
         {
             errorHandler = new webifc::utility::LoaderErrorHandler();
-            loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.NO_CHUNKS,*errorHandler,schemaManager);
+            loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,*errorHandler,schemaManager);
         }
         
         webifc::geometry::IfcGeometryProcessor * GetGeometryLoader()
@@ -447,7 +447,6 @@ bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
     {
         return {};
     }
-
     return loader->IsValidExpressID(expressId);
 }
 
@@ -839,7 +838,7 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
     {
         return 0;
     }
-    if (loader->GetMaxExpressId() < expressID || !loader->IsValidExpressID(expressID)) return 0;
+    if (!loader->IsValidExpressID(expressID)) return 0;
 
     auto& line = loader->GetLine(expressID);
     return line.ifcType;
@@ -904,7 +903,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("COORDINATE_TO_ORIGIN", &webifc::utility::LoaderSettings::COORDINATE_TO_ORIGIN)
         .field("CIRCLE_SEGMENTS", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &webifc::utility::LoaderSettings::TAPE_SIZE)
-        .field("NO_CHUNKS", &webifc::utility::LoaderSettings::NO_CHUNKS)
+        .field("MEMORY_LIMIT", &webifc::utility::LoaderSettings::MEMORY_LIMIT)
     ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")

@@ -18,9 +18,9 @@ namespace webifc::parsing {
    std::string p21encode(std::string_view input);
 
  
-   IfcLoader::IfcLoader(size_t tapeSize, uint8_t noChunks,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
+   IfcLoader::IfcLoader(size_t tapeSize, uint32_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
    { 
-     _tokenStream = new IfcTokenStream(tapeSize,noChunks);
+     _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
      _nullLine = new IfcLine();
      _nullLine->ifcType=0;
      _nullLine->tapeOffset=0;
@@ -34,13 +34,11 @@ namespace webifc::parsing {
    
    const std::vector<IfcHeaderLine> IfcLoader::GetHeaderLinesWithType(const uint32_t type) const
    { 
-     if (_ifcTypeToHeaderLineID.count(type)==0) return {};
-     auto &list = _ifcTypeToHeaderLineID.at(type);
-     std::vector<IfcHeaderLine> ret(list.size());
-
-     std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
-              { return _headerLines[lineID]; });
-
+     std::vector<IfcHeaderLine> ret;
+     for (auto &line: _headerLines)
+     {
+        if (line.ifcType==type) ret.push_back(line);
+     }
      return ret;
    }
    
@@ -69,7 +67,6 @@ namespace webifc::parsing {
           }
       }
       return IFC2X3;
-
    }
    
    void IfcLoader::LoadFile(std::istream &requestData)
@@ -321,7 +318,6 @@ namespace webifc::parsing {
   							l.ifcType = currentIfcType;
   							l.lineIndex = static_cast<uint32_t>(_headerLines.size());
   							l.tapeOffset = currentTapeOffset;
-  							_ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
   							_headerLines.push_back(std::move(l));
   						}
   					}
@@ -383,13 +379,13 @@ namespace webifc::parsing {
    
    bool IfcLoader::IsValidExpressID(const uint32_t expressID) const
    {  
-   	 if (expressID ==0 || _lines[expressID-1]==_nullLine) return false;
+   	 if (expressID == 0 || expressID > _lines.size() || _lines[expressID-1]==_nullLine) return false;
      else return true;
    }
    
    const IfcLine &IfcLoader::GetLine(const uint32_t expressID) const
    { 
-      if (_lines[expressID-1]==_nullLine || expressID == 0) {
+      if (expressID == 0 || expressID > _lines.size()) {
         _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Attempt to Access Invalid ExpressID", expressID);
         return *_nullLine;
       }
@@ -475,7 +471,7 @@ namespace webifc::parsing {
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
   {
-  	if (_lines.size() <expressID) _lines.resize(expressID,_nullLine);
+  	if (_lines.size() < expressID) _lines.resize(expressID,_nullLine);
     // new line?
     if (_lines[expressID-1] == _nullLine)
   	{
@@ -498,7 +494,6 @@ namespace webifc::parsing {
       l.ifcType = type;
       l.lineIndex = static_cast<uint32_t>(_headerLines.size());
       l.tapeOffset = start;
-      _ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
       _headerLines.push_back(std::move(l));
   }
   

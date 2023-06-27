@@ -570,7 +570,7 @@ describe('creating ifc', () => {
 describe('opening large amounts of data', () => {
     test("open a small model but with a heavy memory restriction", () => {
         let s: LoaderSettings = {
-            NO_CHUNKS :  2,
+            MEMORY_LIMIT :  209714,
             TAPE_SIZE : 104857
         };
         const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test'));
