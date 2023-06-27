@@ -767,6 +767,7 @@ namespace webifc::geometry
                 auto &lineProfile = _loader.GetLine(foundProfile);
                 if (_optimize_profiles)
                 {
+                    // std::cout << "Optimizing profile(ID: " << profileID << ")" << std::endl;
                     if (lineProfile.ifcType == schema::IFCCIRCLEHOLLOWPROFILEDEF || lineProfile.ifcType == schema::IFCCIRCLEPROFILEDEF)
                     {
                         _loader.MoveToArgumentOffset(lineProfile, 0);
@@ -780,53 +781,45 @@ namespace webifc::geometry
                             mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
                         }
 
+                        glm::dmat4 profileTransform = glm::dmat4(
+                            glm::dvec4(1, 0, 0, 0),
+                            glm::dvec4(0, 1, 0, 0),
+                            glm::dvec4(0, 0, 1, 0),
+                            glm::dvec4(0, 0, 0, 1)
+                        );
                         if (profilePlacementID)
                         {
                             auto trans2d = _geometryLoader.GetAxis2Placement2D(profilePlacementID);
-                            glm::dmat4 trans3d = glm::dmat4(
+                            profileTransform = glm::dmat4(
                                 glm::dvec4(trans2d[0][0], trans2d[0][1], 0, 0),
                                 glm::dvec4(trans2d[1][0], trans2d[1][1], 0, 0),
                                 glm::dvec4(0, 0, 1, 0),
                                 glm::dvec4(trans2d[2][0], trans2d[2][1], 0, 1)
                             );
-                            mesh.transformation *= trans3d;
                         }
 
                         glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
-
-                        double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
-                        bool flipWinding = dirDot < 0; // can't be perp according to spec
-
                         glm::dvec3 dx = glm::dvec3(1, 0, 0);
                         glm::dvec3 dy = glm::dvec3(0, 1, 0);
                         glm::dvec3 dz = glm::normalize(dir);
-                        if (glm::abs(dirDot) < EPS_BIG)
-                        {
-                            dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 0, 1)));
-                        }
-                        else
-                        {
-                            dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 1, 0)));
-                        }
 
-                        dy = glm::normalize(glm::cross(dir, dx));
-
-                        glm::dmat4 rot = glm::dmat4(
-                            glm::dvec4(1, 0, 0, 0),
-                            glm::dvec4(0, 1, 0, 0),
-                            glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0, 0, 0, 1));
-
-                        glm::dmat4 trans = glm::dmat4(
+                        glm::dmat4 profileScale = glm::dmat4(
                             glm::dvec4(dx * radius, 0),
                             glm::dvec4(dy * radius, 0),
+                            glm::dvec4(0, 0, 1, 0),
+                            glm::dvec4(0 ,0 ,0 ,1));
+                        
+                        glm::dmat4 extrusionScale = glm::dmat4(
+                            glm::dvec4(1, 0, 0, 0),
+                            glm::dvec4(0, 1, 0, 0),
                             glm::dvec4(dz * depth, 0),
-                            glm::dvec4(0, 0, 0, 1));
-                        trans = trans * rot;
+                            glm::dvec4(0 ,0 ,0 ,1));
+
+                        profileTransform *= profileScale;
+                        extrusionScale *= profileTransform;
+                        mesh.transformation *= extrusionScale;
 
                         _expressIDToGeometry[1] = predefinedCylinder;
-                        mesh.transformation = mesh.transformation * trans;
-
                         mesh.expressID = 1;
                         mesh.hasGeometry = true;
                         return mesh;
@@ -845,53 +838,48 @@ namespace webifc::geometry
                             mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
                         }
 
+                        glm::dmat4 profileTransform = glm::dmat4(
+                            glm::dvec4(1, 0, 0, 0),
+                            glm::dvec4(0, 1, 0, 0),
+                            glm::dvec4(0, 0, 1, 0),
+                            glm::dvec4(0, 0, 0, 1)
+                        );
                         if (profilePlacementID)
                         {
                             auto trans2d = _geometryLoader.GetAxis2Placement2D(profilePlacementID);
-                            glm::dmat4 trans3d = glm::dmat4(
+                            profileTransform = glm::dmat4(
                                 glm::dvec4(trans2d[0][0], trans2d[0][1], 0, 0),
                                 glm::dvec4(trans2d[1][0], trans2d[1][1], 0, 0),
                                 glm::dvec4(0, 0, 1, 0),
                                 glm::dvec4(trans2d[2][0], trans2d[2][1], 0, 1)
                             );
-                            mesh.transformation *= trans3d;
                         }
 
                         glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
 
                         double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
-                        bool flipWinding = dirDot < 0; // can't be perp according to spec
 
                         glm::dvec3 dx = glm::dvec3(1, 0, 0);
                         glm::dvec3 dy = glm::dvec3(0, 1, 0);
                         glm::dvec3 dz = glm::normalize(dir);
-                        if (glm::abs(dirDot) < EPS_BIG)
-                        {
-                            dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 0, 1)));
-                        }
-                        else
-                        {
-                            dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 1, 0)));
-                        }
 
-                        dy = glm::normalize(glm::cross(dir, dx));
-
-                        glm::dmat4 rot = glm::dmat4(
-                            glm::dvec4(1, 0, 0, 0),
-                            glm::dvec4(0, 1, 0, 0),
-                            glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0, 0, 0, 1));
-
-                        glm::dmat4 trans = glm::dmat4(
+                        glm::dmat4 profileScale = glm::dmat4(
                             glm::dvec4(dx * dimx, 0),
                             glm::dvec4(dy * dimy, 0),
+                            glm::dvec4(0, 0, 1, 0),
+                            glm::dvec4(0 ,0 ,0 ,1));
+                        
+                        glm::dmat4 extrusionScale = glm::dmat4(
+                            glm::dvec4(1, 0, 0, 0),
+                            glm::dvec4(0, 1, 0, 0),
                             glm::dvec4(dz * depth, 0),
-                            glm::dvec4(0, 0, 0, 1));
-                        trans = trans * rot;
+                            glm::dvec4(0 ,0 ,0 ,1));
+
+                        profileTransform *= profileScale;
+                        extrusionScale *= profileTransform;
+                        mesh.transformation *= extrusionScale;
 
                         _expressIDToGeometry[2] = predefinedCube;
-                        mesh.transformation = mesh.transformation * trans;
-
                         mesh.expressID = 2;
                         mesh.hasGeometry = true;
                         return mesh;
@@ -927,10 +915,10 @@ namespace webifc::geometry
                 double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
                 bool flipWinding = dirDot < 0; // can't be perp according to spec
 
-// TODO: correct dump in case of compositeProfile
-#ifdef CSG_DEBUG_OUTPUT
-                io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
-#endif
+                // TODO: correct dump in case of compositeProfile
+                #ifdef CSG_DEBUG_OUTPUT
+                    io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
+                #endif
 
                 IfcGeometry geom;
 
@@ -967,10 +955,10 @@ namespace webifc::geometry
                     }
                 }
 
-// TODO: correct dump in case of compositeProfile
-#ifdef CSG_DEBUG_OUTPUT
-                io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
-#endif
+                // TODO: correct dump in case of compositeProfile
+                #ifdef CSG_DEBUG_OUTPUT
+                    io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
+                #endif
 
                 _expressIDToGeometry[line.expressID] = geom;
                 mesh.expressID = line.expressID;
@@ -1717,7 +1705,7 @@ namespace webifc::geometry
 
             if (surface.BSplineSurface.Active)
             {
-                TriangulateBspline(geometry, bounds3D, surface);
+                TriangulateBspline(geometry, bounds3D, surface, _geometryLoader.GetLinearScalingFactor());
             }
             else if (surface.CylinderSurface.Active)
             {

@@ -271,11 +271,13 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep/DM1-3_RIV.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#block/ark_tyen_barnehage.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#solids/01-Architecture.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/TESTED_Simple_project_01.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/TESTED_Simple_project_01.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/Queens_demo_wip.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
-    
+    set.OPTIMIZE_PROFILES = true;
 
     webifc::utility::LoaderErrorHandler errorHandler;
     webifc::schema::IfcSchemaManager schemaManager;
@@ -324,8 +326,15 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 20906); //01-Architecture
     // SpecificLoadTest(loader, geometryLoader, 186); //TESTED_Simple_project_01
     // SpecificLoadTest(loader, geometryLoader, 22620); //TESTED_Simple_project_01
+    // SpecificLoadTest(loader, geometryLoader, 22551); //TESTED_Simple_project_01
+    // SpecificLoadTest(loader, geometryLoader, 474567); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 474551); //Queens_demo_wip
+    SpecificLoadTest(loader, geometryLoader, 247738); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 245903); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 242768); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 378325); //Solibri Building
 
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
 
 
