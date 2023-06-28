@@ -181,15 +181,15 @@ void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> & expressIds, em
     }
 }
 
-void StreamMeshesVal(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback)
+void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback)
 {
     std::vector<uint32_t> expressIds;
 
     uint32_t size = expressIdsVal["length"].as<uint32_t>();
     uint32_t index = 0;
-    while (index < size)
+    for (size_t i=0; i < size; i++) 
     {
-        emscripten::val expressIdVal = expressIdsVal[std::to_string(index++)];
+        emscripten::val expressIdVal = expressIdsVal[std::to_string(i)];
 
         uint32_t expressId = expressIdVal.as<uint32_t>();
 
@@ -1025,7 +1025,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
-    emscripten::function("StreamMeshes", &StreamMeshesVal);
+    emscripten::function("StreamMeshes", &StreamMeshesWithExpressID);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
