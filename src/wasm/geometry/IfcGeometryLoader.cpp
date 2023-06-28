@@ -1403,7 +1403,7 @@ namespace webifc::geometry
           {
             glm::dvec2 vec(0);
             vec[0] = radius * std::cos(angle);
-            vec[1] = -radius * std::sin(angle); // not sure why we need this, but we apparently do
+            vec[1] = radius * std::sin(angle); // not sure why we need this, but we apparently do
             glm::dvec2 pos = GetAxis2Placement2D(positionID) * glm::dvec3(vec, 1);
             curve.Add(pos);
           }
@@ -2366,7 +2366,6 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
   {
   case schema::IFCAXIS2PLACEMENT2D:
     {
-
       auto &line = _loader.GetLine(expressID);
 
       _loader.MoveToArgumentOffset(line, 0);
@@ -2382,7 +2381,7 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
 
       glm::dvec2 pos = GetCartesianPoint2D(locationID);
 
-      glm::dvec2 yAxis = glm::normalize(glm::dvec2(xAxis.y, -xAxis.x));
+      glm::dvec2 yAxis = glm::normalize(glm::dvec2(-xAxis.y, xAxis.x));
 
       return glm::dmat3(
         glm::dvec3(xAxis, 0),
