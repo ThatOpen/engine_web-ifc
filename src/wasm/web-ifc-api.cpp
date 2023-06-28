@@ -94,13 +94,13 @@ int CreateModel(webifc::utility::LoaderSettings settings)
 int OpenModel(webifc::utility::LoaderSettings settings, emscripten::val callback)
 {
     auto modelID = CreateModel(settings);
+    const std::function<uint32_t(char *, size_t, size_t)> loaderFunc= [callback](char* dest, size_t sourceOffset, size_t destSize) {    
+        emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
+        uint32_t len = retVal.as<uint32_t>();
+        return len;
+    };
     
-    models[modelID].GetLoader()->LoadFile([&](char* dest, size_t sourceOffset, size_t destSize)
-                    {
-                        emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
-                        uint32_t len = retVal.as<uint32_t>();
-                        return len;
-                    });
+    models[modelID].GetLoader()->LoadFile(loaderFunc);
 
     return modelID;
 }

@@ -15,7 +15,7 @@
    void IfcTokenStream::IfcFileStream::load()
    {
      if (_buffer == nullptr) _buffer = new char[_size];
-     prev=_buffer[_currentSize-1];
+     else if (_currentSize > 0) prev=_buffer[_currentSize-1];
      _currentSize = _dataSource(_buffer, _startRef, _size);
      _pointer = 0;
    }
@@ -54,8 +54,8 @@
 
    void IfcTokenStream::IfcFileStream::Clear() 
    {
-      delete _buffer;
-      _buffer=nullptr;
+      //delete[] _buffer;
+      //_buffer=nullptr;
    }
    
    char IfcTokenStream::IfcFileStream::Prev() 

@@ -23,7 +23,6 @@ namespace webifc::parsing
       while (!_fileStream->IsAtEnd())
       {
           checkMemory();
-          std::cout << _activeChunks<<":"<<_chunks.size()<<std::endl;
           IfcTokenChunk chunk(_chunkSize,tokenOffset,_fileStream->GetRef(),_fileStream);
           auto cSize = chunk.TokenSize();
           tokenOffset+=cSize;
@@ -42,6 +41,10 @@ namespace webifc::parsing
   
   std::string_view IfcTokenStream::ReadString() 
   {
+      if (!_cChunk->IsLoaded()) {
+        checkMemory();
+        _activeChunks++;
+      }
       auto length = _cChunk->Read<uint16_t>(_readPtr);
       Forward(2);
       auto str = _cChunk->ReadString(_readPtr,length);
@@ -75,14 +78,12 @@ namespace webifc::parsing
   void IfcTokenStream::checkMemory()
   {
     if (_activeChunks == _maxChunks){
-      std::cout << "FULL!"<<std::endl;
       for (uint32_t x = 0; x < _chunks.size(); x++) 
       {
         if (_chunks[x].IsLoaded())
         {
           if (_chunks[x].Clear())
           {
-            std::cout << "Cleared" << x <<std::endl;
             _activeChunks--;
             break;
           }

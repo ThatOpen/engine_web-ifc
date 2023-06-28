@@ -215,7 +215,7 @@ export class IfcAPI {
     */
     OpenModels(dataSets: Array<Uint8Array>, settings?: LoaderSettings): Array<number> {
         let s: LoaderSettings = {
-            MEMORY_LIMIT :  3221225472,
+            MEMORY_LIMIT :  2147483648,
             ...settings
         };
         s.MEMORY_LIMIT = s.MEMORY_LIMIT! / dataSets.length;
@@ -232,7 +232,7 @@ export class IfcAPI {
             COORDINATE_TO_ORIGIN: false,
             CIRCLE_SEGMENTS: 12,
             TAPE_SIZE: 67108864,
-            MEMORY_LIMIT: 3221225472,
+            MEMORY_LIMIT: 2147483648,
             ...settings
         };
         let deprecated = ['USE_FAST_BOOLS','CIRCLE_SEGMENTS_LOW','CIRCLE_SEGMENTS_MEDIUM','CIRCLE_SEGMENTS_HIGH'];
