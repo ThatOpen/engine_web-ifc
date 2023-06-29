@@ -31,7 +31,7 @@ namespace webifc::geometry {
 		if (fvertexData.size() != vertexData.size())
 		{
 			fvertexData.resize(vertexData.size());
-			for (size_t i = 0; i < vertexData.size(); i += 6)
+			for (size_t i = 0; i < vertexData.size()-5; i += 6)
 			{
 				fvertexData[i + 0] = vertexData[i + 0];
 				fvertexData[i + 1] = vertexData[i + 1];
