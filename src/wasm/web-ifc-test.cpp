@@ -267,7 +267,7 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/v41.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#398 solved/398.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#359/359.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#359 Solved/359.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep/DM1-3_RIV.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#block/ark_tyen_barnehage.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#solids/01-Architecture.ifc");
@@ -322,6 +322,7 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 10333); //359
     // SpecificLoadTest(loader, geometryLoader, 10340); //359
     // SpecificLoadTest(loader, geometryLoader, 10349); //359
+    // SpecificLoadTest(loader, geometryLoader, 8233); //359
     // SpecificLoadTest(loader, geometryLoader, 4235596); //DM1-3_RIV
     // SpecificLoadTest(loader, geometryLoader, 20906); //01-Architecture
     // SpecificLoadTest(loader, geometryLoader, 186); //TESTED_Simple_project_01
@@ -329,8 +330,8 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 22551); //TESTED_Simple_project_01
     // SpecificLoadTest(loader, geometryLoader, 474567); //Queens_demo_wip
     // SpecificLoadTest(loader, geometryLoader, 474551); //Queens_demo_wip
-    SpecificLoadTest(loader, geometryLoader, 247738); //Queens_demo_wip
-    // SpecificLoadTest(loader, geometryLoader, 245903); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 247738); //Queens_demo_wip
+    SpecificLoadTest(loader, geometryLoader, 245903); //Queens_demo_wip
     // SpecificLoadTest(loader, geometryLoader, 242768); //Queens_demo_wip
     // SpecificLoadTest(loader, geometryLoader, 378325); //Solibri Building
 

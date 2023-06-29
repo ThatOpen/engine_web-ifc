@@ -323,13 +323,14 @@ namespace webifc::geometry
                     flipWinding = true;
                 }
 
-                double d = EXTRUSION_DISTANCE_HALFSPACE_M / _geometryLoader.GetLinearScalingFactor();
+                double d = 1;
 
                 IfcProfile profile;
                 profile.isConvex = false;
                 profile.curve = GetRectangleCurve(d, d, glm::dmat3(1));
 
                 auto geom = Extrude(profile, extrusionNormal, d, _errorHandler);
+                geom.halfSpace = true;
 
                 // @Refactor: duplicate of extrudedareasolid
                 if (flipWinding)
@@ -785,8 +786,7 @@ namespace webifc::geometry
                             glm::dvec4(1, 0, 0, 0),
                             glm::dvec4(0, 1, 0, 0),
                             glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0, 0, 0, 1)
-                        );
+                            glm::dvec4(0, 0, 0, 1));
                         if (profilePlacementID)
                         {
                             auto trans2d = _geometryLoader.GetAxis2Placement2D(profilePlacementID);
@@ -794,8 +794,7 @@ namespace webifc::geometry
                                 glm::dvec4(trans2d[0][0], trans2d[0][1], 0, 0),
                                 glm::dvec4(trans2d[1][0], trans2d[1][1], 0, 0),
                                 glm::dvec4(0, 0, 1, 0),
-                                glm::dvec4(trans2d[2][0], trans2d[2][1], 0, 1)
-                            );
+                                glm::dvec4(trans2d[2][0], trans2d[2][1], 0, 1));
                         }
 
                         glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
@@ -807,13 +806,13 @@ namespace webifc::geometry
                             glm::dvec4(dx * radius, 0),
                             glm::dvec4(dy * radius, 0),
                             glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0 ,0 ,0 ,1));
-                        
+                            glm::dvec4(0, 0, 0, 1));
+
                         glm::dmat4 extrusionScale = glm::dmat4(
                             glm::dvec4(1, 0, 0, 0),
                             glm::dvec4(0, 1, 0, 0),
                             glm::dvec4(dz * depth, 0),
-                            glm::dvec4(0 ,0 ,0 ,1));
+                            glm::dvec4(0, 0, 0, 1));
 
                         profileTransform *= profileScale;
                         extrusionScale *= profileTransform;
@@ -842,8 +841,7 @@ namespace webifc::geometry
                             glm::dvec4(1, 0, 0, 0),
                             glm::dvec4(0, 1, 0, 0),
                             glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0, 0, 0, 1)
-                        );
+                            glm::dvec4(0, 0, 0, 1));
                         if (profilePlacementID)
                         {
                             auto trans2d = _geometryLoader.GetAxis2Placement2D(profilePlacementID);
@@ -851,8 +849,7 @@ namespace webifc::geometry
                                 glm::dvec4(trans2d[0][0], trans2d[0][1], 0, 0),
                                 glm::dvec4(trans2d[1][0], trans2d[1][1], 0, 0),
                                 glm::dvec4(0, 0, 1, 0),
-                                glm::dvec4(trans2d[2][0], trans2d[2][1], 0, 1)
-                            );
+                                glm::dvec4(trans2d[2][0], trans2d[2][1], 0, 1));
                         }
 
                         glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
@@ -867,13 +864,13 @@ namespace webifc::geometry
                             glm::dvec4(dx * dimx, 0),
                             glm::dvec4(dy * dimy, 0),
                             glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0 ,0 ,0 ,1));
-                        
+                            glm::dvec4(0, 0, 0, 1));
+
                         glm::dmat4 extrusionScale = glm::dmat4(
                             glm::dvec4(1, 0, 0, 0),
                             glm::dvec4(0, 1, 0, 0),
                             glm::dvec4(dz * depth, 0),
-                            glm::dvec4(0 ,0 ,0 ,1));
+                            glm::dvec4(0, 0, 0, 1));
 
                         profileTransform *= profileScale;
                         extrusionScale *= profileTransform;
@@ -915,10 +912,10 @@ namespace webifc::geometry
                 double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
                 bool flipWinding = dirDot < 0; // can't be perp according to spec
 
-                // TODO: correct dump in case of compositeProfile
-                #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
-                #endif
+// TODO: correct dump in case of compositeProfile
+#ifdef CSG_DEBUG_OUTPUT
+                io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
+#endif
 
                 IfcGeometry geom;
 
@@ -955,10 +952,10 @@ namespace webifc::geometry
                     }
                 }
 
-                // TODO: correct dump in case of compositeProfile
-                #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
-                #endif
+// TODO: correct dump in case of compositeProfile
+#ifdef CSG_DEBUG_OUTPUT
+                io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
+#endif
 
                 _expressIDToGeometry[line.expressID] = geom;
                 mesh.expressID = line.expressID;
@@ -1540,7 +1537,44 @@ namespace webifc::geometry
 
                 if (doit)
                 {
-                    result = fuzzybools::Subtract(result, secondGeom);
+                    if (secondGeom.halfSpace)
+                    {
+                        glm::dvec3 origin = secondGeom.halfSpaceOrigin;
+                        glm::dvec3 x = secondGeom.halfSpaceX - origin;
+                        glm::dvec3 y = secondGeom.halfSpaceY - origin;
+                        glm::dvec3 z = secondGeom.halfSpaceZ - origin;
+                        glm::dmat4 trans = glm::dmat4(
+                            glm::dvec4(x, 0),
+                            glm::dvec4(y, 0),
+                            glm::dvec4(z, 0),
+                            glm::dvec4(0, 0, 0, 1)
+                        );
+                        IfcGeometry newSecond;
+
+                        double scaleX = 1;
+                        double scaleY = 1;
+                        double scaleZ = 1;
+
+                        for (uint32_t i = 0; i < result.numPoints; i++)
+                        {
+                            glm::dvec3 p = result.GetPoint(i);
+                            glm::dvec3 vec = (p - origin);
+                            double dx = glm::dot(vec, x);
+                            double dy = glm::dot(vec, y);
+                            double dz = glm::dot(vec, z);
+                            if (glm::abs(dx) > scaleX) {scaleX = glm::abs(dx); }
+                            if (glm::abs(dy) > scaleY) {scaleY = glm::abs(dy); }
+                            if (glm::abs(dz) > scaleZ) {scaleZ = glm::abs(dz); }
+                        }
+                        newSecond.AddGeometry(secondGeom, trans, scaleX * 2, scaleY * 2, scaleZ * 2, secondGeom.halfSpaceOrigin);
+                        IfcGeometry newFirst;
+                        newFirst.AddGeometry(result);
+                        result = fuzzybools::Subtract(result, newSecond);
+                    }
+                    else
+                    {
+                        result = fuzzybools::Subtract(result, secondGeom);
+                    }
                 }
             }
             finalResult.AddGeometry(result);

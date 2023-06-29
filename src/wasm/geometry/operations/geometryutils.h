@@ -685,7 +685,15 @@ namespace webifc::geometry {
 				if (meshGeom.numFaces)
 				{
 					IfcGeometry newGeom;
-
+					newGeom.halfSpace = meshGeom.halfSpace;
+					if (newGeom.halfSpace)
+					{
+						newGeom.halfSpaceOrigin = newMat * glm::dvec4(meshGeom.halfSpaceOrigin, 1);
+						newGeom.halfSpaceX = newMat * glm::dvec4(meshGeom.halfSpaceX, 1);
+						newGeom.halfSpaceY = newMat * glm::dvec4(meshGeom.halfSpaceY, 1);
+						newGeom.halfSpaceZ = newMat * glm::dvec4(meshGeom.halfSpaceZ, 1);
+					}
+					
 					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 					{
 						fuzzybools::Face f = meshGeom.GetFace(i);
