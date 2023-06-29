@@ -94,13 +94,13 @@ int CreateModel(webifc::utility::LoaderSettings settings)
 int OpenModel(webifc::utility::LoaderSettings settings, emscripten::val callback)
 {
     auto modelID = CreateModel(settings);
+    const std::function<uint32_t(char *, size_t, size_t)> loaderFunc= [callback](char* dest, size_t sourceOffset, size_t destSize) {    
+        emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
+        uint32_t len = retVal.as<uint32_t>();
+        return len;
+    };
     
-    models[modelID].GetLoader()->LoadFile([&](char* dest, size_t sourceOffset, size_t destSize)
-                    {
-                        emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
-                        uint32_t len = retVal.as<uint32_t>();
-                        return len;
-                    });
+    models[modelID].GetLoader()->LoadFile(loaderFunc);
 
     return modelID;
 }
@@ -181,15 +181,15 @@ void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> & expressIds, em
     }
 }
 
-void StreamMeshesVal(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback)
+void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback)
 {
     std::vector<uint32_t> expressIds;
 
     uint32_t size = expressIdsVal["length"].as<uint32_t>();
     uint32_t index = 0;
-    while (index < size)
+    for (size_t i=0; i < size; i++) 
     {
-        emscripten::val expressIdVal = expressIdsVal[std::to_string(index++)];
+        emscripten::val expressIdVal = expressIdsVal[std::to_string(i)];
 
         uint32_t expressId = expressIdVal.as<uint32_t>();
 
@@ -406,11 +406,8 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types
     for (uint32_t i=0; i < size; i++) {
     
         uint32_t type = types[std::to_string(i)].as<uint32_t>();
-        auto lineIDs = loader->GetLineIDsWithType(type);
-        for (auto lineID : lineIDs)
-        {
-          expressIDs.push_back(loader->LineIDToExpressID(lineID));
-        }
+        auto ids = loader->GetExpressIDsWithType(type);
+        expressIDs.insert(expressIDs.end(),ids.begin(),ids.end());    
     }
     return expressIDs;
 }
@@ -426,8 +423,7 @@ std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expre
     auto expressIDs = GetLineIDsWithType(modelID,targetTypes);
     for (auto foundExpressID : expressIDs)
     {
-      auto lineID = loader->ExpressIDToLineID(foundExpressID); 
-      loader->MoveToLineArgument(lineID, position);
+      loader->MoveToLineArgument(foundExpressID, position);
 
       webifc::parsing::IfcTokenType t = loader->GetTokenType();
       if (t == webifc::parsing::IfcTokenType::REF) 
@@ -469,7 +465,6 @@ bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
     {
         return {};
     }
-
     return loader->IsValidExpressID(expressId);
 }
 
@@ -508,11 +503,11 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     }
 
     std::vector<uint32_t> expressIDs;
-    auto numLines = loader->GetNumLines();
-    for (uint32_t i = 0; i < numLines; i++)
+    auto numLines = loader->GetMaxExpressId();
+    for (uint32_t i = 1; i <= numLines; i++)
     {
-        if (loader->GetLine(i).expressID==0) continue;
-        expressIDs.push_back(loader->GetLine(i).expressID);
+        if (!loader->IsValidExpressID(i) || loader->GetLine(i).ifcType==0) continue;
+        expressIDs.push_back(i);
     }
     return expressIDs;
 }
@@ -670,8 +665,7 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
     loader->Push((void*)ifcName.c_str(), ifcName.size());
     bool responseCode = WriteSet(modelID,parameters);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
-    uint32_t end = loader->GetTotalSize();
-    loader->AddHeaderLineTape(type, start, end);
+    loader->AddHeaderLineTape(type, start);
     return responseCode;
 }
 
@@ -704,9 +698,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     // end line
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
 
-    uint32_t end = loader->GetTotalSize();
-
-    loader->UpdateLineTape(expressID, type, start, end);
+    loader->UpdateLineTape(expressID, type, start);
     return responseCode;
 }
 
@@ -842,18 +834,18 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
         return emscripten::val::undefined();
     }
 
-    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
-    if (line.expressID==0) return emscripten::val::object();
+    if (!loader->IsValidExpressID(expressID)) return emscripten::val::object();
+    auto& line = loader->GetLine(expressID);
+    if (line.ifcType==0) return emscripten::val::object();
 
     loader->MoveToArgumentOffset(line, 0);
 
     auto arguments = GetArgs(modelID);
 
     auto retVal = emscripten::val::object();
-    retVal.set(emscripten::val("ID"), line.expressID);
+    retVal.set(emscripten::val("ID"), expressID);
     retVal.set(emscripten::val("type"), line.ifcType);
     retVal.set(emscripten::val("arguments"), arguments);
-
     return retVal;
 }
 
@@ -864,9 +856,9 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
     {
         return 0;
     }
-    if (loader->GetMaxExpressId() < expressID || !loader->IsValidExpressID(expressID)) return 0;
+    if (!loader->IsValidExpressID(expressID)) return 0;
 
-    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
+    auto& line = loader->GetLine(expressID);
     return line.ifcType;
 }
 
@@ -1033,7 +1025,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
-    emscripten::function("StreamMeshes", &StreamMeshesVal);
+    emscripten::function("StreamMeshes", &StreamMeshesWithExpressID);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);

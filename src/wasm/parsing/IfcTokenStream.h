@@ -36,6 +36,10 @@ namespace webifc::parsing
         void SetTokenSource(std::istream &requestData);
         template <typename T> T Read()
         {
+          if (!_cChunk->IsLoaded()) {
+            checkMemory();
+            _activeChunks++;
+          }
           T v =  _cChunk->Read<T>(_readPtr);
           Forward(sizeof(T));
           return v;

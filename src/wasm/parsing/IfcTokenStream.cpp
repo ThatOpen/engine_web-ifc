@@ -41,6 +41,10 @@ namespace webifc::parsing
   
   std::string_view IfcTokenStream::ReadString() 
   {
+      if (!_cChunk->IsLoaded()) {
+        checkMemory();
+        _activeChunks++;
+      }
       auto length = _cChunk->Read<uint16_t>(_readPtr);
       Forward(2);
       auto str = _cChunk->ReadString(_readPtr,length);
