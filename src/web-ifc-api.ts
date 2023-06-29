@@ -60,7 +60,7 @@ export const LINE_END = 9;
  * @property {boolean} OPTIMIZE_PROFILES - If true, the model will return all circular and rectangular profiles as a single geometry.
  * @property {boolean} COORDINATE_TO_ORIGIN - If true, the model will be translated to the origin.
  * @property {number} CIRCLE_SEGMENTS - Number of segments for circles. 
- * @property {number} MEMORY_LIMIT - Memory limit for the loader.
+ * @property {number} MEMORY_LIMIT - The amount of memory to be reserved for storing IFC data in memory
  * @property {number} TAPE_SIZE - Size of the tape for the loader.
  */
 export interface LoaderSettings {
@@ -215,7 +215,7 @@ export class IfcAPI {
     */
     OpenModels(dataSets: Array<Uint8Array>, settings?: LoaderSettings): Array<number> {
         let s: LoaderSettings = {
-            MEMORY_LIMIT :  3221225472,
+            MEMORY_LIMIT :  2147483648,
             ...settings
         };
         s.MEMORY_LIMIT = s.MEMORY_LIMIT! / dataSets.length;
@@ -232,7 +232,7 @@ export class IfcAPI {
             COORDINATE_TO_ORIGIN: false,
             CIRCLE_SEGMENTS: 12,
             TAPE_SIZE: 67108864,
-            MEMORY_LIMIT: 3221225472,
+            MEMORY_LIMIT: 2147483648,
             ...settings
         };
         let deprecated = ['USE_FAST_BOOLS','CIRCLE_SEGMENTS_LOW','CIRCLE_SEGMENTS_MEDIUM','CIRCLE_SEGMENTS_HIGH'];
@@ -565,13 +565,12 @@ export class IfcAPI {
 	 * @param lineObject line object to write
 	 */
     WriteLine<Type extends IfcLineObject>(modelID: number, lineObject: Type) {
-        if (this.deletedLines.get(modelID)!.has(lineObject.expressID)) 
+        if (lineObject.expressID!= -1 && this.deletedLines.get(modelID)!.has(lineObject.expressID)) 
         {
             Log.error(`Cannot re-use deleted express ID`);
             return;
         }
-
-        if (this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
+        if (lineObject.expressID != -1 && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
         {
             Log.error(`Cannot change type of existing IFC Line`);
             return;
