@@ -14,6 +14,7 @@ let cppSchema: Array<string> = [];
 let chSchema: Array<string> = [];
 
 let completeifcElementList = new Set<string>();
+let schemaEntityMap: any = {};
 
 let completeEntityList = new Set<string>();
 completeEntityList.add("FILE_SCHEMA");
@@ -103,6 +104,8 @@ for (var i = 0; i < files.length; i++) {
   for (var x=0; x < entities.length; x++) 
   {
       completeEntityList.add(entities[x].name);
+      schemaEntityMap[entities[x].name] = schemaEntityMap[entities[x].name] || [];
+      schemaEntityMap[entities[x].name].push(schemaNameClean);
       if (entities[x].isIfcProduct) completeifcElementList.add(entities[x].name);
   }
   
@@ -247,6 +250,10 @@ for (var i = 0; i < files.length; i++) {
   
   for (var x=0; x < entities.length; x++) generateClass(entities[x], tsSchema,types,crcTable);
   tsSchema.push("}"); 
+}
+
+for(const entity in schemaEntityMap) {
+  tsSchema.push(`export type ${entity}=${schemaEntityMap[entity].map((s: any) => `${s}.${entity}`).join("|")};`);
 }
 
 // now write out the global c++/ts metadata. All the WASM needs to know about is a list of all entities

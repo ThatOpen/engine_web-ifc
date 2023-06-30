@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
  
 namespace webifc::utility
 {
@@ -28,6 +29,6 @@ namespace webifc::utility
     void info(const std::string& msg);
     void warn(const std::string& msg);
     void error(const std::string& msg);
-    void log(const std::string& msg, const LogLevel& level);
+    void log(const std::string& msg, const LogLevel& level, std::ostream& out = std::cout);
   }
 }

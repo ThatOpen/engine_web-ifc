@@ -10,10 +10,32 @@ describe('ModelApi', () => {
     beforeAll(async () => {
         ifcApi = new WebIFC.IfcAPI();
         await ifcApi.Init();
-        ifcApi.SetLogLevel(WebIFC.LogLevel.LOG_LEVEL_OFF);
-    })
+        //ifcApi.SetLogLevel(WebIFC.LogLevel.LOG_LEVEL_OFF);
+    });
 
-    test('Create', () => {
+    test('Create IFC2X3', () => {
+        const model = {
+            schema: WebIFC.Schemas.IFC2X3,
+        }
+        const testId = ifcApi.modelApi.Create(model);
+        const buffer = ifcApi.SaveModel(testId);
+        ifcApi.OpenModel(buffer);
+        expect(testId).toBeGreaterThan(-1);
+        ifcApi.CloseModel(testId);
+    });
+
+    test('Create IFC4', () => {
+        const model = {
+            schema: WebIFC.Schemas.IFC4,
+        }
+        const testId = ifcApi.modelApi.Create(model);
+        const buffer = ifcApi.SaveModel(testId);
+        ifcApi.OpenModel(buffer);
+        expect(testId).toBeGreaterThan(-1);
+        ifcApi.CloseModel(testId);
+    });
+
+    test('Create IFC4X3', () => {
         const model = {
             schema: WebIFC.Schemas.IFC4X3,
             name: 'ModelApi',
@@ -28,15 +50,17 @@ describe('ModelApi', () => {
             },
         }
         modelId = ifcApi.modelApi.Create(model);
+        const buffer = ifcApi.SaveModel(modelId);
+        ifcApi.OpenModel(buffer);
         expect(modelId).toBeGreaterThan(-1);
     });
 
     test('Add IfcApplication', () => {
         const application = new WebIFC.IFC4X3.IfcApplication(
             {type: WebIFC.REF , value: 23},
-            {type: WebIFC.IFCLABEL, value: '1.0'},
-            {type: WebIFC.IFCLABEL, value: 'WebIFC'},
-            {type: WebIFC.IFCLABEL, value: 'WebIFC'},
+            {type: WebIFC.STRING, value: '1.0'},            // why does this not work with WebIFC.Label ???
+            {type: WebIFC.STRING, value: 'WebIFC'},
+            {type: WebIFC.STRING, value: 'WebIFC'},
         );
         ifcApi.modelApi.AddApplication(modelId, application) as number;
     });

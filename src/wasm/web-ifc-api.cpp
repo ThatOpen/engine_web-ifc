@@ -530,6 +530,7 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
         break;
     }
     case webifc::parsing::IfcTokenType::REF:
+    case webifc::parsing::IfcTokenType::INTEGER:
     {
         uint32_t val = value.as<uint32_t>();
         loader->Push<uint32_t>(val);
@@ -620,6 +621,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
                 case webifc::parsing::IfcTokenType::ENUM:
                 case webifc::parsing::IfcTokenType::REF:
                 case webifc::parsing::IfcTokenType::REAL:
+                case webifc::parsing::IfcTokenType::INTEGER:
                 {
                     WriteValue(modelID,type, child["value"]);
                     break;

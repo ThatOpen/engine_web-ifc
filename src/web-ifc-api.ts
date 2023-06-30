@@ -17,7 +17,9 @@ import {
     InheritanceDef,
     InversePropertyDef,
     ToRawLineData,
-    SchemaNames
+    SchemaNames,
+    FILE_DESCRIPTION,
+    FILE_NAME,
 } from "./ifc-schema";
 import { ModelApi, PropsApi, GeomApi } from "./api";
 import { Properties } from "./helpers/properties";
@@ -38,7 +40,7 @@ if (typeof self !== 'undefined' && self.crossOriginIsolated) {
     }
 } else WebIFCWasm = require(__WASM_PATH__);
 
-export { ModelApi, PropsApi, LogLevel, Properties };
+export { ModelApi, PropsApi, LogLevel, Properties, guid };
 export * from "./ifc-schema";
 export const UNKNOWN = 0;
 export const STRING = 1;
@@ -50,6 +52,7 @@ export const EMPTY = 6;
 export const SET_BEGIN = 7;
 export const SET_END = 8;
 export const LINE_END = 9;
+export const INTEGER = 10;
 
 /**
  * Settings for the IFCLoader
@@ -313,7 +316,7 @@ export class IfcAPI {
      * @param schema ifc schema version
 	 * @returns ModelID
     */
-    CreateModel(schema: string, settings?: LoaderSettings): number {
+    CreateModel(schema: string, settings?: LoaderSettings, writeHeader = true): number {
         let s = this.CreateSettings(settings);
         let result = this.wasmModule.CreateModel(s);
         this.modelSchemaList[result] = this.LookupSchemaId(schema);
@@ -336,12 +339,16 @@ export class IfcAPI {
         let modelSize = this.wasmModule.GetModelSize(modelID);
         const headerBytes = 512;
         let dataBuffer = new Uint8Array(modelSize + headerBytes);
-        let size = 0; 
-        this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
-            let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
-            size = srcSize;
-            dataBuffer.set(src, 0);
-        });
+        let size = 0;
+        try {
+            this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
+                let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
+                size = srcSize;
+                dataBuffer.set(src, 0);
+            });
+        } catch (e) {
+            Log.error('Failed to save model ' + modelID);
+        }
         //shrink down to size
         let newBuffer = new Uint8Array(size);
         newBuffer.set(dataBuffer.subarray(0,size),0);
@@ -411,6 +418,7 @@ export class IfcAPI {
         }
 
         let rawLineData = this.GetRawLineData(modelID, expressID);
+        if(!rawLineData || !rawLineData.type) return null;
         let lineData;
         try {
             lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
@@ -483,7 +491,7 @@ export class IfcAPI {
      */
     CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
-        return Constructors[this.modelSchemaList[modelID]][type](-1,args);
+        return Constructors[this.modelSchemaList[modelID]][type](args);
     }
 
     /**
@@ -565,23 +573,33 @@ export class IfcAPI {
             Log.error(`Cannot change type of existing IFC Line`);
             return;
         }
-
         let property: keyof Type;
         const lineIds: number[] = [];
         if(!Array.isArray(lineObjects)) lineObjects = [lineObjects];
 
         for(const lineObject of lineObjects) {
+            if (lineObject.expressID !== undefined && this.deletedLines.get(modelID)?.has(lineObject.expressID)) 
+            {
+              Log.error(`Cannot re-use deleted express ID`);
+              continue;
+            }
+
+            if (lineObject.expressID !== undefined && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
+            {
+              Log.error(`Cannot change type of existing IFC Line`);
+              continue;
+            }
             for (property in lineObject) {
                 const lineProperty: any = lineObject[property];
                 if (lineProperty  && (lineProperty as IfcLineObject).expressID !== undefined) {
-                // this is a real object, we have to write it as well and convert to a handle
-                // TODO: detect if the object needs to be written at all, or if it's unchanged
-                this.WriteLine(modelID, lineProperty as IfcLineObject);
-
-                // overwrite the reference
-                // NOTE: this modifies the parameter
-                // no check for undefined because of above if
-                (lineObject[property] as any)= new Handle((lineProperty as IfcLineObject).expressID as number);
+                    // this is a real object, we have to write it as well and convert to a handle
+                    // TODO: detect if the object needs to be written at all, or if it's unchanged
+                    this.WriteLine(modelID, lineProperty as IfcLineObject);
+                    
+                    // overwrite the reference
+                    // NOTE: this modifies the parameter
+                    // no check for undefined because of above if
+                    (lineObject[property] as any)= new Handle((lineProperty as IfcLineObject).expressID as number);
                 }
                 else if (Array.isArray(lineProperty) && lineProperty.length > 0) {
                     for (let i = 0; i < lineProperty.length; i++) {
