@@ -31,7 +31,7 @@ namespace webifc::geometry {
 		if (fvertexData.size() != vertexData.size())
 		{
 			fvertexData.resize(vertexData.size());
-			for (size_t i = 0; i < vertexData.size(); i += 6)
+			for (size_t i = 0; i < vertexData.size()-5; i += 6)
 			{
 				fvertexData[i + 0] = vertexData[i + 0];
 				fvertexData[i + 1] = vertexData[i + 1];
@@ -54,7 +54,7 @@ namespace webifc::geometry {
 		return (uint32_t)(size_t)&fvertexData[0];
 	}
 
-	void IfcGeometry::AddGeometry(fuzzybools::Geometry geom)
+	void IfcGeometry::AddGeometry(fuzzybools::Geometry geom, glm::dmat4 trans, double scx, double scy, double scz, glm::dvec3 origin)
 	{
 			
 		for (uint32_t i = 0; i < geom.numFaces; i++)
@@ -63,6 +63,21 @@ namespace webifc::geometry {
 			glm::dvec3 a = geom.GetPoint(f.i0);
 			glm::dvec3 b = geom.GetPoint(f.i1);
 			glm::dvec3 c = geom.GetPoint(f.i2);
+			if(scx != 1 || scy != 1 || scz != 1)
+			{
+				double aax = glm::dot(trans[0], glm::dvec4(a - origin, 1)) * scx;
+				double aay = glm::dot(trans[1], glm::dvec4(a - origin, 1)) * scy;
+				double aaz = glm::dot(trans[2], glm::dvec4(a - origin, 1)) * scz;
+				a = origin + glm::dvec3(aax *  trans[0]) + glm::dvec3(aay * trans[1]) + glm::dvec3(aaz * trans[2]);
+				double bbx = glm::dot(trans[0], glm::dvec4(b - origin, 1)) * scx;
+				double bby = glm::dot(trans[1], glm::dvec4(b - origin, 1)) * scy;
+				double bbz = glm::dot(trans[2], glm::dvec4(b - origin, 1)) * scz;
+				b = origin + glm::dvec3(bbx *  trans[0]) + glm::dvec3(bby * trans[1]) + glm::dvec3(bbz * trans[2]);
+				double ccx = glm::dot(trans[0], glm::dvec4(c - origin, 1)) * scx;
+				double ccy = glm::dot(trans[1], glm::dvec4(c - origin, 1)) * scy;
+				double ccz = glm::dot(trans[2], glm::dvec4(c - origin, 1)) * scz;
+				c = origin + glm::dvec3(ccx *  trans[0]) + glm::dvec3(ccy * trans[1]) + glm::dvec3(ccz * trans[2]);
+			}
 			AddFace(a, b, c);
 		}
 

@@ -32,7 +32,7 @@ struct ModelInfo
         {
             if (geometryLoader==nullptr)
             {
-                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN);
+                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN, settings.OPTIMIZE_PROFILES);
             }
             return geometryLoader;
         }
@@ -94,13 +94,13 @@ int CreateModel(webifc::utility::LoaderSettings settings)
 int OpenModel(webifc::utility::LoaderSettings settings, emscripten::val callback)
 {
     auto modelID = CreateModel(settings);
+    const std::function<uint32_t(char *, size_t, size_t)> loaderFunc= [callback](char* dest, size_t sourceOffset, size_t destSize) {    
+        emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
+        uint32_t len = retVal.as<uint32_t>();
+        return len;
+    };
     
-    models[modelID].GetLoader()->LoadFile([&](char* dest, size_t sourceOffset, size_t destSize)
-                    {
-                        emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
-                        uint32_t len = retVal.as<uint32_t>();
-                        return len;
-                    });
+    models[modelID].GetLoader()->LoadFile(loaderFunc);
 
     return modelID;
 }
@@ -144,7 +144,7 @@ webifc::geometry::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
     return mesh;
 }
 
-void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten::val callback) {
+void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> & expressIds, emscripten::val callback) {
     auto loader = models[modelID].GetLoader();
     auto geomLoader = models[modelID].GetGeometryLoader();
 
@@ -179,6 +179,24 @@ void StreamMeshes(uint32_t modelID, std::vector<uint32_t> expressIds, emscripten
 
         index++;
     }
+}
+
+void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback)
+{
+    std::vector<uint32_t> expressIds;
+
+    uint32_t size = expressIdsVal["length"].as<uint32_t>();
+    uint32_t index = 0;
+    for (size_t i=0; i < size; i++) 
+    {
+        emscripten::val expressIdVal = expressIdsVal[std::to_string(i)];
+
+        uint32_t expressId = expressIdVal.as<uint32_t>();
+
+        expressIds.push_back(expressId);
+    }
+    
+    StreamMeshes(modelID, expressIds, callback);
 }
 
 void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t>& types, emscripten::val callback)
@@ -388,11 +406,8 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types
     for (uint32_t i=0; i < size; i++) {
     
         uint32_t type = types[std::to_string(i)].as<uint32_t>();
-        auto lineIDs = loader->GetLineIDsWithType(type);
-        for (auto lineID : lineIDs)
-        {
-          expressIDs.push_back(loader->LineIDToExpressID(lineID));
-        }
+        auto ids = loader->GetExpressIDsWithType(type);
+        expressIDs.insert(expressIDs.end(),ids.begin(),ids.end());    
     }
     return expressIDs;
 }
@@ -408,8 +423,7 @@ std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expre
     auto expressIDs = GetLineIDsWithType(modelID,targetTypes);
     for (auto foundExpressID : expressIDs)
     {
-      auto lineID = loader->ExpressIDToLineID(foundExpressID); 
-      loader->MoveToLineArgument(lineID, position);
+      loader->MoveToLineArgument(foundExpressID, position);
 
       webifc::parsing::IfcTokenType t = loader->GetTokenType();
       if (t == webifc::parsing::IfcTokenType::REF) 
@@ -451,7 +465,6 @@ bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
     {
         return {};
     }
-
     return loader->IsValidExpressID(expressId);
 }
 
@@ -490,10 +503,11 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     }
 
     std::vector<uint32_t> expressIDs;
-    auto numLines = loader->GetNumLines();
-    for (uint32_t i = 0; i < numLines; i++)
+    auto numLines = loader->GetMaxExpressId();
+    for (uint32_t i = 1; i <= numLines; i++)
     {
-        expressIDs.push_back(loader->GetLine(i).expressID);
+        if (!loader->IsValidExpressID(i) || loader->GetLine(i).ifcType==0) continue;
+        expressIDs.push_back(i);
     }
     return expressIDs;
 }
@@ -550,6 +564,18 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
         if (child.isNull()) loader->Push<uint8_t>(webifc::parsing::IfcTokenType::EMPTY);
         else if (child.isUndefined()) continue;
         else if (child.isArray()) WriteSet(modelID,child);
+        else if (child["value"].isArray())
+        {
+            emscripten::val innerVal = child["value"];
+            loader->Push(webifc::parsing::IfcTokenType::SET_BEGIN);
+            uint32_t sz = innerVal["length"].as<uint32_t>();
+            for (size_t z=0; z < sz;z++) {
+                double value = innerVal[std::to_string(z)].as<double>();
+                loader->Push<uint8_t>(webifc::parsing::IfcTokenType::REAL);
+                loader->Push<double>(value);
+            }
+            loader->Push(webifc::parsing::IfcTokenType::SET_END);
+        }
         else if (child["type"].isNumber())
         {
             webifc::parsing::IfcTokenType type = static_cast<webifc::parsing::IfcTokenType>(child["type"].as<uint32_t>());
@@ -651,9 +677,15 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
     loader->Push((void*)ifcName.c_str(), ifcName.size());
     bool responseCode = WriteSet(modelID,parameters);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
-    uint32_t end = loader->GetTotalSize();
-    loader->AddHeaderLineTape(type, start, end);
+    loader->AddHeaderLineTape(type, start);
     return responseCode;
+}
+
+void RemoveLine(uint32_t modelID, uint32_t expressID)
+{
+    auto loader = models[modelID].GetLoader();
+    if (!loader) return;
+    loader->RemoveLine(expressID);
 }
 
 bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
@@ -678,9 +710,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     // end line
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
 
-    uint32_t end = loader->GetTotalSize();
-
-    loader->UpdateLineTape(expressID, type, start, end);
+    loader->UpdateLineTape(expressID, type, start);
     return responseCode;
 }
 
@@ -816,17 +846,18 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
         return emscripten::val::undefined();
     }
 
-    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
+    if (!loader->IsValidExpressID(expressID)) return emscripten::val::object();
+    auto& line = loader->GetLine(expressID);
+    if (line.ifcType==0) return emscripten::val::object();
 
     loader->MoveToArgumentOffset(line, 0);
 
     auto arguments = GetArgs(modelID);
 
     auto retVal = emscripten::val::object();
-    retVal.set(emscripten::val("ID"), line.expressID);
+    retVal.set(emscripten::val("ID"), expressID);
     retVal.set(emscripten::val("type"), line.ifcType);
     retVal.set(emscripten::val("arguments"), arguments);
-
     return retVal;
 }
 
@@ -835,10 +866,11 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
     auto loader = models[modelID].GetLoader();
     if (!loader)
     {
-        return -1;
+        return 0;
     }
+    if (!loader->IsValidExpressID(expressID)) return 0;
 
-    auto& line = loader->GetLine(loader->ExpressIDToLineID(expressID));
+    auto& line = loader->GetLine(expressID);
     return line.ifcType;
 }
 
@@ -897,6 +929,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
         ;
 
     emscripten::value_object<webifc::utility::LoaderSettings>("LoaderSettings")
+        .field("OPTIMIZE_PROFILES", &webifc::utility::LoaderSettings::OPTIMIZE_PROFILES)
         .field("COORDINATE_TO_ORIGIN", &webifc::utility::LoaderSettings::COORDINATE_TO_ORIGIN)
         .field("CIRCLE_SEGMENTS", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &webifc::utility::LoaderSettings::TAPE_SIZE)
@@ -1004,7 +1037,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
-    emscripten::function("StreamMeshes", &StreamMeshes);
+    emscripten::function("StreamMeshes", &StreamMeshesWithExpressID);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
@@ -1013,6 +1046,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetLineType", &GetLineType);
     emscripten::function("GetHeaderLine", &GetHeaderLine);
     emscripten::function("WriteLine", &WriteLine);
+    emscripten::function("RemoveLine", &RemoveLine);
     emscripten::function("WriteHeaderLine", &WriteHeaderLine);
     emscripten::function("SaveModel", &SaveModel);
     emscripten::function("ValidateExpressID", &ValidateExpressID);

@@ -18,32 +18,27 @@ namespace webifc::parsing {
    std::string p21encode(std::string_view input);
 
  
-   IfcLoader::IfcLoader(size_t tapeSize, size_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
+   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
    { 
-   _tokenStream = new IfcTokenStream(tapeSize,(memoryLimit/tapeSize));
+     _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
+     _nullLine = new IfcLine();
+     _nullLine->ifcType=0;
+     _nullLine->tapeOffset=0;
    }  
    
    const std::vector<uint32_t> IfcLoader::GetExpressIDsWithType(const uint32_t type) const
    { 
-      if (_ifcTypeToLineID.count(type)==0) return {};
-      auto &list = _ifcTypeToLineID.at(type);
-      std::vector<uint32_t> ret(list.size());
-
-      std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
-      { return _lines[lineID].expressID; });
-
-      return ret;
+      if (_ifcTypeToExpressID.count(type)==0) return {};
+      return _ifcTypeToExpressID.at(type);
    }
    
    const std::vector<IfcHeaderLine> IfcLoader::GetHeaderLinesWithType(const uint32_t type) const
    { 
-     if (_ifcTypeToHeaderLineID.count(type)==0) return {};
-     auto &list = _ifcTypeToHeaderLineID.at(type);
-     std::vector<IfcHeaderLine> ret(list.size());
-
-     std::transform(list.begin(), list.end(), ret.begin(), [&](uint32_t lineID)
-              { return _headerLines[lineID]; });
-
+     std::vector<IfcHeaderLine> ret;
+     for (auto &line: _headerLines)
+     {
+        if (line.ifcType==type) ret.push_back(line);
+     }
      return ret;
    }
    
@@ -72,7 +67,6 @@ namespace webifc::parsing {
           }
       }
       return IFC2X3;
-
    }
    
    void IfcLoader::LoadFile(std::istream &requestData)
@@ -185,7 +179,8 @@ namespace webifc::parsing {
       output << "ENDSEC;"<<std::endl<<"DATA;"<<std::endl;
       for(uint32_t i=0; i < _lines.size();i++)
       {
-        _tokenStream->MoveTo(_lines[i].tapeOffset);
+        if (_lines[i] == _nullLine || _lines[i]->ifcType == 0) continue;
+        _tokenStream->MoveTo(_lines[i]->tapeOffset);
         bool newLine = true;
         bool insideSet = false;
         IfcTokenType prev = IfcTokenType::EMPTY;
@@ -307,16 +302,13 @@ namespace webifc::parsing {
   				{
             if (currentExpressID != 0)
   					{
-  						IfcLine l;
-  						l.expressID = currentExpressID;
-  						l.ifcType = currentIfcType;
-  						l.lineIndex = static_cast<uint32_t>(_lines.size());
-  						l.tapeOffset = currentTapeOffset;
-  						l.tapeEnd = _tokenStream->GetReadOffset();
-  						_ifcTypeToLineID[l.ifcType].push_back(l.lineIndex);
-  						maxExpressId = std::max(maxExpressId, l.expressID);
-
-  						_lines.push_back(std::move(l));
+  						IfcLine* l = new IfcLine();
+  						l->ifcType = currentIfcType;
+  						l->tapeOffset = currentTapeOffset;
+  						_ifcTypeToExpressID[l->ifcType].push_back(currentExpressID);
+  						maxExpressId = std::max(maxExpressId, currentExpressID);
+              _lines.resize(maxExpressId,_nullLine);
+  						_lines[currentExpressID-1]=l;
   					}
   					else if (currentIfcType != 0)
   					{
@@ -326,8 +318,6 @@ namespace webifc::parsing {
   							l.ifcType = currentIfcType;
   							l.lineIndex = static_cast<uint32_t>(_headerLines.size());
   							l.tapeOffset = currentTapeOffset;
-  							l.tapeEnd = _tokenStream->GetReadOffset();
-  							_ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
   							_headerLines.push_back(std::move(l));
   						}
   					}
@@ -380,46 +370,26 @@ namespace webifc::parsing {
   					break;
   				}
   			}
-  			_expressIDToLine.resize(maxExpressId + 1);
-  			for (uint32_t i = 1; i <= _lines.size(); i++) _expressIDToLine[_lines[i-1].expressID] = i;
-   }
-   
-   size_t IfcLoader::GetNumLines() const
-   { 
-     return _lines.size();
-   }
-   
-   const std::vector<uint32_t> IfcLoader::GetLineIDsWithType(const uint32_t type) const
-   { 
-      if (_ifcTypeToLineID.count(type)==0) return {};
-      return _ifcTypeToLineID.at(type);
    }
    
    uint32_t IfcLoader::GetMaxExpressId() const
    { 
-      if (_expressIDToLine.size()==0) return 0;
-      return _expressIDToLine.size()-1;
+      return _lines.size();
    }
    
    bool IfcLoader::IsValidExpressID(const uint32_t expressID) const
    {  
-   	 if (_expressIDToLine[expressID]==0) return false;
+   	 if (expressID == 0 || expressID > _lines.size() || _lines[expressID-1]==_nullLine) return false;
      else return true;
    }
    
-   uint32_t IfcLoader::ExpressIDToLineID(const uint32_t expressID) const
+   const IfcLine &IfcLoader::GetLine(const uint32_t expressID) const
    { 
-      return _expressIDToLine[expressID]-1;
-   }
-   
-   uint32_t IfcLoader::LineIDToExpressID(const uint32_t lineID) const
-   { 
-      return _lines[lineID].expressID;
-   }
-   
-   const IfcLine &IfcLoader::GetLine(const uint32_t lineID) const
-   { 
-      return _lines[lineID];
+      if (expressID == 0 || expressID > _lines.size()) {
+        _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Attempt to Access Invalid ExpressID", expressID);
+        return *_nullLine;
+      }
+      return *_lines[expressID-1];
    }
    
    IfcLoader::~IfcLoader()
@@ -427,9 +397,10 @@ namespace webifc::parsing {
      delete _tokenStream;
    }
    
-   void IfcLoader::MoveToLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const
+   void IfcLoader::MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const
    { 
-     MoveToArgumentOffset(_lines[lineID], argumentIndex);
+     _tokenStream->MoveTo(_lines[expressID-1]->tapeOffset);
+     ArgumentOffset(argumentIndex);
    }
    
    void IfcLoader::MoveToHeaderLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const
@@ -456,12 +427,26 @@ namespace webifc::parsing {
        _tokenStream->Read<char>(); // real type
        return _tokenStream->Read<double>();
    }
+
+  uint32_t IfcLoader::GetCurrentLineExpressID() const
+  {
+      if (_lines.size()==0) return 0;
+      uint32_t pos = _tokenStream->GetReadOffset();
+      uint32_t prevLine = 0;
+      for (size_t i=0; i < _lines.size();i++)
+      {
+        if (_lines[i] == _nullLine) continue;
+        if (_lines[i]->tapeOffset > pos) break;
+        prevLine = i;
+      }
+      return prevLine-1;
+  }
    
    uint32_t IfcLoader::GetRefArgument() const
    { 
       if (_tokenStream->Read<char>() != IfcTokenType::REF)
      	{
-     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF");
+     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF", GetCurrentLineExpressID());
      		return 0;
      	}
      	return _tokenStream->Read<uint32_t>();
@@ -478,51 +463,37 @@ namespace webifc::parsing {
 		_tokenStream->MoveTo(tapeOffset);
 		return GetDoubleArgument();
 	}
-  
-  void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start, const uint32_t end)
+
+  void IfcLoader::RemoveLine(const uint32_t expressID)
   {
-  	if (expressID >= _expressIDToLine.size())
-    {
-       // allocate some space
-      _expressIDToLine.resize(expressID+1);
-    }
-
+      _lines[expressID-1]->ifcType = 0;
+  }
+  
+  void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
+  {
+  	if (_lines.size() < expressID) _lines.resize(expressID,_nullLine);
     // new line?
-    if (_expressIDToLine[expressID] == 0)
+    if (_lines[expressID-1] == _nullLine)
   	{
-
       // create line object
-  		int lineID = _lines.size();
-  		_lines.emplace_back();
-
-  		// create a line ID
-  		_expressIDToLine[expressID] = lineID+1;
-  		auto &line = _lines[lineID];
-
+  		IfcLine * line = new IfcLine();
+      _lines[expressID-1]=line;
   		// fill line data
-  		line.expressID = expressID;
-  		line.lineIndex = lineID;
-  		line.ifcType = type;
+  		line->ifcType = type;
 
-  		_ifcTypeToLineID[type].push_back(lineID);
+  		_ifcTypeToExpressID[type].push_back(expressID);
   	}
 
-  	auto lineID = _expressIDToLine[expressID]-1;
-  	auto &line = _lines[lineID];
-
-  	line.tapeOffset = start;
-  	line.tapeEnd = end;
+  	_lines[expressID-1]->tapeOffset = start;
   }
 
-  void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start, const uint32_t end)
+  void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start)
   {
     
       IfcHeaderLine l;
       l.ifcType = type;
       l.lineIndex = static_cast<uint32_t>(_headerLines.size());
       l.tapeOffset = start;
-      l.tapeEnd = end;
-      _ifcTypeToHeaderLineID[l.ifcType].push_back(l.lineIndex);
       _headerLines.push_back(std::move(l));
   }
   
@@ -545,7 +516,7 @@ namespace webifc::parsing {
      	}
      	else
      	{
-     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY");
+     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY", GetCurrentLineExpressID());
      		return 0;
      	}
    }
@@ -607,7 +578,7 @@ namespace webifc::parsing {
          }
          else
          {
-           _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token");
+           _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token", GetCurrentLineExpressID());
          }
        }
 
@@ -670,7 +641,7 @@ namespace webifc::parsing {
      			}
      			else
      			{
-     				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token");
+     				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token", GetCurrentLineExpressID());
      			}
      		}
 
@@ -705,7 +676,7 @@ namespace webifc::parsing {
    		{
    		case IfcTokenType::LINE_END:
    		{
-   			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected line end");
+   			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected line end", GetCurrentLineExpressID());
    			break;
    		}
    		case IfcTokenType::UNKNOWN:

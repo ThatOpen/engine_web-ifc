@@ -25,7 +25,7 @@ namespace webifc::geometry
   class IfcGeometryProcessor 
   {
       public:
-        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin);
+        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, bool optimizeprofiles);
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
         IfcFlatMesh GetFlatMesh(uint32_t expressID);
@@ -40,7 +40,6 @@ namespace webifc::geometry
         IfcGeometry BoolSubtract(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups);
         std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
         std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
-        IfcComposedMesh GetMeshByLine(uint32_t lineID);
         IfcSurface GetSurface(uint32_t expressID);
         const IfcGeometryLoader _geometryLoader;
         glm::dmat4 _transformation = glm::dmat4(1.0);
@@ -49,11 +48,14 @@ namespace webifc::geometry
         const schema::IfcSchemaManager &_schemaManager;
         bool _isCoordinated = false;
         bool _coordinateToOrigin;
+        bool _optimize_profiles;
         uint16_t _circleSegments;
         glm::dmat4 _coordinationMatrix = glm::dmat4(1.0);
         void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false);
         std::vector<uint32_t> Read2DArrayOfThreeIndices();
         void ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points);
+        IfcGeometry predefinedCylinder;
+        IfcGeometry predefinedCube;
   };
   
 }

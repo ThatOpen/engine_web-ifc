@@ -175,6 +175,10 @@ async function LoadFile(filename) {
     ifcapi.WriteLine(modelID, newUnits2);
 
     let time = ms() - start;
+    let obj =  ifcapi.GetLine(modelID,148);
+    console.log(obj.RefLatitude);
+    obj.RefLatitude.value[0]=999;
+    ifcapi.WriteLine(modelID, obj);
     console.log(`Writing ${numLines} lines took ${time} ms`);
 
     start = ms();

@@ -266,11 +266,18 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/IfcSurfaceCurveSweptAreaSolid.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/v41.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#398 solved/398.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#359 Solved/359.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep/DM1-3_RIV.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#block/ark_tyen_barnehage.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#solids/01-Architecture.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/TESTED_Simple_project_01.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/Queens_demo_wip.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
-    
+    set.OPTIMIZE_PROFILES = true;
 
     webifc::utility::LoaderErrorHandler errorHandler;
     webifc::schema::IfcSchemaManager schemaManager;
@@ -294,7 +301,7 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS,set.COORDINATE_TO_ORIGIN);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS,set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);
@@ -310,7 +317,23 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 2837); // IfcSurfaceCurveSweptAreaSolid
     // SpecificLoadTest(loader, geometryLoader, 112077); // v41
     // SpecificLoadTest(loader, geometryLoader, 527); // 398
-    SpecificLoadTest(loader, geometryLoader, 1342624); //384
+    // SpecificLoadTest(loader, geometryLoader, 1342624); //384
+    // SpecificLoadTest(loader, geometryLoader, 10567); //359
+    // SpecificLoadTest(loader, geometryLoader, 10333); //359
+    // SpecificLoadTest(loader, geometryLoader, 10340); //359
+    // SpecificLoadTest(loader, geometryLoader, 10349); //359
+    // SpecificLoadTest(loader, geometryLoader, 8233); //359
+    // SpecificLoadTest(loader, geometryLoader, 4235596); //DM1-3_RIV
+    // SpecificLoadTest(loader, geometryLoader, 20906); //01-Architecture
+    // SpecificLoadTest(loader, geometryLoader, 186); //TESTED_Simple_project_01
+    // SpecificLoadTest(loader, geometryLoader, 22620); //TESTED_Simple_project_01
+    // SpecificLoadTest(loader, geometryLoader, 22551); //TESTED_Simple_project_01
+    // SpecificLoadTest(loader, geometryLoader, 474567); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 474551); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 247738); //Queens_demo_wip
+    SpecificLoadTest(loader, geometryLoader, 245903); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 242768); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 378325); //Solibri Building
 
     // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
