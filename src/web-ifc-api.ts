@@ -18,8 +18,8 @@ import {
     InversePropertyDef,
     ToRawLineData,
     SchemaNames,
-    FILE_DESCRIPTION,
     FILE_NAME,
+    FILE_DESCRIPTION
 } from "./ifc-schema";
 import { ModelApi, PropsApi, GeomApi } from "./api";
 import { Properties } from "./helpers/properties";
@@ -327,6 +327,23 @@ export class IfcAPI {
             this.CloseModel(result)
             return -1;
         } 
+        if(writeHeader) {
+            this.wasmModule.WriteHeaderLine(result, FILE_DESCRIPTION,[
+                [{type: STRING, value: 'ViewDefinition []'}], 
+                {type: STRING, value: '2;1'}
+            ]);
+            const appName = 'ifcjs/web-ifc ' + this.GetVersion();
+            this.wasmModule.WriteHeaderLine(result, FILE_NAME,[
+               {type: STRING, value: 'IfcModel.ifc'},
+               {type: STRING, value: new Date().toISOString().slice(0,19)},
+               [{type: STRING, value: '' }],
+               [{type: STRING, value: appName}],
+               {type: STRING, value: appName},
+               {type: STRING, value: appName},
+               null,
+            ]);
+            this.wasmModule.WriteHeaderLine(result, FILE_SCHEMA,[[{type: STRING, value: schema}]]);
+        }
         return result;
     }
 
@@ -563,28 +580,18 @@ export class IfcAPI {
 	 * @param lineObject line object to write
 	 */
     WriteLine<Type extends IfcLineObject>(modelID: number, lineObjects: Type | Type[]) {
-        if (lineObject.expressID!= -1 && this.deletedLines.get(modelID)!.has(lineObject.expressID)) 
-        {
-            Log.error(`Cannot re-use deleted express ID`);
-            return;
-        }
-        if (lineObject.expressID != -1 && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
-        {
-            Log.error(`Cannot change type of existing IFC Line`);
-            return;
-        }
         let property: keyof Type;
         const lineIds: number[] = [];
         if(!Array.isArray(lineObjects)) lineObjects = [lineObjects];
 
         for(const lineObject of lineObjects) {
-            if (lineObject.expressID !== undefined && this.deletedLines.get(modelID)?.has(lineObject.expressID)) 
+            if (lineObject.expressID !== undefined && lineObject.expressID !== -1 && this.deletedLines.get(modelID)?.has(lineObject.expressID)) 
             {
               Log.error(`Cannot re-use deleted express ID`);
               continue;
             }
 
-            if (lineObject.expressID !== undefined && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
+            if (lineObject.expressID !== undefined && lineObject.expressID !== -1 && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
             {
               Log.error(`Cannot change type of existing IFC Line`);
               continue;
