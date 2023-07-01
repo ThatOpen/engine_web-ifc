@@ -911,7 +911,6 @@ namespace webifc::geometry
         {
           _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", pointRef, point.ifcType);
         }
-        
     }
 
     IfcCurve IfcGeometryLoader::GetEdge(uint32_t expressID) const
