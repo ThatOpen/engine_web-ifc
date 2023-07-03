@@ -15,16 +15,15 @@ namespace webifc::parsing
     
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
-    _chunkData = NULL;
-    if (_fileStream!=NULL) Load();
+    _chunkData = nullptr;
+    if (_fileStream!=nullptr) Load();
     else _loaded=true;
-   
   }
   
   bool IfcTokenStream::IfcTokenChunk::Clear()
   {
-    if (_fileStream==NULL) return false; 
-    delete _chunkData;
+    if (_fileStream==nullptr) return false; 
+    delete[] _chunkData;
     _loaded=false;
     return true;
   }
@@ -53,7 +52,7 @@ namespace webifc::parsing
   void IfcTokenStream::IfcTokenChunk::Push(void *v, const size_t size)
   {
       _currentSize+=size;
-      if (_chunkData == NULL ) 
+      if (_chunkData == nullptr) 
       {
          _chunkData = new uint8_t[_chunkSize];
       }
@@ -62,7 +61,7 @@ namespace webifc::parsing
           _chunkData = new uint8_t[_currentSize];
           std::memcpy(_chunkData, tmp, _currentSize-size);
           _chunkSize = _currentSize;
-          delete tmp;
+          delete[] tmp;
       }
       std::memcpy(_chunkData + _currentSize - size, v, size);
   }

@@ -431,22 +431,25 @@ namespace webifc::geometry {
 		double hd = depth / 2;
 		double hweb = thickness / 2;
 
-		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
-		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
 		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));
 
 		if (hasFillet)
 		{
 			// TODO: Create interpolation and sloped lines
+			c.points.push_back(placement * glm::dvec3(+hw, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, +hd, 1));
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec3(-hw, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(+hw - thickness, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(+hw - thickness, +hd, 1));
+			c.points.push_back(placement * glm::dvec3(+hw, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, +hd, 1));
 		}
 
-		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
 
 		if (MatrixFlipsTriangles(placement))
 		{

@@ -770,16 +770,24 @@ namespace webifc::geometry
 		{
 			auto meshGeom = geomIt->second;
 
-			if (meshGeom.numFaces)
-			{
-				IfcGeometry newGeom;
-
-				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+				if (meshGeom.numFaces)
 				{
-					fuzzybools::Face f = meshGeom.GetFace(i);
-					glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
-					glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
-					glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
+					IfcGeometry newGeom;
+					newGeom.halfSpace = meshGeom.halfSpace;
+					if (newGeom.halfSpace)
+					{
+						newGeom.halfSpaceOrigin = newMat * glm::dvec4(meshGeom.halfSpaceOrigin, 1);
+						newGeom.halfSpaceX = newMat * glm::dvec4(meshGeom.halfSpaceX, 1);
+						newGeom.halfSpaceY = newMat * glm::dvec4(meshGeom.halfSpaceY, 1);
+						newGeom.halfSpaceZ = newMat * glm::dvec4(meshGeom.halfSpaceZ, 1);
+					}
+					
+					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+					{
+						fuzzybools::Face f = meshGeom.GetFace(i);
+						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
+						glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
+						glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
 
 					if (transformationBreaksWinding)
 					{

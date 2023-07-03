@@ -517,7 +517,7 @@ namespace webifc::geometry
 	}
 
 	inline double InverseMethod(glm::dvec3 pt, tinynurbs::RationalSurface3d srf, double pr, double rotations, double minError, double maxError,
-		double& fU, double& fV, double& divisor, double maxDistance, double& fUs, double& fVs)
+		double& fU, double& fV, double& divisor, double maxDistance)
 	{
 		while (maxDistance > maxError && divisor < 10000)
 		{
@@ -566,7 +566,7 @@ namespace webifc::geometry
 		return maxDistance;
 	}
 
-	inline glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf)
+	inline glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf, double scaling)
 	{
 		glm::highp_dvec3 ptc = tinynurbs::surfacePoint(srf, 0.0, 0.0);
 		glm::highp_dvec3 pth = tinynurbs::surfacePoint(srf, 1.0, 0.0);
@@ -584,15 +584,13 @@ namespace webifc::geometry
 		double fV = 0.5;
 		double divisor = 100.0;
 		double maxDistance = 1e+100;
-		double fUs = fU;
-		double fVs = fV;
 
-		maxDistance = InverseMethod(pt, srf, pr, rotations, minError, maxError, fU, fV, divisor, maxDistance, fUs, fVs);
-		return glm::dvec2(fUs, fVs);
+		maxDistance = InverseMethod(pt, srf, pr, rotations, minError / scaling, maxError / scaling, fU, fV, divisor, maxDistance);
+		return glm::dvec2(fU, fV);
 	}
 
 		// TODO: review and simplify
-	inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
+	inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface, double scaling)
 	{
 			//			double limit = 1e-4;
 
@@ -661,7 +659,7 @@ namespace webifc::geometry
 			for (size_t j = 0; j < bounds[0].curve.points.size(); j++)
 			{
 				glm::dvec3 pt = bounds[0].curve.points[j];
-				glm::dvec2 pInv = BSplineInverseEvaluation(pt, srf);
+				glm::dvec2 pInv = BSplineInverseEvaluation(pt, srf, scaling);
 				points.push_back({pInv.x, pInv.y});
 			}
 			uvBoundaryValues.push_back(points);

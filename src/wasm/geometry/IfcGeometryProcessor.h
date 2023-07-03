@@ -40,7 +40,6 @@ namespace webifc::geometry
         IfcGeometry BoolSubtract(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups);
         std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
         std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
-        IfcComposedMesh GetMeshByLine(uint32_t lineID);
         IfcSurface GetSurface(uint32_t expressID);
         const IfcGeometryLoader _geometryLoader;
         glm::dmat4 _transformation = glm::dmat4(1.0);
