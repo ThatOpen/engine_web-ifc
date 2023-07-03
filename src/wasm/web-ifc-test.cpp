@@ -272,8 +272,10 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#block/ark_tyen_barnehage.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#solids/01-Architecture.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/TESTED_Simple_project_01.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/Queens_demo_wip.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/Queens_demo_wip.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bsplines/425.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#380/380.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -331,13 +333,14 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 474567); //Queens_demo_wip
     // SpecificLoadTest(loader, geometryLoader, 474551); //Queens_demo_wip
     // SpecificLoadTest(loader, geometryLoader, 247738); //Queens_demo_wip
-    SpecificLoadTest(loader, geometryLoader, 245903); //Queens_demo_wip
+    // SpecificLoadTest(loader, geometryLoader, 245903); //Queens_demo_wip
     // SpecificLoadTest(loader, geometryLoader, 242768); //Queens_demo_wip
     // SpecificLoadTest(loader, geometryLoader, 378325); //Solibri Building
+    // SpecificLoadTest(loader, geometryLoader, 176076); //425
+    SpecificLoadTest(loader, geometryLoader,365); //380
 
     // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
-
 
     auto errors = errorHandler.GetErrors();
     errorHandler.ClearErrors();
