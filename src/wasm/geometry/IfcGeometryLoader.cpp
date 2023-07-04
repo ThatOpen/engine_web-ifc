@@ -21,8 +21,7 @@ namespace webifc::geometry
 
  IfcCrossSections IfcGeometryLoader::GetCrossSections2D(uint32_t expressID) const
   {
-    auto lineID = _loader.ExpressIDToLineID(expressID);
-    auto &line = _loader.GetLine(lineID);
+    auto &line = _loader.GetLine(expressID);
     IfcCrossSections sections;
     switch (line.ifcType)
     {
@@ -134,8 +133,7 @@ namespace webifc::geometry
 
   IfcCrossSections IfcGeometryLoader::GetCrossSections3D(uint32_t expressID, bool scaled, glm::dmat4 coordination) const
   {
-    auto lineID = _loader.ExpressIDToLineID(expressID);
-    auto &line = _loader.GetLine(lineID);
+    auto &line = _loader.GetLine(expressID);
     IfcCrossSections sections;
     double scale = 1;
     if (scaled)
@@ -383,9 +381,9 @@ namespace webifc::geometry
       }
 
         auto &relAggVector = GetRelAggregates();
-        if (relAggVector.count(line.expressID) == 1) 
+        if (relAggVector.count(expressID) == 1) 
         {
-          auto &relAgg = relAggVector.at(line.expressID);
+          auto &relAgg = relAggVector.at(expressID);
           for (auto expressID : relAgg)
           {
             alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID));
@@ -3138,7 +3136,7 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
       return GetLocalPlacement(posID);
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", line.expressID, line.ifcType);
+      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", expressID, line.ifcType);
       break;
     }
 
@@ -3148,8 +3146,7 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
 
 std::array<glm::dvec3,2> IfcGeometryLoader::GetAxis1Placement(const uint32_t expressID) const
 {
-  uint32_t lineID = _loader.ExpressIDToLineID(expressID);
-  auto &line = _loader.GetLine(lineID);
+  auto &line = _loader.GetLine(expressID);
 
     _loader.MoveToArgumentOffset(line, 0);
     uint32_t locationID = _loader.GetRefArgument();
@@ -3172,18 +3169,16 @@ std::array<glm::dvec3,2> IfcGeometryLoader::GetAxis1Placement(const uint32_t exp
     std::unordered_map<uint32_t, std::vector<uint32_t>>  resultVector;
     auto relElements = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
 
-  for (uint32_t relVoidID : relVoids)
+  for (uint32_t relVoidID : relElements)
   {
-    uint32_t lineID = _loader.ExpressIDToLineID(relVoidID);
-    auto &line = _loader.GetLine(lineID);
+    auto &line = _loader.GetLine(relVoidID);
 
       _loader.MoveToArgumentOffset(line, 4);
 
       uint32_t relatingBuildingElement = _loader.GetRefArgument();
       auto aggregates = _loader.GetSetArgument();
 
-      uint32_t lineID2 = _loader.ExpressIDToLineID(relatingBuildingElement);
-      auto &line2 = _loader.GetLine(lineID2);
+      auto &line2 = _loader.GetLine(relatingBuildingElement);
 
       if(_schemaManager.IsIfcElement(line2.ifcType))
       {
@@ -3223,8 +3218,7 @@ std::array<glm::dvec3,2> IfcGeometryLoader::GetAxis1Placement(const uint32_t exp
 
   for (uint32_t relVoidID : relVoids)
   {
-    uint32_t lineID = _loader.ExpressIDToLineID(relVoidID);
-    auto &line = _loader.GetLine(lineID);
+    auto &line = _loader.GetLine(relVoidID);
 
       _loader.MoveToArgumentOffset(line, 4);
 
@@ -3240,7 +3234,7 @@ std::array<glm::dvec3,2> IfcGeometryLoader::GetAxis1Placement(const uint32_t exp
     std::unordered_map<uint32_t, std::vector<uint32_t>> resultVector;
     auto relVoids = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
 
-  for (uint32_t relElementID : relElements)
+  for (uint32_t relElementID : relVoids)
   {
       auto &line = _loader.GetLine(relElementID);
 
