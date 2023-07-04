@@ -161,11 +161,11 @@ BenchMarkResult ReportOneFile(std::filesystem::directory_entry file, bool tabSep
     if (!tabSeparated)
     {
         std::cout << " - Generating geometry took " << endtime - geomStart << " msec." << std::endl;
-        std::cout << " - Total processing took " << endtime - firstStart << " msec." << std::endl << std::endl;
+        std::cout << " - Total processing took " << endtime - firstStart << " msec." << std::endl;
         std::cout << " - " << totalVertices << " vertices count." << std::endl;
         std::cout << " - " << totalIndices << " indices count." << std::endl;
         std::cout << " - " << errorEntities << " errors." << std::endl;
-        std::cout << " - " << tallyEntities << " entities." << std::endl;
+        std::cout << " - " << tallyEntities << " entities." << std::endl << std::endl;
     }
     else
     {
