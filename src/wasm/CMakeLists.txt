@@ -57,10 +57,11 @@ FetchContent_MakeAvailable(cdt)
 FetchContent_GetProperties(cdt)
 
 Message("Downloading FUZZY")
-FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/tomvandig/fuzzy-bools" GIT_TAG "a52c0f0c0667b7c875ae44e91e63a33c1813be64" SOURCE_SUBDIR "../")
+# using a custom version of fuzzy-bools to silence some debug printf from the library that pollutes the output of the executables
+FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/CBenghi/fuzzy-bools" GIT_TAG "07faaad8cae623dd634b1c09b4b37b44bf645781" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(fuzzy)
 FetchContent_GetProperties(fuzzy)
-file (RENAME ${fuzzy_SOURCE_DIR}/src ${fuzzy_SOURCE_DIR}/fuzzy RESULT result) # specifying results continues even if rename was already performed
+file (RENAME ${fuzzy_SOURCE_DIR}/src ${fuzzy_SOURCE_DIR}/fuzzy RESULT result) # specifying 'result' continues even if rename was already performed
 file (GLOB FuzzyHeaders ${fuzzy_SOURCE_DIR}/fuzzy/*.h)
 message(${WebIfcGeometryH})
  
@@ -78,10 +79,9 @@ function(PARAM_SETTER THE_EXECUTABLE)
 		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wextra")
 		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wpedantic")
 		target_compile_options(${THE_EXECUTABLE} PUBLIC "-pedantic")
-	endif()
-	if (RELEASE)
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "-O3")
-		set_target_properties(${THE_EXECUTABLE} PROPERTIES LINK_FLAGS "-O3")
+		if (RELEASE)
+			target_compile_options(${THE_EXECUTABLE} PUBLIC "-O3")
+		endif()
 	endif()
 endfunction()
 
@@ -116,14 +116,18 @@ if (NOT EMSCRIPTEN)
 	param_setter(web-ifc)
 	target_include_directories(web-ifc PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
 	#comment these to prevent debug files being generated
-	target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
-	target_compile_options(web-ifc PUBLIC "-DDEBUG_DUMP_SVG")
+	if (NOT RELEASE)
+		target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
+		target_compile_options(web-ifc PUBLIC "-DDEBUG_DUMP_SVG")
+	endif()
 
 	#build parameters for regression suite
 	add_executable (web-ifc-regression ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcGeometryH} ${FuzzyHeaders} "regression.cpp" "./test/io_helpers.cpp")
 	param_setter(web-ifc-regression)
 	#comment these to prevent debug files being generated
-	target_compile_options(web-ifc-regression PUBLIC "-DCSG_DEBUG_OUTPUT")
-	target_compile_options(web-ifc-regression PUBLIC "-DDEBUG_DUMP_SVG")
+	if (NOT RELEASE)
+		target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
+		target_compile_options(web-ifc PUBLIC "-DDEBUG_DUMP_SVG")
+	endif()
 	
 endif()
