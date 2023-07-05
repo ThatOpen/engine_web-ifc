@@ -23,13 +23,13 @@ namespace webifc::geometry
 
   IfcAlignment IfcGeometryLoader::GetAlignment(uint32_t expressID, IfcAlignment alignment, glm::dmat4 transform) const
     {
-      auto &line = _loader.GetLine(expressID);
+      auto lineType = _loader.GetLineType(expressID);
 
-      switch (line.ifcType)
+      switch (lineType)
       {
       case schema::IFCALIGNMENT:
       {
-        _loader.MoveToArgumentOffset(line, 5);
+        _loader.MoveToArgumentOffset(expressID, 5);
         uint32_t localPlacement = 0;
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
@@ -58,7 +58,7 @@ namespace webifc::geometry
       }
       case schema::IFCALIGNMENTHORIZONTAL:
       {
-        _loader.MoveToArgumentOffset(line, 5);
+        _loader.MoveToArgumentOffset(expressID, 5);
         uint32_t localPlacement = 0;
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
@@ -95,7 +95,7 @@ namespace webifc::geometry
       }
       case schema::IFCALIGNMENTVERTICAL:
       {
-        _loader.MoveToArgumentOffset(line, 5);
+        _loader.MoveToArgumentOffset(expressID, 5);
         uint32_t localPlacement = 0;
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
@@ -141,16 +141,16 @@ namespace webifc::geometry
 
     IfcCurve IfcGeometryLoader::GetAlignmentCurve(uint32_t expressID) const
     {
-      auto &line = _loader.GetLine(expressID);
+      auto lineType = _loader.GetLineType(expressID);
 
       IfcCurve alignmentCurve;
 
-      switch (line.ifcType)
+      switch (lineType)
       {
       case schema::IFCALIGNMENTSEGMENT:
       {
 
-        _loader.MoveToArgumentOffset(line, 5);
+        _loader.MoveToArgumentOffset(expressID, 5);
         uint32_t localPlacement = 0;
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
@@ -164,7 +164,7 @@ namespace webifc::geometry
           transform_t = GetLocalPlacement(localPlacement);
         }
 
-        _loader.MoveToArgumentOffset(line, 7);
+        _loader.MoveToArgumentOffset(expressID, 7);
         uint32_t curveID = 0;
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
@@ -187,26 +187,26 @@ namespace webifc::geometry
       case schema::IFCALIGNMENTHORIZONTALSEGMENT:
       {
 
-        _loader.MoveToArgumentOffset(line, 8);
+        _loader.MoveToArgumentOffset(expressID, 8);
         std::string type = _loader.GetStringArgument();
 
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
         uint32_t ifcStartPoint = _loader.GetRefArgument();
         glm::dvec2 StartPoint = GetCartesianPoint2D(ifcStartPoint);
 
-        _loader.MoveToArgumentOffset(line, 3);
+        _loader.MoveToArgumentOffset(expressID, 3);
         double ifcStartDirection = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 4);
+        _loader.MoveToArgumentOffset(expressID, 4);
         double StartRadiusOfCurvature = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 5);
+        _loader.MoveToArgumentOffset(expressID, 5);
         double EndRadiusOfCurvature = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 6);
+        _loader.MoveToArgumentOffset(expressID, 6);
         double SegmentLength = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 7);
+        _loader.MoveToArgumentOffset(expressID, 7);
         double GravityCenterLineHeight = _loader.GetDoubleArgument();
 
         switch (Horizontal_alignment_type.at(type))
@@ -383,25 +383,25 @@ namespace webifc::geometry
       }
       case schema::IFCALIGNMENTVERTICALSEGMENT:
       {
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
         double StartDistAlong = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 3);
+        _loader.MoveToArgumentOffset(expressID, 3);
         double HorizontalLength = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 4);
+        _loader.MoveToArgumentOffset(expressID, 4);
         double StartHeight = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 5);
+        _loader.MoveToArgumentOffset(expressID, 5);
         double StartGradient = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 6);
+        _loader.MoveToArgumentOffset(expressID, 6);
         double EndGradient = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 7);
+        _loader.MoveToArgumentOffset(expressID, 7);
         double RadiusOfCurvature = _loader.GetDoubleArgument();
 
-        _loader.MoveToArgumentOffset(line, 8);
+        _loader.MoveToArgumentOffset(expressID, 8);
         std::string type = _loader.GetStringArgument();
 
         IfcProfile profile;
@@ -497,12 +497,12 @@ namespace webifc::geometry
 
   std::optional<glm::dvec4> IfcGeometryLoader::GetColor(uint32_t expressID) const
     {
-      auto &line = _loader.GetLine(expressID);
-      switch (line.ifcType)
+      auto lineType = _loader.GetLineType(expressID);
+      switch (lineType)
       {
       case schema::IFCPRESENTATIONSTYLEASSIGNMENT:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto ifcPresentationStyleSelects = _loader.GetSetArgument();
 
         for (auto &styleSelect : ifcPresentationStyleSelects)
@@ -516,7 +516,7 @@ namespace webifc::geometry
       }
       case schema::IFCDRAUGHTINGPREDEFINEDCOLOUR:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
          std::string color = _loader.GetStringArgument();
          if (color == "black") return glm::dvec4(0.0,0.0,0.0,1.0);
          else if (color == "red") return glm::dvec4(1.0,0,0,1.0);
@@ -530,7 +530,7 @@ namespace webifc::geometry
       }
       case schema::IFCCURVESTYLE:
       {
-         _loader.MoveToArgumentOffset(line, 3);
+         _loader.MoveToArgumentOffset(expressID, 3);
          auto foundColor = GetColor(_loader.GetRefArgument());
          if (foundColor) return foundColor;
          return {};
@@ -538,14 +538,14 @@ namespace webifc::geometry
       case schema::IFCFILLAREASTYLEHATCHING:
       {
           //we cannot properly support this but for now use its colour as solid
-         _loader.MoveToArgumentOffset(line, 0);
+         _loader.MoveToArgumentOffset(expressID, 0);
          auto foundColor = GetColor(_loader.GetRefArgument());
          if (foundColor) return foundColor;
          return {};
       }
       case schema::IFCSURFACESTYLE:
       {
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
         auto ifcSurfaceStyleElementSelects = _loader.GetSetArgument();
 
         for (auto &styleElementSelect : ifcSurfaceStyleElementSelects)
@@ -559,9 +559,9 @@ namespace webifc::geometry
       }
       case schema::IFCSURFACESTYLERENDERING:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto outputColor = GetColor(_loader.GetRefArgument());
-        _loader.MoveToArgumentOffset(line, 1);
+        _loader.MoveToArgumentOffset(expressID, 1);
 
         if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
         {
@@ -573,12 +573,12 @@ namespace webifc::geometry
       }
       case schema::IFCSURFACESTYLESHADING:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         return GetColor(_loader.GetRefArgument());
       }
       case schema::IFCSTYLEDREPRESENTATION:
       {
-        _loader.MoveToArgumentOffset(line, 3);
+        _loader.MoveToArgumentOffset(expressID, 3);
         auto repItems = _loader.GetSetArgument();
 
         for (auto &repItem : repItems)
@@ -592,7 +592,7 @@ namespace webifc::geometry
       }
       case schema::IFCSTYLEDITEM:
       {
-        _loader.MoveToArgumentOffset(line, 1);
+        _loader.MoveToArgumentOffset(expressID, 1);
         auto styledItems = _loader.GetSetArgument();
 
         for (auto &styledItem : styledItems)
@@ -606,7 +606,7 @@ namespace webifc::geometry
       }
       case schema::IFCCOLOURRGB:
       {
-        _loader.MoveToArgumentOffset(line, 1);
+        _loader.MoveToArgumentOffset(expressID, 1);
         glm::dvec4 outputColor;
         outputColor.r = _loader.GetDoubleArgument();
         outputColor.g = _loader.GetDoubleArgument();
@@ -617,13 +617,13 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIALLAYERSETUSAGE:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         uint32_t layerSetID = _loader.GetRefArgument();
         return GetColor(layerSetID);
       }
       case schema::IFCMATERIALLAYERSET:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto layers = _loader.GetSetArgument();
 
         for (auto &layer : layers)
@@ -637,7 +637,7 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIALLAYER:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         uint32_t matRepID = _loader.GetRefArgument();
         return GetColor(matRepID);
       }
@@ -658,7 +658,7 @@ namespace webifc::geometry
       }
       case schema::IFCFILLAREASTYLE:
       {
-        _loader.MoveToArgumentOffset(line, 1);
+        _loader.MoveToArgumentOffset(expressID, 1);
         auto ifcFillStyleSelects = _loader.GetSetArgument();
 
         for (auto &styleSelect : ifcFillStyleSelects)
@@ -672,7 +672,7 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIALLIST:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto materials = _loader.GetSetArgument();
 
         for (auto &material : materials)
@@ -685,7 +685,7 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIALCONSTITUENTSET:
       {
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
         auto materialContituents = _loader.GetSetArgument();
 
         for (auto &materialContituent : materialContituents)
@@ -698,7 +698,7 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIALCONSTITUENT:
       {
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
         auto material = _loader.GetRefArgument();
         auto foundColor = GetColor(material);
         if (foundColor) return foundColor;
@@ -706,7 +706,7 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIALPROFILESETUSAGE:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto profileSet = _loader.GetRefArgument();
         auto foundColor = GetColor(profileSet);
         if (foundColor) return foundColor;
@@ -714,7 +714,7 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIALPROFILE:
       {
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
         auto profileSet = _loader.GetRefArgument();
         auto foundColor = GetColor(profileSet);
         if (foundColor) return foundColor;
@@ -722,7 +722,7 @@ namespace webifc::geometry
       }
       case schema::IFCMATERIALPROFILESET:
       {
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
         auto materialProfiles = _loader.GetSetArgument();
 
         for (auto &materialProfile : materialProfiles)
@@ -734,7 +734,7 @@ namespace webifc::geometry
         return {};
       }
       default:
-        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", expressID, line.ifcType);
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", expressID, lineType);
         break;
       }
 
@@ -744,15 +744,15 @@ namespace webifc::geometry
 
     IfcBound3D IfcGeometryLoader::GetBound(uint32_t expressID) const
     {
-      auto &line = _loader.GetLine(expressID);
+      auto lineType = _loader.GetLineType(expressID);
 
-      switch (line.ifcType)
+      switch (lineType)
       {
       case schema::IFCFACEOUTERBOUND:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         uint32_t loop = _loader.GetRefArgument();
-        _loader.MoveToArgumentOffset(line, 1);
+        _loader.MoveToArgumentOffset(expressID, 1);
         std::string orientValue = _loader.GetStringArgument();
         bool orient = orientValue == "T";
 
@@ -770,9 +770,9 @@ namespace webifc::geometry
       }
       case schema::IFCFACEBOUND:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         uint32_t loop = _loader.GetRefArgument();
-        _loader.MoveToArgumentOffset(line, 1);
+        _loader.MoveToArgumentOffset(expressID, 1);
         std::string orientValue = _loader.GetStringArgument();
         bool orient = orientValue == "T";
 
@@ -789,7 +789,7 @@ namespace webifc::geometry
         return bound;
       }
       default:
-        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", expressID, line.ifcType);
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", expressID, lineType);
         break;
       }
 
@@ -798,15 +798,15 @@ namespace webifc::geometry
 
     IfcCurve IfcGeometryLoader::GetLoop(uint32_t expressID) const
     {
-      auto &line = _loader.GetLine(expressID);
+      auto lineType = _loader.GetLineType(expressID);
 
-      switch (line.ifcType)
+      switch (lineType)
       {
       case schema::IFCPOLYLOOP:
       {
         IfcCurve curve;
 
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto points = _loader.GetSetArgument();
 
         curve.points.reserve(points.size());
@@ -831,7 +831,7 @@ namespace webifc::geometry
       {
         IfcCurve curve;
 
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto edges = _loader.GetSetArgument();
         int id = 0;
 
@@ -867,7 +867,7 @@ namespace webifc::geometry
         return curve;
       }
       default:
-        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", expressID, line.ifcType);
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", expressID, lineType);
         break;
       }
 
@@ -878,12 +878,10 @@ namespace webifc::geometry
 
     IfcCurve IfcGeometryLoader::GetOrientedEdge(uint32_t expressID) const
     {
-      auto &line = _loader.GetLine(expressID);
-
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
       std::string orientValue = _loader.GetStringArgument();
       bool orient = orientValue == "T";
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t edgeCurveRef = _loader.GetRefArgument();
       IfcCurve curveEdge = GetEdge(edgeCurveRef);
 
@@ -899,41 +897,41 @@ namespace webifc::geometry
 
     glm::dvec3 IfcGeometryLoader::GetVertexPoint(uint32_t expressID) const 
     {
-        auto &vertex = _loader.GetLine(expressID);
-        _loader.MoveToArgumentOffset(vertex, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         uint32_t pointRef = _loader.GetRefArgument();
-        auto &point = _loader.GetLine(pointRef);
-        if (point.ifcType == schema::IFCCARTESIANPOINT)
+        auto point = _loader.GetLineType(pointRef);
+        if (point == schema::IFCCARTESIANPOINT)
         {
           return GetCartesianPoint3D(pointRef);
         }
         else
         {
-          _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", pointRef, point.ifcType);
+          _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", pointRef, point);
+          return {};
         }
         
     }
 
     IfcCurve IfcGeometryLoader::GetEdge(uint32_t expressID) const
     {
-      auto &line = _loader.GetLine(expressID);
+      auto lineType = _loader.GetLineType(expressID);
 
-      switch (line.ifcType)
+      switch (lineType)
       {
       case schema::IFCEDGECURVE:
       {
         IfcTrimmingArguments ts;
         ts.exist = true;
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         glm::dvec3 p1 = GetVertexPoint(_loader.GetRefArgument());
-        _loader.MoveToArgumentOffset(line, 1);
+        _loader.MoveToArgumentOffset(expressID, 1);
         glm::dvec3 p2 = GetVertexPoint(_loader.GetRefArgument());
         ts.start.pos3D = p1;
         ts.start.hasPos = true;
         ts.end.hasPos = true;
         ts.end.pos3D = p2;
        
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
         uint32_t CurveRef = _loader.GetRefArgument();
         IfcCurve curve;
         ComputeCurve(CurveRef, curve, 3, true, -1, -1, ts);
@@ -941,7 +939,7 @@ namespace webifc::geometry
         return curve;
       }
       default:
-        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", expressID, line.ifcType);
+        _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", expressID, lineType);
         break;
       }
       return IfcCurve();
@@ -989,8 +987,7 @@ namespace webifc::geometry
 
   glm::dvec3 IfcGeometryLoader::GetCartesianPoint3D(const uint32_t expressID) const
   {
-    auto &line = _loader.GetLine(expressID);
-    _loader.MoveToArgumentOffset(line, 0);
+    _loader.MoveToArgumentOffset(expressID, 0);
     _loader.GetTokenType();
     // because these calls cannot be reordered we have to use intermediate variables
     double x = _loader.GetDoubleArgument();
@@ -1002,8 +999,7 @@ namespace webifc::geometry
 
   glm::dvec2 IfcGeometryLoader::GetCartesianPoint2D(const uint32_t expressID) const
   {
-    auto &line = _loader.GetLine(expressID);
-    _loader.MoveToArgumentOffset(line, 0);
+    _loader.MoveToArgumentOffset(expressID, 0);
     _loader.GetTokenType();
     // because these calls cannot be reordered we have to use intermediate variables
     double x = _loader.GetDoubleArgument();
@@ -1014,9 +1010,7 @@ namespace webifc::geometry
 
   std::vector<glm::dvec3> IfcGeometryLoader::ReadIfcCartesianPointList3D(uint32_t expressID) const
   {
-    auto &line = _loader.GetLine(expressID);
-
-    _loader.MoveToArgumentOffset(line, 0);
+    _loader.MoveToArgumentOffset(expressID, 0);
 
     std::vector<glm::dvec3> result;
 
@@ -1040,9 +1034,7 @@ namespace webifc::geometry
 
   std::vector<glm::dvec2> IfcGeometryLoader::ReadIfcCartesianPointList2D(uint32_t expressID) const
   {
-    auto &line = _loader.GetLine(expressID);
-
-    _loader.MoveToArgumentOffset(line, 0);
+    _loader.MoveToArgumentOffset(expressID, 0);
 
     std::vector<glm::dvec2> result;
 
@@ -1073,12 +1065,12 @@ namespace webifc::geometry
 
   void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool edge, int sameSense, int trimSense , IfcTrimmingArguments trim) const
   {
-    auto &line = _loader.GetLine(expressID);
-    switch (line.ifcType)
+    auto lineType = _loader.GetLineType(expressID);
+    switch (lineType)
     {
     case schema::IFCPOLYLINE:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto points = _loader.GetSetArgument();
 
         for (auto &token : points)
@@ -1101,7 +1093,7 @@ namespace webifc::geometry
       }
     case schema::IFCCOMPOSITECURVE:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto segments = _loader.GetSetArgument();
         auto selfIntersects = _loader.GetStringArgument();
 
@@ -1126,7 +1118,7 @@ namespace webifc::geometry
       }
     case schema::IFCCOMPOSITECURVESEGMENT:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto transition = _loader.GetStringArgument();
         auto sameSenseS = _loader.GetStringArgument();
         auto parentID = _loader.GetRefArgument();
@@ -1164,7 +1156,7 @@ namespace webifc::geometry
           }
           else if (trim.start.hasParam && trim.end.hasParam)
           {
-            _loader.MoveToArgumentOffset(line, 0);
+            _loader.MoveToArgumentOffset(expressID, 0);
             auto positionID = _loader.GetRefArgument();
             auto vectorID = _loader.GetRefArgument();
             glm::dvec3 placement = glm::dvec3(GetCartesianPoint2D(positionID), 0);
@@ -1188,7 +1180,7 @@ namespace webifc::geometry
           }
           else
           {
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", expressID, line.ifcType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", expressID, lineType);
           }
         }
         else if (dimensions == 3 && trim.exist)
@@ -1208,14 +1200,14 @@ namespace webifc::geometry
           }
           else
           {
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", expressID, line.ifcType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", expressID, lineType);
           }
         }
       break;
       }
     case schema::IFCTRIMMEDCURVE:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto basisCurveID = _loader.GetRefArgument();
         auto trim1Set = _loader.GetSetArgument();
         auto trim2Set = _loader.GetSetArgument();
@@ -1245,10 +1237,10 @@ namespace webifc::geometry
       }
     case schema::IFCINDEXEDPOLYCURVE:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto pts2DRef = _loader.GetRefArgument();
 
-        _loader.MoveToArgumentOffset(line, 2);
+        _loader.MoveToArgumentOffset(expressID, 2);
 
         if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
         {
@@ -1264,7 +1256,7 @@ namespace webifc::geometry
 
         if (dimensions == 2)
         {
-          _loader.MoveToArgumentOffset(line, 1);
+          _loader.MoveToArgumentOffset(expressID, 1);
           if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
           {
             auto pnSegment = ReadCurveIndices();
@@ -1309,7 +1301,7 @@ namespace webifc::geometry
       // TODO: review and simplify
     case schema::IFCCIRCLE:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto positionID = _loader.GetRefArgument();
         double radius = _loader.GetDoubleArgument();
 
@@ -1430,7 +1422,7 @@ namespace webifc::geometry
       // TODO: review and simplify
     case schema::IFCELLIPSE:
       {
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         auto positionID = _loader.GetRefArgument();
         double radius1 = _loader.GetDoubleArgument();
         double radius2 = _loader.GetDoubleArgument();
@@ -1565,7 +1557,7 @@ namespace webifc::geometry
         std::vector<glm::f64> indexes;
         std::vector<glm::f64> weights;
 
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         double degree = _loader.GetDoubleArgument();
         auto points = _loader.GetSetArgument();
         auto curveType = _loader.GetStringArgument();
@@ -1638,7 +1630,7 @@ namespace webifc::geometry
         std::vector<glm::f64> indexes;
         std::vector<glm::f64> weights;
 
-        _loader.MoveToArgumentOffset(line, 0);
+        _loader.MoveToArgumentOffset(expressID, 0);
         double degree = _loader.GetDoubleArgument();
         auto points = _loader.GetSetArgument();
         auto curveType = _loader.GetStringArgument();
@@ -1722,7 +1714,7 @@ case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
     std::vector<glm::u32> knotMultiplicities;
     std::vector<glm::f64> knots;
     std::vector<glm::f64> weights;
-    _loader.MoveToArgumentOffset(line, 0);
+    _loader.MoveToArgumentOffset(expressID, 0);
     double degree = _loader.GetDoubleArgument();
     auto points = _loader.GetSetArgument();
     auto curveType = _loader.GetStringArgument();
@@ -1798,7 +1790,7 @@ case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
     break;
   }
 default:
-  _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", expressID, line.ifcType);
+  _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", expressID, lineType);
   break;
 }
   
@@ -1850,17 +1842,17 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
 IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
 {
-  auto &line = _loader.GetLine(expressID);
-  switch (line.ifcType)
+  auto lineType = _loader.GetLineType(expressID);
+  switch (lineType)
   {
   case schema::IFCARBITRARYOPENPROFILEDEF:
   case schema::IFCARBITRARYCLOSEDPROFILEDEF:
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       profile.curve = GetCurve(_loader.GetRefArgument(),2);
       profile.isConvex = IsCurveConvex(profile.curve);
 
@@ -1870,13 +1862,13 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       profile.curve = GetCurve(_loader.GetRefArgument(),2);
       profile.isConvex = IsCurveConvex(profile.curve);
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
       auto holes = _loader.GetSetArgument();
 
       for (auto &hole : holes)
@@ -1892,11 +1884,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t placementID = _loader.GetRefArgument();
       double xdim = _loader.GetDoubleArgument();
       double ydim = _loader.GetDoubleArgument();
@@ -1920,11 +1912,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t placementID = _loader.GetRefArgument();
       double xdim = _loader.GetDoubleArgument();
       double ydim = _loader.GetDoubleArgument();
@@ -1944,11 +1936,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t placementID = _loader.GetOptionalRefArgument();
       double radius = _loader.GetDoubleArgument();
 
@@ -1967,11 +1959,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t placementID = _loader.GetRefArgument();
       double radiusX = _loader.GetDoubleArgument();
       double radiusY = _loader.GetDoubleArgument();
@@ -1986,11 +1978,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t placementID = _loader.GetRefArgument();
       double radius = _loader.GetDoubleArgument();
       double thickness = _loader.GetDoubleArgument();
@@ -2007,11 +1999,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
 
       glm::dmat3 placement(1);
 
@@ -2023,7 +2015,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
         placement = GetAxis2Placement2D(placementID);
       }
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
 
       double width = _loader.GetDoubleArgument();
       double depth = _loader.GetDoubleArgument();
@@ -2049,11 +2041,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = false;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
 
       glm::dmat3 placement(1);
 
@@ -2065,7 +2057,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
         placement = GetAxis2Placement2D(placementID);
       }
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
       double filletRadius = 0;
       double depth = _loader.GetDoubleArgument();
       double width = _loader.GetDoubleArgument();
@@ -2097,11 +2089,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = false;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
 
       glm::dmat3 placement(1);
 
@@ -2113,7 +2105,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
         placement = GetAxis2Placement2D(placementID);
       }
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
       double depth = _loader.GetDoubleArgument();
       double width = _loader.GetDoubleArgument();
       double webThickness = _loader.GetDoubleArgument();
@@ -2146,11 +2138,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
 
       glm::dmat3 placement(1);
 
@@ -2162,7 +2154,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
         placement = GetAxis2Placement2D(placementID);
       }
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
 
       double depth = _loader.GetDoubleArgument();
       double flangeWidth = _loader.GetDoubleArgument();
@@ -2185,11 +2177,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
 
       glm::dmat3 placement(1);
 
@@ -2203,7 +2195,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
 
       bool hasFillet = false;
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
 
       double depth = _loader.GetDoubleArgument();
       double Width = _loader.GetDoubleArgument();
@@ -2219,11 +2211,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       profile.isConvex = true;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
 
       glm::dmat3 placement(1);
 
@@ -2237,7 +2229,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
 
       bool hasFillet = false;
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
 
       double depth = _loader.GetDoubleArgument();
       double flangeWidth = _loader.GetDoubleArgument();
@@ -2252,11 +2244,11 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
     }
   case schema::IFCDERIVEDPROFILEDEF:
     {
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t profileID = _loader.GetRefArgument();
       IfcProfile profile = GetProfileByLine(profileID);
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
       uint32_t transformID = _loader.GetRefArgument();
       glm::dmat3 transformation = GetAxis2Placement2D(transformID);
 
@@ -2286,7 +2278,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
 
       std::vector<uint32_t> lst;
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       parsing::IfcTokenType t = _loader.GetTokenType();
       if (t == parsing::IfcTokenType::SET_BEGIN)
       {
@@ -2309,7 +2301,7 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
       return profile;
     }
   default:
-    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", expressID, line.ifcType);
+    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", expressID, lineType);
     break;
   }
 
@@ -2321,22 +2313,22 @@ IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
 
 IfcProfile IfcGeometryLoader::GetProfile3D(uint32_t expressID) const
 {
-  auto &line = _loader.GetLine(expressID);
-  switch (line.ifcType)
+  auto lineType = _loader.GetLineType(expressID);
+  switch (lineType)
   {
   case schema::IFCARBITRARYOPENPROFILEDEF:
     {
       IfcProfile profile;
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       profile.curve = GetCurve(_loader.GetRefArgument(),3);
 
       return profile;
     }
   default:
-    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 3D profile type", expressID, line.ifcType);
+    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 3D profile type", expressID, lineType);
     break;
   }
 
@@ -2345,9 +2337,7 @@ IfcProfile IfcGeometryLoader::GetProfile3D(uint32_t expressID) const
 
 glm::dvec3 IfcGeometryLoader::GetVector(uint32_t expressID) const
 {
-  auto &line = _loader.GetLine(expressID);
-
-  _loader.MoveToArgumentOffset(line, 0);
+  _loader.MoveToArgumentOffset(expressID, 0);
   auto positionID = _loader.GetRefArgument();
   double length = _loader.GetDoubleArgument();
 
@@ -2361,14 +2351,12 @@ glm::dvec3 IfcGeometryLoader::GetVector(uint32_t expressID) const
 
 glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
 {
-  auto &line = _loader.GetLine(expressID);
-  switch (line.ifcType)
+  auto lineType = _loader.GetLineType(expressID);
+  switch (lineType)
   {
   case schema::IFCAXIS2PLACEMENT2D:
     {
-      auto &line = _loader.GetLine(expressID);
-
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       uint32_t locationID = _loader.GetRefArgument();
       parsing::IfcTokenType dirToken = _loader.GetTokenType();
 
@@ -2397,33 +2385,33 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
       glm::dvec2 Axis1(1, 0);
       glm::dvec2 Axis2(0, 1);
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
         Axis1 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
       }
-      _loader.MoveToArgumentOffset(line, 1);
+      _loader.MoveToArgumentOffset(expressID, 1);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
         Axis2 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
       }
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t posID = _loader.GetRefArgument();
       glm::dvec2 pos = GetCartesianPoint2D(posID);
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
       {
         _loader.StepBack();
         scale1 = _loader.GetDoubleArgument();
       }
 
-      if (line.ifcType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
+      if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
       {
-        _loader.MoveToArgumentOffset(line, 4);
+        _loader.MoveToArgumentOffset(expressID, 4);
         if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
         {
           _loader.StepBack();
@@ -2431,7 +2419,7 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
         }
       }
 
-      if (line.ifcType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
+      if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
       {
         scale2 = scale1;
       }
@@ -2442,7 +2430,7 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
         glm::dvec3(pos, 1));
     }
   default:
-    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 2D placement type", expressID, line.ifcType);
+    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 2D placement type", expressID, lineType);
     break;
   }
   return glm::dmat3();
@@ -2450,14 +2438,14 @@ glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
 
 glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
 {
-  auto &line = _loader.GetLine(expressID);
-  switch (line.ifcType)
+  auto lineType = _loader.GetLineType(expressID);
+  switch (lineType)
   {
   case schema::IFCAXIS1PLACEMENT:
     {
       glm::dvec3 zAxis(0, 0, 1);
       glm::dvec3 xAxis(1, 0, 0);
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       uint32_t posID = _loader.GetRefArgument();
       parsing::IfcTokenType zID = _loader.GetTokenType();
       if (zID == parsing::IfcTokenType::REF)
@@ -2486,7 +2474,7 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
       glm::dvec3 zAxis(0, 0, 1);
       glm::dvec3 xAxis(1, 0, 0);
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       uint32_t posID = _loader.GetRefArgument();
       parsing::IfcTokenType zID = _loader.GetTokenType();
       if (zID == parsing::IfcTokenType::REF)
@@ -2495,7 +2483,7 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
         zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
       }
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       parsing::IfcTokenType xID = _loader.GetTokenType();
       if (xID == parsing::IfcTokenType::REF)
       {
@@ -2518,7 +2506,7 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
     {
       glm::dmat4 relPlacement(1);
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       parsing::IfcTokenType relPlacementToken = _loader.GetTokenType();
       if (relPlacementToken == parsing::IfcTokenType::REF)
       {
@@ -2526,7 +2514,7 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
         relPlacement = GetLocalPlacement(_loader.GetRefArgument());
       }
 
-      _loader.MoveToArgumentOffset(line, 1);
+      _loader.MoveToArgumentOffset(expressID, 1);
       uint32_t axis2PlacementID = _loader.GetRefArgument();
 
       glm::dmat4 axis2Placement = GetLocalPlacement(axis2PlacementID);
@@ -2545,47 +2533,47 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
       glm::dvec3 Axis2(0, 1, 0);
       glm::dvec3 Axis3(0, 0, 1);
 
-      _loader.MoveToArgumentOffset(line, 0);
+      _loader.MoveToArgumentOffset(expressID, 0);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
         Axis1 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
       }
-      _loader.MoveToArgumentOffset(line, 1);
+      _loader.MoveToArgumentOffset(expressID, 1);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
         Axis2 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
       }
 
-      _loader.MoveToArgumentOffset(line, 2);
+      _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t posID = _loader.GetRefArgument();
       glm::dvec3 pos = GetCartesianPoint3D(posID);
 
-      _loader.MoveToArgumentOffset(line, 3);
+      _loader.MoveToArgumentOffset(expressID, 3);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
       {
         _loader.StepBack();
         scale1 = _loader.GetDoubleArgument();
       }
 
-      _loader.MoveToArgumentOffset(line, 4);
+      _loader.MoveToArgumentOffset(expressID, 4);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
         Axis3 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
       }
 
-      if (line.ifcType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
+      if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
       {
-        _loader.MoveToArgumentOffset(line, 5);
+        _loader.MoveToArgumentOffset(expressID, 5);
         if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
         {
           _loader.StepBack();
           scale2 = _loader.GetDoubleArgument();
         }
 
-        _loader.MoveToArgumentOffset(line, 6);
+        _loader.MoveToArgumentOffset(expressID, 6);
         if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
         {
           _loader.StepBack();
@@ -2593,7 +2581,7 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
         }
       }
 
-      if (line.ifcType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR3D)
+      if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR3D)
       {
         scale2 = scale1;
         scale3 = scale1;
@@ -2606,7 +2594,7 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
         glm::dvec4(pos, 1));
     }
   default:
-    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", expressID, line.ifcType);
+    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", expressID, lineType);
     break;
   }
 
@@ -2616,9 +2604,7 @@ glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
 
 std::array<glm::dvec3,2> IfcGeometryLoader::GetAxis1Placement(const uint32_t expressID) const
 {
-  auto &line = _loader.GetLine(expressID);
-
-  _loader.MoveToArgumentOffset(line, 0);
+  _loader.MoveToArgumentOffset(expressID, 0);
   uint32_t locationID = _loader.GetRefArgument();
   parsing::IfcTokenType dirToken = _loader.GetTokenType();
 
@@ -2642,9 +2628,7 @@ std::unordered_map<uint32_t, std::vector<uint32_t>>  IfcGeometryLoader::Populate
 
   for (uint32_t relVoidID : relVoids)
   {
-    auto &line = _loader.GetLine(relVoidID);
-
-    _loader.MoveToArgumentOffset(line, 4);
+    _loader.MoveToArgumentOffset(relVoidID, 4);
 
     uint32_t relatingBuildingElement = _loader.GetRefArgument();
     uint32_t relatedOpeningElement = _loader.GetRefArgument();
@@ -2661,9 +2645,7 @@ std::unordered_map<uint32_t, std::vector<uint32_t>>  IfcGeometryLoader::Populate
 
   for (uint32_t relVoidID : relVoids)
   {
-    auto &line = _loader.GetLine(relVoidID);
-
-    _loader.MoveToArgumentOffset(line, 4);
+    _loader.MoveToArgumentOffset(relVoidID, 4);
 
     uint32_t relatingBuildingElement = _loader.GetRefArgument();
 
@@ -2680,9 +2662,7 @@ std::unordered_map<uint32_t, std::vector<uint32_t>>  IfcGeometryLoader::Populate
 
   for (uint32_t relVoidID : relVoids)
   {
-    auto &line = _loader.GetLine(relVoidID);
-
-    _loader.MoveToArgumentOffset(line, 4);
+    _loader.MoveToArgumentOffset(relVoidID, 4);
 
     uint32_t relatingBuildingElement = _loader.GetRefArgument();
     auto aggregates = _loader.GetSetArgument();
@@ -2703,16 +2683,14 @@ std::unordered_map<uint32_t, std::vector<uint32_t>>  IfcGeometryLoader::Populate
 
   for (uint32_t relElementID : relElements)
   {
-    auto &line = _loader.GetLine(relElementID);
-
-    _loader.MoveToArgumentOffset(line, 4);
+    _loader.MoveToArgumentOffset(relElementID, 4);
 
     uint32_t relatingBuildingElement = _loader.GetRefArgument();
     auto aggregates = _loader.GetSetArgument();
 
-    auto &line2 = _loader.GetLine(relatingBuildingElement);
+    auto lineType2 = _loader.GetLineType(relatingBuildingElement);
 
-    if(_schemaManager.IsIfcElement(line2.ifcType))
+    if(_schemaManager.IsIfcElement(lineType2))
     {
       for (auto &aggregate : aggregates)
       {
@@ -2731,9 +2709,7 @@ std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> IfcGeom
 
   for (uint32_t styledItemID : styledItems)
   {
-    auto &line = _loader.GetLine(styledItemID);
-
-    _loader.MoveToArgumentOffset(line, 0);
+    _loader.MoveToArgumentOffset(styledItemID, 0);
 
     if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
     {
@@ -2759,13 +2735,11 @@ std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> IfcGeom
 
   for (uint32_t styledItemID : styledItems)
   {
-    auto &line = _loader.GetLine(styledItemID);
-
-    _loader.MoveToArgumentOffset(line, 5);
+    _loader.MoveToArgumentOffset(styledItemID, 5);
 
     uint32_t materialSelect = _loader.GetRefArgument();
 
-    _loader.MoveToArgumentOffset(line, 4);
+    _loader.MoveToArgumentOffset(styledItemID, 4);
 
     auto RelatedObjects = _loader.GetSetArgument();
 
@@ -2786,13 +2760,11 @@ std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> IfcGeom
 
  for (uint32_t styledItemID : matDefs)
  {
-  auto &line = _loader.GetLine(styledItemID);
-
-  _loader.MoveToArgumentOffset(line, 2);
+  _loader.MoveToArgumentOffset(styledItemID, 2);
 
   auto representations = _loader.GetSetArgument();
 
-  _loader.MoveToArgumentOffset(line, 3);
+  _loader.MoveToArgumentOffset(styledItemID, 3);
 
   uint32_t material = _loader.GetRefArgument();
 
@@ -2817,38 +2789,33 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
   }
 
   auto projectEID = projects[0];
-
-  auto &line = _loader.GetLine(projectEID);
-  _loader.MoveToArgumentOffset(line, 8);
+  _loader.MoveToArgumentOffset(projectEID, 8);
 
   auto unitsID = _loader.GetRefArgument();
-
-  auto &unitsLine =_loader. GetLine(unitsID);
-  _loader.MoveToArgumentOffset(unitsLine, 0);
+  _loader.MoveToArgumentOffset(unitsID, 0);
 
   auto unitIds = _loader.GetSetArgument();
 
   for (auto &unitID : unitIds)
   {
     auto unitRef = _loader.GetRefArgument(unitID);
+    auto lineType = _loader.GetLineType(unitRef);
 
-    auto &line = _loader.GetLine(unitRef);
-
-    if (line.ifcType == schema::IFCSIUNIT)
+    if (lineType == schema::IFCSIUNIT)
     {
-     _loader.MoveToArgumentOffset(line, 1);
+     _loader.MoveToArgumentOffset(unitRef, 1);
      std::string unitType = _loader.GetStringArgument();
 
      std::string unitPrefix;
 
-     _loader.MoveToArgumentOffset(line, 2);
+     _loader.MoveToArgumentOffset(unitRef, 2);
      if (_loader.GetTokenType() == parsing::IfcTokenType::ENUM)
      {
        _loader.StepBack();
        unitPrefix = _loader.GetStringArgument();
      }
 
-     _loader.MoveToArgumentOffset(line, 3);
+     _loader.MoveToArgumentOffset(unitRef, 3);
      std::string unitName = _loader.GetStringArgument();
 
      if (unitType == "LENGTHUNIT" && unitName == "METRE")
@@ -2857,37 +2824,34 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
        _linearScalingFactor *= prefix;
      }
    }
-   if(line.ifcType == schema::IFCCONVERSIONBASEDUNIT)
+   if(lineType == schema::IFCCONVERSIONBASEDUNIT)
    {
-     _loader.MoveToArgumentOffset(line, 1);
+     _loader.MoveToArgumentOffset(unitRef, 1);
      std::string unitType = _loader.GetStringArgument();
-     _loader.MoveToArgumentOffset(line, 3);
+     _loader.MoveToArgumentOffset(unitRef, 3);
      auto unitRefLine = _loader.GetRefArgument();
-     auto &unitLine = _loader.GetLine(unitRefLine);
 
-     _loader.MoveToArgumentOffset(unitLine, 1);
+     _loader.MoveToArgumentOffset(unitRefLine, 1);
      auto ratios = _loader.GetSetArgument();
 
      ///Scale Correction
 
-     _loader.MoveToArgumentOffset(unitLine, 2);
+     _loader.MoveToArgumentOffset(unitRefLine, 2);
      auto scaleRefLine = _loader.GetRefArgument();
 
-     auto &scaleLine = _loader.GetLine(scaleRefLine);
-
-     _loader.MoveToArgumentOffset(scaleLine, 1);
+     _loader.MoveToArgumentOffset(scaleRefLine, 1);
      std::string unitTypeScale = _loader.GetStringArgument();
 
      std::string unitPrefix;
 
-     _loader.MoveToArgumentOffset(scaleLine, 2);
+     _loader.MoveToArgumentOffset(scaleRefLine, 2);
      if (_loader.GetTokenType() == parsing::IfcTokenType::ENUM)
      {
        _loader.StepBack();
        unitPrefix =_loader.GetStringArgument();
      }
 
-     _loader.MoveToArgumentOffset(scaleLine, 3);
+     _loader.MoveToArgumentOffset(scaleRefLine, 3);
      std::string unitName = _loader.GetStringArgument();
 
      if (unitTypeScale == "LENGTHUNIT" && unitName == "METRE")
@@ -2988,8 +2952,7 @@ std::vector<IfcSegmentIndexSelect> IfcGeometryLoader::ReadCurveIndices() const
   if (t == parsing::IfcTokenType::REF)
   {
     _loader.StepBack();
-    auto &line = _loader.GetLine(_loader.GetRefArgument());
-    _loader.MoveToArgumentOffset(line, 0);
+    _loader.MoveToArgumentOffset(_loader.GetRefArgument(), 0);
   }
 
   _loader.StepBack();

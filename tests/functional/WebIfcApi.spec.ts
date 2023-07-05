@@ -386,7 +386,6 @@ describe('WebIfcApi writing methods', () => {
     test('can write a line by giving a line object', () => {
         let projectBeforeWriting: any = ifcApi.GetAllLines(modelID);
         let payload = new IFC2X3.IfcBuildingElementProxy(
-            9999999,
             new IFC2X3.IfcGloballyUniqueId('GUID'),
             new WebIFC.Handle(41),
             new IFC2X3.IfcLabel('NZ-SHS beam:100x6.0SHS:823947'),

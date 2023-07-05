@@ -54,6 +54,7 @@ export const EMPTY = 6;
 export const SET_BEGIN = 7;
 export const SET_END = 8;
 export const LINE_END = 9;
+export const INTEGER = 10;
 
 /**
  * Settings for the IFCLoader
@@ -424,7 +425,8 @@ export class IfcAPI {
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData;
         try {
-            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
+            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
+            lineData.expressID = rawLineData.ID;
         } catch (e) {
              Log.error("Invalid IFC Line:"+expressID);
              return;
@@ -493,7 +495,7 @@ export class IfcAPI {
      */
     CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
-        return Constructors[this.modelSchemaList[modelID]][type](-1,args);
+        return Constructors[this.modelSchemaList[modelID]][type](args);
     }
 
     /**
@@ -827,7 +829,7 @@ export class IfcAPI {
          * @returns Express numerical value
          */
     GetMaxExpressID(modelID: number) {
-        return this.wasmModule.GetMaxExpressID(modelID);
+        return this.wasmModule.GetMaxExpressID(modelID) as number;
     }
 
     /**
