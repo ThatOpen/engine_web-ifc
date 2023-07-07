@@ -1531,7 +1531,7 @@ namespace webifc::geometry
           {
             glm::dvec2 vec(0);
             vec[0] = radius1 * std::cos(angle);
-            vec[1] = -radius2 * std::sin(angle);
+            vec[1] = radius2 * std::sin(angle);
             curve.Add(GetAxis2Placement2D(positionID) * glm::dvec3(vec, 1));
           }
           else
