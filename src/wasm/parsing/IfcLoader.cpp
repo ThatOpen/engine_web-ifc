@@ -438,6 +438,12 @@ namespace webifc::parsing {
        return _tokenStream->Read<int>();
    }
 
+  int IfcLoader::GetIntArgument(const uint32_t tapeOffset) const
+  {
+    _tokenStream->MoveTo(tapeOffset);
+    return GetIntArgument();
+  }
+
   uint32_t IfcLoader::GetCurrentLineExpressID() const
   {
       if (_lines.size()==0) return 0;

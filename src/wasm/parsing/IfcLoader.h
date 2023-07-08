@@ -36,6 +36,7 @@ namespace webifc::parsing
       std::string GetStringArgument() const;
       double GetDoubleArgument() const;
       int GetIntArgument() const;
+      int GetIntArgument(const uint32_t tapeOffset) const;
       double GetDoubleArgument(const uint32_t tapeOffset) const;
       double GetOptionalDoubleParam(double defaultValue) const;
       uint32_t GetRefArgument() const;

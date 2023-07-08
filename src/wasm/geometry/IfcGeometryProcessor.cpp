@@ -1013,10 +1013,10 @@ namespace webifc::geometry
             std::vector<std::vector<glm::vec<3, glm::f64>>> ctrolPts;
 
             _loader.MoveToArgumentOffset(expressID, 0);
-            double Udegree = _loader.GetDoubleArgument();
+            int Udegree = _loader.GetIntArgument();
 
             _loader.MoveToArgumentOffset(expressID, 1);
-            double Vdegree = _loader.GetDoubleArgument();
+            int Vdegree = _loader.GetIntArgument();
 
             _loader.MoveToArgumentOffset(expressID, 2);
             auto ctrlPointGroups = _loader.GetSetListArgument();
@@ -1058,16 +1058,16 @@ namespace webifc::geometry
             IfcSurface surface;
 
             std::vector<std::vector<glm::vec<3, glm::f64>>> ctrolPts;
-            std::vector<glm::f64> UMultiplicity;
-            std::vector<glm::f64> VMultiplicity;
+            std::vector<uint32_t> UMultiplicity;
+            std::vector<uint32_t> VMultiplicity;
             std::vector<glm::f64> UKnots;
             std::vector<glm::f64> VKnots;
 
             _loader.MoveToArgumentOffset(expressID, 0);
-            double Udegree = _loader.GetDoubleArgument();
+            int Udegree = _loader.GetIntArgument();
 
             _loader.MoveToArgumentOffset(expressID, 1);
-            double Vdegree = _loader.GetDoubleArgument();
+            int Vdegree = _loader.GetIntArgument();
 
             _loader.MoveToArgumentOffset(expressID, 2);
             auto ctrlPointGroups = _loader.GetSetListArgument();
@@ -1108,12 +1108,12 @@ namespace webifc::geometry
 
             for (auto &token : knotSetU)
             {
-                UMultiplicity.push_back(_loader.GetDoubleArgument(token));
+                UMultiplicity.push_back(_loader.GetIntArgument(token));
             }
 
             for (auto &token : knotSetV)
             {
-                VMultiplicity.push_back(_loader.GetDoubleArgument(token));
+                VMultiplicity.push_back(_loader.GetIntArgument(token));
             }
 
             for (auto &token : indexesSetU)
@@ -1196,16 +1196,16 @@ namespace webifc::geometry
 
             std::vector<std::vector<glm::vec<3, glm::f64>>> ctrolPts;
             std::vector<std::vector<glm::f64>> weightPts;
-            std::vector<glm::f64> UMultiplicity;
-            std::vector<glm::f64> VMultiplicity;
+            std::vector<uint32_t> UMultiplicity;
+            std::vector<uint32_t> VMultiplicity;
             std::vector<glm::f64> UKnots;
             std::vector<glm::f64> VKnots;
 
             _loader.MoveToArgumentOffset(expressID, 0);
-            double Udegree = _loader.GetDoubleArgument();
+            int Udegree = _loader.GetIntArgument();
 
             _loader.MoveToArgumentOffset(expressID, 1);
-            double Vdegree = _loader.GetDoubleArgument();
+            int Vdegree = _loader.GetIntArgument();
 
             _loader.MoveToArgumentOffset(expressID, 2);
             auto ctrlPointGroups = _loader.GetSetListArgument();
@@ -1258,12 +1258,12 @@ namespace webifc::geometry
 
             for (auto &token : knotSetU)
             {
-                UMultiplicity.push_back(_loader.GetDoubleArgument(token));
+                UMultiplicity.push_back(_loader.GetIntArgument(token));
             }
 
             for (auto &token : knotSetV)
             {
-                VMultiplicity.push_back(_loader.GetDoubleArgument(token));
+                VMultiplicity.push_back(_loader.GetIntArgument(token));
             }
 
             for (auto &token : indexesSetU)
@@ -1584,9 +1584,9 @@ namespace webifc::geometry
         // while we have point set begin
         while (_loader.GetTokenType() == parsing::IfcTokenType::SET_BEGIN)
         {
-            result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
-            result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
-            result.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+            result.push_back(_loader.GetIntArgument());
+            result.push_back(_loader.GetIntArgument());
+            result.push_back(_loader.GetIntArgument());
 
             // read point set end
             _loader.GetTokenType();
@@ -1613,7 +1613,7 @@ namespace webifc::geometry
             IfcGeometry geometry;
             for (auto &indexID : indexIDs)
             {
-                uint32_t index = static_cast<uint32_t>(_loader.GetDoubleArgument(indexID));
+                uint32_t index = _loader.GetIntArgument(indexID);
                 glm::dvec3 point = points[index - 1]; // indices are 1-based
 
                 // I am not proud of this
@@ -1639,7 +1639,7 @@ namespace webifc::geometry
                 while (_loader.GetTokenType() != parsing::IfcTokenType::SET_END)
                 {
                     _loader.StepBack();
-                    uint32_t index = static_cast<uint32_t>(_loader.GetDoubleArgument());
+                    uint32_t index = _loader.GetIntArgument();
 
                     glm::dvec3 point = points[index - 1]; // indices are still 1-based
 

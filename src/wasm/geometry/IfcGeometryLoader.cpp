@@ -1551,14 +1551,14 @@ namespace webifc::geometry
         {
           condition = !condition;
         }
-        std::vector<glm::f64> knotMultiplicities;
+        std::vector<uint32_t> knotMultiplicities;
         std::vector<glm::f64> distinctKnots;
         std::vector<glm::f64> knots;
         std::vector<glm::f64> indexes;
         std::vector<glm::f64> weights;
 
         _loader.MoveToArgumentOffset(expressID, 0);
-        double degree = _loader.GetDoubleArgument();
+        int degree = _loader.GetIntArgument();
         auto points = _loader.GetSetArgument();
         auto curveType = _loader.GetStringArgument();
         auto closed = _loader.GetStringArgument();
@@ -1566,7 +1566,7 @@ namespace webifc::geometry
 
 
         // build default knots
-        for (int k = 0; k < points.size() + degree + 1; k++)
+        for (size_t k = 0; k < points.size() + degree + 1; k++)
         {
           knots.push_back(k);
         }
@@ -1624,14 +1624,14 @@ namespace webifc::geometry
         // Let L denote the number of distinct values amongst the d+k+2 knots in the knot list; L will be referred to as the ‘upper index on knots’. Let mj denote the multiplicity (i.e., number of repetitions) of the _j_th distinct knot.
 
         // All knot multiplicities except the first and the last shall be in the range 1,...,d; the first and last may have a maximum value of d + 1. In evaluating the basis functions, a knot u of, e.g., multiplicity 3 is interpreted as a sequence u, u, u,; in the knot array.
-        std::vector<glm::f64> knotMultiplicities;
+        std::vector<uint32_t> knotMultiplicities;
         std::vector<glm::f64> distinctKnots;
         std::vector<glm::f64> knots;
         std::vector<glm::f64> indexes;
         std::vector<glm::f64> weights;
 
         _loader.MoveToArgumentOffset(expressID, 0);
-        double degree = _loader.GetDoubleArgument();
+        int degree = _loader.GetIntArgument();
         auto points = _loader.GetSetArgument();
         auto curveType = _loader.GetStringArgument();
         auto closed = _loader.GetStringArgument();
@@ -1643,7 +1643,7 @@ namespace webifc::geometry
 
         for (auto &token : knotMultiplicitiesSet)
         {
-          knotMultiplicities.push_back(_loader.GetDoubleArgument(token));
+          knotMultiplicities.push_back(_loader.GetIntArgument(token));
         }
 
         for (auto &token : knotSet)
@@ -1654,7 +1654,7 @@ namespace webifc::geometry
         for (size_t k = 0; k < distinctKnots.size(); k++)
         {
           double knot = distinctKnots[k];
-          for (int i = 0; i < knotMultiplicities[k]; i++)
+          for (size_t i = 0; i < knotMultiplicities[k]; i++)
           {
             knots.push_back(knot);
           }
@@ -1711,11 +1711,11 @@ case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
     }
 
     std::vector<glm::f64> distinctKnots;
-    std::vector<glm::u32> knotMultiplicities;
+    std::vector<uint32_t> knotMultiplicities;
     std::vector<glm::f64> knots;
     std::vector<glm::f64> weights;
     _loader.MoveToArgumentOffset(expressID, 0);
-    double degree = _loader.GetDoubleArgument();
+    int degree = _loader.GetIntArgument();
     auto points = _loader.GetSetArgument();
     auto curveType = _loader.GetStringArgument();
     auto closed = _loader.GetStringArgument();
@@ -1727,7 +1727,7 @@ case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
 
         for (auto &token : knotMultiplicitiesSet)
         {
-          knotMultiplicities.push_back(_loader.GetDoubleArgument(token));
+          knotMultiplicities.push_back(_loader.GetIntArgument(token));
         }
 
         for (auto &token : knotSet)
