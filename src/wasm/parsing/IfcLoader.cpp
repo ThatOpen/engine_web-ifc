@@ -376,6 +376,11 @@ namespace webifc::parsing {
   					_tokenStream->Forward(sizeof(double));
   					break;
   				}
+          case IfcTokenType::INTEGER:
+          {
+            _tokenStream->Forward(sizeof(int));
+            break;
+          }
   				default:
   					break;
   				}
@@ -578,6 +583,10 @@ namespace webifc::parsing {
          {
            _tokenStream->Read<double>();
          }
+         else if (t == IfcTokenType::INTEGER)
+         {
+           _tokenStream->Read<int>();
+         }
          else if (t == IfcTokenType::REF)
          {
            _tokenStream->Read<uint32_t>();
@@ -641,6 +650,10 @@ namespace webifc::parsing {
      			{
      				_tokenStream->Read<double>();
      			}
+          else if (t == IfcTokenType::INTEGER)
+          {
+            _tokenStream->Read<int>();
+          }
      			else if (t == IfcTokenType::REF)
      			{
      				_tokenStream->Read<uint32_t>();
@@ -726,6 +739,11 @@ namespace webifc::parsing {
    			_tokenStream->Read<double>();
    			break;
    		}
+    case IfcTokenType::INTEGER:
+      {
+        _tokenStream->Read<int>();
+        break;
+      }
    		default:
    			break;
    		}
