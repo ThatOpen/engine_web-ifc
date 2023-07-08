@@ -171,7 +171,7 @@ namespace webifc::parsing
           double value = number_value.first;
 
           if (negative) value *= -1;
-          if (number_value.second) {
+          if (!number_value.second) {
             Push<uint8_t>(IfcTokenType::INTEGER);
             Push<int>((int)value);
           } else {

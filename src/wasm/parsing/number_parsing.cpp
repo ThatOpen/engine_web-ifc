@@ -54,7 +54,7 @@ namespace webifc::parsing {
         ++num;
         break;
       } else {
-        return {sign * int_part,false};
+        return {sign * int_part,has_frac};
       }
       ++num;
     }
@@ -71,7 +71,7 @@ namespace webifc::parsing {
           ++num;
           break;
         } else {
-          return {sign * (int_part + frac_part),false};
+          return {sign * (int_part + frac_part),has_frac};
         }
         ++num;
       }

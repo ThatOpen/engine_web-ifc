@@ -1584,9 +1584,9 @@ namespace webifc::geometry
         // while we have point set begin
         while (_loader.GetTokenType() == parsing::IfcTokenType::SET_BEGIN)
         {
-            result.push_back(_loader.GetIntArgument());
-            result.push_back(_loader.GetIntArgument());
-            result.push_back(_loader.GetIntArgument());
+            result.push_back((uint32_t)_loader.GetIntArgument());
+            result.push_back((uint32_t)_loader.GetIntArgument());
+            result.push_back((uint32_t)_loader.GetIntArgument());
 
             // read point set end
             _loader.GetTokenType();

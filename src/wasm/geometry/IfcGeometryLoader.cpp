@@ -2972,10 +2972,10 @@ std::vector<IfcSegmentIndexSelect> IfcGeometryLoader::ReadCurveIndices() const
           _loader.StepBack();
           t = _loader.GetTokenType();
               // If you receive a real then add the real to the list
-          if (t == parsing::IfcTokenType::REAL)
+          if (t == parsing::IfcTokenType::INTEGER)
           {
             _loader.StepBack();
-            segment.indexs.push_back(static_cast<uint32_t>(_loader.GetDoubleArgument()));
+            segment.indexs.push_back(static_cast<uint32_t>(_loader.GetIntArgument()));
           }
         }
       }
