@@ -188,7 +188,8 @@ for (var i = 0; i < files.length; i++) {
 
       if (type.isList)
       {
-          tsSchema.push(`export class ${type.name} { constructor(public value: Array<${type.typeName}>) {} };`);
+          let typeNum = type.typeNum;
+          tsSchema.push(`export class ${type.name} { type: number=${typeNum}; constructor(public value: Array<${type.typeName}>) {} };`);
           typeList.add(type.name);
       }
       else if (type.isSelect)

@@ -571,13 +571,20 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
         else if (child.isArray()) WriteSet(modelID,child);
         else if (child["value"].isArray())
         {
+            
             emscripten::val innerVal = child["value"];
+            webifc::parsing::IfcTokenType type = static_cast<webifc::parsing::IfcTokenType>(child["type"].as<uint32_t>());
             loader->Push(webifc::parsing::IfcTokenType::SET_BEGIN);
             uint32_t sz = innerVal["length"].as<uint32_t>();
             for (size_t z=0; z < sz;z++) {
-                double value = innerVal[std::to_string(z)].as<double>();
-                loader->Push<uint8_t>(webifc::parsing::IfcTokenType::REAL);
-                loader->Push<double>(value);
+                loader->Push<uint8_t>(type);
+                if (type == webifc::parsing::IfcTokenType::INTEGER) {
+                    int value = innerVal[std::to_string(z)].as<int>();
+                    loader->Push<int>(value);
+                } else {
+                    double value = innerVal[std::to_string(z)].as<double>();
+                    loader->Push<double>(value);
+                }
             }
             loader->Push(webifc::parsing::IfcTokenType::SET_END);
         }

@@ -14,7 +14,7 @@
 
 namespace webifc::parsing {
 
-   std::string getAsStringWithBigE(double theNumber,bool trailing);
+   std::string getAsStringWithBigE(double theNumber);
    std::string p21encode(std::string_view input);
 
  
@@ -156,12 +156,12 @@ namespace webifc::parsing {
             }
             case IfcTokenType::REAL:
             {
-              output << getAsStringWithBigE(_tokenStream->Read<double>(),true);
+              output << getAsStringWithBigE(_tokenStream->Read<double>());
               break;
             }
             case IfcTokenType::INTEGER:
             {
-              output << getAsStringWithBigE(_tokenStream->Read<int>(),false);
+              output << std::to_string(_tokenStream->Read<int>());
               break;
             }
             default:
@@ -253,12 +253,12 @@ namespace webifc::parsing {
             }
             case IfcTokenType::REAL:
             {
-              output << getAsStringWithBigE(_tokenStream->Read<double>(),true);
+              output << getAsStringWithBigE(_tokenStream->Read<double>());
               break;
             }
             case IfcTokenType::INTEGER:
-            {
-              output << getAsStringWithBigE(_tokenStream->Read<int>(),false);
+            { 
+              output << std::to_string(_tokenStream->Read<int>());
               break;
             }
             default:

@@ -228,7 +228,7 @@ export function expTypeToTypeNum(expTypeName:string) : number
     else if (expTypeName == "BOOLEAN") return 3;
     else if (expTypeName == "BINARY") return 4;
     else if (expTypeName == "LOGICAL") return 3;
-    return 0;
+    return 5;
 }
 
 export function parseInverse(line:string,entity:Entity) 

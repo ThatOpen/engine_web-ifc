@@ -114,13 +114,13 @@ namespace webifc::parsing {
     return {sign * (int_part + frac_part) * exp_part,has_frac};
   }
 
-  std::string getAsStringWithBigE(double theNumber,bool trailing)
+  std::string getAsStringWithBigE(double theNumber)
     {
       std::stringstream stream;
       if (std::floor(theNumber) == theNumber) {
         // integer
         long theActualNumber = (long) theNumber;
-        if (trailing) stream << theActualNumber << ".";
+        stream << theActualNumber << ".";
         return stream.str();
       } else {
         //decimal

@@ -3903,8 +3903,8 @@ export class IfcBoxAlignment {
 type: number=1;
 constructor(public value: string) {}
 }
-export class IfcComplexNumber { constructor(public value: Array<number>) {} };
-export class IfcCompoundPlaneAngleMeasure { constructor(public value: Array<number>) {} };
+export class IfcComplexNumber { type: number=4; constructor(public value: Array<number>) {} };
+export class IfcCompoundPlaneAngleMeasure { type: number=10; constructor(public value: Array<number>) {} };
 export class IfcContextDependentMeasure {
 type: number=4;
 public value: number;
@@ -12649,7 +12649,7 @@ type: number=4;
 public value: number;
 constructor(v: any) { this.value = parseFloat(v);}
 }
-export class IfcArcIndex { constructor(public value: Array<IfcPositiveInteger>) {} };
+export class IfcArcIndex { type: number=5; constructor(public value: Array<IfcPositiveInteger>) {} };
 export class IfcAreaDensityMeasure {
 type: number=4;
 public value: number;
@@ -12679,8 +12679,8 @@ type: number=10;
 public value: number;
 constructor(v: any) { this.value = parseFloat(v);}
 }
-export class IfcComplexNumber { constructor(public value: Array<number>) {} };
-export class IfcCompoundPlaneAngleMeasure { constructor(public value: Array<number>) {} };
+export class IfcComplexNumber { type: number=4; constructor(public value: Array<number>) {} };
+export class IfcCompoundPlaneAngleMeasure { type: number=10; constructor(public value: Array<number>) {} };
 export class IfcContextDependentMeasure {
 type: number=4;
 public value: number;
@@ -12860,7 +12860,7 @@ type: number=4;
 public value: number;
 constructor(v: any) { this.value = parseFloat(v);}
 }
-export class IfcLineIndex { constructor(public value: Array<IfcPositiveInteger>) {} };
+export class IfcLineIndex { type: number=5; constructor(public value: Array<IfcPositiveInteger>) {} };
 export class IfcLinearForceMeasure {
 type: number=4;
 public value: number;
@@ -13045,7 +13045,7 @@ type: number=4;
 public value: number;
 constructor(v: any) { this.value = parseFloat(v);}
 }
-export class IfcPropertySetDefinitionSet { constructor(public value: Array<IfcPropertySetDefinition>) {} };
+export class IfcPropertySetDefinitionSet { type: number=5; constructor(public value: Array<IfcPropertySetDefinition>) {} };
 export class IfcRadioActivityMeasure {
 type: number=4;
 public value: number;
@@ -22803,7 +22803,7 @@ type: number=4;
 public value: number;
 constructor(v: any) { this.value = parseFloat(v);}
 }
-export class IfcArcIndex { constructor(public value: Array<IfcPositiveInteger>) {} };
+export class IfcArcIndex { type: number=5; constructor(public value: Array<IfcPositiveInteger>) {} };
 export class IfcAreaDensityMeasure {
 type: number=4;
 public value: number;
@@ -22833,8 +22833,8 @@ type: number=10;
 public value: number;
 constructor(v: any) { this.value = parseFloat(v);}
 }
-export class IfcComplexNumber { constructor(public value: Array<number>) {} };
-export class IfcCompoundPlaneAngleMeasure { constructor(public value: Array<number>) {} };
+export class IfcComplexNumber { type: number=4; constructor(public value: Array<number>) {} };
+export class IfcCompoundPlaneAngleMeasure { type: number=10; constructor(public value: Array<number>) {} };
 export class IfcContextDependentMeasure {
 type: number=4;
 public value: number;
@@ -23014,7 +23014,7 @@ type: number=4;
 public value: number;
 constructor(v: any) { this.value = parseFloat(v);}
 }
-export class IfcLineIndex { constructor(public value: Array<IfcPositiveInteger>) {} };
+export class IfcLineIndex { type: number=5; constructor(public value: Array<IfcPositiveInteger>) {} };
 export class IfcLinearForceMeasure {
 type: number=4;
 public value: number;
@@ -23199,7 +23199,7 @@ type: number=4;
 public value: number;
 constructor(v: any) { this.value = parseFloat(v);}
 }
-export class IfcPropertySetDefinitionSet { constructor(public value: Array<IfcPropertySetDefinition>) {} };
+export class IfcPropertySetDefinitionSet { type: number=5; constructor(public value: Array<IfcPropertySetDefinition>) {} };
 export class IfcRadioActivityMeasure {
 type: number=4;
 public value: number;
