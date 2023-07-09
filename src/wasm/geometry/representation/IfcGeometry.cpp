@@ -31,26 +31,18 @@ namespace webifc::geometry {
 		if (fvertexData.size() != vertexData.size())
 		{
 			fvertexData.resize(vertexData.size());
-			for (size_t i = 0; i < vertexData.size()-5; i += 6)
+			for (size_t i = 0; i < vertexData.size(); i++)
 			{
-				fvertexData[i + 0] = vertexData[i + 0];
-				fvertexData[i + 1] = vertexData[i + 1];
-				fvertexData[i + 2] = vertexData[i + 2];
-
-				fvertexData[i + 3] = vertexData[i + 3];
-				fvertexData[i + 4] = vertexData[i + 4];
-				fvertexData[i + 5] = vertexData[i + 5];
+				// The vector was previously copied in batches of 6, but
+				// copying single entry at a time is more resilient if the 
+				// underlying geometry lib changes the treatment of normals
+				fvertexData[i] = vertexData[i];
 			}
-
-			// cleanup
-			// vertexData = {};
 		}
-
 		if (fvertexData.empty())
 		{
 			return 0;
 		}
-
 		return (uint32_t)(size_t)&fvertexData[0];
 	}
 
