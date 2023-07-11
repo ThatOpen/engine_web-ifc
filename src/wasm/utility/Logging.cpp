@@ -1,9 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
- 
-#include <iostream>
-#include <string>
+
 #include "Logging.h"
  
 namespace webifc::utility
@@ -16,9 +14,9 @@ namespace webifc::utility
     void debug(const std::string& msg) { log(msg, LogLevel::LOG_LEVEL_DEBUG); }
     void info(const std::string& msg)  { log(msg, LogLevel::LOG_LEVEL_INFO);  }
     void warn(const std::string& msg)  { log(msg, LogLevel::LOG_LEVEL_WARN);  }
-    void error(const std::string& msg) { log(msg, LogLevel::LOG_LEVEL_ERROR); }
+    void error(const std::string& msg) { log(msg, LogLevel::LOG_LEVEL_ERROR, std::cerr); }
 
-    void log(const std::string& msg, const LogLevel& level)
+    void log(const std::string& msg, const LogLevel& level, std::ostream& out)
     {
       if (level >= LOG_LEVEL) {
         std::string fullMsg = msg;
@@ -30,7 +28,7 @@ namespace webifc::utility
           case LogLevel::LOG_LEVEL_OFF:   return;
           default: return;
         }
-        std::cout << fullMsg << std::endl;
+        out << fullMsg << std::endl;
       }
     }
   }

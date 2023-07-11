@@ -83,6 +83,14 @@ The WASM library is built through emscripten, please see [the emscripten install
 
 To build the WASM you also need CMAKE [see here](https://cmake.org/download/) and (on windows) MINGW [see here](https://sourceforge.net/projects/mingw/) - once installed (and in your path) run `npm run setup-mingw` to configure the environment for web-ifc.
 
+Or you can use the docker image from `build` folder.
+```bash
+# build the docker image
+npm run docker:build
+# run the docker image with everything set up
+docker run -v $(pwd):/web-ifc web-ifc-build npm run build-release
+```
+
 ### WASM library
 
 Run `npm install` to install all dependencies.

@@ -24,7 +24,8 @@ namespace webifc::parsing
     EMPTY,
     SET_BEGIN,
     SET_END,
-    LINE_END
+    LINE_END,
+    INTEGER
   };
   
   

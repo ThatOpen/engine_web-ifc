@@ -8,6 +8,7 @@
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include "../../utility/LoaderError.h"
+#include "../../utility/Logging.h"
 
 #include <mapbox/earcut.hpp>
 
@@ -28,7 +29,7 @@ namespace webifc::geometry {
 		double ldotn = glm::dot(dir, normal);
 		if (ldotn == 0)
 		{
-			printf("0 direction in extrude\n");
+			webifc::utility::log::warn("0 direction in extrude\n");
 			return glm::dvec3(0);
 		}
 		else
@@ -139,7 +140,7 @@ namespace webifc::geometry {
 						// this is bad news, as it nans the points added to the final mesh
 						// also, it's hard to bail out now :/
 						// see curve.add() for more info on how this is currently "solved"
-						printf("NaN perp!\n");
+						webifc::utility::log::warn("NaN perp!\n");
 					}
 
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
@@ -191,7 +192,7 @@ namespace webifc::geometry {
 
 					if (left == glm::dvec3(0, 0, 0))
 					{
-						printf("0 left vec in sweep!\n");
+						webifc::utility::log::warn("0 left vec in sweep!\n");
 					}
 
 					// project profile onto planeNormal, place on planeOrigin
@@ -531,7 +532,7 @@ namespace webifc::geometry {
 						double ldotn = glm::dot(transDir, cuttingPlaneNormal);
 						if (ldotn == 0)
 						{
-							printf("0 direction in extrude\n");
+							webifc::utility::log::warn("0 direction in extrude\n");
 						}
 						else
 						{

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../representation/IfcCurve.h"
+#include "../../utility/Logging.h"
 
 namespace webifc::geometry {
 
@@ -78,7 +79,7 @@ namespace webifc::geometry {
 		double tPrime = t * (high - low) + low;
 		if (tPrime < low || tPrime > high)
 		{
-			printf("BSpline tPrime out of bounds\n");
+			webifc::utility::log::warn("BSpline tPrime out of bounds\n");
 			return glm::dvec3(0, 0, 0);
 		}
 
@@ -142,7 +143,7 @@ namespace webifc::geometry {
 		double tPrime = t * (high - low) + low;
 		if (tPrime < low || tPrime > high)
 		{
-			printf("BSpline tPrime out of bounds\n");
+			webifc::utility::log::warn("BSpline tPrime out of bounds\n");
 			return glm::dvec2(0, 0);
 		}
 

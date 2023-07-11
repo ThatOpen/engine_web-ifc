@@ -1,9 +1,7 @@
 FROM emscripten/emsdk:3.1.31
-WORKDIR /web-ifc-app
+WORKDIR /web-ifc
 COPY package*.json .
-RUN npm i -g cpy-cli
+RUN npm i -g cpy-cli ts-node typescript make-dir esbuild
 RUN npm i
-COPY . .
-RUN npm run build-release
 EXPOSE 3000
-ENTRYPOINT [ "npm", "run", "dev" ]
+VOLUME [ "/web-ifc" ]
