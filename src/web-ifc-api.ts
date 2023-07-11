@@ -441,7 +441,7 @@ export class IfcAPI {
         {
           for (let inverseProp of inverseData) 
           {
-			if (inversePropKey && inverseProp[0] !== inversePropKey) continue;
+            if (inversePropKey && inverseProp[0] !== inversePropKey) continue;
 			  
             if (!inverseProp[3]) lineData[inverseProp[0]] = null;
             else lineData[inverseProp[0]] = [];
