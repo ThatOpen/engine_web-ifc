@@ -414,9 +414,10 @@ export class IfcAPI {
 	 * @param expressID express ID of the line
 	 * @param flatten recursively flatten the line, default false
 	 * @param inverse get the inverse properties of the line, default false
+	 * @param inversePropKey filters out all other properties from a inverse search, for a increase in performance. Default null
 	 * @returns lineObject
 	 */
-    GetLine(modelID: number, expressID: number, flatten = false, inverse = false) {
+    GetLine(modelID: number, expressID: number, flatten = false, inverse = false, inversePropKey = null) {
         let expressCheck = this.wasmModule.ValidateExpressID(modelID, expressID);
         if (!expressCheck) {
             return;
@@ -440,6 +441,8 @@ export class IfcAPI {
         {
           for (let inverseProp of inverseData) 
           {
+			if (inversePropKey && inverseProp[0] !== inversePropKey) continue;
+			  
             if (!inverseProp[3]) lineData[inverseProp[0]] = null;
             else lineData[inverseProp[0]] = [];
             
