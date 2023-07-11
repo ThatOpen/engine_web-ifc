@@ -428,7 +428,7 @@ export class IfcAPI {
             lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
         } catch (e) {
              Log.error("Invalid IFC Line:"+expressID);
-             return;
+             throw e;
         }
 
         if (flatten) {
