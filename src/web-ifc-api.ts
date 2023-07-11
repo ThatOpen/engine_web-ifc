@@ -417,7 +417,7 @@ export class IfcAPI {
 	 * @param inversePropKey filters out all other properties from a inverse search, for a increase in performance. Default null
 	 * @returns lineObject
 	 */
-    GetLine(modelID: number, expressID: number, flatten = false, inverse = false, inversePropKey = null) {
+    GetLine(modelID: number, expressID: number, flatten = false, inverse = false, inversePropKey: string | null | undefined = null) {
         let expressCheck = this.wasmModule.ValidateExpressID(modelID, expressID);
         if (!expressCheck) {
             return;
