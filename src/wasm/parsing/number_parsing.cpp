@@ -124,7 +124,7 @@ namespace webifc::parsing {
         return stream.str();
       } else {
         //decimal
-        stream << theNumber;
+        stream << std::setprecision(16) << theNumber;
         std::string s = stream.str();
         for (unsigned int j = 0; j < s.length(); j++)
         {
