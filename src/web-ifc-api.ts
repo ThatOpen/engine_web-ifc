@@ -425,7 +425,12 @@ export class IfcAPI {
             lineData.expressID = rawLineData.ID;
         } catch (e) {
              Log.error("Invalid IFC Line:"+expressID);
-             return;
+	     // throw an error when the line is defined 
+	     if (rawLineData.ID) {
+                 throw e;
+	     } else {
+                 return;
+             }
         }
 
         if (flatten) {
