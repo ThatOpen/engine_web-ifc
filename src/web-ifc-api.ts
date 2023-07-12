@@ -346,19 +346,13 @@ export class IfcAPI {
 	 * @returns Buffer containing the model data
 	 */
     SaveModel(modelID: number): Uint8Array {
-        let modelSize = this.wasmModule.GetModelSize(modelID);
-        const headerBytes = 512;
-        let dataBuffer = new Uint8Array(modelSize + headerBytes);
-        let size = 0; 
+        let dataBuffer:Uint8Array = new Uint8Array(0);
         this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
             let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
-            size = srcSize;
+            dataBuffer = new Uint8Array(srcSize);
             dataBuffer.set(src, 0);
         });
-        //shrink down to size
-        let newBuffer = new Uint8Array(size);
-        newBuffer.set(dataBuffer.subarray(0,size),0);
-        return newBuffer;
+       return dataBuffer;
     }
 
     /**
