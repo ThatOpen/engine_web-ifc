@@ -631,7 +631,7 @@ namespace webifc::geometry
 
 		for (size_t i = 0; i < surface.BSplineSurface.UMultiplicity.size(); i++)
 		{
-			for (int r = 0; r < surface.BSplineSurface.UMultiplicity[i]; r++)
+			for (size_t r = 0; r < surface.BSplineSurface.UMultiplicity[i]; r++)
 			{
 				srf.knots_u.push_back(surface.BSplineSurface.UKnots[i]);
 			}
@@ -639,7 +639,7 @@ namespace webifc::geometry
 
 		for (size_t i = 0; i < surface.BSplineSurface.VMultiplicity.size(); i++)
 		{
-			for (int r = 0; r < surface.BSplineSurface.VMultiplicity[i]; r++)
+			for (size_t r = 0; r < surface.BSplineSurface.VMultiplicity[i]; r++)
 			{
 				srf.knots_v.push_back(surface.BSplineSurface.VKnots[i]);
 			}

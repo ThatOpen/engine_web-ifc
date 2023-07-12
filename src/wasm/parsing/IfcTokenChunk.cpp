@@ -10,7 +10,7 @@ namespace webifc::parsing
 
   std::vector<char> p21decode(std::vector<char> & str);
   bool need_to_decode(std::vector<char> & str);
-  double crack_atof(const char*& num, const char* const end);
+  std::pair<double,bool> crack_atof(const char*& num, const char* const end);
 
     
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
@@ -167,11 +167,17 @@ namespace webifc::parsing
 
           const char* start = &(temp[0]);
           const char* end = start;
-          double value = crack_atof(end, start + temp.size());
+          std::pair<double,bool> number_value = crack_atof(end, start + temp.size());
+          double value = number_value.first;
 
           if (negative) value *= -1;
-          Push<uint8_t>(IfcTokenType::REAL);
-          Push<double>(value);
+          if (!number_value.second) {
+            Push<uint8_t>(IfcTokenType::INTEGER);
+            Push<int>((int)value);
+          } else {
+            Push<uint8_t>(IfcTokenType::REAL);
+            Push<double>(value);
+          }
 
           // skip next advance
           continue;

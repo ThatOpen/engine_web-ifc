@@ -19,12 +19,13 @@
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+#include <utility>
 
 namespace webifc::parsing {
   
-  double crack_atof(const char*& num, const char* const end) {
+  std::pair<double,bool> crack_atof(const char*& num, const char* const end) {
     if (!num || !end || end <= num) {
-      return 0;
+      return {0,false};
     }
 
     int sign         = 1;
@@ -53,7 +54,7 @@ namespace webifc::parsing {
         ++num;
         break;
       } else {
-        return sign * int_part;
+        return {sign * int_part,has_frac};
       }
       ++num;
     }
@@ -70,7 +71,7 @@ namespace webifc::parsing {
           ++num;
           break;
         } else {
-          return sign * (int_part + frac_part);
+          return {sign * (int_part + frac_part),has_frac};
         }
         ++num;
       }
@@ -110,9 +111,8 @@ namespace webifc::parsing {
     
     }
 
-    return sign * (int_part + frac_part) * exp_part;
+    return {sign * (int_part + frac_part) * exp_part,has_frac};
   }
-
 
   std::string getAsStringWithBigE(double theNumber)
     {

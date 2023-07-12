@@ -158,7 +158,7 @@ export class Properties {
         const result: any[] = [];
         let rels = null;
         if (elementID !== 0)
-            rels = await this.api.GetLine(modelID, elementID, false, true)[propsName.key];
+            rels = await this.api.GetLine(modelID, elementID, false, true, propsName.key)[propsName.key];
         else {
 			let vec = this.api.GetLineIDsWithType(modelID, propsName.name);
 			rels = [];

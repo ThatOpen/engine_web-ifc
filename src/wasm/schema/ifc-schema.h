@@ -1144,7 +1144,7 @@ namespace webifc::schema {
 	static const unsigned int IFCURIREFERENCE = 950732822;
 }
 enum IFC_SCHEMA {
-	IFC2X3,
-	IFC4,
-	IFC4X3,
+IFC2X3,
+IFC4,
+IFC4X3,
 };

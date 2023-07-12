@@ -79,8 +79,8 @@ namespace webifc::geometry {
 			std::string CurveType;
 			std::vector<std::vector<double>> Weights;
 			std::vector<std::vector<glm::dvec3>> ControlPoints;
-			std::vector<glm::f64> UMultiplicity;
-			std::vector<glm::f64> VMultiplicity;
+			std::vector<uint32_t> UMultiplicity;
+			std::vector<uint32_t> VMultiplicity;
 			std::vector<glm::f64> UKnots;
 			std::vector<glm::f64> VKnots;
 			std::vector<std::vector<glm::f64>> WeightPoints;

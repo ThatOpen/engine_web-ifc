@@ -32,12 +32,12 @@ namespace webifc::parsing {
       return _ifcTypeToExpressID.at(type);
    }
    
-   const std::vector<IfcHeaderLine> IfcLoader::GetHeaderLinesWithType(const uint32_t type) const
+   const std::vector<uint32_t> IfcLoader::GetHeaderLinesWithType(const uint32_t type) const
    { 
-     std::vector<IfcHeaderLine> ret;
-     for (auto &line: _headerLines)
+     std::vector<uint32_t> ret;
+     for (size_t i=0; i < _headerLines.size();i++)
      {
-        if (line.ifcType==type) ret.push_back(line);
+        if (_headerLines[i].ifcType==type) ret.push_back(i);
      }
      return ret;
    }
@@ -51,7 +51,7 @@ namespace webifc::parsing {
    IFC_SCHEMA IfcLoader::GetSchema() const
    { 
       auto line = GetHeaderLinesWithType(schema::FILE_SCHEMA)[0];
-      MoveToHeaderLineArgument(line.lineIndex, 0);
+      MoveToHeaderLineArgument(line, 0);
       auto schemas = _schemaManager.GetAvailableSchemas();
 
       while (!_tokenStream->IsAtEnd()) {
@@ -159,6 +159,11 @@ namespace webifc::parsing {
               output << getAsStringWithBigE(_tokenStream->Read<double>());
               break;
             }
+            case IfcTokenType::INTEGER:
+            {
+              output << std::to_string(_tokenStream->Read<int>());
+              break;
+            }
             default:
               break;
           }
@@ -249,6 +254,11 @@ namespace webifc::parsing {
             case IfcTokenType::REAL:
             {
               output << getAsStringWithBigE(_tokenStream->Read<double>());
+              break;
+            }
+            case IfcTokenType::INTEGER:
+            { 
+              output << std::to_string(_tokenStream->Read<int>());
               break;
             }
             default:
@@ -366,6 +376,11 @@ namespace webifc::parsing {
   					_tokenStream->Forward(sizeof(double));
   					break;
   				}
+          case IfcTokenType::INTEGER:
+          {
+            _tokenStream->Forward(sizeof(int));
+            break;
+          }
   				default:
   					break;
   				}
@@ -383,13 +398,13 @@ namespace webifc::parsing {
      else return true;
    }
    
-   const IfcLine &IfcLoader::GetLine(const uint32_t expressID) const
+   uint32_t IfcLoader::GetLineType(const uint32_t expressID) const
    { 
       if (expressID == 0 || expressID > _lines.size()) {
         _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Attempt to Access Invalid ExpressID", expressID);
-        return *_nullLine;
+        return 0;
       }
-      return *_lines[expressID-1];
+      return _lines[expressID-1]->ifcType;
    }
    
    IfcLoader::~IfcLoader()
@@ -411,14 +426,8 @@ namespace webifc::parsing {
    
    std::string IfcLoader::GetStringArgument() const
    { 
-   	 std::string s = std::string(GetStringViewArgument());
-     return s;
-   }
-   
-   std::string_view IfcLoader::GetStringViewArgument() const
-   { 
-     _tokenStream->Read<char>(); // string type
-   	 std::string_view s = _tokenStream->ReadString();
+   	 _tokenStream->Read<char>(); // string type
+     std::string s = std::string(_tokenStream->ReadString());
      return s;
    }
    
@@ -427,6 +436,18 @@ namespace webifc::parsing {
        _tokenStream->Read<char>(); // real type
        return _tokenStream->Read<double>();
    }
+
+   int IfcLoader::GetIntArgument() const
+   {
+       _tokenStream->Read<char>();
+       return _tokenStream->Read<int>();
+   }
+
+  int IfcLoader::GetIntArgument(const uint32_t tapeOffset) const
+  {
+    _tokenStream->MoveTo(tapeOffset);
+    return GetIntArgument();
+  }
 
   uint32_t IfcLoader::GetCurrentLineExpressID() const
   {
@@ -562,6 +583,10 @@ namespace webifc::parsing {
          {
            _tokenStream->Read<double>();
          }
+         else if (t == IfcTokenType::INTEGER)
+         {
+           _tokenStream->Read<int>();
+         }
          else if (t == IfcTokenType::REF)
          {
            _tokenStream->Read<uint32_t>();
@@ -625,6 +650,10 @@ namespace webifc::parsing {
      			{
      				_tokenStream->Read<double>();
      			}
+          else if (t == IfcTokenType::INTEGER)
+          {
+            _tokenStream->Read<int>();
+          }
      			else if (t == IfcTokenType::REF)
      			{
      				_tokenStream->Read<uint32_t>();
@@ -710,15 +739,20 @@ namespace webifc::parsing {
    			_tokenStream->Read<double>();
    			break;
    		}
+    case IfcTokenType::INTEGER:
+      {
+        _tokenStream->Read<int>();
+        break;
+      }
    		default:
    			break;
    		}
    	}
    }
    
-   void IfcLoader::MoveToArgumentOffset(const IfcLine &line, const uint32_t argumentIndex) const
+   void IfcLoader::MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const
    {
-    _tokenStream->MoveTo(line.tapeOffset);
+    _tokenStream->MoveTo(_lines[expressID-1]->tapeOffset);
    	ArgumentOffset(argumentIndex);
    }
    

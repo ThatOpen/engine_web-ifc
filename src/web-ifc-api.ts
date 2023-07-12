@@ -54,6 +54,7 @@ export const EMPTY = 6;
 export const SET_BEGIN = 7;
 export const SET_END = 8;
 export const LINE_END = 9;
+export const INTEGER = 10;
 
 /**
  * Settings for the IFCLoader
@@ -414,9 +415,10 @@ export class IfcAPI {
 	 * @param expressID express ID of the line
 	 * @param flatten recursively flatten the line, default false
 	 * @param inverse get the inverse properties of the line, default false
+	 * @param inversePropKey filters out all other properties from a inverse search, for a increase in performance. Default null
 	 * @returns lineObject
 	 */
-    GetLine(modelID: number, expressID: number, flatten = false, inverse = false) {
+    GetLine(modelID: number, expressID: number, flatten = false, inverse = false, inversePropKey: string | null | undefined = null) {
         let expressCheck = this.wasmModule.ValidateExpressID(modelID, expressID);
         if (!expressCheck) {
             return;
@@ -425,7 +427,8 @@ export class IfcAPI {
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData;
         try {
-            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
+            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
+            lineData.expressID = rawLineData.ID;
         } catch (e) {
              Log.error("Invalid IFC Line:"+expressID);
              throw e;
@@ -440,6 +443,8 @@ export class IfcAPI {
         {
           for (let inverseProp of inverseData) 
           {
+            if (inversePropKey && inverseProp[0] !== inversePropKey) continue;
+			  
             if (!inverseProp[3]) lineData[inverseProp[0]] = null;
             else lineData[inverseProp[0]] = [];
             
@@ -494,7 +499,7 @@ export class IfcAPI {
      */
     CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
-        return Constructors[this.modelSchemaList[modelID]][type](-1,args);
+        return Constructors[this.modelSchemaList[modelID]][type](args);
     }
 
     /**
@@ -828,7 +833,7 @@ export class IfcAPI {
          * @returns Express numerical value
          */
     GetMaxExpressID(modelID: number) {
-        return this.wasmModule.GetMaxExpressID(modelID);
+        return this.wasmModule.GetMaxExpressID(modelID) as number;
     }
 
     /**
