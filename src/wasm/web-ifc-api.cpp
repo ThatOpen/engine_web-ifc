@@ -760,7 +760,7 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     }
 }
 
-emscripten::val GetArgs(uint32_t modelID, bool inObject=false)
+emscripten::val GetArgs(uint32_t modelID, bool inObject=false, bool inList=false)
 {
     auto loader = models[modelID].GetLoader();
     auto arguments = emscripten::val::array();
@@ -784,7 +784,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false)
             }
             case webifc::parsing::IfcTokenType::SET_BEGIN:
             {
-                arguments.set(size++,GetArgs(modelID));
+                arguments.set(size++,GetArgs(modelID, false, true));
                 break;
             }
             case webifc::parsing::IfcTokenType::SET_END:
@@ -828,7 +828,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false)
                 break;
         }
     }
-    if (size == 0) return emscripten::val::null();
+    if (size == 0 && !inList) return emscripten::val::null();
     if (size == 1 && inObject) return arguments[0];
     return arguments;
 }
