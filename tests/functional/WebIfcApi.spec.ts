@@ -590,6 +590,21 @@ describe('opening large amounts of data', () => {
     
 })
 
+describe('function based opening', () => {
+    test("open a file through a callback function",  () => {
+       
+        let file =fs.openSync(path.join(__dirname, '../artifacts/example.ifc.test'),'r');
+        let retriever = function (offset:number, size: number) {
+            let data = new Uint8Array(size);
+            let bytesRead = fs.readSync(file,data,0,size,offset);            
+            if (bytesRead <= 0 ) return new Uint8Array(0);
+            return data;       
+        }
+        let modelId = ifcApi.OpenModelFromCallback(retriever);
+        fs.closeSync(file);
+        expect(ifcApi.GetAllLines(modelId).size()).toBe(6487);
+    });
+});
 
 afterAll(() => {
     ifcApi.CloseModel(modelID);

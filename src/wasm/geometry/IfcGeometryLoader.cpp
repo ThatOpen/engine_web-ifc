@@ -2782,7 +2782,6 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
 
   if (projects.size() != 1)
   {
-    std::cout << "SIZE:"<<projects.size()<<std::endl;
     _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected empty ifc project");
     return;
   }

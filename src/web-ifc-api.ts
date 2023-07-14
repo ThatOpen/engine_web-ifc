@@ -290,6 +290,35 @@ export class IfcAPI {
     }
 
     /**
+     * Opens a model and returns a modelID number
+     * @param callback a function of signature (offset:number, size: number) => Uint8Array that will retrieve the IFC data
+     * @param settings Settings for loading the model @see LoaderSettings
+     * @returns ModelID or -1 if model fails to open
+    */
+    OpenModelFromCallback(callback:  (offset:number, size: number) => Uint8Array, settings?: LoaderSettings): number {
+        let s = this.CreateSettings(settings);
+        let result = this.wasmModule.OpenModel(s, (destPtr: number, offsetInSrc: number, destSize: number) => {
+            let data = callback(offsetInSrc,destSize);
+            let srcSize = Math.min(data.byteLength, destSize);
+            let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + srcSize);
+            dest.set(data);
+            return srcSize;
+        });
+        this.deletedLines.set(result,new Set());
+        var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
+        this.modelSchemaList[result] = this.LookupSchemaId(schemaName);
+        this.modelSchemaNameList[result] = schemaName;
+        if (this.modelSchemaList[result] == -1) 
+        {
+            Log.error("Unsupported Schema:"+schemaName);
+            this.CloseModel(result)
+            return -1;
+        } 
+        Log.info("Parsing Model using " + schemaName + " Schema");
+        return result;
+    }
+
+    /**
      * Fetches the ifc schema version of a given model
      * @param modelID Model ID
 	 * @returns IFC Schema version
