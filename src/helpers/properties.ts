@@ -83,8 +83,15 @@ export class Properties {
 	 * @param recursive default false, if true get all nested properties recursively
 	 * @returns array of IfcElements inheriting from IfcPropertySetDefinition
 	 */
-    async getPropertySets(modelID: number, elementID = 0, recursive = false) {
-        return await this.getRelatedProperties(modelID, elementID, PropsNames.psets, recursive);
+    async getPropertySets(modelID: number, elementID = 0, recursive = false, includeTypeProperties = false) {
+        if (includeTypeProperties)
+        {
+            let types = await this.getTypeProperties(modelID,elementID,false);
+            let results: any[] = [];
+            for (let t of types) results.push(...await this.getPropertySets(modelID,t.expressID,recursive));
+            return results;
+
+        } else return await this.getRelatedProperties(modelID, elementID, PropsNames.psets, recursive);
     }
 
 	/**
@@ -123,8 +130,15 @@ export class Properties {
 	 * @param recursive default false, if true get all nested properties recursively
 	 * @returns array of IfcElements inheriting from IfcMaterialDefinition
 	 */
-    async getMaterialsProperties(modelID: number, elementID = 0, recursive = false) {
-        return await this.getRelatedProperties(modelID, elementID, PropsNames.materials, recursive);
+    async getMaterialsProperties(modelID: number, elementID = 0, recursive = false, includeTypeMaterials = false) {
+        if (includeTypeMaterials)
+        {
+            let types = await this.getTypeProperties(modelID,elementID,false);
+            let results: any[] = [];
+            for (let t of types) results.push(...await this.getMaterialsProperties(modelID,t.expressID,recursive));
+            return results;
+
+        } else return await this.getRelatedProperties(modelID, elementID, PropsNames.materials, recursive);
     }
 
 	/**

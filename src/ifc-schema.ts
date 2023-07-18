@@ -19093,7 +19093,7 @@ super(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Re
 }
 }
 }
-SchemaNames[3]=['IFC4X3'];
+SchemaNames[3]=['IFC4X3','IFC4X3_RC3'];
 FromRawLineData[3]={
 3630933823:(v:any[])=>new IFC4X3.IfcActorRole(v[0], !v[1] ? null :new IFC4X3.IfcLabel(v[1].value), !v[2] ? null :new IFC4X3.IfcText(v[2].value)),
 618182010:(v:any[])=>new IFC4X3.IfcAddress(v[0], !v[1] ? null :new IFC4X3.IfcText(v[1].value), !v[2] ? null :new IFC4X3.IfcLabel(v[2].value)),
