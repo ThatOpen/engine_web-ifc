@@ -39,7 +39,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     }
 
     let prefix = '';
-    if (p.optional) prefix ='!v['+i+'] ? null :'
+    if (p.optional || p.primitive) prefix ='!v['+i+'] ? null :'
 
     if (p.set)
     {
