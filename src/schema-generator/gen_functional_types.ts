@@ -234,9 +234,6 @@ for (var i = 0; i < files.length; i++) {
           if (typeName=="number") {
             tsSchema.push(`public value: number;`);
             tsSchema.push(`constructor(v: any) { this.value = parseFloat(v);}`);
-          } else if (typeName=="boolean") {
-             tsSchema.push(`public value: boolean;`);
-              tsSchema.push(`constructor(v: any) { this.value = v == "true" ? true : false; }`);
           } else {
             tsSchema.push(`constructor(public value: ${typeName}) {}`);
           }
