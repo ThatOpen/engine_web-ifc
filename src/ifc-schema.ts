@@ -1147,6 +1147,7 @@ export class Handle<_> {
 type: number=5;
 constructor(public value: number) {}
 }
+export enum logical {FALSE,TRUE,UNKNOWN}
 export abstract class IfcLineObject {
 type: number=0;
 constructor(public expressID: number = -1) {}
@@ -3897,7 +3898,7 @@ constructor(v: any) { this.value = parseFloat(v);}
 export class IfcBoolean {
 type: number=3;
 public value: boolean;
-constructor(v: any) { this.value = v == "true" ? true : false; }
+constructor(v: any) { this.value = v == "T" ? true : false; }
 }
 export class IfcBoxAlignment {
 type: number=1;
@@ -4095,8 +4096,8 @@ constructor(v: any) { this.value = parseFloat(v);}
 }
 export class IfcLogical {
 type: number=3;
-public value: boolean;
-constructor(v: any) { this.value = v == "true" ? true : false; }
+public value: logical;
+constructor(v: any) { this.value = v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }
 }
 export class IfcLuminousFluxMeasure {
 type: number=4;
@@ -5273,7 +5274,7 @@ super();
 }
 export class IfcPresentationLayerWithStyle extends IfcPresentationLayerAssignment {
 type:number=1304840413;
-constructor(public Name: IfcLabel , public Description: IfcText | null, public AssignedItems: IfcLayeredItem[] , public Identifier: IfcIdentifier | null, public LayerOn: boolean , public LayerFrozen: boolean , public LayerBlocked: boolean , public LayerStyles: IfcPresentationStyleSelect[] | null)
+constructor(public Name: IfcLabel , public Description: IfcText | null, public AssignedItems: IfcLayeredItem[] , public Identifier: IfcIdentifier | null, public LayerOn: logical , public LayerFrozen: logical , public LayerBlocked: logical , public LayerStyles: IfcPresentationStyleSelect[] | null)
 {
 super(Name, Description, AssignedItems, Identifier);
 }
@@ -5486,7 +5487,7 @@ super();
 }
 export class IfcShapeAspect extends IfcLineObject {
 type:number=867548509;
-constructor(public ShapeRepresentations: (Handle<IfcShapeModel> | IfcShapeModel)[] , public Name: IfcLabel | null, public Description: IfcText | null, public ProductDefinitional: boolean , public PartOfProductDefinitionShape: (Handle<IfcProductDefinitionShape> | IfcProductDefinitionShape) )
+constructor(public ShapeRepresentations: (Handle<IfcShapeModel> | IfcShapeModel)[] , public Name: IfcLabel | null, public Description: IfcText | null, public ProductDefinitional: logical , public PartOfProductDefinitionShape: (Handle<IfcProductDefinitionShape> | IfcProductDefinitionShape) )
 {
 super();
 }
@@ -7082,14 +7083,14 @@ super(GlobalId, OwnerHistory, Name, Description);
 }
 export class IfcOffsetCurve2D extends IfcCurve {
 type:number=3388369263;
-constructor(public BasisCurve: (Handle<IfcCurve> | IfcCurve) , public Distance: IfcLengthMeasure , public SelfIntersect: boolean )
+constructor(public BasisCurve: (Handle<IfcCurve> | IfcCurve) , public Distance: IfcLengthMeasure , public SelfIntersect: logical )
 {
 super();
 }
 }
 export class IfcOffsetCurve3D extends IfcCurve {
 type:number=3505215534;
-constructor(public BasisCurve: (Handle<IfcCurve> | IfcCurve) , public Distance: IfcLengthMeasure , public SelfIntersect: boolean , public RefDirection: (Handle<IfcDirection> | IfcDirection) )
+constructor(public BasisCurve: (Handle<IfcCurve> | IfcCurve) , public Distance: IfcLengthMeasure , public SelfIntersect: logical , public RefDirection: (Handle<IfcDirection> | IfcDirection) )
 {
 super();
 }
@@ -7741,7 +7742,7 @@ super(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasProper
 }
 export class IfcCompositeCurve extends IfcBoundedCurve {
 type:number=3732776249;
-constructor(public Segments: (Handle<IfcCompositeCurveSegment> | IfcCompositeCurveSegment)[] , public SelfIntersect: boolean )
+constructor(public Segments: (Handle<IfcCompositeCurveSegment> | IfcCompositeCurveSegment)[] , public SelfIntersect: logical )
 {
 super();
 }
@@ -8626,7 +8627,7 @@ super(GlobalId, OwnerHistory, Name, Description, ObjectType);
 }
 export class Ifc2DCompositeCurve extends IfcCompositeCurve {
 type:number=1213861670;
-constructor(public Segments: (Handle<IfcCompositeCurveSegment> | IfcCompositeCurveSegment)[] , public SelfIntersect: boolean )
+constructor(public Segments: (Handle<IfcCompositeCurveSegment> | IfcCompositeCurveSegment)[] , public SelfIntersect: logical )
 {
 super(Segments, SelfIntersect);
 }
@@ -8675,7 +8676,7 @@ super(GlobalId, OwnerHistory, Name, Description, ObjectType);
 }
 export class IfcBSplineCurve extends IfcBoundedCurve {
 type:number=1967976161;
-constructor(public Degree: number , public ControlPointsList: (Handle<IfcCartesianPoint> | IfcCartesianPoint)[] , public CurveForm: IfcBSplineCurveForm , public ClosedCurve: boolean , public SelfIntersect: boolean )
+constructor(public Degree: number , public ControlPointsList: (Handle<IfcCartesianPoint> | IfcCartesianPoint)[] , public CurveForm: IfcBSplineCurveForm , public ClosedCurve: logical , public SelfIntersect: logical )
 {
 super();
 }
@@ -8689,7 +8690,7 @@ super(GlobalId, OwnerHistory, Name, Description, ApplicableOccurrence, HasProper
 }
 export class IfcBezierCurve extends IfcBSplineCurve {
 type:number=1916977116;
-constructor(public Degree: number , public ControlPointsList: (Handle<IfcCartesianPoint> | IfcCartesianPoint)[] , public CurveForm: IfcBSplineCurveForm , public ClosedCurve: boolean , public SelfIntersect: boolean )
+constructor(public Degree: number , public ControlPointsList: (Handle<IfcCartesianPoint> | IfcCartesianPoint)[] , public CurveForm: IfcBSplineCurveForm , public ClosedCurve: logical , public SelfIntersect: logical )
 {
 super(Degree, ControlPointsList, CurveForm, ClosedCurve, SelfIntersect);
 }
@@ -9154,7 +9155,7 @@ super(GlobalId, OwnerHistory, Name, Description, ObjectType, ObjectPlacement, Re
 }
 export class IfcRationalBezierCurve extends IfcBezierCurve {
 type:number=3055160366;
-constructor(public Degree: number , public ControlPointsList: (Handle<IfcCartesianPoint> | IfcCartesianPoint)[] , public CurveForm: IfcBSplineCurveForm , public ClosedCurve: boolean , public SelfIntersect: boolean , public WeightsData: number[] )
+constructor(public Degree: number , public ControlPointsList: (Handle<IfcCartesianPoint> | IfcCartesianPoint)[] , public CurveForm: IfcBSplineCurveForm , public ClosedCurve: logical , public SelfIntersect: logical , public WeightsData: number[] )
 {
 super(Degree, ControlPointsList, CurveForm, ClosedCurve, SelfIntersect);
 }
@@ -12668,7 +12669,7 @@ constructor(v: any) { this.value = parseFloat(v);}
 export class IfcBoolean {
 type: number=3;
 public value: boolean;
-constructor(v: any) { this.value = v == "true" ? true : false; }
+constructor(v: any) { this.value = v == "T" ? true : false; }
 }
 export class IfcBoxAlignment {
 type: number=1;
@@ -12883,8 +12884,8 @@ constructor(v: any) { this.value = parseFloat(v);}
 }
 export class IfcLogical {
 type: number=3;
-public value: boolean;
-constructor(v: any) { this.value = v == "true" ? true : false; }
+public value: logical;
+constructor(v: any) { this.value = v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }
 }
 export class IfcLuminousFluxMeasure {
 type: number=4;
@@ -16302,7 +16303,7 @@ super(GlobalId, OwnerHistory, Name, Description);
 }
 export class IfcRelInterferesElements extends IfcRelConnects {
 type:number=427948657;
-constructor(public GlobalId: IfcGloballyUniqueId , public OwnerHistory: (Handle<IfcOwnerHistory> | IfcOwnerHistory) | null, public Name: IfcLabel | null, public Description: IfcText | null, public RelatingElement: (Handle<IfcElement> | IfcElement) , public RelatedElement: (Handle<IfcElement> | IfcElement) , public InterferenceGeometry: (Handle<IfcConnectionGeometry> | IfcConnectionGeometry) | null, public InterferenceType: IfcIdentifier | null, public ImpliedOrder: boolean )
+constructor(public GlobalId: IfcGloballyUniqueId , public OwnerHistory: (Handle<IfcOwnerHistory> | IfcOwnerHistory) | null, public Name: IfcLabel | null, public Description: IfcText | null, public RelatingElement: (Handle<IfcElement> | IfcElement) , public RelatedElement: (Handle<IfcElement> | IfcElement) , public InterferenceGeometry: (Handle<IfcConnectionGeometry> | IfcConnectionGeometry) | null, public InterferenceType: IfcIdentifier | null, public ImpliedOrder: logical )
 {
 super(GlobalId, OwnerHistory, Name, Description);
 }
@@ -22822,7 +22823,7 @@ constructor(v: any) { this.value = parseFloat(v);}
 export class IfcBoolean {
 type: number=3;
 public value: boolean;
-constructor(v: any) { this.value = v == "true" ? true : false; }
+constructor(v: any) { this.value = v == "T" ? true : false; }
 }
 export class IfcBoxAlignment {
 type: number=1;
@@ -23037,8 +23038,8 @@ constructor(v: any) { this.value = parseFloat(v);}
 }
 export class IfcLogical {
 type: number=3;
-public value: boolean;
-constructor(v: any) { this.value = v == "true" ? true : false; }
+public value: logical;
+constructor(v: any) { this.value = v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }
 }
 export class IfcLuminousFluxMeasure {
 type: number=4;

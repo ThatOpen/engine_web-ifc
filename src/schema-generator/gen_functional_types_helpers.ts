@@ -107,7 +107,7 @@ export function generateTapeAssignment(p: Prop, types:Type[])
         if (p.optional) prefix ='!i.'+p.name+' ? null :'
         return prefix + 'Labelise(i.'+p.name+')';
     }
-    else if (type?.typeName == "boolean") 
+    else if (type?.typeName == "boolean" || type?.typeName == "logical") 
     {
         return `i.${p.name}?.toString()`;
     }
@@ -214,7 +214,7 @@ export function expTypeToTSType(expTypeName:string)
     }
     else if (expTypeName == "LOGICAL")
     {
-        tsType = "boolean";
+        tsType = "logical";
     }
 
     return tsType;

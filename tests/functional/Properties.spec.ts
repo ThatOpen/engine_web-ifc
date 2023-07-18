@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Properties, IfcAPI, IFCRELASSOCIATESMATERIAL, IFCRELDEFINESBYPROPERTIES, IFCWALLSTANDARDCASE, LogLevel } from '../../dist/web-ifc-api-node.js';
+import { Properties, IfcAPI, IFCRELASSOCIATESMATERIAL, IFCRELDEFINESBYPROPERTIES, IFCWALLSTANDARDCASE, LogLevel, logical } from '../../dist/web-ifc-api-node.js';
 
 declare global {
 	namespace jest {
@@ -126,6 +126,18 @@ describe('Properties', () => {
         expect(IFCWALLSTANDARDCASEITEMS.size()).toEqual(17);
         const IFCWALLSTANDARDCASELINEDATA: any = await ifcApi.GetLine(modelID, IFCWALLSTANDARDCASEITEMS.get(0));
         expect(IFCWALLSTANDARDCASELINEDATA.hasOwnProperty("GlobalId")).toBeTruthy();
+    })
+
+    test('get get the proper value of a logical', async () => {
+	       const line = await ifcApi.GetLine(modelID,13862);
+	       expect(line.NominalValue.value == logical.UNKNOWN);
+    })
+
+    test('get get the proper value of a boolean', async () => {
+	       const line = await ifcApi.GetLine(modelID,242);
+	       expect(line.NominalValue.value == false);
+	       const line2 = await ifcApi.GetLine(modelID,243);
+	       expect(line2.NominalValue.value == true);
     })
 
 })

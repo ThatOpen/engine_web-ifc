@@ -36,6 +36,8 @@ tsSchema.push(`type: number=5;`);
 tsSchema.push(`constructor(public value: number) {}`);
 tsSchema.push(`}`);
 
+tsSchema.push(`export enum logical {FALSE,TRUE,UNKNOWN}`);
+
 tsSchema.push(`export abstract class IfcLineObject {`);
 tsSchema.push(`type: number=0;`);
 tsSchema.push(`constructor(public expressID: number = -1) {}`);
@@ -235,8 +237,11 @@ for (var i = 0; i < files.length; i++) {
             tsSchema.push(`public value: number;`);
             tsSchema.push(`constructor(v: any) { this.value = parseFloat(v);}`);
           } else if (typeName=="boolean") {
-             tsSchema.push(`public value: boolean;`);
-              tsSchema.push(`constructor(v: any) { this.value = v == "true" ? true : false; }`);
+              tsSchema.push(`public value: boolean;`);
+              tsSchema.push(`constructor(v: any) { this.value = v == "T" ? true : false; }`);
+          } else if (typeName=="logical") {
+              tsSchema.push(`public value: logical;`);
+              tsSchema.push(`constructor(v: any) { this.value = v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }`);
           } else {
             tsSchema.push(`constructor(public value: ${typeName}) {}`);
           }
