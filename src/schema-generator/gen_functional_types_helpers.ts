@@ -39,7 +39,8 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     }
 
     let prefix = '';
-    if (p.optional || p.primitive) prefix ='!v['+i+'] ? null :'
+    const valueCheckPrefix = '!v['+i+'] ? null :';
+    if (p.optional) prefix = valueCheckPrefix;
 
     if (p.set)
     {
@@ -57,16 +58,16 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     else if (type?.isSelect)
     {
         let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-        if (isEntitySelect) content='new Handle(v['+i+'].value)';
+        if (isEntitySelect) content = 'new Handle(' + valueCheckPrefix + 'v['+i+'].value)';
         else content='TypeInitialiser('+schemaNo+',v['+i+'])'
 
     }
     else if (isType) {
         if (type?.isList) content='new '+schemaName+'.'+p.type+'(v['+i+'].map( (x:any) => x.value))';
-        else content='new '+schemaName+'.'+p.type+'(v['+i+'].value)';
+        else content = 'new '+schemaName+'.'+p.type+'(' + valueCheckPrefix + 'v['+i+'].value)';
     }
-    else if (p.primitive) content='v['+i+'].value';
-    else content='new Handle<'+schemaName+'.'+p.type+'>(v['+i+'].value)';
+    else if (p.primitive) content = valueCheckPrefix + 'v['+i+'].value';
+    else content = 'new Handle<'+schemaName+'.'+p.type+'>(' + valueCheckPrefix + 'v['+i+'].value)';
     return prefix + content;
 }
 
