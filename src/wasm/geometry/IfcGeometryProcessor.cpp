@@ -741,6 +741,7 @@ namespace webifc::geometry
                     for (uint32_t i = 0; i < profile.profiles.size(); i++)
                     {
                         IfcGeometry geom_t = Sweep(closed, profile.profiles[i], directrix, axis);
+                        geom.AddPart(geom_t);
                         geom.AddGeometry(geom_t);
                     }
                 }
@@ -947,6 +948,7 @@ namespace webifc::geometry
                                 geom_t.indexData[k * 3 + 1] = temp;
                             }
                         }
+                        geom.AddPart(geom_t);
                         geom.AddGeometry(geom_t);
                     }
                 }
@@ -1559,8 +1561,6 @@ namespace webifc::geometry
                             if (glm::abs(dz) > scaleZ) {scaleZ = glm::abs(dz); }
                         }
                         newSecond.AddGeometry(secondGeom, trans, scaleX * 2, scaleY * 2, scaleZ * 2, secondGeom.halfSpaceOrigin);
-                        IfcGeometry newFirst;
-                        newFirst.AddGeometry(result);
                         result = fuzzybools::Subtract(result, newSecond);
                     }
                     else
@@ -1569,6 +1569,9 @@ namespace webifc::geometry
                     }
                 }
             }
+            IfcGeometry newResult;
+            newResult.AddGeometry(result);
+            finalResult.AddPart(newResult);
             finalResult.AddGeometry(result);
         }
 

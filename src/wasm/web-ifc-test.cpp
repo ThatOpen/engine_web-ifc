@@ -277,7 +277,9 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bsplines/425.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#380/380.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing III/rac_advanced_sample_project.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing III/rac_advanced_sample_project.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#452/452.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#451/Snowdon Towers Sample Architectural_IFC2x3.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -341,7 +343,10 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 176076); //425
     // SpecificLoadTest(loader, geometryLoader,365); //380
     // SpecificLoadTest(loader, geometryLoader, 133133); //rac_advanced_sample_project
-    SpecificLoadTest(loader, geometryLoader, 1179353); //rac_advanced_sample_project
+    // SpecificLoadTest(loader, geometryLoader, 1179353); //rac_advanced_sample_project
+    SpecificLoadTest(loader, geometryLoader, 108704); //452.ifc
+    // SpecificLoadTest(loader, geometryLoader, 108228); //452.ifc
+    // SpecificLoadTest(loader, geometryLoader, 922573); //Snowdon Towers Sample Architectural_IFC2x3.ifc
 
     // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);

@@ -46,6 +46,11 @@ namespace webifc::geometry {
 		return (uint32_t)(size_t)&fvertexData[0];
 	}
 
+	void IfcGeometry::AddPart(IfcGeometry geom)
+	{
+		part.push_back(geom);
+	}
+
 	void IfcGeometry::AddGeometry(fuzzybools::Geometry geom, glm::dmat4 trans, double scx, double scy, double scz, glm::dvec3 origin)
 	{
 			
