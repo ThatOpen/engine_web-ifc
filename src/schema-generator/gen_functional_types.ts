@@ -235,13 +235,13 @@ for (var i = 0; i < files.length; i++) {
           tsSchema.push(`type: number=${typeNum};`);
           if (typeName=="number") {
             tsSchema.push(`public value: number;`);
-            tsSchema.push(`constructor(v: any) { this.value = parseFloat(v);}`);
+            tsSchema.push(`constructor(v: any) { this.value = v === null ? v : parseFloat(v);}`);
           } else if (typeName=="boolean") {
               tsSchema.push(`public value: boolean;`);
-              tsSchema.push(`constructor(v: any) { this.value = v == "T" ? true : false; }`);
+              tsSchema.push(`constructor(v: any) { this.value = v === null ? v : v == "T" ? true : false; }`);
           } else if (typeName=="logical") {
               tsSchema.push(`public value: logical;`);
-              tsSchema.push(`constructor(v: any) { this.value = v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }`);
+              tsSchema.push(`constructor(v: any) { this.value = v === null ? v : v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }`);
           } else {
             tsSchema.push(`constructor(public value: ${typeName}) {}`);
           }
