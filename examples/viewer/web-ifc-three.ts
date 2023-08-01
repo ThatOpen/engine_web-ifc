@@ -66,7 +66,7 @@ export class IfcThree
         if (geometries.length > 0)
         { 
             const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
-            let mat = new THREE.MeshPhongMaterial();
+            let mat = new THREE.MeshPhongMaterial({side:THREE.DoubleSide});
             mat.vertexColors = true;
             const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
             scene.add(mergedMesh);
@@ -75,7 +75,7 @@ export class IfcThree
         if (transparentGeometries.length > 0)
         {
             const combinedGeometryTransp = BufferGeometryUtils.mergeBufferGeometries(transparentGeometries);
-            let matTransp = new THREE.MeshPhongMaterial();
+            let matTransp = new THREE.MeshPhongMaterial({side:THREE.DoubleSide});
             matTransp.vertexColors = true;
             matTransp.transparent = true;
             matTransp.opacity = 0.5;
