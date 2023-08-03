@@ -6,7 +6,6 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
-#include <format>
 #include "IfcLoader.h"
 #include "../utility/LoaderError.h"
 #include "../utility/Logging.h"
