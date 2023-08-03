@@ -115,19 +115,16 @@ namespace webifc::parsing {
     return {sign * (int_part + frac_part) * exp_part,has_frac};
   }
 
-  std::string numberAsString(double number)
+  void numberAsString(double number, std::ostringstream &output)
   {
-    if (std::floor(number) == number) {
-      // integer
-      std::stringstream stream;
-      stream << (long)number << ".";
-      return stream.str();
-    } else {
+    if (std::floor(number) == number) output << (long)number << ".";
+    else {
       //decimal
       std::string numberString = std::format("{}", number);
       size_t eLoc = numberString.find_first_of('e');
       if (eLoc != std::string::npos) numberString[eLoc]='E';
-      return numberString;
+      output << numberString;
     }
   }
-  }
+
+}

@@ -16,7 +16,7 @@ using namespace std;
 namespace webifc::parsing {
 
     
-    void encodeCharacters(std::stringstream &stream,std::string &data) 
+    void encodeCharacters(std::ostringstream &stream,std::string &data) 
     {
         std::u16string utf16 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.from_bytes(data.data());
         stream << "\\X2\\" << std::hex <<std::setfill('0') << std::uppercase;
@@ -24,9 +24,8 @@ namespace webifc::parsing {
         stream << std::dec<< std::setw(0) << "\\X0\\";
     }
 
-    std::string p21encode(std::string_view input) 
-      {   
-        std::stringstream stream;
+    void p21encode(std::string_view input, std::ostringstream &output)
+    {   
         std::string tmp;
         bool inEncode=false;
         for (char c : input) {
@@ -42,15 +41,14 @@ namespace webifc::parsing {
             }
           } else {
             if (inEncode) {
-                encodeCharacters(stream,tmp);
+                encodeCharacters(output,tmp);
                 inEncode=false;
                 tmp.clear();
             }
           }
-          stream << c;
+          output << c;
         }
-        if (inEncode) encodeCharacters(stream,tmp);
-        return stream.str();
+        if (inEncode) encodeCharacters(output,tmp);
     }
 
 
