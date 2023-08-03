@@ -188,7 +188,7 @@ namespace webifc::geometry
       {
 
         _loader.MoveToArgumentOffset(expressID, 8);
-        std::string type = _loader.GetStringArgument();
+        std::string_view type = _loader.GetStringArgument();
 
         _loader.MoveToArgumentOffset(expressID, 2);
         uint32_t ifcStartPoint = _loader.GetRefArgument();
@@ -402,7 +402,7 @@ namespace webifc::geometry
         double RadiusOfCurvature = _loader.GetDoubleArgument();
 
         _loader.MoveToArgumentOffset(expressID, 8);
-        std::string type = _loader.GetStringArgument();
+        std::string_view type = _loader.GetStringArgument();
 
         IfcProfile profile;
 
@@ -517,7 +517,7 @@ namespace webifc::geometry
       case schema::IFCDRAUGHTINGPREDEFINEDCOLOUR:
       {
         _loader.MoveToArgumentOffset(expressID, 0);
-         std::string color = _loader.GetStringArgument();
+         std::string_view color = _loader.GetStringArgument();
          if (color == "black") return glm::dvec4(0.0,0.0,0.0,1.0);
          else if (color == "red") return glm::dvec4(1.0,0,0,1.0);
          else if (color == "green") return glm::dvec4(0,1.0,0,1.0);
@@ -753,7 +753,7 @@ namespace webifc::geometry
         _loader.MoveToArgumentOffset(expressID, 0);
         uint32_t loop = _loader.GetRefArgument();
         _loader.MoveToArgumentOffset(expressID, 1);
-        std::string orientValue = _loader.GetStringArgument();
+        std::string_view orientValue = _loader.GetStringArgument();
         bool orient = orientValue == "T";
 
         IfcBound3D bound;
@@ -773,7 +773,7 @@ namespace webifc::geometry
         _loader.MoveToArgumentOffset(expressID, 0);
         uint32_t loop = _loader.GetRefArgument();
         _loader.MoveToArgumentOffset(expressID, 1);
-        std::string orientValue = _loader.GetStringArgument();
+        std::string_view orientValue = _loader.GetStringArgument();
         bool orient = orientValue == "T";
 
         IfcBound3D bound;
@@ -879,7 +879,7 @@ namespace webifc::geometry
     IfcCurve IfcGeometryLoader::GetOrientedEdge(uint32_t expressID) const
     {
       _loader.MoveToArgumentOffset(expressID, 3);
-      std::string orientValue = _loader.GetStringArgument();
+      std::string_view orientValue = _loader.GetStringArgument();
       bool orient = orientValue == "T";
       _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t edgeCurveRef = _loader.GetRefArgument();
@@ -970,7 +970,7 @@ namespace webifc::geometry
       else if (tokenType == parsing::IfcTokenType::LABEL)
       {
         // parametervalue
-        std::string type = _loader.GetStringArgument();
+        std::string_view type = _loader.GetStringArgument();
 
         if (type == "IFCPARAMETERVALUE")
         {
@@ -2802,9 +2802,9 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
     if (lineType == schema::IFCSIUNIT)
     {
      _loader.MoveToArgumentOffset(unitRef, 1);
-     std::string unitType = _loader.GetStringArgument();
+     std::string_view unitType = _loader.GetStringArgument();
 
-     std::string unitPrefix;
+     std::string_view unitPrefix;
 
      _loader.MoveToArgumentOffset(unitRef, 2);
      if (_loader.GetTokenType() == parsing::IfcTokenType::ENUM)
@@ -2814,7 +2814,7 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
      }
 
      _loader.MoveToArgumentOffset(unitRef, 3);
-     std::string unitName = _loader.GetStringArgument();
+     std::string_view unitName = _loader.GetStringArgument();
 
      if (unitType == "LENGTHUNIT" && unitName == "METRE")
      {
@@ -2825,7 +2825,7 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
    if(lineType == schema::IFCCONVERSIONBASEDUNIT)
    {
      _loader.MoveToArgumentOffset(unitRef, 1);
-     std::string unitType = _loader.GetStringArgument();
+     std::string_view unitType = _loader.GetStringArgument();
      _loader.MoveToArgumentOffset(unitRef, 3);
      auto unitRefLine = _loader.GetRefArgument();
 
@@ -2838,9 +2838,9 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
      auto scaleRefLine = _loader.GetRefArgument();
 
      _loader.MoveToArgumentOffset(scaleRefLine, 1);
-     std::string unitTypeScale = _loader.GetStringArgument();
+     std::string_view unitTypeScale = _loader.GetStringArgument();
 
-     std::string unitPrefix;
+     std::string_view unitPrefix;
 
      _loader.MoveToArgumentOffset(scaleRefLine, 2);
      if (_loader.GetTokenType() == parsing::IfcTokenType::ENUM)
@@ -2850,7 +2850,7 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
      }
 
      _loader.MoveToArgumentOffset(scaleRefLine, 3);
-     std::string unitName = _loader.GetStringArgument();
+     std::string_view unitName = _loader.GetStringArgument();
 
      if (unitTypeScale == "LENGTHUNIT" && unitName == "METRE")
      {
@@ -2879,7 +2879,7 @@ void IfcGeometryLoader::ReadLinearScalingFactor()
  }
 }
 
-double IfcGeometryLoader::ConvertPrefix(const std::string &prefix)
+double IfcGeometryLoader::ConvertPrefix(const std::string_view &prefix)
 {
   if (prefix == "") return 1;
   else if (prefix == "EXA") return 1e18;

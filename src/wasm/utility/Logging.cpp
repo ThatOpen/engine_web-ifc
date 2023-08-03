@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 #include <iostream>
-#include <string>
+#include <string_view>
 #include "Logging.h"
  
 namespace webifc::utility
@@ -13,24 +13,23 @@ namespace webifc::utility
   void setLogLevel(const LogLevel level) { LOG_LEVEL = level; }
 
   namespace log {
-    void debug(const std::string& msg) { log(msg, LogLevel::LOG_LEVEL_DEBUG); }
-    void info(const std::string& msg)  { log(msg, LogLevel::LOG_LEVEL_INFO);  }
-    void warn(const std::string& msg)  { log(msg, LogLevel::LOG_LEVEL_WARN);  }
-    void error(const std::string& msg) { log(msg, LogLevel::LOG_LEVEL_ERROR); }
+    void debug(const std::string_view& msg) { log(msg, LogLevel::LOG_LEVEL_DEBUG); }
+    void info(const std::string_view& msg)  { log(msg, LogLevel::LOG_LEVEL_INFO);  }
+    void warn(const std::string_view& msg)  { log(msg, LogLevel::LOG_LEVEL_WARN);  }
+    void error(const std::string_view& msg) { log(msg, LogLevel::LOG_LEVEL_ERROR); }
 
-    void log(const std::string& msg, const LogLevel& level)
+    void log(const std::string_view& msg, const LogLevel& level)
     {
       if (level >= LOG_LEVEL) {
-        std::string fullMsg = msg;
         switch (level) {
-          case LogLevel::LOG_LEVEL_DEBUG: fullMsg = "DEBUG: " + msg; break;
-          case LogLevel::LOG_LEVEL_INFO:  fullMsg = "INFO: "  + msg; break;
-          case LogLevel::LOG_LEVEL_WARN:  fullMsg = "WARN: "  + msg; break;
-          case LogLevel::LOG_LEVEL_ERROR: fullMsg = "ERROR: " + msg; break;
+          case LogLevel::LOG_LEVEL_DEBUG: std::cout << "DEBUG: "; break;
+          case LogLevel::LOG_LEVEL_INFO:  std::cout <<  "INFO: "; break;
+          case LogLevel::LOG_LEVEL_WARN:  std::cout << "WARN: "; break;
+          case LogLevel::LOG_LEVEL_ERROR: std::cout <<  "ERROR: "; break;
           case LogLevel::LOG_LEVEL_OFF:   return;
           default: return;
         }
-        std::cout << fullMsg << std::endl;
+        std::cout << msg << std::endl;
       }
     }
   }

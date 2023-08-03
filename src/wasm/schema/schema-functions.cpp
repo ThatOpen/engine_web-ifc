@@ -245,7 +245,7 @@ _schemas.push_back(IFC4);
 _schemaNames.push_back("IFC4X3");
 _schemas.push_back(IFC4X3);
 }
-std::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {
+std::string_view IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {
 switch(typeCode) {
 case schema::FILE_SCHEMA: return "FILE_SCHEMA";
 case schema::FILE_NAME: return "FILE_NAME";

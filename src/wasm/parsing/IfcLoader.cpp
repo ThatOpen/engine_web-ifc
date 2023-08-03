@@ -14,8 +14,8 @@
 
 namespace webifc::parsing {
 
-   std::string numberAsString(double theNumber);
-   std::string p21encode(std::string_view input);
+   void numberAsString(double number, std::ostringstream &output);
+   void p21encode(std::string_view input, std::ostringstream &output);
 
  
    IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
@@ -135,7 +135,9 @@ namespace webifc::parsing {
             }
             case IfcTokenType::STRING:
             {
-              output << "'" << p21encode(_tokenStream->ReadString()) << "'";
+              output << "'";
+              p21encode(_tokenStream->ReadString(),output);
+              output << "'";
               break;
             }
             case IfcTokenType::ENUM:
@@ -156,7 +158,7 @@ namespace webifc::parsing {
             }
             case IfcTokenType::REAL:
             {
-              output << numberAsString(_tokenStream->Read<double>());
+              numberAsString(_tokenStream->Read<double>(),output);
               break;
             }
             case IfcTokenType::INTEGER:
@@ -232,7 +234,9 @@ namespace webifc::parsing {
             }
             case IfcTokenType::STRING:
             {
-              output << "'" << p21encode(_tokenStream->ReadString()) << "'";
+              output << "'";
+              p21encode(_tokenStream->ReadString(),output);
+              output << "'";
               break;
             }
             case IfcTokenType::ENUM:
@@ -253,7 +257,7 @@ namespace webifc::parsing {
             }
             case IfcTokenType::REAL:
             {
-              output << numberAsString(_tokenStream->Read<double>());
+              numberAsString(_tokenStream->Read<double>(),output);
               break;
             }
             case IfcTokenType::INTEGER:
@@ -279,8 +283,7 @@ namespace webifc::parsing {
       }
       output << "ENDSEC;"<<std::endl<<"END-ISO-10303-21;";
       std::string tmp = output.str();
-      const char * outputString = tmp.c_str();
-      outputData((char*)outputString,tmp.size());
+      outputData((char*)tmp.c_str(),tmp.size());
    }
    
    void IfcLoader::SaveFile(std::ostream &outputData) const
@@ -424,11 +427,10 @@ namespace webifc::parsing {
    	 ArgumentOffset(argumentIndex);	
    }
    
-   std::string IfcLoader::GetStringArgument() const
+   std::string_view IfcLoader::GetStringArgument() const
    { 
    	 _tokenStream->Read<char>(); // string type
-     std::string s = std::string(_tokenStream->ReadString());
-     return s;
+     return _tokenStream->ReadString();
    }
    
    double IfcLoader::GetDoubleArgument() const
