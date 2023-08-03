@@ -20,6 +20,7 @@
 #include <sstream>
 #include <iomanip>
 #include <utility>
+#include <format>
 
 namespace webifc::parsing {
   
@@ -114,29 +115,19 @@ namespace webifc::parsing {
     return {sign * (int_part + frac_part) * exp_part,has_frac};
   }
 
-  std::string getAsStringWithBigE(double theNumber)
-    {
+  std::string numberAsString(double number)
+  {
+    if (std::floor(number) == number) {
+      // integer
       std::stringstream stream;
-      if (std::floor(theNumber) == theNumber) {
-        // integer
-        long theActualNumber = (long) theNumber;
-        stream << theActualNumber << ".";
-        return stream.str();
-      } else {
-        //decimal
-        stream << std::setprecision(16) << theNumber;
-        std::string s = stream.str();
-        for (unsigned int j = 0; j < s.length(); j++)
-        {
-          if (s[j] == 'e')
-          {
-            s[j] = 'E';
-            break;
-          }
-        }
-        return s;
-      }
+      stream << (long)number << ".";
+      return stream.str();
+    } else {
+      //decimal
+      std::string numberString = std::format("{}", number);
+      size_t eLoc = numberString.find_first_of('e');
+      if (eLoc != std::string::npos) numberString[eLoc]='E';
+      return numberString;
     }
-
   }
-
+  }

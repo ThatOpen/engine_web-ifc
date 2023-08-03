@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 #include <optional>
+#include <cstdint>
 #include <glm/glm.hpp>
 
 #include "../parsing/IfcLoader.h"

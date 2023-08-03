@@ -9,11 +9,21 @@ const ifcapi = new IfcAPI();
 
 async function LoadFile(filename) {
     // load model data as a string
-    const ifcData = fs.readFileSync(filename);
+
+     const ifcData1 = fs.readFileSync("../dsp.ifc");
 
     await ifcapi.Init();
 
+    let modelID1 = ifcapi.OpenModel(ifcData1);
+    
+     fs.writeFileSync("../outexported.ifc", ifcapi.SaveModel(modelID1));
+
+    const ifcData = fs.readFileSync(filename);
+
+
     let modelID = ifcapi.OpenModel(ifcData);
+
+
 
     console.log(`Loaded model ${filename} to modelID ${modelID}`);
 

@@ -8,6 +8,7 @@
 #include <array>
 #include <unordered_map>
 #include <optional>
+#include <cstdint>
 #include <tinynurbs/tinynurbs.h>
 #include "geometryutils.h"
 #include <glm/glm.hpp>

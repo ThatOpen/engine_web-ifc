@@ -6,6 +6,7 @@
  
 #include <glm/glm.hpp>
 #include <string>
+#include <cstdint>
 #include "representation/geometry.h"
 #include "../parsing/IfcLoader.h"
 #include "../utility/LoaderError.h"

@@ -9,18 +9,27 @@
 #include <iomanip>
 #include <codecvt>
 #include <locale>
+#include <cstdint>
 
 using namespace std;
 
 namespace webifc::parsing {
 
+    
+    void encodeCharacters(std::stringstream &stream,std::string &data) 
+    {
+        std::u16string utf16 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.from_bytes(data.data());
+        stream << "\\X2\\" << std::hex <<std::setfill('0') << std::uppercase;
+        for (char16_t uC : utf16) stream << std::setw(4) << static_cast<int>(uC);
+        stream << std::dec<< std::setw(0) << "\\X0\\";
+    }
+
     std::string p21encode(std::string_view input) 
       {   
         std::stringstream stream;
-        std::string stringInput(input);
         std::string tmp;
         bool inEncode=false;
-        for (char c : stringInput) {
+        for (char c : input) {
           if (c > 126 || c < 32) { 
             if (!inEncode) 
             {
@@ -33,23 +42,15 @@ namespace webifc::parsing {
             }
           } else {
             if (inEncode) {
-              std::u16string utf16 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.from_bytes(tmp.data());
-              stream << "\\X2\\" << std::hex <<std::setw(4)<<std::setfill('0') << std::uppercase;
-              for (char16_t uC : utf16) stream << uC;
-              stream << std::dec<< std::setw(1) << "\\X0\\";
-              inEncode=false;
-              tmp="";
+                encodeCharacters(stream,tmp);
+                inEncode=false;
+                tmp.clear();
             }
           }
           stream << c;
         }
-        if (inEncode) {
-            std::u16string utf16 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.from_bytes(tmp.data());
-            stream << "\\X2\\" << std::hex <<std::setw(4)<<std::setfill('0') << std::uppercase;
-            for (char16_t uC : utf16) stream << uC;
-            stream << std::dec<< std::setw(1) << "\\X0\\";
-        }
-      return stream.str();
+        if (inEncode) encodeCharacters(stream,tmp);
+        return stream.str();
     }
 
 

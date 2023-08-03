@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <cstdint>
 #include <glm/glm.hpp>
 #include <fuzzy/geometry.h>
 

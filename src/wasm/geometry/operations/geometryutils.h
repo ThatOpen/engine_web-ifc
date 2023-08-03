@@ -5,10 +5,10 @@
 
 #pragma once
 
+#include <cstdint>
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include "../../utility/LoaderError.h"
-
 #include <mapbox/earcut.hpp>
 
 namespace webifc::geometry {

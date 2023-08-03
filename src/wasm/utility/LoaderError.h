@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <cstdint>
 
 namespace webifc::utility
 {
