@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include "../representation/IfcCurve.h"
 
 namespace webifc::geometry {

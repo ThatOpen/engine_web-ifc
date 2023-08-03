@@ -6,6 +6,7 @@
 #include <fstream>
 #include <filesystem>
 #include <locale>
+#include <cstdint>
 #include <signal.h> // used to stop with feedback on ctrl-c
 
 #include "test/io_helpers.h"

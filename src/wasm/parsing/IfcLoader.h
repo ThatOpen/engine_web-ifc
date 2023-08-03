@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <istream>
 #include <set>
+#include <cstdint>
 
 #include "IfcTokenStream.h"
 #include "../utility/LoaderError.h"

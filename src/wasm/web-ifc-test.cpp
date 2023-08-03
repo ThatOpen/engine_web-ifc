@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdint>
 #include <filesystem>
 #include "test/io_helpers.h"
 

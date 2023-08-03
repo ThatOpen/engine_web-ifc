@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <codecvt>
 #include <locale>
+#include <cstdint>
 
 using namespace std;
 

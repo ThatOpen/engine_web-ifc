@@ -12,6 +12,7 @@
 #include <cstdio>
 #include <algorithm>
 #include <unordered_map>
+#include <cstdint>
 #include <glm/glm.hpp>
 
 #include "IfcCurve.h"

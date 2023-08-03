@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include "../../utility/LoaderError.h"

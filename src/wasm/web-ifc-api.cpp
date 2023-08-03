@@ -6,6 +6,7 @@
 #include <vector>
 #include <stack>
 #include <sstream>
+#include <cstdint>
 #include <memory>
 
 #include <emscripten/bind.h>
