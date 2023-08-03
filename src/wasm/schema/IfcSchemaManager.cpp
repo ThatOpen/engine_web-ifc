@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 #include <unordered_set>
-#include <cstdint>
 #include "IfcSchemaManager.h"
 
 namespace webifc::schema {
