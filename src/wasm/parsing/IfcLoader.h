@@ -9,6 +9,7 @@
 #include <istream>
 #include <set>
 #include <cstdint>
+#include <string_view>
 
 #include "IfcTokenStream.h"
 #include "../utility/LoaderError.h"
@@ -34,7 +35,7 @@ namespace webifc::parsing
       bool IsAtEnd() const;
       void MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const;
       void MoveToHeaderLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const;
-      std::string GetStringArgument() const;
+      std::string_view GetStringArgument() const;
       double GetDoubleArgument() const;
       int GetIntArgument() const;
       int GetIntArgument(const uint32_t tapeOffset) const;

@@ -279,8 +279,7 @@ namespace webifc::parsing {
       }
       output << "ENDSEC;"<<std::endl<<"END-ISO-10303-21;";
       std::string tmp = output.str();
-      const char * outputString = tmp.c_str();
-      outputData((char*)outputString,tmp.size());
+      outputData((char*)tmp.c_str(),tmp.size());
    }
    
    void IfcLoader::SaveFile(std::ostream &outputData) const
@@ -424,11 +423,10 @@ namespace webifc::parsing {
    	 ArgumentOffset(argumentIndex);	
    }
    
-   std::string IfcLoader::GetStringArgument() const
+   std::string_view IfcLoader::GetStringArgument() const
    { 
    	 _tokenStream->Read<char>(); // string type
-     std::string s = std::string(_tokenStream->ReadString());
-     return s;
+     return _tokenStream->ReadString();
    }
    
    double IfcLoader::GetDoubleArgument() const

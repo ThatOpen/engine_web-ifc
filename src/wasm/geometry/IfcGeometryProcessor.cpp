@@ -266,11 +266,11 @@ namespace webifc::geometry
                 // @Refactor: duplicate of above
 
                 _loader.MoveToArgumentOffset(expressID, 0);
-                std::string op = _loader.GetStringArgument();
+                std::string_view op = _loader.GetStringArgument();
 
                 if (op != "DIFFERENCE")
                 {
-                    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported boolean op " + op, expressID);
+                    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported boolean op " +  std::string(op), expressID);
                     return mesh;
                 }
 
@@ -310,7 +310,7 @@ namespace webifc::geometry
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t surfaceID = _loader.GetRefArgument();
-                std::string agreement = _loader.GetStringArgument();
+                std::string_view agreement = _loader.GetStringArgument();
 
                 IfcSurface surface = GetSurface(surfaceID);
 
@@ -355,7 +355,7 @@ namespace webifc::geometry
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t surfaceID = _loader.GetRefArgument();
-                std::string agreement = _loader.GetStringArgument();
+                std::string_view agreement = _loader.GetStringArgument();
                 uint32_t positionID = _loader.GetRefArgument();
                 uint32_t boundaryID = _loader.GetRefArgument();
 

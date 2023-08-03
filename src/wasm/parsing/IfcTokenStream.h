@@ -8,6 +8,7 @@
 #include <istream>
 #include <iostream>
 #include <functional>
+#include <string_view>
 #include <cstring>
 #include <cstdint>
  

@@ -4,7 +4,7 @@
  
 #pragma once
 
-#include <string>
+#include <string_view>
  
 namespace webifc::utility
 {
@@ -24,10 +24,10 @@ namespace webifc::utility
   void setLogLevel(const LogLevel level);
   
   namespace log {
-    void debug(const std::string& msg);
-    void info(const std::string& msg);
-    void warn(const std::string& msg);
-    void error(const std::string& msg);
-    void log(const std::string& msg, const LogLevel& level);
+    void debug(const std::string_view& msg);
+    void info(const std::string_view& msg);
+    void warn(const std::string_view& msg);
+    void error(const std::string_view& msg);
+    void log(const std::string_view& msg, const LogLevel& level);
   }
 }

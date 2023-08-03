@@ -187,7 +187,6 @@ void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, 
     std::vector<uint32_t> expressIds;
 
     uint32_t size = expressIdsVal["length"].as<uint32_t>();
-    uint32_t index = 0;
     for (size_t i=0; i < size; i++) 
     {
         emscripten::val expressIdVal = expressIdsVal[std::to_string(i)];
@@ -664,7 +663,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
 
 std::string GetNameFromTypeCode(uint32_t type) 
 {
-    return schemaManager.IfcTypeCodeToType(type);
+    return std::string(schemaManager.IfcTypeCodeToType(type));
 }
 
 uint32_t GetTypeCodeFromName(std::string typeName) 
@@ -685,10 +684,10 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
         return false;
     }
     uint32_t start = loader->GetTotalSize();
-    std::string ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::string_view ifcName = schemaManager.IfcTypeCodeToType(type);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
-    loader->Push((void*)ifcName.c_str(), ifcName.size());
+    loader->Push((void*)ifcName.data(), ifcName.size());
     bool responseCode = WriteSet(modelID,parameters);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
     loader->AddHeaderLineTape(type, start);
@@ -716,10 +715,10 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     loader->Push<uint32_t>(expressID);
 
     // line TYPE
-    std::string ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::string_view ifcName = schemaManager.IfcTypeCodeToType(type);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
-    loader->Push((void*)ifcName.c_str(), ifcName.size());
+    loader->Push((void*)ifcName.data(), ifcName.size());
     bool responseCode = WriteSet(modelID,parameters);
     // end line
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
@@ -737,8 +736,8 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     case webifc::parsing::IfcTokenType::STRING:
     case webifc::parsing::IfcTokenType::ENUM:
     {
-        std::string s = loader->GetStringArgument();
-        return emscripten::val(s);
+        std::string_view s = loader->GetStringArgument();
+        return emscripten::val(std::string(s));
     }
     case webifc::parsing::IfcTokenType::REAL:
     {
@@ -893,7 +892,7 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
 
 std::string GetVersion() 
 {
-    return WEB_IFC_VERSION_NUMBER;
+    return std::string(WEB_IFC_VERSION_NUMBER);
 }
 
 uint32_t GetMaxExpressID(uint32_t modelID)

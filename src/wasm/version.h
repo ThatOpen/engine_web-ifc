@@ -1,5 +1,5 @@
 
 #pragma once
-#include<string>
+#include <string_view>
 
-const std::string WEB_IFC_VERSION_NUMBER = "0.0.43";
+const std::string_view WEB_IFC_VERSION_NUMBER{"0.0.43"};
