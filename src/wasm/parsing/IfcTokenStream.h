@@ -9,6 +9,7 @@
 #include <iostream>
 #include <functional>
 #include <cstring>
+#include <cstdint>
  
 namespace webifc::parsing
 {
