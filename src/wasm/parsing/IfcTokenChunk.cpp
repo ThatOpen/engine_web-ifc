@@ -4,14 +4,13 @@
  
 
 #include "IfcTokenStream.h"
+#include <fast_float/fast_float.h>
 
 namespace webifc::parsing
 {
 
   std::vector<char> p21decode(std::vector<char> & str);
   bool need_to_decode(std::vector<char> & str);
-  std::pair<double,bool> crack_atof(const char*& num, const char* const end);
-
     
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
@@ -158,25 +157,27 @@ namespace webifc::parsing
         {
           bool negative = _fileStream->Prev() == '-';
           temp.clear();
+          bool isFractional = false;
 
           while ((_fileStream->Get() >= '0' && _fileStream->Get() <= '9') || (_fileStream->Get() == '.') || _fileStream->Get() == 'e' || _fileStream->Get() == 'E' || _fileStream->Get() == '-'|| _fileStream->Get() == '+')
           {
-            temp.push_back(_fileStream->Get());
+            char c1 = _fileStream->Get();
+            if (c1=='.') isFractional=true;
+            temp.push_back(c1);
             _fileStream->Forward();
           }
 
-          const char* start = &(temp[0]);
-          const char* end = start;
-          std::pair<double,bool> number_value = crack_atof(end, start + temp.size());
-          double value = number_value.first;
+          double number_value;
+          fast_float::from_chars(&(temp[0]), &(temp[0])+temp.size(), number_value);
 
-          if (negative) value *= -1;
-          if (!number_value.second) {
+
+          if (negative) number_value *= -1;
+          if (!isFractional) {
             Push<uint8_t>(IfcTokenType::INTEGER);
-            Push<int>((int)value);
+            Push<int>((int)number_value);
           } else {
             Push<uint8_t>(IfcTokenType::REAL);
-            Push<double>(value);
+            Push<double>(number_value);
           }
 
           // skip next advance

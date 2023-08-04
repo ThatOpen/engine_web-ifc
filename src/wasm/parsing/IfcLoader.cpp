@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
+#include <format>
 #include "IfcLoader.h"
 #include "../utility/LoaderError.h"
 #include "../utility/Logging.h"
@@ -14,9 +15,7 @@
 
 namespace webifc::parsing {
 
-   void numberAsString(double number, std::ostringstream &output);
    void p21encode(std::string_view input, std::ostringstream &output);
-
  
    IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
    { 
@@ -166,7 +165,15 @@ namespace webifc::parsing {
               }
               case IfcTokenType::REAL:
               {
-                numberAsString(_tokenStream->Read<double>(),output);
+                double number = _tokenStream->Read<double>();
+                if (std::floor(number) == number) output << (long)number << ".";
+                else {
+                  //decimal
+                  std::string numberString = std::format("{}", number);
+                  size_t eLoc = numberString.find_first_of('e');
+                  if (eLoc != std::string::npos) numberString[eLoc]='E';
+                  output << numberString;
+                }
                 break;
               }
               case IfcTokenType::INTEGER:
