@@ -201,7 +201,7 @@ namespace webifc::parsing
           temp.clear();
           while ((_fileStream->Get() >= 'A' && _fileStream->Get() <= 'Z') || (_fileStream->Get() >= 'a' && _fileStream->Get() <= 'z') || (_fileStream->Get() >= '0' && _fileStream->Get() <= '9') || _fileStream->Get() == '_')
           {
-            temp.push_back(std::toupper(_fileStream->Get()));
+            temp.push_back(_fileStream->Get());
             _fileStream->Forward();
           }
 
