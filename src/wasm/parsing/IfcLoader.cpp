@@ -231,32 +231,26 @@ namespace webifc::parsing {
   				{
   				case IfcTokenType::LINE_END:
   				{
-            if (currentExpressID != 0)
+            if (currentExpressID != 0 || currentIfcType !=0)
   					{
   						IfcLine* l = new IfcLine();
   						l->ifcType = currentIfcType;
   						l->tapeOffset = currentTapeOffset;
-  						_ifcTypeToExpressID[l->ifcType].push_back(currentExpressID);
-  						maxExpressId = std::max(maxExpressId, currentExpressID);
-              _lines.resize(maxExpressId,_nullLine);
-  						_lines[currentExpressID-1]=l;
-  					}
-  					else if (currentIfcType != 0)
-  					{
   						if(currentIfcType == webifc::schema::FILE_DESCRIPTION || currentIfcType == webifc::schema::FILE_NAME||currentIfcType == webifc::schema::FILE_SCHEMA )
-  						{
-  							IfcLine *l= new IfcLine();
-  							l->ifcType = currentIfcType;
-  							l->tapeOffset = currentTapeOffset;
-  							_headerLines.push_back(l);
-  						}
+              {
+                _headerLines.push_back(l);
+              }
+              else if (currentExpressID != 0)
+              {
+                _ifcTypeToExpressID[currentIfcType].push_back(currentExpressID);
+                maxExpressId = std::max(maxExpressId, currentExpressID);
+                _lines.resize(maxExpressId,_nullLine);
+                _lines[currentExpressID-1]=l;
+                currentExpressID = 0;
+              }
+              currentIfcType = 0;
   					}
-
-  					// reset
-  					currentExpressID = 0;
-  					currentIfcType = 0;
   					currentTapeOffset = _tokenStream->GetReadOffset();
-
   					break;
   				}
   				case IfcTokenType::UNKNOWN:
@@ -268,27 +262,18 @@ namespace webifc::parsing {
   				case IfcTokenType::ENUM:
   				{
   					_tokenStream->ReadString();
-
   					break;
   				}
   				case IfcTokenType::LABEL:
   				{
   					std::string_view s = _tokenStream->ReadString();
-  					if (currentIfcType == 0)
-  					{
-              currentIfcType = _schemaManager.IfcTypeToTypeCode(s);
-  					}
-
+  					if (currentIfcType == 0) currentIfcType = _schemaManager.IfcTypeToTypeCode(s);
   					break;
   				}
   				case IfcTokenType::REF:
   				{
   					uint32_t ref = _tokenStream->Read<uint32_t>();
-  					if (currentExpressID == 0)
-  					{
-  						currentExpressID = ref;
-  					}
-
+  					if (currentExpressID == 0) currentExpressID = ref;
   					break;
   				}
   				case IfcTokenType::REAL:

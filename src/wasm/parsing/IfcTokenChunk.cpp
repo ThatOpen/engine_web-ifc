@@ -71,6 +71,7 @@ namespace webifc::parsing
       _loaded=true;
       if (_fileStream->GetRef()!=_fileStartRef) _fileStream->Go(_fileStartRef);
       std::vector<char> temp;
+      temp.reserve(50);
       _currentSize = 0;
       while ( !_fileStream->IsAtEnd() && _currentSize < _chunkSize)
       {
@@ -111,31 +112,29 @@ namespace webifc::parsing
                 break;
               }
             }
-            
              _fileStream->Forward();
-            
           }
 
           if (need_to_decode(temp)) temp = p21decode(temp);
 
           Push<uint8_t>(IfcTokenType::STRING);
           Push<uint16_t>(temp.size());
-          if (!temp.empty()) Push((void*)&temp[0], temp.size());
+          if (!temp.empty()) Push(temp.data(), temp.size());
           
         } 
         else if (c == '#')
         {
           _fileStream->Forward();
           uint32_t num = 0;
-          while (_fileStream->Get() >= '0' &&  _fileStream->Get() <= '9')
+          char c = _fileStream->Get();
+          while (c >= '0' &&  c <= '9')
           {
-            num = num * 10 + (_fileStream->Get() - '0');
+            num = num * 10 + (c - '0');
             _fileStream->Forward();
+            c = _fileStream->Get();
           }
-
           Push<uint8_t>(IfcTokenType::REF);
           Push<uint32_t>(num);
-
           // skip next advance
           continue;
         }
@@ -155,24 +154,18 @@ namespace webifc::parsing
         else if (c == '(') Push<uint8_t>(IfcTokenType::SET_BEGIN);
         else if (c >= '0' && c <= '9')
         {
-          bool negative = _fileStream->Prev() == '-';
           temp.clear();
-          bool isFractional = false;
-
-          while ((_fileStream->Get() >= '0' && _fileStream->Get() <= '9') || (_fileStream->Get() == '.') || _fileStream->Get() == 'e' || _fileStream->Get() == 'E' || _fileStream->Get() == '-'|| _fileStream->Get() == '+')
+          if (_fileStream->Prev() == '-') temp.push_back('-');
+          char c = _fileStream->Get();
+          while ((c >= '0' && c <= '9') || (c == '.') || c == 'e' || c == 'E' || c == '-'|| c == '+')
           {
-            char c1 = _fileStream->Get();
-            if (c1=='.') isFractional=true;
-            temp.push_back(c1);
+            temp.push_back(c);
             _fileStream->Forward();
+            c = _fileStream->Get();
           }
-
           double number_value;
-          fast_float::from_chars(&(temp[0]), &(temp[0])+temp.size(), number_value);
-
-
-          if (negative) number_value *= -1;
-          if (!isFractional) {
+          fast_float::from_chars(temp.data(), temp.data() +temp.size(), number_value);
+          if (_fileStream->Prev() != '.' && std::floor(number_value) == number_value) {
             Push<uint8_t>(IfcTokenType::INTEGER);
             Push<int>((int)number_value);
           } else {
@@ -187,28 +180,32 @@ namespace webifc::parsing
         {
           temp.clear();
           _fileStream->Forward();
-          while (_fileStream->Get() != '.')
+          char c = _fileStream->Get();
+          while ( c != '.')
           {
-            temp.push_back(_fileStream->Get());
+            temp.push_back(c);
             _fileStream->Forward();
+            c = _fileStream->Get();
           }
 
           Push<uint8_t>(IfcTokenType::ENUM);
           Push<uint16_t>(temp.size());
-          Push((void*)&temp[0], temp.size());
+          Push(temp.data(), temp.size());
         }
         else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
         {
           temp.clear();
-          while ((_fileStream->Get() >= 'A' && _fileStream->Get() <= 'Z') || (_fileStream->Get() >= 'a' && _fileStream->Get() <= 'z') || (_fileStream->Get() >= '0' && _fileStream->Get() <= '9') || _fileStream->Get() == '_')
+          char c = _fileStream->Get();
+          while ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_')
           {
-            temp.push_back(_fileStream->Get());
+            temp.push_back(c);
             _fileStream->Forward();
+            c = _fileStream->Get();
           }
 
           Push<uint8_t>(IfcTokenType::LABEL);
           Push<uint16_t>(temp.size());
-          Push((void*)&temp[0], temp.size ());
+          Push(temp.data(), temp.size ());
 
           // skip next advance
           continue;
