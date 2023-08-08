@@ -89,7 +89,7 @@ function(PARAM_SETTER THE_EXECUTABLE)
 			target_compile_options(${THE_EXECUTABLE} PUBLIC "-O3")
 		endif()
 	else()
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "-std:c++20")
+		target_compile_options(${THE_EXECUTABLE} PUBLIC "-std:c++latest")
 	endif()
 endfunction()
 
