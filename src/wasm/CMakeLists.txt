@@ -31,6 +31,11 @@ file (GLOB WebIfcTestSourceFiles test/*.cpp)
 file (GLOB WebIfcTestingMain web-ifc-test.cpp)
 
 #download the external projects and save their paths
+Message("Downloading FastFloat")
+FetchContent_Declare(fastfloat GIT_REPOSITORY "https://github.com/fastfloat/fast_float" GIT_TAG "2b2395f9ac836ffca6404424bcc252bff7aa80e4" SOURCE_SUBDIR "../")
+FetchContent_MakeAvailable(fastfloat)
+FetchContent_GetProperties(fastfloat)
+
 Message("Downloading TinyNURBS")
 FetchContent_Declare(tinynurbs GIT_REPOSITORY "https://github.com/pradeep-pyro/tinynurbs" GIT_TAG "2fc6562d71665312c6298f7c340bace1bcf1b7a1" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(tinynurbs)
@@ -70,6 +75,7 @@ Message("Downloads Finished")
 
 function(PARAM_SETTER THE_EXECUTABLE)
     target_include_directories(${THE_EXECUTABLE} PUBLIC ${tinynurbs_SOURCE_DIR}/include)
+    target_include_directories(${THE_EXECUTABLE} PUBLIC ${fastfloat_SOURCE_DIR}/include)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${cdt_SOURCE_DIR}/CDT/include)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${glm_SOURCE_DIR}/)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${glm_SOURCE_DIR}/glm)

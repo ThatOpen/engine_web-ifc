@@ -4,15 +4,11 @@
  
 
 #include "IfcTokenStream.h"
+#include <fast_float/fast_float.h>
 
 namespace webifc::parsing
 {
-
-  std::vector<char> p21decode(std::vector<char> & str);
-  bool need_to_decode(std::vector<char> & str);
-  std::pair<double,bool> crack_atof(const char*& num, const char* const end);
-
-    
+  
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
     _chunkData = nullptr;
@@ -72,6 +68,7 @@ namespace webifc::parsing
       _loaded=true;
       if (_fileStream->GetRef()!=_fileStartRef) _fileStream->Go(_fileStartRef);
       std::vector<char> temp;
+      temp.reserve(50);
       _currentSize = 0;
       while ( !_fileStream->IsAtEnd() && _currentSize < _chunkSize)
       {
@@ -112,31 +109,25 @@ namespace webifc::parsing
                 break;
               }
             }
-            
              _fileStream->Forward();
-            
           }
-
-          if (need_to_decode(temp)) temp = p21decode(temp);
-
           Push<uint8_t>(IfcTokenType::STRING);
           Push<uint16_t>(temp.size());
-          if (!temp.empty()) Push((void*)&temp[0], temp.size());
-          
+          if (temp.size() > 0) Push(temp.data(),temp.size());
         } 
         else if (c == '#')
         {
           _fileStream->Forward();
           uint32_t num = 0;
-          while (_fileStream->Get() >= '0' &&  _fileStream->Get() <= '9')
+          char c = _fileStream->Get();
+          while (c >= '0' &&  c <= '9')
           {
-            num = num * 10 + (_fileStream->Get() - '0');
+            num = num * 10 + (c - '0');
             _fileStream->Forward();
+            c = _fileStream->Get();
           }
-
           Push<uint8_t>(IfcTokenType::REF);
           Push<uint32_t>(num);
-
           // skip next advance
           continue;
         }
@@ -156,27 +147,23 @@ namespace webifc::parsing
         else if (c == '(') Push<uint8_t>(IfcTokenType::SET_BEGIN);
         else if (c >= '0' && c <= '9')
         {
-          bool negative = _fileStream->Prev() == '-';
           temp.clear();
-
-          while ((_fileStream->Get() >= '0' && _fileStream->Get() <= '9') || (_fileStream->Get() == '.') || _fileStream->Get() == 'e' || _fileStream->Get() == 'E' || _fileStream->Get() == '-'|| _fileStream->Get() == '+')
+          if (_fileStream->Prev() == '-') temp.push_back('-');
+          char c = _fileStream->Get();
+          while ((c >= '0' && c <= '9') || (c == '.') || c == 'e' || c == 'E' || c == '-'|| c == '+')
           {
-            temp.push_back(_fileStream->Get());
+            temp.push_back(c);
             _fileStream->Forward();
+            c = _fileStream->Get();
           }
-
-          const char* start = &(temp[0]);
-          const char* end = start;
-          std::pair<double,bool> number_value = crack_atof(end, start + temp.size());
-          double value = number_value.first;
-
-          if (negative) value *= -1;
-          if (!number_value.second) {
+          double number_value;
+          fast_float::from_chars(temp.data(), temp.data() +temp.size(), number_value);
+          if (_fileStream->Prev() != '.' && std::floor(number_value) == number_value) {
             Push<uint8_t>(IfcTokenType::INTEGER);
-            Push<int>((int)value);
+            Push<int>((int)number_value);
           } else {
             Push<uint8_t>(IfcTokenType::REAL);
-            Push<double>(value);
+            Push<double>(number_value);
           }
 
           // skip next advance
@@ -186,28 +173,32 @@ namespace webifc::parsing
         {
           temp.clear();
           _fileStream->Forward();
-          while (_fileStream->Get() != '.')
+          char c = _fileStream->Get();
+          while ( c != '.')
           {
-            temp.push_back(_fileStream->Get());
+            temp.push_back(c);
             _fileStream->Forward();
+            c = _fileStream->Get();
           }
 
           Push<uint8_t>(IfcTokenType::ENUM);
           Push<uint16_t>(temp.size());
-          Push((void*)&temp[0], temp.size());
+          Push(temp.data(), temp.size());
         }
         else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
         {
           temp.clear();
-          while ((_fileStream->Get() >= 'A' && _fileStream->Get() <= 'Z') || (_fileStream->Get() >= 'a' && _fileStream->Get() <= 'z') || (_fileStream->Get() >= '0' && _fileStream->Get() <= '9') || _fileStream->Get() == '_')
+          char c = _fileStream->Get();
+          while ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_')
           {
-            temp.push_back(_fileStream->Get());
+            temp.push_back(c);
             _fileStream->Forward();
+            c = _fileStream->Get();
           }
 
           Push<uint8_t>(IfcTokenType::LABEL);
           Push<uint16_t>(temp.size());
-          Push((void*)&temp[0], temp.size ());
+          Push(temp.data(), temp.size ());
 
           // skip next advance
           continue;

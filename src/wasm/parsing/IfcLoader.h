@@ -36,6 +36,7 @@ namespace webifc::parsing
       void MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const;
       void MoveToHeaderLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const;
       std::string_view GetStringArgument() const;
+      std::string GetDecodedStringArgument() const;
       double GetDoubleArgument() const;
       int GetIntArgument() const;
       int GetIntArgument(const uint32_t tapeOffset) const;
@@ -69,18 +70,12 @@ namespace webifc::parsing
         uint32_t tapeOffset;
       };
 
-      struct IfcHeaderLine
-      {
-        uint32_t ifcType;
-        uint32_t lineIndex;
-        uint32_t tapeOffset;
-      };
       const schema::IfcSchemaManager &_schemaManager;
       utility::LoaderErrorHandler &_errorHandler;
       IfcTokenStream * _tokenStream;
       IfcLine * _nullLine;
       std::vector<IfcLine*> _lines;
-      std::vector<IfcHeaderLine> _headerLines;
+      std::vector<IfcLine*> _headerLines;
       std::unordered_map<uint32_t, std::vector<uint32_t>> _ifcTypeToExpressID;
       void ParseLines();
       void ArgumentOffset(const uint32_t argumentIndex) const;      
