@@ -51,7 +51,7 @@ TEST(EscapeSTest)
 
 TEST(EscapePTest)
 {
-    string_view str = "\\PE\\\\S\\*\\S\\U\\S\\b"sv;
-    auto str = webifc::parsing::p21decode(str);
+    string_view strIn = "\\PE\\\\S\\*\\S\\U\\S\\b"sv;
+    auto str = webifc::parsing::p21decode(strIn);
     ASSERT_EQ(str, "Њет");
 }
