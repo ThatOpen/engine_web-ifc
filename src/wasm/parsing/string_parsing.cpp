@@ -137,7 +137,6 @@ namespace webifc::parsing {
                                     }
                                     if (c1 < 'A' || c1 > 'I') return;
                                     codepage = c1 - 'A';
-                                    error=true;
                                 }
                                 default:
                                     error=true;
