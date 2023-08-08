@@ -55,6 +55,7 @@ namespace webifc::parsing {
             {
                 error=false;
                 iter=str.begin();
+                codepage=0;
                 end=str.end();
                 for (char c=*iter; c != 0 && !error; c=getNext())
                 {
@@ -129,7 +130,7 @@ namespace webifc::parsing {
                                 case 'P':
                                 {
                                     char c1 = getNext();
-                                    if (c==0) return;
+                                    if (c1==0) return;
                                     if (getNext() != '\\')
                                      {
                                         error=true;
@@ -140,6 +141,7 @@ namespace webifc::parsing {
                                         return;
                                     }
                                     codepage = c1 - 'A';
+                                    break;
                                 }
                                 default:
                                     error=true;
