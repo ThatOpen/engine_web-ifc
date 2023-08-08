@@ -15,7 +15,8 @@
 
 namespace webifc::parsing {
 
-   void p21encode(std::string_view input, std::ostringstream &output);
+  void p21encode(std::string_view input, std::ostringstream &output);
+  std::string p21decode(std::string_view & str);    
  
    IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
    { 
@@ -333,6 +334,12 @@ namespace webifc::parsing {
    { 
    	 _tokenStream->Read<char>(); // string type
      return _tokenStream->ReadString();
+   }
+
+   std::string IfcLoader::GetDecodedStringArgument() const
+   { 
+      std::string_view str = GetStringArgument();
+      return p21decode(str);
    }
    
    double IfcLoader::GetDoubleArgument() const

@@ -1,7 +1,7 @@
 
 const fs = require("fs");
 const { Console } = require("console");
-const { ms,IfcAPI, Handle, IFC2X3, IFCBUILDINGSTOREY, IFCPROPERTYSINGLEVALUE, IFCSIUNIT, EMPTY, IFCPROPERTYSET, IFCOWNERHISTORY, IFCRELDEFINESBYPROPERTIES } = require("../../dist/web-ifc-api-node.js");
+const { ms,IfcAPI, Handle, IFC2X3, FILE_NAME, IFCBUILDINGSTOREY, IFCPROPERTYSINGLEVALUE, IFCSIUNIT, EMPTY, IFCPROPERTYSET, IFCOWNERHISTORY, IFCRELDEFINESBYPROPERTIES } = require("../../dist/web-ifc-api-node.js");
 
 console.log("Hello web-ifc-node!");
 
@@ -10,16 +10,7 @@ const ifcapi = new IfcAPI();
 async function LoadFile(filename) {
     // load model data as a string
 
-     const ifcData1 = fs.readFileSync("../dsp.ifc");
-
     await ifcapi.Init();
-
-    let modelID1 = ifcapi.OpenModel(ifcData1);
-    
-     fs.writeFileSync("../outexported.ifc", ifcapi.SaveModel(modelID1));
-
-    const ifcData = fs.readFileSync(filename);
-
 
     let modelID = ifcapi.OpenModel(ifcData);
 

@@ -36,6 +36,7 @@ namespace webifc::parsing
       void MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const;
       void MoveToHeaderLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const;
       std::string_view GetStringArgument() const;
+      std::string GetDecodedStringArgument() const;
       double GetDoubleArgument() const;
       int GetIntArgument() const;
       int GetIntArgument(const uint32_t tapeOffset) const;

@@ -734,6 +734,9 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     switch (t)
     {
     case webifc::parsing::IfcTokenType::STRING:
+    {
+        return emscripten::val(loader->GetDecodedStringArgument());
+    }
     case webifc::parsing::IfcTokenType::ENUM:
     {
         std::string_view s = loader->GetStringArgument();

@@ -8,8 +8,6 @@
 
 namespace webifc::parsing
 {
-
-  std::vector<char> &p21decode(std::vector<char> & str);    
   
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
@@ -115,8 +113,7 @@ namespace webifc::parsing
           }
           Push<uint8_t>(IfcTokenType::STRING);
           Push<uint16_t>(temp.size());
-          if (!temp.empty()) Push(temp.data(), temp.size());
-          
+          if (temp.size() > 0) Push(temp.data(),temp.size());
         } 
         else if (c == '#')
         {
