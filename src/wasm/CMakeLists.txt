@@ -88,6 +88,8 @@ function(PARAM_SETTER THE_EXECUTABLE)
 		if (RELEASE)
 			target_compile_options(${THE_EXECUTABLE} PUBLIC "-O3")
 		endif()
+	else()
+		target_compile_options(${THE_EXECUTABLE} PUBLIC "-std:c++20")
 	endif()
 endfunction()
 
