@@ -128,13 +128,13 @@ namespace webifc::parsing {
                                 }
                                 case 'P':
                                 {
+                                    char c1 = getNext();
+                                    if (c==0) return;
                                     if (getNext() != '\\')
                                      {
                                         error=true;
                                         return;
                                     }
-                                    char c1 = getNext();
-                                    if (c==0) return;
                                     if (c1 < 'A' || c1 > 'I') return;
                                     codepage = c1 - 'A';
                                     error=true;
