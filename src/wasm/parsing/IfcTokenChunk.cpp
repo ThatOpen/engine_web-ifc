@@ -150,15 +150,17 @@ namespace webifc::parsing
           temp.clear();
           if (_fileStream->Prev() == '-') temp.push_back('-');
           char c = _fileStream->Get();
+          bool isFrac = false;
           while ((c >= '0' && c <= '9') || (c == '.') || c == 'e' || c == 'E' || c == '-'|| c == '+')
           {
             temp.push_back(c);
+            if (c=='.') isFrac = true;
             _fileStream->Forward();
             c = _fileStream->Get();
           }
           double number_value;
           fast_float::from_chars(temp.data(), temp.data() +temp.size(), number_value);
-          if (_fileStream->Prev() != '.' && std::floor(number_value) == number_value) {
+          if (!isFrac) {
             Push<uint8_t>(IfcTokenType::INTEGER);
             Push<int>((int)number_value);
           } else {

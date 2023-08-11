@@ -232,12 +232,12 @@ namespace webifc::parsing {
   				{
   				case IfcTokenType::LINE_END:
   				{
-            if (currentExpressID != 0 || currentIfcType !=0)
+            if (currentIfcType !=0)
   					{
   						IfcLine* l = new IfcLine();
   						l->ifcType = currentIfcType;
   						l->tapeOffset = currentTapeOffset;
-  						if(currentIfcType == webifc::schema::FILE_DESCRIPTION || currentIfcType == webifc::schema::FILE_NAME||currentIfcType == webifc::schema::FILE_SCHEMA )
+  						if(currentIfcType == webifc::schema::FILE_DESCRIPTION || currentIfcType == webifc::schema::FILE_NAME || currentIfcType == webifc::schema::FILE_SCHEMA )
               {
                 _headerLines.push_back(l);
               }
