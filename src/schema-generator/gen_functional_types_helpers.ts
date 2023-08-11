@@ -51,6 +51,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
             else content+='TypeInitialiser('+schemaNo+',p)';
         }
         else if (isType) content+='new '+schemaName+'.'+p.type+'(p.value)';
+        else if (p.primitive && p.type =="number") content+='Number(p.value)';
         else if (p.primitive) content+='p.value';
         else content+='new Handle<'+schemaName+'.'+p.type+'>(p.value)';
         content +=' : null) || []';
