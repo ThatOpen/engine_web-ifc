@@ -647,6 +647,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
             if (child.isNumber()) type = webifc::parsing::IfcTokenType::REAL;
             else if (child.isString()) type = webifc::parsing::IfcTokenType::STRING;
             else type = webifc::parsing::IfcTokenType::ENUM;
+            loader->Push<uint8_t>(type);
             WriteValue(modelID, type, child);
         }
         else

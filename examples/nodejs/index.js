@@ -11,6 +11,7 @@ async function LoadFile(filename) {
     // load model data as a string
 
     await ifcapi.Init();
+    const ifcData = fs.readFileSync(filename);
 
     let modelID = ifcapi.OpenModel(ifcData);
 
