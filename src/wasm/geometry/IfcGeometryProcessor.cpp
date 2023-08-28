@@ -666,6 +666,9 @@ namespace webifc::geometry
             }
             case schema::IFCSWEPTDISKSOLID:
             {
+                _expressIDToGeometry[1] = predefinedCylinder;
+                _expressIDToGeometry[2] = predefinedCube;
+
                 // TODO: prevent self intersections in Sweep function still not working properly
 
                 bool closed = false;
@@ -703,7 +706,7 @@ namespace webifc::geometry
                 IfcProfile profile;
                 profile.curve = GetCircleCurve(radius, _circleSegments);
 
-                IfcGeometry geom = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile, directrix);
+                IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), mesh, _optimize_profiles, closed, profile, radius, directrix);
 
                 _expressIDToGeometry[expressID] = geom;
                 mesh.expressID = expressID;
@@ -760,6 +763,8 @@ namespace webifc::geometry
             }
             case schema::IFCEXTRUDEDAREASOLID:
             {
+                _expressIDToGeometry[1] = predefinedCylinder;
+                _expressIDToGeometry[2] = predefinedCube;
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t profileID = _loader.GetRefArgument();
                 uint32_t placementID = _loader.GetOptionalRefArgument();
@@ -776,6 +781,11 @@ namespace webifc::geometry
                         _loader.MoveToArgumentOffset(profileID, 2);
                         uint32_t profilePlacementID = _loader.GetRefArgument();
                         double radius = _loader.GetDoubleArgument();
+
+                        // std::cout << radius << std::endl;
+                        // std::cout << depth << std::endl;
+			            // std::cout << profilePlacementID << std::endl;
+
                         // double thickness = _loader.GetDoubleArgument(); // Read this property only in hollow profiles
 
                         if (placementID)
@@ -819,7 +829,6 @@ namespace webifc::geometry
                         extrusionScale *= profileTransform;
                         mesh.transformation *= extrusionScale;
 
-                        _expressIDToGeometry[1] = predefinedCylinder;
                         mesh.expressID = 1;
                         mesh.hasGeometry = true;
                         return mesh;
@@ -877,7 +886,6 @@ namespace webifc::geometry
                         extrusionScale *= profileTransform;
                         mesh.transformation *= extrusionScale;
 
-                        _expressIDToGeometry[2] = predefinedCube;
                         mesh.expressID = 2;
                         mesh.hasGeometry = true;
                         return mesh;

@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-
 #include <iostream>
 #include <fstream>
 #include <cstdint>
@@ -15,7 +14,6 @@
 #include "utility/LoaderError.h"
 #include "utility/LoaderSettings.h"
 #include "schema/ifc-schema.h"
-
 
 using namespace webifc::io;
 
@@ -93,12 +91,10 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
 
-            
-            for (auto& geom : mesh.geometries)
+            for (auto &geom : mesh.geometries)
             {
                 auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
             }
-            
 
             meshes.push_back(mesh);
         }
@@ -222,12 +218,10 @@ void TestTriangleDecompose()
             points.push_back(c + e3 * RandomDouble(0, 1));
         }
 
-       
-
         std::cout << "Start test " << i << std::endl;
 
         bool swapped = false;
-      
+
         // webifc::IsValidTriangulation(triangles, points);
 
         std::vector<webifc::io::Point> pts;
@@ -239,7 +233,6 @@ void TestTriangleDecompose()
             p.y = pt.y;
             pts.push_back(p);
         }
-
     }
 }
 
@@ -279,8 +272,9 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#380/380.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing III/rac_advanced_sample_project.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#452/452.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#452/452.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#451/Snowdon Towers Sample Architectural_IFC2x3.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#464/464.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -308,7 +302,7 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS,set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, errorHandler, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
 
     start = ms();
     // SpecificLoadTest(loader, geometryLoader, 8765);
@@ -345,9 +339,14 @@ int main()
     // SpecificLoadTest(loader, geometryLoader,365); //380
     // SpecificLoadTest(loader, geometryLoader, 133133); //rac_advanced_sample_project
     // SpecificLoadTest(loader, geometryLoader, 1179353); //rac_advanced_sample_project
-    SpecificLoadTest(loader, geometryLoader, 108704); //452.ifc
+    // SpecificLoadTest(loader, geometryLoader, 108704); //452.ifc
     // SpecificLoadTest(loader, geometryLoader, 108228); //452.ifc
     // SpecificLoadTest(loader, geometryLoader, 922573); //Snowdon Towers Sample Architectural_IFC2x3.ifc
+    // SpecificLoadTest(loader, geometryLoader, 633228); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 963632); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 964810); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 961485); // 464.ifc
+    SpecificLoadTest(loader, geometryLoader, 961645); // 464.ifc
 
     // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
