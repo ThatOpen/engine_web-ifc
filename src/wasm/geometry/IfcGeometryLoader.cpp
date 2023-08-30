@@ -1179,7 +1179,7 @@ namespace webifc::geometry
           }
           else
           {
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", expressID, lineType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect 2D IFCLINE", expressID, lineType);
           }
         }
         else if (dimensions == 3 && trim.exist)
@@ -1197,9 +1197,33 @@ namespace webifc::geometry
               curve.Add(trim.start.pos3D);
             }
           }
+          else if (trim.start.hasParam && trim.end.hasParam)
+          {
+            _loader.MoveToArgumentOffset(expressID, 0);
+            auto positionID = _loader.GetRefArgument();
+            auto vectorID = _loader.GetRefArgument();
+            glm::dvec3 placement = GetCartesianPoint3D(positionID);
+            glm::dvec3 vector;
+            vector = GetVector(vectorID);
+
+            if (condition)
+            {
+              glm::dvec3 p1 = placement + vector * trim.start.param;
+              glm::dvec3 p2 = placement + vector * trim.end.param;
+              curve.Add(p1);
+              curve.Add(p2);
+            }
+            else
+            {
+              glm::dvec3 p2 = placement + vector * trim.start.param;
+              glm::dvec3 p1 = placement + vector * trim.end.param;
+              curve.Add(p1);
+              curve.Add(p2);
+            }
+          }
           else
           {
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect IFCLINE", expressID, lineType);
+            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect 3D IFCLINE", expressID, lineType);
           }
         }
       break;
