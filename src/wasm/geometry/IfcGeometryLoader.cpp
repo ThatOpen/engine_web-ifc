@@ -1261,7 +1261,7 @@ namespace webifc::geometry
     case schema::IFCINDEXEDPOLYCURVE:
       {
         _loader.MoveToArgumentOffset(expressID, 0);
-        auto pts2DRef = _loader.GetRefArgument();
+        auto ptsRef = _loader.GetRefArgument();
 
         _loader.MoveToArgumentOffset(expressID, 2);
 
@@ -1287,7 +1287,7 @@ namespace webifc::geometry
             {
               if (sg.type == "IFCLINEINDEX")
               {
-                auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+                auto pts = ReadIfcCartesianPointList2D(ptsRef);
                 for (auto &pt : sg.indexs)
                 {
                   curve.Add(pts[pt - 1]);
@@ -1295,7 +1295,7 @@ namespace webifc::geometry
               }
               if (sg.type == "IFCARCINDEX")
               {
-                auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+                auto pts = ReadIfcCartesianPointList2D(ptsRef);
                 IfcCurve arc = BuildArc3Pt(pts[sg.indexs[0] - 1], pts[sg.indexs[1] - 1], pts[sg.indexs[2] - 1],_circleSegments);
                 for (auto &pt : arc.points)
                 {
@@ -1306,7 +1306,43 @@ namespace webifc::geometry
           }
           else
           {
-            auto pts = ReadIfcCartesianPointList2D(pts2DRef);
+            auto pts = ReadIfcCartesianPointList2D(ptsRef);
+            for (auto &pt : pts)
+            {
+              curve.Add(pt);
+            }
+          }
+        }
+        else if (dimensions == 3)
+        {
+          _loader.MoveToArgumentOffset(expressID, 1);
+          if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
+          {
+            auto pnSegment = ReadCurveIndices();
+            for (auto &sg : pnSegment)
+            {
+              if (sg.type == "IFCLINEINDEX")
+              {
+                auto pts = ReadIfcCartesianPointList3D(ptsRef);
+                for (auto &pt : sg.indexs)
+                {
+                  curve.Add(pts[pt - 1]);
+                }
+              }
+              if (sg.type == "IFCARCINDEX")
+              {
+                auto pts = ReadIfcCartesianPointList3D(ptsRef);
+                IfcCurve arc = Build3DArc3Pt(pts[sg.indexs[0] - 1], pts[sg.indexs[1] - 1], pts[sg.indexs[2] - 1],_circleSegments, EPS_MINISCULE);
+                for (auto &pt : arc.points)
+                {
+                  curve.Add(pt);
+                }
+              }
+            }
+          }
+          else
+          {
+            auto pts = ReadIfcCartesianPointList3D(ptsRef);
             for (auto &pt : pts)
             {
               curve.Add(pt);
