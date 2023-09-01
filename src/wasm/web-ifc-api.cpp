@@ -539,13 +539,13 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     case webifc::parsing::IfcTokenType::REAL:
     {
         double val = value.as<double>();
-        loader->Push<double>(val);
+        loader->PushDouble(val);
         break;
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
         int val = value.as<int>();
-        loader->Push<int>(val);
+        loader->PushInt(val);
         break;
     }
     default:
@@ -580,10 +580,10 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
                 loader->Push<uint8_t>(type);
                 if (type == webifc::parsing::IfcTokenType::INTEGER) {
                     int value = innerVal[std::to_string(z)].as<int>();
-                    loader->Push<int>(value);
+                    loader->PushInt(value);
                 } else {
                     double value = innerVal[std::to_string(z)].as<double>();
-                    loader->Push<double>(value);
+                    loader->PushDouble(value);
                 }
             }
             loader->Push(webifc::parsing::IfcTokenType::SET_END);
@@ -745,8 +745,8 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     }
     case webifc::parsing::IfcTokenType::REAL:
     {
-        double d = loader->GetDoubleArgument();
-        return emscripten::val(std::to_string(d));
+        std::string_view s = loader->GetDoubleArgumentAsString();
+        return emscripten::val(std::string(s));
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {

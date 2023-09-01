@@ -4,7 +4,6 @@
  
 
 #include "IfcTokenStream.h"
-#include <fast_float/fast_float.h>
 
 namespace webifc::parsing
 {
@@ -158,15 +157,10 @@ namespace webifc::parsing
             _fileStream->Forward();
             c = _fileStream->Get();
           }
-          double number_value;
-          fast_float::from_chars(temp.data(), temp.data() +temp.size(), number_value);
-          if (!isFrac) {
-            Push<uint8_t>(IfcTokenType::INTEGER);
-            Push<int>((int)number_value);
-          } else {
-            Push<uint8_t>(IfcTokenType::REAL);
-            Push<double>(number_value);
-          }
+          if (isFrac) Push<uint8_t>(IfcTokenType::REAL);
+          else Push<uint8_t>(IfcTokenType::INTEGER);  
+          Push<uint16_t>(temp.size());
+          Push(temp.data(), temp.size());
 
           // skip next advance
           continue;
