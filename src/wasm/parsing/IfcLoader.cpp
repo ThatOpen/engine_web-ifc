@@ -7,6 +7,7 @@
 #include <cmath>
 #include <algorithm>
 #include <format>
+#include <fast_float/fast_float.h>
 #include "IfcLoader.h"
 #include "../utility/LoaderError.h"
 #include "../utility/Logging.h"
@@ -153,33 +154,17 @@ namespace webifc::parsing {
                 output << "." << _tokenStream->ReadString() << ".";
                 break;
               }
-              case IfcTokenType::LABEL:
-              {
-                output << _tokenStream->ReadString();
-                break;
-              }
               case IfcTokenType::REF:
               {
                 output << "#" << _tokenStream->Read<uint32_t>();
                 if (newLine) output << "=";
                 break;
               }
+              case IfcTokenType::LABEL:
               case IfcTokenType::REAL:
-              {
-                double number = _tokenStream->Read<double>();
-                if (std::floor(number) == number) output << (long)number << ".";
-                else {
-                  //decimal
-                  std::string numberString = std::format("{}", number);
-                  size_t eLoc = numberString.find_first_of('e');
-                  if (eLoc != std::string::npos) numberString[eLoc]='E';
-                  output << numberString;
-                }
-                break;
-              }
               case IfcTokenType::INTEGER:
               { 
-                output << std::to_string(_tokenStream->Read<int>());
+                output << _tokenStream->ReadString();
                 break;
               }
               default:
@@ -260,9 +245,12 @@ namespace webifc::parsing {
   				case IfcTokenType::SET_END:
   					break;
   				case IfcTokenType::STRING:
+          case IfcTokenType::REAL:
+          case IfcTokenType::INTEGER:
   				case IfcTokenType::ENUM:
   				{
-  					_tokenStream->ReadString();
+  					auto size = _tokenStream->Read<uint16_t>();
+            _tokenStream->Forward(size);
   					break;
   				}
   				case IfcTokenType::LABEL:
@@ -277,16 +265,6 @@ namespace webifc::parsing {
   					if (currentExpressID == 0) currentExpressID = ref;
   					break;
   				}
-  				case IfcTokenType::REAL:
-  				{
-  					_tokenStream->Forward(sizeof(double));
-  					break;
-  				}
-          case IfcTokenType::INTEGER:
-          {
-            _tokenStream->Forward(sizeof(int));
-            break;
-          }
   				default:
   					break;
   				}
@@ -341,17 +319,40 @@ namespace webifc::parsing {
       std::string_view str = GetStringArgument();
       return p21decode(str);
    }
+
+   void IfcLoader::PushDouble(double input)
+   {             
+      std::string numberString = std::format("{}", input);
+      uint16_t length = numberString.size();
+      Push<uint16_t>((uint16_t)length);
+      Push((void*)numberString.c_str(), numberString.size());                
+   }
+
+   void IfcLoader::PushInt(int input)
+   {
+    std::string numberString = std::to_string(input);
+    uint16_t length = numberString.size();
+    Push<uint16_t>((uint16_t)length);
+    Push((void*)numberString.c_str(), numberString.size());             
+   } 
    
    double IfcLoader::GetDoubleArgument() const
    { 
-       _tokenStream->Read<char>(); // real type
-       return _tokenStream->Read<double>();
+      std::string_view str = GetStringArgument();
+      double number_value;
+      fast_float::from_chars(str.data(), str.data() +str.size(), number_value);
+      return number_value;
+   }
+
+   std::string_view  IfcLoader::GetDoubleArgumentAsString() const
+   {
+      return GetStringArgument();
    }
 
    int IfcLoader::GetIntArgument() const
    {
-       _tokenStream->Read<char>();
-       return _tokenStream->Read<int>();
+       std::string_view str = GetStringArgument();
+       return std::stoi(std::string(str));
    }
 
   int IfcLoader::GetIntArgument(const uint32_t tapeOffset) const
@@ -489,19 +490,11 @@ namespace webifc::parsing {
        {
          tapeOffsets.push_back(offset);
 
-         if (t == IfcTokenType::REAL)
-         {
-           _tokenStream->Read<double>();
-         }
-         else if (t == IfcTokenType::INTEGER)
-         {
-           _tokenStream->Read<int>();
-         }
-         else if (t == IfcTokenType::REF)
+         if (t == IfcTokenType::REF)
          {
            _tokenStream->Read<uint32_t>();
          }
-         else if (t == IfcTokenType::STRING)
+         else if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL)
          {
            uint16_t length = _tokenStream->Read<uint16_t>();
            _tokenStream->Forward(length);
@@ -556,19 +549,11 @@ namespace webifc::parsing {
      		{
      			tempSet.push_back(offset);
 
-     			if (t == IfcTokenType::REAL)
-     			{
-     				_tokenStream->Read<double>();
-     			}
-          else if (t == IfcTokenType::INTEGER)
-          {
-            _tokenStream->Read<int>();
-          }
-     			else if (t == IfcTokenType::REF)
+     			if (t == IfcTokenType::REF)
      			{
      				_tokenStream->Read<uint32_t>();
      			}
-     			else if (t == IfcTokenType::STRING)
+     			else if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL)
      			{
      				uint16_t length = _tokenStream->Read<uint16_t>();
      				_tokenStream->Forward(length);
@@ -634,6 +619,8 @@ namespace webifc::parsing {
    		case IfcTokenType::STRING:
    		case IfcTokenType::ENUM:
    		case IfcTokenType::LABEL:
+      case IfcTokenType::INTEGER:
+      case IfcTokenType::REAL:
    		{
    			uint16_t length = _tokenStream->Read<uint16_t>();
    			_tokenStream->Forward(length);
@@ -644,16 +631,6 @@ namespace webifc::parsing {
    			_tokenStream->Read<uint32_t>();
    			break;
    		}
-   		case IfcTokenType::REAL:
-   		{
-   			_tokenStream->Read<double>();
-   			break;
-   		}
-    case IfcTokenType::INTEGER:
-      {
-        _tokenStream->Read<int>();
-        break;
-      }
    		default:
    			break;
    		}

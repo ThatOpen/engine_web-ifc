@@ -41,6 +41,7 @@ namespace webifc::parsing
       int GetIntArgument() const;
       int GetIntArgument(const uint32_t tapeOffset) const;
       double GetDoubleArgument(const uint32_t tapeOffset) const;
+      std::string_view  GetDoubleArgumentAsString() const;
       double GetOptionalDoubleParam(double defaultValue) const;
       uint32_t GetRefArgument() const;
       uint32_t GetRefArgument(const uint32_t tapeOffset) const;
@@ -58,6 +59,8 @@ namespace webifc::parsing
       void AddHeaderLineTape(const uint32_t type, const uint32_t start);
       uint32_t GetCurrentLineExpressID() const;
       void RemoveLine(const uint32_t expressID);
+      void PushDouble(double input);
+      void PushInt(int input);
       template <typename T> void Push(T input)
       {
         _tokenStream->Push(input);
