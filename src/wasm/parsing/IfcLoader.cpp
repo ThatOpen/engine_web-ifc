@@ -404,20 +404,17 @@ namespace webifc::parsing {
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
   {
-  	if (_lines.size() < expressID) _lines.resize(expressID,_nullLine);
-    // new line?
-    if (_lines[expressID-1] == _nullLine)
+    if (expressID > _lines.size())
   	{
       // create line object
   		IfcLine * line = new IfcLine();
-      _lines[expressID-1]=line;
+      _lines.push_back(line);
   		// fill line data
   		line->ifcType = type;
-
+      line->tapeOffset = start;
   		_ifcTypeToExpressID[type].push_back(expressID);
-  	}
 
-  	_lines[expressID-1]->tapeOffset = start;
+  	} else _lines[expressID-1]->tapeOffset = start;
   }
 
   void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start)
