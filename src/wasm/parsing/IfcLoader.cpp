@@ -404,7 +404,7 @@ namespace webifc::parsing {
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
   {
-    if (expressID >= _lines.size())
+    if (expressID > _lines.size())
   	{
       // create line object
   		IfcLine * line = new IfcLine();
