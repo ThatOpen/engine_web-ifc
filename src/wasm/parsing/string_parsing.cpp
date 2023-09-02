@@ -384,6 +384,7 @@ namespace webifc::parsing {
                     case 0xFE: return 731;
                     case 0xFF: return 711;
                 }
+                return input;
             }
         
     };
