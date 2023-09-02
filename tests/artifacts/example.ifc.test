@@ -25,8 +25,8 @@ FILE_SCHEMA(('IFC2X3'));
 ENDSEC;
 
 DATA;
-#1= IFCORGANIZATION($,'Autodesk Revit 2021 (ENU)',$,$,$);
-#5= IFCAPPLICATION(#1,'2021','Autodesk Revit 2021 (ENU)','Revit');
+#1= IFCORGANIZATION($,'Autodesk Revit 2021 (ENU) C\X\8E',$,$,$);
+#5= IFCAPPLICATION(#1,'2021','Autodesk Revit 2021 (ENU) ','Revit');
 #6= IFCCARTESIANPOINT((0.,0.,0.));
 #9= IFCCARTESIANPOINT((0.,0.));
 #11= IFCDIRECTION((1.,0.,0.));
