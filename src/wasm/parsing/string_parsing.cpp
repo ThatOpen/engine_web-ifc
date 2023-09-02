@@ -10,9 +10,10 @@
 #include <codecvt>
 #include <locale>
 #include <cstdint>
-#include <iostream>
 
 namespace webifc::parsing {
+
+    bool foundRoman = false;
 
     void encodeCharacters(std::ostringstream &stream,std::string &data) 
     {
@@ -92,9 +93,9 @@ namespace webifc::parsing {
                                             str[0] = (d1 << 4) | d2;
                                             str[1] = 0;
                                             auto cA = reinterpret_cast<char16_t*>(str);
-                                            cA[0]=checkRomanEncoding(cA[0]);
+                                            if (cA[0] >= 0x80 && cA[0] <= 0x9F) foundRoman = true;
+                                            if (foundRoman) cA[0]=checkRomanEncoding(cA[0]);
                                             std::u16string u16str(cA, 1);
-                                            for (int i=0; i < u16str.size();i++) u16str[i]=checkRomanEncoding(u16str[i]);
                                             std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert; 
                                             std::string utf8 = convert.to_bytes(u16str);
                                             std::copy(utf8.begin(), utf8.end(), std::back_inserter(result));

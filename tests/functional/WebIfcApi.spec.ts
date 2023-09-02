@@ -140,7 +140,7 @@ describe('WebIfcApi reading methods', () => {
     })
     test('can read MAC ROMAN Characters', () => {
         let line: RawLineData = ifcApi.GetRawLineData(modelID, 1);
-        expect(line.arguments[1].value).toEqual('Autodesk Revit 2021 (ENU) CÈ');
+        expect(line.arguments[1].value).toEqual('Autodesk Revit 2021 (ENU) Cé');
     })
     test('can count errors in ifc file', () => {
         let errors: any = ifcApi.GetAndClearErrors(modelID);
