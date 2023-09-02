@@ -10,6 +10,7 @@
 #include <codecvt>
 #include <locale>
 #include <cstdint>
+#include <iostream>
 
 namespace webifc::parsing {
 
@@ -90,7 +91,10 @@ namespace webifc::parsing {
                                             char str[2];
                                             str[0] = (d1 << 4) | d2;
                                             str[1] = 0;
-                                            std::u16string u16str(reinterpret_cast<char16_t*>(str), 1);
+                                            auto cA = reinterpret_cast<char16_t*>(str);
+                                            cA[0]=checkRomanEncoding(cA[0]);
+                                            std::u16string u16str(cA, 1);
+                                            for (int i=0; i < u16str.size();i++) u16str[i]=checkRomanEncoding(u16str[i]);
                                             std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert; 
                                             std::string utf8 = convert.to_bytes(u16str);
                                             std::copy(utf8.begin(), utf8.end(), std::back_inserter(result));
@@ -244,6 +248,142 @@ namespace webifc::parsing {
                     utf8 = convert.to_bytes(u32str);
                 }
                 std::copy(utf8.begin(), utf8.end(), std::back_inserter(result));
+            }
+
+            const char16_t checkRomanEncoding(char16_t input) const
+            {
+                if (input < 0x80 || input > 0xFF) return input;
+                switch (input)
+                {
+                    case 0x80: return 196;
+                    case 0x81: return 197;
+                    case 0x82: return 199;
+                    case 0x83: return 201;
+                    case 0x84: return 209;
+                    case 0x85: return 214;
+                    case 0x86: return 220;
+                    case 0x87: return 225;
+                    case 0x88: return 224;
+                    case 0x89: return 226;
+                    case 0x8A: return 228;
+                    case 0x8B: return 227;
+                    case 0x8C: return 229;
+                    case 0x8D: return 231;
+                    case 0x8E: return 233;
+                    case 0x8F: return 232;
+                    case 0x90: return 234;
+                    case 0x91: return 235;
+                    case 0x92: return 237;
+                    case 0x93: return 236;
+                    case 0x94: return 238;
+                    case 0x95: return 239;
+                    case 0x96: return 241;
+                    case 0x97: return 243;
+                    case 0x98: return 242;
+                    case 0x99: return 244;
+                    case 0x9A: return 246;
+                    case 0x9B: return 245;
+                    case 0x9C: return 250;
+                    case 0x9D: return 249;
+                    case 0x9E: return 251;
+                    case 0x9F: return 252;
+                    case 0xA0: return 8224;
+                    case 0xA1: return 176;
+                    case 0xA2: return 162;
+                    case 0xA3: return 163;
+                    case 0xA4: return 167;
+                    case 0xA5: return 8226;
+                    case 0xA6: return 182;
+                    case 0xA7: return 223;
+                    case 0xA8: return 174;
+                    case 0xA9: return 169;
+                    case 0xAA: return 8482;
+                    case 0xAB: return 180;
+                    case 0xAC: return 168;
+                    case 0xAD: return 8800;
+                    case 0xAE: return 198;
+                    case 0xAF: return 216;
+                    case 0xB0: return 8734;
+                    case 0xB1: return 177;
+                    case 0xB2: return 8804;
+                    case 0xB3: return 8805;
+                    case 0xB4: return 165;
+                    case 0xB5: return 181;
+                    case 0xB6: return 8706;
+                    case 0xB7: return 8721;
+                    case 0xB8: return 8719;
+                    case 0xB9: return 960;
+                    case 0xBA: return 8747;
+                    case 0xBB: return 170;
+                    case 0xBC: return 186;
+                    case 0xBD: return 937;
+                    case 0xBE: return 230;
+                    case 0xBF: return 248;
+                    case 0xC0: return 191;
+                    case 0xC1: return 161;
+                    case 0xC2: return 172;
+                    case 0xC3: return 8730;
+                    case 0xC4: return 402;
+                    case 0xC5: return 8776;
+                    case 0xC6: return 8710;
+                    case 0xC7: return 171;
+                    case 0xC8: return 187;
+                    case 0xC9: return 8230;
+                    case 0xCA: return 160;
+                    case 0xCB: return 192;
+                    case 0xCC: return 195;
+                    case 0xCD: return 213;
+                    case 0xCE: return 338;
+                    case 0xCF: return 339;
+                    case 0xD0: return 8211;
+                    case 0xD1: return 8212;
+                    case 0xD2: return 8220;
+                    case 0xD3: return 8221;
+                    case 0xD4: return 8216;
+                    case 0xD5: return 8217;
+                    case 0xD6: return 247;
+                    case 0xD7: return 9674;
+                    case 0xD8: return 255;
+                    case 0xD9: return 376;
+                    case 0xDA: return 8260;
+                    case 0xDB: return 8364;
+                    case 0xDC: return 8249;
+                    case 0xDD: return 8250;
+                    case 0xDE: return 64257;
+                    case 0xDF: return 64258;
+                    case 0xE0: return 8225;
+                    case 0xE1: return 183;
+                    case 0xE2: return 8218;
+                    case 0xE3: return 8222;
+                    case 0xE4: return 8240;
+                    case 0xE5: return 194;
+                    case 0xE6: return 202;
+                    case 0xE7: return 193;
+                    case 0xE8: return 203;
+                    case 0xE9: return 200;
+                    case 0xEA: return 205;
+                    case 0xEB: return 206;
+                    case 0xEC: return 207;
+                    case 0xED: return 204;
+                    case 0xEE: return 211;
+                    case 0xEF: return 212;
+                    case 0xF0: return 63743;
+                    case 0xF1: return 210;
+                    case 0xF2: return 218;
+                    case 0xF3: return 219;
+                    case 0xF4: return 217;
+                    case 0xF5: return 305;
+                    case 0xF6: return 710;
+                    case 0xF7: return 732;
+                    case 0xF8: return 175;
+                    case 0xF9: return 728;
+                    case 0xFA: return 729;
+                    case 0xFB: return 730;
+                    case 0xFC: return 184;
+                    case 0xFD: return 733;
+                    case 0xFE: return 731;
+                    case 0xFF: return 711;
+                }
             }
         
     };
