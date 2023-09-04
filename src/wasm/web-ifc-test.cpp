@@ -287,7 +287,7 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/394.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/IfcSurfaceCurveSweptAreaSolid.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/IfcSurfaceCurveSweptAreaSolid.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/v41.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#398 solved/398.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
@@ -307,7 +307,7 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#464/464.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#harry/harry.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#473/473.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#420/420.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#420/420.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -339,7 +339,7 @@ int main()
 
     start = ms();
 
-    // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
+    SpecificLoadTest(loader, geometryLoader, 2837); // IfcSurfaceCurveSweptAreaSolid
     // SpecificLoadTest(loader, geometryLoader,616888); // (E28)_CARRETERA_10.94_4X3
     // SpecificLoadTest(loader, geometryLoader, 22716); // Corridor-5a_renamedProfiles_4x3
     // SpecificLoadTest(loader, geometryLoader, 24943); // Corridor-5a_renamedProfiles_4x3
@@ -388,7 +388,7 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 961645); // 464.ifc
     // SpecificLoadTest(loader, geometryLoader, 743259); // harry.ifc
 
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     auto errors = errorHandler.GetErrors();
