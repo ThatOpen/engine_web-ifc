@@ -138,6 +138,10 @@ describe('WebIfcApi reading methods', () => {
         let line: RawLineData = ifcApi.GetRawLineData(modelID, expressId);
         expect(line.ID).toEqual(expressId);
     })
+    test('can read MAC ROMAN Characters', () => {
+        let line: RawLineData = ifcApi.GetRawLineData(modelID, 1);
+        expect(line.arguments[1].value).toEqual('Autodesk Revit 2021 (ENU) Cé');
+    })
     test('can count errors in ifc file', () => {
         let errors: any = ifcApi.GetAndClearErrors(modelID);
         expect(errors.size()).toEqual(quantityOfknownErrors);
@@ -386,7 +390,6 @@ describe('WebIfcApi writing methods', () => {
     test('can write a line by giving a line object', () => {
         let projectBeforeWriting: any = ifcApi.GetAllLines(modelID);
         let payload = new IFC2X3.IfcBuildingElementProxy(
-            9999999,
             new IFC2X3.IfcGloballyUniqueId('GUID'),
             new WebIFC.Handle(41),
             new IFC2X3.IfcLabel('NZ-SHS beam:100x6.0SHS:823947'),
@@ -472,7 +475,7 @@ describe('WebIfcApi known failures', () => {
             let rawIfcString = Utf8ArrayToStr(ifcDatas);
 
             expect(rawIfcString.indexOf("#6=IFCCARTESIANPOINT((0.,0.,0.));")).toBeTruthy();
-            expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);") == -1).toBeTruthy();
+            expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);")).toBeTruthy();
 
             ifcApi.CloseModel(failModelID);
         });
@@ -485,7 +488,7 @@ describe('WebIfcApi known failures', () => {
             failModelID = ifcApi.OpenModel(exampleIFCData);
             let ifcDatas = ifcApi.SaveModel(failModelID);
             let rawIfcString = Utf8ArrayToStr(ifcDatas);
-            expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);") == -1).toBeTruthy();
+            expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);")).toBeTruthy();
             ifcApi.CloseModel(failModelID);
         });
 
@@ -591,6 +594,21 @@ describe('opening large amounts of data', () => {
     
 })
 
+describe('function based opening', () => {
+    test("open a file through a callback function",  () => {
+       
+        let file =fs.openSync(path.join(__dirname, '../artifacts/example.ifc.test'),'r');
+        let retriever = function (offset:number, size: number) {
+            let data = new Uint8Array(size);
+            let bytesRead = fs.readSync(file,data,0,size,offset);            
+            if (bytesRead <= 0 ) return new Uint8Array(0);
+            return data;       
+        }
+        let modelId = ifcApi.OpenModelFromCallback(retriever);
+        fs.closeSync(file);
+        expect(ifcApi.GetAllLines(modelId).size()).toBe(6487);
+    });
+});
 
 afterAll(() => {
     ifcApi.CloseModel(modelID);

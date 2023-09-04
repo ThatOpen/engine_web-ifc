@@ -8,10 +8,11 @@
 
 #include <array>
 #include <optional>
-#include <string>
+#include <string_view>
 #include <cstdio>
 #include <algorithm>
 #include <unordered_map>
+#include <cstdint>
 #include <glm/glm.hpp>
 
 #include "IfcCurve.h"
@@ -23,7 +24,7 @@ namespace webifc::geometry {
 	inline constexpr double EPS_SMALL = 1e-6;
 	inline static constexpr double EPS_TINY = 1e-9;
 
-	const static std::unordered_map<std::string, int> Horizontal_alignment_type{
+	const static std::unordered_map<std::string_view, int> Horizontal_alignment_type{
 		{"LINE", 1},		
 		{"CIRCULARARC", 2},	
 		{"CLOTHOID", 3},	
@@ -34,7 +35,7 @@ namespace webifc::geometry {
 		{"SINECURVE", 8},				//ToDo
 		{"VIENNESEBEND", 9}};			//ToDo
 
-		const static std::unordered_map<std::string, int> Vertical_alignment_type{
+		const static std::unordered_map<std::string_view, int> Vertical_alignment_type{
 			{"CONSTANTGRADIENT", 1},	
 			{"CIRCULARARC", 2},			
 			{"PARABOLICARC", 3},		
@@ -44,13 +45,13 @@ namespace webifc::geometry {
 
 		struct IfcSegmentIndexSelect
 		{
-			std::string type;
+			std::string_view type;
 			std::vector<uint32_t> indexs;
 		};
 
 		struct IfcProfile
 		{
-			std::string type;
+			std::string_view type;
 			IfcCurve curve;
 			std::vector<IfcCurve> holes;
 			bool isConvex;
@@ -75,13 +76,13 @@ namespace webifc::geometry {
 			bool Active = false;
 			double UDegree;
 			double VDegree;
-			std::string ClosedU;
-			std::string ClosedV;
-			std::string CurveType;
+			std::string_view ClosedU;
+			std::string_view ClosedV;
+			std::string_view CurveType;
 			std::vector<std::vector<double>> Weights;
 			std::vector<std::vector<glm::dvec3>> ControlPoints;
-			std::vector<glm::f64> UMultiplicity;
-			std::vector<glm::f64> VMultiplicity;
+			std::vector<uint32_t> UMultiplicity;
+			std::vector<uint32_t> VMultiplicity;
 			std::vector<glm::f64> UKnots;
 			std::vector<glm::f64> VKnots;
 			std::vector<std::vector<glm::f64>> WeightPoints;

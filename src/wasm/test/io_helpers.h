@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <cstdint>
 #include <glm/glm.hpp>
 #include "../geometry/representation/geometry.h"
 #include "../geometry/representation/IfcGeometry.h"

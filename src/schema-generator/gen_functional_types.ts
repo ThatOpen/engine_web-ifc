@@ -32,37 +32,39 @@ tsSchema.push(`// This is a generated file, please see: gen_functional_types.js`
 
 
 tsSchema.push(`export class Handle<_> {`);
-tsSchema.push(`\ttype: number=5;`);
-tsSchema.push(`\tconstructor(public value: number) {}`);
+tsSchema.push(`type: number=5;`);
+tsSchema.push(`constructor(public value: number) {}`);
 tsSchema.push(`}`);
 
+tsSchema.push(`export enum logical {FALSE,TRUE,UNKNOWN}`);
+
 tsSchema.push(`export abstract class IfcLineObject {`);
-tsSchema.push(`\ttype: number=0;`);
-tsSchema.push(`\tconstructor(public expressID: number) {}`);
+tsSchema.push(`type: number=0;`);
+tsSchema.push(`constructor(public expressID: number = -1) {}`);
 tsSchema.push(`}`);
 tsSchema.push('/** @ignore */');
-tsSchema.push(`export const FromRawLineData: any = [];`);
+tsSchema.push(`export const FromRawLineData: any=[];`);
 tsSchema.push('/** @ignore */');
-tsSchema.push(`export const InversePropertyDef: any = {};`);
+tsSchema.push(`export const InversePropertyDef: any={};`);
 tsSchema.push('/** @ignore */');
-tsSchema.push(`export const InheritanceDef: any = {};`);
+tsSchema.push(`export const InheritanceDef: any={};`);
 tsSchema.push('/** @ignore */');
-tsSchema.push(`export const Constructors: any = {};`);
+tsSchema.push(`export const Constructors: any={};`);
 tsSchema.push('/** @ignore */');
-tsSchema.push(`export const ToRawLineData: any = {};`);
+tsSchema.push(`export const ToRawLineData: any={};`);
 tsSchema.push('/** @ignore */');
-tsSchema.push(`export const TypeInitialisers: any = {};`);
+tsSchema.push(`export const TypeInitialisers: any={};`);
 tsSchema.push('/** @ignore */');
-tsSchema.push(`export const SchemaNames: Array<Array<string>> = [];`);
+tsSchema.push(`export const SchemaNames: Array<Array<string>>=[];`);
 
 
 tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
-tsSchema.push('\tif (Array.isArray(tapeItem)) tapeItem.map((p:any) => TypeInitialiser(schema,p));');
-tsSchema.push('\tif (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
+tsSchema.push('if (Array.isArray(tapeItem)) tapeItem.map((p:any)=>TypeInitialiser(schema,p));');
+tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
 tsSchema.push('}');
 tsSchema.push('function Labelise(tapeItem:any) {');
-tsSchema.push('\ttapeItem.value=tapeItem.value.toString(); tapeItem.valueType=tapeItem.type; tapeItem.type=2; tapeItem.label=tapeItem.constructor.name.toUpperCase();');
-tsSchema.push('\treturn tapeItem;');
+tsSchema.push('tapeItem.value=tapeItem.value.toString(); tapeItem.valueType=tapeItem.type; tapeItem.type=2; tapeItem.label=tapeItem.constructor.name.toUpperCase();');
+tsSchema.push('return tapeItem;');
 tsSchema.push('}')
 
 var files = fs.readdirSync("./");
@@ -71,7 +73,7 @@ tsSchema.push("// supported ifc schemas");
   for (var i = 0; i < files.length; i++) {
 	  if (!files[i].endsWith(".exp")) continue;
 	  const schemaName = files[i].replace(".exp","");
-	  tsSchema.push(`\t${schemaName.replace(".", "_")} = "${schemaName}",`);
+	  tsSchema.push(`\t${schemaName.replace(".", "_")}="${schemaName}",`);
   }
 tsSchema.push(`};`);
 
@@ -113,7 +115,7 @@ for (var i = 0; i < files.length; i++) {
   for (var x=0; x < entities.length; x++) 
   {
     let constructorArray = entities[x].derivedProps.filter(j => !entities[x].ifcDerivedProps.includes(j.name));
-    tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(id:number, ${constructorArray.length==0? '_:any' :'v:any[]'}) => new ${schemaNameClean}.${entities[x].name}(id, ${entities[x].derivedProps.filter(j => !entities[x].ifcDerivedProps.includes(j.name)).map((p, j) => generatePropAssignment(p,j,types,schemaNameClean,i)).join(", ")}),`);
+    tsSchema.push(`${crc32(entities[x].name.toUpperCase(),crcTable)}:(${constructorArray.length==0? '_:any' :'v:any[]'})=>new ${schemaNameClean}.${entities[x].name}(${entities[x].derivedProps.filter(j => !entities[x].ifcDerivedProps.includes(j.name)).map((p, j) => generatePropAssignment(p,j,types,schemaNameClean,i)).join(", ")}),`);
   }
   tsSchema.push('}');
   
@@ -121,7 +123,7 @@ for (var i = 0; i < files.length; i++) {
   tsSchema.push(`InheritanceDef[${i}]={`)
   for (var x=0; x < entities.length; x++) 
   {
-      if (entities[x].children.length > 0) tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}: [${entities[x].children.map((c) => `${c.toUpperCase()}`).join(",")}],`);
+      if (entities[x].children.length > 0) tsSchema.push(`${crc32(entities[x].name.toUpperCase(),crcTable)}: [${entities[x].children.map((c) => `${c.toUpperCase()}`).join(",")}],`);
   }
   tsSchema.push('}');
   
@@ -131,7 +133,7 @@ for (var i = 0; i < files.length; i++) {
   {
     if (entities[x].derivedInverseProps.length > 0)
       {
-        let inverseProp:string =`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:[`;
+        let inverseProp:string =`${crc32(entities[x].name.toUpperCase(),crcTable)}:[`;
         entities[x].derivedInverseProps.forEach((prop) => {
           let pos = 0;
           //find the target element
@@ -164,14 +166,14 @@ for (var i = 0; i < files.length; i++) {
   for (var x=0; x < entities.length; x++) 
   {
     let constructorArray = entities[x].derivedProps.filter(j => !entities[x].ifcDerivedProps.includes(j.name));
-    tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(ID:number, ${constructorArray.length==0? '_:any':'a: any[]'}) => new ${schemaNameClean}.${entities[x].name}(ID, ${constructorArray.map((_, i) => 'a['+i+']').join(", ")}),`);
+    tsSchema.push(`${crc32(entities[x].name.toUpperCase(),crcTable)}:(${constructorArray.length==0? '_:any':'a: any[]'})=>new ${schemaNameClean}.${entities[x].name}(${constructorArray.map((_, i) => 'a['+i+']').join(", ")}),`);
   
   }
   tsSchema.push('}');
   
   //generate ToRawLineData
   tsSchema.push(`ToRawLineData[${i}]={`)
-  for (var x=0; x < entities.length; x++) tsSchema.push(`\t${crc32(entities[x].name.toUpperCase(),crcTable)}:(${entities[x].derivedProps.length==0?'_:any': `i:${schemaNameClean}.${entities[x].name}`}):unknown[] => [${entities[x].derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}],`);
+  for (var x=0; x < entities.length; x++) tsSchema.push(`${crc32(entities[x].name.toUpperCase(),crcTable)}:(${entities[x].derivedProps.length==0?'_:any': `i:${schemaNameClean}.${entities[x].name}`}):unknown[]=>[${entities[x].derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}],`);
   tsSchema.push('}');
 
   //initialisers
@@ -188,33 +190,34 @@ for (var i = 0; i < files.length; i++) {
 
       if (type.isList)
       {
-          tsSchema.push(`\texport class ${type.name} {`);
-          tsSchema.push(`\t\tconstructor(public value: Array<${type.typeName}>) {}`);
-          tsSchema.push(`\t};`);
+          let typeNum = type.typeNum;
+          tsSchema.push(`export class ${type.name} { type: number=${typeNum}; constructor(public value: Array<${type.typeName}>) {} };`);
           typeList.add(type.name);
       }
       else if (type.isSelect)
       {
-          let selectOutput: string = `\texport type ${type.name} = `;
+          let selectOutput: string = `export type ${type.name} = `;
+          let first = true;
           type.values.forEach(refType => {
               let isType: boolean = types.some( x => x.name == refType);
+              if(!first) selectOutput+='|'
               if (isType)
-              {
-                  selectOutput+=` | ${refType}`;
+              { 
+                selectOutput+=refType;
               }
               else
               {
-                  selectOutput+=` | (Handle<${refType}> | ${refType})`;
+                selectOutput+=`(Handle<${refType}> | ${refType})`;
               }
+              first = false;
+
           });
           selectOutput+=";";
           tsSchema.push(selectOutput);
       }
       else if (type.isEnum)
       {
-          tsSchema.push(`\texport class ${type.name} {`);
-          tsSchema.push('\t\t'+type.values.map((v) => `static ${v} : any =  { type:3, value:'${v}'}; `).join(''));
-          tsSchema.push(`\t}`);
+          tsSchema.push(`export class ${type.name} {` + type.values.map((v) => `static ${v} : any =  { type:3, value:'${v}'}; `).join('') +'}');
       }
       else
       {
@@ -228,25 +231,26 @@ for (var i = 0; i < files.length; i++) {
           } 
 
           typeList.add(type.name);
-          tsSchema.push(`\texport class ${type.name} {`);
-          tsSchema.push(`\t\ttype: number=${typeNum};`);
+          tsSchema.push(`export class ${type.name} {`);
+          tsSchema.push(`type: number=${typeNum};`);
           if (typeName=="number") {
-            tsSchema.push(`\t\tpublic value: number;`);
-            tsSchema.push(`\t\tconstructor(v: any) { this.value = parseFloat(v);}`);
+            tsSchema.push(`public value: number;`);
+            tsSchema.push(`constructor(v: any) { this.value = v === null ? v : parseFloat(v);}`);
           } else if (typeName=="boolean") {
-             tsSchema.push(`\t\tpublic value: boolean;`);
-              tsSchema.push(`\t\tconstructor(v: any) { this.value = v == "true" ? true : false; }`);
+              tsSchema.push(`public value: boolean;`);
+              tsSchema.push(`constructor(v: any) { this.value = v === null ? v : v == "T" ? true : false; }`);
+          } else if (typeName=="logical") {
+              tsSchema.push(`public value: logical;`);
+              tsSchema.push(`constructor(v: any) { this.value = v === null ? v : v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }`);
           } else {
-            tsSchema.push(`\t\tconstructor(public value: ${typeName}) {}`);
+            tsSchema.push(`constructor(public value: ${typeName}) {}`);
           }
-          tsSchema.push(`\t}`);
+          tsSchema.push(`}`);
       }
   });
   
   for (var x=0; x < entities.length; x++) generateClass(entities[x], tsSchema,types,crcTable);
   tsSchema.push("}"); 
-   
-
 }
 
 // now write out the global c++/ts metadata. All the WASM needs to know about is a list of all entities
@@ -272,31 +276,31 @@ cppSchema.push("#include <unordered_set>");
 cppSchema.push("#include \"ifc-schema.h\"");
 cppSchema.push("#include \"IfcSchemaManager.h\"");
 cppSchema.push("namespace webifc::schema {")
-cppSchema.push("\tvoid IfcSchemaManager::initSchemaData() {");
+cppSchema.push("void IfcSchemaManager::initSchemaData() {");
 completeifcElementList.forEach(element => {
-    cppSchema.push(`\t\t_ifcElements.insert(${element.toUpperCase()});`);
+    cppSchema.push(`_ifcElements.insert(${element.toUpperCase()});`);
 });
 chSchema.push(`enum IFC_SCHEMA {`)
 for (var i = 0; i < files.length; i++) {
   if (!files[i].endsWith(".exp")) continue;
   var schemaName = files[i].replace(".exp","");
   var schemaNameClean = schemaName.replace(".","_");
-  chSchema.push(`\t${schemaNameClean},`)
-  cppSchema.push(`\t\t_schemaNames.push_back("${schemaNameClean}");`);
-  cppSchema.push(`\t\t_schemas.push_back(${schemaNameClean});`);
+  chSchema.push(`${schemaNameClean},`)
+  cppSchema.push(`_schemaNames.push_back("${schemaNameClean}");`);
+  cppSchema.push(`_schemas.push_back(${schemaNameClean});`);
 }
-cppSchema.push("\t}");
+cppSchema.push("}");
 chSchema.push(`};`)
 
-cppSchema.push("\tstd::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {");
-cppSchema.push("\t\tswitch(typeCode) {");
+cppSchema.push("std::string_view IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {");
+cppSchema.push("switch(typeCode) {");
 new Set([...completeEntityList,...typeList]).forEach(entity => {
-    cppSchema.push(`\t\t\tcase schema::${entity.toUpperCase()}: return "${entity.toUpperCase()}";`);
+    cppSchema.push(`case schema::${entity.toUpperCase()}: return "${entity.toUpperCase()}";`);
 });
 
-cppSchema.push(`\t\t\tdefault: return "<web-ifc-type-unknown>";`);
-cppSchema.push("\t\t}");
-cppSchema.push("\t}");
+cppSchema.push(`default: return "<web-ifc-type-unknown>";`);
+cppSchema.push("}");
+cppSchema.push("}");
 cppSchema.push("}");
 
 fs.writeFileSync("../wasm/schema/ifc-schema.h", chSchema.join("\n")); 

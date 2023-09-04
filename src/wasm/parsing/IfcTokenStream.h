@@ -8,7 +8,9 @@
 #include <istream>
 #include <iostream>
 #include <functional>
+#include <string_view>
 #include <cstring>
+#include <cstdint>
  
 namespace webifc::parsing
 {
@@ -24,7 +26,8 @@ namespace webifc::parsing
     EMPTY,
     SET_BEGIN,
     SET_END,
-    LINE_END
+    LINE_END,
+    INTEGER
   };
   
   

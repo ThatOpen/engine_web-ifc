@@ -88,6 +88,27 @@ class BenchmarkResultFormatter{
     }
 }
 
+async function StreamFileToString(filename: string) {
+    let stream = fs.createReadStream(filename);
+    return new Promise((resolve, reject) => {
+      const data:any = [];
+
+      stream.on('data', (chunk) => {
+        data.push(chunk);
+      });
+
+      stream.on('end', () => {
+        resolve(Buffer.concat(data))
+      })
+
+      stream.on('error', (err) => {
+        reject(err)
+      })
+
+      return data;
+    })
+}
+
 async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResult>
 {
     let result = new FileResult();
@@ -97,7 +118,7 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     //let modelID = module.OpenModel("example.ifc", new Uint8Array(data.toString()));
 
     const ifcFilePath = path.join(__dirname, './'+filename);
-    const ifcFileContent = fs.readFileSync(ifcFilePath);
+    const ifcFileContent = await StreamFileToString(ifcFilePath);
     
     let startTime = ms();
     let modelID : number = module.OpenModel(ifcFileContent);
@@ -176,7 +197,7 @@ function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string
     let formatter = new BenchmarkResultFormatter();
     formatter.columns = {
         filename: "filename",
-        fileSize: "Size (mo)",
+        fileSize: "Size (mb)",
         timeTakenToOpenModel: "Time to open model (ms)",
         timeSuccess: "Time to execute all (ms)",
         numberOfIfcEntities: "Total ifc entities",

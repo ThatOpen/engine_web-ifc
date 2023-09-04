@@ -72,7 +72,7 @@ These are the requirements needed to build web-ifc (only for those that wish to 
 
 1. Node v16 or later
 2. NPM v7 or later
-3. EMSCRIPTEN v3.1.27 or later
+3. EMSCRIPTEN v3.1.44 or later
 4. CMAKE v3.18 or later
 
 ## Building WASM module

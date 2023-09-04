@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 #include <optional>
+#include <cstdint>
 #include <glm/glm.hpp>
 
 #include "../parsing/IfcLoader.h"
@@ -87,7 +88,7 @@ namespace webifc::geometry
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateRelMaterialsMap();
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateMaterialDefinitionsMap();
     void ReadLinearScalingFactor();
-    double ConvertPrefix(const std::string &prefix);
+    double ConvertPrefix(const std::string_view &prefix);
   };
   
 }

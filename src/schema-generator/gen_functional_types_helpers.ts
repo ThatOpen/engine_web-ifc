@@ -1,6 +1,5 @@
 import {Entity, Type, Prop} from "./gen_functional_types_interfaces";
 
-
 export function generateInitialiser(type: Type, initialisersDone: Set<string>,buffer: Array<string>, crcTable:any,types: Type[],schemaName:string,schemaNo: number) 
 {
     if (type.isEnum) return;
@@ -8,7 +7,7 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
     if (type.isList)
     {
         if (initialisersDone.has(type.name)) return;
-        buffer.push(`\t${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v.map( (x:any) => x.value)),`);
+        buffer.push(`${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v.map( (x:any) => x.value)),`);
         initialisersDone.add(type.name);
         return
     }
@@ -24,7 +23,7 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
 
     if (initialisersDone.has(type.name)) return;
     initialisersDone.add(type.name);
-    buffer.push(`\t${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v),`);
+    buffer.push(`${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v),`);
     return;
 }       
 
@@ -40,34 +39,36 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     }
 
     let prefix = '';
-    if (p.optional) prefix ='!v['+i+'] ? null :'
+    const valueCheckPrefix = '!v['+i+'] ? null :';
+    if (p.optional) prefix = valueCheckPrefix;
 
     if (p.set)
     {
-        content = 'v['+i+'].map((p:any) => '
+        content = 'v['+i+']?.map((p:any) =>  p?.value ?'
         if (type?.isSelect){
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
             if (isEntitySelect) content+='new Handle(p.value)';
             else content+='TypeInitialiser('+schemaNo+',p)';
         }
         else if (isType) content+='new '+schemaName+'.'+p.type+'(p.value)';
+        else if (p.primitive && p.type =="number") content+='Number(p.value)';
         else if (p.primitive) content+='p.value';
         else content+='new Handle<'+schemaName+'.'+p.type+'>(p.value)';
-        content +=')';
+        content +=' : null) || []';
     }
     else if (type?.isSelect)
     {
         let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-        if (isEntitySelect) content='new Handle(v['+i+'].value)';
+        if (isEntitySelect) content = 'new Handle(' + valueCheckPrefix + 'v['+i+'].value)';
         else content='TypeInitialiser('+schemaNo+',v['+i+'])'
 
     }
     else if (isType) {
         if (type?.isList) content='new '+schemaName+'.'+p.type+'(v['+i+'].map( (x:any) => x.value))';
-        else content='new '+schemaName+'.'+p.type+'(v['+i+'].value)';
+        else content = 'new '+schemaName+'.'+p.type+'(' + valueCheckPrefix + 'v['+i+'].value)';
     }
-    else if (p.primitive) content='v['+i+'].value';
-    else content='new Handle<'+schemaName+'.'+p.type+'>(v['+i+'].value)';
+    else if (p.primitive) content = valueCheckPrefix + 'v['+i+'].value';
+    else content = 'new Handle<'+schemaName+'.'+p.type+'>(' + valueCheckPrefix + 'v['+i+'].value)';
     return prefix + content;
 }
 
@@ -108,7 +109,7 @@ export function generateTapeAssignment(p: Prop, types:Type[])
         if (p.optional) prefix ='!i.'+p.name+' ? null :'
         return prefix + 'Labelise(i.'+p.name+')';
     }
-    else if (type?.typeName == "boolean") 
+    else if (type?.typeName == "boolean" || type?.typeName == "logical") 
     {
         return `i.${p.name}?.toString()`;
     }
@@ -150,24 +151,24 @@ export function generateClass(entity:Entity, classBuffer: Array<string>, types:T
   {
     classBuffer.push(`export class ${entity.name} extends ${entity.parent} {`);
   }
-  classBuffer.push("\ttype:number="+crc32(entity.name.toUpperCase(),crcTable)+";");
+  classBuffer.push("type:number="+crc32(entity.name.toUpperCase(),crcTable)+";");
   
 
   entity.inverseProps.forEach((prop) => {
-    let type = `${"(Handle<" + prop.type + `> | ${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
-    classBuffer.push(`\t${prop.name}!: ${type};`);
+    let type = `${"(Handle<" + prop.type + `>|${prop.type})` }${prop.set ? "[]" : ""} ${"| null"}`;
+    classBuffer.push(`${prop.name}!: ${type};`);
   });
 
-  classBuffer.push(`\tconstructor(expressID: number, ${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
-  classBuffer.push(`\t{`)
+  classBuffer.push(`constructor(${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  classBuffer.push(`{`)
   if (!entity.parent) {
-    classBuffer.push(`\t\tsuper(expressID);`)
+    classBuffer.push(`super();`)
   } else {
     var nonLocalProps = entity.derivedProps.filter(n => !entity.props.includes(n))
-    if (nonLocalProps.length ==0) classBuffer.push(`\t\t\tsuper(expressID);`);
-    else classBuffer.push(`\t\tsuper(expressID,${nonLocalProps.map((p) => generateSuperAssignment(p,entity.ifcDerivedProps,types)).join(", ")});`)
+    if (nonLocalProps.length ==0) classBuffer.push(`super();`);
+    else classBuffer.push(`super(${nonLocalProps.map((p) => generateSuperAssignment(p,entity.ifcDerivedProps,types)).join(", ")});`)
   }
-   classBuffer.push("\t}");
+   classBuffer.push("}");
    classBuffer.push("}");
 }
 
@@ -197,7 +198,7 @@ export function crc32(str:string,crcTable:Array<number> ) {
 export function expTypeToTSType(expTypeName:string)
 {
     let tsType = expTypeName;
-    if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER")
+    if (expTypeName == "REAL" || expTypeName == "NUMBER" || expTypeName == "INTEGER")
     {
         tsType = "number";
     }
@@ -215,7 +216,7 @@ export function expTypeToTSType(expTypeName:string)
     }
     else if (expTypeName == "LOGICAL")
     {
-        tsType = "boolean";
+        tsType = "logical";
     }
 
     return tsType;
@@ -223,12 +224,13 @@ export function expTypeToTSType(expTypeName:string)
 
 export function expTypeToTypeNum(expTypeName:string) : number
 {
-    if (expTypeName == "REAL" || expTypeName == "INTEGER" || expTypeName == "NUMBER") return 4;
+    if (expTypeName == "INTEGER") return 10;
+    else if (expTypeName == "REAL" || expTypeName == "NUMBER") return 4;
     else if (expTypeName == "STRING") return 1;
     else if (expTypeName == "BOOLEAN") return 3;
     else if (expTypeName == "BINARY") return 4;
     else if (expTypeName == "LOGICAL") return 3;
-    return 0;
+    return 5;
 }
 
 export function parseInverse(line:string,entity:Entity) 

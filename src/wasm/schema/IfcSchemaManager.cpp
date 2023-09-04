@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 #include <vector>
-#include <string>
+#include <string_view>
 #include <unordered_set>
 #include "IfcSchemaManager.h"
 
@@ -22,7 +22,7 @@ namespace webifc::schema {
         initSchemaData();
     }
 
-    std::string IfcSchemaManager::GetSchemaName(IFC_SCHEMA schema)  const
+    std::string_view IfcSchemaManager::GetSchemaName(IFC_SCHEMA schema)  const
     {
         return _schemaNames[schema];
     }
@@ -32,16 +32,11 @@ namespace webifc::schema {
         return _schemas;
     }
 
-    uint32_t IfcSchemaManager::IfcTypeToTypeCode(std::string name) const
-    {
-        return IfcTypeToTypeCode(name.data(),name.size());
-    }
-
     uint32_t IfcSchemaManager::IfcTypeToTypeCode(std::string_view name) const
     {
         return IfcTypeToTypeCode(name.data(),name.size());
     }
-    
+ 
     uint32_t IfcSchemaManager::IfcTypeToTypeCode(const void * name, size_t len) const
     {
         uint32_t c = 0 ^ 0xFFFFFFFF;

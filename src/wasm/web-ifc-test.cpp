@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdint>
 #include <filesystem>
 #include "test/io_helpers.h"
 
@@ -298,7 +299,15 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#mep2/Queens_demo_wip.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bsplines/425.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#380/380.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#380/380.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing III/rac_advanced_sample_project.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#452/452.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#451/Snowdon Towers Sample Architectural_IFC2x3.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#464/464.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#harry/harry.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#473/473.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#420/420.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -326,7 +335,7 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader,errorHandler,schemaManager,set.CIRCLE_SEGMENTS,set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, errorHandler, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
 
     start = ms();
 
@@ -366,9 +375,20 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 242768); //Queens_demo_wip
     // SpecificLoadTest(loader, geometryLoader, 378325); //Solibri Building
     // SpecificLoadTest(loader, geometryLoader, 176076); //425
-    SpecificLoadTest(loader, geometryLoader,365); //380
+    // SpecificLoadTest(loader, geometryLoader,365); //380
+    // SpecificLoadTest(loader, geometryLoader, 133133); //rac_advanced_sample_project
+    // SpecificLoadTest(loader, geometryLoader, 1179353); //rac_advanced_sample_project
+    // SpecificLoadTest(loader, geometryLoader, 108704); //452.ifc
+    // SpecificLoadTest(loader, geometryLoader, 108228); //452.ifc
+    // SpecificLoadTest(loader, geometryLoader, 922573); //Snowdon Towers Sample Architectural_IFC2x3.ifc
+    // SpecificLoadTest(loader, geometryLoader, 633228); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 963632); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 964810); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 961485); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 961645); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 743259); // harry.ifc
 
-    // auto meshes = LoadAllTest(loader, geometryLoader);
+    auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     auto errors = errorHandler.GetErrors();

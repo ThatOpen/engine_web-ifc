@@ -53,3 +53,4 @@ dist/*
 
 #Mac Temporary Files
 **/.DS_Store
+benchmark/ifcfiles/large.ifc.test

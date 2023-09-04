@@ -3,14 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 #include <vector>
-#include <string>
+#include <string_view>
 #include "LoaderError.h"
 #include "Logging.h"
 
 namespace webifc::utility 
 {
 
-    void LoaderErrorHandler::ReportError(const LoaderErrorType t, const std::string m, const uint32_t e, const uint32_t type) 
+    void LoaderErrorHandler::ReportError(const LoaderErrorType t, const std::string_view m, const uint32_t e, const uint32_t type) 
     { 
         log::error(m);
         _errors.emplace_back(t,m,e,type);
@@ -27,7 +27,7 @@ namespace webifc::utility
         return _errors;
     }
 
-    LoaderError::LoaderError(const LoaderErrorType t, const std::string m, const uint32_t e, const uint32_t type) 
+    LoaderError::LoaderError(const LoaderErrorType t, const std::string_view m, const uint32_t e, const uint32_t type) 
         : type(t), message(m), expressID(e), ifcType(type)
     {
     }

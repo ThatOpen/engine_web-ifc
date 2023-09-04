@@ -6,6 +6,7 @@
 #include <vector>
 #include <stack>
 #include <sstream>
+#include <cstdint>
 #include <memory>
 
 #include <emscripten/bind.h>
@@ -186,7 +187,6 @@ void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, 
     std::vector<uint32_t> expressIds;
 
     uint32_t size = expressIdsVal["length"].as<uint32_t>();
-    uint32_t index = 0;
     for (size_t i=0; i < size; i++) 
     {
         emscripten::val expressIdVal = expressIdsVal[std::to_string(i)];
@@ -568,7 +568,7 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     auto numLines = loader->GetMaxExpressId();
     for (uint32_t i = 1; i <= numLines; i++)
     {
-        if (!loader->IsValidExpressID(i) || loader->GetLine(i).ifcType==0) continue;
+        if (!loader->IsValidExpressID(i)) continue;
         expressIDs.push_back(i);
     }
     return expressIDs;
@@ -601,8 +601,13 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     case webifc::parsing::IfcTokenType::REAL:
     {
         double val = value.as<double>();
-        loader->Push<double>(val);
-
+        loader->PushDouble(val);
+        break;
+    }
+    case webifc::parsing::IfcTokenType::INTEGER:
+    {
+        int val = value.as<int>();
+        loader->PushInt(val);
         break;
     }
     default:
@@ -628,13 +633,20 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
         else if (child.isArray()) WriteSet(modelID,child);
         else if (child["value"].isArray())
         {
+            
             emscripten::val innerVal = child["value"];
+            webifc::parsing::IfcTokenType type = static_cast<webifc::parsing::IfcTokenType>(child["type"].as<uint32_t>());
             loader->Push(webifc::parsing::IfcTokenType::SET_BEGIN);
             uint32_t sz = innerVal["length"].as<uint32_t>();
             for (size_t z=0; z < sz;z++) {
-                double value = innerVal[std::to_string(z)].as<double>();
-                loader->Push<uint8_t>(webifc::parsing::IfcTokenType::REAL);
-                loader->Push<double>(value);
+                loader->Push<uint8_t>(type);
+                if (type == webifc::parsing::IfcTokenType::INTEGER) {
+                    int value = innerVal[std::to_string(z)].as<int>();
+                    loader->PushInt(value);
+                } else {
+                    double value = innerVal[std::to_string(z)].as<double>();
+                    loader->PushDouble(value);
+                }
             }
             loader->Push(webifc::parsing::IfcTokenType::SET_END);
         }
@@ -682,6 +694,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
                 case webifc::parsing::IfcTokenType::ENUM:
                 case webifc::parsing::IfcTokenType::REF:
                 case webifc::parsing::IfcTokenType::REAL:
+                case webifc::parsing::IfcTokenType::INTEGER:
                 {
                     WriteValue(modelID,type, child["value"]);
                     break;
@@ -696,6 +709,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
             if (child.isNumber()) type = webifc::parsing::IfcTokenType::REAL;
             else if (child.isString()) type = webifc::parsing::IfcTokenType::STRING;
             else type = webifc::parsing::IfcTokenType::ENUM;
+            loader->Push<uint8_t>(type);
             WriteValue(modelID, type, child);
         }
         else
@@ -712,7 +726,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
 
 std::string GetNameFromTypeCode(uint32_t type) 
 {
-    return schemaManager.IfcTypeCodeToType(type);
+    return std::string(schemaManager.IfcTypeCodeToType(type));
 }
 
 uint32_t GetTypeCodeFromName(std::string typeName) 
@@ -733,10 +747,10 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
         return false;
     }
     uint32_t start = loader->GetTotalSize();
-    std::string ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::string_view ifcName = schemaManager.IfcTypeCodeToType(type);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
-    loader->Push((void*)ifcName.c_str(), ifcName.size());
+    loader->Push((void*)ifcName.data(), ifcName.size());
     bool responseCode = WriteSet(modelID,parameters);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
     loader->AddHeaderLineTape(type, start);
@@ -764,10 +778,10 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     loader->Push<uint32_t>(expressID);
 
     // line TYPE
-    std::string ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::string_view ifcName = schemaManager.IfcTypeCodeToType(type);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
-    loader->Push((void*)ifcName.c_str(), ifcName.size());
+    loader->Push((void*)ifcName.data(), ifcName.size());
     bool responseCode = WriteSet(modelID,parameters);
     // end line
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
@@ -783,15 +797,23 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     switch (t)
     {
     case webifc::parsing::IfcTokenType::STRING:
+    {
+        return emscripten::val(loader->GetDecodedStringArgument());
+    }
     case webifc::parsing::IfcTokenType::ENUM:
     {
-        std::string s = loader->GetStringArgument();
-        return emscripten::val(s);
+        std::string_view s = loader->GetStringArgument();
+        return emscripten::val(std::string(s));
     }
     case webifc::parsing::IfcTokenType::REAL:
     {
-        double d = loader->GetDoubleArgument();
-        return emscripten::val(std::to_string(d));
+        std::string_view s = loader->GetDoubleArgumentAsString();
+        return emscripten::val(std::string(s));
+    }
+    case webifc::parsing::IfcTokenType::INTEGER:
+    {
+        int d = loader->GetIntArgument();
+        return emscripten::val(d);
     }
     case webifc::parsing::IfcTokenType::REF:
     {
@@ -804,7 +826,7 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     }
 }
 
-emscripten::val GetArgs(uint32_t modelID, bool inObject=false)
+emscripten::val GetArgs(uint32_t modelID, bool inObject=false, bool inList=false)
 {
     auto loader = models[modelID].GetLoader();
     auto arguments = emscripten::val::array();
@@ -828,7 +850,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false)
             }
             case webifc::parsing::IfcTokenType::SET_BEGIN:
             {
-                arguments.set(size++,GetArgs(modelID));
+                arguments.set(size++,GetArgs(modelID, false, true));
                 break;
             }
             case webifc::parsing::IfcTokenType::SET_END:
@@ -854,6 +876,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false)
             case webifc::parsing::IfcTokenType::STRING:
             case webifc::parsing::IfcTokenType::ENUM:
             case webifc::parsing::IfcTokenType::REAL:
+            case webifc::parsing::IfcTokenType::INTEGER:
             case webifc::parsing::IfcTokenType::REF:
             {
                 loader->StepBack();
@@ -871,7 +894,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false)
                 break;
         }
     }
-    if (size == 0) return emscripten::val::null();
+    if (size == 0 && !inList) return emscripten::val::null();
     if (size == 1 && inObject) return arguments[0];
     return arguments;
 }
@@ -889,12 +912,12 @@ emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
         return emscripten::val::undefined(); 
     }
     auto line = lines[0];
-    loader->MoveToHeaderLineArgument(line.lineIndex, 0);
+    loader->MoveToHeaderLineArgument(line, 0);
 
-    std::string s(schemaManager.IfcTypeCodeToType(line.ifcType));
+    std::string s(schemaManager.IfcTypeCodeToType(headerType));
     auto arguments = GetArgs(modelID);
     auto retVal = emscripten::val::object();
-    retVal.set("ID", line.lineIndex);
+    retVal.set("ID", line);
     retVal.set("type", s);
     retVal.set("arguments", arguments);
     return retVal;
@@ -909,16 +932,16 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     }
 
     if (!loader->IsValidExpressID(expressID)) return emscripten::val::object();
-    auto& line = loader->GetLine(expressID);
-    if (line.ifcType==0) return emscripten::val::object();
+    uint32_t lineType = loader->GetLineType(expressID);
+    if (lineType==0) return emscripten::val::object();
 
-    loader->MoveToArgumentOffset(line, 0);
+    loader->MoveToArgumentOffset(expressID, 0);
 
     auto arguments = GetArgs(modelID);
 
     auto retVal = emscripten::val::object();
     retVal.set(emscripten::val("ID"), expressID);
-    retVal.set(emscripten::val("type"), line.ifcType);
+    retVal.set(emscripten::val("type"), lineType);
     retVal.set(emscripten::val("arguments"), arguments);
     return retVal;
 }
@@ -930,15 +953,12 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
     {
         return 0;
     }
-    if (!loader->IsValidExpressID(expressID)) return 0;
-
-    auto& line = loader->GetLine(expressID);
-    return line.ifcType;
+    return loader->GetLineType(expressID);
 }
 
 std::string GetVersion() 
 {
-    return WEB_IFC_VERSION_NUMBER;
+    return std::string(WEB_IFC_VERSION_NUMBER);
 }
 
 uint32_t GetMaxExpressID(uint32_t modelID)

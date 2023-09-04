@@ -54,6 +54,7 @@ export const EMPTY = 6;
 export const SET_BEGIN = 7;
 export const SET_END = 8;
 export const LINE_END = 9;
+export const INTEGER = 10;
 
 /**
  * Settings for the IFCLoader
@@ -281,6 +282,36 @@ export class IfcAPI {
         this.deletedLines.set(result,new Set());
         var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
         this.modelSchemaList[result] = this.LookupSchemaId(schemaName);
+        this.modelSchemaNameList[result] = schemaName;
+        if (this.modelSchemaList[result] == -1) 
+        {
+            Log.error("Unsupported Schema:"+schemaName);
+            this.CloseModel(result)
+            return -1;
+        } 
+        Log.info("Parsing Model using " + schemaName + " Schema");
+        return result;
+    }
+
+    /**
+     * Opens a model and returns a modelID number
+     * @param callback a function of signature (offset:number, size: number) => Uint8Array that will retrieve the IFC data
+     * @param settings Settings for loading the model @see LoaderSettings
+     * @returns ModelID or -1 if model fails to open
+    */
+    OpenModelFromCallback(callback:  (offset:number, size: number) => Uint8Array, settings?: LoaderSettings): number {
+        let s = this.CreateSettings(settings);
+        let result = this.wasmModule.OpenModel(s, (destPtr: number, offsetInSrc: number, destSize: number) => {
+            let data = callback(offsetInSrc,destSize);
+            let srcSize = Math.min(data.byteLength, destSize);
+            let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + srcSize);
+            dest.set(data);
+            return srcSize;
+        });
+        this.deletedLines.set(result,new Set());
+        var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
+        this.modelSchemaList[result] = this.LookupSchemaId(schemaName);
+        this.modelSchemaNameList[result] = schemaName;
         if (this.modelSchemaList[result] == -1) 
         {
             Log.error("Unsupported Schema:"+schemaName);
@@ -348,19 +379,13 @@ export class IfcAPI {
 	 * @returns Buffer containing the model data
 	 */
     SaveModel(modelID: number): Uint8Array {
-        let modelSize = this.wasmModule.GetModelSize(modelID);
-        const headerBytes = 512;
-        let dataBuffer = new Uint8Array(modelSize + headerBytes);
-        let size = 0; 
+        let dataBuffer:Uint8Array = new Uint8Array(0);
         this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
             let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
-            size = srcSize;
+            dataBuffer = new Uint8Array(srcSize);
             dataBuffer.set(src, 0);
         });
-        //shrink down to size
-        let newBuffer = new Uint8Array(size);
-        newBuffer.set(dataBuffer.subarray(0,size),0);
-        return newBuffer;
+       return dataBuffer;
     }
 
     /**
@@ -417,9 +442,10 @@ export class IfcAPI {
 	 * @param expressID express ID of the line
 	 * @param flatten recursively flatten the line, default false
 	 * @param inverse get the inverse properties of the line, default false
+	 * @param inversePropKey filters out all other properties from a inverse search, for a increase in performance. Default null
 	 * @returns lineObject
 	 */
-    GetLine(modelID: number, expressID: number, flatten = false, inverse = false) {
+    GetLine(modelID: number, expressID: number, flatten = false, inverse = false, inversePropKey: string | null | undefined = null) {
         let expressCheck = this.wasmModule.ValidateExpressID(modelID, expressID);
         if (!expressCheck) {
             return;
@@ -428,10 +454,16 @@ export class IfcAPI {
         let rawLineData = this.GetRawLineData(modelID, expressID);
         let lineData;
         try {
-            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.ID,rawLineData.arguments);
+            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
+            lineData.expressID = rawLineData.ID;
         } catch (e) {
              Log.error("Invalid IFC Line:"+expressID);
-             return;
+	     // throw an error when the line is defined 
+	     if (rawLineData.ID) {
+                 throw e;
+	     } else {
+                 return;
+             }
         }
 
         if (flatten) {
@@ -443,6 +475,8 @@ export class IfcAPI {
         {
           for (let inverseProp of inverseData) 
           {
+            if (inversePropKey && inverseProp[0] !== inversePropKey) continue;
+			  
             if (!inverseProp[3]) lineData[inverseProp[0]] = null;
             else lineData[inverseProp[0]] = [];
             
@@ -497,7 +531,7 @@ export class IfcAPI {
      */
     CreateIfcEntity(modelID: number, type:number, ...args: any[] ): IfcLineObject
     {
-        return Constructors[this.modelSchemaList[modelID]][type](-1,args);
+        return Constructors[this.modelSchemaList[modelID]][type](args);
     }
 
     /**
@@ -893,7 +927,7 @@ export class IfcAPI {
          * @returns Express numerical value
          */
     GetMaxExpressID(modelID: number) {
-        return this.wasmModule.GetMaxExpressID(modelID);
+        return this.wasmModule.GetMaxExpressID(modelID) as number;
     }
 
     /**
@@ -967,10 +1001,14 @@ export class IfcAPI {
             for (let y = 0; y < size; y++) {
                 const expressID = lines.get(y);
                 const info = this.GetLine(modelID, expressID);
-                if ('GlobalId' in info) {
-                    const globalID = info.GlobalId.value;
-                    map.set(expressID, globalID);
-                    map.set(globalID, expressID);
+                try{
+                    if ("GlobalId" in info) {
+                        const globalID = info.GlobalId.value;
+                        map.set(expressID, globalID);
+                        map.set(globalID, expressID);
+                    }
+                } catch (e) {
+                    continue;
                 }
             }
         }
