@@ -1279,7 +1279,7 @@ namespace webifc::geometry
     // because these calls cannot be reordered we have to use intermediate variables
     double x = _loader.GetDoubleArgument();
     double y = _loader.GetDoubleArgument();
-    double z = _loader.GetDoubleArgument();
+    double z = _loader.GetOptionalDoubleParam(0);
     glm::dvec3 point(x, y, z);
     return point;
   }
