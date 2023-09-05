@@ -1890,7 +1890,55 @@ namespace webifc::geometry
 
         break;
       }
-    case schema::IFCBSPLINECURVE:
+      case schema::IFCGRADIENTCURVE:
+      {
+        _loader.MoveToArgumentOffset(expressID, 0);
+        auto tokens = _loader.GetSetArgument();
+        auto u = _loader.GetStringArgument();
+        auto masterCurveID = _loader.GetRefArgument();
+        curve = GetCurve(masterCurveID, 3, false);
+
+        std::vector<IfcCurve> curveList;
+        for (auto token : tokens)
+        {
+          auto curveID = _loader.GetRefArgument(token);
+          IfcCurve gradientCurve = GetCurve(curveID, 3, false);
+          curveList.push_back(gradientCurve);
+        }
+        // #ifdef DEBUG_DUMP_SVG
+        //   webifc::io::DumpGradientCurve(curveList, curve,"V_gradient.obj", "H_gradient.obj");
+        // #endif
+        break;
+      }
+      case schema::IFCCURVESEGMENT:
+      {
+        _loader.MoveToArgumentOffset(expressID, 0);
+        auto type = _loader.GetStringArgument();
+        _loader.MoveToArgumentOffset(expressID, 1);
+        auto placementID = _loader.GetRefArgument();
+        _loader.MoveToArgumentOffset(expressID, 2);
+        double SegmentStart = ReadLenghtMeasure();
+        _loader.MoveToArgumentOffset(expressID, 4);
+        double SegmentEnd = ReadLenghtMeasure();
+        _loader.MoveToArgumentOffset(expressID, 6);
+        auto curveID = _loader.GetRefArgument();
+
+        IfcTrimmingArguments trim = IfcTrimmingArguments();
+        trim.start.param = SegmentStart;
+        trim.end.param = SegmentEnd;
+        trim.start.hasParam = true;
+        trim.end.hasParam = true;
+        ComputeCurve(curveID, curve, 3, false, -1, -1, trim);
+
+        glm::dmat3 placement = GetAxis2Placement2D(placementID);
+
+        for (size_t j = 0; j < curve.points.size(); j++)
+        {
+          curve.points[j] = placement * glm::dvec3(curve.points[j].x, curve.points[j].y, curve.points[j].z);
+        }
+        break;
+      }
+      case schema::IFCBSPLINECURVE:
       {
         bool condition = sameSense == 0;
         if (edge)
