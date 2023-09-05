@@ -37,6 +37,11 @@ namespace webifc::parsing
   {
     return _loaded;
   }
+
+  size_t IfcTokenStream::IfcTokenChunk::GetMaxSize() 
+  {
+    return _chunkSize;
+  }
   
   std::string_view IfcTokenStream::IfcTokenChunk::ReadString(const size_t ptr,const size_t size) 
   {

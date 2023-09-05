@@ -468,6 +468,16 @@ bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
     return loader->IsValidExpressID(expressId);
 }
 
+void ExtendLineStorage(uint32_t modelID, uint32_t lineStorageSize)
+{
+        auto loader = models[modelID].GetLoader();
+        if (!loader)
+        {
+            return;
+        }
+        loader->ExtendLineStorage(lineStorageSize);
+}
+
 uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
 {
     auto loader = models[modelID].GetLoader();
@@ -1047,6 +1057,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::register_vector<double>("DoubleVector");
 
+    emscripten::function("ExtendLineStorage", &ExtendLineStorage);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllAlignments", &GetAllAlignments);
     emscripten::function("OpenModel", &OpenModel);

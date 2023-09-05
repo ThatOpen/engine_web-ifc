@@ -99,10 +99,10 @@ namespace webifc::parsing
         _chunks.emplace_back(_chunkSize,0,0,_fileStream);
         _activeChunks++;
       }
-      if ( _chunks.back().TokenSize() + size > _chunkSize)
+      if ( _chunks.back().TokenSize() + size > _chunks.back().GetMaxSize())
       {
         checkMemory();
-        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),0,_fileStream);
+        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),0,nullptr);
         _activeChunks++;
       }
       _chunks.back().Push(v,size);

@@ -99,6 +99,7 @@ namespace webifc::parsing
               size_t TokenSize();
               size_t GetTokenRef();
               void Push(void *v, const size_t size);
+              size_t GetMaxSize();
               std::string_view ReadString(const size_t ptr,const size_t size); 
               template <typename T> T Read(const size_t ptr)
               {
