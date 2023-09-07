@@ -1645,7 +1645,7 @@ namespace webifc::geometry
       }
 
       // TODO: review and simplify
-    case schema::IFCCIRCLE:
+      case schema::IFCCIRCLE:
       {
         _loader.MoveToArgumentOffset(expressID, 0);
         auto positionID = _loader.GetRefArgument();

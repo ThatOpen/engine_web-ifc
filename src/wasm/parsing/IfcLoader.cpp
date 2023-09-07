@@ -634,12 +634,18 @@ namespace webifc::parsing {
      _tokenStream->Back();
    }
 
-   double IfcLoader::GetOptionalDoubleParam(double defaultValue = 0) const
+    double IfcLoader::GetOptionalDoubleParam(double defaultValue = 0) const
     {
       if (GetTokenType() == IfcTokenType::REAL)
       {
         StepBack();
         return GetDoubleArgument();
+      }
+      StepBack();
+      if (GetTokenType() == IfcTokenType::INTEGER)
+      {
+        StepBack();
+        return GetIntArgument();
       }
       return defaultValue;
     }
