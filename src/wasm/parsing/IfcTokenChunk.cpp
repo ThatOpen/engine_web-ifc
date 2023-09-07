@@ -10,7 +10,6 @@ namespace webifc::parsing
   
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
-    _chunkData = nullptr;
     _loaded=true;
     _currentSize = 0;
     _chunkData = new uint8_t[_chunkSize];

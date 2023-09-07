@@ -96,7 +96,7 @@ namespace webifc::parsing
   {
       if (_chunks.empty())
       {
-        _chunks.emplace_back(_chunkSize,0,0,_fileStream);
+        _chunks.emplace_back(_chunkSize,0,0,nullptr);
         _activeChunks++;
       }
       if ( _chunks.back().TokenSize() + size > _chunks.back().GetMaxSize())
