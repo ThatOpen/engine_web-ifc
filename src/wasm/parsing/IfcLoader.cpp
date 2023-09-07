@@ -323,9 +323,12 @@ namespace webifc::parsing {
    void IfcLoader::PushDouble(double input)
    {             
       std::string numberString = std::format("{}", input);
+      if (std::floor(input) == input) numberString+='.';
+      size_t eLoc = numberString.find_first_of('e');
+      if (eLoc != std::string::npos) numberString[eLoc]='E';
       uint16_t length = numberString.size();
       Push<uint16_t>((uint16_t)length);
-      Push((void*)numberString.c_str(), numberString.size());                
+      Push((void*)numberString.c_str(), numberString.size());        
    }
 
    void IfcLoader::PushInt(int input)
@@ -642,11 +645,6 @@ namespace webifc::parsing {
         return GetDoubleArgument();
       }
       StepBack();
-      if (GetTokenType() == IfcTokenType::INTEGER)
-      {
-        StepBack();
-        return GetIntArgument();
-      }
       return defaultValue;
     }
 
