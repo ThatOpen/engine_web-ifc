@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.  */
 
-
 #pragma once
 
 #include <cstdint>
@@ -11,18 +10,19 @@
 #include "../../utility/LoaderError.h"
 #include <mapbox/earcut.hpp>
 
-namespace webifc::geometry {
+namespace webifc::geometry
+{
 
 	inline double angleConversion(double angle)
 	{
-		if(abs(angle > 2) - EPS_SMALL * CONST_PI)
+		if (abs(angle > 2) - EPS_SMALL * CONST_PI)
 		{
 			angle = (angle / 360) * 2 * CONST_PI;
 		}
 		return angle;
 	}
 
-	inline 	glm::dvec3 projectOntoPlane(const glm::dvec3 &origin, const glm::dvec3 &normal, const glm::dvec3 &point, const glm::dvec3 &dir)
+	inline glm::dvec3 projectOntoPlane(const glm::dvec3 &origin, const glm::dvec3 &normal, const glm::dvec3 &point, const glm::dvec3 &dir)
 	{
 		// project {et} onto the plane, following the extrusion normal
 		double ldotn = glm::dot(dir, normal);
@@ -57,6 +57,9 @@ namespace webifc::geometry {
 
 
 		//! This implementation generates much more vertices than needed, and does not have smoothed normals
+		// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
+		// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
+	//! This implementation generates much more vertices than needed, and does not have smoothed normals
 		// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
 		// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
 	inline	IfcGeometry Sweep(const double scaling, const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
@@ -522,413 +525,503 @@ namespace webifc::geometry {
 			return geom;
 		}
 
-		inline bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3 &normal, double eps = 0)
+	inline bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3 &normal, double eps = 0)
+	{
+		glm::dvec3 v12(v2 - v1);
+		glm::dvec3 v13(v3 - v1);
+
+		glm::dvec3 norm = glm::cross(v12, v13);
+
+		double len = glm::length(norm);
+
+		if (len <= eps)
 		{
-			glm::dvec3 v12(v2 - v1);
-			glm::dvec3 v13(v3 - v1);
-
-			glm::dvec3 norm = glm::cross(v12, v13);
-
-			double len = glm::length(norm);
-
-			if (len <= eps)
-			{
-				return false;
-			}
-
-			normal = norm / len;
-
-			return true;
-		}
-
-		inline bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3> &points, glm::dvec3 &v1, glm::dvec3 &v2, glm::dvec3 &v3)
-		{
-			v1 = points[0];
-
-			for (auto &p : points)
-			{
-				if (v1 != p)
-				{
-					v2 = p;
-					break;
-				}
-			}
-
-			glm::dvec3 normal;
-		// multiple tries to find the best match
-			for (double i = 0; i < 4; i++)
-			{
-				double EPS = EPS_SMALL;
-				if (i == 0)
-				{
-					EPS = 100;
-				}
-				if (i == 1)
-				{
-					EPS = 1;
-				}
-				if (i == 2)
-				{
-					EPS = 0.01;
-				}
-				for (auto &p : points)
-				{
-					if (computeSafeNormal(v1, v2, p, normal, EPS))
-					{
-						v3 = p;
-						return true;
-					}
-				}
-			}
-
 			return false;
 		}
 
-		inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds,utility::LoaderErrorHandler &_errorHandler,uint32_t expressID)
+		normal = norm / len;
+
+		return true;
+	}
+
+	inline bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3> &points, glm::dvec3 &v1, glm::dvec3 &v2, glm::dvec3 &v3)
+	{
+		v1 = points[0];
+
+		for (auto &p : points)
 		{
-			if (bounds.size() == 1 && bounds[0].curve.points.size() == 3)
+			if (v1 != p)
 			{
-				auto c = bounds[0].curve;
-
-				// size_t offset = geometry.numPoints;
-
-				geometry.AddFace(c.points[0], c.points[1], c.points[2]);
+				v2 = p;
+				break;
 			}
-			else if (bounds.size() > 0 && bounds[0].curve.points.size() >= 3)
+		}
+
+		glm::dvec3 normal;
+		// multiple tries to find the best match
+		for (double i = 0; i < 4; i++)
+		{
+			double EPS = EPS_SMALL;
+			if (i == 0)
 			{
-				// bound greater than 4 vertices or with holes, triangulate
-				// TODO: modify to use glm::dvec2 with custom accessors
-				using Point = std::array<double, 2>;
-				std::vector<std::vector<Point>> polygon;
-
-				uint32_t offset = geometry.numPoints;
-
-				// if more than one bound
-				if (bounds.size() > 1)
+				EPS = 100;
+			}
+			if (i == 1)
+			{
+				EPS = 1;
+			}
+			if (i == 2)
+			{
+				EPS = 0.01;
+			}
+			for (auto &p : points)
+			{
+				if (computeSafeNormal(v1, v2, p, normal, EPS))
 				{
-					// locate the outer bound index
-					int outerIndex = -1;
-					for (size_t i = 0; i < bounds.size(); i++)
-					{
-						if (bounds[i].type == IfcBoundType::OUTERBOUND)
-						{
-							outerIndex = i;
-							break;
-						}
-					}
+					v3 = p;
+					return true;
+				}
+			}
+		}
 
-					if (outerIndex == -1)
+		return false;
+	}
+
+	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, utility::LoaderErrorHandler &_errorHandler, uint32_t expressID)
+	{
+		if (bounds.size() == 1 && bounds[0].curve.points.size() == 3)
+		{
+			auto c = bounds[0].curve;
+
+			// size_t offset = geometry.numPoints;
+
+			geometry.AddFace(c.points[0], c.points[1], c.points[2]);
+		}
+		else if (bounds.size() > 0 && bounds[0].curve.points.size() >= 3)
+		{
+			// bound greater than 4 vertices or with holes, triangulate
+			// TODO: modify to use glm::dvec2 with custom accessors
+			using Point = std::array<double, 2>;
+			std::vector<std::vector<Point>> polygon;
+
+			uint32_t offset = geometry.numPoints;
+
+			// if more than one bound
+			if (bounds.size() > 1)
+			{
+				// locate the outer bound index
+				int outerIndex = -1;
+				for (size_t i = 0; i < bounds.size(); i++)
+				{
+					if (bounds[i].type == IfcBoundType::OUTERBOUND)
 					{
-						_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound!",expressID);
-					}
-					else
-					{
-						// swap the outer bound to the first position
-						std::swap(bounds[0], bounds[outerIndex]);
+						outerIndex = i;
+						break;
 					}
 				}
 
-				// if the first bound is not an outer bound now, this is unexpected
-				if (bounds[0].type != IfcBoundType::OUTERBOUND)
+				if (outerIndex == -1)
 				{
-					_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound first!",expressID);
+					_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound!", expressID);
 				}
-
-				glm::dvec3 v1, v2, v3;
-				if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
+				else
 				{
-					// these points are on a line
-					_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "No basis found for brep!",expressID);
-					return;
+					// swap the outer bound to the first position
+					std::swap(bounds[0], bounds[outerIndex]);
 				}
+			}
 
-				glm::dvec3 v12(glm::normalize(v3 - v2));
-				glm::dvec3 v13(glm::normalize(v1 - v2));
-				glm::dvec3 n = glm::normalize(glm::cross(v12, v13));
-				v12 = glm::cross(v13, n);
+			// if the first bound is not an outer bound now, this is unexpected
+			if (bounds[0].type != IfcBoundType::OUTERBOUND)
+			{
+				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound first!", expressID);
+			}
 
-				// check winding of outer bound
-				IfcCurve test;
-				for (size_t i = 0; i < bounds[0].curve.points.size(); i++)
+			glm::dvec3 v1, v2, v3;
+			if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
+			{
+				// these points are on a line
+				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "No basis found for brep!", expressID);
+				return;
+			}
+
+			glm::dvec3 v12(glm::normalize(v3 - v2));
+			glm::dvec3 v13(glm::normalize(v1 - v2));
+			glm::dvec3 n = glm::normalize(glm::cross(v12, v13));
+			v12 = glm::cross(v13, n);
+
+			// check winding of outer bound
+			IfcCurve test;
+			for (size_t i = 0; i < bounds[0].curve.points.size(); i++)
+			{
+				glm::dvec3 pt = bounds[0].curve.points[i];
+				glm::dvec3 pt2 = pt - v1;
+
+				glm::dvec2 proj(
+					glm::dot(pt2, v12),
+					glm::dot(pt2, v13));
+
+				test.Add(proj);
+			}
+
+			// if the outer bound is clockwise under the current projection (v12,v13,n), we invert the projection
+			if (!test.IsCCW())
+			{
+				n *= -1;
+				std::swap(v12, v13);
+			}
+
+			for (auto &bound : bounds)
+			{
+				std::vector<Point> points;
+				for (size_t i = 0; i < bound.curve.points.size(); i++)
 				{
-					glm::dvec3 pt = bounds[0].curve.points[i];
+					glm::dvec3 pt = bound.curve.points[i];
+					geometry.AddPoint(pt, n);
+
+					// project pt onto plane of curve to obtain 2d coords
 					glm::dvec3 pt2 = pt - v1;
 
 					glm::dvec2 proj(
 						glm::dot(pt2, v12),
 						glm::dot(pt2, v13));
 
-					test.Add(proj);
+					points.push_back({proj.x, proj.y});
 				}
 
-				// if the outer bound is clockwise under the current projection (v12,v13,n), we invert the projection
-				if (!test.IsCCW())
-				{
-					n *= -1;
-					std::swap(v12, v13);
-				}
-
-				for (auto &bound : bounds)
-				{
-					std::vector<Point> points;
-					for (size_t i = 0; i < bound.curve.points.size(); i++)
-					{
-						glm::dvec3 pt = bound.curve.points[i];
-						geometry.AddPoint(pt, n);
-
-						// project pt onto plane of curve to obtain 2d coords
-						glm::dvec3 pt2 = pt - v1;
-
-						glm::dvec2 proj(
-							glm::dot(pt2, v12),
-							glm::dot(pt2, v13));
-
-						points.push_back({proj.x, proj.y});
-					}
-
-					polygon.push_back(points);
-				}
-
-				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
-
-				for (size_t i = 0; i < indices.size(); i += 3)
-				{
-					geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
-				}
+				polygon.push_back(points);
 			}
-			else
+
+			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
+
+			for (size_t i = 0; i < indices.size(); i += 3)
 			{
-				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "bad bound",expressID);
+				geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+			}
+		}
+		else
+		{
+			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "bad bound", expressID);
+		}
+	}
+
+	inline IfcGeometry SectionedSurface(IfcCrossSections profiles, webifc::utility::LoaderErrorHandler _errorHandler)
+	{
+		IfcGeometry geom;
+
+		// Iterate over each profile, and create a surface by connecting the corresponding points with faces.
+		for (size_t i = 0; i < profiles.curves.size() - 1; i++)
+		{
+			IfcCurve &profile1 = profiles.curves[i];
+			IfcCurve &profile2 = profiles.curves[i + 1];
+
+			// Check that the profiles have the same number of points
+			if (profile1.points.size() != profile2.points.size())
+			{
+				_errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "profiles must have the same number of points in SectionedSurface");
+			}
+
+			std::vector<uint32_t> indices;
+
+			// Create faces by connecting corresponding points from the two profiles
+			for (size_t j = 0; j < profile1.points.size(); j++)
+			{
+				glm::dvec3 &p1 = profile1.points[j];
+				int j2 = 0;
+				if (profile1.points.size() > 1)
+				{
+					double pr = (double)j / (double)(profile1.points.size() - 1);
+					j2 = pr * (profile2.points.size() - 1);
+				}
+				glm::dvec3 &p2 = profile2.points[j2];
+
+				glm::dvec3 normal = glm::dvec3(0.0, 0.0, 1.0);
+
+				if (glm::distance(p1, p2) > 1E-5)
+				{
+					normal = glm::normalize(glm::cross(p2 - p1, glm::cross(p2 - p1, glm::dvec3(0.0, 0.0, 1.0))));
+				}
+
+				geom.AddPoint(p1, normal);
+				geom.AddPoint(p2, normal);
+
+				indices.push_back(geom.numPoints - 2);
+				indices.push_back(geom.numPoints - 1);
+			}
+
+			// Create the faces
+			if (indices.size() > 0)
+			{
+				for (size_t j = 0; j < indices.size() - 2; j += 4)
+				{
+					geom.AddFace(indices[j], indices[j + 1], indices[j + 2]);
+					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3]);
+				}
 			}
 		}
 
+		return geom;
+	}
 
-		inline IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance,webifc::utility::LoaderErrorHandler _errorHandler, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
+	inline IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance, webifc::utility::LoaderErrorHandler _errorHandler, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
+	{
+		IfcGeometry geom;
+		std::vector<bool> holesIndicesHash;
+
+		// build the caps
 		{
-			IfcGeometry geom;
-			std::vector<bool> holesIndicesHash;
+			using Point = std::array<double, 2>;
+			int polygonCount = 1 + profile.holes.size(); // Main profile + holes
+			std::vector<std::vector<Point>> polygon(polygonCount);
 
-			// build the caps
+			glm::dvec3 normal = dir;
+
+			for (size_t i = 0; i < profile.curve.points.size(); i++)
 			{
-				using Point = std::array<double, 2>;
-				int polygonCount = 1 + profile.holes.size(); // Main profile + holes
-				std::vector<std::vector<Point>> polygon(polygonCount);
+				glm::dvec2 pt = profile.curve.points[i];
+				glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
-				glm::dvec3 normal = dir;
+				geom.AddPoint(et, normal);
+				polygon[0].push_back({pt.x, pt.y});
+			}
 
-				for (size_t i = 0; i < profile.curve.points.size(); i++)
+			for (size_t i = 0; i < profile.curve.points.size(); i++)
+			{
+				holesIndicesHash.push_back(false);
+			}
+
+			for (size_t i = 0; i < profile.holes.size(); i++)
+			{
+				IfcCurve hole = profile.holes[i];
+				int pointCount = hole.points.size();
+
+				for (int j = 0; j < pointCount; j++)
 				{
-					glm::dvec2 pt = profile.curve.points[i];
+					holesIndicesHash.push_back(j == 0);
+
+					glm::dvec2 pt = hole.points[j];
 					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
 
+					profile.curve.Add(pt);
 					geom.AddPoint(et, normal);
-					polygon[0].push_back({pt.x, pt.y});
-				}
-
-				for (size_t i = 0; i < profile.curve.points.size(); i++)
-				{
-					holesIndicesHash.push_back(false);
-				}
-
-				for (size_t i = 0; i < profile.holes.size(); i++)
-				{
-					IfcCurve hole = profile.holes[i];
-					int pointCount = hole.points.size();
-
-					for (int j = 0; j < pointCount; j++)
-					{
-						holesIndicesHash.push_back(j == 0);
-
-						glm::dvec2 pt = hole.points[j];
-						glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
-
-						profile.curve.Add(pt);
-						geom.AddPoint(et, normal);
-						polygon[i + 1].push_back({pt.x, pt.y}); // Index 0 is main profile; see earcut reference
-					}
-				}
-
-				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
-
-				if (indices.size() < 3)
-				{
-					// probably a degenerate polygon
-					_errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "degenerate polygon in extrude");
-					return geom;
-				}
-
-				uint32_t offset = 0;
-				bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
-				bool flipWinding = !winding;
-
-				for (size_t i = 0; i < indices.size(); i += 3)
-				{
-					if (flipWinding)
-					{
-						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
-					}
-					else
-					{
-						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
-					}
-				}
-
-				offset += geom.numPoints;
-
-				normal = -dir;
-
-				for (size_t i = 0; i < profile.curve.points.size(); i++)
-				{
-					glm::dvec2 pt = profile.curve.points[i];
-					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0), 1);
-
-					if (cuttingPlaneNormal != glm::dvec3(0))
-					{
-						et = glm::dvec4(glm::dvec3(pt, 0), 1);
-						glm::dvec3 transDir = glm::dvec4(dir, 0);
-
-						// project {et} onto the plane, following the extrusion normal
-						double ldotn = glm::dot(transDir, cuttingPlaneNormal);
-						if (ldotn == 0)
-						{
-							printf("0 direction in extrude\n");
-						}
-						else
-						{
-							glm::dvec3 dpos = cuttingPlanePos - glm::dvec3(et);
-							double dist = glm::dot(dpos, cuttingPlaneNormal) / ldotn;
-							// we want to apply dist, even when negative
-							et = et + glm::dvec4(dist * transDir, 1);
-						}
-					}
-
-					geom.AddPoint(et, normal);
-				}
-
-				for (size_t i = 0; i < indices.size(); i += 3)
-				{
-					if (flipWinding)
-					{
-						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
-					}
-					else
-					{
-						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
-					}
+					polygon[i + 1].push_back({pt.x, pt.y}); // Index 0 is main profile; see earcut reference
 				}
 			}
 
-			uint32_t capSize = profile.curve.points.size();
-			for (size_t i = 1; i < capSize; i++)
+			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
+
+			if (indices.size() < 3)
 			{
-				// https://github.com/tomvandig/web-ifc/issues/5
-				if (holesIndicesHash[i])
-				{
-					continue;
-				}
-
-				uint32_t bl = i - 1;
-				uint32_t br = i - 0;
-
-				uint32_t tl = capSize + i - 1;
-				uint32_t tr = capSize + i - 0;
-
-				// this winding should be correct
-				geom.AddFace(geom.GetPoint(tl),
-					geom.GetPoint(br),
-					geom.GetPoint(bl));
-
-				geom.AddFace(geom.GetPoint(tl),
-					geom.GetPoint(tr),
-					geom.GetPoint(br));
+				// probably a degenerate polygon
+				_errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "degenerate polygon in extrude");
+				return geom;
 			}
 
-			return geom;
+			uint32_t offset = 0;
+			bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
+			bool flipWinding = !winding;
+
+			for (size_t i = 0; i < indices.size(); i += 3)
+			{
+				if (flipWinding)
+				{
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+				}
+				else
+				{
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+				}
+			}
+
+			offset += geom.numPoints;
+
+			normal = -dir;
+
+			for (size_t i = 0; i < profile.curve.points.size(); i++)
+			{
+				glm::dvec2 pt = profile.curve.points[i];
+				glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0), 1);
+
+				if (cuttingPlaneNormal != glm::dvec3(0))
+				{
+					et = glm::dvec4(glm::dvec3(pt, 0), 1);
+					glm::dvec3 transDir = glm::dvec4(dir, 0);
+
+					// project {et} onto the plane, following the extrusion normal
+					double ldotn = glm::dot(transDir, cuttingPlaneNormal);
+					if (ldotn == 0)
+					{
+						printf("0 direction in extrude\n");
+					}
+					else
+					{
+						glm::dvec3 dpos = cuttingPlanePos - glm::dvec3(et);
+						double dist = glm::dot(dpos, cuttingPlaneNormal) / ldotn;
+						// we want to apply dist, even when negative
+						et = et + glm::dvec4(dist * transDir, 1);
+					}
+				}
+
+				geom.AddPoint(et, normal);
+			}
+
+			for (size_t i = 0; i < indices.size(); i += 3)
+			{
+				if (flipWinding)
+				{
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+				}
+				else
+				{
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+				}
+			}
 		}
 
-		inline double VectorToAngle(double x, double y)
+		uint32_t capSize = profile.curve.points.size();
+		for (size_t i = 1; i < capSize; i++)
 		{
-			double dd = sqrt(x * x + y * y);
-			double xx = x / dd;
-			double yy = y / dd;
-
-			double angle = asin(xx);
-			double cosv = cos(angle);
-
-			if (glm::abs(yy - cosv) > 1e-5)
+			// https://github.com/tomvandig/web-ifc/issues/5
+			if (holesIndicesHash[i])
 			{
-				angle = acos(yy);
-				double sinv = sin(angle);
+				continue;
+			}
+
+			uint32_t bl = i - 1;
+			uint32_t br = i - 0;
+
+			uint32_t tl = capSize + i - 1;
+			uint32_t tr = capSize + i - 0;
+
+			// this winding should be correct
+			geom.AddFace(geom.GetPoint(tl),
+						 geom.GetPoint(br),
+						 geom.GetPoint(bl));
+
+			geom.AddFace(geom.GetPoint(tl),
+						 geom.GetPoint(tr),
+						 geom.GetPoint(br));
+		}
+
+		return geom;
+	}
+
+	inline double VectorToAngle(double x, double y)
+	{
+		double dd = sqrt(x * x + y * y);
+		double xx = x / dd;
+		double yy = y / dd;
+
+		double angle = asin(xx);
+		double cosv = cos(angle);
+
+		if (glm::abs(yy - cosv) > 1e-5)
+		{
+			angle = acos(yy);
+			double sinv = sin(angle);
+			cosv = cos(angle);
+			if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
+			{
+				angle = angle + (CONST_PI - angle) * 2;
+				sinv = sin(angle);
 				cosv = cos(angle);
 				if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
 				{
-					angle = angle + (CONST_PI - angle) * 2;
-					sinv = sin(angle);
-					cosv = cos(angle);
-					if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
-					{
-						angle = angle + CONST_PI;
-					}
+					angle = angle + CONST_PI;
 				}
 			}
-
-			return (angle / (2 * CONST_PI)) * 360;
 		}
 
-		inline	bool MatrixFlipsTriangles(const glm::dmat4 &mat)
+		return (angle / (2 * CONST_PI)) * 360;
+	}
+
+	inline bool MatrixFlipsTriangles(const glm::dmat4 &mat)
+	{
+		return glm::determinant(mat) < 0;
+	}
+
+	inline bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
+	}
+
+	inline double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+	{
+		glm::dvec3 ab = b - a;
+		glm::dvec3 ac = c - a;
+
+		glm::dvec3 norm = glm::cross(ab, ac);
+		return glm::length(norm) / 2;
+	}
+
+	inline double cross2d(const glm::dvec2 &point1, const glm::dvec2 &point2)
+	{
+		return point1.x * point2.y - point1.y * point2.x;
+	}
+
+	inline double areaOfTriangle(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
+	{
+		glm::dvec2 ab = b - a;
+		glm::dvec2 ac = c - a;
+
+		double norm = cross2d(ab, ac) / 2;
+		return std::fabs(norm);
+	}
+
+	inline double RandomDouble(double lo, double hi)
+	{
+		return lo + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (hi - lo)));
+	}
+
+	inline std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
+	{
+		glm::dmat4 newMat = mat * mesh.transformation;
+
+		bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
+
+		auto geomIt = geometryMap.find(mesh.expressID);
+
+		if (geomIt != geometryMap.end())
 		{
-			return glm::determinant(mat) < 0;
-		}
+			auto meshGeom = geomIt->second;
 
-		inline	std::optional<glm::dvec3> GetOriginRec(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat)
-		{
-			glm::dmat4 newMat = mat * mesh.transformation;
-
-			bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
-
-			auto geomIt = geometryMap.find(mesh.expressID);
-
-			if (geomIt != geometryMap.end())
+			if (meshGeom.numFaces)
 			{
-				auto meshGeom = geomIt->second;
-
-				if (meshGeom.numFaces)
+				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 				{
-					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
-					{
-						fuzzybools::Face f = meshGeom.GetFace(i);
-						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
+					fuzzybools::Face f = meshGeom.GetFace(i);
+					glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 
-						return a;
-					}
+					return a;
 				}
 			}
-
-			for (auto &c : mesh.children)
-			{
-				auto v = GetOriginRec(c, geometryMap, newMat);
-				if (v.has_value())
-				{
-					return v;
-				}
-			}
-
-			return std::nullopt;
 		}
 
-		inline	glm::dvec3 GetOrigin(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap)
+		for (auto &c : mesh.children)
 		{
-			auto v = GetOriginRec(mesh, geometryMap, glm::dmat4(1));
-
+			auto v = GetOriginRec(c, geometryMap, newMat);
 			if (v.has_value())
 			{
-				return *v;
-			}
-			else
-			{
-				return glm::dvec3(0);
+				return v;
 			}
 		}
+
+		return std::nullopt;
+	}
+
+	inline glm::dvec3 GetOrigin(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap)
+	{
+		auto v = GetOriginRec(mesh, geometryMap, glm::dmat4(1));
+
+		if (v.has_value())
+		{
+			return *v;
+		}
+		else
+		{
+			return glm::dvec3(0);
+		}
+	}
 
 		inline	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
 		{
@@ -1023,37 +1116,37 @@ namespace webifc::geometry {
 			}
 		}
 
-		inline	std::vector<IfcGeometry> flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
-		{
-			std::vector<IfcGeometry> geoms;
-			flattenRecursive(mesh, geometryMap, geoms, mat);
-			return geoms;
-		}
-
-		inline	std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)
-		{
-			std::array<double, 16> flatTransformation;
-
-			for (int i = 0; i < 4; i++)
-			{
-				for (int j = 0; j < 4; j++)
-				{
-					flatTransformation[i * 4 + j] = transformation[i][j];
-				}
-			}
-
-			return flatTransformation;
-		}
-
-		inline	bool notPresent(glm::dvec3 pt, std::vector<glm::dvec3> points)
-		{
-			for (auto &pt2 : points)
-			{
-				if (pt.x == pt2.x && pt.y == pt2.y && pt.z == pt2.z)
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+	inline std::vector<IfcGeometry> flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
+	{
+		std::vector<IfcGeometry> geoms;
+		flattenRecursive(mesh, geometryMap, geoms, mat);
+		return geoms;
 	}
+
+	inline std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)
+	{
+		std::array<double, 16> flatTransformation;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				flatTransformation[i * 4 + j] = transformation[i][j];
+			}
+		}
+
+		return flatTransformation;
+	}
+
+	inline bool notPresent(glm::dvec3 pt, std::vector<glm::dvec3> points)
+	{
+		for (auto &pt2 : points)
+		{
+			if (pt.x == pt2.x && pt.y == pt2.y && pt.z == pt2.z)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+}

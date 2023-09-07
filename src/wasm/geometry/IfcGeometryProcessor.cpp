@@ -188,6 +188,10 @@ namespace webifc::geometry
                     }
 
                     finalGeometry = BoolSubtract(flatElementMeshes, voidGeoms);
+                    
+                    #ifdef CSG_DEBUG_OUTPUT
+                        io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
+                    #endif
                 }
 
                 _expressIDToGeometry[expressID] = finalGeometry;
@@ -222,6 +226,25 @@ namespace webifc::geometry
         {
             switch (lineType)
             {
+            case schema::IFCSECTIONEDSOLIDHORIZONTAL:
+            case schema::IFCSECTIONEDSOLID:
+            case schema::IFCSECTIONEDSURFACE:
+            {
+                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID), _errorHandler);
+                mesh.transformation = glm::dmat4(1);
+                // TODO: this is getting problematic.....
+                _expressIDToGeometry[expressID] = geom;
+                mesh.hasGeometry = true;
+
+                // #ifdef DEBUG_DUMP_SVG
+                //     webifc::io::DumpSectionCurves(curves,"sectioned.obj");
+                //     webifc::io::DumpIfcGeometry(geom, "geom.obj");
+                // #endif
+
+                return mesh;
+
+                break;
+            }
             case schema::IFCMAPPEDITEM:
             {
                 _loader.MoveToArgumentOffset(expressID, 0);

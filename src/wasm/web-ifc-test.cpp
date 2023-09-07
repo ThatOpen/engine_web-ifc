@@ -78,6 +78,37 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
     return alignments;
 }
 
+std::vector<webifc::geometry::IfcCrossSections> GetCrossSections3D(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
+{
+    std::vector<webifc::geometry::IfcCrossSections> crossSections;
+
+    std::vector<uint32_t> typeList;
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLID);
+    typeList.push_back(webifc::schema::IFCSECTIONEDSURFACE);
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLIDHORIZONTAL);
+
+    for (auto &type : typeList)
+    {
+
+        auto elements = loader.GetExpressIDsWithType(type);
+
+        for (unsigned int i = 0; i < elements.size(); i++)
+        {
+            auto crossSection = geometryLoader.GetLoader().GetCrossSections3D(elements[i]);
+            crossSections.push_back(crossSection);
+        }
+    }
+
+    bool writeFiles = true;
+
+    if (writeFiles)
+    {
+        DumpCrossSections(crossSections, "CrossSection.obj");
+    }
+
+    return crossSections;
+}
+
 std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
 {
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
@@ -247,15 +278,14 @@ int main()
     // Benchmark();
 
     // return 0;
-
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Projekt_COLORADO_PS.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/Sample1_Vectorworks2022.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/problematics/S_Office_Integrated Design Archi.ifc");
-    // std::string content = ReadFile("Q2.ifc");
-    // std::string content = ReadFile("../../../examples/example.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#278 pending/extrusions.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#sweptdisk/IfcSurfaceCurveSweptAreaSolid.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/15.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.2/IFC_FILES/01097-Tungasletta-2-Hovedbygg-RC2-prelim.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/(E28)_CARRETERA_10.94_4X3.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Corridor-5a_renamedProfiles_4x3.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/Q2.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/muysimple.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/SECTIONS/Ferrocarril_4x3_crosssec.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#384/384.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool testing/Solibri Building.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/394.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/IfcSurfaceCurveSweptAreaSolid.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ifcrevolvedarea/v41.ifc");
@@ -275,7 +305,9 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#452/452.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#451/Snowdon Towers Sample Architectural_IFC2x3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#464/464.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#harry/harry.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#harry/harry.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#473/473.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#420/420.ifc");
 
     webifc::utility::LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
@@ -306,13 +338,19 @@ int main()
     webifc::geometry::IfcGeometryProcessor geometryLoader(loader, errorHandler, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
 
     start = ms();
-    // SpecificLoadTest(loader, geometryLoader, 8765);
-    // SpecificLoadTest(loader, geometryLoader, 122);
-    // SpecificLoadTest(loader, geometryLoader,469706);
-    // auto meshes = LoadAllTest(loader, geometryLoader);
-    // auto alignments = GetAlignments(loader, geometryLoader);
-    // auto trans = webifc::geometry::FlattenTransformation(geometryLoader.GetCoordinationMatrix());
-    // SpecificLoadTest(loader, geometryLoader, 15);
+
+    // SpecificLoadTest(loader, geometryLoader, 2837); // IfcSurfaceCurveSweptAreaSolid
+    // SpecificLoadTest(loader, geometryLoader,616888); // (E28)_CARRETERA_10.94_4X3
+    SpecificLoadTest(loader, geometryLoader, 22716); // Corridor-5a_renamedProfiles_4x3
+    // SpecificLoadTest(loader, geometryLoader, 24943); // Corridor-5a_renamedProfiles_4x3
+    // SpecificLoadTest(loader, geometryLoader, 4035); // muysimple
+    // SpecificLoadTest(loader, geometryLoader, 292780); //01097-Tungasletta-2-Hovedbygg-RC2-prelim
+    // SpecificLoadTest(loader, geometryLoader, 377148); // Solibri Building.ifc
+    // SpecificLoadTest(loader, geometryLoader, 1342624); //384
+    // SpecificLoadTest(loader, geometryLoader, 3843); //394
+    // SpecificLoadTest(loader, geometryLoader, 5046); //394
+    // SpecificLoadTest(loader, geometryLoader, 4123); //394
+    // SpecificLoadTest(loader, geometryLoader, 6131); //394
     // SpecificLoadTest(loader, geometryLoader, 2591); // IfcSurfaceCurveSweptAreaSolid
     // SpecificLoadTest(loader, geometryLoader, 4822); // 394 upsideown
     // SpecificLoadTest(loader, geometryLoader, 2736); // 394
@@ -348,8 +386,9 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 964810); // 464.ifc
     // SpecificLoadTest(loader, geometryLoader, 961485); // 464.ifc
     // SpecificLoadTest(loader, geometryLoader, 961645); // 464.ifc
+    // SpecificLoadTest(loader, geometryLoader, 743259); // harry.ifc
 
-    auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     auto errors = errorHandler.GetErrors();

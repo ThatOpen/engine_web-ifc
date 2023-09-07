@@ -57,6 +57,7 @@ namespace webifc::geometry {
 			bool isConvex;
 			bool isComposite = false;
 			std::vector<IfcProfile> profiles;
+			std::vector<double> tags;
 		};
 
 		struct IfcAlignmentSegment
@@ -102,6 +103,12 @@ namespace webifc::geometry {
 			double Length;
 		};
 
+		struct IfcCrossSections
+		{
+			std::vector<IfcCurve> curves;
+			std::vector<uint32_t> expressID;
+		};
+
 		struct IfcAlignment
 		{
 			IfcAlignmentSegment Horizontal;
@@ -143,6 +150,7 @@ namespace webifc::geometry {
 		{
 			bool hasParam = false;
 			bool hasPos = false;
+			bool hasLenght = false;
 			double param;
 			glm::dvec2 pos;
 			glm::dvec3 pos3D;

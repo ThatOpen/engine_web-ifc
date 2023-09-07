@@ -115,6 +115,10 @@ export interface curve {
     curves: Array<point>;
 }
 
+export interface IfcCrossSection {
+    curves: Array<curve>;
+}
+
 export interface IfcAlignmentSegment {
     curves: Array<curve>;
 }
@@ -723,6 +727,68 @@ export class IfcAPI {
 	 */
     GetAllLines(modelID: Number): Vector<number> {
         return this.wasmModule.GetAllLines(modelID);
+    }
+
+    /**
+     * Returns all crossSections in 2D contained in IFCSECTIONEDSOLID, IFCSECTIONEDSURFACE, IFCSECTIONEDSOLIDHORIZONTAL (IFC4x3 or superior) 
+     * @param modelID model ID
+     * @returns Lists with the cross sections curves as sets of points
+     */
+    GetAllCrossSections2D(modelID: Number): any
+    {
+        const crossSections =  this.wasmModule.GetAllCrossSections2D(modelID);
+        const crossSectionList = [];
+        for (let i = 0; i < crossSections.size(); i++) {
+            const alignment = crossSections.get(i);
+            const curveList = [];
+            const expressList = [];
+            for (let j = 0; j < alignment.curves.size(); j++) {
+                const curve = alignment.curves.get(j);
+                const ptList = [];
+                for (let p = 0; p < curve.points.size(); p++) {
+                const pt = curve.points.get(p);
+                const newPoint = { x: pt.x, y: pt.y, z: pt.z };
+                ptList.push(newPoint);
+                }
+                const newCurve = { points: ptList };
+                curveList.push(newCurve);
+                expressList.push(alignment.expressID.get(j));
+            }
+            const align = { origin, curves: curveList, expressID: expressList };
+            crossSectionList.push(align);
+        }
+        return crossSectionList;
+    }
+
+    /**
+     * Returns all crossSections in 3D contained in IFCSECTIONEDSOLID, IFCSECTIONEDSURFACE, IFCSECTIONEDSOLIDHORIZONTAL (IFC4x3 or superior) 
+     * @param modelID model ID
+     * @returns Lists with the cross sections curves as sets of points
+     */
+    GetAllCrossSections3D(modelID: Number): any
+    {
+        const crossSections =  this.wasmModule.GetAllCrossSections3D(modelID);
+        const crossSectionList = [];
+        for (let i = 0; i < crossSections.size(); i++) {
+            const alignment = crossSections.get(i);
+            const curveList = [];
+            const expressList = [];
+            for (let j = 0; j < alignment.curves.size(); j++) {
+                const curve = alignment.curves.get(j);
+                const ptList = [];
+                for (let p = 0; p < curve.points.size(); p++) {
+                const pt = curve.points.get(p);
+                const newPoint = { x: pt.x, y: pt.y, z: pt.z };
+                ptList.push(newPoint);
+                }
+                const newCurve = { points: ptList };
+                curveList.push(newCurve);
+                expressList.push(alignment.expressID.get(j));
+            }
+            const align = { origin, curves: curveList, expressID: expressList };
+            crossSectionList.push(align);
+        }
+        return crossSectionList;
     }
 
     /**

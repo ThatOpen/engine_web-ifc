@@ -304,6 +304,68 @@ webifc::geometry::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
     return geomLoader->GetGeometry(expressID);
 }
 
+std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections2D(uint32_t modelID)
+{
+    auto loader = models[modelID].GetLoader();
+    auto geomLoader = models[modelID].GetGeometryLoader();
+
+    if (!loader || !geomLoader)
+    {
+        return {};
+    }
+
+    std::vector<uint32_t> typeList; 
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLIDHORIZONTAL);  
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLID);
+    typeList.push_back(webifc::schema::IFCSECTIONEDSURFACE);
+
+    std::vector<webifc::geometry::IfcCrossSections> crossSections;
+
+    for(auto& type: typeList)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+
+        for (size_t i = 0; i < elements.size(); i++)
+        {
+            webifc::geometry::IfcCrossSections crossSection = geomLoader->GetLoader().GetCrossSections2D(elements[i]);
+            crossSections.push_back(crossSection);
+        }
+    }
+
+    return crossSections;
+}
+
+std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections3D(uint32_t modelID)
+{
+    auto loader = models[modelID].GetLoader();
+    auto geomLoader = models[modelID].GetGeometryLoader();
+
+    if (!loader || !geomLoader)
+    {
+        return {};
+    }
+
+    std::vector<uint32_t> typeList; 
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLIDHORIZONTAL);  
+    typeList.push_back(webifc::schema::IFCSECTIONEDSOLID);
+    typeList.push_back(webifc::schema::IFCSECTIONEDSURFACE);
+
+    std::vector<webifc::geometry::IfcCrossSections> crossSections;
+
+    for(auto& type: typeList)
+    {
+        auto elements = loader->GetExpressIDsWithType(type);
+
+        for (size_t i = 0; i < elements.size(); i++)
+        {
+            webifc::geometry::IfcCrossSections crossSection = geomLoader->GetLoader().GetCrossSections3D(elements[i], true, geomLoader->GetCoordinationMatrix());
+            crossSections.push_back(crossSection);
+        }
+    }
+
+    return crossSections;
+}
+
 std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
 {
     auto loader = models[modelID].GetLoader();
@@ -1027,6 +1089,12 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<webifc::geometry::IfcFlatMesh>("IfcFlatMeshVector");
     emscripten::register_vector<uint32_t>("UintVector");
 
+    emscripten::register_vector<webifc::geometry::IfcCrossSections>("IfcCrossSectionsVector");
+
+    emscripten::value_object<webifc::geometry::IfcCrossSections>("IfcCrossSections")
+        .field("curves", &webifc::geometry::IfcCrossSections::curves)
+        .field("expressID", &webifc::geometry::IfcCrossSections::expressID);
+
     emscripten::register_vector<webifc::geometry::IfcAlignment>("IfcAlignmentVector");
 
     emscripten::value_object<webifc::geometry::IfcAlignment>("IfcAlignment")
@@ -1052,13 +1120,14 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("x", &glm::vec<2, glm::f64>::x)
         .field("y", &glm::vec<2, glm::f64>::y);
 
-    emscripten::register_vector<glm::vec<3, glm::f64>>("vector3doubleVector");
-
+    emscripten::register_vector<glm::vec<3, double>>("vector3double");
 
     emscripten::register_vector<double>("DoubleVector");
 
     emscripten::function("ExtendLineStorage", &ExtendLineStorage);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
+    emscripten::function("GetAllCrossSections2D", &GetAllCrossSections2D);
+    emscripten::function("GetAllCrossSections3D", &GetAllCrossSections3D);
     emscripten::function("GetAllAlignments", &GetAllAlignments);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);

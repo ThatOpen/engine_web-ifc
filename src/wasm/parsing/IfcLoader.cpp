@@ -323,9 +323,12 @@ namespace webifc::parsing {
    void IfcLoader::PushDouble(double input)
    {             
       std::string numberString = std::format("{}", input);
+      if (std::floor(input) == input) numberString+='.';
+      size_t eLoc = numberString.find_first_of('e');
+      if (eLoc != std::string::npos) numberString[eLoc]='E';
       uint16_t length = numberString.size();
       Push<uint16_t>((uint16_t)length);
-      Push((void*)numberString.c_str(), numberString.size());                
+      Push((void*)numberString.c_str(), numberString.size());        
    }
 
    void IfcLoader::PushInt(int input)
@@ -372,7 +375,7 @@ namespace webifc::parsing {
         if (_lines[i]->tapeOffset > pos) break;
         prevLine = i;
       }
-      return prevLine-1;
+      return prevLine+1;
   }
    
    uint32_t IfcLoader::GetRefArgument() const
@@ -496,12 +499,7 @@ namespace webifc::parsing {
          {
            _tokenStream->Read<uint32_t>();
          }
-         else if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL)
-         {
-           uint16_t length = _tokenStream->Read<uint16_t>();
-           _tokenStream->Forward(length);
-         }
-         else if (t == IfcTokenType::LABEL)
+         else if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM)
          {
            uint16_t length = _tokenStream->Read<uint16_t>();
            _tokenStream->Forward(length);
@@ -555,12 +553,7 @@ namespace webifc::parsing {
      			{
      				_tokenStream->Read<uint32_t>();
      			}
-     			else if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL)
-     			{
-     				uint16_t length = _tokenStream->Read<uint16_t>();
-     				_tokenStream->Forward(length);
-     			}
-     			else if (t == IfcTokenType::LABEL)
+     			else if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM)
      			{
      				uint16_t length = _tokenStream->Read<uint16_t>();
      				_tokenStream->Forward(length);
@@ -649,13 +642,14 @@ namespace webifc::parsing {
      _tokenStream->Back();
    }
 
-   double IfcLoader::GetOptionalDoubleParam(double defaultValue = 0) const
+    double IfcLoader::GetOptionalDoubleParam(double defaultValue = 0) const
     {
-      if (GetTokenType() ==IfcTokenType::REAL)
+      if (GetTokenType() == IfcTokenType::REAL)
       {
         StepBack();
         return GetDoubleArgument();
       }
+      StepBack();
       return defaultValue;
     }
 
