@@ -12,7 +12,10 @@ namespace webifc::parsing
   {
     _chunkData = nullptr;
     if (_fileStream!=nullptr) Load();
-    else _loaded=true;
+    else {
+      _loaded=true;
+      _currentSize = 0;
+    }
   }
   
   bool IfcTokenStream::IfcTokenChunk::Clear()
