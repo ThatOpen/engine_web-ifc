@@ -66,8 +66,8 @@ namespace webifc::parsing
   
   void IfcTokenStream::IfcTokenChunk::Load()
   {
-      _loaded=true;
       _chunkData =  new uint8_t[_chunkSize];
+      _loaded=true;
       if (_fileStream->GetRef()!=_fileStartRef) _fileStream->Go(_fileStartRef);
       std::vector<char> temp;
       temp.reserve(50);
