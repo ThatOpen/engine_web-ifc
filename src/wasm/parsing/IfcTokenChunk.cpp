@@ -65,9 +65,11 @@ namespace webifc::parsing
   
   void IfcTokenStream::IfcTokenChunk::Load()
   {
+      _loaded=true;
       if (_fileStream->GetRef()!=_fileStartRef) _fileStream->Go(_fileStartRef);
       std::vector<char> temp;
       temp.reserve(50);
+      _currentSize=0;
       while ( !_fileStream->IsAtEnd() && _currentSize < _chunkSize)
       {
         const char c = _fileStream->Get();
