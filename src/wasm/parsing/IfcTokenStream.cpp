@@ -12,8 +12,8 @@ namespace webifc::parsing
   IfcTokenStream::IfcTokenStream(const size_t chunkSize, const size_t maxChunks) 
   :  _chunkSize(chunkSize), _maxChunks(maxChunks)
   { 
-    _cChunk=NULL;
-    _fileStream=NULL;
+    _cChunk=nullptr;
+    _fileStream=nullptr;
   }
 
   void IfcTokenStream::SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData) 
@@ -96,13 +96,13 @@ namespace webifc::parsing
   {
       if (_chunks.empty())
       {
-        _chunks.emplace_back(_chunkSize,0,0,nullptr);
+        _chunks.emplace_back(_chunkSize,0,0,_fileStream);
         _activeChunks++;
       }
       if ( _chunks.back().TokenSize() + size > _chunks.back().GetMaxSize())
       {
         checkMemory();
-        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),0,nullptr);
+        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),0,_fileStream);
         _activeChunks++;
       }
       _chunks.back().Push(v,size);
