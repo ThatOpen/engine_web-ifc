@@ -47,9 +47,13 @@ namespace webifc::parsing
       }
       auto length = _cChunk->Read<uint16_t>(_readPtr);
       Forward(2);
-      auto str = _cChunk->ReadString(_readPtr,length);
-      Forward(length);
-      return str;
+      if (length > 0) 
+      {
+        auto str = _cChunk->ReadString(_readPtr,length);
+        Forward(length);
+        return str;
+      }
+      return "";
   }
   
   void IfcTokenStream::Forward(const size_t size)
