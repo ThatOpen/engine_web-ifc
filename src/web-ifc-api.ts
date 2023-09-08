@@ -598,7 +598,17 @@ export class IfcAPI {
     }
 
 	/**
-	 * Writes a line to the model, can be used to write new lines or to update existing lines
+     * Writes a line to the model, can be used to write new lines or to update existing lines
+     * @param modelID Model handle retrieved by OpenModel
+     * @param lineObject line object to write
+     */
+    WriteLines<Type extends IfcLineObject>(modelID: number, lineObjects: Array<Type>) {
+        this.wasmModule.ExtendLineStorage(modelID,lineObjects.length);
+        for (let lineObject of lineObjects) this.WriteLine(modelID,lineObject);
+    }
+
+    /**
+	 * Writes a set of line to the model, can be used to write new lines or to update existing lines
 	 * @param modelID Model handle retrieved by OpenModel
 	 * @param lineObject line object to write
 	 */

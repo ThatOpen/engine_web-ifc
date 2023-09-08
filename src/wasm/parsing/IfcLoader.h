@@ -61,6 +61,7 @@ namespace webifc::parsing
       void RemoveLine(const uint32_t expressID);
       void PushDouble(double input);
       void PushInt(int input);
+      void ExtendLineStorage(uint32_t lineStorageSize);
       template <typename T> void Push(T input)
       {
         _tokenStream->Push(input);

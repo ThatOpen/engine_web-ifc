@@ -11,8 +11,9 @@ namespace webifc::parsing
   IfcTokenStream::IfcTokenChunk::IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *fileStream) :  _startRef(startRef), _fileStartRef(fileStartRef), _chunkSize(chunkSize), _fileStream(fileStream)
   {
     _chunkData = nullptr;
+    _loaded=true;
+    _currentSize = 0;
     if (_fileStream!=nullptr) Load();
-    else _loaded=true;
   }
   
   bool IfcTokenStream::IfcTokenChunk::Clear()
@@ -37,6 +38,11 @@ namespace webifc::parsing
   {
     return _loaded;
   }
+
+  size_t IfcTokenStream::IfcTokenChunk::GetMaxSize() 
+  {
+    return _chunkSize;
+  }
   
   std::string_view IfcTokenStream::IfcTokenChunk::ReadString(const size_t ptr,const size_t size) 
   {
@@ -46,11 +52,8 @@ namespace webifc::parsing
   
   void IfcTokenStream::IfcTokenChunk::Push(void *v, const size_t size)
   {
+      if (_chunkData == nullptr) _chunkData =  new uint8_t[_chunkSize];
       _currentSize+=size;
-      if (_chunkData == nullptr) 
-      {
-         _chunkData = new uint8_t[_chunkSize];
-      }
       if (_currentSize > _chunkSize) {
           uint8_t * tmp = _chunkData;
           _chunkData = new uint8_t[_currentSize];
@@ -203,6 +206,5 @@ namespace webifc::parsing
         else if (c == ';') Push<uint8_t>(IfcTokenType::LINE_END);
         _fileStream->Forward();  
       }
-      _chunkSize=_currentSize;
     }
 }

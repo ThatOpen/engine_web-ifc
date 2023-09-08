@@ -404,6 +404,11 @@ namespace webifc::parsing {
   {
       _lines[expressID-1]->ifcType = 0;
   }
+
+  void IfcLoader::ExtendLineStorage(uint32_t lineStorageSize)
+  {
+    _lines.reserve(_lines.size()+lineStorageSize);
+  }
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
   {
