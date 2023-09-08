@@ -12,7 +12,6 @@ namespace webifc::parsing
   {
     _loaded=true;
     _currentSize = 0;
-    _chunkData = new uint8_t[_chunkSize];
     if (_fileStream!=nullptr) Load();
   }
   
@@ -52,6 +51,7 @@ namespace webifc::parsing
   
   void IfcTokenStream::IfcTokenChunk::Push(void *v, const size_t size)
   {
+      if (_chunkData == nullptr) _chunkData =  new uint8_t[_chunkSize];
       _currentSize+=size;
       if (_currentSize > _chunkSize) {
           uint8_t * tmp = _chunkData;
