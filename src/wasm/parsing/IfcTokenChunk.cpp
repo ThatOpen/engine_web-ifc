@@ -206,6 +206,5 @@ namespace webifc::parsing
         else if (c == ';') Push<uint8_t>(IfcTokenType::LINE_END);
         _fileStream->Forward();  
       }
-      _chunkSize=_currentSize;
     }
 }
