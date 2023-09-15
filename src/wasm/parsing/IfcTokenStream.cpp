@@ -74,9 +74,16 @@ namespace webifc::parsing
   
   void IfcTokenStream::MoveTo(const size_t pos)
   {
-      _currentChunk = pos / _chunkSize;
-      _cChunk = &_chunks[_currentChunk];
-      _readPtr = pos % _chunkSize;
+     for (size_t i=_chunks.size()-1; i >=0; i--)
+      {
+        if (_chunks[i].GetTokenRef() <= pos) 
+        {
+          _currentChunk = i;
+          _cChunk = &_chunks[_currentChunk];
+          _readPtr = pos - _cChunk->GetTokenRef();
+          break;
+        }
+      }
   }
   
   void IfcTokenStream::checkMemory()
@@ -106,7 +113,9 @@ namespace webifc::parsing
       if ( _chunks.back().TokenSize() + size > _chunks.back().GetMaxSize())
       {
         checkMemory();
-        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),0,_fileStream);
+        size_t fsRef = 0;
+        if (_fileStream !=nullptr) fsRef = _fileStream->GetRef();
+        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),fsRef,_fileStream);
         _activeChunks++;
       }
       _chunks.back().Push(v,size);
