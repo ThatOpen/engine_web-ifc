@@ -15,6 +15,7 @@ export interface Prop {
     primitive: boolean;
     optional: boolean;
     set: boolean;
+    dimensions: number;
 }
 
 export interface InverseProp {

@@ -44,7 +44,10 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
 
     if (p.set)
     {
-        content = 'v['+i+']?.map((p:any) =>  p?.value ?'
+        content = 'v['+i+']?.map((p:any) =>  ';
+
+        if (p.dimensions > 1) content+="p?.map((p:any) =>";
+        content+='p?.value ?';
         if (type?.isSelect){
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
             if (isEntitySelect) content+='new Handle(p.value)';
@@ -55,6 +58,9 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
         else if (p.primitive) content+='p.value';
         else content+='new Handle<'+schemaName+'.'+p.type+'>(p.value)';
         content +=' : null) || []';
+        if (p.dimensions > 1) content +=')';
+
+
     }
     else if (type?.isSelect)
     {
@@ -408,11 +414,16 @@ export function parseElements(data:string)
             let name = split[0];
             let optional = split.indexOf("OPTIONAL") != -1;
             let set = split.indexOf("SET") != -1 || split.indexOf("LIST") != -1;
+            let dimensions = 0;
             if (set && !optional) 
             {
                 let setLoc = split.indexOf("SET");
                 if (setLoc == -1) setLoc = split.indexOf("LIST")
                 if (split[setLoc+1].includes("[0:")) optional=true;
+            }
+            if (set) {
+                var count = (line.match(/LIST/g) || []).length;
+                dimensions = count;
             }
             let type = split[split.length - 1].replace(";", "");
             let firstBracket = type.indexOf("(");
@@ -426,7 +437,8 @@ export function parseElements(data:string)
                 type: tsType,
                 primitive: tsType !== type,
                 optional,
-                set
+                set,
+                dimensions
             })
         }  
         else if (entity && readIfcDerived && hasColon) parseDerived(line,entity);
