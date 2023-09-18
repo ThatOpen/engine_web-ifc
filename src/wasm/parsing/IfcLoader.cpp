@@ -286,6 +286,7 @@ namespace webifc::parsing {
    { 
       if (expressID == 0 || expressID > _lines.size()) {
         _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Attempt to Access Invalid ExpressID", expressID);
+        std::cout << "[Extended LOG] Invalid ExpressID: " + std::to_string(expressID) << std::endl;
         return 0;
       }
       return _lines[expressID-1]->ifcType;
@@ -383,6 +384,7 @@ namespace webifc::parsing {
       if (_tokenStream->Read<char>() != IfcTokenType::REF)
      	{
      		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF", GetCurrentLineExpressID());
+        std::cout << "[Extended LOG] token: " + std::to_string(_tokenStream->Read<char>()) + " (CurrentLineExpressID: " + std::to_string(GetCurrentLineExpressID()) + ")" << std::endl;
      		return 0;
      	}
      	return _tokenStream->Read<uint32_t>();
@@ -454,6 +456,7 @@ namespace webifc::parsing {
      	else
      	{
      		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY", GetCurrentLineExpressID());
+        std::cout << "[Extended LOG] Not found style type: (" + std::to_string(t) + ")" << std::endl;
      		return 0;
      	}
    }

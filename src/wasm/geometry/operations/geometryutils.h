@@ -814,6 +814,7 @@ namespace webifc::geometry
 			{
 				// probably a degenerate polygon
 				_errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "degenerate polygon in extrude");
+				std::cout << "[Extended LOG] Polygon has " + std::to_string(indices.size()) + " indices." << std::endl;
 				return geom;
 			}
 

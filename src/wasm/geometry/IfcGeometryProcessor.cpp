@@ -16,6 +16,20 @@
 
 namespace webifc::geometry
 {
+    std::set<std::string> unsuppertedTypes;
+    std::string IfcGeometryProcessor::GetUnsuppertedTypes()
+    {
+        std::string types = "";
+        if (unsuppertedTypes.size() > 0)
+        {
+            for (auto v : unsuppertedTypes)
+            {
+                types += v + " ";
+            }
+        }
+        return types;
+    }
+    
     IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, bool optimizeprofiles)
         : _geometryLoader(loader, errorHandler, schemaManager, circleSegments), _loader(loader), _errorHandler(errorHandler), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _optimize_profiles(optimizeprofiles), _circleSegments(circleSegments)
     {
@@ -1016,6 +1030,14 @@ namespace webifc::geometry
                 return mesh;
             default:
                 _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected mesh type", expressID, lineType);
+
+                auto ifcTypeName = std::string(_schemaManager.IfcTypeCodeToType(lineType));
+                std::cout << "[Extended LOG] Not found mesh type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
+
+                if (unsuppertedTypes.find(ifcTypeName) == unsuppertedTypes.end())
+                {
+                    unsuppertedTypes.insert(ifcTypeName);
+                }
                 break;
             }
         }

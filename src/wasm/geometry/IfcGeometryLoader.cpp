@@ -1025,6 +1025,7 @@ namespace webifc::geometry
     }
     default:
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", expressID, lineType);
+      std::cout << "[Extended LOG] Not found style type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
       break;
     }
 
@@ -1079,6 +1080,7 @@ namespace webifc::geometry
     }
     default:
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", expressID, lineType);
+      std::cout << "[Extended LOG] Not found bound type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
       break;
     }
 
@@ -1157,6 +1159,7 @@ namespace webifc::geometry
     }
     default:
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", expressID, lineType);
+      std::cout << "[Extended LOG] Not found loop type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
       break;
     }
 
@@ -1195,6 +1198,7 @@ namespace webifc::geometry
     else
     {
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", pointRef, point);
+      std::cout << "[Extended LOG] Not found vertxpoint type: " << std::string(_schemaManager.IfcTypeCodeToType(point)) + " (" + std::to_string(point) + ")" << std::endl;
       return {};
     }
   }
@@ -1227,6 +1231,7 @@ namespace webifc::geometry
     }
     default:
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", expressID, lineType);
+      std::cout << "[Extended LOG] Not found edgecurve type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
       break;
     }
     return IfcCurve();
@@ -2763,6 +2768,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     }
     default:
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", expressID, lineType);
+      std::cout << "[Extended LOG] Not found profile type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
       break;
     }
 
@@ -2787,6 +2793,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     }
     default:
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 3D profile type", expressID, lineType);
+      std::cout << "[Extended LOG] Not found 3D profile type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
       break;
     }
 
@@ -2889,6 +2896,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     }
     default:
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 2D placement type", expressID, lineType);
+      std::cout << "[Extended LOG] Not found 2D placement type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
       break;
     }
     return glm::dmat3();
@@ -3143,6 +3151,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     }
     default:
       _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", expressID, lineType);
+      std::cout << "[Extended LOG] Not found placement type: " << std::string(_schemaManager.IfcTypeCodeToType(lineType)) + " (" + std::to_string(lineType) + ")" << std::endl;
       break;
     }
 

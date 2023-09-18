@@ -32,32 +32,32 @@ file (GLOB WebIfcTestingMain web-ifc-test.cpp)
 
 #download the external projects and save their paths
 Message("Downloading FastFloat")
-FetchContent_Declare(fastfloat GIT_REPOSITORY "https://github.com/fastfloat/fast_float" GIT_TAG "2b2395f9ac836ffca6404424bcc252bff7aa80e4" SOURCE_SUBDIR "../")
+FetchContent_Declare(fastfloat GIT_REPOSITORY "https://github.com/fastfloat/fast_float" GIT_TAG "2b2395f9ac836ffca6404424bcc252bff7aa80e4" SOURCE_SUBDIR "../" GIT_PROGRESS TRUE)
 FetchContent_MakeAvailable(fastfloat)
 FetchContent_GetProperties(fastfloat)
 
 Message("Downloading TinyNURBS")
-FetchContent_Declare(tinynurbs GIT_REPOSITORY "https://github.com/pradeep-pyro/tinynurbs" GIT_TAG "2fc6562d71665312c6298f7c340bace1bcf1b7a1" SOURCE_SUBDIR "../")
+FetchContent_Declare(tinynurbs GIT_REPOSITORY "https://github.com/pradeep-pyro/tinynurbs" GIT_TAG "2fc6562d71665312c6298f7c340bace1bcf1b7a1" SOURCE_SUBDIR "../" GIT_PROGRESS TRUE)
 FetchContent_MakeAvailable(tinynurbs)
 FetchContent_GetProperties(tinynurbs)
 
 Message("Downloading TinyCPPTest")
-FetchContent_Declare(tinycpptest GIT_REPOSITORY "https://github.com/kovacsv/TinyCppTest" GIT_TAG "12e42c8ac6e032ce450fb3f772ebdfd1ddc6008c" SOURCE_SUBDIR "../")
+FetchContent_Declare(tinycpptest GIT_REPOSITORY "https://github.com/kovacsv/TinyCppTest" GIT_TAG "12e42c8ac6e032ce450fb3f772ebdfd1ddc6008c" SOURCE_SUBDIR "../" GIT_PROGRESS TRUE)
 FetchContent_MakeAvailable(tinycpptest)
 FetchContent_GetProperties(tinycpptest)
 
 Message("Downloading GLM")
-FetchContent_Declare(glm GIT_REPOSITORY "https://github.com/g-truc/glm" GIT_TAG "bf71a834948186f4097caa076cd2663c69a10e1e" SOURCE_SUBDIR "../")
+FetchContent_Declare(glm GIT_REPOSITORY "https://github.com/g-truc/glm" GIT_TAG "bf71a834948186f4097caa076cd2663c69a10e1e" SOURCE_SUBDIR "../" GIT_PROGRESS TRUE)
 FetchContent_MakeAvailable(glm)
 FetchContent_GetProperties(glm)
 
 Message("Downloading Earcut")
-FetchContent_Declare(earcut GIT_REPOSITORY "https://github.com/mapbox/earcut.hpp" GIT_TAG "4811a2b69b91f6127a75e780de6e2113609ddabb" SOURCE_SUBDIR "../")
+FetchContent_Declare(earcut GIT_REPOSITORY "https://github.com/mapbox/earcut.hpp" GIT_TAG "4811a2b69b91f6127a75e780de6e2113609ddabb" SOURCE_SUBDIR "../" GIT_PROGRESS TRUE)
 FetchContent_MakeAvailable(earcut)
 FetchContent_GetProperties(earcut)
 
 Message("Downloading CDT")
-FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_TAG "4d0c9026b8ec846fe544897e7111f8f9080d5f8a" SOURCE_SUBDIR "../")
+FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_TAG "4d0c9026b8ec846fe544897e7111f8f9080d5f8a" SOURCE_SUBDIR "../" GIT_PROGRESS TRUE)
 FetchContent_MakeAvailable(cdt)
 FetchContent_GetProperties(cdt)
 

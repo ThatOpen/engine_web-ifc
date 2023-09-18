@@ -28,6 +28,9 @@
   },
   "pckg-gui": {},
   "scripts": {
+    "infrabyte-setup-env": "echo RUN: source ../../emsdk/emsdk_env.sh",
+    "infrabyte-cleanup": "sudo rimraf ./src/wasm/build ./dist",
+    "infrabyte-release": "rimraf ./_custom-release && mkdir ./_custom-release && cp -r ./dist/* ./_custom-release",
     "gen-schema": "cd src/schema-generator && ts-node gen_functional_types.ts",
     "setup-env": "emsdk_env",
     "setup-mingw": "mingw-get instal msys-make gettext",

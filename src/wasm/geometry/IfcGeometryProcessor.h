@@ -26,6 +26,7 @@ namespace webifc::geometry
   class IfcGeometryProcessor 
   {
       public:
+        static std::string GetUnsuppertedTypes();
         IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, bool optimizeprofiles);
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
