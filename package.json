@@ -96,5 +96,8 @@
     "crypto": false,
     "path": false,
     "fs": false
+  },
+  "dependencies": {
+    "web-ifc": "^0.0.43"
   }
 }

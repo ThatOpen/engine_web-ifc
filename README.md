@@ -1,30 +1,24 @@
-
 <p align="center">
-  <a href="https://ifcjs.github.io/info/">ifc.js</a>
+  <a href="https://thatopen.com/">TOC</a>
   |
-  <a href="https://ifcjs.github.io/info/docs/Guide/web-ifc/Introduction">documentation</a>
+  <a href="https://platform.thatopen.com/documentation">documentation</a>
   |
-  <a href="https://ifcjs.github.io/web-ifc/docs">API Docs</a>
+  <a href="https://platform.thatopen.com/app">demo</a>
   |
-  <a href="https://ifcjs.github.io/web-ifc/demo">demo</a>
+  <a href="https://people.thatopen.com/">community</a>
   |
-  <a href="https://ifcjs.github.io/web-ifc/examples">example models</a>
+  <a href="https://www.npmjs.com/package/bim-fragment">npm package</a>
   |
-  <a href="https://discord.gg/FXfyR4XrKT">discord</a>
-  |
-  <a href="https://github.com/ifcjs/web-ifc/tree/main/examples/usage/src">usage examples</a>
-  |
-  <a href="https://www.npmjs.com/package/web-ifc">npm package</a>
-  |
-  <a href="https://github.com/ifcjs/web-ifc/blob/main/contributing.md">contributing</a>
+  <a href="https://airtable.com/appolsrsBWel2m6wr/shr4ybI6JOeHJEqkG">roadmap</a>
 </p>
 
-<img src="banner.png">
-<h1>web-ifc <img src="https://ifcjs.github.io/info/img/logo.svg" width="32"></h1>
+![cover](cover.png)
 
-[![Build](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml/badge.svg)](https://github.com/tomvandig/web-ifc/actions/workflows/build.yml)
-![npm](https://img.shields.io/npm/dw/web-ifc)
-![opencollective](https://opencollective.com/ifcjs/tiers/badge.svg)
+<h1>Web IFC <img src="https://ifcjs.github.io/components/resources/favicon.ico" width="32"></h1>
+
+[![NPM Package][npm]][npm-url]
+[![NPM Package][npm-downloads]][npm-url]
+[![Tests](https://github.com/IFCjs/components/actions/workflows/tests.yml/badge.svg)](https://github.com/IFCjs/components/actions/workflows/tests.yaml)
 
 **web-ifc** is a javascript library to read and write ifc files, at native speeds. **web-ifc** is part of the [ifc.js](https://ifcjs.github.io/info/) project, which aims to lower the threshold for developing open BIM applications.
 
@@ -104,3 +98,7 @@ Although the primary focus of the library is to be used through WebAssembly in t
 Want to help out? Great!
 
 Please checkout [our contribution suggestsions](https://github.com/tomvandig/web-ifc/blob/main/contributing.md).
+
+[npm]: https://img.shields.io/npm/v/web-ifc
+[npm-url]: https://www.npmjs.com/package/web-ifc
+[npm-downloads]: https://img.shields.io/npm/dw/web-ifc
