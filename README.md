@@ -7,12 +7,12 @@
   |
   <a href="https://people.thatopen.com/">community</a>
   |
-  <a href="https://www.npmjs.com/package/bim-fragment">npm package</a>
+  <a href="https://www.npmjs.com/package/web-ifc">npm package</a>
   |
   <a href="https://airtable.com/appolsrsBWel2m6wr/shr4ybI6JOeHJEqkG">roadmap</a>
 </p>
 
-![cover](cover.png)
+![cover](banner.png)
 
 <h1>Web IFC <img src="https://ifcjs.github.io/components/resources/favicon.ico" width="32"></h1>
 
@@ -92,12 +92,6 @@ Run `npm run dev` to launch a development server with a basic ifc file viewer.
 ## Stand alone C++
 
 Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/tomvandig/web-ifc/blob/main/src/wasm/web-ifc-test.cpp) for a simple entry point to get started.
-
-## Contributing
-
-Want to help out? Great!
-
-Please checkout [our contribution suggestsions](https://github.com/tomvandig/web-ifc/blob/main/contributing.md).
 
 [npm]: https://img.shields.io/npm/v/web-ifc
 [npm-url]: https://www.npmjs.com/package/web-ifc
