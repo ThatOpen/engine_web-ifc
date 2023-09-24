@@ -2983,7 +2983,8 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       if (zID == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
-        zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        auto tmpVec = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        if (glm::length(tmpVec) > 0) zAxis = tmpVec;
       }
 
       _loader.MoveToArgumentOffset(expressID, 2);
@@ -2991,7 +2992,8 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       if (xID == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
-        xAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        auto tmpVec = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        if (glm::length(tmpVec) > 0) xAxis = tmpVec;
       }
 
       glm::dvec3 pos = GetCartesianPoint3D(posID);
@@ -3018,7 +3020,8 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       if (xID == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
-        xAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        auto tmpVec = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        if (glm::length(tmpVec) > 0) xAxis = tmpVec;
       }
 
       glm::dvec3 pos = GetCartesianPoint3D(posID);

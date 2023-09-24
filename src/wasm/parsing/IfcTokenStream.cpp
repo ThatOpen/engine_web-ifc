@@ -148,7 +148,7 @@ namespace webifc::parsing
   
   size_t IfcTokenStream::GetReadOffset() 
   {
-      return _currentChunk*_chunkSize + _readPtr;
+      return _cChunk->GetTokenRef() + _readPtr;
   }
   
 }
