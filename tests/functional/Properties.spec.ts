@@ -41,7 +41,7 @@ beforeAll(async () => {
     ifcApi = new IfcAPI();
     await ifcApi.Init();
     ifcApi.SetLogLevel(LogLevel.LOG_LEVEL_OFF);
-    const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
+    const exampleIFCPath = path.join(__dirname, '../ifcfiles/public/example.ifc');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
     properties = ifcApi.properties;

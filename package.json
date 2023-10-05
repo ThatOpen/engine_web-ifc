@@ -53,14 +53,13 @@
     "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
     "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
     "postversion": "node src/setversion.js",
+    "benchmark": "ts-node ./tests/benchmark/benchmark.ts",
     "test": "jest  --runInBand ",
     "test:unit": "jest  --runInBand --testMatch['**/tests/unit/**/*.spec.ts']",
     "test:functional": "jest  --runInBand --testMatch['**/tests/functional/**/*.spec.ts']",
-    "regression-test-build": "esbuild tests/regression/src/index.js --bundle --sourcemap --platform=node --outfile=tests/regression/dist/test.js && cd tests/regression && cpy public/*.html dist/ --flat && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc.js dist/web-ifc.js && cpy ../../dist/web-ifc-mt.wasm dist/web-ifc-mt.wasm && cpy ../../dist/web-ifc-mt.worker.js dist/web-ifc-mt-worker.js && cpy ../../dist/web-ifc-mt.js dist/web-ifc-mt.js",
-    "regression-test": "npm run regression-test-build && cd tests/regression/dist && ws -p 8080 --cors.opener-policy same-origin --cors.embedder-policy require-corp",
     "gen-docs": "typedoc --out dist/docs && cpy ./banner.png ./dist/docs"
   },
-  "author": "tomvandig",
+  "author": "web-ifc",
   "files": [
     "web-ifc.wasm",
     "web-ifc-mt.wasm",
@@ -76,8 +75,6 @@
     "web-ifc-mt.worker.js"
   ],
   "devDependencies": {
-    "@types/jest": "^27.0.3",
-    "@types/three": "^0.130.1",
     "concurrently": "^6.2.0",
     "cpy-cli": "^4.2.0",
     "esbuild": "^0.12.15",
@@ -86,7 +83,7 @@
     "make-dir-cli": "^3.0.0",
     "npm-watch": "^0.10.0",
     "rimraf": "^5.0.0",
-    "three": "^0.130.1",
+    "three": "^0.157.0",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.9.1",
     "typedoc": "^0.23.25",
@@ -96,8 +93,5 @@
     "crypto": false,
     "path": false,
     "fs": false
-  },
-  "dependencies": {
-    "web-ifc": "^0.0.43"
   }
 }

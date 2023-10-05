@@ -1,11 +1,15 @@
 # System informations 
- {"gpu":"","cpuName":"Apple M1","freeRam":98.71875,"totalRam":8192}
+ {"cpuName":"Apple M1","freeRam":103.15625,"totalRam":8192}
  _________ 
 | filename | Size (mb) | Time to open model (ms) | Time to execute all (ms) | Total ifc entities | Total meshes | Total geometries | total errors |
 |-------|-------|-------|-------|-------|-------|-------|-------|
-| ifcfiles/advanced_model.ifc.test | 33.67 | 272 | 2399 | 594374 | 6401 | 14120 | 0 |
- ifcfiles/dental_clinic.ifc.test | 12.4 | 158 | 999 | 209259 | 2586 | 2626 | 176 |
- ifcfiles/example.ifc.test | 0.39 | 7 | 10 | 6487 | 115 | 119 | 0 |
- ifcfiles/large.ifc.test | 251.25 | 1679 | 5501 | 2153923 | 8701 | 9875 | 182 |
- ifcfiles/schependomlaan.ifc.test | 47 | 460 | 760 | 714485 | 3569 | 3643 | 7296 |
- ifcfiles/tested_sample_project.ifc.test | 0.68 | 6 | 120 | 14119 | 93 | 98 | 0 |
+| tests/ifcfiles/public/S_Office_Integrated Design Archi.ifc | 29.62 | 316 | 5900 | 551442 | 3422 | 3873 | 96 |
+ tests/ifcfiles/public/Sample_entities.ifc | 0.03 | 16 | 1 | 466 | 2 | 10 | 0 |
+ tests/ifcfiles/public/advanced_model.ifc | 33.67 | 284 | 2369 | 594374 | 6401 | 14120 | 0 |
+ tests/ifcfiles/public/clinic.ifc | 12.4 | 113 | 975 | 209259 | 2586 | 2626 | 176 |
+ tests/ifcfiles/public/dental_clinic.ifc | 12.4 | 103 | 922 | 209259 | 2586 | 2626 | 176 |
+ tests/ifcfiles/public/duplex.ifc | 2.27 | 22 | 78 | 38898 | 216 | 224 | 0 |
+ tests/ifcfiles/public/example.ifc | 0.39 | 4 | 11 | 6487 | 115 | 119 | 0 |
+ tests/ifcfiles/public/example_issue_214.ifc | 0 | 6 | 73 | 5 | 0 | 0 | 1 |
+ tests/ifcfiles/public/schependomlaan.ifc | 47 | 397 | 763 | 714485 | 3569 | 3643 | 7296 |
+ tests/ifcfiles/public/tested_sample_project.ifc | 0.68 | 8 | 129 | 14119 | 93 | 98 | 0 |

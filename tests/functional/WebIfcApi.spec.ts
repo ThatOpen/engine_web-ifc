@@ -89,7 +89,7 @@ beforeAll(async () => {
     ifcApi = new WebIFC.IfcAPI();
     await ifcApi.Init();
     ifcApi.SetLogLevel(WebIFC.LogLevel.LOG_LEVEL_OFF);
-    const exampleIFCPath = path.join(__dirname, '../artifacts/example.ifc.test');
+    const exampleIFCPath = path.join(__dirname, '../ifcfiles/public/example.ifc');
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
     emptyFileModelID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
@@ -428,7 +428,7 @@ describe('WebIfcApi known failures', () => {
             let ifcApi = new WebIFC.IfcAPI();
             await ifcApi.Init();
             let failModelID = 0;
-            const exampleIFCPath: string = path.join(__dirname, '../artifacts/Sample_entities.ifc.test');
+            const exampleIFCPath: string = path.join(__dirname, '../ifcfiles/public/Sample_entities.ifc');
             const exampleIFCData = fs.readFileSync(exampleIFCPath);
             failModelID = ifcApi.OpenModel(exampleIFCData);
             const IFCELECTRICDISTRIBUTIONPOINT_EXPRESSID = 237;
@@ -452,7 +452,7 @@ describe('WebIfcApi known failures', () => {
             };
             await ifcApi.Init();
             let failModelID = 0;
-            const exampleIFCPath: string = path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test');
+            const exampleIFCPath: string = path.join(__dirname, '../ifcfiles/public/S_Office_Integrated Design Archi.ifc');
             const exampleIFCData = fs.readFileSync(exampleIFCPath);
             try {
                 ifcApi.OpenModel(exampleIFCData, config);
@@ -468,7 +468,7 @@ describe('WebIfcApi known failures', () => {
             let ifcApi = new WebIFC.IfcAPI();
             await ifcApi.Init();
             let failModelID = 0;
-            const exampleIFCPath: string = path.join(__dirname, '../artifacts/example.ifc_issue_214.test');
+            const exampleIFCPath: string = path.join(__dirname, '../ifcfiles/public/example_issue_214.ifc');
             const exampleIFCData = fs.readFileSync(exampleIFCPath);
             failModelID = ifcApi.OpenModel(exampleIFCData);
             let ifcDatas = ifcApi.SaveModel(failModelID);
@@ -483,7 +483,7 @@ describe('WebIfcApi known failures', () => {
             let ifcApi = new WebIFC.IfcAPI();
             await ifcApi.Init();
             let failModelID = 0;
-            const exampleIFCPath: string = path.join(__dirname, '../artifacts/example.ifc_issue_214.test');
+            const exampleIFCPath: string = path.join(__dirname, '../ifcfiles/public/example_issue_214.ifc');
             const exampleIFCData = fs.readFileSync(exampleIFCPath);
             failModelID = ifcApi.OpenModel(exampleIFCData);
             let ifcDatas = ifcApi.SaveModel(failModelID);
@@ -538,7 +538,7 @@ describe('creating ifc', () => {
         let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
         expect(createdID).toBe(6);
         const buffer = ifcApi.SaveModel(createdID);
-        fs.writeFileSync(path.join(__dirname, '../artifacts/created.ifc'), buffer);
+        fs.writeFileSync(path.join(__dirname, '../ifcfiles/created.ifc'), buffer);
         ifcApi.CloseModel(createdID);
     });
 
@@ -576,7 +576,7 @@ describe('opening large amounts of data', () => {
             MEMORY_LIMIT :  10485760,
             TAPE_SIZE : 104857
         };
-        const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/S_Office_Integrated Design Archi.ifc.test'));
+        const exampleIFCData = fs.readFileSync(path.join(__dirname, '../ifcfiles/public/S_Office_Integrated Design Archi.ifc'));
         let modelId = ifcApi.OpenModel(exampleIFCData,s);
         expect(modelId).toBe(7);
     });
@@ -585,7 +585,7 @@ describe('opening large amounts of data', () => {
         let s: LoaderSettings = {
             TAPE_SIZE : 104857
         };
-        const exampleIFCData = fs.readFileSync(path.join(__dirname, '../artifacts/example.ifc.test'));
+        const exampleIFCData = fs.readFileSync(path.join(__dirname, '../ifcfiles/public/example.ifc'));
         let exampleIFCDatas : Array<Uint8Array> = [];
         for (let i=0; i < 100; i++) exampleIFCDatas.push(exampleIFCData); 
         let modelIds = ifcApi.OpenModels(exampleIFCDatas,s);
@@ -597,7 +597,7 @@ describe('opening large amounts of data', () => {
 describe('function based opening', () => {
     test("open a file through a callback function",  () => {
        
-        let file =fs.openSync(path.join(__dirname, '../artifacts/example.ifc.test'),'r');
+        let file =fs.openSync(path.join(__dirname, '../ifcfiles/public/example.ifc'),'r');
         let retriever = function (offset:number, size: number) {
             let data = new Uint8Array(size);
             let bytesRead = fs.readSync(file,data,0,size,offset);            
