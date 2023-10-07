@@ -2,6 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as os from 'os';
 import * as WebIFC from '../../dist/web-ifc-api-node';
+// @ts-ignore
+import AdmZip from 'adm-zip';
 
 let newIfcAPI = new WebIFC.IfcAPI();
 const OUTPUT_FILE = './benchmark.md';
@@ -110,12 +112,15 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
 {
     let result = new FileResult();
     result.filename = filename;
-    
-    
-    //let modelID = module.OpenModel("example.ifc", new Uint8Array(data.toString()));
 
     const ifcFilePath = path.join(filename);
-    const ifcFileContent = await StreamFileToString(ifcFilePath);
+    let ifcFileContent;
+    if (filename.includes(".ifczip"))  {
+        let zip = new AdmZip(filename);
+        zip.getEntries().forEach(function (zipEntry:any) {
+            ifcFileContent = zipEntry.getData();
+        });
+    } else ifcFileContent = await StreamFileToString(ifcFilePath);
     
     let startTime = ms();
     let modelID : number = module.OpenModel(ifcFileContent);
@@ -169,7 +174,7 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
 
 async function GetBenchmarkFiles(): Promise<string[]>
 {
-    return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => f.endsWith(".ifc")).map((f) => path.join(BENCHMARK_FILES_DIR, f));
+    return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => ( f.endsWith(".ifc") || f.endsWith(".ifczip")) ).map((f) => path.join(BENCHMARK_FILES_DIR, f));
 }
 
 async function getSystemInformations(): Promise<SystemInfo>
