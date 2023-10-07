@@ -134,14 +134,6 @@ if (NOT EMSCRIPTEN)
 		target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
 		target_compile_options(web-ifc PUBLIC "-DDEBUG_DUMP_SVG")
 	endif()
-
-	#build parameters for regression suite
-	add_executable (web-ifc-regression ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcGeometryH} ${FuzzyHeaders} "regression.cpp" "./test/io_helpers.cpp")
-	param_setter(web-ifc-regression)
-	#comment these to prevent debug files being generated
-	if (NOT RELEASE)
-		target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
-		target_compile_options(web-ifc PUBLIC "-DDEBUG_DUMP_SVG")
-	endif()
+	
 	
 endif()
