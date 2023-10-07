@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         os-type: [ubuntu-latest]
-        configuration: [Debug, Release, RelWithDebInfo]    
+        configuration: [Release]    
     
     steps:
     - uses: actions/checkout@v2
