@@ -7,7 +7,7 @@ import AdmZip from 'adm-zip';
 
 let newIfcAPI = new WebIFC.IfcAPI();
 const OUTPUT_FILE = './benchmark.md';
-const BENCHMARK_FILES_DIR = "./tests/ifcfiles/public/";
+const BENCHMARK_FILES_DIR = "./tests/ifcfiles/";
 
 class FileResult
 {
@@ -174,7 +174,9 @@ async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkR
 
 async function GetBenchmarkFiles(): Promise<string[]>
 {
-    return fs.readdirSync(BENCHMARK_FILES_DIR).filter((f) => ( f.endsWith(".ifc") || f.endsWith(".ifczip")) ).map((f) => path.join(BENCHMARK_FILES_DIR, f));
+    let files = await fs.readdirSync(BENCHMARK_FILES_DIR+"public/").filter((f) => ( f.endsWith(".ifc") || f.endsWith(".ifczip")) ).map((f) => path.join(BENCHMARK_FILES_DIR+"public/", f));
+    let privateFiles = await fs.readdirSync(BENCHMARK_FILES_DIR+"private/").filter((f) => ( f.endsWith(".ifc") || f.endsWith(".ifczip")) ).map((f) => path.join(BENCHMARK_FILES_DIR+"private/", f));
+    return files.concat(privateFiles);
 }
 
 async function getSystemInformations(): Promise<SystemInfo>
