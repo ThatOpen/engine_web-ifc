@@ -1,9 +1,13 @@
 import * as THREE from "three";
 import { readFileSync, writeFileSync, readdirSync } from "fs";
 import * as path from "path"
+import {createHash} from "node:crypto"
 import {IfcAPI} from "../../dist/web-ifc-api-node.js";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { STLExporter } from 'three/examples/jsm/exporters/STLExporter.js';
+import { Blob, FileReader } from 'vblob';
+global.Blob = Blob;
+global.FileReader = FileReader;
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import AdmZip from 'adm-zip';
 
 const REGRESSION_FILES_DIR = "./tests/ifcfiles/public/";
@@ -53,10 +57,9 @@ async function CreateModel(ifcAPI, filename)
     const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
     const scene = new THREE.Scene();
     scene.add(mergedMesh);
-    const exporter = new STLExporter();
-    const result = exporter.parse(scene, { binary: true });
-    let newFileName=filename.replace(".ifczip",".stl").replace(".ifc",".stl");
-    writeFileSync(newFileName, result, "utf-8");
+    const exporter = new GLTFExporter();
+    let newFileName=filename.replace(".ifczip",".glb").replace(".ifc",".glb");
+    exporter.parse(scene, function ( gltf ) { console.log(createHash('sha256').update(gltf).digest('hex')); }, function (e) { console.log(e); });
   }
 }
 
