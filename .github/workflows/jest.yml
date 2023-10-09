@@ -3,6 +3,7 @@ env:
    NPM_TOKEN: ' '
 on: 
   push:
+    branches: [ main ]
     paths:
       - 'src/**'
       - 'tests/**'

@@ -34,7 +34,6 @@
 *.ilk
 *.pdb
 files
-*.ifc
 
 .vs
 Debug
@@ -53,4 +52,8 @@ dist/*
 
 #Mac Temporary Files
 **/.DS_Store
-benchmark/ifcfiles/large.ifc.test
+
+examples/nodejs/*.ifc
+tests/ifcfiles/private/*.ifc
+tests/ifcfiles/private/*.stl
+tests/ifcfiles/created.ifc
