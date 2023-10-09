@@ -55,6 +55,7 @@
     "postversion": "node src/setversion.js",
     "benchmark": "ts-node ./tests/benchmark/benchmark.ts",
     "regression": "node --max-old-space-size=4096 ./tests/regression/regression.mjs",
+    "regression-update": "node --max-old-space-size=4096 ./tests/regression/regression.mjs update",
     "test": "jest  --runInBand ",
     "test:unit": "jest  --runInBand --testMatch['**/tests/unit/**/*.spec.ts']",
     "test:functional": "jest  --runInBand --testMatch['**/tests/functional/**/*.spec.ts']",
