@@ -73,6 +73,12 @@ These are the requirements needed to build web-ifc (only for those that wish to 
 3. EMSCRIPTEN v3.1.44 or later
 4. CMAKE v3.18 or later
 
+## Regression Testing
+
+We have a library of test models in the tests/public folder. If you have a model you would like to contribute please open a PR.
+
+You can run regression tests on all these models by running `npm run regression`. It will alert you if any of the sample model geometry has changed. If the change is correct you can refresh the regression tests by running `npm run regression-update`.
+
 ## Building WASM module
 
 ### Setting up emscripten and build system
