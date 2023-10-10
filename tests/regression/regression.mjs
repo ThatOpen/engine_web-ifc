@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { readFileSync, writeFileSync, readdirSync } from "fs";
 import * as path from "path"
-import {createHash} from "node:crypto"
+const {createHash} = await import('node:crypto');
 import {IfcAPI} from "../../dist/web-ifc-api-node.js";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { Blob, FileReader } from 'vblob';
@@ -10,24 +10,57 @@ global.FileReader = FileReader;
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import AdmZip from 'adm-zip';
 
-const REGRESSION_FILES_DIR = "./tests/ifcfiles/public/";
+const REGRESSION_FILES_DIR = "./tests/ifcfiles/";
+const REGRESSION_RESULT_FILE = "./tests/regression/results.json";
 
 var materials = {};
+var ifcAPI;
+var regressionResults = {};
+
 
 async function RunRegression()
 {
-    const ifcAPI = new IfcAPI();
+    let update = false;
+    if (process.argv.includes("update")) update = true;
+    ifcAPI = new IfcAPI();
     await ifcAPI.Init();
     let files = await GetRegressionFiles();
-    for (let file of files) await CreateModel(ifcAPI, file);
+    for (let fileName of files) {
+      regressionResults[fileName] = await CreateModelResuts(fileName);
+      regressionResults[fileName] = createHash('sha256').update(JSON.stringify(regressionResults[fileName])).digest('hex');
+
+    }
+    if (update) {
+        writeFileSync(REGRESSION_RESULT_FILE, JSON.stringify(regressionResults));
+      console.log("--------Results Updated-----------");
+    } else {
+      let regressionResultsCurrent = JSON.parse(readFileSync(REGRESSION_RESULT_FILE));
+      console.log("--------Regression Results-----------");
+      let passTests = true;
+      for (let fileName in regressionResults) {
+          if (fileName in regressionResultsCurrent) {
+            if (regressionResultsCurrent[fileName] == regressionResults[fileName]) console.log(fileName+"- PASS");
+            else {
+              console.log(fileName+"- FAIL");
+              passTests = false;
+            }
+          } else console.log("Could not find:"+filename);
+      }
+      if (!passTests) {
+        console.log("One or models failed - please verify the models and if you are happy run npm run regression-update");
+        process.exit(1);
+      }
+    }
 }
 
 async function GetRegressionFiles()
 {
-    return readdirSync(REGRESSION_FILES_DIR).filter((f) => ( f.endsWith(".ifc") || f.endsWith(".ifczip")) ).map((f) => path.join(REGRESSION_FILES_DIR, f));
+    let files = readdirSync(REGRESSION_FILES_DIR+"public/").filter((f) => ( f.endsWith(".ifc") || f.endsWith(".ifczip")) ).map((f) => path.join(REGRESSION_FILES_DIR+"public/", f));
+    let privateFiles = await readdirSync(REGRESSION_FILES_DIR+"private/").filter((f) => ( f.endsWith(".ifc") || f.endsWith(".ifczip")) ).map((f) => path.join(REGRESSION_FILES_DIR+"private/", f));
+    return files.concat(privateFiles);
 }
 
-async function CreateModel(ifcAPI, filename)
+async function CreateModelResuts(filename)
 {
   let ifcdata;
   if (filename.includes(".ifczip"))  {
@@ -43,7 +76,7 @@ async function CreateModel(ifcAPI, filename)
     const placedGeometries = mesh.geometries;
     for (let i = 0; i < placedGeometries.size(); i++) {
       const placedGeometry = placedGeometries.get(i);
-      let mesh = getPlacedGeometry(ifcAPI,modelID, placedGeometry);
+      let mesh = getPlacedGeometry(modelID, placedGeometry);
       let geom = mesh.geometry.applyMatrix4(mesh.matrix);
       geometries.push(geom);
     }
@@ -58,13 +91,14 @@ async function CreateModel(ifcAPI, filename)
     const scene = new THREE.Scene();
     scene.add(mergedMesh);
     const exporter = new GLTFExporter();
-    let newFileName=filename.replace(".ifczip",".glb").replace(".ifc",".glb");
-    exporter.parse(scene, function ( gltf ) { console.log(createHash('sha256').update(gltf).digest('hex')); }, function (e) { console.log(e); });
+    return new Promise((resolve, reject) => {
+        exporter.parse(scene, ( gltf ) => { resolve(gltf);}, (e) => {reject(e);});
+    });
   }
 }
 
-function getPlacedGeometry(ifcAPI,modelID, placedGeometry) {
-  const geometry = getBufferGeometry(ifcAPI, modelID, placedGeometry);
+function getPlacedGeometry(modelID, placedGeometry) {
+  const geometry = getBufferGeometry(modelID, placedGeometry);
   const material = getMeshMaterial(placedGeometry.color);
   const mesh = new THREE.Mesh(geometry, material);
   mesh.matrix = getMeshMatrix(placedGeometry.flatTransformation);
@@ -72,7 +106,7 @@ function getPlacedGeometry(ifcAPI,modelID, placedGeometry) {
   return mesh;
 }
 
-function getBufferGeometry(ifcAPI,modelID, placedGeometry) {
+function getBufferGeometry(modelID, placedGeometry) {
   const geometry = ifcAPI.GetGeometry(
     modelID,
     placedGeometry.geometryExpressID
