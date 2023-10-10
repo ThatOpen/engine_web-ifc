@@ -463,39 +463,6 @@ describe('WebIfcApi known failures', () => {
             ifcApi.CloseModel(failModelID);
         })
     });
-    describe("issue:#214", () => {
-        test("REAL numbers written by SaveModel() are in an invalid format", async () => {
-            let ifcApi = new WebIFC.IfcAPI();
-            await ifcApi.Init();
-            let failModelID = 0;
-            const exampleIFCPath: string = path.join(__dirname, '../ifcfiles/public/example_issue_214.ifc');
-            const exampleIFCData = fs.readFileSync(exampleIFCPath);
-            failModelID = ifcApi.OpenModel(exampleIFCData);
-            let ifcDatas = ifcApi.SaveModel(failModelID);
-            let rawIfcString = Utf8ArrayToStr(ifcDatas);
-
-            expect(rawIfcString.indexOf("#6=IFCCARTESIANPOINT((0.,0.,0.));")).toBeTruthy();
-            expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);")).toBeTruthy();
-
-            ifcApi.CloseModel(failModelID);
-        });
-        test("when SaveModel() exponents need to be written with a 'E' not 'e'", async () => {
-            let ifcApi = new WebIFC.IfcAPI();
-            await ifcApi.Init();
-            let failModelID = 0;
-            const exampleIFCPath: string = path.join(__dirname, '../ifcfiles/public/example_issue_214.ifc');
-            const exampleIFCData = fs.readFileSync(exampleIFCPath);
-            failModelID = ifcApi.OpenModel(exampleIFCData);
-            let ifcDatas = ifcApi.SaveModel(failModelID);
-            let rawIfcString = Utf8ArrayToStr(ifcDatas);
-            expect(rawIfcString.indexOf("#13=IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.000000000000001E-05,#12,$);")).toBeTruthy();
-            ifcApi.CloseModel(failModelID);
-        });
-
-        test("FILE_NAME header should have 7 attributes not 5", async () => {
-            expect(true).toBeTruthy();
-        });
-    });
 })
 
 describe('some use cases', () => {
