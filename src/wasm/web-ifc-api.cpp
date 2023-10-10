@@ -639,7 +639,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
     {
         emscripten::val child = val[std::to_string(i)];
         if (child.isNull()) loader->Push<uint8_t>(webifc::parsing::IfcTokenType::EMPTY);
-        else if (child.isUndefined()) continue;
+        else if (child.isUndefined()) loader->Push<uint8_t>(webifc::parsing::IfcTokenType::EMPTY);
         else if (child.isArray()) WriteSet(modelID,child);
         else if (child["value"].isArray())
         {
