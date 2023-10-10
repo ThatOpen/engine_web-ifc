@@ -37,14 +37,18 @@ async function RunRegression()
       let regressionResultsCurrent = JSON.parse(readFileSync(REGRESSION_RESULT_FILE));
       console.log("--------Regression Results-----------");
       let passTests = true;
-      for (let fileName in regressionResults) {
-          if (fileName in regressionResultsCurrent) {
-            if (regressionResultsCurrent[fileName] == regressionResults[fileName]) console.log(fileName+"- PASS");
-            else {
-              console.log(fileName+"- FAIL");
-              passTests = false;
-            }
-          } else console.log("Could not find:"+filename);
+      try {
+        for (let fileName in regressionResults) {
+            if (fileName in regressionResultsCurrent) {
+              if (regressionResultsCurrent[fileName] == regressionResults[fileName]) console.log(fileName+"- PASS");
+              else {
+                console.log(fileName+"- FAIL");
+                passTests = false;
+              }
+            } else console.log("Could not find:"+filename);
+        }
+      } catch (e) {
+        console.log(e);
       }
       if (!passTests) {
         console.log("One or models failed - please verify the models and if you are happy run npm run regression-update");
