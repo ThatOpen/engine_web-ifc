@@ -62,8 +62,8 @@ tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
 tsSchema.push('if (Array.isArray(tapeItem)) tapeItem.map((p:any)=>TypeInitialiser(schema,p));');
 tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
 tsSchema.push('}');
-tsSchema.push('function Labelise(tapeItem:any,name:string) {');
-tsSchema.push('if (tapeItem.label) return tapeItem; else return {value:tapeItem.value.toString(),valueType:tapeItem.type,type:2,label:name,...tapeItem};');
+tsSchema.push('function Labelise(tapeItem:any) {');
+tsSchema.push('if (tapeItem.label) return tapeItem; else return {value:tapeItem.value.toString(),valueType:tapeItem.type,type:2,label:tapeItem.name};');
 tsSchema.push('}')
 tsSchema.push('function BooleanConvert(item:boolean | logical) {');
 tsSchema.push(' switch(item.toString()) { case \'true\':return \'T\'; case \'false\':return \'F\';case \'0\':return \'F\';case \'1\':return \'T\';case \'2\':return \'U\';}');
@@ -235,6 +235,7 @@ for (var i = 0; i < files.length; i++) {
           typeList.add(type.name);
           tsSchema.push(`export class ${type.name} {`);
           tsSchema.push(`type: number=${typeNum};`);
+          tsSchema.push(`name: string='${type.name.toUpperCase()}';`);
           if (typeName=="number") {
             tsSchema.push(`public value: number;`);
             tsSchema.push(`constructor(v: any) { this.value = v === null ? v : parseFloat(v);}`);
