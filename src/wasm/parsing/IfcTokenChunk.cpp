@@ -156,7 +156,7 @@ namespace webifc::parsing
           while ((c >= '0' && c <= '9') || (c == '.') || c == 'e' || c == 'E' || c == '-'|| c == '+')
           {
             temp.push_back(c);
-            if (c=='.') isFrac = true;
+            if (c=='.' || c == 'E') isFrac = true;
             _fileStream->Forward();
             c = _fileStream->Get();
           }
