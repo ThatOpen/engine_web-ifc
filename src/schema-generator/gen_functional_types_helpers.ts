@@ -105,7 +105,7 @@ export function generateTapeAssignment(p: Prop, types:Type[])
         if (isEntitySelect)  return `i.${p.name}`;
         let prefix='';
         if (p.optional) prefix ='!i.'+p.name+' ? null :'
-        return prefix + 'i.'+p.name+'.map((p:any) => Labelise(p))'
+        return prefix + 'i.'+p.name+'.map((p:any) => Labelise(p,\''+type.name+'\'))'
     }
     else if (type?.isSelect)
     {
@@ -113,11 +113,14 @@ export function generateTapeAssignment(p: Prop, types:Type[])
         if (isEntitySelect)  return `i.${p.name}`;
         let prefix='';
         if (p.optional) prefix ='!i.'+p.name+' ? null :'
-        return prefix + 'Labelise(i.'+p.name+')';
+        return prefix + 'Labelise(i.'+p.name+',\''+type.name+'\')';
     }
     else if (type?.typeName == "boolean" || type?.typeName == "logical") 
     {
-        return `i.${p.name}?.toString()`;
+        let response:string = "";
+        if (p.optional) response +=`i.${p.name} == null ? null : `;
+        response += `{type:3,value:BooleanConvert(i.${p.name}.value)}`;
+        return response;
     }
     return `i.${p.name}`;
 }

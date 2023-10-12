@@ -62,9 +62,11 @@ tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
 tsSchema.push('if (Array.isArray(tapeItem)) tapeItem.map((p:any)=>TypeInitialiser(schema,p));');
 tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
 tsSchema.push('}');
-tsSchema.push('function Labelise(tapeItem:any) {');
-tsSchema.push('tapeItem.value=tapeItem.value.toString(); tapeItem.valueType=tapeItem.type; tapeItem.type=2; tapeItem.label=tapeItem.constructor.name.toUpperCase();');
-tsSchema.push('return tapeItem;');
+tsSchema.push('function Labelise(tapeItem:any,name:string) {');
+tsSchema.push('if (tapeItem.label) return tapeItem; else return {value:tapeItem.value.toString(),valueType:tapeItem.type,type:2,label:name,...tapeItem};');
+tsSchema.push('}')
+tsSchema.push('function BooleanConvert(item:boolean | logical) {');
+tsSchema.push(' switch(item.toString()) { case \'true\':return \'T\'; case \'false\':return \'F\';case \'0\':return \'F\';case \'1\':return \'T\';case \'2\':return \'U\';}');
 tsSchema.push('}')
 
 var files = fs.readdirSync("./");
