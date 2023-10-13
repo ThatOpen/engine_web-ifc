@@ -45,7 +45,7 @@ async function RunRegression()
                 console.log(fileName+"- FAIL");
                 passTests = false;
               }
-            } else console.log("Could not find:"+filename);
+            } else console.log("Could not find:"+fileName);
         }
       } catch (e) {
         console.log(e);
