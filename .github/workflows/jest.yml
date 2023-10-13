@@ -27,3 +27,5 @@ jobs:
           node-version: '16.x'
     - name: Run all tests
       run: npm t
+    - name: Regression Tests
+      run: npm run regression

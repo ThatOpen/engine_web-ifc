@@ -54,6 +54,8 @@
     "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
     "postversion": "node src/setversion.js",
     "benchmark": "ts-node ./tests/benchmark/benchmark.ts",
+    "regression": "node --max-old-space-size=4096 ./tests/regression/regression.mjs",
+    "regression-update": "node --max-old-space-size=4096 ./tests/regression/regression.mjs update",
     "test": "jest  --runInBand ",
     "test:unit": "jest  --runInBand --testMatch['**/tests/unit/**/*.spec.ts']",
     "test:functional": "jest  --runInBand --testMatch['**/tests/functional/**/*.spec.ts']",
@@ -65,7 +67,6 @@
     "web-ifc-mt.wasm",
     "web-ifc-node.wasm",
     "web-ifc-api-node.js",
-    "web-ifc-api-node.mjs",
     "web-ifc-api-node.d.ts",
     "web-ifc-api.js",
     "web-ifc-api.d.ts",
@@ -75,6 +76,7 @@
     "web-ifc-mt.worker.js"
   ],
   "devDependencies": {
+    "@types/three": "^0.156.0",
     "adm-zip": "^0.5.10",
     "cpy-cli": "^4.2.0",
     "esbuild": "^0.12.15",
@@ -85,7 +87,8 @@
     "ts-jest": "^27.0.7",
     "ts-node": "^10.9.1",
     "typedoc": "^0.23.25",
-    "typescript": "^4.7.0"
+    "typescript": "^4.7.0",
+    "vblob": "^1.1.0"
   },
   "browser": {
     "crypto": false,
