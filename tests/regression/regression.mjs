@@ -26,7 +26,7 @@ async function RunRegression()
     await ifcAPI.Init();
     let files = await GetRegressionFiles();
     for (let fileName of files) {
-      let properFileName = fileName.replace("\\","/");
+      let properFileName = fileName.replaceAll("\\","/");
       regressionResults[properFileName] = await CreateModelResuts(fileName);
       regressionResults[properFileName] = createHash('sha256').update(JSON.stringify(regressionResults[properFileName])).digest('hex');
 
@@ -40,7 +40,7 @@ async function RunRegression()
       let passTests = true;
       try {
         for (let fileName in regressionResults) {
-            fileName = fileName.replace("\\","/");
+            fileName = fileName.replaceAll("\\","/");
             if (fileName in regressionResultsCurrent) {
               if (regressionResultsCurrent[fileName] == regressionResults[fileName]) console.log(fileName+"- PASS");
               else {
