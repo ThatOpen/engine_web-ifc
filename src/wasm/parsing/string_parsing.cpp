@@ -80,7 +80,7 @@ namespace webifc::parsing {
                                     result.push_back('\\');
                                     break;
                                 case 'X':
-                                {   
+                                {
                                     char c = getNext();
                                     if (c==0) return;
                                     switch (c) {
@@ -88,7 +88,6 @@ namespace webifc::parsing {
                                          {
                                             char d1 = getNextHex();
                                             char d2 = getNextHex();
-                                            if (d1 == 0 || d2 ==0) return;
                                             char str[2];
                                             str[0] = (d1 << 4) | d2;
                                             str[1] = 0;
