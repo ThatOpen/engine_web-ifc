@@ -676,7 +676,7 @@ export class IfcAPI {
             if (property && property.type === 5) {
                 if (property.value) line[propertyName] = this.GetLine(modelID, property.value, true);
             }
-            else if (Array.isArray(property) && property.length > 0 && property[0].type === 5) {
+            else if (Array.isArray(property) && property.length > 0 && property[0] && property[0].type === 5) {
                 for (let i = 0; i < property.length; i++) {
                     if (property[i].value) line[propertyName][i] = this.GetLine(modelID, property[i].value, true);
                 }
