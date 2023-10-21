@@ -11,8 +11,6 @@
 #include "parsing/IfcLoader.h"
 #include "schema/IfcSchemaManager.h"
 #include "geometry/IfcGeometryProcessor.h"
-#include "utility/LoaderError.h"
-#include "utility/LoaderSettings.h"
 #include "schema/ifc-schema.h"
 
 using namespace webifc::io;
