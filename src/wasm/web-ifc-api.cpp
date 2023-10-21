@@ -13,8 +13,7 @@
 
 #include "parsing/IfcLoader.h"
 #include "schema/IfcSchemaManager.h"
-#include "utility/LoaderSettings.h"
-#include "utility/Logging.h"
+#include "LoaderSettings.h"
 #include "geometry/IfcGeometryProcessor.h"
 
 #include "version.h"
@@ -25,7 +24,6 @@ struct ModelInfo
     public:
         ModelInfo(webifc::utility::LoaderSettings _settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
         {
-            errorHandler = new webifc::utility::LoaderErrorHandler();
             loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,*errorHandler,schemaManager);
         }
         
@@ -36,11 +34,6 @@ struct ModelInfo
                 geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN, settings.OPTIMIZE_PROFILES);
             }
             return geometryLoader;
-        }
-        
-        webifc::utility::LoaderErrorHandler * GetErrorHanlder()
-        {
-            return errorHandler;
         }
         
         webifc::parsing::IfcLoader * GetLoader()
@@ -61,7 +54,6 @@ struct ModelInfo
         webifc::utility::LoaderSettings settings;
         webifc::parsing::IfcLoader * loader=nullptr;
         webifc::geometry::IfcGeometryProcessor * geometryLoader=nullptr;
-        webifc::utility::LoaderErrorHandler * errorHandler=nullptr;
 };
 
 std::vector<ModelInfo> models;
@@ -390,20 +382,6 @@ std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
     }
 
     return alignments;
-}
-
-std::vector<webifc::utility::LoaderError> GetAndClearErrors(uint32_t modelID)
-{
-    auto errorHandler = models[modelID].GetErrorHanlder();
-
-    if (!errorHandler)
-    {
-        return {};
-    }
-    
-    auto errors = errorHandler->GetErrors();
-    errorHandler->ClearErrors();
-    return errors;
 }
 
 void SetGeometryTransformation(uint32_t modelID, std::array<double, 16> m)
@@ -1140,7 +1118,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
-    emscripten::function("GetAndClearErrors", &GetAndClearErrors);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("GetLineType", &GetLineType);
     emscripten::function("GetHeaderLine", &GetHeaderLine);

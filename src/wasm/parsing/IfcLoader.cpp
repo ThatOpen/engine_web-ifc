@@ -9,8 +9,6 @@
 #include <format>
 #include <fast_float/fast_float.h>
 #include "IfcLoader.h"
-#include "../utility/LoaderError.h"
-#include "../utility/Logging.h"
 #include "../version.h"
 #include "../schema/IfcSchemaManager.h" 
 
@@ -19,7 +17,7 @@ namespace webifc::parsing {
   void p21encode(std::string_view input, std::ostringstream &output);
   std::string p21decode(std::string_view & str);    
  
-   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
+   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager)
    { 
      _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
      _nullLine = new IfcLine();

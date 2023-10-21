@@ -9,7 +9,6 @@
 #include <cstdint>
 #include "representation/geometry.h"
 #include "../parsing/IfcLoader.h"
-#include "../utility/LoaderError.h"
 #include "../schema/IfcSchemaManager.h"
 #include "IfcGeometryLoader.h"
 
@@ -26,7 +25,7 @@ namespace webifc::geometry
   class IfcGeometryProcessor 
   {
       public:
-        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, bool optimizeprofiles);
+        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, bool optimizeprofiles);
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
         IfcFlatMesh GetFlatMesh(uint32_t expressID);
@@ -45,7 +44,6 @@ namespace webifc::geometry
         const IfcGeometryLoader _geometryLoader;
         glm::dmat4 _transformation = glm::dmat4(1.0);
         const parsing::IfcLoader &_loader;
-        utility::LoaderErrorHandler &_errorHandler;
         const schema::IfcSchemaManager &_schemaManager;
         bool _isCoordinated = false;
         bool _coordinateToOrigin;

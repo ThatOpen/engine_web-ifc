@@ -61,6 +61,11 @@ FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_
 FetchContent_MakeAvailable(cdt)
 FetchContent_GetProperties(cdt)
 
+Message("Downloading spdlog")
+FetchContent_Declare(spdlog GIT_REPOSITORY "https://github.com/gabime/spdlog" GIT_TAG "7e635fca68d014934b4af8a1cf874f63989352b7" SOURCE_SUBDIR "../")
+FetchContent_MakeAvailable(spdlog)
+FetchContent_GetProperties(spdlog)
+
 Message("Downloading FUZZY")
 # using a custom version of fuzzy-bools to silence some debug printf from the library that pollutes the output of the executables
 # FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/CBenghi/fuzzy-bools" GIT_TAG "07faaad8cae623dd634b1c09b4b37b44bf645781" SOURCE_SUBDIR "../")
