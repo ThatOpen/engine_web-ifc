@@ -307,13 +307,21 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#473/473.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#420/420.ifc");
 
-    webifc::utility::LoaderSettings set;
+    struct LoaderSettings
+    {
+        bool OPTIMIZE_PROFILES = false;
+        bool COORDINATE_TO_ORIGIN = false;
+        uint16_t CIRCLE_SEGMENTS = 12;
+        uint32_t TAPE_SIZE = 67108864 ; // probably no need for anyone other than web-ifc devs to change this
+        uint32_t MEMORY_LIMIT = 2147483648;
+    };
+
+    LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
     set.OPTIMIZE_PROFILES = true;
 
-    webifc::utility::LoaderErrorHandler errorHandler;
     webifc::schema::IfcSchemaManager schemaManager;
-    webifc::parsing::IfcLoader loader(set.TAPE_SIZE, set.MEMORY_LIMIT, errorHandler, schemaManager);
+    webifc::parsing::IfcLoader loader(set.TAPE_SIZE, set.MEMORY_LIMIT, schemaManager);
 
     auto start = ms();
     loader.LoadFile([&](char *dest, size_t sourceOffset, size_t destSize)
@@ -333,7 +341,7 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, errorHandler, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
 
     start = ms();
 
@@ -388,14 +396,6 @@ int main()
 
     // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
-
-    auto errors = errorHandler.GetErrors();
-    errorHandler.ClearErrors();
-
-    for (auto error : errors)
-    {
-        std::cout << error.expressID << " " << error.ifcType << " " << std::to_string((int)error.type) << " " << error.message << std::endl;
-    }
 
     time = ms() - start;
 
