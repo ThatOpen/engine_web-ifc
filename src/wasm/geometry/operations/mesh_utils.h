@@ -10,6 +10,7 @@
 #include <optional>
 #include <cstdint>
 #include <tinynurbs/tinynurbs.h>
+#include <spdlog/spdlog.h>
 #include "geometryutils.h"
 #include <glm/glm.hpp>
 
@@ -21,6 +22,7 @@ namespace webifc::geometry
 	// TODO: review and simplify
 	inline void TriangulateRevolution(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
 	{
+		spdlog::debug("[TriangulateRevolution({})]");
 			// First we get the revolution data
 
 		glm::dvec3 cent = surface.RevolutionSurface.Direction[3];
@@ -194,7 +196,8 @@ namespace webifc::geometry
 		// TODO: review and simplify
 	inline void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
 	{
-			// First we get the cylinder data
+		spdlog::debug("[TriangulateCylindricalSurface({})]");
+		// First we get the cylinder data
 
 		double radius = surface.CylinderSurface.Radius;
 		glm::dvec3 cent = surface.transformation[3];
@@ -445,6 +448,7 @@ namespace webifc::geometry
 		// TODO: review and simplify
 	inline void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
 	{
+		spdlog::debug("[TriangulateExtrusion({})]");
 			// NO EXAMPLE FILES ABOUT THIS CASE
 
 			// THIS IS A SIMPLE EXTRUSION, NOT TRIMMED
@@ -520,6 +524,7 @@ namespace webifc::geometry
 	inline double InverseMethod(glm::dvec3 pt, tinynurbs::RationalSurface3d srf, double pr, double rotations, double minError, double maxError,
 		double& fU, double& fV, double& divisor, double maxDistance)
 	{
+		spdlog::debug("[InverseMethod({})]");
 		while (maxDistance > maxError && divisor < 10000)
 		{
 			for (double r = 1; r < 5; r++)
@@ -569,6 +574,7 @@ namespace webifc::geometry
 
 	inline glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf, double scaling)
 	{
+		spdlog::debug("[BSplineInverseEvaluation({})]");
 		glm::highp_dvec3 ptc = tinynurbs::surfacePoint(srf, 0.0, 0.0);
 		glm::highp_dvec3 pth = tinynurbs::surfacePoint(srf, 1.0, 0.0);
 		glm::highp_dvec3 ptv = tinynurbs::surfacePoint(srf, 0.0, 1.0);
@@ -596,7 +602,7 @@ namespace webifc::geometry
 			//			double limit = 1e-4;
 
 			// First: We define the Nurbs surface
-
+		spdlog::debug("[TriangulateBspline({})]");
 		tinynurbs::RationalSurface3d srf;
 		srf.degree_u = surface.BSplineSurface.UDegree;
 		srf.degree_v = surface.BSplineSurface.VDegree;

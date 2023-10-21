@@ -58,6 +58,7 @@ namespace webifc::geometry
 
     IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID)
     {
+        spdlog::debug("[GetMesh({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
         std::optional<glm::dvec4> styledItemColor;
@@ -1027,6 +1028,7 @@ namespace webifc::geometry
 
     IfcSurface IfcGeometryProcessor::GetSurface(uint32_t expressID)
     {
+        spdlog::debug("[GetSurface({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
         // TODO: IfcSweptSurface and IfcBSplineSurface still missing
@@ -1465,6 +1467,7 @@ namespace webifc::geometry
 
     IfcFlatMesh IfcGeometryProcessor::GetFlatMesh(uint32_t expressID)
     {
+        spdlog::debug("[GetFlatMesh({})]",expressID);
         IfcFlatMesh flatMesh;
         flatMesh.expressID = expressID;
 
@@ -1479,6 +1482,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix, const glm::dvec4 &color, bool hasColor)
     {
+       
         glm::dvec4 newParentColor = color;
         bool newHasColor = hasColor;
         glm::dmat4 newMatrix = parentMatrix * composedMesh.transformation;
@@ -1537,6 +1541,7 @@ namespace webifc::geometry
 
     IfcGeometry IfcGeometryProcessor::BoolSubtract(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms)
     {
+        spdlog::debug("[BoolSubtract({})]");
         IfcGeometry finalResult;
 
         for (auto &firstGeom : firstGeoms)
@@ -1635,6 +1640,7 @@ namespace webifc::geometry
     void IfcGeometryProcessor::ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points)
     {
         
+        spdlog::debug("[ReadIndexedPolygonalFace({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
         bounds.emplace_back();
@@ -1695,6 +1701,7 @@ namespace webifc::geometry
 
     IfcGeometry IfcGeometryProcessor::GetBrep(uint32_t expressID)
     {
+        spdlog::debug("[GetBrep({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
         switch (lineType)
         {
@@ -1724,6 +1731,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry)
     {
+        spdlog::debug("[AddFaceToGeometry({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
         switch (lineType)

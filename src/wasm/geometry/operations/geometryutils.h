@@ -63,6 +63,7 @@ namespace webifc::geometry
 		// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
 	inline	IfcGeometry Sweep(const double scaling, const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
+		spdlog::debug("[Sweep({})]");
 		IfcGeometry geom;
 
 		std::vector<glm::vec<3, glm::f64>> dpts;
@@ -274,6 +275,7 @@ namespace webifc::geometry
 
 	inline	IfcGeometry SweepCircular(const double scaling, IfcComposedMesh &mesh, const bool optimizeProfiles, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
+		spdlog::debug("[SweepCircular({})]");
 		IfcGeometry geom;
 
 		std::vector<glm::vec<3, glm::f64>> dpts;
@@ -588,6 +590,7 @@ namespace webifc::geometry
 
 	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, uint32_t expressID)
 	{
+		spdlog::debug("[TriangulateBounds({})]");
 		if (bounds.size() == 1 && bounds[0].curve.points.size() == 3)
 		{
 			auto c = bounds[0].curve;
@@ -706,6 +709,7 @@ namespace webifc::geometry
 
 	inline IfcGeometry SectionedSurface(IfcCrossSections profiles)
 	{
+		spdlog::debug("[SectionedSurface({})]");
 		IfcGeometry geom;
 
 		// Iterate over each profile, and create a surface by connecting the corresponding points with faces.
@@ -764,6 +768,7 @@ namespace webifc::geometry
 
 	inline IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
 	{
+		spdlog::debug("[Extrude({})]");
 		IfcGeometry geom;
 		std::vector<bool> holesIndicesHash;
 

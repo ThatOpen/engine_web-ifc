@@ -22,6 +22,7 @@ namespace webifc::geometry
 
   IfcCrossSections IfcGeometryLoader::GetCrossSections2D(uint32_t expressID) const
   {
+    spdlog::debug("[GetCrossSections2D({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     IfcCrossSections sections;
     switch (lineType)
@@ -134,6 +135,7 @@ namespace webifc::geometry
 
   IfcCrossSections IfcGeometryLoader::GetCrossSections3D(uint32_t expressID, bool scaled, glm::dmat4 coordination) const
   {
+   spdlog::debug("[GetCrossSections3D({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     IfcCrossSections sections;
     double scale = 1;
@@ -295,6 +297,7 @@ namespace webifc::geometry
 
   IfcAlignment IfcGeometryLoader::GetAlignment(uint32_t expressID, IfcAlignment alignment, glm::dmat4 transform) const
   {
+    spdlog::debug("[GetAlignment({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
 
     switch (lineType)
@@ -411,6 +414,7 @@ namespace webifc::geometry
 
   IfcCurve IfcGeometryLoader::GetAlignmentCurve(uint32_t expressID) const
   {
+    spdlog::debug("[GetAlignmentCurve({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
 
     IfcCurve alignmentCurve;
@@ -765,6 +769,7 @@ namespace webifc::geometry
 
   std::optional<glm::dvec4> IfcGeometryLoader::GetColor(uint32_t expressID) const
   {
+   spdlog::debug("[GetColor({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     switch (lineType)
     {
@@ -1034,6 +1039,7 @@ namespace webifc::geometry
 
   IfcBound3D IfcGeometryLoader::GetBound(uint32_t expressID) const
   {
+    spdlog::debug("[GetBound({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
 
     switch (lineType)
@@ -1088,6 +1094,7 @@ namespace webifc::geometry
 
   IfcCurve IfcGeometryLoader::GetLoop(uint32_t expressID) const
   {
+    spdlog::debug("[GetLoop({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
 
     switch (lineType)
@@ -1167,6 +1174,7 @@ namespace webifc::geometry
 
   IfcCurve IfcGeometryLoader::GetOrientedEdge(uint32_t expressID) const
   {
+    spdlog::debug("[GetOrientedEdge({})]",expressID);
     _loader.MoveToArgumentOffset(expressID, 3);
     std::string_view orientValue = _loader.GetStringArgument();
     bool orient = orientValue == "T";
@@ -1186,6 +1194,7 @@ namespace webifc::geometry
 
   glm::dvec3 IfcGeometryLoader::GetVertexPoint(uint32_t expressID) const
   {
+    spdlog::debug("[GetVertexPoint({})]",expressID);
     _loader.MoveToArgumentOffset(expressID, 0);
     uint32_t pointRef = _loader.GetRefArgument();
     auto point = _loader.GetLineType(pointRef);
@@ -1202,6 +1211,7 @@ namespace webifc::geometry
 
   IfcCurve IfcGeometryLoader::GetEdge(uint32_t expressID) const
   {
+    spdlog::debug("[GetEdge({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
 
     switch (lineType)
@@ -1275,6 +1285,7 @@ namespace webifc::geometry
 
   glm::dvec3 IfcGeometryLoader::GetCartesianPoint3D(const uint32_t expressID) const
   {
+    spdlog::debug("[GetCartesianPoint3D({})]",expressID);
     _loader.MoveToArgumentOffset(expressID, 0);
     _loader.GetTokenType();
     // because these calls cannot be reordered we have to use intermediate variables
@@ -1287,6 +1298,7 @@ namespace webifc::geometry
 
   glm::dvec2 IfcGeometryLoader::GetCartesianPoint2D(const uint32_t expressID) const
   {
+   spdlog::debug("[GetCartesianPoint2D({})]",expressID);
     _loader.MoveToArgumentOffset(expressID, 0);
     _loader.GetTokenType();
     // because these calls cannot be reordered we have to use intermediate variables
@@ -1298,6 +1310,7 @@ namespace webifc::geometry
 
   std::vector<glm::dvec3> IfcGeometryLoader::ReadIfcCartesianPointList3D(uint32_t expressID) const
   {
+    spdlog::debug("[ReadIfcCartesianPointList3D({})]",expressID);
     _loader.MoveToArgumentOffset(expressID, 0);
 
     std::vector<glm::dvec3> result;
@@ -1322,6 +1335,7 @@ namespace webifc::geometry
 
   std::vector<glm::dvec2> IfcGeometryLoader::ReadIfcCartesianPointList2D(uint32_t expressID) const
   {
+    spdlog::debug("[ReadIfcCartesianPointList2D({})]",expressID);
     _loader.MoveToArgumentOffset(expressID, 0);
 
     std::vector<glm::dvec2> result;
@@ -1345,6 +1359,7 @@ namespace webifc::geometry
 
   IfcCurve IfcGeometryLoader::GetCurve(uint32_t expressID, uint8_t dimensions,bool edge) const
   {
+    spdlog::debug("[GetCurve({})]",expressID);
     IfcCurve curve;
     ComputeCurve(expressID, curve, dimensions,  edge);
     return curve;
@@ -1352,6 +1367,7 @@ namespace webifc::geometry
 
   void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool edge, int sameSense, int trimSense , IfcTrimmingArguments trim) const
   {
+    spdlog::debug("[ComputeCurve({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     switch (lineType)
     {
@@ -2198,6 +2214,7 @@ default:
 
 IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 {
+  spdlog::debug("[GetProfile({})]",expressID);
   auto profile = GetProfileByLine(expressID);
 
   if (!profile.isComposite)
@@ -2237,6 +2254,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   IfcProfile IfcGeometryLoader::GetProfileByLine(uint32_t expressID) const
   {
+    spdlog::debug("[GetProfileByLine({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     switch (lineType)
     {
@@ -2772,6 +2790,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   IfcProfile IfcGeometryLoader::GetProfile3D(uint32_t expressID) const
   {
+   spdlog::debug("[GetProfile3D({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     switch (lineType)
     {
@@ -2796,6 +2815,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   glm::dvec3 IfcGeometryLoader::GetVector(uint32_t expressID) const
   {
+    spdlog::debug("[GetVector({})]",expressID);
     _loader.MoveToArgumentOffset(expressID, 0);
     auto positionID = _loader.GetRefArgument();
     double length = _loader.GetDoubleArgument();
@@ -2810,6 +2830,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
   {
+    spdlog::debug("[GetAxis2Placement2D({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     switch (lineType)
     {
@@ -2897,6 +2918,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   IfcCurve IfcGeometryLoader::GetLocalCurve(uint32_t expressID) const
   {
+    spdlog::debug("[GetLocalCurve({})]",expressID);
     for (uint32_t i = 0; i < LocalcurvesIndices.size(); i++)
     {
       if (LocalcurvesIndices[i] == expressID)
@@ -2912,6 +2934,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID, glm::dvec3 vector) const
   {
+    spdlog::debug("[GetLocalPlacement({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     switch (lineType)
     {
@@ -3155,6 +3178,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   std::array<glm::dvec3, 2> IfcGeometryLoader::GetAxis1Placement(const uint32_t expressID) const
   {
+    spdlog::debug("[GetAxis1Placement({})]",expressID);
     _loader.MoveToArgumentOffset(expressID, 0);
     uint32_t locationID = _loader.GetRefArgument();
     parsing::IfcTokenType dirToken = _loader.GetTokenType();
