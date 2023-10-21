@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cstdint>
+#include <spdlog/spdlog.h>
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include <mapbox/earcut.hpp>
