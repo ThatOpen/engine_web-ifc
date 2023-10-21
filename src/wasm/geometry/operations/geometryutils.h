@@ -7,7 +7,6 @@
 #include <cstdint>
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
-#include "../../utility/LoaderError.h"
 #include <mapbox/earcut.hpp>
 
 namespace webifc::geometry
@@ -587,7 +586,7 @@ namespace webifc::geometry
 		return false;
 	}
 
-	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, utility::LoaderErrorHandler &_errorHandler, uint32_t expressID)
+	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, uint32_t expressID)
 	{
 		if (bounds.size() == 1 && bounds[0].curve.points.size() == 3)
 		{
@@ -622,7 +621,7 @@ namespace webifc::geometry
 
 				if (outerIndex == -1)
 				{
-					_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound!", expressID);
+					spdlog::error("[TriangulateBounds()] Expected outer bound! {}", expressID);
 				}
 				else
 				{
@@ -634,14 +633,14 @@ namespace webifc::geometry
 			// if the first bound is not an outer bound now, this is unexpected
 			if (bounds[0].type != IfcBoundType::OUTERBOUND)
 			{
-				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Expected outer bound first!", expressID);
+				spdlog::error("[TriangulateBounds() Expected outer bound first! {}", expressID);
 			}
 
 			glm::dvec3 v1, v2, v3;
 			if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
 			{
 				// these points are on a line
-				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "No basis found for brep!", expressID);
+				spdlog::error("[TriangulateBounds()] No basis found for brep! {}", expressID);
 				return;
 			}
 
@@ -701,11 +700,11 @@ namespace webifc::geometry
 		}
 		else
 		{
-			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "bad bound", expressID);
+			spdlog::error("[TriangulateBounds()] bad bound {}", expressID);
 		}
 	}
 
-	inline IfcGeometry SectionedSurface(IfcCrossSections profiles, webifc::utility::LoaderErrorHandler _errorHandler)
+	inline IfcGeometry SectionedSurface(IfcCrossSections profiles)
 	{
 		IfcGeometry geom;
 
@@ -718,7 +717,7 @@ namespace webifc::geometry
 			// Check that the profiles have the same number of points
 			if (profile1.points.size() != profile2.points.size())
 			{
-				_errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "profiles must have the same number of points in SectionedSurface");
+				spdlog::error("[SectionedSurface()] profiles must have the same number of points in SectionedSurface");
 			}
 
 			std::vector<uint32_t> indices;
@@ -763,7 +762,7 @@ namespace webifc::geometry
 		return geom;
 	}
 
-	inline IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance, webifc::utility::LoaderErrorHandler _errorHandler, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
+	inline IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
 	{
 		IfcGeometry geom;
 		std::vector<bool> holesIndicesHash;
@@ -813,7 +812,7 @@ namespace webifc::geometry
 			if (indices.size() < 3)
 			{
 				// probably a degenerate polygon
-				_errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "degenerate polygon in extrude");
+				spdlog::error("[Extrude()] degenerate polygon in extrude");
 				return geom;
 			}
 

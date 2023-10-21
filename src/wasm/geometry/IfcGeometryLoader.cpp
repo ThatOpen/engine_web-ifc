@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.   */
 
+#include <spdlog/spdlog.h>
 #include "IfcGeometryLoader.h"
 #include "operations/curve-utils.h"
 #include "operations/geometryutils.h"
@@ -12,8 +13,8 @@
 namespace webifc::geometry
 {
 
-  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments)
-      : _loader(loader), _errorHandler(errorHandler), _schemaManager(schemaManager), _relVoidRel(PopulateRelVoidsRelMap()), _relVoids(PopulateRelVoidsMap()), _relAggregates(PopulateRelAggregatesMap()),
+  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments)
+      : _loader(loader), _schemaManager(schemaManager), _relVoidRel(PopulateRelVoidsRelMap()), _relVoids(PopulateRelVoidsMap()), _relAggregates(PopulateRelAggregatesMap()),
         _relElementAggregates(PopulateRelElementAggregatesMap()), _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
   {
     ReadLinearScalingFactor();
@@ -1024,7 +1025,7 @@ namespace webifc::geometry
       return {};
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected style type", expressID, lineType);
+      spdlog::error("[GetColor()] unexpected style type {}", expressID, lineType);
       break;
     }
 
@@ -1078,7 +1079,7 @@ namespace webifc::geometry
       return bound;
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected bound type", expressID, lineType);
+      spdlog::error("[(GetBounds)] unexpected bound type {}", expressID, lineType);
       break;
     }
 
@@ -1156,7 +1157,7 @@ namespace webifc::geometry
       return curve;
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected loop type", expressID, lineType);
+      spdlog::error("[GetLoop()] unexpected loop type {}", expressID, lineType);
       break;
     }
 
@@ -1194,7 +1195,7 @@ namespace webifc::geometry
     }
     else
     {
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected vertxpoint type", pointRef, point);
+      spdlog::error("[GetVertexPoint()] unexpected vertxpoint type {}", pointRef, point);
       return {};
     }
   }
@@ -1226,7 +1227,7 @@ namespace webifc::geometry
       return curve;
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected edgecurve type", expressID, lineType);
+      spdlog::error("[GetEdge())] unexpected edgecurve type {}", expressID, lineType);
       break;
     }
     return IfcCurve();
@@ -1386,7 +1387,7 @@ namespace webifc::geometry
         if (selfIntersects == "T")
         {
           // TODO: this is probably bad news
-          _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Self intersecting composite curve", expressID);
+          spdlog::error("[ComputeCurve()] Self intersecting composite curve {}", expressID);
         }
 
         for (auto &token : segments)
@@ -1466,7 +1467,7 @@ namespace webifc::geometry
           }
           else
           {
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect 2D IFCLINE", expressID, lineType);
+            spdlog::error("[ComputeCurve()] Unsupported trimmingselect 2D IFCLINE {}", expressID, lineType);
           }
         }
         else if (dimensions == 3 && trim.exist)
@@ -1510,7 +1511,7 @@ namespace webifc::geometry
           }
           else
           {
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported trimmingselect 3D IFCLINE", expressID, lineType);
+            spdlog::error("[ComputeCurve()] Unsupported trimmingselect 3D IFCLINE {}", expressID, lineType);
           }
         }
       break;
@@ -1560,7 +1561,7 @@ namespace webifc::geometry
           if (selfIntersects == "T")
           {
             // TODO: this is probably bad news
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Self intersecting ifcindexedpolycurve", expressID);
+            spdlog::error("[ComputeCurve()] Self intersecting ifcindexedpolycurve {}", expressID);
           }
         }
 
@@ -1638,7 +1639,7 @@ namespace webifc::geometry
         }
         else
         {
-          _errorHandler.ReportError(utility::LoaderErrorType::UNSPECIFIED, "Parsing ifcindexedpolycurve in 3D is not possible", expressID);
+          spdlog::error("[ComputeCurve()] Parsing ifcindexedpolycurve in 3D is not possible {}", expressID);
         }
 
         break;
@@ -2184,7 +2185,7 @@ case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
     break;
   }
 default:
-  _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported curve type", expressID, lineType);
+  spdlog::error("[ComputeCurve()] Unsupported curve type {}", expressID, lineType);
   break;
 }
   
@@ -2762,7 +2763,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       return profile;
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected profile type", expressID, lineType);
+      spdlog::error("[GetProfileByLine()] unexpected profile type {}", expressID, lineType);
       break;
     }
 
@@ -2786,7 +2787,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       return profile;
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 3D profile type", expressID, lineType);
+      spdlog::error("[GetProfilebyLine()] unexpected 3D profile type {}", expressID, lineType);
       break;
     }
 
@@ -2888,7 +2889,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
           glm::dvec3(pos, 1));
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected 2D placement type", expressID, lineType);
+      spdlog::error("[GetAxis2DPlacement()] unexpected 2D placement type {}", expressID, lineType);
       break;
     }
     return glm::dmat3();
@@ -3145,7 +3146,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       return GetLocalPlacement(posID);
     }
     default:
-      _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected placement type", expressID, lineType);
+     spdlog::error("[GetLocalPlacement()] unexpected placement type {}", expressID, lineType);
       break;
     }
 
@@ -3330,7 +3331,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
     if (projects.size() != 1)
     {
-      _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected empty ifc project");
+      spdlog::error("[ReadLinearScalingFactor()] unexpected empty ifc project");
       return;
     }
 

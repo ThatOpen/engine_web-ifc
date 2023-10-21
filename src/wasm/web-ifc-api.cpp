@@ -8,30 +8,37 @@
 #include <sstream>
 #include <cstdint>
 #include <memory>
-
 #include <emscripten/bind.h>
+#include <spdlog/spdlog.h>
 
 #include "parsing/IfcLoader.h"
 #include "schema/IfcSchemaManager.h"
-#include "LoaderSettings.h"
 #include "geometry/IfcGeometryProcessor.h"
 
 #include "version.h"
 
+struct LoaderSettings
+{
+    bool OPTIMIZE_PROFILES = false;
+    bool COORDINATE_TO_ORIGIN = false;
+    uint16_t CIRCLE_SEGMENTS = 12;
+    uint32_t TAPE_SIZE = 67108864 ; // probably no need for anyone other than web-ifc devs to change this
+    uint32_t MEMORY_LIMIT = 2147483648;
+};
 
 struct ModelInfo
 {
     public:
-        ModelInfo(webifc::utility::LoaderSettings _settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
+        ModelInfo(LoaderSettings _settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
         {
-            loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,*errorHandler,schemaManager);
+            loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,schemaManager);
         }
         
         webifc::geometry::IfcGeometryProcessor * GetGeometryLoader()
         {
             if (geometryLoader==nullptr)
             {
-                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader, *errorHandler,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN, settings.OPTIMIZE_PROFILES);
+                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN, settings.OPTIMIZE_PROFILES);
             }
             return geometryLoader;
         }
@@ -51,7 +58,7 @@ struct ModelInfo
 
     private:
         webifc::schema::IfcSchemaManager &schemaManager;
-        webifc::utility::LoaderSettings settings;
+        LoaderSettings settings;
         webifc::parsing::IfcLoader * loader=nullptr;
         webifc::geometry::IfcGeometryProcessor * geometryLoader=nullptr;
 };
@@ -67,7 +74,7 @@ webifc::schema::IfcSchemaManager schemaManager;
 
 bool shown_version_header = false;
 
-int CreateModel(webifc::utility::LoaderSettings settings)
+int CreateModel(LoaderSettings settings)
 {
     if (!shown_version_header)
     {
@@ -76,7 +83,7 @@ int CreateModel(webifc::utility::LoaderSettings settings)
         str << " schemas available [";
         for (auto schema : schemaManager.GetAvailableSchemas())  str << schemaManager.GetSchemaName(schema)<<",";
         str << "]";
-        webifc::utility::log::info(str.str());
+        spdlog::info(str.str());
         shown_version_header = true;
     }
 
@@ -84,7 +91,7 @@ int CreateModel(webifc::utility::LoaderSettings settings)
     return models.size()-1;
 }
 
-int OpenModel(webifc::utility::LoaderSettings settings, emscripten::val callback)
+int OpenModel(LoaderSettings settings, emscripten::val callback)
 {
     auto modelID = CreateModel(settings);
     const std::function<uint32_t(char *, size_t, size_t)> loaderFunc= [callback](char* dest, size_t sourceOffset, size_t destSize) {    
@@ -701,7 +708,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
         }
         else
         {
-            webifc::utility::log::error("Error in writeline: unknown object received");
+            spdlog::error("[WriteSet()] Error in writeline: unknown object received");
             responseCode = false;
         }
     }
@@ -976,7 +983,8 @@ extern "C" bool IsModelOpen(uint32_t modelID)
  */
 void SetLogLevel(int levelArg)
 {
-    webifc::utility::setLogLevel(levelArg);
+    spdlog::set_level((spdlog::level::level_enum)levelArg);
+    spdlog::set_pattern("[WEB-IFC][%l]%v");
 }
 
 EMSCRIPTEN_BINDINGS(my_module) {
@@ -997,12 +1005,12 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("w", &glm::dvec4::w)
         ;
 
-    emscripten::value_object<webifc::utility::LoaderSettings>("LoaderSettings")
-        .field("OPTIMIZE_PROFILES", &webifc::utility::LoaderSettings::OPTIMIZE_PROFILES)
-        .field("COORDINATE_TO_ORIGIN", &webifc::utility::LoaderSettings::COORDINATE_TO_ORIGIN)
-        .field("CIRCLE_SEGMENTS", &webifc::utility::LoaderSettings::CIRCLE_SEGMENTS)
-        .field("TAPE_SIZE", &webifc::utility::LoaderSettings::TAPE_SIZE)
-        .field("MEMORY_LIMIT", &webifc::utility::LoaderSettings::MEMORY_LIMIT)
+    emscripten::value_object<LoaderSettings>("LoaderSettings")
+        .field("OPTIMIZE_PROFILES", &LoaderSettings::OPTIMIZE_PROFILES)
+        .field("COORDINATE_TO_ORIGIN", &LoaderSettings::COORDINATE_TO_ORIGIN)
+        .field("CIRCLE_SEGMENTS", &LoaderSettings::CIRCLE_SEGMENTS)
+        .field("TAPE_SIZE", &LoaderSettings::TAPE_SIZE)
+        .field("MEMORY_LIMIT", &LoaderSettings::MEMORY_LIMIT)
     ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
@@ -1030,31 +1038,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("geometryExpressID", &webifc::geometry::IfcPlacedGeometry::geometryExpressID)
         ;
 
-    emscripten::enum_<webifc::utility::LogLevel>("LogLevel")
-        .value("DEBUG", webifc::utility::LogLevel::LOG_LEVEL_DEBUG)
-        .value("INFO", webifc::utility::LogLevel::LOG_LEVEL_INFO)
-        .value("WARN", webifc::utility::LogLevel::LOG_LEVEL_WARN)
-        .value("ERROR", webifc::utility::LogLevel::LOG_LEVEL_ERROR)
-        .value("OFF", webifc::utility::LogLevel::LOG_LEVEL_OFF)
-        ;
-
-    emscripten::enum_<webifc::utility::LoaderErrorType>("LoaderErrorType")
-        .value("BOOL_ERROR", webifc::utility::LoaderErrorType::BOOL_ERROR)
-        .value("PARSING", webifc::utility::LoaderErrorType::PARSING)
-        .value("UNSPECIFIED", webifc::utility::LoaderErrorType::UNSPECIFIED)
-        .value("UNSUPPORTED_TYPE", webifc::utility::LoaderErrorType::UNSUPPORTED_TYPE)
-        ;
-
-    emscripten::value_object<webifc::utility::LoaderError>("LoaderError")
-        .field("type", &webifc::utility::LoaderError::type)
-        .field("message", &webifc::utility::LoaderError::message)
-        .field("expressID", &webifc::utility::LoaderError::expressID)
-        .field("ifcType", &webifc::utility::LoaderError::ifcType)
-        ;
-
     emscripten::register_vector<std::string>("stringVector");
-
-    emscripten::register_vector<webifc::utility::LoaderError>("LoaderErrorVector");
 
     emscripten::register_vector<webifc::geometry::IfcPlacedGeometry>("IfcPlacedGeometryVector");
 

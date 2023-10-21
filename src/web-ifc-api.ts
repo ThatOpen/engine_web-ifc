@@ -199,6 +199,7 @@ export class IfcAPI {
 
             //@ts-ignore
             this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler });
+            this.wasmModule.SetLogLevel(LogLevel.LOG_LEVEL_ERROR);
         }
         else {
 			Log.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
@@ -238,7 +239,7 @@ export class IfcAPI {
         {
             if (d in s)
             {
-                Log.info('Use of deprecated settings '+d+' detected');
+                Log.warn('Use of deprecated settings '+d+' detected');
             }
         }
         return s;
@@ -282,7 +283,7 @@ export class IfcAPI {
             this.CloseModel(result)
             return -1;
         } 
-        Log.info("Parsing Model using " + schemaName + " Schema");
+        Log.debug("Parsing Model using " + schemaName + " Schema");
         return result;
     }
 
@@ -311,7 +312,7 @@ export class IfcAPI {
             this.CloseModel(result)
             return -1;
         } 
-        Log.info("Parsing Model using " + schemaName + " Schema");
+        Log.debug("Parsing Model using " + schemaName + " Schema");
         return result;
     }
 
@@ -512,9 +513,9 @@ export class IfcAPI {
      * @returns Vector containing the list of errors
      * @deprecated Log level will not directly effect the logging of errors
      */
-    GetAndClearErrors(modelID: number): Vector<any> {
+    GetAndClearErrors(_: number): Vector<any> {
         Log.warn("GetAndClearErrors is deprecated and will be removed in the next version");
-        return new Vector();
+        return { size: function() { return 0; }, get: function (_:number) { return {}; } };
     }
 
     /**

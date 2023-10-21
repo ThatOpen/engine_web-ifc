@@ -82,8 +82,17 @@ window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEdit
   codereset.addEventListener('click', resetCode);
   const coderun = document.getElementById('runcode');
   coderun.addEventListener('click', runCode);
+   const changeLogLevelSelect = document.getElementById('logLevel');
+  changeLogLevelSelect.addEventListener('change', changeLogLevel);
   Init3DView();
 };
+}
+
+async function changeLogLevel() 
+{
+    let fileInput = <HTMLInputElement>document.getElementById('logLevel');
+    ifcAPI.SetLogLevel(fileInput.value);
+    console.log("Log Level Set to:"+fileInput.value);
 }
 
 async function runCode() {

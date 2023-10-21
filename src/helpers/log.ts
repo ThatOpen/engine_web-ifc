@@ -4,15 +4,14 @@
  */
 
 export enum LogLevel {
-    LOG_LEVEL_DEBUG = 0,
-    LOG_LEVEL_INFO,
-    LOG_LEVEL_WARN,
-    LOG_LEVEL_ERROR,
-    LOG_LEVEL_OFF,
+    LOG_LEVEL_DEBUG = 1,
+    LOG_LEVEL_WARN = 3,
+    LOG_LEVEL_ERROR = 4,
+    LOG_LEVEL_OFF = 6
 }
 
 export abstract class Log {
-	private static logLevel: number = LogLevel.LOG_LEVEL_INFO;
+	private static logLevel: number = LogLevel.LOG_LEVEL_ERROR;
 
 	public static setLogLevel(level: number) {
 		this.logLevel = level;
@@ -27,12 +26,6 @@ export abstract class Log {
 	public static debug(msg: string, ...args: any[]) {
 		if (this.logLevel <= LogLevel.LOG_LEVEL_DEBUG) {
 			console.trace('DEBUG: ', msg, ...args);
-		}
-	}
-
-	public static info(msg: string, ...args: any[]) {
-		if (this.logLevel <= LogLevel.LOG_LEVEL_INFO) {
-			console.info('INFO: ', msg, ...args);
 		}
 	}
 
