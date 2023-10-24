@@ -1601,9 +1601,6 @@ namespace webifc::geometry
                     }
                 }
             }
-            IfcGeometry newResult;
-            newResult.AddGeometry(result);
-            finalResult.AddPart(newResult);
             finalResult.AddGeometry(result);
         }
 
