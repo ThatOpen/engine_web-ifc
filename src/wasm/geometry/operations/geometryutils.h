@@ -272,7 +272,7 @@ namespace webifc::geometry
 			return geom;
 		}
 
-	inline	IfcGeometry SweepCircular(const double scaling, IfcComposedMesh &mesh, const bool optimizeProfiles, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
+	inline	IfcGeometry SweepCircular(const double scaling, IfcComposedMesh &mesh, const bool optimizeProfiles, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, uint32_t expressIdCyl, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		IfcGeometry geom;
 
@@ -509,7 +509,7 @@ namespace webifc::geometry
 				{
 					transforms[i] = glm::dmat4(transforms[i][0], transforms[i][1], ddir, transforms[i][3]);
 					IfcComposedMesh newMesh;
-					newMesh.expressID = 1;
+					newMesh.expressID = expressIdCyl;
 					newMesh.hasColor = mesh.hasColor;
 					newMesh.color = mesh.color;
 					newMesh.hasGeometry = true;
