@@ -334,43 +334,98 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 		return glm::determinant(mat) < 0;
 	}
 
-	inline IfcCurve GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true)
+	inline IfcCurve GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true, bool normalToCenterEnding = false)
 	{
 		IfcCurve c;
-
-		for (int i = 0; i < numSegments; i++)
+		if(normalToCenterEnding)
 		{
-			double ratio = static_cast<double>(i) / (numSegments - 1);
-			double angle = startRad + ratio * (endRad - startRad);
+			double sweep_angle = (endRad - startRad);
 
-			glm::dvec2 circleCoordinate;
-			if (swap)
+			double step = sweep_angle / (numSegments - 1);
+
+			if(endRad > startRad)
 			{
-				circleCoordinate = glm::dvec2(
-					radiusX * std::cos(angle),
-					radiusY * std::sin(angle));
+				startRad -= step /2;
+				endRad += step /2;
 			}
-			else
+			if(endRad <= startRad)
 			{
-				circleCoordinate = glm::dvec2(
-					radiusX * std::sin(angle),
-					radiusY * std::cos(angle));
+				startRad += step /2;
+				endRad -= step /2;
 			}
-			glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
-			c.points.push_back(glm::dvec3(pos,0));
+
+			for (int i = 0; i < numSegments; i++)
+			{
+				double ratio = static_cast<double>(i) / (numSegments - 1);
+				double angle = startRad + ratio * (endRad - startRad);
+
+				glm::dvec2 circleCoordinate;
+				if (swap)
+				{
+					circleCoordinate = glm::dvec2(
+						radiusX * std::cos(angle),
+						radiusY * std::sin(angle));
+				}
+				else
+				{
+					circleCoordinate = glm::dvec2(
+						radiusX * std::sin(angle),
+						radiusY * std::cos(angle));
+				}
+				glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
+				c.points.push_back(glm::dvec3(pos,0));
+			}
+
+			c.points[0] = (c.points[0] + c.points[1]) * 0.5;
+
+			c.points[c.points.size() - 1] = (c.points[c.points.size() - 1] + c.points[c.points.size() - 2]) * 0.5;
+
+			// check for a closed curve
+			if (endRad == CONST_PI * 2 && startRad == 0)
+			{
+				c.points.push_back(c.points[0]);
+
+				if (MatrixFlipsTriangles(placement))
+				{
+					c.Invert();
+				}
+			}
 		}
-
-		// check for a closed curve
-		if (endRad == CONST_PI * 2 && startRad == 0)
+		else
 		{
-			c.points.push_back(c.points[0]);
-
-			if (MatrixFlipsTriangles(placement))
+			for (int i = 0; i < numSegments; i++)
 			{
-				c.Invert();
+				double ratio = static_cast<double>(i) / (numSegments - 1);
+				double angle = startRad + ratio * (endRad - startRad);
+
+				glm::dvec2 circleCoordinate;
+				if (swap)
+				{
+					circleCoordinate = glm::dvec2(
+						radiusX * std::cos(angle),
+						radiusY * std::sin(angle));
+				}
+				else
+				{
+					circleCoordinate = glm::dvec2(
+						radiusX * std::sin(angle),
+						radiusY * std::cos(angle));
+				}
+				glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
+				c.points.push_back(glm::dvec3(pos,0));
+			}
+
+			// check for a closed curve
+			if (endRad == CONST_PI * 2 && startRad == 0)
+			{
+				c.points.push_back(c.points[0]);
+
+				if (MatrixFlipsTriangles(placement))
+				{
+					c.Invert();
+				}
 			}
 		}
-
 		return c;
 	}
 
@@ -649,17 +704,28 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 		if(glm::length(right) == 0)
 		{
-			right = glm::dvec3(EPS_BIG2, 0, 0);	
+			right = glm::dvec3(EPS_BIG2, 0, 0);
+			glm::dvec3 up = glm::cross(axis, right);
+
+			auto curve2D = GetEllipseCurve(1, 1, _circleSegments, glm::dmat3(1), 0, angleRad, true, true);
+
+			for (auto &pt2D : curve2D.points)
+			{
+				glm::dvec3 pt3D = pos + pt2D.x * right + pt2D.y * up;
+				curve.Add(pt3D);
+			}	
 		}
-
-		glm::dvec3 up = glm::cross(axis, right);
-
-		auto curve2D = GetEllipseCurve(1, 1, _circleSegments, glm::dmat3(1), 0, angleRad, true);
-
-		for (auto &pt2D : curve2D.points)
+		else
 		{
-			glm::dvec3 pt3D = pos + pt2D.x * right + pt2D.y * up;
-			curve.Add(pt3D);
+			glm::dvec3 up = glm::cross(axis, right);
+
+			auto curve2D = GetEllipseCurve(1, 1, _circleSegments, glm::dmat3(1), 0, angleRad, true);
+
+			for (auto &pt2D : curve2D.points)
+			{
+				glm::dvec3 pt3D = pos + pt2D.x * right + pt2D.y * up;
+				curve.Add(pt3D);
+			}
 		}
 
 		return curve;
