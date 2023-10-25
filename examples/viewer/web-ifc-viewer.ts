@@ -113,7 +113,6 @@ async function runCode() {
 
   let ifcData = ifcAPI.SaveModel(model);
   let ifcDataString = new TextDecoder('ascii').decode(ifcData);
-  console.log(ifcDataString);
 
   ifcAPI.CloseModel(model);
 
@@ -161,12 +160,6 @@ async function LoadModel(data: Uint8Array) {
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);
 
-    // log errors to console
-    let errors = ifcAPI.GetAndClearErrors(modelID);
-    for (let i = 0; i < errors.size(); i++)
-    {
-        console.log(errors.get(i));
-    }
 
     if(ifcAPI.GetModelSchema(modelID) == 'IFC2X3' || 
     ifcAPI.GetModelSchema(modelID) == 'IFC4' ||
@@ -178,33 +171,30 @@ async function LoadModel(data: Uint8Array) {
         {
             for (let i = 0; i < types.length; i++) {
                 let type = types[i];
-                console.log(type);
-                console.log(type.typeID);
-                console.log(type.typeName);
+                //console.log(type);
+                //console.log(type.typeID);
+                //console.log(type.typeName);
             }
         }
     }
-
-    let line = ifcAPI.GetLine(0, 1);
-    console.log(line);
 
     if( ifcAPI.GetModelSchema(modelID) == 'IFC4X3_RC4')
     {
         // This function should activate only if we are in IFC4X3
         let alignments = await ifcAPI.GetAllAlignments(modelID);
-        console.log("Alignments: ", alignments);
+        //console.log("Alignments: ", alignments);
     }
     let lines = ifcAPI.GetLineIDsWithType(modelID,  IFCUNITASSIGNMENT);
-    console.log(lines.size());
+    //console.log(lines.size());
     for(let l = 0; l < lines.size(); l++)
     {
-        console.log(lines.get(l));
+        //console.log(lines.get(l));
         let unitList = ifcAPI.GetLine(modelID, lines.get(l));
-        console.log(unitList);
-        console.log(unitList.Units);
-        console.log(unitList.Units.length);
+        //console.log(unitList);
+        //console.log(unitList.Units);
+        //console.log(unitList.Units.length);
         for(let u = 0; u < unitList.Units.length; u++) {
-            console.log(ifcAPI.GetLine(modelID, unitList.Units[u].value));
+            //console.log(ifcAPI.GetLine(modelID, unitList.Units[u].value));
         }
     }
     ifcAPI.CloseModel(modelID);
