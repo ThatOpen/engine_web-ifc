@@ -74,7 +74,6 @@ if (typeof window != 'undefined')
 //@ts-ignore
 window.InitWebIfcViewer = async (monacoEditor: Monaco.editor.IStandaloneCodeEditor) => {
   await ifcAPI.Init();
-  ifcAPI.SetLogLevel(LogLevel.LOG_LEVEL_INFO);
   initMonacoEditor(monacoEditor);
   const fileInput = document.getElementById('finput');
   fileInput.addEventListener('change', fileInputChanged);

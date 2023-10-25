@@ -973,10 +973,6 @@ extern "C" bool IsModelOpen(uint32_t modelID)
     return true;
 }
 
-// TODO(pablo): the level param ought to be LogLevel, but I couldn't
-// get the value passing from typescript correctly.  The levels are
-// kept in sync with src/web-ifc-api.ts
-
 /**
  * Sets the global log level.
  * @data levelArg Will be clamped between DEBUG and OFF.

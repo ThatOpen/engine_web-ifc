@@ -199,7 +199,7 @@ export class IfcAPI {
 
             //@ts-ignore
             this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler });
-            this.wasmModule.SetLogLevel(LogLevel.LOG_LEVEL_ERROR);
+            this.SetLogLevel(LogLevel.LOG_LEVEL_ERROR);
         }
         else {
 			Log.error(`Could not find wasm module at './web-ifc' from web-ifc-api.ts`);
