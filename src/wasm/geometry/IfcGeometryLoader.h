@@ -55,6 +55,7 @@ namespace webifc::geometry
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetRelMaterials() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetMaterialDefinitions() const;
     double GetLinearScalingFactor() const;
+    std::string GetAngleUnits() const;
   private:
     IfcCurve GetAlignmentCurve(uint32_t expressID) const;
     IfcProfile GetProfileByLine(uint32_t expressID) const;
@@ -77,6 +78,7 @@ namespace webifc::geometry
     double _squaredScalingFactor = 1;
     double _cubicScalingFactor = 1;
     double _angularScalingFactor = 1;
+    std::string _angleUnits;
     uint16_t _circleSegments;
     mutable std::vector<IfcCurve> LocalCurvesList;
     mutable std::vector<uint32_t> LocalcurvesIndices;

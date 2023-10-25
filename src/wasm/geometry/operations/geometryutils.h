@@ -13,21 +13,13 @@
 namespace webifc::geometry
 {
 
-	inline double angleConversion(double angle)
+	inline double angleConversion(double angle, std::string angleUnits)
 	{
-		if(abs(angle - CONST_PI) < EPS_BIG2)
+		if(angleUnits == "RADIAN")
 		{
 			return angle;
 		}
-		else if (abs(angle - CONST_PI * 2) < EPS_BIG2)
-		{
-			return angle;
-		}
-		else if (abs(angle - CONST_PI / 2) < EPS_BIG2)
-		{
-			return angle;
-		}
-		else if (abs(angle > 2) - EPS_SMALL * CONST_PI)
+		else
 		{
 			angle = (angle / 360) * 2 * CONST_PI;
 		}

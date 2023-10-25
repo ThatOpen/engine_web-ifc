@@ -3369,6 +3369,10 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
           double prefix = ConvertPrefix(unitPrefix);
           _linearScalingFactor *= prefix;
         }
+        if (unitType == "PLANEANGLEUNIT")
+        {
+          _angleUnits = unitName;
+        }
       }
       if (lineType == schema::IFCCONVERSIONBASEDUNIT)
       {
@@ -3505,6 +3509,11 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
   double IfcGeometryLoader::GetLinearScalingFactor() const
   {
     return _linearScalingFactor;
+  }
+
+  std::string IfcGeometryLoader::GetAngleUnits() const
+  {
+    return _angleUnits;
   }
 
   double IfcGeometryLoader::ReadLenghtMeasure() const
