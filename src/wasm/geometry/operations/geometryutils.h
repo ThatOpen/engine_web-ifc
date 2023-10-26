@@ -13,9 +13,13 @@
 namespace webifc::geometry
 {
 
-	inline double angleConversion(double angle)
+	inline double angleConversion(double angle, std::string angleUnits)
 	{
-		if (abs(angle > 2) - EPS_SMALL * CONST_PI)
+		if(angleUnits == "RADIAN")
+		{
+			return angle;
+		}
+		else
 		{
 			angle = (angle / 360) * 2 * CONST_PI;
 		}
@@ -62,7 +66,7 @@ namespace webifc::geometry
 	//! This implementation generates much more vertices than needed, and does not have smoothed normals
 		// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
 		// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
-	inline	IfcGeometry Sweep(const double scaling, const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
+	inline	IfcGeometry Sweep(const double scaling, const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
 		spdlog::debug("[Sweep({})]");
 		IfcGeometry geom;
@@ -74,7 +78,7 @@ namespace webifc::geometry
 		{
 			if (i < directrix.points.size() - 1)
 			{
-				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 / scaling)
+				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 / scaling || !optimize)
 				{
 					dpts.push_back(directrix.points[i]);
 				}
@@ -246,35 +250,30 @@ namespace webifc::geometry
 				glm::dvec3 p1 = dpts[i - 1];
 				glm::dvec3 p2 = dpts[i];
 
-				const double di = glm::distance(p1, p2);
+				const auto &c1 = curves[i - 1].points;
+				const auto &c2 = curves[i].points;
 
-				//Only segments smaller than 10 cm will be represented, those that are bigger will be standardized
+				uint32_t capSize = c1.size();
+				for (size_t j = 1; j < capSize; j++)
+				{
+					glm::dvec3 bl = c1[j - 1];
+					glm::dvec3 br = c1[j - 0];
 
-					const auto &c1 = curves[i - 1].points;
-					const auto &c2 = curves[i].points;
+					glm::dvec3 tl = c2[j - 1];
+					glm::dvec3 tr = c2[j - 0];
 
-					uint32_t capSize = c1.size();
-					for (size_t j = 1; j < capSize; j++)
-					{
-						glm::dvec3 bl = c1[j - 1];
-						glm::dvec3 br = c1[j - 0];
-
-						glm::dvec3 tl = c2[j - 1];
-						glm::dvec3 tr = c2[j - 0];
-
-						geom.AddFace(tl, br, bl);
-						geom.AddFace(tl, tr, br);
-					}
-				
+					geom.AddFace(tl, br, bl);
+					geom.AddFace(tl, tr, br);
+				}	
 			}
 
-			// DumpSVGCurve(directrix.points, glm::dvec3(), "directrix.html");
+			// io::DumpSVGCurve(directrix.points, "directrix.html");
 			// DumpIfcGeometry(geom, "sweep.obj");
 
 			return geom;
 		}
 
-	inline	IfcGeometry SweepCircular(const double scaling, IfcComposedMesh &mesh, const bool optimizeProfiles, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
+	inline	IfcGeometry SweepCircular(const double scaling, IfcComposedMesh &mesh, const bool optimizeProfiles, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, uint32_t expressIdCyl, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		spdlog::debug("[SweepCircular({})]");
 		IfcGeometry geom;
@@ -512,7 +511,7 @@ namespace webifc::geometry
 				{
 					transforms[i] = glm::dmat4(transforms[i][0], transforms[i][1], ddir, transforms[i][3]);
 					IfcComposedMesh newMesh;
-					newMesh.expressID = 1;
+					newMesh.expressID = expressIdCyl;
 					newMesh.hasColor = mesh.hasColor;
 					newMesh.color = mesh.color;
 					newMesh.hasGeometry = true;

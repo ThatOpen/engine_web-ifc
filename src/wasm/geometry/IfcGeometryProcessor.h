@@ -48,6 +48,8 @@ namespace webifc::geometry
         bool _isCoordinated = false;
         bool _coordinateToOrigin;
         bool _optimize_profiles;
+        uint32_t expressIdCyl = 0;
+        uint32_t expressIdRect = 0;
         uint16_t _circleSegments;
         glm::dmat4 _coordinationMatrix = glm::dmat4(1.0);
         void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false);

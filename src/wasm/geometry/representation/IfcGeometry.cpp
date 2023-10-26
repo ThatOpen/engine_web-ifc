@@ -51,9 +51,15 @@ namespace webifc::geometry {
 		part.push_back(geom);
 	}
 
+	void IfcGeometry::AddPart(fuzzybools::Geometry geom)
+	{
+		IfcGeometry newGeom;
+		newGeom.MergeGeometry(geom);
+		part.push_back(newGeom);
+	}
+
 	void IfcGeometry::AddGeometry(fuzzybools::Geometry geom, glm::dmat4 trans, double scx, double scy, double scz, glm::dvec3 origin)
 	{
-			
 		for (uint32_t i = 0; i < geom.numFaces; i++)
 		{
 			fuzzybools::Face f = geom.GetFace(i);
@@ -77,7 +83,19 @@ namespace webifc::geometry {
 			}
 			AddFace(a, b, c);
 		}
+		AddPart(geom);
+	}
 
+	void IfcGeometry::MergeGeometry(fuzzybools::Geometry geom)
+	{
+		for (uint32_t i = 0; i < geom.numFaces; i++)
+		{
+			fuzzybools::Face f = geom.GetFace(i);
+			glm::dvec3 a = geom.GetPoint(f.i0);
+			glm::dvec3 b = geom.GetPoint(f.i1);
+			glm::dvec3 c = geom.GetPoint(f.i2);
+			AddFace(a, b, c);
+		}
 	}
 
 	uint32_t IfcGeometry::GetVertexDataSize()
