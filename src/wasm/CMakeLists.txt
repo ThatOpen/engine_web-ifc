@@ -61,6 +61,11 @@ FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_
 FetchContent_MakeAvailable(cdt)
 FetchContent_GetProperties(cdt)
 
+Message("Downloading spdlog")
+FetchContent_Declare(spdlog GIT_REPOSITORY "https://github.com/gabime/spdlog" GIT_TAG "7e635fca68d014934b4af8a1cf874f63989352b7" SOURCE_SUBDIR "../")
+FetchContent_MakeAvailable(spdlog)
+FetchContent_GetProperties(spdlog)
+
 Message("Downloading FUZZY")
 # using a custom version of fuzzy-bools to silence some debug printf from the library that pollutes the output of the executables
 # FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/CBenghi/fuzzy-bools" GIT_TAG "07faaad8cae623dd634b1c09b4b37b44bf645781" SOURCE_SUBDIR "../")
@@ -81,6 +86,7 @@ function(PARAM_SETTER THE_EXECUTABLE)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${glm_SOURCE_DIR}/glm)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${earcut_SOURCE_DIR}/include)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${fuzzy_SOURCE_DIR}/)
+	target_include_directories(${THE_EXECUTABLE} PUBLIC ${spdlog_SOURCE_DIR}/include)
 
 	if (NOT MSVC)
 		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wall")
@@ -112,6 +118,7 @@ if (EMSCRIPTEN)
 	#multi-treaded versions
 	add_executable (web-ifc-mt ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
 	param_setter(web-ifc-mt)
+	target_compile_options(web-ifc-mt PUBLIC "-pthread")
 	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -flto --define-macro=REAL_T_IS_DOUBLE -sSTACK_SIZE=5MB -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web,worker")
 endif()
 

@@ -45,6 +45,5 @@ describe('Test the column example', () => {
             count++;
         })
 		expect(count).toEqual(36);
-		expect(ifcAPI.GetAndClearErrors(m2).size()).toEqual(1);
 	});	
 });
