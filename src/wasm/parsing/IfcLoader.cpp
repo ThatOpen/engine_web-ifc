@@ -8,9 +8,8 @@
 #include <algorithm>
 #include <format>
 #include <fast_float/fast_float.h>
+#include <spdlog/spdlog.h>
 #include "IfcLoader.h"
-#include "../utility/LoaderError.h"
-#include "../utility/Logging.h"
 #include "../version.h"
 #include "../schema/IfcSchemaManager.h" 
 
@@ -19,7 +18,7 @@ namespace webifc::parsing {
   void p21encode(std::string_view input, std::ostringstream &output);
   std::string p21decode(std::string_view & str);    
  
-   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager), _errorHandler(errorHandler)
+   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager)
    { 
      _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
      _nullLine = new IfcLine();
@@ -285,7 +284,7 @@ namespace webifc::parsing {
    uint32_t IfcLoader::GetLineType(const uint32_t expressID) const
    { 
       if (expressID == 0 || expressID > _lines.size()) {
-        _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "Attempt to Access Invalid ExpressID", expressID);
+        spdlog::error("[GetLineType()] Attempt to Access Invalid ExpressID {}", expressID);
         return 0;
       }
       return _lines[expressID-1]->ifcType;
@@ -382,7 +381,7 @@ namespace webifc::parsing {
    { 
       if (_tokenStream->Read<char>() != IfcTokenType::REF)
      	{
-     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF", GetCurrentLineExpressID());
+     		spdlog::error("[GetRefArgument()] unexpected token type, expected REF {}", GetCurrentLineExpressID());
      		return 0;
      	}
      	return _tokenStream->Read<uint32_t>();
@@ -453,7 +452,7 @@ namespace webifc::parsing {
      	}
      	else
      	{
-     		_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token type, expected REF or EMPTY", GetCurrentLineExpressID());
+     		spdlog::error("[GetOptionalRefArgument()] unexpected token type, expected REF or EMPTY", GetCurrentLineExpressID());
      		return 0;
      	}
    }
@@ -506,7 +505,7 @@ namespace webifc::parsing {
          }
          else
          {
-           _errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token", GetCurrentLineExpressID());
+           spdlog::error("[GetSetArgument[]) unexpected token", GetCurrentLineExpressID());
          }
        }
 
@@ -560,7 +559,7 @@ namespace webifc::parsing {
      			}
      			else
      			{
-     				_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected token", GetCurrentLineExpressID());
+     				spdlog::error("[GetSetListArgument()] unexpected token", GetCurrentLineExpressID());
      			}
      		}
 
@@ -595,7 +594,7 @@ namespace webifc::parsing {
    		{
    		case IfcTokenType::LINE_END:
    		{
-   			_errorHandler.ReportError(utility::LoaderErrorType::PARSING, "unexpected line end", GetCurrentLineExpressID());
+   			spdlog::error("[ArgumentOffset()] unexpected line end {}", GetCurrentLineExpressID());
    			break;
    		}
    		case IfcTokenType::UNKNOWN:

@@ -9,13 +9,14 @@
 
 namespace webifc::geometry {
 
-	inline bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
-	{
-		return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) >= 0;
-	}
+inline bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
+{
+	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) >= 0;
+}
 
 inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const glm::dvec3 &p3, uint16_t circleSegments, double EPS_MINSIZE)
 {
+    spdlog::debug("[Build3DArc3Pt({})]");
     // Calculate the center of the circle
     glm::dvec3 v1 = p2 - p1;
     glm::dvec3 v2 = p3 - p1;
@@ -93,6 +94,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve BuildArc3Pt(const glm::dvec2 &p1, const glm::dvec2 &p2, const glm::dvec2 &p3,uint16_t circleSegments)
 	{
+		spdlog::debug("[BuildArc3Pt({})]");
 		double f1 = (p1.x * p1.x - p2.x * p2.x + p1.y * p1.y - p2.y * p2.y);
 		double f2 = (p1.x * p1.x - p3.x * p3.x + p1.y * p1.y - p3.y * p3.y);
 		double v = 2 * (p1.x - p2.x) * (p1.y - p3.y) - 2 * (p1.x - p3.x) * (p1.y - p2.y);
@@ -144,6 +146,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 	
 	inline	glm::dvec3 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
 	{
+		spdlog::debug("[InterpolateRationalBSplineCurveWithKnots({})]");
 		glm::dvec3 point;
 
 		int domainLow = degree;
@@ -208,6 +211,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 	inline	glm::dvec2 InterpolateRationalBSplineCurveWithKnots(double t, int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
 	{
 
+		spdlog::debug("[InterpolateRationalBSplineCurveWithKnots({})]");
 		glm::dvec2 point;
 
 		int domainLow = degree;
@@ -274,6 +278,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 	inline	std::vector<glm::dvec3> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
 	{
 
+		spdlog::debug("[GetRationalBSplineCurveWithKnots({})]");
 		std::vector<glm::dvec3> c;
 
 		for (double i = 0; i < 1; i += 0.05)
@@ -295,6 +300,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline	std::vector<glm::dvec2> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec2> points, std::vector<double> knots, std::vector<double> weights)
 	{
+		spdlog::debug("[GetRationalBSplineCurveWithKnots({})]");
 		std::vector<glm::dvec2> c;
 
 		for (double i = 0; i < 1; i += 0.05)
@@ -336,6 +342,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true, bool normalToCenterEnding = false)
 	{
+		spdlog::debug("[GetEllipseCurve({})]");
 		IfcCurve c;
 		if(normalToCenterEnding)
 		{
@@ -693,6 +700,8 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 	
 	inline IfcCurve BuildArc(double scale, const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad,uint16_t _circleSegments)
 	{
+		
+		spdlog::debug("[BuildArc({})]");
 		IfcCurve curve;
 
 		// project pos onto axis

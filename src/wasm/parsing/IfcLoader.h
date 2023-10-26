@@ -12,7 +12,6 @@
 #include <string_view>
 
 #include "IfcTokenStream.h"
-#include "../utility/LoaderError.h"
 #include "../schema/IfcSchemaManager.h"
 
 namespace webifc::parsing
@@ -21,7 +20,7 @@ namespace webifc::parsing
 	class IfcLoader {
   
     public:
-      IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,utility::LoaderErrorHandler &errorHandler,schema::IfcSchemaManager &schemaManager);  
+      IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,schema::IfcSchemaManager &schemaManager);  
       ~IfcLoader();
       const std::vector<uint32_t> GetHeaderLinesWithType(const uint32_t type) const;
       void LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
@@ -75,7 +74,6 @@ namespace webifc::parsing
       };
 
       const schema::IfcSchemaManager &_schemaManager;
-      utility::LoaderErrorHandler &_errorHandler;
       IfcTokenStream * _tokenStream;
       IfcLine * _nullLine;
       std::vector<IfcLine*> _lines;

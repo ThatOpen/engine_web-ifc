@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+#include <spdlog/spdlog.h>
+
 #if defined(DEBUG_DUMP_SVG) || defined(DUMP_CSG_MESHES)
 #include "../test/io_helpers.h"
 #endif
@@ -16,8 +18,8 @@
 
 namespace webifc::geometry
 {
-    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, webifc::utility::LoaderErrorHandler &errorHandler, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, bool optimizeprofiles)
-        : _geometryLoader(loader, errorHandler, schemaManager, circleSegments), _loader(loader), _errorHandler(errorHandler), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _optimize_profiles(optimizeprofiles), _circleSegments(circleSegments)
+    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, bool optimizeprofiles)
+        : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _optimize_profiles(optimizeprofiles), _circleSegments(circleSegments)
     {
         expressIdCyl = _loader.GetMaxExpressId() + 5;
         expressIdRect = _loader.GetMaxExpressId() + 6;
@@ -25,11 +27,11 @@ namespace webifc::geometry
         IfcProfile profile;
         double scaling = 1;
         profile.curve = GetCircleCurve(scaling, _circleSegments, glm::dmat3(1));
-        predefinedCylinder = Extrude(profile, glm::dvec3(0, 0, 1), scaling, _errorHandler);
+        predefinedCylinder = Extrude(profile, glm::dvec3(0, 0, 1), scaling);
 
         IfcProfile profileCube;
         profileCube.curve = GetRectangleCurve(scaling, scaling, glm::dmat3(1));
-        predefinedCube = Extrude(profileCube, glm::dvec3(0, 0, 1), scaling, _errorHandler);
+        predefinedCube = Extrude(profileCube, glm::dvec3(0, 0, 1), scaling);
     }
 
     IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
@@ -59,6 +61,7 @@ namespace webifc::geometry
 
     IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID)
     {
+        spdlog::debug("[GetMesh({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
         std::optional<glm::dvec4> styledItemColor;
@@ -233,7 +236,7 @@ namespace webifc::geometry
             case schema::IFCSECTIONEDSOLID:
             case schema::IFCSECTIONEDSURFACE:
             {
-                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID), _errorHandler);
+                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID));
                 mesh.transformation = glm::dmat4(1);
                 // TODO: this is getting problematic.....
                 _expressIDToGeometry[expressID] = geom;
@@ -297,7 +300,7 @@ namespace webifc::geometry
 
                 if (op != "DIFFERENCE")
                 {
-                    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported boolean op " +  std::string(op), expressID);
+                   spdlog::error("[GetMesh()] Unsupported boolean op {}",std::string(op), expressID);
                     return mesh;
                 }
 
@@ -356,7 +359,7 @@ namespace webifc::geometry
                 profile.isConvex = false;
                 profile.curve = GetRectangleCurve(d, d, glm::dmat3(1));
 
-                auto geom = Extrude(profile, extrusionNormal, d, _errorHandler);
+                auto geom = Extrude(profile, extrusionNormal, d);
                 geom.halfSpace = true;
 
                 // @Refactor: duplicate of extrudedareasolid
@@ -421,7 +424,7 @@ namespace webifc::geometry
                 profile.isConvex = false;
                 profile.curve = curve;
 
-                auto geom = Extrude(profile, extrusionNormal, extrudeDistance, _errorHandler, localPlaneNormal, localPlanePos);
+                auto geom = Extrude(profile, extrusionNormal, extrudeDistance, localPlaneNormal, localPlanePos);
                 // auto geom = Extrude(profile, surface.transformation, extrusionNormal, EXTRUSION_DISTANCE_HALFSPACE);
 
                 // @Refactor: duplicate of extrudedareasolid
@@ -548,7 +551,7 @@ namespace webifc::geometry
                     uint32_t faceID = _loader.GetRefArgument(face);
                     ReadIndexedPolygonalFace(faceID, bounds, points);
 
-                    TriangulateBounds(geom, bounds, _errorHandler, expressID);
+                    TriangulateBounds(geom, bounds, expressID);
 
                     bounds.clear();
                 }
@@ -556,7 +559,7 @@ namespace webifc::geometry
                 _loader.MoveToArgumentOffset(expressID, 3);
                 if (_loader.GetTokenType() == parsing::IfcTokenType::SET_BEGIN)
                 {
-                    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Unsupported IFCPOLYGONALFACESET with PnIndex", expressID);
+                    spdlog::error("[GetMesh()] Unsupported IFCPOLYGONALFACESET with PnIndex {}", expressID);
                 }
 
                 _expressIDToGeometry[expressID] = geom;
@@ -707,7 +710,7 @@ namespace webifc::geometry
 
                 if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
                 {
-                    _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "Inner radius of IFCSWEPTDISKSOLID currently not supported", expressID);
+                    spdlog::error("[GetMesh()] Inner radius of IFCSWEPTDISKSOLID currently not supported {}", expressID);
                     _loader.StepBack();
                     _loader.GetDoubleArgument();
                 }
@@ -960,7 +963,7 @@ namespace webifc::geometry
 
                 if (!profile.isComposite)
                 {
-                    geom = Extrude(profile, dir, depth, _errorHandler);
+                    geom = Extrude(profile, dir, depth);
                     if (flipWinding)
                     {
                         for (uint32_t i = 0; i < geom.numFaces; i++)
@@ -976,7 +979,7 @@ namespace webifc::geometry
                 {
                     for (uint32_t i = 0; i < profile.profiles.size(); i++)
                     {
-                        IfcGeometry geom_t = Extrude(profile.profiles[i], dir, depth, _errorHandler);
+                        IfcGeometry geom_t = Extrude(profile.profiles[i], dir, depth);
                         if (flipWinding)
                         {
                             for (uint32_t k = 0; k < geom_t.numFaces; k++)
@@ -1022,7 +1025,7 @@ namespace webifc::geometry
                 // ignore polylines as meshes
                 return mesh;
             default:
-                _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected mesh type", expressID, lineType);
+                spdlog::error("[GetMesh()] unexpected mesh type {}", expressID, lineType);
                 break;
             }
         }
@@ -1032,6 +1035,7 @@ namespace webifc::geometry
 
     IfcSurface IfcGeometryProcessor::GetSurface(uint32_t expressID)
     {
+        spdlog::debug("[GetSurface({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
         // TODO: IfcSweptSurface and IfcBSplineSurface still missing
@@ -1461,7 +1465,7 @@ namespace webifc::geometry
             break;
         }
         default:
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected surface type", expressID, lineType);
+            spdlog::error("[GetSurface()] unexpected surface type", expressID, lineType);
             break;
         }
 
@@ -1470,6 +1474,7 @@ namespace webifc::geometry
 
     IfcFlatMesh IfcGeometryProcessor::GetFlatMesh(uint32_t expressID)
     {
+        spdlog::debug("[GetFlatMesh({})]",expressID);
         IfcFlatMesh flatMesh;
         flatMesh.expressID = expressID;
 
@@ -1484,6 +1489,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix, const glm::dvec4 &color, bool hasColor)
     {
+       
         glm::dvec4 newParentColor = color;
         bool newHasColor = hasColor;
         glm::dmat4 newMatrix = parentMatrix * composedMesh.transformation;
@@ -1542,6 +1548,7 @@ namespace webifc::geometry
 
     IfcGeometry IfcGeometryProcessor::BoolSubtract(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms)
     {
+        spdlog::debug("[BoolSubtract({})]");
         IfcGeometry finalResult;
 
         for (auto &firstGeom : firstGeoms)
@@ -1552,7 +1559,7 @@ namespace webifc::geometry
                 bool doit = true;
                 if (secondGeom.numFaces == 0)
                 {
-                    _errorHandler.ReportError(utility::LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target");
+                    spdlog::error("[BoolSubtract()] bool aborted due to empty source or target");
 
                     // bail out because we will get strange meshes
                     // if this happens, probably there's an issue parsing the mesh that occurred earlier
@@ -1561,7 +1568,7 @@ namespace webifc::geometry
 
                 if (result.numFaces == 0)
                 {
-                    _errorHandler.ReportError(utility::LoaderErrorType::BOOL_ERROR, "bool aborted due to empty source or target");
+                    spdlog::error("[BoolSubtract()] bool aborted due to empty source or target");
 
                     // bail out because we will get strange meshes
                     // if this happens, probably there's an issue parsing the mesh that occurred earlier
@@ -1637,6 +1644,7 @@ namespace webifc::geometry
     void IfcGeometryProcessor::ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points)
     {
         
+        spdlog::debug("[ReadIndexedPolygonalFace({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
         bounds.emplace_back();
@@ -1690,13 +1698,14 @@ namespace webifc::geometry
             break;
         }
         default:
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected indexedface type", expressID, lineType);
+            spdlog::error("[ReadIndexedPolygonalFace()] unexpected indexedface type {}", expressID, lineType);
             break;
         }
     }
 
     IfcGeometry IfcGeometryProcessor::GetBrep(uint32_t expressID)
     {
+        spdlog::debug("[GetBrep({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
         switch (lineType)
         {
@@ -1717,7 +1726,7 @@ namespace webifc::geometry
             return geometry;
         }
         default:
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected shell type", expressID, lineType);
+            spdlog::error("[GetBrep()] unexpected shell type {}", expressID, lineType);
             break;
         }
 
@@ -1726,6 +1735,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry)
     {
+        spdlog::debug("[AddFaceToGeometry({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
         switch (lineType)
@@ -1743,7 +1753,7 @@ namespace webifc::geometry
                 bounds3D[i] = _geometryLoader.GetBound(boundID);
             }
 
-            TriangulateBounds(geometry, bounds3D, _errorHandler, expressID);
+            TriangulateBounds(geometry, bounds3D, expressID);
             break;
         }
         case schema::IFCADVANCEDFACE:
@@ -1784,12 +1794,12 @@ namespace webifc::geometry
             }
             else
             {
-                TriangulateBounds(geometry, bounds3D, _errorHandler, expressID);
+                TriangulateBounds(geometry, bounds3D, expressID);
             }
             break;
         }
         default:
-            _errorHandler.ReportError(utility::LoaderErrorType::UNSUPPORTED_TYPE, "unexpected face type", expressID, lineType);
+            spdlog::error("[AddFaceToGeometry()] unexpected face type {}", expressID, lineType);
             break;
         }
     }
