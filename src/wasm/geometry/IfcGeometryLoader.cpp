@@ -2780,6 +2780,36 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
       return profile;
     }
+    case schema::IFCTRAPEZIUMPROFILEDEF:
+    {
+      IfcProfile profile;
+
+      _loader.MoveToArgumentOffset(expressID, 0);
+      profile.type = _loader.GetStringArgument();
+      profile.isConvex = true;
+
+      _loader.MoveToArgumentOffset(expressID, 2);
+      uint32_t placementID = _loader.GetRefArgument();
+      double bottomXDim = _loader.GetDoubleArgument();
+      double topXDim = _loader.GetDoubleArgument();
+      double yDim = _loader.GetDoubleArgument();
+      double topXOffset = _loader.GetDoubleArgument();
+
+      glm::dmat3 placement;
+      if (placementID != 0)
+      {
+        placement = GetAxis2Placement2D(placementID);
+      }
+      else
+      {
+        placement = glm::dmat3(
+            glm::dvec3(1, 0, 0),
+            glm::dvec3(0, 1, 0),
+            glm::dvec3(0, 0, 1));
+      }
+      profile.curve = GetTrapeziumCurve(bottomXDim, topXDim, yDim, topXOffset, placement);
+      return profile;
+    }
     default:
       spdlog::error("[GetProfileByLine()] unexpected profile type {}", expressID, lineType);
       break;

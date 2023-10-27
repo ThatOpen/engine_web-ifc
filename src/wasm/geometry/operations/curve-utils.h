@@ -697,7 +697,33 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 		return c;
 	}
-	
+
+	inline IfcCurve GetTrapeziumCurve(double bottomXDim, double topXDim, double yDim, double topXOffset, glm::dmat3 placement = glm::dmat3(1))
+	{
+		double halfX = bottomXDim / 2;
+		double halfY = yDim / 2;
+
+		glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
+		glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
+
+		glm::dvec2 tl = placement * glm::dvec3(-halfX + topXOffset, halfY, 1);
+		glm::dvec2 tr = placement * glm::dvec3(-halfX + topXOffset + topXDim, halfY, 1);
+
+		IfcCurve c;
+		c.Add(bl);
+		c.Add(br);
+		c.Add(tr);
+		c.Add(tl);
+		c.Add(bl);
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
 	inline IfcCurve BuildArc(double scale, const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad,uint16_t _circleSegments)
 	{
 		
