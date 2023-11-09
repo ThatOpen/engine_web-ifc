@@ -12,8 +12,6 @@
   <a href="https://people.thatopen.com/">community</a>
   |
   <a href="https://www.npmjs.com/package/web-ifc">npm package</a>
-  |
-  <a href="https://airtable.com/appolsrsBWel2m6wr/shr4ybI6JOeHJEqkG">roadmap</a>
 </p>
 
 ![cover](banner.png)
