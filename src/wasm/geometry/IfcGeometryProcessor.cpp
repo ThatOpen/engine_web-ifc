@@ -1614,11 +1614,11 @@ namespace webifc::geometry
 
                     if (op == "DIFFERENCE")
                     {
-                        result = fuzzybools::Subtract(result, secondGeom);
+                        result = fuzzybools::Subtract(result, secondOperator);
                     }
                     else if (op == "UNION")
                     {
-                        result = fuzzybools::Union(result, secondGeom);
+                        result = fuzzybools::Union(result, secondOperator);
                     }
                 }
             }
