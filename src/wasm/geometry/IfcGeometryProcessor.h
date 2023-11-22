@@ -37,7 +37,7 @@ namespace webifc::geometry
         private:
         void AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry);
         IfcGeometry GetBrep(uint32_t expressID);
-        IfcGeometry BoolSubtract(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups);
+        IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, std::string op);
         std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
         std::unordered_map<uint32_t, IfcComposedMesh> _expressIDToMesh;
         IfcSurface GetSurface(uint32_t expressID);
