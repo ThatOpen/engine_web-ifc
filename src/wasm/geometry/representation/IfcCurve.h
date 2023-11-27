@@ -15,6 +15,7 @@ namespace webifc::geometry {
 	{
 		std::vector<glm::dvec3> points;
 		std::vector<uint16_t> indices;
+		std::vector<std::string> userData;
 		void Add(glm::dvec3 pt);
 		void Add(glm::dvec2 pt);
 		glm::dvec2 Get2d(size_t i) const;
@@ -22,7 +23,7 @@ namespace webifc::geometry {
 		void Invert();
 		bool IsCCW() const;
 		glm::dmat4 getPlacementAtDistance(double length);
-
+		
 		private:
 			static constexpr double EPS_TINY = 1e-9;
 	};

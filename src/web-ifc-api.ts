@@ -816,7 +816,12 @@ export class IfcAPI {
               const newPoint = { x: pt.x, y: pt.y };
               ptList.push(newPoint);
             }
-            const newCurve = { points: ptList };
+            const dtList = [];
+            for (let p = 0; p < curve.userData.size(); p++) {
+                const dt = curve.userData.get(p);
+                dtList.push(dt);
+            }
+            const newCurve = { points: ptList, data: dtList };
             horList.push(newCurve);
           }
           const verList = [];
@@ -828,7 +833,12 @@ export class IfcAPI {
               const newPoint = { x: pt.x, y: pt.y };
               ptList.push(newPoint);
             }
-            const newCurve = { points: ptList };
+            const dtList = [];
+            for (let p = 0; p < curve.userData.size(); p++) {
+                const dt = curve.userData.get(p);
+                dtList.push(dt);
+            }
+            const newCurve = { points: ptList, data: dtList };
             verList.push(newCurve);
           }
     

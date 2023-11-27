@@ -1069,7 +1069,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<webifc::geometry::IfcCurve>("IfcCurveVector");
 
     emscripten::value_object<webifc::geometry::IfcCurve>("IfcCurve")
-        .field("points", &webifc::geometry::IfcCurve::points);
+        .field("points", &webifc::geometry::IfcCurve::points)
+        .field("userData", &webifc::geometry::IfcCurve::userData);
 
     emscripten::register_vector<glm::vec<2, glm::f64>>("vector2doubleVector");
 

@@ -483,6 +483,8 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(expressID, 7);
       double GravityCenterLineHeight = _loader.GetDoubleArgument();
 
+      std::string str(type);
+
       switch (Horizontal_alignment_type.at(type))
       {
       default:
@@ -502,6 +504,9 @@ namespace webifc::geometry
         curve.Add(EndPoint);
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("TYPE: " + str);
+        alignmentCurve.userData.push_back("LENGHT: " + std::to_string(SegmentLength));
+        alignmentCurve.userData.push_back("DIRECTION: " + std::to_string(ifcStartDirection));
 
         break;
       }
@@ -521,6 +526,8 @@ namespace webifc::geometry
         }
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("TYPE: " + str);
+        alignmentCurve.userData.push_back("RADIUS: " + std::to_string(StartRadiusOfCurvature));
 
         break;
       }
@@ -622,6 +629,10 @@ namespace webifc::geometry
         }
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("TYPE: " + str);
+        alignmentCurve.userData.push_back("START RADIUS: " + std::to_string(StartRadiusOfCurvature));
+        alignmentCurve.userData.push_back("END RADIUS: " + std::to_string(EndRadiusOfCurvature));
+        alignmentCurve.userData.push_back("A: " + std::to_string(A));
 
         break;
       }
@@ -678,6 +689,8 @@ namespace webifc::geometry
 
       IfcProfile profile;
 
+      std::string str(type);
+
       switch (Vertical_alignment_type.at(type))
       {
       default:
@@ -696,7 +709,9 @@ namespace webifc::geometry
         curve.Add(jPoint);
 
         alignmentCurve = curve;
-
+        alignmentCurve.userData.push_back("TYPE: " + str);
+        alignmentCurve.userData.push_back("START HEIGHT: " + std::to_string(StartHeight));
+        alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
         break;
       }
       case 2: // ARC
@@ -727,6 +742,10 @@ namespace webifc::geometry
         }
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("TYPE: " + str);
+        alignmentCurve.userData.push_back("RADIUS: " + std::to_string(RadiusOfCurvature));
+        alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
+        alignmentCurve.userData.push_back("END GRADIENT: " + std::to_string(EndGradient));
 
         break;
       }
@@ -756,6 +775,11 @@ namespace webifc::geometry
         }
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("TYPE: " + str);
+        alignmentCurve.userData.push_back("LENGHT: " + std::to_string(HorizontalLength));
+        alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
+        alignmentCurve.userData.push_back("END GRADIENT: " + std::to_string(EndGradient));
+        alignmentCurve.userData.push_back("R: " + std::to_string(R));
 
         break;
       }
