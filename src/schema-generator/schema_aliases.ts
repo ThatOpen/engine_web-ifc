@@ -10,6 +10,7 @@ const schemaAliases : Array<SchemaAlias>  = [
 { schemaName : "IFC4X1", alias : "IFC4"},
 { schemaName : "IFC4X2", alias :"IFC4"},
 { schemaName : "IFC4X3_RC3", alias :"IFC4X3"},
+{ schemaName : "IFC4X3_RC$", alias :"IFC4X3"},
 { schemaName : "IFC4X3_RC1", alias :"IFC4X3"},
 { schemaName : "IFC4X3_RC2", alias :"IFC4X3"}
 
