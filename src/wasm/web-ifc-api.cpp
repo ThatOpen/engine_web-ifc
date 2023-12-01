@@ -578,7 +578,10 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     case webifc::parsing::IfcTokenType::STRING:
     case webifc::parsing::IfcTokenType::ENUM:
     {
-        std::string copy = value.as<std::string>();
+        std::string copy;
+        if (value.isTrue()) copy="T";
+        else if (value.isFalse()) copy="F";
+        else copy = value.as<std::string>();
         uint16_t length = copy.size();
         loader->Push<uint16_t>((uint16_t)length);
         loader->Push((void*)copy.c_str(), copy.size());
