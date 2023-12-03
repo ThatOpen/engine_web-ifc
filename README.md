@@ -3,7 +3,7 @@
   |
   <a href="https://ifcjs.github.io/web-ifc/docs">documentation</a>
   |
-  <a href="https://platform.thatopen.com/documentation"> platform documentation</a>
+  <a href="https://docs.thatopen.com/intro"> platform documentation</a>
   |
   <a href="https://ifcjs.github.io/web-ifc/demo">demo</a>
   |
