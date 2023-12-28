@@ -960,7 +960,7 @@ export class IfcAPI {
 
     /**
      * Closes a model and frees all related memory
-     * @param modelID Model handle retrieved by OpenModel, model must not be closed
+     * @param modelID Model handle retrieved by OpenModel, model must be closed after use
     */
     CloseModel(modelID: number) {
         this.ifcGuidMap.delete(modelID);
