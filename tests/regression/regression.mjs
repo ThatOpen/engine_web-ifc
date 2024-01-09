@@ -73,7 +73,7 @@ async function CreateModelResuts(filename)
   if (filename.includes(".ifczip"))  {
         let zip = new AdmZip(filename);
         zip.getEntries().forEach(function (zipEntry) {
-            ifcdata = zipEntry.getData();
+            let ifcdata = zipEntry.getData();
             modelID = ifcAPI.OpenModel(ifcdata);
         });
   } else {
