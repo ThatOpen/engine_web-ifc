@@ -614,7 +614,7 @@ export class IfcAPI {
             Log.error(`Cannot re-use deleted express ID`);
             return;
         }
-        if (lineObject.expressID != -1 && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
+        if (lineObject.expressID != -1 && lineObject.expressID <= this.GetMaxExpressID(modelID) && this.GetLineType(modelID,lineObject.expressID) != lineObject.type && this.GetLineType(modelID,lineObject.expressID) != 0) 
         {
             Log.error(`Cannot change type of existing IFC Line`);
             return;
