@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { readFileSync, writeFileSync, readdirSync } from "fs";
+import { readFileSync, writeFileSync, readdirSync,readSync, openSync } from "fs";
 import * as path from "path"
 const {createHash} = await import('node:crypto');
 import {IfcAPI} from "../../dist/web-ifc-api-node.js";
@@ -68,15 +68,28 @@ async function GetRegressionFiles()
 
 async function CreateModelResuts(filename)
 {
-  let ifcdata;
+  let modelID;
+  console.log("Parsing:"+filename);
   if (filename.includes(".ifczip"))  {
         let zip = new AdmZip(filename);
         zip.getEntries().forEach(function (zipEntry) {
             ifcdata = zipEntry.getData();
+            modelID = ifcAPI.OpenModel(ifcdata);
         });
-  } else ifcdata = readFileSync(filename);
-  
-  let modelID = ifcAPI.OpenModel(ifcdata);
+  } else {
+    let file = openSync(filename);
+    let retriever = function (offset, size) {
+            let data = new Uint8Array(size);
+            let bytesRead = readSync(file,data,0,size,offset);            
+            if (bytesRead <= 0 ) return new Uint8Array(0);
+            return data;       
+        }
+      try {
+        modelID = ifcAPI.OpenModelFromCallback(retriever);
+      } catch (e) {
+        console.log(e);
+      }
+  }
   let geometries = [];
   ifcAPI.StreamAllMeshes(modelID, (mesh) => {
     const placedGeometries = mesh.geometries;
@@ -88,7 +101,7 @@ async function CreateModelResuts(filename)
     }
   });
 
-  console.log("Parsing Model:"+filename+"Loading " + geometries.length +" geometries");
+  console.log("Parsed Model:"+filename+"Loading " + geometries.length +" geometries");
   if (geometries.length > 0) {
     const combinedGeometry = BufferGeometryUtils.mergeGeometries(geometries);
     const mat = new THREE.MeshStandardMaterial({ side: THREE.DoubleSide });
