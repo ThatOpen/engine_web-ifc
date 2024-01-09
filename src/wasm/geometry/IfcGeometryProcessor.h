@@ -29,7 +29,7 @@ namespace webifc::geometry
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
         IfcFlatMesh GetFlatMesh(uint32_t expressID);
-        IfcComposedMesh GetMesh(uint32_t expressID);
+        IfcComposedMesh GetMesh(uint32_t expressID, uint32_t nestLevel = 0);
         void SetTransformation(const glm::dmat4 &val);
         glm::dmat4 GetCoordinationMatrix();
         void Clear();
