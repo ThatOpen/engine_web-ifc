@@ -28,7 +28,7 @@ async function RunRegression()
     for (let fileName of files) {
       let properFileName = fileName.replaceAll("\\","/");
       regressionResults[properFileName] = await CreateModelResuts(fileName);
-      regressionResults[properFileName] = JSON.stringify(regressionResults[properFileName]);
+      regressionResults[properFileName] = createHash('sha256').update(JSON.stringify(regressionResults[properFileName])).digest('hex');
 
     }
     if (update) {
@@ -44,7 +44,7 @@ async function RunRegression()
             if (fileName in regressionResultsCurrent) {
               if (regressionResultsCurrent[fileName] == regressionResults[fileName]) console.log(fileName+"- PASS");
               else {
-                console.log(fileName+"- FAIL read: " + regressionResults[fileName] + " vs previous: " + regressionResultsCurrent[fileName]);
+                console.log(fileName+"- FAIL");
                 passTests = false;
               }
             } else console.log("Could not find:"+fileName);
