@@ -150,6 +150,8 @@ export interface NewIfcModel {
     authorization?: string;
 }
 
+export type ModelLoadCallback = (offset:number, size: number) => Uint8Array;
+
 /** @ignore */
 export function ms() {
     return new Date().getTime();
@@ -293,7 +295,7 @@ export class IfcAPI {
      * @param settings Settings for loading the model @see LoaderSettings
      * @returns ModelID or -1 if model fails to open
     */
-    OpenModelFromCallback(callback:  (offset:number, size: number) => Uint8Array, settings?: LoaderSettings): number {
+    OpenModelFromCallback(callback:  ModelLoadCallback , settings?: LoaderSettings): number {
         let s = this.CreateSettings(settings);
         let result = this.wasmModule.OpenModel(s, (destPtr: number, offsetInSrc: number, destSize: number) => {
             let data = callback(offsetInSrc,destSize);
