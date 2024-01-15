@@ -769,7 +769,7 @@ namespace webifc::geometry
                 glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[1];
 
                 IfcCurve directrix = BuildArc(_geometryLoader.GetLinearScalingFactor(), pos, axis, angle, _circleSegments);
-                if(glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG)
+                if(glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG())
                 {
                     closed = true;
                 }
@@ -1621,11 +1621,22 @@ namespace webifc::geometry
 
                     if (op == "DIFFERENCE")
                     {
-                        result = fuzzybools::Subtract(result, secondOperator);
+                        result.GeneratePlanes();
+		                secondOperator.GeneratePlanes();
+                        double scale = _geometryLoader.GetLinearScalingFactor();
+                        result = fuzzybools::Subtract(result, secondOperator, scale);
+                        // #ifdef CSG_DEBUG_OUTPUT
+                        //     webifc::geometry::IfcGeometry geom;
+                        //     geom.AddGeometry(result);
+                        //     io::DumpIfcGeometry(geom, "result.obj");
+                        // #endif
                     }
                     else if (op == "UNION")
                     {
-                        result = fuzzybools::Union(result, secondOperator);
+                        result.GeneratePlanes();
+		                secondOperator.GeneratePlanes();
+                        double scale = _geometryLoader.GetLinearScalingFactor();
+                        result = fuzzybools::Union(result, secondOperator, scale);
                     }
                 }
             }
