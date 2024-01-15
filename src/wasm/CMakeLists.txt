@@ -70,7 +70,7 @@ Message("Downloading FUZZY")
 # using a custom version of fuzzy-bools to silence some debug printf from the library that pollutes the output of the executables
 # FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/CBenghi/fuzzy-bools" GIT_TAG "07faaad8cae623dd634b1c09b4b37b44bf645781" SOURCE_SUBDIR "../")
 # FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/tomvandig/fuzzy-bools" GIT_TAG "a52c0f0c0667b7c875ae44e91e63a33c1813be64" SOURCE_SUBDIR "../")
-FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/QuimMoya/fuzzy-bools" GIT_TAG "9b858c6d70591a370ab294faa6113d807fb5b2f2" SOURCE_SUBDIR "../")
+FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/QuimMoya/fuzzy-bools" GIT_TAG "b0c75bb7ce3b4110761e7af0df3fa7285c142be4" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(fuzzy)
 FetchContent_GetProperties(fuzzy)
 file (RENAME ${fuzzy_SOURCE_DIR}/src ${fuzzy_SOURCE_DIR}/fuzzy RESULT result) # specifying 'result' continues even if rename was already performed
