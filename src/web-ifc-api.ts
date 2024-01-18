@@ -104,23 +104,24 @@ export interface PlacedGeometry {
 export interface FlatMesh {
     geometries: Vector<PlacedGeometry>;
     expressID: number;
+    delete(): void;
 }
 
-export interface point {
+export interface Point {
     x: number;
     y: number;
 }
 
-export interface curve {
-    curves: Array<point>;
+export interface Curve {
+    curves: Array<Point>;
 }
 
 export interface IfcCrossSection {
-    curves: Array<curve>;
+    curves: Array<Curve>;
 }
 
 export interface IfcAlignmentSegment {
-    curves: Array<curve>;
+    curves: Array<Curve>;
 }
 
 export interface IfcAlignment {
@@ -134,9 +135,10 @@ export interface IfcGeometry {
     GetVertexDataSize(): number;
     GetIndexData(): number;
     GetIndexDataSize(): number;
+    delete(): void;
 }
 
-export interface ifcType {
+export interface IfcType {
     typeID: number;
     typeName: string;
 }
@@ -422,8 +424,8 @@ export class IfcAPI {
      * @param modelID Model handle retrieved by OpenModel
      * @returns Array of objects containing typeID and typeName
      */
-    GetAllTypesOfModel(modelID: number): ifcType[] {
-        let typesNames: ifcType[] = [];
+    GetAllTypesOfModel(modelID: number): IfcType[] {
+        let typesNames: IfcType[] = [];
         const elements = Object.keys(FromRawLineData[this.modelSchemaList[modelID]]).map((e) => parseInt(e));
         for (let i = 0; i < elements.length; i++) {
             const lines = this.GetLineIDsWithType(modelID, elements[i]);
