@@ -51,7 +51,8 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::Clear()
     {
-        _expressIDToGeometry = {};
+        _expressIDToGeometry.clear();
+        std::unordered_map<uint32_t, IfcGeometry>().swap(_expressIDToGeometry);
     }
 
     glm::dmat4 IfcGeometryProcessor::GetCoordinationMatrix()
@@ -798,7 +799,6 @@ namespace webifc::geometry
                     mesh.color = glm::dvec4(1.0);
                 else
                     mesh.color = styledItemColor.value();
-                _expressIDToMesh[expressID] = mesh;
                 return mesh;
             }
             case schema::IFCEXTRUDEDAREASOLID:
