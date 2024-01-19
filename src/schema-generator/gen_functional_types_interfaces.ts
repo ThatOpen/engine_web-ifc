@@ -12,6 +12,7 @@ export interface Type {
 export interface Prop {
     name: string;
     type: string;
+    typeNum: number;
     primitive: boolean;
     optional: boolean;
     set: boolean;
