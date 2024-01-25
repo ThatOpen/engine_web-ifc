@@ -97,6 +97,22 @@ If you wish to build the WASM with debugging enabled you can run `npm run build-
 
 Run `npm run dev` to launch a development server with a basic ifc file viewer.
 
+### Build Files
+
+The output of the build process consts of the following files:
+
+1. web-ifc.wasm - The wasm (compiled C++) to run in the browser
+2. web-ifc-mt.wasm - The wasm (compiled C++) to run in the browser if multi-threading is supported.
+3. web-ifc-node.wasm - The wasm (compiled C++) to run in node
+4. web-ifc-api-node.js - Compiled javascript wrapper for the wasm to run in node.
+5. web-ifc-api-node.d.ts - Typescript definitions for the web-ifc api (for node)
+6. web-ifc-api.js - Compiled javascript wrapper for the wasm to run in browser.
+7. web-ifc-api.d.ts - Typescript definitions for the main web-ifc API
+8. ifc-schema.d.ts - Typescript definitions for the IFC schema
+9. helpers/properties.d.ts - Typescript definitions for the properties aspect of the web-ifc API
+10. helpers/log.d.ts - Typescript definitions for the logger aspect of the web-ifc API
+11. web-ifc-mt.worker.js - Webworker javascript to enable multi-threading in the browser.
+
 ## Stand alone C++
 
 Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/tomvandig/web-ifc/blob/main/src/wasm/web-ifc-test.cpp) for a simple entry point to get started.
