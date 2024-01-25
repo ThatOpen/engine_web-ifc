@@ -276,6 +276,7 @@ new Set([...completeEntityList,...typeList]).forEach(entity => {
 chSchema.push("}");
 
 cppSchema.push("#include <unordered_set>");
+cppSchema.push("#include <string>");
 cppSchema.push("#include \"ifc-schema.h\"");
 cppSchema.push("#include \"IfcSchemaManager.h\"");
 cppSchema.push("namespace webifc::schema {")
@@ -295,10 +296,10 @@ for (var i = 0; i < files.length; i++) {
 cppSchema.push("}");
 chSchema.push(`};`)
 
-cppSchema.push("std::string_view IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {");
+cppSchema.push("std::string IfcSchemaManager::IfcTypeCodeToType(uint32_t typeCode) const {");
 cppSchema.push("switch(typeCode) {");
 new Set([...completeEntityList,...typeList]).forEach(entity => {
-    cppSchema.push(`case schema::${entity.toUpperCase()}: return "${entity.toUpperCase()}";`);
+    cppSchema.push(`case schema::${entity.toUpperCase()}: return "${entity}";`);
 });
 
 cppSchema.push(`default: return "<web-ifc-type-unknown>";`);

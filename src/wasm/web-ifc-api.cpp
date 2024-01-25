@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 #include <string>
+#include <algorithm>
 #include <vector>
 #include <stack>
 #include <sstream>
@@ -744,7 +745,8 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
         return false;
     }
     uint32_t start = loader->GetTotalSize();
-    std::string_view ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::string ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::transform(ifcName.begin(), ifcName.end(), ifcName.begin(), ::toupper);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
     loader->Push((void*)ifcName.data(), ifcName.size());
@@ -775,7 +777,8 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     loader->Push<uint32_t>(expressID);
 
     // line TYPE
-    std::string_view ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::string ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::transform(ifcName.begin(), ifcName.end(), ifcName.begin(), ::toupper);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
     loader->Push((void*)ifcName.data(), ifcName.size());
