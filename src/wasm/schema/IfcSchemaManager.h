@@ -18,7 +18,7 @@ namespace webifc::schema {
             const std::vector<IFC_SCHEMA> GetAvailableSchemas() const;
             std::string_view GetSchemaName(IFC_SCHEMA schema) const;
             uint32_t IfcTypeToTypeCode(const std::string_view name) const;
-            std::string_view IfcTypeCodeToType(const uint32_t typeCode) const; 
+            std::string IfcTypeCodeToType(const uint32_t typeCode) const; 
             bool IsIfcElement(const uint32_t typeCode) const;
             const std::unordered_set<uint32_t> & GetIfcElementList() const;
         private: 

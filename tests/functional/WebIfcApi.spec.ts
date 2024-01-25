@@ -145,9 +145,9 @@ describe('WebIfcApi reading methods', () => {
         expect(schemaLine.arguments[0][0].value).toEqual(expectedFileSchema);
     });
     test('can get name for type code', () => {
-        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCPROPERTYSINGLEVALUE)).toBe("IFCPROPERTYSINGLEVALUE");
-        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCWALL)).toBe("IFCWALL");
-        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCRELASSOCIATESMATERIAL)).toBe("IFCRELASSOCIATESMATERIAL");
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCPROPERTYSINGLEVALUE)).toBe("IfcPropertySingleValue");
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCWALL)).toBe("IfcWall");
+        expect(ifcApi.GetNameFromTypeCode(WebIFC.IFCRELASSOCIATESMATERIAL)).toBe("IfcRelAssociatesMaterial");
     });
     test('can check if is ifcelement', () => {
         expect(ifcApi.IsIfcElement(WebIFC.IFCWALL)).toBeTruthy();
