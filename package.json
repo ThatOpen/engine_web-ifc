@@ -76,6 +76,7 @@
     "web-ifc-mt.worker.js"
   ],
   "devDependencies": {
+    "@types/jest": "^27.5.2",
     "@types/three": "^0.156.0",
     "adm-zip": "^0.5.10",
     "cpy-cli": "^5.0.0",
