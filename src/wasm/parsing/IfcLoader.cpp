@@ -18,7 +18,7 @@ namespace webifc::parsing {
   void p21encode(std::string_view input, std::ostringstream &output);
   std::string p21decode(std::string_view & str);    
  
-   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,schema::IfcSchemaManager &schemaManager) :_schemaManager(schemaManager)
+   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer, schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
    { 
      _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
      _nullLine = new IfcLine();
@@ -88,6 +88,7 @@ namespace webifc::parsing {
       output << "******************************************************/" << std::endl;
       
       const std::vector<IfcLine*> *totalLines[2] = {&_headerLines, &_lines};
+      uint32_t linesWritten = 0;
       for (uint8_t z=0; z < 2; z++)
       {
         const std::vector<IfcLine*>* currentLines = totalLines[z];
@@ -180,6 +181,16 @@ namespace webifc::parsing {
               newLine = false;
             }
             prev = t;
+          }
+        
+          linesWritten++;
+          if (linesWritten > _lineWriterBuffer ) 
+          {
+            std::string tmp = output.str();
+            outputData((char*)tmp.c_str(),tmp.size());
+            output.str("");
+            output.clear();
+            linesWritten=0;
           }
         }
         if (z==0) output << "ENDSEC;"<<std::endl<<"DATA;"<<std::endl;
