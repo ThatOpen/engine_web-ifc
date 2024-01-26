@@ -67,12 +67,7 @@ export const INTEGER = 10;
 export interface LoaderSettings {
     OPTIMIZE_PROFILES?: boolean;
     COORDINATE_TO_ORIGIN?: boolean;
-    USE_FAST_BOOLS?: boolean;
-    CIRCLE_SEGMENTS_LOW?: number;
-    CIRCLE_SEGMENTS_MEDIUM?: number;
-    CIRCLE_SEGMENTS_HIGH?: number;
     CIRCLE_SEGMENTS?: number;
-    BOOL_ABORT_THRESHOLD?: number;
     MEMORY_LIMIT?: number;
     TAPE_SIZE? : number;
 }
@@ -238,14 +233,6 @@ export class IfcAPI {
             MEMORY_LIMIT: 2147483648,
             ...settings
         };
-        let deprecated = ['USE_FAST_BOOLS','CIRCLE_SEGMENTS_LOW','CIRCLE_SEGMENTS_MEDIUM','CIRCLE_SEGMENTS_HIGH'];
-        for (let d in deprecated) 
-        {
-            if (d in s)
-            {
-                Log.warn('Use of deprecated settings '+d+' detected');
-            }
-        }
         return s;
     }
 
