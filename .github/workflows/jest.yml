@@ -23,8 +23,6 @@ jobs:
     - name: Build
       run: npm run build-release
     - uses: actions/setup-node@v3
-      with:
-          node-version: '16.x'
     - name: Run all tests
       run: npm t
     - name: Regression Tests
