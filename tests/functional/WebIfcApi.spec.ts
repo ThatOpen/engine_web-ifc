@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as WebIFC from '../../dist/web-ifc-api-node.js';
 import {IFC2X3} from '../../dist/web-ifc-api-node.js';
-import {LoaderSettings,IfcLineObject} from '../../dist/web-ifc-api-node.js';
+import {LoaderSettings,IfcLineObject,Schemas,IFCCARTESIANPOINT,IFCLENGTHMEASURE,IFCPOLYLOOP} from '../../dist/web-ifc-api-node.js';
 
 import type {
     Vector,
@@ -530,6 +530,42 @@ describe('function based opening', () => {
         let modelId = ifcApi.OpenModelFromCallback(retriever);
         fs.closeSync(file);
         expect(ifcApi.GetAllLines(modelId).size()).toBe(6487);
+    });
+});
+
+describe('write a large IFC file', () => {
+    test("write a large IFC file",  () => {
+        const modelOption = {
+            schema: Schemas.IFC2X3,  // ifc版本
+            name: "test.ifc",
+            description: ["1", "2"],
+            authors: ["3", "4"],
+            organizations: ["5", "6"],
+            authorization: "78",
+        }
+        let newModID = ifcApi.CreateModel(modelOption);
+        const modelCount = 5000;
+        for (let i = 0; i < modelCount; i++) {
+            console.log(`${i}/${modelCount}`)
+            for (let j = 0; j < 50; j++) {
+                let cartPoint1 = ifcApi.CreateIfcEntity(newModID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,1),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,2),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,3)]);
+                let cartPoint2 = ifcApi.CreateIfcEntity(newModID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,4),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,5),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,6)]);
+                let cartPoint3 = ifcApi.CreateIfcEntity(newModID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,7),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,8),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,9)]);
+                let array = [cartPoint1, cartPoint2, cartPoint3];
+                let poly = ifcApi.CreateIfcEntity(newModID,IFCPOLYLOOP,array);
+                ifcApi.WriteLine(newModID, poly);
+            }
+        }      
+    // save file
+    const outputFile = fs.openSync("./out.ifc",'w');
+    let cFilePosition = 0;
+    function callback(buffer:Uint8Array) {
+        fs.writeSync(outputFile, buffer,0, buffer.length,cFilePosition);
+        cFilePosition+=buffer.length;
+    }
+    ifcApi.SaveModelToCallback(newModID,callback);
+    ifcApi.CloseModel(newModID);
+       
     });
 });
 

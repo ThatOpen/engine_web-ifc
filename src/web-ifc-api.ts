@@ -63,6 +63,7 @@ export const INTEGER = 10;
  * @property {number} CIRCLE_SEGMENTS - Number of segments for circles. 
  * @property {number} MEMORY_LIMIT - The amount of memory to be reserved for storing IFC data in memory
  * @property {number} TAPE_SIZE - Size of the tape for the loader.
+ * @property {number} LINEWRITER_BUFFER - The number of lines to write to memory at a time when writing an IFC file.
  */
 export interface LoaderSettings {
     OPTIMIZE_PROFILES?: boolean;
@@ -70,6 +71,7 @@ export interface LoaderSettings {
     CIRCLE_SEGMENTS?: number;
     MEMORY_LIMIT?: number;
     TAPE_SIZE? : number;
+    LINEWRITER_BUFFER?: number;
 }
 
 export interface Vector<T> {
@@ -148,6 +150,7 @@ export interface NewIfcModel {
 }
 
 export type ModelLoadCallback = (offset:number, size: number) => Uint8Array;
+export type ModelSaveCallback = (data:Uint8Array) => void;
 
 /** @ignore */
 export function ms() {
@@ -366,11 +369,28 @@ export class IfcAPI {
     SaveModel(modelID: number): Uint8Array {
         let dataBuffer:Uint8Array = new Uint8Array(0);
         this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
+            let origSize: number = dataBuffer.byteLength;
             let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
-            dataBuffer = new Uint8Array(srcSize);
-            dataBuffer.set(src, 0);
+            let newBuffer = new Uint8Array(origSize+srcSize);
+            newBuffer.set(dataBuffer)
+            newBuffer.set(src, origSize);
+            dataBuffer = newBuffer;
         });
        return dataBuffer;
+    }
+
+    /**
+     * Saves a model to a Buffer
+     * @param modelID Model ID
+     * @returns Buffer containing the model data
+     */
+    SaveModelToCallback(modelID: number, callback: ModelSaveCallback) {
+        this.wasmModule.SaveModel(modelID, (srcPtr: number, srcSize: number) => {
+            let src = this.wasmModule.HEAPU8.subarray(srcPtr, srcPtr + srcSize);
+            let newBuffer = new Uint8Array(srcSize);
+            newBuffer.set(src);
+            callback(newBuffer);
+        });
     }
 
     /**
@@ -442,14 +462,14 @@ export class IfcAPI {
             lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
             lineData.expressID = rawLineData.ID;
         } catch (e) {
-             Log.error("Invalid IFC Line:"+expressID);
-	     // throw an error when the line is defined 
-	     if (rawLineData.ID) {
-                 throw e;
-	     } else {
-                 return;
-             }
-        }
+           Log.error("Invalid IFC Line:"+expressID);
+	         // throw an error when the line is defined 
+           if (rawLineData.ID) {
+               throw e;
+           } else {
+               return;
+           }
+       }
 
         if (flatten) {
             this.FlattenLine(modelID, lineData);

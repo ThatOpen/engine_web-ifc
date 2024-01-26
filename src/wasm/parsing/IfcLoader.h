@@ -20,7 +20,7 @@ namespace webifc::parsing
 	class IfcLoader {
   
     public:
-      IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,schema::IfcSchemaManager &schemaManager);  
+      IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer,schema::IfcSchemaManager &schemaManager);  
       ~IfcLoader();
       const std::vector<uint32_t> GetHeaderLinesWithType(const uint32_t type) const;
       void LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
@@ -72,7 +72,7 @@ namespace webifc::parsing
         uint32_t ifcType;
         uint32_t tapeOffset;
       };
-
+      const uint32_t _lineWriterBuffer;
       const schema::IfcSchemaManager &_schemaManager;
       IfcTokenStream * _tokenStream;
       IfcLine * _nullLine;

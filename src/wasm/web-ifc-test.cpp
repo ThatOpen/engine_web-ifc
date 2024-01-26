@@ -285,6 +285,7 @@ int main()
         uint16_t CIRCLE_SEGMENTS = 12;
         uint32_t TAPE_SIZE = 67108864 ; // probably no need for anyone other than web-ifc devs to change this
         uint32_t MEMORY_LIMIT = 2147483648;
+        uint16_t LINEWRITER_BUFFER = 10000;
     };
 
     LoaderSettings set;
@@ -292,7 +293,7 @@ int main()
     set.OPTIMIZE_PROFILES = true;
 
     webifc::schema::IfcSchemaManager schemaManager;
-    webifc::parsing::IfcLoader loader(set.TAPE_SIZE, set.MEMORY_LIMIT, schemaManager);
+    webifc::parsing::IfcLoader loader(set.TAPE_SIZE, set.MEMORY_LIMIT, set.LINEWRITER_BUFFER, schemaManager);
 
     auto start = ms();
     loader.LoadFile([&](char *dest, size_t sourceOffset, size_t destSize)
