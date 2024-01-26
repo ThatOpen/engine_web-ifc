@@ -78,7 +78,7 @@
   "devDependencies": {
     "@types/three": "^0.156.0",
     "adm-zip": "^0.5.10",
-    "cpy-cli": "^4.2.0",
+    "cpy-cli": "^5.0.0",
     "esbuild": "^0.19.12",
     "jest": "^27.4.2",
     "make-dir-cli": "^3.0.0",
