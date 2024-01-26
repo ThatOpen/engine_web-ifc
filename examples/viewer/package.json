@@ -12,7 +12,7 @@
   "devDependencies": {
     "cpy-cli": "^4.2.0",
     "del-cli": "^5.0.0",
-    "esbuild": "^0.12.15",
+    "esbuild": "^0.19.12",
     "local-web-server": "^5.2.1",
     "make-dir-cli": "^3.0.0"
   },
