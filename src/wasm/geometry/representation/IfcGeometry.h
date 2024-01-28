@@ -36,6 +36,7 @@ namespace webifc::geometry {
 		fuzzybools::Geometry Normalize(glm::dvec3 center, glm::dvec3 extents);
 		private:
 			void ReverseFace(uint32_t index);
+			bool normalized = false;
 
 	};
 
