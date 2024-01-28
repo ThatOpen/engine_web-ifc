@@ -25,6 +25,23 @@ namespace webifc::geometry {
 		}
 	}
 
+	fuzzybools::Geometry IfcGeometry::Normalize(glm::dvec3 center,glm::dvec3 extents)
+	{
+		if (!normalized)
+		{
+			glm::dvec3 min = center - extents/2.0;
+
+			for (size_t i = 0; i < vertexData.size(); i += 6)
+			{
+				vertexData[i + 0] = vertexData[i + 0] - min.x;
+				vertexData[i + 1] = vertexData[i + 1] - min.y;
+				vertexData[i + 2] = vertexData[i + 2] - min.z;
+			}
+			normalized = true;
+		}
+		return fuzzybools::Geometry::Normalize(center,extents);
+	}
+
 	uint32_t IfcGeometry::GetVertexData()
 	{
 		// unfortunately webgl can't do doubles
