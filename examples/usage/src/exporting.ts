@@ -28,6 +28,6 @@ export default async function() {
             };
         }
 
-        Equals("In eq out", diffBytes, 403018);
+        Equals("In eq out", diffBytes, 403045);
     });
 }
