@@ -461,7 +461,6 @@ describe('creating ifc', () => {
         let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
         expect(createdID).toBe(6);
         const buffer = ifcApi.SaveModel(createdID);
-        fs.writeFileSync(path.join(__dirname, '../ifcfiles/created.ifc'), buffer);
         ifcApi.CloseModel(createdID);
     });
 

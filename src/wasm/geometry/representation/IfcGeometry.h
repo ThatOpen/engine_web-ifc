@@ -33,6 +33,7 @@ namespace webifc::geometry {
 		uint32_t GetVertexDataSize();
 		uint32_t GetIndexData();
 		uint32_t GetIndexDataSize();
+		fuzzybools::Geometry Normalize(glm::dvec3 center, glm::dvec3 extents);
 		private:
 			void ReverseFace(uint32_t index);
 

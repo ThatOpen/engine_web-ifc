@@ -1540,7 +1540,7 @@ namespace webifc::geometry
                 newHasColor = composedMesh.hasColor;
             }
 
-            geometry.transformation = _coordinationMatrix * newMatrix;
+            geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(center - extents/2.0);
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
 
