@@ -1,7 +1,7 @@
 {
 	"sidebarLinks": {
 	},
-	 "entryPoints": ["./src/ifc-schema.ts","./src/web-ifc-api.ts","./src/helpers/properties.ts","./src/helpers/log.ts"],
+	 "entryPoints": ["./src/ts/ifc-schema.ts","./src/ts/web-ifc-api.ts","./src/ts/helpers/properties.ts","./src/ts/helpers/log.ts"],
 	 "navigationLinks":{
 	 	"ifc.js":"https://ifcjs.github.io/info/",
 	 	"web-ifc":"https://github.com/ifcjs/web-ifc",

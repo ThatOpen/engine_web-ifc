@@ -9,4 +9,4 @@ let file = `
 const std::string_view WEB_IFC_VERSION_NUMBER = "${pckg.version}";
 `
 
-fs.writeFileSync("./src/wasm/version.h", file);
+fs.writeFileSync("./src/cpp/version.h", file);

@@ -44,6 +44,8 @@ output
 debug_output
 .bin
 build
+build_wasm
+build_debug_wasm
 *.log
 node_modules
 dist/*
