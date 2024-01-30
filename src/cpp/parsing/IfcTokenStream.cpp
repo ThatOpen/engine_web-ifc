@@ -16,6 +16,13 @@ namespace webifc::parsing
     _fileStream=nullptr;
   }
 
+  IfcTokenStream::~IfcTokenStream() 
+  {
+    delete _fileStream;
+    _chunks.clear();
+    std::vector<IfcTokenChunk>().swap(_chunks);
+  }
+
   void IfcTokenStream::SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData) 
   {
       _fileStream = new IfcFileStream(requestData,_chunkSize);
