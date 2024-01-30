@@ -307,8 +307,8 @@ cppSchema.push("}");
 cppSchema.push("}");
 cppSchema.push("}");
 
-fs.writeFileSync("../wasm/schema/ifc-schema.h", chSchema.join("\n")); 
-fs.writeFileSync("../wasm/schema/schema-functions.cpp", cppSchema.join("\n")); 
-fs.writeFileSync("../ifc-schema.ts", tsSchema.join("\n")); 
+fs.writeFileSync("../cpp/schema/ifc-schema.h", chSchema.join("\n")); 
+fs.writeFileSync("../cpp/schema/schema-functions.cpp", cppSchema.join("\n")); 
+fs.writeFileSync("../ts/ifc-schema.ts", tsSchema.join("\n")); 
 
 console.log(`...Done!`);
