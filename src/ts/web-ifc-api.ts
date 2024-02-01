@@ -103,24 +103,26 @@ export interface FlatMesh {
 export interface Point {
     x: number;
     y: number;
+    z?: number;
 }
 
 export interface Curve {
-    curves: Array<Point>;
+    points: Array<Point>;
 }
 
-export interface IfcCrossSection {
+export interface CrossSection {
+    curves: Array<Curve>;
+    expressID: Array<number>;
+}
+
+export interface AlignmentSegment {
     curves: Array<Curve>;
 }
 
-export interface IfcAlignmentSegment {
-    curves: Array<Curve>;
-}
-
-export interface IfcAlignment {
+export interface Alignment {
     FlatCoordinationMatrix: Array<number>;
-    Horizontal: IfcAlignmentSegment;
-    Vertical: IfcAlignmentSegment;
+    Horizontal: AlignmentSegment;
+    Vertical: AlignmentSegment;
 }
 
 export interface IfcGeometry {
@@ -723,7 +725,7 @@ export class IfcAPI {
      * @param modelID model ID
      * @returns Lists with the cross sections curves as sets of points
      */
-    GetAllCrossSections2D(modelID: Number): any
+    GetAllCrossSections2D(modelID: Number): Array<CrossSection>
     {
         const crossSections =  this.wasmModule.GetAllCrossSections2D(modelID);
         const crossSectionList = [];
@@ -733,13 +735,13 @@ export class IfcAPI {
             const expressList = [];
             for (let j = 0; j < alignment.curves.size(); j++) {
                 const curve = alignment.curves.get(j);
-                const ptList = [];
+                const ptList: Array<Point> = [];
                 for (let p = 0; p < curve.points.size(); p++) {
                 const pt = curve.points.get(p);
-                const newPoint = { x: pt.x, y: pt.y, z: pt.z };
+                const newPoint: Point = { x: pt.x, y: pt.y, z: pt.z };
                 ptList.push(newPoint);
                 }
-                const newCurve = { points: ptList };
+                const newCurve: Curve = { points: ptList };
                 curveList.push(newCurve);
                 expressList.push(alignment.expressID.get(j));
             }
@@ -754,14 +756,14 @@ export class IfcAPI {
      * @param modelID model ID
      * @returns Lists with the cross sections curves as sets of points
      */
-    GetAllCrossSections3D(modelID: Number): any
+    GetAllCrossSections3D(modelID: Number): Array<CrossSection>
     {
         const crossSections =  this.wasmModule.GetAllCrossSections3D(modelID);
         const crossSectionList = [];
         for (let i = 0; i < crossSections.size(); i++) {
             const alignment = crossSections.get(i);
-            const curveList = [];
-            const expressList = [];
+            const curveList: Array<Curve> = [];
+            const expressList: Array<number> = [];
             for (let j = 0; j < alignment.curves.size(); j++) {
                 const curve = alignment.curves.get(j);
                 const ptList = [];
@@ -770,7 +772,7 @@ export class IfcAPI {
                 const newPoint = { x: pt.x, y: pt.y, z: pt.z };
                 ptList.push(newPoint);
                 }
-                const newCurve = { points: ptList };
+                const newCurve: Curve = { points: ptList };
                 curveList.push(newCurve);
                 expressList.push(alignment.expressID.get(j));
             }
@@ -793,7 +795,7 @@ export class IfcAPI {
           const horList = [];
           for (let j = 0; j < alignment.Horizontal.curves.size(); j++) {
             const curve = alignment.Horizontal.curves.get(j);
-            const ptList = [];
+            const ptList: Array<Point> = [];
             for (let p = 0; p < curve.points.size(); p++) {
               const pt = curve.points.get(p);
               const newPoint = { x: pt.x, y: pt.y };
@@ -902,8 +904,7 @@ export class IfcAPI {
             curve3D: curve3DList,
           };
           alignmentList.push(align);
-    
-          /////
+
         }
         return alignmentList;
       }
