@@ -25,11 +25,11 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
         sudo update-alternatives --set gcc /usr/bin/gcc-13
     - name: Configure
-      working-directory: ${{github.workspace}}/src/wasm
-      run: cmake -B ${{github.workspace}}/src/wasm/Build -DCMAKE_BUILD_TYPE=${{matrix.configuration}}
+      working-directory: ${{github.workspace}}/src/cpp
+      run: cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=${{matrix.configuration}}
     - name: Build
-      working-directory: ${{github.workspace}}/src/wasm
-      run: cmake --build ${{github.workspace}}/src/wasm/Build --config ${{matrix.configuration}}
+      working-directory: ${{github.workspace}}/src/cpp
+      run: cmake --build ${{github.workspace}}/src/cpp/Build --config ${{matrix.configuration}}
     - name: Test
-      working-directory: ${{github.workspace}}/src/wasm/Build
+      working-directory: ${{github.workspace}}/src/cpp/Build
       run: ctest -VV -C ${{matrix.configuration}} -L web-ifc

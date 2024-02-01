@@ -35,6 +35,7 @@ namespace webifc::parsing
   {
       public:
         IfcTokenStream(const size_t chunkSize, const size_t maxChunks);
+        ~IfcTokenStream();
         void SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
         void SetTokenSource(std::istream &requestData);
         template <typename T> T Read()
@@ -71,6 +72,7 @@ namespace webifc::parsing
         {
           public:
             IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, const uint32_t size);
+            ~IfcFileStream();
             void Go(const uint32_t ref);
             void Forward();
             void Back();

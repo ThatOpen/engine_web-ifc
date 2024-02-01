@@ -24,8 +24,6 @@ import {
 
 declare var __WASM_PATH__:string;
 
-if (typeof __WASM_PATH__ === "undefined") __WASM_PATH__ = "./web-ifc";
-
 let WebIFCWasm: any;
 
 if (typeof self !== 'undefined' && self.crossOriginIsolated) {
