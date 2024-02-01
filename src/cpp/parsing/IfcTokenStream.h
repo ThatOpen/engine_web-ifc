@@ -96,6 +96,7 @@ namespace webifc::parsing
         {
             public:
             	IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *_fileStream);
+              ~IfcTokenChunk();
               bool Clear();
               bool IsLoaded();
               size_t TokenSize();

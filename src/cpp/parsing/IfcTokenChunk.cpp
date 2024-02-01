@@ -15,6 +15,10 @@ namespace webifc::parsing
     _currentSize = 0;
     if (_fileStream!=nullptr) Load();
   }
+
+  IfcTokenStream::IfcTokenChunk::~IfcTokenChunk(){
+    delete[] _chunkData;
+  }
   
   bool IfcTokenStream::IfcTokenChunk::Clear()
   {
