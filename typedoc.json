@@ -18,7 +18,7 @@
         "private": false,
         "external": false
     },
-    "readme":"readme.md",
+    "readme":"README.md",
     "excludeNotDocumented": true,
     "excludeNotDocumentedKinds": [
         "Reference"
