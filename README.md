@@ -1,13 +1,11 @@
 <p align="center">
   <a href="https://thatopen.com/">TOC</a>
   |
-  <a href="https://ifcjs.github.io/web-ifc/docs">documentation</a>
+  <a href="https://ifcjs.github.io/web-ifc/docs">web-ifc documentation</a>
   |
   <a href="https://docs.thatopen.com/intro"> platform documentation</a>
   |
   <a href="https://ifcjs.github.io/web-ifc/demo">demo</a>
-  |
-  <a href="https://ifcjs.github.io/web-ifc/examples">example models</a>
   |
   <a href="https://people.thatopen.com/">community</a>
   |

@@ -18,7 +18,7 @@
         "private": false,
         "external": false
     },
-    "readme":"apidocs.md",
+    "readme":"readme.md",
     "excludeNotDocumented": true,
     "excludeNotDocumentedKinds": [
         "Reference"
