@@ -995,7 +995,7 @@ export class IfcAPI {
     */
     LoadAllGeometry(modelID: number): Vector<FlatMesh> {
         let flatMeshes =  this.wasmModule.LoadAllGeometry(modelID);
-        lineIds[Symbol.iterator] = function*() { for (let i=0; i < lineIds.size();i++) yield lineIds.get(i); }
+        flatMeshes[Symbol.iterator] = function*() { for (let i=0; i < flatMeshes.size();i++) yield flatMeshes.get(i); }
         return flatMeshes;
     }
 
