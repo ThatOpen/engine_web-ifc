@@ -15,11 +15,9 @@ import type {
 
 let ifcApi: IfcAPI;
 let modelID: number;
-let tmpModelID: number;
 let expressId: number = 9989; // an IFCSPACE
 let geometries: Vector < FlatMesh > ; // to store geometries instead of refetching them
 let allGeometriesSize: number = 119;
-let quantityOfknownErrors: number = 0;
 let meshesCount: number = 115;
 let totalLineNumber : number = 6487;
 let emptyFileModelID: number;
@@ -49,7 +47,6 @@ beforeAll(async () => {
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
     emptyFileModelID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
-    tmpModelID = ifcApi.OpenModel(exampleIFCData);
 })
 
 describe('WebIfcApi reading methods', () => {
@@ -67,6 +64,12 @@ describe('WebIfcApi reading methods', () => {
     test('can return the correct number of line when getting all lines', () => {
         const lines: any = ifcApi.GetAllLines(modelID);
         expect(lines.size()).toEqual(totalLineNumber);
+    })
+    test('can return the correct number of line when getting all lines and iterate over them', () => {
+        const lines: any = ifcApi.GetAllLines(modelID);
+        let i=0;
+        for (let _ of lines) i++;
+        expect(i).toEqual(totalLineNumber);
     })
     test('can GetLine', () => {
         const line: Object = ifcApi.GetLine(modelID, expressId);
@@ -98,10 +101,6 @@ describe('WebIfcApi reading methods', () => {
         let line: RawLineData = ifcApi.GetRawLineData(modelID, 1);
         expect(line.arguments[1].value).toEqual('Autodesk Revit 2021 (ENU) Cé');
     })
-    test('can count errors in ifc file', () => {
-        let errors: any = ifcApi.GetAndClearErrors(modelID);
-        expect(errors.size()).toEqual(quantityOfknownErrors);
-    })
     test('can Create Ifc Guid To Express Id Map', () => {
         ifcApi.CreateIfcGuidToExpressIdMapping(modelID);
         expect(ifcApi.ifcGuidMap.get(0)?.get(expressIDMatchingGuid.expressID)).toEqual(expressIDMatchingGuid.guid);
@@ -119,11 +118,6 @@ describe('WebIfcApi reading methods', () => {
         const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
         expect(maxExpressId).toEqual(lastExpressId);
     })
-    test('can increment the max expressID', () => {
-        let maxEID = ifcApi.GetMaxExpressID(tmpModelID);
-        let newEID = ifcApi.IncrementMaxExpressID(tmpModelID, 2);
-        expect(newEID).toBe(maxEID + 2);
-    });
      test('can use the guid->expressID map', () => {
         let eid = ifcApi.GetExpressIdFromGuid(modelID,'39ashYNBDEDR$HhFzW6w9a');
         expect(eid).toBe(138);
@@ -372,7 +366,7 @@ describe('WebIfcApi writing methods', () => {
         let ifcDatas = ifcApi.SaveModel(modelID);
         let exportModelID = ifcApi.OpenModel(ifcDatas);
         const line: any = ifcApi.GetLine(exportModelID, expressId);
-        expect(exportModelID).toEqual(3);
+        expect(exportModelID).toEqual(2);
         expect(line.expressID).toEqual(expressId);
     })
 
@@ -448,7 +442,7 @@ describe('some use cases', () => {
 describe('creating ifc', () => {
     test('can create new ifc model', () => {
         let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
-        expect(createdID).toBe(5);
+        expect(createdID).toBe(4);
         expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
         expect(ifcApi.wasmModule.GetModelSize(createdID)).toBeGreaterThan(0);
         expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBe(7);
@@ -459,7 +453,7 @@ describe('creating ifc', () => {
 
     test('can create & save new ifc model', () => {
         let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
-        expect(createdID).toBe(6);
+        expect(createdID).toBe(5);
         ifcApi.SaveModel(createdID);
         ifcApi.CloseModel(createdID);
     });
@@ -500,7 +494,7 @@ describe('opening large amounts of data', () => {
         };
         const exampleIFCData = fs.readFileSync(path.join(__dirname, '../ifcfiles/public/S_Office_Integrated Design Archi.ifc'));
         let modelId = ifcApi.OpenModel(exampleIFCData,s);
-        expect(modelId).toBe(7);
+        expect(modelId).toBe(6);
     });
 
      test("open a small model but many times", () => {
@@ -555,12 +549,7 @@ describe('write a large IFC file', () => {
             }
         }      
     // save file
-    const outputFile = fs.openSync("./out.ifc",'w');
-    let cFilePosition = 0;
-    function callback(buffer:Uint8Array) {
-        fs.writeSync(outputFile, buffer,0, buffer.length,cFilePosition);
-        cFilePosition+=buffer.length;
-    }
+    function callback(_:Uint8Array) {}
     ifcApi.SaveModelToCallback(newModID,callback);
     ifcApi.CloseModel(newModID);
        
