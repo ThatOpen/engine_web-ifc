@@ -176,7 +176,7 @@ export function generateClass(entity:Entity, classBuffer: Array<string>, types:T
     classBuffer.push(`${prop.name}!: ${type};`);
   });
 
-  classBuffer.push(`constructor(${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  classBuffer.push(`constructor(${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""}${p.dimensions>1 ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
   classBuffer.push(`{`)
   if (!entity.parent) {
     classBuffer.push(`super();`)
@@ -431,10 +431,12 @@ export function parseElements(data:string)
                 let setLoc = split.indexOf("SET");
                 if (setLoc == -1) setLoc = split.indexOf("LIST")
                 if (split[setLoc+1].includes("[0:")) optional=true;
+
             }
             if (set) {
                 var count = (line.match(/LIST/g) || []).length;
                 dimensions = count;
+                
             }
             let type = split[split.length - 1].replace(";", "");
             let firstBracket = type.indexOf("(");
