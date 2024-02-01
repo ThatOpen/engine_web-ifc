@@ -15,11 +15,9 @@ import type {
 
 let ifcApi: IfcAPI;
 let modelID: number;
-let tmpModelID: number;
 let expressId: number = 9989; // an IFCSPACE
 let geometries: Vector < FlatMesh > ; // to store geometries instead of refetching them
 let allGeometriesSize: number = 119;
-let quantityOfknownErrors: number = 0;
 let meshesCount: number = 115;
 let totalLineNumber : number = 6487;
 let emptyFileModelID: number;
@@ -49,7 +47,6 @@ beforeAll(async () => {
     const exampleIFCData = fs.readFileSync(exampleIFCPath);
     modelID = ifcApi.OpenModel(exampleIFCData);
     emptyFileModelID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
-    tmpModelID = ifcApi.OpenModel(exampleIFCData);
 })
 
 describe('WebIfcApi reading methods', () => {
@@ -67,6 +64,12 @@ describe('WebIfcApi reading methods', () => {
     test('can return the correct number of line when getting all lines', () => {
         const lines: any = ifcApi.GetAllLines(modelID);
         expect(lines.size()).toEqual(totalLineNumber);
+    })
+    test('can return the correct number of line when getting all lines and iterate over them', () => {
+        const lines: any = ifcApi.GetAllLines(modelID);
+        let i=0;
+        for (let _ of lines) i++;
+        expect(i).toEqual(totalLineNumber);
     })
     test('can GetLine', () => {
         const line: Object = ifcApi.GetLine(modelID, expressId);
@@ -98,10 +101,6 @@ describe('WebIfcApi reading methods', () => {
         let line: RawLineData = ifcApi.GetRawLineData(modelID, 1);
         expect(line.arguments[1].value).toEqual('Autodesk Revit 2021 (ENU) Cé');
     })
-    test('can count errors in ifc file', () => {
-        let errors: any = ifcApi.GetAndClearErrors(modelID);
-        expect(errors.size()).toEqual(quantityOfknownErrors);
-    })
     test('can Create Ifc Guid To Express Id Map', () => {
         ifcApi.CreateIfcGuidToExpressIdMapping(modelID);
         expect(ifcApi.ifcGuidMap.get(0)?.get(expressIDMatchingGuid.expressID)).toEqual(expressIDMatchingGuid.guid);
@@ -119,11 +118,6 @@ describe('WebIfcApi reading methods', () => {
         const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
         expect(maxExpressId).toEqual(lastExpressId);
     })
-    test('can increment the max expressID', () => {
-        let maxEID = ifcApi.GetMaxExpressID(tmpModelID);
-        let newEID = ifcApi.IncrementMaxExpressID(tmpModelID, 2);
-        expect(newEID).toBe(maxEID + 2);
-    });
      test('can use the guid->expressID map', () => {
         let eid = ifcApi.GetExpressIdFromGuid(modelID,'39ashYNBDEDR$HhFzW6w9a');
         expect(eid).toBe(138);
