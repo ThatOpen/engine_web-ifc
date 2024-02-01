@@ -229,6 +229,11 @@ describe('WebIfcApi geometries', () => {
         });
         expect(count).toEqual(meshesCount);
     })
+    test('get totals and indexes of streamed meshes ', () => {
+        ifcApi.StreamAllMeshes(modelID, (_,index,total) => {
+            expect(index).toBeLessThan(total);
+        });
+    })
     test('can ensure the corret number of all streamed meshes with a given Types', () => {
         let count: number = 0;
         ifcApi.StreamAllMeshesWithTypes(modelID, [WebIFC.IFCEXTRUDEDAREASOLID], () => {

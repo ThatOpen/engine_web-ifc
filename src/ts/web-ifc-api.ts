@@ -957,7 +957,7 @@ export class IfcAPI {
      * @param expressIDs expressIDs of elements to stream
 	 * @param meshCallback callback function that is called for each mesh
 	 */
-    StreamMeshes(modelID: number, expressIDs: Array<number>, meshCallback: (mesh: FlatMesh) => void) {
+    StreamMeshes(modelID: number, expressIDs: Array<number>, meshCallback: (mesh: FlatMesh, index:number, total:number) => void) {
         this.wasmModule.StreamMeshes(modelID, expressIDs,meshCallback);
     }
 
@@ -966,7 +966,7 @@ export class IfcAPI {
 	 * @param modelID Model handle retrieved by OpenModel
 	 * @param meshCallback callback function that is called for each mesh
 	 */
-    StreamAllMeshes(modelID: number, meshCallback: (mesh: FlatMesh) => void) {
+    StreamAllMeshes(modelID: number, meshCallback: (mesh: FlatMesh, index:number, total:number) => void) {
         this.wasmModule.StreamAllMeshes(modelID, meshCallback);
     }
 
@@ -976,7 +976,7 @@ export class IfcAPI {
 	 * @param types types of elements to stream
 	 * @param meshCallback callback function that is called for each mesh
 	 */
-    StreamAllMeshesWithTypes(modelID: number, types: Array<number>, meshCallback: (mesh: FlatMesh) => void) {
+    StreamAllMeshesWithTypes(modelID: number, types: Array<number>, meshCallback: (mesh: FlatMesh, index:number, total:number) => void) {
         this.wasmModule.StreamAllMeshesWithTypes(modelID, types, meshCallback);
     }
 
