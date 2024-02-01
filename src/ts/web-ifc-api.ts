@@ -392,18 +392,6 @@ export class IfcAPI {
     }
 
     /**
-     * Export a model to IFC
-     * @param modelID model ID
-     * @returns blob with mimetype application/x-step containing the model data 
-     * 
-     * @deprecated Use SaveModel instead - will be removed in next version
-     */
-    ExportFileAsIFC(modelID: number) {
-        Log.warn("ExportFileAsIFC is deprecated, use SaveModel instead");
-        return this.SaveModel(modelID);
-    }
-    
-    /**
     * Retrieves the geometry of an element
     * @param modelID Model handle retrieved by OpenModel
     * @param geometryExpressID express ID of the element
