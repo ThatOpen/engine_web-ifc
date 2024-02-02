@@ -232,6 +232,7 @@ export class IfcAPI {
             CIRCLE_SEGMENTS: 12,
             TAPE_SIZE: 67108864,
             MEMORY_LIMIT: 2147483648,
+            LINEWRITER_BUFFER: 10000,
             ...settings
         };
         return s;

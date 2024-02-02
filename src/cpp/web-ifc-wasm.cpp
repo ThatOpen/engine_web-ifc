@@ -722,7 +722,6 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
     return responseCode;
 }
 
-
 std::string GetNameFromTypeCode(uint32_t type) 
 {
     return std::string(schemaManager.IfcTypeCodeToType(type));
@@ -968,7 +967,7 @@ uint32_t GetMaxExpressID(uint32_t modelID)
     return loader->GetMaxExpressId();
 }
 
-extern "C" bool IsModelOpen(uint32_t modelID)
+bool IsModelOpen(uint32_t modelID)
 {
     if (modelID >= models.size()) return false;
     auto loader = models[modelID].GetLoader();
@@ -1014,6 +1013,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("CIRCLE_SEGMENTS", &LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &LoaderSettings::TAPE_SIZE)
         .field("MEMORY_LIMIT", &LoaderSettings::MEMORY_LIMIT)
+        .field("LINEWRITER_BUFFER",&LoaderSettings::LINEWRITER_BUFFER)
     ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
