@@ -18,7 +18,7 @@ namespace webifc::parsing
 
   IfcTokenStream::~IfcTokenStream() 
   {
-    for (size_t i=0; i < _chunks.size();i++)  _chunks[i].Clear();
+    for (size_t i=0; i < _chunks.size();i++)  _chunks[i].Clear(true);
     _chunks.clear();
     std::vector<IfcTokenChunk>().swap(_chunks);
     delete _fileStream;

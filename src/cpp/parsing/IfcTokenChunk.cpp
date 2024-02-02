@@ -16,12 +16,17 @@ namespace webifc::parsing
     if (_fileStream!=nullptr) Load();
   }
 
-  bool IfcTokenStream::IfcTokenChunk::Clear()
+  bool IfcTokenStream::IfcTokenChunk::Clear(bool force)
   {
-    if (_fileStream==nullptr) return false; 
-    delete[] _chunkData;
+    if (_fileStream==nullptr && !force) return false; 
+    if (_chunkData!=nullptr) delete[] _chunkData;
     _loaded=false;
     return true;
+  }
+
+  bool IfcTokenStream::IfcTokenChunk::Clear()
+  {
+    return Clear(false);
   }
   
   size_t IfcTokenStream::IfcTokenChunk::GetTokenRef()
