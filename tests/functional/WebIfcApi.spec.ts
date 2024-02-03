@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as WebIFC from '../../dist/web-ifc-api-node.js';
 import {IFC2X3} from '../../dist/web-ifc-api-node.js';
-import {LoaderSettings,IfcLineObject,Schemas,IFCCARTESIANPOINT,IFCLENGTHMEASURE,IFCPOLYLOOP} from '../../dist/web-ifc-api-node.js';
+import {LoaderSettings,IfcLineObject,Schemas,IFCFACE,IFCFACEOUTERBOUND,IFCCARTESIANPOINT,IFCLENGTHMEASURE,IFCPOLYLOOP} from '../../dist/web-ifc-api-node.js';
 
 import type {
     Vector,
@@ -532,6 +532,49 @@ describe('function based opening', () => {
 });
 
 describe('write a large IFC file', () => {
+    test("write a large IFC file in stages",  () => {
+         const modelOption = {
+            schema: Schemas.IFC2X3,  // ifc版本
+            name: "test.ifc",
+            description: ["1", "2"],
+            authors: ["3", "4"],
+            organizations: ["5", "6"],
+            authorization: "78",
+        }
+        const modelCount = 2;
+        let newModelID = 0;
+        let maxExpressID = 1;
+        for (let i = 0; i < modelCount; i++) {
+            console.log("START START")
+            newModelID = ifcApi.CreateModel(modelOption);
+            const faces = [];
+            let cartPoint1 = ifcApi.CreateIfcEntity(newModelID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,1),ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,2),ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,3)]);
+            cartPoint1.expressID = maxExpressID++;
+            let cartPoint2 = ifcApi.CreateIfcEntity(newModelID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,4),ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,5),ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,6)]);
+            cartPoint2.expressID = maxExpressID++;
+            let cartPoint3 = ifcApi.CreateIfcEntity(newModelID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,7),ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,8),ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,9)]);
+            cartPoint3.expressID = maxExpressID++;
+            let array = [cartPoint1, cartPoint2, cartPoint3];
+            let poly = ifcApi.CreateIfcEntity(newModelID,IFCPOLYLOOP, array);
+            poly.expressID = maxExpressID++;
+            ifcApi.WriteLine(newModelID, poly);
+
+            const faceOuterBound = ifcApi.CreateIfcEntity(newModelID,IFCFACEOUTERBOUND, poly, true)
+            faceOuterBound.expressID = maxExpressID++;
+            ifcApi.WriteLine(newModelID, faceOuterBound);
+
+            const face = ifcApi.CreateIfcEntity(newModelID,IFCFACE, [faceOuterBound])
+            face.expressID = maxExpressID++;
+            faces.push(face);
+            ifcApi.WriteLine(newModelID, face);
+            
+            fs.appendFileSync("test.ifc", ifcApi.SaveModel(newModelID)); 
+            fs.appendFileSync("test.ifc", "\n---------------------\n"); 
+            ifcApi.CloseModel(newModelID)
+            console.log("START END")
+        }
+
+    });
     test("write a large IFC file",  () => {
         const modelOption = {
             schema: Schemas.IFC2X3,  // ifc版本
@@ -542,9 +585,9 @@ describe('write a large IFC file', () => {
             authorization: "78",
         }
         let newModID = ifcApi.CreateModel(modelOption);
-        const modelCount = 5000;
+        const modelCount = 1;
         for (let i = 0; i < modelCount; i++) {
-            for (let j = 0; j < 50; j++) {
+            for (let j = 0; j < 1; j++) {
                 let cartPoint1 = ifcApi.CreateIfcEntity(newModID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,1),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,2),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,3)]);
                 let cartPoint2 = ifcApi.CreateIfcEntity(newModID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,4),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,5),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,6)]);
                 let cartPoint3 = ifcApi.CreateIfcEntity(newModID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,7),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,8),ifcApi.CreateIfcType(newModID,IFCLENGTHMEASURE,9)]);

@@ -431,10 +431,12 @@ namespace webifc::parsing {
   	{
       // create line object
   		IfcLine * line = new IfcLine();
-      _lines.push_back(line);
   		// fill line data
   		line->ifcType = type;
       line->tapeOffset = start;
+      //place in vector
+      _lines.resize(expressID,_nullLine);
+      _lines[expressID-1]=line;
   		_ifcTypeToExpressID[type].push_back(expressID);
 
   	} else _lines[expressID-1]->tapeOffset = start;
