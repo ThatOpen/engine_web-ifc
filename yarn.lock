@@ -844,9 +844,9 @@
   integrity sha512-gVC1InwyVrO326wbBZw+AO3u2vRXz/iRWq9jYhpG4W8LXyIgDv3ZmcLQ5Q4Gs+gFMyqx+viFoFT+l3p61QFCmQ==
 
 "@types/webxr@*":
-  version "0.5.12"
-  resolved "https://registry.npmjs.org/@types/webxr/-/webxr-0.5.12.tgz"
-  integrity sha512-+6LV7bN17XUWy4wIMILsGQX6ucawf64lYLG9jaGKSvOnKaJzWjcKXAkO0dZaC8MfoEqYQC7gl1GQnfITjBcazw==
+  version "0.5.13"
+  resolved "https://registry.yarnpkg.com/@types/webxr/-/webxr-0.5.13.tgz#5fd07863819c30869d66b765926d0b5a53a7e9e0"
+  integrity sha512-Hi4K3aTEoaa31Cep75AA9wK5q2iZgC1L70serPbI11L4YieoZpu5LvLr6FZXyIdqkkGPh1WMuDf6oSPHJXBkoA==
 
 "@types/yargs-parser@*":
   version "21.0.3"
