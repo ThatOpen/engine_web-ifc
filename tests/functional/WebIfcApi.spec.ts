@@ -19,9 +19,9 @@ let expressId: number = 9989; // an IFCSPACE
 let geometries: Vector < FlatMesh > ; // to store geometries instead of refetching them
 let allGeometriesSize: number = 119;
 let meshesCount: number = 115;
-let totalLineNumber : number = 6487;
+let totalLineNumber : number = 6488;
 let emptyFileModelID: number;
-let lastExpressId : number = 14312;
+let lastExpressId : number = 14313;
 let expectedFileDescription : string = "ViewDefinition [CoordinationView_V2.0]";
 let expectedFileSchema = "IFC2X3";
 let expectedFileName = "3458";
@@ -83,6 +83,10 @@ describe('WebIfcApi reading methods', () => {
     test('expect the correct line to be returned', () => {
         const line: any = ifcApi.GetLine(modelID, expressId);
         expect(line.expressID).toEqual(expressId);
+    })
+    test('IFC Address Parsing', () => {
+        const line: any = ifcApi.GetLine(modelID, 14313);
+        expect(line.AddressLines.length).toBe(1);
     })
     test('expect getting flatten line return verbose line', () => {
         let flattened: boolean = true;
@@ -527,7 +531,7 @@ describe('function based opening', () => {
         }
         let modelId = ifcApi.OpenModelFromCallback(retriever);
         fs.closeSync(file);
-        expect(ifcApi.GetAllLines(modelId).size()).toBe(6487);
+        expect(ifcApi.GetAllLines(modelId).size()).toBe(6488);
     });
 });
 
@@ -545,7 +549,6 @@ describe('write a large IFC file', () => {
         let newModelID = 0;
         let maxExpressID = 1;
         for (let i = 0; i < modelCount; i++) {
-            console.log("START START")
             newModelID = ifcApi.CreateModel(modelOption);
             const faces = [];
             let cartPoint1 = ifcApi.CreateIfcEntity(newModelID,IFCCARTESIANPOINT,[ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,1),ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,2),ifcApi.CreateIfcType(newModelID,IFCLENGTHMEASURE,3)]);
@@ -571,7 +574,6 @@ describe('write a large IFC file', () => {
             fs.appendFileSync("test.ifc", ifcApi.SaveModel(newModelID)); 
             fs.appendFileSync("test.ifc", "\n---------------------\n"); 
             ifcApi.CloseModel(newModelID)
-            console.log("START END")
         }
 
     });

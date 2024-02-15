@@ -39,7 +39,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     }
 
     let prefix = '';
-    const valueCheckPrefix = '!v['+i+'] ? null :';
+    const valueCheckPrefix = '!v['+i+'] && v['+i+']!=\'\' ? null :';
     if (p.optional) prefix = valueCheckPrefix;
 
     if (p.set)
@@ -47,7 +47,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
         content = 'v['+i+']?.map((p:any) =>  ';
 
         if (p.dimensions > 1) content+="p?.map((p:any) =>";
-        content+='p?.value ?';
+        content+='p?.value && p?.value!=\'\' ?';
         if (type?.isSelect){
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
             if (isEntitySelect) content+='new Handle(p.value)';
