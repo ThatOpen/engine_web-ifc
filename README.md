@@ -54,7 +54,7 @@ ifcApi.CloseModel(modelID);
 
 ```
 
-See [examples](https://github.com/tomvandig/web-ifc/tree/main/examples/usage/src) for more details on how to use web-ifc.
+See [examples](https://github.com/IFCjs/web-ifc/tree/main/examples/usage) for more details on how to use web-ifc.
 
 ## Current Build
 
@@ -113,7 +113,7 @@ The output of the build process consts of the following files:
 
 ## Stand alone C++
 
-Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/tomvandig/web-ifc/blob/main/src/wasm/web-ifc-test.cpp) for a simple entry point to get started.
+Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/IFCjs/web-ifc/blob/main/src/cpp/web-ifc-test.cpp) for a simple entry point to get started.
 
 [npm]: https://img.shields.io/npm/v/web-ifc
 [npm-url]: https://www.npmjs.com/package/web-ifc
