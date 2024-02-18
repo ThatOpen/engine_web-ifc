@@ -18,7 +18,7 @@ namespace webifc::parsing {
   void p21encode(std::string_view input, std::ostringstream &output);
   std::string p21decode(std::string_view & str);    
  
-   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer, schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
+   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
    { 
      _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
      _nullLine = new IfcLine();
@@ -670,4 +670,32 @@ namespace webifc::parsing {
       return defaultValue;
     }
 
+    std::vector<uint32_t> IfcLoader::GetAllLines() const {
+      std::vector<uint32_t> expressIDs;
+      auto numLines = GetMaxExpressId();
+      for (uint32_t i = 1; i <= numLines; i++)
+      {
+          if (IsValidExpressID(i)) continue;
+          expressIDs.push_back(i);
+      }
+      return expressIDs;
+    }
+
+    uint32_t IfcLoader::GetNextExpressID(uint32_t expressId) const {
+      uint32_t currentId = expressId;
+      bool cont = true;
+      uint32_t maxId = GetMaxExpressId();
+
+      while(cont)
+      {
+          if(currentId > maxId)
+          {
+              cont = false;
+              continue;
+          }
+          currentId++;
+          cont = !(IsValidExpressID(currentId));
+      }
+      return currentId;
+    }
 }

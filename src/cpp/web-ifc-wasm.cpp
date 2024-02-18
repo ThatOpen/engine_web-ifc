@@ -6,67 +6,13 @@
 #include <algorithm>
 #include <vector>
 #include <stack>
-#include <sstream>
 #include <cstdint>
 #include <memory>
 #include <emscripten/bind.h>
 #include <spdlog/spdlog.h>
-
-#include "parsing/IfcLoader.h"
-#include "schema/IfcSchemaManager.h"
-#include "geometry/IfcGeometryProcessor.h"
-
+#include "modelmanager/ModelManager.h"
 #include "version.h"
 
-struct LoaderSettings
-{
-    bool OPTIMIZE_PROFILES = false;
-    bool COORDINATE_TO_ORIGIN = false;
-    uint16_t CIRCLE_SEGMENTS = 12;
-    uint32_t TAPE_SIZE = 67108864 ; // probably no need for anyone other than web-ifc devs to change this
-    uint32_t MEMORY_LIMIT = 2147483648;
-    uint16_t LINEWRITER_BUFFER = 10000;
-};
-
-struct ModelInfo
-{
-    public:
-        ModelInfo(LoaderSettings _settings, webifc::schema::IfcSchemaManager &_schemaManager) : schemaManager(_schemaManager), settings(_settings)
-        {
-            loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,_settings.LINEWRITER_BUFFER,schemaManager);
-        }
-        
-        webifc::geometry::IfcGeometryProcessor * GetGeometryLoader()
-        {
-            if (geometryLoader==nullptr)
-            {
-                geometryLoader = new webifc::geometry::IfcGeometryProcessor(*loader,schemaManager,settings.CIRCLE_SEGMENTS,settings.COORDINATE_TO_ORIGIN, settings.OPTIMIZE_PROFILES);
-            }
-            return geometryLoader;
-        }
-        
-        webifc::parsing::IfcLoader * GetLoader()
-        {
-            return loader;
-        }
-
-        void Close()
-        {
-            delete geometryLoader;
-            geometryLoader=nullptr;
-            delete loader;
-            loader=nullptr;
-        }
-
-    private:
-        webifc::schema::IfcSchemaManager &schemaManager;
-        LoaderSettings settings;
-        webifc::parsing::IfcLoader * loader=nullptr;
-        webifc::geometry::IfcGeometryProcessor * geometryLoader=nullptr;
-};
-
-std::vector<ModelInfo> models;
-webifc::schema::IfcSchemaManager schemaManager;
 
 #ifdef __EMSCRIPTEN_PTHREADS__
     constexpr bool MT_ENABLED = true;
@@ -74,87 +20,54 @@ webifc::schema::IfcSchemaManager schemaManager;
     constexpr bool MT_ENABLED = false;
 #endif
 
-bool shown_version_header = false;
+webifc::manager::ModelManager manager = new webifc::manager::ModelManager(MT_ENABLED);
 
-int CreateModel(LoaderSettings settings)
-{
-    if (!shown_version_header)
-    {
-        std::stringstream str;
-        str << "web-ifc: "<< WEB_IFC_VERSION_NUMBER << " threading: " << (MT_ENABLED ? "enabled" : "disabled");
-        str << " schemas available [";
-        for (auto schema : schemaManager.GetAvailableSchemas())  str << schemaManager.GetSchemaName(schema)<<",";
-        str << "]";
-        spdlog::info(str.str());
-        shown_version_header = true;
-    }
-
-    models.emplace_back(settings,schemaManager);
-    return models.size()-1;
+int CreateModel(webifc::manager::LoaderSettings settings) {
+    return manager.CreateModel(settings);
 }
 
-int OpenModel(LoaderSettings settings, emscripten::val callback)
+int OpenModel(webifc::manager::LoaderSettings settings, emscripten::val callback)
 {
-    auto modelID = CreateModel(settings);
+    auto modelID = manager.CreateModel(settings);
     const std::function<uint32_t(char *, size_t, size_t)> loaderFunc= [callback](char* dest, size_t sourceOffset, size_t destSize) {    
         emscripten::val retVal = callback((uint32_t)dest,sourceOffset, destSize);
         uint32_t len = retVal.as<uint32_t>();
         return len;
     };
     
-    models[modelID].GetLoader()->LoadFile(loaderFunc);
-
+    manager.GetIfcLoader(modelID)->LoadFile(loaderFunc);
     return modelID;
 }
 
 void SaveModel(uint32_t modelID, emscripten::val callback)
 {
-    models[modelID].GetLoader()->SaveFile([&](char* src, size_t srcSize)
+    if (manager.IsModelOpen(modelID)) return;
+    manager.GetIfcLoader(modelID)->SaveFile([&](char* src, size_t srcSize)
         {
             emscripten::val retVal = callback((uint32_t)src, srcSize);
         }
     );
 }
 
-int GetModelSize(uint32_t modelID)
-{
-    return models[modelID].GetLoader()->GetTotalSize();
+int GetModelSize(uint32_t modelID) {
+    return manager.IsModelOpen(modelID) ? manager.GetIfcLoader(modelID)->GetTotalSize() : 0;
 }
 
-void CloseModel(uint32_t modelID)
-{
-    models[modelID].Close();
+void CloseModel(uint32_t modelID) {
+    return manager.CloseModel(modelID);
 }
 
 webifc::geometry::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
 {
-    auto geomLoader = models[modelID].GetGeometryLoader();
-
-    if (!geomLoader)
-    {
-        return {};
-    }
-
-    webifc::geometry::IfcFlatMesh mesh = geomLoader->GetFlatMesh(expressID);
-    
-    for (auto& geom : mesh.geometries)
-    {
-        auto& flatGeom = geomLoader->GetGeometry(geom.geometryExpressID);
-        flatGeom.GetVertexData();
-    }
-
+    if (!manager.IsModelOpen(modelID)) return {};  
+    webifc::geometry::IfcFlatMesh mesh = manager.GetGeometryProcessor(modelID)->GetFlatMesh(expressID);
+    for (auto& geom : mesh.geometries) manager.GetGeometryProcessor(modelID)->GetGeometry(geom.geometryExpressID).GetVertexData();
     return mesh;
 }
 
 void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> & expressIds, emscripten::val callback) {
-    auto loader = models[modelID].GetLoader();
-    auto geomLoader = models[modelID].GetGeometryLoader();
-
-    if (!loader || !geomLoader)
-    {
-        return;
-    }
-
+    if (!manager.IsModelOpen(modelID)) return;    
+    auto geomLoader = manager.GetGeometryProcessor(modelID);
     int index = 0;
     int total = expressIds.size();
 
@@ -183,32 +96,11 @@ void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> & expressIds, em
     }
 }
 
-void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback)
-{
-    std::vector<uint32_t> expressIds;
-
-    uint32_t size = expressIdsVal["length"].as<uint32_t>();
-    for (size_t i=0; i < size; i++) 
-    {
-        emscripten::val expressIdVal = expressIdsVal[std::to_string(i)];
-
-        uint32_t expressId = expressIdVal.as<uint32_t>();
-
-        expressIds.push_back(expressId);
-    }
-    
-    StreamMeshes(modelID, expressIds, callback);
-}
-
 void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t>& types, emscripten::val callback)
 {
-    auto loader = models[modelID].GetLoader();
-
-    if (!loader)
-    {
-        return;
-    }
-
+    if (!manager.IsModelOpen(modelID)) return;
+    auto loader = manager.GetIfcLoader(modelID);
+   
     for (auto& type : types)
     {
         auto elements = loader->GetExpressIDsWithType(type);
@@ -216,36 +108,10 @@ void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t>& typ
     }
 }
 
-void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, emscripten::val callback)
-{
-    std::vector<uint32_t> types;
-
-    uint32_t size = typesVal["length"].as<uint32_t>();
-    uint32_t index = 0;
-    while (index < size)
-    {
-        emscripten::val typeVal = typesVal[std::to_string(index++)];
-
-        uint32_t type = typeVal.as<uint32_t>();
-
-        types.push_back(type);
-    }
-    
-    StreamAllMeshesWithTypes(modelID, types, callback);
-}
-
 void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
-    auto loader = models[modelID].GetLoader();
-    auto geomLoader = models[modelID].GetGeometryLoader();
-
-    if (!loader || !geomLoader)
-    {
-        return;
-    }
-
     std::vector<uint32_t> types;
 
-    for (auto& type : schemaManager.GetIfcElementList())
+    for (auto& type : manager.GetSchemaManager().GetIfcElementList())
     {
         if (type == webifc::schema::IFCOPENINGELEMENT || type == webifc::schema::IFCSPACE || type == webifc::schema::IFCOPENINGSTANDARDCASE)
         {
@@ -254,23 +120,17 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
 
         types.push_back(type);
     }
-
     StreamAllMeshesWithTypes(modelID, types, callback);
 }
 
 std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 {
-    auto loader = models[modelID].GetLoader();
-    auto geomLoader = models[modelID].GetGeometryLoader();
-
-    if (!loader || !geomLoader)
-    {
-        return {};
-    }
-
+    if (!manager.IsModelOpen(modelID)) return std::vector<webifc::geometry::IfcFlatMesh>();
+    auto loader = manager.GetIfcLoader(modelID);
+    auto geomLoader = manager.GetGeometryProcessor(modelID);
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
 
-    for (auto type : schemaManager.GetIfcElementList())
+    for (auto type : manager.GetSchemaManager().GetIfcElementList())
     {
         auto elements = loader->GetExpressIDsWithType(type);
 
@@ -296,24 +156,13 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 
 webifc::geometry::IfcGeometry GetGeometry(uint32_t modelID, uint32_t expressID)
 {
-    auto geomLoader = models[modelID].GetGeometryLoader();
-    if (!geomLoader)
-    {
-        return {};
-    }
-
-    return geomLoader->GetGeometry(expressID);
+    return manager.IsModelOpen(modelID) ? manager.GetGeometryProcessor(modelID)->GetGeometry(expressID) : webifc::geometry::IfcGeometry();
 }
 
-std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections2D(uint32_t modelID)
+std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections(uint32_t modelID,uint8_t dimensions)
 {
-    auto loader = models[modelID].GetLoader();
-    auto geomLoader = models[modelID].GetGeometryLoader();
-
-    if (!loader || !geomLoader)
-    {
-        return {};
-    }
+    if (!manager.IsModelOpen(modelID)) return std::vector<webifc::geometry::IfcCrossSections>();
+    auto geomLoader =  manager.GetGeometryProcessor(modelID);
 
     std::vector<uint32_t> typeList; 
     typeList.push_back(webifc::schema::IFCSECTIONEDSOLIDHORIZONTAL);  
@@ -324,42 +173,13 @@ std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections2D(uint32_t m
 
     for(auto& type: typeList)
     {
-        auto elements = loader->GetExpressIDsWithType(type);
+        auto elements = manager.GetIfcLoader(modelID)->GetExpressIDsWithType(type);
 
         for (size_t i = 0; i < elements.size(); i++)
         {
-            webifc::geometry::IfcCrossSections crossSection = geomLoader->GetLoader().GetCrossSections2D(elements[i]);
-            crossSections.push_back(crossSection);
-        }
-    }
-
-    return crossSections;
-}
-
-std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections3D(uint32_t modelID)
-{
-    auto loader = models[modelID].GetLoader();
-    auto geomLoader = models[modelID].GetGeometryLoader();
-
-    if (!loader || !geomLoader)
-    {
-        return {};
-    }
-
-    std::vector<uint32_t> typeList; 
-    typeList.push_back(webifc::schema::IFCSECTIONEDSOLIDHORIZONTAL);  
-    typeList.push_back(webifc::schema::IFCSECTIONEDSOLID);
-    typeList.push_back(webifc::schema::IFCSECTIONEDSURFACE);
-
-    std::vector<webifc::geometry::IfcCrossSections> crossSections;
-
-    for(auto& type: typeList)
-    {
-        auto elements = loader->GetExpressIDsWithType(type);
-
-        for (size_t i = 0; i < elements.size(); i++)
-        {
-            webifc::geometry::IfcCrossSections crossSection = geomLoader->GetLoader().GetCrossSections3D(elements[i], true, geomLoader->GetCoordinationMatrix());
+            webifc::geometry::IfcCrossSections crossSection;
+            if (dimensions == 2) crossSection = geomLoader->GetLoader().GetCrossSections2D(elements[i]);
+            else crossSection = geomLoader->GetLoader().GetCrossSections3D(elements[i]);
             crossSections.push_back(crossSection);
         }
     }
@@ -369,17 +189,11 @@ std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections3D(uint32_t m
 
 std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
 {
-    auto loader = models[modelID].GetLoader();
-    auto geomLoader = models[modelID].GetGeometryLoader();
-
-    if (!loader || !geomLoader)
-    {
-        return {};
-    }
-
+    if (!manager.IsModelOpen(modelID)) return std::vector<webifc::geometry::IfcAlignment>();
+    auto geomLoader = manager.GetGeometryProcessor(modelID);
     auto type = webifc::schema::IFCALIGNMENT;
 
-    auto elements = loader->GetExpressIDsWithType(type);
+    auto elements = manager.GetIfcLoader(modelID)->GetExpressIDsWithType(type);
 
     std::vector<webifc::geometry::IfcAlignment> alignments;
 
@@ -395,60 +209,18 @@ std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
 
 void SetGeometryTransformation(uint32_t modelID, std::array<double, 16> m)
 {
-    auto geomLoader = models[modelID].GetGeometryLoader();
-    if (!geomLoader)
-    {
-        return;
-    }
-
-    glm::dmat4 transformation;
-    glm::dvec4 v1(m[0], m[1], m[2], m[3]);
-    glm::dvec4 v2(m[4], m[5], m[6], m[7]);
-    glm::dvec4 v3(m[8], m[9], m[10], m[11]);
-    glm::dvec4 v4(m[12], m[13], m[14], m[15]);
-
-    transformation[0] = v1;
-    transformation[1] = v2;
-    transformation[2] = v3;
-    transformation[3] = v4;
-
-    geomLoader->SetTransformation(transformation);
-}
-
-std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)
-{
-    std::array<double, 16> flatTransformation;
-
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            flatTransformation[i * 4 + j] = transformation[i][j];
-        }
-    }
-
-    return flatTransformation;
+    if (manager.IsModelOpen(modelID)) manager.GetGeometryProcessor(modelID)->SetTransformation(m);
 }
 
 std::array<double, 16> GetCoordinationMatrix(uint32_t modelID)
 {
-    auto geomLoader = models[modelID].GetGeometryLoader();
-    if (!geomLoader)
-    {
-        return {};
-    }
-
-    return FlattenTransformation(geomLoader->GetCoordinationMatrix());
+    return  manager.IsModelOpen(modelID) ?  manager.GetGeometryProcessor(modelID)->GetFlatCoordinationMatrix(): std::array<double,16>();
 }
 
 std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types)
 {
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return {};
-    }
-
+    if (!manager.IsModelOpen(modelID)) return {};
+    auto loader = manager.GetIfcLoader(modelID);
     std::vector<uint32_t> expressIDs;
 
     uint32_t size = types["length"].as<uint32_t>();
@@ -463,11 +235,8 @@ std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types
 
 std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expressID, emscripten::val targetTypes, uint32_t position, bool set)
 {
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return {};
-    }
+    if (!manager.IsModelOpen(modelID)) return {};
+    auto loader = manager.GetIfcLoader(modelID);
     std::vector<uint32_t> inverseIDs;
     auto expressIDs = GetLineIDsWithType(modelID,targetTypes);
     for (auto foundExpressID : expressIDs)
@@ -507,74 +276,26 @@ std::vector<uint32_t> GetInversePropertyForItem(uint32_t modelID, uint32_t expre
     return inverseIDs;
 }
 
-bool ValidateExpressID(uint32_t modelID, uint32_t expressId)
-{
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return {};
-    }
-    return loader->IsValidExpressID(expressId);
+bool ValidateExpressID(uint32_t modelID, uint32_t expressId) {
+   return manager.IsModelOpen(modelID) ?  manager.GetIfcLoader(modelID)->IsValidExpressID(expressId) : false;
 }
 
-void ExtendLineStorage(uint32_t modelID, uint32_t lineStorageSize)
-{
-        auto loader = models[modelID].GetLoader();
-        if (!loader)
-        {
-            return;
-        }
-        loader->ExtendLineStorage(lineStorageSize);
+void ExtendLineStorage(uint32_t modelID, uint32_t lineStorageSize) {
+    if (manager.IsModelOpen(modelID)) manager.GetIfcLoader(modelID)->ExtendLineStorage(lineStorageSize);
 }
 
-uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId)
-{
-    auto loader = models[modelID].GetLoader();
-    if(!loader)
-    {
-        return {};
-    }
-
-    uint32_t currentId = expressId;
-
-    bool cont = true;
-    uint32_t maxId = loader->GetMaxExpressId();
-
-    while(cont)
-    {
-        if(currentId > maxId)
-        {
-            cont = false;
-            continue;
-        }
-        currentId++;
-        cont = !(loader->IsValidExpressID(currentId));
-    }
-    return currentId;
+uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId) { 
+    return manager.IsModelOpen(modelID) ?  manager.GetIfcLoader(modelID)->GetNextExpressID(expressId) : 0;
 }
 
-std::vector<uint32_t> GetAllLines(uint32_t modelID)
-{
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return {};
-    }
-
-    std::vector<uint32_t> expressIDs;
-    auto numLines = loader->GetMaxExpressId();
-    for (uint32_t i = 1; i <= numLines; i++)
-    {
-        if (!loader->IsValidExpressID(i)) continue;
-        expressIDs.push_back(i);
-    }
-    return expressIDs;
+std::vector<uint32_t> GetAllLines(uint32_t modelID) {
+    return manager.IsModelOpen(modelID) ? manager.GetIfcLoader(modelID)->GetAllLines() : std::vector<uint32_t>();
 }
 
 bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::val value)
 {
     bool responseCode = true;
-    auto loader = models[modelID].GetLoader();
+    auto loader =manager.GetIfcLoader(modelID);
     switch (t)
     {
     case webifc::parsing::IfcTokenType::STRING:
@@ -620,7 +341,7 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
 bool WriteSet(uint32_t modelID, emscripten::val& val)
 {
     bool responseCode = true;
-    auto loader = models[modelID].GetLoader();
+    auto loader = manager.GetIfcLoader(modelID);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::SET_BEGIN);
 
     uint32_t size = val["length"].as<uint32_t>();
@@ -722,30 +443,24 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
     return responseCode;
 }
 
-std::string GetNameFromTypeCode(uint32_t type) 
-{
-    return std::string(schemaManager.IfcTypeCodeToType(type));
+std::string GetNameFromTypeCode(uint32_t type) {
+    return std::string(manager.GetSchemaManager().IfcTypeCodeToType(type));
 }
 
-uint32_t GetTypeCodeFromName(std::string typeName) 
-{
-    return schemaManager.IfcTypeToTypeCode(typeName);
+uint32_t GetTypeCodeFromName(std::string typeName) {
+    return manager.GetSchemaManager().IfcTypeToTypeCode(typeName);
 }
 
-bool IsIfcElement(uint32_t type) 
-{
-    return schemaManager.IsIfcElement(type);
+bool IsIfcElement(uint32_t type) {
+    return manager.GetSchemaManager().IsIfcElement(type);
 }
 
 bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
 {
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return false;
-    }
+    if (!manager.IsModelOpen(modelID)) return false;
+    auto loader = manager.GetIfcLoader(modelID);
     uint32_t start = loader->GetTotalSize();
-    std::string ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::string ifcName = manager.GetSchemaManager().IfcTypeCodeToType(type);
     std::transform(ifcName.begin(), ifcName.end(), ifcName.begin(), ::toupper);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
@@ -756,20 +471,14 @@ bool WriteHeaderLine(uint32_t modelID,uint32_t type, emscripten::val parameters)
     return responseCode;
 }
 
-void RemoveLine(uint32_t modelID, uint32_t expressID)
-{
-    auto loader = models[modelID].GetLoader();
-    if (!loader) return;
-    loader->RemoveLine(expressID);
+void RemoveLine(uint32_t modelID, uint32_t expressID) {
+    if (manager.IsModelOpen(modelID)) manager.GetIfcLoader(modelID)->RemoveLine(expressID);
 }
 
 bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::val parameters)
 {
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return false;
-    }
+    if (!manager.IsModelOpen(modelID)) return false;
+    auto loader = manager.GetIfcLoader(modelID);
     uint32_t start = loader->GetTotalSize();
 
     // line ID
@@ -777,7 +486,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     loader->Push<uint32_t>(expressID);
 
     // line TYPE
-    std::string ifcName = schemaManager.IfcTypeCodeToType(type);
+    std::string ifcName = manager.GetSchemaManager().IfcTypeCodeToType(type);
     std::transform(ifcName.begin(), ifcName.end(), ifcName.begin(), ::toupper);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
     loader->Push<uint16_t>((uint16_t)ifcName.size());
@@ -793,7 +502,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 
 emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
 {
-    auto loader = models[modelID].GetLoader();
+    auto loader = manager.GetIfcLoader(modelID);
     switch (t)
     {
     case webifc::parsing::IfcTokenType::STRING:
@@ -828,7 +537,7 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
 
 emscripten::val GetArgs(uint32_t modelID, bool inObject=false, bool inList=false)
 {
-    auto loader = models[modelID].GetLoader();
+    auto loader = manager.GetIfcLoader(modelID);
     auto arguments = emscripten::val::array();
     size_t size = 0;
     bool endOfLine = false;
@@ -865,7 +574,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false, bool inList=false
                 obj.set("type", emscripten::val(static_cast<uint32_t>(webifc::parsing::IfcTokenType::LABEL)));
                 loader->StepBack();
                 auto s=loader->GetStringArgument();
-                auto typeCode = schemaManager.IfcTypeToTypeCode(s);
+                auto typeCode = manager.GetSchemaManager().IfcTypeToTypeCode(s);
                 obj.set("typecode", emscripten::val(typeCode));
                 // read set open
                 loader->GetTokenType();
@@ -901,20 +610,15 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false, bool inList=false
 
 emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
 {
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return emscripten::val::undefined();
-    }
+    if (!manager.IsModelOpen(modelID)) return emscripten::val::undefined();
+    auto loader = manager.GetIfcLoader(modelID);
     auto lines = loader->GetHeaderLinesWithType(headerType);
 
-    if(lines.size() <= 0){
-        return emscripten::val::undefined(); 
-    }
+    if(lines.size() <= 0) return emscripten::val::undefined(); 
     auto line = lines[0];
     loader->MoveToHeaderLineArgument(line, 0);
 
-    std::string s(schemaManager.IfcTypeCodeToType(headerType));
+    std::string s(manager.GetSchemaManager().IfcTypeCodeToType(headerType));
     auto arguments = GetArgs(modelID);
     auto retVal = emscripten::val::object();
     retVal.set("ID", line);
@@ -925,12 +629,8 @@ emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
 
 emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 {
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return emscripten::val::undefined();
-    }
-
+    if (!manager.IsModelOpen(modelID)) return emscripten::val::undefined();
+    auto loader = manager.GetIfcLoader(modelID);
     if (!loader->IsValidExpressID(expressID)) return emscripten::val::object();
     uint32_t lineType = loader->GetLineType(expressID);
     if (lineType==0) return emscripten::val::object();
@@ -946,47 +646,24 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     return retVal;
 }
 
-uint32_t GetLineType(uint32_t modelID, uint32_t expressID)
-{
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return 0;
-    }
-    return loader->GetLineType(expressID);
+uint32_t GetLineType(uint32_t modelID, uint32_t expressID) {
+    return manager.IsModelOpen(modelID) ?  manager.GetIfcLoader(modelID)->GetLineType(expressID) :  0;
 }
 
-std::string GetVersion() 
-{
+std::string GetVersion() {
     return std::string(WEB_IFC_VERSION_NUMBER);
 }
 
-uint32_t GetMaxExpressID(uint32_t modelID)
-{
-    auto loader = models[modelID].GetLoader();
-    return loader->GetMaxExpressId();
+uint32_t GetMaxExpressID(uint32_t modelID) {
+    return manager.IsModelOpen(modelID) ? manager.GetIfcLoader(modelID)->GetMaxExpressId() : 0;
 }
 
-bool IsModelOpen(uint32_t modelID)
-{
-    if (modelID >= models.size()) return false;
-    auto loader = models[modelID].GetLoader();
-    if (!loader)
-    {
-        return false;
-    }
-
-    return true;
+bool IsModelOpen(uint32_t modelID) {
+    return manager.IsModelOpen(modelID);
 }
 
-/**
- * Sets the global log level.
- * @data levelArg Will be clamped between DEBUG and OFF.
- */
-void SetLogLevel(int levelArg)
-{
-    spdlog::set_level((spdlog::level::level_enum)levelArg);
-    spdlog::set_pattern("[WEB-IFC][%l]%v");
+void SetLogLevel(uint8_t levelArg) {
+    manager.SetLogLevel(levelArg);
 }
 
 EMSCRIPTEN_BINDINGS(my_module) {
@@ -1007,13 +684,13 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("w", &glm::dvec4::w)
         ;
 
-    emscripten::value_object<LoaderSettings>("LoaderSettings")
-        .field("OPTIMIZE_PROFILES", &LoaderSettings::OPTIMIZE_PROFILES)
-        .field("COORDINATE_TO_ORIGIN", &LoaderSettings::COORDINATE_TO_ORIGIN)
-        .field("CIRCLE_SEGMENTS", &LoaderSettings::CIRCLE_SEGMENTS)
-        .field("TAPE_SIZE", &LoaderSettings::TAPE_SIZE)
-        .field("MEMORY_LIMIT", &LoaderSettings::MEMORY_LIMIT)
-        .field("LINEWRITER_BUFFER",&LoaderSettings::LINEWRITER_BUFFER)
+    emscripten::value_object<webifc::manager::LoaderSettings>("LoaderSettings")
+        .field("OPTIMIZE_PROFILES", &webifc::manager::LoaderSettings::OPTIMIZE_PROFILES)
+        .field("COORDINATE_TO_ORIGIN", &webifc::manager::LoaderSettings::COORDINATE_TO_ORIGIN)
+        .field("CIRCLE_SEGMENTS", &webifc::manager::LoaderSettings::CIRCLE_SEGMENTS)
+        .field("TAPE_SIZE", &webifc::manager::LoaderSettings::TAPE_SIZE)
+        .field("MEMORY_LIMIT", &webifc::manager::LoaderSettings::MEMORY_LIMIT)
+        .field("LINEWRITER_BUFFER",&webifc::manager::LoaderSettings::LINEWRITER_BUFFER)
     ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
@@ -1091,8 +768,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("ExtendLineStorage", &ExtendLineStorage);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
-    emscripten::function("GetAllCrossSections2D", &GetAllCrossSections2D);
-    emscripten::function("GetAllCrossSections3D", &GetAllCrossSections3D);
+    emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);
     emscripten::function("OpenModel", &OpenModel);
     emscripten::function("CreateModel", &CreateModel);
@@ -1102,10 +778,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
-    emscripten::function("StreamMeshes", &StreamMeshesWithExpressID);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
-    emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("GetLineType", &GetLineType);
     emscripten::function("GetHeaderLine", &GetHeaderLine);

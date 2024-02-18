@@ -39,9 +39,19 @@ namespace webifc::geometry
         return _geometryLoader;
     }
 
-    void IfcGeometryProcessor::SetTransformation(const glm::dmat4 &val)
+    void IfcGeometryProcessor::SetTransformation(const std::array<double, 16> &val)
     {
-        _transformation = val;
+        glm::dmat4 transformation;
+        glm::dvec4 v1(val[0], val[1], val[2], val[3]);
+        glm::dvec4 v2(val[4], val[5], val[6], val[7]);
+        glm::dvec4 v3(val[8], val[9], val[10], val[11]);
+        glm::dvec4 v4(val[12], val[13], val[14], val[15]);
+
+        transformation[0] = v1;
+        transformation[1] = v2;
+        transformation[2] = v3;
+        transformation[3] = v4;
+        _transformation = transformation;
     }
 
     IfcGeometry &IfcGeometryProcessor::GetGeometry(uint32_t expressID)
@@ -55,7 +65,20 @@ namespace webifc::geometry
         std::unordered_map<uint32_t, IfcGeometry>().swap(_expressIDToGeometry);
     }
 
-    glm::dmat4 IfcGeometryProcessor::GetCoordinationMatrix()
+    std::array<double, 16> IfcGeometryProcessor::GetFlatCoordinationMatrix() const
+    {
+        std::array<double, 16> flatTransformation;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                flatTransformation[i * 4 + j] = _coordinationMatrix[i][j];
+            }
+        }
+        return flatTransformation;
+    }
+
+    glm::dmat4 IfcGeometryProcessor::GetCoordinationMatrix() const
     {
         return _coordinationMatrix;
     }

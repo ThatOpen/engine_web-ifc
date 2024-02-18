@@ -25,6 +25,7 @@ file (GLOB WebIfcParsing parsing/*.cpp)
 file (GLOB_RECURSE WebIfcGeometry geometry/*.cpp)
 file (GLOB_RECURSE WebIfcGeometryH geometry/*.h)
 file (GLOB WebIfcSchema schema/*.cpp)
+file (GLOB WebIfcManager modelmanager/*.cpp)
 file (GLOB WebIfcAPI web-ifc-wasm.cpp)
 file (GLOB WebIfcUtility utility/*.cpp)
 file (GLOB WebIfcTestSourceFiles test/*.cpp)
@@ -108,16 +109,16 @@ endfunction()
 
 if (EMSCRIPTEN)
 	#build parameters for web-ifc
-	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
+	add_executable (web-ifc ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
 	param_setter(web-ifc)
 	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web")
 
-	add_executable (web-ifc-node ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
+	add_executable (web-ifc-node ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
 	param_setter(web-ifc-node)
 	set_target_properties(web-ifc-node PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 ")
 
 	#multi-treaded versions
-	add_executable (web-ifc-mt ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
+	add_executable (web-ifc-mt ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
 	param_setter(web-ifc-mt)
 	target_compile_options(web-ifc-mt PUBLIC "-pthread")
 	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -flto --define-macro=REAL_T_IS_DOUBLE -sSTACK_SIZE=5MB -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web,worker")
@@ -126,7 +127,7 @@ endif()
 if (NOT EMSCRIPTEN)
 
 	#build parameters for web-ifc-test
-	add_executable (web-ifc-test ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestSourceFiles})
+	add_executable (web-ifc-test ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestSourceFiles})
 	param_setter(web-ifc-test)
 	target_include_directories(web-ifc-test PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
 
@@ -134,7 +135,7 @@ if (NOT EMSCRIPTEN)
 	set_tests_properties(web-ifc-test PROPERTIES LABELS "web-ifc")
 	
 	#build parameters for web-ifc in testing environment
-	add_executable (web-ifc ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestingMain} "./test/io_helpers.cpp")
+	add_executable (web-ifc ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestingMain} "./test/io_helpers.cpp")
 	param_setter(web-ifc)
 	target_include_directories(web-ifc PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
 	#comment these to prevent debug files being generated

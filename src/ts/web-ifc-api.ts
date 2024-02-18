@@ -716,7 +716,7 @@ export class IfcAPI {
      */
     GetAllCrossSections2D(modelID: Number): Array<CrossSection>
     {
-        const crossSections =  this.wasmModule.GetAllCrossSections2D(modelID);
+        const crossSections =  this.wasmModule.GetAllCrossSections(modelID,2);
         const crossSectionList = [];
         for (let i = 0; i < crossSections.size(); i++) {
             const alignment = crossSections.get(i);
@@ -747,7 +747,7 @@ export class IfcAPI {
      */
     GetAllCrossSections3D(modelID: Number): Array<CrossSection>
     {
-        const crossSections =  this.wasmModule.GetAllCrossSections3D(modelID);
+        const crossSections =  this.wasmModule.GetAllCrossSections(modelID,3);
         const crossSectionList = [];
         for (let i = 0; i < crossSections.size(); i++) {
             const alignment = crossSections.get(i);
