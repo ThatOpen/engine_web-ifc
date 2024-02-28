@@ -351,8 +351,8 @@ export class IfcAPI {
             {type: STRING, value: timestamp},
             authors,
             orgs,
-            {type: STRING, value: "ifcjs/web-ifc-api"},
-            {type: STRING, value: "ifcjs/web-ifc-api"},
+            {type: STRING, value: "thatopen/web-ifc-api"},
+            {type: STRING, value: "thatopen/web-ifc-api"},
             auth,
         ]);
         this.wasmModule.WriteHeaderLine(result,FILE_SCHEMA,[[{type: STRING, value: model.schema}]]);

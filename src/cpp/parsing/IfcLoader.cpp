@@ -80,11 +80,11 @@ namespace webifc::parsing {
       std::ostringstream output;
       output << "ISO-10303-21;"<<std::endl<<"HEADER;"<<std::endl;
       output << "/******************************************************" << std::endl;
-      output << "* STEP Physical File produced by: IFCjs WebIfc " << WEB_IFC_VERSION_NUMBER << std::endl;
+      output << "* STEP Physical File produced by: That Open Engine WebIfc " << WEB_IFC_VERSION_NUMBER << std::endl;
       output << "* Module: web-ifc/IfcLoader" << std::endl;
       output << "* Version: " << WEB_IFC_VERSION_NUMBER << std::endl;
-      output << "* Source: https://github.com/IFCjs/web-ifc" << std::endl;
-      output << "* Issues: https://github.com/IFCjs/web-ifc/issues" << std::endl;
+      output << "* Source: https://github.com/ThatOpen/engine_web-ifc" << std::endl;
+      output << "* Issues: https://github.com/ThatOpen/engine_web-ifc/issues" << std::endl;
       output << "******************************************************/" << std::endl;
       
       const std::vector<IfcLine*> *totalLines[2] = {&_headerLines, &_lines};
