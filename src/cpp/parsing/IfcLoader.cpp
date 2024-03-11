@@ -304,11 +304,16 @@ namespace webifc::parsing {
    IfcLoader::~IfcLoader()
    { 
       delete _tokenStream;
-      delete _nullLine;
-      for (size_t i=0; i < _lines.size();i++) delete _lines[i];
+      for (size_t i=0; i < _lines.size();i++) {
+        if (_lines[i] == _nullLine) {
+          continue;
+        }
+        delete _lines[i];
+      }
       for (size_t i=0; i < _headerLines.size();i++) delete _headerLines[i];
       _lines.clear();
       _headerLines.clear();
+      delete _nullLine;
    }
    
    void IfcLoader::MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const
