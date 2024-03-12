@@ -1660,7 +1660,7 @@ namespace webifc::geometry
               if (sg.type == "IFCARCINDEX")
               {
                 auto pts = ReadIfcCartesianPointList3D(ptsRef);
-                IfcCurve arc = Build3DArc3Pt(pts[sg.indexs[0] - 1], pts[sg.indexs[1] - 1], pts[sg.indexs[2] - 1],_circleSegments, EPS_MINISCULE());
+                IfcCurve arc = Build3DArc3Pt(pts[sg.indexs[0] - 1], pts[sg.indexs[1] - 1], pts[sg.indexs[2] - 1],_circleSegments, EPS_MINISCULE);
                 for (auto &pt : arc.points)
                 {
                   curve.Add(pt);

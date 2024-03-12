@@ -739,7 +739,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 		if(glm::length(right) == 0)
 		{
-			right = glm::dvec3(EPS_BIG2(), 0, 0);
+			right = glm::dvec3(EPS_BIG2, 0, 0);
 			glm::dvec3 up = glm::cross(axis, right);
 
 			auto curve2D = GetEllipseCurve(1, 1, _circleSegments, glm::dmat3(1), 0, angleRad, true, true);

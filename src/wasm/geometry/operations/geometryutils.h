@@ -78,7 +78,7 @@ namespace webifc::geometry
 		{
 			if (i < directrix.points.size() - 1)
 			{
-				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2() / scaling || !optimize)
+				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 / scaling || !optimize)
 				{
 					dpts.push_back(directrix.points[i]);
 				}
@@ -285,7 +285,7 @@ namespace webifc::geometry
 		{
 			if (i < directrix.points.size() - 1)
 			{
-				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2() / scaling)
+				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 / scaling)
 				{
 					dpts.push_back(directrix.points[i]);
 				}
@@ -387,7 +387,7 @@ namespace webifc::geometry
 
 				double parallelZ = glm::abs(glm::dot(dz, glm::dvec3(0, 0, 1)));
 
-				if(parallelZ > 1 - EPS_BIG2())
+				if(parallelZ > 1 - EPS_BIG2)
 				{
 					dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 1, 0)));
 				} else {

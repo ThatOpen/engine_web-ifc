@@ -769,7 +769,7 @@ namespace webifc::geometry
                 glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[1];
 
                 IfcCurve directrix = BuildArc(_geometryLoader.GetLinearScalingFactor(), pos, axis, angle, _circleSegments);
-                if(glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG())
+                if(glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG)
                 {
                     closed = true;
                 }
@@ -1624,12 +1624,24 @@ namespace webifc::geometry
                         result.GeneratePlanes();
 		                secondOperator.GeneratePlanes();
                         double scale = _geometryLoader.GetLinearScalingFactor();
+
+                        #ifdef CSG_DEBUG_OUTPUT
+                            webifc::geometry::IfcGeometry geomf;
+                            geomf.AddGeometry(result);
+                            io::DumpIfcGeometry(geomf, "first.obj");
+
+                            webifc::geometry::IfcGeometry geoms;
+                            geoms.AddGeometry(secondOperator);
+                            io::DumpIfcGeometry(geoms, "second.obj");
+                        #endif
+
                         result = fuzzybools::Subtract(result, secondOperator, scale);
-                        // #ifdef CSG_DEBUG_OUTPUT
-                        //     webifc::geometry::IfcGeometry geom;
-                        //     geom.AddGeometry(result);
-                        //     io::DumpIfcGeometry(geom, "result.obj");
-                        // #endif
+
+                        #ifdef CSG_DEBUG_OUTPUT
+                            webifc::geometry::IfcGeometry geom;
+                            geom.AddGeometry(result);
+                            io::DumpIfcGeometry(geom, "result.obj");
+                        #endif
                     }
                     else if (op == "UNION")
                     {

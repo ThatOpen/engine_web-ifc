@@ -58,6 +58,7 @@ FetchContent_GetProperties(earcut)
 
 Message("Downloading CDT")
 FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_TAG "4d0c9026b8ec846fe544897e7111f8f9080d5f8a" SOURCE_SUBDIR "../")
+# FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_TAG "9d99b32ae56b26cd2781678dc4405c98b8679a9f" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(cdt)
 FetchContent_GetProperties(cdt)
 
@@ -70,8 +71,7 @@ Message("Downloading FUZZY")
 # using a custom version of fuzzy-bools to silence some debug printf from the library that pollutes the output of the executables
 # FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/CBenghi/fuzzy-bools" GIT_TAG "07faaad8cae623dd634b1c09b4b37b44bf645781" SOURCE_SUBDIR "../")
 # FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/tomvandig/fuzzy-bools" GIT_TAG "a52c0f0c0667b7c875ae44e91e63a33c1813be64" SOURCE_SUBDIR "../")
-# FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/QuimMoya/fuzzy-bools" GIT_TAG "88a93cad265ec2b074ebb1db4f3f6c5ed028ebf0" SOURCE_SUBDIR "../")
-FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/QuimMoya/fuzzy-bools" GIT_TAG "6164d661d997a8111c0c44def053be2ba24aa164" SOURCE_SUBDIR "../")
+FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/QuimMoya/fuzzy-bools" GIT_TAG "841f6e386a7b09aa32343438575012a5c7424deb" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(fuzzy)
 FetchContent_GetProperties(fuzzy)
 file (RENAME ${fuzzy_SOURCE_DIR}/src ${fuzzy_SOURCE_DIR}/fuzzy RESULT result) # specifying 'result' continues even if rename was already performed
