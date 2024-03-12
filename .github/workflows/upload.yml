@@ -22,13 +22,10 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
       - uses: actions/setup-node@v2
-        with:
-          node-version: 18
       - name: Install and Build
         run: |
           npm install -g npm@latest
           npm ci
-          npm --prefix ./examples/viewer ci
           npm run build-release
       - name: Archive Build
         uses: montudor/action-zip@v1

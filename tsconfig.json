@@ -16,6 +16,6 @@
     "alwaysStrict": true              
   },
   "files": [
-    "src/web-ifc-api.ts"
+    "src/ts/web-ifc-api.ts"
   ]
 }

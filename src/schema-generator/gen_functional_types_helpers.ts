@@ -39,7 +39,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     }
 
     let prefix = '';
-    const valueCheckPrefix = '!v['+i+'] ? null :';
+    const valueCheckPrefix = '!v['+i+'] && v['+i+']!=\'\' ? null :';
     if (p.optional) prefix = valueCheckPrefix;
 
     if (p.set)
@@ -47,7 +47,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
         content = 'v['+i+']?.map((p:any) =>  ';
 
         if (p.dimensions > 1) content+="p?.map((p:any) =>";
-        content+='p?.value ?';
+        content+='p?.value && p?.value!=\'\' ?';
         if (type?.isSelect){
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
             if (isEntitySelect) content+='new Handle(p.value)';
@@ -122,6 +122,14 @@ export function generateTapeAssignment(p: Prop, types:Type[])
         response += `{type:3,value:BooleanConvert(i.${p.name}.value)}`;
         return response;
     }
+    else if (type?.typeNum == 10 || p.typeNum==10) 
+    {
+        let response:string = "";
+        if (p.optional) response +=`i.${p.name} == null ? null : `;
+        response += `{type:10,value:i.${p.name}}`;
+        return response;
+    }
+    if (p.name=="Exponent") console.log(p);
     return `i.${p.name}`;
 }
 
@@ -168,7 +176,7 @@ export function generateClass(entity:Entity, classBuffer: Array<string>, types:T
     classBuffer.push(`${prop.name}!: ${type};`);
   });
 
-  classBuffer.push(`constructor(${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  classBuffer.push(`constructor(${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""}${p.dimensions>1 ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
   classBuffer.push(`{`)
   if (!entity.parent) {
     classBuffer.push(`super();`)
@@ -423,10 +431,12 @@ export function parseElements(data:string)
                 let setLoc = split.indexOf("SET");
                 if (setLoc == -1) setLoc = split.indexOf("LIST")
                 if (split[setLoc+1].includes("[0:")) optional=true;
+
             }
             if (set) {
                 var count = (line.match(/LIST/g) || []).length;
                 dimensions = count;
+                
             }
             let type = split[split.length - 1].replace(";", "");
             let firstBracket = type.indexOf("(");
@@ -438,6 +448,7 @@ export function parseElements(data:string)
             entity.props.push({
                 name,
                 type: tsType,
+                typeNum: expTypeToTypeNum(type),
                 primitive: tsType !== type,
                 optional,
                 set,
