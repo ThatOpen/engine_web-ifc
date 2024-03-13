@@ -1,11 +1,11 @@
 <p align="center">
   <a href="https://thatopen.com/">TOC</a>
   |
-  <a href="https://ifcjs.github.io/web-ifc/docs">web-ifc documentation</a>
+  <a href="https://thatopen.github.io/engine_web-ifc/docs">web-ifc documentation</a>
   |
   <a href="https://docs.thatopen.com/intro"> platform documentation</a>
   |
-  <a href="https://ifcjs.github.io/web-ifc/demo">demo</a>
+  <a href="https://thatopen.github.io/engine_web-ifc/demo">demo</a>
   |
   <a href="https://people.thatopen.com/">community</a>
   |
@@ -14,13 +14,13 @@
 
 ![cover](banner.png)
 
-<h1>Web IFC <img src="https://ifcjs.github.io/components/resources/favicon.ico" width="32"></h1>
+<h1>Web IFC <img src="https://thatopen.github.io/engine_components/resources/favicon.ico" width="32"/></h1>
 
 [![NPM Package][npm]][npm-url]
 [![NPM Package][npm-downloads]][npm-url]
-[![Tests](https://github.com/IFCjs/components/actions/workflows/tests.yml/badge.svg)](https://github.com/IFCjs/components/actions/workflows/tests.yaml)
+[![Tests](https://github.com/ThatOpen/engine_components/actions/workflows/tests.yml/badge.svg)](https://github.com/ThatOpen/engine_components/actions/workflows/tests.yaml)
 
-**web-ifc** is a javascript library to read and write ifc files, at native speeds. **web-ifc** is part of the [ifc.js](https://ifcjs.github.io/info/) project, which aims to lower the threshold for developing open BIM applications.
+**web-ifc** is a javascript library to read and write ifc files, at native speeds. **web-ifc** is part of the [That Open Company](https://thatopen.com) project, which aims to lower the threshold for developing open BIM applications.
 
 ## Status
 
@@ -54,11 +54,11 @@ ifcApi.CloseModel(modelID);
 
 ```
 
-See [examples](https://github.com/IFCjs/web-ifc/tree/main/examples/usage) for more details on how to use web-ifc.
+See [examples](https://github.com/ThatOpen/engine_web-ifc/tree/main/examples/usage) for more details on how to use web-ifc.
 
 ## Current Build
 
-The current live build of web-ifc is avaialble [here](https://ifcjs.github.io/web-ifc/build.zip). Using this allows you to test newest fixes before we make a release. If you wish to use this version then download the zip file and place the contents of the dist folder manually into your node_modules/web-ifc folder. I.e if you are using web-ifc-three then it will be node_modules/web-ifc-three/node_modules/web-ifc. Please note you must replace the javascript and the WASM.
+The current live build of web-ifc is avaialble [here](https://thatopen.github.io/engine_web-ifc/build.zip). Using this allows you to test newest fixes before we make a release. If you wish to use this version then download the zip file and place the contents of the dist folder manually into your node_modules/web-ifc folder. I.e if you are using web-ifc-three then it will be node_modules/web-ifc-three/node_modules/web-ifc. Please note you must replace the javascript and the WASM.
 
 ## Requirements
 
@@ -113,7 +113,7 @@ The output of the build process consts of the following files:
 
 ## Stand alone C++
 
-Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/IFCjs/web-ifc/blob/main/src/cpp/web-ifc-test.cpp) for a simple entry point to get started.
+Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/ThatOpen/engine_web-ifc/blob/main/src/cpp/web-ifc-test.cpp) for a simple entry point to get started.
 
 [npm]: https://img.shields.io/npm/v/web-ifc
 [npm-url]: https://www.npmjs.com/package/web-ifc

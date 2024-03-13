@@ -80,11 +80,11 @@ namespace webifc::parsing {
       std::ostringstream output;
       output << "ISO-10303-21;"<<std::endl<<"HEADER;"<<std::endl;
       output << "/******************************************************" << std::endl;
-      output << "* STEP Physical File produced by: IFCjs WebIfc " << WEB_IFC_VERSION_NUMBER << std::endl;
+      output << "* STEP Physical File produced by: That Open Engine WebIfc " << WEB_IFC_VERSION_NUMBER << std::endl;
       output << "* Module: web-ifc/IfcLoader" << std::endl;
       output << "* Version: " << WEB_IFC_VERSION_NUMBER << std::endl;
-      output << "* Source: https://github.com/IFCjs/web-ifc" << std::endl;
-      output << "* Issues: https://github.com/IFCjs/web-ifc/issues" << std::endl;
+      output << "* Source: https://github.com/ThatOpen/engine_web-ifc" << std::endl;
+      output << "* Issues: https://github.com/ThatOpen/engine_web-ifc/issues" << std::endl;
       output << "******************************************************/" << std::endl;
       
       const std::vector<IfcLine*> *totalLines[2] = {&_headerLines, &_lines};
@@ -304,11 +304,16 @@ namespace webifc::parsing {
    IfcLoader::~IfcLoader()
    { 
       delete _tokenStream;
-      delete _nullLine;
-      for (size_t i=0; i < _lines.size();i++) delete _lines[i];
+      for (size_t i=0; i < _lines.size();i++) {
+        if (_lines[i] == _nullLine) {
+          continue;
+        }
+        delete _lines[i];
+      }
       for (size_t i=0; i < _headerLines.size();i++) delete _headerLines[i];
       _lines.clear();
       _headerLines.clear();
+      delete _nullLine;
    }
    
    void IfcLoader::MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const
@@ -367,13 +372,13 @@ namespace webifc::parsing {
       return GetStringArgument();
    }
 
-   int IfcLoader::GetIntArgument() const
+   long IfcLoader::GetIntArgument() const
    {
        std::string_view str = GetStringArgument();
-       return std::stoi(std::string(str));
+       return std::stol(std::string(str));
    }
 
-  int IfcLoader::GetIntArgument(const uint32_t tapeOffset) const
+  long IfcLoader::GetIntArgument(const uint32_t tapeOffset) const
   {
     _tokenStream->MoveTo(tapeOffset);
     return GetIntArgument();

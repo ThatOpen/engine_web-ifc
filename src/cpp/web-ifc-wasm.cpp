@@ -521,7 +521,7 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
-        int d = loader->GetIntArgument();
+        long d = loader->GetIntArgument();
         return emscripten::val(d);
     }
     case webifc::parsing::IfcTokenType::REF:

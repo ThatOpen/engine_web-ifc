@@ -43,6 +43,9 @@ namespace webifc::parsing {
                 encodeCharacters(output,tmp);
                 inEncode=false;
                 tmp.clear();
+            } else if (c==39) {
+                output << c << c;
+                continue;
             }
           }
           output << c;
