@@ -25,21 +25,23 @@ namespace webifc::geometry {
 		}
 	}
 
-	fuzzybools::Geometry IfcGeometry::Normalize(glm::dvec3 center,glm::dvec3 extents)
+	glm::dvec3 IfcGeometry::Normalize()
 	{
+		glm::dvec3 center(0,0,0);
 		if (!normalized)
 		{
-			glm::dvec3 min = center - extents/2.0;
+			glm::dvec3 extents;
+			GetCenterExtents(center,extents);
 
 			for (size_t i = 0; i < vertexData.size(); i += 6)
 			{
-				vertexData[i + 0] = vertexData[i + 0] - min.x;
-				vertexData[i + 1] = vertexData[i + 1] - min.y;
-				vertexData[i + 2] = vertexData[i + 2] - min.z;
+				vertexData[i + 0] = vertexData[i + 0] - center.x;
+				vertexData[i + 1] = vertexData[i + 1] - center.y;
+				vertexData[i + 2] = vertexData[i + 2] - center.z;
 			}
 			normalized = true;
 		}
-		return fuzzybools::Geometry::Normalize(center,extents);
+		return center;
 	}
 
 	uint32_t IfcGeometry::GetVertexData()
