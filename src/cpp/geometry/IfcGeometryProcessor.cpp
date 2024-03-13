@@ -1520,14 +1520,12 @@ namespace webifc::geometry
                 _isCoordinated = true;
             }
 
-            glm::dvec3 center;
-            glm::dvec3 extents;
+     
             auto geom = _expressIDToGeometry[composedMesh.expressID];
-            if (geometry.testReverse())
-                geom.ReverseFaces();
-            geom.GetCenterExtents(center, extents);
-            auto normalizedGeom = geom.Normalize(center, extents);
-            _expressIDToGeometry[composedMesh.expressID] = *static_cast<IfcGeometry *>(&normalizedGeom);
+            if (geometry.testReverse()) geom.ReverseFaces();
+      
+            auto translation = geom.Normalize();
+            _expressIDToGeometry[composedMesh.expressID] = geom;
 
             if (!composedMesh.hasColor)
             {
@@ -1540,7 +1538,7 @@ namespace webifc::geometry
                 newHasColor = composedMesh.hasColor;
             }
 
-            geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(center - extents/2.0);
+            geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(translation);
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
 
