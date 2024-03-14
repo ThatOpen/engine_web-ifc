@@ -924,9 +924,9 @@ acorn@^8.2.4, acorn@^8.4.1:
   integrity sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==
 
 adm-zip@^0.5.10:
-  version "0.5.10"
-  resolved "https://registry.npmjs.org/adm-zip/-/adm-zip-0.5.10.tgz"
-  integrity sha512-x0HvcHqVJNTPk/Bw8JbLWlWoo6Wwnsug0fnYYro1HBrjxZ3G7/AZk7Ahv8JwDe1uIcz8eBqvu86FuF1POiG7vQ==
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.11.tgz#02ca7aed2d17cc6283b6b7d835f68e73cc74544e"
+  integrity sha512-bSG/kcTQRVyCZ3aOWt3nu/KGIxkfSNi7MXzgKr/MHfKbqPakFESQvaujpUaAG8OQuSroxYMY5vLMpdE6+oND2Q==
 
 agent-base@6:
   version "6.0.2"
