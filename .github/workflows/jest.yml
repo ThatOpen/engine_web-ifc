@@ -31,4 +31,4 @@ jobs:
     - name: Run all tests
       run: npm t
     - name: Regression Tests
-      run: bun run regression
+      run: bun ./tests/regression/regression.mjs
