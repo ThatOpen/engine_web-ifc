@@ -1,4 +1,4 @@
-name: Publish to Github Pages
+name: Upload Documentation to Github Pages
 env:
    NPM_TOKEN: ' '
 on:

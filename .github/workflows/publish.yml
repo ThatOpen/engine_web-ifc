@@ -1,4 +1,4 @@
-name: Publish package to Npm
+name: Publish Web-IFC to NPM Registry
 env:
   NPM_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
 on: 
@@ -24,4 +24,3 @@ jobs:
         with:
           commit_message: Automated Version Number Setting
           branch: main
-          

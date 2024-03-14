@@ -1,4 +1,4 @@
-name: CI Jest Tests
+name: Integratation Tests
 env:
    NPM_TOKEN: ' '
 on: 
@@ -18,12 +18,17 @@ jobs:
     - uses: mymindstorm/setup-emsdk@v14
       with:
           version: 3.1.44
+    - uses: oven-sh/setup-bun@v1
+      with:
+      bun-version: latest
     - name: Install modules
-      run: npm i
+      run: |
+        - bun i
+        - npm i
     - name: Build
-      run: npm run build-release
+      run: bun run build-release
     - uses: actions/setup-node@v4
     - name: Run all tests
       run: npm t
     - name: Regression Tests
-      run: npm run regression
+      run: bun run regression

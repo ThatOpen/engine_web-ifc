@@ -1,4 +1,4 @@
-name: Build
+name: C++ Build and Tests
 
 on:
   push:
