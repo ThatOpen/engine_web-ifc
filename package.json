@@ -39,8 +39,8 @@
     "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
     "postversion": "node src/setversion.js",
     "benchmark": "ts-node ./tests/benchmark/benchmark.ts",
-    "regression": "node --max-old-space-size=4096 ./tests/regression/regression.mjs",
-    "regression-update": "node --max-old-space-size=4096 ./tests/regression/regression.mjs update",
+    "regression": "node --max-old-space-size=8192 ./tests/regression/regression.mjs",
+    "regression-update": "node --max-old-space-size=8192 ./tests/regression/regression.mjs update",
     "test": "jest  --runInBand ",
     "gen-docs": "typedoc --out dist/docs && cpy ./banner.png ./dist/docs",
     "usage_example": "cd examples/usage  && ts-node index.ts"
