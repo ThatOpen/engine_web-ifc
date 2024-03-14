@@ -30,14 +30,23 @@ void webifc::manager::ModelManager::SetLogLevel(uint8_t levelArg) {
     spdlog::set_pattern("[WEB-IFC][%l]%v");
 }
 
-webifc::geometry::IfcGeometryProcessor* webifc::manager::ModelManager::GetGeometryProcessor(uint32_t modelID) const {
+webifc::geometry::IfcGeometryProcessor* webifc::manager::ModelManager::GetGeometryProcessor(uint32_t modelID) {
     if (!IsModelOpen(modelID)) return {};
-    return _geometryProcessors[modelID];
+    if (!_geometryProcessors.contains(modelID))  {
+        webifc::geometry::IfcGeometryProcessor* processor = new webifc::geometry::IfcGeometryProcessor(*GetIfcLoader(modelID),_schemaManager,GetSettings(modelID)->CIRCLE_SEGMENTS,GetSettings(modelID)->COORDINATE_TO_ORIGIN, GetSettings(modelID)->OPTIMIZE_PROFILES);
+        _geometryProcessors[modelID]=processor;
+    }
+    return _geometryProcessors.at(modelID);
 }
 
 webifc::parsing::IfcLoader* webifc::manager::ModelManager::GetIfcLoader(uint32_t modelID) const {
     if (!IsModelOpen(modelID)) return {};
     return _loaders[modelID];
+}
+
+webifc::manager::LoaderSettings *webifc::manager::ModelManager::GetSettings(uint32_t modelID) const {
+    if (!IsModelOpen(modelID)) return {};
+    return _settings[modelID];
 }
 
 const webifc::schema::IfcSchemaManager &webifc::manager::ModelManager::GetSchemaManager() const {
@@ -58,7 +67,7 @@ void webifc::manager::ModelManager::CloseModel(uint32_t modelID) {
     _geometryProcessors[modelID] = nullptr;
 }
 
-uint32_t webifc::manager::ModelManager::CreateModel(LoaderSettings _settings) {
+uint32_t webifc::manager::ModelManager::CreateModel(LoaderSettings settings) {
     if (!header_shown)
     {
         std::stringstream str;
@@ -69,9 +78,8 @@ uint32_t webifc::manager::ModelManager::CreateModel(LoaderSettings _settings) {
         spdlog::info(str.str());
         header_shown = true;
     }
-    webifc::parsing::IfcLoader * loader = new webifc::parsing::IfcLoader(_settings.TAPE_SIZE,_settings.MEMORY_LIMIT,_settings.LINEWRITER_BUFFER,_schemaManager);
-    webifc::geometry::IfcGeometryProcessor * processor = new webifc::geometry::IfcGeometryProcessor(*loader,_schemaManager,_settings.CIRCLE_SEGMENTS,_settings.COORDINATE_TO_ORIGIN, _settings.OPTIMIZE_PROFILES);
-    _geometryProcessors.push_back(processor);
+    webifc::parsing::IfcLoader * loader = new webifc::parsing::IfcLoader(settings.TAPE_SIZE,settings.MEMORY_LIMIT,settings.LINEWRITER_BUFFER,_schemaManager);
     _loaders.push_back(loader);
+    _settings.push_back(&settings);
     return _loaders.size()-1;
 }
