@@ -1,4 +1,4 @@
-name: Publish package to Npm
+name: Publish Web-IFC to NPM Registry
 env:
   NPM_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
 on: 
@@ -11,9 +11,9 @@ jobs:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
-      - uses: mymindstorm/setup-emsdk@v11
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - uses: mymindstorm/setup-emsdk@v14
         with:
           version: 3.1.44
       - run: npm install -g npm@latest
@@ -24,4 +24,3 @@ jobs:
         with:
           commit_message: Automated Version Number Setting
           branch: main
-          
