@@ -23,8 +23,8 @@ jobs:
       bun-version: latest
     - name: Install modules
       run: |
-        - bun i
-        - npm i
+        bun i
+        npm i
     - name: Build
       run: bun run build-release
     - uses: actions/setup-node@v4
