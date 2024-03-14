@@ -41,7 +41,7 @@ int OpenModel(webifc::manager::LoaderSettings settings, emscripten::val callback
 
 void SaveModel(uint32_t modelID, emscripten::val callback)
 {
-    if (manager.IsModelOpen(modelID)) return;
+    if (!manager.IsModelOpen(modelID)) return;
     manager.GetIfcLoader(modelID)->SaveFile([&](char* src, size_t srcSize)
         {
             emscripten::val retVal = callback((uint32_t)src, srcSize);
@@ -106,6 +106,21 @@ void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t>& typ
         auto elements = loader->GetExpressIDsWithType(type);
         StreamMeshes(modelID, elements, callback);
     }
+}
+
+void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, emscripten::val callback)
+{
+    if (!manager.IsModelOpen(modelID)) return;
+    std::vector<uint32_t> types;
+    uint32_t size = typesVal["length"].as<uint32_t>();
+    uint32_t index = 0;
+    while (index < size)
+    {
+        emscripten::val typeVal = typesVal[std::to_string(index++)];
+        uint32_t type = typeVal.as<uint32_t>();
+        types.push_back(type);
+    }
+    StreamAllMeshesWithTypes(modelID, types, callback);
 }
 
 void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
@@ -780,6 +795,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetFlatMesh", &GetFlatMesh);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
+    emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("GetLineType", &GetLineType);
     emscripten::function("GetHeaderLine", &GetHeaderLine);

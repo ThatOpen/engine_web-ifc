@@ -680,7 +680,7 @@ namespace webifc::parsing {
       auto numLines = GetMaxExpressId();
       for (uint32_t i = 1; i <= numLines; i++)
       {
-          if (IsValidExpressID(i)) continue;
+          if (!IsValidExpressID(i)) continue;
           expressIDs.push_back(i);
       }
       return expressIDs;

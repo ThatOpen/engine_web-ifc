@@ -55,8 +55,8 @@ const webifc::schema::IfcSchemaManager &webifc::manager::ModelManager::GetSchema
 
 bool webifc::manager::ModelManager::IsModelOpen(uint32_t modelID) const {
     if (_loaders.size() <= modelID) return false;
-     if (_loaders[modelID] == nullptr) return false;
-     return true;
+    if (_loaders[modelID] == nullptr) return false;
+    return true;
 }
 
 void webifc::manager::ModelManager::CloseModel(uint32_t modelID) {
