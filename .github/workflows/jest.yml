@@ -19,8 +19,8 @@ jobs:
       with:
           version: 3.1.44
     - uses: oven-sh/setup-bun@v1
-      with:
-      bun-version: latest
+        with:
+        bun-version: latest
     - name: Install modules
       run: |
         bun i
