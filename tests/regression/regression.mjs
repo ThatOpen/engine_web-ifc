@@ -61,7 +61,7 @@ async function RunRegression()
 
 async function GetRegressionFiles()
 {
-    let files = readdirSync(REGRESSION_FILES_DIR+"public/").filter((f) => ( f.endsWith(".ifc") ).map((f) => path.join(REGRESSION_FILES_DIR+"public/", f));
+    let files = readdirSync(REGRESSION_FILES_DIR+"public/").filter((f) => ( f.endsWith(".ifc")) ).map((f) => path.join(REGRESSION_FILES_DIR+"public/", f));
     let privateFiles = await readdirSync(REGRESSION_FILES_DIR+"private/").filter((f) => ( f.endsWith(".ifc") || f.endsWith(".ifczip")) ).map((f) => path.join(REGRESSION_FILES_DIR+"private/", f));
     return files.concat(privateFiles);
 }
