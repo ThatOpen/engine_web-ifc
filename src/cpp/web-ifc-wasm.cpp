@@ -124,6 +124,7 @@ void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, ems
 }
 
 void StreamAllMeshes(uint32_t modelID, emscripten::val callback) {
+    if (!manager.IsModelOpen(modelID)) return;
     std::vector<uint32_t> types;
 
     for (auto& type : manager.GetSchemaManager().GetIfcElementList())

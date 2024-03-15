@@ -198,7 +198,6 @@ describe('Setting material & propertySets on IfcElements', () => {
 		expect(materialProps.length - matLength).toEqual(2);
 		expect(rel['RelatedObjects'].length).toEqual(2);
 		expect(element['HasAssociations'].length - ascLength).toEqual(2);
-		console.log(element['HasAssociations'])
 		expect(element['HasAssociations']).toContainHandle({type:5, value:14052});
 		expect(element['HasAssociations']).toContainHandle({type:5, value:14047});
 		expect(rel['RelatedObjects']).toContainHandle({type:5, value:1469});
