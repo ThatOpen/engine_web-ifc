@@ -611,6 +611,13 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 		if (hasFillet)
 		{
 			// TODO: Create interpolation and sloped lines
+			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hweb, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hweb, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
 		}
 		else
 		{

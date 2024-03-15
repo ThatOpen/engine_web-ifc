@@ -276,11 +276,12 @@ int main()
     // Benchmark();
 
     // return 0;
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ALLPLAN/#515/Spacewell_Wall.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ALLPLAN/#515/Spacewell_Wall.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing V/walls_test.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing VI/219.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC.JS ISSUES/SOLIDS_BOOLS_MODELLER/BUG1.IFC");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC.JS ISSUES/SOLIDS_BOOLS_MODELLER/TEST.IFC");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#590/1110-PR117I-A.ifc");
 
     struct LoaderSettings
     {
@@ -325,7 +326,8 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 7390); //512
     // SpecificLoadTest(loader, geometryLoader, 7260); //512
     // SpecificLoadTest(loader, geometryLoader,122); //219
-    SpecificLoadTest(loader, geometryLoader, 4616); //515
+    // SpecificLoadTest(loader, geometryLoader, 4616); //515
+    SpecificLoadTest(loader, geometryLoader,8395); //590
 
     // auto meshes = LoadAllTest(loader, geometryLoader);
     // auto alignments = GetAlignments(loader, geometryLoader);
