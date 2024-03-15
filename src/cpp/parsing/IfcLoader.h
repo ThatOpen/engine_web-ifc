@@ -20,7 +20,7 @@ namespace webifc::parsing
 	class IfcLoader {
   
     public:
-      IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer,schema::IfcSchemaManager &schemaManager);  
+      IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager);  
       ~IfcLoader();
       const std::vector<uint32_t> GetHeaderLinesWithType(const uint32_t type) const;
       void LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
@@ -48,6 +48,7 @@ namespace webifc::parsing
       IfcTokenType GetTokenType() const;
       IfcTokenType GetTokenType(const uint32_t tapeOffset) const;
       const std::vector<uint32_t> GetSetArgument() const;
+      std::vector<uint32_t> GetAllLines() const;
       const std::vector<std::vector<uint32_t>> GetSetListArgument() const;
       void MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const;
       void StepBack() const;
@@ -61,6 +62,7 @@ namespace webifc::parsing
       void PushDouble(double input);
       void PushInt(int input);
       void ExtendLineStorage(uint32_t lineStorageSize);
+      uint32_t GetNextExpressID(uint32_t expressId) const;
       template <typename T> void Push(T input)
       {
         _tokenStream->Push(input);
