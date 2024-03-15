@@ -29,17 +29,17 @@ namespace webifc::manager {
             ModelManager(bool _mt_enabled);
             ~ModelManager();
             webifc::geometry::IfcGeometryProcessor* GetGeometryProcessor(uint32_t modelID);
-            LoaderSettings *GetSettings(uint32_t modelID) const;
+            const LoaderSettings &GetSettings(uint32_t modelID) const;
             webifc::parsing::IfcLoader *GetIfcLoader(uint32_t modelID) const;
             const webifc::schema::IfcSchemaManager &GetSchemaManager() const;
             bool IsModelOpen(uint32_t modelID) const;
             void CloseModel(uint32_t modelID);
-            uint32_t CreateModel(LoaderSettings _settings);
+            uint32_t CreateModel(LoaderSettings settings);
             void SetLogLevel(uint8_t levelArg);
         private: 
             const webifc::schema::IfcSchemaManager _schemaManager; 
             std::vector<webifc::parsing::IfcLoader*> _loaders;
-            std::vector<LoaderSettings*> _settings;
+            std::vector<LoaderSettings> _settings;
             std::map<uint32_t,webifc::geometry::IfcGeometryProcessor*> _geometryProcessors;
             bool header_shown = false;
             bool mt_enabled;

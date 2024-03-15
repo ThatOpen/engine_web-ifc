@@ -33,7 +33,8 @@ void webifc::manager::ModelManager::SetLogLevel(uint8_t levelArg) {
 webifc::geometry::IfcGeometryProcessor* webifc::manager::ModelManager::GetGeometryProcessor(uint32_t modelID) {
     if (!IsModelOpen(modelID)) return {};
     if (!_geometryProcessors.contains(modelID))  {
-        webifc::geometry::IfcGeometryProcessor* processor = new webifc::geometry::IfcGeometryProcessor(*GetIfcLoader(modelID),_schemaManager,GetSettings(modelID)->CIRCLE_SEGMENTS,GetSettings(modelID)->COORDINATE_TO_ORIGIN, GetSettings(modelID)->OPTIMIZE_PROFILES);
+        std::cout << "SETTINGS:"<<GetSettings(modelID).CIRCLE_SEGMENTS<<std::endl;
+        webifc::geometry::IfcGeometryProcessor* processor = new webifc::geometry::IfcGeometryProcessor(*GetIfcLoader(modelID),_schemaManager,GetSettings(modelID).CIRCLE_SEGMENTS,GetSettings(modelID).COORDINATE_TO_ORIGIN, GetSettings(modelID).OPTIMIZE_PROFILES);
         _geometryProcessors[modelID]=processor;
     }
     return _geometryProcessors.at(modelID);
@@ -44,8 +45,8 @@ webifc::parsing::IfcLoader* webifc::manager::ModelManager::GetIfcLoader(uint32_t
     return _loaders[modelID];
 }
 
-webifc::manager::LoaderSettings *webifc::manager::ModelManager::GetSettings(uint32_t modelID) const {
-    if (!IsModelOpen(modelID)) return {};
+const webifc::manager::LoaderSettings &webifc::manager::ModelManager::GetSettings(uint32_t modelID) const {
+    if (!IsModelOpen(modelID)) return LoaderSettings();
     return _settings[modelID];
 }
 
@@ -80,6 +81,6 @@ uint32_t webifc::manager::ModelManager::CreateModel(LoaderSettings settings) {
     }
     webifc::parsing::IfcLoader * loader = new webifc::parsing::IfcLoader(settings.TAPE_SIZE,settings.MEMORY_LIMIT,settings.LINEWRITER_BUFFER,_schemaManager);
     _loaders.push_back(loader);
-    _settings.push_back(&settings);
+    _settings.push_back(settings);
     return _loaders.size()-1;
 }
