@@ -1744,8 +1744,12 @@ namespace webifc::geometry
           }
         }
 
-        double startRad = startDegrees / 180 * CONST_PI;
-        double endRad = endDegrees / 180 * CONST_PI;
+        double startRad = startDegrees;
+        double endRad = endDegrees;
+
+        convertAngleUnits(startDegrees, startRad);
+        convertAngleUnits(endDegrees, endRad);
+
         double lengthDegrees = endDegrees - startDegrees;
 
         // unset or true
@@ -1866,15 +1870,18 @@ namespace webifc::geometry
           }
         }
 
-        double startRad = startDegrees / 180 * CONST_PI;
-        double endRad = endDegrees / 180 * CONST_PI;
+        double startRad = startDegrees;
+        double endRad = endDegrees;
+
+        convertAngleUnits(startDegrees, startRad);
+        convertAngleUnits(endDegrees, endRad);
+
+        double lengthDegrees = endDegrees - startDegrees;
 
         // TODO: Because this is an ellipse you need to correct the angles
 
         // startRad = atan((radius1 / radius2) * tan(startDegrees));
         // endRad = atan((radius1 / radius2) * tan(endDegrees));
-
-        double lengthDegrees = endDegrees - startDegrees;
 
         // unset or true
         if (trimSense == 1 || trimSense == -1)
@@ -2235,6 +2242,17 @@ default:
 
 }
 
+void IfcGeometryLoader::convertAngleUnits(double &Degrees, double &Rad) const
+{
+  if (_angleUnits == "RADIAN")
+  {
+    Degrees = (Rad / CONST_PI) * 180;
+  }
+  else
+  {
+    Rad = Degrees / 180 * CONST_PI;
+  }
+}
 
 IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 {
@@ -2788,7 +2806,10 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
         double slope_degrees = listSlopes[i];
 
         // Convert slope from degrees to radians
-        double slope_radians = slope_degrees * (CONST_PI / 180.0);
+
+        double slope_radians = slope_degrees;
+
+        convertAngleUnits(slope_degrees, slope_radians);
 
         // Calculate the change in x and y based on the width and slope
         double dx = width * cos(slope_radians);

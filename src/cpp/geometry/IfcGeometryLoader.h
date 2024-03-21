@@ -62,6 +62,7 @@ namespace webifc::geometry
     glm::dvec3 GetVertexPoint(uint32_t expressID) const;
     IfcTrimmingSelect GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const;
     void ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool edge, int sameSense = -1, int trimSense = -1, IfcTrimmingArguments trim = {}) const;
+    void convertAngleUnits(double &Degrees, double &Rad) const;
     double ReadLenghtMeasure() const;
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
     const webifc::parsing::IfcLoader &_loader;
