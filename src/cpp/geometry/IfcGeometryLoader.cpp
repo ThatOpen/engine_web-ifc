@@ -989,14 +989,24 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(expressID, 0);
       auto materials = _loader.GetSetArgument();
 
+      std::optional<glm::dvec4> lastColor;
+      bool result = false;
       for (auto &material : materials)
       {
         uint32_t materialID = _loader.GetRefArgument(material);
         auto foundColor = GetColor(materialID);
         if (foundColor)
-          return foundColor;
+          lastColor = foundColor;
+          result = true;
       }
-      return {};
+      if(result)
+      {
+        return lastColor;
+      }
+      else
+      {
+        return {};
+      }    
     }
     case schema::IFCMATERIALCONSTITUENTSET:
     {
