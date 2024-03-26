@@ -1566,6 +1566,9 @@ namespace webifc::geometry
             geometry.geometryExpressID = composedMesh.expressID;
 
             flatMesh.geometries.push_back(geometry);
+        } else if (composedMesh.hasColor) {
+            newParentColor = composedMesh.color;
+            newHasColor = composedMesh.hasColor;
         }
 
         for (auto &c : composedMesh.children)
