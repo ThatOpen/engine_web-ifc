@@ -138,7 +138,23 @@ namespace webifc::geometry {
 					uint32_t ip = 0;
 					for (auto pt : curve.points)
 					{
-						Horizontal.curves[ic].points[ip] = coordinationMatrix * glm::dvec4(pt.x,pt.y, 0, 1);
+						Horizontal.curves[ic].points[ip] = coordinationMatrix * glm::dvec4(pt.x, 0, -pt.y, 1);
+						Horizontal.curves[ic].points[ip] = glm::dvec4(Horizontal.curves[ic].points[ip].x,
+																		-Horizontal.curves[ic].points[ip].z,
+																		Horizontal.curves[ic].points[ip].y,
+																		1);
+						ip++;
+					}
+					ic++;
+				}
+
+				ic = 0;
+				for (auto curve : Vertical.curves)
+				{
+					uint32_t ip = 0;
+					for (auto pt : curve.points)
+					{
+						Vertical.curves[ic].points[ip] = glm::dvec3(pt.x, pt.y + coordinationMatrix[3][1], 1);
 						ip++;
 					}
 					ic++;
