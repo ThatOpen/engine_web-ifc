@@ -295,7 +295,7 @@ namespace webifc::geometry
     }
   }
 
-  IfcAlignment IfcGeometryLoader::GetAlignment(uint32_t expressID, IfcAlignment alignment, glm::dmat4 transform) const
+  IfcAlignment IfcGeometryLoader::GetAlignment(uint32_t expressID, IfcAlignment alignment, glm::dmat4 transform, uint32_t sourceExpressID) const
   {
     spdlog::debug("[GetAlignment({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
@@ -324,7 +324,7 @@ namespace webifc::geometry
         auto &relAgg = relAggVector.at(expressID);
         for (auto expressID : relAgg)
         {
-          alignment = GetAlignment(expressID, alignment, transform * transform_t);
+          alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
         }
       }
 
@@ -352,7 +352,7 @@ namespace webifc::geometry
         auto &relAgg = relAggVector.at(expressID);
         for (auto expressID : relAgg)
         {
-          alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID));
+          alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
         }
 
         for (size_t i = 0; i < alignment.Horizontal.curves.size(); i++)
@@ -389,7 +389,7 @@ namespace webifc::geometry
         auto &relAgg = relAggVector.at(expressID);
         for (auto expressID : relAgg)
         {
-          alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID));
+          alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
         }
 
         for (size_t i = 0; i < alignment.Vertical.curves.size(); i++)
@@ -412,7 +412,7 @@ namespace webifc::geometry
     return alignment;
   }
 
-  IfcCurve IfcGeometryLoader::GetAlignmentCurve(uint32_t expressID) const
+  IfcCurve IfcGeometryLoader::GetAlignmentCurve(uint32_t expressID, uint32_t parentExpressID) const
   {
     spdlog::debug("[GetAlignmentCurve({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
@@ -447,7 +447,7 @@ namespace webifc::geometry
       }
       if (curveID != 0 && _loader.IsValidExpressID(curveID))
       {
-        IfcCurve temp = GetAlignmentCurve(curveID);
+        IfcCurve temp = GetAlignmentCurve(curveID, parentExpressID);
         alignmentCurve = temp;
       }
 
@@ -504,6 +504,7 @@ namespace webifc::geometry
         curve.Add(EndPoint);
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("LENGHT: " + std::to_string(SegmentLength));
         alignmentCurve.userData.push_back("DIRECTION: " + std::to_string(ifcStartDirection));
@@ -526,6 +527,7 @@ namespace webifc::geometry
         }
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("RADIUS: " + std::to_string(StartRadiusOfCurvature));
 
@@ -629,6 +631,7 @@ namespace webifc::geometry
         }
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("START RADIUS: " + std::to_string(StartRadiusOfCurvature));
         alignmentCurve.userData.push_back("END RADIUS: " + std::to_string(EndRadiusOfCurvature));
@@ -709,6 +712,7 @@ namespace webifc::geometry
         curve.Add(jPoint);
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("START HEIGHT: " + std::to_string(StartHeight));
         alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
@@ -742,6 +746,7 @@ namespace webifc::geometry
         }
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("RADIUS: " + std::to_string(RadiusOfCurvature));
         alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
@@ -775,6 +780,7 @@ namespace webifc::geometry
         }
 
         alignmentCurve = curve;
+        alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("LENGHT: " + std::to_string(HorizontalLength));
         alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
