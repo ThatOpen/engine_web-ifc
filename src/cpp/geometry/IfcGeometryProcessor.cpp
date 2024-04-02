@@ -39,9 +39,19 @@ namespace webifc::geometry
         return _geometryLoader;
     }
 
-    void IfcGeometryProcessor::SetTransformation(const glm::dmat4 &val)
+    void IfcGeometryProcessor::SetTransformation(const std::array<double, 16> &val)
     {
-        _transformation = val;
+        glm::dmat4 transformation;
+        glm::dvec4 v1(val[0], val[1], val[2], val[3]);
+        glm::dvec4 v2(val[4], val[5], val[6], val[7]);
+        glm::dvec4 v3(val[8], val[9], val[10], val[11]);
+        glm::dvec4 v4(val[12], val[13], val[14], val[15]);
+
+        transformation[0] = v1;
+        transformation[1] = v2;
+        transformation[2] = v3;
+        transformation[3] = v4;
+        _transformation = transformation;
     }
 
     IfcGeometry &IfcGeometryProcessor::GetGeometry(uint32_t expressID)
@@ -55,7 +65,20 @@ namespace webifc::geometry
         std::unordered_map<uint32_t, IfcGeometry>().swap(_expressIDToGeometry);
     }
 
-    glm::dmat4 IfcGeometryProcessor::GetCoordinationMatrix()
+    std::array<double, 16> IfcGeometryProcessor::GetFlatCoordinationMatrix() const
+    {
+        std::array<double, 16> flatTransformation;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                flatTransformation[i * 4 + j] = _coordinationMatrix[i][j];
+            }
+        }
+        return flatTransformation;
+    }
+
+    glm::dmat4 IfcGeometryProcessor::GetCoordinationMatrix() const
     {
         return _coordinationMatrix;
     }
@@ -1520,14 +1543,12 @@ namespace webifc::geometry
                 _isCoordinated = true;
             }
 
-            glm::dvec3 center;
-            glm::dvec3 extents;
+     
             auto geom = _expressIDToGeometry[composedMesh.expressID];
-            if (geometry.testReverse())
-                geom.ReverseFaces();
-            geom.GetCenterExtents(center, extents);
-            auto normalizedGeom = geom.Normalize(center, extents);
-            _expressIDToGeometry[composedMesh.expressID] = *static_cast<IfcGeometry *>(&normalizedGeom);
+            if (geometry.testReverse()) geom.ReverseFaces();
+      
+            auto translation = geom.Normalize();
+            _expressIDToGeometry[composedMesh.expressID] = geom;
 
             if (!composedMesh.hasColor)
             {
@@ -1540,11 +1561,14 @@ namespace webifc::geometry
                 newHasColor = composedMesh.hasColor;
             }
 
-            geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(center - extents/2.0);
+            geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(translation);
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
 
             flatMesh.geometries.push_back(geometry);
+        } else if (composedMesh.hasColor) {
+            newParentColor = composedMesh.color;
+            newHasColor = composedMesh.hasColor;
         }
 
         for (auto &c : composedMesh.children)

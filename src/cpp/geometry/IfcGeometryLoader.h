@@ -45,7 +45,7 @@ namespace webifc::geometry
     std::optional<glm::dvec4> GetColor(uint32_t expressID) const;
     IfcCrossSections GetCrossSections2D(uint32_t expressID) const;
     IfcCrossSections GetCrossSections3D(uint32_t expressID, bool scaled = false, glm::dmat4 coordination = glm::dmat4(1)) const;
-    IfcAlignment GetAlignment(uint32_t expressID, IfcAlignment alignment = IfcAlignment(), glm::dmat4 transform = glm::dmat4(1)) const;
+    IfcAlignment GetAlignment(uint32_t expressID, IfcAlignment alignment = IfcAlignment(), glm::dmat4 transform = glm::dmat4(1), uint32_t sourceExpressID = -1) const;
     bool GetColor(const uint32_t expressID, const glm::dvec4 &outputColor) const; 
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids() const;
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoidRels() const;
@@ -57,7 +57,7 @@ namespace webifc::geometry
     double GetLinearScalingFactor() const;
     std::string GetAngleUnits() const;
   private:
-    IfcCurve GetAlignmentCurve(uint32_t expressID) const;
+    IfcCurve GetAlignmentCurve(uint32_t expressID, uint32_t parentExpressID = -1) const;
     IfcProfile GetProfileByLine(uint32_t expressID) const;
     glm::dvec3 GetVertexPoint(uint32_t expressID) const;
     IfcTrimmingSelect GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const;

@@ -122,14 +122,6 @@ export function generateTapeAssignment(p: Prop, types:Type[])
         response += `{type:3,value:BooleanConvert(i.${p.name}.value)}`;
         return response;
     }
-    else if (type?.typeNum == 10 || p.typeNum==10) 
-    {
-        let response:string = "";
-        if (p.optional) response +=`i.${p.name} == null ? null : `;
-        response += `{type:10,value:i.${p.name}}`;
-        return response;
-    }
-    if (p.name=="Exponent") console.log(p);
     return `i.${p.name}`;
 }
 
