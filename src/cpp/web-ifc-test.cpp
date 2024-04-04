@@ -276,7 +276,9 @@ int main()
     // Benchmark();
 
     // return 0;
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/(E28)_CARRETERA_10.94_4X3.ifc");
+    .
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ALLPLAN/#515/Spacewell_Wall.ifc");
+    //std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/(E28)_CARRETERA_10.94_4X3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#529/529.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#722/722.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#546/546.ifc");
@@ -329,9 +331,10 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 17517); //512
     // SpecificLoadTest(loader, geometryLoader, 7390); //512
     // SpecificLoadTest(loader, geometryLoader, 7260); //512
+    SpecificLoadTest(loader, geometryLoader, 4616); //515
 
-    auto meshes = LoadAllTest(loader, geometryLoader);
-    auto alignments = GetAlignments(loader, geometryLoader);
+    // auto meshes = LoadAllTest(loader, geometryLoader);
+    // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;
 
