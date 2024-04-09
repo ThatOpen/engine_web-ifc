@@ -1702,14 +1702,30 @@ namespace webifc::geometry
       }
 
       // TODO: review and simplify
+      // TODO: review and simplify
+      case schema::IFCELLIPSE:
       case schema::IFCCIRCLE:
       {
         _loader.MoveToArgumentOffset(expressID, 0);
         auto positionID = _loader.GetRefArgument();
-        double radius = _loader.GetDoubleArgument();
+        double radius1 = 0;
+        double radius2 = 0;
+
+        if(lineType == schema::IFCCIRCLE)
+        {
+          radius1 = _loader.GetDoubleArgument();
+          radius2 = radius1;
+        }
+        if(lineType == schema::IFCELLIPSE)
+        {
+          radius1 = _loader.GetDoubleArgument();
+          radius2 = _loader.GetDoubleArgument();
+        }
 
         double startDegrees = 0;
         double endDegrees = 360;
+
+        bool byPos = false;
 
         if (trim.exist)
         {
@@ -1720,15 +1736,16 @@ namespace webifc::geometry
           }
           else if (trim.start.hasPos && trim.end.hasPos)
           {
+            byPos = true;
             if (dimensions == 2)
             {
               glm::dmat3 placement = GetAxis2Placement2D(positionID);
-              double xx = placement[2].x - trim.start.pos.x;
-              double yy = placement[2].y - trim.start.pos.y;
-              startDegrees = VectorToAngle(xx, yy);
-              xx = placement[2].x - trim.end.pos.x;
-              yy = placement[2].y - trim.end.pos.y;
-              endDegrees = VectorToAngle(xx, yy);
+              double xx = trim.start.pos.x - placement[2].x;
+              double yy = trim.start.pos.y - placement[2].y;
+              startDegrees = VectorToAngle2D(xx, yy);
+              xx = trim.end.pos.x - placement[2].x;
+              yy = trim.end.pos.y - placement[2].y;
+              endDegrees = VectorToAngle2D(xx, yy);
             }
             else if (dimensions == 3)
             {
@@ -1738,13 +1755,13 @@ namespace webifc::geometry
               glm::dvec4 vecZ = placement[2];
 
               glm::dvec3 v1 = glm::dvec3(
-                trim.start.pos3D.x - placement[3].x,
-                trim.start.pos3D.y - placement[3].y,
-                trim.start.pos3D.z - placement[3].z);
+                  trim.start.pos3D.x - placement[3].x,
+                  trim.start.pos3D.y - placement[3].y,
+                  trim.start.pos3D.z - placement[3].z);
               glm::dvec3 v2 = glm::dvec3(
-                trim.end.pos3D.x - placement[3].x,
-                trim.end.pos3D.y - placement[3].y,
-                trim.end.pos3D.z - placement[3].z);
+                  trim.end.pos3D.x - placement[3].x,
+                  trim.end.pos3D.y - placement[3].y,
+                  trim.end.pos3D.z - placement[3].z);
 
               double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
               double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
@@ -1766,22 +1783,50 @@ namespace webifc::geometry
         convertAngleUnits(startDegrees, startRad);
         convertAngleUnits(endDegrees, endRad);
 
-        double lengthDegrees = endDegrees - startDegrees;
+        while (startDegrees < 0)
+        {
+          startDegrees += 360;
+          startRad += 2 * CONST_PI;
+        }
 
-        // unset or true
+        while (endDegrees < 0)
+        {
+          endDegrees += 360;
+          endRad += 2 * CONST_PI;
+        }
+
+        while (startDegrees > 360)
+        {
+          startDegrees -= 360;
+          startRad -= 2 * CONST_PI;
+        }
+
+        while (endDegrees > 360)
+        {
+          endDegrees -= 360;
+          endRad -= 2 * CONST_PI;
+        }
+
+        double lengthDegrees = 0;
+
         if (trimSense == 1 || trimSense == -1)
         {
-          if (lengthDegrees < 0)
+          if (startDegrees > endDegrees)
           {
-            lengthDegrees += 360;
+            endDegrees += 360;
+            endRad += 2 * CONST_PI;
           }
+          lengthDegrees = endDegrees - startDegrees; 
         }
-        else
+
+        if (trimSense == 0)
         {
-          if (lengthDegrees > 0)
+          if (startDegrees < endDegrees)
           {
-            lengthDegrees -= 360;
+            startDegrees += 360;
+            startRad += 2 * CONST_PI;
           }
+          lengthDegrees = endDegrees - startDegrees;
         }
 
         double lengthRad = lengthDegrees / 180 * CONST_PI;
@@ -1791,150 +1836,23 @@ namespace webifc::geometry
         for (int i = 0; i < _circleSegments; i++)
         {
           double ratio = static_cast<double>(i) / (_circleSegments - 1);
-          double angle = startRad + ratio * lengthRad;
+          double angle = 0;
+          angle = startRad + ratio * lengthRad;
 
-          if (sameSense == 0)
-          {
-            angle = endRad - ratio * lengthRad;
-          }
-
-          if (dimensions== 2)
-          {
-            glm::dvec2 vec(0);
-            vec[0] = radius * std::cos(angle);
-            vec[1] = radius * std::sin(angle); // not sure why we need this, but we apparently do
-            glm::dvec2 pos = GetAxis2Placement2D(positionID) * glm::dvec3(vec, 1);
-            curve.Add(pos);
-          }
-          else
-          {
-            glm::dvec3 vec(0);
-            vec[0] = radius * std::cos(angle);
-            vec[1] = -radius * std::sin(angle); // negative or not???
-            glm::dvec3 pos = GetLocalPlacement(positionID) * glm::dvec4(glm::dvec3(vec), 1);
-            curve.Add(pos);
-          }
-
-        }
-
-        // without a trim, we close the circle
-        if (!trim.exist)
-        {
-          curve.Add(curve.points[startIndex]);
-        }
-
-        break;
-      }
-
-      // TODO: review and simplify
-    case schema::IFCELLIPSE:
-      {
-        _loader.MoveToArgumentOffset(expressID, 0);
-        auto positionID = _loader.GetRefArgument();
-        double radius1 = _loader.GetDoubleArgument();
-        double radius2 = _loader.GetDoubleArgument();
-
-        double startDegrees = 0;
-        double endDegrees = 360;
-
-        if (trim.exist)
-        {
-          if (trim.start.hasParam && trim.end.hasParam)
-          {
-            startDegrees = trim.start.param;
-            endDegrees = trim.end.param;
-          }
-          else if (trim.start.hasPos && trim.end.hasPos)
-          {
-            if (dimensions == 2)
-            {
-              glm::dmat3 placement = GetAxis2Placement2D(positionID);
-              double xx = placement[2].x - trim.start.pos.x;
-              double yy = placement[2].y - trim.start.pos.y;
-              startDegrees = VectorToAngle(xx, yy);
-              xx = placement[2].x - trim.end.pos.x;
-              yy = placement[2].y - trim.end.pos.y;
-              endDegrees = VectorToAngle(xx, yy);
-            }
-            else if (dimensions== 3)
-            {
-              glm::dmat4 placement = GetLocalPlacement(positionID);
-              glm::dvec4 vecX = placement[0];
-              glm::dvec4 vecY = placement[1];
-              glm::dvec4 vecZ = placement[2];
-
-              glm::dvec3 v1 = glm::dvec3(
-                trim.start.pos3D.x - placement[3].x,
-                trim.start.pos3D.y - placement[3].y,
-                trim.start.pos3D.z - placement[3].z);
-              glm::dvec3 v2 = glm::dvec3(
-                trim.end.pos3D.x - placement[3].x,
-                trim.end.pos3D.y - placement[3].y,
-                trim.end.pos3D.z - placement[3].z);
-
-              double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
-              double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
-              // double dzS = vecZ.x * v1.x + vecZ.y * v1.y + vecZ.z * v1.z;
-
-              double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
-              double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
-              // double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
-
-              endDegrees = VectorToAngle(dxS, dyS) - 90;
-              startDegrees = VectorToAngle(dxE, dyE) - 90;
-            }
-          }
-        }
-
-        double startRad = startDegrees;
-        double endRad = endDegrees;
-
-        convertAngleUnits(startDegrees, startRad);
-        convertAngleUnits(endDegrees, endRad);
-
-        double lengthDegrees = endDegrees - startDegrees;
-
-        // TODO: Because this is an ellipse you need to correct the angles
-
-        // startRad = atan((radius1 / radius2) * tan(startDegrees));
-        // endRad = atan((radius1 / radius2) * tan(endDegrees));
-
-        // unset or true
-        if (trimSense == 1 || trimSense == -1)
-        {
-          if (lengthDegrees < 0)
-          {
-            lengthDegrees += 360;
-          }
-        }
-        else
-        {
-          if (lengthDegrees > 0)
-          {
-            lengthDegrees -= 360;
-          }
-        }
-
-        double lengthRad = lengthDegrees / 180 * CONST_PI;
-
-        size_t startIndex = curve.points.size();
-
-
-        for (int i = 0; i < _circleSegments; i++)
-        {
-          double ratio = static_cast<double>(i) / (_circleSegments - 1);
-          double angle = startRad + ratio * lengthRad;
-          if (sameSense == 0)
-          {
-            angle = endRad - ratio * lengthRad;
-          }
-
-          if ( dimensions == 2)
+          if (dimensions == 2)
           {
             glm::dvec2 vec(0);
             vec[0] = radius1 * std::cos(angle);
-            vec[1] = radius2 * std::sin(angle);
-            curve.Add(GetAxis2Placement2D(positionID) * glm::dvec3(vec, 1));
+            vec[1] = radius2 * std::sin(angle); // not sure why we need this, but we apparently do
+            glm::dmat3 dmat = GetAxis2Placement2D(positionID);
+            // If trimming by points no rotation is required
+            if (byPos)
+            {
+              dmat[0] = glm::dvec3(1.0, 0.0, 0.0); // Assigning [1, 0, 0] to the X vector
+              dmat[1] = glm::dvec3(0.0, 1.0, 0.0); // Assigning [0, 1, 0] to the Y vector
+            }
+            glm::dvec2 pos = dmat * glm::dvec3(vec, 1);
+            curve.Add(pos);
           }
           else
           {

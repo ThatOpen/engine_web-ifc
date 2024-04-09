@@ -910,6 +910,35 @@ namespace webifc::geometry
 		return geom;
 	}
 
+    inline double VectorToAngle2D(double x, double y)
+	{
+		double dd = sqrt(x * x + y * y);
+		double xx = x / dd;
+		double yy = y / dd;
+
+		double angle = acos(xx);
+		double cosv = cos(angle);
+		double sinv = sin(angle);
+		if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
+		{
+			angle = asin(yy);
+			sinv = sin(angle);
+			cosv = cos(angle);
+			if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
+			{
+				angle = angle + (CONST_PI - angle) * 2;
+				sinv = sin(angle);
+				cosv = cos(angle);
+				if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
+				{
+					angle = angle + CONST_PI;
+				}
+			}
+		}
+
+		return (angle / (2 * CONST_PI)) * 360;
+	}
+
 	inline double VectorToAngle(double x, double y)
 	{
 		double dd = sqrt(x * x + y * y);
@@ -1125,6 +1154,38 @@ namespace webifc::geometry
 		std::vector<IfcGeometry> geoms;
 		flattenRecursive(mesh, geometryMap, geoms, mat);
 		return geoms;
+	}
+
+	inline std::vector<IfcGeometry> flattenSolids(std::vector<IfcGeometry> geoms)
+	{
+		std::vector<IfcGeometry> newGeoms;
+		IfcGeometry newGeom;
+		for (uint32_t g = 0; g < geoms.size(); g++)
+		{
+			if(!geoms[g].halfSpace)
+			{
+					if (geoms[g].numFaces)
+					{
+						for (uint32_t i = 0; i < geoms[g].numFaces; i++)
+						{
+							fuzzybools::Face f = geoms[g].GetFace(i);
+							glm::dvec3 a = geoms[g].GetPoint(f.i0);
+							glm::dvec3 b = geoms[g].GetPoint(f.i1);
+							glm::dvec3 c = geoms[g].GetPoint(f.i2);
+							newGeom.AddFace(a, b, c);
+						}
+					}
+			}
+		}
+		newGeoms.push_back(newGeom);
+		for (uint32_t g = 0; g < geoms.size(); g++)
+		{
+			if(geoms[g].halfSpace)
+			{
+				newGeoms.push_back(geoms[g]);
+			}
+		}
+		return newGeoms;
 	}
 
 	inline std::array<double, 16> FlattenTransformation(const glm::dmat4 &transformation)
