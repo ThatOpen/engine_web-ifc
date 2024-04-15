@@ -1649,9 +1649,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.668:
-  version "1.4.734"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.734.tgz#6e0083e1a6be06b2df4c849ba1534d86f30a6738"
-  integrity sha512-pYfGUc+ll8AOzLbLC0lfgwkvCZIV+sKGuFFsSNuF3K3ujrmem8jIjg/t6DNq0J7biTSS1hCt/Hts0nmA3ZyprQ==
+  version "1.4.736"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.736.tgz#ecb4348f4d5c70fb1e31c347e5bad6b751066416"
+  integrity sha512-Rer6wc3ynLelKNM4lOCg7/zPQj8tPOCB2hzD32PX9wd3hgRRi9MxEbmkFCokzcEhRVMiOVLjnL9ig9cefJ+6+Q==
 
 emittery@^0.8.1:
   version "0.8.1"
