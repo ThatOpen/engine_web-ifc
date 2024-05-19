@@ -21,9 +21,7 @@ jobs:
     - name: Install
       run: |
         sudo apt update
-        sudo apt install gcc-13 g++-13
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
-        sudo update-alternatives --set gcc /usr/bin/gcc-13
+        sudo apt install build-essential g++
     - name: Configure
       working-directory: ${{github.workspace}}/src/cpp
       run: cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=${{matrix.configuration}}
