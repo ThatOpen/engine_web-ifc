@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        os-type: [ubuntu-latest]
+        os-type: [ubuntu-24.04]
         configuration: [Release]    
     
     steps:
