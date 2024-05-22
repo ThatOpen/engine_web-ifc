@@ -54,7 +54,6 @@ export const INTEGER = 10;
 
 /**
  * Settings for the IFCLoader
- * @property {boolean} OPTIMIZE_PROFILES - If true, the model will return all circular and rectangular profiles as a single geometry.
  * @property {boolean} COORDINATE_TO_ORIGIN - If true, the model will be translated to the origin.
  * @property {number} CIRCLE_SEGMENTS - Number of segments for circles. 
  * @property {number} MEMORY_LIMIT - The amount of memory to be reserved for storing IFC data in memory
@@ -62,7 +61,6 @@ export const INTEGER = 10;
  * @property {number} LINEWRITER_BUFFER - The number of lines to write to memory at a time when writing an IFC file.
  */
 export interface LoaderSettings {
-    OPTIMIZE_PROFILES?: boolean;
     COORDINATE_TO_ORIGIN?: boolean;
     CIRCLE_SEGMENTS?: number;
     MEMORY_LIMIT?: number;
@@ -227,7 +225,6 @@ export class IfcAPI {
 
     private CreateSettings(settings?: LoaderSettings) {
         let s: LoaderSettings = {
-            OPTIMIZE_PROFILES: false,
             COORDINATE_TO_ORIGIN: false,
             CIRCLE_SEGMENTS: 12,
             TAPE_SIZE: 67108864,

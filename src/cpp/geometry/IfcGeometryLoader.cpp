@@ -3005,7 +3005,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
       return result;
     }
-  case schema::IFCAXIS2PLACEMENT3D:
+    case schema::IFCAXIS2PLACEMENT3D:
     {
       glm::dvec3 zAxis(0, 0, 1);
       glm::dvec3 xAxis(1, 0, 0);

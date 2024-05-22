@@ -720,7 +720,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
         ;
 
     emscripten::value_object<webifc::manager::LoaderSettings>("LoaderSettings")
-        .field("OPTIMIZE_PROFILES", &webifc::manager::LoaderSettings::OPTIMIZE_PROFILES)
         .field("COORDINATE_TO_ORIGIN", &webifc::manager::LoaderSettings::COORDINATE_TO_ORIGIN)
         .field("CIRCLE_SEGMENTS", &webifc::manager::LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &webifc::manager::LoaderSettings::TAPE_SIZE)
