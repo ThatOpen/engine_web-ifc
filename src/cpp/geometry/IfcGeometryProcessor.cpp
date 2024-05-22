@@ -1430,7 +1430,6 @@ namespace webifc::geometry
             }
 
             geometry.transformation = _coordinationMatrix * newMatrix * translation;
-            // geometry.transformation = _coordinationMatrix * newMatrix;
 
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;

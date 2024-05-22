@@ -27,18 +27,18 @@ namespace webifc::geometry {
 
 	glm::dmat4 IfcGeometry::Normalize()
 	{
-		glm::dvec3 center(0,0,0);
+		glm::dvec3 center = normalizationCenter;
 		if (!normalized)
-		{
+		{	
 			glm::dvec3 extents;
 			GetCenterExtents(center,extents);
-
 			for (size_t i = 0; i < vertexData.size(); i += 6)
 			{
 				vertexData[i + 0] = vertexData[i + 0] - center.x;
 				vertexData[i + 1] = vertexData[i + 1] - center.y;
 				vertexData[i + 2] = vertexData[i + 2] - center.z;
 			}
+			normalizationCenter = center;
 			normalized = true;
 		}
 		glm::dmat4 resultMat = glm::dmat4(1.0);
