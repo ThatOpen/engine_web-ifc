@@ -18,20 +18,9 @@
 
 namespace webifc::geometry
 {
-    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, bool optimizeprofiles)
-        : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _optimize_profiles(optimizeprofiles), _circleSegments(circleSegments)
+    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin)
+        : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _circleSegments(circleSegments)
     {
-        expressIdCyl = _loader.GetMaxExpressId() + 5;
-        expressIdRect = _loader.GetMaxExpressId() + 6;
-
-        IfcProfile profile;
-        double scaling = 1;
-        profile.curve = GetCircleCurve(scaling, _circleSegments, glm::dmat3(1));
-        predefinedCylinder = Extrude(profile, glm::dvec3(0, 0, 1), scaling);
-
-        IfcProfile profileCube;
-        profileCube.curve = GetRectangleCurve(scaling, scaling, glm::dmat3(1));
-        predefinedCube = Extrude(profileCube, glm::dvec3(0, 0, 1), scaling);
     }
 
     IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
@@ -726,8 +715,6 @@ namespace webifc::geometry
             }
             case schema::IFCSWEPTDISKSOLID:
             {
-                _expressIDToGeometry[expressIdCyl] = predefinedCylinder;
-                _expressIDToGeometry[expressIdRect] = predefinedCube;
 
                 // TODO: prevent self intersections in Sweep function still not working properly
 
@@ -766,7 +753,7 @@ namespace webifc::geometry
                 IfcProfile profile;
                 profile.curve = GetCircleCurve(radius, _circleSegments);
 
-                IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), mesh, _optimize_profiles, closed, profile, radius, directrix, expressIdCyl);
+                IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), mesh, closed, profile, radius, directrix);
 
                 _expressIDToGeometry[expressID] = geom;
                 mesh.expressID = expressID;
@@ -802,7 +789,7 @@ namespace webifc::geometry
 
                 if (!profile.isComposite)
                 {
-                    geom = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile, directrix, axis, false, false);
+                    geom = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile, directrix, axis, false);
                 }
                 else
                 {
@@ -826,8 +813,6 @@ namespace webifc::geometry
             }
             case schema::IFCEXTRUDEDAREASOLID:
             {
-                _expressIDToGeometry[expressIdCyl] = predefinedCylinder;
-                _expressIDToGeometry[expressIdRect] = predefinedCube;
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t profileID = _loader.GetRefArgument();
                 uint32_t placementID = _loader.GetOptionalRefArgument();
@@ -835,126 +820,6 @@ namespace webifc::geometry
                 double depth = _loader.GetDoubleArgument();
 
                 auto lineProfileType = _loader.GetLineType(profileID);
-                if (_optimize_profiles)
-                {
-                    // std::cout << "Optimizing profile(ID: " << profileID << ")" << std::endl;
-                    if (lineProfileType == schema::IFCCIRCLEHOLLOWPROFILEDEF || lineProfileType == schema::IFCCIRCLEPROFILEDEF)
-                    {
-                        _loader.MoveToArgumentOffset(profileID, 0);
-                        _loader.MoveToArgumentOffset(profileID, 2);
-                        uint32_t profilePlacementID = _loader.GetRefArgument();
-                        double radius = _loader.GetDoubleArgument();
-
-                        // std::cout << radius << std::endl;
-                        // std::cout << depth << std::endl;
-			            // std::cout << profilePlacementID << std::endl;
-
-                        // double thickness = _loader.GetDoubleArgument(); // Read this property only in hollow profiles
-
-                        if (placementID)
-                        {
-                            mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
-                        }
-
-                        glm::dmat4 profileTransform = glm::dmat4(
-                            glm::dvec4(1, 0, 0, 0),
-                            glm::dvec4(0, 1, 0, 0),
-                            glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0, 0, 0, 1));
-                        if (profilePlacementID)
-                        {
-                            auto trans2d = _geometryLoader.GetAxis2Placement2D(profilePlacementID);
-                            profileTransform = glm::dmat4(
-                                glm::dvec4(trans2d[0][0], trans2d[0][1], 0, 0),
-                                glm::dvec4(trans2d[1][0], trans2d[1][1], 0, 0),
-                                glm::dvec4(0, 0, 1, 0),
-                                glm::dvec4(trans2d[2][0], trans2d[2][1], 0, 1));
-                        }
-
-                        glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
-                        glm::dvec3 dx = glm::dvec3(1, 0, 0);
-                        glm::dvec3 dy = glm::dvec3(0, 1, 0);
-                        glm::dvec3 dz = glm::normalize(dir);
-
-                        glm::dmat4 profileScale = glm::dmat4(
-                            glm::dvec4(dx * radius, 0),
-                            glm::dvec4(dy * radius, 0),
-                            glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0, 0, 0, 1));
-
-                        glm::dmat4 extrusionScale = glm::dmat4(
-                            glm::dvec4(1, 0, 0, 0),
-                            glm::dvec4(0, 1, 0, 0),
-                            glm::dvec4(dz * depth, 0),
-                            glm::dvec4(0, 0, 0, 1));
-
-                        profileTransform *= profileScale;
-                        extrusionScale *= profileTransform;
-                        mesh.transformation *= extrusionScale;
-
-                        mesh.expressID = expressIdCyl;
-                        mesh.hasGeometry = true;
-                        return mesh;
-                    }
-                    else if (lineProfileType == schema::IFCRECTANGLEHOLLOWPROFILEDEF || lineProfileType == schema::IFCRECTANGLEPROFILEDEF)
-                    {
-                        _loader.MoveToArgumentOffset(profileID, 0);
-                        _loader.MoveToArgumentOffset(profileID, 2);
-                        uint32_t profilePlacementID = _loader.GetRefArgument();
-                        double dimx = _loader.GetDoubleArgument();
-                        double dimy = _loader.GetDoubleArgument();
-                        // double thickness = _loader.GetDoubleArgument(); // Read this property only in hollow profiles
-
-                        if (placementID)
-                        {
-                            mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
-                        }
-
-                        glm::dmat4 profileTransform = glm::dmat4(
-                            glm::dvec4(1, 0, 0, 0),
-                            glm::dvec4(0, 1, 0, 0),
-                            glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0, 0, 0, 1));
-                        if (profilePlacementID)
-                        {
-                            auto trans2d = _geometryLoader.GetAxis2Placement2D(profilePlacementID);
-                            profileTransform = glm::dmat4(
-                                glm::dvec4(trans2d[0][0], trans2d[0][1], 0, 0),
-                                glm::dvec4(trans2d[1][0], trans2d[1][1], 0, 0),
-                                glm::dvec4(0, 0, 1, 0),
-                                glm::dvec4(trans2d[2][0], trans2d[2][1], 0, 1));
-                        }
-
-                        glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
-
-                        double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
-
-                        glm::dvec3 dx = glm::dvec3(1, 0, 0);
-                        glm::dvec3 dy = glm::dvec3(0, 1, 0);
-                        glm::dvec3 dz = glm::normalize(dir);
-
-                        glm::dmat4 profileScale = glm::dmat4(
-                            glm::dvec4(dx * dimx, 0),
-                            glm::dvec4(dy * dimy, 0),
-                            glm::dvec4(0, 0, 1, 0),
-                            glm::dvec4(0, 0, 0, 1));
-
-                        glm::dmat4 extrusionScale = glm::dmat4(
-                            glm::dvec4(1, 0, 0, 0),
-                            glm::dvec4(0, 1, 0, 0),
-                            glm::dvec4(dz * depth, 0),
-                            glm::dvec4(0, 0, 0, 1));
-
-                        profileTransform *= profileScale;
-                        extrusionScale *= profileTransform;
-                        mesh.transformation *= extrusionScale;
-
-                        mesh.expressID = expressIdRect;
-                        mesh.hasGeometry = true;
-                        return mesh;
-                    }
-                }
-
                 IfcProfile profile = _geometryLoader.GetProfile(profileID);
                 if (!profile.isComposite)
                 {
@@ -1546,8 +1411,11 @@ namespace webifc::geometry
      
             auto geom = _expressIDToGeometry[composedMesh.expressID];
             if (geometry.testReverse()) geom.ReverseFaces();
-      
-            auto translation = geom.Normalize();
+
+            auto translation = glm::dmat4(1.0);
+
+            translation = geom.Normalize();
+
             _expressIDToGeometry[composedMesh.expressID] = geom;
 
             if (!composedMesh.hasColor)
@@ -1561,7 +1429,9 @@ namespace webifc::geometry
                 newHasColor = composedMesh.hasColor;
             }
 
-            geometry.transformation = _coordinationMatrix * newMatrix * glm::translate(translation);
+            geometry.transformation = _coordinationMatrix * newMatrix * translation;
+            // geometry.transformation = _coordinationMatrix * newMatrix;
+
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
 

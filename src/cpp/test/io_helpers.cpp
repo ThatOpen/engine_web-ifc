@@ -244,6 +244,12 @@ namespace webifc::io
         writeFile(filename, ToObj(geom, offset));
     }
 
+    void DumpIfcGeometry(webifc::geometry::IfcGeometry &geom, glm::dmat4 transform, std::string filename)
+    {
+        size_t offset = 0;
+        writeFile(filename, ToObj(geom, offset, transform));
+    }
+
     void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::string filename)
     {
         writeFile(filename, makeSVGLines(lines));

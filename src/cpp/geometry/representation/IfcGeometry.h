@@ -33,7 +33,7 @@ namespace webifc::geometry {
 		uint32_t GetVertexDataSize();
 		uint32_t GetIndexData();
 		uint32_t GetIndexDataSize();
-		glm::dvec3 Normalize();
+		glm::dmat4 Normalize();
 		private:
 			void ReverseFace(uint32_t index);
 			bool normalized = false;

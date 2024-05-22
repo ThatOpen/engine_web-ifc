@@ -25,7 +25,7 @@ namespace webifc::geometry {
 		}
 	}
 
-	glm::dvec3 IfcGeometry::Normalize()
+	glm::dmat4 IfcGeometry::Normalize()
 	{
 		glm::dvec3 center(0,0,0);
 		if (!normalized)
@@ -41,7 +41,12 @@ namespace webifc::geometry {
 			}
 			normalized = true;
 		}
-		return center;
+		glm::dmat4 resultMat = glm::dmat4(1.0);
+		resultMat[3][0] = center[0];
+		resultMat[3][1] = center[1];
+		resultMat[3][2] = center[2];
+
+		return  resultMat;
 	}
 
 	uint32_t IfcGeometry::GetVertexData()

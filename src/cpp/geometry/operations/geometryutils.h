@@ -273,7 +273,7 @@ namespace webifc::geometry
 			return geom;
 		}
 
-	inline	IfcGeometry SweepCircular(const double scaling, IfcComposedMesh &mesh, const bool optimizeProfiles, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, uint32_t expressIdCyl, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
+	inline	IfcGeometry SweepCircular(const double scaling, IfcComposedMesh &mesh, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		spdlog::debug("[SweepCircular({})]");
 		IfcGeometry geom;
@@ -489,34 +489,19 @@ namespace webifc::geometry
 
 				//Only segments smaller than 10 cm will be represented, those that are bigger will be standardized
 
-				if(!optimizeProfiles || di < 0.5 / scaling)
+				const auto &c1 = curves[i - 1].points;
+				const auto &c2 = curves[i].points;
+
+				uint32_t capSize = c1.size();
+				for (size_t j = 1; j < capSize; j++)
 				{
-					const auto &c1 = curves[i - 1].points;
-					const auto &c2 = curves[i].points;
+					glm::dvec3 bl = c1[j - 1];
+					glm::dvec3 br = c1[j - 0];
+					glm::dvec3 tl = c2[j - 1];
+					glm::dvec3 tr = c2[j - 0];
 
-					uint32_t capSize = c1.size();
-					for (size_t j = 1; j < capSize; j++)
-					{
-						glm::dvec3 bl = c1[j - 1];
-						glm::dvec3 br = c1[j - 0];
-
-						glm::dvec3 tl = c2[j - 1];
-						glm::dvec3 tr = c2[j - 0];
-
-						geom.AddFace(tl, br, bl);
-						geom.AddFace(tl, tr, br);
-					}
-				}
-				else
-				{
-					transforms[i] = glm::dmat4(transforms[i][0], transforms[i][1], ddir, transforms[i][3]);
-					IfcComposedMesh newMesh;
-					newMesh.expressID = expressIdCyl;
-					newMesh.hasColor = mesh.hasColor;
-					newMesh.color = mesh.color;
-					newMesh.hasGeometry = true;
-					newMesh.transformation = transforms[i];
-					mesh.children.push_back(newMesh);		
+					geom.AddFace(tl, br, bl);
+					geom.AddFace(tl, tr, br);
 				}
 			}
 
