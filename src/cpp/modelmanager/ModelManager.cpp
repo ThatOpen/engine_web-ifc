@@ -33,7 +33,7 @@ void webifc::manager::ModelManager::SetLogLevel(uint8_t levelArg) {
 webifc::geometry::IfcGeometryProcessor* webifc::manager::ModelManager::GetGeometryProcessor(uint32_t modelID) {
     if (!IsModelOpen(modelID)) return {};
     if (!_geometryProcessors.contains(modelID))  {
-        webifc::geometry::IfcGeometryProcessor* processor = new webifc::geometry::IfcGeometryProcessor(*GetIfcLoader(modelID),_schemaManager,GetSettings(modelID).CIRCLE_SEGMENTS,GetSettings(modelID).COORDINATE_TO_ORIGIN, GetSettings(modelID).OPTIMIZE_PROFILES);
+        webifc::geometry::IfcGeometryProcessor* processor = new webifc::geometry::IfcGeometryProcessor(*GetIfcLoader(modelID),_schemaManager,GetSettings(modelID).CIRCLE_SEGMENTS,GetSettings(modelID).COORDINATE_TO_ORIGIN);
         _geometryProcessors[modelID]=processor;
     }
     return _geometryProcessors.at(modelID);

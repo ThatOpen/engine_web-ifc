@@ -24,6 +24,7 @@ namespace webifc::geometry {
 		glm::dvec3 halfSpaceY = glm::dvec3(0, 1, 0);
 		glm::dvec3 halfSpaceZ = glm::dvec3(0, 0, 1);
 		glm::dvec3 halfSpaceOrigin = glm::dvec3(0, 0, 0);
+		glm::dvec3 normalizationCenter = glm::dvec3(0, 0, 0);
 		void ReverseFaces();
 		uint32_t GetVertexData();
 		void AddPart(IfcGeometry geom);
@@ -33,7 +34,7 @@ namespace webifc::geometry {
 		uint32_t GetVertexDataSize();
 		uint32_t GetIndexData();
 		uint32_t GetIndexDataSize();
-		glm::dvec3 Normalize();
+		glm::dmat4 Normalize();
 		private:
 			void ReverseFace(uint32_t index);
 			bool normalized = false;

@@ -107,10 +107,12 @@ std::vector<webifc::geometry::IfcCrossSections> GetCrossSections3D(webifc::parsi
     return crossSections;
 }
 
-std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
+std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint32_t IdToExport)
 {
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
     webifc::schema::IfcSchemaManager schema;
+
+    bool writeFiles = true;
 
     for (auto type : schema.GetIfcElementList())
     {
@@ -119,6 +121,11 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
         for (unsigned int i = 0; i < elements.size(); i++)
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
+
+            if(mesh.expressID == IdToExport)
+            {
+                DumpFlatMesh(mesh, geometryLoader, "TEST_GEOM.obj");
+            }
 
             for (auto &geom : mesh.geometries)
             {
@@ -276,11 +283,21 @@ int main()
     // Benchmark();
 
     // return 0;
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#512/512.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ALLPLAN/#515/Spacewell_Wall.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/(E28)_CARRETERA_10.94_4X3.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#529/529.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#722/722.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#546/546.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ALLPLAN/#515/Spacewell_Wall.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing V/walls_test.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing VI/219.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC.JS ISSUES/SOLIDS_BOOLS_MODELLER/BUG1.IFC");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC.JS ISSUES/SOLIDS_BOOLS_MODELLER/TEST.IFC");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#590/1110-PR117I-A.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing/FZK-Haus-EliteCAD.ifc");
 
     struct LoaderSettings
     {
-        bool OPTIMIZE_PROFILES = false;
         bool COORDINATE_TO_ORIGIN = false;
         uint16_t CIRCLE_SEGMENTS = 12;
         uint32_t TAPE_SIZE = 67108864 ; // probably no need for anyone other than web-ifc devs to change this
@@ -290,7 +307,6 @@ int main()
 
     LoaderSettings set;
     set.COORDINATE_TO_ORIGIN = true;
-    set.OPTIMIZE_PROFILES = true;
 
     webifc::schema::IfcSchemaManager schemaManager;
     webifc::parsing::IfcLoader loader(set.TAPE_SIZE, set.MEMORY_LIMIT, set.LINEWRITER_BUFFER, schemaManager);
@@ -313,15 +329,17 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.OPTIMIZE_PROFILES);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN);
 
     start = ms();
 
     // SpecificLoadTest(loader, geometryLoader, 17517); //512
-    SpecificLoadTest(loader, geometryLoader, 7390); //512
+    // SpecificLoadTest(loader, geometryLoader, 7390); //512
     // SpecificLoadTest(loader, geometryLoader, 7260); //512
+    // SpecificLoadTest(loader, geometryLoader, 4616); //515
+    SpecificLoadTest(loader, geometryLoader, 5557);
 
-    // auto meshes = LoadAllTest(loader, geometryLoader);
+    auto meshes = LoadAllTest(loader, geometryLoader, 5557);
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;
