@@ -16,7 +16,6 @@ namespace webifc::manager {
     
     struct LoaderSettings
     {
-        bool OPTIMIZE_PROFILES = false;
         bool COORDINATE_TO_ORIGIN = false;
         uint16_t CIRCLE_SEGMENTS = 12;
         uint32_t TAPE_SIZE = 67108864 ; // probably no need for anyone other than web-ifc devs to change this

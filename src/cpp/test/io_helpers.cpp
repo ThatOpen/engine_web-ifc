@@ -223,7 +223,8 @@ namespace webifc::io
 
         for (uint32_t i = 0; i < geom.numPoints; i++)
         {
-            glm::dvec4 t = transform * glm::dvec4(geom.GetPoint(i), 1);
+            auto p = glm::dvec4(geom.GetPoint(i), 1);
+            glm::dvec4 t = transform * p;
             obj << "v " << t.x * scale << " " << t.y * scale << " " << t.z * scale << "\n";
         }
 
@@ -242,6 +243,28 @@ namespace webifc::io
     {
         size_t offset = 0;
         writeFile(filename, ToObj(geom, offset));
+    }
+
+    void DumpFlatMesh(webifc::geometry::IfcFlatMesh &mesh, webifc::geometry::IfcGeometryProcessor &processor, std::string filename)
+    {
+        size_t offset = 0;
+        writeFile(filename, ToObj(mesh, processor, offset));
+    }
+
+    std::string ToObj(webifc::geometry::IfcFlatMesh &mesh, webifc::geometry::IfcGeometryProcessor &processor, size_t &offset, glm::dmat4 mat)
+    {
+        std::string complete;
+
+        for (auto &geom : mesh.geometries)
+        {
+            auto flatGeom = processor.GetGeometry(geom.geometryExpressID);
+
+            glm::dmat4 trans = mat * geom.transformation;
+
+            complete += ToObj(flatGeom, offset, trans);
+        }
+
+        return complete;
     }
 
     void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::string filename)

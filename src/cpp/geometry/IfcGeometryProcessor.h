@@ -25,7 +25,7 @@ namespace webifc::geometry
   class IfcGeometryProcessor 
   {
       public:
-        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, bool optimizeprofiles);
+        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin);
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
         IfcFlatMesh GetFlatMesh(uint32_t expressID);

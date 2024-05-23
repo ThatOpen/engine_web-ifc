@@ -48,7 +48,7 @@
         if (_startRef > 0) {
           _startRef--;
           load();
-          _pointer = _currentSize - 1;
+          _pointer = 0;
         }
       } 
       else
