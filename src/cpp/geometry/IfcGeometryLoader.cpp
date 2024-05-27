@@ -1348,6 +1348,22 @@ namespace webifc::geometry
     return point;
   }
 
+  bool IfcGeometryLoader::ReadIfcCartesianPointList(uint32_t expressID) const
+  {
+    spdlog::debug("[ReadIfcCartesianPointList({})]",expressID);  
+    auto listType = _loader.GetLineType(expressID);
+    _loader.MoveToArgumentOffset(expressID, 0);
+
+    if (listType == schema::IFCCARTESIANPOINTLIST3D)
+    {
+      return false;
+    }
+    if (listType == schema::IFCCARTESIANPOINTLIST2D)
+    {
+      return true;
+    }
+  }
+
   std::vector<glm::dvec3> IfcGeometryLoader::ReadIfcCartesianPointList3D(uint32_t expressID) const
   {
     spdlog::debug("[ReadIfcCartesianPointList3D({})]",expressID);
@@ -1621,7 +1637,7 @@ namespace webifc::geometry
           }
         }
 
-        if (dimensions == 2)
+        if (ReadIfcCartesianPointList(ptsRef))
         {
           _loader.MoveToArgumentOffset(expressID, 1);
           if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
@@ -1631,6 +1647,7 @@ namespace webifc::geometry
             {
               if (sg.type == "IFCLINEINDEX")
               {
+
                 auto pts = ReadIfcCartesianPointList2D(ptsRef);
                 for (auto &pt : sg.indexs)
                 {
@@ -1657,7 +1674,7 @@ namespace webifc::geometry
             }
           }
         }
-        else if (dimensions == 3)
+        else if (!ReadIfcCartesianPointList(ptsRef))
         {
           _loader.MoveToArgumentOffset(expressID, 1);
           if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
@@ -1701,13 +1718,22 @@ namespace webifc::geometry
         break;
       }
 
-      // TODO: review and simplify
-      // TODO: review and simplify
       case schema::IFCELLIPSE:
       case schema::IFCCIRCLE:
       {
         _loader.MoveToArgumentOffset(expressID, 0);
         auto positionID = _loader.GetRefArgument();
+
+        // Bad solution, must add a method to define dimensions 2 or 3 in all cases not only circles
+        auto typePlacement = _loader.GetLineType(positionID);
+        if(typePlacement == schema::IFCAXIS2PLACEMENT3D)
+        {
+          dimensions = 3;
+        }
+
+        _loader.MoveToArgumentOffset(expressID, 0);
+        positionID = _loader.GetRefArgument();
+
         double radius1 = 0;
         double radius2 = 0;
 
@@ -2242,6 +2268,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       _loader.MoveToArgumentOffset(expressID, 2);
+      // ISSUE 765 requires dimension 3, not sure how to solve it without a stopgap
       profile.curve = GetCurve(_loader.GetRefArgument(), 2);
       profile.isConvex = IsCurveConvex(profile.curve);
 
