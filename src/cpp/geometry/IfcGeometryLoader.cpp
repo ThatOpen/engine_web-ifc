@@ -1811,7 +1811,7 @@ namespace webifc::geometry
 
         if (trimSense == 1 || trimSense == -1)
         {
-          if (startDegrees > endDegrees)
+          if (startDegrees >= endDegrees)
           {
             endDegrees += 360;
             endRad += 2 * CONST_PI;
@@ -1821,7 +1821,7 @@ namespace webifc::geometry
 
         if (trimSense == 0)
         {
-          if (startDegrees < endDegrees)
+          if (startDegrees <= endDegrees)
           {
             startDegrees += 360;
             startRad += 2 * CONST_PI;
