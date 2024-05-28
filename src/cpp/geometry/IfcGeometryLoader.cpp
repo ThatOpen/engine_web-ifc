@@ -1724,7 +1724,7 @@ namespace webifc::geometry
         _loader.MoveToArgumentOffset(expressID, 0);
         auto positionID = _loader.GetRefArgument();
 
-        // Bad solution, must add a method to define dimensions 2 or 3 in all cases not only circles
+        // TODO: Bad solution, must add a method to define dimensions 2 or 3 in all cases not only circles
         auto typePlacement = _loader.GetLineType(positionID);
         if(typePlacement == schema::IFCAXIS2PLACEMENT3D)
         {
@@ -2399,11 +2399,16 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       profile.isConvex = true;
 
       _loader.MoveToArgumentOffset(expressID, 2);
-      uint32_t placementID = _loader.GetRefArgument();
+      uint32_t placementID = _loader.GetOptionalRefArgument();
       double radius = _loader.GetDoubleArgument();
       double thickness = _loader.GetDoubleArgument();
 
-      glm::dmat3 placement = GetAxis2Placement2D(placementID);
+      glm::dmat3 placement = glm::dmat3(1.0);
+
+      if(placementID)
+      {
+        placement = GetAxis2Placement2D(placementID);
+      }
 
       profile.curve = GetCircleCurve(radius, _circleSegments, placement);
       profile.holes.push_back(GetCircleCurve(radius - thickness, _circleSegments, placement));
@@ -2866,6 +2871,12 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   glm::dmat3 IfcGeometryLoader::GetAxis2Placement2D(uint32_t expressID) const
   {
+    // TODO: Bad solution
+    if(expressID < 1)
+    {
+      return glm::dmat3(1.0);
+    }
+
     spdlog::debug("[GetAxis2Placement2D({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
     switch (lineType)
