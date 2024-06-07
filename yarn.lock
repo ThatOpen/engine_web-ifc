@@ -160,12 +160,7 @@
   dependencies:
     "@babel/types" "^7.24.6"
 
-"@babel/helper-string-parser@^7.23.4", "@babel/helper-string-parser@^7.24.1":
-  version "7.24.6"
-  resolved "https://registry.yarnpkg.com/@babel/helper-string-parser/-/helper-string-parser-7.24.6.tgz#28583c28b15f2a3339cfafafeaad42f9a0e828df"
-  integrity sha512-WdJjwMEkmBicq5T9fm/cHND3+UlFa2Yj8ALLgmoSQAJZysYbBjw+azChSGPN4DSPLXOcooGRvDwZWMcF/mLO2Q==
-
-"@babel/helper-string-parser@^7.24.6":
+"@babel/helper-string-parser@^7.23.4", "@babel/helper-string-parser@^7.24.1", "@babel/helper-string-parser@^7.24.6":
   version "7.24.6"
   resolved "https://registry.yarnpkg.com/@babel/helper-string-parser/-/helper-string-parser-7.24.6.tgz#28583c28b15f2a3339cfafafeaad42f9a0e828df"
   integrity sha512-WdJjwMEkmBicq5T9fm/cHND3+UlFa2Yj8ALLgmoSQAJZysYbBjw+azChSGPN4DSPLXOcooGRvDwZWMcF/mLO2Q==
@@ -1307,9 +1302,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001587:
-  version "1.0.30001615"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001615.tgz#7c2c8772db681b6dee74d81d6550db68f2d28842"
-  integrity sha512-1IpazM5G3r38meiae0bHRnPhz+CBQ3ZLqbQMtrg+AsTPKAXgW38JNsXkyZ+v8waCsDmPq87lmfun5Q2AGysNEQ==
+  version "1.0.30001629"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001629.tgz#907a36f4669031bd8a1a8dbc2fa08b29e0db297e"
+  integrity sha512-c3dl911slnQhmxUIT4HhYzT7wnBK/XYpGnYLOj4nJBaRiw52Ibe7YxlDaAeRECvA786zCuExhxIUJ2K7nHMrBw==
 
 chalk@^2.4.2:
   version "2.4.2"
