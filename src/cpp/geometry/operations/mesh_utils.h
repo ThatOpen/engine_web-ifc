@@ -20,7 +20,7 @@ namespace webifc::geometry
 {
 
 	// TODO: review and simplify
-	inline void TriangulateRevolution(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
+	inline void TriangulateRevolution(IfcGeometry& geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
 	{
 		spdlog::debug("[TriangulateRevolution({})]");
 			// First we get the revolution data
@@ -194,7 +194,7 @@ namespace webifc::geometry
 	}
 
 		// TODO: review and simplify
-	inline void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
+	inline void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
 	{
 		spdlog::debug("[TriangulateCylindricalSurface({})]");
 		// First we get the cylinder data
@@ -446,7 +446,7 @@ namespace webifc::geometry
 	}
 
 		// TODO: review and simplify
-	inline void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface)
+	inline void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
 	{
 		spdlog::debug("[TriangulateExtrusion({})]");
 			// NO EXAMPLE FILES ABOUT THIS CASE
@@ -521,7 +521,7 @@ namespace webifc::geometry
 		}
 	}
 
-	inline double InverseMethod(glm::dvec3 pt, tinynurbs::RationalSurface3d srf, double pr, double rotations, double minError, double maxError,
+	inline double InverseMethod(glm::dvec3 const& pt, tinynurbs::RationalSurface3d const& srf, double const pr, double const rotations, double const minError, double const maxError,
 		double& fU, double& fV, double& divisor, double maxDistance)
 	{
 		spdlog::debug("[InverseMethod({})]");
@@ -572,7 +572,7 @@ namespace webifc::geometry
 		return maxDistance;
 	}
 
-	inline glm::dvec2 BSplineInverseEvaluation(glm::dvec3 pt, tinynurbs::RationalSurface3d srf, double scaling)
+	inline glm::dvec2 BSplineInverseEvaluation(glm::dvec3 const& pt, tinynurbs::RationalSurface3d const& srf, double const scaling)
 	{
 		spdlog::debug("[BSplineInverseEvaluation({})]");
 		glm::highp_dvec3 ptc = tinynurbs::surfacePoint(srf, 0.0, 0.0);
@@ -597,7 +597,7 @@ namespace webifc::geometry
 	}
 
 		// TODO: review and simplify
-	inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, IfcSurface &surface, double scaling)
+	inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double const scaling)
 	{
 			//			double limit = 1e-4;
 
