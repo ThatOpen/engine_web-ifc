@@ -39,6 +39,8 @@ namespace webifc::geometry{
 		uv_point_t inverse_evaluation(glm::dvec3 const& pt) const;
 		uv_point_t inverse_method(glm::dvec3 const pt, double initial_divisor, double max_distance) const;
 		std::vector<uint32_t> get_triangulation_uv_points(uv_points_t const& uv_points) const;
+		std::vector<double> get_zscores(std::vector<double> knots) const;
+		std::vector<double> check_knots(std::vector<double> const& knots) const;
 
 		IfcGeometry& geometry;
 		std::vector<IfcBound3D> const& bounds;

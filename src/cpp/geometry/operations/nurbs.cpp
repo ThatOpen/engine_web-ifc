@@ -13,6 +13,49 @@ namespace webifc::geometry{
 	void Nurbs::fill_geometry(){
 		auto uv_points {this->get_uv_points()};
 		auto indices {get_triangulation_uv_points(uv_points)};
+
+		// Subdivide resulting triangles to increase definition
+		// r indicates the level of subdivision, currently 3 you can increase it to 5
+		for (size_t r = 0; r < 3; r++)
+		{
+			auto num_indices{indices.size()};
+			std::vector<uint32_t> newIndices;
+			newIndices.reserve(num_indices / 3 * 12);
+			Nurbs::uv_points_t newUVPoints;
+			newUVPoints.reserve(num_indices / 3 * 6);
+
+			for (size_t i = 0; i < num_indices; i += 3)
+			{
+				auto const& p0 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 0]]));
+				auto const& p1 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 1]]));
+				auto const& p2 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 2]]));
+				newUVPoints.emplace_back((p0.x + p1.x) / 2, (p0.y + p1.y) / 2);
+				newUVPoints.emplace_back((p0.x + p2.x) / 2, (p0.y + p2.y) / 2);
+				newUVPoints.emplace_back((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+
+				int offset = newUVPoints.size() - 6;
+
+				newIndices.push_back(offset + 0);
+				newIndices.push_back(offset + 3);
+				newIndices.push_back(offset + 4);
+
+				newIndices.push_back(offset + 3);
+				newIndices.push_back(offset + 5);
+				newIndices.push_back(offset + 4);
+
+				newIndices.push_back(offset + 3);
+				newIndices.push_back(offset + 1);
+				newIndices.push_back(offset + 5);
+
+				newIndices.push_back(offset + 4);
+				newIndices.push_back(offset + 5);
+				newIndices.push_back(offset + 2);
+			}
+
+			uv_points = newUVPoints;
+			indices = newIndices;
+		}
+
 		for (size_t i = 0; i < indices.size(); i += 3)
 		{
 			auto const& p0 {uv_points[indices[i + 0]]};
@@ -72,10 +115,11 @@ namespace webifc::geometry{
 	}
 	std::vector<double> Nurbs::get_knots(std::vector<double>const & bs_knots, std::vector<uint32_t> const & bs_mults) const{
 		std::vector<double> result;
+		auto knots_no_expanded {this->check_knots(bs_knots)}; 
 		auto const num_srf_knots {std::accumulate(bs_mults.begin(), bs_mults.end(), 0.0)};
 		result.reserve(num_srf_knots);
 		for(size_t knot_i{0}; knot_i < bs_knots.size(); ++knot_i){
-			auto const knot {bs_knots[knot_i]};
+			auto const knot {knots_no_expanded[knot_i]};
 			auto const knot_mult {bs_mults[knot_i]};
 			for(size_t i{0}; i < knot_mult; ++i) result.push_back(knot);
 		}
@@ -226,6 +270,36 @@ namespace webifc::geometry{
 			}
 		}
 		catch(...){ return {};}
+		return result;
+	}
+	std::vector<double> Nurbs::get_zscores(std::vector<double> knots) const{
+		std::vector<double> result(knots.size());
+		double mean = std::accumulate(knots.begin(), knots.end(), 0.0) / knots.size();
+		double sq_sum = std::inner_product(knots.begin(), knots.end(), knots.begin(), 0.0);
+		double stdev = std::sqrt(sq_sum / knots.size() - mean * mean);
+		for (size_t i = 0; i < knots.size(); ++i) {
+				result[i] = (knots[i] - mean) / stdev;
+		}
+		return result;
+	}
+	std::vector<double> Nurbs::check_knots(std::vector<double> const& knots) const{
+		std::vector<double> result(knots.size());
+		auto const num_knots {knots.size()};
+		if(num_knots == 2){
+			result[0] = 0.0;
+			result[1] = 1.0;
+			return result;
+		}
+		auto threshold {3.0};
+		auto zscores {get_zscores(knots)};
+		for(size_t i{0}; i < num_knots; ++i){
+			if(std::abs(zscores[i]) > threshold){
+				if(i == 0)									result[i] = knots[i+1];
+				else if (i == num_knots -1)	result[i] = knots[i-1];
+				else 												result[i] = (knots[i-1]+knots[i+1]) / 2.0;
+			}
+			else result[i] = knots[i]; 
+		}
 		return result;
 	}
 }
