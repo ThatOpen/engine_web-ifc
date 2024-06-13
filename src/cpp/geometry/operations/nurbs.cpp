@@ -171,26 +171,22 @@ namespace webifc::geometry{
 		double fU {0.5};
 		double fV {0.5};
 		glm::highp_dvec3 pt00{};
+
 		while (max_distance > maxError && divisor < 10000)
 		{
 			for (double r = 1; r < 5; r++)
 			{
 				int round = 0;
+				auto mul_divisor {r * r * divisor};
 				while (max_distance > minError && round < 3)
 				{
 					for (double i = 0; i < rotations; i++)
 					{
-						double rads = (i / rotations) * CONST_PI * 2;
-						double incU = glm::sin(rads) / (r * r * divisor);
-						double incV = glm::cos(rads) / (r * r * divisor);
-						if (pr > 1)
-						{
-							incV *= pr;
-						}
-						else
-						{
-							incU /= pr;
-						}
+						double rads = (i / rotations) * pi2;
+						double incU = glm::sin(rads) / mul_divisor;
+						double incV = glm::cos(rads) / mul_divisor;
+						if (pr > 1) incV *= pr;
+						else incU /= pr;
 						while (true)
 						{
 							double ffU = fU + incU;
@@ -213,7 +209,7 @@ namespace webifc::geometry{
 							}	
 
 							pt00 = tinynurbs::surfacePoint(*this->nurbs, ffU, ffV);
-							double di = glm::distance(pt00, pt);
+							auto const di {glm::distance(pt00, pt)};
 							if (di < max_distance)
 							{
 								max_distance = di;

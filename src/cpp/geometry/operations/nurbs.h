@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 namespace tinynurbs{
 	template<typename T>
@@ -17,7 +18,9 @@ namespace webifc::geometry{
 	class BSpline;
 	class IfcSurface;
 
-	constexpr double rotations 		{ 6 };
+	constexpr double rotations 		{ 6.0 };
+  constexpr auto pi {glm::pi<double>()};
+  constexpr auto pi2 {glm::two_pi<double>()};
 
 	class Nurbs{
 	
