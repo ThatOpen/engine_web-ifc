@@ -1191,11 +1191,11 @@ namespace webifc::geometry
         {
           for (auto &pt : edgeCurve.points)
           {
-            // if (notPresent(pt, curve.points))
-            // {
+            if (notPresent(pt, curve.points))
+            {
               curve.points.push_back(pt);
               curve.indices.push_back(id);
-            // }
+            }
           }
         }
         id++;

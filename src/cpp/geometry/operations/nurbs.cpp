@@ -163,7 +163,7 @@ namespace webifc::geometry{
 		std::sort(points.begin(), points.end(),[](auto const& left, auto const& right){
 		  return left[1] < right[1];
 		});
-		this->dump_uv_points(points);
+		// this->dump_uv_points(points);
 		return points;
 	}
 	auto Nurbs::get_approximation(glm::dvec3 const& pt, uv_point_t const& range_u, uv_point_t const& range_v) const{
@@ -302,24 +302,24 @@ namespace webifc::geometry{
 			auto const num_indices{triangulator.triangles.size() * 3};
 			result.reserve(triangulator.triangles.size() * 3);
 			for(auto const& triangle : triangulator.triangles){
-				auto & vertice0_id{triangle.vertices[0]};
-				auto & vertice1_id{triangle.vertices[1]};
-				auto & vertice2_id{triangle.vertices[2]};
-				auto vertice0 {glm::dvec2{uv_points[vertice0_id][0], uv_points[vertice0_id][1]}};
-				auto vertice1 {glm::dvec2{uv_points[vertice1_id][0], uv_points[vertice1_id][1]}};
-				auto vertice2 {glm::dvec2{uv_points[vertice2_id][0], uv_points[vertice2_id][1]}};
-				auto area{areaOfTriangle(vertice0, vertice1, vertice2)};
+				auto const & vertice0_id{triangle.vertices[0]};
+				auto const & vertice1_id{triangle.vertices[1]};
+				auto const & vertice2_id{triangle.vertices[2]};
+				auto const& vertice0 {glm::dvec2{uv_points[vertice0_id][0], uv_points[vertice0_id][1]}};
+				auto const& vertice1 {glm::dvec2{uv_points[vertice1_id][0], uv_points[vertice1_id][1]}};
+				auto const& vertice2 {glm::dvec2{uv_points[vertice2_id][0], uv_points[vertice2_id][1]}};
+				auto const area{areaOfTriangle(vertice0, vertice1, vertice2)};
 				constexpr double EPS {1E-3};
 				constexpr double EPS2 {EPS*EPS};
-				if(area < EPS2) {
+				if(area < EPS2)
 					continue;
-				}
 				result.emplace_back(std::move(vertice0_id));
 				result.emplace_back(std::move(vertice1_id));
 				result.emplace_back(std::move(vertice2_id));
 			}
 		}
 		catch(...){ return {};}
+		this->dump_triangulation_uv_points(uv_points, result);
 		return result;
 	}
 	std::vector<double> Nurbs::get_zscores(std::vector<double> const& knots) const{
@@ -370,5 +370,34 @@ namespace webifc::geometry{
 			line_uv.indexes.push_back(i+1);
 		}
 		utils::exports::obj::write_obj(L"exports/objs/uv_BSpline.obj", obj_data_uv);
+	}
+	void Nurbs::dump_triangulation_uv_points(uv_points_t const& uv_points, std::vector<uint32_t> const& indexes) const{
+		auto num_points{uv_points.size()};
+		utils::exports::data_obj obj_data{};
+		obj_data.lengths_axis = vector_t{10.0, 10.0, 10.0}; 
+		obj_data.vertices.reserve(num_points);
+		obj_data.material_file = "materials";	
+		obj_data.show_id = true;
+		obj_data.lines.reserve(indexes.size() / 3);
+		size_t line_index{0};
+		for(size_t i {2}; i < indexes.size(); i += 3){
+			auto const index_0 {indexes[i-2]};			
+			auto const index_1 {indexes[i-1]};			
+			auto const index_2 {indexes[i-0]};			
+			auto const& p0 {uv_points[index_0]};
+			auto const& p1 {uv_points[index_1]};
+			auto const& p2 {uv_points[index_2]};
+			obj_data.vertices.emplace_back(p0.x, p0.y, 0.0);
+			obj_data.vertices.emplace_back(p1.x, p1.y, 0.0);
+			obj_data.vertices.emplace_back(p2.x, p2.y, 0.0);
+
+			auto& line {obj_data.lines.emplace_back()};
+			line.material = line_index++;
+			line.indexes.push_back(obj_data.vertices.size() - 0);
+			line.indexes.push_back(obj_data.vertices.size() - 1);
+			line.indexes.push_back(obj_data.vertices.size() - 2);
+			line.indexes.push_back(obj_data.vertices.size() - 0);
+		}
+		utils::exports::obj::write_obj(L"exports/objs/triangulation_uv_nurbs.obj", obj_data);
 	}
 }
