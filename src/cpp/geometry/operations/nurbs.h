@@ -45,8 +45,6 @@ namespace webifc::geometry{
 		std::vector<double> get_zscores(std::vector<double> const& knots) const;
 		std::vector<double> check_knots(std::vector<double> const& knots) const;
 		auto get_approximation(glm::dvec3 const& pt, uv_point_t const& range_u, uv_point_t const& range_v) const;
-		void dump_uv_points(uv_points_t const& uv_points) const;
-		void dump_triangulation_uv_points(uv_points_t const& uv_points, std::vector<uint32_t> const& indexes) const;
 
 		IfcGeometry& geometry;
 		std::vector<IfcBound3D> const& bounds;

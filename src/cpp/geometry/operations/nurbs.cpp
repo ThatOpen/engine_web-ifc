@@ -10,7 +10,6 @@
 #include <string>
 #include <execution>
 #include <iostream>
-#include <utils/exports/obj/obj.hpp>
 
 namespace webifc::geometry{
 
@@ -163,7 +162,6 @@ namespace webifc::geometry{
 		std::sort(points.begin(), points.end(),[](auto const& left, auto const& right){
 		  return left[1] < right[1];
 		});
-		// this->dump_uv_points(points);
 		return points;
 	}
 	auto Nurbs::get_approximation(glm::dvec3 const& pt, uv_point_t const& range_u, uv_point_t const& range_v) const{
@@ -305,7 +303,6 @@ namespace webifc::geometry{
 			}
 		}
 		catch(...){ return {};}
-		this->dump_triangulation_uv_points(uv_points, result);
 		return result;
 	}
 	std::vector<double> Nurbs::get_zscores(std::vector<double> const& knots) const{
@@ -337,53 +334,5 @@ namespace webifc::geometry{
 			else result[i] = knots[i]; 
 		}
 		return result;
-	}
-	void Nurbs::dump_uv_points(uv_points_t const& uv_points) const{
-		auto num_points{uv_points.size()};
-		utils::exports::data_obj obj_data_uv{};
-		obj_data_uv.lengths_axis = vector_t{10.0, 10.0, 10.0}; 
-		obj_data_uv.vertices.reserve(num_points);
-		obj_data_uv.material_file = "materials";	
-		obj_data_uv.show_id = true;
-		for(size_t i {1}; i < uv_points.size(); ++i){
-			auto const& bs1 {uv_points[i-1]};
-			auto const& bs0 {uv_points[i-0]};
-			if(i==1) obj_data_uv.vertices.emplace_back(bs0[0], bs0[1], 0.0); 
-			auto& line_uv {obj_data_uv.lines.emplace_back()};
-			line_uv.material = i;
-			line_uv.indexes.push_back(i);
-			obj_data_uv.vertices.emplace_back(bs1[0], bs1[1], 0.0);
-			line_uv.indexes.push_back(i+1);
-		}
-		utils::exports::obj::write_obj(L"exports/objs/uv_BSpline.obj", obj_data_uv);
-	}
-	void Nurbs::dump_triangulation_uv_points(uv_points_t const& uv_points, std::vector<uint32_t> const& indexes) const{
-		auto num_points{uv_points.size()};
-		utils::exports::data_obj obj_data{};
-		obj_data.lengths_axis = vector_t{10.0, 10.0, 10.0}; 
-		obj_data.vertices.reserve(num_points);
-		obj_data.material_file = "materials";	
-		obj_data.show_id = true;
-		obj_data.lines.reserve(indexes.size() / 3);
-		size_t line_index{0};
-		for(size_t i {2}; i < indexes.size(); i += 3){
-			auto const index_0 {indexes[i-2]};			
-			auto const index_1 {indexes[i-1]};			
-			auto const index_2 {indexes[i-0]};			
-			auto const& p0 {uv_points[index_0]};
-			auto const& p1 {uv_points[index_1]};
-			auto const& p2 {uv_points[index_2]};
-			obj_data.vertices.emplace_back(p0.x, p0.y, 0.0);
-			obj_data.vertices.emplace_back(p1.x, p1.y, 0.0);
-			obj_data.vertices.emplace_back(p2.x, p2.y, 0.0);
-
-			auto& line {obj_data.lines.emplace_back()};
-			line.material = line_index++;
-			line.indexes.push_back(obj_data.vertices.size() - 0);
-			line.indexes.push_back(obj_data.vertices.size() - 1);
-			line.indexes.push_back(obj_data.vertices.size() - 2);
-			line.indexes.push_back(obj_data.vertices.size() - 0);
-		}
-		utils::exports::obj::write_obj(L"exports/objs/triangulation_uv_nurbs.obj", obj_data);
 	}
 }
