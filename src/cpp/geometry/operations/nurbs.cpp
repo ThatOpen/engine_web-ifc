@@ -20,45 +20,45 @@ namespace webifc::geometry{
 
 		// Subdivide resulting triangles to increase definition
 		// r indicates the level of subdivision, currently 3 you can increase it to 5
-		// for (size_t r = 0; r < 3; r++)
-		// {
-		// 	auto num_indices{indices.size()};
-		// 	std::vector<uint32_t> newIndices;
-		// 	newIndices.reserve(num_indices / 3 * 12);
-		// 	Nurbs::uv_points_t newUVPoints;
-		// 	newUVPoints.reserve(num_indices / 3 * 6);
+		for (size_t r = 0; r < 3; r++)
+		{
+			auto num_indices{indices.size()};
+			std::vector<uint32_t> newIndices;
+			newIndices.reserve(num_indices / 3 * 12);
+			Nurbs::uv_points_t newUVPoints;
+			newUVPoints.reserve(num_indices / 3 * 6);
 
-		// 	for (size_t i = 0; i < num_indices; i += 3)
-		// 	{
-		// 		auto const& p0 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 0]]));
-		// 		auto const& p1 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 1]]));
-		// 		auto const& p2 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 2]]));
-		// 		newUVPoints.emplace_back((p0.x + p1.x) / 2, (p0.y + p1.y) / 2);
-		// 		newUVPoints.emplace_back((p0.x + p2.x) / 2, (p0.y + p2.y) / 2);
-		// 		newUVPoints.emplace_back((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+			for (size_t i = 0; i < num_indices; i += 3)
+			{
+				auto const& p0 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 0]]));
+				auto const& p1 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 1]]));
+				auto const& p2 = newUVPoints.emplace_back(std::move(uv_points[indices[i + 2]]));
+				newUVPoints.emplace_back((p0.x + p1.x) / 2, (p0.y + p1.y) / 2);
+				newUVPoints.emplace_back((p0.x + p2.x) / 2, (p0.y + p2.y) / 2);
+				newUVPoints.emplace_back((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 
-		// 		int offset = newUVPoints.size() - 6;
+				int offset = newUVPoints.size() - 6;
 
-		// 		newIndices.push_back(offset + 0);
-		// 		newIndices.push_back(offset + 3);
-		// 		newIndices.push_back(offset + 4);
+				newIndices.push_back(offset + 0);
+				newIndices.push_back(offset + 3);
+				newIndices.push_back(offset + 4);
 
-		// 		newIndices.push_back(offset + 3);
-		// 		newIndices.push_back(offset + 5);
-		// 		newIndices.push_back(offset + 4);
+				newIndices.push_back(offset + 3);
+				newIndices.push_back(offset + 5);
+				newIndices.push_back(offset + 4);
 
-		// 		newIndices.push_back(offset + 3);
-		// 		newIndices.push_back(offset + 1);
-		// 		newIndices.push_back(offset + 5);
+				newIndices.push_back(offset + 3);
+				newIndices.push_back(offset + 1);
+				newIndices.push_back(offset + 5);
 
-		// 		newIndices.push_back(offset + 4);
-		// 		newIndices.push_back(offset + 5);
-		// 		newIndices.push_back(offset + 2);
-		// 	}
+				newIndices.push_back(offset + 4);
+				newIndices.push_back(offset + 5);
+				newIndices.push_back(offset + 2);
+			}
 
-		// 	uv_points = newUVPoints;
-		// 	indices = newIndices;
-		// }
+			uv_points = newUVPoints;
+			indices = newIndices;
+		}
 
 		for (size_t i = 0; i < indices.size(); i += 3)
 		{
@@ -84,8 +84,8 @@ namespace webifc::geometry{
 	
 	void Nurbs::init(){
 		this->nurbs = std::make_shared<tinynurbs::RationalSurface3d>(
-				static_cast<int>(this->bspline_surface.UDegree),
-				static_cast<int>(this->bspline_surface.VDegree),
+				static_cast<int>(static_cast<uint32_t>(this->bspline_surface.UDegree)),
+				static_cast<int>(static_cast<uint32_t>(this->bspline_surface.VDegree)),
 				this->get_knots(this->bspline_surface.UKnots, this->bspline_surface.UMultiplicity),
 				this->get_knots(this->bspline_surface.VKnots, this->bspline_surface.VMultiplicity),
 				tinynurbs::array2<glm::dvec3>{this->num_u, this->num_v, this->get_control_points()},
@@ -144,15 +144,15 @@ namespace webifc::geometry{
 		points.resize(num_points);
 		std::cout << std::format("Transform {} points", num_points);
 	 	debug::watch watch{};
+		auto count{0};
 		std::transform(bound_points.begin(), bound_points.end(), points.begin(), [&](auto const& point){
-				auto uv {this->inverse_evaluation(point)};
-				return Nurbs::uv_point_t{uv.x, uv.y};
+			++count;
+			auto uv {this->inverse_evaluation(point)};
+			return Nurbs::uv_point_t{uv.x, uv.y};				
 		});
 		std::cout << std::format(" in {} ms\n", watch.get_time_ms());
 		std::sort(points.begin(), points.end(),[](auto const& left, auto const& right){
-			  if (left[0] != right[0]) {
-          return left[0] < right[0];
-        }
+			  if (left[0] != right[0]) return left[0] < right[0];
         return left[1] < right[1];
 		});
 		auto last_it2 = std::unique(points.begin(), points.end(), [](auto const& a, auto const& b){
@@ -173,16 +173,14 @@ namespace webifc::geometry{
     auto min_distance = std::numeric_limits<double>::max();
 		auto const portion_u {std::abs((range_u.y - range_u.x) / grid_size)};
 		auto const portion_v {std::abs((range_v.y - range_v.x) / grid_size)};
-    auto const middle_step_u {portion_u / 2};
-    auto const middle_step_v {portion_v / 2};
 		auto new_range_u {range_u};
 		auto new_range_v {range_v};
-		for (int i = 0; i <= grid_size; ++i) {
-				auto const step_u {portion_u * i + middle_step_u};
-				auto const u {range_u.x + step_u};
-        for (int j = 0; j <= grid_size; ++j) {
-					auto const step_v {portion_v * i + middle_step_v};
-					auto const v {range_v.x + step_v};
+		for (int i = 0; i < grid_size; ++i) {
+				auto const step_u {portion_u * i};
+				auto const u {range_u.x + step_u != 0.0 ? step_u : step_u + std::numeric_limits<double>::epsilon()};
+        for (int j = 0; j < grid_size; ++j) {
+					auto const step_v {portion_v * i};
+					auto const v {range_v.x + step_v != 0.0 ? step_v : step_v + std::numeric_limits<double>::epsilon() };
 					auto const pt_grid {tinynurbs::surfacePoint(*this->nurbs, u, v)};
 					auto const dist {glm::distance(pt_grid, pt)};
 					if (dist < min_distance) {
@@ -205,17 +203,17 @@ namespace webifc::geometry{
 	{
 		spdlog::debug("[InverseMethod({})]");
 		glm::highp_dvec3 pt00{};
-		auto max_distance = std::numeric_limits<double>::max();
 		double fU {0.5};
 		double fV {0.5};
 		// auto [max_distance, fU, fV, new_range_u, new_range_v] {this->get_approximation(pt, this->range_knots_u, this->range_knots_v)};
+		// if(max_distance <= maxError) return {fU, fV};
 		// auto previous_distance{max_distance};
 		// while(max_distance > maxError){
 		// 	auto [next_max_distance, next_fU, next_fV, range_u, range_v] {this->get_approximation(pt, new_range_u, new_range_v)};
 		// 	fU = next_fU;
 		// 	fV = next_fV;
 		// 	if(max_distance <= maxError) return {fU, fV};
-		// 	if((previous_distance - next_max_distance) < 0.10) break;
+		// 	if((previous_distance - next_max_distance) < 0.010) break;
 		// 	previous_distance = next_max_distance;
 		// 	new_range_u = range_u;
 		// 	new_range_v = range_v;
@@ -223,7 +221,8 @@ namespace webifc::geometry{
 		// }
 		
 		size_t count{0};
-		double divisor {10.0};
+		double divisor {100.0};
+		auto max_distance = std::numeric_limits<double>::max();
 		while (max_distance > maxError && divisor < 10000)
 		{
 			for (double r = 1; r < 5; r++)
@@ -245,24 +244,11 @@ namespace webifc::geometry{
 							// spdlog::debug("result: {} \t || {} \t || count: {} \t",fU, fV, count);
 							double ffU = fU + incU;
 							double ffV = fV + incV;
-							if (ffU < range_knots_u.x)
-							{
-									ffU = range_knots_u.y - (range_knots_u.x - ffU);
-							}
-							else if (ffU > range_knots_u.y)
-							{
-									ffU = range_knots_u.x + (ffU - range_knots_u.y);
-							}
-							if (ffV < range_knots_v.x)
-							{
-									ffV = range_knots_v.y - (range_knots_v.x - ffV);
-							}
-							else if (ffV > range_knots_v.y)
-							{
-									ffV = range_knots_v.x + (ffV - range_knots_v.y);
-							}	
-
-							pt00 = tinynurbs::surfacePoint(*this->nurbs, ffU, ffV);
+							if (ffU < range_knots_u.x)ffU = range_knots_u.y - (range_knots_u.x - ffU);
+							else if (ffU > range_knots_u.y) ffU = range_knots_u.x + (ffU - range_knots_u.y);
+							if (ffV < range_knots_v.x) ffV = range_knots_v.y - (range_knots_v.x - ffV);
+							else if (ffV > range_knots_v.y) ffV = range_knots_v.x + (ffV - range_knots_v.y);
+							pt00 = tinynurbs::surfacePoint(*this->nurbs, ffU, ffV);							
 							auto const di {glm::distance(pt00, pt)};
 							if (di < max_distance)
 							{
@@ -309,7 +295,7 @@ namespace webifc::geometry{
 				auto const& vertice1 {glm::dvec2{uv_points[vertice1_id][0], uv_points[vertice1_id][1]}};
 				auto const& vertice2 {glm::dvec2{uv_points[vertice2_id][0], uv_points[vertice2_id][1]}};
 				auto const area{areaOfTriangle(vertice0, vertice1, vertice2)};
-				constexpr double EPS {1E-3};
+				constexpr double EPS {1E-2};
 				constexpr double EPS2 {EPS*EPS};
 				if(area < EPS2)
 					continue;

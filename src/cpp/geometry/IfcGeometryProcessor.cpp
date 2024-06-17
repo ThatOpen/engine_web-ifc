@@ -1165,21 +1165,21 @@ namespace webifc::geometry
                 VKnots.push_back(_loader.GetDoubleArgument(token));
             }
 
-            if (UKnots[UKnots.size() - 1] != (int)UKnots[UKnots.size() - 1])
-            {
-                for (uint32_t i = 0; i < UKnots.size(); i++)
-                {
-                    UKnots[i] = UKnots[i] * (UKnots.size() - 1) / UKnots[UKnots.size() - 1];
-                }
-            }
+            // if (UKnots[UKnots.size() - 1] != (int)UKnots[UKnots.size() - 1])
+            // {
+            //     for (uint32_t i = 0; i < UKnots.size(); i++)
+            //     {
+            //         UKnots[i] = UKnots[i] * (UKnots.size() - 1) / UKnots[UKnots.size() - 1];
+            //     }
+            // }
 
-            if (VKnots[VKnots.size() - 1] != (int)VKnots[VKnots.size() - 1])
-            {
-                for (uint32_t i = 0; i < VKnots.size(); i++)
-                {
-                    VKnots[i] = VKnots[i] * (VKnots.size() - 1) / VKnots[VKnots.size() - 1];
-                }
-            }
+            // if (VKnots[VKnots.size() - 1] != (int)VKnots[VKnots.size() - 1])
+            // {
+            //     for (uint32_t i = 0; i < VKnots.size(); i++)
+            //     {
+            //         VKnots[i] = VKnots[i] * (VKnots.size() - 1) / VKnots[VKnots.size() - 1];
+            //     }
+            // }
 
             // if (closedU == "T")
             // {
@@ -1638,19 +1638,19 @@ namespace webifc::geometry
             }
             else if (surface.CylinderSurface.Active)
             {
-                // TriangulateCylindricalSurface(geometry, bounds3D, surface);
+                TriangulateCylindricalSurface(geometry, bounds3D, surface);
             }
             else if (surface.RevolutionSurface.Active)
             {
-                // TriangulateRevolution(geometry, bounds3D, surface);
+                TriangulateRevolution(geometry, bounds3D, surface);
             }
             else if (surface.ExtrusionSurface.Active)
             {
-                // TriangulateExtrusion(geometry, bounds3D, surface);
+                TriangulateExtrusion(geometry, bounds3D, surface);
             }
             else
             {
-                // TriangulateBounds(geometry, bounds3D, expressID);
+                TriangulateBounds(geometry, bounds3D, expressID);
             }
             break;
         }
