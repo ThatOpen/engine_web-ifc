@@ -1514,8 +1514,6 @@ namespace webifc::geometry
 
                     if (op == "DIFFERENCE")
                     {
-                        result.GeneratePlanes();
-		                secondOperator.GeneratePlanes();
                         double scale = _geometryLoader.GetLinearScalingFactor();
 
                         #ifdef CSG_DEBUG_OUTPUT
@@ -1528,7 +1526,7 @@ namespace webifc::geometry
                             io::DumpIfcGeometry(geoms, "second.obj");
                         #endif
 
-                        result = fuzzybools::Subtract(result, secondOperator, scale);
+                        result = fuzzybools::Subtract(result, secondOperator);
 
                         #ifdef CSG_DEBUG_OUTPUT
                             webifc::geometry::IfcGeometry geom;
@@ -1538,10 +1536,8 @@ namespace webifc::geometry
                     }
                     else if (op == "UNION")
                     {
-                        result.GeneratePlanes();
-		                secondOperator.GeneratePlanes();
                         double scale = _geometryLoader.GetLinearScalingFactor();
-                        result = fuzzybools::Union(result, secondOperator, scale);
+                        result = fuzzybools::Union(result, secondOperator);
                     }
                 }
             }
