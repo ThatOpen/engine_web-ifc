@@ -1066,57 +1066,6 @@ namespace webifc::geometry
                 VKnots.push_back(_loader.GetDoubleArgument(token));
             }
 
-            if (UKnots[UKnots.size() - 1] != (int)UKnots[UKnots.size() - 1])
-            {
-                for (uint32_t i = 0; i < UKnots.size(); i++)
-                {
-                    UKnots[i] = UKnots[i] * (UKnots.size() - 1) / UKnots[UKnots.size() - 1];
-                }
-            }
-
-            if (VKnots[VKnots.size() - 1] != (int)VKnots[VKnots.size() - 1])
-            {
-                for (uint32_t i = 0; i < VKnots.size(); i++)
-                {
-                    VKnots[i] = VKnots[i] * (VKnots.size() - 1) / VKnots[VKnots.size() - 1];
-                }
-            }
-
-            // if (closedU == "T")
-            // {
-            //  std::vector<std::vector<glm::vec<3, glm::f64>>> newCtrolPts;
-            //  for (uint32_t i = 0; i < Udegree; i++)
-            //  {
-            //      newCtrolPts.push_back(ctrolPts[ctrolPts.size() - 1 + (i - Udegree)]);
-            //  }
-            //  for (uint32_t s = 0; s < ctrolPts.size(); s++)
-            //  {
-            //      newCtrolPts.push_back(ctrolPts[s]);
-            //  }
-            //  ctrolPts = newCtrolPts;
-            //  UMultiplicity[0] += Udegree;
-            // }
-
-            // if (closedV == "T")
-            // {
-            //  std::vector<std::vector<glm::vec<3, glm::f64>>> newCtrolPts;
-            //  for (uint32_t r = 0; r < ctrolPts.size(); r++)
-            //  {
-            //      std::vector<glm::vec<3, glm::f64>> newSubList;
-            //      for (uint32_t i = 0; i < Vdegree; i++)
-            //      {
-            //          newSubList.push_back(ctrolPts[r][ctrolPts[r].size() - 1 + (i - Vdegree)]);
-            //      }
-            //      for (uint32_t s = 0; s < ctrolPts[r].size(); s++)
-            //      {
-            //          newSubList.push_back(ctrolPts[r][s]);
-            //      }
-            //      newCtrolPts.push_back(newSubList);
-            //  }
-            //  ctrolPts = newCtrolPts;
-            //  VMultiplicity[0] += Vdegree;
-            // }
-
             surface.BSplineSurface.Active = true;
             surface.BSplineSurface.UDegree = Udegree;
             surface.BSplineSurface.VDegree = Vdegree;
@@ -1216,21 +1165,21 @@ namespace webifc::geometry
                 VKnots.push_back(_loader.GetDoubleArgument(token));
             }
 
-            if (UKnots[UKnots.size() - 1] != (int)UKnots[UKnots.size() - 1])
-            {
-                for (uint32_t i = 0; i < UKnots.size(); i++)
-                {
-                    UKnots[i] = UKnots[i] * (UKnots.size() - 1) / UKnots[UKnots.size() - 1];
-                }
-            }
+            // if (UKnots[UKnots.size() - 1] != (int)UKnots[UKnots.size() - 1])
+            // {
+            //     for (uint32_t i = 0; i < UKnots.size(); i++)
+            //     {
+            //         UKnots[i] = UKnots[i] * (UKnots.size() - 1) / UKnots[UKnots.size() - 1];
+            //     }
+            // }
 
-            if (VKnots[VKnots.size() - 1] != (int)VKnots[VKnots.size() - 1])
-            {
-                for (uint32_t i = 0; i < VKnots.size(); i++)
-                {
-                    VKnots[i] = VKnots[i] * (VKnots.size() - 1) / VKnots[VKnots.size() - 1];
-                }
-            }
+            // if (VKnots[VKnots.size() - 1] != (int)VKnots[VKnots.size() - 1])
+            // {
+            //     for (uint32_t i = 0; i < VKnots.size(); i++)
+            //     {
+            //         VKnots[i] = VKnots[i] * (VKnots.size() - 1) / VKnots[VKnots.size() - 1];
+            //     }
+            // }
 
             // if (closedU == "T")
             // {
@@ -1514,29 +1463,10 @@ namespace webifc::geometry
 
                     if (op == "DIFFERENCE")
                     {
-                        double scale = _geometryLoader.GetLinearScalingFactor();
-
-                        #ifdef CSG_DEBUG_OUTPUT
-                            webifc::geometry::IfcGeometry geomf;
-                            geomf.AddGeometry(result);
-                            io::DumpIfcGeometry(geomf, "first.obj");
-
-                            webifc::geometry::IfcGeometry geoms;
-                            geoms.AddGeometry(secondOperator);
-                            io::DumpIfcGeometry(geoms, "second.obj");
-                        #endif
-
                         result = fuzzybools::Subtract(result, secondOperator);
-
-                        #ifdef CSG_DEBUG_OUTPUT
-                            webifc::geometry::IfcGeometry geom;
-                            geom.AddGeometry(result);
-                            io::DumpIfcGeometry(geom, "result.obj");
-                        #endif
                     }
                     else if (op == "UNION")
                     {
-                        double scale = _geometryLoader.GetLinearScalingFactor();
                         result = fuzzybools::Union(result, secondOperator);
                     }
                 }
