@@ -108,9 +108,12 @@ std::vector<webifc::geometry::IfcCrossSections> GetCrossSections3D(webifc::parsi
 }
 
 std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint32_t IdToExport)
+std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint32_t IdToExport)
 {
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
     webifc::schema::IfcSchemaManager schema;
+
+    bool writeFiles = true;
 
     bool writeFiles = true;
 
@@ -121,6 +124,11 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
         for (unsigned int i = 0; i < elements.size(); i++)
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
+
+            if(mesh.expressID == IdToExport)
+            {
+                DumpFlatMesh(mesh, geometryLoader, "TEST_GEOM.obj");
+            }
 
             if(mesh.expressID == IdToExport)
             {
@@ -297,6 +305,7 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#590/1110-PR117I-A.ifc");
     std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing/FZK-Haus-EliteCAD.ifc");
 
+
     struct LoaderSettings
     {
         bool COORDINATE_TO_ORIGIN = false;
@@ -335,6 +344,7 @@ int main()
     start = ms();
 
     // SpecificLoadTest(loader, geometryLoader, 17517); //512
+    // SpecificLoadTest(loader, geometryLoader, 7390); //512
     // SpecificLoadTest(loader, geometryLoader, 7390); //512
     // SpecificLoadTest(loader, geometryLoader, 7260); //512
     // SpecificLoadTest(loader, geometryLoader, 4616); //515

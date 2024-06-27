@@ -62,6 +62,10 @@ namespace webifc::parsing {
                 iter=str.begin();
                 codepage=0;
                 end=str.end();
+                if (str.size() == 0) {
+                    // msvc: avoid dereference `iter.end()` when _ITERATOR_DEBUG_LEVEL >= 1
+                    return;
+                }
                 for (char c=*iter; c != 0 && !error; c=getNext())
                 {
                     switch (c) 

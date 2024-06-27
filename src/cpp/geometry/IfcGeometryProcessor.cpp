@@ -20,6 +20,7 @@ namespace webifc::geometry
 {
     IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin)
         : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _circleSegments(circleSegments)
+
     {
     }
 
@@ -1379,7 +1380,6 @@ namespace webifc::geometry
             }
 
             geometry.transformation = _coordinationMatrix * newMatrix * translation;
-
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
 
@@ -1463,11 +1463,35 @@ namespace webifc::geometry
 
                     if (op == "DIFFERENCE")
                     {
-                        result = fuzzybools::Subtract(result, secondOperator);
+
+                        result.GeneratePlanes();
+		                    secondOperator.GeneratePlanes();
+                        double scale = _geometryLoader.GetLinearScalingFactor();
+
+                        #ifdef CSG_DEBUG_OUTPUT
+                            webifc::geometry::IfcGeometry geomf;
+                            geomf.AddGeometry(result);
+                            io::DumpIfcGeometry(geomf, "first.obj");
+
+                            webifc::geometry::IfcGeometry geoms;
+                            geoms.AddGeometry(secondOperator);
+                            io::DumpIfcGeometry(geoms, "second.obj");
+                        #endif
+
+                        result = fuzzybools::Subtract(result, secondOperator, scale);
+
+                        #ifdef CSG_DEBUG_OUTPUT
+                            webifc::geometry::IfcGeometry geom;
+                            geom.AddGeometry(result);
+                            io::DumpIfcGeometry(geom, "result.obj");
+                        #endif
                     }
                     else if (op == "UNION")
                     {
-                        result = fuzzybools::Union(result, secondOperator);
+                        result.GeneratePlanes();
+		                    secondOperator.GeneratePlanes();
+                        double scale = _geometryLoader.GetLinearScalingFactor();
+                        result = fuzzybools::Union(result, secondOperator, scale);
                     }
                 }
             }
