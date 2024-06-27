@@ -36,6 +36,7 @@ namespace webifc::geometry
     IfcProfile GetProfile3D(uint32_t expressID) const;
     IfcCurve GetLocalCurve(uint32_t expressID) const;
     IfcCurve GetCurve(uint32_t expressID,uint8_t dimensions, bool edge=false) const;
+    bool ReadIfcCartesianPointList(const uint32_t expressID) const;
     std::vector<glm::dvec3> ReadIfcCartesianPointList3D(const uint32_t expressID) const;
     std::vector<glm::dvec2> ReadIfcCartesianPointList2D(const uint32_t expressID) const;
     IfcCurve GetOrientedEdge(uint32_t expressID) const;

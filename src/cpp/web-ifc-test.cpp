@@ -108,9 +108,12 @@ std::vector<webifc::geometry::IfcCrossSections> GetCrossSections3D(webifc::parsi
 }
 
 std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint32_t IdToExport)
+std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint32_t IdToExport)
 {
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
     webifc::schema::IfcSchemaManager schema;
+
+    bool writeFiles = true;
 
     bool writeFiles = true;
 
@@ -121,6 +124,11 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
         for (unsigned int i = 0; i < elements.size(); i++)
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
+
+            if(mesh.expressID == IdToExport)
+            {
+                DumpFlatMesh(mesh, geometryLoader, "TEST_GEOM.obj");
+            }
 
             if(mesh.expressID == IdToExport)
             {
@@ -283,19 +291,7 @@ int main()
     // Benchmark();
 
     // return 0;
-    
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ALLPLAN/#515/Spacewell_Wall.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/(E28)_CARRETERA_10.94_4X3.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#529/529.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#722/722.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#546/546.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ALLPLAN/#515/Spacewell_Wall.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing V/walls_test.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing VI/219.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC.JS ISSUES/SOLIDS_BOOLS_MODELLER/BUG1.IFC");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC.JS ISSUES/SOLIDS_BOOLS_MODELLER/TEST.IFC");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#590/1110-PR117I-A.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing/FZK-Haus-EliteCAD.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#512/512.ifc");
 
     struct LoaderSettings
     {
@@ -335,6 +331,7 @@ int main()
     start = ms();
 
     // SpecificLoadTest(loader, geometryLoader, 17517); //512
+    // SpecificLoadTest(loader, geometryLoader, 7390); //512
     // SpecificLoadTest(loader, geometryLoader, 7390); //512
     // SpecificLoadTest(loader, geometryLoader, 7260); //512
     // SpecificLoadTest(loader, geometryLoader, 4616); //515
