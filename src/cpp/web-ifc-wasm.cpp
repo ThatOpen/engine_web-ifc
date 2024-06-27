@@ -26,6 +26,10 @@ int CreateModel(webifc::manager::LoaderSettings settings) {
     return manager.CreateModel(settings);
 }
 
+void CloseAllModels() {
+    return manager.CloseAllModels();
+}
+
 int OpenModel(webifc::manager::LoaderSettings settings, emscripten::val callback)
 {
     auto modelID = manager.CreateModel(settings);
@@ -834,4 +838,5 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("GetTypeCodeFromName", &GetTypeCodeFromName);
     emscripten::function("IsIfcElement", &IsIfcElement);
     emscripten::function("GetVersion", &GetVersion);
+    emscripten::function("CloseAllModels", &CloseAllModels);
 }
