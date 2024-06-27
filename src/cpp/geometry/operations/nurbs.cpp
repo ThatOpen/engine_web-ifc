@@ -1,15 +1,12 @@
 #include "nurbs.h"
-#include <geometry/representation/IfcGeometry.h>
-#include <geometry/representation/geometry.h>
-#include <geometry/operations/geometryutils.h>
+#include "../representation/IfcGeometry.h"
+#include "../representation/geometry.h"
+#include "../operations/geometryutils.h"
 #include <tinynurbs/tinynurbs.h>
 #include <spdlog/spdlog.h>
 #include <CDT.h>
-#include <utils/debug/watch.hpp>
 #include <numeric>
 #include <string>
-#include <execution>
-#include <iostream>
 
 namespace webifc::geometry{
 
@@ -141,15 +138,12 @@ namespace webifc::geometry{
 		auto const& bound_points {this->bounds.front().curve.points};
 		size_t num_points{bound_points.size()};
 		points.resize(num_points);
-		std::cout << std::format("Transform {} points", num_points);
-	 	debug::watch watch{};
 		auto count{0};
 		std::transform(bound_points.begin(), bound_points.end(), points.begin(), [&](auto const& point){
 			++count;
 			auto uv {this->inverse_evaluation(point)};
 			return Nurbs::uv_point_t{uv.x, uv.y};				
 		});
-		std::cout << std::format(" in {} ms\n", watch.get_time_ms());
 		std::sort(points.begin(), points.end(),[](auto const& left, auto const& right){
 			  if (left[0] != right[0]) return left[0] < right[0];
         return left[1] < right[1];
@@ -272,7 +266,7 @@ namespace webifc::geometry{
 		if(uv_points.empty()) return result;
 		auto const num_points {uv_points.size()};
 		auto const num_edges {num_points};
-		CDT::Triangulation<double> triangulator{CDT::VertexInsertionOrder::Auto};
+		CDT::Triangulation<double> triangulator{};
 		std::vector<CDT::V2d<double>> points;
 		points.resize(num_points);
 		std::transform(uv_points.begin(), uv_points.end(), points.begin(), [](auto const& uv_point){

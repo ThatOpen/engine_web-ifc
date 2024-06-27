@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <geometry/operations/nurbs.h>
+#include "nurbs.h"
 #include <vector>
 #include <array>
 #include <unordered_map>

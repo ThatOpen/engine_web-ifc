@@ -20,8 +20,7 @@ namespace webifc::geometry
 {
     IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin)
         : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _circleSegments(circleSegments)
-    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin)
-        : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager), _coordinateToOrigin(coordinateToOrigin), _circleSegments(circleSegments)
+
     {
     }
 
@@ -756,7 +755,6 @@ namespace webifc::geometry
                 profile.curve = GetCircleCurve(radius, _circleSegments);
 
                 IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), mesh, closed, profile, radius, directrix);
-                IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), mesh, closed, profile, radius, directrix);
 
                 _expressIDToGeometry[expressID] = geom;
                 mesh.expressID = expressID;
@@ -792,7 +790,6 @@ namespace webifc::geometry
 
                 if (!profile.isComposite)
                 {
-                    geom = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile, directrix, axis, false);
                     geom = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile, directrix, axis, false);
                 }
                 else
@@ -1369,11 +1366,6 @@ namespace webifc::geometry
 
             translation = geom.Normalize();
 
-
-            auto translation = glm::dmat4(1.0);
-
-            translation = geom.Normalize();
-
             _expressIDToGeometry[composedMesh.expressID] = geom;
 
             if (!composedMesh.hasColor)
@@ -1388,9 +1380,6 @@ namespace webifc::geometry
             }
 
             geometry.transformation = _coordinationMatrix * newMatrix * translation;
-
-            geometry.transformation = _coordinationMatrix * newMatrix * translation;
-
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
 
@@ -1474,8 +1463,9 @@ namespace webifc::geometry
 
                     if (op == "DIFFERENCE")
                     {
+
                         result.GeneratePlanes();
-		                secondOperator.GeneratePlanes();
+		                    secondOperator.GeneratePlanes();
                         double scale = _geometryLoader.GetLinearScalingFactor();
 
                         #ifdef CSG_DEBUG_OUTPUT
@@ -1499,7 +1489,7 @@ namespace webifc::geometry
                     else if (op == "UNION")
                     {
                         result.GeneratePlanes();
-		                secondOperator.GeneratePlanes();
+		                    secondOperator.GeneratePlanes();
                         double scale = _geometryLoader.GetLinearScalingFactor();
                         result = fuzzybools::Union(result, secondOperator, scale);
                     }
