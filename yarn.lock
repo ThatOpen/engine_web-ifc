@@ -18,15 +18,7 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.24.2", "@babel/code-frame@^7.24.6":
-  version "7.24.7"
-  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.24.7.tgz#882fd9e09e8ee324e496bd040401c6f046ef4465"
-  integrity sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==
-  dependencies:
-    "@babel/highlight" "^7.24.7"
-    picocolors "^1.0.0"
-
-"@babel/code-frame@^7.24.7":
+"@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.24.2", "@babel/code-frame@^7.24.6", "@babel/code-frame@^7.24.7":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.24.7.tgz#882fd9e09e8ee324e496bd040401c6f046ef4465"
   integrity sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==
@@ -161,6 +153,7 @@
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.24.7.tgz#98c84fe6fe3d0d3ae7bfc3a5e166a46844feb2a0"
   integrity sha512-Rq76wjt7yz9AAc1KnlRKNAi/dMSVWgDRx43FHoJEbcYU6xOWaE2dVPwcdTukJrjxS65GITyfbvEYHvkirZ6uEg==
+
 "@babel/helper-simple-access@^7.24.7":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/helper-simple-access/-/helper-simple-access-7.24.7.tgz#bcade8da3aec8ed16b9c4953b74e506b51b5edb3"
@@ -209,23 +202,12 @@
   integrity sha512-85ttAOMLsr53VgXkTbkx8oA6YTfT4q7/HzXSLEYmjcSTJPMPQtvq1BD79Byep5xMUYbGRzEpDsjUf3dyp54IKw==
 
 "@babel/helpers@^7.24.5":
-  version "7.24.5"
-  resolved "https://registry.npmjs.org/@babel/helpers/-/helpers-7.24.5.tgz"
-  integrity sha512-CiQmBMMpMQHwM5m01YnrM6imUG1ebgYJ+fAIW4FZe6m4qHTPaRHti+R8cggAwkdz4oXhtO4/K9JWlh+8hIfR2Q==
-  dependencies:
-    "@babel/template" "^7.24.0"
-    "@babel/traverse" "^7.24.5"
-    "@babel/types" "^7.24.5"
-
-"@babel/highlight@^7.24.7":
   version "7.24.7"
-  resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.24.7.tgz#a05ab1df134b286558aae0ed41e6c5f731bf409d"
-  integrity sha512-EStJpq4OuY8xYfhGVXngigBJRWxftKX9ksiGDnmlY3o7B/V7KIAc9X4oiK87uPJSc/vs5L869bem5fhZa8caZw==
+  resolved "https://registry.yarnpkg.com/@babel/helpers/-/helpers-7.24.7.tgz#aa2ccda29f62185acb5d42fb4a3a1b1082107416"
+  integrity sha512-NlmJJtvcw72yRJRcnCmGvSi+3jDEg8qFu3z0AFoymmzLx5ERVWyzd9kVXr7Th9/8yIJi2Zc6av4Tqz3wFs8QWg==
   dependencies:
-    "@babel/helper-validator-identifier" "^7.24.7"
-    chalk "^2.4.2"
-    js-tokens "^4.0.0"
-    picocolors "^1.0.0"
+    "@babel/template" "^7.24.7"
+    "@babel/types" "^7.24.7"
 
 "@babel/highlight@^7.24.7":
   version "7.24.7"
