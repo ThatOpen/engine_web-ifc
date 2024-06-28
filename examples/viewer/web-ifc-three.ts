@@ -4,7 +4,7 @@
  
 import * as THREE from "three";
 import { IfcAPI, ms, PlacedGeometry, Color, FlatMesh, IFCSITE } from "../../dist/web-ifc-api";
-import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
   
 export class IfcThree
 {
@@ -74,7 +74,7 @@ export class IfcThree
 
         if (transparentGeometries.length > 0)
         {
-            const combinedGeometryTransp = BufferGeometryUtils.mergeBufferGeometries(transparentGeometries);
+            const combinedGeometryTransp = BufferGeometryUtils.mergeGeometries(transparentGeometries);
             let matTransp = new THREE.MeshPhongMaterial({side:THREE.DoubleSide});
             matTransp.vertexColors = true;
             matTransp.transparent = true;
