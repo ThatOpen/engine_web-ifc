@@ -65,7 +65,7 @@
     "@types/three": "^0.165.0",
     "adm-zip": "^0.5.10",
     "cpy-cli": "^5.0.0",
-    "esbuild": "^0.21.3",
+    "esbuild": "^0.22.0",
     "jest": "^27.4.2",
     "make-dir-cli": "^4.0.0",
     "rimraf": "^5.0.0",
