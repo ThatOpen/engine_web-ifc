@@ -16,6 +16,10 @@ webifc::manager::ModelManager::ModelManager(bool _mt_enabled) {
 }
 
 webifc::manager::ModelManager::~ModelManager() {
+    CloseAllModels();
+}
+
+void webifc::manager::ModelManager::CloseAllModels() {
     for (size_t i=0; i < _loaders.size();i++) {
         if (!IsModelOpen(i)) continue;
         delete _loaders[i];
@@ -23,7 +27,7 @@ webifc::manager::ModelManager::~ModelManager() {
     }
     _loaders.clear();
     _geometryProcessors.clear();
-}
+} 
 
 void webifc::manager::ModelManager::SetLogLevel(uint8_t levelArg) {
     spdlog::set_level((spdlog::level::level_enum)levelArg);

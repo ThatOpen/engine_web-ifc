@@ -35,6 +35,7 @@ namespace webifc::manager {
             void CloseModel(uint32_t modelID);
             uint32_t CreateModel(LoaderSettings settings);
             void SetLogLevel(uint8_t levelArg);
+            void CloseAllModels();
         private: 
             const webifc::schema::IfcSchemaManager _schemaManager; 
             std::vector<webifc::parsing::IfcLoader*> _loaders;

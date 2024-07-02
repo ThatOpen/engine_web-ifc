@@ -7,8 +7,8 @@ type SchemaAlias = { schemaName: string, alias:string}
 const schemaAliases : Array<SchemaAlias>  = [
 
 { schemaName : "IFC2X_FINAL", alias : "IFC2X3"},
-{ schemaName : "IFC4X1", alias : "IFC4"},
-{ schemaName : "IFC4X2", alias :"IFC4"},
+{ schemaName : "IFC4X1", alias : "IFC4X3"},
+{ schemaName : "IFC4X2", alias :"IFC4X3"},
 { schemaName : "IFC4X3_RC3", alias :"IFC4X3"},
 { schemaName : "IFC4X3_RC4", alias :"IFC4X3"},
 { schemaName : "IFC4X3_RC1", alias :"IFC4X3"},

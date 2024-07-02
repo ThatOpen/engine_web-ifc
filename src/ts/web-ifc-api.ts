@@ -181,7 +181,7 @@ export class IfcAPI {
      * you override the path from which the wasm module is loaded.
      */
     async Init(customLocateFileHandler?: LocateFileHandlerFn) {
-        if (WebIFCWasm) {
+        if (WebIFCWasm && this.wasmModule == undefined) {
             let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
                 if (path.endsWith(".wasm")) {
@@ -935,6 +935,14 @@ export class IfcAPI {
     CloseModel(modelID: number) {
         this.ifcGuidMap.delete(modelID);
         this.wasmModule.CloseModel(modelID);
+    }
+
+    /**
+     * Closes all models and frees all related memory
+    */
+    Dispose() {
+        this.ifcGuidMap.clear()
+        this.wasmModule.CloseAllModels();
     }
 
     /**

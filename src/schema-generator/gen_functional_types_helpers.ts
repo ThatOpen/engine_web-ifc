@@ -261,11 +261,11 @@ export function parseInverse(line:string,entity:Entity)
 
 export function parseDerived(line:string,entity:Entity) 
 {
-    let lineStart = line.split(" ")[0];
-    lineStart = lineStart.replace("DERIVE","").trim();
-    if (lineStart.trim().startsWith("SELF"))
+    line = line.replace("DERIVE","").trim();
+    let lineChunks = line.split(" ");
+    if (lineChunks[0].trim().startsWith("SELF"))
     {
-        let split = lineStart.split(".");
+        let split = lineChunks[0].split(".");
         entity.ifcDerivedProps.push(split[1]);
     }
 }
@@ -408,7 +408,9 @@ export function parseElements(data:string)
         }
         else if (entity && readInverse && hasColon) 
         {
-          parseInverse(line,entity);
+            parseInverse(line,entity);
+        } else if (entity && readIfcDerived && hasColon) {
+            parseDerived(line,entity);
         }
         else if (entity && readProps && hasColon)
         {
