@@ -283,6 +283,7 @@ int main()
     // Benchmark();
 
     // return 0;
+    
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#ALLPLAN/#515/Spacewell_Wall.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC/IFC4.3/IFC_FILES/ALIGNMENT/(E28)_CARRETERA_10.94_4X3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#529/529.ifc");
@@ -294,7 +295,7 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC.JS ISSUES/SOLIDS_BOOLS_MODELLER/BUG1.IFC");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/IFC.JS ISSUES/SOLIDS_BOOLS_MODELLER/TEST.IFC");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#590/1110-PR117I-A.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#837/test.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/PROGRAMES/VSCODE/IFC.JS/issues/#bool/#bool testing/FZK-Haus-EliteCAD.ifc");
 
     struct LoaderSettings
     {
@@ -337,8 +338,9 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 7390); //512
     // SpecificLoadTest(loader, geometryLoader, 7260); //512
     // SpecificLoadTest(loader, geometryLoader, 4616); //515
+    SpecificLoadTest(loader, geometryLoader, 5557);
 
-    auto meshes = LoadAllTest(loader, geometryLoader, -1);
+    auto meshes = LoadAllTest(loader, geometryLoader, 5557);
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;
