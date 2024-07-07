@@ -700,7 +700,7 @@ export class IfcAPI {
 	 * @param modelID model ID
 	 * @returns vector of all line IDs
 	 */
-    GetAllLines(modelID: Number): Vector<number> {
+    GetAllLines(modelID: number): Vector<number> {
         let lineIds = this.wasmModule.GetAllLines(modelID);
         lineIds[Symbol.iterator] = function*() { for (let i=0; i < lineIds.size();i++) yield lineIds.get(i); }
         return lineIds;
@@ -711,7 +711,7 @@ export class IfcAPI {
      * @param modelID model ID
      * @returns Lists with the cross sections curves as sets of points
      */
-    GetAllCrossSections2D(modelID: Number): Array<CrossSection>
+    GetAllCrossSections2D(modelID: number): Array<CrossSection>
     {
         const crossSections =  this.wasmModule.GetAllCrossSections(modelID,2);
         const crossSectionList = [];
@@ -731,7 +731,7 @@ export class IfcAPI {
                 curveList.push(newCurve);
                 expressList.push(alignment.expressID.get(j));
             }
-            const align = { origin, curves: curveList, expressID: expressList };
+            const align = { FlatCoordinationMatrix: this.GetCoordinationMatrix(modelID), curves: curveList, expressID: expressList };
             crossSectionList.push(align);
         }
         return crossSectionList;
@@ -742,7 +742,7 @@ export class IfcAPI {
      * @param modelID model ID
      * @returns Lists with the cross sections curves as sets of points
      */
-    GetAllCrossSections3D(modelID: Number): Array<CrossSection>
+    GetAllCrossSections3D(modelID: number): Array<CrossSection>
     {
         const crossSections =  this.wasmModule.GetAllCrossSections(modelID,3);
         const crossSectionList = [];
@@ -762,7 +762,7 @@ export class IfcAPI {
                 curveList.push(newCurve);
                 expressList.push(alignment.expressID.get(j));
             }
-            const align = { origin, curves: curveList, expressID: expressList };
+            const align = { FlatCoordinationMatrix: this.GetCoordinationMatrix(modelID), curves: curveList, expressID: expressList };
             crossSectionList.push(align);
         }
         return crossSectionList;
@@ -773,8 +773,10 @@ export class IfcAPI {
      * @param modelID model ID
      * @returns Lists with horizontal and vertical curves as sets of points
      */
-    GetAllAlignments(modelID: Number): any {
+    GetAllAlignments(modelID: number): any {
         const alignments = this.wasmModule.GetAllAlignments(modelID);
+        console.log("RAW");
+        console.log(alignments);
         const alignmentList = [];
         for (let i = 0; i < alignments.size(); i++) {
           const alignment = alignments.get(i);
@@ -884,7 +886,7 @@ export class IfcAPI {
           }
     
           const align = {
-            origin,
+            FlatCoordinationMatrix: this.GetCoordinationMatrix(modelID),
             horizontal: horList,
             vertical: verList,
             curve3D: curve3DList,
