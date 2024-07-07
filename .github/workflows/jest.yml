@@ -25,7 +25,6 @@ jobs:
       run: npm i
     - name: Build
       run: npm run build-release
-    - uses: actions/setup-node@v4
     - name: Run all tests
       run: npm t
     - name: Regression Tests
