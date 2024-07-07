@@ -359,6 +359,7 @@ namespace webifc::geometry
 		}
 
 			// Then we find the angular difference
+		if (angleVec.size() == 0) return;
 		for (size_t i = 0; i < angleVec.size() - 1; i++)
 		{
 			if (angleVec[i] - angleVec[i + 1] > 180)
