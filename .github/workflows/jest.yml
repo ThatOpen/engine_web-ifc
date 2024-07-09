@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: 21
     - name: Install modules
-      run: npm i
+      run: npm ci
     - name: Build
       run: npm run build-release
     - name: Run all tests
