@@ -5,50 +5,39 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  build:
+  WASM Web-IFC:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.44
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 21
+      - name: Build WASM Version
+        run: |
+          npm ci
+          npm run build-release
+      - name: Test WASM Web-IFC
+        run: npm t
+      - name: Regression Tests
+        run: npm run regression
+  C++ Web-IFC:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v2
-    - name: Install
+    - name: Setup Build Environment
       run: |
         sudo apt update
         sudo apt install gcc-13 g++-13
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
         sudo update-alternatives --set gcc /usr/bin/gcc-13
-    - name: Configure
+    - name: Building C++ Web-IFC
       working-directory: ${{github.workspace}}/src/cpp
-      run: cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=Release
-    - name: Build
-      working-directory: ${{github.workspace}}/src/cpp
-      run: cmake --build ${{github.workspace}}/src/cpp/Build --config Release
-    - name: Test
+      run: |
+        cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=Release
+        cmake --build ${{github.workspace}}/src/cpp/Build --config Release
+    - name: Test C++ Web-IFC
       working-directory: ${{github.workspace}}/src/cpp/Build
       run: ctest -VV -C ${{matrix.configuration}} -L web-ifc
-    - uses: mymindstorm/setup-emsdk@v14
-      with:
-        version: 3.1.44
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 21
-    - name: Install modules
-      run: npm ci
-    - name: Build
-      run: npm run build-release
-    - uses: actions/upload-artifact@v4
-      with:
-        name: build
-        path: dist/
-  tests:
-    runs-on: ubuntu-24.04
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: dist/
-      - name: Run all tests
-        run: npm t
-      - name: Regression Tests
-        run: npm run regression
-   
