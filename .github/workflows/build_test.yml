@@ -38,19 +38,17 @@ jobs:
       with:
         name: build
         path: dist/
-tests:
-  runs-on: ubuntu-24.04
-  needs: build
-  steps:
-    - uses: actions/checkout@v2
-    - uses: actions/download-artifact@v4
-      with:
-        name: build
-        path: dist/
-    - name: Run all tests
-      run: npm t
-    - name: Regression Tests
-      run: npm run regression
-
-   
+  tests:
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: dist/
+      - name: Run all tests
+        run: npm t
+      - name: Regression Tests
+        run: npm run regression
    
