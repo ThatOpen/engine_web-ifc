@@ -17,10 +17,10 @@ jobs:
         sudo update-alternatives --set gcc /usr/bin/gcc-13
     - name: Configure
       working-directory: ${{github.workspace}}/src/cpp
-      run: cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=${{matrix.configuration}}
+      run: cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=Release
     - name: Build
       working-directory: ${{github.workspace}}/src/cpp
-      run: cmake --build ${{github.workspace}}/src/cpp/Build --config ${{matrix.configuration}}
+      run: cmake --build ${{github.workspace}}/src/cpp/Build --config Release
     - name: Test
       working-directory: ${{github.workspace}}/src/cpp/Build
       run: ctest -VV -C ${{matrix.configuration}} -L web-ifc
