@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  WASM Web-IFC:
+  WASM_Web-IFC:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
         run: npm t
       - name: Regression Tests
         run: npm run regression
-  C++ Web-IFC:
+  CPP_Web-IFC:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v2
