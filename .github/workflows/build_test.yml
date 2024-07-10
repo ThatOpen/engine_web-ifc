@@ -23,6 +23,10 @@ jobs:
         run: npm t
       - name: Regression Tests
         run: npm run regression
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
   CPP_Web-IFC:
     runs-on: ubuntu-24.04
     steps:
@@ -41,3 +45,36 @@ jobs:
     - name: Test C++ Web-IFC
       working-directory: ${{github.workspace}}/src/cpp/Build
       run: ctest -VV -C ${{matrix.configuration}} -L web-ifc
+  Upload Documentation:
+    runs-on: ubuntu-24.04
+    needs: WASM_Web-IFC
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build
+        path: dist/
+    - name: Archive Build
+      uses: montudor/action-zip@v1
+      with:
+        args: zip -qq -r build.zip dist/
+    - name: Build Viewer
+      run: |
+        npm run build-viewer
+        npm run gen-docs
+        mkdir ./dist/pages
+        mkdir ./dist/pages/demo
+        mkdir ./dist/pages/examples
+        mkdir ./dist/pages/docs
+        cp -R ./examples/viewer/dist/* ./dist/pages/demo
+        cp -R ./dist/docs/* ./dist/pages/docs
+        cp -R ./build.zip ./dist/pages
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './dist/pages'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
