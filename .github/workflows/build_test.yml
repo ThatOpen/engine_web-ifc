@@ -1,0 +1,84 @@
+name: Web-IFC Build and Test
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+permissions:
+  pages: write
+  id-token: write
+jobs:
+  WASM_Web-IFC:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.44
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 21
+      - name: Build WASM Version
+        run: |
+          npm ci
+          npm run build-release
+      - name: Test WASM Web-IFC
+        run: npm t
+      - name: Regression Tests
+        run: npm run regression
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
+  CPP_Web-IFC:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Build Environment
+      run: |
+        sudo apt update
+        sudo apt install gcc-13 g++-13
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
+        sudo update-alternatives --set gcc /usr/bin/gcc-13
+    - name: Building C++ Web-IFC
+      working-directory: ${{github.workspace}}/src/cpp
+      run: |
+        cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=Release
+        cmake --build ${{github.workspace}}/src/cpp/Build --config Release
+    - name: Test C++ Web-IFC
+      working-directory: ${{github.workspace}}/src/cpp/Build
+      run: ctest -VV -C ${{matrix.configuration}} -L web-ifc
+  Upload_Documentation:
+    runs-on: ubuntu-24.04
+    needs: WASM_Web-IFC
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build
+        path: dist/
+    - name: Archive Build
+      uses: montudor/action-zip@v1
+      with:
+        args: zip -qq -r build.zip dist/
+    - name: Build Viewer
+      run: |
+        npm ci
+        npm run build-viewer
+        npm run gen-docs
+        mkdir ./dist/pages
+        mkdir ./dist/pages/demo
+        mkdir ./dist/pages/examples
+        mkdir ./dist/pages/docs
+        cp -R ./examples/viewer/dist/* ./dist/pages/demo
+        cp -R ./dist/docs/* ./dist/pages/docs
+        cp -R ./build.zip ./dist/pages
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './dist/pages'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
