@@ -20,42 +20,46 @@ var regressionResults = {};
 
 async function RunRegression()
 {
-    let update = false;
-    if (process.argv.includes("update")) update = true;
-    ifcAPI = new IfcAPI();
-    await ifcAPI.Init();
-    let files = await GetRegressionFiles();
-    for (let fileName of files) {
-      let properFileName = fileName.replaceAll("\\","/");
-      regressionResults[properFileName] = await CreateModelResuts(fileName);
-      regressionResults[properFileName] = createHash('sha256').update(JSON.stringify(regressionResults[properFileName])).digest('hex');
+    try {
+      let update = false;
+      if (process.argv.includes("update")) update = true;
+      ifcAPI = new IfcAPI();
+      await ifcAPI.Init();
+      let files = await GetRegressionFiles();
+      for (let fileName of files) {
+        let properFileName = fileName.replaceAll("\\","/");
+        regressionResults[properFileName] = await CreateModelResuts(fileName);
+        regressionResults[properFileName] = createHash('sha256').update(JSON.stringify(regressionResults[properFileName])).digest('hex');
 
-    }
-    if (update) {
-        writeFileSync(REGRESSION_RESULT_FILE, JSON.stringify(regressionResults));
-      console.log("--------Results Updated-----------");
-    } else {
-      let regressionResultsCurrent = JSON.parse(readFileSync(REGRESSION_RESULT_FILE));
-      console.log("--------Regression Results-----------");
-      let passTests = true;
-      try {
-        for (let fileName in regressionResults) {
-            fileName = fileName.replaceAll("\\","/");
-            if (fileName in regressionResultsCurrent) {
-              if (regressionResultsCurrent[fileName] == regressionResults[fileName]) console.log(fileName+"- PASS");
-              else {
-                console.log(fileName+"- FAIL");
-                passTests = false;
-              }
-            } else console.log("Could not find:"+fileName);
+      }
+      if (update) {
+          writeFileSync(REGRESSION_RESULT_FILE, JSON.stringify(regressionResults));
+        console.log("--------Results Updated-----------");
+      } else {
+        let regressionResultsCurrent = JSON.parse(readFileSync(REGRESSION_RESULT_FILE));
+        console.log("--------Regression Results-----------");
+        let passTests = true;
+        try {
+          for (let fileName in regressionResults) {
+              fileName = fileName.replaceAll("\\","/");
+              if (fileName in regressionResultsCurrent) {
+                if (regressionResultsCurrent[fileName] == regressionResults[fileName]) console.log(fileName+"- PASS");
+                else {
+                  console.log(fileName+"- FAIL");
+                  passTests = false;
+                }
+              } else console.log("Could not find:"+fileName);
+          }
+        } catch (e) {
+          console.log(e);
         }
-      } catch (e) {
-        console.log(e);
+        if (!passTests) {
+          console.log("One or models failed - please verify the models and if you are happy run npm run regression-update");
+          process.exit(1);
+        }
       }
-      if (!passTests) {
-        console.log("One or models failed - please verify the models and if you are happy run npm run regression-update");
-        process.exit(1);
-      }
+    } catch (e) {
+      console.log(e);
     }
 }
 
@@ -199,8 +203,4 @@ function ifcGeometryToBuffer(color, vertexData, indexData) {
   return geometry;
 }
 
-try {
-  RunRegression();
-} catch (e) {
-  console.log(e);
-}
+RunRegression().then( res => console.log("FINISHED"));
