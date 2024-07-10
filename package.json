@@ -70,7 +70,7 @@
     "local-web-server": "^5.2.1",
     "make-dir-cli": "^4.0.0",
     "monaco-editor": "^0.50.0",
-    "rimraf": "^5.0.0",
+    "rimraf": "^6.0.0",
     "three": "^0.166.0",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.9.1",
