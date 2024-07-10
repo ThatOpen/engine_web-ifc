@@ -62,6 +62,7 @@ jobs:
         args: zip -qq -r build.zip dist/
     - name: Build Viewer
       run: |
+        npm ci
         npm run build-viewer
         npm run gen-docs
         mkdir ./dist/pages
