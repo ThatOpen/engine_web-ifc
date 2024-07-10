@@ -6,6 +6,7 @@ on:
     branches: [ main ]
 permissions:
   pages: write
+  id-token: write
 jobs:
   WASM_Web-IFC:
     runs-on: ubuntu-24.04
