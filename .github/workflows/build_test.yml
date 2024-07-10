@@ -45,7 +45,7 @@ jobs:
     - name: Test C++ Web-IFC
       working-directory: ${{github.workspace}}/src/cpp/Build
       run: ctest -VV -C ${{matrix.configuration}} -L web-ifc
-  Upload Documentation:
+  Upload_Documentation:
     runs-on: ubuntu-24.04
     needs: WASM_Web-IFC
     if: github.ref == 'refs/heads/main'
