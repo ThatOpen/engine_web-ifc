@@ -199,4 +199,8 @@ function ifcGeometryToBuffer(color, vertexData, indexData) {
   return geometry;
 }
 
-RunRegression();
+try {
+  RunRegression();
+} catch (e) {
+  console.log(e);
+}
