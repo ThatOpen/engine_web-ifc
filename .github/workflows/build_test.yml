@@ -4,6 +4,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+permissions:
+  pages: write
 jobs:
   WASM_Web-IFC:
     runs-on: ubuntu-24.04
