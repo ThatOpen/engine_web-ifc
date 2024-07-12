@@ -1897,7 +1897,7 @@ namespace webifc::geometry
           double angle = 0;
           angle = startRad + ratio * lengthRad;
 
-          if(byParam)
+          if(sameSense == 0)
           {
             angle = startRad + (1 - ratio) * lengthRad;; // not sure why we need this, but we apparently do
           }

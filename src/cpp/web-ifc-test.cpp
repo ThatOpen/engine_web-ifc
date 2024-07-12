@@ -283,8 +283,10 @@ int main()
     // Benchmark();
 
     // return 0;
-    
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/File2.ifc");
+
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/rac_advanced_sample_project.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/Element3D 1_modif.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/ISSUE_126_model.ifc");
 
     struct LoaderSettings
     {
@@ -322,8 +324,10 @@ int main()
     webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN);
 
     start = ms();
-
-    SpecificLoadTest(loader, geometryLoader, 17);
+    
+    // SpecificLoadTest(loader, geometryLoader, 1179353);
+    // SpecificLoadTest(loader, geometryLoader, 17);
+    SpecificLoadTest(loader, geometryLoader, 1221);
 
     // auto meshes = LoadAllTest(loader, geometryLoader, 5557);
     auto alignments = GetAlignments(loader, geometryLoader);
