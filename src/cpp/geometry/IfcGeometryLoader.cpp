@@ -14,7 +14,7 @@ namespace webifc::geometry
 {
 
   IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments)
-      : _loader(loader), _schemaManager(schemaManager), _relVoidRel(PopulateRelVoidsRelMap()), _relVoids(PopulateRelVoidsMap()), _relAggregates(PopulateRelAggregatesMap()),
+      : _loader(loader), _schemaManager(schemaManager), _relVoidRel(PopulateRelVoidsRelMap()), _relVoids(PopulateRelVoidsMap()), _relAggregates(PopulateRelAggregatesMap()), _relNests(PopulateRelNestsMap()),
         _relElementAggregates(PopulateRelElementAggregatesMap()), _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
   {
     ReadLinearScalingFactor();
@@ -328,6 +328,16 @@ namespace webifc::geometry
         }
       }
 
+      auto &relNestsVector = GetRelNests();
+      if (relNestsVector.count(expressID) == 1)
+      {
+        auto &relNest = relNestsVector.at(expressID);
+        for (auto expressID : relNest)
+        {
+          alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
+        }
+      }
+
       break;
     }
     case schema::IFCALIGNMENTHORIZONTAL:
@@ -351,6 +361,25 @@ namespace webifc::geometry
       {
         auto &relAgg = relAggVector.at(expressID);
         for (auto expressID : relAgg)
+        {
+          alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
+        }
+
+        for (size_t i = 0; i < alignment.Horizontal.curves.size(); i++)
+        {
+          for (size_t j = 0; j < alignment.Horizontal.curves[i].points.size(); j++)
+          {
+            alignment.Horizontal.curves[i].points[j] =
+                glm::dvec4(alignment.Horizontal.curves[i].points[j].x, alignment.Horizontal.curves[i].points[j].y, 0, 1) * transform * transform_t;
+          }
+        }
+      }
+
+      auto &relNestVector = GetRelNests();
+      if (relNestVector.count(expressID) == 1)
+      {
+        auto &relNest = relNestVector.at(expressID);
+        for (auto expressID : relNest)
         {
           alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
         }
@@ -3287,11 +3316,11 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
   std::unordered_map<uint32_t, std::vector<uint32_t>> IfcGeometryLoader::PopulateRelAggregatesMap()
   {
     std::unordered_map<uint32_t, std::vector<uint32_t>> resultVector;
-    auto relVoids = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
+    auto relAggregates = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
 
-    for (uint32_t relVoidID : relVoids)
+    for (uint32_t relAggregateID : relAggregates)
     {
-      _loader.MoveToArgumentOffset(relVoidID, 4);
+      _loader.MoveToArgumentOffset(relAggregateID, 4);
 
       uint32_t relatingBuildingElement = _loader.GetRefArgument();
       auto aggregates = _loader.GetSetArgument();
@@ -3300,6 +3329,27 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       {
         uint32_t aggregateID = _loader.GetRefArgument(aggregate);
         resultVector[relatingBuildingElement].push_back(aggregateID);
+      }
+    }
+    return resultVector;
+  }
+
+  std::unordered_map<uint32_t, std::vector<uint32_t>> IfcGeometryLoader::PopulateRelNestsMap()
+  {
+    std::unordered_map<uint32_t, std::vector<uint32_t>> resultVector;
+    auto relNests = _loader.GetExpressIDsWithType(schema::IFCRELNESTS);
+
+    for (uint32_t relNestID : relNests)
+    {
+      _loader.MoveToArgumentOffset(relNestID, 4);
+
+      uint32_t relatingBuildingElement = _loader.GetRefArgument();
+      auto nests = _loader.GetSetArgument();
+
+      for (auto &nest : nests)
+      {
+        uint32_t nestID = _loader.GetRefArgument(nest);
+        resultVector[relatingBuildingElement].push_back(nestID);
       }
     }
     return resultVector;
@@ -3565,6 +3615,11 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
   const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelAggregates() const
   {
     return _relAggregates;
+  }
+
+  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelNests() const
+  {
+    return _relNests;
   }
 
   const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelElementAggregates() const

@@ -284,7 +284,7 @@ int main()
 
     // return 0;
     
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/Element3D 1.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/File2.ifc");
 
     struct LoaderSettings
     {
@@ -326,7 +326,7 @@ int main()
     SpecificLoadTest(loader, geometryLoader, 17);
 
     // auto meshes = LoadAllTest(loader, geometryLoader, 5557);
-    // auto alignments = GetAlignments(loader, geometryLoader);
+    auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;
 
