@@ -178,12 +178,16 @@ async function LoadModel(data: Uint8Array) {
         }
     }
 
-    if( ifcAPI.GetModelSchema(modelID) == 'IFC4X3_RC4')
+    try
     {
         // This function should activate only if we are in IFC4X3
         let alignments = await ifcAPI.GetAllAlignments(modelID);
-        //console.log("Alignments: ", alignments);
+        console.log("Alignments: ", alignments);
+    } catch (error) {
+        // Code to handle the error
+        console.error("An error occurred:", error);
     }
+
     let lines = ifcAPI.GetLineIDsWithType(modelID,  IFCUNITASSIGNMENT);
     //console.log(lines.size());
     for(let l = 0; l < lines.size(); l++)

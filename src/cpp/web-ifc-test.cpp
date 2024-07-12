@@ -286,7 +286,8 @@ int main()
 
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/rac_advanced_sample_project.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/Element3D 1_modif.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/ISSUE_126_model.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/ISSUE_126_model.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/cono.ifc");
 
     struct LoaderSettings
     {
@@ -327,7 +328,7 @@ int main()
     
     // SpecificLoadTest(loader, geometryLoader, 1179353);
     // SpecificLoadTest(loader, geometryLoader, 17);
-    SpecificLoadTest(loader, geometryLoader, 1221);
+    // SpecificLoadTest(loader, geometryLoader, 1221);
 
     // auto meshes = LoadAllTest(loader, geometryLoader, 5557);
     auto alignments = GetAlignments(loader, geometryLoader);

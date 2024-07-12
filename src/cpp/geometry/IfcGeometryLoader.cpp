@@ -300,6 +300,8 @@ namespace webifc::geometry
     spdlog::debug("[GetAlignment({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
 
+    // TODO: Add support for IFCREFERENT
+
     switch (lineType)
     {
     case schema::IFCALIGNMENT:
@@ -417,6 +419,25 @@ namespace webifc::geometry
       {
         auto &relAgg = relAggVector.at(expressID);
         for (auto expressID : relAgg)
+        {
+          alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
+        }
+
+        for (size_t i = 0; i < alignment.Vertical.curves.size(); i++)
+        {
+          for (size_t j = 0; j < alignment.Vertical.curves[i].points.size(); j++)
+          {
+            alignment.Vertical.curves[i].points[j] =
+                glm::dvec4(alignment.Vertical.curves[i].points[j].x, alignment.Vertical.curves[i].points[j].y, 0, 1) * transform * transform_t;
+          }
+        }
+      }
+
+      auto &relNestVector = GetRelNests();
+      if (relNestVector.count(expressID) == 1)
+      {
+        auto &relNest = relNestVector.at(expressID);
+        for (auto expressID : relNest)
         {
           alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
         }
