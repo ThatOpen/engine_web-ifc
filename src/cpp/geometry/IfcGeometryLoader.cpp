@@ -1464,9 +1464,10 @@ namespace webifc::geometry
 
         for (auto &token : segments)
         {
-          #ifdef DEBUG_DUMP_SVG
-              io::DumpSVGCurve(curve.points, "partial_curve.html");
-          #endif
+          // DEBUG
+          // #ifdef DEBUG_DUMP_SVG
+          //     io::DumpSVGCurve(curve.points, "partial_curve.html");
+          // #endif
 
           uint32_t segmentId = _loader.GetRefArgument(token);
 
@@ -1752,11 +1753,13 @@ namespace webifc::geometry
         double endDegrees = 360;
 
         bool byPos = false;
+        bool byParam = false;
 
         if (trim.exist)
         {
           if (trim.start.hasParam && trim.end.hasParam)
           {
+            byParam = true;
             startDegrees = trim.start.param;
             endDegrees = trim.end.param;
           }
@@ -1865,11 +1868,16 @@ namespace webifc::geometry
           double angle = 0;
           angle = startRad + ratio * lengthRad;
 
+          if(byParam)
+          {
+            angle = startRad + (1 - ratio) * lengthRad;; // not sure why we need this, but we apparently do
+          }
+
           if (dimensions == 2)
           {
             glm::dvec2 vec(0);
             vec[0] = radius1 * std::cos(angle);
-            vec[1] = radius2 * std::sin(angle); // not sure why we need this, but we apparently do
+            vec[1] = radius2 * std::sin(angle);
             glm::dmat3 dmat = GetAxis2Placement2D(positionID);
             // If trimming by points no rotation is required
             if (byPos)
@@ -2192,13 +2200,14 @@ case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
     break;
   }
 default:
+
   spdlog::error("[ComputeCurve()] Unsupported curve type {}", expressID, lineType);
   break;
 }
-  
-  #ifdef DEBUG_DUMP_SVG
-      io::DumpSVGCurve(curve.points, "partial_curve.html");
-  #endif
+  // DEBUG
+  // #ifdef DEBUG_DUMP_SVG
+  //     io::DumpSVGCurve(curve.points, "partial_curve.html");
+  // #endif
 
 }
 
