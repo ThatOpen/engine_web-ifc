@@ -215,8 +215,8 @@ std::vector<webifc::geometry::IfcCrossSections> GetAllCrossSections(uint32_t mod
         for (size_t i = 0; i < elements.size(); i++)
         {
             webifc::geometry::IfcCrossSections crossSection;
-            if (dimensions == 2) crossSection = geomLoader->GetLoader().GetCrossSections2D(elements[i]);
-            else crossSection = geomLoader->GetLoader().GetCrossSections3D(elements[i]);
+            if (dimensions == 2) crossSection = geomLoader->GetLoader().GetCrossSections2D(elements[i], geomLoader->_expressIDToPlacement);
+            else crossSection = geomLoader->GetLoader().GetCrossSections3D(elements[i], geomLoader->_expressIDToPlacement);
             crossSections.push_back(crossSection);
         }
     }
@@ -236,7 +236,7 @@ std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
 
     for (size_t i = 0; i < elements.size(); i++)
     {
-        webifc::geometry::IfcAlignment alignment = geomLoader->GetLoader().GetAlignment(elements[i]);
+        webifc::geometry::IfcAlignment alignment = geomLoader->GetLoader().GetAlignment(elements[i], geomLoader->_expressIDToPlacement);
         alignment.transform(geomLoader->GetCoordinationMatrix());
         alignments.push_back(alignment);
     }

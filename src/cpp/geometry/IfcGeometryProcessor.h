@@ -30,6 +30,7 @@ namespace webifc::geometry
         IfcGeometryLoader GetLoader() const;
         IfcFlatMesh GetFlatMesh(uint32_t expressID);
         IfcComposedMesh GetMesh(uint32_t expressID, uint32_t nestLevel = 0);
+        std::unordered_map<uint32_t, glm::dmat4> _expressIDToPlacement;
         void SetTransformation(const std::array<double, 16> &val);
         std::array<double, 16> GetFlatCoordinationMatrix() const;
         glm::dmat4 GetCoordinationMatrix() const;
