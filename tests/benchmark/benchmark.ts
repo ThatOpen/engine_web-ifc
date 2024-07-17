@@ -141,8 +141,6 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
     // Convert the file size to megabytes (optional)
     let sizeMo = fileSizeInBytes / (1024*1024);
     result.fileSize = parseFloat(sizeMo.toFixed(2));
-
-    result.totalNumberOfErrors =  module.GetAndClearErrors(modelID).size();
     module.CloseModel(modelID);
 
 
