@@ -61,7 +61,7 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
 
     for (unsigned int i = 0; i < elements.size(); i++)
     {
-        auto alignment = geometryLoader.GetLoader().GetAlignment(elements[i], geometryLoader._expressIDToPlacement);
+        auto alignment = geometryLoader.GetLoader().GetAlignment(elements[i]);
         alignment.transform(geometryLoader.GetCoordinationMatrix());
         alignments.push_back(alignment);
     }
@@ -92,7 +92,7 @@ std::vector<webifc::geometry::IfcCrossSections> GetCrossSections3D(webifc::parsi
 
         for (unsigned int i = 0; i < elements.size(); i++)
         {
-            auto crossSection = geometryLoader.GetLoader().GetCrossSections3D(elements[i], geometryLoader._expressIDToPlacement);
+            auto crossSection = geometryLoader.GetLoader().GetCrossSections3D(elements[i]);
             crossSections.push_back(crossSection);
         }
     }
