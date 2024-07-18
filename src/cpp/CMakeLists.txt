@@ -31,20 +31,6 @@ file(GLOB WebIfcUtility utility/*.cpp)
 file(GLOB WebIfcTestSourceFiles test/*.cpp)
 file(GLOB WebIfcTestingMain web-ifc-test.cpp)
 
-# Print the contents of WebIfcGeometry
-message("Contents of WebIfcGeometry:")
-
-foreach(file ${WebIfcGeometry})
-	message("${file}")
-endforeach()
-
-# Print the contents of WebIfcGeometryH
-message("Contents of WebIfcGeometryH:")
-
-foreach(file ${WebIfcGeometryH})
-	message("${file}")
-endforeach()
-
 # download the external projects and save their paths
 Message("Downloading FastFloat")
 FetchContent_Declare(fastfloat GIT_REPOSITORY "https://github.com/fastfloat/fast_float" GIT_TAG "2b2395f9ac836ffca6404424bcc252bff7aa80e4" SOURCE_SUBDIR "../")

@@ -52,6 +52,7 @@ namespace webifc::geometry
     {
         _expressIDToGeometry.clear();
         std::unordered_map<uint32_t, IfcGeometry>().swap(_expressIDToGeometry);
+        _geometryLoader.Clear();
     }
 
     std::array<double, 16> IfcGeometryProcessor::GetFlatCoordinationMatrix() const
@@ -153,7 +154,7 @@ namespace webifc::geometry
 
             if (localPlacement != 0 && _loader.IsValidExpressID(localPlacement))
             {
-                mesh.transformation = _geometryLoader.GetLocalPlacement(localPlacement, _expressIDToPlacement);
+                mesh.transformation = _geometryLoader.GetLocalPlacement(localPlacement);
             }
 
             if (ifcPresentation != 0 && _loader.IsValidExpressID(ifcPresentation))
@@ -249,7 +250,7 @@ namespace webifc::geometry
             case schema::IFCSECTIONEDSOLID:
             case schema::IFCSECTIONEDSURFACE:
             {
-                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID, _expressIDToPlacement));
+                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID));
                 mesh.transformation = glm::dmat4(1);
                 // TODO: this is getting problematic.....
                 _expressIDToGeometry[expressID] = geom;
@@ -270,7 +271,7 @@ namespace webifc::geometry
                 uint32_t ifcPresentation = _loader.GetRefArgument();
                 uint32_t localPlacement = _loader.GetRefArgument();
 
-                mesh.transformation = _geometryLoader.GetLocalPlacement(localPlacement, _expressIDToPlacement);
+                mesh.transformation = _geometryLoader.GetLocalPlacement(localPlacement);
                 mesh.children.push_back(GetMesh(ifcPresentation));
 
                 return mesh;
@@ -410,8 +411,8 @@ namespace webifc::geometry
                 uint32_t boundaryID = _loader.GetRefArgument();
 
                 IfcSurface surface = GetSurface(surfaceID);
-                glm::dmat4 position = _geometryLoader.GetLocalPlacement(positionID, _expressIDToPlacement);
-                IfcCurve curve = _geometryLoader.GetCurve(boundaryID, _expressIDToPlacement, 2);
+                glm::dmat4 position = _geometryLoader.GetLocalPlacement(positionID);
+                IfcCurve curve = _geometryLoader.GetCurve(boundaryID, 2);
 
                 if (!curve.IsCCW())
                 {
@@ -476,7 +477,7 @@ namespace webifc::geometry
                 uint32_t axis2Placement = _loader.GetRefArgument();
                 uint32_t ifcPresentation = _loader.GetRefArgument();
 
-                mesh.transformation = _geometryLoader.GetLocalPlacement(axis2Placement, _expressIDToPlacement);
+                mesh.transformation = _geometryLoader.GetLocalPlacement(axis2Placement);
                 mesh.children.push_back(GetMesh(ifcPresentation));
 
                 return mesh;
@@ -667,7 +668,7 @@ namespace webifc::geometry
 
                 if (profileID)
                 {
-                    profile = _geometryLoader.GetProfile(profileID, _expressIDToPlacement);
+                    profile = _geometryLoader.GetProfile(profileID);
                 }
                 else
                 {
@@ -676,12 +677,12 @@ namespace webifc::geometry
 
                 if (placementID)
                 {
-                    placement = _geometryLoader.GetLocalPlacement(placementID, _expressIDToPlacement);
+                    placement = _geometryLoader.GetLocalPlacement(placementID);
                 }
 
                 if (directrixRef)
                 {
-                    directrix = _geometryLoader.GetCurve(directrixRef, _expressIDToPlacement, 3);
+                    directrix = _geometryLoader.GetCurve(directrixRef, 3);
                 }
                 else
                 {
@@ -748,7 +749,7 @@ namespace webifc::geometry
                     _loader.GetDoubleArgument();
                 }
 
-                IfcCurve directrix = _geometryLoader.GetCurve(directrixRef, _expressIDToPlacement, 3);
+                IfcCurve directrix = _geometryLoader.GetCurve(directrixRef, 3);
 
                 IfcProfile profile;
                 profile.curve = GetCircleCurve(radius, _circleSegments);
@@ -771,8 +772,8 @@ namespace webifc::geometry
                 uint32_t axis1PlacementID = _loader.GetRefArgument();
                 double angle = angleConversion(_loader.GetDoubleArgument(), _geometryLoader.GetAngleUnits());
 
-                IfcProfile profile = _geometryLoader.GetProfile(profileID, _expressIDToPlacement);
-                glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID, _expressIDToPlacement);
+                IfcProfile profile = _geometryLoader.GetProfile(profileID);
+                glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID);
                 glm::dvec3 axis = _geometryLoader.GetAxis1Placement(axis1PlacementID)[0];
 
                 bool closed = false;
@@ -820,7 +821,7 @@ namespace webifc::geometry
                 double depth = _loader.GetDoubleArgument();
 
                 auto lineProfileType = _loader.GetLineType(profileID);
-                IfcProfile profile = _geometryLoader.GetProfile(profileID, _expressIDToPlacement);
+                IfcProfile profile = _geometryLoader.GetProfile(profileID);
                 if (!profile.isComposite)
                 {
                     if (profile.curve.points.empty())
@@ -841,7 +842,7 @@ namespace webifc::geometry
 
                 if (placementID)
                 {
-                    mesh.transformation = _geometryLoader.GetLocalPlacement(placementID, _expressIDToPlacement);
+                    mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
                 }
 
                 glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
@@ -942,7 +943,7 @@ namespace webifc::geometry
 
             _loader.MoveToArgumentOffset(expressID, 0);
             uint32_t locationID = _loader.GetRefArgument();
-            surface.transformation = _geometryLoader.GetLocalPlacement(locationID, _expressIDToPlacement);
+            surface.transformation = _geometryLoader.GetLocalPlacement(locationID);
 
             return surface;
         }
@@ -1236,7 +1237,7 @@ namespace webifc::geometry
 
             _loader.MoveToArgumentOffset(expressID, 0);
             uint32_t locationID = _loader.GetRefArgument();
-            surface.transformation = _geometryLoader.GetLocalPlacement(locationID, _expressIDToPlacement);
+            surface.transformation = _geometryLoader.GetLocalPlacement(locationID);
 
             _loader.MoveToArgumentOffset(expressID, 1);
             double radius = _loader.GetDoubleArgument();
@@ -1254,21 +1255,21 @@ namespace webifc::geometry
 
             _loader.MoveToArgumentOffset(expressID, 0);
             uint32_t profileID = _loader.GetRefArgument();
-            IfcProfile profile = _geometryLoader.GetProfile3D(profileID, _expressIDToPlacement);
+            IfcProfile profile = _geometryLoader.GetProfile3D(profileID);
 
             _loader.MoveToArgumentOffset(expressID, 1);
             if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
             {
                 _loader.StepBack();
                 uint32_t placementID = _loader.GetRefArgument();
-                surface.transformation = _geometryLoader.GetLocalPlacement(placementID, _expressIDToPlacement);
+                surface.transformation = _geometryLoader.GetLocalPlacement(placementID);
             }
 
             _loader.MoveToArgumentOffset(expressID, 2);
             uint32_t locationID = _loader.GetRefArgument();
 
             surface.RevolutionSurface.Active = true;
-            surface.RevolutionSurface.Direction = _geometryLoader.GetLocalPlacement(locationID, _expressIDToPlacement);
+            surface.RevolutionSurface.Direction = _geometryLoader.GetLocalPlacement(locationID);
             surface.RevolutionSurface.Profile = profile;
 
             return surface;
@@ -1281,7 +1282,7 @@ namespace webifc::geometry
 
             _loader.MoveToArgumentOffset(expressID, 0);
             uint32_t profileID = _loader.GetRefArgument();
-            IfcProfile profile = _geometryLoader.GetProfile(profileID, _expressIDToPlacement);
+            IfcProfile profile = _geometryLoader.GetProfile(profileID);
 
             _loader.MoveToArgumentOffset(expressID, 2);
             uint32_t directionID = _loader.GetRefArgument();
@@ -1302,7 +1303,7 @@ namespace webifc::geometry
 
             _loader.MoveToArgumentOffset(expressID, 1);
             uint32_t locationID = _loader.GetRefArgument();
-            surface.transformation = _geometryLoader.GetLocalPlacement(locationID, _expressIDToPlacement);
+            surface.transformation = _geometryLoader.GetLocalPlacement(locationID);
 
             return surface;
 
@@ -1606,7 +1607,7 @@ namespace webifc::geometry
             for (size_t i = 0; i < bounds.size(); i++)
             {
                 uint32_t boundID = _loader.GetRefArgument(bounds[i]);
-                bounds3D[i] = _geometryLoader.GetBound(boundID, _expressIDToPlacement);
+                bounds3D[i] = _geometryLoader.GetBound(boundID);
             }
 
             TriangulateBounds(geometry, bounds3D, expressID);
@@ -1622,7 +1623,7 @@ namespace webifc::geometry
             for (size_t i = 0; i < bounds.size(); i++)
             {
                 uint32_t boundID = _loader.GetRefArgument(bounds[i]);
-                bounds3D[i] = _geometryLoader.GetBound(boundID, _expressIDToPlacement);
+                bounds3D[i] = _geometryLoader.GetBound(boundID);
             }
 
             _loader.MoveToArgumentOffset(expressID, 1);
