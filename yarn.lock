@@ -967,9 +967,9 @@ ansi-escape-sequences@^5.1.2:
   dependencies:
     array-back "^4.0.0"
 
-ansi-escape-sequences@^6.2.1:
+ansi-escape-sequences@^6.2.2:
   version "6.2.2"
-  resolved "https://registry.npmjs.org/ansi-escape-sequences/-/ansi-escape-sequences-6.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/ansi-escape-sequences/-/ansi-escape-sequences-6.2.2.tgz#6154a3acbcf9631026a83e2fd7f524db045eb7d3"
   integrity sha512-mBPG9BZy4dMOJQ9BehU6ph8IKslvVppbqZ8APHnpfP+Hsx/hGow5PY46lSQL1vPPi1F5XTtO6p3GcH8O9c0cUg==
   dependencies:
     array-back "^6.2.2"
@@ -1045,17 +1045,12 @@ argparse@^2.0.1:
   resolved "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
-array-back@^3.0.1, array-back@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/array-back/-/array-back-3.1.0.tgz"
-  integrity sha512-TkuxA4UCOvxuDK6NZYXCalszEzj+TLszyASooky+i742l9TqsOdYCMJJupxRic61hwquNtppB3hgcuq9SVSH1Q==
-
-array-back@^4.0.0, array-back@^4.0.1, array-back@^4.0.2:
+array-back@^4.0.0, array-back@^4.0.1:
   version "4.0.2"
   resolved "https://registry.npmjs.org/array-back/-/array-back-4.0.2.tgz"
   integrity sha512-NbdMezxqf94cnNfWLL7V/im0Ub+Anbb0IoZhvzie8+4HJ4nMQuzHuy49FkGYCJK2yAloZ3meiB6AVMClbrI1vg==
 
-array-back@^6.2.0, array-back@^6.2.2:
+array-back@^6.2.2:
   version "6.2.2"
   resolved "https://registry.npmjs.org/array-back/-/array-back-6.2.2.tgz"
   integrity sha512-gUAZ7HPyb4SJczXAMUXMGAvI976JoK3qEx9v1FTmeYuJj0IBiaKttG1ydtGKdkfqWkIkouke7nG8ufGy77+Cvw==
@@ -1209,10 +1204,10 @@ byte-size@^6.2.0:
   resolved "https://registry.npmjs.org/byte-size/-/byte-size-6.2.0.tgz"
   integrity sha512-6EspYUCAPMc7E2rltBgKwhG+Cmk0pDm9zDtF1Awe2dczNUL3YpZ8mTs/dueOTS1hqGWBOatqef4jYMGjln7WmA==
 
-byte-size@^8.1.0:
-  version "8.1.1"
-  resolved "https://registry.npmjs.org/byte-size/-/byte-size-8.1.1.tgz"
-  integrity sha512-tUkzZWK0M/qdoLEqikxBWe4kumyuwjl3HO6zHTr4yEI23EojPtLYXdG1+AQY7MN0cGyNDvEaJ8wiYQm6P2bPxg==
+byte-size@^8.1.1:
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/byte-size/-/byte-size-8.2.1.tgz#b1adb6832a585994d33478f2031c12acbd8476b2"
+  integrity sha512-pph2jjc3PxRLeB2nWfJy/tMiHnS6j7xhDlkglBp3KlchnJkILdZ2DmUyZ8svDJ5Z+q431vbhuoiuOvuGhY8fjw==
 
 bytes@3.1.2, bytes@^3.1.2:
   version "3.1.2"
@@ -1258,6 +1253,13 @@ caniuse-lite@^1.0.30001640:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001642.tgz#6aa6610eb24067c246d30c57f055a9d0a7f8d05f"
   integrity sha512-3XQ0DoRgLijXJErLSl+bLnJ+Et4KqV1PY6JJBGAFlsNsz31zeAIncyeZfLCabHK/jtSh+671RM9YMldxjUPZtA==
 
+chalk-template@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/chalk-template/-/chalk-template-0.4.0.tgz#692c034d0ed62436b9062c1707fadcd0f753204b"
+  integrity sha512-/ghrgmhfY8RaSdeo43hNXxpoHAtxdbskUHjPpfqUWGttFgycUhYPGx3YZBCnUCvOa7Doivn1IZec3DEGFoMgLg==
+  dependencies:
+    chalk "^4.1.2"
+
 chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz"
@@ -1267,7 +1269,7 @@ chalk@^2.4.2:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chalk@^4.0.0:
+chalk@^4.0.0, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -1358,25 +1360,25 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-command-line-args@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.npmjs.org/command-line-args/-/command-line-args-5.2.1.tgz"
-  integrity sha512-H4UfQhZyakIjC74I9d34fGYDwk3XpSr17QhEd0Q3I9Xq1CETHo4Hcuo87WyWHpAF1aSLjLRf5lD9ZGX2qStUvg==
+command-line-args@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/command-line-args/-/command-line-args-6.0.0.tgz#e4703592b0846a9ac440a5a1e2ffc0f89707701e"
+  integrity sha512-zDdHxHzlCp/gA1gy0VtPK3YL0Aob3ijJdwZ7H3HSl55hh8EziLtRlyj/od8EGRJfX8IjussC/mQkScl2Ms5Suw==
   dependencies:
-    array-back "^3.1.0"
-    find-replace "^3.0.0"
+    array-back "^6.2.2"
+    find-replace "^5.0.1"
     lodash.camelcase "^4.3.0"
-    typical "^4.0.0"
+    typical "^7.1.1"
 
-command-line-usage@^6.1.3:
-  version "6.1.3"
-  resolved "https://registry.npmjs.org/command-line-usage/-/command-line-usage-6.1.3.tgz"
-  integrity sha512-sH5ZSPr+7UStsloltmDh7Ce5fb8XPlHyoPzTpyyMuYCtervL65+ubVZ6Q61cFtFl62UyJlc8/JwERRbAFPUqgw==
+command-line-usage@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/command-line-usage/-/command-line-usage-7.0.3.tgz#6bce992354f6af10ecea2b631bfdf0c8b3bfaea3"
+  integrity sha512-PqMLy5+YGwhMh1wS04mVG44oqDsgyLRSKJBdOo1bnYhMKBW65gZF1dRp2OZRhiTjgUHljy99qkO7bsctLaw35Q==
   dependencies:
-    array-back "^4.0.2"
-    chalk "^2.4.2"
-    table-layout "^1.0.2"
-    typical "^5.2.0"
+    array-back "^6.2.2"
+    chalk-template "^0.4.0"
+    table-layout "^4.1.0"
+    typical "^7.1.1"
 
 common-log-format@^1.0.0:
   version "1.0.0"
@@ -1502,7 +1504,7 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
-current-module-paths@^1.1.0, current-module-paths@^1.1.1:
+current-module-paths@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/current-module-paths/-/current-module-paths-1.1.1.tgz"
   integrity sha512-8Ga5T8oMXBaSsHq9Gj+bddX7kHSaJKsl2vaAd3ep51eQLkr4W18eFEmEZM5bLo1zrz8tt3jE1U8QK9QGhaLR4g==
@@ -1852,12 +1854,12 @@ fill-range@^7.1.1:
   dependencies:
     to-regex-range "^5.0.1"
 
-find-replace@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/find-replace/-/find-replace-3.0.0.tgz"
-  integrity sha512-6Tb2myMioCAgv5kfvP5/PkZZ/ntTpVK39fHY7WkWBgvbeE+VHd/tZuZ4mrC+bxh4cfOZeYKVPaJIZtZXV7GNCQ==
+find-replace@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/find-replace/-/find-replace-5.0.1.tgz#28bbcf985b5274f6edd5e087c1e4e26a08b0da21"
+  integrity sha512-o5/Y8HrCNRuFF5rdNTkX8Vhv6kTFTV0t1zIoigwlCdbkA9qaapRzxvWPND2VvlFa9LBI05Q1i8ml/saMqkOJUQ==
   dependencies:
-    array-back "^3.0.1"
+    array-back "^6.2.2"
 
 find-up@^4.0.0, find-up@^4.1.0:
   version "4.1.0"
@@ -2892,9 +2894,9 @@ koa-static@^5.0.0:
     debug "^3.1.0"
     koa-send "^5.0.0"
 
-koa@^2.13.4:
+koa@^2.15.3:
   version "2.15.3"
-  resolved "https://registry.npmjs.org/koa/-/koa-2.15.3.tgz"
+  resolved "https://registry.yarnpkg.com/koa/-/koa-2.15.3.tgz#062809266ee75ce0c75f6510a005b0e38f8c519a"
   integrity sha512-j/8tY9j5t+GVMLeioLaxweJiKUayFhlGqNTzf2ZGwL0ZCQijd2RLHK0SLW5Tsko8YyyqCZC2cojIb0/s62qTAg==
   dependencies:
     accepts "^1.3.5"
@@ -2938,12 +2940,12 @@ linkify-it@^5.0.0:
   dependencies:
     uc.micro "^2.0.0"
 
-load-module@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.npmjs.org/load-module/-/load-module-4.2.1.tgz"
-  integrity sha512-Sbfg6R4LjvyThJpqUoADHMjyoI2+cL4msbCQeZ9kkY/CqP/TT2938eftKm7x4I2gd4/A+DEe6nePkbfWYbXwSw==
+load-module@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/load-module/-/load-module-5.0.0.tgz#a2402683cd6d14049ed10fa75de681aab60dddb6"
+  integrity sha512-zZBnYIvAuP2TprnRisam+N/A3v+JX60pvdKoHQRKyl4xlHLQQLpp7JKNyEQ6D3Si0/QIQMgXko3PtV+cx6L7mA==
   dependencies:
-    array-back "^6.2.0"
+    array-back "^6.2.2"
 
 local-web-server@^5.2.1:
   version "5.3.3"
@@ -3128,21 +3130,21 @@ lws-static@^3.1.0:
     koa-static "^5.0.0"
 
 lws@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.npmjs.org/lws/-/lws-4.1.2.tgz"
-  integrity sha512-hm6mlYa5ZM+iLbFIEiifGnXJWbNRQL80DZ5gXfkdgBJSMIvjnVyVIPpw1fCU/IMcgHBvn1iCrFc391FP12NguQ==
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/lws/-/lws-4.1.4.tgz#ee5ebc3bb200718d66825d568735f4f92adb4e34"
+  integrity sha512-Wo2jbQBdfPM9fW0NxLbCcA9uDjNYzZ8+rNUWuw0Yec3ai7CM+61l8pQiMnP4HxJ5maUC6S7pUcf7oXbJlDO9kQ==
   dependencies:
     "@75lb/deep-merge" "^1.1.1"
-    ansi-escape-sequences "^6.2.1"
+    ansi-escape-sequences "^6.2.2"
     array-back "^6.2.2"
-    byte-size "^8.1.0"
-    command-line-args "^5.2.1"
-    command-line-usage "^6.1.3"
+    byte-size "^8.1.1"
+    command-line-args "^6.0.0"
+    command-line-usage "^7.0.3"
     create-mixin "^3.0.0"
-    current-module-paths "^1.1.0"
-    koa "^2.13.4"
-    load-module "^4.2.1"
-    open "^8.4.0"
+    current-module-paths "^1.1.1"
+    koa "^2.15.3"
+    load-module "^5.0.0"
+    open "^8.4.2"
     qrcode-terminal "^0.12.0"
     typical "^7.1.1"
     walk-back "^5.1.0"
@@ -3407,9 +3409,9 @@ only@~0.0.2:
   resolved "https://registry.npmjs.org/only/-/only-0.0.2.tgz"
   integrity sha512-Fvw+Jemq5fjjyWz6CpKx6w9s7xxqo3+JCyM0WXWeCSOboZ8ABkyvP8ID4CZuChA/wxSx+XSJmdOm8rGVyJ1hdQ==
 
-open@^8.4.0:
+open@^8.4.2:
   version "8.4.2"
-  resolved "https://registry.npmjs.org/open/-/open-8.4.2.tgz"
+  resolved "https://registry.yarnpkg.com/open/-/open-8.4.2.tgz#5b5ffe2a8f793dcd2aad73e550cb87b59cb084f9"
   integrity sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==
   dependencies:
     define-lazy-prop "^2.0.0"
@@ -4036,7 +4038,16 @@ symbol-tree@^3.2.4:
   resolved "https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-table-layout@^1.0.2, table-layout@~1.0.0:
+table-layout@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/table-layout/-/table-layout-4.1.0.tgz#533573a037aad6abffc45911be14c79d1c43aaa6"
+  integrity sha512-AfbFMOsAZDoaQq2sDF/F7PSTxnTBexr4cuArFW1bMl07tFbB+HBwKpnw99To3ffcjRFe12dEoyckiNz1+qCSng==
+  dependencies:
+    "@75lb/deep-merge" "^1.1.1"
+    array-back "^6.2.2"
+    wordwrapjs "^5.1.0"
+
+table-layout@~1.0.0:
   version "1.0.2"
   resolved "https://registry.npmjs.org/table-layout/-/table-layout-1.0.2.tgz"
   integrity sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==
@@ -4217,11 +4228,6 @@ typescript@^4.7.0:
   resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.5.tgz"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
-typical@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/typical/-/typical-4.0.0.tgz"
-  integrity sha512-VAH4IvQ7BDFYglMd7BPRDfLgxZZX4O4TFcRDA6EN5X7erNJJq+McIEp8np9aVtxrCJ6qx4GTYVfOWNjcqwZgRw==
-
 typical@^5.2.0:
   version "5.2.0"
   resolved "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz"
@@ -4372,6 +4378,11 @@ wordwrapjs@^4.0.0:
   dependencies:
     reduce-flatten "^2.0.0"
     typical "^5.2.0"
+
+wordwrapjs@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/wordwrapjs/-/wordwrapjs-5.1.0.tgz#4c4d20446dcc670b14fa115ef4f8fd9947af2b3a"
+  integrity sha512-JNjcULU2e4KJwUNv6CHgI46UvDGitb6dGryHajXTDiLgg1/RiGoPSDw4kZfYnwGtEXf2ZMeIewDQgFGzkCB2Sg==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
   version "7.0.0"
