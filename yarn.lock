@@ -2948,12 +2948,12 @@ load-module@^5.0.0:
     array-back "^6.2.2"
 
 local-web-server@^5.2.1:
-  version "5.3.3"
-  resolved "https://registry.npmjs.org/local-web-server/-/local-web-server-5.3.3.tgz"
-  integrity sha512-toU0Mz/OskG/HKDtmjTiwDWDRnzFY4aQH2zPZIX7+hebBJKGr5HXuOyx/noI20I/wemkbBDontBnBch5VTgjlg==
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/local-web-server/-/local-web-server-5.3.4.tgz#1a2bfef049f3cac13644fd1b1e4145052366e139"
+  integrity sha512-usoYTaihUKuScb9Oj7Kbm87U5jQYY5yyS6v9HvtNYAl6+H1xEgjVsASeaYIoKNxyFXJzXffSabTZRRi8QaNKvw==
   dependencies:
     current-module-paths "^1.1.1"
-    lws "^4.1.2"
+    lws "^4.1.4"
     lws-basic-auth "^2.0.0"
     lws-blacklist "^3.0.0"
     lws-body-parser "^3.0.0"
@@ -3129,7 +3129,7 @@ lws-static@^3.1.0:
   dependencies:
     koa-static "^5.0.0"
 
-lws@^4.1.2:
+lws@^4.1.4:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/lws/-/lws-4.1.4.tgz#ee5ebc3bb200718d66825d568735f4f92adb4e34"
   integrity sha512-Wo2jbQBdfPM9fW0NxLbCcA9uDjNYzZ8+rNUWuw0Yec3ai7CM+61l8pQiMnP4HxJ5maUC6S7pUcf7oXbJlDO9kQ==
