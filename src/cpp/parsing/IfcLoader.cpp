@@ -666,10 +666,16 @@ namespace webifc::parsing {
 
     double IfcLoader::GetOptionalDoubleParam(double defaultValue = 0) const
     {
-      if (GetTokenType() == IfcTokenType::REAL)
+      auto tk = GetTokenType();
+      if (tk == IfcTokenType::REAL)
       {
         StepBack();
         return GetDoubleArgument();
+      }
+      if (tk == IfcTokenType::INTEGER)
+      {
+        StepBack();
+        return GetIntArgument();
       }
       StepBack();
       return defaultValue;

@@ -1462,6 +1462,16 @@ namespace webifc::geometry
                         secondOperator = secondGeom;
                     }
 
+                    #ifdef CSG_DEBUG_OUTPUT
+                        io::DumpIfcGeometry(secondOperator, "second.obj");
+                    #endif
+
+                    #ifdef CSG_DEBUG_OUTPUT
+                        IfcGeometry firstOperator;
+                        firstOperator.AddGeometry(result);
+                        io::DumpIfcGeometry(firstOperator, "first.obj");
+                    #endif
+
                     if (op == "DIFFERENCE")
                     {
                         result = fuzzybools::Subtract(result, secondOperator);
@@ -1470,6 +1480,12 @@ namespace webifc::geometry
                     {
                         result = fuzzybools::Union(result, secondOperator);
                     }
+
+                    #ifdef CSG_DEBUG_OUTPUT
+                        IfcGeometry resultOperator;
+                        resultOperator.AddGeometry(result);
+                        io::DumpIfcGeometry(resultOperator, "result.obj");
+                    #endif
                 }
             }
             finalResult.AddGeometry(result);

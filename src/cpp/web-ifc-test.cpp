@@ -284,10 +284,8 @@ int main()
 
     // return 0;
 
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/rac_advanced_sample_project.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/Element3D 1_modif.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/ISSUE_126_model.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/cono.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/weird-placement.ifc");
+
 
     struct LoaderSettings
     {
@@ -326,12 +324,10 @@ int main()
 
     start = ms();
     
-    // SpecificLoadTest(loader, geometryLoader, 1179353);
-    // SpecificLoadTest(loader, geometryLoader, 17);
-    // SpecificLoadTest(loader, geometryLoader, 1221);
+    // SpecificLoadTest(loader, geometryLoader, 4963);
 
-    // auto meshes = LoadAllTest(loader, geometryLoader, 5557);
-    auto alignments = GetAlignments(loader, geometryLoader);
+    auto meshes = LoadAllTest(loader, geometryLoader, 4963);
+    // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;
 
