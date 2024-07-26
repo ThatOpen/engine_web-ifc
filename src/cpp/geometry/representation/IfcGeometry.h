@@ -10,7 +10,7 @@
 #include <string>
 #include <cstdint>
 #include <glm/glm.hpp>
-#include <fuzzy/geometry.h>
+#include "../operations/boolean-utils/geometry.h"
 
 #include "geometry.h"
 

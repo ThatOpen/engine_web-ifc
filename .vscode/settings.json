@@ -116,5 +116,6 @@
   "cmake.sourceDirectory": "${workspaceFolder}/src/cpp",
   "cmake.buildDirectory": "${workspaceFolder}/src/cpp/build",
   "ecl.launchConfiguration": "not found",
-  "ecl.targetCluster": {}
+  "ecl.targetCluster": {},
+  "C_Cpp.errorSquiggles": "enabled"
 }

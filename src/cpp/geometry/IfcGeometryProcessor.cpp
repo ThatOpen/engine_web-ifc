@@ -14,7 +14,7 @@
 #include "operations/geometryutils.h"
 #include "operations/curve-utils.h"
 #include "operations/mesh_utils.h"
-#include <fuzzy/fuzzy-bools.h>
+#include "operations/boolean-utils/fuzzy-bools.h"
 
 namespace webifc::geometry
 {
