@@ -1007,7 +1007,7 @@ namespace webifc::geometry
 			{
 				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 				{
-					fuzzybools::Face f = meshGeom.GetFace(i);
+					Face f = meshGeom.GetFace(i);
 					glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 
 					return a;
@@ -1073,7 +1073,7 @@ namespace webifc::geometry
 							
 							for (uint32_t i = 0; i < newMeshGeom.numFaces; i++)
 							{
-								fuzzybools::Face f = newMeshGeom.GetFace(i);
+								Face f = newMeshGeom.GetFace(i);
 								glm::dvec3 a = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i0), 1);
 								glm::dvec3 b = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i1), 1);
 								glm::dvec3 c = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i2), 1);
@@ -1108,7 +1108,7 @@ namespace webifc::geometry
 						
 						for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 						{
-							fuzzybools::Face f = meshGeom.GetFace(i);
+							Face f = meshGeom.GetFace(i);
 							glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 							glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
 							glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
@@ -1153,7 +1153,7 @@ namespace webifc::geometry
 					{
 						for (uint32_t i = 0; i < geoms[g].numFaces; i++)
 						{
-							fuzzybools::Face f = geoms[g].GetFace(i);
+							Face f = geoms[g].GetFace(i);
 							glm::dvec3 a = geoms[g].GetPoint(f.i0);
 							glm::dvec3 b = geoms[g].GetPoint(f.i1);
 							glm::dvec3 c = geoms[g].GetPoint(f.i2);

@@ -8,10 +8,253 @@
 
 namespace webifc::geometry {
 
+		void Geometry::BuildFromVectors(std::vector<double>& d, std::vector<uint32_t>& i)
+		{
+			vertexData = d;
+			indexData = i;
 
+			numPoints = indexData.size();
+			numFaces = indexData.size() / 3;
+		}
+
+		void Geometry::AddPoint(glm::dvec4& pt, glm::dvec3& n)
+		{
+			glm::dvec3 p = pt;
+			AddPoint(p, n);
+		}
+
+		fuzzybools::AABB Geometry::GetAABB() const
+		{
+			fuzzybools::AABB aabb;
+
+			for (uint32_t i = 0; i < numPoints; i++)
+			{
+				aabb.min = glm::min(aabb.min, GetPoint(i));
+				aabb.max = glm::max(aabb.max, GetPoint(i));
+			}
+
+			return aabb;
+		}
+
+		void Geometry::AddPoint(glm::dvec3& pt, glm::dvec3& n)
+		{
+			//vertexData.reserve((numPoints + 1) * VERTEX_FORMAT_SIZE_FLOATS);
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
+			vertexData.push_back(pt.x);
+			vertexData.push_back(pt.y);
+			vertexData.push_back(pt.z);
+
+			vertexData.push_back(n.x);
+			vertexData.push_back(n.y);
+			vertexData.push_back(n.z);
+
+			if (std::isnan(pt.x) || std::isnan(pt.y) || std::isnan(pt.z))
+			{
+				if (messages) { printf("NaN in geom!\n"); }
+			}
+
+			if (std::isnan(n.x) || std::isnan(n.y) || std::isnan(n.z))
+			{
+				if (messages) { printf("NaN in geom!\n"); }
+			}
+
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
+			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
+
+			numPoints += 1;
+		}
+
+		void Geometry::AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		{
+			glm::dvec3 normal;
+
+			double area = fuzzybools::areaOfTriangle(a, b, c);
+//			if (!computeSafeNormal(a, b, c, normal, EPS_SMALL))
+			if (!fuzzybools::computeSafeNormal(a, b, c, normal, toleranceAddFace))
+			{
+				// bail out, zero area triangle
+				if (messages) { printf("zero triangle, AddFace(vec, vec, vec)\n"); }
+				return;
+			}
+
+			AddPoint(a, normal);
+			AddPoint(b, normal);
+			AddPoint(c, normal);
+
+			AddFace(numPoints - 3, numPoints - 2, numPoints - 1);
+		}
+
+		void Geometry::AddFace(uint32_t a, uint32_t b, uint32_t c)
+		{
+//			indexData.reserve((numFaces + 1) * 3);
+//			indexData[numFaces * 3 + 0] = a;
+//			indexData[numFaces * 3 + 1] = b;
+//			indexData[numFaces * 3 + 2] = c;
+			indexData.push_back(a);
+			indexData.push_back(b);
+			indexData.push_back(c);
+
+			double area = fuzzybools::areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
+
+			glm::dvec3 normal;
+//			if (!computeSafeNormal(GetPoint(a), GetPoint(b), GetPoint(c), normal, EPS_SMALL))
+			if (!fuzzybools::computeSafeNormal(GetPoint(a), GetPoint(b), GetPoint(c), normal, toleranceAddFace))
+			{
+				// bail out, zero area triangle
+				if (messages) { printf("zero triangle, AddFace(int, int, int)\n"); }
+			}
+
+			numFaces++;
+		}
+
+		Face Geometry::GetFace(size_t index) const
+		{
+			Face f;
+			f.i0 = indexData[index * 3 + 0];
+			f.i1 = indexData[index * 3 + 1];
+			f.i2 = indexData[index * 3 + 2];
+			return f;
+		}
+
+		fuzzybools::AABB Geometry::GetFaceBox(size_t index) const
+		{
+			fuzzybools::AABB aabb;
+			aabb.index = static_cast<uint32_t>(index);
+
+			glm::dvec3 a = GetPoint(indexData[index * 3 + 0]);
+			glm::dvec3 b = GetPoint(indexData[index * 3 + 1]);
+			glm::dvec3 c = GetPoint(indexData[index * 3 + 2]);
+
+			aabb.min = glm::min(a, aabb.min);
+			aabb.min = glm::min(b, aabb.min);
+			aabb.min = glm::min(c, aabb.min);
+
+			aabb.max = glm::max(a, aabb.max);
+			aabb.max = glm::max(b, aabb.max);
+			aabb.max = glm::max(c, aabb.max);
+
+			aabb.center = (aabb.max + aabb.min) / 2.0;
+
+			return aabb;
+		}
+
+		glm::dvec3 Geometry::GetPoint(size_t index) const
+		{
+			return glm::dvec3(
+				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0],
+				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
+				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
+			);
+		}
+
+		void Geometry::GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const
+		{
+			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
+			glm::dvec3 max(DBL_MIN, DBL_MIN, DBL_MIN);
+
+			for (size_t i = 0; i < numPoints; i++)
+			{
+				auto pt = GetPoint(i);
+				min = glm::min(min, pt);
+				max = glm::max(max, pt);
+			}
+
+			extents = (max - min);
+			center = min + extents / 2.0;
+		}
+
+		Geometry Geometry::Normalize(glm::dvec3 center, glm::dvec3 extents) const
+		{
+			Geometry newGeom;
+
+			double scale = std::max(extents.x, std::max(extents.y, extents.z)) / 10.0;
+
+			for (size_t i = 0; i < numFaces; i++)
+			{
+				auto face = GetFace(i);
+				auto pa = GetPoint(face.i0);
+				auto pb = GetPoint(face.i1);
+				auto pc = GetPoint(face.i2);
+
+				auto a = (pa - center) / scale;
+				auto b = (pb - center) / scale;
+				auto c = (pc - center) / scale;
+
+				// std::cout << areaOfTriangle(pa, pb, pc) << std::endl;
+
+				newGeom.AddFace(pa, pb, pc);
+			}
+
+
+			return newGeom;
+		}
+
+		Geometry Geometry::DeNormalize(glm::dvec3 center, glm::dvec3 extents) const
+		{
+			Geometry newGeom;
+
+			double scale = std::max(extents.x, std::max(extents.y, extents.z)) / 10.0;
+
+			for (size_t i = 0; i < numFaces; i++)
+			{
+				auto face = GetFace(i);
+				auto pa = GetPoint(face.i0);
+				auto pb = GetPoint(face.i1);
+				auto pc = GetPoint(face.i2);
+
+				// std::cout << areaOfTriangle(pa, pb, pc) << std::endl;
+
+				auto a = pa * scale + center;
+				auto b = pb * scale + center;
+				auto c = pc * scale + center;
+
+				newGeom.AddFace(a, b, c);
+			}
+
+
+			return newGeom;
+		}
+		
+		bool Geometry::IsEmpty()
+		{
+			return vertexData.empty();
+		}
+
+		double Geometry::Volume(const glm::dmat4& trans)
+		{
+			double totalVolume = 0;
+
+			for (uint32_t i = 0; i < numFaces; i++)
+			{
+				Face f = GetFace(i);
+
+				glm::dvec3 a = trans * glm::dvec4(GetPoint(f.i0), 1);
+				glm::dvec3 b = trans * glm::dvec4(GetPoint(f.i1), 1);
+				glm::dvec3 c = trans * glm::dvec4(GetPoint(f.i2), 1);
+
+				glm::dvec3 norm;
+
+//				if (computeSafeNormal(a, b, c, norm))
+				if (fuzzybools::computeSafeNormal(a, b, c, norm, EPS_SMALL))
+				{
+					double area = fuzzybools::areaOfTriangle(a, b, c);
+					double height = glm::dot(norm, a);
+
+					double tetraVolume = area * height / 3;
+
+					totalVolume += tetraVolume;
+				}
+			}
+
+			return totalVolume;
+		}
+	
 	void IfcGeometry::ReverseFace(uint32_t index)
 	{
-			fuzzybools::Face f = GetFace(index);
+			Face f = GetFace(index);
 			indexData[index * 3 + 0] = f.i2;
 			indexData[index * 3 + 1] = f.i1;
 			indexData[index * 3 + 2] = f.i0;
@@ -75,18 +318,18 @@ namespace webifc::geometry {
 		part.push_back(geom);
 	}
 
-	void IfcGeometry::AddPart(fuzzybools::Geometry geom)
+	void IfcGeometry::AddPart(Geometry geom)
 	{
 		IfcGeometry newGeom;
 		newGeom.MergeGeometry(geom);
 		part.push_back(newGeom);
 	}
 
-	void IfcGeometry::AddGeometry(fuzzybools::Geometry geom, glm::dmat4 trans, double scx, double scy, double scz, glm::dvec3 origin)
+	void IfcGeometry::AddGeometry(Geometry geom, glm::dmat4 trans, double scx, double scy, double scz, glm::dvec3 origin)
 	{
 		for (uint32_t i = 0; i < geom.numFaces; i++)
 		{
-			fuzzybools::Face f = geom.GetFace(i);
+			Face f = geom.GetFace(i);
 			glm::dvec3 a = geom.GetPoint(f.i0);
 			glm::dvec3 b = geom.GetPoint(f.i1);
 			glm::dvec3 c = geom.GetPoint(f.i2);
@@ -110,11 +353,11 @@ namespace webifc::geometry {
 		AddPart(geom);
 	}
 
-	void IfcGeometry::MergeGeometry(fuzzybools::Geometry geom)
+	void IfcGeometry::MergeGeometry(Geometry geom)
 	{
 		for (uint32_t i = 0; i < geom.numFaces; i++)
 		{
-			fuzzybools::Face f = geom.GetFace(i);
+			Face f = geom.GetFace(i);
 			glm::dvec3 a = geom.GetPoint(f.i0);
 			glm::dvec3 b = geom.GetPoint(f.i1);
 			glm::dvec3 c = geom.GetPoint(f.i2);

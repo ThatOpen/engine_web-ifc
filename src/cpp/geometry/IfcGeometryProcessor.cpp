@@ -1396,6 +1396,28 @@ namespace webifc::geometry
         }
     }
 
+    fuzzybools::Geometry convertToFuzzy(Geometry geom)
+    {
+        fuzzybools::Geometry newGeom;
+        newGeom.fvertexData = geom.fvertexData;
+		newGeom.vertexData = geom.vertexData;
+		newGeom.indexData = geom.indexData;
+		newGeom.numPoints = geom.numPoints;
+		newGeom.numFaces = geom.numFaces;
+        return newGeom;
+    }
+
+    IfcGeometry convertToWebIfc(fuzzybools::Geometry geom)
+    {
+        IfcGeometry newGeom;
+        newGeom.fvertexData = geom.fvertexData;
+		newGeom.vertexData = geom.vertexData;
+		newGeom.indexData = geom.indexData;
+		newGeom.numPoints = geom.numPoints;
+		newGeom.numFaces = geom.numFaces;
+        return newGeom;
+    }
+
     IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
     {
         spdlog::debug("[BoolProcess({})]");
@@ -1403,7 +1425,7 @@ namespace webifc::geometry
 
         for (auto &firstGeom : firstGeoms)
         {
-            fuzzybools::Geometry result = firstGeom;
+            fuzzybools::Geometry result = convertToFuzzy(firstGeom);
             for (auto &secondGeom : secondGeoms)
             {
                 bool doit = true;
@@ -1467,28 +1489,29 @@ namespace webifc::geometry
                     #endif
 
                     #ifdef CSG_DEBUG_OUTPUT
-                        IfcGeometry firstOperator;
-                        firstOperator.AddGeometry(result);
+                        IfcGeometry firstOperator = convertToWebIfc(result);
                         io::DumpIfcGeometry(firstOperator, "first.obj");
                     #endif
 
                     if (op == "DIFFERENCE")
                     {
-                        result = fuzzybools::Subtract(result, secondOperator);
+                        fuzzybools::Geometry secondFuzzGeom = convertToFuzzy(secondOperator);
+                        result = fuzzybools::Subtract(result, secondFuzzGeom);
                     }
                     else if (op == "UNION")
                     {
-                        result = fuzzybools::Union(result, secondOperator);
+                        fuzzybools::Geometry secondFuzzGeom = convertToFuzzy(secondOperator);
+                        result = fuzzybools::Union(result, secondFuzzGeom);
                     }
 
                     #ifdef CSG_DEBUG_OUTPUT
-                        IfcGeometry resultOperator;
-                        resultOperator.AddGeometry(result);
+                        IfcGeometry resultOperator = convertToWebIfc(result);
                         io::DumpIfcGeometry(resultOperator, "result.obj");
                     #endif
                 }
             }
-            finalResult.AddGeometry(result);
+            IfcGeometry resultWI = convertToWebIfc(result);
+            finalResult.AddGeometry(resultWI);
         }
 
         return finalResult;
