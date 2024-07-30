@@ -25,6 +25,20 @@ namespace webifc::geometry {
 		int i2;
 	};
 
+    struct AABB
+    {
+        uint32_t index;
+        Vec min = Vec(DBL_MAX, DBL_MAX, DBL_MAX);
+        Vec max = Vec(-DBL_MAX, -DBL_MAX, -DBL_MAX);
+        Vec center = Vec();
+
+        bool intersects(const AABB& other) const;
+        bool contains(const Vec& pos) const;
+        void merge(const AABB& other);
+        void merge(const glm::dvec3& other);
+        bool Intersect(const Vec& origin, const Vec& dir) const;
+    };
+
 	struct Geometry
 	{
 		std::vector<float> fvertexData;
@@ -36,12 +50,12 @@ namespace webifc::geometry {
 
 		void BuildFromVectors(std::vector<double>& d, std::vector<uint32_t>& i);
 		void AddPoint(glm::dvec4& pt, glm::dvec3& n);
-		fuzzybools::AABB GetAABB() const;
+		AABB GetAABB() const;
 		void AddPoint(glm::dvec3& pt, glm::dvec3& n);
 		void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c);
 		void AddFace(uint32_t a, uint32_t b, uint32_t c);
 		Face GetFace(size_t index) const;
-		fuzzybools::AABB GetFaceBox(size_t index) const;
+		AABB GetFaceBox(size_t index) const;
 		glm::dvec3 GetPoint(size_t index) const;
 		void GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const;
 		Geometry Normalize(glm::dvec3 center, glm::dvec3 extents) const;
