@@ -5,7 +5,7 @@
 #include "io_helpers.h"
 #include <fstream>
 #include "../geometry/operations/boolean-utils/fuzzy-bools.h"
-#include "../geometry/representation/ifcGeometry.h"
+#include "../geometry/representation/IfcGeometry.h"
 #include "../geometry/representation/geometry.h"
 
 namespace webifc::io
