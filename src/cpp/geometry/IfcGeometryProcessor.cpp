@@ -1606,7 +1606,7 @@ namespace webifc::geometry
         return newGeom;
     }
 
-    IfcGeometry booleanManager::mainBoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
+    IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
     {
         spdlog::debug("[BoolProcess({})]");
         IfcGeometry finalResult;
