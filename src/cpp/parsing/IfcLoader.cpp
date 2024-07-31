@@ -375,7 +375,7 @@ namespace webifc::parsing {
    long IfcLoader::GetIntArgument() const
    {
        std::string_view str = GetStringArgument();
-       return std::stol(std::string(str));
+       return std::stoll(std::string(str));
    }
 
   long IfcLoader::GetIntArgument(const uint32_t tapeOffset) const
