@@ -107,6 +107,127 @@ std::vector<webifc::geometry::IfcCrossSections> GetCrossSections3D(webifc::parsi
     return crossSections;
 }
 
+std::string ReadValue(webifc::parsing::IfcLoader &loader, webifc::parsing::IfcTokenType t)
+{
+    switch (t)
+    {
+    case webifc::parsing::IfcTokenType::STRING:
+    {
+        return loader.GetDecodedStringArgument();
+    }
+    case webifc::parsing::IfcTokenType::ENUM:
+    {
+        std::string_view s = loader.GetStringArgument();
+        return std::string(s);
+    }
+    case webifc::parsing::IfcTokenType::REAL:
+    {
+        std::string_view s = loader.GetDoubleArgumentAsString();
+        return std::string(s);
+    }
+    case webifc::parsing::IfcTokenType::INTEGER:
+    {
+        long d = loader.GetIntArgument();
+        return std::to_string(d);
+    }
+    case webifc::parsing::IfcTokenType::REF:
+    {
+        uint32_t ref = loader.GetRefArgument();
+        return std::to_string(ref);
+    }
+    default:
+        // use undefined to signal val parse issue
+        return "";
+    }
+}
+
+std::string GetArgs(webifc::parsing::IfcLoader &loader, bool inObject=false, bool inList=false)
+{
+    std::string arguments;
+    size_t size = 0;
+    bool endOfLine = false;
+    while (!loader.IsAtEnd() && !endOfLine)
+    {
+        webifc::parsing::IfcTokenType t = loader.GetTokenType();
+
+        switch (t)
+        {
+            case webifc::parsing::IfcTokenType::LINE_END:
+            {
+                endOfLine = true;
+                break;
+            }
+            case webifc::parsing::IfcTokenType::EMPTY:
+            {
+                arguments += " Empty ";
+                break;
+            }
+            case webifc::parsing::IfcTokenType::SET_BEGIN:
+            {
+                arguments += GetArgs(loader, false, true);
+                break;
+            }
+            case webifc::parsing::IfcTokenType::SET_END:
+            {
+                endOfLine = true;
+                break;
+            }
+            case webifc::parsing::IfcTokenType::LABEL:
+            {
+                // read label
+                std::string obj; 
+                obj = " type: LABEL ";
+                loader.StepBack();
+                auto s=loader.GetStringArgument();
+                // read set open
+                loader.GetTokenType();
+                obj += " value " + GetArgs(loader,true) + " ";
+                arguments += obj;
+                break;
+            }
+            case webifc::parsing::IfcTokenType::STRING:
+            case webifc::parsing::IfcTokenType::ENUM:
+            case webifc::parsing::IfcTokenType::REAL:
+            case webifc::parsing::IfcTokenType::INTEGER:
+            case webifc::parsing::IfcTokenType::REF:
+            {
+                loader.StepBack();
+                std::string obj;
+                if (inObject) obj = ReadValue(loader,t);
+                else {
+                    std::string obj; 
+                    obj += " type REF ";
+                    obj += ReadValue(loader,t) + " ";
+                }
+                arguments += obj;
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    return arguments;
+}
+
+std::string GetLine(webifc::parsing::IfcLoader &loader, uint32_t expressID)
+{
+    if (!loader.IsValidExpressID(expressID)) return "";
+    uint32_t lineType = loader.GetLineType(expressID);
+    if (lineType==0) return "";
+
+    loader.MoveToArgumentOffset(expressID, 0);
+
+    auto arguments = GetArgs(loader);
+
+    std::string retVal;
+    retVal += "\"ID\": " + std::to_string(expressID) + ", ";
+    retVal += "\"type\": " + std::to_string(lineType) + ", ";
+    retVal += "\"arguments\": " + arguments;
+    retVal += "}";
+
+    return retVal;
+}
+
 std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint32_t IdToExport)
 {
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
@@ -284,7 +405,7 @@ int main()
 
     // return 0;
 
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/weird-placement.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/test/969.ifc");
 
 
     struct LoaderSettings
@@ -324,9 +445,10 @@ int main()
 
     start = ms();
     
-    // SpecificLoadTest(loader, geometryLoader, 4963);
+    // SpecificLoadTest(loader, geometryLoader, 1089);
 
-    auto meshes = LoadAllTest(loader, geometryLoader, 4963);
+    auto meshes = LoadAllTest(loader, geometryLoader, -1);
+    std::cout << GetLine(loader, 225) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;
