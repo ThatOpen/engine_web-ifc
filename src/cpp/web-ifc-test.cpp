@@ -284,7 +284,7 @@ int main()
 
     // return 0;
 
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/weird-placement.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/test/missing_hole.ifc");
 
 
     struct LoaderSettings
@@ -324,9 +324,9 @@ int main()
 
     start = ms();
     
-    // SpecificLoadTest(loader, geometryLoader, 4963);
+    // SpecificLoadTest(loader, geometryLoader, 1089);
 
-    auto meshes = LoadAllTest(loader, geometryLoader, 4963);
+    auto meshes = LoadAllTest(loader, geometryLoader, 1089);
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;

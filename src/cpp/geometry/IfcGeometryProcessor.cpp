@@ -1396,125 +1396,9 @@ namespace webifc::geometry
         }
     }
 
-    fuzzybools::Geometry convertToFuzzy(Geometry geom)
-    {
-        fuzzybools::Geometry newGeom;
-        newGeom.fvertexData = geom.fvertexData;
-		newGeom.vertexData = geom.vertexData;
-		newGeom.indexData = geom.indexData;
-		newGeom.numPoints = geom.numPoints;
-		newGeom.numFaces = geom.numFaces;
-        return newGeom;
-    }
-
-    IfcGeometry convertToWebIfc(fuzzybools::Geometry geom)
-    {
-        IfcGeometry newGeom;
-        newGeom.fvertexData = geom.fvertexData;
-		newGeom.vertexData = geom.vertexData;
-		newGeom.indexData = geom.indexData;
-		newGeom.numPoints = geom.numPoints;
-		newGeom.numFaces = geom.numFaces;
-        return newGeom;
-    }
-
     IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
     {
-        spdlog::debug("[BoolProcess({})]");
-        IfcGeometry finalResult;
-
-        for (auto &firstGeom : firstGeoms)
-        {
-            fuzzybools::Geometry result = convertToFuzzy(firstGeom);
-            for (auto &secondGeom : secondGeoms)
-            {
-                bool doit = true;
-                if (secondGeom.numFaces == 0)
-                {
-                    spdlog::error("[BoolProcess()] bool aborted due to empty source or target");
-
-                    // bail out because we will get strange meshes
-                    // if this happens, probably there's an issue parsing the mesh that occurred earlier
-                    doit = false;
-                }
-
-                if (result.numFaces == 0)
-                {
-                    spdlog::error("[BoolProcess()] bool aborted due to empty source or target");
-
-                    // bail out because we will get strange meshes
-                    // if this happens, probably there's an issue parsing the mesh that occurred earlier
-                    break;
-                }
-
-                if (doit)
-                {
-                    IfcGeometry secondOperator;
-
-                    if (secondGeom.halfSpace)
-                    {
-                        glm::dvec3 origin = secondGeom.halfSpaceOrigin;
-                        glm::dvec3 x = secondGeom.halfSpaceX - origin;
-                        glm::dvec3 y = secondGeom.halfSpaceY - origin;
-                        glm::dvec3 z = secondGeom.halfSpaceZ - origin;
-                        glm::dmat4 trans = glm::dmat4(
-                            glm::dvec4(x, 0),
-                            glm::dvec4(y, 0),
-                            glm::dvec4(z, 0),
-                            glm::dvec4(0, 0, 0, 1)
-                        );
-
-                        double scaleX = 1;
-                        double scaleY = 1;
-                        double scaleZ = 1;
-
-                        for (uint32_t i = 0; i < result.numPoints; i++)
-                        {
-                            glm::dvec3 p = result.GetPoint(i);
-                            glm::dvec3 vec = (p - origin);
-                            double dx = glm::dot(vec, x);
-                            double dy = glm::dot(vec, y);
-                            double dz = glm::dot(vec, z);
-                            if (glm::abs(dx) > scaleX) {scaleX = glm::abs(dx); }
-                            if (glm::abs(dy) > scaleY) {scaleY = glm::abs(dy); }
-                            if (glm::abs(dz) > scaleZ) {scaleZ = glm::abs(dz); }
-                        }
-                        secondOperator.AddGeometry(secondGeom, trans, scaleX * 2, scaleY * 2, scaleZ * 2, secondGeom.halfSpaceOrigin);
-                    } else {
-                        secondOperator = secondGeom;
-                    }
-
-                    #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpIfcGeometry(secondOperator, "second.obj");
-                    #endif
-
-                    #ifdef CSG_DEBUG_OUTPUT
-                        IfcGeometry firstOperator = convertToWebIfc(result);
-                        io::DumpIfcGeometry(firstOperator, "first.obj");
-                    #endif
-
-                    if (op == "DIFFERENCE")
-                    {
-                        fuzzybools::Geometry secondFuzzGeom = convertToFuzzy(secondOperator);
-                        result = fuzzybools::Subtract(result, secondFuzzGeom);
-                    }
-                    else if (op == "UNION")
-                    {
-                        fuzzybools::Geometry secondFuzzGeom = convertToFuzzy(secondOperator);
-                        result = fuzzybools::Union(result, secondFuzzGeom);
-                    }
-
-                    #ifdef CSG_DEBUG_OUTPUT
-                        IfcGeometry resultOperator = convertToWebIfc(result);
-                        io::DumpIfcGeometry(resultOperator, "result.obj");
-                    #endif
-                }
-            }
-            IfcGeometry resultWI = convertToWebIfc(result);
-            finalResult.AddGeometry(resultWI);
-        }
-
-        return finalResult;
+        return boolEngine.BoolProcess(firstGeoms, secondGeoms, op);
     }
 
     std::vector<uint32_t> IfcGeometryProcessor::Read2DArrayOfThreeIndices()
@@ -1698,6 +1582,136 @@ namespace webifc::geometry
             spdlog::error("[AddFaceToGeometry()] unexpected face type {}", expressID, lineType);
             break;
         }
+    }
+
+    fuzzybools::Geometry booleanManager::convertToEngine(Geometry geom)
+    {
+        fuzzybools::Geometry newGeom;
+        newGeom.fvertexData = geom.fvertexData;
+		newGeom.vertexData = geom.vertexData;
+		newGeom.indexData = geom.indexData;
+		newGeom.numPoints = geom.numPoints;
+		newGeom.numFaces = geom.numFaces;
+        return newGeom;
+    }
+
+    IfcGeometry booleanManager::convertToWebIfc(fuzzybools::Geometry geom)
+    {
+        IfcGeometry newGeom;
+        newGeom.fvertexData = geom.fvertexData;
+		newGeom.vertexData = geom.vertexData;
+		newGeom.indexData = geom.indexData;
+		newGeom.numPoints = geom.numPoints;
+		newGeom.numFaces = geom.numFaces;
+        return newGeom;
+    }
+
+    IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
+    {
+        spdlog::debug("[BoolProcess({})]");
+        IfcGeometry finalResult;
+
+        for (auto &firstGeom : firstGeoms)
+        {
+            IfcGeometry result = firstGeom;
+            for (auto &secondGeom : secondGeoms)
+            {
+                bool doit = true;
+                if (secondGeom.numFaces == 0)
+                {
+                    spdlog::error("[BoolProcess()] bool aborted due to empty source or target");
+
+                    // bail out because we will get strange meshes
+                    // if this happens, probably there's an issue parsing the mesh that occurred earlier
+                    doit = false;
+                }
+
+                if (result.numFaces == 0)
+                {
+                    spdlog::error("[BoolProcess()] bool aborted due to empty source or target");
+
+                    // bail out because we will get strange meshes
+                    // if this happens, probably there's an issue parsing the mesh that occurred earlier
+                    break;
+                }
+
+                if (doit)
+                {
+                    IfcGeometry secondOperator;
+
+                    if (secondGeom.halfSpace)
+                    {
+                        glm::dvec3 origin = secondGeom.halfSpaceOrigin;
+                        glm::dvec3 x = secondGeom.halfSpaceX - origin;
+                        glm::dvec3 y = secondGeom.halfSpaceY - origin;
+                        glm::dvec3 z = secondGeom.halfSpaceZ - origin;
+                        glm::dmat4 trans = glm::dmat4(
+                            glm::dvec4(x, 0),
+                            glm::dvec4(y, 0),
+                            glm::dvec4(z, 0),
+                            glm::dvec4(0, 0, 0, 1)
+                        );
+
+                        double scaleX = 1;
+                        double scaleY = 1;
+                        double scaleZ = 1;
+
+                        for (uint32_t i = 0; i < result.numPoints; i++)
+                        {
+                            glm::dvec3 p = result.GetPoint(i);
+                            glm::dvec3 vec = (p - origin);
+                            double dx = glm::dot(vec, x);
+                            double dy = glm::dot(vec, y);
+                            double dz = glm::dot(vec, z);
+                            if (glm::abs(dx) > scaleX) {scaleX = glm::abs(dx); }
+                            if (glm::abs(dy) > scaleY) {scaleY = glm::abs(dy); }
+                            if (glm::abs(dz) > scaleZ) {scaleZ = glm::abs(dz); }
+                        }
+                        secondOperator.AddGeometry(secondGeom, trans, scaleX * 2, scaleY * 2, scaleZ * 2, secondGeom.halfSpaceOrigin);
+                    } else {
+                        secondOperator = secondGeom;
+                    }
+
+                    #ifdef CSG_DEBUG_OUTPUT
+                        io::DumpIfcGeometry(secondOperator, "second.obj");
+                    #endif
+
+                    #ifdef CSG_DEBUG_OUTPUT
+                        io::DumpIfcGeometry(result, "first.obj");
+                    #endif
+
+                    if (op == "DIFFERENCE")
+                    {
+                        result = Subtract(result, secondOperator);
+                    }
+                    else if (op == "UNION")
+                    {
+                        result = Union(result, secondOperator);
+                    }
+
+                    #ifdef CSG_DEBUG_OUTPUT
+                        io::DumpIfcGeometry(result, "result.obj");
+                    #endif
+                }
+            }
+            finalResult.AddGeometry(result);
+        }
+
+        return finalResult;
+    }
+
+    IfcGeometry booleanManager::Union(IfcGeometry firstOperator, IfcGeometry secondOperator)
+    {        
+        fuzzybools::Geometry firstEngGeom = convertToEngine(firstOperator);
+        fuzzybools::Geometry secondEngGeom = convertToEngine(secondOperator);
+        return convertToWebIfc(fuzzybools::Union(firstEngGeom, secondEngGeom));
+    }
+
+    IfcGeometry booleanManager::Subtract(IfcGeometry firstOperator, IfcGeometry secondOperator)
+    {
+        fuzzybools::Geometry firstEngGeom = convertToEngine(firstOperator);
+        fuzzybools::Geometry secondEngGeom = convertToEngine(secondOperator);
+        return convertToWebIfc(fuzzybools::Subtract(firstEngGeom, secondEngGeom));
     }
 
 }
