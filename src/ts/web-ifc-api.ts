@@ -775,8 +775,6 @@ export class IfcAPI {
      */
     GetAllAlignments(modelID: number): any {
         const alignments = this.wasmModule.GetAllAlignments(modelID);
-        console.log("RAW");
-        console.log(alignments);
         const alignmentList = [];
         for (let i = 0; i < alignments.size(); i++) {
           const alignment = alignments.get(i);
