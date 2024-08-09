@@ -10,6 +10,14 @@
     lodash.assignwith "^4.2.0"
     typical "^7.1.1"
 
+"@75lb/deep-merge@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@75lb/deep-merge/-/deep-merge-1.1.2.tgz#6aa53d9730e64a159075da65d3bd057abfe1dde0"
+  integrity sha512-08K9ou5VNbheZFxM5tDWoqjA3ImC50DiuuJ2tj1yEPRfkp8lLLg6XAaJ4On+a0yAXor/8ay5gHnAIshRM44Kpw==
+  dependencies:
+    lodash "^4.17.21"
+    typical "^7.1.1"
+
 "@ampproject/remapping@^2.2.0":
   version "2.3.0"
   resolved "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.3.0.tgz"
@@ -1217,10 +1225,10 @@ byte-size@^6.2.0:
   resolved "https://registry.npmjs.org/byte-size/-/byte-size-6.2.0.tgz"
   integrity sha512-6EspYUCAPMc7E2rltBgKwhG+Cmk0pDm9zDtF1Awe2dczNUL3YpZ8mTs/dueOTS1hqGWBOatqef4jYMGjln7WmA==
 
-byte-size@^8.1.1:
-  version "8.1.1"
-  resolved "https://registry.npmjs.org/byte-size/-/byte-size-8.1.1.tgz"
-  integrity sha512-tUkzZWK0M/qdoLEqikxBWe4kumyuwjl3HO6zHTr4yEI23EojPtLYXdG1+AQY7MN0cGyNDvEaJ8wiYQm6P2bPxg==
+byte-size@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/byte-size/-/byte-size-9.0.0.tgz#ab0eaa699a5247d611ec806348ea4f1819a17d54"
+  integrity sha512-xrJ8Hki7eQ6xew55mM6TG9zHI852OoAHcPfduWWtR6yxk2upTuIZy13VioRBDyHReHDdbeDPifUboeNkK/sXXA==
 
 bytes@3.1.2, bytes@^3.1.2:
   version "3.1.2"
@@ -3010,7 +3018,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-lodash@^4.7.0:
+lodash@^4.17.21, lodash@^4.7.0:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -3143,14 +3151,14 @@ lws-static@^3.1.0:
     koa-static "^5.0.0"
 
 lws@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.npmjs.org/lws/-/lws-4.1.4.tgz"
-  integrity sha512-Wo2jbQBdfPM9fW0NxLbCcA9uDjNYzZ8+rNUWuw0Yec3ai7CM+61l8pQiMnP4HxJ5maUC6S7pUcf7oXbJlDO9kQ==
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/lws/-/lws-4.1.5.tgz#fe3d59abead8946733d7c57f97a19fc1e8d5583c"
+  integrity sha512-MGRogJgMXFuurf5VOUKOoBeBYYlmxvaxNX/q5SJC/GzHxAqLxcQ4I21NrGkZVmCdSladgyEyC1tm/s0sT1OMPQ==
   dependencies:
-    "@75lb/deep-merge" "^1.1.1"
+    "@75lb/deep-merge" "^1.1.2"
     ansi-escape-sequences "^6.2.2"
     array-back "^6.2.2"
-    byte-size "^8.1.1"
+    byte-size "^9.0.0"
     command-line-args "^6.0.0"
     command-line-usage "^7.0.3"
     create-mixin "^3.0.0"
