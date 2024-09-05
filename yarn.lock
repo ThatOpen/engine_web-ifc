@@ -1498,9 +1498,9 @@ cssstyle@^2.3.0:
     cssom "~0.3.6"
 
 current-module-paths@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/current-module-paths/-/current-module-paths-1.1.1.tgz"
-  integrity sha512-8Ga5T8oMXBaSsHq9Gj+bddX7kHSaJKsl2vaAd3ep51eQLkr4W18eFEmEZM5bLo1zrz8tt3jE1U8QK9QGhaLR4g==
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/current-module-paths/-/current-module-paths-1.1.2.tgz#13a2d821b2f864c3adead261b7954b068510c32f"
+  integrity sha512-H4s4arcLx/ugbu1XkkgSvcUZax0L6tXUqnppGniQb8l5VjUKGHoayXE5RiriiPhYDd+kjZnaok1Uig13PKtKYQ==
 
 data-urls@^2.0.0:
   version "2.0.0"
