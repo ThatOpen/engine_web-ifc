@@ -38,12 +38,12 @@ constexpr double tolerancePointOnLine     = 1.0E-04;
 */    
 constexpr double toleranceParallel      = 1.0E-04;
 constexpr double toleranceParallelTight = 1.0E-10;
-constexpr double toleranceInsideOutside = 1.0E-10;
+constexpr double toleranceInsideOutside = 1.0E-04;
 
 /*
     Constants used in function isInsideMesh
 */    
-constexpr double toleranceBoundaryPoint = 1.0E-10;
+constexpr double toleranceBoundaryPoint = 1.0E-04;
 
 /*
     Constants used in function AddFace in geometry.h
