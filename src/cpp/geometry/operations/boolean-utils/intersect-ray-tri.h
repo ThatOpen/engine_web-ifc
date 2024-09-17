@@ -83,7 +83,7 @@ namespace fuzzybools
         (c) Check if the triangle is behind the ray.  If so, return false.
 */    
 //      if (t < -toleranceInsideOutside * dirLength) return false;
-        if (t < -toleranceInsideOutside) return false;
+        if (t < -toleranceInsideOutsideToPlane) return false;
 /*
         (d) Compute p, the point of intersection.
 */    
