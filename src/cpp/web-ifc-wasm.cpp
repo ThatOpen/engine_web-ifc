@@ -13,9 +13,10 @@
 #include "modelmanager/ModelManager.h"
 #include "version.h"
 
-void p21encode(std::string_view input, std::ostringstream &output);
-std::string p21decode(std::string_view & str);    
- 
+namespace webifc::parsing { 
+    void p21encode(std::string_view input, std::ostringstream &output);
+    std::string p21decode(std::string_view & str);    
+}
 
 #ifdef __EMSCRIPTEN_PTHREADS__
     constexpr bool MT_ENABLED = true;
@@ -711,13 +712,13 @@ void SetLogLevel(uint8_t levelArg) {
 std::string EncodeText(std::string text) {
     const std::string_view strView{text};
     std::ostringstream output;
-    p21encode(strView,output);
+    webifc::parsing::p21encode(strView,output);
     return output.str();
 }
 
 std::string DecodeText(std::string text) {
     std::string_view strView{text};
-    return p21decode(strView);
+    return webifc::parsing::p21decode(strView);
 }
 
 EMSCRIPTEN_BINDINGS(my_module) {
