@@ -45,7 +45,7 @@ namespace fuzzybools
         BVH& bvh
     )
     {
-        Vec dir(1.0, 1.1, 1.4);   // From where does this come?
+        Vec dir(1.0, 1.1, 1.4);   // From where does this come? // This is an arbitrary direction to evaluate inside/outside
         int winding = 0;
 
         InsideResult result;
@@ -63,16 +63,15 @@ namespace fuzzybools
 
                 Vec intersection;
                 double distance;
-                bool hasIntersection = intersect_ray_triangle(pt, pt + dir, a, b, c, intersection, distance, true);
+                double d_plane;
+                bool hasIntersection = intersect_ray_triangle(pt, pt + dir, a, b, c, intersection, distance, d_plane, true);
                 if (hasIntersection)
                 {
                     Vec otherNormal = computeNormal(a, b, c);  // normalised
                     double d = glm::dot(otherNormal, dir);
                     double dn = glm::dot(otherNormal, normal);
-                    if (std::fabs(distance) < toleranceBoundaryPoint)
+                    if (std::fabs(d_plane) < toleranceBoundaryPoint)
                     {
-
-                    
                         if (dn > 1.0 - toleranceParallel)
                         {
 /*
@@ -101,15 +100,16 @@ namespace fuzzybools
                         }    
                     }
 
+                    // It will never reach the --else-- code
 //                  if (true || d >= 0)
-                    if (true || d > toleranceParallelTight)
-                    {
-                        winding++;
-                    }
-                    else
-                    {
-                        winding--;
-                    }
+                    // if (true || d > toleranceParallelTight)
+                    // {
+                    winding++;
+                    // }
+                    // else
+                    // {
+                    //     winding--;
+                    // }
                 }
 
                 // Continue to search.

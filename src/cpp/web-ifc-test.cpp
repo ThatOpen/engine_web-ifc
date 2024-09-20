@@ -405,7 +405,7 @@ int main()
 
     // return 0;
 
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/trouble wall.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/993.ifc");
 
 
     struct LoaderSettings
@@ -445,9 +445,9 @@ int main()
 
     start = ms();
     
-    SpecificLoadTest(loader, geometryLoader, 778508);
+    SpecificLoadTest(loader, geometryLoader, 3649);
 
-    // auto meshes = LoadAllTest(loader, geometryLoader, -1);
+    auto meshes = LoadAllTest(loader, geometryLoader, 3649);
     std::cout << GetLine(loader, 225) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
 
