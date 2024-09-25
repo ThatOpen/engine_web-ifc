@@ -82,10 +82,6 @@ namespace fuzzybools
             {
                 if (isInside2 == MeshLocation::INSIDE || isInside1 == MeshLocation::OUTSIDE)
                 {
-                    if(isInside1 == MeshLocation::INSIDE)
-                    {
-                        doit = true;
-                    }
                     // inside 2, with subtract, means don't include
                     // outside 1, with subtract, means don't include
                 }
