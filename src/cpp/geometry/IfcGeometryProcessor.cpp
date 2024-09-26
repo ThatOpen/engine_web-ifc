@@ -1352,10 +1352,13 @@ namespace webifc::geometry
             if (!_isCoordinated && _coordinateToOrigin)
             {
                 auto &geom = _expressIDToGeometry[composedMesh.expressID];
-                auto pt = geom.GetPoint(0);
-                auto transformedPt = newMatrix * glm::dvec4(pt, 1);
-                _coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
-                _isCoordinated = true;
+                if(geom.numPoints > 0)
+                {
+                    auto pt = geom.GetPoint(0);
+                    auto transformedPt = newMatrix * glm::dvec4(pt, 1);
+                    _coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
+                    _isCoordinated = true;
+                }
             }
 
      
