@@ -1244,8 +1244,10 @@ namespace fuzzybools
 
                 auto triCenter = (ptA + ptB + ptC) / 3.0;
 
-                auto posA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA);
-                auto posB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB);
+                Vec raydir = computeNormal(ptA, ptB, ptC);
+
+                auto posA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                auto posB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB, raydir);
 
                 if (posA.loc != MeshLocation::BOUNDARY && posB.loc != MeshLocation::BOUNDARY)
                 {
@@ -1554,7 +1556,7 @@ namespace fuzzybools
                 {
                     edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
                 }
-                DumpSVGLines(edges, L"contour.html");
+                DumpSVGLines(edges, L"contour_A.html");
             #endif
 
             for (auto& segment : contours)
@@ -1567,6 +1569,20 @@ namespace fuzzybools
 
         for (auto& [planeId, contours] : contoursB)
         {
+            std::vector<std::vector<glm::dvec2>> edges;
+
+            Plane& p = sp.planes[planeId];
+
+            #ifdef CSG_DEBUG_OUTPUT
+                auto basis = p.MakeBasis();
+
+                for (auto& segment : contours)
+                {
+                    edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
+                }
+                DumpSVGLines(edges, L"contour_B.html");
+            #endif
+
             for (auto& segment : contours)
             {
                 auto lineId = sp.planes[planeId].AddLine(sp.points[segment.first], sp.points[segment.second]);

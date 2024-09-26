@@ -49,8 +49,10 @@ namespace fuzzybools
 
             auto isInsideTarget = MeshLocation::INSIDE;
 
-            auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1);
-            auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2);
+            Vec raydir = computeNormal(a, b, c);
+
+            auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir);
+            auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir);
 
             auto isInside1 = isInside1Loc.loc;
             auto isInside2 = isInside2Loc.loc;
@@ -157,8 +159,10 @@ namespace fuzzybools
 
             auto isInsideTarget = MeshLocation::INSIDE;
 
-            auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1);
-            auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2);
+            Vec raydir = computeNormal(a, b, c);
+
+            auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir);
+            auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir);
 
             auto isInside1 = isInside1Loc.loc;
             auto isInside2 = isInside2Loc.loc;
