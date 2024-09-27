@@ -1558,11 +1558,11 @@ namespace webifc::geometry
             }
             else if (surface.CylinderSurface.Active)
             {
-                TriangulateCylindricalSurface(geometry, bounds3D, surface);
+                TriangulateCylindricalSurface(geometry, bounds3D, surface, _circleSegments);
             }
             else if (surface.RevolutionSurface.Active)
             {
-                TriangulateRevolution(geometry, bounds3D, surface);
+                TriangulateRevolution(geometry, bounds3D, surface, _circleSegments);
             }
             else if (surface.ExtrusionSurface.Active)
             {

@@ -21,7 +21,7 @@ namespace webifc::geometry
 {
 
 	// TODO: review and simplify
-	inline void TriangulateRevolution(IfcGeometry& geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
+	inline void TriangulateRevolution(IfcGeometry& geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double numRots)
 	{
 		spdlog::debug("[TriangulateRevolution({})]");
 			// First we get the revolution data
@@ -32,8 +32,6 @@ namespace webifc::geometry
 		glm::dvec3 vecZ = glm::normalize(surface.RevolutionSurface.Direction[2]);
 
 		std::vector<std::vector<glm::dvec3>> newPoints;
-
-		double numRots = 10;
 
 		for (int r = 0; r < numRots; r++)
 		{
@@ -195,7 +193,7 @@ namespace webifc::geometry
 	}
 
 		// TODO: review and simplify
-	inline void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
+	inline void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double numRots)
 	{
 		spdlog::debug("[TriangulateCylindricalSurface({})]");
 		// First we get the cylinder data
@@ -208,7 +206,6 @@ namespace webifc::geometry
 
 		std::vector<std::vector<glm::dvec3>> newPoints;
 
-		double numRots = 10;
 		double minZ = 1e+10;
 		double maxZ = -1e+10;
 
