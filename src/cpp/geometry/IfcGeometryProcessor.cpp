@@ -321,15 +321,8 @@ namespace webifc::geometry
                 uint32_t firstOperandID = _loader.GetRefArgument();
                 uint32_t secondOperandID = _loader.GetRefArgument();
 
-                uint32_t nestLevel2 = nestLevel + 1;
-
-                if(nestLevel > 20)
-                {
-                    return mesh;
-                }
-
-                auto firstMesh = GetMesh(firstOperandID, nestLevel2);
-                auto secondMesh = GetMesh(secondOperandID, nestLevel2);
+                auto firstMesh = GetMesh(firstOperandID, nestLevel + 1);
+                auto secondMesh = GetMesh(secondOperandID, nestLevel + 1);
 
                 auto origin = GetOrigin(firstMesh, _expressIDToGeometry);
                 auto normalizeMat = glm::translate(-origin);
@@ -460,9 +453,9 @@ namespace webifc::geometry
                     }
                 }
 
-#ifdef DUMP_CSG_MESHES
-                DumpIfcGeometry(geom, "pbhs.obj");
-#endif
+                #ifdef DUMP_CSG_MESHES
+                    DumpIfcGeometry(geom, "pbhs.obj");
+                #endif
 
                 // TODO: this is getting problematic.....
                 _expressIDToGeometry[expressID] = geom;
@@ -850,10 +843,10 @@ namespace webifc::geometry
                 double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
                 bool flipWinding = dirDot < 0; // can't be perp according to spec
 
-// TODO: correct dump in case of compositeProfile
-#ifdef CSG_DEBUG_OUTPUT
-                io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
-#endif
+                // TODO: correct dump in case of compositeProfile
+                #ifdef CSG_DEBUG_OUTPUT
+                    io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
+                #endif
 
                 IfcGeometry geom;
 
@@ -891,10 +884,10 @@ namespace webifc::geometry
                     }
                 }
 
-// TODO: correct dump in case of compositeProfile
-#ifdef CSG_DEBUG_OUTPUT
-                io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
-#endif
+                // TODO: correct dump in case of compositeProfile
+                #ifdef CSG_DEBUG_OUTPUT
+                    io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
+                #endif
 
                 _expressIDToGeometry[expressID] = geom;
                 mesh.expressID = expressID;
