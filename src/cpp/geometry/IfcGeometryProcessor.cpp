@@ -73,7 +73,7 @@ namespace webifc::geometry
         return _coordinationMatrix;
     }
 
-    IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID, uint32_t nestLevel)
+    IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID)
     {
         spdlog::debug("[GetMesh({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
@@ -321,8 +321,8 @@ namespace webifc::geometry
                 uint32_t firstOperandID = _loader.GetRefArgument();
                 uint32_t secondOperandID = _loader.GetRefArgument();
 
-                auto firstMesh = GetMesh(firstOperandID, nestLevel + 1);
-                auto secondMesh = GetMesh(secondOperandID, nestLevel + 1);
+                auto firstMesh = GetMesh(firstOperandID);
+                auto secondMesh = GetMesh(secondOperandID);
 
                 auto origin = GetOrigin(firstMesh, _expressIDToGeometry);
                 auto normalizeMat = glm::translate(-origin);
