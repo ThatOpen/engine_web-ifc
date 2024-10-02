@@ -21,6 +21,7 @@
 #include "loop-finder.h"
 #include "obj-exporter.h"
 #include "is-inside-mesh.h"
+#include "is-inside-boundary.h"
 
 using Vec2 = glm::dvec2;
 using Vec3 = glm::dvec3;
@@ -1253,6 +1254,52 @@ namespace fuzzybools
                 {
                     continue;
                 }
+
+                // If the 2D triangle is not inside the boundaries of the projected boundary of the face it requires further verification
+                // It can't be discarded because inside/outside could fail when boundaries have internal partitions
+                // Therefore new tests are required to verify that the triangle is on the boundary of A or B
+
+                glm::dvec2 t1 = projectedPoints[tri.vertices[0]];
+                glm::dvec2 t2 = projectedPoints[tri.vertices[1]];
+                glm::dvec2 t3 = projectedPoints[tri.vertices[2]];
+
+                bool inside2d = isInsideBoundary(t1,t2,t3, edges, projectedPoints);
+
+                if(!inside2d)
+                {
+                    double inc = 0.9;
+                    
+                    auto ptt = glm::mix(triCenter, ptA, inc);
+
+                    auto postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                    auto postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+
+                    if (postA.loc != MeshLocation::BOUNDARY && postB.loc != MeshLocation::BOUNDARY)
+                    {
+                        continue;
+                    }
+
+                    ptt = glm::mix(triCenter, ptB, inc);
+
+                    postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                    postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+
+                    if (postA.loc != MeshLocation::BOUNDARY && postB.loc != MeshLocation::BOUNDARY)
+                    {
+                        continue;
+                    }
+
+                    ptt = glm::mix(triCenter, ptC, inc);
+
+                    postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                    postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+
+                    if (postA.loc != MeshLocation::BOUNDARY && postB.loc != MeshLocation::BOUNDARY)
+                    {
+                        continue;
+                    }               
+                }
+
 
                 // although CDT is great, it spits out too many or too little tris, we fix it manually
                 //if (!IsPointInsideLoop(projectedPoints, contourLoop, triCenter))
