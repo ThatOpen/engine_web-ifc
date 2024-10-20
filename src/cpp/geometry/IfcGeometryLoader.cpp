@@ -1435,6 +1435,27 @@ namespace webifc::geometry
       double x = _loader.GetDoubleArgument();
       double y = _loader.GetDoubleArgument();
       double z = _loader.GetDoubleArgument();
+
+/*
+        Round all coordinates, after they are read, to a specified number of decimal places.
+        For example, if the rounding is to be in the fourth decimal place, then set
+            ROUNDING = 1.0E-04
+        and
+            ROUNDING_RECIPROCAL = 1.0E+04.
+
+        To disable/enable rounding, set ROUNDING_ENABLE to 0/1.  This value is set in EPS.h.
+*/
+    if (ROUNDING_ENABLE == 1)
+    {
+        int q = 0;
+        q = (int)(x * ROUNDING_RECIPROCAL + 0.5);
+        x = q * ROUNDING;
+        q = (int)(y * ROUNDING_RECIPROCAL + 0.5);
+        y = q * ROUNDING;
+        q = (int)(z * ROUNDING_RECIPROCAL + 0.5);
+        z = q * ROUNDING;
+    }
+
       result.emplace_back(x, y, z);
 
       // read point set end
