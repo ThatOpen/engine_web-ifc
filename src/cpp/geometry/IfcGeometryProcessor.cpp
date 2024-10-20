@@ -73,7 +73,7 @@ namespace webifc::geometry
         return _coordinationMatrix;
     }
 
-    IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID, uint32_t nestLevel)
+    IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID)
     {
         spdlog::debug("[GetMesh({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
@@ -321,15 +321,8 @@ namespace webifc::geometry
                 uint32_t firstOperandID = _loader.GetRefArgument();
                 uint32_t secondOperandID = _loader.GetRefArgument();
 
-                uint32_t nestLevel2 = nestLevel + 1;
-
-                if(nestLevel > 20)
-                {
-                    return mesh;
-                }
-
-                auto firstMesh = GetMesh(firstOperandID, nestLevel2);
-                auto secondMesh = GetMesh(secondOperandID, nestLevel2);
+                auto firstMesh = GetMesh(firstOperandID);
+                auto secondMesh = GetMesh(secondOperandID);
 
                 auto origin = GetOrigin(firstMesh, _expressIDToGeometry);
                 auto normalizeMat = glm::translate(-origin);
@@ -460,9 +453,9 @@ namespace webifc::geometry
                     }
                 }
 
-#ifdef DUMP_CSG_MESHES
-                DumpIfcGeometry(geom, "pbhs.obj");
-#endif
+                #ifdef DUMP_CSG_MESHES
+                    DumpIfcGeometry(geom, "pbhs.obj");
+                #endif
 
                 // TODO: this is getting problematic.....
                 _expressIDToGeometry[expressID] = geom;
@@ -850,10 +843,10 @@ namespace webifc::geometry
                 double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
                 bool flipWinding = dirDot < 0; // can't be perp according to spec
 
-// TODO: correct dump in case of compositeProfile
-#ifdef CSG_DEBUG_OUTPUT
-                io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
-#endif
+                // TODO: correct dump in case of compositeProfile
+                #ifdef CSG_DEBUG_OUTPUT
+                    io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
+                #endif
 
                 IfcGeometry geom;
 
@@ -891,10 +884,10 @@ namespace webifc::geometry
                     }
                 }
 
-// TODO: correct dump in case of compositeProfile
-#ifdef CSG_DEBUG_OUTPUT
-                io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
-#endif
+                // TODO: correct dump in case of compositeProfile
+                #ifdef CSG_DEBUG_OUTPUT
+                    io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
+                #endif
 
                 _expressIDToGeometry[expressID] = geom;
                 mesh.expressID = expressID;
@@ -1352,10 +1345,13 @@ namespace webifc::geometry
             if (!_isCoordinated && _coordinateToOrigin)
             {
                 auto &geom = _expressIDToGeometry[composedMesh.expressID];
-                auto pt = geom.GetPoint(0);
-                auto transformedPt = newMatrix * glm::dvec4(pt, 1);
-                _coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
-                _isCoordinated = true;
+                if(geom.numPoints > 0)
+                {
+                    auto pt = geom.GetPoint(0);
+                    auto transformedPt = newMatrix * glm::dvec4(pt, 1);
+                    _coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
+                    _isCoordinated = true;
+                }
             }
 
      
@@ -1562,11 +1558,11 @@ namespace webifc::geometry
             }
             else if (surface.CylinderSurface.Active)
             {
-                TriangulateCylindricalSurface(geometry, bounds3D, surface);
+                TriangulateCylindricalSurface(geometry, bounds3D, surface, _circleSegments);
             }
             else if (surface.RevolutionSurface.Active)
             {
-                TriangulateRevolution(geometry, bounds3D, surface);
+                TriangulateRevolution(geometry, bounds3D, surface, _circleSegments);
             }
             else if (surface.ExtrusionSurface.Active)
             {

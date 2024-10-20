@@ -42,12 +42,12 @@ namespace fuzzybools
         const Vec& pt,
         Vec normal,
         const Geometry& g,
-        BVH& bvh
+        BVH& bvh,
+        Vec dir = Vec(1.0, 1.1, 1.4) // assuming Vec constructor takes 3 doubles
     )
     {
-        Vec dir(1.0, 1.1, 1.4);   // From where does this come? // This is an arbitrary direction to evaluate inside/outside
         int winding = 0;
-
+        dir = dir + Vec(0.02,0.01,0.04); //Randomly changing the normal to create a truly random direction for raytrace 
         InsideResult result;
         result.loc = MeshLocation::BOUNDARY;
         result.normal = glm::dvec3(0);

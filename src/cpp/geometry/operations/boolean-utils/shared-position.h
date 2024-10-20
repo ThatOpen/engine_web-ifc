@@ -21,6 +21,7 @@
 #include "loop-finder.h"
 #include "obj-exporter.h"
 #include "is-inside-mesh.h"
+#include "is-inside-boundary.h"
 
 using Vec2 = glm::dvec2;
 using Vec3 = glm::dvec3;
@@ -366,8 +367,7 @@ namespace fuzzybools
 
         bool IsEqualTo(const Vec3& n, double d)
         {
-            return (equals(normal,  n, toleranceVectorEquality) && equals(distance,  d, toleranceScalarEquality)) ||
-                   (equals(normal, -n, toleranceVectorEquality) && equals(distance, -d, toleranceScalarEquality));
+            return (equals(normal,  n, toleranceVectorEquality) && equals(distance,  d, toleranceScalarEquality));
         }
 
 //============================================================================================
@@ -901,6 +901,19 @@ namespace fuzzybools
                     continue;
                 }
 
+                if (isA)
+                {
+                    #ifdef CSG_DEBUG_OUTPUT
+                        DumpGeometry(geom, L"Initial_A.obj");
+                    #endif
+                }
+                else
+                {
+                    #ifdef CSG_DEBUG_OUTPUT
+                        DumpGeometry(geom, L"Initial_B.obj");
+                    #endif
+                }
+
                 auto a = geom.GetPoint(f.i0);
                 auto b = geom.GetPoint(f.i1);
                 auto c = geom.GetPoint(f.i2);
@@ -1196,6 +1209,7 @@ namespace fuzzybools
             //auto contourLoop = FindLargestEdgeLoop(projectedPoints, edges);
 
             #ifdef CSG_DEBUG_OUTPUT
+                std::vector<std::vector<glm::dvec2>> edges3DTriangles;
                 std::set<std::pair<size_t, size_t>> edgesTriangles;
                 std::set<std::pair<size_t, size_t>> finalEdgesTriangles;
             #endif
@@ -1231,13 +1245,61 @@ namespace fuzzybools
 
                 auto triCenter = (ptA + ptB + ptC) / 3.0;
 
-                auto posA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA);
-                auto posB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB);
+                Vec raydir = computeNormal(ptA, ptB, ptC);
+
+                auto posA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                auto posB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB, raydir);
 
                 if (posA.loc != MeshLocation::BOUNDARY && posB.loc != MeshLocation::BOUNDARY)
                 {
                     continue;
                 }
+
+                // If the 2D triangle is not inside the boundaries of the projected boundary of the face it requires further verification
+                // It can't be discarded because inside/outside could fail when boundaries have internal partitions
+                // Therefore new tests are required to verify that the triangle is on the boundary of A or B
+
+                glm::dvec2 t1 = projectedPoints[tri.vertices[0]];
+                glm::dvec2 t2 = projectedPoints[tri.vertices[1]];
+                glm::dvec2 t3 = projectedPoints[tri.vertices[2]];
+
+                bool inside2d = isInsideBoundary(t1,t2,t3, edges, projectedPoints);
+
+                if(!inside2d)
+                {
+                    double inc = 0.9;
+                    
+                    auto ptt = glm::mix(triCenter, ptA, inc);
+
+                    auto postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                    auto postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+
+                    if (postA.loc != MeshLocation::BOUNDARY && postB.loc != MeshLocation::BOUNDARY)
+                    {
+                        continue;
+                    }
+
+                    ptt = glm::mix(triCenter, ptB, inc);
+
+                    postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                    postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+
+                    if (postA.loc != MeshLocation::BOUNDARY && postB.loc != MeshLocation::BOUNDARY)
+                    {
+                        continue;
+                    }
+
+                    ptt = glm::mix(triCenter, ptC, inc);
+
+                    postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                    postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+
+                    if (postA.loc != MeshLocation::BOUNDARY && postB.loc != MeshLocation::BOUNDARY)
+                    {
+                        continue;
+                    }               
+                }
+
 
                 // although CDT is great, it spits out too many or too little tris, we fix it manually
                 //if (!IsPointInsideLoop(projectedPoints, contourLoop, triCenter))
@@ -1248,6 +1310,13 @@ namespace fuzzybools
 
                 // TODO: why is this swapped? winding doesnt matter much, but still
                 geom.AddFace(ptB, ptA, ptC);
+
+                #ifdef CSG_DEBUG_OUTPUT
+                    edges3DTriangles.push_back({ glm::dvec2(ptA.z+ ptA.x/2, ptA.y+ ptA.x/2), glm::dvec2(ptB.z+ ptB.x/2, ptB.y+ ptB.x/2) });
+                    edges3DTriangles.push_back({ glm::dvec2(ptA.z+ ptA.x/2, ptA.y+ ptA.x/2), glm::dvec2(ptC.z+ ptC.x/2, ptC.y+ ptC.x/2) });
+                    edges3DTriangles.push_back({ glm::dvec2(ptB.z+ ptB.x/2, ptB.y+ ptB.x/2), glm::dvec2(ptC.z+ ptC.x/2, ptC.y+ ptC.x/2) });
+                    DumpSVGLines(edges3DTriangles, L"edges_tri.html");
+                #endif
 
                 #ifdef CSG_DEBUG_OUTPUT
                     finalEdgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[1]));
@@ -1534,7 +1603,7 @@ namespace fuzzybools
                 {
                     edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
                 }
-                DumpSVGLines(edges, L"contour.html");
+                DumpSVGLines(edges, L"contour_A.html");
             #endif
 
             for (auto& segment : contours)
@@ -1547,6 +1616,20 @@ namespace fuzzybools
 
         for (auto& [planeId, contours] : contoursB)
         {
+            std::vector<std::vector<glm::dvec2>> edges;
+
+            Plane& p = sp.planes[planeId];
+
+            #ifdef CSG_DEBUG_OUTPUT
+                auto basis = p.MakeBasis();
+
+                for (auto& segment : contours)
+                {
+                    edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
+                }
+                DumpSVGLines(edges, L"contour_B.html");
+            #endif
+
             for (auto& segment : contours)
             {
                 auto lineId = sp.planes[planeId].AddLine(sp.points[segment.first], sp.points[segment.second]);
