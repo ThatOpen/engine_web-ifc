@@ -721,6 +721,10 @@ std::string DecodeText(std::string text) {
     return webifc::parsing::p21decode(strView);
 }
 
+void ResetCache(uint32_t modelID) {
+    if (manager.IsModelOpen(modelID)) manager.GetGeometryProcessor(modelID)->GetLoader().ResetCache();
+}
+
 EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::class_<webifc::geometry::IfcGeometry>("IfcGeometry")

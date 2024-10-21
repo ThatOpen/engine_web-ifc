@@ -1120,4 +1120,13 @@ export class IfcAPI {
         return this.wasmModule.DecodeText(text);
     }
 
+     /**
+     * Resets the Cached IFC Data - useful when changing the geometry of a model
+     * @param modelID Model handle retrieved by OpenModel
+     */
+
+    ResetCache(modelID: number) {
+        return this.wasmModule.DecodeText(modelID);
+    }
+
 }
