@@ -76,7 +76,7 @@ namespace fuzzybools
 
             glm::dvec3 n = computeNormal(a, b, c);
 
-            glm::dvec3 triCenter = (a + b + c) * 1.0 / 3.0;
+            glm::dvec3 triCenter = (a + b * 2.0 + c * 3.0) * 1.0 / 6.0; // Using true centroid could cause issues (#540)
 
             auto isInsideTarget = MeshLocation::INSIDE;
 
@@ -158,18 +158,18 @@ namespace fuzzybools
             }
 
             #ifdef CSG_DEBUG_OUTPUT
-                if (doit || true)
+                if (doit)
                 {
-                    edgesPrinted.push_back({ glm::dvec2(a.z + a.x/2, a.y+ a.x/2), glm::dvec2(b.z+ b.x/2, b.y+ b.x/2)});
-                    edgesPrinted.push_back({ glm::dvec2(a.z+ a.x/2, a.y+ a.x/2), glm::dvec2(c.z+ c.x/2, c.y+ c.x/2) });
-                    edgesPrinted.push_back({ glm::dvec2(b.z+ b.x/2, b.y+ b.x/2), glm::dvec2(c.z+ c.x/2, c.y+ c.x/2) });
-                    DumpSVGLines(edgesPrinted, L"final_tri.html");
+                    // edgesPrinted.push_back({ glm::dvec2(a.z + a.x/2, a.y+ a.x/2), glm::dvec2(b.z+ b.x/2, b.y+ b.x/2)});
+                    // edgesPrinted.push_back({ glm::dvec2(a.z+ a.x/2, a.y+ a.x/2), glm::dvec2(c.z+ c.x/2, c.y+ c.x/2) });
+                    // edgesPrinted.push_back({ glm::dvec2(b.z+ b.x/2, b.y+ b.x/2), glm::dvec2(c.z+ c.x/2, c.y+ c.x/2) });
+                    // DumpSVGLines(edgesPrinted, L"final_tri.html");
                 }
             #endif
         }
 
         #ifdef CSG_DEBUG_OUTPUT
-            DumpSVGLines(edgesPrinted, L"final_tri.html");
+            // DumpSVGLines(edgesPrinted, L"final_tri.html");
         #endif
     }
 
