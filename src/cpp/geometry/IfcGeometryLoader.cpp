@@ -20,6 +20,17 @@ namespace webifc::geometry
     ReadLinearScalingFactor();
   }
 
+  void IfcGeometryLoader::ResetCache() {
+      _relVoidRel = PopulateRelVoidsRelMap();
+      _relVoids = PopulateRelVoidsMap();
+      _relAggregates = PopulateRelAggregatesMap();
+      _relNests = PopulateRelNestsMap();
+      _relElementAggregates = PopulateRelElementAggregatesMap();
+      _styledItems = PopulateStyledItemMap();
+      _relMaterials = PopulateRelMaterialsMap();
+      _materialDefinitions = PopulateMaterialDefinitionsMap();
+  }
+
   void IfcGeometryLoader::Clear() const{
       _expressIDToPlacement.clear();
       std::unordered_map<uint32_t, glm::dmat4>().swap(_expressIDToPlacement);

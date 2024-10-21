@@ -26,6 +26,7 @@ namespace webifc::geometry
   {
   public:
     IfcGeometryLoader(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments);
+    void ResetCache();
     std::array<glm::dvec3,2> GetAxis1Placement(const uint32_t expressID) const;
     glm::dmat3 GetAxis2Placement2D(const uint32_t expressID) const;
     glm::dmat4 GetLocalPlacement(const uint32_t expressID, glm::dvec3 vector = glm::dvec3(1)) const;
@@ -70,14 +71,14 @@ namespace webifc::geometry
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
     const webifc::parsing::IfcLoader &_loader;
     const webifc::schema::IfcSchemaManager &_schemaManager;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoidRel;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids; 
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> _relNests;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> _relAggregates;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> _relElementAggregates;
-    const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;
-    const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _relMaterials;
-    const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _materialDefinitions;
+    std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoidRel;
+    std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids; 
+    std::unordered_map<uint32_t, std::vector<uint32_t>> _relNests;
+    std::unordered_map<uint32_t, std::vector<uint32_t>> _relAggregates;
+    std::unordered_map<uint32_t, std::vector<uint32_t>> _relElementAggregates;
+    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;
+    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _relMaterials;
+    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _materialDefinitions;
     double _linearScalingFactor = 1;
     double _squaredScalingFactor = 1;
     double _cubicScalingFactor = 1;
