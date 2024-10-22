@@ -60,7 +60,7 @@ constexpr double toleranceAddFace = 1.0E-10;
             
         To disable/enable rounding, set ROUNDING_ENABLE to 0/1.            
 */                    
-constexpr int    ROUNDING_ENABLE     = 1;
+constexpr int    ROUNDING_ENABLE     = 0;
 constexpr double ROUNDING            = 1.0E-04;
 constexpr double ROUNDING_RECIPROCAL = 1.0E+04;
 
