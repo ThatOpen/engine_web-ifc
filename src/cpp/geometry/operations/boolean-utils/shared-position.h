@@ -904,13 +904,13 @@ namespace fuzzybools
                 if (isA)
                 {
                     #ifdef CSG_DEBUG_OUTPUT
-                        DumpGeometry(geom, L"Initial_A.obj");
+                        // DumpGeometry(geom, L"Initial_A.obj");
                     #endif
                 }
                 else
                 {
                     #ifdef CSG_DEBUG_OUTPUT
-                        DumpGeometry(geom, L"Initial_B.obj");
+                        // DumpGeometry(geom, L"Initial_B.obj");
                     #endif
                 }
 
@@ -1209,17 +1209,17 @@ namespace fuzzybools
             //auto contourLoop = FindLargestEdgeLoop(projectedPoints, edges);
 
             #ifdef CSG_DEBUG_OUTPUT
-                std::vector<std::vector<glm::dvec2>> edges3DTriangles;
-                std::set<std::pair<size_t, size_t>> edgesTriangles;
-                std::set<std::pair<size_t, size_t>> finalEdgesTriangles;
+                // std::vector<std::vector<glm::dvec2>> edges3DTriangles;
+                // std::set<std::pair<size_t, size_t>> edgesTriangles;
+                // std::set<std::pair<size_t, size_t>> finalEdgesTriangles;
             #endif
 
             for (auto& tri : triangles)
             {
                 #ifdef CSG_DEBUG_OUTPUT
-                    edgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[1]));
-                    edgesTriangles.insert(std::make_pair(tri.vertices[1], tri.vertices[2]));
-                    edgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[2]));
+                    // edgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[1]));
+                    // edgesTriangles.insert(std::make_pair(tri.vertices[1], tri.vertices[2]));
+                    // edgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[2]));
                 #endif
 
                 size_t pointIdA = projectedPointToPoint[mapping[tri.vertices[0]]];
@@ -1312,37 +1312,37 @@ namespace fuzzybools
                 geom.AddFace(ptB, ptA, ptC);
 
                 #ifdef CSG_DEBUG_OUTPUT
-                    edges3DTriangles.push_back({ glm::dvec2(ptA.z+ ptA.x/2, ptA.y+ ptA.x/2), glm::dvec2(ptB.z+ ptB.x/2, ptB.y+ ptB.x/2) });
-                    edges3DTriangles.push_back({ glm::dvec2(ptA.z+ ptA.x/2, ptA.y+ ptA.x/2), glm::dvec2(ptC.z+ ptC.x/2, ptC.y+ ptC.x/2) });
-                    edges3DTriangles.push_back({ glm::dvec2(ptB.z+ ptB.x/2, ptB.y+ ptB.x/2), glm::dvec2(ptC.z+ ptC.x/2, ptC.y+ ptC.x/2) });
-                    DumpSVGLines(edges3DTriangles, L"edges_tri.html");
+                    // edges3DTriangles.push_back({ glm::dvec2(ptA.z+ ptA.x/2, ptA.y+ ptA.x/2), glm::dvec2(ptB.z+ ptB.x/2, ptB.y+ ptB.x/2) });
+                    // edges3DTriangles.push_back({ glm::dvec2(ptA.z+ ptA.x/2, ptA.y+ ptA.x/2), glm::dvec2(ptC.z+ ptC.x/2, ptC.y+ ptC.x/2) });
+                    // edges3DTriangles.push_back({ glm::dvec2(ptB.z+ ptB.x/2, ptB.y+ ptB.x/2), glm::dvec2(ptC.z+ ptC.x/2, ptC.y+ ptC.x/2) });
+                    // DumpSVGLines(edges3DTriangles, L"edges_tri.html");
                 #endif
 
                 #ifdef CSG_DEBUG_OUTPUT
-                    finalEdgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[1]));
-                    finalEdgesTriangles.insert(std::make_pair(tri.vertices[1], tri.vertices[2]));
-                    finalEdgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[2]));
+                    // finalEdgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[1]));
+                    // finalEdgesTriangles.insert(std::make_pair(tri.vertices[1], tri.vertices[2]));
+                    // finalEdgesTriangles.insert(std::make_pair(tri.vertices[0], tri.vertices[2]));
                 #endif
             }
         
             #ifdef CSG_DEBUG_OUTPUT
-                std::vector<std::vector<glm::dvec2>> edgesPrinted2;
+                // std::vector<std::vector<glm::dvec2>> edgesPrinted2;
 
-                for (auto& e : edgesTriangles)
-                {
-                    edgesPrinted2.push_back({ projectedPoints[e.first], projectedPoints[e.second] });
-                }
+                // for (auto& e : edgesTriangles)
+                // {
+                //     edgesPrinted2.push_back({ projectedPoints[e.first], projectedPoints[e.second] });
+                // }
 
-                DumpSVGLines(edgesPrinted2, L"poly_triangulation.html");
+                // DumpSVGLines(edgesPrinted2, L"poly_triangulation.html");
 
-                std::vector<std::vector<glm::dvec2>> finalEdgesPrinted;
+                // std::vector<std::vector<glm::dvec2>> finalEdgesPrinted;
 
-                for (auto& e : finalEdgesTriangles)
-                {
-                    finalEdgesPrinted.push_back({ projectedPoints[e.first], projectedPoints[e.second] });
-                }
+                // for (auto& e : finalEdgesTriangles)
+                // {
+                //     finalEdgesPrinted.push_back({ projectedPoints[e.first], projectedPoints[e.second] });
+                // }
 
-                DumpSVGLines(finalEdgesPrinted, L"final_poly_triangulation.html");
+                // DumpSVGLines(finalEdgesPrinted, L"final_poly_triangulation.html");
             #endif
         }
 //============================================================================================
@@ -1584,7 +1584,7 @@ namespace fuzzybools
 
 //============================================================================================
 
-    inline Geometry Normalize(SharedPosition& sp)
+    inline Geometry Normalize(SharedPosition& sp, bool UNION)
     {
 
         // construct all contours, derive lines
@@ -1743,6 +1743,8 @@ namespace fuzzybools
             sp.TriangulatePlane(geom, plane);
         }
 
+        geom.data = geom.numFaces;
+
         // re-add irrelevant faces
         for (auto& faceIndex : sp.A.irrelevantFaces)
         {
@@ -1755,18 +1757,19 @@ namespace fuzzybools
             geom.AddFace(a, b, c);
         }
 
-/*
-        for (auto& faceIndex : sp.B.irrelevantFaces)
+        if (UNION)
         {
-            const Face& f = sp._linkedB->GetFace(faceIndex);
+            for (auto& faceIndex : sp.B.irrelevantFaces)
+            {
+                const Face& f = sp._linkedB->GetFace(faceIndex);
 
-            auto a = sp._linkedB->GetPoint(f.i0);
-            auto b = sp._linkedB->GetPoint(f.i1);
-            auto c = sp._linkedB->GetPoint(f.i2);
+                auto a = sp._linkedB->GetPoint(f.i0);
+                auto b = sp._linkedB->GetPoint(f.i1);
+                auto c = sp._linkedB->GetPoint(f.i2);
 
-            geom.AddFace(a, b, c);
+                geom.AddFace(a, b, c);
+            }
         }
-*/
 
         return geom;
     }

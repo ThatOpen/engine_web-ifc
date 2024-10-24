@@ -16,12 +16,12 @@ namespace fuzzybools
     static void doubleClipSingleMesh(Geometry& mesh, BVH& bvh1, BVH& bvh2, Geometry& result)
     {  
         #ifdef CSG_DEBUG_OUTPUT
-            std::vector<std::vector<glm::dvec2>> edgesPrinted;
+            // std::vector<std::vector<glm::dvec2>> edgesPrinted;
         #endif
 
         std::vector<std::pair<int, AABB>> boundingList;
 
-        for (uint32_t i = 0; i < mesh.numFaces; i++)
+        for (uint32_t i = 0; i < mesh.data; i++)
         {
             bool doit = false;
             Face tri = mesh.GetFace(i);
@@ -84,6 +84,32 @@ namespace fuzzybools
 
             auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir);
             auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir);
+
+            Vec extraDir1 = glm::normalize(Vec(1.1, 1.4, 1.2));
+            Vec extraDir2 = glm::normalize(Vec(-2.1, 1.4, -3.2));
+
+            auto isInside1Loc_B = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir1);
+            auto isInside2Loc_B = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir1);
+
+            if(isInside1Loc.loc != isInside1Loc_B.loc)
+            {
+                auto isInside1Loc_C = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir2);
+                if(isInside1Loc_C.loc == isInside1Loc_B.loc){isInside1Loc = isInside1Loc_B;}
+                else if(isInside1Loc_B.loc != isInside1Loc_C.loc && isInside1Loc.loc != isInside1Loc_C.loc)
+                {
+                    isInside1Loc = isInside1Loc_B;
+                }
+            }
+
+            if(isInside2Loc.loc != isInside2Loc_B.loc)
+            {
+                auto isInside2Loc_C = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir2);
+                if(isInside2Loc_C.loc == isInside2Loc_B.loc){isInside2Loc = isInside2Loc_B;}
+                else if(isInside2Loc_B.loc != isInside2Loc_C.loc && isInside2Loc.loc != isInside2Loc_C.loc)
+                {
+                    isInside2Loc = isInside2Loc_B;
+                }
+            }
 
             auto isInside1 = isInside1Loc.loc;
             auto isInside2 = isInside2Loc.loc;
@@ -171,11 +197,20 @@ namespace fuzzybools
         #ifdef CSG_DEBUG_OUTPUT
             // DumpSVGLines(edgesPrinted, L"final_tri.html");
         #endif
+
+        for (uint32_t i = mesh.data; i < mesh.numFaces; i++)
+        {
+            Face tri = mesh.GetFace(i);
+            glm::dvec3 a = mesh.GetPoint(tri.i0);
+            glm::dvec3 b = mesh.GetPoint(tri.i1);
+            glm::dvec3 c = mesh.GetPoint(tri.i2);
+            result.AddFace(a, b, c);
+        }
     }
 
     static void doubleClipSingleMesh2(Geometry& mesh, BVH& bvh1, BVH& bvh2, Geometry& result)
     {
-        for (uint32_t i = 0; i < mesh.numFaces; i++)
+        for (uint32_t i = 0; i < mesh.data; i++)
         {
             Face tri = mesh.GetFace(i);
             glm::dvec3 a = mesh.GetPoint(tri.i0);
@@ -186,14 +221,40 @@ namespace fuzzybools
 
             auto area = areaOfTriangle(a, b, c);
 
-            glm::dvec3 triCenter = (a + b + c) * 1.0 / 3.0;
+            glm::dvec3 triCenter = (a + b * 2.0 + c * 3.0) * 1.0 / 6.0; // Using true centroid could cause issues (#540)
 
             auto isInsideTarget = MeshLocation::INSIDE;
 
             Vec raydir = computeNormal(a, b, c);
 
-            auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir);
-            auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir);
+            auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir, true);
+            auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir, true);
+
+            Vec extraDir1 = glm::normalize(Vec(1.1, 1.4, 1.2));
+            Vec extraDir2 = glm::normalize(Vec(-2.1, 1.4, -3.2));
+
+            auto isInside1Loc_B = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir1, true);
+            auto isInside2Loc_B = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir1, true);
+
+            if(isInside1Loc.loc != isInside1Loc_B.loc)
+            {
+                auto isInside1Loc_C = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir2, true);
+                if(isInside1Loc_C.loc == isInside1Loc_B.loc){isInside1Loc = isInside1Loc_B;}
+                else if(isInside1Loc_B.loc != isInside1Loc_C.loc && isInside1Loc.loc != isInside1Loc_C.loc)
+                {
+                    isInside1Loc = isInside1Loc_B;
+                }
+            }
+
+            if(isInside2Loc.loc != isInside2Loc_B.loc)
+            {
+                auto isInside2Loc_C = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir2, true);
+                if(isInside2Loc_C.loc == isInside2Loc_B.loc){isInside2Loc = isInside2Loc_B;}
+                else if(isInside2Loc_B.loc != isInside2Loc_C.loc && isInside2Loc.loc != isInside2Loc_C.loc)
+                {
+                    isInside2Loc = isInside2Loc_B;
+                }
+            }
 
             auto isInside1 = isInside1Loc.loc;
             auto isInside2 = isInside2Loc.loc;
@@ -208,6 +269,7 @@ namespace fuzzybools
             }
             else if (isInside1 == MeshLocation::BOUNDARY && isInside2 == MeshLocation::BOUNDARY)
             {
+                /*
                 // both boundary, no dice if normals are opposite direction
                 auto dot = glm::dot(isInside1Loc.normal, isInside2Loc.normal);
 
@@ -219,8 +281,9 @@ namespace fuzzybools
                     // furthermore, since the first operand is the first added, we don't flip
                     result.AddFace(a, b, c);
                 }
+                */
             }
-            else if (isInside1 == MeshLocation::BOUNDARY)
+            else if (isInside1 == MeshLocation::BOUNDARY && isInside2 == MeshLocation::OUTSIDE)
             {
                 // either is a boundary, keep
                 if (glm::dot(n, isInside1Loc.normal) < 0)
@@ -232,7 +295,7 @@ namespace fuzzybools
                     result.AddFace(a, b, c);
                 }
             }
-            else if (isInside2 == MeshLocation::BOUNDARY)
+            else if (isInside2 == MeshLocation::BOUNDARY && isInside1 == MeshLocation::OUTSIDE)
             {
                 // either is a boundary, keep
                 if (glm::dot(n, isInside2Loc.normal) < 0)
@@ -248,6 +311,15 @@ namespace fuzzybools
             {
                 // neither a boundary, neither inside, neither outside, nothing left
             }
+        }
+
+        for (uint32_t i = mesh.data; i < mesh.numFaces; i++)
+        {
+            Face tri = mesh.GetFace(i);
+            glm::dvec3 a = mesh.GetPoint(tri.i0);
+            glm::dvec3 b = mesh.GetPoint(tri.i1);
+            glm::dvec3 c = mesh.GetPoint(tri.i2);
+            result.AddFace(a, b, c);
         }
     }
 

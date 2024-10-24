@@ -207,6 +207,72 @@ namespace webifc::geometry
                         voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
                     }
 
+                    if(relVoidsIt->second.size() > 30) // When voids are greater than 10 they are all fused
+                    {   
+                        std::vector<IfcGeometry> joinedVoidGeoms;
+                        IfcGeometry fusedVoids;
+                        for (auto geom : voidGeoms)
+                        {
+                            if (geom.halfSpace)
+                            {
+                                joinedVoidGeoms.push_back(geom);
+                            }
+                            else
+                            {
+                                std::vector<IfcGeometry> geomVector = {geom};  // Wrap 'geom' in a vector
+                                fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION");
+                            }
+                        }
+
+                        #ifdef CSG_DEBUG_OUTPUT
+                            // io::DumpIfcGeometry(fusedVoids, "union_bool_void.obj");
+                        #endif
+
+                        joinedVoidGeoms.push_back(fusedVoids);
+
+                        voidGeoms = joinedVoidGeoms;
+                        voidGeoms.shrink_to_fit();
+                    }
+
+                    // if(flatElementMeshes.size() > 10) // When elements are greater than 10 they are all fused
+                    // {   
+                    //     std::vector<IfcGeometry> joinedMeshGeoms;
+                    //     IfcGeometry fusedMesh;
+                    //     for (auto geom : flatElementMeshes)
+                    //     {
+                    //         if (geom.halfSpace)
+                    //         {
+                    //             joinedMeshGeoms.push_back(geom);
+                    //         }
+                    //         else
+                    //         {
+                    //             #ifdef CSG_DEBUG_OUTPUT
+                    //                 // io::DumpIfcGeometry(fusedMesh, "union_bool_solid_partial_A.obj");
+                    //             #endif
+
+                    //             #ifdef CSG_DEBUG_OUTPUT
+                    //                 // io::DumpIfcGeometry(geom, "union_bool_solid_partial_B.obj");
+                    //             #endif
+
+                    //             std::vector<IfcGeometry> geomVector = {geom};  // Wrap 'geom' in a vector
+                    //             fusedMesh = BoolProcess(std::vector<IfcGeometry>{fusedMesh}, geomVector, "UNION");
+
+                    //             #ifdef CSG_DEBUG_OUTPUT
+                    //                 // io::DumpIfcGeometry(fusedMesh, "union_bool_solid_partial.obj");
+                    //             #endif
+                    //         }
+                    //     }
+
+                    //     #ifdef CSG_DEBUG_OUTPUT
+                    //         // io::DumpIfcGeometry(fusedMesh, "union_bool_solid.obj");
+                    //     #endif
+
+                    //     joinedMeshGeoms.push_back(fusedMesh);
+
+                    //     flatElementMeshes = joinedMeshGeoms;
+                    //     flatElementMeshes.shrink_to_fit();
+                    // }
+
                     finalGeometry = BoolProcess(flatElementMeshes, voidGeoms, "DIFFERENCE");
                     
                     #ifdef CSG_DEBUG_OUTPUT
@@ -1622,7 +1688,7 @@ namespace webifc::geometry
                     doit = false;
                 }
 
-                if (result.numFaces == 0)
+                if (result.numFaces == 0 && op != "UNION")
                 {
                     spdlog::error("[BoolProcess()] bool aborted due to empty source or target");
 

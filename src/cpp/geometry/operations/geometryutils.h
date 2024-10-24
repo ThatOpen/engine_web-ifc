@@ -4,6 +4,10 @@
 
 #pragma once
 
+#if defined(DEBUG_DUMP_SVG) || defined(DUMP_CSG_MESHES)
+#include "boolean-utils/svg.h"
+#endif
+
 #include <cstdint>
 #include <spdlog/spdlog.h>
 #include "../representation/geometry.h"
@@ -562,7 +566,7 @@ namespace webifc::geometry
 			}
 			if (i == 3)
 			{
-				EPS = 1e-08;
+				EPS = 1e-03;
 			}
 			for (auto &p : points)
 			{
@@ -574,7 +578,32 @@ namespace webifc::geometry
 			}
 		}
 
-		return false;
+		double d1 = 0;
+
+		for (auto &p : points)
+		{
+			double d2 = glm::distance(v1, p);
+			if (d1 < d2)
+			{
+				d1 = d2;
+				v2 = p;
+			}
+		}
+
+		d1 = 0;
+		for (auto &p : points)
+		{
+			double d2 = glm::distance(v1, p);
+			double d3 = glm::distance(v2, p);
+			if (d1 < d2 + d3)
+			{
+				d1 = d2 + d3;
+				v3 = p;
+			}
+		}
+
+		// multiple tries to find the best match
+		return computeSafeNormal(v1, v2, v3, normal, 1e-08);
 	}
 
 	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, uint32_t expressID)
@@ -626,6 +655,11 @@ namespace webifc::geometry
 			if (bounds[0].type != IfcBoundType::OUTERBOUND)
 			{
 				spdlog::error("[TriangulateBounds() Expected outer bound first! {}", expressID);
+			}
+
+			if(bounds[0].curve.points.size() == 189)
+			{
+				bounds[0] = bounds[0];
 			}
 
 			glm::dvec3 v1, v2, v3;
@@ -683,12 +717,42 @@ namespace webifc::geometry
 				polygon.push_back(points);
 			}
 
+			#ifdef CSG_DEBUG_OUTPUT
+				// std::vector<std::vector<glm::dvec2>> polygonEdgesPrinted;
+				// std::vector<std::vector<glm::dvec2>> edgesPrinted;
+
+				// for (size_t i = 0; i < polygon[0].size() - 1; i++)
+				// {	
+				// 	auto& a = polygon[0][i];       // Access the current point
+				// 	auto& b = polygon[0][i + 1];   // Access the next point
+				// 	polygonEdgesPrinted.push_back({glm::dvec2(a[0], a[1]), glm::dvec2(b[0], b[1])});
+				// }
+				// auto& a = polygon[0][polygon[0].size() - 1];       // Access the current point
+				// auto& b = polygon[0][0];   // Access the next point
+				// polygonEdgesPrinted.push_back({glm::dvec2(a[0], a[1]), glm::dvec2(b[0], b[1])});
+
+				// fuzzybools::DumpSVGLines(polygonEdgesPrinted, L"Polygon.html");
+			#endif
+
 			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
 			for (size_t i = 0; i < indices.size(); i += 3)
 			{
+				#ifdef CSG_DEBUG_OUTPUT
+					// auto a = geometry.GetPoint(offset + indices[i + 0]);
+					// auto b = geometry.GetPoint(offset + indices[i + 1]);
+					// auto c = geometry.GetPoint(offset + indices[i + 2]);
+					// edgesPrinted.push_back({glm::dvec2(a.z + a.x / 2, a.y + a.x / 2), glm::dvec2(b.z + b.x / 2, b.y + b.x / 2)});
+					// edgesPrinted.push_back({glm::dvec2(a.z + a.x / 2, a.y + a.x / 2), glm::dvec2(c.z + c.x / 2, c.y + c.x / 2)});
+					// edgesPrinted.push_back({glm::dvec2(b.z + b.x / 2, b.y + b.x / 2), glm::dvec2(c.z + c.x / 2, c.y + c.x / 2)});
+					// fuzzybools::DumpSVGLines(edgesPrinted, L"triangulateBounds_tri.html");
+				#endif
 				geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
 			}
+
+			#ifdef CSG_DEBUG_OUTPUT
+				// fuzzybools::DumpSVGLines(edgesPrinted, L"triangulateBounds_tri.html");
+			#endif
 		}
 		else
 		{

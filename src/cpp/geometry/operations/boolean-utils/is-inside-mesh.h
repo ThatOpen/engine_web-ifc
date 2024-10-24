@@ -43,7 +43,8 @@ namespace fuzzybools
         Vec normal,
         const Geometry& g,
         BVH& bvh,
-        Vec dir = Vec(1.0, 1.1, 1.4) // assuming Vec constructor takes 3 doubles
+        Vec dir = Vec(1.0, 1.1, 1.4),
+        bool UNION = false
     )
     {
         int winding = 0;
@@ -88,9 +89,18 @@ namespace fuzzybools
                             The normals point in opposite directions, which means that the boundary is
                             an outside boundary.
 */
-                            result.loc = MeshLocation::OUTSIDE;
-                            result.normal = normal;
-                            return true;
+                            if(!UNION)
+                            {
+                                result.loc = MeshLocation::OUTSIDE;
+                                result.normal = normal;
+                                return true;
+                            }
+                            else
+                            {
+                                result.loc = MeshLocation::BOUNDARY;
+                                result.normal = normal;
+                                return true;
+                            }
                         }
                         else
                         {

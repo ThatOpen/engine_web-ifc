@@ -14,7 +14,7 @@ namespace fuzzybools
 		auto bvh1 = fuzzybools::MakeBVH(A);
 		auto bvh2 = fuzzybools::MakeBVH(B);
 
-		auto geom = Normalize(sp);
+		auto geom = Normalize(sp, false);
 
         #ifdef CSG_DEBUG_OUTPUT
 			DumpGeometry(geom, L"Post-normalize.obj");
@@ -31,7 +31,7 @@ namespace fuzzybools
 		auto bvh1 = fuzzybools::MakeBVH(A);
 		auto bvh2 = fuzzybools::MakeBVH(B);
 
-		auto geom = Normalize(sp);
+		auto geom = Normalize(sp, true);
 
 		return fuzzybools::clipJoin(geom, bvh1, bvh2);
 	}
