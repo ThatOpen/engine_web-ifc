@@ -657,11 +657,6 @@ namespace webifc::geometry
 				spdlog::error("[TriangulateBounds() Expected outer bound first! {}", expressID);
 			}
 
-			if(bounds[0].curve.points.size() == 189)
-			{
-				bounds[0] = bounds[0];
-			}
-
 			glm::dvec3 v1, v2, v3;
 			if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
 			{

@@ -510,6 +510,7 @@ namespace fuzzybools
         std::vector<Triangle> triangles;
         std::map<std::pair<size_t, size_t>, size_t> segmentCounts;
         std::vector<size_t> irrelevantFaces;
+        std::vector<size_t> irrelevantFaces_toTest;
 
         std::map<size_t, std::vector<std::pair<size_t, size_t>>> planeSegments;
         std::map<size_t, std::map<std::pair<size_t, size_t>, size_t>> planeSegmentCounts;
@@ -868,8 +869,8 @@ namespace fuzzybools
             auto boxA = A.GetAABB();
             auto boxB = B.GetAABB();
 			
-            AddGeometry(A, boxB, true);
-            AddGeometry(B, boxA, false);
+            AddGeometry(A, B, boxB, true);
+            AddGeometry(B, A, boxA, false);
 
             _linkedA = &A;
             _linkedB = &B;
@@ -877,7 +878,7 @@ namespace fuzzybools
 
 //============================================================================================
 
-        void AddGeometry(const Geometry& geom, const AABB& relevantBounds, bool isA)
+        void AddGeometry(const Geometry& geom, const Geometry& secondGeom, const AABB& relevantBounds, bool isA)
         {
             Geometry relevant;
 
@@ -899,6 +900,40 @@ namespace fuzzybools
                     }
 
                     continue;
+                }
+
+                // Arbitrary limit. If an element has more than 1000 faces only those that touch a face of the other solid will pass
+                // This limit allows terrains and other models containing too many planes to optimize the number of planes that are computed
+                // This method is only applied to huge models because it has some unexpected drawbacks
+
+                if(geom.numFaces > 1000)
+                {
+                    bool contact = false;
+
+                    for (size_t j = 0; j < secondGeom.numFaces; j++)
+                    {
+                        auto faceBox2 = secondGeom.GetFaceBox(j);
+                        
+                        if (faceBox.intersects(faceBox2))
+                        {
+                            contact = true;
+                            break;
+                        }
+                    }
+
+                    if(!contact)
+                    {
+                        if (isA)
+                        {
+                            A.irrelevantFaces_toTest.push_back(i);
+                        }
+                        else
+                        {
+                            B.irrelevantFaces_toTest.push_back(i);
+                        }
+
+                        continue;
+                    }
                 }
 
                 if (isA)
@@ -1741,6 +1776,32 @@ namespace fuzzybools
         for (auto& plane : sp.planes)
         {
             sp.TriangulatePlane(geom, plane);
+        }
+
+        // re-add irrelevant faces that should be tested
+        for (auto& faceIndex : sp.A.irrelevantFaces_toTest)
+        {
+            const Face& f = sp._linkedA->GetFace(faceIndex);
+
+            auto a = sp._linkedA->GetPoint(f.i0);
+            auto b = sp._linkedA->GetPoint(f.i1);
+            auto c = sp._linkedA->GetPoint(f.i2);
+
+            geom.AddFace(a, b, c);
+        }
+
+        if (UNION)
+        {
+            for (auto& faceIndex : sp.B.irrelevantFaces_toTest)
+            {
+                const Face& f = sp._linkedB->GetFace(faceIndex);
+
+                auto a = sp._linkedB->GetPoint(f.i0);
+                auto b = sp._linkedB->GetPoint(f.i1);
+                auto c = sp._linkedB->GetPoint(f.i2);
+
+                geom.AddFace(a, b, c);
+            }
         }
 
         geom.data = geom.numFaces;
