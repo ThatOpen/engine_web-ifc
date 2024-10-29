@@ -17,7 +17,7 @@ namespace fuzzybools
 
         bool intersects(const AABB& other) const
         {
-           double eps = EPS_BIG;
+           double eps = toleranceAABB;
            return (max.x + eps >= other.min.x && other.max.x + eps >= min.x &&
                     max.y + eps >= other.min.y && other.max.y + eps >= min.y &&
                     max.z + eps >= other.min.z && other.max.z + eps >= min.z);
@@ -25,7 +25,7 @@ namespace fuzzybools
 
         bool contains(const Vec& pos) const
         {
-            double eps = EPS_BIG;
+            double eps = toleranceAABB;
             return  pos.x + eps >= min.x && pos.x - eps <= max.x &&
                     pos.y + eps >= min.y && pos.y - eps <= max.y &&
                     pos.z + eps >= min.z && pos.z - eps <= max.z;

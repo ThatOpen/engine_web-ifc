@@ -76,7 +76,7 @@ namespace fuzzybools
 
             glm::dvec3 n = computeNormal(a, b, c);
 
-            glm::dvec3 triCenter = (a + b * 2.0 + c * 3.0) * 1.0 / 6.0; // Using true centroid could cause issues (#540)
+            glm::dvec3 triCenter = (a + b * 1.02 + c * 1.03) * 1.0 / 3.05; // Using true centroid could cause issues (#540)
 
             auto isInsideTarget = MeshLocation::INSIDE;
 
