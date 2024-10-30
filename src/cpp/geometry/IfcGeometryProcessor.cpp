@@ -767,6 +767,7 @@ namespace webifc::geometry
 
                 IfcGeometry geom = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile, directrix, surface.normal(), true);
 
+                mesh.transformation = placement;
                 _expressIDToGeometry[expressID] = geom;
                 mesh.expressID = expressID;
                 mesh.hasGeometry = true;

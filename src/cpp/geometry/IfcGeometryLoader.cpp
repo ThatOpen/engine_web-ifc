@@ -1818,6 +1818,10 @@ namespace webifc::geometry
         {
           dimensions = 3;
         }
+        if(typePlacement == schema::IFCAXIS2PLACEMENT2D)
+        {
+          dimensions = 2;
+        }
 
         _loader.MoveToArgumentOffset(expressID, 0);
         positionID = _loader.GetRefArgument();
