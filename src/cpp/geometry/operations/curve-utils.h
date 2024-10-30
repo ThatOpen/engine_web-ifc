@@ -100,12 +100,33 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 		double v = 2 * (p1.x - p2.x) * (p1.y - p3.y) - 2 * (p1.x - p3.x) * (p1.y - p2.y);
 
 		double cenX = ((p1.y - p3.y) * f1 - (p1.y - p2.y) * f2) / v;
-		double cenYa = (f2 - 2 * cenX * (p1.x - p3.x)) / (2 * (p1.y - p3.y));
-		double cenYb = (f1 - 2 * cenX * (p1.x - p2.x)) / (2 * (p1.y - p2.y));
+		double den1 = (2 * (p1.y - p3.y));
+		double den2 = (2 * (p1.y - p2.y));
+		double cenYa = (f2 - 2 * cenX * (p1.x - p3.x)) / den1;
+		double cenYb = (f1 - 2 * cenX * (p1.x - p2.x)) / den2;
 		double cenY = cenYa;
-		if (std::isnan(cenY) || std::isinf(cenY))
+		if(glm::abs(den1) > glm::abs(den2))
+		{
+			cenY = cenYa;
+		}
+		else
 		{
 			cenY = cenYb;
+		}
+		if (std::isnan(cenY) || std::isinf(cenY))
+		{
+			if (!std::isnan(cenYa) && !std::isinf(cenYa))
+			{
+				cenY = cenYa;
+			}
+			else if (!std::isnan(cenYb) && !std::isinf(cenYb))
+			{
+				cenY = cenYb;
+			}
+			else
+			{
+				spdlog::error("3 Point Arc - Error: wrong points");
+			}
 		}
 
 		glm::dvec2 pCen;
