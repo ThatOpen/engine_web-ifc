@@ -108,7 +108,7 @@
     "@babel/helper-validator-identifier" "^7.25.9"
     "@babel/traverse" "^7.25.9"
 
-"@babel/helper-plugin-utils@^7.0.0", "@babel/helper-plugin-utils@^7.10.4", "@babel/helper-plugin-utils@^7.12.13", "@babel/helper-plugin-utils@^7.14.5", "@babel/helper-plugin-utils@^7.24.8", "@babel/helper-plugin-utils@^7.25.9", "@babel/helper-plugin-utils@^7.8.0":
+"@babel/helper-plugin-utils@^7.0.0", "@babel/helper-plugin-utils@^7.10.4", "@babel/helper-plugin-utils@^7.12.13", "@babel/helper-plugin-utils@^7.14.5", "@babel/helper-plugin-utils@^7.25.9", "@babel/helper-plugin-utils@^7.8.0":
   version "7.25.9"
   resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.25.9.tgz#9cbdd63a9443a2c92a725cca7ebca12cc8dd9f46"
   integrity sha512-kSMlyUVdWe25rEsRGviIgOWnoT/nfABVWlqt9N19/dIPWViAOW2s9wznP5tURbs/IDuNk4gPy3YdYRgH3uxhBw==
@@ -199,11 +199,11 @@
     "@babel/helper-plugin-utils" "^7.14.5"
 
 "@babel/plugin-syntax-import-attributes@^7.24.7":
-  version "7.25.6"
-  resolved "https://registry.npmjs.org/@babel/plugin-syntax-import-attributes/-/plugin-syntax-import-attributes-7.25.6.tgz"
-  integrity sha512-sXaDXaJN9SNLymBdlWFA+bjzBhFD617ZaFiY13dGt7TVslVvVgA6fkZOP7Ki3IGElC45lwHdOTrCtKZGVAWeLQ==
+  version "7.26.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-import-attributes/-/plugin-syntax-import-attributes-7.26.0.tgz#3b1412847699eea739b4f2602c74ce36f6b0b0f7"
+  integrity sha512-e2dttdsJ1ZTpi3B9UYGLw41hifAubg19AtCu/2I/F1QNVclOBr1dYpTdmdyZ84Xiz43BS/tCUkMAZNLv12Pi+A==
   dependencies:
-    "@babel/helper-plugin-utils" "^7.24.8"
+    "@babel/helper-plugin-utils" "^7.25.9"
 
 "@babel/plugin-syntax-import-meta@^7.10.4":
   version "7.10.4"
