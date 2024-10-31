@@ -36,7 +36,7 @@ constexpr double tolerancePointOnLine     = 1.0E-04;
 /*
     Constants used in aabb.h
 */    
-constexpr double toleranceAABB     = 1.0E-01;
+constexpr double toleranceAABB     = 1.0E-03;
 
 /*
     Constants used in function intersect_ray_triangle
