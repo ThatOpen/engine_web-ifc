@@ -35,9 +35,9 @@
     picocolors "^1.0.0"
 
 "@babel/compat-data@^7.25.9":
-  version "7.25.9"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.25.9.tgz#24b01c5db6a3ebf85661b4fb4a946a9bccc72ac8"
-  integrity sha512-yD+hEuJ/+wAJ4Ox2/rpNv5HIuPG82x3ZlQvYVn8iYCprdxzE7P1udpGF1jyjQVBU4dgznN+k2h103vxZ7NdPyw==
+  version "7.26.2"
+  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.26.2.tgz#278b6b13664557de95b8f35b90d96785850bb56e"
+  integrity sha512-Z0WgzSEa+aUcdiJuCIqgujCshpMWgUpgOxXotrYPSA53hA3qopNaqcJpyr0hVb1FeWdnqFA35/fUtXgBK8srQg==
 
 "@babel/core@^7.1.0", "@babel/core@^7.12.3", "@babel/core@^7.7.2", "@babel/core@^7.8.0":
   version "7.25.2"
