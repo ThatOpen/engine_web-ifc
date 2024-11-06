@@ -10,8 +10,20 @@ namespace fuzzybools
 {
 	constexpr int VERTEX_FORMAT_SIZE_FLOATS = 6;
 
+    struct SimplePlane
+    {
+        double distance;
+        Vec normal;
+
+		bool IsEqualTo(const Vec &n, double d)
+        {
+            return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, toleranceScalarEquality));
+        }
+	};
+
 	struct Face
 	{
+		int pId;
 		int i0;
 		int i1;
 		int i2;
@@ -22,7 +34,10 @@ namespace fuzzybools
 		std::vector<float> fvertexData;
 		std::vector<double> vertexData;
 		std::vector<uint32_t> indexData;
+		std::vector<uint32_t> planeData;
+		std::vector<SimplePlane> planes;
 
+		bool hasPlanes = false;
 		uint32_t numPoints = 0;
 		uint32_t numFaces = 0;
 		uint32_t data = 0;
@@ -78,7 +93,7 @@ namespace fuzzybools
 			numPoints += 1;
 		}
 
-		inline void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		inline void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, uint32_t pId)
 		{
 			glm::dvec3 normal;
 
@@ -94,10 +109,10 @@ namespace fuzzybools
 			AddPoint(b, normal);
 			AddPoint(c, normal);
 
-			AddFace(numPoints - 3, numPoints - 2, numPoints - 1);
+			AddFace(numPoints - 3, numPoints - 2, numPoints - 1, pId);
 		}
 
-		inline void AddFace(uint32_t a, uint32_t b, uint32_t c)
+		inline void AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId)
 		{
 //			indexData.reserve((numFaces + 1) * 3);
 //			indexData[numFaces * 3 + 0] = a;
@@ -106,6 +121,7 @@ namespace fuzzybools
 			indexData.push_back(a);
 			indexData.push_back(b);
 			indexData.push_back(c);
+			planeData.push_back(pId);
 
 			double area = areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
 
@@ -126,6 +142,7 @@ namespace fuzzybools
 			f.i0 = indexData[index * 3 + 0];
 			f.i1 = indexData[index * 3 + 1];
 			f.i2 = indexData[index * 3 + 2];
+			f.pId = planeData[index];
 			return f;
 		}
 
@@ -195,7 +212,7 @@ namespace fuzzybools
 
 				// std::cout << areaOfTriangle(pa, pb, pc) << std::endl;
 
-				newGeom.AddFace(pa, pb, pc);
+				newGeom.AddFace(pa, pb, pc, face.pId);
 			}
 
 
@@ -221,7 +238,7 @@ namespace fuzzybools
 				auto b = pb * scale + center;
 				auto c = pc * scale + center;
 
-				newGeom.AddFace(a, b, c);
+				newGeom.AddFace(a, b, c, face.pId);
 			}
 
 

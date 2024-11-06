@@ -245,6 +245,7 @@ namespace fuzzybools
 
     struct Plane
     {
+        int refPlane = -1;
         size_t id;
         size_t globalID;
         double distance;
@@ -858,11 +859,11 @@ namespace fuzzybools
 
         //============================================================================================
 
-        size_t AddPlane(const Vec3 &normal, double d)
+        size_t AddPlane(const Vec3 &normal, double d, uint32_t refId)
         {
             for (auto &plane : planes)
             {
-                if (plane.IsEqualTo(normal, d))
+                if (plane.refPlane == refId || plane.IsEqualTo(normal, d))
                 {
                     return plane.id;
                 }
@@ -870,10 +871,9 @@ namespace fuzzybools
 
             Plane p;
             p.id = planes.size();
-            //          p.normal = normal;
+            p.refPlane = refId;
             p.normal = glm::normalize(normal);
             p.distance = d;
-
             planes.push_back(p);
 
             return p.id;
@@ -886,8 +886,8 @@ namespace fuzzybools
             auto boxA = A.GetAABB();
             auto boxB = B.GetAABB();
 
-            AddGeometry(A, B, boxB, true, isUnion);
-            AddGeometry(B, A, boxA, false, isUnion);
+            AddGeometry(A, B, boxB, true, isUnion, 0);
+            AddGeometry(B, A, boxA, false, isUnion, A.planes.size());
 
             _linkedA = &A;
             _linkedB = &B;
@@ -895,7 +895,7 @@ namespace fuzzybools
 
         //============================================================================================
 
-        void AddGeometry(const Geometry &geom, const Geometry &secondGeom, const AABB &relevantBounds, bool isA, bool isUnion)
+        void AddGeometry(const Geometry &geom, const Geometry &secondGeom, const AABB &relevantBounds, bool isA, bool isUnion, uint32_t offsetPlane)
         {
 #ifdef CSG_DEBUG_OUTPUT
             Geometry relevant;
@@ -969,12 +969,26 @@ namespace fuzzybools
                 auto c = geom.GetPoint(f.i2);
 
 #ifdef CSG_DEBUG_OUTPUT
-                relevant.AddFace(a, b, c);
+                relevant.AddFace(a, b, c, -1);
 #endif
 
                 Vec3 norm;
                 if (computeSafeNormal(a, b, c, norm, EPS_SMALL))
-                {
+                {   
+                    double rs =  glm::dot(geom.planes[f.pId].normal , norm);
+
+                    size_t planeId = -1;
+
+                    if(rs < 0)
+                    {
+                        planeId = AddPlane(-geom.planes[f.pId].normal, -geom.planes[f.pId].distance, f.pId + offsetPlane);
+                    }
+                    else
+                    {
+                        planeId = AddPlane(geom.planes[f.pId].normal, geom.planes[f.pId].distance, f.pId + offsetPlane);
+                    }
+
+
                     auto ia = AddPoint(a);
                     auto ib = AddPoint(b);
                     auto ic = AddPoint(c);
@@ -982,8 +996,6 @@ namespace fuzzybools
                     double da = glm::dot(norm, a);
                     double db = glm::dot(norm, b);
                     double dc = glm::dot(norm, c);
-
-                    size_t planeId = AddPlane(norm, da);
 
                     if (!planes[planeId].IsPointOnPlane(a))
                     {
@@ -1025,12 +1037,12 @@ namespace fuzzybools
                     if (isA)
                     {
                         A.AddFace(planeId, ia, ib, ic);
-                        relevantA.AddFace(a, b, c);
+                        relevantA.AddFace(a, b, c, planes[planeId].refPlane);
                     }
                     else
                     {
                         B.AddFace(planeId, ia, ib, ic);
-                        relevantB.AddFace(a, b, c);
+                        relevantB.AddFace(a, b, c, planes[planeId].refPlane);
                     }
                 }
                 else
@@ -1337,9 +1349,14 @@ namespace fuzzybools
 
                 glm::dvec3 v1 = glm::normalize(ptA - ptB);
                 glm::dvec3 v2 = glm::normalize(ptA - ptC);
-                double rs = glm::dot(v1, v2);
+                glm::dvec3 v3 = glm::normalize(ptB - ptC);
+                double rs1 = glm::dot(v1, v2);
+                double rs2 = glm::dot(v2, v3);
+                double rs3 = glm::dot(v1, v3);
 
-                if (std::abs(rs) > 1 - toleranceThinTriangle)
+                if (std::abs(rs1) > 1 - toleranceThinTriangle ||
+                    std::abs(rs2) > 1 - toleranceThinTriangle ||
+                    std::abs(rs3) > 1 - toleranceThinTriangle)
                 {
                     continue;
                 }
@@ -1372,12 +1389,20 @@ namespace fuzzybools
 
                 if (!inside2d)
                 {
+                    auto postA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                    auto postB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+
+                    if (postA.loc != MeshLocation::BOUNDARY && postB.loc != MeshLocation::BOUNDARY)
+                    {
+                        continue;
+                    }
+
                     double inc = 0.9;
 
                     auto ptt = glm::mix(triCenter, ptA, inc);
 
-                    auto postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
-                    auto postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+                    postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
+                    postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
 
                     if (postA.loc != MeshLocation::BOUNDARY && postB.loc != MeshLocation::BOUNDARY)
                     {
@@ -1413,7 +1438,7 @@ namespace fuzzybools
                 //}
 
                 // TODO: why is this swapped? winding doesnt matter much, but still
-                geom.AddFace(ptB, ptA, ptC);
+                geom.AddFace(ptB, ptA, ptC, p.refPlane);
 
 #ifdef CSG_DEBUG_OUTPUT
                 // edges3DTriangles.push_back({ glm::dvec2(ptA.z+ ptA.x/2, ptA.y+ ptA.x/2), glm::dvec2(ptB.z+ ptB.x/2, ptB.y+ ptB.x/2) });
@@ -1716,7 +1741,7 @@ namespace fuzzybools
 
     //============================================================================================
 
-    inline Geometry Normalize(SharedPosition &sp, bool UNION)
+    inline Geometry Normalize(const Geometry& A, const Geometry& B, SharedPosition &sp, bool UNION)
     {
 
         // construct all contours, derive lines
@@ -1729,13 +1754,13 @@ namespace fuzzybools
             Plane &p = sp.planes[planeId];
 
 #ifdef CSG_DEBUG_OUTPUT
-            // auto basis = p.MakeBasis();
+            auto basis = p.MakeBasis();
 
-            // for (auto& segment : contours)
-            // {
-            //     edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
-            // }
-            // DumpSVGLines(edges, L"contour_A.html");
+            for (auto& segment : contours)
+            {
+                edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
+            }
+            DumpSVGLines(edges, L"contour_A.html");
 #endif
 
             for (auto &segment : contours)
@@ -1753,13 +1778,13 @@ namespace fuzzybools
             Plane &p = sp.planes[planeId];
 
 #ifdef CSG_DEBUG_OUTPUT
-            // auto basis = p.MakeBasis();
+            auto basis = p.MakeBasis();
 
-            // for (auto& segment : contours)
-            // {
-            //     edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
-            // }
-            // DumpSVGLines(edges, L"contour_B.html");
+            for (auto& segment : contours)
+            {
+                edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
+            }
+            DumpSVGLines(edges, L"contour_B.html");
 #endif
 
             for (auto &segment : contours)
@@ -1881,6 +1906,26 @@ namespace fuzzybools
             sp.TriangulatePlane(geom, plane);
         }
 
+        for (auto &plane : A.planes)
+        {
+            SimplePlane p;
+            p.normal = plane.normal;
+            p.distance = plane.distance;
+            geom.planes.push_back(p);
+            geom.hasPlanes = true;
+        }
+
+        for (auto &plane : B.planes)
+        {
+            SimplePlane p;
+            p.normal = plane.normal;
+            p.distance = plane.distance;
+            geom.planes.push_back(p);
+            geom.hasPlanes = true;
+        }
+
+        uint32_t offsetA = A.planes.size();
+
         // re-add irrelevant faces that should be tested
         for (auto &faceIndex : sp.A.irrelevantFaces_toTest)
         {
@@ -1890,7 +1935,7 @@ namespace fuzzybools
             auto b = sp._linkedA->GetPoint(f.i1);
             auto c = sp._linkedA->GetPoint(f.i2);
 
-            geom.AddFace(a, b, c);
+            geom.AddFace(a, b, c, f.pId);
         }
 
         for (auto &faceIndex : sp.B.irrelevantFaces_toTest)
@@ -1901,7 +1946,7 @@ namespace fuzzybools
             auto b = sp._linkedB->GetPoint(f.i1);
             auto c = sp._linkedB->GetPoint(f.i2);
 
-            geom.AddFace(a, b, c);
+            geom.AddFace(a, b, c,  f.pId + offsetA);
         }
 
         geom.data = geom.numFaces;
@@ -1915,7 +1960,7 @@ namespace fuzzybools
             auto b = sp._linkedA->GetPoint(f.i1);
             auto c = sp._linkedA->GetPoint(f.i2);
 
-            geom.AddFace(a, b, c);
+            geom.AddFace(a, b, c, f.pId);
         }
 
         if (UNION)
@@ -1928,7 +1973,7 @@ namespace fuzzybools
                 auto b = sp._linkedB->GetPoint(f.i1);
                 auto c = sp._linkedB->GetPoint(f.i2);
 
-                geom.AddFace(a, b, c);
+                geom.AddFace(a, b, c, f.pId + offsetA);
             }
         }
 

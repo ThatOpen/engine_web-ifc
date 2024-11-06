@@ -1026,6 +1026,11 @@ namespace webifc::geometry
 		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
 	}
 
+	inline bool equals(double A, double B, double eps = 0)
+	{
+		return std::fabs(A - B) <= eps;
+	}
+
 	inline double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
 		glm::dvec3 ab = b - a;

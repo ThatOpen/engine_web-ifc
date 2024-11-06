@@ -9,6 +9,11 @@
 
 namespace webifc::geometry {
 
+		bool Plane::IsEqualTo(const Vec &n, double d) const
+        {
+            return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, toleranceScalarEquality));
+        }
+
         bool AABB::intersects(const AABB& other) const
         {
            double eps = EPS_BIG;
@@ -133,7 +138,7 @@ namespace webifc::geometry {
 			numPoints += 1;
 		}
 
-		void Geometry::AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		void Geometry::AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, uint32_t pId)
 		{
 			glm::dvec3 normal;
 
@@ -150,10 +155,10 @@ namespace webifc::geometry {
 			AddPoint(b, normal);
 			AddPoint(c, normal);
 
-			AddFace(numPoints - 3, numPoints - 2, numPoints - 1);
+			AddFace(numPoints - 3, numPoints - 2, numPoints - 1, pId);
 		}
 
-		void Geometry::AddFace(uint32_t a, uint32_t b, uint32_t c)
+		void Geometry::AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId)
 		{
 //			indexData.reserve((numFaces + 1) * 3);
 //			indexData[numFaces * 3 + 0] = a;
@@ -162,6 +167,7 @@ namespace webifc::geometry {
 			indexData.push_back(a);
 			indexData.push_back(b);
 			indexData.push_back(c);
+			planeData.push_back(pId);
 
 			double area = areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
 
@@ -176,12 +182,91 @@ namespace webifc::geometry {
 			numFaces++;
 		}
 
+		size_t Geometry::AddPlane(const glm::dvec3 &normal, double d)
+        {
+            for (auto &plane : planes)
+            {
+                if (plane.IsEqualTo(normal, d))
+                {
+                    return plane.id;
+                }
+            }
+
+            Plane p;
+			p.id = planes.size();
+            p.normal = glm::normalize(normal);
+            p.distance = d;
+
+            planes.push_back(p);
+
+            return p.id;
+        }
+
+		void Geometry::buildPlanes()
+		{
+			if(!hasPlanes)
+			{
+
+				Vec centroid = Vec(0,0,0);
+
+				for (size_t i = 0; i < numFaces; i++)
+				{
+					Face f = GetFace(i);
+
+					auto a = GetPoint(f.i0);
+					auto b = GetPoint(f.i1);
+					auto c = GetPoint(f.i2);
+
+					centroid = centroid + (a + b + c) / 3.0;
+				}
+
+				for (size_t i = 0; i < numFaces; i++)
+				{
+					Face f = GetFace(i);
+
+					auto a = GetPoint(f.i0);
+					auto b = GetPoint(f.i1);
+					auto c = GetPoint(f.i2);
+
+					glm::dvec3 norm;
+
+					if (computeSafeNormal(a, b, c, norm, EPS_SMALL))
+					{
+						double da = glm::dot(norm, a - centroid);
+
+						size_t id = AddPlane(norm, da);
+						planeData[i] = id;
+					}
+
+					hasPlanes = true;
+				}
+
+				for (size_t i = 0; i < numFaces; i++)
+				{
+					Face f = GetFace(i);
+
+					if(f.pId > -1)
+					{
+						auto a = GetPoint(f.i0);
+						auto b = GetPoint(f.i1);
+						auto c = GetPoint(f.i2);
+
+						double da = glm::dot(planes[f.pId].normal, a);
+
+						planes[f.pId].distance = da;
+					}
+				}
+			}
+			// TODO: Remove unused planes
+		}
+
 		Face Geometry::GetFace(size_t index) const
 		{
 			Face f;
 			f.i0 = indexData[index * 3 + 0];
 			f.i1 = indexData[index * 3 + 1];
 			f.i2 = indexData[index * 3 + 2];
+			f.pId = planeData[index]; 
 			return f;
 		}
 

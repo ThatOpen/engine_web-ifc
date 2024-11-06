@@ -18,8 +18,18 @@ namespace webifc::geometry {
 
 	constexpr int VERTEX_FORMAT_SIZE_FLOATS = 6;
 
+    struct Plane
+    {
+		size_t id;
+        double distance;
+        Vec normal;
+
+		bool IsEqualTo(const Vec &n, double d) const;
+	};
+
 	struct Face
 	{
+		int pId;
 		int i0;
 		int i1;
 		int i2;
@@ -44,7 +54,10 @@ namespace webifc::geometry {
 		std::vector<float> fvertexData;
 		std::vector<double> vertexData;
 		std::vector<uint32_t> indexData;
+		std::vector<uint32_t> planeData;
+		std::vector<Plane> planes;
 
+		bool hasPlanes = false;
 		uint32_t numPoints = 0;
 		uint32_t numFaces = 0;
 
@@ -52,11 +65,13 @@ namespace webifc::geometry {
 		void AddPoint(glm::dvec4& pt, glm::dvec3& n);
 		AABB GetAABB() const;
 		void AddPoint(glm::dvec3& pt, glm::dvec3& n);
-		void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c);
-		void AddFace(uint32_t a, uint32_t b, uint32_t c);
+		void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, uint32_t pId = -1);
+		void AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId = -1);
+		size_t AddPlane(const glm::dvec3 &normal, double d);
+		void buildPlanes();
 		Face GetFace(size_t index) const;
 		AABB GetFaceBox(size_t index) const;
-		glm::dvec3 GetPoint(size_t index) const;
+		Vec GetPoint(size_t index) const;
 		void GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const;
 		Geometry Normalize(glm::dvec3 center, glm::dvec3 extents) const;
 		Geometry DeNormalize(glm::dvec3 center, glm::dvec3 extents) const;
@@ -68,11 +83,11 @@ namespace webifc::geometry {
 	{
 		bool halfSpace = false;
 		std::vector<IfcGeometry>  part;
-		glm::dvec3 halfSpaceX = glm::dvec3(1, 0, 0);
-		glm::dvec3 halfSpaceY = glm::dvec3(0, 1, 0);
-		glm::dvec3 halfSpaceZ = glm::dvec3(0, 0, 1);
-		glm::dvec3 halfSpaceOrigin = glm::dvec3(0, 0, 0);
-		glm::dvec3 normalizationCenter = glm::dvec3(0, 0, 0);
+		Vec halfSpaceX = Vec(1, 0, 0);
+		Vec halfSpaceY = Vec(0, 1, 0);
+		Vec halfSpaceZ = Vec(0, 0, 1);
+		Vec halfSpaceOrigin = Vec(0, 0, 0);
+		Vec normalizationCenter = Vec(0, 0, 0);
 		void ReverseFaces();
 		uint32_t GetVertexData();
 		void AddPart(IfcGeometry geom);

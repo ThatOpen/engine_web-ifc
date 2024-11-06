@@ -207,7 +207,7 @@ namespace webifc::geometry
                         voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
                     }
 
-                    if(relVoidsIt->second.size() > 30) // When voids are greater than 10 they are all fused
+                    if(relVoidsIt->second.size() > 50) // When voids are greater than 10 they are all fused
                     {   
                         std::vector<IfcGeometry> joinedVoidGeoms;
                         IfcGeometry fusedVoids;
@@ -1653,8 +1653,17 @@ namespace webifc::geometry
         newGeom.fvertexData = geom.fvertexData;
 		newGeom.vertexData = geom.vertexData;
 		newGeom.indexData = geom.indexData;
+        newGeom.planeData = geom.planeData;
 		newGeom.numPoints = geom.numPoints;
 		newGeom.numFaces = geom.numFaces;
+        for(auto plane: geom.planes)
+        {
+            fuzzybools::SimplePlane newPlane;
+            newPlane.distance = plane.distance;
+            newPlane.normal = plane.normal;
+            newGeom.planes.push_back(newPlane);
+        }
+        newGeom.hasPlanes = geom.hasPlanes;
         return newGeom;
     }
 
@@ -1664,8 +1673,20 @@ namespace webifc::geometry
         newGeom.fvertexData = geom.fvertexData;
 		newGeom.vertexData = geom.vertexData;
 		newGeom.indexData = geom.indexData;
+        newGeom.planeData = geom.planeData;
 		newGeom.numPoints = geom.numPoints;
 		newGeom.numFaces = geom.numFaces;
+        uint32_t id = 0;
+        for(auto plane: geom.planes)
+        {
+            webifc::geometry::Plane newPlane;
+            newPlane.id = id;
+            newPlane.distance = plane.distance;
+            newPlane.normal = plane.normal;
+            newGeom.planes.push_back(newPlane);
+            id++;
+        }
+        newGeom.hasPlanes = geom.hasPlanes;
         return newGeom;
     }
 
@@ -1742,6 +1763,9 @@ namespace webifc::geometry
                     #ifdef CSG_DEBUG_OUTPUT
                         io::DumpIfcGeometry(result, "first.obj");
                     #endif
+
+                    result.buildPlanes();
+                    secondOperator.buildPlanes();
 
                     if (op == "DIFFERENCE")
                     {

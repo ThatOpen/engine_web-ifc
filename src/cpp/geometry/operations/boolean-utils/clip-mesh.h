@@ -21,6 +21,12 @@ namespace fuzzybools
 
         std::vector<std::pair<int, AABB>> boundingList;
 
+        for(auto &plane: mesh.planes)
+        {
+            result.hasPlanes = true;
+            result.planes.push_back(plane);
+        }
+
         for (uint32_t i = 0; i < mesh.data; i++)
         {
             bool doit = false;
@@ -133,7 +139,7 @@ namespace fuzzybools
                 {
                     // normals face away from eachother, we can keep this face
                     // furthermore, since the first operand is the first added, we don't flip
-                    result.AddFace(a, b, c);
+                    result.AddFace(a, b, c, tri.pId);
                     doit = true;
                 }
             }
@@ -152,12 +158,12 @@ namespace fuzzybools
                         // we're taking the face of the second operand, but we must match the winding
                         if (glm::dot(n, isInside2Loc.normal) < 0)
                         {
-                            result.AddFace(a, b, c);
+                            result.AddFace(a, b, c, tri.pId);
                             doit = true;
                         }
                         else
                         {
-                            result.AddFace(b, a, c);
+                            result.AddFace(b, a, c, tri.pId);
                             doit = true;
                         }
                     }
@@ -166,18 +172,18 @@ namespace fuzzybools
                         // we're taking the face of the second operand, but we must match the winding
                         if (glm::dot(n, isInside1Loc.normal) < 0)
                         {
-                            result.AddFace(b, a, c);
+                            result.AddFace(b, a, c, tri.pId);
                             doit = true;
                         }
                         else
                         {
-                            result.AddFace(a, b, c);
+                            result.AddFace(a, b, c, tri.pId);
                             doit = true;
                         }
                     }
                     else
                     {
-                        result.AddFace(a, b, c);
+                        result.AddFace(a, b, c, tri.pId);
                         doit = true;
                     }
                 }
@@ -204,12 +210,18 @@ namespace fuzzybools
             glm::dvec3 a = mesh.GetPoint(tri.i0);
             glm::dvec3 b = mesh.GetPoint(tri.i1);
             glm::dvec3 c = mesh.GetPoint(tri.i2);
-            result.AddFace(a, b, c);
+            result.AddFace(a, b, c, tri.pId);
         }
     }
 
     static void doubleClipSingleMesh2(Geometry& mesh, BVH& bvh1, BVH& bvh2, Geometry& result)
     {
+        for(auto &plane: mesh.planes)
+        {
+            result.hasPlanes = true;
+            result.planes.push_back(plane);
+        }
+
         for (uint32_t i = 0; i < mesh.data; i++)
         {
             Face tri = mesh.GetFace(i);
@@ -288,11 +300,11 @@ namespace fuzzybools
                 // either is a boundary, keep
                 if (glm::dot(n, isInside1Loc.normal) < 0)
                 {
-                    result.AddFace(b, a, c);
+                    result.AddFace(b, a, c, tri.pId);
                 }
                 else
                 {
-                    result.AddFace(a, b, c);
+                    result.AddFace(a, b, c, tri.pId);
                 }
             }
             else if (isInside2 == MeshLocation::BOUNDARY && isInside1 == MeshLocation::OUTSIDE)
@@ -300,11 +312,11 @@ namespace fuzzybools
                 // either is a boundary, keep
                 if (glm::dot(n, isInside2Loc.normal) < 0)
                 {
-                    result.AddFace(b, a, c);
+                    result.AddFace(b, a, c, tri.pId);
                 }
                 else
                 {
-                    result.AddFace(a, b, c);
+                    result.AddFace(a, b, c, tri.pId);
                 }
             }
             else
@@ -319,7 +331,7 @@ namespace fuzzybools
             glm::dvec3 a = mesh.GetPoint(tri.i0);
             glm::dvec3 b = mesh.GetPoint(tri.i1);
             glm::dvec3 c = mesh.GetPoint(tri.i2);
-            result.AddFace(a, b, c);
+            result.AddFace(a, b, c, tri.pId);
         }
     }
 
