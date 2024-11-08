@@ -24,8 +24,8 @@ constexpr double toleranceIsInsideCenterExtents = 1.0E-10;
 /*
     Constants used in shared-position.h
 */    
-constexpr double toleranceVectorEquality = 1.0E-05;
-constexpr double toleranceScalarEquality = 1.0E-05;
+constexpr double toleranceVectorEquality = 1.0E-04;
+constexpr double toleranceScalarEquality = 1.0E-04;
 constexpr double toleranceCollinear      = 1.0E-04;
 
 /*

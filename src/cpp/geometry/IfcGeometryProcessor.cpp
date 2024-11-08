@@ -1697,7 +1697,7 @@ namespace webifc::geometry
 
         for (auto &firstGeom : firstGeoms)
         {
-            IfcGeometry result = firstGeom;
+            IfcGeometry firstOperator = firstGeom;
             for (auto &secondGeom : secondGeoms)
             {
                 bool doit = true;
@@ -1710,7 +1710,7 @@ namespace webifc::geometry
                     doit = false;
                 }
 
-                if (result.numFaces == 0 && op != "UNION")
+                if (firstOperator.numFaces == 0 && op != "UNION")
                 {
                     spdlog::error("[BoolProcess()] bool aborted due to empty source or target");
 
@@ -1740,9 +1740,9 @@ namespace webifc::geometry
                         double scaleY = 1;
                         double scaleZ = 1;
 
-                        for (uint32_t i = 0; i < result.numPoints; i++)
+                        for (uint32_t i = 0; i < firstOperator.numPoints; i++)
                         {
-                            glm::dvec3 p = result.GetPoint(i);
+                            glm::dvec3 p = firstOperator.GetPoint(i);
                             glm::dvec3 vec = (p - origin);
                             double dx = glm::dot(vec, x);
                             double dy = glm::dot(vec, y);
@@ -1761,27 +1761,27 @@ namespace webifc::geometry
                     #endif
 
                     #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpIfcGeometry(result, "first.obj");
+                        io::DumpIfcGeometry(firstOperator, "first.obj");
                     #endif
 
-                    result.buildPlanes();
+                    firstOperator.buildPlanes();
                     secondOperator.buildPlanes();
 
                     if (op == "DIFFERENCE")
                     {
-                        result = Subtract(result, secondOperator);
+                        firstOperator = Subtract(firstOperator, secondOperator);
                     }
                     else if (op == "UNION")
                     {
-                        result = Union(result, secondOperator);
+                        firstOperator = Union(firstOperator, secondOperator);
                     }
 
                     #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpIfcGeometry(result, "result.obj");
+                        io::DumpIfcGeometry(firstOperator, "result.obj");
                     #endif
                 }
             }
-            finalResult.AddGeometry(result);
+            finalResult.AddGeometry(firstOperator);
         }
 
         return finalResult;

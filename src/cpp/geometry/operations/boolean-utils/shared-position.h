@@ -1754,13 +1754,13 @@ namespace fuzzybools
             Plane &p = sp.planes[planeId];
 
 #ifdef CSG_DEBUG_OUTPUT
-            auto basis = p.MakeBasis();
+            // auto basis = p.MakeBasis();
 
-            for (auto& segment : contours)
-            {
-                edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
-            }
-            DumpSVGLines(edges, L"contour_A.html");
+            // for (auto& segment : contours)
+            // {
+            //     edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
+            // }
+            // DumpSVGLines(edges, L"contour_A.html");
 #endif
 
             for (auto &segment : contours)
@@ -1778,13 +1778,13 @@ namespace fuzzybools
             Plane &p = sp.planes[planeId];
 
 #ifdef CSG_DEBUG_OUTPUT
-            auto basis = p.MakeBasis();
+            // auto basis = p.MakeBasis();
 
-            for (auto& segment : contours)
-            {
-                edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
-            }
-            DumpSVGLines(edges, L"contour_B.html");
+            // for (auto& segment : contours)
+            // {
+            //     edges.push_back({ basis.project(sp.points[segment.first].location3D), basis.project(sp.points[segment.second].location3D) });
+            // }
+            // DumpSVGLines(edges, L"contour_B.html");
 #endif
 
             for (auto &segment : contours)
