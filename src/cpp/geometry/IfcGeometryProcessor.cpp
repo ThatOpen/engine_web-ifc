@@ -73,18 +73,12 @@ namespace webifc::geometry
         return _coordinationMatrix;
     }
 
-    IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID)
+    std::optional<glm::dvec4> IfcGeometryProcessor::GetStyleItemFromExpressId(uint32_t expressID)
     {
-        spdlog::debug("[GetMesh({})]",expressID);
-        auto lineType = _loader.GetLineType(expressID);
-
         std::optional<glm::dvec4> styledItemColor;
         auto &styledItems = _geometryLoader.GetStyledItems();
         auto &relMaterials = _geometryLoader.GetRelMaterials();
         auto &materialDefinitions = _geometryLoader.GetMaterialDefinitions();
-        auto relVoids = _geometryLoader.GetRelVoids();
-        auto &relElementAggregates = _geometryLoader.GetRelElementAggregates();
-
         auto styledItem = styledItems.find(expressID);
         if (styledItem != styledItems.end())
         {
@@ -126,14 +120,29 @@ namespace webifc::geometry
                 }
             }
         }
+        return styledItemColor;
+    }
 
+    IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID)
+    {
+        spdlog::debug("[GetMesh({})]",expressID);
+        auto lineType = _loader.GetLineType(expressID);
+        auto relVoids = _geometryLoader.GetRelVoids();
+        auto &relElementAggregates = _geometryLoader.GetRelElementAggregates();
+
+        
         IfcComposedMesh mesh;
         mesh.expressID = expressID;
-        mesh.hasColor = styledItemColor.has_value();
-        if (!styledItemColor)
+        std::optional<glm::dvec4> generatedColor = GetStyleItemFromExpressId(expressID);
+        if (!generatedColor) 
+        {
             mesh.color = glm::dvec4(1.0);
-        else
-            mesh.color = styledItemColor.value();
+            mesh.hasColor = false;
+        } else {
+            mesh.color = generatedColor.value();
+            mesh.hasColor = true;
+        }
+
         mesh.transformation = glm::dmat4(1);
 
         if (_schemaManager.IsIfcElement(lineType))
@@ -285,9 +294,9 @@ namespace webifc::geometry
                 resultMesh.expressID = expressID;
                 resultMesh.hasGeometry = true;
                 // If there is no styledItemcolor apply color of the object
-                if (styledItemColor)
+                if (mesh.hasColor)
                 {
-                    resultMesh.color = styledItemColor.value();
+                    resultMesh.color = mesh.color;
                     resultMesh.hasColor = true;
                 }
                 else if (elementColor.has_value())
@@ -552,6 +561,11 @@ namespace webifc::geometry
                     uint32_t shellRef = _loader.GetRefArgument(shell);
                     IfcComposedMesh temp;
                     _expressIDToGeometry[shellRef] = GetBrep(shellRef);
+                    std::optional<glm::dvec4> shellColor = GetStyleItemFromExpressId(shellRef);
+                    if (shellColor) {
+                        temp.color=shellColor.value();
+                        temp.hasColor=true;
+                    }
                     temp.expressID = shellRef;
                     temp.hasGeometry = true;
                     temp.transformation = glm::dmat4(1);
@@ -566,6 +580,7 @@ namespace webifc::geometry
                 uint32_t ifcPresentation = _loader.GetRefArgument();
 
                 _expressIDToGeometry[expressID] = GetBrep(ifcPresentation);
+                if (!mesh.hasColor) mesh.color=GetStyleItemFromExpressId(ifcPresentation).value_or(glm::dvec4(1.0));
                 mesh.hasGeometry = true;
 
                 return mesh;
@@ -576,6 +591,7 @@ namespace webifc::geometry
                 uint32_t ifcPresentation = _loader.GetRefArgument();
 
                 _expressIDToGeometry[expressID] = GetBrep(ifcPresentation);
+                if (!mesh.hasColor) mesh.color=GetStyleItemFromExpressId(ifcPresentation).value_or(glm::dvec4(1.0));;
                 mesh.hasGeometry = true;
 
                 return mesh;
@@ -866,10 +882,10 @@ namespace webifc::geometry
                 _expressIDToGeometry[expressID] = geom;
                 mesh.expressID = expressID;
                 mesh.hasGeometry = true;
-                if (!styledItemColor)
+                if (!mesh.hasColor)
                     mesh.color = glm::dvec4(1.0);
                 else
-                    mesh.color = styledItemColor.value();
+                    mesh.color = generatedColor.value();
                 return mesh;
             }
             case schema::IFCEXTRUDEDAREASOLID:
