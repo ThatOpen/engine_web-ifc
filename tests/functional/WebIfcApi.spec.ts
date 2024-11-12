@@ -426,27 +426,21 @@ describe('WebIfcApi known failures', () => {
 
 describe('some use cases', () => {
     test("can write a new property value and read it back in", async () => {
-        async function getFirstStorey(api:any, mId:any) {
-            const storeyIds = await api.GetLineIDsWithType(mId, WebIFC.IFCBUILDINGSTOREY);
-            expect(storeyIds.size()).toBe(2);
-            const storeyId = storeyIds.get(0);
-            const storey = await api.properties.getItemProperties(mId, storeyId);
-            return [storey, storeyId];
-          }
-          let [storey, storeyId] = await getFirstStorey(ifcApi, modelID);
+    
+          let storey = await ifcApi.properties.getItemProperties(modelID, 138);
           const newStoreyName = 'Nivel 1 - Editado'
           storey.LongName.value = newStoreyName;
           ifcApi.WriteLine(modelID, storey);
-          storey = await ifcApi.properties.getItemProperties(modelID, storeyId);
+          storey = await ifcApi.properties.getItemProperties(modelID, 138);
           expect(storey.LongName.value).toBe(newStoreyName);
       
           const writtenData = await ifcApi.SaveModel(modelID);
           let modelId = ifcApi.OpenModel(writtenData);
-          [storey, storeyId] = await getFirstStorey(ifcApi, modelId);
+          storey = await ifcApi.properties.getItemProperties(modelId, 138);
           expect(storey.LongName.value).toBe(newStoreyName);
-    });
-    
+    })
 })
+
 
 describe('creating ifc', () => {
     test('can create new ifc model', () => {

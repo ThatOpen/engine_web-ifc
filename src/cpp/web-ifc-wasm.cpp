@@ -321,10 +321,6 @@ bool ValidateExpressID(uint32_t modelID, uint32_t expressId) {
    return manager.IsModelOpen(modelID) ?  manager.GetIfcLoader(modelID)->IsValidExpressID(expressId) : false;
 }
 
-void ExtendLineStorage(uint32_t modelID, uint32_t lineStorageSize) {
-    if (manager.IsModelOpen(modelID)) manager.GetIfcLoader(modelID)->ExtendLineStorage(lineStorageSize);
-}
-
 uint32_t GetNextExpressID(uint32_t modelID, uint32_t expressId) { 
     return manager.IsModelOpen(modelID) ?  manager.GetIfcLoader(modelID)->GetNextExpressID(expressId) : 0;
 }
@@ -392,7 +388,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
     {
         emscripten::val child = val[std::to_string(i)];
         if (child.isNull()) loader->Push<uint8_t>(webifc::parsing::IfcTokenType::EMPTY);
-        else if (child.isUndefined()) loader->Push<uint8_t>(webifc::parsing::IfcTokenType::EMPTY);
+        else if (child.isUndefined()) loader->Push<uint8_t>(webifc::parsing::IfcTokenType::UNKNOWN);
         else if (child.isArray()) WriteSet(modelID,child);
         else if (child["value"].isArray())
         {
@@ -824,7 +820,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::register_vector<double>("DoubleVector");
 
-    emscripten::function("ExtendLineStorage", &ExtendLineStorage);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);

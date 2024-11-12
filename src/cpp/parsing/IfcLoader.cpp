@@ -21,9 +21,7 @@ namespace webifc::parsing {
    IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
    { 
      _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
-     _nullLine = new IfcLine();
-     _nullLine->ifcType=0;
-     _nullLine->tapeOffset=0;
+     _maxExpressId=0;
    }  
    
    const std::vector<uint32_t> IfcLoader::GetExpressIDsWithType(const uint32_t type) const
@@ -87,16 +85,21 @@ namespace webifc::parsing {
       output << "* Issues: https://github.com/ThatOpen/engine_web-ifc/issues" << std::endl;
       output << "******************************************************/" << std::endl;
       
-      const std::vector<IfcLine*> *totalLines[2] = {&_headerLines, &_lines};
       uint32_t linesWritten = 0;
       for (uint8_t z=0; z < 2; z++)
       {
-        const std::vector<IfcLine*>* currentLines = totalLines[z];
+        std::vector<IfcLine*>* currentLines;
+        if(z==0) currentLines= (std::vector<IfcLine*>*) &_headerLines;
+        else {
+          currentLines =  new std::vector<IfcLine*>();
+          std::transform( _lines.begin(), _lines.end(), std::back_inserter( *currentLines ), [](auto &kv){ return kv.second;}  );
+        }
         for(uint32_t i=0; i < currentLines->size();i++)
         {
+       
           IfcLine * line = (*currentLines)[i];
 
-          if (line == _nullLine || line->ifcType == 0) continue;
+          if (line->ifcType == 0) continue;
           _tokenStream->MoveTo(line->tapeOffset);
           bool newLine = true;
           bool insideSet = false;
@@ -216,7 +219,6 @@ namespace webifc::parsing {
   
    void IfcLoader::ParseLines() 
    {
-        uint32_t maxExpressId = 0;
   			uint32_t currentIfcType = 0;
   			uint32_t currentExpressID = 0;
   			uint32_t currentTapeOffset = 0;
@@ -239,9 +241,8 @@ namespace webifc::parsing {
               else if (currentExpressID != 0)
               {
                 _ifcTypeToExpressID[currentIfcType].push_back(currentExpressID);
-                maxExpressId = std::max(maxExpressId, currentExpressID);
-                _lines.resize(maxExpressId,_nullLine);
-                _lines[currentExpressID-1]=l;
+                _maxExpressId = std::max(_maxExpressId, currentExpressID);
+                _lines[currentExpressID]=l;
                 currentExpressID = 0;
               }
               currentIfcType = 0;
@@ -283,42 +284,37 @@ namespace webifc::parsing {
    
    uint32_t IfcLoader::GetMaxExpressId() const
    { 
-      return _lines.size();
+      return _maxExpressId;
    }
    
    bool IfcLoader::IsValidExpressID(const uint32_t expressID) const
    {  
-   	 if (expressID == 0 || expressID > _lines.size() || _lines[expressID-1]==_nullLine) return false;
+   	 if (expressID == 0 || expressID > _maxExpressId || !_lines.contains(expressID)) return false;
      else return true;
    }
    
    uint32_t IfcLoader::GetLineType(const uint32_t expressID) const
    { 
-      if (expressID == 0 || expressID > _lines.size()) {
+      if (expressID == 0 || expressID > _maxExpressId || !_lines.contains(expressID)) {
         spdlog::error("[GetLineType()] Attempt to Access Invalid ExpressID {}", expressID);
         return 0;
       }
-      return _lines[expressID-1]->ifcType;
+      return _lines.at(expressID)->ifcType;
    }
    
    IfcLoader::~IfcLoader()
    { 
       delete _tokenStream;
-      for (size_t i=0; i < _lines.size();i++) {
-        if (_lines[i] == _nullLine) {
-          continue;
-        }
-        delete _lines[i];
-      }
+      for (const auto & [key, value] : _lines) delete value;
       for (size_t i=0; i < _headerLines.size();i++) delete _headerLines[i];
       _lines.clear();
       _headerLines.clear();
-      delete _nullLine;
    }
    
    void IfcLoader::MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const
    { 
-     _tokenStream->MoveTo(_lines[expressID-1]->tapeOffset);
+     if (!_lines.contains(expressID)) return;
+     _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
      ArgumentOffset(argumentIndex);
    }
    
@@ -387,15 +383,13 @@ namespace webifc::parsing {
   uint32_t IfcLoader::GetCurrentLineExpressID() const
   {
       if (_lines.size()==0) return 0;
-      uint32_t pos = _tokenStream->GetReadOffset();
       uint32_t prevLine = 0;
-      for (size_t i=0; i < _lines.size();i++)
-      {
-        if (_lines[i] == _nullLine) continue;
-        if (_lines[i]->tapeOffset > pos) break;
-        prevLine = i;
+      uint32_t pos = _tokenStream->GetReadOffset();
+      for (const auto & [key, value] : _lines) {
+         if (value->tapeOffset > pos) break;
+         prevLine = key;
       }
-      return prevLine+1;
+      return prevLine;
   }
    
    uint32_t IfcLoader::GetRefArgument() const
@@ -422,17 +416,12 @@ namespace webifc::parsing {
 
   void IfcLoader::RemoveLine(const uint32_t expressID)
   {
-      _lines[expressID-1]->ifcType = 0;
-  }
-
-  void IfcLoader::ExtendLineStorage(uint32_t lineStorageSize)
-  {
-    _lines.reserve(_lines.size()+lineStorageSize);
+      _lines.erase(expressID);
   }
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
   {
-    if (expressID > _lines.size())
+    if (!_lines.contains(expressID))
   	{
       // create line object
   		IfcLine * line = new IfcLine();
@@ -440,11 +429,11 @@ namespace webifc::parsing {
   		line->ifcType = type;
       line->tapeOffset = start;
       //place in vector
-      _lines.resize(expressID,_nullLine);
-      _lines[expressID-1]=line;
+      _lines[expressID]=line;
   		_ifcTypeToExpressID[type].push_back(expressID);
+      if (expressID > _maxExpressId) _maxExpressId=expressID;
 
-  	} else _lines[expressID-1]->tapeOffset = start;
+  	} else _lines[expressID]->tapeOffset = start;
   }
 
   void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start)
@@ -656,8 +645,10 @@ namespace webifc::parsing {
    
    void IfcLoader::MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const
    {
-    _tokenStream->MoveTo(_lines[expressID-1]->tapeOffset);
-   	ArgumentOffset(argumentIndex);
+    if (_lines.contains(expressID)) {
+      _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
+   	  ArgumentOffset(argumentIndex);
+    }
    }
    
    void IfcLoader::StepBack() const {
@@ -683,30 +674,14 @@ namespace webifc::parsing {
 
     std::vector<uint32_t> IfcLoader::GetAllLines() const {
       std::vector<uint32_t> expressIDs;
-      auto numLines = GetMaxExpressId();
-      for (uint32_t i = 1; i <= numLines; i++)
-      {
-          if (!IsValidExpressID(i)) continue;
-          expressIDs.push_back(i);
-      }
+      std::transform( _lines.begin(), _lines.end(), std::back_inserter( expressIDs ), [](auto &kv){ return kv.first;}  );
       return expressIDs;
     }
 
     uint32_t IfcLoader::GetNextExpressID(uint32_t expressId) const {
-      uint32_t currentId = expressId;
-      bool cont = true;
-      uint32_t maxId = GetMaxExpressId();
-
-      while(cont)
-      {
-          if(currentId > maxId)
-          {
-              cont = false;
-              continue;
-          }
-          currentId++;
-          cont = !(IsValidExpressID(currentId));
-      }
+      uint32_t currentId = expressId+1;
+      while(!_lines.contains(currentId)) currentId++;
       return currentId;
     }
+
 }

@@ -26,13 +26,7 @@ declare var __WASM_PATH__:string;
 
 let WebIFCWasm: any;
 
-if (typeof self !== 'undefined' && self.crossOriginIsolated) {
-    try {
-        WebIFCWasm = require("./web-ifc-mt");
-    } catch (ex){
-        WebIFCWasm = require(__WASM_PATH__);
-    }
-} else WebIFCWasm = require(__WASM_PATH__);
+
 
 export * from "./ifc-schema";
 import { Properties } from "./helpers/properties";
@@ -180,7 +174,17 @@ export class IfcAPI {
      * @param customLocateFileHandler An optional locateFile function that let's
      * you override the path from which the wasm module is loaded.
      */
-    async Init(customLocateFileHandler?: LocateFileHandlerFn) {
+    async Init(customLocateFileHandler?: LocateFileHandlerFn, forceSingleThread: boolean = false) {
+        if (!WebIFCWasm) {
+            if (typeof self !== 'undefined' && self.crossOriginIsolated && !forceSingleThread) {
+                try {
+                    WebIFCWasm = require("./web-ifc-mt");
+                } catch (ex){
+                    WebIFCWasm = require(__WASM_PATH__);
+                }
+            } else WebIFCWasm = require(__WASM_PATH__);
+        }
+        
         if (WebIFCWasm && this.wasmModule == undefined) {
             let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
@@ -583,7 +587,6 @@ export class IfcAPI {
      * @param lineObject array of line object to write
      */
     WriteLines<Type extends IfcLineObject>(modelID: number, lineObjects: Array<Type>) {
-        this.wasmModule.ExtendLineStorage(modelID,lineObjects.length);
         for (let lineObject of lineObjects) this.WriteLine(modelID,lineObject);
     }
 
@@ -672,7 +675,6 @@ export class IfcAPI {
 
     /** @ignore */
     WriteRawLinesData(modelID: number, data: Array<RawLineData>) {
-        this.wasmModule.ExtendLineStorage(modelID,data.length);
         for (let rawLine of data)  this.wasmModule.WriteLine(modelID, rawLine.ID, rawLine.type, rawLine.arguments);
     }
 
