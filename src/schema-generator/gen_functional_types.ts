@@ -175,7 +175,7 @@ for (var i = 0; i < files.length; i++) {
   
   //generate ToRawLineData
   tsSchema.push(`ToRawLineData[${i}]={`)
-  for (var x=0; x < entities.length; x++) tsSchema.push(`${crc32(entities[x].name.toUpperCase(),crcTable)}:(${entities[x].derivedProps.length==0?'_:any': `i:${schemaNameClean}.${entities[x].name}`}):unknown[]=>[${entities[x].derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}],`);
+  for (var x=0; x < entities.length; x++) tsSchema.push(`${crc32(entities[x].name.toUpperCase(),crcTable)}:(${entities[x].derivedProps.length==0?'_:any': `i:${schemaNameClean}.${entities[x].name}`}):unknown[]=>[${entities[x].derivedProps.map((p) => generateTapeAssignment(p,entities[x].ifcDerivedProps,types)).join(", ")}],`);
   tsSchema.push('}');
 
   //initialisers
