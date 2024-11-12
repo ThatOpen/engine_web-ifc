@@ -77,8 +77,7 @@ namespace webifc::parsing
       const uint32_t _lineWriterBuffer;
       const schema::IfcSchemaManager &_schemaManager;
       IfcTokenStream * _tokenStream;
-      IfcLine * _nullLine;
-      std::vector<IfcLine*> _lines;
+      std::unordered_map<uint32_t,IfcLine*> _lines;
       std::vector<IfcLine*> _headerLines;
       std::unordered_map<uint32_t, std::vector<uint32_t>> _ifcTypeToExpressID;
       void ParseLines();
