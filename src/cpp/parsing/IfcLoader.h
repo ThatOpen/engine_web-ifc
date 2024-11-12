@@ -61,7 +61,6 @@ namespace webifc::parsing
       void RemoveLine(const uint32_t expressID);
       void PushDouble(double input);
       void PushInt(int input);
-      void ExtendLineStorage(uint32_t lineStorageSize);
       uint32_t GetNextExpressID(uint32_t expressId) const;
       template <typename T> void Push(T input)
       {
@@ -74,6 +73,7 @@ namespace webifc::parsing
         uint32_t ifcType;
         uint32_t tapeOffset;
       };
+      uint32_t _maxExpressId;
       const uint32_t _lineWriterBuffer;
       const schema::IfcSchemaManager &_schemaManager;
       IfcTokenStream * _tokenStream;

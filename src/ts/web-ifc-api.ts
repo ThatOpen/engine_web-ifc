@@ -587,7 +587,6 @@ export class IfcAPI {
      * @param lineObject array of line object to write
      */
     WriteLines<Type extends IfcLineObject>(modelID: number, lineObjects: Array<Type>) {
-        this.wasmModule.ExtendLineStorage(modelID,lineObjects.length);
         for (let lineObject of lineObjects) this.WriteLine(modelID,lineObject);
     }
 
@@ -676,7 +675,6 @@ export class IfcAPI {
 
     /** @ignore */
     WriteRawLinesData(modelID: number, data: Array<RawLineData>) {
-        this.wasmModule.ExtendLineStorage(modelID,data.length);
         for (let rawLine of data)  this.wasmModule.WriteLine(modelID, rawLine.ID, rawLine.type, rawLine.arguments);
     }
 
