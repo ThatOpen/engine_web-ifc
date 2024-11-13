@@ -1376,14 +1376,14 @@ comma-separated-tokens@^2.0.0:
   integrity sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==
 
 command-line-args@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/command-line-args/-/command-line-args-6.0.0.tgz"
-  integrity sha512-zDdHxHzlCp/gA1gy0VtPK3YL0Aob3ijJdwZ7H3HSl55hh8EziLtRlyj/od8EGRJfX8IjussC/mQkScl2Ms5Suw==
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/command-line-args/-/command-line-args-6.0.1.tgz#cbd1efb4f72b285dbd54bde9a8585c2d9694b070"
+  integrity sha512-Jr3eByUjqyK0qd8W0SGFW1nZwqCaNCtbXjRo2cRJC1OYxWl3MZ5t1US3jq+cO4sPavqgw4l9BMGX0CBe+trepg==
   dependencies:
     array-back "^6.2.2"
-    find-replace "^5.0.1"
+    find-replace "^5.0.2"
     lodash.camelcase "^4.3.0"
-    typical "^7.1.1"
+    typical "^7.2.0"
 
 command-line-usage@^7.0.3:
   version "7.0.3"
@@ -1876,9 +1876,9 @@ fill-range@^7.1.1:
   dependencies:
     to-regex-range "^5.0.1"
 
-find-replace@^5.0.1:
+find-replace@^5.0.2:
   version "5.0.2"
-  resolved "https://registry.npmjs.org/find-replace/-/find-replace-5.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/find-replace/-/find-replace-5.0.2.tgz#fe27ff0be05975aef6fc679c1139bbabea564e26"
   integrity sha512-Y45BAiE3mz2QsrN2fb5QEtO4qb44NcS7en/0y9PEVsg351HsLeVclP8QPMH79Le9sH3rs5RSwJu99W0WPZO43Q==
 
 find-up@^4.0.0, find-up@^4.1.0:
@@ -4316,6 +4316,11 @@ typical@^7.1.1:
   version "7.1.1"
   resolved "https://registry.npmjs.org/typical/-/typical-7.1.1.tgz"
   integrity sha512-T+tKVNs6Wu7IWiAce5BgMd7OZfNYUndHwc5MknN+UHOudi7sGZzuHdCadllRuqJ3fPtgFtIH9+lt9qRv6lmpfA==
+
+typical@^7.2.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/typical/-/typical-7.3.0.tgz#930376be344228709f134613911fa22aa09617a4"
+  integrity sha512-ya4mg/30vm+DOWfBg4YK3j2WD6TWtRkCbasOJr40CseYENzCUby/7rIvXA99JGsQHeNxLbnXdyLLxKSv3tauFw==
 
 uc.micro@^2.0.0, uc.micro@^2.1.0:
   version "2.1.0"
