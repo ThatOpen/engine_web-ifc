@@ -26,7 +26,11 @@ declare var __WASM_PATH__:string;
 
 let WebIFCWasm: any;
 
-
+let currentScriptPath: string;
+if (typeof document !== 'undefined') {
+    const currentScriptData  = (document.currentScript as HTMLScriptElement);
+    currentScriptPath = currentScriptData.src.substring(0, currentScriptData.src.lastIndexOf("/") + 1) ;
+}
 
 export * from "./ifc-schema";
 import { Properties } from "./helpers/properties";
@@ -193,10 +197,10 @@ export class IfcAPI {
                         return this.wasmPath + path;
                     }
 
-                    return prefix + this.wasmPath + path;
+                    return (currentScriptPath !== undefined ? currentScriptPath : prefix) + this.wasmPath + path;
                 }
                 // otherwise use the default path
-                return prefix + path;
+                return (currentScriptPath !== undefined ? currentScriptPath : prefix) + path;
             }
 
             //@ts-ignore
