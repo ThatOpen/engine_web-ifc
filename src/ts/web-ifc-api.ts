@@ -27,8 +27,8 @@ declare var __WASM_PATH__:string;
 let WebIFCWasm: any;
 
 let currentScriptPath: string;
-if (document !== undefined && document.currentScript !==undefined) {
-    const currentScriptData  = (document?.currentScript as HTMLScriptElement);
+if (typeof document !== 'undefined') {
+    const currentScriptData  = (document.currentScript as HTMLScriptElement);
     currentScriptPath = currentScriptData.src.substring(0, currentScriptData.src.lastIndexOf("/") + 1) ;
 }
 
