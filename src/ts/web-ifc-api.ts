@@ -29,7 +29,7 @@ let WebIFCWasm: any;
 let currentScriptPath: string;
 if (typeof document !== 'undefined') {
     const currentScriptData  = (document.currentScript as HTMLScriptElement);
-    if (typeof currentScriptData.src !== 'undefined') currentScriptPath = currentScriptData.src.substring(0, currentScriptData.src.lastIndexOf("/") + 1) ;
+    if (typeof currentScriptData?.src !== 'undefined') currentScriptPath = currentScriptData.src.substring(0, currentScriptData.src.lastIndexOf("/") + 1) ;
 }
 
 export * from "./ifc-schema";
