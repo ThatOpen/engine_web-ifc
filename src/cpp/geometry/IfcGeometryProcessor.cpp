@@ -664,6 +664,7 @@ namespace webifc::geometry
 
                 return mesh;
             }
+            case schema::IFCTRIANGULATEDIRREGULARNETWORK:
             case schema::IFCTRIANGULATEDFACESET:
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
