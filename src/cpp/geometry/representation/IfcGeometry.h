@@ -97,7 +97,9 @@ namespace webifc::geometry {
 		uint32_t GetVertexDataSize();
 		uint32_t GetIndexData();
 		uint32_t GetIndexDataSize();
+		SweptDiskSolid GetSweptDiskSolid();
 		glm::dmat4 Normalize();
+		SweptDiskSolid sweptDiskSolid;
 		private:
 			void ReverseFace(uint32_t index);
 			bool normalized = false;

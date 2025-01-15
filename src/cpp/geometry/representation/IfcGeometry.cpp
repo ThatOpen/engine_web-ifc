@@ -432,6 +432,34 @@ namespace webifc::geometry {
 				vertexData[i + 1] = vertexData[i + 1] - center.y;
 				vertexData[i + 2] = vertexData[i + 2] - center.z;
 			}
+			for (size_t i = 0; i < sweptDiskSolid.axis.size(); i++)
+			{
+				for (size_t j = 0; j < sweptDiskSolid.axis[i].points.size(); j++)
+				{
+					sweptDiskSolid.axis[i].points[j].x -= center.x;
+					sweptDiskSolid.axis[i].points[j].y -= center.y;
+					sweptDiskSolid.axis[i].points[j].z -= center.z;
+				}
+			}
+			
+			for (size_t i = 0; i < sweptDiskSolid.profiles.size(); i++)
+			{
+				for (size_t j = 0; j < sweptDiskSolid.profiles[i].curve.points.size(); j++)
+				{
+					sweptDiskSolid.profiles[i].curve.points[j].x -= center.x;
+					sweptDiskSolid.profiles[i].curve.points[j].y -= center.y;
+					sweptDiskSolid.profiles[i].curve.points[j].z -= center.z;
+				}
+				for (size_t j = 0; j < sweptDiskSolid.profiles[i].holes.size(); j++)
+				{
+					for (size_t k = 0; k < sweptDiskSolid.profiles[i].holes[j].points.size(); k++)
+					{
+						sweptDiskSolid.profiles[i].holes[j].points[k].x -= center.x;
+						sweptDiskSolid.profiles[i].holes[j].points[k].y -= center.y;
+						sweptDiskSolid.profiles[i].holes[j].points[k].z -= center.z;
+					}
+				}
+			}
 			normalizationCenter = center;
 			normalized = true;
 		}
@@ -462,6 +490,11 @@ namespace webifc::geometry {
 			return 0;
 		}
 		return (uint32_t)(size_t)&fvertexData[0];
+	}
+
+	SweptDiskSolid IfcGeometry::GetSweptDiskSolid()
+	{
+		return sweptDiskSolid;
 	}
 
 	void IfcGeometry::AddPart(IfcGeometry geom)

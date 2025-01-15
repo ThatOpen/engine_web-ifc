@@ -2112,7 +2112,7 @@ namespace webifc::geometry
 
         break;
       }
-    case schema::IFCBSPLINECURVEWITHKNOTS:
+      case schema::IFCBSPLINECURVEWITHKNOTS:
       {
         bool condition = sameSense == 0;
         if (edge)
@@ -2139,8 +2139,6 @@ namespace webifc::geometry
         auto selfIntersect = _loader.GetStringArgument();
         auto knotMultiplicitiesSet = _loader.GetSetArgument(); // The multiplicities of the knots. This list defines the number of times each knot in the knots list is to be repeated in constructing the knot array.
         auto knotSet = _loader.GetSetArgument();         // The list of distinct knots used to define the B-spline basis functions.
-
-
 
         for (auto &token : knotMultiplicitiesSet)
         {
@@ -2195,78 +2193,78 @@ namespace webifc::geometry
         for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
       }
 
-    if (condition)
-    {
-      std::reverse(curve.points.begin(), curve.points.end());
+      if (condition)
+      {
+        std::reverse(curve.points.begin(), curve.points.end());
+      }
+
+      break;
     }
-
-    break;
-  }
-case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
-  {
-
-    bool condition = sameSense == 0;
-    if (edge)
+  case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
     {
-      condition = !condition;
-    }
 
-    std::vector<glm::f64> distinctKnots;
-    std::vector<uint32_t> knotMultiplicities;
-    std::vector<glm::f64> knots;
-    std::vector<glm::f64> weights;
-    _loader.MoveToArgumentOffset(expressID, 0);
-    int degree = _loader.GetIntArgument();
-    auto points = _loader.GetSetArgument();
-    auto curveType = _loader.GetStringArgument();
-    auto closed = _loader.GetStringArgument();
-    auto selfIntersect = _loader.GetStringArgument();
-        auto knotMultiplicitiesSet = _loader.GetSetArgument(); // The multiplicities of the knots. This list defines the number of times each knot in the knots list is to be repeated in constructing the knot array.
-        auto knotSet = _loader.GetSetArgument();
-        auto knotSpec = _loader.GetStringArgument(); // The description of the knot type. This is for information only.
-        auto weightsSet = _loader.GetSetArgument();
+      bool condition = sameSense == 0;
+      if (edge)
+      {
+        condition = !condition;
+      }
 
-        for (auto &token : knotMultiplicitiesSet)
+      std::vector<glm::f64> distinctKnots;
+      std::vector<uint32_t> knotMultiplicities;
+      std::vector<glm::f64> knots;
+      std::vector<glm::f64> weights;
+      _loader.MoveToArgumentOffset(expressID, 0);
+      int degree = _loader.GetIntArgument();
+      auto points = _loader.GetSetArgument();
+      auto curveType = _loader.GetStringArgument();
+      auto closed = _loader.GetStringArgument();
+      auto selfIntersect = _loader.GetStringArgument();
+      auto knotMultiplicitiesSet = _loader.GetSetArgument(); // The multiplicities of the knots. This list defines the number of times each knot in the knots list is to be repeated in constructing the knot array.
+      auto knotSet = _loader.GetSetArgument();
+      auto knotSpec = _loader.GetStringArgument(); // The description of the knot type. This is for information only.
+      auto weightsSet = _loader.GetSetArgument();
+
+      for (auto &token : knotMultiplicitiesSet)
+      {
+        knotMultiplicities.push_back(_loader.GetIntArgument(token));
+      }
+
+      for (auto &token : knotSet)
+      {
+        distinctKnots.push_back(_loader.GetDoubleArgument(token));
+      }
+
+      for (auto &token : weightsSet)
+      {
+        weights.push_back(_loader.GetDoubleArgument(token));
+      }
+
+      for (size_t k = 0; k < distinctKnots.size(); k++)
+      {
+        double knot = distinctKnots[k];
+        for (size_t i = 0; i < knotMultiplicities[k]; i++)
         {
-          knotMultiplicities.push_back(_loader.GetIntArgument(token));
+          knots.push_back(knot);
+        }
+      }
+
+      if (knots.size() != points.size() + degree + 1)
+      {
+        std::cout << "Error: Knots and control points do not match" << std::endl;
+      }
+
+      if (dimensions == 2) 
+      {
+        std::vector<glm::dvec2> ctrolPts;
+        for (auto &token : points)
+        {
+          uint32_t pointId = _loader.GetRefArgument(token);
+          ctrolPts.push_back(GetCartesianPoint3D(pointId));
         }
 
-        for (auto &token : knotSet)
-        {
-          distinctKnots.push_back(_loader.GetDoubleArgument(token));
-        }
-
-        for (auto &token : weightsSet)
-        {
-          weights.push_back(_loader.GetDoubleArgument(token));
-        }
-
-        for (size_t k = 0; k < distinctKnots.size(); k++)
-        {
-          double knot = distinctKnots[k];
-          for (size_t i = 0; i < knotMultiplicities[k]; i++)
-          {
-            knots.push_back(knot);
-          }
-        }
-
-        if (knots.size() != points.size() + degree + 1)
-        {
-          std::cout << "Error: Knots and control points do not match" << std::endl;
-        }
-
-        if (dimensions == 2) 
-        {
-          std::vector<glm::dvec2> ctrolPts;
-          for (auto &token : points)
-          {
-            uint32_t pointId = _loader.GetRefArgument(token);
-            ctrolPts.push_back(GetCartesianPoint3D(pointId));
-          }
-
-          std::vector<glm::dvec2> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
-          for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
-        }
+        std::vector<glm::dvec2> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
+        for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
+      }
       else if (dimensions == 3)
       {
         std::vector<glm::dvec3> ctrolPts;
@@ -2280,25 +2278,22 @@ case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
         for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
       }
 
+      if (condition)
+      {
+        std::reverse(curve.points.begin(), curve.points.end());
+      }
 
-
-
-    if (condition)
-    {
-      std::reverse(curve.points.begin(), curve.points.end());
+      break;
     }
+    default:
 
+    spdlog::error("[ComputeCurve()] Unsupported curve type {}", expressID, lineType);
     break;
   }
-default:
-
-  spdlog::error("[ComputeCurve()] Unsupported curve type {}", expressID, lineType);
-  break;
-}
-  // DEBUG
-  // #ifdef DEBUG_DUMP_SVG
-  //     io::DumpSVGCurve(curve.points, "partial_curve.html");
-  // #endif
+    // DEBUG
+    // #ifdef DEBUG_DUMP_SVG
+    //     io::DumpSVGCurve(curve.points, "partial_curve.html");
+    // #endif
 
 }
 

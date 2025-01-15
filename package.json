@@ -85,5 +85,8 @@
     "crypto": false,
     "path": false,
     "fs": false
+  },
+  "dependencies": {
+    "glm": "^1.0.0"
   }
 }

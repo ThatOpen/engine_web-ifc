@@ -831,7 +831,11 @@ namespace webifc::geometry
                 IfcProfile profile;
                 profile.curve = GetCircleCurve(radius, _circleSegments);
 
-                IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), mesh, closed, profile, radius, directrix);
+                IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), closed, profile, radius, directrix);
+
+                geom.sweptDiskSolid.axis = std::vector<IfcCurve> {directrix};
+                geom.sweptDiskSolid.profiles = std::vector<IfcProfile> {profile};
+                geom.sweptDiskSolid.profileRadius = radius;
 
                 _expressIDToGeometry[expressID] = geom;
                 mesh.expressID = expressID;

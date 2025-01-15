@@ -277,7 +277,7 @@ namespace webifc::geometry
 			return geom;
 		}
 
-	inline	IfcGeometry SweepCircular(const double scaling, IfcComposedMesh &mesh, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
+	inline	IfcGeometry SweepCircular(const double scaling, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		spdlog::debug("[SweepCircular({})]");
 		IfcGeometry geom;

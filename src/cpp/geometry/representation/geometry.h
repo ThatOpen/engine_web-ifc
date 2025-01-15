@@ -65,6 +65,13 @@ namespace webifc::geometry {
 			std::vector<IfcCurve> curves;
 		};
 
+		struct SweptDiskSolid
+		{
+			std::vector<IfcProfile> profiles;
+			std::vector<IfcCurve> axis;
+			double profileRadius;
+		};
+
 		struct Cylinder
 		{
 			bool Active = false;

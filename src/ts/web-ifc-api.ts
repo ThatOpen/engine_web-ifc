@@ -106,6 +106,22 @@ export interface Curve {
     points: Array<Point>;
 }
 
+export interface SweptDiskSolid
+{
+    profile: Profile;
+    axis: Array<Curve>;
+    profileRadius: number;
+};
+
+export interface Profile
+{
+    curve: Curve;
+    holes: Array<Curve>;
+    profiles: Array<Profile>;
+    isConvex: boolean;
+    isComposite: boolean;
+};
+
 export interface CrossSection {
     curves: Array<Curve>;
     expressID: Array<number>;
@@ -126,6 +142,7 @@ export interface IfcGeometry {
     GetVertexDataSize(): number;
     GetIndexData(): number;
     GetIndexDataSize(): number;
+    GetSweptDiskSolid(): SweptDiskSolid;
     delete(): void;
 }
 

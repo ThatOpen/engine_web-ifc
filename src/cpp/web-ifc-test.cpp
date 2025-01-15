@@ -141,7 +141,7 @@ std::string ReadValue(webifc::parsing::IfcLoader &loader, webifc::parsing::IfcTo
     }
 }
 
-std::string GetArgs(webifc::parsing::IfcLoader &loader, bool inObject=false, bool inList=false)
+std::string GetArgs(webifc::parsing::IfcLoader &loader, bool inObject = false, bool inList = false)
 {
     std::string arguments;
     size_t size = 0;
@@ -152,58 +152,60 @@ std::string GetArgs(webifc::parsing::IfcLoader &loader, bool inObject=false, boo
 
         switch (t)
         {
-            case webifc::parsing::IfcTokenType::LINE_END:
+        case webifc::parsing::IfcTokenType::LINE_END:
+        {
+            endOfLine = true;
+            break;
+        }
+        case webifc::parsing::IfcTokenType::EMPTY:
+        {
+            arguments += " Empty ";
+            break;
+        }
+        case webifc::parsing::IfcTokenType::SET_BEGIN:
+        {
+            arguments += GetArgs(loader, false, true);
+            break;
+        }
+        case webifc::parsing::IfcTokenType::SET_END:
+        {
+            endOfLine = true;
+            break;
+        }
+        case webifc::parsing::IfcTokenType::LABEL:
+        {
+            // read label
+            std::string obj;
+            obj = " type: LABEL ";
+            loader.StepBack();
+            auto s = loader.GetStringArgument();
+            // read set open
+            loader.GetTokenType();
+            obj += " value " + GetArgs(loader, true) + " ";
+            arguments += obj;
+            break;
+        }
+        case webifc::parsing::IfcTokenType::STRING:
+        case webifc::parsing::IfcTokenType::ENUM:
+        case webifc::parsing::IfcTokenType::REAL:
+        case webifc::parsing::IfcTokenType::INTEGER:
+        case webifc::parsing::IfcTokenType::REF:
+        {
+            loader.StepBack();
+            std::string obj;
+            if (inObject)
+                obj = ReadValue(loader, t);
+            else
             {
-                endOfLine = true;
-                break;
-            }
-            case webifc::parsing::IfcTokenType::EMPTY:
-            {
-                arguments += " Empty ";
-                break;
-            }
-            case webifc::parsing::IfcTokenType::SET_BEGIN:
-            {
-                arguments += GetArgs(loader, false, true);
-                break;
-            }
-            case webifc::parsing::IfcTokenType::SET_END:
-            {
-                endOfLine = true;
-                break;
-            }
-            case webifc::parsing::IfcTokenType::LABEL:
-            {
-                // read label
-                std::string obj; 
-                obj = " type: LABEL ";
-                loader.StepBack();
-                auto s=loader.GetStringArgument();
-                // read set open
-                loader.GetTokenType();
-                obj += " value " + GetArgs(loader,true) + " ";
-                arguments += obj;
-                break;
-            }
-            case webifc::parsing::IfcTokenType::STRING:
-            case webifc::parsing::IfcTokenType::ENUM:
-            case webifc::parsing::IfcTokenType::REAL:
-            case webifc::parsing::IfcTokenType::INTEGER:
-            case webifc::parsing::IfcTokenType::REF:
-            {
-                loader.StepBack();
                 std::string obj;
-                if (inObject) obj = ReadValue(loader,t);
-                else {
-                    std::string obj; 
-                    obj += " type REF ";
-                    obj += ReadValue(loader,t) + " ";
-                }
-                arguments += obj;
-                break;
+                obj += " type REF ";
+                obj += ReadValue(loader, t) + " ";
             }
-            default:
-                break;
+            arguments += obj;
+            break;
+        }
+        default:
+            break;
         }
     }
     return arguments;
@@ -211,9 +213,11 @@ std::string GetArgs(webifc::parsing::IfcLoader &loader, bool inObject=false, boo
 
 std::string GetLine(webifc::parsing::IfcLoader &loader, uint32_t expressID)
 {
-    if (!loader.IsValidExpressID(expressID)) return "";
+    if (!loader.IsValidExpressID(expressID))
+        return "";
     uint32_t lineType = loader.GetLineType(expressID);
-    if (lineType==0) return "";
+    if (lineType == 0)
+        return "";
 
     loader.MoveToArgumentOffset(expressID, 0);
 
@@ -243,7 +247,7 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
         {
             auto mesh = geometryLoader.GetFlatMesh(elements[i]);
 
-            if(mesh.expressID == IdToExport)
+            if (mesh.expressID == IdToExport)
             {
                 DumpFlatMesh(mesh, geometryLoader, "TEST_GEOM.obj");
             }
@@ -258,6 +262,34 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
     }
 
     return meshes;
+}
+
+std::vector<webifc::geometry::SweptDiskSolid> GetAllRebars(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader)
+{
+    std::vector<webifc::geometry::SweptDiskSolid> reinforcingBars;
+    std::vector<glm::dmat4> reinforcingBarsTransform;
+
+    auto type = webifc::schema::IFCREINFORCINGBAR;
+
+    auto elements = loader.GetExpressIDsWithType(type);
+
+    for (size_t i = 0; i < elements.size(); i++)
+    {    
+        if(elements[i] == 145645)
+        {
+            auto mesh = geometryLoader.GetFlatMesh(elements[i]);
+
+            for (auto &geom : mesh.geometries)
+            {
+                auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
+
+                reinforcingBars.push_back(flatGeom.sweptDiskSolid);
+                reinforcingBarsTransform.push_back(geom.transformation);
+            }
+        }
+    }
+
+    return reinforcingBars;
 }
 
 void DumpRefs(std::unordered_map<uint32_t, std::vector<uint32_t>> &refs)
@@ -405,14 +437,14 @@ int main()
 
     // return 0;
 
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/993.ifc");
-
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/isolated.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/m3d.ifc");
 
     struct LoaderSettings
     {
         bool COORDINATE_TO_ORIGIN = false;
         uint16_t CIRCLE_SEGMENTS = 12;
-        uint32_t TAPE_SIZE = 67108864 ; // probably no need for anyone other than web-ifc devs to change this
+        uint32_t TAPE_SIZE = 67108864; // probably no need for anyone other than web-ifc devs to change this
         uint32_t MEMORY_LIMIT = 2147483648;
         uint16_t LINEWRITER_BUFFER = 10000;
     };
@@ -444,10 +476,10 @@ int main()
     webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN);
 
     start = ms();
-    
-    SpecificLoadTest(loader, geometryLoader, 3649);
 
-    auto meshes = LoadAllTest(loader, geometryLoader, 3649);
+    SpecificLoadTest(loader, geometryLoader, 4553);
+    // auto meshes = LoadAllTest(loader, geometryLoader, -1);
+    // auto rebars = GetAllRebars(loader, geometryLoader);
     std::cout << GetLine(loader, 225) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
 

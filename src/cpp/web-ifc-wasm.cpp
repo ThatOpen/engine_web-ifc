@@ -729,7 +729,9 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetVertexDataSize", &webifc::geometry::IfcGeometry::GetVertexDataSize)
         .function("GetIndexData", &webifc::geometry::IfcGeometry::GetIndexData)
         .function("GetIndexDataSize", &webifc::geometry::IfcGeometry::GetIndexDataSize)
+        .function("GetSweptDiskSolid", &webifc::geometry::IfcGeometry::GetSweptDiskSolid)
         ;
+
 
 
     emscripten::value_object<glm::dvec4>("dvec4")
@@ -784,6 +786,11 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::register_vector<webifc::geometry::IfcFlatMesh>("IfcFlatMeshVector");
     emscripten::register_vector<uint32_t>("UintVector");
 
+    emscripten::value_object<webifc::geometry::SweptDiskSolid>("SweptDiskSolid")
+        .field("profiles", &webifc::geometry::SweptDiskSolid::profiles)
+        .field("axis", &webifc::geometry::SweptDiskSolid::axis)
+        .field("profileRadius", &webifc::geometry::SweptDiskSolid::profileRadius);
+
     emscripten::register_vector<webifc::geometry::IfcCrossSections>("IfcCrossSectionsVector");
 
     emscripten::value_object<webifc::geometry::IfcCrossSections>("IfcCrossSections")
@@ -806,9 +813,18 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::register_vector<webifc::geometry::IfcCurve>("IfcCurveVector");
 
+    emscripten::register_vector<webifc::geometry::IfcProfile>("IfcProfileVector");
+
     emscripten::value_object<webifc::geometry::IfcCurve>("IfcCurve")
         .field("points", &webifc::geometry::IfcCurve::points)
         .field("userData", &webifc::geometry::IfcCurve::userData);
+    
+    emscripten::value_object<webifc::geometry::IfcProfile>("IfcProfile")
+        .field("curve", &webifc::geometry::IfcProfile::curve)
+        .field("holes", &webifc::geometry::IfcProfile::holes)
+        .field("profiles", &webifc::geometry::IfcProfile::profiles)
+        .field("isConvex", &webifc::geometry::IfcProfile::isConvex)
+        .field("isComposite", &webifc::geometry::IfcProfile::isComposite);
 
     emscripten::register_vector<glm::vec<2, glm::f64>>("vector2doubleVector");
 
