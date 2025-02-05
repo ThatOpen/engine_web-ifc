@@ -11,7 +11,7 @@
 #include <emscripten/bind.h>
 #include <spdlog/spdlog.h>
 #include "../web-ifc/modelmanager/ModelManager.h"
-#include "version.h"
+#include "../version.h"
 
 namespace webifc::parsing { 
     void p21encode(std::string_view input, std::ostringstream &output);
