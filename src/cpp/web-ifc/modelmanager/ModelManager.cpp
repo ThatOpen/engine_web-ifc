@@ -9,7 +9,7 @@
 #include "../schema/IfcSchemaManager.h"
 #include "../geometry/IfcGeometryProcessor.h"
 #include "../parsing/IfcLoader.h"
-#include "../version.h"
+#include "../../version.h"
 
 webifc::manager::ModelManager::ModelManager(bool _mt_enabled) {
     mt_enabled = _mt_enabled;

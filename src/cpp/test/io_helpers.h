@@ -10,10 +10,10 @@
 #include <sstream>
 #include <cstdint>
 #include <glm/glm.hpp>
-#include "../geometry/representation/geometry.h"
-#include "../geometry/representation/IfcGeometry.h"
-#include "../geometry/IfcGeometryProcessor.h"
-#include "../geometry/operations/geometryutils.h"
+#include "../web-ifc/geometry/representation/geometry.h"
+#include "../web-ifc/geometry/representation/IfcGeometry.h"
+#include "../web-ifc/geometry/IfcGeometryProcessor.h"
+#include "../web-ifc/geometry/operations/geometryutils.h"
 
 namespace webifc::io 
 {
