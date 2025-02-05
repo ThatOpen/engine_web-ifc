@@ -10,7 +10,7 @@
 #include <memory>
 #include <emscripten/bind.h>
 #include <spdlog/spdlog.h>
-#include "modelmanager/ModelManager.h"
+#include "../web-ifc/modelmanager/ModelManager.h"
 #include "version.h"
 
 namespace webifc::parsing { 
