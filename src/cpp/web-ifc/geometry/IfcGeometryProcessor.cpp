@@ -5,7 +5,7 @@
 #include <spdlog/spdlog.h>
 
 #if defined(DEBUG_DUMP_SVG) || defined(DUMP_CSG_MESHES)
-#include "../test/io_helpers.h"
+#include "../../test/io_helpers.h"
 #endif
 
 #include "IfcGeometryProcessor.h"

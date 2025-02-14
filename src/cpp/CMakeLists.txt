@@ -86,6 +86,8 @@ function(PARAM_SETTER THE_EXECUTABLE)
 			target_compile_options(${THE_EXECUTABLE} PUBLIC "-O3")
 		endif()
 	else()
+		# Force UTF-8 for Windows MSVC
+		target_compile_options(${THE_EXECUTABLE} PUBLIC "/utf-8")
 		target_compile_options(${THE_EXECUTABLE} PUBLIC "-std:c++latest")
 	endif()
 endfunction()

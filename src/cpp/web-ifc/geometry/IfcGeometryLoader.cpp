@@ -7,7 +7,7 @@
 #include "operations/curve-utils.h"
 #include "operations/geometryutils.h"
 #ifdef DEBUG_DUMP_SVG
-#include "../test/io_helpers.h"
+#include "../../test/io_helpers.h"
 #endif
 
 namespace webifc::geometry
