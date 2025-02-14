@@ -1898,6 +1898,11 @@ namespace webifc::geometry
               endDegrees = VectorToAngle(dxS, dyS) - 90;
               startDegrees = VectorToAngle(dxE, dyE) - 90;
             }
+            if (_angleUnits == "RADIAN")
+            {
+               endDegrees = endDegrees / 180 * CONST_PI;
+               startDegrees = startDegrees / 180 * CONST_PI;
+            }
           }
         }
 
