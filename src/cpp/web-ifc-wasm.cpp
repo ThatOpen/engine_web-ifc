@@ -817,7 +817,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<webifc::geometry::IfcCurve>("IfcCurve")
         .field("points", &webifc::geometry::IfcCurve::points)
-        .field("userData", &webifc::geometry::IfcCurve::userData);
+        .field("userData", &webifc::geometry::IfcCurve::userData)
+        .field("arcSegments", &webifc::geometry::IfcCurve::arcSegments);
     
     emscripten::value_object<webifc::geometry::IfcProfile>("IfcProfile")
         .field("curve", &webifc::geometry::IfcProfile::curve)

@@ -104,6 +104,8 @@ export interface Point {
 
 export interface Curve {
     points: Array<Point>;
+    userData: Array<string>;
+    arcSegments: Array<number>;
 }
 
 export interface SweptDiskSolid
@@ -204,8 +206,8 @@ export class IfcAPI {
                     WebIFCWasm = require(__WASM_PATH__);
                 }
             } else WebIFCWasm = require(__WASM_PATH__);
-        }
-        
+        }        
+
         if (WebIFCWasm && this.wasmModule == undefined) {
             let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
@@ -750,7 +752,7 @@ export class IfcAPI {
                 const newPoint: Point = { x: pt.x, y: pt.y, z: pt.z };
                 ptList.push(newPoint);
                 }
-                const newCurve: Curve = { points: ptList };
+                const newCurve: Curve = { points: ptList, userData: [], arcSegments: [] };
                 curveList.push(newCurve);
                 expressList.push(alignment.expressID.get(j));
             }
@@ -781,7 +783,7 @@ export class IfcAPI {
                 const newPoint = { x: pt.x, y: pt.y, z: pt.z };
                 ptList.push(newPoint);
                 }
-                const newCurve: Curve = { points: ptList };
+                const newCurve: Curve = { points: ptList, userData: [], arcSegments: [] };
                 curveList.push(newCurve);
                 expressList.push(alignment.expressID.get(j));
             }

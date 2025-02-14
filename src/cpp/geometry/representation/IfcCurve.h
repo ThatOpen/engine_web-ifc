@@ -15,8 +15,9 @@ namespace webifc::geometry {
 	struct IfcCurve
 	{
 		std::vector<glm::dvec3> points;
-		std::vector<uint16_t> indices;
+		std::vector<uint32_t> arcSegments;
 		std::vector<std::string> userData;
+		std::vector<uint16_t> indices;
 		void Add(glm::dvec3 pt);
 		void Add(glm::dvec2 pt);
 		glm::dvec2 Get2d(size_t i) const;

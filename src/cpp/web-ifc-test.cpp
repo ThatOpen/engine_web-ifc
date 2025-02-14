@@ -437,8 +437,8 @@ int main()
 
     // return 0;
 
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/isolated.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/m3d.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/isolated.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/m3d.ifc");
 
     struct LoaderSettings
     {
@@ -477,9 +477,9 @@ int main()
 
     start = ms();
 
-    SpecificLoadTest(loader, geometryLoader, 4553);
+    // SpecificLoadTest(loader, geometryLoader, 4553);
     // auto meshes = LoadAllTest(loader, geometryLoader, -1);
-    // auto rebars = GetAllRebars(loader, geometryLoader);
+    auto rebars = GetAllRebars(loader, geometryLoader);
     std::cout << GetLine(loader, 225) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
 

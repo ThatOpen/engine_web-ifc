@@ -1749,7 +1749,9 @@ namespace webifc::geometry
                 for (auto &pt : arc.points)
                 {
                   curve.Add(pt);
-                }
+                } 
+                curve.arcSegments.push_back(curve.points.size() - 1 - arc.points.size());
+                curve.arcSegments.push_back(curve.points.size() - 1);
               }
             }
           }
@@ -1786,6 +1788,8 @@ namespace webifc::geometry
                 {
                   curve.Add(pt);
                 }
+                curve.arcSegments.push_back(curve.points.size() - 1 - arc.points.size());
+                curve.arcSegments.push_back(curve.points.size() - 1);
               }
             }
           }
@@ -1953,6 +1957,7 @@ namespace webifc::geometry
 
         size_t startIndex = curve.points.size();
 
+        curve.arcSegments.push_back(curve.points.size() - 1); // This is required to identify arc points in the points list
         for (int i = 0; i < _circleSegments; i++)
         {
           double ratio = static_cast<double>(i) / (_circleSegments - 1);
@@ -1988,7 +1993,7 @@ namespace webifc::geometry
             curve.Add(pos);
           }
         }
-
+        curve.arcSegments.push_back(curve.points.size() - 1); // This is required to identify arc points in the points list
         // without a trim, we close the circle
         if (!trim.exist)
         {
