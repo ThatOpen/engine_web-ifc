@@ -6,12 +6,12 @@
 #include <fstream>
 #include <cstdint>
 #include <filesystem>
-#include "test/io_helpers.h"
+#include "io_helpers.h"
 
-#include "parsing/IfcLoader.h"
-#include "schema/IfcSchemaManager.h"
-#include "geometry/IfcGeometryProcessor.h"
-#include "schema/ifc-schema.h"
+#include "../web-ifc/parsing/IfcLoader.h"
+#include "../web-ifc/schema/IfcSchemaManager.h"
+#include "../web-ifc/geometry/IfcGeometryProcessor.h"
+#include "../web-ifc/schema/ifc-schema.h"
 
 using namespace webifc::io;
 

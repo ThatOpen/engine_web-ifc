@@ -21,15 +21,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # collect source files
-file(GLOB WebIfcParsing parsing/*.cpp)
-file(GLOB_RECURSE WebIfcGeometry geometry/*.cpp)
-file(GLOB_RECURSE WebIfcGeometryH geometry/*.h)
-file(GLOB WebIfcSchema schema/*.cpp)
-file(GLOB WebIfcManager modelmanager/*.cpp)
-file(GLOB WebIfcAPI web-ifc-wasm.cpp)
-file(GLOB WebIfcUtility utility/*.cpp)
-file(GLOB WebIfcTestSourceFiles test/*.cpp)
-file(GLOB WebIfcTestingMain web-ifc-test.cpp)
+file(GLOB_RECURSE web-ifc-source web-ifc/*.cpp)
+file(GLOB_RECURSE web-ifc-wasm wasm/*.cpp)
 
 # download the external projects and save their paths
 Message("Downloading FastFloat")
@@ -38,8 +31,6 @@ FetchContent_MakeAvailable(fastfloat)
 FetchContent_GetProperties(fastfloat)
 
 Message("Downloading TinyNURBS")
-
-# FetchContent_Declare(tinynurbs GIT_REPOSITORY "https://github.com/pradeep-pyro/tinynurbs" GIT_TAG "2fc6562d71665312c6298f7c340bace1bcf1b7a1" SOURCE_SUBDIR "../")
 FetchContent_Declare(tinynurbs GIT_REPOSITORY "https://github.com/QuimMoya/tinynurbs" GIT_TAG "47115cd9b6e922b27bbc4ab01fdeac2e9ea597a4" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(tinynurbs)
 FetchContent_GetProperties(tinynurbs)
@@ -61,27 +52,13 @@ FetchContent_GetProperties(earcut)
 
 Message("Downloading CDT")
 FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_TAG "4d0c9026b8ec846fe544897e7111f8f9080d5f8a" SOURCE_SUBDIR "../")
-
-# FetchContent_Declare(cdt GIT_REPOSITORY "https://github.com/artem-ogre/CDT" GIT_TAG "9d99b32ae56b26cd2781678dc4405c98b8679a9f" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(cdt)
 FetchContent_GetProperties(cdt)
 
 Message("Downloading spdlog")
-FetchContent_Declare(spdlog GIT_REPOSITORY "https://github.com/gabime/spdlog" GIT_TAG "7e635fca68d014934b4af8a1cf874f63989352b7" SOURCE_SUBDIR "../")
+FetchContent_Declare(spdlog GIT_REPOSITORY "https://github.com/gabime/spdlog" GIT_TAG "f355b3d58f7067eee1706ff3c801c2361011f3d5" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(spdlog)
 FetchContent_GetProperties(spdlog)
-
-#Message("Downloading FUZZY")
-# using a custom version of fuzzy-bools to silence some debug printf from the library that pollutes the output of the executables
-# FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/CBenghi/fuzzy-bools" GIT_TAG "07faaad8cae623dd634b1c09b4b37b44bf645781" SOURCE_SUBDIR "../")
-# FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/tomvandig/fuzzy-bools" GIT_TAG "a52c0f0c0667b7c875ae44e91e63a33c1813be64" SOURCE_SUBDIR "../")
-# @pobr1 Improvement
-# FetchContent_Declare(fuzzy GIT_REPOSITORY "https://github.com/QuimMoya/fuzzy-bools" GIT_TAG "2cf2885065dcf5359dc42b9934cd7d0acb62f431" SOURCE_SUBDIR "../")
-# FetchContent_MakeAvailable(fuzzy)
-# FetchContent_GetProperties(fuzzy)
-# file(RENAME ${fuzzy_SOURCE_DIR}/src ${fuzzy_SOURCE_DIR}/fuzzy RESULT result) # specifying 'result' continues even if rename was already performed
-# file(GLOB FuzzyHeaders ${fuzzy_SOURCE_DIR}/fuzzy/*.h)
-message(${WebIfcGeometryH})
 
 Message("Downloads Finished")
 
@@ -92,7 +69,6 @@ function(PARAM_SETTER THE_EXECUTABLE)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${glm_SOURCE_DIR}/)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${glm_SOURCE_DIR}/glm)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${earcut_SOURCE_DIR}/include)
-	target_include_directories(${THE_EXECUTABLE} PUBLIC ${fuzzy_SOURCE_DIR}/)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${spdlog_SOURCE_DIR}/include)
 
 	if(NOT MSVC)
@@ -116,24 +92,28 @@ endfunction()
 
 if(EMSCRIPTEN)
 	# build parameters for web-ifc
-	add_executable(web-ifc ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
+	add_executable(web-ifc ${web-ifc-source} ${web-ifc-wasm})
 	param_setter(web-ifc)
 	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web")
 
-	add_executable(web-ifc-node ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
+	add_executable(web-ifc-node ${web-ifc-source} ${web-ifc-wasm})
 	param_setter(web-ifc-node)
 	set_target_properties(web-ifc-node PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 ")
 
 	# multi-treaded versions
-	add_executable(web-ifc-mt ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcAPI} ${WebIfcUtility} ${WebIfcGeometry})
+	add_executable(web-ifc-mt ${web-ifc-source} ${web-ifc-wasm})
 	param_setter(web-ifc-mt)
 	target_compile_options(web-ifc-mt PUBLIC "-pthread")
 	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -flto --define-macro=REAL_T_IS_DOUBLE -sSTACK_SIZE=5MB -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web,worker")
 endif()
 
 if(NOT EMSCRIPTEN)
+	# build web-ifc as a static library
+	add_library(web-ifc-library STATIC ${web-ifc-source})
+	param_setter(web-ifc-library)
+
 	# build parameters for web-ifc-test
-	add_executable(web-ifc-test ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestSourceFiles})
+	add_executable(web-ifc-test ${web-ifc-source} "./test/encoding_test.cpp" "./test/main.cpp" "./test/io_helpers.cpp")
 	param_setter(web-ifc-test)
 	target_include_directories(web-ifc-test PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
 
@@ -141,7 +121,7 @@ if(NOT EMSCRIPTEN)
 	set_tests_properties(web-ifc-test PROPERTIES LABELS "web-ifc")
 
 	# build parameters for web-ifc in testing environment
-	add_executable(web-ifc ${WebIfcManager} ${WebIfcSchema} ${WebIfcParsing} ${WebIfcUtility} ${WebIfcGeometry} ${WebIfcTestingMain} "./test/io_helpers.cpp")
+	add_executable(web-ifc ${web-ifc-source} "./test/web-ifc-test.cpp" "./test/io_helpers.cpp")
 	param_setter(web-ifc)
 	target_include_directories(web-ifc PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
 

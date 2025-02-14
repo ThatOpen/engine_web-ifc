@@ -10,7 +10,7 @@
 #include <fast_float/fast_float.h>
 #include <spdlog/spdlog.h>
 #include "IfcLoader.h"
-#include "../version.h"
+#include "../../version.h"
 #include "../schema/IfcSchemaManager.h" 
 
 namespace webifc::parsing {
