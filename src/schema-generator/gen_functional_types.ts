@@ -262,7 +262,9 @@ for (var i = 0; i < files.length; i++) {
       line+="\""+entities[x].derivedProps[i].name+"\"";
       if (i != entities[x].derivedProps.length-1) line+=",";
     }
-    cppPropertyNames.push("{"+crc32(entities[x].name,crcTable)+",{"+line+"}}")
+    let comma="";
+    if (x!= entities.length -1) comma=","
+    cppPropertyNames.push("{"+crc32(entities[x].name,crcTable)+",{"+line+"}}"+comma);
   }
   cppPropertyNames.push("};")
 }
