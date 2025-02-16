@@ -98,7 +98,7 @@ for (var i = 0; i < files.length; i++) {
   let entities: Array<Entity> = sortEntities(parsed.entities);
   let types = parsed.types;
 
-  cppPropertyNames.push("std::map<uint64_t,std::vector<std::string>> "+schemaNameClean+" = {")
+  cppPropertyNames.push("std::map<uint64_t,std::vector<std::string>> "+schemaNameClean+"_Names = {")
 
   entities.forEach((e) => {
       walkParents(e,entities);

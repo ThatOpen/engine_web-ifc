@@ -18,7 +18,7 @@ namespace webifc::parsing {
   void p21encode(std::string_view input, std::ostringstream &output);
   std::string p21decode(std::string_view & str);    
  
-   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
+   IfcLoader::IfcLoader(uint32_t tapeSize, uint64_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
    { 
      _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
      _maxExpressId=0;

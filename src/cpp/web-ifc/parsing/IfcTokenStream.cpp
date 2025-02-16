@@ -9,7 +9,7 @@
 namespace webifc::parsing
 {
 
-  IfcTokenStream::IfcTokenStream(const size_t chunkSize, const size_t maxChunks) 
+  IfcTokenStream::IfcTokenStream(const size_t chunkSize, const uint64_t maxChunks) 
   :  _chunkSize(chunkSize), _maxChunks(maxChunks)
   { 
     _cChunk=nullptr;
