@@ -264,6 +264,7 @@ for (var i = 0; i < files.length; i++) {
     }
     cppPropertyNames.push("{"+crc32(entities[x].name,crcTable)+",{"+line+"}}")
   }
+  cppPropertyNames.push("};")
 }
 
 // now write out the global c++/ts metadata. All the WASM needs to know about is a list of all entities
@@ -315,7 +316,7 @@ cppSchema.push("}");
 cppSchema.push("}");
 cppSchema.push("}");
 
-cppPropertyNames.push("}")
+
 
 
 fs.writeFileSync("../cpp/web-ifc/schema/ifc-schema.h", chSchema.join("\n")); 

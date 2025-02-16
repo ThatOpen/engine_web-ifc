@@ -652,6 +652,7 @@ std::map<uint64_t,std::vector<std::string>> IFC2X3 = {
 {3755151903,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","ControlElementId"}}
 {3639064598,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","DistributionPointFunction","UserDefinedFunction"}}
 {3147818812,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","SteelGrade","NominalDiameter","CrossSectionArea","BarLength","BarRole","BarSurface"}}
+};
 std::map<uint64_t,std::vector<std::string>> IFC4 = {
 {2007701578,{"Role","UserDefinedRole","Description"}}
 {2946994697,{"Purpose","Description","UserDefinedPurpose"}}
@@ -1429,6 +1430,7 @@ std::map<uint64_t,std::vector<std::string>> IFC4 = {
 {225565729,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","PredefinedType"}}
 {1183489088,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","PredefinedType"}}
 {3675318572,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","PredefinedType"}}
+};
 std::map<uint64_t,std::vector<std::string>> IFC4X3 = {
 {2007701578,{"Role","UserDefinedRole","Description"}}
 {2946994697,{"Purpose","Description","UserDefinedPurpose"}}
@@ -2302,4 +2304,4 @@ std::map<uint64_t,std::vector<std::string>> IFC4X3 = {
 {225565729,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","PredefinedType"}}
 {1183489088,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","PredefinedType"}}
 {3675318572,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","PredefinedType"}}
-}
+};
