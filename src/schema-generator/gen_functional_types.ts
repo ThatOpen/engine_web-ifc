@@ -11,6 +11,7 @@ console.log("Starting...");
 
 let tsSchema: Array<string> = [];
 let cppSchema: Array<string> = [];
+let cppPropertyNames: Array<string> = [];
 let chSchema: Array<string> = [];
 
 let completeifcElementList = new Set<string>();
@@ -97,6 +98,7 @@ for (var i = 0; i < files.length; i++) {
   let entities: Array<Entity> = sortEntities(parsed.entities);
   let types = parsed.types;
 
+  cppPropertyNames.push("std::map<uint64_t,std::vector<std::string>> "+schemaNameClean+" = {")
 
   entities.forEach((e) => {
       walkParents(e,entities);
@@ -254,13 +256,19 @@ for (var i = 0; i < files.length; i++) {
   
   for (var x=0; x < entities.length; x++) generateClass(entities[x], tsSchema,types,crcTable);
   tsSchema.push("}"); 
+  for (var x=0; x < entities.length; x++) {
+    let line = ""
+    for (let i=0; i < entities[x].derivedProps.length;i++) {
+      line+="\""+entities[x].derivedProps[i].name+"\"";
+      if (i != entities[x].derivedProps.length-1) line+=",";
+    }
+    cppPropertyNames.push("{"+crc32(entities[x].name,crcTable)+",{"+line+"}}")
+  }
 }
 
 // now write out the global c++/ts metadata. All the WASM needs to know about is a list of all entities
 
 console.log(`Writing Global WASM/TS Metadata!...`);
-
-
 
 chSchema.push("#pragma once");
 chSchema.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
@@ -307,8 +315,12 @@ cppSchema.push("}");
 cppSchema.push("}");
 cppSchema.push("}");
 
-fs.writeFileSync("../cpp/schema/ifc-schema.h", chSchema.join("\n")); 
-fs.writeFileSync("../cpp/schema/schema-functions.cpp", cppSchema.join("\n")); 
+cppPropertyNames.push("}")
+
+
+fs.writeFileSync("../cpp/web-ifc/schema/ifc-schema.h", chSchema.join("\n")); 
+fs.writeFileSync("../cpp/web-ifc/schema/schema-functions.cpp", cppSchema.join("\n")); 
+fs.writeFileSync("../cpp/web-ifc/schema/schema-names.h", cppPropertyNames.join("\n")); 
 fs.writeFileSync("../ts/ifc-schema.ts", tsSchema.join("\n")); 
 
 console.log(`...Done!`);

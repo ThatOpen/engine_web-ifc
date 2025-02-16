@@ -642,6 +642,51 @@ namespace webifc::parsing {
    		}
    	}
    }
+
+   uint32_t IfcLoader::GetNoLineArguments() const
+   {
+    uint32_t noArguments = 0;
+    uint32_t setDepth = 0;
+    while (true)
+    {
+      if (setDepth == 1) noArguments++;
+
+      IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
+
+      switch (t)
+      {
+      case IfcTokenType::LINE_END: return noArguments;
+      case IfcTokenType::UNKNOWN:
+      case IfcTokenType::EMPTY:
+        break;
+      case IfcTokenType::SET_BEGIN:
+        setDepth++;
+        break;
+      case IfcTokenType::SET_END:
+        setDepth--;
+        if (setDepth == 0) return noArguments;
+        break;
+      case IfcTokenType::STRING:
+      case IfcTokenType::ENUM:
+      case IfcTokenType::LABEL:
+      case IfcTokenType::INTEGER:
+      case IfcTokenType::REAL:
+      {
+        uint16_t length = _tokenStream->Read<uint16_t>();
+        _tokenStream->Forward(length);
+        break;
+      }
+      case IfcTokenType::REF:
+      {
+        _tokenStream->Read<uint32_t>();
+        break;
+      }
+      default:
+        break;
+      }
+    }
+    return noArguments;
+   }
    
    void IfcLoader::MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const
    {

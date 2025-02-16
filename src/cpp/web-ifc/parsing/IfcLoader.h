@@ -51,6 +51,7 @@ namespace webifc::parsing
       std::vector<uint32_t> GetAllLines() const;
       const std::vector<std::vector<uint32_t>> GetSetListArgument() const;
       void MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const;
+      uint32_t GetNoLineArguments() const;
       void StepBack() const;
       IFC_SCHEMA GetSchema() const;
       void Push(void *v, const uint64_t size);
