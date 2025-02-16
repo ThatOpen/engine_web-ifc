@@ -1,4 +1,4 @@
-std::map<uint64_t,std::vector<std::string>> IFC2X3 = {
+std::map<uint64_t,std::vector<std::string>> IFC2X3_Names = {
 {2007701578,{"Role","UserDefinedRole","Description"}},
 {2946994697,{"Purpose","Description","UserDefinedPurpose"}},
 {2261658103,{"ApplicationDeveloper","Version","ApplicationFullName","ApplicationIdentifier"}},
@@ -653,7 +653,7 @@ std::map<uint64_t,std::vector<std::string>> IFC2X3 = {
 {3639064598,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","DistributionPointFunction","UserDefinedFunction"}},
 {3147818812,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","SteelGrade","NominalDiameter","CrossSectionArea","BarLength","BarRole","BarSurface"}}
 };
-std::map<uint64_t,std::vector<std::string>> IFC4 = {
+std::map<uint64_t,std::vector<std::string>> IFC4_Names = {
 {2007701578,{"Role","UserDefinedRole","Description"}},
 {2946994697,{"Purpose","Description","UserDefinedPurpose"}},
 {2261658103,{"ApplicationDeveloper","Version","ApplicationFullName","ApplicationIdentifier"}},
@@ -1431,7 +1431,7 @@ std::map<uint64_t,std::vector<std::string>> IFC4 = {
 {1183489088,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","PredefinedType"}},
 {3675318572,{"GlobalId","OwnerHistory","Name","Description","ObjectType","ObjectPlacement","Representation","Tag","PredefinedType"}}
 };
-std::map<uint64_t,std::vector<std::string>> IFC4X3 = {
+std::map<uint64_t,std::vector<std::string>> IFC4X3_Names = {
 {2007701578,{"Role","UserDefinedRole","Description"}},
 {2946994697,{"Purpose","Description","UserDefinedPurpose"}},
 {2551088864,{"StartTag","EndTag"}},
