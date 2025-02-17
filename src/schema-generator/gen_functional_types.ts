@@ -12,6 +12,7 @@ console.log("Starting...");
 let tsSchema: Array<string> = [];
 let cppSchema: Array<string> = [];
 let cppPropertyNames: Array<string> = [];
+let cppPropertyNamesList: Array<String> = [];
 let chSchema: Array<string> = [];
 
 let completeifcElementList = new Set<string>();
@@ -22,6 +23,8 @@ completeEntityList.add("FILE_NAME");
 completeEntityList.add("FILE_DESCRIPTION");
 
 let typeList = new Set<string>();
+
+cppPropertyNames.push("std::string getPropertyName(IFC_SCHEMA schema,uint32_t typeCode,uint32_t prop) const {")
 
 tsSchema.push('/**');
 tsSchema.push(' * Web-IFC IFC Schema Representation');
@@ -97,8 +100,6 @@ for (var i = 0; i < files.length; i++) {
   let parsed = parseElements(schemaData);
   let entities: Array<Entity> = sortEntities(parsed.entities);
   let types = parsed.types;
-
-  cppPropertyNames.push("std::map<uint64_t,std::vector<std::string>> "+schemaNameClean+"_Names = {")
 
   entities.forEach((e) => {
       walkParents(e,entities);
@@ -256,17 +257,20 @@ for (var i = 0; i < files.length; i++) {
   
   for (var x=0; x < entities.length; x++) generateClass(entities[x], tsSchema,types,crcTable);
   tsSchema.push("}"); 
+  
   for (var x=0; x < entities.length; x++) {
-    let line = ""
+    let crcCode = crc32(entities[x].name.toUpperCase(),crcTable);
     for (let i=0; i < entities[x].derivedProps.length;i++) {
-      line+="\""+entities[x].derivedProps[i].name+"\"";
-      if (i != entities[x].derivedProps.length-1) line+=",";
+      let idex = cppPropertyNamesList.indexOf(entities[x].derivedProps[i].name);
+      if (idex == -1 ) {
+        idex=cppPropertyNamesList.length;
+        cppPropertyNamesList.push(entities[x].derivedProps[i] .name);
+      }
+      cppPropertyNames.push("if (schema == "+schemaNameClean+" && prop=="+i+" && typeCode=="+crcCode+") return propyNames["+idex+"];");
+
     }
-    let comma="";
-    if (x!= entities.length -1) comma=","
-    cppPropertyNames.push("{"+crc32(entities[x].name,crcTable)+",{"+line+"}}"+comma);
   }
-  cppPropertyNames.push("};")
+ 
 }
 
 // now write out the global c++/ts metadata. All the WASM needs to know about is a list of all entities
@@ -317,6 +321,15 @@ cppSchema.push(`default: return "<web-ifc-type-unknown>";`);
 cppSchema.push("}");
 cppSchema.push("}");
 cppSchema.push("}");
+
+let nameList ="std::array<std::string,"+cppPropertyNamesList.length+"> propyNames = {";
+for (let x=0; x < cppPropertyNamesList.length; x++) {
+  nameList+="\""+cppPropertyNamesList[x]+"\"";
+  if (x!+cppPropertyNamesList.length-1) nameList+=",";
+}
+nameList+="};";
+cppPropertyNames.unshift(nameList);
+cppPropertyNames.push("}")
 
 
 
