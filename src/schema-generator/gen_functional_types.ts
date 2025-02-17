@@ -24,7 +24,7 @@ completeEntityList.add("FILE_DESCRIPTION");
 
 let typeList = new Set<string>();
 
-cppPropertyNames.push("std::string getPropertyName(IFC_SCHEMA schema,uint32_t typeCode,uint32_t prop) const {")
+cppPropertyNames.push("std::string getPropertyName(IFC_SCHEMA schema,uint32_t typeCode,uint32_t prop) {")
 
 tsSchema.push('/**');
 tsSchema.push(' * Web-IFC IFC Schema Representation');
