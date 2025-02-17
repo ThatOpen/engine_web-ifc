@@ -18,7 +18,7 @@ namespace webifc::parsing {
   void p21encode(std::string_view input, std::ostringstream &output);
   std::string p21decode(std::string_view & str);    
  
-   IfcLoader::IfcLoader(uint32_t tapeSize, uint32_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
+   IfcLoader::IfcLoader(uint32_t tapeSize, uint64_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
    { 
      _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
      _maxExpressId=0;
@@ -641,6 +641,51 @@ namespace webifc::parsing {
    			break;
    		}
    	}
+   }
+
+   uint32_t IfcLoader::GetNoLineArguments() const
+   {
+    uint32_t noArguments = 0;
+    uint32_t setDepth = 0;
+    while (true)
+    {
+      if (setDepth == 1) noArguments++;
+
+      IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
+
+      switch (t)
+      {
+      case IfcTokenType::LINE_END: return noArguments;
+      case IfcTokenType::UNKNOWN:
+      case IfcTokenType::EMPTY:
+        break;
+      case IfcTokenType::SET_BEGIN:
+        setDepth++;
+        break;
+      case IfcTokenType::SET_END:
+        setDepth--;
+        if (setDepth == 0) return noArguments;
+        break;
+      case IfcTokenType::STRING:
+      case IfcTokenType::ENUM:
+      case IfcTokenType::LABEL:
+      case IfcTokenType::INTEGER:
+      case IfcTokenType::REAL:
+      {
+        uint16_t length = _tokenStream->Read<uint16_t>();
+        _tokenStream->Forward(length);
+        break;
+      }
+      case IfcTokenType::REF:
+      {
+        _tokenStream->Read<uint32_t>();
+        break;
+      }
+      default:
+        break;
+      }
+    }
+    return noArguments;
    }
    
    void IfcLoader::MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const
