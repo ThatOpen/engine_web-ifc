@@ -643,50 +643,46 @@ namespace webifc::parsing {
    	}
    }
 
-   uint32_t IfcLoader::GetNoLineArguments() const
+   uint32_t IfcLoader::GetNoLineArguments(uint32_t expressID) const
    {
-    uint32_t noArguments = 0;
-    uint32_t setDepth = 0;
-    while (true)
-    {
-      if (setDepth == 1) noArguments++;
 
-      IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
+      if (!_lines.contains(expressID)) return 0;
+      _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
+      _tokenStream->Read<char>();
+      _tokenStream->Read<uint32_t>();
+      _tokenStream->Read<char>();
+      uint16_t length = _tokenStream->Read<uint16_t>();
+      _tokenStream->Forward(length);
+      _tokenStream->Read<char>();
+      uint32_t noArguments = 0;
 
-      switch (t)
-      {
-      case IfcTokenType::LINE_END: return noArguments;
-      case IfcTokenType::UNKNOWN:
-      case IfcTokenType::EMPTY:
-        break;
-      case IfcTokenType::SET_BEGIN:
-        setDepth++;
-        break;
-      case IfcTokenType::SET_END:
-        setDepth--;
-        if (setDepth == 0) return noArguments;
-        break;
-      case IfcTokenType::STRING:
-      case IfcTokenType::ENUM:
-      case IfcTokenType::LABEL:
-      case IfcTokenType::INTEGER:
-      case IfcTokenType::REAL:
-      {
-        uint16_t length = _tokenStream->Read<uint16_t>();
-        _tokenStream->Forward(length);
-        break;
+       while (true) {
+        IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
+        if (t == SET_END || t==LINE_END) return noArguments;
+        if (t == UNKNOWN || t==EMPTY) {
+          noArguments++;
+          continue;
+        }
+        if (t==SET_BEGIN) {
+          StepBack();
+          GetSetArgument();
+          continue;
+        }
+        if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM) {
+          uint16_t length = _tokenStream->Read<uint16_t>();
+          _tokenStream->Forward(length);
+          noArguments++;
+          continue;
+        }
+        if (t == REF) {
+          _tokenStream->Read<uint32_t>();
+          noArguments++;
+          continue;
+        }
       }
-      case IfcTokenType::REF:
-      {
-        _tokenStream->Read<uint32_t>();
-        break;
-      }
-      default:
-        break;
-      }
-    }
-    return noArguments;
+      return noArguments;
    }
+
    
    void IfcLoader::MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const
    {
