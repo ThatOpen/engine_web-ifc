@@ -984,6 +984,7 @@ namespace webifc::geometry
                 return mesh;
             }
             case schema::IFCGEOMETRICSET:
+            case schema::IFCGEOMETRICCURVESET:
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
                 auto items = _loader.GetSetArgument();
@@ -996,11 +997,43 @@ namespace webifc::geometry
 
                 return mesh;
             }
+			case schema::IFCBOUNDINGBOX:
+				// ignore bounding box
+				return mesh;
+			case schema::IFCCIRCLE:
             case schema::IFCPOLYLINE:
             case schema::IFCINDEXEDPOLYCURVE:
             case schema::IFCTRIMMEDCURVE:
-                // ignore polylines as meshes
-                return mesh;
+			{
+				// could be 
+				// #1324059= IFCGRID('3Yls6_O6GJNv5JAJ8l_3XY',#35,'Raster 001',$,$,#1323916,#1324056,(#1323917),$,$);
+				// #1323917= IFCGRIDAXIS('7',#1323926,.T.);
+				// #1323926= IFCINDEXEDPOLYCURVE(#1323922,(IFCLINEINDEX((1,2))),$);
+				auto lineProfileType = _loader.GetLineType(expressID);
+				IfcCurve curve = _geometryLoader.GetCurve(expressID, 3, false);
+
+				if (curve.points.size() > 0) {
+					IfcGeometry geom;
+
+					for (uint32_t i = 0; i < curve.points.size(); i++)
+					{
+						auto vert = curve.points[i];
+						geom.vertexData.push_back(vert.x);
+						geom.vertexData.push_back(vert.y);
+						geom.vertexData.push_back(vert.z);
+						geom.vertexData.push_back(0);  // needs to be 6 values per vertex
+						geom.vertexData.push_back(0);
+						geom.vertexData.push_back(1);
+						geom.indexData.push_back(i);
+					}
+					geom.numPoints = curve.points.size();
+					geom.isPolygon = true;
+					mesh.hasGeometry = true;
+					_expressIDToGeometry[expressID] = geom;
+				}
+
+				return mesh;
+			}
             default:
                 spdlog::error("[GetMesh()] unexpected mesh type {}", expressID, lineType);
                 break;
