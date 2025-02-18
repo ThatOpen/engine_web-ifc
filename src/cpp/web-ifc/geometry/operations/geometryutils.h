@@ -152,7 +152,9 @@ namespace webifc::geometry
 						// this is bad news, as it nans the points added to the final mesh
 						// also, it's hard to bail out now :/
 						// see curve.add() for more info on how this is currently "solved"
+#if defined(_DEBUG)
 						printf("NaN perp!\n");
+#endif
 					}
 
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
@@ -363,7 +365,9 @@ namespace webifc::geometry
 						// this is bad news, as it nans the points added to the final mesh
 						// also, it's hard to bail out now :/
 						// see curve.add() for more info on how this is currently "solved"
+#if defined(_DEBUG)
 						printf("NaN perp!\n");
+#endif
 					}
 
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
@@ -931,19 +935,22 @@ namespace webifc::geometry
 		}
 
 		uint32_t capSize = profile.curve.points.size();
-		for (size_t i = 1; i < capSize; i++)
+		for (size_t i = 1; i <= capSize; i++)
 		{
 			// https://github.com/tomvandig/web-ifc/issues/5
-			if (holesIndicesHash[i])
+			if (i < capSize)
 			{
-				continue;
+				if (holesIndicesHash[i])
+				{
+					continue;
+				}
 			}
 
 			uint32_t bl = i - 1;
-			uint32_t br = i - 0;
+			uint32_t br = i % capSize;
 
 			uint32_t tl = capSize + i - 1;
-			uint32_t tr = capSize + i - 0;
+			uint32_t tr = capSize + i  % capSize;
 
 			// this winding should be correct
 			geom.AddFace(geom.GetPoint(tl),
