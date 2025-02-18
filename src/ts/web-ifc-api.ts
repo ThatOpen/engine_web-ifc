@@ -223,7 +223,7 @@ export class IfcAPI {
             }
 
             //@ts-ignore
-            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler,mainScriptUrlOrBlob });
+            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler });
             this.SetLogLevel(LogLevel.LOG_LEVEL_ERROR);
         }
         else {
