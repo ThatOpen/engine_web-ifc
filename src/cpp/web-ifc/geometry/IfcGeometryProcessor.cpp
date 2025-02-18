@@ -1441,7 +1441,7 @@ namespace webifc::geometry
         return IfcSurface();
     }
 
-    IfcFlatMesh IfcGeometryProcessor::GetFlatMesh(uint32_t expressID)
+    IfcFlatMesh IfcGeometryProcessor::GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor)
     {
         spdlog::debug("[GetFlatMesh({})]",expressID);
         IfcFlatMesh flatMesh;
@@ -1449,7 +1449,11 @@ namespace webifc::geometry
 
         IfcComposedMesh composedMesh = GetMesh(expressID);
 
-        glm::dmat4 mat = glm::scale(glm::dvec3(_geometryLoader.GetLinearScalingFactor()));
+		glm::dmat4 mat = glm::dmat4(1);
+		if (applyLinearScalingFactor)
+		{
+			mat = glm::scale(glm::dvec3(_geometryLoader.GetLinearScalingFactor()));;
+		}
 
         AddComposedMeshToFlatMesh(flatMesh, composedMesh, _transformation * NormalizeIFC * mat);
 
