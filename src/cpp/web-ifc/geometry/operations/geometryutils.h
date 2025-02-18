@@ -828,6 +828,12 @@ namespace webifc::geometry
 		IfcGeometry geom;
 		std::vector<bool> holesIndicesHash;
 
+		// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
+		glm::dvec3 lastToFirstPoint = profile.curve.points.front() - profile.curve.points.back();
+		if (glm::length(lastToFirstPoint) > 1e-8) {
+			profile.curve.points.push_back(profile.curve.points.front());
+		}
+
 		// build the caps
 		{
 			using Point = std::array<double, 2>;
@@ -939,31 +945,28 @@ namespace webifc::geometry
 		}
 
 		uint32_t capSize = profile.curve.points.size();
-		for (size_t i = 1; i <= capSize; i++)
+		for (size_t i = 1; i < capSize; i++)
 		{
 			// https://github.com/tomvandig/web-ifc/issues/5
-			if (i < capSize)
+			if (holesIndicesHash[i])
 			{
-				if (holesIndicesHash[i])
-				{
-					continue;
-				}
+				continue;
 			}
 
 			uint32_t bl = i - 1;
-			uint32_t br = i % capSize;
+			uint32_t br = i - 0;
 
 			uint32_t tl = capSize + i - 1;
-			uint32_t tr = capSize + i  % capSize;
+			uint32_t tr = capSize + i - 0;
 
 			// this winding should be correct
 			geom.AddFace(geom.GetPoint(tl),
-						 geom.GetPoint(br),
-						 geom.GetPoint(bl));
+				geom.GetPoint(br),
+				geom.GetPoint(bl));
 
 			geom.AddFace(geom.GetPoint(tl),
-						 geom.GetPoint(tr),
-						 geom.GetPoint(br));
+				geom.GetPoint(tr),
+				geom.GetPoint(br));
 		}
 
 		return geom;
