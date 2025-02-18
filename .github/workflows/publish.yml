@@ -16,7 +16,7 @@ jobs:
       - uses: mymindstorm/setup-emsdk@v14
         with:
           version: 3.1.44
-      - run: npm install -g npm@latest
+      - run: sudo npm install -g npm@latest
       - run: npm ci
       - run: npm run build-publish-repo
       - run: npm version patch --git-tag-version false

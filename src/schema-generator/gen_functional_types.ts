@@ -11,6 +11,8 @@ console.log("Starting...");
 
 let tsSchema: Array<string> = [];
 let cppSchema: Array<string> = [];
+let cppPropertyNames: Array<string> = [];
+let cppPropertyNamesList: Array<String> = [];
 let chSchema: Array<string> = [];
 
 let completeifcElementList = new Set<string>();
@@ -21,6 +23,8 @@ completeEntityList.add("FILE_NAME");
 completeEntityList.add("FILE_DESCRIPTION");
 
 let typeList = new Set<string>();
+
+cppPropertyNames.push("std::string getPropertyName(IFC_SCHEMA schema,uint32_t typeCode,uint32_t prop) {")
 
 tsSchema.push('/**');
 tsSchema.push(' * Web-IFC IFC Schema Representation');
@@ -96,7 +100,6 @@ for (var i = 0; i < files.length; i++) {
   let parsed = parseElements(schemaData);
   let entities: Array<Entity> = sortEntities(parsed.entities);
   let types = parsed.types;
-
 
   entities.forEach((e) => {
       walkParents(e,entities);
@@ -175,7 +178,7 @@ for (var i = 0; i < files.length; i++) {
   
   //generate ToRawLineData
   tsSchema.push(`ToRawLineData[${i}]={`)
-  for (var x=0; x < entities.length; x++) tsSchema.push(`${crc32(entities[x].name.toUpperCase(),crcTable)}:(${entities[x].derivedProps.length==0?'_:any': `i:${schemaNameClean}.${entities[x].name}`}):unknown[]=>[${entities[x].derivedProps.map((p) => generateTapeAssignment(p,types)).join(", ")}],`);
+  for (var x=0; x < entities.length; x++) tsSchema.push(`${crc32(entities[x].name.toUpperCase(),crcTable)}:(${entities[x].derivedProps.length==0?'_:any': `i:${schemaNameClean}.${entities[x].name}`}):unknown[]=>[${entities[x].derivedProps.map((p) => generateTapeAssignment(p,entities[x].ifcDerivedProps,types)).join(", ")}],`);
   tsSchema.push('}');
 
   //initialisers
@@ -254,13 +257,25 @@ for (var i = 0; i < files.length; i++) {
   
   for (var x=0; x < entities.length; x++) generateClass(entities[x], tsSchema,types,crcTable);
   tsSchema.push("}"); 
+  
+  for (var x=0; x < entities.length; x++) {
+    let crcCode = crc32(entities[x].name.toUpperCase(),crcTable);
+    for (let i=0; i < entities[x].derivedProps.length;i++) {
+      let idex = cppPropertyNamesList.indexOf(entities[x].derivedProps[i].name);
+      if (idex == -1 ) {
+        idex=cppPropertyNamesList.length;
+        cppPropertyNamesList.push(entities[x].derivedProps[i] .name);
+      }
+      cppPropertyNames.push("if (schema == "+schemaNameClean+" && prop=="+i+" && typeCode=="+crcCode+") return propyNames["+idex+"];");
+
+    }
+  }
+ 
 }
 
 // now write out the global c++/ts metadata. All the WASM needs to know about is a list of all entities
 
 console.log(`Writing Global WASM/TS Metadata!...`);
-
-
 
 chSchema.push("#pragma once");
 chSchema.push("// unique list of crc32 codes for ifc classes - this is a generated file - please see schema generator in src/schema");
@@ -307,8 +322,21 @@ cppSchema.push("}");
 cppSchema.push("}");
 cppSchema.push("}");
 
-fs.writeFileSync("../cpp/schema/ifc-schema.h", chSchema.join("\n")); 
-fs.writeFileSync("../cpp/schema/schema-functions.cpp", cppSchema.join("\n")); 
+let nameList ="std::array<std::string,"+cppPropertyNamesList.length+"> propyNames = {";
+for (let x=0; x < cppPropertyNamesList.length; x++) {
+  nameList+="\""+cppPropertyNamesList[x]+"\"";
+  if (x!+cppPropertyNamesList.length-1) nameList+=",";
+}
+nameList+="};";
+cppPropertyNames.unshift(nameList);
+cppPropertyNames.push("}")
+
+
+
+
+fs.writeFileSync("../cpp/web-ifc/schema/ifc-schema.h", chSchema.join("\n")); 
+fs.writeFileSync("../cpp/web-ifc/schema/schema-functions.cpp", cppSchema.join("\n")); 
+fs.writeFileSync("../cpp/web-ifc/schema/schema-names.h", cppPropertyNames.join("\n")); 
 fs.writeFileSync("../ts/ifc-schema.ts", tsSchema.join("\n")); 
 
 console.log(`...Done!`);

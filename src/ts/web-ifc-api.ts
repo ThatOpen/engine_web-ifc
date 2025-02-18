@@ -26,13 +26,11 @@ declare var __WASM_PATH__:string;
 
 let WebIFCWasm: any;
 
-if (typeof self !== 'undefined' && self.crossOriginIsolated) {
-    try {
-        WebIFCWasm = require("./web-ifc-mt");
-    } catch (ex){
-        WebIFCWasm = require(__WASM_PATH__);
-    }
-} else WebIFCWasm = require(__WASM_PATH__);
+let currentScriptPath: string;
+if (typeof document !== 'undefined') {
+    const currentScriptData  = (document.currentScript as HTMLScriptElement);
+    if (currentScriptData?.src !== undefined) currentScriptPath = currentScriptData.src.substring(0, currentScriptData.src.lastIndexOf("/") + 1) ;
+}
 
 export * from "./ifc-schema";
 import { Properties } from "./helpers/properties";
@@ -106,7 +104,25 @@ export interface Point {
 
 export interface Curve {
     points: Array<Point>;
+    userData: Array<string>;
+    arcSegments: Array<number>;
 }
+
+export interface SweptDiskSolid
+{
+    profile: Profile;
+    axis: Array<Curve>;
+    profileRadius: number;
+};
+
+export interface Profile
+{
+    curve: Curve;
+    holes: Array<Curve>;
+    profiles: Array<Profile>;
+    isConvex: boolean;
+    isComposite: boolean;
+};
 
 export interface CrossSection {
     curves: Array<Curve>;
@@ -128,6 +144,7 @@ export interface IfcGeometry {
     GetVertexDataSize(): number;
     GetIndexData(): number;
     GetIndexDataSize(): number;
+    GetSweptDiskSolid(): SweptDiskSolid;
     delete(): void;
 }
 
@@ -180,7 +197,17 @@ export class IfcAPI {
      * @param customLocateFileHandler An optional locateFile function that let's
      * you override the path from which the wasm module is loaded.
      */
-    async Init({locateFile,mainScriptUrlOrBlob}:{locateFile?:LocateFileHandlerFn,mainScriptUrlOrBlob?:Blob|String}) {
+    async Init(customLocateFileHandler?: LocateFileHandlerFn, forceSingleThread: boolean = false) {
+        if (!WebIFCWasm) {
+            if (typeof self !== 'undefined' && self.crossOriginIsolated && !forceSingleThread) {
+                try {
+                    WebIFCWasm = require("./web-ifc-mt");
+                } catch (ex){
+                    WebIFCWasm = require(__WASM_PATH__);
+                }
+            } else WebIFCWasm = require(__WASM_PATH__);
+        }        
+
         if (WebIFCWasm && this.wasmModule == undefined) {
             let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
@@ -189,10 +216,10 @@ export class IfcAPI {
                         return this.wasmPath + path;
                     }
 
-                    return prefix + this.wasmPath + path;
+                    return (currentScriptPath !== undefined ? currentScriptPath : prefix) + this.wasmPath + path;
                 }
                 // otherwise use the default path
-                return prefix + path;
+                return (currentScriptPath !== undefined ? currentScriptPath : prefix) + path;
             }
 
             //@ts-ignore
@@ -583,7 +610,6 @@ export class IfcAPI {
      * @param lineObject array of line object to write
      */
     WriteLines<Type extends IfcLineObject>(modelID: number, lineObjects: Array<Type>) {
-        this.wasmModule.ExtendLineStorage(modelID,lineObjects.length);
         for (let lineObject of lineObjects) this.WriteLine(modelID,lineObject);
     }
 
@@ -672,7 +698,6 @@ export class IfcAPI {
 
     /** @ignore */
     WriteRawLinesData(modelID: number, data: Array<RawLineData>) {
-        this.wasmModule.ExtendLineStorage(modelID,data.length);
         for (let rawLine of data)  this.wasmModule.WriteLine(modelID, rawLine.ID, rawLine.type, rawLine.arguments);
     }
 
@@ -727,7 +752,7 @@ export class IfcAPI {
                 const newPoint: Point = { x: pt.x, y: pt.y, z: pt.z };
                 ptList.push(newPoint);
                 }
-                const newCurve: Curve = { points: ptList };
+                const newCurve: Curve = { points: ptList, userData: [], arcSegments: [] };
                 curveList.push(newCurve);
                 expressList.push(alignment.expressID.get(j));
             }
@@ -758,7 +783,7 @@ export class IfcAPI {
                 const newPoint = { x: pt.x, y: pt.y, z: pt.z };
                 ptList.push(newPoint);
                 }
-                const newCurve: Curve = { points: ptList };
+                const newCurve: Curve = { points: ptList, userData: [], arcSegments: [] };
                 curveList.push(newCurve);
                 expressList.push(alignment.expressID.get(j));
             }
@@ -1099,4 +1124,34 @@ export class IfcAPI {
         Log.setLogLevel(level);
         this.wasmModule.SetLogLevel(level);
     }
+
+    /**
+     * Encodes test using IFC Encoding
+     * @text the text to encode
+     * @returns the text encoded 
+     */
+
+    EncodeText(text:string) {
+        return this.wasmModule.EncodeText(text);
+    }
+
+     /**
+     * Decodes test using IFC Encoding
+     * @text the text to decode
+     * @returns the text decoded 
+     */
+
+    DecodeText(text: string) {
+        return this.wasmModule.DecodeText(text);
+    }
+
+     /**
+     * Resets the Cached IFC Data - useful when changing the geometry of a model
+     * @param modelID Model handle retrieved by OpenModel
+     */
+
+    ResetCache(modelID: number) {
+        return this.wasmModule.DecodeText(modelID);
+    }
+
 }

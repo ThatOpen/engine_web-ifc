@@ -21,12 +21,6 @@
 
 **web-ifc** is a javascript library to read and write ifc files, at native speeds. **web-ifc** is part of the [That Open Company](https://thatopen.com) project, which aims to lower the threshold for developing open BIM applications.
 
-## Status
-
-Although it is quite stable and fast already, web-ifc is in **pre-alpha status** until ifc support matures. The list of currently supported ifc elements, or level of support for different ifc types, is an undocumented work in progress. 
-
-Depending on your models, web-ifc may be quick and correct, or slow and broken. If your model does not work as expected please raise an issue and attach the model if possible, or contact us and we can discuss passing the model confidentially.
-
 ## Install
 
 `npm install web-ifc`

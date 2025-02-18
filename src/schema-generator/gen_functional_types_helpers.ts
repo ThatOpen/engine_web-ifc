@@ -96,10 +96,14 @@ export function sortEntities(entities: Array<Entity>) {
   return sortedEntities;
 }
 
-export function generateTapeAssignment(p: Prop, types:Type[]) 
+export function generateTapeAssignment(p: Prop, ifcDerivedProps: string[],types:Type[]) 
 {
     let type = types.find( (x:Type) => x.name == p.type);
-    if (p.set && type?.isSelect)
+    if (ifcDerivedProps.includes(p.name))
+    {
+        return "undefined";
+    }
+    else if (p.set && type?.isSelect)
     {
         let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
         if (isEntitySelect)  return `i.${p.name}`;
