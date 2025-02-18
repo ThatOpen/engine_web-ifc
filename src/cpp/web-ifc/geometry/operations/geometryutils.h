@@ -961,12 +961,12 @@ namespace webifc::geometry
 
 			// this winding should be correct
 			geom.AddFace(geom.GetPoint(tl),
-				geom.GetPoint(br),
-				geom.GetPoint(bl));
+						geom.GetPoint(br),
+						geom.GetPoint(bl));
 
 			geom.AddFace(geom.GetPoint(tl),
-				geom.GetPoint(tr),
-				geom.GetPoint(br));
+						geom.GetPoint(tr),
+						geom.GetPoint(br));
 		}
 
 		return geom;
