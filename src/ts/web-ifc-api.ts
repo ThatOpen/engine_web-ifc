@@ -180,7 +180,7 @@ export class IfcAPI {
      * @param customLocateFileHandler An optional locateFile function that let's
      * you override the path from which the wasm module is loaded.
      */
-    async Init(customLocateFileHandler?: LocateFileHandlerFn) {
+    async Init({locateFile,mainScriptUrlOrBlob}:{locateFile?:LocateFileHandlerFn,mainScriptUrlOrBlob?:Blob|String}) {
         if (WebIFCWasm && this.wasmModule == undefined) {
             let locateFileHandler: LocateFileHandlerFn = (path, prefix) => {
                 // when the wasm module requests the wasm file, we redirect to include the user specified path
@@ -196,7 +196,7 @@ export class IfcAPI {
             }
 
             //@ts-ignore
-            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: customLocateFileHandler || locateFileHandler });
+            this.wasmModule = await WebIFCWasm({ noInitialRun: true, locateFile: locateFile || locateFileHandler,mainScriptUrlOrBlob });
             this.SetLogLevel(LogLevel.LOG_LEVEL_ERROR);
         }
         else {
