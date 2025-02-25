@@ -67,10 +67,7 @@ tsSchema.push('if (Array.isArray(tapeItem)) tapeItem.map((p:any)=>TypeInitialise
 tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
 tsSchema.push('}');
 tsSchema.push('function Labelise(tapeItem:any) {');
-tsSchema.push('if (tapeItem.label) return tapeItem; else return {value:tapeItem.value.toString(),valueType:tapeItem.type,type:2,label:tapeItem.name};');
-tsSchema.push('}')
-tsSchema.push('function BooleanConvert(item:boolean | logical) {');
-tsSchema.push(' switch(item.toString()) { case \'true\':return \'T\'; case \'false\':return \'F\';case \'0\':return \'F\';case \'1\':return \'T\';case \'2\':return \'U\';}');
+tsSchema.push('if (tapeItem.label) return tapeItem; else return {value:tapeItem.value?.toString(),valueType:tapeItem.type,type:2,label:tapeItem.name};');
 tsSchema.push('}')
 
 var files = fs.readdirSync("./");
@@ -244,10 +241,10 @@ for (var i = 0; i < files.length; i++) {
             tsSchema.push(`constructor(v: any) { this.value = v === null ? v : parseFloat(v);}`);
           } else if (typeName=="boolean") {
               tsSchema.push(`public value: boolean;`);
-              tsSchema.push(`constructor(v: any) { this.value = v === null ? v : v == "T" ? true : false; }`);
+              tsSchema.push(`constructor(v: any) { this.value = v ; }`);
           } else if (typeName=="logical") {
               tsSchema.push(`public value: logical;`);
-              tsSchema.push(`constructor(v: any) { this.value = v === null ? v : v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }`);
+              tsSchema.push(`constructor(v: any) { this.value = v ; }`);
           } else {
             tsSchema.push(`constructor(public value: ${typeName}) {}`);
           }
