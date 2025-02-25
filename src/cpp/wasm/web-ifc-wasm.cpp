@@ -341,6 +341,7 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
         std::string copy;
         if (value.isTrue()) copy="T";
         else if (value.isFalse()) copy="F";
+        else if (value.isUndefined() || value.isNull()) copy="U";
         else copy = value.as<std::string>();
         if (copy == "true") copy="T";
         else if (copy == "false") copy="F";
@@ -551,12 +552,21 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     case webifc::parsing::IfcTokenType::ENUM:
     {
         std::string_view s = loader->GetStringArgument();
+        if(s=="T"){
+            return emscripten::val(true);
+        }
+        if(s=="F"){
+            return emscripten::val(false);
+        }
+        if(s=="U"){
+            return emscripten::val::undefined();
+        }
         return emscripten::val(std::string(s));
     }
     case webifc::parsing::IfcTokenType::REAL:
     {
-        std::string_view s = loader->GetDoubleArgumentAsString();
-        return emscripten::val(std::string(s));
+        double d = loader->GetDoubleArgument();
+        return emscripten::val(d);
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
@@ -631,7 +641,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false, bool inList=false
                 emscripten::val obj;
                 if (inObject) obj = ReadValue(modelID,t);
                 else {
-                    obj = emscripten::val::object(); 
+                    obj = emscripten::val::object();
                     obj.set("type", emscripten::val(static_cast<uint32_t>(t)));
                     obj.set("value", ReadValue(modelID,t));
                 }
