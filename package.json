@@ -11,7 +11,9 @@
       "import": "./web-ifc-api.js",
       "browser": "./web-ifc-api.js"
     },
-    "./*": "./*"
+    "./web-ifc.wasm": "./web-ifc.wasm",
+    "./web-ifc-mt.wasm": "./web-ifc-mt.wasm",
+    "./web-ifc-node.wasm": "./web-ifc-node.wasm"
   },
   "pckg-gui": {},
   "scripts": {
@@ -48,7 +50,18 @@
   },
   "author": "web-ifc",
   "files": [
-    "*"
+    "web-ifc.wasm",
+    "web-ifc-mt.wasm",
+    "web-ifc-node.wasm",
+    "web-ifc-api-node.js",
+    "web-ifc-api-node.d.ts",
+    "web-ifc-api.js",
+    "web-ifc-api.d.ts",
+    "web-ifc-api-iife.js",
+    "ifc-schema.d.ts",
+    "helpers/properties.d.ts",
+    "helpers/log.d.ts",
+    "web-ifc-mt.worker.js"
   ],
   "devDependencies": {
     "@types/jest": "^27.5.2",
