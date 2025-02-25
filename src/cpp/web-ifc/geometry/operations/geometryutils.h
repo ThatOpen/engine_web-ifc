@@ -1000,6 +1000,9 @@ namespace webifc::geometry
 	inline double VectorToAngle(double x, double y)
 	{
 		double dd = sqrt(x * x + y * y);
+		if (std::abs(dd) < EPS_MINISCULE) {
+			return 0;
+		}
 		double xx = x / dd;
 		double yy = y / dd;
 
