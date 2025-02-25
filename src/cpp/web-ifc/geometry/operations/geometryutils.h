@@ -152,7 +152,9 @@ namespace webifc::geometry
 						// this is bad news, as it nans the points added to the final mesh
 						// also, it's hard to bail out now :/
 						// see curve.add() for more info on how this is currently "solved"
+#if defined(_DEBUG)
 						printf("NaN perp!\n");
+#endif
 					}
 
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
@@ -363,7 +365,9 @@ namespace webifc::geometry
 						// this is bad news, as it nans the points added to the final mesh
 						// also, it's hard to bail out now :/
 						// see curve.add() for more info on how this is currently "solved"
+#if defined(_DEBUG)
 						printf("NaN perp!\n");
+#endif
 					}
 
 					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
@@ -820,6 +824,12 @@ namespace webifc::geometry
 		IfcGeometry geom;
 		std::vector<bool> holesIndicesHash;
 
+		// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
+		glm::dvec3 lastToFirstPoint = profile.curve.points.front() - profile.curve.points.back();
+		if (glm::length(lastToFirstPoint) > 1e-8) {
+			profile.curve.points.push_back(profile.curve.points.front());
+		}
+
 		// build the caps
 		{
 			using Point = std::array<double, 2>;
@@ -947,12 +957,12 @@ namespace webifc::geometry
 
 			// this winding should be correct
 			geom.AddFace(geom.GetPoint(tl),
-						 geom.GetPoint(br),
-						 geom.GetPoint(bl));
+						geom.GetPoint(br),
+						geom.GetPoint(bl));
 
 			geom.AddFace(geom.GetPoint(tl),
-						 geom.GetPoint(tr),
-						 geom.GetPoint(br));
+						geom.GetPoint(tr),
+						geom.GetPoint(br));
 		}
 
 		return geom;
@@ -990,6 +1000,9 @@ namespace webifc::geometry
 	inline double VectorToAngle(double x, double y)
 	{
 		double dd = sqrt(x * x + y * y);
+		if (std::abs(dd) < EPS_MINISCULE) {
+			return 0;
+		}
 		double xx = x / dd;
 		double yy = y / dd;
 
