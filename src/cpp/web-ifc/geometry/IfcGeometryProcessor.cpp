@@ -572,6 +572,37 @@ namespace webifc::geometry
                     mesh.children.push_back(temp);
                 }
 
+                int unitaryFaces = 0;
+                for(auto &child :  mesh.children)
+                {
+                    auto temp = _expressIDToGeometry[child.expressID];
+                    if(temp.numFaces < 4)
+                    {
+                        unitaryFaces++;
+                    }
+                }
+
+                IfcGeometry newGeometry;
+                if(unitaryFaces > 12)
+                {
+                    for(auto &child :  mesh.children)
+                    {
+                        auto temp = _expressIDToGeometry[child.expressID];
+                        newGeometry.AddGeometry(temp);
+                    }
+                    IfcComposedMesh newMesh;
+                    _expressIDToGeometry[expressID] = newGeometry;
+                    std::optional<glm::dvec4> shellColor = GetStyleItemFromExpressId(expressID);
+                    if (shellColor) {
+                        newMesh.color=shellColor.value();
+                        newMesh.hasColor=true;
+                    }
+                    newMesh.expressID = expressID;
+                    newMesh.hasGeometry = true;
+                    newMesh.transformation = glm::dmat4(1);
+                    return newMesh;
+                }
+
                 return mesh;
             }
             case schema::IFCADVANCEDBREP:
