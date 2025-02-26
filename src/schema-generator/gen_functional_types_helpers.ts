@@ -50,13 +50,13 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
         content+='(p?.value ?? undefined) !== undefined && p?.value!==\'\' ?';
         if (type?.isSelect){
             let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-            if (isEntitySelect) content+='new Handle(p.value)';
+            if (isEntitySelect) content+='new Handle(p.value, '+schemaNo+', p)';
             else content+='TypeInitialiser('+schemaNo+',p)';
         }
         else if (isType) content+='new '+schemaName+'.'+p.type+'(p.value)';
         else if (p.primitive && p.type =="number") content+='Number(p.value)';
         else if (p.primitive) content+='p.value';
-        else content+='new Handle<'+schemaName+'.'+p.type+'>(p.value)';
+        else content+='new Handle<'+schemaName+'.'+p.type+'>(p.value, '+schemaNo+', p)';
         content +=' : null) || []';
         if (p.dimensions > 1) content +=')';
 
@@ -65,7 +65,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
     else if (type?.isSelect)
     {
         let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-        if (isEntitySelect) content = 'new Handle(' + valueCheckPrefix + 'v['+i+'].value)';
+        if (isEntitySelect) content = 'new Handle(' + valueCheckPrefix + 'v['+i+'].value, '+schemaNo+', v['+i+'])';
         else content='TypeInitialiser('+schemaNo+',v['+i+'])'
 
     }
@@ -74,7 +74,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
         else content = 'new '+schemaName+'.'+p.type+'(' + valueCheckPrefix + 'v['+i+'].value)';
     }
     else if (p.primitive) content = valueCheckPrefix + 'v['+i+'].value';
-    else content = 'new Handle<'+schemaName+'.'+p.type+'>(' + valueCheckPrefix + 'v['+i+'].value)';
+    else content = 'new Handle<'+schemaName+'.'+p.type+'>(' + valueCheckPrefix + 'v['+i+'].value, '+schemaNo+', v['+i+'])';
     return prefix + content;
 }
 
@@ -106,17 +106,17 @@ export function generateTapeAssignment(p: Prop, ifcDerivedProps: string[],types:
     else if (p.set && type?.isSelect)
     {
         let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-        if (isEntitySelect)  return `i.${p.name}`;
+        if (isEntitySelect)  return `Labelise(i.${p.name})`;
         let prefix='';
-        if (p.optional) prefix ='!i.'+p.name+' ? null :'
-        return prefix + 'i.'+p.name+'.map((p:any) => Labelise(p))'
+        if (p.optional) prefix ='(i.'+p.name+' ?? undefined) === undefined ? null :'
+        return prefix + 'i.'+p.name+'!.map((p:any) => Labelise(p))'
     }
     else if (type?.isSelect)
     {
         let isEntitySelect = type?.values.some(refType => types.findIndex( t => t.name==refType)==-1);
-        if (isEntitySelect)  return `i.${p.name}`;
+        if (isEntitySelect)  return `Labelise(i.${p.name})`;
         let prefix='';
-        if (p.optional) prefix ='!i.'+p.name+' ? null :'
+        if (p.optional) prefix ='(i.'+p.name+' ?? undefined) === undefined ? null :'
         return prefix + 'Labelise(i.'+p.name+')';
     }
     else if (type?.typeName == "boolean" || type?.typeName == "logical") 

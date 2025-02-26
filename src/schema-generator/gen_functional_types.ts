@@ -37,8 +37,9 @@ tsSchema.push(`// This is a generated file, please see: gen_functional_types.js`
 
 tsSchema.push(`export class Handle<_> {`);
 tsSchema.push(`type: number=5;`);
-tsSchema.push(`constructor(public value: number) {}`);
-tsSchema.push(`}`);
+tsSchema.push(`constructor(public value: number, schema: number = 2, tapeItem?: any) {`);
+tsSchema.push(`if (tapeItem&&tapeItem?.type === 2) return TypeInitialiser(schema, tapeItem)`);
+tsSchema.push(`}}`);
 
 tsSchema.push(`export enum logical {FALSE,TRUE,UNKNOWN}`);
 
@@ -64,10 +65,12 @@ tsSchema.push(`export const SchemaNames: Array<Array<string>>=[];`);
 
 tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
 tsSchema.push('if (Array.isArray(tapeItem)) tapeItem.map((p:any)=>TypeInitialiser(schema,p));');
-tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
+tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); return tapeItem.value;');
 tsSchema.push('}');
-tsSchema.push('function Labelise(tapeItem:any) {');
-tsSchema.push('if (tapeItem.label) return tapeItem; else return {value:tapeItem.value?.toString(),valueType:tapeItem.type,type:2,label:tapeItem.name};');
+tsSchema.push('function Labelise(tapeItem:any): any {');
+tsSchema.push('if ((tapeItem ?? undefined) === undefined || tapeItem instanceof Handle || tapeItem.label) return tapeItem;');
+tsSchema.push('if (Array.isArray(tapeItem)) return tapeItem.map((p)=>Labelise(p));');
+tsSchema.push('return {value:tapeItem.value,valueType:tapeItem.type,type:2,label:tapeItem.name};');
 tsSchema.push('}')
 
 var files = fs.readdirSync("./");
