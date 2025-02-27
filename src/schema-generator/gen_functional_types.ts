@@ -70,7 +70,8 @@ tsSchema.push('}');
 tsSchema.push('function Labelise(tapeItem:any): any {');
 tsSchema.push('if ((tapeItem ?? undefined) === undefined || tapeItem instanceof Handle || tapeItem.label) return tapeItem;');
 tsSchema.push('if (Array.isArray(tapeItem)) return tapeItem.map((p)=>Labelise(p));');
-tsSchema.push('return {value:tapeItem.value,valueType:tapeItem.type,type:2,label:tapeItem.name};');
+tsSchema.push('const _valueName = tapeItem.type === 4 ? "internalValue" : "value";');
+tsSchema.push('return {[_valueName]:tapeItem[_valueName],valueType:tapeItem.type,type:2,label:tapeItem.name};');
 tsSchema.push('}')
 
 var files = fs.readdirSync("./");
@@ -240,8 +241,13 @@ for (var i = 0; i < files.length; i++) {
           tsSchema.push(`type: number=${typeNum};`);
           tsSchema.push(`name: string='${type.name.toUpperCase()}';`);
           if (typeName=="number") {
-            tsSchema.push(`public value: number;`);
-            tsSchema.push(`constructor(v: any) { this.value = v === null ? v : parseFloat(v);}`);
+            // preserve double(64bit) number
+            tsSchema.push(`private _internalValue: any;`);
+            tsSchema.push(`private _representationValue: any;`);
+            tsSchema.push(`constructor(v: any) { this.value = v; }`);
+            tsSchema.push(`get internalValue() { return this._internalValue }`);
+            tsSchema.push(`get value(): any { return this._representationValue }`);
+            tsSchema.push(`set value(v: any) { this._representationValue = (this._internalValue=v) === null ? v : parseFloat(v); }`);
           } else if (typeName=="boolean") {
               tsSchema.push(`public value: boolean;`);
               tsSchema.push(`constructor(v: any) { this.value = v ; }`);
