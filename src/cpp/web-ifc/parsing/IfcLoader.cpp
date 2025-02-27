@@ -666,6 +666,7 @@ namespace webifc::parsing {
         if (t==SET_BEGIN) {
           StepBack();
           GetSetArgument();
+          noArguments++;
           continue;
         }
         if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM) {
