@@ -359,7 +359,7 @@ namespace webifc::parsing {
    { 
       std::string_view str = GetStringArgument();
       double number_value;
-      fast_float::from_chars(str.data(), str.data() +str.size(), number_value);
+      fast_float::from_chars(str.data(), str.data() + str.size(), number_value);
       return number_value;
    }
 
