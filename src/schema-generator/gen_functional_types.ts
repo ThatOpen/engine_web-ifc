@@ -41,6 +41,17 @@ tsSchema.push(`constructor(public value: number, schema: number = 2, tapeItem?: 
 tsSchema.push(`if (tapeItem&&tapeItem?.type === 2) return TypeInitialiser(schema, tapeItem)`);
 tsSchema.push(`}}`);
 
+// preserve double(64bit) number
+tsSchema.push(`export class NumberHandle {`);
+tsSchema.push(`private _internalValue: any;`);
+tsSchema.push(`private _representationValue: any;`);
+tsSchema.push(`type: number=4;`);
+tsSchema.push(`constructor(v: any, type?: number) { if(type) this.type = type; this.value = v; }`);
+tsSchema.push(`get internalValue() { return this._internalValue }`);
+tsSchema.push(`get value(): any { return this._representationValue }`);
+tsSchema.push(`set value(v: any) { this._representationValue = (this._internalValue=v) === null ? v : parseFloat(v); }`);
+tsSchema.push(`}`);
+
 tsSchema.push(`export enum logical {FALSE,TRUE,UNKNOWN}`);
 
 tsSchema.push(`export abstract class IfcLineObject {`);
@@ -68,7 +79,7 @@ tsSchema.push('if (Array.isArray(tapeItem)) tapeItem.map((p:any)=>TypeInitialise
 tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); return tapeItem.value;');
 tsSchema.push('}');
 tsSchema.push('function Labelise(tapeItem:any): any {');
-tsSchema.push('if ((tapeItem ?? undefined) === undefined || tapeItem instanceof Handle || tapeItem.label) return tapeItem;');
+tsSchema.push('if ((tapeItem ?? undefined) === undefined || tapeItem instanceof Handle || tapeItem instanceof NumberHandle || tapeItem.label) return tapeItem;');
 tsSchema.push('if (Array.isArray(tapeItem)) return tapeItem.map((p)=>Labelise(p));');
 tsSchema.push('const _valueName = tapeItem.type === 4 ? "internalValue" : "value";');
 tsSchema.push('return {[_valueName]:tapeItem[_valueName],valueType:tapeItem.type,type:2,label:tapeItem.name};');
@@ -237,24 +248,17 @@ for (var i = 0; i < files.length; i++) {
           } 
 
           typeList.add(type.name);
-          tsSchema.push(`export class ${type.name} {`);
+          tsSchema.push(`export class ${type.name}${typeName=="number" ?" extends NumberHandle":""} {`);
           tsSchema.push(`type: number=${typeNum};`);
           tsSchema.push(`name: string='${type.name.toUpperCase()}';`);
-          if (typeName=="number") {
-            // preserve double(64bit) number
-            tsSchema.push(`private _internalValue: any;`);
-            tsSchema.push(`private _representationValue: any;`);
-            tsSchema.push(`constructor(v: any) { this.value = v; }`);
-            tsSchema.push(`get internalValue() { return this._internalValue }`);
-            tsSchema.push(`get value(): any { return this._representationValue }`);
-            tsSchema.push(`set value(v: any) { this._representationValue = (this._internalValue=v) === null ? v : parseFloat(v); }`);
-          } else if (typeName=="boolean") {
+    
+          if (typeName=="boolean") {
               tsSchema.push(`public value: boolean;`);
               tsSchema.push(`constructor(v: any) { this.value = v ; }`);
           } else if (typeName=="logical") {
               tsSchema.push(`public value: logical;`);
               tsSchema.push(`constructor(v: any) { this.value = v ; }`);
-          } else {
+          } else if (typeName!="number") {
             tsSchema.push(`constructor(public value: ${typeName}) {}`);
           }
           tsSchema.push(`}`);
