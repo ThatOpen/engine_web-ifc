@@ -673,6 +673,7 @@ namespace webifc::parsing {
           uint16_t length = _tokenStream->Read<uint16_t>();
           _tokenStream->Forward(length);
           noArguments++;
+          if (t==IfcTokenType::LABEL) GetSetArgument();
           continue;
         }
         if (t == REF) {
