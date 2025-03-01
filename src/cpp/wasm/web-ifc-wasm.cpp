@@ -341,6 +341,7 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
         std::string copy;
         if (value.isTrue()) copy="T";
         else if (value.isFalse()) copy="F";
+        else if (value.isUndefined() || value.isNull()) copy="U";
         else copy = value.as<std::string>();
         if (copy == "true") copy="T";
         else if (copy == "false") copy="F";
@@ -392,7 +393,6 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
         else if (child.isArray()) WriteSet(modelID,child);
         else if (child["value"].isArray())
         {
-            
             emscripten::val innerVal = child["value"];
             webifc::parsing::IfcTokenType type = static_cast<webifc::parsing::IfcTokenType>(child["type"].as<uint32_t>());
             loader->Push(webifc::parsing::IfcTokenType::SET_BEGIN);
@@ -432,7 +432,7 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
                 {
                     auto label = child["label"];
                     auto valueType = static_cast<webifc::parsing::IfcTokenType>(child["valueType"].as<uint32_t>());
-                    auto value = child["value"];
+                    auto value = child[valueType == 4 ? "internalValue" : "value"];
 
                     std::string copy = label.as<std::string>();
 
@@ -449,10 +449,14 @@ bool WriteSet(uint32_t modelID, emscripten::val& val)
 
                     break;
                 }
+                case webifc::parsing::IfcTokenType::REAL:
+                {
+                    WriteValue(modelID,type, child["internalValue"]);
+                    break;
+                }
                 case webifc::parsing::IfcTokenType::STRING:
                 case webifc::parsing::IfcTokenType::ENUM:
                 case webifc::parsing::IfcTokenType::REF:
-                case webifc::parsing::IfcTokenType::REAL:
                 case webifc::parsing::IfcTokenType::INTEGER:
                 {
                     WriteValue(modelID,type, child["value"]);
@@ -551,6 +555,15 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     case webifc::parsing::IfcTokenType::ENUM:
     {
         std::string_view s = loader->GetStringArgument();
+        if(s=="T"){
+            return emscripten::val(true);
+        }
+        if(s=="F"){
+            return emscripten::val(false);
+        }
+        if(s=="U"){
+            return emscripten::val::undefined();
+        }
         return emscripten::val(std::string(s));
     }
     case webifc::parsing::IfcTokenType::REAL:
@@ -631,7 +644,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject=false, bool inList=false
                 emscripten::val obj;
                 if (inObject) obj = ReadValue(modelID,t);
                 else {
-                    obj = emscripten::val::object(); 
+                    obj = emscripten::val::object();
                     obj.set("type", emscripten::val(static_cast<uint32_t>(t)));
                     obj.set("value", ReadValue(modelID,t));
                 }
