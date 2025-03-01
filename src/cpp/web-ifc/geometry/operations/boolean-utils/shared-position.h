@@ -1302,7 +1302,10 @@ namespace fuzzybools
 
             CDT::Triangulation<double> cdt(CDT::VertexInsertionOrder::AsProvided);
             std::vector<CDT::Edge> cdt_edges;
+			cdt_edges.reserve(edges.size());
+
             std::vector<CDT::V2d<double>> cdt_verts;
+			cdt_verts.reserve(projectedPoints.size());
 
             for (auto &point : projectedPoints)
             {
