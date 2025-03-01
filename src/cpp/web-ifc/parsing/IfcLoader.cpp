@@ -359,7 +359,7 @@ namespace webifc::parsing {
    { 
       std::string_view str = GetStringArgument();
       double number_value;
-      fast_float::from_chars(str.data(), str.data() +str.size(), number_value);
+      fast_float::from_chars(str.data(), str.data() + str.size(), number_value);
       return number_value;
    }
 
@@ -666,6 +666,7 @@ namespace webifc::parsing {
         if (t==SET_BEGIN) {
           StepBack();
           GetSetArgument();
+          noArguments++;
           continue;
         }
         if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM) {
