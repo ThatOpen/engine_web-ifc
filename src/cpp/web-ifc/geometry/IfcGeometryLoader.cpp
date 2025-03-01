@@ -311,7 +311,7 @@ namespace webifc::geometry
     }
   }
 
-  IfcAlignment IfcGeometryLoader::GetAlignment(uint32_t expressID, IfcAlignment alignment, glm::dmat4 transform, uint32_t sourceExpressID) const
+  IfcAlignment IfcGeometryLoader::GetAlignment(uint32_t expressID, IfcAlignment alignment, glm::dmat4 transform, uint32_t sourceExpressID)
   {
     spdlog::debug("[GetAlignment({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
@@ -863,7 +863,7 @@ namespace webifc::geometry
     return alignmentCurve;
   }
 
-  std::optional<glm::dvec4> IfcGeometryLoader::GetColor(uint32_t expressID) const
+  std::optional<glm::dvec4> IfcGeometryLoader::GetColor(uint32_t expressID)
   {
    spdlog::debug("[GetColor({})]",expressID);
     auto lineType = _loader.GetLineType(expressID);
@@ -3696,42 +3696,42 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       return 1;
   }
 
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelVoids() const
+  std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelVoids()
   {
     return _relVoids;
   }
 
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelVoidRels() const
+  std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelVoidRels()
   {
     return _relVoidRel;
   }
 
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelAggregates() const
+  std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelAggregates()
   {
     return _relAggregates;
   }
 
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelNests() const
+  std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelNests()
   {
     return _relNests;
   }
 
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelElementAggregates() const
+  std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelElementAggregates()
   {
     return _relElementAggregates;
   }
 
-  const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetStyledItems() const
+  std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetStyledItems()
   {
     return _styledItems;
   }
 
-  const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetRelMaterials() const
+  std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetRelMaterials()
   {
     return _relMaterials;
   }
 
-  const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetMaterialDefinitions() const
+  std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetMaterialDefinitions()
   {
     return _materialDefinitions;
   }
