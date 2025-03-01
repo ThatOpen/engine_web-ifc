@@ -37,7 +37,19 @@ tsSchema.push(`// This is a generated file, please see: gen_functional_types.js`
 
 tsSchema.push(`export class Handle<_> {`);
 tsSchema.push(`type: number=5;`);
-tsSchema.push(`constructor(public value: number) {}`);
+tsSchema.push(`constructor(public value: number, schema: number = 2, tapeItem?: any) {`);
+tsSchema.push(`if (tapeItem&&tapeItem?.type === 2) return TypeInitialiser(schema, tapeItem)`);
+tsSchema.push(`}}`);
+
+// preserve double(64bit) number
+tsSchema.push(`export class NumberHandle {`);
+tsSchema.push(`private _internalValue: any;`);
+tsSchema.push(`private _representationValue: any;`);
+tsSchema.push(`type: number=4;`);
+tsSchema.push(`constructor(v: any, type?: number) { if(type) this.type = type; this.value = v; }`);
+tsSchema.push(`get internalValue() { return this._internalValue }`);
+tsSchema.push(`get value(): any { return this._representationValue }`);
+tsSchema.push(`set value(v: any) { this._representationValue = (this._internalValue=v) === null ? v : parseFloat(v); }`);
 tsSchema.push(`}`);
 
 tsSchema.push(`export enum logical {FALSE,TRUE,UNKNOWN}`);
@@ -64,13 +76,13 @@ tsSchema.push(`export const SchemaNames: Array<Array<string>>=[];`);
 
 tsSchema.push('function TypeInitialiser(schema:number,tapeItem:any) {');
 tsSchema.push('if (Array.isArray(tapeItem)) tapeItem.map((p:any)=>TypeInitialiser(schema,p));');
-tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); else return tapeItem.value;');
+tsSchema.push('if (tapeItem.typecode) return TypeInitialisers[schema][tapeItem.typecode](tapeItem.value); return tapeItem.value;');
 tsSchema.push('}');
-tsSchema.push('function Labelise(tapeItem:any) {');
-tsSchema.push('if (tapeItem.label) return tapeItem; else return {value:tapeItem.value.toString(),valueType:tapeItem.type,type:2,label:tapeItem.name};');
-tsSchema.push('}')
-tsSchema.push('function BooleanConvert(item:boolean | logical) {');
-tsSchema.push(' switch(item.toString()) { case \'true\':return \'T\'; case \'false\':return \'F\';case \'0\':return \'F\';case \'1\':return \'T\';case \'2\':return \'U\';}');
+tsSchema.push('function Labelise(tapeItem:any): any {');
+tsSchema.push('if ((tapeItem ?? undefined) === undefined || tapeItem instanceof Handle || tapeItem instanceof NumberHandle || tapeItem.label) return tapeItem;');
+tsSchema.push('if (Array.isArray(tapeItem)) return tapeItem.map((p)=>Labelise(p));');
+tsSchema.push('const _valueName = tapeItem.type === 4 ? "internalValue" : "value";');
+tsSchema.push('return {[_valueName]:tapeItem[_valueName],valueType:tapeItem.type,type:2,label:tapeItem.name};');
 tsSchema.push('}')
 
 var files = fs.readdirSync("./");
@@ -236,19 +248,17 @@ for (var i = 0; i < files.length; i++) {
           } 
 
           typeList.add(type.name);
-          tsSchema.push(`export class ${type.name} {`);
+          tsSchema.push(`export class ${type.name}${typeName=="number" ?" extends NumberHandle":""} {`);
           tsSchema.push(`type: number=${typeNum};`);
           tsSchema.push(`name: string='${type.name.toUpperCase()}';`);
-          if (typeName=="number") {
-            tsSchema.push(`public value: number;`);
-            tsSchema.push(`constructor(v: any) { this.value = v === null ? v : parseFloat(v);}`);
-          } else if (typeName=="boolean") {
+    
+          if (typeName=="boolean") {
               tsSchema.push(`public value: boolean;`);
-              tsSchema.push(`constructor(v: any) { this.value = v === null ? v : v == "T" ? true : false; }`);
+              tsSchema.push(`constructor(v: any) { this.value = v ; }`);
           } else if (typeName=="logical") {
               tsSchema.push(`public value: logical;`);
-              tsSchema.push(`constructor(v: any) { this.value = v === null ? v : v == "T" ? logical.TRUE : v == "F" ? logical.FALSE: logical.UNKNOWN; }`);
-          } else {
+              tsSchema.push(`constructor(v: any) { this.value = v ; }`);
+          } else if (typeName!="number") {
             tsSchema.push(`constructor(public value: ${typeName}) {}`);
           }
           tsSchema.push(`}`);
