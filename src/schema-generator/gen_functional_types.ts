@@ -13,6 +13,8 @@ let tsSchema: Array<string> = [];
 let cppSchema: Array<string> = [];
 let cppPropertyNames: Array<string> = [];
 let cppPropertyNamesList: Array<String> = [];
+let cppPropertyTypes: Array<string> = [];
+let cppPropertyTypesList: Array<String> = [];
 let chSchema: Array<string> = [];
 
 let completeifcElementList = new Set<string>();
@@ -25,6 +27,7 @@ completeEntityList.add("FILE_DESCRIPTION");
 let typeList = new Set<string>();
 
 cppPropertyNames.push("std::string getPropertyName(IFC_SCHEMA schema,uint32_t typeCode,uint32_t prop) {")
+cppPropertyTypes.push("uint32_t getPropertyTypeName(IFC_SCHEMA schema,uint32_t typeCode,uint32_t prop) {")
 
 tsSchema.push('/**');
 tsSchema.push(' * Web-IFC IFC Schema Representation');
@@ -278,6 +281,13 @@ for (var i = 0; i < files.length; i++) {
       }
       cppPropertyNames.push("if (schema == "+schemaNameClean+" && prop=="+i+" && typeCode=="+crcCode+") return propyNames["+idex+"];");
 
+      idex = cppPropertyTypesList.indexOf(entities[x].derivedProps[i].type);
+      if (idex == -1 ) {
+        idex=cppPropertyTypesList.length;
+        cppPropertyTypesList.push(entities[x].derivedProps[i].type);
+      }
+      cppPropertyTypes.push("if (schema == "+schemaNameClean+" && prop=="+i+" && typeCode=="+crcCode+") return propTypeNames["+idex+"];");
+
     }
   }
  
@@ -342,11 +352,18 @@ cppPropertyNames.unshift(nameList);
 cppPropertyNames.push("}")
 
 
-
+let typeNameList ="std::array<uint32_t,"+cppPropertyNamesList.length+"> propTypeNames = {";
+for (let x=0; x < cppPropertyTypesList.length; x++) {
+  typeNameList+= crc32(cppPropertyTypesList[x].toUpperCase(),crcTable);
+  if (x!+cppPropertyTypesList.length-1) typeNameList+=",";
+}
+typeNameList+="};";
+cppPropertyTypes.unshift(typeNameList);
+cppPropertyTypes.push("}")
 
 fs.writeFileSync("../cpp/web-ifc/schema/ifc-schema.h", chSchema.join("\n")); 
 fs.writeFileSync("../cpp/web-ifc/schema/schema-functions.cpp", cppSchema.join("\n")); 
-fs.writeFileSync("../cpp/web-ifc/schema/schema-names.h", cppPropertyNames.join("\n")); 
+fs.writeFileSync("../cpp/web-ifc/schema/schema-names.h", [ ...cppPropertyNames, ...cppPropertyTypes].join("\n")); 
 fs.writeFileSync("../ts/ifc-schema.ts", tsSchema.join("\n")); 
 
 console.log(`...Done!`);
