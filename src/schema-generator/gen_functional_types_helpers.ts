@@ -54,8 +54,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
             else content+='TypeInitialiser('+schemaNo+',p)';
         }
         else if (isType) content+='new '+schemaName+'.'+p.type+'(p.value)';
-        else if (p.primitive && p.type =="number") content+='Number(p.value)';
-        else if (p.primitive) content+='p.value';
+        else if (p.primitive) content+=p.type =="number" ? 'Number(p.value)' : 'p.value';
         else content+='new Handle<'+schemaName+'.'+p.type+'>(p.value, '+schemaNo+', p)';
         content +=' : null) || []';
         if (p.dimensions > 1) content +=')';
@@ -73,6 +72,7 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
         if (type?.isList) content='new '+schemaName+'.'+p.type+'(v['+i+'].map( (x:any) => x.value))';
         else content = 'new '+schemaName+'.'+p.type+'(' + valueCheckPrefix + 'v['+i+'].value)';
     }
+    else if (p.primitive && p.type === "number") content = 'new NumberHandle('+valueCheckPrefix+'v['+i+'].value, '+p.typeNum+')';
     else if (p.primitive) content = valueCheckPrefix + 'v['+i+'].value';
     else content = 'new Handle<'+schemaName+'.'+p.type+'>(' + valueCheckPrefix + 'v['+i+'].value, '+schemaNo+', v['+i+'])';
     return prefix + content;
@@ -172,7 +172,7 @@ export function generateClass(entity:Entity, classBuffer: Array<string>, types:T
     classBuffer.push(`${prop.name}!: ${type};`);
   });
 
-  classBuffer.push(`constructor(${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(types.some( x => x.name == p.type) || p.primitive) ? p.type : "(Handle<" + p.type + `> | ${p.type})` }${p.set ? "[]" : ""}${p.dimensions>1 ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
+  classBuffer.push(`constructor(${entity.derivedProps.filter(i => !entity.ifcDerivedProps.includes(i.name)).map((p) => `public ${p.name}: ${(!types.some( x => x.name == p.type) || (p.primitive&&p.type!=="number")) ? ((p.primitive && p.type === "number") ? "(NumberHandle":"(Handle<" + p.type + ">") + `| ${p.type})` : p.type }${p.set ? "[]" : ""}${p.dimensions>1 ? "[]" : ""} ${p.optional ? "| null" : ""}`).join(", ")})`)
   classBuffer.push(`{`)
   if (!entity.parent) {
     classBuffer.push(`super();`)
