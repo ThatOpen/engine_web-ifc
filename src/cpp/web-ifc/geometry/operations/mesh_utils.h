@@ -192,56 +192,12 @@ namespace webifc::geometry
 		}
 	}
 
-		// TODO: review and simplify
+	// TODO: review and simplify
 	inline void TriangulateCylindricalSurface(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double numRots)
 	{
 		spdlog::debug("[TriangulateCylindricalSurface({})]");
-		// First we get the cylinder data
 
-		double radius = surface.CylinderSurface.Radius;
-		glm::dvec3 cent = surface.transformation[3];
-		glm::dvec3 vecX = glm::normalize(surface.transformation[0]);
-		glm::dvec3 vecY = glm::normalize(surface.transformation[1]);
-		glm::dvec3 vecZ = glm::normalize(surface.transformation[2]);
-
-		std::vector<std::vector<glm::dvec3>> newPoints;
-
-		double minZ = 1e+10;
-		double maxZ = -1e+10;
-
-			// Find the relative coordinates of each curve point in the cylinder reference plane
-			// Only retain the max and min relative Z
-		for (size_t i = 0; i < bounds.size(); i++)
-		{
-			for (size_t j = 0; j < bounds[i].curve.points.size(); j++)
-			{
-				glm::dvec3 vv = bounds[i].curve.points[j] - cent;
-					//					double dx = glm::dot(vecX, vv);
-					//					double dy = glm::dot(vecY, vv);
-				double dz = glm::dot(vecZ, vv);
-				if (maxZ < dz)
-				{
-					maxZ = dz;
-				}
-				if (minZ > dz)
-				{
-					minZ = dz;
-				}
-			}
-		}
-
-		for (int r = 0; r < numRots; r++)
-		{
-			std::vector<glm::dvec3> newList;
-			newPoints.push_back(newList);
-		}
-
-		std::vector<glm::dvec3> bounding;
-		std::vector<double> angleVec;
-		std::vector<double> angleDsp;
-
-			// Find the max. curve index in the boundary
-
+		// Find the max. curve index in the boundary
 		int maxTeam = 0;
 		for (size_t i = 0; i < bounds.size(); i++)
 		{
@@ -254,9 +210,8 @@ namespace webifc::geometry
 			}
 		}
 
+		// We group each point with their boundary
 		std::vector<std::vector<glm::dvec3>> boundingGroups;
-
-			// We group each point with their boundary
 
 		for (int r = 0; r < maxTeam; r++)
 		{
@@ -274,177 +229,20 @@ namespace webifc::geometry
 			boundingGroups.push_back(boundingTemp);
 		}
 
-		int repeats = 0;
-		bool start = false;
-		bool end = false;
-		size_t id = 0;
-
-			// In the case of boundary lines having only 2 endings...
-			//... we omit these lines and add solely curves having > 2 points...
-			//... starting from a 2 point line, by doing it this way we don't have repeated points
-		while (!end && repeats < maxTeam * 3)
+		bimGeometry::Geometry geom = bimGeometry::Revolve(
+			surface.transformation, 
+			boundingGroups,
+			numRots, 
+			surface.CylinderSurface.Radius);
+		
+		for (int r = 0; r < geom.numFaces; r++)
 		{
-			if (id >= boundingGroups.size())
-			{
-				id = 0;
-			}
-			if (boundingGroups[id].size() < 3)
-			{
-				if (!start)
-				{
-					start = true;
-				}
-				else
-				{
-					break;
-				}
-			}
-			if (boundingGroups[id].size() > 2 && start)
-			{
-				for (size_t i = 0; i < boundingGroups[id].size(); i++)
-				{
-					bounding.push_back(boundingGroups[id][i]);
-				}
-			}
-			id++;
-			repeats++;
-		}
-
-			// If the previous method finds nothing, then we don't have straight lines ...
-			//... then we add all boundary points directly
-		if (bounding.size() == 0)
-		{
-			for (size_t j = 0; j < boundingGroups.size(); j++)
-			{
-				for (size_t i = 0; i < boundingGroups[j].size(); i++)
-				{
-					bounding.push_back(boundingGroups[j][i]);
-				}
-			}
-		}
-
-		double startDegrees = 0;
-		double endDegrees = 360;
-
-			// Now we project the points in the cylinder surface
-			// There is a problem when points in the cylinder are around 0 degrees
-			// Numerical instabilities can make these points to jump from 0 to 360
-			// It causes lots of trouble when drawing the boundaries in the cylinder
-
-			// The method presented here finds the angle of each point, measures the ...
-			//  ... angular difference and then, if the difference is bigger than 180 ...
-			//  ... corrects it to a lesser value. Finally it gets the first angle and ...
-			//  ... adds the angular differences again, reconstructing a corrected boundary.
-
-			// Now we find the angle of each point in the reference plane of the cylinder
-		for (size_t j = 0; j < bounding.size(); j++)
-		{
-			glm::dvec3 vv = bounding[j] - cent;
-			double dx = glm::dot(vecX, vv);
-			double dy = glm::dot(vecY, vv);
-				// double dz = glm::dot(vecZ, vv);
-			double temp = VectorToAngle(dx, dy);
-			while (temp < 0)
-			{
-				temp += 360;
-			}
-			while (temp > 360)
-			{
-				temp -= 360;
-			}
-			angleVec.push_back(temp);
-		}
-
-			// Then we find the angular difference
-		if (angleVec.size() == 0) return;
-		for (size_t i = 0; i < angleVec.size() - 1; i++)
-		{
-			if (angleVec[i] - angleVec[i + 1] > 180)
-			{
-				angleDsp.push_back(360 - (angleVec[i] - angleVec[i + 1]));
-			}
-			else if (angleVec[i] - angleVec[i + 1] < -180)
-			{
-				angleDsp.push_back(-(angleVec[i] - angleVec[i + 1] + 360));
-			}
-			else
-			{
-				angleDsp.push_back(angleVec[i + 1] - angleVec[i]);
-			}
-		}
-
-		startDegrees = angleVec[0];
-		endDegrees = angleVec[0];
-
-			// Add angular differences starting from the first angle. We also correct the start and end angles
-
-		double temp = angleVec[0];
-		for (size_t i = 0; i < angleDsp.size(); i++)
-		{
-			temp += angleDsp[i];
-			if (endDegrees < temp)
-			{
-				endDegrees = temp;
-			}
-			if (startDegrees > temp)
-			{
-				startDegrees = temp;
-			}
-		}
-
-			// Then we use the start and end angles as bounding boxes of the boundary ...
-			//  ... we will represent this bounding box.
-
-		while (startDegrees < -360)
-		{
-			startDegrees += 360;
-		}
-		double startRad = startDegrees / 180 * CONST_PI;
-		double endRad = endDegrees / 180 * CONST_PI;
-		double radSpan = endRad - startRad;
-		double radStep = radSpan / (numRots - 1);
-
-		for (int r = 0; r < numRots; r++)
-		{
-			double angle = startRad + r * radStep;
-			double dtempX = sin(angle) * radius;
-			double dtempY = cos(angle) * radius;
-			double newPx = dtempX * vecX.x + dtempY * vecY.x + minZ * vecZ.x + cent.x;
-			double newPy = dtempX * vecX.y + dtempY * vecY.y + minZ * vecZ.y + cent.y;
-			double newPz = dtempX * vecX.z + dtempY * vecY.z + minZ * vecZ.z + cent.z;
-			glm::dvec3 newPt = glm::dvec3(
-				newPx,
-				newPy,
-				newPz);
-			newPoints[r].push_back(newPt);
-		}
-		for (int r = 0; r < numRots; r++)
-		{
-			double angle = startRad + r * radStep;
-			double dtempX = sin(angle) * radius;
-			double dtempY = cos(angle) * radius;
-			double newPx = dtempX * vecX.x + dtempY * vecY.x + maxZ * vecZ.x + cent.x;
-			double newPy = dtempX * vecX.y + dtempY * vecY.y + maxZ * vecZ.y + cent.y;
-			double newPz = dtempX * vecX.z + dtempY * vecY.z + maxZ * vecZ.z + cent.z;
-			glm::dvec3 newPt = glm::dvec3(
-				newPx,
-				newPy,
-				newPz);
-			newPoints[r].push_back(newPt);
-		}
-
-		for (int r = 0; r < numRots - 1; r++)
-		{
-			int r1 = r + 1;
-			for (size_t s = 0; s < newPoints[r].size() - 1; s++)
-			{
-				geometry.AddFace(newPoints[r][s], newPoints[r][s + 1], newPoints[r1][s]);
-				geometry.AddFace(newPoints[r1][s], newPoints[r][s + 1], newPoints[r1][s + 1]);
-			}
+		 	bimGeometry::Face f = geom.GetFace(r);
+			geometry.AddFace(geom.GetPoint(f.i0), geom.GetPoint(f.i1),  geom.GetPoint(f.i2));
 		}
 	}
 
-		// TODO: review and simplify
+	// TODO: review and simplify
 	inline void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
 	{
 		spdlog::debug("[TriangulateExtrusion({})]");

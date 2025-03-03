@@ -1,8 +1,8 @@
 #include <vector>
 #include <algorithm>
 #include <glm/glm.hpp>
-#include "Curve.h"
-#include "functions.h"
+#include "curve.h"
+#include "utils.h"
 #include "epsilons.h"
 
 namespace bimGeometry
@@ -12,7 +12,7 @@ namespace bimGeometry
 	{
 		if (points.empty())
 			points.push_back(pt);
-		else if (!equals(pt, points.back(), EPS_TINY))
+		else if (!equals(pt, points.back(), EPS_TINY_CURVE))
 			points.push_back(pt);
 	}
 

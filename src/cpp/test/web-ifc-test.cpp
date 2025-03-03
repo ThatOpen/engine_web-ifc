@@ -275,17 +275,13 @@ std::vector<webifc::geometry::SweptDiskSolid> GetAllRebars(webifc::parsing::IfcL
 
     for (size_t i = 0; i < elements.size(); i++)
     {    
-        if(elements[i] == 145645)
+        auto mesh = geometryLoader.GetFlatMesh(elements[i]);
+
+        for (auto &geom : mesh.geometries)
         {
-            auto mesh = geometryLoader.GetFlatMesh(elements[i]);
-
-            for (auto &geom : mesh.geometries)
-            {
-                auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
-
-                reinforcingBars.push_back(flatGeom.sweptDiskSolid);
-                reinforcingBarsTransform.push_back(geom.transformation);
-            }
+            auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
+            reinforcingBars.push_back(flatGeom.sweptDiskSolid);
+            reinforcingBarsTransform.push_back(geom.transformation);
         }
     }
 
@@ -437,8 +433,8 @@ int main()
 
     // return 0;
 
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/isolated.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/m3d.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/VEC-IFC-INST-totaal-20130726.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
 
     struct LoaderSettings
     {
@@ -477,9 +473,9 @@ int main()
 
     start = ms();
 
-    // SpecificLoadTest(loader, geometryLoader, 4553);
-    // auto meshes = LoadAllTest(loader, geometryLoader, -1);
-    auto rebars = GetAllRebars(loader, geometryLoader);
+    // SpecificLoadTest(loader, geometryLoader, 44618);
+    auto meshes = LoadAllTest(loader, geometryLoader, -1);
+    // auto rebars = GetAllRebars(loader, geometryLoader);
     std::cout << GetLine(loader, 225) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
 

@@ -13,6 +13,7 @@
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include <mapbox/earcut.hpp>
+#include "bim-geometry/utils.h"
 
 namespace webifc::geometry
 {
@@ -333,205 +334,191 @@ namespace webifc::geometry
 			glm::dvec3 directrixSegmentNormal;
 			glm::dvec3 planeOrigin;
 
-				if (i == 0) // start
+			if (i == 0) // start
+			{
+				planeNormal = glm::normalize(dpts[1] - dpts[0]);
+				directrixSegmentNormal = planeNormal;
+				planeOrigin = dpts[0];
+				directrix2 = planeNormal;
+			}
+			else if (i == dpts.size() - 1) // end
+			{
+				planeNormal = glm::normalize(dpts[i] - dpts[i - 1]);
+				directrixSegmentNormal = planeNormal;
+				planeOrigin = dpts[i];
+				directrix2 = planeNormal;
+			}
+			else // middle
+			{
+				// possibly the directrix is bad
+				glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
+				glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
+				glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
+				directrix2 = -n1;
+
+				// double prod = glm::dot(n1, n2);
+
+				if (std::isnan(p.x))
 				{
-					planeNormal = glm::normalize(dpts[1] - dpts[0]);
-					directrixSegmentNormal = planeNormal;
-					planeOrigin = dpts[0];
-					directrix2 = planeNormal;
-				}
-				else if (i == dpts.size() - 1) // end
-				{
-					planeNormal = glm::normalize(dpts[i] - dpts[i - 1]);
-					directrixSegmentNormal = planeNormal;
-					planeOrigin = dpts[i];
-					directrix2 = planeNormal;
-				}
-				else // middle
-				{
-					// possibly the directrix is bad
-					glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
-					glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
-					glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
-					directrix2 = -n1;
-
-					// double prod = glm::dot(n1, n2);
-
-					if (std::isnan(p.x))
-					{
-						// TODO: sometimes outliers cause the perp to become NaN!
-						// this is bad news, as it nans the points added to the final mesh
-						// also, it's hard to bail out now :/
-						// see curve.add() for more info on how this is currently "solved"
-						printf("NaN perp!\n");
-					}
-
-					glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
-					glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
-
-					// TODO: When n1 and n2 have similar direction but opposite side...
-					// ... projection tend to infinity. -> glm::dot(n1, n2)
-					// I implemented a bad solution to prevent projection to infinity
-					if (glm::dot(n1, n2) < -0.9)
-					{
-						n2 = -n2;
-						u2 = -u2;
-					}
-
-					glm::dvec3 au = glm::normalize(u1 + u2);
-					planeNormal = glm::normalize(glm::cross(au, p));
-					directrixSegmentNormal = n1; // n1 or n2 doesn't matter
-
-					planeOrigin = dpts[i];
+					// TODO: sometimes outliers cause the perp to become NaN!
+					// this is bad news, as it nans the points added to the final mesh
+					// also, it's hard to bail out now :/
+					// see curve.add() for more info on how this is currently "solved"
+					printf("NaN perp!\n");
 				}
 
-                glm::dvec3 dz = glm::normalize(directrix2);
-                glm::dvec3 dx = glm::dvec3(1, 0, 0);
-                glm::dvec3 dy = glm::dvec3(0, 1, 0);
+				glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
+				glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
 
-				double parallelZ = glm::abs(glm::dot(dz, glm::dvec3(0, 0, 1)));
-
-				if(parallelZ > 1 - EPS_BIG2)
+				// TODO: When n1 and n2 have similar direction but opposite side...
+				// ... projection tend to infinity. -> glm::dot(n1, n2)
+				// I implemented a bad solution to prevent projection to infinity
+				if (glm::dot(n1, n2) < -0.9)
 				{
-					dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 1, 0)));
-				} else {
-					dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 0, 1)));
+					n2 = -n2;
+					u2 = -u2;
 				}
 
-				dy = glm::normalize(glm::cross(dz, dx));
+				glm::dvec3 au = glm::normalize(u1 + u2);
+				planeNormal = glm::normalize(glm::cross(au, p));
+				directrixSegmentNormal = n1; // n1 or n2 doesn't matter
 
-                glm::dmat4 profileScale = glm::dmat4(
-                    glm::dvec4(dx * radius, 0),
-                    glm::dvec4(dy * radius, 0),
-                    glm::dvec4(dz, 0),
-                    glm::dvec4(planeOrigin, 1));
+				planeOrigin = dpts[i];
+			}
 
-				transforms.push_back(profileScale);	
+			glm::dvec3 dz = glm::normalize(directrix2);
+			glm::dvec3 dx = glm::dvec3(1, 0, 0);
+			glm::dvec3 dy = glm::dvec3(0, 1, 0);
 
-				if (curves.empty())
+			double parallelZ = glm::abs(glm::dot(dz, glm::dvec3(0, 0, 1)));
+
+			if(parallelZ > 1 - EPS_BIG2)
+			{
+				dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 1, 0)));
+			} else {
+				dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 0, 1)));
+			}
+
+			dy = glm::normalize(glm::cross(dz, dx));
+
+			glm::dmat4 profileScale = glm::dmat4(
+				glm::dvec4(dx * radius, 0),
+				glm::dvec4(dy * radius, 0),
+				glm::dvec4(dz, 0),
+				glm::dvec4(planeOrigin, 1));
+
+			transforms.push_back(profileScale);	
+
+			if (curves.empty())
+			{
+				// construct initial curve
+				glm::dvec3 left;
+				glm::dvec3 right;
+				if (initialDirectrixNormal == glm::dvec3(0))
 				{
-					// construct initial curve
-					glm::dvec3 left;
-					glm::dvec3 right;
-					if (initialDirectrixNormal == glm::dvec3(0))
-					{
-						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.y, directrixSegmentNormal.x, directrixSegmentNormal.z));
-						if (left == glm::dvec3(0, 0, 0))
-						{
-							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.x, directrixSegmentNormal.z, directrixSegmentNormal.y));
-						}
-						if (left == glm::dvec3(0, 0, 0))
-						{
-							left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.z, directrixSegmentNormal.y, directrixSegmentNormal.x));
-						}
-						right = glm::normalize(glm::cross(directrixSegmentNormal, left));
-						left = glm::normalize(glm::cross(directrixSegmentNormal, right));
-					}
-					else
-					{
-						left = glm::cross(directrixSegmentNormal, initialDirectrixNormal);
-						glm::dvec3 side = glm::normalize(initialDirectrixNormal);
-						right = glm::normalize(glm::cross(directrixSegmentNormal, left));
-						left = glm::normalize(glm::cross(directrixSegmentNormal, right));
-						right *= side;
-					}
-
+					left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.y, directrixSegmentNormal.x, directrixSegmentNormal.z));
 					if (left == glm::dvec3(0, 0, 0))
 					{
-						printf("0 left vec in sweep!\n");
+						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.x, directrixSegmentNormal.z, directrixSegmentNormal.y));
 					}
-
-					// project profile onto planeNormal, place on planeOrigin
-					// TODO: look at holes
-					auto &ppts = profile.curve.points;
-					for (auto &pt2D : ppts)
-					{				
-						glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
-						if(rotate90)
-						{
-							pt = -pt2D.x * right - pt2D.y * left + planeOrigin;
-						}
-						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
-						
-						segmentForCurve.Add(proj);
+					if (left == glm::dvec3(0, 0, 0))
+					{
+						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.z, directrixSegmentNormal.y, directrixSegmentNormal.x));
 					}
+					right = glm::normalize(glm::cross(directrixSegmentNormal, left));
+					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
 				}
 				else
 				{
-					// project previous curve onto the normal
-					const IfcCurve &prevCurve = curves.back();
+					left = glm::cross(directrixSegmentNormal, initialDirectrixNormal);
+					glm::dvec3 side = glm::normalize(initialDirectrixNormal);
+					right = glm::normalize(glm::cross(directrixSegmentNormal, left));
+					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
+					right *= side;
+				}
 
-					auto &ppts = prevCurve.points;
-					for (auto &pt : ppts)
+				if (left == glm::dvec3(0, 0, 0))
+				{
+					printf("0 left vec in sweep!\n");
+				}
+
+				// project profile onto planeNormal, place on planeOrigin
+				// TODO: look at holes
+				auto &ppts = profile.curve.points;
+				for (auto &pt2D : ppts)
+				{				
+					glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
+					if(rotate90)
 					{
-						glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
-
-						segmentForCurve.Add(proj);
+						pt = -pt2D.x * right - pt2D.y * left + planeOrigin;
 					}
-				}
-
-				if (!closed || (i != 0 && i != dpts.size() - 1))
-				{
-					curves.push_back(segmentForCurve);
+					glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
+					
+					segmentForCurve.Add(proj);
 				}
 			}
-
-			if (closed)
+			else
 			{
-				dpts.pop_back();
-				dpts.erase(dpts.begin());
-			}
+				// project previous curve onto the normal
+				const IfcCurve &prevCurve = curves.back();
 
-			// connect the curves
-			for (size_t i = 1; i < dpts.size(); i++)
-			{
-				glm::dvec3 p1 = dpts[i - 1];
-				glm::dvec3 p2 = dpts[i];
-				glm::dvec3 dir = p1 - p2;
-				glm::dvec4 ddir = glm::dvec4(dir, 0);
-				const double di = glm::distance(p1, p2);
-
-				//Only segments smaller than 10 cm will be represented, those that are bigger will be standardized
-
-				const auto &c1 = curves[i - 1].points;
-				const auto &c2 = curves[i].points;
-
-				uint32_t capSize = c1.size();
-				for (size_t j = 1; j < capSize; j++)
+				auto &ppts = prevCurve.points;
+				for (auto &pt : ppts)
 				{
-					glm::dvec3 bl = c1[j - 1];
-					glm::dvec3 br = c1[j - 0];
-					glm::dvec3 tl = c2[j - 1];
-					glm::dvec3 tr = c2[j - 0];
+					glm::dvec3 proj = projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
-					geom.AddFace(tl, br, bl);
-					geom.AddFace(tl, tr, br);
+					segmentForCurve.Add(proj);
 				}
 			}
 
-			// DumpSVGCurve(directrix.points, glm::dvec3(), "directrix.html");
-			// DumpIfcGeometry(geom, "sweep.obj");
-
-			return geom;
+			if (!closed || (i != 0 && i != dpts.size() - 1))
+			{
+				curves.push_back(segmentForCurve);
+			}
 		}
+
+		if (closed)
+		{
+			dpts.pop_back();
+			dpts.erase(dpts.begin());
+		}
+
+		// connect the curves
+		for (size_t i = 1; i < dpts.size(); i++)
+		{
+			glm::dvec3 p1 = dpts[i - 1];
+			glm::dvec3 p2 = dpts[i];
+			glm::dvec3 dir = p1 - p2;
+			glm::dvec4 ddir = glm::dvec4(dir, 0);
+			const double di = glm::distance(p1, p2);
+
+			//Only segments smaller than 10 cm will be represented, those that are bigger will be standardized
+
+			const auto &c1 = curves[i - 1].points;
+			const auto &c2 = curves[i].points;
+
+			uint32_t capSize = c1.size();
+			for (size_t j = 1; j < capSize; j++)
+			{
+				glm::dvec3 bl = c1[j - 1];
+				glm::dvec3 br = c1[j - 0];
+				glm::dvec3 tl = c2[j - 1];
+				glm::dvec3 tr = c2[j - 0];
+
+				geom.AddFace(tl, br, bl);
+				geom.AddFace(tl, tr, br);
+			}
+		}
+
+		// DumpSVGCurve(directrix.points, glm::dvec3(), "directrix.html");
+		// DumpIfcGeometry(geom, "sweep.obj");
+
+		return geom;
+	}
 
 	inline bool computeSafeNormal(const glm::dvec3 v1, const glm::dvec3 v2, const glm::dvec3 v3, glm::dvec3 &normal, double eps = 0)
 	{
-		glm::dvec3 v12(v2 - v1);
-		glm::dvec3 v13(v3 - v1);
-
-		glm::dvec3 norm = glm::cross(v12, v13);
-
-		double len = glm::length(norm);
-
-		if (len <= eps)
-		{
-			return false;
-		}
-
-		normal = norm / len;
-
-		return true;
+		return bimGeometry::computeSafeNormal(v1, v2, v3, normal, eps);
 	}
 
 	inline bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3> &points, glm::dvec3 &v1, glm::dvec3 &v2, glm::dvec3 &v3)
@@ -989,34 +976,7 @@ namespace webifc::geometry
 
 	inline double VectorToAngle(double x, double y)
 	{
-		double dd = sqrt(x * x + y * y);
-		if (std::abs(dd) < EPS_MINISCULE) {
-			return 0;
-		}
-		double xx = x / dd;
-		double yy = y / dd;
-
-		double angle = asin(xx);
-		double cosv = cos(angle);
-
-		if (glm::abs(yy - cosv) > 1e-5)
-		{
-			angle = acos(yy);
-			double sinv = sin(angle);
-			cosv = cos(angle);
-			if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
-			{
-				angle = angle + (CONST_PI - angle) * 2;
-				sinv = sin(angle);
-				cosv = cos(angle);
-				if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
-				{
-					angle = angle + CONST_PI;
-				}
-			}
-		}
-
-		return (angle / (2 * CONST_PI)) * 360;
+		return bimGeometry::VectorToAngle(x, y);
 	}
 
 	inline bool MatrixFlipsTriangles(const glm::dmat4 &mat)
@@ -1036,25 +996,12 @@ namespace webifc::geometry
 
 	inline double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
-		glm::dvec3 ab = b - a;
-		glm::dvec3 ac = c - a;
-
-		glm::dvec3 norm = glm::cross(ab, ac);
-		return glm::length(norm) / 2;
-	}
-
-	inline double cross2d(const glm::dvec2 &point1, const glm::dvec2 &point2)
-	{
-		return point1.x * point2.y - point1.y * point2.x;
+		return bimGeometry::areaOfTriangle(a, b, c);
 	}
 
 	inline double areaOfTriangle(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
 	{
-		glm::dvec2 ab = b - a;
-		glm::dvec2 ac = c - a;
-
-		double norm = cross2d(ab, ac) / 2;
-		return std::fabs(norm);
+		return bimGeometry::areaOfTriangle2D(a, b, c);
 	}
 
 	inline double RandomDouble(double lo, double hi)

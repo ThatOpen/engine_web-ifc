@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
-#include "../operations/bimGeometry/Curve.h"
+#include "../operations/bim-geometry/curve.h"
 
 namespace webifc::geometry {
 
