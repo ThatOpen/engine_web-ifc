@@ -72,4 +72,35 @@ namespace bimGeometry {
         //t = tmin;
         return true;
     }
+
+    Buffers AABB::GetBuffers()
+    {
+        Buffers buffers;
+
+        buffers.AddPoint(Vec(max.x,max.y,min.z));
+        buffers.AddPoint(Vec(max.x,min.y,min.z));
+        buffers.AddPoint(Vec(max.x,min.y,max.z));
+        buffers.AddPoint(Vec(max.x,max.y,max.z));
+        buffers.AddPoint(Vec(min.x,max.y,min.z));
+        buffers.AddPoint(Vec(min.x,min.y,min.z));
+        buffers.AddPoint(Vec(min.x,min.y,max.z));
+        buffers.AddPoint(Vec(min.x,max.y,max.z));
+
+        buffers.AddTri(0, 1, 3);
+        buffers.AddTri(3, 1, 2);
+        buffers.AddTri(5, 2, 1);
+        buffers.AddTri(2, 5, 6);
+        buffers.AddTri(7, 0, 4);
+        buffers.AddTri(3, 0, 7);
+        buffers.AddTri(7, 4, 5);
+        buffers.AddTri(5, 6, 7);
+
+        return buffers;
+    }
+
+    void AABB::SetValues(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+        min = Vec(minX, minY, minZ);
+        max = Vec(maxX, maxY, maxZ);
+        center = Vec((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
+    }
 }

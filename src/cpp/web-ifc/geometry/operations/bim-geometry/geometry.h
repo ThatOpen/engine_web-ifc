@@ -23,5 +23,9 @@ namespace bimGeometry {
         void AddFace(uint32_t a, uint32_t b, uint32_t c);
         void AddPoint(glm::dvec4& pt, glm::dvec3& n);
 		void AddPoint(glm::dvec3& pt, glm::dvec3& n);
+        uint32_t GetVertexData();
+		uint32_t GetVertexDataSize();
+		uint32_t GetIndexData();
+		uint32_t GetIndexDataSize();
     };
 }

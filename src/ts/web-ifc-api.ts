@@ -148,6 +148,16 @@ export interface IfcGeometry {
     delete(): void;
 }
 
+export interface Buffers {
+    fvertexData: Array<number>;
+    indexData: Array<number>;
+}
+
+export interface AABB {
+    GetBuffers(): Buffers;
+    SetValues(minX: number, minY: number, minZ: number, maxX: number, maxY: number, maxZ: number): void;
+}
+
 export interface IfcType {
     typeID: number;
     typeName: string;
@@ -424,6 +434,11 @@ export class IfcAPI {
     */
     GetGeometry(modelID: number, geometryExpressID: number): IfcGeometry {
         return this.wasmModule.GetGeometry(modelID, geometryExpressID);
+    }
+
+    CreateAABB()
+    {
+        return this.wasmModule.CreateAABB();
     }
 
     /**

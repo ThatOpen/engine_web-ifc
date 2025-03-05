@@ -734,6 +734,11 @@ void ResetCache(uint32_t modelID) {
     if (manager.IsModelOpen(modelID)) manager.GetGeometryProcessor(modelID)->GetLoader().ResetCache();
 }
 
+bimGeometry::AABB CreateAABB()
+{
+    return bimGeometry::AABB();
+}
+
 EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::class_<webifc::geometry::IfcGeometry>("IfcGeometry")
@@ -850,6 +855,22 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::register_vector<double>("DoubleVector");
 
+    //bimGeometry
+
+    emscripten::value_object<bimGeometry::Buffers>("Buffers")
+        .field("fvertexData", &bimGeometry::Buffers::fvertexData)
+        .field("indexData", &bimGeometry::Buffers::indexData)
+        ;
+
+    emscripten::class_<bimGeometry::AABB>("AABB")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::AABB::GetBuffers)
+        .function("SetValues", &bimGeometry::AABB::SetValues)
+        ;
+
+    emscripten::register_vector<float>("vector<float>");
+
+    emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);
