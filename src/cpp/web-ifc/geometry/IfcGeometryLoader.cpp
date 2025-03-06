@@ -3087,7 +3087,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     return curve;
   }
 
-  glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID, glm::dvec3 vector) const
+  glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
   {
     if(_expressIDToPlacement.contains(expressID)) {
       return _expressIDToPlacement[expressID];
@@ -3327,15 +3327,48 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       }
       case schema::IFCAXIS2PLACEMENTLINEAR:
       {
-        glm::dvec3 vector = glm::dvec3(0, 0, 1);
+        glm::dvec3 xAxis = glm::dvec3(1, 0, 0);
+        glm::dvec3 zAxis = glm::dvec3(0, 0, 1);
+		glm::dvec3 Location;
         _loader.MoveToArgumentOffset(expressID, 0);
-        uint32_t posID = _loader.GetRefArgument();
-        if (_loader.GetRefArgument() == parsing::IfcTokenType::REF)
+        uint32_t posID = _loader.GetRefArgument();   // Location : IfcPoint;
+		uint32_t LocationType = _loader.GetLineType(posID);
+		if (LocationType == schema::IFCPOINTBYDISTANCEEXPRESSION)
+		{
+			glm::dmat4 LocationMatrix = GetLocalPlacement(posID);
+			_expressIDToPlacement[expressID] = LocationMatrix;
+			return LocationMatrix;
+		}
+		else
+		{
+			Location = GetCartesianPoint3D(posID);
+		}
+		
+		_loader.MoveToArgumentOffset(expressID, 1);
+		auto tokenTypeAxis = _loader.GetTokenType();
+        if (tokenTypeAxis == parsing::IfcTokenType::REF)
         {
+			// Axis : OPTIONAL IfcDirection;    The exact direction of the local Z Axis.
           _loader.StepBack();
-          glm::dvec3 vector = GetCartesianPoint3D(_loader.GetRefArgument());
+		  zAxis = GetCartesianPoint3D(_loader.GetRefArgument());
         }
-        glm::dmat4 result = GetLocalPlacement(posID, vector);
+        
+		auto tokenTypeRefDirection = _loader.GetTokenType();
+		if (tokenTypeRefDirection == parsing::IfcTokenType::REF)
+		{
+			// tokenTypeRefDirection : OPTIONAL IfcDirection;    The direction used to determine the direction of the local X Axis.
+			_loader.StepBack();
+			xAxis = GetCartesianPoint3D(_loader.GetRefArgument());
+		}
+
+		glm::dvec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+		xAxis = glm::normalize(glm::cross(zAxis, yAxis));
+
+		glm::dmat4 result = glm::dmat4(
+			glm::dvec4(xAxis, 0),
+			glm::dvec4(yAxis, 0),
+			glm::dvec4(zAxis, 0),
+			glm::dvec4(Location, 1));
 
         _expressIDToPlacement[expressID] = result;
         return result;
