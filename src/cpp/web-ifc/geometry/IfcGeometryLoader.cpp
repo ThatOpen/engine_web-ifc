@@ -2055,6 +2055,73 @@ namespace webifc::geometry
         }
         break;
       }
+	  case schema::IFCPOLYNOMIALCURVE:
+	  {
+		  // IfcPolynomialCurve -----------------------------------------------------------
+		  //		IfcPlacement								Position;
+		  //		std::vector<IfcReal>						CoefficientsX;			//optional
+		  //		std::vector<IfcReal>						CoefficientsY;			//optional
+		  //		std::vector<IfcReal>						CoefficientsZ;			//optional
+
+		  // #452417=IFCPOLYNOMIALCURVE(#452416,(0.0,1.0),(0.0,-0.0249887896744,0.0031250),$);
+		  _loader.MoveToArgumentOffset(expressID, 0);
+		  auto placementID = _loader.GetRefArgument();
+		  glm::dmat3 placement = GetAxis2Placement2D(placementID);
+
+		  //auto type = _loader.GetStringArgument();
+		  _loader.MoveToArgumentOffset(expressID, 1);
+		  
+
+		  // Read coefficients for X, Y, and Z
+		  std::vector<double> CoefficientsX, CoefficientsY, CoefficientsZ;
+
+		  auto ReadCoefficients = [&](size_t offset, std::vector<double>& coefficients) {
+			  _loader.MoveToArgumentOffset(expressID, offset);
+			  auto tt = _loader.GetTokenType();
+			  if ( tt == parsing::SET_BEGIN) {
+				  for (size_t ii = 0; ii < 100; ++ii) {
+					  tt = _loader.GetTokenType(); // Move to next token
+					  if (tt != parsing::IfcTokenType::REAL) {
+						  break;
+					  }
+					  _loader.StepBack();
+					  coefficients.emplace_back(_loader.GetDoubleArgument());
+				  }
+			  }
+			  };
+
+		  ReadCoefficients(1, CoefficientsX);
+		  ReadCoefficients(2, CoefficientsY);
+		  ReadCoefficients(3, CoefficientsZ);
+
+		  
+		  std::vector<glm::dvec3> points;
+		  double tMin = 0.0, tMax = 1.0; // Define evaluation range
+		  size_t numPoints = 6; // Number of samples for curve resolution
+
+		  for (size_t i = 0; i <= numPoints; ++i) {
+			  double t = tMin + (tMax - tMin) * (static_cast<double>(i) / numPoints);
+			  double x = 0.0, y = 0.0, z = 0.0;
+
+			  for (size_t j = 0; j < CoefficientsX.size(); ++j)
+				  x += CoefficientsX[j] * std::pow(t, j);
+
+			  for (size_t j = 0; j < CoefficientsY.size(); ++j)
+				  y += CoefficientsY[j] * std::pow(t, j);
+
+			  for (size_t j = 0; j < CoefficientsZ.size(); ++j)
+				  z += CoefficientsZ[j] * std::pow(t, j);
+
+			  points.emplace_back(x, y, z);
+		  }
+
+		  // Apply placement transformation
+		  for (auto& pt : points) {
+			  glm::dvec3 transformed = placement * pt;
+			  curve.points.push_back(glm::dvec3(transformed));
+		  }
+		  break;
+	  }
       case schema::IFCBSPLINECURVE:
       {
         bool condition = sameSense == 0;
