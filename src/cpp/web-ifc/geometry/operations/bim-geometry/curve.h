@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
+#pragma once
+
 namespace bimGeometry {
 	struct Curve
 	{

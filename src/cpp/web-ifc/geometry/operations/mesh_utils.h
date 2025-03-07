@@ -242,83 +242,40 @@ namespace webifc::geometry
 		}
 	}
 
-	// TODO: review and simplify
-	inline void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
+    // TODO: review and simplify
+    inline void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
 	{
 		spdlog::debug("[TriangulateExtrusion({})]");
-			// NO EXAMPLE FILES ABOUT THIS CASE
-
-			// THIS IS A SIMPLE EXTRUSION, NOT TRIMMED
 
 		double len = surface.ExtrusionSurface.Length;
 		glm::dvec3 dir = surface.ExtrusionSurface.Direction;
 
 		if (!surface.ExtrusionSurface.Profile.isComposite)
 		{
-			for (size_t j = 0; j < surface.ExtrusionSurface.Profile.curve.points.size() - 1; j++)
+			std::vector<glm::dvec3> points = surface.ExtrusionSurface.Profile.curve.points;
+			bimGeometry::Geometry geom = bimGeometry::Extrude(points, dir, len);
+			for (int r = 0; r < geom.numFaces; r++)
 			{
-				int j2 = j + 1;
-
-				double npx = surface.ExtrusionSurface.Profile.curve.points[j].x + dir.x * len;
-				double npy = surface.ExtrusionSurface.Profile.curve.points[j].y + dir.y * len;
-				double npz = dir.z * len;
-				glm::dvec3 nptj1 = glm::dvec3(
-					npx,
-					npy,
-					npz);
-				npx = surface.ExtrusionSurface.Profile.curve.points[j2].x + dir.x * len;
-				npy = surface.ExtrusionSurface.Profile.curve.points[j2].y + dir.y * len;
-				npz = dir.z * len;
-				glm::dvec3 nptj2 = glm::dvec3(
-					npx,
-					npy,
-					npz);
-				geometry.AddFace(
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j].x,surface.ExtrusionSurface.Profile.curve.points[j].y, 0),
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2].x,surface.ExtrusionSurface.Profile.curve.points[j2].y, 0),
-					nptj1);
-				geometry.AddFace(
-					glm::dvec3(surface.ExtrusionSurface.Profile.curve.points[j2].x,surface.ExtrusionSurface.Profile.curve.points[j2].y, 0),
-					nptj2,
-					nptj1);
+				bimGeometry::Face f = geom.GetFace(r);
+				geometry.AddFace(geom.GetPoint(f.i0), geom.GetPoint(f.i1),  geom.GetPoint(f.i2));
 			}
 		}
 		else
 		{
 			for (size_t i = 0; i < surface.ExtrusionSurface.Profile.profiles.size(); i++)
 			{
-				for (size_t j = 0; j < surface.ExtrusionSurface.Profile.profiles[i].curve.points.size() - 1; j++)
+				std::vector<glm::dvec3> points = surface.ExtrusionSurface.Profile.profiles[i].curve.points;
+                bimGeometry::Geometry geom = bimGeometry::Extrude(points, dir, len);
+				for (int r = 0; r < geom.numFaces; r++)
 				{
-					int j2 = j + 1;
-
-					double npx = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j].x + dir.x * len;
-					double npy = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j].y + dir.y * len;
-					double npz = dir.z * len;
-					glm::dvec3 nptj1 = glm::dvec3(
-						npx,
-						npy,
-						npz);
-					npx = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].x + dir.x * len;
-					npy = surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].y + dir.y * len;
-					npz = dir.z * len;
-					glm::dvec3 nptj2 = glm::dvec3(
-						npx,
-						npy,
-						npz);
-					geometry.AddFace(
-						glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j].x,surface.ExtrusionSurface.Profile.profiles[i].curve.points[j].y, 0),
-						glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].x,surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].y, 0),
-						nptj1);
-					geometry.AddFace(
-						glm::dvec3(surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].x,surface.ExtrusionSurface.Profile.profiles[i].curve.points[j2].y, 0),
-						nptj2,
-						nptj1);
+					bimGeometry::Face f = geom.GetFace(r);
+					geometry.AddFace(geom.GetPoint(f.i0), geom.GetPoint(f.i1),  geom.GetPoint(f.i2));
 				}
-			}
+            }
 		}
-	}
+    }
 
-	inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double const scaling)
+    inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double const scaling)
 	{
 		spdlog::debug("[TriangulateBspline({})]");
 		Nurbs nurbs{geometry, bounds, surface, scaling};

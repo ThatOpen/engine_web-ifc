@@ -91,42 +91,4 @@ namespace bimGeometry
 
         numFaces++;
     }
-
-    
-	uint32_t Geometry::GetVertexData()
-	{
-		// unfortunately webgl can't do doubles
-		if (fvertexData.size() != vertexData.size())
-		{
-			fvertexData.resize(vertexData.size());
-			for (size_t i = 0; i < vertexData.size(); i++)
-			{
-				// The vector was previously copied in batches of 6, but
-				// copying single entry at a time is more resilient if the 
-				// underlying geometry lib changes the treatment of normals
-				fvertexData[i] = vertexData[i];
-			}
-		}
-		if (fvertexData.empty())
-		{
-			return 0;
-		}
-		return (uint32_t)(size_t)&fvertexData[0];
-	}
-
-    uint32_t Geometry::GetVertexDataSize()
-	{
-		return (uint32_t)fvertexData.size();
-	}
-
-	uint32_t Geometry::GetIndexData()
-	{
-		return (uint32_t)(size_t)&indexData[0];
-	}
-
-	uint32_t Geometry::GetIndexDataSize()
-	{
-		return (uint32_t)indexData.size();
-	}
-
 }

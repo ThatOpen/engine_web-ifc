@@ -307,4 +307,38 @@ namespace bimGeometry
 
 		return geometry;
 	}
+
+	inline bimGeometry::Geometry Extrude(std::vector<glm::dvec3> &points, glm::dvec3 &dir, double len)
+    {
+		bimGeometry::Geometry geom;
+
+        for (size_t j = 0; j < points.size() - 1; j++)
+        {
+            int j2 = j + 1;
+
+            double npx = points[j].x + dir.x * len;
+            double npy = points[j].y + dir.y * len;
+            double npz = dir.z * len;
+            glm::dvec3 nptj1 = glm::dvec3(
+                npx,
+                npy,
+                npz);
+            npx = points[j2].x + dir.x * len;
+            npy = points[j2].y + dir.y * len;
+            npz = dir.z * len;
+            glm::dvec3 nptj2 = glm::dvec3(
+                npx,
+                npy,
+                npz);
+            geom.AddFace(
+                glm::dvec3(points[j].x, points[j].y, 0),
+                glm::dvec3(points[j2].x, points[j2].y, 0),
+                nptj1);
+			geom.AddFace(
+                glm::dvec3(points[j2].x, points[j2].y, 0),
+                nptj2,
+                nptj1);
+        }
+		return geom;
+    }
 }

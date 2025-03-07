@@ -12,6 +12,7 @@
 #include <spdlog/spdlog.h>
 #include "../web-ifc/modelmanager/ModelManager.h"
 #include "../version.h"
+#include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
 
 namespace webifc::parsing { 
     void p21encode(std::string_view input, std::ostringstream &output);
@@ -739,6 +740,11 @@ bimGeometry::AABB CreateAABB()
     return bimGeometry::AABB();
 }
 
+bimGeometry::Extrusion CreateExtrusion()
+{
+    return bimGeometry::Extrusion();
+}
+
 EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::class_<webifc::geometry::IfcGeometry>("IfcGeometry")
@@ -862,15 +868,23 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("indexData", &bimGeometry::Buffers::indexData)
         ;
 
+    emscripten::register_vector<float>("vector<float>");
+
     emscripten::class_<bimGeometry::AABB>("AABB")
         .constructor<>()
         .function("GetBuffers", &bimGeometry::AABB::GetBuffers)
         .function("SetValues", &bimGeometry::AABB::SetValues)
         ;
 
-    emscripten::register_vector<float>("vector<float>");
+        
+    emscripten::class_<bimGeometry::Extrusion>("Extrusion")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Extrusion::GetBuffers)
+        .function("SetValues", &bimGeometry::Extrusion::SetValues)
+        ;
 
     emscripten::function("CreateAABB", &CreateAABB);
+    emscripten::function("CreateExtrusion", &CreateExtrusion);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);

@@ -158,6 +158,11 @@ export interface AABB {
     SetValues(minX: number, minY: number, minZ: number, maxX: number, maxY: number, maxZ: number): void;
 }
 
+export interface Extrusion {
+    GetBuffers(): Buffers;
+    SetValues(profile_: Array<number>, dir_: Array<number>, len_: number): void;
+}
+
 export interface IfcType {
     typeID: number;
     typeName: string;
@@ -439,6 +444,11 @@ export class IfcAPI {
     CreateAABB()
     {
         return this.wasmModule.CreateAABB();
+    }
+
+    CreateExtrusion()
+    {
+        return this.wasmModule.CreateExtrusion();
     }
 
     /**
