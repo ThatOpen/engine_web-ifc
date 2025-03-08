@@ -20,7 +20,10 @@ namespace webifc::parsing {
  
    IfcLoader::IfcLoader(uint32_t tapeSize, uint64_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
    { 
-     _tokenStream = new IfcTokenStream(tapeSize,memoryLimit/tapeSize);
+     uint64_t maxChunks;
+     if (memoryLimit > 0) maxChunks = memoryLimit/tapeSize; 
+     else maxChunks = 0;
+     _tokenStream = new IfcTokenStream(tapeSize,maxChunks);
      _maxExpressId=0;
    }  
    
@@ -672,6 +675,7 @@ namespace webifc::parsing {
           uint16_t length = _tokenStream->Read<uint16_t>();
           _tokenStream->Forward(length);
           noArguments++;
+          if (t==IfcTokenType::LABEL) GetSetArgument();
           continue;
         }
         if (t == REF) {
