@@ -9,6 +9,7 @@
 #endif
 
 #include "IfcGeometryProcessor.h"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include "representation/geometry.h"
 #include "operations/geometryutils.h"
