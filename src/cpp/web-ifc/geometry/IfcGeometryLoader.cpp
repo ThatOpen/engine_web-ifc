@@ -2111,7 +2111,8 @@ namespace webifc::geometry
             ctrolPts.push_back(GetCartesianPoint3D(pointId));
           }
         
-          std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
+		  double numCurvePoints = ctrolPts.size();
+          std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights, numCurvePoints);
           for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
         }        
 
@@ -2199,7 +2200,8 @@ namespace webifc::geometry
           uint32_t pointId = _loader.GetRefArgument(token);
           ctrolPts.push_back(GetCartesianPoint3D(pointId));
         }
-        std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
+		double numCurvePoints = ctrolPts.size();
+        std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights, numCurvePoints);
         for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
       }
 
@@ -2284,7 +2286,8 @@ namespace webifc::geometry
           ctrolPts.push_back(GetCartesianPoint3D(pointId));
         }
 
-        std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
+		double numCurvePoints = ctrolPts.size();
+        std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights, numCurvePoints);
         for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
       }
 

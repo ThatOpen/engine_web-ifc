@@ -11,6 +11,9 @@
 namespace webifc::geometry{
 
 	void Nurbs::fill_geometry(){
+		if (!_initialized) {
+			return;
+		}
 		auto uv_points {this->get_uv_points()};
 		auto indices {get_triangulation_uv_points(uv_points)};
 
@@ -78,14 +81,89 @@ namespace webifc::geometry{
 			this->init();
 	}
 	
-	void Nurbs::init(){
+	void Nurbs::init() {
+		// Check that the control point grid has sufficient dimensions.
+		// We need at least (degree + 1) control points in each direction.
+		if (this->num_u < static_cast<size_t>(this->bspline_surface.UDegree) + 1) {
+			spdlog::error("Insufficient control point rows: num_u = {} but UDegree = {} requires at least {} rows",
+				this->num_u, this->bspline_surface.UDegree, this->bspline_surface.UDegree + 1);
+			return; // Or throw an exception.
+		}
+		if (this->num_v < static_cast<size_t>(this->bspline_surface.VDegree) + 1) {
+			spdlog::error("Insufficient control point columns: num_v = {} but VDegree = {} requires at least {} columns",
+				this->num_v, this->bspline_surface.VDegree, this->bspline_surface.VDegree + 1);
+			return; // Or throw an exception.
+		}
+
+		// Validate degrees.
+		if (this->bspline_surface.UDegree < 0 || this->bspline_surface.VDegree < 0) {
+			spdlog::error("Invalid degree values: UDegree={}, VDegree={}",
+				this->bspline_surface.UDegree, this->bspline_surface.VDegree);
+			return;
+		}
+
+		// Validate control points count.
+		size_t expectedCount = this->num_u * this->num_v;
+		auto controlPoints = this->get_control_points();
+		if (controlPoints.size() != expectedCount) {
+			spdlog::error("Control points count mismatch: expected {}, got {}", expectedCount, controlPoints.size());
+			return;
+		}
+		auto weights = this->get_weights();
+		if (weights.size() != expectedCount) {
+			spdlog::error("Weights count mismatch: expected {}, got {}", expectedCount, weights.size());
+			return;
+		}
+
+		// Create the NURBS surface.
 		this->nurbs = std::make_shared<tinynurbs::RationalSurface3d>(
-				static_cast<int>(static_cast<uint32_t>(this->bspline_surface.UDegree)),
-				static_cast<int>(static_cast<uint32_t>(this->bspline_surface.VDegree)),
-				this->get_knots(this->bspline_surface.UKnots, this->bspline_surface.UMultiplicity),
-				this->get_knots(this->bspline_surface.VKnots, this->bspline_surface.VMultiplicity),
-				tinynurbs::array2<glm::dvec3>{this->num_u, this->num_v, this->get_control_points()},
-				tinynurbs::array2<double>{this->num_u, this->num_v, this->get_weights()});
+			static_cast<int>(this->bspline_surface.UDegree),
+			static_cast<int>(this->bspline_surface.VDegree),
+			this->get_knots(this->bspline_surface.UKnots, this->bspline_surface.UMultiplicity),
+			this->get_knots(this->bspline_surface.VKnots, this->bspline_surface.VMultiplicity),
+			tinynurbs::array2<glm::dvec3>{this->num_u, this->num_v, controlPoints},
+			tinynurbs::array2<double>{this->num_u, this->num_v, weights}
+		);
+
+		// Check that the knot vectors are large enough.
+		if (this->nurbs->knots_u.size() < static_cast<size_t>(this->nurbs->degree_u + 1)) {
+			spdlog::error("Invalid knots_u: size {} is less than degree_u+1 ({})",
+				this->nurbs->knots_u.size(), this->nurbs->degree_u + 1);
+			return;
+		}
+		if (this->nurbs->knots_v.size() < static_cast<size_t>(this->nurbs->degree_v + 1)) {
+			spdlog::error("Invalid knots_v: size {} is less than degree_v+1 ({})",
+				this->nurbs->knots_v.size(), this->nurbs->degree_v + 1);
+			return;
+		}
+
+		// Helper lambda to check if a knot vector is monotonic increasing.
+		auto check_monotonic = [](const std::vector<double>& knots, const std::string& name) -> bool {
+			for (size_t i = 1; i < knots.size(); i++) {
+				if (knots[i] < knots[i - 1]) {
+					spdlog::error("{} is not monotonic increasing at index {} ({} < {})", name, i, knots[i], knots[i - 1]);
+					return false;
+				}
+			}
+			return true;
+			};
+
+		if (!check_monotonic(this->nurbs->knots_u, "knots_u")) return;
+		if (!check_monotonic(this->nurbs->knots_v, "knots_v")) return;
+
+		// Ensure that we have enough knots to set the range.
+		if (this->nurbs->knots_u.size() <= this->nurbs->degree_u ||
+			this->nurbs->knots_u.size() <= this->nurbs->degree_u + 1) {
+			spdlog::error("Not enough knots in knots_u to determine range, size={}, degree_u={}",
+				this->nurbs->knots_u.size(), this->nurbs->degree_u);
+			return;
+		}
+		if (this->nurbs->knots_v.size() <= this->nurbs->degree_v ||
+			this->nurbs->knots_v.size() <= this->nurbs->degree_v + 1) {
+			spdlog::error("Not enough knots in knots_v to determine range, size={}, degree_v={}",
+				this->nurbs->knots_v.size(), this->nurbs->degree_v);
+			return;
+		}
 		this->range_knots_u = {
 			this->nurbs->knots_u[this->nurbs->degree_u],
 			this->nurbs->knots_u[this->nurbs->knots_u.size() - this->nurbs->degree_u - 1]
@@ -94,14 +172,21 @@ namespace webifc::geometry{
 			this->nurbs->knots_v[this->nurbs->degree_v],
 			this->nurbs->knots_v[this->nurbs->knots_v.size() - this->nurbs->degree_v - 1]
 		};
+
+		// Compute sample surface points.
 		this->ptc = tinynurbs::surfacePoint(*this->nurbs, 0.0, 0.0);
 		this->pth = tinynurbs::surfacePoint(*this->nurbs, 1.0, 0.0);
 		this->ptv = tinynurbs::surfacePoint(*this->nurbs, 0.0, 1.0);
+
+		// Compute distances for further use.
 		this->dh = glm::distance(ptc, pth);
 		this->dv = glm::distance(ptc, ptv);
 		this->pr = (dh + 1) / (dv + 1);
+
+		// Scale error tolerances.
 		this->minError /= this->scaling;
 		this->maxError /= this->scaling;
+		_initialized = true;
 	}
 	std::vector<double> Nurbs::get_weights() const{
 		std::vector<double> result(this->num_u * this->num_v);
