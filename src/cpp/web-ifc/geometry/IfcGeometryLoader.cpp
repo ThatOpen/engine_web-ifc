@@ -3461,7 +3461,6 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       uint32_t relatingBuildingElement = _loader.GetRefArgument();
       auto aggregates = _loader.GetSetArgument();
       auto lineType2 = _loader.GetLineType(relatingBuildingElement);
-      auto relVoidsIt1 = _relVoids.find(aggregateID);
       
       if (_schemaManager.IsIfcElement(lineType2))
       {
@@ -3471,6 +3470,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
           uint32_t aggregateID = _loader.GetRefArgument(aggregate);
           resultVector[aggregateID].push_back(relatingBuildingElement);
           if (relVoidsIt2 != _relVoids.end() && !relVoidsIt2->second.empty()) {
+            auto relVoidsIt1 = _relVoids.find(aggregateID);
             // any any voids that are aggregated to the voids map
             if (relVoidsIt1 == _relVoids.end()) {
                 _relVoids[aggregateID]= std::vector<uint32_t>();
