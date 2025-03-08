@@ -3382,36 +3382,6 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       resultVector[relatingBuildingElement].push_back(relatedOpeningElement);
     }
 
-    // add any aggregated voids to the map
-    auto relElements = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
-
-    for (uint32_t relElementID : relElements)
-    {
-      _loader.MoveToArgumentOffset(relElementID, 4);
-
-      uint32_t relatingBuildingElement = _loader.GetRefArgument();
-      auto aggregates = _loader.GetSetArgument();
-      auto lineType2 = _loader.GetLineType(relatingBuildingElement);
-      
-      if (_schemaManager.IsIfcElement(lineType2))
-      {
-        auto relVoidsIt2 = _relVoids.find(relatingBuildingElement);
-        for (auto &aggregate : aggregates)
-        {
-          uint32_t aggregateID = _loader.GetRefArgument(aggregate);
-          if (relVoidsIt2 != _relVoids.end() && !relVoidsIt2->second.empty()) {
-            auto relVoidsIt1 = _relVoids.find(aggregateID);
-            // any any voids that are aggregated to the voids map
-            if (relVoidsIt1 == _relVoids.end()) {
-                _relVoids[aggregateID]= std::vector<uint32_t>();
-                relVoidsIt1 = _relVoids.find(aggregateID);
-            }
-            relVoidsIt1->second.insert(relVoidsIt1->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
-          }
-
-        }
-      }
-    }
     return resultVector;
   }
 
@@ -3426,11 +3396,22 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
       uint32_t relatingBuildingElement = _loader.GetRefArgument();
       auto aggregates = _loader.GetSetArgument();
+      auto lineType2 = _loader.GetLineType(relatingBuildingElement);
+      auto relVoidsIt2 = _relVoids.find(relatingBuildingElement);
 
       for (auto &aggregate : aggregates)
       {
         uint32_t aggregateID = _loader.GetRefArgument(aggregate);
         resultVector[relatingBuildingElement].push_back(aggregateID);
+        if (relVoidsIt2 != _relVoids.end() && !relVoidsIt2->second.empty()) {
+            auto relVoidsIt1 = _relVoids.find(aggregateID);
+            // any any voids that are aggregated to the voids map
+            if (relVoidsIt1 == _relVoids.end()) {
+                _relVoids[aggregateID]= std::vector<uint32_t>();
+                relVoidsIt1 = _relVoids.find(aggregateID);
+            }
+            relVoidsIt1->second.insert(relVoidsIt1->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
+        }
       }
     }
     return resultVector;
