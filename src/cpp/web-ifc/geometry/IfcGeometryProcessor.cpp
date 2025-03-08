@@ -128,8 +128,6 @@ namespace webifc::geometry
         spdlog::debug("[GetMesh({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
         auto &relVoids = _geometryLoader.GetRelVoids();
-        auto &relElementAggregates = _geometryLoader.GetRelElementAggregates();
-
         
         IfcComposedMesh mesh;
         mesh.expressID = expressID;
