@@ -41,7 +41,7 @@ FetchContent_MakeAvailable(tinycpptest)
 FetchContent_GetProperties(tinycpptest)
 
 Message("Downloading GLM")
-FetchContent_Declare(glm GIT_REPOSITORY "https://github.com/g-truc/glm" GIT_TAG "0af55ccecd98d4e5a8d1fad7de25ba429d60e863" SOURCE_SUBDIR "../")
+FetchContent_Declare(glm GIT_REPOSITORY "https://github.com/g-truc/glm" GIT_TAG "2d4c4b4dd31fde06cfffad7915c2b3006402322f" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(glm)
 FetchContent_GetProperties(glm)
 
