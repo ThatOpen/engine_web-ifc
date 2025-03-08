@@ -173,26 +173,6 @@ namespace webifc::geometry
 
             auto relVoidsIt = relVoids.find(expressID);
 
-            auto relAggIt = relElementAggregates.find(expressID);
-            if (relAggIt != relElementAggregates.end() && !relAggIt->second.empty())
-            {
-                for (auto relAggExpressID : relAggIt->second)
-                {
-                    auto relVoidsIt2 = relVoids.find(relAggExpressID);
-                    if (relVoidsIt2 != relVoids.end() && !relVoidsIt2->second.empty())
-                    {
-                        if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
-                        {
-                            relVoidsIt->second.insert(relVoidsIt->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
-                        }
-                        else
-                        {
-                            relVoidsIt = relVoidsIt2;
-                        }
-                    }
-                }
-            }
-
             if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
             {
                 IfcComposedMesh resultMesh;
