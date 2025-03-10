@@ -6,7 +6,7 @@
 #include "IfcGeometryLoader.h"
 #include "operations/curve-utils.h"
 #include "operations/geometryutils.h"
-#ifdef DEBUG_DUMP_SVG
+#if defined(DEBUG_DUMP_SVG) || defined(_DEBUG)
 #include "../../test/io_helpers.h"
 #endif
 
@@ -2049,14 +2049,21 @@ namespace webifc::geometry
       }
       case schema::IFCCURVESEGMENT:
       {
+		  // IfcCurveSegment ---------------------------------------------
+		  //	IfcTransitionCode							Transition;
+		  //	IfcPlacement								Placement;
+		  //	IfcCurveMeasureSelect						SegmentStart;
+		  //	IfcCurveMeasureSelect						SegmentLength;
+		  //	IfcCurve									ParentCurve;
+
         _loader.MoveToArgumentOffset(expressID, 0);
         auto type = _loader.GetStringArgument();
         _loader.MoveToArgumentOffset(expressID, 1);
         auto placementID = _loader.GetRefArgument();
         _loader.MoveToArgumentOffset(expressID, 2);
-        double SegmentStart = ReadLenghtMeasure();
+        double SegmentStart = ReadCurveMeasureSelect();
         _loader.MoveToArgumentOffset(expressID, 4);
-        double SegmentEnd = ReadLenghtMeasure();
+        double SegmentEnd = ReadCurveMeasureSelect();
         _loader.MoveToArgumentOffset(expressID, 6);
         auto curveID = _loader.GetRefArgument();
 
@@ -2140,6 +2147,90 @@ namespace webifc::geometry
 			  glm::dvec3 transformed = placement * pt;
 			  curve.points.push_back(glm::dvec3(transformed));
 		  }
+		  break;
+	  }
+	  case schema::IFCCLOTHOID:
+	  {
+		  // IfcClothoid ----------------------------------------------------
+		  //		IfcAxis2Placement						Position;
+		  //		IfcLengthMeasure						ClothoidConstant;
+
+		  _loader.MoveToArgumentOffset(expressID, 0);
+		  auto positionID = _loader.GetRefArgument();
+		  glm::dmat3 placement = GetAxis2Placement2D(positionID);
+
+		  _loader.MoveToArgumentOffset(expressID, 1);
+		  double ClothoidConstant = ReadCurveMeasureSelect();
+
+		  //#113=IFCCARTESIANPOINT((0.0,0.0));
+		  //#114=IFCDIRECTION((1.0,0.0));
+		  //#115=IFCAXIS2PLACEMENT2D(#113,#114);
+		  //#116=IFCCLOTHOID(#115,-120.0);
+		  //#117=IFCCURVESEGMENT(.CONTSAMEGRADIENTSAMECURVATURE.,#112,IFCPARAMETERVALUE(-82.285),IFCPARAMETERVALUE(82.285),#116);
+
+		  double startParam = 0;
+		  double endParam = 1.0;
+
+		  if (trim.exist)
+		  {
+			  if (trim.start.hasParam && trim.end.hasParam)
+			  {
+				  startParam = trim.start.param;
+				  endParam = trim.end.param;
+			  }
+		  }
+
+		  std::vector<glm::dvec3> clothoidPoints;
+		  if (curve.arcSegments.size() > 1)
+		  {
+			  glm::dvec3 lastPoint2 = curve.points[curve.points.size() - 2];
+			  glm::dvec3 lastPoint1 = curve.points[curve.points.size() - 1];
+
+			  // Assume parent curve with IFCCURVESEGMENT(.CONTSAMEGRADIENT.)
+			  uint32_t lastPointIndex2 = curve.arcSegments[curve.arcSegments.size()-2];
+			  uint32_t lastPointIndex1 = curve.arcSegments[curve.arcSegments.size()-1];
+			  if (lastPointIndex2 < curve.points.size() && lastPointIndex1 < curve.points.size() )
+			  {
+				  lastPoint1 = curve.points[lastPointIndex1];
+				  lastPoint2 = curve.points[lastPointIndex2];
+			  }
+
+			  // Compute direction from last two points
+			  glm::dvec3 gradient = glm::normalize(lastPoint1 - lastPoint2);
+
+			  // Compute clothoid
+			  uint32_t numPoints = 10;
+			  double step = 1.0 / numPoints;  // Adjust step size if needed
+			  double t = 0.0;
+
+			  for (uint32_t i = 0; i <= numPoints; ++i)
+			  {
+				  double s = t * ClothoidConstant;
+
+				  // Approximate Fresnel integrals (or use lookup table)
+				  double C = s - (pow(s, 5) / 40.0);
+				  double S = (pow(s, 3) / 3.0) - (pow(s, 7) / 56.0);
+
+				  glm::dvec3 point(C, S, 0.0); // 2D clothoid curve
+				  clothoidPoints.push_back(lastPoint1 + (gradient * point.x) + (glm::dvec3(0.0, 1.0, 0.0) * point.y));
+
+				  t += step;
+			  }
+
+			  for (size_t j = 0; j < clothoidPoints.size(); j++)
+			  {
+				  // Apply placement transformation
+				  clothoidPoints[j] = placement * glm::dvec3(clothoidPoints[j].x, clothoidPoints[j].y, clothoidPoints[j].z);
+			  }
+
+			  // Store generated clothoid points
+			  curve.points.insert(curve.points.end(), clothoidPoints.begin(), clothoidPoints.end());
+		  }
+		  
+		  #ifdef _DEBUG
+		  webifc::io::DumpSVGCurveXY(clothoidPoints, "curve_clothoid.html");
+		  webifc::io::DumpSVGCurveXY(curve.points, "curve.html");
+		  #endif
 		  break;
 	  }
       case schema::IFCBSPLINECURVE:
@@ -3189,7 +3280,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       {
         _loader.MoveToArgumentOffset(expressID, 0);
         IfcCurve curve;
-        auto lnSegment = 0;
+        auto lnSegment = 0.0;
 
         if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
         {
@@ -3871,18 +3962,47 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   double IfcGeometryLoader::ReadLenghtMeasure() const
   {
-    parsing::IfcTokenType t = _loader.GetTokenType();
-    if (t == parsing::IfcTokenType::LABEL)
-    {
-      _loader.StepBack();
-      if (_loader.GetStringArgument() == "IFCNONNEGATIVELENGTHMEASURE")
-      {
-        _loader.GetTokenType();
-        return _loader.GetDoubleArgument();
-      }
-    }
+	  parsing::IfcTokenType t = _loader.GetTokenType();
+	  if (t == parsing::IfcTokenType::LABEL)
+	  {
+		  _loader.StepBack();
+		  std::string_view selectType = _loader.GetStringArgument();
+		  if (selectType == "IFCNONNEGATIVELENGTHMEASURE" || selectType == "IFCLENGTHMEASURE")
+		  {
+			  _loader.GetTokenType();
+			  return _loader.GetDoubleArgument();
+		  }
+	  }
+	  return 0.0;
   }
 
+  double IfcGeometryLoader::ReadCurveMeasureSelect() const
+  {
+	  // TYPE IfcCurveMeasureSelect = SELECT(IfcLengthMeasure, IfcParameterValue);
+	  // TYPE IfcParameterValue = REAL;
+
+	  parsing::IfcTokenType t = _loader.GetTokenType();
+	  if (t == parsing::IfcTokenType::LABEL)
+	  {
+		  _loader.StepBack();
+		  std::string_view selectType = _loader.GetStringArgument();
+		  if (selectType == "IFCLENGTHMEASURE" || selectType == "IFCPARAMETERVALUE")
+		  {
+			  // argument with SELELCT label: #116=IFCCLOTHOID(#115,IFCPARAMETERVALUE(-120.0));
+			  _loader.GetTokenType();
+			  return _loader.GetDoubleArgument();
+		  }
+	  }
+	  else if (t == parsing::IfcTokenType::REAL)
+	  {
+		  // argument without SELELCT label: #116=IFCCLOTHOID(#115,-120.0);
+		  _loader.StepBack();
+		  double value = _loader.GetDoubleArgument();
+		  return value;
+	  }
+	  return 0.0;
+  }
+  
   std::vector<IfcSegmentIndexSelect> IfcGeometryLoader::ReadCurveIndices() const
   {
     std::vector<IfcSegmentIndexSelect> result;
