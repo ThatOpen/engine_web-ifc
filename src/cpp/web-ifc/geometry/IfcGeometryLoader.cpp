@@ -14,18 +14,16 @@ namespace webifc::geometry
 {
 
   IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments)
-      : _loader(loader), _schemaManager(schemaManager), _relVoidRel(PopulateRelVoidsRelMap()), _relVoids(PopulateRelVoidsMap()), _relAggregates(PopulateRelAggregatesMap()), _relNests(PopulateRelNestsMap()),
-        _relElementAggregates(PopulateRelElementAggregatesMap()), _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
+      : _loader(loader), _schemaManager(schemaManager), _relVoids(PopulateRelVoidsMap()), _relNests(PopulateRelNestsMap()), _relAggregates(PopulateRelAggregatesMap()),
+        _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
   {
     ReadLinearScalingFactor();
   }
 
   void IfcGeometryLoader::ResetCache() {
-      _relVoidRel = PopulateRelVoidsRelMap();
       _relVoids = PopulateRelVoidsMap();
       _relAggregates = PopulateRelAggregatesMap();
       _relNests = PopulateRelNestsMap();
-      _relElementAggregates = PopulateRelElementAggregatesMap();
       _styledItems = PopulateStyledItemMap();
       _relMaterials = PopulateRelMaterialsMap();
       _materialDefinitions = PopulateMaterialDefinitionsMap();
@@ -336,20 +334,19 @@ namespace webifc::geometry
         transform_t = GetLocalPlacement(localPlacement);
       }
 
-      auto &relAggVector = GetRelAggregates();
-      if (relAggVector.count(expressID) == 1)
+     
+      if (_relNests.count(expressID) == 1)
       {
-        auto &relAgg = relAggVector.at(expressID);
+        auto &relAgg = _relNests.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
         }
       }
 
-      auto &relNestsVector = GetRelNests();
-      if (relNestsVector.count(expressID) == 1)
+      if (_relNests.count(expressID) == 1)
       {
-        auto &relNest = relNestsVector.at(expressID);
+        auto &relNest = _relNests.at(expressID);
         for (auto expressID : relNest)
         {
           alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
@@ -374,10 +371,9 @@ namespace webifc::geometry
         transform_t = GetLocalPlacement(localPlacement);
       }
 
-      auto &relAggVector = GetRelAggregates();
-      if (relAggVector.count(expressID) == 1)
+      if (_relNests.count(expressID) == 1)
       {
-        auto &relAgg = relAggVector.at(expressID);
+        auto &relAgg = _relNests.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -393,10 +389,9 @@ namespace webifc::geometry
         }
       }
 
-      auto &relNestVector = GetRelNests();
-      if (relNestVector.count(expressID) == 1)
+      if (_relNests.count(expressID) == 1)
       {
-        auto &relNest = relNestVector.at(expressID);
+        auto &relNest = _relNests.at(expressID);
         for (auto expressID : relNest)
         {
           alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -430,10 +425,9 @@ namespace webifc::geometry
         transform_t = GetLocalPlacement(localPlacement);
       }
 
-      auto &relAggVector = GetRelAggregates();
-      if (relAggVector.count(expressID) == 1)
+      if (_relAggregates.count(expressID) == 1)
       {
-        auto &relAgg = relAggVector.at(expressID);
+        auto &relAgg = _relAggregates.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -449,10 +443,9 @@ namespace webifc::geometry
         }
       }
 
-      auto &relNestVector = GetRelNests();
-      if (relNestVector.count(expressID) == 1)
+      if (_relNests.count(expressID) == 1)
       {
-        auto &relNest = relNestVector.at(expressID);
+        auto &relNest = _relNests.at(expressID);
         for (auto expressID : relNest)
         {
           alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -909,9 +902,15 @@ namespace webifc::geometry
     case schema::IFCCURVESTYLE:
     {
       _loader.MoveToArgumentOffset(expressID, 3);
-      auto foundColor = GetColor(_loader.GetRefArgument());
-      if (foundColor)
-        return foundColor;
+	  // argument 3 (CurveColour) is optional, so check if it is set
+	  auto tt = _loader.GetTokenType();
+	  if (tt == parsing::REF)
+	  {
+		  _loader.StepBack();
+		  auto foundColor = GetColor(_loader.GetRefArgument());
+		  if (foundColor)
+			  return foundColor;
+	  }
       return {};
     }
     case schema::IFCFILLAREASTYLEHATCHING:
@@ -1322,6 +1321,20 @@ namespace webifc::geometry
 
     switch (lineType)
     {
+		
+	case schema::IFCEDGE:
+	{
+		_loader.MoveToArgumentOffset(expressID, 0);
+		glm::dvec3 p1 = GetVertexPoint(_loader.GetRefArgument());
+		_loader.MoveToArgumentOffset(expressID, 1);
+		glm::dvec3 p2 = GetVertexPoint(_loader.GetRefArgument());
+
+		IfcCurve curve;
+		curve.points.push_back(p1);
+		curve.points.push_back(p2);
+
+		return curve;
+	}
     case schema::IFCEDGECURVE:
     {
       IfcTrimmingArguments ts;
@@ -3582,22 +3595,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
       resultVector[relatingBuildingElement].push_back(relatedOpeningElement);
     }
-    return resultVector;
-  }
 
-  std::unordered_map<uint32_t, std::vector<uint32_t>> IfcGeometryLoader::PopulateRelVoidsRelMap()
-  {
-    std::unordered_map<uint32_t, std::vector<uint32_t>> resultVector;
-    auto relVoids = _loader.GetExpressIDsWithType(schema::IFCRELVOIDSELEMENT);
-
-    for (uint32_t relVoidID : relVoids)
-    {
-      _loader.MoveToArgumentOffset(relVoidID, 4);
-
-      uint32_t relatingBuildingElement = _loader.GetRefArgument();
-
-      resultVector[relatingBuildingElement].push_back(relVoidID);
-    }
     return resultVector;
   }
 
@@ -3612,11 +3610,22 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
       uint32_t relatingBuildingElement = _loader.GetRefArgument();
       auto aggregates = _loader.GetSetArgument();
+      auto lineType2 = _loader.GetLineType(relatingBuildingElement);
+      auto relVoidsIt2 = _relVoids.find(relatingBuildingElement);
 
       for (auto &aggregate : aggregates)
       {
         uint32_t aggregateID = _loader.GetRefArgument(aggregate);
         resultVector[relatingBuildingElement].push_back(aggregateID);
+        if (relVoidsIt2 != _relVoids.end() && !relVoidsIt2->second.empty()) {
+            auto relVoidsIt1 = _relVoids.find(aggregateID);
+            // any any voids that are aggregated to the voids map
+            if (relVoidsIt1 == _relVoids.end()) {
+                _relVoids[aggregateID]= std::vector<uint32_t>();
+                relVoidsIt1 = _relVoids.find(aggregateID);
+            }
+            relVoidsIt1->second.insert(relVoidsIt1->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
+        }
       }
     }
     return resultVector;
@@ -3643,32 +3652,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     return resultVector;
   }
 
-  std::unordered_map<uint32_t, std::vector<uint32_t>> IfcGeometryLoader::PopulateRelElementAggregatesMap()
-  {
-    std::unordered_map<uint32_t, std::vector<uint32_t>> resultVector;
-    auto relElements = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
-
-    for (uint32_t relElementID : relElements)
-    {
-      _loader.MoveToArgumentOffset(relElementID, 4);
-
-      uint32_t relatingBuildingElement = _loader.GetRefArgument();
-      auto aggregates = _loader.GetSetArgument();
-
-      auto lineType2 = _loader.GetLineType(relatingBuildingElement);
-
-      if (_schemaManager.IsIfcElement(lineType2))
-      {
-        for (auto &aggregate : aggregates)
-        {
-          uint32_t aggregateID = _loader.GetRefArgument(aggregate);
-          resultVector[aggregateID].push_back(relatingBuildingElement);
-        }
-      }
-    }
-    return resultVector;
-  }
-
+ 
   std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> IfcGeometryLoader::PopulateStyledItemMap()
   {
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> returnVector;
@@ -3893,26 +3877,6 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
   const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelVoids() const
   {
     return _relVoids;
-  }
-
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelVoidRels() const
-  {
-    return _relVoidRel;
-  }
-
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelAggregates() const
-  {
-    return _relAggregates;
-  }
-
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelNests() const
-  {
-    return _relNests;
-  }
-
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelElementAggregates() const
-  {
-    return _relElementAggregates;
   }
 
   const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetStyledItems() const

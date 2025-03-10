@@ -50,10 +50,6 @@ namespace webifc::geometry
     IfcAlignment GetAlignment(uint32_t expressID, IfcAlignment alignment = IfcAlignment(), glm::dmat4 transform = glm::dmat4(1), uint32_t sourceExpressID = -1) const;
     bool GetColor(const uint32_t expressID, const glm::dvec4 &outputColor) const; 
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids() const;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoidRels() const;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelNests() const;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelAggregates() const;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelElementAggregates() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetStyledItems() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetRelMaterials() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetMaterialDefinitions() const;
@@ -72,11 +68,9 @@ namespace webifc::geometry
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
     const webifc::parsing::IfcLoader &_loader;
     const webifc::schema::IfcSchemaManager &_schemaManager;
-    std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoidRel;
     std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids; 
     std::unordered_map<uint32_t, std::vector<uint32_t>> _relNests;
     std::unordered_map<uint32_t, std::vector<uint32_t>> _relAggregates;
-    std::unordered_map<uint32_t, std::vector<uint32_t>> _relElementAggregates;
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _relMaterials;
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _materialDefinitions;
@@ -89,10 +83,8 @@ namespace webifc::geometry
     mutable std::vector<IfcCurve> LocalCurvesList;
     mutable std::vector<uint32_t> LocalcurvesIndices;
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsMap();
-    std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsRelMap();
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelNestsMap();
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelAggregatesMap();
-    std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelElementAggregatesMap();
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateStyledItemMap();
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateRelMaterialsMap();
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateMaterialDefinitionsMap();

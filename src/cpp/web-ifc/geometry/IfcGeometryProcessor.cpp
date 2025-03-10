@@ -9,6 +9,7 @@
 #endif
 
 #include "IfcGeometryProcessor.h"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include "representation/geometry.h"
 #include "operations/geometryutils.h"
@@ -127,9 +128,7 @@ namespace webifc::geometry
     {
         spdlog::debug("[GetMesh({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
-        auto relVoids = _geometryLoader.GetRelVoids();
-        auto &relElementAggregates = _geometryLoader.GetRelElementAggregates();
-
+        auto &relVoids = _geometryLoader.GetRelVoids();
         
         IfcComposedMesh mesh;
         mesh.expressID = expressID;
@@ -172,26 +171,6 @@ namespace webifc::geometry
             }
 
             auto relVoidsIt = relVoids.find(expressID);
-
-            auto relAggIt = relElementAggregates.find(expressID);
-            if (relAggIt != relElementAggregates.end() && !relAggIt->second.empty())
-            {
-                for (auto relAggExpressID : relAggIt->second)
-                {
-                    auto relVoidsIt2 = relVoids.find(relAggExpressID);
-                    if (relVoidsIt2 != relVoids.end() && !relVoidsIt2->second.empty())
-                    {
-                        if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
-                        {
-                            relVoidsIt->second.insert(relVoidsIt->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
-                        }
-                        else
-                        {
-                            relVoidsIt = relVoidsIt2;
-                        }
-                    }
-                }
-            }
 
             if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
             {
@@ -641,8 +620,10 @@ namespace webifc::geometry
 
                 return mesh;
             }
+            case schema::IFCTOPOLOGYREPRESENTATION:
             case schema::IFCSHAPEREPRESENTATION:
             {
+				// IFCTOPOLOGYREPRESENTATION and IFCSHAPEREPRESENTATION are identical in attributes layout
                 _loader.MoveToArgumentOffset(expressID, 1);
                 auto type = _loader.GetStringArgument();
 
@@ -695,6 +676,54 @@ namespace webifc::geometry
 
                 return mesh;
             }
+			case schema::IFCFACESURFACE:
+			{
+				IfcGeometry geometry;
+				_loader.MoveToArgumentOffset(expressID, 0);
+				auto bounds = _loader.GetSetArgument();
+
+				std::vector<IfcBound3D> bounds3D(bounds.size());
+
+				for (size_t i = 0; i < bounds.size(); i++)
+				{
+					uint32_t boundID = _loader.GetRefArgument(bounds[i]);
+					bounds3D[i] = _geometryLoader.GetBound(boundID);
+				}
+
+				TriangulateBounds(geometry, bounds3D, expressID);
+
+				_loader.MoveToArgumentOffset(expressID, 1);
+				auto surfRef = _loader.GetRefArgument();
+
+				auto surface = GetSurface(surfRef);
+
+				if (surface.BSplineSurface.Active)
+				{
+					TriangulateBspline(geometry, bounds3D, surface, _geometryLoader.GetLinearScalingFactor());
+				}
+				else if (surface.CylinderSurface.Active)
+				{
+					TriangulateCylindricalSurface(geometry, bounds3D, surface, _circleSegments);
+				}
+				else if (surface.RevolutionSurface.Active)
+				{
+					TriangulateRevolution(geometry, bounds3D, surface, _circleSegments);
+				}
+				else if (surface.ExtrusionSurface.Active)
+				{
+					TriangulateExtrusion(geometry, bounds3D, surface);
+				}
+				else
+				{
+					TriangulateBounds(geometry, bounds3D, expressID);
+				}
+
+				_expressIDToGeometry[expressID] = geometry;
+				mesh.expressID = expressID;
+				mesh.hasGeometry = true;
+
+				break;
+			}
             case schema::IFCTRIANGULATEDIRREGULARNETWORK:
             case schema::IFCTRIANGULATEDFACESET:
             {
@@ -1015,6 +1044,7 @@ namespace webifc::geometry
                 return mesh;
             }
             case schema::IFCGEOMETRICSET:
+            case schema::IFCGEOMETRICCURVESET:
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
                 auto items = _loader.GetSetArgument();
@@ -1027,11 +1057,88 @@ namespace webifc::geometry
 
                 return mesh;
             }
+			case schema::IFCBOUNDINGBOX:
+				// ignore bounding box
+				return mesh;
+
+			case schema::IFCCARTESIANPOINT:
+			{
+				// IfcCartesianPoint is derived from IfcRepresentationItem and can be used as representation item directly
+				IfcGeometry geom;
+				auto point = _geometryLoader.GetCartesianPoint3D(expressID);
+				geom.vertexData.push_back(point.x);
+				geom.vertexData.push_back(point.y);
+				geom.vertexData.push_back(point.z);
+				geom.vertexData.push_back(0);  // needs to be 6 values per vertex
+				geom.vertexData.push_back(0);
+				geom.vertexData.push_back(1);
+				geom.indexData.push_back(0);
+
+				geom.numPoints = 1;
+				geom.isPolygon = true;
+				mesh.hasGeometry = true;
+				_expressIDToGeometry[expressID] = geom;
+
+				return mesh;
+			}
+			case schema::IFCEDGE:
+			{
+				// IfcEdge is derived from IfcRepresentationItem and can be used as representation item directly
+				IfcCurve edge = _geometryLoader.GetEdge(expressID);
+				IfcGeometry geom;
+
+				for (uint32_t i = 0; i < edge.points.size(); i++)
+				{
+					auto vert = edge.points[i];
+					geom.vertexData.push_back(vert.x);
+					geom.vertexData.push_back(vert.y);
+					geom.vertexData.push_back(vert.z);
+					geom.vertexData.push_back(0);  // needs to be 6 values per vertex
+					geom.vertexData.push_back(0);
+					geom.vertexData.push_back(1);
+					geom.indexData.push_back(i);
+				}
+				geom.numPoints = edge.points.size();
+				geom.isPolygon = true;
+				mesh.hasGeometry = true;
+				_expressIDToGeometry[expressID] = geom;
+
+				return mesh;
+			}
+			case schema::IFCCIRCLE:
             case schema::IFCPOLYLINE:
             case schema::IFCINDEXEDPOLYCURVE:
             case schema::IFCTRIMMEDCURVE:
-                // ignore polylines as meshes
-                return mesh;
+			{
+				auto lineProfileType = _loader.GetLineType(expressID);
+				IfcCurve curve = _geometryLoader.GetCurve(expressID, 3, false);
+
+				if (curve.points.size() > 0) {
+					IfcGeometry geom;
+
+					for (uint32_t i = 0; i < curve.points.size(); i++)
+					{
+						auto vert = curve.points[i];
+						geom.vertexData.push_back(vert.x);
+						geom.vertexData.push_back(vert.y);
+						geom.vertexData.push_back(vert.z);
+						geom.vertexData.push_back(0);  // needs to be 6 values per vertex
+						geom.vertexData.push_back(0);
+						geom.vertexData.push_back(1);
+						geom.indexData.push_back(i);
+					}
+					geom.numPoints = curve.points.size();
+					geom.isPolygon = true;
+					mesh.hasGeometry = true;
+					_expressIDToGeometry[expressID] = geom;
+				}
+
+				return mesh;
+			}
+			case schema::IFCTEXTLITERAL:
+			case schema::IFCTEXTLITERALWITHEXTENT:
+				// TODO: save string of the text literal in IfcComposedMesh
+				return mesh;
             default:
                 spdlog::error("[GetMesh()] unexpected mesh type {}", expressID, lineType);
                 break;
@@ -1429,7 +1536,7 @@ namespace webifc::geometry
         return IfcSurface();
     }
 
-    IfcFlatMesh IfcGeometryProcessor::GetFlatMesh(uint32_t expressID)
+    IfcFlatMesh IfcGeometryProcessor::GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor)
     {
         spdlog::debug("[GetFlatMesh({})]",expressID);
         IfcFlatMesh flatMesh;
@@ -1437,7 +1544,11 @@ namespace webifc::geometry
 
         IfcComposedMesh composedMesh = GetMesh(expressID);
 
-        glm::dmat4 mat = glm::scale(glm::dvec3(_geometryLoader.GetLinearScalingFactor()));
+		glm::dmat4 mat = glm::dmat4(1);
+		if (applyLinearScalingFactor)
+		{
+			mat = glm::scale(glm::dvec3(_geometryLoader.GetLinearScalingFactor()));;
+		}
 
         AddComposedMeshToFlatMesh(flatMesh, composedMesh, _transformation * NormalizeIFC * mat);
 
