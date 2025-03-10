@@ -114,6 +114,7 @@ namespace webifc::io
  
     void writeFile(std::string filename, std::string data);
     void DumpSVGCurve(std::vector<glm::dvec3> points, std::string filename, std::vector<uint32_t> indices = {});
+    void DumpSVGCurveXY(std::vector<glm::dvec3> points, std::string filename, std::vector<uint32_t> indices = {});
     void svgMakeLine(glm::dvec2 a, glm::dvec2 b, std::stringstream &svg, std::string col = "rgb(255,0,0)");
     void SVGLinesToString(Bounds bounds, glm::dvec2 size, glm::dvec2 offset, SVGLineSet lineSet, std::stringstream &svg);
     std::string makeSVGLines(SVGDrawing drawing);

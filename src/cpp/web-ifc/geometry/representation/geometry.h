@@ -98,14 +98,14 @@ namespace webifc::geometry {
 		struct Revolution
 		{
 			bool Active = false;
-			glm::dmat4 Direction;
+			glm::dmat4 Direction = glm::dmat4(1.0);
 			IfcProfile Profile;
 		};
 
 		struct Extrusion
 		{
 			bool Active = false;
-			glm::dvec3 Direction;
+			glm::dvec3 Direction = glm::dvec3(0.0,0.0,1.0);
 			IfcProfile Profile;
 			double Length;
 		};
@@ -175,8 +175,8 @@ namespace webifc::geometry {
 			bool hasPos = false;
 			bool hasLenght = false;
 			double param;
-			glm::dvec2 pos;
-			glm::dvec3 pos3D;
+			glm::dvec2 pos = glm::dvec2(0.0,0.0);
+			glm::dvec3 pos3D= glm::dvec3(0.0,0.0,0.0);
 		};
 
 		struct IfcTrimmingArguments
@@ -188,8 +188,8 @@ namespace webifc::geometry {
 
 		struct IfcPlacedGeometry
 		{
-			glm::dvec4 color;
-			glm::dmat4 transformation;
+			glm::dvec4 color = glm::dvec4(1.0,1.0,1.0,1.0);
+			glm::dmat4 transformation = glm::dmat4(1.0);
 			std::array<double, 16> flatTransformation;
 			uint32_t geometryExpressID;
 
@@ -240,8 +240,8 @@ namespace webifc::geometry {
 
 		struct IfcComposedMesh
 		{
-			glm::dvec4 color;
-			glm::dmat4 transformation;
+			glm::dvec4 color = glm::dvec4(1.0,1.0,1.0,1.0);
+			glm::dmat4 transformation = glm::dmat4(1.0);
 			uint32_t expressID;
 			bool hasGeometry = false;
 			bool hasColor = false;
@@ -291,7 +291,7 @@ namespace webifc::geometry {
 
 		struct IfcSurface
 		{
-			glm::dmat4 transformation;
+			glm::dmat4 transformation = glm::dmat4(1.0);
 			BSpline BSplineSurface;
 			Cylinder CylinderSurface;
 			Revolution RevolutionSurface;

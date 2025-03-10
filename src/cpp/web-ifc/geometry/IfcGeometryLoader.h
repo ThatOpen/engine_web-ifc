@@ -68,6 +68,7 @@ namespace webifc::geometry
     void ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool edge, int sameSense = -1, int trimSense = -1, IfcTrimmingArguments trim = {}) const;
     void convertAngleUnits(double &Degrees, double &Rad) const;
     double ReadLenghtMeasure() const;
+	double ReadCurveMeasureSelect() const;
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
     const webifc::parsing::IfcLoader &_loader;
     const webifc::schema::IfcSchemaManager &_schemaManager;
