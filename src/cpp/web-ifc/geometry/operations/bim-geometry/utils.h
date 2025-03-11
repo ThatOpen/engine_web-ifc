@@ -308,6 +308,125 @@ namespace bimGeometry
 		return geometry;
 	}
 
+	inline std::vector<glm::dvec2> SolveParabola(uint16_t segments,glm::dvec2 startPoint, double HorizontalLength, double StartHeight, double StartGradient, double EndGradient)
+	{
+		std::vector<glm::dvec2> points;
+
+		double R = HorizontalLength / (EndGradient - StartGradient);
+
+        for (double i = 0; i <= segments; i++)
+        {
+          double pr = i / segments;
+          double grad = ((HorizontalLength * pr) / R) + StartGradient;
+          double alt = (HorizontalLength * pr * (grad + StartGradient) * 0.5) + StartHeight;
+          points.push_back(glm::dvec2(HorizontalLength * pr, alt));
+        }
+
+		return points;
+	}
+
+	inline std::vector<glm::dvec2> SolveClothoid(uint16_t segments, glm::dvec2 startPoint, double ifcStartDirection, double StartRadiusOfCurvature, double EndRadiusOfCurvature, double SegmentLength)
+	{
+		std::vector<glm::dvec2> points;
+
+		bool inverse = false;
+        if (abs(StartRadiusOfCurvature) > abs(EndRadiusOfCurvature))
+        {
+          inverse = true;
+        }
+
+        double A = sqrt(abs(EndRadiusOfCurvature - StartRadiusOfCurvature) * SegmentLength);
+        double Api = A * sqrt(CONST_PI);
+        double uMax = SegmentLength / Api;
+
+        double s = A * uMax * sqrt(CONST_PI);
+        double radFin = (A * A * A) / (A * s);
+
+        double vSin = 0;
+        double vCos = 0;
+
+        glm::dvec2 DirectionX(
+            glm::cos(ifcStartDirection),
+            glm::sin(ifcStartDirection));
+        glm::dvec2 DirectionY(
+            -glm::sin(ifcStartDirection),
+            glm::cos(ifcStartDirection));
+
+        if (EndRadiusOfCurvature < 0 || StartRadiusOfCurvature < 0)
+        {
+          DirectionY.x = -DirectionY.x;
+          DirectionY.y = -DirectionY.y;
+        }
+
+        if (inverse)
+        {
+          DirectionX.x = -DirectionX.x;
+          DirectionX.y = -DirectionX.y;
+        }
+
+        double def = segments;
+        double dif = def / 10;
+        double count = 0;
+        double tram = uMax / def;
+        glm::dvec2 end(0, 0);
+        glm::dvec2 prev(0, 0);
+        glm::dvec2 endDir;
+        for (double c = 1; c < def + 1; c++)
+        {
+          prev = end;
+          end = startPoint + Api * (DirectionX * vCos + DirectionY * vSin);
+          if (c == def || c == 1 || count >= dif)
+          {
+            points.push_back(end);
+            count = 0;
+          }
+          if (c == def)
+          {
+            endDir = prev - end;
+          }
+          double val = c * tram;
+          vSin += sin(CONST_PI * ((A * val * val) / (2 * abs(A)))) * tram;
+          vCos += cos(CONST_PI * ((A * val * val) / (2 * abs(A)))) * tram;
+          count++;
+        }
+
+        if (inverse)
+        {
+          DirectionX.x = -DirectionX.x;
+          DirectionX.y = -DirectionX.y;
+
+          glm::dvec2 newDirectionX(
+              endDir.x,
+              endDir.y);
+          glm::dvec2 newDirectionY(
+              -endDir.y,
+              endDir.x);
+
+          if (EndRadiusOfCurvature < 0 || StartRadiusOfCurvature < 0)
+          {
+            newDirectionY.x = -newDirectionY.x;
+            newDirectionY.y = -newDirectionY.y;
+          }
+
+          newDirectionX = glm::normalize(newDirectionX);
+          newDirectionY = glm::normalize(newDirectionY);
+
+          for (uint32_t i = 0; i < points.size(); i++)
+          {
+            double xx = points[i].x - end.x;
+            double yy = points[i].y - end.y;
+            double dx = xx * newDirectionX.x + yy * newDirectionX.y;
+            double dy = xx * newDirectionY.x + yy * newDirectionY.y;
+            double newDx = startPoint.x + DirectionX.x * dx + DirectionY.x * dy;
+            double newDy = startPoint.y + DirectionX.y * dx + DirectionY.y * dy;
+            points[i].x = newDx;
+            points[i].y = newDy;
+          }
+        }
+
+		return points;
+	}
+
 	inline bimGeometry::Geometry Extrude(std::vector<glm::dvec3> &points, glm::dvec3 &dir, double len)
     {
 		bimGeometry::Geometry geom;

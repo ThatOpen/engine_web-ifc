@@ -163,6 +163,29 @@ export interface Extrusion {
     SetValues(profile_: Array<number>, dir_: Array<number>, len_: number): void;
 }
 
+export interface Parabola {
+    GetBuffers(): Buffers;
+    SetValues(segments: number,
+        startPointX: number,
+        startPointY: number,
+        startPointZ: number,
+        horizontalLength: number,
+        startHeight: number,
+        startGradient: number,
+        endGradient: number): void;
+}
+export interface Clothoid {
+    GetBuffers(): Buffers;
+    SetValues(segments: number,
+        startPointX: number,
+        startPointY: number,
+        startPointZ: number,
+        ifcStartDirection: number,
+        StartRadiusOfCurvature: number,
+        EndRadiusOfCurvature: number,
+        SegmentLength: number): void;
+}
+
 export interface IfcType {
     typeID: number;
     typeName: string;
@@ -449,6 +472,16 @@ export class IfcAPI {
     CreateExtrusion()
     {
         return this.wasmModule.CreateExtrusion();
+    }
+
+    CreateParabola()
+    {
+        return this.wasmModule.CreateParabola();
+    }
+
+    CreateClothoid()
+    {
+        return this.wasmModule.CreateClothoid();
     }
 
     /**

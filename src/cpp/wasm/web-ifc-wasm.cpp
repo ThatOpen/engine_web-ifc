@@ -13,6 +13,8 @@
 #include "../web-ifc/modelmanager/ModelManager.h"
 #include "../version.h"
 #include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
+#include "../web-ifc/geometry/operations/bim-geometry/parabola.h"
+#include "../web-ifc/geometry/operations/bim-geometry/clothoid.h"
 
 namespace webifc::parsing { 
     void p21encode(std::string_view input, std::ostringstream &output);
@@ -745,6 +747,17 @@ bimGeometry::Extrusion CreateExtrusion()
     return bimGeometry::Extrusion();
 }
 
+bimGeometry::Parabola CreateParabola()
+{
+    return bimGeometry::Parabola();
+}
+
+bimGeometry::Clothoid CreateClothoid()
+{
+    return bimGeometry::Clothoid();
+}
+
+
 EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::class_<webifc::geometry::IfcGeometry>("IfcGeometry")
@@ -882,9 +895,23 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetBuffers", &bimGeometry::Extrusion::GetBuffers)
         .function("SetValues", &bimGeometry::Extrusion::SetValues)
         ;
+    
+    emscripten::class_<bimGeometry::Parabola>("Parabola")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Parabola::GetBuffers)
+        .function("SetValues", &bimGeometry::Parabola::SetValues)
+        ;
+    
+    emscripten::class_<bimGeometry::Clothoid>("Clothoid")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Clothoid::GetBuffers)
+        .function("SetValues", &bimGeometry::Clothoid::SetValues)
+        ;
 
     emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("CreateExtrusion", &CreateExtrusion);
+    emscripten::function("CreateParabola", &CreateParabola);
+    emscripten::function("CreateClothoid", &CreateClothoid);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);
