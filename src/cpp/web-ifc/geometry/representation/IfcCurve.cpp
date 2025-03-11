@@ -21,10 +21,8 @@ namespace webifc::geometry
 	
 	glm::dvec2 IfcCurve::Get2d(size_t i) const 
 	{
-		glm::dvec2 ret;
-		ret.x = points.at(i).x;
-		ret.y = points.at(i).y;
-		return ret;
+		const glm::dvec3 &ret = points.at(i);
+		return { ret.x, ret.y };
 	}
 
 	glm::dvec3 IfcCurve::Get3d(size_t i) const
