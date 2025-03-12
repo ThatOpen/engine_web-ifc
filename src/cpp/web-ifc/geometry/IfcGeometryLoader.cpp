@@ -167,36 +167,48 @@ namespace webifc::geometry
     {
     case schema::IFCSECTIONEDSOLIDHORIZONTAL:
     {
+		// IfcSectionedSolidHorizontal -------------------------------------------
+		//		IfcCurve									Directrix;
+		//		std::vector<IfcProfileDef>					CrossSections;
+		//		std::vector<IfcAxis2PlacementLinear>		CrossSectionPositions;
+
       _loader.MoveToArgumentOffset(expressID, 0);
       auto curveId = _loader.GetRefArgument();
 
-      // faces
+      // CrossSections
       _loader.MoveToArgumentOffset(expressID, 1);
-      auto faces = _loader.GetSetArgument();
+      auto CrossSections = _loader.GetSetArgument();
 
       // linear position
       _loader.MoveToArgumentOffset(expressID, 2);
-      auto linearPositions = _loader.GetSetArgument();
+      auto CrossSectionPositions = _loader.GetSetArgument();
 
       IfcCurve curve = GetCurve(curveId, 3);
 
       std::vector<IfcProfile> profiles;
       std::vector<IfcCurve> curves;
-      std::vector<uint32_t> expressIds;
+      std::vector<uint32_t> CrossSectionExpressIds;
 
       std::vector<glm::dmat4> transform;
-      for (auto &linearPosition : linearPositions)
+      for (auto &CrossSectionPositionTapeOffset : CrossSectionPositions)
       {
-        auto expressID = _loader.GetRefArgument(linearPosition);
-        glm::dmat4 linearPlacement = GetLocalPlacement(expressID) * scale;
+        auto CrossSectionPositionID = _loader.GetRefArgument(CrossSectionPositionTapeOffset);
+        glm::dmat4 linearPlacement = GetLocalPlacement(CrossSectionPositionID) * scale;
         transform.push_back(linearPlacement);
       }
 
+	  if (transform.size() < CrossSections.size())
+	  {
+		  // if there are more cross sections than positions, ignore the extra cross sections
+		  CrossSections.resize(transform.size());
+	  }
+
       uint32_t id = 0;
-      for (auto &face : faces)
+      for (auto &face : CrossSections)
       {
-        auto expressID = _loader.GetRefArgument(face);
-        IfcProfile profile = GetProfile(expressID);
+        auto CrossSectionExpressID = _loader.GetRefArgument(face);
+        IfcProfile profile = GetProfile(CrossSectionExpressID);
+		// the profile normal agrees with the tangent of the Directrix, the profile X axis is oriented perpendicularly to the left of the Directrix
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
           glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
@@ -204,12 +216,12 @@ namespace webifc::geometry
         }
         profiles.push_back(profile);
         curves.push_back(profile.curve);
-        expressIds.push_back(expressID);
+		CrossSectionExpressIds.push_back(CrossSectionExpressID);
         id++;
       }
 
       sections.curves = curves;
-      sections.expressID = expressIds;
+      sections.expressID = CrossSectionExpressIds;
 
       return sections;
 
@@ -2956,7 +2968,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       {
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
-          profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i].x, profile.curve.points[i].y, 1);
+          profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i].x, profile.curve.points[i].y, 0);
         }
       }
       else
@@ -2965,7 +2977,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
         {
           for (uint32_t i = 0; i < profile.profiles[j].curve.points.size(); i++)
           {
-            profile.profiles[j].curve.points[i] = transformation * glm::dvec3(profile.profiles[j].curve.points[i].x, profile.profiles[j].curve.points[i].y, 1);
+            profile.profiles[j].curve.points[i] = transformation * glm::dvec3(profile.profiles[j].curve.points[i].x, profile.profiles[j].curve.points[i].y, 0);
           }
         }
       }
@@ -3500,7 +3512,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       {
         glm::dvec3 xAxis = glm::dvec3(1, 0, 0);
         glm::dvec3 zAxis = glm::dvec3(0, 0, 1);
-		glm::dvec3 Location;
+		glm::dvec3 Location = glm::dvec3(0, 0, 0);
         _loader.MoveToArgumentOffset(expressID, 0);
         uint32_t posID = _loader.GetRefArgument();   // Location : IfcPoint;
 		uint32_t LocationType = _loader.GetLineType(posID);
