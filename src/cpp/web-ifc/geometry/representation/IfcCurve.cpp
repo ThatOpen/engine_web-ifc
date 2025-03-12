@@ -69,7 +69,7 @@ namespace webifc::geometry
 	glm::dmat4 IfcCurve::getPlacementAtDistance(double length)
 	{
 		double totalDistance = 0;
-		glm::dvec3 pos;
+		glm::dvec3 pos = glm::dvec3(0, 0, 0);
 		glm::dvec3 vx = glm::dvec3(1, 0, 0);
 		glm::dvec3 vy = glm::dvec3(0, 1, 0);
 		glm::dvec3 vz = glm::dvec3(0, 0, 1);
@@ -81,6 +81,7 @@ namespace webifc::geometry
 				totalDistance += distance;
 				if (totalDistance >= length)
 				{
+					// extrapolate from last 2 points if length is behind last point
 					double factor = (totalDistance - length) / distance;
 					pos = points[i] * factor + points[i + 1] * (1 - factor);
 					glm::dvec3 tan = points[i + 1] - points[i];
