@@ -538,6 +538,25 @@ namespace webifc::geometry
 		return true;
 	}
 
+	// Compute a unit normal vector for a polygon given by its vertices.
+	// The vertices must be in order (clockwise or counterclockwise).
+	inline glm::dvec3 computePolygonNormal(const std::vector<glm::dvec3>& points) {
+		size_t numPoints = points.size();
+		if (numPoints < 3) {
+			// Not enough points to form a polygon, return default vector.
+			return glm::dvec3(0.0, 0.0, 1.0);
+		}
+		glm::dvec3 normal(0.0);
+		for (size_t i = 0; i < numPoints; i++) {
+			size_t next = (i + 1) % numPoints;
+			normal.x += (points[i].y - points[next].y) * (points[i].z + points[next].z);
+			normal.y += (points[i].z - points[next].z) * (points[i].x + points[next].x);
+			normal.z += (points[i].x - points[next].x) * (points[i].y + points[next].y);
+		}
+
+		return glm::normalize(normal);
+	}
+
 	inline bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3> &points, glm::dvec3 &v1, glm::dvec3 &v2, glm::dvec3 &v3)
 	{
 		v1 = points[0];
@@ -763,59 +782,152 @@ namespace webifc::geometry
 		}
 	}
 
+	inline void createCap(const std::vector<std::array<double, 2> >& polygon, uint32_t offset, IfcGeometry& geom)
+	{
+		std::vector<std::vector<std::array<double, 2> > > vectorOfPolygon = { polygon };
+		std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(vectorOfPolygon);
+
+		if (indices.size() < 3)
+		{
+			// probably a degenerate polygon
+			spdlog::error("[SectionedSurface()] degenerate polygon in cap");
+			return;
+		}
+
+		bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
+		bool flipWinding = !winding;
+
+		for (size_t j = 0; j < indices.size(); j += 3)
+		{
+			if (flipWinding)
+			{
+				geom.AddFace(offset + indices[j + 0], offset + indices[j + 2], offset + indices[j + 1]);
+			}
+			else
+			{
+				geom.AddFace(offset + indices[j + 0], offset + indices[j + 1], offset + indices[j + 2]);
+			}
+		}
+	}
+
 	inline IfcGeometry SectionedSurface(IfcCrossSections profiles)
 	{
-		spdlog::debug("[SectionedSurface({})]");
+		spdlog::debug("[SectionedSurface()]");
 		IfcGeometry geom;
 
+		if (profiles.curves.size() < 2)
+		{
+			spdlog::error("[SectionedSurface()] at least two profiles are required in SectionedSurface");
+			return geom;
+		}
+		
 		// Iterate over each profile, and create a surface by connecting the corresponding points with faces.
 		for (size_t i = 0; i < profiles.curves.size() - 1; i++)
 		{
 			IfcCurve &profile1 = profiles.curves[i];
 			IfcCurve &profile2 = profiles.curves[i + 1];
+			if (profile1.points.size() < 2)
+			{
+				continue;
+			}
 
 			// Check that the profiles have the same number of points
 			if (profile1.points.size() != profile2.points.size())
 			{
 				spdlog::error("[SectionedSurface()] profiles must have the same number of points in SectionedSurface");
+				continue;
 			}
 
-			std::vector<uint32_t> indices;
+			// find the start index in profile2 that is closest to the start index in profile1
+			size_t startIndexProfile2 = 0;
+			double minDist = std::numeric_limits<double>::max();
+			glm::dvec3 &p1 = profile1.points[0];
+			uint32_t numLoopPoints = profile1.points.size();
+			for (size_t j = 0; j < numLoopPoints; j++)
+			{
+				glm::dvec3 &p2 = profile2.points[j];
+				double dist = glm::distance(p1, p2);
+				if (dist < minDist)
+				{
+					minDist = dist;
+					startIndexProfile2 = j;
+				}
+			}
 
 			// Create faces by connecting corresponding points from the two profiles
-			for (size_t j = 0; j < profile1.points.size(); j++)
+			glm::dvec3 loopNormal = computePolygonNormal(profile1.points);
+			using Point = std::array<double, 2>;
+			std::vector<std::array<double, 2>> polygon1;
+			std::vector<std::array<double, 2>> polygon2;
+			std::vector<glm::dvec3> upperLoop, upperLoopNormals;
+			for (size_t j = 0; j < numLoopPoints; j++)
 			{
-				glm::dvec3 &p1 = profile1.points[j];
-				int j2 = 0;
-				if (profile1.points.size() > 1)
-				{
-					double pr = (double)j / (double)(profile1.points.size() - 1);
-					j2 = pr * (profile2.points.size() - 1);
-				}
-				glm::dvec3 &p2 = profile2.points[j2];
-
+				glm::dvec3& p1 = profile1.points[j];
+				int j2 = (startIndexProfile2 + j) % numLoopPoints;
+				glm::dvec3& p2 = profile2.points[j2];
 				glm::dvec3 normal = glm::dvec3(0.0, 0.0, 1.0);
-
 				if (glm::distance(p1, p2) > 1E-5)
 				{
-					normal = glm::normalize(glm::cross(p2 - p1, glm::cross(p2 - p1, glm::dvec3(0.0, 0.0, 1.0))));
+					normal = glm::cross(loopNormal, p2 - p1);
+					normal = glm::normalize(normal);
+				}
+				geom.AddPoint(p1, normal);
+				upperLoop.push_back(p2);
+				upperLoopNormals.push_back(normal);
+
+				// project points to XY/XZ/YZ plane
+				double polygon1X = p1.x;
+				double polygon1Y = p1.y;
+				double polygon2X = p2.x;
+				double polygon2Y = p2.y;
+				if (std::abs(loopNormal.y) > std::abs(loopNormal.x) && std::abs(loopNormal.y) > std::abs(loopNormal.z))
+				{
+					// y is the largest component, so project to XZ plane
+					polygon1X = p1.x;
+					polygon1Y = p1.z;
+					polygon2X = p2.x;
+					polygon2Y = p2.z;
+				}
+				else if (std::abs(loopNormal.x) > std::abs(loopNormal.y) && std::abs(loopNormal.x) > std::abs(loopNormal.z))
+				{
+					// x is the largest component, so project to YZ plane
+					polygon1X = p1.y;
+					polygon1Y = p1.z;
+					polygon2X = p2.y;
+					polygon2Y = p2.z;
 				}
 
-				geom.AddPoint(p1, normal);
-				geom.AddPoint(p2, normal);
-
-				indices.push_back(geom.numPoints - 2);
-				indices.push_back(geom.numPoints - 1);
+				polygon1.push_back( {polygon1X, polygon1Y} );
+				polygon2.push_back( {polygon2X, polygon2Y} );
 			}
 
-			// Create the faces
-			if (indices.size() > 0)
+			for (size_t j = 0; j < numLoopPoints; j++)
 			{
-				for (size_t j = 0; j < indices.size() - 2; j += 4)
-				{
-					geom.AddFace(indices[j], indices[j + 1], indices[j + 2]);
-					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3]);
-				}
+				geom.AddPoint(upperLoop[j], upperLoopNormals[j]);
+			}
+
+			// Create the side faces
+			for (size_t j = 0; j < numLoopPoints; j++)
+			{
+				uint32_t idxBottom = j;
+				uint32_t idxBottomNext = (j + 1) % numLoopPoints;
+				uint32_t idxTop = j + numLoopPoints;
+				uint32_t idxTopNext = idxBottomNext + numLoopPoints;
+				geom.AddFace(idxBottom, idxBottomNext, idxTopNext);
+				geom.AddFace(idxTopNext, idxTop, idxBottom);
+			}
+
+			// Create bottom cap
+			if (i == 0 )
+			{
+				createCap(polygon1, 0, geom);
+			}
+			
+			// Create the top cap
+			if (i == 0 || i == profiles.curves.size() - 1)
+			{
+				uint32_t offset = polygon2.size();
+				createCap(polygon2, offset, geom);
 			}
 		}
 
