@@ -2034,9 +2034,19 @@ namespace webifc::geometry
       }
       case schema::IFCGRADIENTCURVE:
       {
+		  // IfcGradientCurve --------------------------------------------------------
+		  //	std::vector<IfcSegment>				Segments;
+		  //	IfcLogical							SelfIntersect;
+		  //	IfcBoundedCurve						BaseCurve;
+		  //	IfcPlacement						EndPoint;				//optional
+
+		  // IfcGradientCurve: 3D curve, based on its 2D projection (BaseCurve) and a height defined by its gradient 
+		  // segments which can be derived from the segment start height, its placement and 
+		  // the ParentCurve instance and the type of the ParentCurve
+
         _loader.MoveToArgumentOffset(expressID, 0);
         auto tokens = _loader.GetSetArgument();
-        auto u = _loader.GetStringArgument();
+        auto SelfIntersect = _loader.GetStringArgument();
         auto masterCurveID = _loader.GetRefArgument();
         curve = GetCurve(masterCurveID, 3, false);
 
@@ -2077,6 +2087,7 @@ namespace webifc::geometry
         trim.end.param = SegmentEnd;
         trim.start.hasParam = true;
         trim.end.hasParam = true;
+		trim.exist = true;
         ComputeCurve(curveID, curve, 3, false, -1, -1, trim);
 
         glm::dmat3 placement = GetAxis2Placement2D(placementID);
@@ -2165,7 +2176,7 @@ namespace webifc::geometry
 		  glm::dmat3 placement = GetAxis2Placement2D(positionID);
 
 		  _loader.MoveToArgumentOffset(expressID, 1);
-		  double ClothoidConstant = ReadCurveMeasureSelect();
+		  double ClothoidConstantA = ReadCurveMeasureSelect();
 
 		  //#113=IFCCARTESIANPOINT((0.0,0.0));
 		  //#114=IFCDIRECTION((1.0,0.0));
@@ -2175,60 +2186,115 @@ namespace webifc::geometry
 
 		  double startParam = 0;
 		  double endParam = 1.0;
-
 		  if (trim.exist)
 		  {
 			  if (trim.start.hasParam && trim.end.hasParam)
 			  {
-				  startParam = trim.start.param;
-				  endParam = trim.end.param;
+				  startParam = trim.start.param;  // e.g., 0
+				  endParam = trim.end.param;        // e.g., 28
 			  }
 		  }
 
 		  std::vector<glm::dvec3> clothoidPoints;
-		  if (curve.arcSegments.size() > 1)
+		  if (curve.points.size() > 1)
 		  {
+			  // Determine the last two points (possibly using arcSegments if available)
 			  glm::dvec3 lastPoint2 = curve.points[curve.points.size() - 2];
 			  glm::dvec3 lastPoint1 = curve.points[curve.points.size() - 1];
-
-			  // Assume parent curve with IFCCURVESEGMENT(.CONTSAMEGRADIENT.)
-			  uint32_t lastPointIndex2 = curve.arcSegments[curve.arcSegments.size()-2];
-			  uint32_t lastPointIndex1 = curve.arcSegments[curve.arcSegments.size()-1];
-			  if (lastPointIndex2 < curve.points.size() && lastPointIndex1 < curve.points.size() )
+			  if (curve.arcSegments.size() > 1)
 			  {
-				  lastPoint1 = curve.points[lastPointIndex1];
-				  lastPoint2 = curve.points[lastPointIndex2];
+				  uint32_t lastPointIndex2 = curve.arcSegments[curve.arcSegments.size() - 2];
+				  uint32_t lastPointIndex1 = curve.arcSegments[curve.arcSegments.size() - 1];
+				  if (lastPointIndex2 < curve.points.size() && lastPointIndex1 < curve.points.size())
+				  {
+					  lastPoint1 = curve.points[lastPointIndex1];
+					  lastPoint2 = curve.points[lastPointIndex2];
+				  }
 			  }
 
-			  // Compute direction from last two points
-			  glm::dvec3 gradient = glm::normalize(lastPoint1 - lastPoint2);
+			  // Compute the local basis: tangent and a perpendicular 'normal'
+			  glm::dvec3 tangent = glm::normalize(lastPoint1 - lastPoint2);
+			  glm::dvec3 up(0.0, 0.0, 1.0);
+			  if (std::abs(glm::dot(tangent, up)) > 0.999)
+				  up = glm::dvec3(1.0, 0.0, 0.0);
+			  glm::dvec3 normal = glm::normalize(glm::cross(tangent, up));
 
-			  // Compute clothoid
-			  uint32_t numPoints = 10;
-			  double step = 1.0 / numPoints;  // Adjust step size if needed
-			  double t = 0.0;
+			  // Number of segments (10 segments means 11 points)
+			  const uint32_t numPoints = 10;
+			  clothoidPoints.resize(numPoints + 1);
 
+			  // Our target arc length for the clothoid
+			  double desiredLength = endParam - startParam;
+
+			  // Lambda to compute total polyline length for a given scale factor.
+			  auto computeLength = [&](double scaleStep) -> double {
+				  double length = 0.0;
+				  glm::dvec3 prevPoint = lastPoint1;
+				  for (uint32_t i = 0; i <= numPoints; ++i)
+				  {
+					  double u = static_cast<double>(i) / static_cast<double>(numPoints);
+					  // Adjust parameter s by the current scale factor.
+					  double s = startParam + u * (endParam - startParam) * scaleStep;
+					  // Normalize s with the clothoid constant A.
+					  double sScaled = s / ClothoidConstantA;
+					  // Series approximations for the Fresnel integrals, scaled by A.
+					  double C = ClothoidConstantA * (sScaled - (std::pow(sScaled, 5) / 40.0));
+					  double S = ClothoidConstantA * ((std::pow(sScaled, 3) / 3.0) - (std::pow(sScaled, 7) / 56.0));
+					  glm::dvec3 currPoint = lastPoint1 + tangent * C + normal * S;
+					  if (i > 0)
+					  {
+						  length += glm::distance(currPoint, prevPoint);
+					  }
+					  prevPoint = currPoint;
+				  }
+				  return length;
+				  };
+
+			  // Find an initial bracket for scaleStep.
+			  double scaleLow = 0.0;
+			  double scaleHigh = 1.0;
+			  double L = computeLength(scaleHigh);
+			  while (L < desiredLength)
+			  {
+				  scaleHigh *= 2.0;
+				  L = computeLength(scaleHigh);
+				  // Safety break to avoid infinite loop.
+				  if (scaleHigh > 1e6) break;
+			  }
+
+			  // Now perform a binary search for the correct scaleStep that gives us the desired length.
+			  double tol = 0.001;
+			  double scaleStep = scaleHigh;
+			  for (int iter = 0; iter < 100; ++iter)
+			  {
+				  scaleStep = (scaleLow + scaleHigh) * 0.5;
+				  L = computeLength(scaleStep);
+				  if (std::abs(L - desiredLength) < tol)
+					  break;
+				  if (L < desiredLength)
+					  scaleLow = scaleStep;
+				  else
+					  scaleHigh = scaleStep;
+			  }
+
+			  // With the computed scaleStep, generate the final clothoid points.
 			  for (uint32_t i = 0; i <= numPoints; ++i)
 			  {
-				  double s = t * ClothoidConstant;
-
-				  // Approximate Fresnel integrals (or use lookup table)
-				  double C = s - (pow(s, 5) / 40.0);
-				  double S = (pow(s, 3) / 3.0) - (pow(s, 7) / 56.0);
-
-				  glm::dvec3 point(C, S, 0.0); // 2D clothoid curve
-				  clothoidPoints.push_back(lastPoint1 + (gradient * point.x) + (glm::dvec3(0.0, 1.0, 0.0) * point.y));
-
-				  t += step;
+				  double u = static_cast<double>(i) / static_cast<double>(numPoints);
+				  double s = startParam + u * (endParam - startParam) * scaleStep;
+				  double sScaled = s / ClothoidConstantA;
+				  double C = ClothoidConstantA * (sScaled - (std::pow(sScaled, 5) / 40.0));
+				  double S = ClothoidConstantA * ((std::pow(sScaled, 3) / 3.0) - (std::pow(sScaled, 7) / 56.0));
+				  clothoidPoints[i] = lastPoint1 + tangent * C + normal * S;
 			  }
 
+			  // Apply any placement transformation if needed.
 			  for (size_t j = 0; j < clothoidPoints.size(); j++)
 			  {
-				  // Apply placement transformation
-				  clothoidPoints[j] = placement * glm::dvec3(clothoidPoints[j].x, clothoidPoints[j].y, clothoidPoints[j].z);
+				  clothoidPoints[j] = placement * clothoidPoints[j];
 			  }
 
-			  // Store generated clothoid points
+			  // Append the generated clothoid points to the curve.
 			  curve.points.insert(curve.points.end(), clothoidPoints.begin(), clothoidPoints.end());
 		  }
 		  
