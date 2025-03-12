@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include "geometry.h"
 #include "epsilons.h"
+#include "curve.h"
 
 #pragma once
 
@@ -306,6 +307,106 @@ namespace bimGeometry
 		}
 
 		return geometry;
+	}
+
+	inline bool MatrixFlipsTriangles(const glm::dmat3 &mat)
+	{
+		return glm::determinant(mat) < 0;
+	}
+
+	inline Curve GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true, bool normalToCenterEnding = false)
+	{
+		Curve c;
+		if(normalToCenterEnding)
+		{
+			double sweep_angle = (endRad - startRad);
+
+			double step = sweep_angle / (numSegments - 1);
+
+			if(endRad > startRad)
+			{
+				startRad -= step /2;
+				endRad += step /2;
+			}
+			if(endRad <= startRad)
+			{
+				startRad += step /2;
+				endRad -= step /2;
+			}
+
+			for (int i = 0; i < numSegments; i++)
+			{
+				double ratio = static_cast<double>(i) / (numSegments - 1);
+				double angle = startRad + ratio * (endRad - startRad);
+
+				glm::dvec2 circleCoordinate;
+				if (swap)
+				{
+					circleCoordinate = glm::dvec2(
+						radiusX * std::cos(angle),
+						radiusY * std::sin(angle));
+				}
+				else
+				{
+					circleCoordinate = glm::dvec2(
+						radiusX * std::sin(angle),
+						radiusY * std::cos(angle));
+				}
+				glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
+				c.points.push_back(glm::dvec3(pos,0));
+			}
+
+			c.points[0] = (c.points[0] + c.points[1]) * 0.5;
+
+			c.points[c.points.size() - 1] = (c.points[c.points.size() - 1] + c.points[c.points.size() - 2]) * 0.5;
+
+			// check for a closed curve
+			if (endRad == CONST_PI * 2 && startRad == 0)
+			{
+				c.points.push_back(c.points[0]);
+
+				if (MatrixFlipsTriangles(placement))
+				{
+					c.Invert();
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < numSegments; i++)
+			{
+				double ratio = static_cast<double>(i) / (numSegments - 1);
+				double angle = startRad + ratio * (endRad - startRad);
+
+				glm::dvec2 circleCoordinate;
+				if (swap)
+				{
+					circleCoordinate = glm::dvec2(
+						radiusX * std::cos(angle),
+						radiusY * std::sin(angle));
+				}
+				else
+				{
+					circleCoordinate = glm::dvec2(
+						radiusX * std::sin(angle),
+						radiusY * std::cos(angle));
+				}
+				glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
+				c.points.push_back(glm::dvec3(pos,0));
+			}
+
+			// check for a closed curve
+			if (endRad == CONST_PI * 2 && startRad == 0)
+			{
+				c.points.push_back(c.points[0]);
+
+				if (MatrixFlipsTriangles(placement))
+				{
+					c.Invert();
+				}
+			}
+		}
+		return c;
 	}
 
 	inline std::vector<glm::dvec2> SolveParabola(uint16_t segments,glm::dvec2 startPoint, double HorizontalLength, double StartHeight, double StartGradient, double EndGradient)

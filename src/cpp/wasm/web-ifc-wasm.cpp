@@ -15,6 +15,7 @@
 #include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
 #include "../web-ifc/geometry/operations/bim-geometry/parabola.h"
 #include "../web-ifc/geometry/operations/bim-geometry/clothoid.h"
+#include "../web-ifc/geometry/operations/bim-geometry/arc.h"
 
 namespace webifc::parsing { 
     void p21encode(std::string_view input, std::ostringstream &output);
@@ -757,6 +758,11 @@ bimGeometry::Clothoid CreateClothoid()
     return bimGeometry::Clothoid();
 }
 
+bimGeometry::Arc CreateArc()
+{
+    return bimGeometry::Arc();
+}
+
 
 EMSCRIPTEN_BINDINGS(my_module) {
 
@@ -908,10 +914,17 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("SetValues", &bimGeometry::Clothoid::SetValues)
         ;
 
+    emscripten::class_<bimGeometry::Arc>("Arc")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Arc::GetBuffers)
+        .function("SetValues", &bimGeometry::Arc::SetValues)
+        ;
+
     emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("CreateExtrusion", &CreateExtrusion);
     emscripten::function("CreateParabola", &CreateParabola);
     emscripten::function("CreateClothoid", &CreateClothoid);
+    emscripten::function("CreateArc", &CreateArc);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);

@@ -186,6 +186,19 @@ export interface Clothoid {
         SegmentLength: number): void;
 }
 
+export interface Arc {
+    GetBuffers(): Buffers;
+    SetValues(        
+        radiusX: number,
+        radiusY: number,
+        numSegments: number,
+        placement: Array<number>,
+        startRad?: number,
+        endRad?: number,
+        swap?: boolean,
+        normalToCenterEnding?: boolean): void;
+}
+
 export interface IfcType {
     typeID: number;
     typeName: string;
@@ -482,6 +495,11 @@ export class IfcAPI {
     CreateClothoid()
     {
         return this.wasmModule.CreateClothoid();
+    }
+
+    CreateArc()
+    {
+        return this.wasmModule.CreateArc();
     }
 
     /**
