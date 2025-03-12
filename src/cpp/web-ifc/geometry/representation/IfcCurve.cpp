@@ -79,7 +79,7 @@ namespace webifc::geometry
 			{
 				double distance = glm::distance(points[i], points[i + 1]);
 				totalDistance += distance;
-				if (totalDistance >= length)
+				if (totalDistance >= length || i == points.size() - 2)
 				{
 					// extrapolate from last 2 points if length is behind last point
 					double factor = (totalDistance - length) / distance;

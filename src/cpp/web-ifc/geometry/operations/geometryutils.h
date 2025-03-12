@@ -790,7 +790,7 @@ namespace webifc::geometry
 		if (indices.size() < 3)
 		{
 			// probably a degenerate polygon
-			spdlog::error("[SectionedSurface()] degenerate polygon in cap");
+			spdlog::warn("[createCap()] degenerate polygon in cap");
 			return;
 		}
 
@@ -857,8 +857,7 @@ namespace webifc::geometry
 			// Create faces by connecting corresponding points from the two profiles
 			glm::dvec3 loopNormal = computePolygonNormal(profile1.points);
 			using Point = std::array<double, 2>;
-			std::vector<std::array<double, 2>> polygon1;
-			std::vector<std::array<double, 2>> polygon2;
+			std::vector<std::array<double, 2>> projectedPolygon;
 			std::vector<glm::dvec3> upperLoop, upperLoopNormals;
 			for (size_t j = 0; j < numLoopPoints; j++)
 			{
@@ -876,29 +875,25 @@ namespace webifc::geometry
 				upperLoopNormals.push_back(normal);
 
 				// project points to XY/XZ/YZ plane
-				double polygon1X = p1.x;
-				double polygon1Y = p1.y;
-				double polygon2X = p2.x;
-				double polygon2Y = p2.y;
+				double polygonX = p1.x;
+				double polygonY = p1.y;
 				if (std::abs(loopNormal.y) > std::abs(loopNormal.x) && std::abs(loopNormal.y) > std::abs(loopNormal.z))
 				{
 					// y is the largest component, so project to XZ plane
-					polygon1X = p1.x;
-					polygon1Y = p1.z;
-					polygon2X = p2.x;
-					polygon2Y = p2.z;
+					polygonX = p1.x;
+					polygonY = p1.z;
 				}
 				else if (std::abs(loopNormal.x) > std::abs(loopNormal.y) && std::abs(loopNormal.x) > std::abs(loopNormal.z))
 				{
 					// x is the largest component, so project to YZ plane
-					polygon1X = p1.y;
-					polygon1Y = p1.z;
-					polygon2X = p2.y;
-					polygon2Y = p2.z;
+					polygonX = p1.y;
+					polygonY = p1.z;
+				}
+				else {
+					spdlog::warn("[SectionedSurface()] unable to project polygon");
 				}
 
-				polygon1.push_back( {polygon1X, polygon1Y} );
-				polygon2.push_back( {polygon2X, polygon2Y} );
+				projectedPolygon.push_back( {polygonX, polygonY} );
 			}
 
 			for (size_t j = 0; j < numLoopPoints; j++)
@@ -920,14 +915,14 @@ namespace webifc::geometry
 			// Create bottom cap
 			if (i == 0 )
 			{
-				createCap(polygon1, 0, geom);
+				createCap(projectedPolygon, 0, geom);
 			}
 			
 			// Create the top cap
 			if (i == 0 || i == profiles.curves.size() - 1)
 			{
-				uint32_t offset = polygon2.size();
-				createCap(polygon2, offset, geom);
+				uint32_t offset = numLoopPoints;
+				createCap(projectedPolygon, offset, geom);
 			}
 		}
 
