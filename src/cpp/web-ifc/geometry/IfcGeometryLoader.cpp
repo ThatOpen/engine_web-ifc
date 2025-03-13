@@ -335,9 +335,9 @@ namespace webifc::geometry
       }
 
      
-      if (_relNests.count(expressID) == 1)
+      if (_relAggregates.count(expressID) == 1)
       {
-        auto &relAgg = _relNests.at(expressID);
+        auto &relAgg = _relAggregates.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
@@ -371,9 +371,9 @@ namespace webifc::geometry
         transform_t = GetLocalPlacement(localPlacement);
       }
 
-      if (_relNests.count(expressID) == 1)
+      if (_relAggregates.count(expressID) == 1)
       {
-        auto &relAgg = _relNests.at(expressID);
+        auto &relAgg = _relAggregates.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
