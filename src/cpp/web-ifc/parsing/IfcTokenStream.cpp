@@ -96,7 +96,7 @@ namespace webifc::parsing
   
   void IfcTokenStream::checkMemory()
   {
-    if (_activeChunks == _maxChunks){
+    if (_maxChunks != 0 && _activeChunks == _maxChunks){
       for (uint32_t x = 0; x < _chunks.size(); x++) 
       {
         if (_chunks[x].IsLoaded())
