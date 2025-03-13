@@ -54,7 +54,7 @@ void SaveModel(uint32_t modelID, emscripten::val callback)
         {
             emscripten::val retVal = callback((uint32_t)src, srcSize);
         }
-    );
+    , false);
 }
 
 int GetModelSize(uint32_t modelID) {
