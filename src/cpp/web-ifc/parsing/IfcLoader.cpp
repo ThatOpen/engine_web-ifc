@@ -76,7 +76,7 @@ namespace webifc::parsing {
      ParseLines();
    }
    
-   void IfcLoader::SaveFile(const std::function<void(char *, size_t)> &outputData) const
+   void IfcLoader::SaveFile(const std::function<void(char *, size_t)> &outputData, bool orderLinesByExpressID) const
    { 
       std::ostringstream output;
       output << "ISO-10303-21;"<<std::endl<<"HEADER;"<<std::endl;
@@ -97,6 +97,10 @@ namespace webifc::parsing {
           currentLines =  new std::vector<IfcLine*>();
           std::transform( _lines.begin(), _lines.end(), std::back_inserter( *currentLines ), [](auto &kv){ return kv.second;}  );
         }
+		if (orderLinesByExpressID) {
+			// Sort based on tapeOffset, which preserves the order by which the lines have been pushed
+			std::sort(currentLines->begin(), currentLines->end(), [](const IfcLine* a, const IfcLine* b) { return a->tapeOffset < b->tapeOffset; });
+		}
         for(uint32_t i=0; i < currentLines->size();i++)
         {
        
@@ -206,13 +210,11 @@ namespace webifc::parsing {
       outputData((char*)tmp.c_str(),tmp.size());
    }
    
-   void IfcLoader::SaveFile(std::ostream &outputData) const
+   void IfcLoader::SaveFile(std::ostream &outputData, bool orderLinesByExpressID) const
    { 
-     SaveFile([&](char* src, size_t srcSize)
-      {
+     SaveFile([&](char* src, size_t srcSize) {
           outputData.write(src,srcSize);
-      }
-    );
+		 },orderLinesByExpressID);
    }
       
    bool IfcLoader::IsAtEnd() const

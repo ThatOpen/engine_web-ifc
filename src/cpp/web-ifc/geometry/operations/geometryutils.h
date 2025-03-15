@@ -622,8 +622,6 @@ namespace webifc::geometry
 			// bound greater than 4 vertices or with holes, triangulate
 			// TODO: modify to use glm::dvec2 with custom accessors
 			using Point = std::array<double, 2>;
-			std::vector<std::vector<Point>> polygon;
-
 			uint32_t offset = geometry.numPoints;
 
 			// if more than one bound
@@ -672,6 +670,8 @@ namespace webifc::geometry
 
 			// check winding of outer bound
 			IfcCurve test;
+			test.points.reserve(bounds[0].curve.points.size());
+
 			for (size_t i = 0; i < bounds[0].curve.points.size(); i++)
 			{
 				glm::dvec3 pt = bounds[0].curve.points[i];
@@ -691,9 +691,13 @@ namespace webifc::geometry
 				std::swap(v12, v13);
 			}
 
+			std::vector<std::vector<Point>> polygon;
+			polygon.reserve(bounds.size());
+
 			for (auto &bound : bounds)
 			{
 				std::vector<Point> points;
+				points.reserve(bound.curve.points.size());
 				for (size_t i = 0; i < bound.curve.points.size(); i++)
 				{
 					glm::dvec3 pt = bound.curve.points[i];
