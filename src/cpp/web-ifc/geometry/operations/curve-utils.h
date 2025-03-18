@@ -296,13 +296,12 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 
 
-	inline	std::vector<glm::dvec3> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights)
+	inline	std::vector<glm::dvec3> GetRationalBSplineCurveWithKnots(int degree, std::vector<glm::dvec3> points, std::vector<double> knots, std::vector<double> weights, double numCurvePoints)
 	{
-
 		spdlog::debug("[GetRationalBSplineCurveWithKnots({})]");
 		std::vector<glm::dvec3> c;
-
-		for (double i = 0; i < 1; i += 0.05)
+		double step = 1.0/numCurvePoints;
+		for (double i = 0; i < 1; i += step)
 		{
 			glm::dvec3 point = InterpolateRationalBSplineCurveWithKnots(i, degree, points, knots, weights);
 			c.push_back(point);
