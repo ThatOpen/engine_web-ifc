@@ -589,6 +589,8 @@ namespace webifc::geometry
         alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("RADIUS: " + std::to_string(StartRadiusOfCurvature));
+        alignmentCurve.userData.push_back("STARTRAD: " + std::to_string(ifcStartDirection));
+        alignmentCurve.userData.push_back("ENDRAD: " + std::to_string(ifcStartDirection + span));
 
         break;
       }
@@ -606,9 +608,11 @@ namespace webifc::geometry
 
         alignmentCurve = curve;
         alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
-        alignmentCurve.userData.push_back("TYPE: " + str);
+        alignmentCurve.userData.push_back("TYPE: " + str);  
+        alignmentCurve.userData.push_back("STARTRAD: " + std::to_string(ifcStartDirection));
         alignmentCurve.userData.push_back("START RADIUS: " + std::to_string(StartRadiusOfCurvature));
         alignmentCurve.userData.push_back("END RADIUS: " + std::to_string(EndRadiusOfCurvature));
+        alignmentCurve.userData.push_back("SEGMENTLENGHT: " + std::to_string(SegmentLength));
 
         break;
       }
@@ -722,6 +726,8 @@ namespace webifc::geometry
         alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("RADIUS: " + std::to_string(RadiusOfCurvature));
+        alignmentCurve.userData.push_back("STARTRAD: " + std::to_string(ifcStartDirection));      
+        alignmentCurve.userData.push_back("ENDRAD: " + std::to_string(ifcEndDirection));        
         alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
         alignmentCurve.userData.push_back("END GRADIENT: " + std::to_string(EndGradient));
 
@@ -746,6 +752,7 @@ namespace webifc::geometry
         alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("LENGHT: " + std::to_string(HorizontalLength));
+        alignmentCurve.userData.push_back("START HEIGHT: " + std::to_string(StartHeight));
         alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
         alignmentCurve.userData.push_back("END GRADIENT: " + std::to_string(EndGradient));
 
