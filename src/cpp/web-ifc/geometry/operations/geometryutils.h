@@ -1255,6 +1255,7 @@ namespace webifc::geometry
 						{
 							IfcGeometry newGeom;
 							newGeom.halfSpace = newMeshGeom.halfSpace;
+                            newGeom.isPolygon = newMeshGeom.isPolygon;
 							if (newGeom.halfSpace)
 							{
 								newGeom.halfSpaceOrigin = newMat * glm::dvec4(newMeshGeom.halfSpaceOrigin, 1);
@@ -1290,6 +1291,7 @@ namespace webifc::geometry
 					{
 						IfcGeometry newGeom;
 						newGeom.halfSpace = meshGeom.halfSpace;
+						newGeom.isPolygon = meshGeom.isPolygon;
 						if (newGeom.halfSpace)
 						{
 							newGeom.halfSpaceOrigin = newMat * glm::dvec4(meshGeom.halfSpaceOrigin, 1);
