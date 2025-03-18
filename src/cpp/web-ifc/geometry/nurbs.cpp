@@ -178,6 +178,11 @@ namespace webifc::geometry{
 		this->pth = tinynurbs::surfacePoint(*this->nurbs, 1.0, 0.0);
 		this->ptv = tinynurbs::surfacePoint(*this->nurbs, 0.0, 1.0);
 
+        if (std::isnan(pth.x) || std::isnan(pth.y) ||std::isnan(pth.z) ) {
+			spdlog::error("pth isnan: ({}/{}/{})", pth.x, pth.y, pth.z);
+			return;
+		}
+
 		// Compute distances for further use.
 		this->dh = glm::distance(ptc, pth);
 		this->dv = glm::distance(ptc, ptv);
@@ -313,6 +318,12 @@ namespace webifc::geometry{
 						double rads = (i / rotations) * pi2;
 						double incU = glm::sin(rads) / mul_divisor;
 						double incV = glm::cos(rads) / mul_divisor;
+
+                        if (std::isnan(pr)) {
+                            spdlog::error("Invalid pr {} ",pr);
+                            break;
+                        }
+
 						if (pr > 1) incV *= pr;
 						else incU /= pr;
 						while (true)
