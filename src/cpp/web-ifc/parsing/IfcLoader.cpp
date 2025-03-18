@@ -507,6 +507,11 @@ namespace webifc::parsing {
        {
          depth--;
        }
+       else if (t == IfcTokenType::LINE_END)
+       {
+           spdlog::error("[GetSetArgument[{}]) unexpected LINE_END token", GetCurrentLineExpressID());
+           break;
+       }
        else
        {
          tapeOffsets.push_back(offset);
@@ -522,7 +527,7 @@ namespace webifc::parsing {
          }
          else
          {
-           spdlog::error("[GetSetArgument[]) unexpected token", GetCurrentLineExpressID());
+           spdlog::error("[GetSetArgument[{}]) unexpected token", GetCurrentLineExpressID());
          }
        }
 
