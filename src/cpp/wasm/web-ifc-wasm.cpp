@@ -16,6 +16,8 @@
 #include "../web-ifc/geometry/operations/bim-geometry/parabola.h"
 #include "../web-ifc/geometry/operations/bim-geometry/clothoid.h"
 #include "../web-ifc/geometry/operations/bim-geometry/arc.h"
+#include "../web-ifc/geometry/operations/bim-geometry/alignment.h"
+#include "../web-ifc/geometry/operations/bim-geometry/utils.h"
 
 namespace webifc::parsing { 
     void p21encode(std::string_view input, std::ostringstream &output);
@@ -247,6 +249,30 @@ std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
         webifc::geometry::IfcAlignment alignment = geomLoader->GetLoader().GetAlignment(elements[i]);
         alignment.transform(geomLoader->GetCoordinationMatrix());
         alignments.push_back(alignment);
+    }
+
+    for (size_t i = 0; i < alignments.size(); i++)
+    {
+        webifc::geometry::IfcAlignment alignment = alignments[i];
+        std::vector<glm::dvec3>  pointsH;
+        std::vector<glm::dvec3>  pointsV;
+        for (size_t j = 0; j < alignment.Horizontal.curves.size(); j++)
+        {
+            for (size_t k = 0; k < alignment.Horizontal.curves[j].points.size(); k++)
+            {
+                pointsH.push_back(alignment.Horizontal.curves[j].points[k]);
+            }
+        }
+        for (size_t j = 0; j < alignment.Vertical.curves.size(); j++)
+        {
+            for (size_t k = 0; k < alignment.Vertical.curves[j].points.size(); k++)
+            {
+                pointsV.push_back(alignment.Vertical.curves[j].points[k]);
+            }
+        }
+        webifc::geometry::IfcCurve curve;
+        curve.points = bimGeometry::Convert2DAlignmentsTo3D(pointsH, pointsV);
+        alignments[i].Absolute.curves.push_back(curve);
     }
 
     return alignments;
@@ -763,6 +789,11 @@ bimGeometry::Arc CreateArc()
     return bimGeometry::Arc();
 }
 
+bimGeometry::Alignment CreateAlignment()
+{
+    return bimGeometry::Alignment();
+}
+
 
 EMSCRIPTEN_BINDINGS(my_module) {
 
@@ -844,7 +875,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<webifc::geometry::IfcAlignment>("IfcAlignment")
         .field("Horizontal", &webifc::geometry::IfcAlignment::Horizontal)
-        .field("Vertical", &webifc::geometry::IfcAlignment::Vertical);
+        .field("Vertical", &webifc::geometry::IfcAlignment::Vertical)
+        .field("Absolute", &webifc::geometry::IfcAlignment::Absolute);
 
     emscripten::value_object<glm::dvec3>("glmDvec3")
         .field("x", &glm::dvec3::x)
@@ -920,11 +952,18 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("SetValues", &bimGeometry::Arc::SetValues)
         ;
 
+    emscripten::class_<bimGeometry::Alignment>("Alignment")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Alignment::GetBuffers)
+        .function("SetValues", &bimGeometry::Alignment::SetValues)
+        ;
+
     emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("CreateExtrusion", &CreateExtrusion);
     emscripten::function("CreateParabola", &CreateParabola);
     emscripten::function("CreateClothoid", &CreateClothoid);
     emscripten::function("CreateArc", &CreateArc);
+    emscripten::function("CreateAlignment", &CreateAlignment);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);

@@ -314,6 +314,54 @@ namespace bimGeometry
 		return glm::determinant(mat) < 0;
 	}
 
+	inline std::vector<glm::dvec3> Convert2DAlignmentsTo3D(
+		const std::vector<glm::dvec3>& horizontal,
+		const std::vector<glm::dvec3>& vertical) {
+		
+		std::vector<glm::dvec3> curve3D;
+		
+		if (horizontal.empty() || vertical.empty()) {
+			return curve3D; // Return empty if no valid alignment
+		}
+		
+		double length = 0.0;
+		double lastX = horizontal[0].x;
+		double lastY = horizontal[0].y;
+		
+		for (const auto& ptH : horizontal) {
+			double dx = ptH.x - lastX;
+			double dy = ptH.y - lastY;
+			length += std::sqrt(dx * dx + dy * dy);
+			lastX = ptH.x;
+			lastY = ptH.y;
+			
+			double altitude = 0.0;
+			double lastAlt = vertical[0].y;
+			double lastVx = vertical[0].x;
+			bool found = false;
+			
+			for (size_t i = 1; i < vertical.size(); ++i) {
+				const auto& ptV = vertical[i];
+				if (ptV.x >= length) {
+					double ratio = (length - lastVx) / (ptV.x - lastVx);
+					altitude = lastAlt * (1.0 - ratio) + ptV.y * ratio;
+					found = true;
+					break;
+				}
+				lastAlt = ptV.y;
+				lastVx = ptV.x;
+			}
+			
+			if (!found) {
+				altitude = vertical.back().y; // If length exceeds vertical range, use last known altitude
+			}
+			
+			curve3D.emplace_back(ptH.x, altitude, -ptH.y);
+		}
+		
+		return curve3D;
+	}
+
 	inline Curve GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true, bool normalToCenterEnding = false)
 	{
 		Curve c;

@@ -120,6 +120,7 @@ namespace webifc::geometry {
 		{
 			IfcAlignmentSegment Horizontal;
 			IfcAlignmentSegment Vertical;
+			IfcAlignmentSegment Absolute;
 
 			void transform(glm::dmat4 coordinationMatrix)
 			{

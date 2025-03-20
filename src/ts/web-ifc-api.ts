@@ -137,6 +137,7 @@ export interface Alignment {
     FlatCoordinationMatrix: Array<number>;
     Horizontal: AlignmentSegment;
     Vertical: AlignmentSegment;
+    Absolute: AlignmentSegment;
 }
 
 export interface IfcGeometry {
@@ -197,6 +198,11 @@ export interface Arc {
         endRad?: number,
         swap?: boolean,
         normalToCenterEnding?: boolean): void;
+}
+
+export interface Alignment {
+    GetBuffers(): Buffers;
+    SetValues(horizontal: Array<number>, vertical: Array<number>): void;
 }
 
 export interface IfcType {
@@ -501,6 +507,12 @@ export class IfcAPI {
     {
         return this.wasmModule.CreateArc();
     }
+
+    CreateAlignment()
+    {
+        return this.wasmModule.CreateAlignment();
+    }
+
 
     /**
      * Gets the header information required by the user
@@ -878,119 +890,70 @@ export class IfcAPI {
         const alignments = this.wasmModule.GetAllAlignments(modelID);
         const alignmentList = [];
         for (let i = 0; i < alignments.size(); i++) {
-          const alignment = alignments.get(i);
-          const horList = [];
-          for (let j = 0; j < alignment.Horizontal.curves.size(); j++) {
-            const curve = alignment.Horizontal.curves.get(j);
-            const ptList: Array<Point> = [];
-            for (let p = 0; p < curve.points.size(); p++) {
-              const pt = curve.points.get(p);
-              const newPoint = { x: pt.x, y: pt.y };
-              ptList.push(newPoint);
-            }
-            const dtList = [];
-            for (let p = 0; p < curve.userData.size(); p++) {
-                const dt = curve.userData.get(p);
-                dtList.push(dt);
-            }
-            const newCurve = { points: ptList, data: dtList };
-            horList.push(newCurve);
-          }
-          const verList = [];
-          for (let j = 0; j < alignment.Vertical.curves.size(); j++) {
-            const curve = alignment.Vertical.curves.get(j);
-            const ptList = [];
-            for (let p = 0; p < curve.points.size(); p++) {
-              const pt = curve.points.get(p);
-              const newPoint = { x: pt.x, y: pt.y };
-              ptList.push(newPoint);
-            }
-            const dtList = [];
-            for (let p = 0; p < curve.userData.size(); p++) {
-                const dt = curve.userData.get(p);
-                dtList.push(dt);
-            }
-            const newCurve = { points: ptList, data: dtList };
-            verList.push(newCurve);
-          }
-    
-          const curve3DList = [];
-          if (
-            alignment.Horizontal.curves.size() > 0 &&
-            alignment.Vertical.curves.size() > 0
-          ) {
-            const startH = { x: 0, y: 0, z: 0 };
-            const startV = { x: 0, y: 0, z: 0 };
-    
-            // Construct 3D polyline from horizontal and vertical polylines
-    
-            let lastx = 0;
-            let lasty = 0;
-            let length = 0;
+
+            const alignment = alignments.get(i);
+  
+            const horList = [];
             for (let j = 0; j < alignment.Horizontal.curves.size(); j++) {
-              const curve = alignment.Horizontal.curves.get(j);
-              const points = [];
-              for (let k = 0; k < curve.points.size(); k++) {
-                let alt = 0;
-                const pt = curve.points.get(k);
-                if (j === 0 && k === 0) {
-                  lastx = pt.x;
-                  lasty = pt.y;
+                const curve = alignment.Horizontal.curves.get(j);
+                const ptList: Array<Point> = [];
+                for (let p = 0; p < curve.points.size(); p++) {
+                    const pt = curve.points.get(p);
+                    const newPoint = { x: pt.x, y: pt.y };
+                    ptList.push(newPoint);
                 }
-                const valueX = pt.x - lastx;
-                const valueY = pt.y - lasty;
-                lastx = pt.x;
-                lasty = pt.y;
-                length += Math.sqrt(valueX * valueX + valueY * valueY);
-                let first = true;
-                let lastAlt = 0;
-                let lastX = 0;
-                let done = false;
-                for (let ii = 0; ii < alignment.Vertical.curves.size(); ii++) {
-                  const curve = alignment.Vertical.curves.get(ii);
-                  for (let jj = 0; jj < curve.points.size(); jj++) {
-                    const pt = curve.points.get(jj);
-                    if (first) {
-                      first = false;
-                      alt = pt.y;
-                      lastAlt = pt.y;
-                      if (pt.x >= length) {
-                        break;
-                      }
-                    }
-                    if (pt.x >= length) {
-                      const value1 = pt.x - lastX;
-                      const value2 = length - lastX;
-                      const value3 = value2 / value1;
-                      alt = lastAlt * (1 - value3) + pt.y * value3;
-                      done = true;
-                      break;
-                    }
-                    lastAlt = pt.y;
-                    lastX = pt.x;
-                  }
-                  if (done) {
-                    break;
-                  }
+                const dtList = [];
+                for (let p = 0; p < curve.userData.size(); p++) {
+                    const dt = curve.userData.get(p);
+                    dtList.push(dt);
                 }
-                points.push({
-                  x: pt.x - startH.x,
-                  y: alt - startV.y,
-                  z: startH.y - pt.y,
-                });
-              }
-              const newCurve = { points: points };
-              curve3DList.push(newCurve);
+                const newCurve = { points: ptList, data: dtList };
+                horList.push(newCurve);
             }
-          }
-    
-          const align = {
-            FlatCoordinationMatrix: this.GetCoordinationMatrix(modelID),
-            horizontal: horList,
-            vertical: verList,
-            curve3D: curve3DList,
-          };
-          alignmentList.push(align);
+
+            const verList = [];
+            for (let j = 0; j < alignment.Vertical.curves.size(); j++) {
+                const curve = alignment.Vertical.curves.get(j);
+                const ptList = [];
+                for (let p = 0; p < curve.points.size(); p++) {
+                    const pt = curve.points.get(p);
+                    const newPoint = { x: pt.x, y: pt.y };
+                    ptList.push(newPoint);
+                }
+                const dtList = [];
+                for (let p = 0; p < curve.userData.size(); p++) {
+                    const dt = curve.userData.get(p);
+                    dtList.push(dt);
+                }
+                const newCurve = { points: ptList, data: dtList };
+                verList.push(newCurve);
+            }
+
+            const curve3DList = [];
+            for (let j = 0; j < alignment.Absolute.curves.size(); j++) {
+                const curve = alignment.Absolute.curves.get(j);
+                const ptList = [];
+                for (let p = 0; p < curve.points.size(); p++) {
+                    const pt = curve.points.get(p);
+                    const newPoint = { x: pt.x, y: pt.y, z: pt.z };
+                    ptList.push(newPoint);
+                }
+                const dtList = [];
+                for (let p = 0; p < curve.userData.size(); p++) {
+                    const dt = curve.userData.get(p);
+                    dtList.push(dt);
+                }
+                const newCurve = { points: ptList, data: dtList };
+                curve3DList.push(newCurve);
+            }
+        
+            const align = {
+                FlatCoordinationMatrix: this.GetCoordinationMatrix(modelID),
+                horizontal: horList,
+                vertical: verList,
+                curve3D: curve3DList,
+            };
+            alignmentList.push(align);
 
         }
         return alignmentList;

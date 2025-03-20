@@ -73,6 +73,31 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
         DumpAlignment(alignments, "V_ALIGN.obj", "H_ALIGN.obj");
     }
 
+    for (size_t i = 0; i < alignments.size(); i++)
+    {
+        webifc::geometry::IfcAlignment alignment = alignments[i];
+        std::vector<glm::dvec3>  pointsH;
+        std::vector<glm::dvec3>  pointsV;
+        for (size_t j = 0; j < alignment.Horizontal.curves.size(); j++)
+        {
+            for (size_t k = 0; k < alignment.Horizontal.curves[j].points.size(); k++)
+            {
+                pointsH.push_back(alignment.Horizontal.curves[j].points[k]);
+            }
+        }
+        for (size_t j = 0; j < alignment.Vertical.curves.size(); j++)
+        {
+            for (size_t k = 0; k < alignment.Vertical.curves[j].points.size(); k++)
+            {
+                pointsV.push_back(alignment.Vertical.curves[j].points[k]);
+            }
+        }
+        webifc::geometry::IfcCurve curve;
+        curve.points = bimGeometry::Convert2DAlignmentsTo3D(pointsH, pointsV);
+        alignments[i].Absolute.curves.push_back(curve);
+    }
+
+
     return alignments;
 }
 
@@ -434,7 +459,8 @@ int main()
     // return 0;
 
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/VEC-IFC-INST-totaal-20130726.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/(E28)_CARRETERA_10.94_4X3.ifc");
 
     struct LoaderSettings
     {
@@ -476,8 +502,8 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 44618);
     auto meshes = LoadAllTest(loader, geometryLoader, -1);
     // auto rebars = GetAllRebars(loader, geometryLoader);
-    std::cout << GetLine(loader, 225) << std::endl;
-    // auto alignments = GetAlignments(loader, geometryLoader);
+    // std::cout << GetLine(loader, 225) << std::endl;
+    auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;
 
