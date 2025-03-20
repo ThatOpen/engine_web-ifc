@@ -590,7 +590,7 @@ namespace webifc::geometry
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("RADIUS: " + std::to_string(StartRadiusOfCurvature));
         alignmentCurve.userData.push_back("STARTRAD: " + std::to_string(ifcStartDirection));
-        alignmentCurve.userData.push_back("ENDRAD: " + std::to_string(ifcStartDirection + span));
+        alignmentCurve.userData.push_back("ENDRAD: " + std::to_string(ifcStartDirection + span));     
 
         break;
       }
@@ -728,8 +728,6 @@ namespace webifc::geometry
         alignmentCurve.userData.push_back("RADIUS: " + std::to_string(RadiusOfCurvature));
         alignmentCurve.userData.push_back("STARTRAD: " + std::to_string(ifcStartDirection));      
         alignmentCurve.userData.push_back("ENDRAD: " + std::to_string(ifcEndDirection));        
-        alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
-        alignmentCurve.userData.push_back("END GRADIENT: " + std::to_string(EndGradient));
 
         break;
       }
