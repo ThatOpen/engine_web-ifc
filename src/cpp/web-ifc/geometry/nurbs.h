@@ -63,5 +63,6 @@ namespace webifc::geometry{
 		double dh{0.0};
 		double dv{0.0};
 		double pr{0.0};
+		bool _initialized = false;
 	};
 }
