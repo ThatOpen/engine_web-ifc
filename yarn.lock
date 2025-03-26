@@ -53,18 +53,7 @@
     json5 "^2.2.3"
     semver "^6.3.1"
 
-"@babel/generator@^7.26.10", "@babel/generator@^7.7.2":
-  version "7.26.10"
-  resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.26.10.tgz"
-  integrity sha512-rRHT8siFIXQrAYOYqZQVsAr8vJ+cBNqcVAY6m5V8/4QqzaPl+zDBe6cLEPRDuNOUf3ww8RfJVlOyQMoSI+5Ang==
-  dependencies:
-    "@babel/parser" "^7.26.10"
-    "@babel/types" "^7.26.10"
-    "@jridgewell/gen-mapping" "^0.3.5"
-    "@jridgewell/trace-mapping" "^0.3.25"
-    jsesc "^3.0.2"
-
-"@babel/generator@^7.27.0":
+"@babel/generator@^7.26.10", "@babel/generator@^7.27.0", "@babel/generator@^7.7.2":
   version "7.27.0"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.27.0.tgz#764382b5392e5b9aff93cadb190d0745866cbc2c"
   integrity sha512-VybsKvpiN1gU1sdMZIp7FcqphVVKEwcuj02x73uvcHE0PTihx1nlBcowYWhDwjpoAXRv43+gDzyggGnn1XZhVw==
@@ -257,16 +246,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.25.9"
 
-"@babel/template@^7.26.9", "@babel/template@^7.3.3":
-  version "7.27.0"
-  resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.27.0.tgz#b253e5406cc1df1c57dcd18f11760c2dbf40c0b4"
-  integrity sha512-2ncevenBqXI6qRMukPlXwHKHchC7RyMuu4xv5JBXRfOGVcTy1mXCD12qrp7Jsoxll1EV3+9sE4GugBVRjT2jFA==
-  dependencies:
-    "@babel/code-frame" "^7.26.2"
-    "@babel/parser" "^7.27.0"
-    "@babel/types" "^7.27.0"
-
-"@babel/template@^7.27.0":
+"@babel/template@^7.26.9", "@babel/template@^7.27.0", "@babel/template@^7.3.3":
   version "7.27.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.27.0.tgz#b253e5406cc1df1c57dcd18f11760c2dbf40c0b4"
   integrity sha512-2ncevenBqXI6qRMukPlXwHKHchC7RyMuu4xv5JBXRfOGVcTy1mXCD12qrp7Jsoxll1EV3+9sE4GugBVRjT2jFA==
