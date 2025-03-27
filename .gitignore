@@ -60,3 +60,4 @@ tests/ifcfiles/private/*.ifc
 tests/ifcfiles/private/*.stl
 tests/ifcfiles/created.ifc
 src/cpp/_deps/
+yarn.lock
