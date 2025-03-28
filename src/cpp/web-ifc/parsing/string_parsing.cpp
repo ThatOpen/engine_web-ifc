@@ -15,9 +15,44 @@ namespace webifc::parsing {
 
     bool foundRoman = false;
 
+	std::u16string utf16_from_utf8(const std::string& utf8) {
+		std::u16string utf16;
+		size_t i = 0;
+
+		while (i < utf8.size()) {
+			char16_t ch = 0;
+			unsigned char byte = utf8[i];
+
+			if (byte < 0x80) {
+				// 1-byte character (ASCII)
+				ch = byte;
+				i += 1;
+			}
+			else if ((byte & 0xE0) == 0xC0) {
+				// 2-byte character
+				if (i + 1 >= utf8.size()) throw std::runtime_error("Invalid UTF-8 sequence");
+				ch = ((byte & 0x1F) << 6) | (utf8[i + 1] & 0x3F);
+				i += 2;
+			}
+			else if ((byte & 0xF0) == 0xE0) {
+				// 3-byte character
+				if (i + 2 >= utf8.size()) throw std::runtime_error("Invalid UTF-8 sequence");
+				ch = ((byte & 0x0F) << 12) | ((utf8[i + 1] & 0x3F) << 6) | (utf8[i + 2] & 0x3F);
+				i += 3;
+			}
+			else {
+				throw std::runtime_error("Unsupported UTF-8 sequence");
+			}
+
+			utf16.push_back(ch);
+		}
+
+		return utf16;
+	}
+
     void encodeCharacters(std::ostringstream &stream,std::string &data) 
     {
-        std::u16string utf16 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.from_bytes(data.data());
+		std::u16string utf16 = utf16_from_utf8(data);
         stream << "\\X2\\" << std::hex <<std::setfill('0') << std::uppercase;
         for (char16_t uC : utf16) stream << std::setw(4) << static_cast<int>(uC);
         stream << std::dec<< std::setw(0) << "\\X0\\";
@@ -52,6 +87,60 @@ namespace webifc::parsing {
         }
         if (inEncode) encodeCharacters(output,tmp);
     }
+
+	std::string utf8_from_utf16(const std::u16string& u16str) {
+		std::string utf8;
+		for (char16_t ch : u16str) {
+			if (ch < 0x80) {
+				// 1-byte character
+				utf8.push_back(static_cast<char>(ch));
+			}
+			else if (ch < 0x800) {
+				// 2-byte character
+				utf8.push_back(static_cast<char>(0xC0 | (ch >> 6)));
+				utf8.push_back(static_cast<char>(0x80 | (ch & 0x3F)));
+			}
+			else {
+				// 3-byte character
+				utf8.push_back(static_cast<char>(0xE0 | (ch >> 12)));
+				utf8.push_back(static_cast<char>(0x80 | ((ch >> 6) & 0x3F)));
+				utf8.push_back(static_cast<char>(0x80 | (ch & 0x3F)));
+			}
+		}
+		return utf8;
+	}
+
+	std::string utf8_from_utf32(const std::u32string& u32str) {
+		std::string utf8;
+		for (char32_t ch : u32str) {
+			if (ch < 0x80) {
+				// 1-byte character
+				utf8.push_back(static_cast<char>(ch));
+			}
+			else if (ch < 0x800) {
+				// 2-byte character
+				utf8.push_back(static_cast<char>(0xC0 | (ch >> 6)));
+				utf8.push_back(static_cast<char>(0x80 | (ch & 0x3F)));
+			}
+			else if (ch < 0x10000) {
+				// 3-byte character
+				utf8.push_back(static_cast<char>(0xE0 | (ch >> 12)));
+				utf8.push_back(static_cast<char>(0x80 | ((ch >> 6) & 0x3F)));
+				utf8.push_back(static_cast<char>(0x80 | (ch & 0x3F)));
+			}
+			else if (ch <= 0x10FFFF) {
+				// 4-byte character
+				utf8.push_back(static_cast<char>(0xF0 | (ch >> 18)));
+				utf8.push_back(static_cast<char>(0x80 | ((ch >> 12) & 0x3F)));
+				utf8.push_back(static_cast<char>(0x80 | ((ch >> 6) & 0x3F)));
+				utf8.push_back(static_cast<char>(0x80 | (ch & 0x3F)));
+			}
+			else {
+				throw std::runtime_error("Invalid UTF-32 code point");
+			}
+		}
+		return utf8;
+	}
 
     struct P21Decoder
     {
@@ -95,15 +184,14 @@ namespace webifc::parsing {
                                          {
                                             char d1 = getNextHex();
                                             char d2 = getNextHex();
-                                            char str[2];
-                                            str[0] = (d1 << 4) | d2;
-                                            str[1] = 0;
-                                            auto cA = reinterpret_cast<char16_t*>(str);
+                                            char str2[2];
+                                            str2[0] = (d1 << 4) | d2;
+                                            str2[1] = 0;
+                                            auto cA = reinterpret_cast<char16_t*>(str2);
                                             if (cA[0] >= 0x80 && cA[0] <= 0x9F) foundRoman = true;
                                             if (foundRoman) cA[0]=checkRomanEncoding(cA[0]);
                                             std::u16string u16str(cA, 1);
-                                            std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert; 
-                                            std::string utf8 = convert.to_bytes(u16str);
+											std::string utf8 = utf8_from_utf16(u16str);
                                             std::copy(utf8.begin(), utf8.end(), std::back_inserter(result));
                                             break;
                                         }
@@ -237,8 +325,7 @@ namespace webifc::parsing {
                         bytes[i+1] = c;
                     }
                     std::u16string u16str(reinterpret_cast<char16_t*>(&bytes[0]), bytes.size() / 2);
-                    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert; 
-                    utf8 = convert.to_bytes(u16str);
+					utf8 = utf8_from_utf16(u16str);
                 } 
                 else if (T == 4) 
                 {
@@ -251,8 +338,8 @@ namespace webifc::parsing {
                         bytes[i+2] = c;
                     }
                     std::u32string u32str(reinterpret_cast<char32_t*>(&bytes[0]), bytes.size() / 4);
-                    std::wstring_convert<std::codecvt_utf8<char32_t>,char32_t> convert; 
-                    utf8 = convert.to_bytes(u32str);
+
+					utf8 = utf8_from_utf32(u32str);
                 }
                 std::copy(utf8.begin(), utf8.end(), std::back_inserter(result));
             }
