@@ -3338,8 +3338,10 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
   {
-    if(_expressIDToPlacement.contains(expressID)) {
-      return _expressIDToPlacement[expressID];
+	auto itFind = _expressIDToPlacement.find(expressID);
+	if (itFind != _expressIDToPlacement.end())
+	{
+	  return itFind->second;
     }
     else
     {

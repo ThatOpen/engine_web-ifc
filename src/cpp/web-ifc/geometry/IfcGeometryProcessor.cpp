@@ -1607,6 +1607,10 @@ namespace webifc::geometry
 
      
             auto geom = _expressIDToGeometry[composedMesh.expressID];
+			if (geom.isPolygon)
+			{
+				return;        // only triangles here
+			}
             if (geometry.testReverse()) geom.ReverseFaces();
 
             auto translation = glm::dmat4(1.0);
