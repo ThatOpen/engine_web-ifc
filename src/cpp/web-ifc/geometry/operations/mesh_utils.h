@@ -184,10 +184,23 @@ namespace webifc::geometry
 		for (int r = 0; r < numRots - 1; r++)
 		{
 			int r1 = r + 1;
-			for (size_t s = 0; s < newPoints[r].size() - 1; s++)
-			{
-				geometry.AddFace(newPoints[r][s], newPoints[r][s + 1], newPoints[r1][s]);
-				geometry.AddFace(newPoints[r1][s], newPoints[r][s + 1], newPoints[r1][s + 1]);
+			if (r1 >= newPoints.size()) {
+				break;
+			}
+			const std::vector<glm::dvec3>& newPointsR = newPoints[r];
+			const std::vector<glm::dvec3>& newPointsR1 = newPoints[r1];
+			if (newPointsR.size() > 0) {
+				for (size_t s = 0; s < newPointsR.size() - 1; s++)
+				{
+					if (s + 1 >= newPointsR.size()) {
+						break;
+					}
+					if (s + 1 >= newPointsR1.size()) {
+						break;
+					}
+					geometry.AddFace(newPointsR[s], newPointsR[s + 1], newPointsR1[s]);
+					geometry.AddFace(newPointsR1[s], newPointsR[s + 1], newPointsR1[s + 1]);
+				}
 			}
 		}
 	}
