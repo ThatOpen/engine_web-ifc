@@ -672,7 +672,7 @@ namespace webifc::parsing {
           StepBack();
           GetSetArgument();
           noArguments++;
-          continue;
+		      continue;
         }
         if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM) {
           uint16_t length = _tokenStream->Read<uint16_t>();
