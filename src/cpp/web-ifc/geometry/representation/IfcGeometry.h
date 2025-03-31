@@ -56,9 +56,9 @@ namespace webifc::geometry {
 		std::vector<uint32_t> indexData;
 		std::vector<uint32_t> planeData;
 		std::vector<Plane> planes;
-
-		bool hasPlanes = false;
+		
 		bool isPolygon = false;
+		bool hasPlanes = false;
 		uint32_t numPoints = 0;
 		uint32_t numFaces = 0;
 

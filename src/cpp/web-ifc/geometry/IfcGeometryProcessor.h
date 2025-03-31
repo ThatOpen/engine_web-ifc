@@ -39,7 +39,7 @@ namespace webifc::geometry
         IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin);
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
-        IfcFlatMesh GetFlatMesh(uint32_t expressID);
+        IfcFlatMesh GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor = true);
         IfcComposedMesh GetMesh(uint32_t expressID);
         void SetTransformation(const std::array<double, 16> &val);
         std::array<double, 16> GetFlatCoordinationMatrix() const;
