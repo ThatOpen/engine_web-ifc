@@ -36,6 +36,7 @@ namespace webifc::parsing
       void MoveToHeaderLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const;
       std::string_view GetStringArgument() const;
       std::string GetDecodedStringArgument() const;
+      std::string GetExpandedUUIDArgument() const;
       double GetDoubleArgument() const;
       long GetIntArgument() const;
       long GetIntArgument(const uint32_t tapeOffset) const;
@@ -62,6 +63,8 @@ namespace webifc::parsing
       void RemoveLine(const uint32_t expressID);
       void PushDouble(double input);
       void PushInt(int input);
+      std::string GenerateUUID() const;
+
       uint32_t GetNextExpressID(uint32_t expressId) const;
       template <typename T> void Push(T input)
       {

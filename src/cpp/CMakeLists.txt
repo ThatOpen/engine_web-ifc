@@ -60,6 +60,12 @@ FetchContent_Declare(spdlog GIT_REPOSITORY "https://github.com/gabime/spdlog" GI
 FetchContent_MakeAvailable(spdlog)
 FetchContent_GetProperties(spdlog)
 
+Message("Downloading StdUUID")
+FetchContent_Declare(stduuid GIT_REPOSITORY "https://github.com/mariusbancila/stduuid" GIT_TAG "3afe7193facd5d674de709fccc44d5055e144d7a" EXCLUDE_FROM_ALL)
+FetchContent_MakeAvailable(stduuid)
+FetchContent_GetProperties(stduuid)
+
+
 Message("Downloads Finished")
 
 function(PARAM_SETTER THE_EXECUTABLE)
@@ -70,6 +76,7 @@ function(PARAM_SETTER THE_EXECUTABLE)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${glm_SOURCE_DIR}/glm)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${earcut_SOURCE_DIR}/include)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC ${spdlog_SOURCE_DIR}/include)
+	target_include_directories(${THE_EXECUTABLE} PUBLIC ${stduuid_SOURCE_DIR}/include)
 
 	if(NOT MSVC)
 		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wall")
