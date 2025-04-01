@@ -588,7 +588,6 @@ export class IfcAPI {
      */
     GetNameFromTypeCode(type:number): string 
     {
-       Log.warn("GetNameFromTypeCode() now returns type names in camel case");
        return this.wasmModule.GetNameFromTypeCode(type);
     }
 
