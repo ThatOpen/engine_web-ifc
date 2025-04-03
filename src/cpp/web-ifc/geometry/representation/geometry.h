@@ -131,10 +131,13 @@ namespace webifc::geometry {
 					{
 						uint32_t lastId1 = Horizontal.curves[ic - 1].points.size() - 1;
 						uint32_t lastId2 = Horizontal.curves[ic].points.size() - 1;
-						double d1 = glm::distance(Horizontal.curves[ic].points[0], Horizontal.curves[ic - 1].points[lastId1]);
-						double d2 = glm::distance(Horizontal.curves[ic].points[lastId2], Horizontal.curves[ic - 1].points[lastId1]);
-						if(d1 > d2){
-							std::reverse(Horizontal.curves[ic].points.begin(), Horizontal.curves[ic].points.end());
+						if(Horizontal.curves[ic - 1].points.size() > 0 && Horizontal.curves[ic].points.size())
+						{
+							double d1 = glm::distance(Horizontal.curves[ic].points[0], Horizontal.curves[ic - 1].points[lastId1]);
+							double d2 = glm::distance(Horizontal.curves[ic].points[lastId2], Horizontal.curves[ic - 1].points[lastId1]);
+							if(d1 > d2){
+								std::reverse(Horizontal.curves[ic].points.begin(), Horizontal.curves[ic].points.end());
+							}
 						}
 					}
 					ic++;
@@ -168,7 +171,7 @@ namespace webifc::geometry {
 					ic++;
 				}
 			}
-	};
+		};
 
 		struct IfcTrimmingSelect
 		{

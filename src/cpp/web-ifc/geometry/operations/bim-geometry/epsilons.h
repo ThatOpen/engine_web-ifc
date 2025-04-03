@@ -10,4 +10,10 @@ namespace bimGeometry
     constexpr double EPS_BIG        = 1.0E-04;
     constexpr double EPS_BIG2       = 1.0E-03;
     constexpr double SCALED_EPS_BIG = 1.0E-04;
+
+    /*
+        Constants used in function AddFace in geometry.h
+    */    
+    constexpr double toleranceAddFace = 1.0E-10;
+    
 }

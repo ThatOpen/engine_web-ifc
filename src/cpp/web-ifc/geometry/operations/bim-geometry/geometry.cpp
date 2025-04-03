@@ -72,6 +72,11 @@ namespace bimGeometry
 
         double area = areaOfTriangle(a, b, c);
 
+        if (!computeSafeNormal(a, b, c, normal, toleranceAddFace))
+        {
+            return;
+        }
+
         AddPoint(a, normal);
         AddPoint(b, normal);
         AddPoint(c, normal);
@@ -86,8 +91,6 @@ namespace bimGeometry
         indexData.push_back(c);
 
         double area = areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
-
-        glm::dvec3 normal;
 
         numFaces++;
     }

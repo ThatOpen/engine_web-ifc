@@ -460,7 +460,8 @@ int main()
 
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/VEC-IFC-INST-totaal-20130726.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/(E28)_CARRETERA_10.94_4X3.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/F_MA_160_ALT3.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
 
     struct LoaderSettings
     {
@@ -499,11 +500,11 @@ int main()
 
     start = ms();
 
-    // SpecificLoadTest(loader, geometryLoader, 44618);
-    auto meshes = LoadAllTest(loader, geometryLoader, -1);
+    SpecificLoadTest(loader, geometryLoader, 140426);
+    // auto meshes = LoadAllTest(loader, geometryLoader, 140759);
     // auto rebars = GetAllRebars(loader, geometryLoader);
     // std::cout << GetLine(loader, 225) << std::endl;
-    auto alignments = GetAlignments(loader, geometryLoader);
+    // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;
 
