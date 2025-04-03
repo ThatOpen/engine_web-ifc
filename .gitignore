@@ -59,3 +59,14 @@ examples/nodejs/*.ifc
 tests/ifcfiles/private/*.ifc
 tests/ifcfiles/private/*.stl
 tests/ifcfiles/created.ifc
+src/cpp/_deps/
+yarn.lock
+
+#external dependencies downloaded by Cmake
+src/cpp/_deps/cdt-src/
+src/cpp/_deps/earcut-src/
+src/cpp/_deps/fastfloat-src/
+src/cpp/_deps/glm-src/
+src/cpp/_deps/spdlog-src/
+src/cpp/_deps/tinycpptest-src/
+src/cpp/_deps/tinynurbs-src/

@@ -19,7 +19,8 @@ import {
     InheritanceDef,
     InversePropertyDef,
     ToRawLineData,
-    SchemaNames
+    SchemaNames,
+    IFCGLOBALLYUNIQUEID
 } from "./ifc-schema";
 
 declare var __WASM_PATH__:string;
@@ -540,71 +541,87 @@ export class IfcAPI {
         return typesNames;
     }
 
+
+    /**
+     * Gets the ifc line data for a given express ID
+     * @param modelID Model handle retrieved by OpenModel
+     * @param expressID express ID of the line
+     * @param flatten recursively flatten the line, default false
+     * @param inverse get the inverse properties of the line, default false
+     * @param inversePropKey filters out all other properties from a inverse search, for a increase in performance. Default null
+     * @returns lineObject
+     */
+    GetLine(modelID: number, expressID: number, flatten = false, inverse = false, inversePropKey: string | null | undefined = null) {
+        return this.GetLines(modelID,[expressID],flatten,inverse,inversePropKey)[0];
+    }
+
+
 	/**
 	 * Gets the ifc line data for a given express ID
 	 * @param modelID Model handle retrieved by OpenModel
-	 * @param expressID express ID of the line
+	 * @param a list of expressID express ID of the line
 	 * @param flatten recursively flatten the line, default false
 	 * @param inverse get the inverse properties of the line, default false
 	 * @param inversePropKey filters out all other properties from a inverse search, for a increase in performance. Default null
 	 * @returns lineObject
 	 */
-    GetLine(modelID: number, expressID: number, flatten = false, inverse = false, inversePropKey: string | null | undefined = null) {
-        let expressCheck = this.wasmModule.ValidateExpressID(modelID, expressID);
-        if (!expressCheck) {
-            return;
-        }
-
-        let rawLineData = this.GetRawLineData(modelID, expressID);
-        let lineData;
-        try {
-            lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
-            lineData.expressID = rawLineData.ID;
-        } catch (e) {
-           Log.error("Invalid IFC Line:"+expressID);
-	         // throw an error when the line is defined 
-           if (rawLineData.ID) {
-               throw e;
-           } else {
-               return;
+    GetLines(modelID: number, expressIDs: Array<number>, flatten = false, inverse = false, inversePropKey: string | null | undefined = null)  {
+        let outputLineData = [];
+        let rawLineDatas = this.GetRawLinesData(modelID, expressIDs);
+        let i=0;
+        for (const rawLineData of rawLineDatas) {
+            let lineData;
+            try {
+                lineData = FromRawLineData[this.modelSchemaList[modelID]][rawLineData.type](rawLineData.arguments);
+                lineData.expressID = rawLineData.ID;
+            } catch (e) {
+               Log.error("Invalid IFC Line:"+expressIDs[i]);
+    	         // throw an error when the line is defined 
+               if (rawLineData.ID) {
+                   throw e;
+               } else {
+                   continue;
+               }
            }
-       }
 
-        if (flatten) {
-            this.FlattenLine(modelID, lineData);
-        }
+            if (flatten) {
+                this.FlattenLine(modelID, lineData);
+            }
 
-        let inverseData = InversePropertyDef[this.modelSchemaList[modelID]][rawLineData.type];
-        if (inverse && inverseData != null) 
-        {
-          for (let inverseProp of inverseData) 
-          {
-            if (inversePropKey && inverseProp[0] !== inversePropKey) continue;
-			  
-            if (!inverseProp[3]) lineData[inverseProp[0]] = null;
-            else lineData[inverseProp[0]] = [];
-            
-            let targetTypes = [inverseProp[1]];
-            if (typeof InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]] != "undefined")
+            let inverseData = InversePropertyDef[this.modelSchemaList[modelID]][rawLineData.type];
+            if (inverse && inverseData != null) 
             {
-              targetTypes=targetTypes.concat(InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
-            }
-            let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, expressID, targetTypes, inverseProp[2], inverseProp[3]);
-            if (!inverseProp[3] && inverseIDs.size()>0) 
-            {
-              if (!flatten) lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
-              else lineData[inverseProp[0]] = this.GetLine(modelID, inverseIDs.get(0));
-            }
-            else 
-            {
-                for (let x = 0; x < inverseIDs.size(); x++) {
-                  if (!flatten) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
-                  else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(x)));
+              for (let inverseProp of inverseData) 
+              {
+                if (inversePropKey && inverseProp[0] !== inversePropKey) continue;
+    			  
+                if (!inverseProp[3]) lineData[inverseProp[0]] = null;
+                else lineData[inverseProp[0]] = [];
+                
+                let targetTypes = [inverseProp[1]];
+                if (typeof InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]] != "undefined")
+                {
+                  targetTypes=targetTypes.concat(InheritanceDef[this.modelSchemaList[modelID]][inverseProp[1]]);
                 }
+                let inverseIDs = this.wasmModule.GetInversePropertyForItem(modelID, rawLineData.ID, targetTypes, inverseProp[2], inverseProp[3]);
+                if (!inverseProp[3] && inverseIDs.size()>0) 
+                {
+                  if (!flatten) lineData[inverseProp[0]] = { type: 5,  value: inverseIDs.get(0) };
+                  else lineData[inverseProp[0]] = this.GetLine(modelID, inverseIDs.get(0));
+                }
+                else 
+                {
+                    for (let x = 0; x < inverseIDs.size(); x++) {
+                      if (!flatten) lineData[inverseProp[0]].push({ type: 5,  value: inverseIDs.get(x) });
+                      else lineData[inverseProp[0]].push(this.GetLine(modelID, inverseIDs.get(x)));
+                    }
+                }
+              }
             }
-          }
+            outputLineData.push(lineData);
+            i++;
         }
-        return lineData;
+        return outputLineData;
     }
 
     /**
@@ -630,6 +647,17 @@ export class IfcAPI {
     }
 
     /**
+     * Creates a new ifc globally unqiue ID
+     * @param modelID Model handle retrieved by OpenModel
+     * @returns An randomly generated globally unique ID
+     */
+    CreateIFCGloballyUniqueId(modelID: number)  
+    {   
+        const guid = this.wasmModule.GenerateGuid(modelID);
+        return TypeInitialisers[this.modelSchemaList[modelID]][IFCGLOBALLYUNIQUEID](guid);
+    }
+
+    /**
      * Creates a new ifc type i.e. IfcLabel, IfcReal, ...
      * @param modelID Model handle retrieved by OpenModel
      * @param type Type code
@@ -648,7 +676,6 @@ export class IfcAPI {
      */
     GetNameFromTypeCode(type:number): string 
     {
-       Log.warn("GetNameFromTypeCode() now returns type names in camel case");
        return this.wasmModule.GetNameFromTypeCode(type);
     }
 
@@ -775,8 +802,13 @@ export class IfcAPI {
     }
 
     /** @ignore */
+    GetRawLinesData(modelID: number, expressIDs: Array<number>): Array<RawLineData> {
+        return this.wasmModule.GetLines(modelID, expressIDs) as Array<RawLineData>;
+    }
+
+    /** @ignore */
     GetRawLineData(modelID: number, expressID: number): RawLineData {
-        return this.wasmModule.GetLine(modelID, expressID) as RawLineData;
+        return this.GetRawLinesData(modelID, [expressID])[0] as RawLineData;
     }
 
     /** @ignore */

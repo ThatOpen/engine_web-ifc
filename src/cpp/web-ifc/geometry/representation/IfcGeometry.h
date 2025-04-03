@@ -45,7 +45,8 @@ namespace webifc::geometry {
 	{
 		std::vector<uint32_t> planeData;
 		std::vector<Plane> planes;
-
+		
+		bool isPolygon = false;
 		bool hasPlanes = false;
 
 		void BuildFromVectors(std::vector<double>& d, std::vector<uint32_t>& i);
