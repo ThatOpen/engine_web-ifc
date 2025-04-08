@@ -1,7 +1,7 @@
 #include <vector>
 #include <algorithm>
 #include <glm/glm.hpp>
-#include "Alignment.h"
+#include "alignment.h"
 #include "utils.h"
 #include "epsilons.h"
 
