@@ -1160,7 +1160,7 @@ namespace webifc::geometry
 			case schema::IFCTEXTLITERALWITHEXTENT:
 				// TODO: save string of the text literal in IfcComposedMesh
 				return mesh;
-            default:
+      default:
                 spdlog::error("[GetMesh()] unexpected mesh type {}", expressID, lineType);
                 break;
             }
@@ -1608,9 +1608,9 @@ namespace webifc::geometry
      
             auto geom = _expressIDToGeometry[composedMesh.expressID];
 			if (geom.isPolygon)
-			{
-				return;        // only triangles here
-			}
+ 			{
+ 				return;        // only triangles here
+ 			}
             if (geometry.testReverse()) geom.ReverseFaces();
 
             auto translation = glm::dmat4(1.0);

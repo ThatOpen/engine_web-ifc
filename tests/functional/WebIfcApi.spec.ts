@@ -80,9 +80,18 @@ describe('WebIfcApi reading methods', () => {
         ifcApi.FlattenLine(modelID, line);
         expect(line.OwnerHistory.OwningUser).not.toBe(null);
     })
+    test('can generate a guid', () => {
+        const guid: any = ifcApi.CreateIFCGloballyUniqueId(modelID);
+        expect(guid.value).not.toBe(null);
+    })
     test('expect the correct line to be returned', () => {
         const line: any = ifcApi.GetLine(modelID, expressId);
         expect(line.expressID).toEqual(expressId);
+    })
+    test('expect the correct lines to be returned', () => {
+        const lines: any = ifcApi.GetLines(modelID, [14313,9989]);
+        expect(lines[0].expressID).toEqual(14313);
+        expect(lines[1].expressID).toEqual(9989);
     })
     test('IFC Address Parsing', () => {
         const line: any = ifcApi.GetLine(modelID, 14313);

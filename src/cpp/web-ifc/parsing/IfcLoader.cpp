@@ -15,7 +15,10 @@
 namespace webifc::parsing {
 
   void p21encode(std::string_view input, std::ostringstream &output);
-  std::string p21decode(std::string_view & str);    
+  std::string p21decode(std::string_view & str);
+  std::string generateStringUUID();
+  std::string expandIfcGuid(const std::string_view &guid);
+  std::string compressIfcGuid(const std::string& guid);
  
    IfcLoader::IfcLoader(uint32_t tapeSize, uint64_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager) :_lineWriterBuffer(lineWriterBuffer), _schemaManager(schemaManager)
    { 
@@ -676,8 +679,9 @@ namespace webifc::parsing {
         if (t==SET_BEGIN) {
           StepBack();
           GetSetArgument();
-		  noArguments++;
-		  continue;
+          noArguments++;
+		      continue;
+
         }
         if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM) {
           uint16_t length = _tokenStream->Read<uint16_t>();
@@ -735,6 +739,15 @@ namespace webifc::parsing {
       uint32_t currentId = expressId+1;
       while(_lines.find(currentId) == _lines.end()) currentId++;
       return currentId;
+    }
+
+    std::string IfcLoader::GetExpandedUUIDArgument() const
+    {
+      return expandIfcGuid(GetStringArgument());
+    }    
+
+    std::string IfcLoader::GenerateUUID() const {
+      return compressIfcGuid(generateStringUUID());
     }
 
 }
