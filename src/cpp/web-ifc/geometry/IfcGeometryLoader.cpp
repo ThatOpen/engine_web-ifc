@@ -335,9 +335,9 @@ namespace webifc::geometry
       }
 
      
-      if (_relNests.count(expressID) == 1)
+      if (_relAggregates.count(expressID) == 1)
       {
-        auto &relAgg = _relNests.at(expressID);
+        auto &relAgg = _relAggregates.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
@@ -371,9 +371,9 @@ namespace webifc::geometry
         transform_t = GetLocalPlacement(localPlacement);
       }
 
-      if (_relNests.count(expressID) == 1)
+      if (_relAggregates.count(expressID) == 1)
       {
-        auto &relAgg = _relNests.at(expressID);
+        auto &relAgg = _relAggregates.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -902,9 +902,15 @@ namespace webifc::geometry
     case schema::IFCCURVESTYLE:
     {
       _loader.MoveToArgumentOffset(expressID, 3);
-      auto foundColor = GetColor(_loader.GetRefArgument());
-      if (foundColor)
-        return foundColor;
+	  // argument 3 (CurveColour) is optional, so check if it is set
+	  auto tt = _loader.GetTokenType();
+	  if (tt == parsing::REF)
+	  {
+		  _loader.StepBack();
+		  auto foundColor = GetColor(_loader.GetRefArgument());
+		  if (foundColor)
+			  return foundColor;
+	  }
       return {};
     }
     case schema::IFCFILLAREASTYLEHATCHING:
@@ -1315,6 +1321,20 @@ namespace webifc::geometry
 
     switch (lineType)
     {
+		
+	case schema::IFCEDGE:
+	{
+		_loader.MoveToArgumentOffset(expressID, 0);
+		glm::dvec3 p1 = GetVertexPoint(_loader.GetRefArgument());
+		_loader.MoveToArgumentOffset(expressID, 1);
+		glm::dvec3 p2 = GetVertexPoint(_loader.GetRefArgument());
+
+		IfcCurve curve;
+		curve.points.push_back(p1);
+		curve.points.push_back(p2);
+
+		return curve;
+	}
     case schema::IFCEDGECURVE:
     {
       IfcTrimmingArguments ts;
@@ -2104,7 +2124,8 @@ namespace webifc::geometry
             ctrolPts.push_back(GetCartesianPoint3D(pointId));
           }
         
-          std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
+		  double numCurvePoints = ctrolPts.size();
+          std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights, numCurvePoints);
           for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
         }        
 
@@ -2192,7 +2213,8 @@ namespace webifc::geometry
           uint32_t pointId = _loader.GetRefArgument(token);
           ctrolPts.push_back(GetCartesianPoint3D(pointId));
         }
-        std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
+		double numCurvePoints = ctrolPts.size();
+        std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights, numCurvePoints);
         for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
       }
 
@@ -2277,7 +2299,8 @@ namespace webifc::geometry
           ctrolPts.push_back(GetCartesianPoint3D(pointId));
         }
 
-        std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights);
+		double numCurvePoints = ctrolPts.size();
+        std::vector<glm::dvec3> tempPoints = GetRationalBSplineCurveWithKnots(degree, ctrolPts, knots, weights, numCurvePoints);
         for (size_t i = 0; i < tempPoints.size(); i++) curve.Add(tempPoints[i]);
       }
 

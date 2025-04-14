@@ -13,10 +13,10 @@ namespace tinynurbs{
 
 namespace webifc::geometry{
 
-	class IfcGeometry;
-	class IfcBound3D;
-	class BSpline;
-	class IfcSurface;
+	struct IfcGeometry;
+	struct IfcBound3D;
+	struct BSpline;
+	struct IfcSurface;
 
 	constexpr double rotations 		{ 6.0 };
   constexpr auto pi {glm::pi<double>()};
@@ -63,5 +63,6 @@ namespace webifc::geometry{
 		double dh{0.0};
 		double dv{0.0};
 		double pr{0.0};
+		bool _initialized = false;
 	};
 }

@@ -53,7 +53,7 @@ void SaveModel(uint32_t modelID, emscripten::val callback)
     manager.GetIfcLoader(modelID)->SaveFile([&](char* src, size_t srcSize)
         {
             emscripten::val retVal = callback((uint32_t)src, srcSize);
-        }
+        }, false
     );
 }
 
@@ -679,10 +679,11 @@ emscripten::val GetHeaderLine(uint32_t modelID, uint32_t headerType)
     return retVal;
 }
 
+
 emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
 {
-    if (!manager.IsModelOpen(modelID)) return emscripten::val::undefined();
     auto loader = manager.GetIfcLoader(modelID);
+    if (!manager.IsModelOpen(modelID)) return emscripten::val::object();
     if (!loader->IsValidExpressID(expressID)) return emscripten::val::object();
     uint32_t lineType = loader->GetLineType(expressID);
     if (lineType==0) return emscripten::val::object();
@@ -696,6 +697,17 @@ emscripten::val GetLine(uint32_t modelID, uint32_t expressID)
     retVal.set(emscripten::val("type"), lineType);
     retVal.set(emscripten::val("arguments"), arguments);
     return retVal;
+
+}
+
+emscripten::val GetLines(uint32_t modelID, emscripten::val expressIDs)
+{
+    auto result = emscripten::val::array();
+    uint32_t size = expressIDs["length"].as<uint32_t>();
+   
+    for (size_t x=0; x < size;x++) result.set(x,GetLine(modelID,expressIDs[x].as<uint32_t>()));
+    
+    return result;
 }
 
 uint32_t GetLineType(uint32_t modelID, uint32_t expressID) {
@@ -704,6 +716,12 @@ uint32_t GetLineType(uint32_t modelID, uint32_t expressID) {
 
 std::string GetVersion() {
     return std::string(WEB_IFC_VERSION_NUMBER);
+}
+
+std::string GenerateGuid(uint32_t modelID) {
+    if (!manager.IsModelOpen(modelID)) return "";
+    auto loader = manager.GetIfcLoader(modelID);
+    return loader->GenerateUUID();
 }
 
 uint32_t GetMaxExpressID(uint32_t modelID) {
@@ -866,6 +884,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
     emscripten::function("GetLine", &GetLine);
+    emscripten::function("GetLines", &GetLines);
     emscripten::function("GetLineType", &GetLineType);
     emscripten::function("GetHeaderLine", &GetHeaderLine);
     emscripten::function("WriteLine", &WriteLine);
@@ -886,4 +905,5 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("CloseAllModels", &CloseAllModels);
     emscripten::function("DecodeText", &DecodeText);
     emscripten::function("EncodeText", &EncodeText);
+    emscripten::function("GenerateGuid", &GenerateGuid);
 }

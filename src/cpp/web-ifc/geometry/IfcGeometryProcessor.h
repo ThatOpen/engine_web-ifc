@@ -33,18 +33,27 @@ namespace webifc::geometry
       IfcGeometry Subtract(IfcGeometry firstOperator, IfcGeometry secondOperator);
   };
 
+  struct IfcGeometrySettings
+  {
+	  bool _coordinateToOrigin = false;
+      bool _optimize_profiles = true;
+	  bool _exportPolylines = false;
+	  uint16_t _circleSegments = 12;
+  };
+
   class IfcGeometryProcessor 
   {
       public:
         IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin);
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
-        IfcFlatMesh GetFlatMesh(uint32_t expressID);
+        IfcFlatMesh GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor = true);
         IfcComposedMesh GetMesh(uint32_t expressID);
         void SetTransformation(const std::array<double, 16> &val);
         std::array<double, 16> GetFlatCoordinationMatrix() const;
         glm::dmat4 GetCoordinationMatrix() const;
         void Clear();
+		IfcGeometrySettings _settings;
         
         private:
         std::optional<glm::dvec4> GetStyleItemFromExpressId(uint32_t expressID);
@@ -59,11 +68,8 @@ namespace webifc::geometry
         booleanManager boolEngine;
         const schema::IfcSchemaManager &_schemaManager;
         bool _isCoordinated = false;
-        bool _coordinateToOrigin;
-        bool _optimize_profiles;
         uint32_t expressIdCyl = 0;
         uint32_t expressIdRect = 0;
-        uint16_t _circleSegments;
         glm::dmat4 _coordinationMatrix = glm::dmat4(1.0);
         void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false);
         std::vector<uint32_t> Read2DArrayOfThreeIndices();
