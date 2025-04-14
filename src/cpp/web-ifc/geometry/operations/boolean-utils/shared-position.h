@@ -6,6 +6,7 @@
 #include <set>
 
 #include <glm/glm.hpp>
+#include <glm/gtx/norm.hpp>
 
 #pragma warning(push)
 #pragma warning(disable : 4267)
@@ -196,16 +197,13 @@ namespace fuzzybools
 
         //============================================================================================
 
-        std::vector<std::pair<size_t, size_t>> GetSegments() const
+        auto GetSegments() const
         {
-            std::vector<std::pair<size_t, size_t>> retval;
+            const auto makeSegments = [&](int i) {
+                return std::make_pair(points[i - 1].second, points[i].second);
+            };
 
-            for (size_t i = 1; i < points.size(); i++)
-            {
-                retval.push_back(std::make_pair(points[i - 1].second, points[i].second));
-            }
-
-            return retval;
+            return std::views::iota(size_t(1), points.size()) | std::views::transform(makeSegments);
         }
 
         std::vector<std::pair<double, size_t>> points;
@@ -1123,11 +1121,11 @@ namespace fuzzybools
                 }
             }
 
-            std::sort(
-                points.begin(), points.end(), [&](const double &left, const double &right)
-                { return left < right; });
+            const auto double_less = +[](double left, double right) { return left < right; };
+            std::sort(points.begin(), points.end(), double_less);
 
             std::vector<std::pair<double, double>> result;
+            result.reserve(points.size() * 2);
 
             for (size_t i = 1; i < points.size(); i++)
             {
@@ -1146,7 +1144,7 @@ namespace fuzzybools
         {
             std::vector<std::pair<size_t, double>> pointsInOrder;
 
-            for (auto &segment : l.GetSegments())
+            for (auto segment : l.GetSegments())
             {
                 if (!l.IsPointOnLine(points[segment.first].location3D))
                 {
@@ -1230,9 +1228,13 @@ namespace fuzzybools
             auto basis = p.MakeBasis();
 
             std::unordered_map<size_t, size_t> pointToProjectedPoint;
+            pointToProjectedPoint.reserve(pointsOnPlane.size());
+
             std::unordered_map<size_t, size_t> projectedPointToPoint;
+            projectedPointToPoint.reserve(pointsOnPlane.size());
 
             std::vector<glm::dvec2> projectedPoints;
+            projectedPoints.reserve(pointsOnPlane.size());
 
             for (auto &pointId : pointsOnPlane)
             {
@@ -1581,17 +1583,20 @@ namespace fuzzybools
 
         for (auto &point : sp.points)
         {
-            double d = glm::distance(lineA.origin, point.location3D);
+            double d = glm::distance2(lineA.origin, point.location3D);
             if (size < d)
             {
                 size = d;
             }
         }
 
+        size = std::sqrt(size);
+
         auto Astart = lineA.origin + lineA.direction * size;
         auto Aend = lineA.origin - lineA.direction * size;
 
         std::vector<double> distances;
+        distances.reserve(p.lines.size());
 
         // line B is expected to have the segments already filled, line A is not
         for (auto &line : p.lines)
@@ -1648,13 +1653,8 @@ namespace fuzzybools
             }
         }
 
-        std::sort(
-            distances.begin(),
-            distances.end(),
-            [&](const double &left, const double &right)
-            {
-                return left < right;
-            });
+        const auto double_less = +[](double left, double right) { return left < right; };
+        std::sort(distances.begin(), distances.end(), double_less);
 
         distances.erase(std::unique(distances.begin(), distances.end()), distances.end());
 
@@ -1665,9 +1665,9 @@ namespace fuzzybools
 
     inline void AddLineLineIntersections(Plane &p, SharedPosition &sp, Line &lineA, Line &lineB)
     {
-        for (auto &segA : lineA.GetSegments())
+        for (auto segA : lineA.GetSegments())
         {
-            for (auto &segB : lineB.GetSegments())
+            for (auto segB : lineB.GetSegments())
             {
                 // check isect A vs B
                 if (!p.HasOverlap(segA, segB))
