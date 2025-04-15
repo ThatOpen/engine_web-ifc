@@ -4,6 +4,7 @@
 #include <map>
 #include <unordered_map>
 #include <set>
+#include <ranges>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/norm.hpp>
