@@ -635,7 +635,10 @@ namespace bimGeometry
 		return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
 	}
 
-	inline	Geometry Sweep(const double scaling, const bool closed, const Curve &profile, const Curve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
+	//! This implementation generates much more vertices than needed, and does not have smoothed normals
+	// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
+	// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
+	inline	Geometry Sweep(const double scaling, const bool closed, const std::vector<glm::dvec3> &profilePoints, const Curve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
 		Geometry geom;
 
@@ -767,7 +770,7 @@ namespace bimGeometry
 
 				// project profile onto planeNormal, place on planeOrigin
 				// TODO: look at holes
-				auto &ppts = profile.points;
+				auto &ppts = profilePoints;
 				for (auto &pt2D : ppts)
 				{				
 					glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
