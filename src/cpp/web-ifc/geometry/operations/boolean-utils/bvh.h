@@ -91,18 +91,19 @@ namespace fuzzybools
         template <typename T>
         bool IntersectRay(const glm::dvec3& origin, const glm::dvec3& dir, T callback)
         {
-            std::stack<uint32_t> stack;
+            static std::vector<uint32_t> stack;
+            stack.clear();
 
             if (nodes.empty())
             {
                 return false;
             }
 
-            stack.push(0);
+            stack.emplace_back(0);
             while (!stack.empty())
             {
-                const auto& node = nodes[stack.top()];
-                stack.pop();
+                const auto& node = nodes[stack.back()];
+                stack.pop_back();
 
                 if (node.box.Intersect(origin, dir))
                 {
@@ -129,8 +130,8 @@ namespace fuzzybools
                     else
                     {
                         // visit children
-                        stack.push(node.left);
-                        stack.push(node.right);
+                        stack.emplace_back(node.left);
+                        stack.emplace_back(node.right);
                     }
                 }
                 else
