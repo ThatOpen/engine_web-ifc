@@ -954,13 +954,13 @@ namespace fuzzybools
                 if (isA)
                 {
 #ifdef CSG_DEBUG_OUTPUT
-                    // DumpGeometry(geom, L"Initial_A.obj");
+                    DumpGeometry(geom, L"Initial_A.obj");
 #endif
                 }
                 else
                 {
 #ifdef CSG_DEBUG_OUTPUT
-                    // DumpGeometry(geom, L"Initial_B.obj");
+                    DumpGeometry(geom, L"Initial_B.obj");
 #endif
                 }
 
