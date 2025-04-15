@@ -7,6 +7,7 @@
 #include <ranges>
 
 #include <glm/glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/norm.hpp>
 
 #pragma warning(push)
