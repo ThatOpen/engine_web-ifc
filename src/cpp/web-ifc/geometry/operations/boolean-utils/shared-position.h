@@ -7,8 +7,6 @@
 #include <ranges>
 
 #include <glm/glm.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/norm.hpp>
 
 #pragma warning(push)
 #pragma warning(disable : 4267)
@@ -1585,14 +1583,12 @@ namespace fuzzybools
 
         for (auto &point : sp.points)
         {
-            double d = glm::distance2(lineA.origin, point.location3D);
+            double d = glm::distance(lineA.origin, point.location3D);
             if (size < d)
             {
                 size = d;
             }
         }
-
-        size = std::sqrt(size);
 
         auto Astart = lineA.origin + lineA.direction * size;
         auto Aend = lineA.origin - lineA.direction * size;
