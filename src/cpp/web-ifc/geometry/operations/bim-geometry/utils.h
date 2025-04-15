@@ -92,7 +92,7 @@ namespace bimGeometry
 		return (angle / (2 * CONST_PI)) * 360;
 	}
 
-	inline Geometry Revolve(glm::dmat4 transform, std::vector<std::vector<glm::dvec3>> boundingGroups, int numRots, int radius)
+	inline Geometry Revolve(glm::dmat4 transform, std::vector<std::vector<glm::dvec3>> boundingGroups, int numRots, double radius)
 	{
 		Geometry geometry;
 
