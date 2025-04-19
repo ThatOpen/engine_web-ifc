@@ -99,11 +99,11 @@ namespace webifc::parsing
             public:
               IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *_fileStream);
               bool Clear(bool force);
-              bool Clear() { return Clear(false); }
+              inline bool Clear() { return Clear(false); }
               inline bool IsLoaded() const noexcept { return _loaded; }
               inline size_t TokenSize() const noexcept { return _currentSize; }
               inline size_t GetTokenRef() const noexcept { return _startRef; }
-              size_t GetMaxSize() const noexcept { return _chunkSize; }
+              inline size_t GetMaxSize() const noexcept { return _chunkSize; }
 
               void Push(void *v, const size_t size);
               

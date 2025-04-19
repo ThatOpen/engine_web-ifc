@@ -9,7 +9,6 @@
 #endif
 
 #include <cstdint>
-#include <numeric>
 #include <spdlog/spdlog.h>
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
@@ -834,12 +833,10 @@ namespace webifc::geometry
 			profile.curve.points.push_back(profile.curve.points.front());
 		}
 
-		const size_t nofHolePoints = std::reduce(
-			profile.holes.begin(),
-			profile.holes.end(),
-			0,
-			[](size_t acc, auto& hole) { return acc + hole.points.size(); }
-		);
+		size_t nofHolePoints = 0;
+		for (const auto &hole : profile.holes) {
+			nofHolePoints += hole.points.size();
+		};
 		std::vector<bool> holesIndicesHash(profile.curve.points.size() + nofHolePoints, false);
 		auto holesIndicesHashCursor = profile.curve.points.size();
 
