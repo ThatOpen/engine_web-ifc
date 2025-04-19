@@ -56,7 +56,9 @@ namespace webifc::parsing
         void Forward(const size_t size);
         std::string_view ReadString();
         void Back();
-        bool IsAtEnd();
+        inline bool IsAtEnd() const noexcept {
+            return _currentChunk >= _chunks.size() - 1 && _readPtr >= _chunks.back().TokenSize();
+        };
         void MoveTo(const size_t pos);
         size_t GetReadOffset();
         size_t GetTotalSize();
@@ -95,14 +97,16 @@ namespace webifc::parsing
         class IfcTokenChunk
         {
             public:
-            	IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *_fileStream);
+              IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *_fileStream);
               bool Clear(bool force);
-              bool Clear();
-              bool IsLoaded();
-              size_t TokenSize();
-              size_t GetTokenRef();
+              bool Clear() { return Clear(false); }
+              inline bool IsLoaded() const noexcept { return _loaded; }
+              inline size_t TokenSize() const noexcept { return _currentSize; }
+              inline size_t GetTokenRef() const noexcept { return _startRef; }
+              size_t GetMaxSize() const noexcept { return _chunkSize; }
+
               void Push(void *v, const size_t size);
-              size_t GetMaxSize();
+              
               std::string_view ReadString(const size_t ptr,const size_t size); 
               template <typename T> T Read(const size_t ptr)
               {

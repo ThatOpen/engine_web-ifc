@@ -24,31 +24,6 @@ namespace webifc::parsing
     return true;
   }
 
-  bool IfcTokenStream::IfcTokenChunk::Clear()
-  {
-    return Clear(false);
-  }
-  
-  size_t IfcTokenStream::IfcTokenChunk::GetTokenRef()
-  {
-    return _startRef;
-  }
-  
-  size_t IfcTokenStream::IfcTokenChunk::TokenSize()
-  {
-    return _currentSize;
-  }
-  
-  bool IfcTokenStream::IfcTokenChunk::IsLoaded() 
-  {
-    return _loaded;
-  }
-
-  size_t IfcTokenStream::IfcTokenChunk::GetMaxSize() 
-  {
-    return _chunkSize;
-  }
-  
   std::string_view IfcTokenStream::IfcTokenChunk::ReadString(const size_t ptr,const size_t size) 
   {
   		if (!_loaded) Load();

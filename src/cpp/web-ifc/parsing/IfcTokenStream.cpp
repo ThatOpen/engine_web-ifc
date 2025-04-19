@@ -149,11 +149,6 @@ namespace webifc::parsing
       _readPtr--;
   }
   
-  bool IfcTokenStream::IsAtEnd()
-  {
-     return _currentChunk >= _chunks.size()-1 && _readPtr >= _chunks.back().TokenSize();
-  }
-  
   size_t IfcTokenStream::GetReadOffset() 
   {
       return _cChunk->GetTokenRef() + _readPtr;
