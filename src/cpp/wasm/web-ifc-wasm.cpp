@@ -13,6 +13,8 @@
 #include "../web-ifc/modelmanager/ModelManager.h"
 #include "../version.h"
 #include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
+#include "../web-ifc/geometry/operations/bim-geometry/revolution.h"
+#include "../web-ifc/geometry/operations/bim-geometry/cylindricalRevolution.h"
 #include "../web-ifc/geometry/operations/bim-geometry/parabola.h"
 #include "../web-ifc/geometry/operations/bim-geometry/clothoid.h"
 #include "../web-ifc/geometry/operations/bim-geometry/arc.h"
@@ -792,6 +794,16 @@ bimGeometry::Extrusion CreateExtrusion()
     return bimGeometry::Extrusion();
 }
 
+bimGeometry::Revolve CreateRevolution()
+{
+    return bimGeometry::Revolve();
+}
+
+bimGeometry::CylindricalRevolution CreateCylindricalRevolution()
+{
+    return bimGeometry::CylindricalRevolution();
+}
+
 bimGeometry::Parabola CreateParabola()
 {
     return bimGeometry::Parabola();
@@ -951,6 +963,18 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetBuffers", &bimGeometry::Extrusion::GetBuffers)
         .function("SetValues", &bimGeometry::Extrusion::SetValues)
         ;
+
+    emscripten::class_<bimGeometry::Revolve>("Revolution")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Revolve::GetBuffers)
+        .function("SetValues", &bimGeometry::Revolve::SetValues)
+        ;
+    
+    emscripten::class_<bimGeometry::CylindricalRevolution>("CylindricalRevolution")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::CylindricalRevolution::GetBuffers)
+        .function("SetValues", &bimGeometry::CylindricalRevolution::SetValues)
+        ;
     
     emscripten::class_<bimGeometry::Parabola>("Parabola")
         .constructor<>()
@@ -978,6 +1002,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("CreateExtrusion", &CreateExtrusion);
+    emscripten::function("CreateRevolution", &CreateRevolution);
+    emscripten::function("CreateCylindricalRevolution", &CreateCylindricalRevolution);
     emscripten::function("CreateParabola", &CreateParabola);
     emscripten::function("CreateClothoid", &CreateClothoid);
     emscripten::function("CreateArc", &CreateArc);

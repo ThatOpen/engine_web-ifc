@@ -165,6 +165,16 @@ export interface Extrusion {
     SetValues(profile_: Array<number>, dir_: Array<number>, len_: number): void;
 }
 
+export interface Revolution {
+    GetBuffers(): Buffers;
+    SetValues(transform_: Array<number>, profile_: Array<number>, startDegrees_: number, endDegrees_: number): void;
+}
+
+export interface CylindricalRevolve {
+    GetBuffers(): Buffers;
+    SetValues(transform_: Array<number>, startDegrees_: number, endDegrees_: number, minZ_: number, maxZ_: number, radius_: number): void;
+}
+
 export interface Parabola {
     GetBuffers(): Buffers;
     SetValues(segments: number,
