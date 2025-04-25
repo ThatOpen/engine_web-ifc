@@ -35,6 +35,8 @@ namespace bimGeometry {
         }
         startDegrees = startDegrees_;
         endDegrees = endDegrees_;
+        maxZ = maxZ_;
+        minZ = minZ_;
         radius = _radius;
         numRots = numRots_;
     }
