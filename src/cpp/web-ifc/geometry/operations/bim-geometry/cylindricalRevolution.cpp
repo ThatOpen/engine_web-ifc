@@ -26,7 +26,7 @@ namespace bimGeometry {
         return buffers;
     }
 
-    void CylindricalRevolution::SetValues(std::vector<double> transform_, double startDegrees_, double endDegrees_, double minZ_, double maxZ_, double _radius) {
+    void CylindricalRevolution::SetValues(std::vector<double> transform_, double startDegrees_, double endDegrees_, double minZ_, double maxZ_, double numRots_, double _radius) {
         if (transform_.size() == 16) {
             transform = glm::dmat4(transform_[0], transform_[1], transform_[2], transform_[3], 
                 transform_[4], transform_[5], transform_[6], transform_[7], 
@@ -36,5 +36,6 @@ namespace bimGeometry {
         startDegrees = startDegrees_;
         endDegrees = endDegrees_;
         radius = _radius;
+        numRots = numRots_;
     }
 }

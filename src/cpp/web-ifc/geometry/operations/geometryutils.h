@@ -39,13 +39,12 @@ namespace webifc::geometry
         ifcGeom.indexData = geom.indexData;
         ifcGeom.numPoints = geom.numPoints;
 		ifcGeom.numFaces = geom.numFaces;
-
 		return ifcGeom;
 	}
 
 	inline	IfcGeometry Sweep(const double scaling, const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
-		IfcGeometry geom = ToIfcGeometry(bimGeometry::Sweep(scaling, closed, profile.curve.points, directrix, initialDirectrixNormal, rotate90, optimize));
+		IfcGeometry geom = ToIfcGeometry(bimGeometry::SweepFunction(scaling, closed, profile.curve.points, directrix.points, initialDirectrixNormal, rotate90, optimize));
 		return geom;
 	}
 

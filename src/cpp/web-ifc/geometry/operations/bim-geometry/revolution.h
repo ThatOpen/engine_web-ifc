@@ -17,7 +17,7 @@ namespace bimGeometry {
         double endDegrees;
         std::vector<glm::dvec3> profile;
 
-        void SetValues(std::vector<double> profile_, std::vector<double> transform_, double startDegrees_, double endDegrees_);
+        void SetValues(std::vector<double> profile_, std::vector<double> transform_, double startDegrees_, double endDegrees_, uint32_t numRots_);
         Buffers GetBuffers();
     };
 }

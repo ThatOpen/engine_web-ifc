@@ -26,7 +26,8 @@ namespace bimGeometry {
         return buffers;
     }
 
-    void Revolve::SetValues(std::vector<double> profile_, std::vector<double> transform_, double startDegrees_, double endDegrees_) {
+    void Revolve::SetValues(std::vector<double> profile_, std::vector<double> transform_, double startDegrees_, double endDegrees_, uint32_t numRots_) {
+        numRots = numRots_;
         profile.clear();
         for (size_t i = 0; i + 2 < profile_.size(); i += 3) {
             profile.emplace_back(profile_[i], profile_[i + 1], profile_[i + 2]);

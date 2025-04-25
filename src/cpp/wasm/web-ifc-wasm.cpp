@@ -13,6 +13,7 @@
 #include "../web-ifc/modelmanager/ModelManager.h"
 #include "../version.h"
 #include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
+#include "../web-ifc/geometry/operations/bim-geometry/sweep.h"
 #include "../web-ifc/geometry/operations/bim-geometry/revolution.h"
 #include "../web-ifc/geometry/operations/bim-geometry/cylindricalRevolution.h"
 #include "../web-ifc/geometry/operations/bim-geometry/parabola.h"
@@ -794,6 +795,11 @@ bimGeometry::Extrusion CreateExtrusion()
     return bimGeometry::Extrusion();
 }
 
+bimGeometry::Sweep CreateSweep()
+{
+    return bimGeometry::Sweep();
+}
+
 bimGeometry::Revolve CreateRevolution()
 {
     return bimGeometry::Revolve();
@@ -963,6 +969,12 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetBuffers", &bimGeometry::Extrusion::GetBuffers)
         .function("SetValues", &bimGeometry::Extrusion::SetValues)
         ;
+    
+    emscripten::class_<bimGeometry::Sweep>("Sweep")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Sweep::GetBuffers)
+        .function("SetValues", &bimGeometry::Sweep::SetValues)
+        ;
 
     emscripten::class_<bimGeometry::Revolve>("Revolution")
         .constructor<>()
@@ -1002,6 +1014,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("CreateExtrusion", &CreateExtrusion);
+    emscripten::function("CreateSweep", &CreateSweep);
     emscripten::function("CreateRevolution", &CreateRevolution);
     emscripten::function("CreateCylindricalRevolution", &CreateCylindricalRevolution);
     emscripten::function("CreateParabola", &CreateParabola);

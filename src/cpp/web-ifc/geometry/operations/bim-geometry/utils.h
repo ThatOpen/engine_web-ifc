@@ -561,25 +561,25 @@ namespace bimGeometry
 	//! This implementation generates much more vertices than needed, and does not have smoothed normals
 	// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
 	// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
-	inline	Geometry Sweep(const double scaling, const bool closed, const std::vector<glm::dvec3> &profilePoints, const Curve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
+	inline	Geometry SweepFunction(const double scaling, const bool closed, const std::vector<glm::dvec3> &profilePoints, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
 		Geometry geom;
 
 		std::vector<glm::vec<3, glm::f64>> dpts;
 
 		// Remove repeated points
-		for (size_t i = 0; i < directrix.points.size(); i++)
+		for (size_t i = 0; i < directrix.size(); i++)
 		{
-			if (i < directrix.points.size() - 1)
+			if (i < directrix.size() - 1)
 			{
-				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 * scaling || !optimize)
+				if (glm::distance(directrix[i], directrix[i + 1]) > EPS_BIG2 * scaling || !optimize)
 				{
-					dpts.push_back(directrix.points[i]);
+					dpts.push_back(directrix[i]);
 				}
 			}
 			else
 			{
-				dpts.push_back(directrix.points[i]);
+				dpts.push_back(directrix[i]);
 			}
 		}
 
@@ -599,11 +599,11 @@ namespace bimGeometry
 
 		if (dpts.size() <= 1)
 		{
-				// nothing to sweep
+			// nothing to sweep
 			return geom;
 		}
 
-			// compute curve for each part of the directrix
+		// compute curve for each part of the directrix
 		std::vector<Curve> curves;
 		std::vector<glm::dmat4> transforms;
 

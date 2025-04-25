@@ -165,14 +165,27 @@ export interface Extrusion {
     SetValues(profile_: Array<number>, dir_: Array<number>, len_: number): void;
 }
 
+export interface Sweep {
+    GetBuffers(): Buffers;
+    SetValues( 
+        scaling: number,
+        closed: boolean,
+        profile: Array<number>,
+        directrix: Array<number>,
+        initialNormal?: Array<number>,
+        rotate90?: boolean,
+        optimize?: boolean
+      ): void;
+}
+
 export interface Revolution {
     GetBuffers(): Buffers;
-    SetValues(transform_: Array<number>, profile_: Array<number>, startDegrees_: number, endDegrees_: number): void;
+    SetValues(profile_: Array<number>, transform_: Array<number>, startDegrees_: number, endDegrees_: number, numRots_: number): void;
 }
 
 export interface CylindricalRevolve {
     GetBuffers(): Buffers;
-    SetValues(transform_: Array<number>, startDegrees_: number, endDegrees_: number, minZ_: number, maxZ_: number, radius_: number): void;
+    SetValues(transform_: Array<number>, startDegrees_: number, endDegrees_: number, minZ_: number, maxZ_: number, numRots_: number, radius_: number): void;
 }
 
 export interface Parabola {
@@ -186,6 +199,7 @@ export interface Parabola {
         startGradient: number,
         endGradient: number): void;
 }
+
 export interface Clothoid {
     GetBuffers(): Buffers;
     SetValues(segments: number,
@@ -502,6 +516,21 @@ export class IfcAPI {
     CreateExtrusion()
     {
         return this.wasmModule.CreateExtrusion();
+    }
+
+    CreateSweep()
+    {
+        return this.wasmModule.CreateSweep();
+    }
+
+    CreateRevolution()
+    {
+        return this.wasmModule.CreateRevolution();
+    }
+
+    CreateCylindricalRevolution()
+    {
+        return this.wasmModule.CreateCylindricalRevolution();
     }
 
     CreateParabola()

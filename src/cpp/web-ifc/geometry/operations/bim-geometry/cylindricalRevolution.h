@@ -20,7 +20,7 @@ namespace bimGeometry {
         double radius;
         std::vector<glm::dvec3> profile;
 
-        void SetValues(std::vector<double> transform_, double startDegrees_, double endDegrees_, double minZ_, double maxZ_, double radius);
+        void SetValues(std::vector<double> transform_, double startDegrees_, double endDegrees_, double minZ_, double maxZ_, double numRots_, double radius);
         Buffers GetBuffers();
     };
 }
