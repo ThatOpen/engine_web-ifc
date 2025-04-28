@@ -12,6 +12,15 @@
 #include <spdlog/spdlog.h>
 #include "../web-ifc/modelmanager/ModelManager.h"
 #include "../version.h"
+#include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
+#include "../web-ifc/geometry/operations/bim-geometry/sweep.h"
+#include "../web-ifc/geometry/operations/bim-geometry/revolution.h"
+#include "../web-ifc/geometry/operations/bim-geometry/cylindricalRevolution.h"
+#include "../web-ifc/geometry/operations/bim-geometry/parabola.h"
+#include "../web-ifc/geometry/operations/bim-geometry/clothoid.h"
+#include "../web-ifc/geometry/operations/bim-geometry/arc.h"
+#include "../web-ifc/geometry/operations/bim-geometry/alignment.h"
+#include "../web-ifc/geometry/operations/bim-geometry/utils.h"
 
 namespace webifc::parsing { 
     void p21encode(std::string_view input, std::ostringstream &output);
@@ -243,6 +252,30 @@ std::vector<webifc::geometry::IfcAlignment> GetAllAlignments(uint32_t modelID)
         webifc::geometry::IfcAlignment alignment = geomLoader->GetLoader().GetAlignment(elements[i]);
         alignment.transform(geomLoader->GetCoordinationMatrix());
         alignments.push_back(alignment);
+    }
+
+    for (size_t i = 0; i < alignments.size(); i++)
+    {
+        webifc::geometry::IfcAlignment alignment = alignments[i];
+        std::vector<glm::dvec3>  pointsH;
+        std::vector<glm::dvec3>  pointsV;
+        for (size_t j = 0; j < alignment.Horizontal.curves.size(); j++)
+        {
+            for (size_t k = 0; k < alignment.Horizontal.curves[j].points.size(); k++)
+            {
+                pointsH.push_back(alignment.Horizontal.curves[j].points[k]);
+            }
+        }
+        for (size_t j = 0; j < alignment.Vertical.curves.size(); j++)
+        {
+            for (size_t k = 0; k < alignment.Vertical.curves[j].points.size(); k++)
+            {
+                pointsV.push_back(alignment.Vertical.curves[j].points[k]);
+            }
+        }
+        webifc::geometry::IfcCurve curve;
+        curve.points = bimGeometry::Convert2DAlignmentsTo3D(pointsH, pointsV);
+        alignments[i].Absolute.curves.push_back(curve);
     }
 
     return alignments;
@@ -752,6 +785,52 @@ void ResetCache(uint32_t modelID) {
     if (manager.IsModelOpen(modelID)) manager.GetGeometryProcessor(modelID)->GetLoader().ResetCache();
 }
 
+bimGeometry::AABB CreateAABB()
+{
+    return bimGeometry::AABB();
+}
+
+bimGeometry::Extrusion CreateExtrusion()
+{
+    return bimGeometry::Extrusion();
+}
+
+bimGeometry::Sweep CreateSweep()
+{
+    return bimGeometry::Sweep();
+}
+
+bimGeometry::Revolve CreateRevolution()
+{
+    return bimGeometry::Revolve();
+}
+
+bimGeometry::CylindricalRevolution CreateCylindricalRevolution()
+{
+    return bimGeometry::CylindricalRevolution();
+}
+
+bimGeometry::Parabola CreateParabola()
+{
+    return bimGeometry::Parabola();
+}
+
+bimGeometry::Clothoid CreateClothoid()
+{
+    return bimGeometry::Clothoid();
+}
+
+bimGeometry::Arc CreateArc()
+{
+    return bimGeometry::Arc();
+}
+
+bimGeometry::Alignment CreateAlignment()
+{
+    return bimGeometry::Alignment();
+}
+
+
 EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::class_<webifc::geometry::IfcGeometry>("IfcGeometry")
@@ -832,7 +911,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<webifc::geometry::IfcAlignment>("IfcAlignment")
         .field("Horizontal", &webifc::geometry::IfcAlignment::Horizontal)
-        .field("Vertical", &webifc::geometry::IfcAlignment::Vertical);
+        .field("Vertical", &webifc::geometry::IfcAlignment::Vertical)
+        .field("Absolute", &webifc::geometry::IfcAlignment::Absolute);
 
     emscripten::value_object<glm::dvec3>("glmDvec3")
         .field("x", &glm::dvec3::x)
@@ -868,6 +948,79 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::register_vector<double>("DoubleVector");
 
+    //bimGeometry
+
+    emscripten::value_object<bimGeometry::Buffers>("Buffers")
+        .field("fvertexData", &bimGeometry::Buffers::fvertexData)
+        .field("indexData", &bimGeometry::Buffers::indexData)
+        ;
+
+    emscripten::register_vector<float>("vector<float>");
+
+    emscripten::class_<bimGeometry::AABB>("AABB")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::AABB::GetBuffers)
+        .function("SetValues", &bimGeometry::AABB::SetValues)
+        ;
+
+        
+    emscripten::class_<bimGeometry::Extrusion>("Extrusion")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Extrusion::GetBuffers)
+        .function("SetValues", &bimGeometry::Extrusion::SetValues)
+        ;
+    
+    emscripten::class_<bimGeometry::Sweep>("Sweep")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Sweep::GetBuffers)
+        .function("SetValues", &bimGeometry::Sweep::SetValues)
+        ;
+
+    emscripten::class_<bimGeometry::Revolve>("Revolution")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Revolve::GetBuffers)
+        .function("SetValues", &bimGeometry::Revolve::SetValues)
+        ;
+    
+    emscripten::class_<bimGeometry::CylindricalRevolution>("CylindricalRevolution")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::CylindricalRevolution::GetBuffers)
+        .function("SetValues", &bimGeometry::CylindricalRevolution::SetValues)
+        ;
+    
+    emscripten::class_<bimGeometry::Parabola>("Parabola")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Parabola::GetBuffers)
+        .function("SetValues", &bimGeometry::Parabola::SetValues)
+        ;
+    
+    emscripten::class_<bimGeometry::Clothoid>("Clothoid")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Clothoid::GetBuffers)
+        .function("SetValues", &bimGeometry::Clothoid::SetValues)
+        ;
+
+    emscripten::class_<bimGeometry::Arc>("Arc")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Arc::GetBuffers)
+        .function("SetValues", &bimGeometry::Arc::SetValues)
+        ;
+
+    emscripten::class_<bimGeometry::Alignment>("Alignment")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Alignment::GetBuffers)
+        .function("SetValues", &bimGeometry::Alignment::SetValues)
+        ;
+
+    emscripten::function("CreateAABB", &CreateAABB);
+    emscripten::function("CreateExtrusion", &CreateExtrusion);
+    emscripten::function("CreateSweep", &CreateSweep);
+    emscripten::function("CreateRevolution", &CreateRevolution);
+    emscripten::function("CreateCylindricalRevolution", &CreateCylindricalRevolution);
+    emscripten::function("CreateParabola", &CreateParabola);
+    emscripten::function("CreateClothoid", &CreateClothoid);
+    emscripten::function("CreateArc", &CreateArc);
+    emscripten::function("CreateAlignment", &CreateAlignment);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);
