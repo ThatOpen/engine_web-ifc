@@ -1,9 +1,11 @@
+#include <array>
 #include <vector>
 #include <algorithm>
 #include <glm/glm.hpp>
 #include "geometry.h"
 #include "epsilons.h"
 #include "curve.h"
+#include <mapbox/earcut.hpp>
 
 #pragma once
 
@@ -90,6 +92,15 @@ namespace bimGeometry
 		}
 
 		return (angle / (2 * CONST_PI)) * 360;
+	}
+
+	inline bool GetWindingOfTriangle(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c)
+	{
+		glm::dvec3 v12(b - a);
+		glm::dvec3 v13(c - a);
+
+		glm::dvec3 norm = glm::normalize(glm::cross(v12, v13));
+		return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
 	}
 
 	inline Geometry Revolution(glm::dmat4 transform, double startDegrees, double endDegrees, std::vector<glm::dvec3> Profile, double numRots)
@@ -533,6 +544,153 @@ namespace bimGeometry
 		return geom;
     }
 
+	inline bimGeometry::Geometry Extrude(std::vector<std::vector<glm::dvec3>> profile, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
+	{
+		bimGeometry::Geometry geom;
+		std::vector<bool> holesIndicesHash;
+
+		// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
+		glm::dvec3 lastToFirstPoint = profile[0].front() - profile[0].back();
+		if (glm::length(lastToFirstPoint) > 1e-8) {
+			profile[0].push_back(profile[0].front());
+		}
+
+		// build the caps
+		{
+			using Point = std::array<double, 2>;
+			int polygonCount = profile.size(); // Main profile + holes
+			std::vector<std::vector<Point>> polygon(polygonCount);
+
+			glm::dvec3 normal = dir;
+
+			for (size_t i = 0; i < profile[0].size(); i++)
+			{
+				glm::dvec2 pt = profile[0][i];
+				glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
+
+				geom.AddPoint(et, normal);
+				polygon[0].push_back(Point{pt.x, pt.y});
+			}
+
+			for (size_t i = 0; i < profile[0].size(); i++)
+			{
+				holesIndicesHash.push_back(false);
+			}
+
+			for (size_t i = 1; i < profile.size(); i++)
+			{
+				std::vector<glm::dvec3> hole = profile[i];
+				int pointCount = hole.size();
+
+				for (int j = 0; j < pointCount; j++)
+				{
+					holesIndicesHash.push_back(j == 0);
+
+					glm::dvec3 pt = hole[j];
+					glm::dvec4 et = glm::dvec4(pt + dir * distance, 1);
+
+					profile[0].push_back(pt);
+					geom.AddPoint(et, normal);
+					polygon[i].push_back({pt.x, pt.y}); // Index 0 is main profile; see earcut reference
+				}
+			}
+
+			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
+
+			if (indices.size() < 3)
+			{
+				return geom;
+			}
+
+			uint32_t offset = 0;
+			bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
+			bool flipWinding = !winding;
+
+			for (size_t i = 0; i < indices.size(); i += 3)
+			{
+				if (flipWinding)
+				{
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+				}
+				else
+				{
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+				}
+			}
+
+			offset += geom.numPoints;
+
+			normal = -dir;
+
+			for (size_t i = 0; i < profile[0].size(); i++)
+			{
+				glm::dvec2 pt = profile[0][i];
+				glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0), 1);
+
+				if (cuttingPlaneNormal != glm::dvec3(0))
+				{
+					et = glm::dvec4(glm::dvec3(pt, 0), 1);
+					glm::dvec3 transDir = glm::dvec4(dir, 0);
+
+					// project {et} onto the plane, following the extrusion normal
+					double ldotn = glm::dot(transDir, cuttingPlaneNormal);
+					if (ldotn == 0)
+					{
+
+					}
+					else
+					{
+						glm::dvec3 dpos = cuttingPlanePos - glm::dvec3(et);
+						double dist = glm::dot(dpos, cuttingPlaneNormal) / ldotn;
+						// we want to apply dist, even when negative
+						et = et + glm::dvec4(dist * transDir, 1);
+					}
+				}
+
+				geom.AddPoint(et, normal);
+			}
+
+			for (size_t i = 0; i < indices.size(); i += 3)
+			{
+				if (flipWinding)
+				{
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+				}
+				else
+				{
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+				}
+			}
+		}
+
+		uint32_t capSize = profile[0].size();
+		for (size_t i = 1; i < capSize; i++)
+		{
+			// https://github.com/tomvandig/web-ifc/issues/5
+			if (holesIndicesHash[i])
+			{
+				continue;
+			}
+
+			uint32_t bl = i - 1;
+			uint32_t br = i - 0;
+
+			uint32_t tl = capSize + i - 1;
+			uint32_t tr = capSize + i - 0;
+
+			// this winding should be correct
+			geom.AddFace(geom.GetPoint(tl),
+						geom.GetPoint(br),
+						geom.GetPoint(bl));
+
+			geom.AddFace(geom.GetPoint(tl),
+						geom.GetPoint(tr),
+						geom.GetPoint(br));
+		}
+
+		return geom;
+	}
+
 	inline glm::dvec3 projectOntoPlane(const glm::dvec3 &origin, const glm::dvec3 &normal, const glm::dvec3 &point, const glm::dvec3 &dir)
 	{
 		// project {et} onto the plane, following the extrusion normal
@@ -547,15 +705,6 @@ namespace bimGeometry
 			double dist = glm::dot(dpos, normal) / ldotn;
 			return point + dist * dir;
 		}
-	}
-
-	inline bool GetWindingOfTriangle(const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c)
-	{
-		glm::dvec3 v12(b - a);
-		glm::dvec3 v13(c - a);
-
-		glm::dvec3 norm = glm::normalize(glm::cross(v12, v13));
-		return glm::dot(norm, glm::dvec3(0, 0, 1)) > 0.0;
 	}
 
 	//! This implementation generates much more vertices than needed, and does not have smoothed normals

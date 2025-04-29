@@ -501,8 +501,8 @@ int main()
 
     start = ms();
 
-    SpecificLoadTest(loader, geometryLoader, 211736);
-    // auto meshes = LoadAllTest(loader, geometryLoader, -1);
+    // SpecificLoadTest(loader, geometryLoader, 2471);
+    auto meshes = LoadAllTest(loader, geometryLoader, -1);
     // auto rebars = GetAllRebars(loader, geometryLoader);
     // std::cout << GetLine(loader, 225) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);

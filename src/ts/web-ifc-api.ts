@@ -162,7 +162,9 @@ export interface AABB {
 
 export interface Extrusion {
     GetBuffers(): Buffers;
-    SetValues(profile_: Array<number>, dir_: Array<number>, len_: number): void;
+    SetValues(profile_: Array<number>, dir_: Array<number>, len_: number, cuttingPlaneNormal_: Array<number>, cuttingPlanePos_: Array<number>, cap_: boolean): void;
+    SetHoles(profile_: Array<number>): void;
+    ClearHoles(): void;
 }
 
 export interface Sweep {

@@ -39,6 +39,16 @@ namespace webifc::geometry
         ifcGeom.indexData = geom.indexData;
         ifcGeom.numPoints = geom.numPoints;
 		ifcGeom.numFaces = geom.numFaces;
+		if(ifcGeom.planeData.size() != ifcGeom.numFaces)
+		{
+			for (size_t i = 0; i < ifcGeom.numFaces; i++)
+			{
+				if(i >= ifcGeom.planeData.size())
+				{
+					ifcGeom.planeData.push_back(-1);
+				}
+			}
+		}
 		return ifcGeom;
 	}
 
@@ -48,6 +58,7 @@ namespace webifc::geometry
 		return geom;
 	}
 
+	// TODO: Send it to bimGeometry
 	inline	IfcGeometry SweepCircular(const double scaling, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		spdlog::debug("[SweepCircular({})]");
@@ -365,6 +376,7 @@ namespace webifc::geometry
 		return computeSafeNormal(v1, v2, v3, normal, 1e-08);
 	}
 
+	// TODO: Send to bimGeometry
 	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, uint32_t expressID)
 	{
 		spdlog::debug("[TriangulateBounds({})]");
@@ -518,6 +530,7 @@ namespace webifc::geometry
 		}
 	}
 
+	// Send to bimGeometry
 	inline IfcGeometry SectionedSurface(IfcCrossSections profiles)
 	{
 		spdlog::debug("[SectionedSurface({})]");
@@ -577,10 +590,11 @@ namespace webifc::geometry
 		return geom;
 	}
 
+	// TODO: Send to bimGeometry
 	inline IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
 	{
 		spdlog::debug("[Extrude({})]");
-		IfcGeometry geom;
+
 		std::vector<bool> holesIndicesHash;
 
 		// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
@@ -589,144 +603,29 @@ namespace webifc::geometry
 			profile.curve.points.push_back(profile.curve.points.front());
 		}
 
-		// build the caps
+		std::vector<std::vector<glm::dvec3>> profile_vector;
+		std::vector<glm::dvec3> profile_contour;
+		for (size_t i = 0; i < profile.curve.points.size(); i++)
 		{
-			using Point = std::array<double, 2>;
-			int polygonCount = 1 + profile.holes.size(); // Main profile + holes
-			std::vector<std::vector<Point>> polygon(polygonCount);
-
-			glm::dvec3 normal = dir;
-
-			for (size_t i = 0; i < profile.curve.points.size(); i++)
+			profile_contour.push_back(profile.curve.points[i]);
+		}
+		profile_vector.push_back(profile_contour);
+		for (size_t i = 0; i < profile.holes.size(); i++)
+		{
+			std::vector<glm::dvec3> hole_contour;
+			IfcCurve hole = profile.holes[i];
+			int pointCount = hole.points.size();
+			for (int j = 0; j < pointCount; j++)
 			{
-				glm::dvec2 pt = profile.curve.points[i];
-				glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
-
-				geom.AddPoint(et, normal);
-				polygon[0].push_back({pt.x, pt.y});
+				hole_contour.push_back(hole.points[j]);
 			}
-
-			for (size_t i = 0; i < profile.curve.points.size(); i++)
-			{
-				holesIndicesHash.push_back(false);
-			}
-
-			for (size_t i = 0; i < profile.holes.size(); i++)
-			{
-				IfcCurve hole = profile.holes[i];
-				int pointCount = hole.points.size();
-
-				for (int j = 0; j < pointCount; j++)
-				{
-					holesIndicesHash.push_back(j == 0);
-
-					glm::dvec2 pt = hole.points[j];
-					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
-
-					profile.curve.Add(pt);
-					geom.AddPoint(et, normal);
-					polygon[i + 1].push_back({pt.x, pt.y}); // Index 0 is main profile; see earcut reference
-				}
-			}
-
-			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
-
-			if (indices.size() < 3)
-			{
-				// probably a degenerate polygon
-				spdlog::error("[Extrude()] degenerate polygon in extrude");
-				return geom;
-			}
-
-			uint32_t offset = 0;
-			bool winding = bimGeometry::GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
-			bool flipWinding = !winding;
-
-			for (size_t i = 0; i < indices.size(); i += 3)
-			{
-				if (flipWinding)
-				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
-				}
-				else
-				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
-				}
-			}
-
-			offset += geom.numPoints;
-
-			normal = -dir;
-
-			for (size_t i = 0; i < profile.curve.points.size(); i++)
-			{
-				glm::dvec2 pt = profile.curve.points[i];
-				glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0), 1);
-
-				if (cuttingPlaneNormal != glm::dvec3(0))
-				{
-					et = glm::dvec4(glm::dvec3(pt, 0), 1);
-					glm::dvec3 transDir = glm::dvec4(dir, 0);
-
-					// project {et} onto the plane, following the extrusion normal
-					double ldotn = glm::dot(transDir, cuttingPlaneNormal);
-					if (ldotn == 0)
-					{
-						printf("0 direction in extrude\n");
-					}
-					else
-					{
-						glm::dvec3 dpos = cuttingPlanePos - glm::dvec3(et);
-						double dist = glm::dot(dpos, cuttingPlaneNormal) / ldotn;
-						// we want to apply dist, even when negative
-						et = et + glm::dvec4(dist * transDir, 1);
-					}
-				}
-
-				geom.AddPoint(et, normal);
-			}
-
-			for (size_t i = 0; i < indices.size(); i += 3)
-			{
-				if (flipWinding)
-				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
-				}
-				else
-				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
-				}
-			}
+			profile_vector.push_back(hole_contour);
 		}
 
-		uint32_t capSize = profile.curve.points.size();
-		for (size_t i = 1; i < capSize; i++)
-		{
-			// https://github.com/tomvandig/web-ifc/issues/5
-			if (holesIndicesHash[i])
-			{
-				continue;
-			}
-
-			uint32_t bl = i - 1;
-			uint32_t br = i - 0;
-
-			uint32_t tl = capSize + i - 1;
-			uint32_t tr = capSize + i - 0;
-
-			// this winding should be correct
-			geom.AddFace(geom.GetPoint(tl),
-						geom.GetPoint(br),
-						geom.GetPoint(bl));
-
-			geom.AddFace(geom.GetPoint(tl),
-						geom.GetPoint(tr),
-						geom.GetPoint(br));
-		}
-
-		return geom;
+		return ToIfcGeometry(bimGeometry::Extrude(profile_vector, dir, distance, cuttingPlaneNormal, cuttingPlanePos));
 	}
 
+	// TODO: Send to bimGeometry
     inline double VectorToAngle2D(double x, double y)
 	{
 		double dd = sqrt(x * x + y * y);
@@ -841,77 +740,42 @@ namespace webifc::geometry
 		}
 	}
 
-		inline	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
+	inline	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
+	{
+		glm::dmat4 newMat = mat * mesh.transformation;
+
+		bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
+
+		auto geomIt = geometryMap.find(mesh.expressID);
+
+		if (geomIt != geometryMap.end())
 		{
-			glm::dmat4 newMat = mat * mesh.transformation;
+			auto meshGeom = geomIt->second;
 
-			bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
-
-			auto geomIt = geometryMap.find(mesh.expressID);
-
-			if (geomIt != geometryMap.end())
+			if (meshGeom.part.size() > 0)
 			{
-				auto meshGeom = geomIt->second;
-
-				if (meshGeom.part.size() > 0)
+				for (uint32_t i = 0; i < meshGeom.part.size(); i++)
 				{
-					for (uint32_t i = 0; i < meshGeom.part.size(); i++)
-					{
 
-						IfcGeometry newMeshGeom = meshGeom.part[i];
-						if (newMeshGeom.numFaces)
-						{
-							IfcGeometry newGeom;
-							newGeom.halfSpace = newMeshGeom.halfSpace;
-							if (newGeom.halfSpace)
-							{
-								newGeom.halfSpaceOrigin = newMat * glm::dvec4(newMeshGeom.halfSpaceOrigin, 1);
-								newGeom.halfSpaceX = newMat * glm::dvec4(newMeshGeom.halfSpaceX, 1);
-								newGeom.halfSpaceY = newMat * glm::dvec4(newMeshGeom.halfSpaceY, 1);
-								newGeom.halfSpaceZ = newMat * glm::dvec4(newMeshGeom.halfSpaceZ, 1);
-							}
-							
-							for (uint32_t i = 0; i < newMeshGeom.numFaces; i++)
-							{
-								Face f = newMeshGeom.GetFace(i);
-								glm::dvec3 a = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i0), 1);
-								glm::dvec3 b = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i1), 1);
-								glm::dvec3 c = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i2), 1);
-
-								if (transformationBreaksWinding)
-								{
-									newGeom.AddFace(b, a, c);
-								}
-								else
-								{
-									newGeom.AddFace(a, b, c);
-								}
-							}
-
-							geoms.push_back(newGeom);
-						}
-					}
-				}
-				else
-				{
-					if (meshGeom.numFaces)
+					IfcGeometry newMeshGeom = meshGeom.part[i];
+					if (newMeshGeom.numFaces)
 					{
 						IfcGeometry newGeom;
-						newGeom.halfSpace = meshGeom.halfSpace;
+						newGeom.halfSpace = newMeshGeom.halfSpace;
 						if (newGeom.halfSpace)
 						{
-							newGeom.halfSpaceOrigin = newMat * glm::dvec4(meshGeom.halfSpaceOrigin, 1);
-							newGeom.halfSpaceX = newMat * glm::dvec4(meshGeom.halfSpaceX, 1);
-							newGeom.halfSpaceY = newMat * glm::dvec4(meshGeom.halfSpaceY, 1);
-							newGeom.halfSpaceZ = newMat * glm::dvec4(meshGeom.halfSpaceZ, 1);
+							newGeom.halfSpaceOrigin = newMat * glm::dvec4(newMeshGeom.halfSpaceOrigin, 1);
+							newGeom.halfSpaceX = newMat * glm::dvec4(newMeshGeom.halfSpaceX, 1);
+							newGeom.halfSpaceY = newMat * glm::dvec4(newMeshGeom.halfSpaceY, 1);
+							newGeom.halfSpaceZ = newMat * glm::dvec4(newMeshGeom.halfSpaceZ, 1);
 						}
 						
-						for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+						for (uint32_t i = 0; i < newMeshGeom.numFaces; i++)
 						{
-							Face f = meshGeom.GetFace(i);
-							glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
-							glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
-							glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
+							Face f = newMeshGeom.GetFace(i);
+							glm::dvec3 a = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i0), 1);
+							glm::dvec3 b = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i1), 1);
+							glm::dvec3 c = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i2), 1);
 
 							if (transformationBreaksWinding)
 							{
@@ -927,12 +791,47 @@ namespace webifc::geometry
 					}
 				}
 			}
-
-			for (auto &c : mesh.children)
+			else
 			{
-				flattenRecursive(c, geometryMap, geoms, newMat);
+				if (meshGeom.numFaces)
+				{
+					IfcGeometry newGeom;
+					newGeom.halfSpace = meshGeom.halfSpace;
+					if (newGeom.halfSpace)
+					{
+						newGeom.halfSpaceOrigin = newMat * glm::dvec4(meshGeom.halfSpaceOrigin, 1);
+						newGeom.halfSpaceX = newMat * glm::dvec4(meshGeom.halfSpaceX, 1);
+						newGeom.halfSpaceY = newMat * glm::dvec4(meshGeom.halfSpaceY, 1);
+						newGeom.halfSpaceZ = newMat * glm::dvec4(meshGeom.halfSpaceZ, 1);
+					}
+					
+					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
+					{
+						Face f = meshGeom.GetFace(i);
+						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
+						glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
+						glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
+
+						if (transformationBreaksWinding)
+						{
+							newGeom.AddFace(b, a, c);
+						}
+						else
+						{
+							newGeom.AddFace(a, b, c);
+						}
+					}
+
+					geoms.push_back(newGeom);
+				}
 			}
 		}
+
+		for (auto &c : mesh.children)
+		{
+			flattenRecursive(c, geometryMap, geoms, newMat);
+		}
+	}
 
 	inline std::vector<IfcGeometry> flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
 	{

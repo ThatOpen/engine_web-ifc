@@ -968,6 +968,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .constructor<>()
         .function("GetBuffers", &bimGeometry::Extrusion::GetBuffers)
         .function("SetValues", &bimGeometry::Extrusion::SetValues)
+        .function("SetHoles", &bimGeometry::Extrusion::SetHoles)
+        .function("ClearHoles", &bimGeometry::Extrusion::ClearHoles)
         ;
     
     emscripten::class_<bimGeometry::Sweep>("Sweep")
