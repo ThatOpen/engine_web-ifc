@@ -14,6 +14,7 @@
 #include "../version.h"
 #include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
 #include "../web-ifc/geometry/operations/bim-geometry/sweep.h"
+#include "../web-ifc/geometry/operations/bim-geometry/circularSweep.h"
 #include "../web-ifc/geometry/operations/bim-geometry/revolution.h"
 #include "../web-ifc/geometry/operations/bim-geometry/cylindricalRevolution.h"
 #include "../web-ifc/geometry/operations/bim-geometry/parabola.h"
@@ -800,6 +801,12 @@ bimGeometry::Sweep CreateSweep()
     return bimGeometry::Sweep();
 }
 
+bimGeometry::CircularSweep CreateCircularSweep()
+{
+    return bimGeometry::CircularSweep();
+}
+
+
 bimGeometry::Revolve CreateRevolution()
 {
     return bimGeometry::Revolve();
@@ -841,8 +848,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetIndexDataSize", &webifc::geometry::IfcGeometry::GetIndexDataSize)
         .function("GetSweptDiskSolid", &webifc::geometry::IfcGeometry::GetSweptDiskSolid)
         ;
-
-
 
     emscripten::value_object<glm::dvec4>("dvec4")
         .field("x", &glm::dvec4::x)
@@ -962,7 +967,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetBuffers", &bimGeometry::AABB::GetBuffers)
         .function("SetValues", &bimGeometry::AABB::SetValues)
         ;
-
         
     emscripten::class_<bimGeometry::Extrusion>("Extrusion")
         .constructor<>()
@@ -976,6 +980,12 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .constructor<>()
         .function("GetBuffers", &bimGeometry::Sweep::GetBuffers)
         .function("SetValues", &bimGeometry::Sweep::SetValues)
+        ;
+    
+    emscripten::class_<bimGeometry::CircularSweep>("CircularSweep")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::CircularSweep::GetBuffers)
+        .function("SetValues", &bimGeometry::CircularSweep::SetValues)
         ;
 
     emscripten::class_<bimGeometry::Revolve>("Revolution")
@@ -1017,6 +1027,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("CreateExtrusion", &CreateExtrusion);
     emscripten::function("CreateSweep", &CreateSweep);
+    emscripten::function("CreateCircularSweep", &CreateCircularSweep);
     emscripten::function("CreateRevolution", &CreateRevolution);
     emscripten::function("CreateCylindricalRevolution", &CreateCylindricalRevolution);
     emscripten::function("CreateParabola", &CreateParabola);

@@ -180,6 +180,19 @@ export interface Sweep {
       ): void;
 }
 
+export interface CircularSweep {
+    GetBuffers(): Buffers;
+    SetValues( 
+        scaling: number,
+        closed: boolean,
+        profile: Array<number>,
+        radius: number,
+        directrix: Array<number>,
+        initialNormal?: Array<number>,
+        rotate90?: boolean,
+      ): void;
+}
+
 export interface Revolution {
     GetBuffers(): Buffers;
     SetValues(profile_: Array<number>, transform_: Array<number>, startDegrees_: number, endDegrees_: number, numRots_: number): void;
@@ -523,6 +536,11 @@ export class IfcAPI {
     CreateSweep()
     {
         return this.wasmModule.CreateSweep();
+    }
+
+    CreateCircularSweep()
+    {
+        return this.wasmModule.CreateCircularSweep();
     }
 
     CreateRevolution()
