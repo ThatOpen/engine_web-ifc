@@ -435,6 +435,7 @@ namespace webifc::geometry
 		}
     }
 
+	// TODO: sent to bimGeometry
     inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double const scaling)
 	{
 		spdlog::debug("[TriangulateBspline({})]");
