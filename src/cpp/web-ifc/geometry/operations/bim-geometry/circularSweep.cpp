@@ -1,7 +1,7 @@
 #include <vector>
 #include <algorithm>
 #include <glm/glm.hpp>
-#include "CircularSweep.h"
+#include "circularSweep.h"
 #include "epsilons.h"
 #include "geometry.h"
 #include "utils.h"

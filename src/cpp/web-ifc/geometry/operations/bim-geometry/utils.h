@@ -1138,5 +1138,61 @@ namespace bimGeometry
 
 		return geom;
 	}
-	
+
+	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles)
+	{
+		Geometry geom;
+
+		// Iterate over each profile, and create a surface by connecting the corresponding points with faces.
+		for (size_t i = 0; i < profiles.size() - 1; i++)
+		{
+			std::vector<glm::dvec3> &profile1 = profiles[i];
+			std::vector<glm::dvec3> &profile2 = profiles[i + 1];
+
+			// Check that the profiles have the same number of points
+			if (profile1.size() != profile2.size())
+			{
+			}
+
+			std::vector<uint32_t> indices;
+
+			// Create faces by connecting corresponding points from the two profiles
+			for (size_t j = 0; j < profile1.size(); j++)
+			{
+				glm::dvec3 &p1 = profile1[j];
+				int j2 = 0;
+				if (profile1.size() > 1)
+				{
+					double pr = (double)j / (double)(profile1.size() - 1);
+					j2 = pr * (profile2.size() - 1);
+				}
+				glm::dvec3 &p2 = profile2[j2];
+
+				glm::dvec3 normal = glm::dvec3(0.0, 0.0, 1.0);
+
+				if (glm::distance(p1, p2) > 1E-5)
+				{
+					normal = glm::normalize(glm::cross(p2 - p1, glm::cross(p2 - p1, glm::dvec3(0.0, 0.0, 1.0))));
+				}
+
+				geom.AddPoint(p1, normal);
+				geom.AddPoint(p2, normal);
+
+				indices.push_back(geom.numPoints - 2);
+				indices.push_back(geom.numPoints - 1);
+			}
+
+			// Create the faces
+			if (indices.size() > 0)
+			{
+				for (size_t j = 0; j < indices.size() - 2; j += 4)
+				{
+					geom.AddFace(indices[j], indices[j + 1], indices[j + 2]);
+					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3]);
+				}
+			}
+		}
+
+		return geom;
+	}
 }
