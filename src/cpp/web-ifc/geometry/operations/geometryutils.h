@@ -581,7 +581,6 @@ namespace webifc::geometry
 	{
 		spdlog::debug("[Extrude({})]");
 		IfcGeometry geom;
-		std::vector<bool> holesIndicesHash;
 
 		// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
 		glm::dvec3 lastToFirstPoint = profile.curve.points.front() - profile.curve.points.back();
@@ -589,11 +588,31 @@ namespace webifc::geometry
 			profile.curve.points.push_back(profile.curve.points.front());
 		}
 
+		size_t nofHolePoints = 0;
+		for (const auto &hole : profile.holes) {
+			nofHolePoints += hole.points.size();
+		};
+		std::vector<bool> holesIndicesHash(profile.curve.points.size() + nofHolePoints, false);
+		auto holesIndicesHashCursor = profile.curve.points.size();
+
+		// Reservation space for geometry
+		{
+			const auto currentSize = geom.vertexData.size();
+			const auto profilePointSize = profile.curve.points.size() * 6;
+			const auto holesPointSize = nofHolePoints * 6;
+			const auto addedPointsToProfile = (profile.curve.points.size() + nofHolePoints) * 6;
+			geom.vertexData.reserve(currentSize + profilePointSize + holesPointSize + addedPointsToProfile);
+		}
+
 		// build the caps
 		{
 			using Point = std::array<double, 2>;
 			int polygonCount = 1 + profile.holes.size(); // Main profile + holes
 			std::vector<std::vector<Point>> polygon(polygonCount);
+			for (size_t i = 0; i < polygonCount; i++) {
+				if (i == 0) { polygon[i].reserve(profile.curve.points.size()); }
+				else { polygon[i].reserve(profile.holes[i - 1].points.size()); }
+			}
 
 			glm::dvec3 normal = dir;
 
@@ -606,19 +625,13 @@ namespace webifc::geometry
 				polygon[0].push_back({pt.x, pt.y});
 			}
 
-			for (size_t i = 0; i < profile.curve.points.size(); i++)
-			{
-				holesIndicesHash.push_back(false);
-			}
-
 			for (size_t i = 0; i < profile.holes.size(); i++)
 			{
 				IfcCurve hole = profile.holes[i];
-				int pointCount = hole.points.size();
 
-				for (int j = 0; j < pointCount; j++)
+				for (int j = 0; j < hole.points.size(); j++)
 				{
-					holesIndicesHash.push_back(j == 0);
+					holesIndicesHash[holesIndicesHashCursor++] = j == 0;
 
 					glm::dvec2 pt = hole.points[j];
 					glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
@@ -630,6 +643,17 @@ namespace webifc::geometry
 			}
 
 			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
+
+			// Reservation space for faces
+			{
+				const auto currrentIndiciesSize = geom.indexData.size();
+				const auto nofIndices = indices.size() * 2;
+				const auto capIndicies = (profile.curve.points.size() - 1 - profile.holes.size()) * 6;
+				geom.indexData.reserve(currrentIndiciesSize + nofIndices + capIndicies);
+
+				const auto currentFaceSize = geom.planeData.size();
+				geom.planeData.reserve(currentFaceSize + (nofIndices + capIndicies) / 3);
+			}
 
 			if (indices.size() < 3)
 			{
@@ -715,13 +739,8 @@ namespace webifc::geometry
 			uint32_t tr = capSize + i - 0;
 
 			// this winding should be correct
-			geom.AddFace(geom.GetPoint(tl),
-						geom.GetPoint(br),
-						geom.GetPoint(bl));
-
-			geom.AddFace(geom.GetPoint(tl),
-						geom.GetPoint(tr),
-						geom.GetPoint(br));
+			geom.AddFace(tl, br, bl);
+			geom.AddFace(tl, tr, br);
 		}
 
 		return geom;
