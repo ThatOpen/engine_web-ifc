@@ -8,17 +8,10 @@
 #include <vector>
 #include <algorithm>
 #include <glm/glm.hpp>
+#include "../operations/geometryutils.h"
 #include "IfcCurve.h"
 namespace webifc::geometry
 {
-
-
-	inline	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
-	{
-		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
-	}
-
-	
 	glm::dvec2 IfcCurve::Get2d(size_t i) const 
 	{
 		const glm::dvec3 &ret = points.at(i);
@@ -33,7 +26,7 @@ namespace webifc::geometry
 	glm::dmat4 IfcCurve::getPlacementAtDistance(double length)
 	{
 		double totalDistance = 0;
-		glm::dvec3 pos;
+		glm::dvec3 pos = glm::dvec3(0, 0, 0);
 		glm::dvec3 vx = glm::dvec3(1, 0, 0);
 		glm::dvec3 vy = glm::dvec3(0, 1, 0);
 		glm::dvec3 vz = glm::dvec3(0, 0, 1);
@@ -43,8 +36,9 @@ namespace webifc::geometry
 			{
 				double distance = glm::distance(points[i], points[i + 1]);
 				totalDistance += distance;
-				if (totalDistance >= length)
+				if (totalDistance >= length || i == points.size() - 2)
 				{
+					// extrapolate from last 2 points if length is behind last point
 					double factor = (totalDistance - length) / distance;
 					pos = points[i] * factor + points[i + 1] * (1 - factor);
 					glm::dvec3 tan = points[i + 1] - points[i];
