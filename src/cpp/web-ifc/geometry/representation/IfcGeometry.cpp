@@ -14,71 +14,6 @@ namespace webifc::geometry {
             return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, toleranceScalarEquality));
         }
 
-        bool AABB::intersects(const AABB& other) const
-        {
-           double eps = EPS_BIG;
-           return (max.x + eps >= other.min.x && other.max.x + eps >= min.x &&
-                    max.y + eps >= other.min.y && other.max.y + eps >= min.y &&
-                    max.z + eps >= other.min.z && other.max.z + eps >= min.z);
-        }
-
-        bool AABB::contains(const Vec& pos) const
-        {
-            double eps = EPS_BIG;
-            return  pos.x + eps >= min.x && pos.x - eps <= max.x &&
-                    pos.y + eps >= min.y && pos.y - eps <= max.y &&
-                    pos.z + eps >= min.z && pos.z - eps <= max.z;
-        }
-
-        void AABB::merge(const AABB& other)
-        {
-            min = glm::min(min, other.min);
-            max = glm::max(max, other.max);
-        }
-
-        void AABB::merge(const glm::dvec3& other)
-        {
-            min = glm::min(min, other);
-            max = glm::max(max, other);
-        }
-
-        bool AABB::Intersect(const Vec& origin, const Vec& dir) const
-        {
-            // r.dir is unit direction vector of ray
-            Vec dirfrac;
-            dirfrac.x = 1.0 / dir.x;
-            dirfrac.y = 1.0 / dir.y;
-            dirfrac.z = 1.0 / dir.z;
-            // lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
-            // r.org is origin of ray
-            double t1 = (min.x - origin.x) * dirfrac.x;
-            double t2 = (max.x - origin.x) * dirfrac.x;
-            double t3 = (min.y - origin.y) * dirfrac.y;
-            double t4 = (max.y - origin.y) * dirfrac.y;
-            double t5 = (min.z - origin.z) * dirfrac.z;
-            double t6 = (max.z - origin.z) * dirfrac.z;
-
-            double tmin = std::max(std::max(std::min(t1, t2), std::min(t3, t4)), std::min(t5, t6));
-            double tmax = std::min(std::min(std::max(t1, t2), std::max(t3, t4)), std::max(t5, t6));
-
-            // if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
-            if (tmax < -EPS_BIG)
-            {
-                //t = tmax;
-                return false;
-            }
-
-            // if tmin > tmax, ray doesn't intersect AABB
-            if (tmin > tmax + EPS_BIG)
-            {
-                //t = tmax;
-                return false;
-            }
-
-            //t = tmin;
-            return true;
-        }
-
 		void Geometry::BuildFromVectors(std::vector<double>& d, std::vector<uint32_t>& i)
 		{
 			vertexData = d;
@@ -88,98 +23,16 @@ namespace webifc::geometry {
 			numFaces = indexData.size() / 3;
 		}
 
-		void Geometry::AddPoint(glm::dvec4& pt, glm::dvec3& n)
-		{
-			glm::dvec3 p = pt;
-			AddPoint(p, n);
-		}
-
-		AABB Geometry::GetAABB() const
-		{
-			AABB aabb;
-
-			for (uint32_t i = 0; i < numPoints; i++)
-			{
-				aabb.min = glm::min(aabb.min, GetPoint(i));
-				aabb.max = glm::max(aabb.max, GetPoint(i));
-			}
-
-			return aabb;
-		}
-
-		void Geometry::AddPoint(glm::dvec3& pt, glm::dvec3& n)
-		{
-			//vertexData.reserve((numPoints + 1) * VERTEX_FORMAT_SIZE_FLOATS);
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
-			vertexData.push_back(pt.x);
-			vertexData.push_back(pt.y);
-			vertexData.push_back(pt.z);
-
-			vertexData.push_back(n.x);
-			vertexData.push_back(n.y);
-			vertexData.push_back(n.z);
-
-			if (std::isnan(pt.x) || std::isnan(pt.y) || std::isnan(pt.z))
-			{
-				if (messages) { printf("NaN in geom!\n"); }
-			}
-
-			if (std::isnan(n.x) || std::isnan(n.y) || std::isnan(n.z))
-			{
-				if (messages) { printf("NaN in geom!\n"); }
-			}
-
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
-			//vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
-
-			numPoints += 1;
-		}
-
 		void Geometry::AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, uint32_t pId)
 		{
-			glm::dvec3 normal;
-
-			double area = fuzzybools::areaOfTriangle(a, b, c);
-//			if (!computeSafeNormal(a, b, c, normal, EPS_SMALL))
-			if (!computeSafeNormal(a, b, c, normal, toleranceAddFace))
-			{
-				// bail out, zero area triangle
-				if (messages) { printf("zero triangle, AddFace(vec, vec, vec)\n"); }
-				return;
-			}
-
-			AddPoint(a, normal);
-			AddPoint(b, normal);
-			AddPoint(c, normal);
-
-			AddFace(numPoints - 3, numPoints - 2, numPoints - 1, pId);
+			bimGeometry::Geometry::AddFace(a, b, c);
+			planeData.push_back(pId);
 		}
 
 		void Geometry::AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId)
 		{
-//			indexData.reserve((numFaces + 1) * 3);
-//			indexData[numFaces * 3 + 0] = a;
-//			indexData[numFaces * 3 + 1] = b;
-//			indexData[numFaces * 3 + 2] = c;
-			indexData.push_back(a);
-			indexData.push_back(b);
-			indexData.push_back(c);
+			bimGeometry::Geometry::AddFace(a, b, c);
 			planeData.push_back(pId);
-
-			double area = areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
-
-			glm::dvec3 normal;
-//			if (!computeSafeNormal(GetPoint(a), GetPoint(b), GetPoint(c), normal, EPS_SMALL))
-			if (!computeSafeNormal(GetPoint(a), GetPoint(b), GetPoint(c), normal, toleranceAddFace))
-			{
-				// bail out, zero area triangle
-				if (messages) { printf("zero triangle, AddFace(int, int, int)\n"); }
-			}
-
-			numFaces++;
 		}
 
 		size_t Geometry::AddPlane(const glm::dvec3 &normal, double d)
@@ -263,9 +116,10 @@ namespace webifc::geometry {
 		Face Geometry::GetFace(size_t index) const
 		{
 			Face f;
-			f.i0 = indexData[index * 3 + 0];
-			f.i1 = indexData[index * 3 + 1];
-			f.i2 = indexData[index * 3 + 2];
+			bimGeometry::Face nf = bimGeometry::Geometry::GetFace(index);
+			f.i0 = nf.i0;
+			f.i1 = nf.i1;
+			f.i2 = nf.i2;
 			f.pId = planeData[index]; 
 			return f;
 		}
@@ -290,15 +144,6 @@ namespace webifc::geometry {
 			aabb.center = (aabb.max + aabb.min) / 2.0;
 
 			return aabb;
-		}
-
-		glm::dvec3 Geometry::GetPoint(size_t index) const
-		{
-			return glm::dvec3(
-				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0],
-				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
-				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
-			);
 		}
 
 		void Geometry::GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const
@@ -495,6 +340,21 @@ namespace webifc::geometry {
 		return (uint32_t)(size_t)&fvertexData[0];
 	}
 
+    uint32_t IfcGeometry::GetVertexDataSize()
+	{
+		return (uint32_t)fvertexData.size();
+	}
+
+	uint32_t IfcGeometry::GetIndexData()
+	{
+		return (uint32_t)(size_t)&indexData[0];
+	}
+
+	uint32_t IfcGeometry::GetIndexDataSize()
+	{
+		return (uint32_t)indexData.size();
+	}
+
 	SweptDiskSolid IfcGeometry::GetSweptDiskSolid()
 	{
 		return sweptDiskSolid;
@@ -551,20 +411,4 @@ namespace webifc::geometry {
 			AddFace(a, b, c);
 		}
 	}
-
-	uint32_t IfcGeometry::GetVertexDataSize()
-	{
-		return (uint32_t)fvertexData.size();
-	}
-
-	uint32_t IfcGeometry::GetIndexData()
-	{
-		return (uint32_t)(size_t)&indexData[0];
-	}
-
-	uint32_t IfcGeometry::GetIndexDataSize()
-	{
-		return (uint32_t)indexData.size();
-	}
-
 }

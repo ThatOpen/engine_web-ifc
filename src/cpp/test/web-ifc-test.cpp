@@ -73,6 +73,31 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
         DumpAlignment(alignments, "V_ALIGN.obj", "H_ALIGN.obj");
     }
 
+    for (size_t i = 0; i < alignments.size(); i++)
+    {
+        webifc::geometry::IfcAlignment alignment = alignments[i];
+        std::vector<glm::dvec3>  pointsH;
+        std::vector<glm::dvec3>  pointsV;
+        for (size_t j = 0; j < alignment.Horizontal.curves.size(); j++)
+        {
+            for (size_t k = 0; k < alignment.Horizontal.curves[j].points.size(); k++)
+            {
+                pointsH.push_back(alignment.Horizontal.curves[j].points[k]);
+            }
+        }
+        for (size_t j = 0; j < alignment.Vertical.curves.size(); j++)
+        {
+            for (size_t k = 0; k < alignment.Vertical.curves[j].points.size(); k++)
+            {
+                pointsV.push_back(alignment.Vertical.curves[j].points[k]);
+            }
+        }
+        webifc::geometry::IfcCurve curve;
+        curve.points = bimGeometry::Convert2DAlignmentsTo3D(pointsH, pointsV);
+        alignments[i].Absolute.curves.push_back(curve);
+    }
+
+
     return alignments;
 }
 
@@ -275,17 +300,13 @@ std::vector<webifc::geometry::SweptDiskSolid> GetAllRebars(webifc::parsing::IfcL
 
     for (size_t i = 0; i < elements.size(); i++)
     {    
-        if(elements[i] == 145645)
+        auto mesh = geometryLoader.GetFlatMesh(elements[i]);
+
+        for (auto &geom : mesh.geometries)
         {
-            auto mesh = geometryLoader.GetFlatMesh(elements[i]);
-
-            for (auto &geom : mesh.geometries)
-            {
-                auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
-
-                reinforcingBars.push_back(flatGeom.sweptDiskSolid);
-                reinforcingBarsTransform.push_back(geom.transformation);
-            }
+            auto flatGeom = geometryLoader.GetGeometry(geom.geometryExpressID);
+            reinforcingBars.push_back(flatGeom.sweptDiskSolid);
+            reinforcingBarsTransform.push_back(geom.transformation);
         }
     }
 
@@ -437,8 +458,11 @@ int main()
 
     // return 0;
 
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/isolated.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/m3d.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/VEC-IFC-INST-totaal-20130726.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/F_MA_160_ALT3.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
 
     struct LoaderSettings
     {
@@ -477,10 +501,10 @@ int main()
 
     start = ms();
 
-    // SpecificLoadTest(loader, geometryLoader, 4553);
+    SpecificLoadTest(loader, geometryLoader, 211736);
     // auto meshes = LoadAllTest(loader, geometryLoader, -1);
-    auto rebars = GetAllRebars(loader, geometryLoader);
-    std::cout << GetLine(loader, 225) << std::endl;
+    // auto rebars = GetAllRebars(loader, geometryLoader);
+    // std::cout << GetLine(loader, 225) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;

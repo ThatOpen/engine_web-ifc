@@ -452,13 +452,19 @@ namespace webifc::io
 
         for (uint32_t ia = 0; ia < geom.size(); ia++)
         {
-            for (uint32_t ic = 0; ic < geom[ia].Vertical.curves.size(); ic++)
+            if(geom[ia].Vertical.curves.size() > 0)
             {
-                for (uint32_t ip = 0; ip < geom[ia].Vertical.curves[ic].points.size() - 1; ip++)
+                for (uint32_t ic = 0; ic < geom[ia].Vertical.curves.size(); ic++)
                 {
-                    obj << "l " << (idx) << " " << (idx + 1) << "\n";
-                    ;
-                    idx++;
+                    if(geom[ia].Vertical.curves[ic].points.size() > 0)
+                    {
+                        for (uint32_t ip = 0; ip < geom[ia].Vertical.curves[ic].points.size() - 1; ip++)
+                        {
+                            obj << "l " << (idx) << " " << (idx + 1) << "\n";
+                            ;
+                            idx++;
+                        }
+                    }
                 }
             }
         }
@@ -474,10 +480,13 @@ namespace webifc::io
         {
             for (uint32_t ic = 0; ic < geom[ia].Horizontal.curves.size(); ic++)
             {
-                for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size(); ip++)
+                if(geom[ia].Horizontal.curves[ic].points.size() > 0)
                 {
-                    glm::dvec3 t = glm::dvec4(geom[ia].Horizontal.curves[ic].points[ip].x, geom[ia].Horizontal.curves[ic].points[ip].y, 0, 1);
-                    obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+                    for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size(); ip++)
+                    {
+                        glm::dvec3 t = glm::dvec4(geom[ia].Horizontal.curves[ic].points[ip].x, geom[ia].Horizontal.curves[ic].points[ip].y, 0, 1);
+                        obj << "v " << t.x << " " << t.y << " " << t.z << "\n";
+                    }
                 }
             }
         }
@@ -488,11 +497,14 @@ namespace webifc::io
         {
             for (uint32_t ic = 0; ic < geom[ia].Horizontal.curves.size(); ic++)
             {
-                for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size() - 1; ip++)
+                if(geom[ia].Horizontal.curves[ic].points.size() > 0)
                 {
-                    obj << "l " << (idx) << " " << (idx + 1) << "\n";
-                    ;
-                    idx++;
+                    for (uint32_t ip = 0; ip < geom[ia].Horizontal.curves[ic].points.size() - 1; ip++)
+                    {
+                        obj << "l " << (idx) << " " << (idx + 1) << "\n";
+                        ;
+                        idx++;
+                    }
                 }
             }
         }

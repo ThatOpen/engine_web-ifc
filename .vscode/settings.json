@@ -109,7 +109,10 @@
     "__node_handle": "cpp",
     "__split_buffer": "cpp",
     "__threading_support": "cpp",
-    "__verbose_abort": "cpp"
+    "__verbose_abort": "cpp",
+    "coroutine": "cpp",
+    "expected": "cpp",
+    "source_location": "cpp"
   },
   "cmake.configureOnOpen": true,
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",

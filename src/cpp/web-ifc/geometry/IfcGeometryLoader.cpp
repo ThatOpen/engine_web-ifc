@@ -601,112 +601,30 @@ namespace webifc::geometry
         alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("RADIUS: " + std::to_string(StartRadiusOfCurvature));
+        alignmentCurve.userData.push_back("STARTRAD: " + std::to_string(ifcStartDirection));
+        alignmentCurve.userData.push_back("ENDRAD: " + std::to_string(ifcStartDirection + span));     
 
         break;
       }
       case 3: // CLOTHOID
-      {
-        bool inverse = false;
-        if (abs(StartRadiusOfCurvature) > abs(EndRadiusOfCurvature))
-        {
-          inverse = true;
-        }
+      { 
         IfcCurve curve;
-        double A = sqrt(abs(EndRadiusOfCurvature - StartRadiusOfCurvature) * SegmentLength);
-        double Api = A * sqrt(CONST_PI);
-        double uMax = SegmentLength / Api;
+        
+        std::vector<glm::dvec2> points = bimGeometry::SolveClothoid(_circleSegments, StartPoint, ifcStartDirection, StartRadiusOfCurvature, EndRadiusOfCurvature, SegmentLength);
 
-        double s = A * uMax * sqrt(CONST_PI);
-        double radFin = (A * A * A) / (A * s);
-
-        double vSin = 0;
-        double vCos = 0;
-
-        glm::dvec2 DirectionX(
-            glm::cos(ifcStartDirection),
-            glm::sin(ifcStartDirection));
-        glm::dvec2 DirectionY(
-            -glm::sin(ifcStartDirection),
-            glm::cos(ifcStartDirection));
-
-        if (EndRadiusOfCurvature < 0 || StartRadiusOfCurvature < 0)
+        for (auto &pt2D : points)
         {
-          DirectionY.x = -DirectionY.x;
-          DirectionY.y = -DirectionY.y;
+          curve.Add(pt2D);
         }
 
-        if (inverse)
-        {
-          DirectionX.x = -DirectionX.x;
-          DirectionX.y = -DirectionX.y;
-        }
-
-        double def = 1000;
-        double dif = def / 10;
-        double count = 0;
-        double tram = uMax / def;
-        glm::dvec2 end(0, 0);
-        glm::dvec2 prev(0, 0);
-        glm::dvec2 endDir;
-        for (double c = 1; c < def + 1; c++)
-        {
-          prev = end;
-          end = StartPoint + Api * (DirectionX * vCos + DirectionY * vSin);
-          if (c == def || c == 1 || count >= dif)
-          {
-            curve.Add(end);
-            count = 0;
-          }
-          if (c == def)
-          {
-            endDir = prev - end;
-          }
-          double val = c * tram;
-          vSin += sin(CONST_PI * ((A * val * val) / (2 * abs(A)))) * tram;
-          vCos += cos(CONST_PI * ((A * val * val) / (2 * abs(A)))) * tram;
-          count++;
-        }
-
-        if (inverse)
-        {
-          DirectionX.x = -DirectionX.x;
-          DirectionX.y = -DirectionX.y;
-
-          glm::dvec2 newDirectionX(
-              endDir.x,
-              endDir.y);
-          glm::dvec2 newDirectionY(
-              -endDir.y,
-              endDir.x);
-
-          if (EndRadiusOfCurvature < 0 || StartRadiusOfCurvature < 0)
-          {
-            newDirectionY.x = -newDirectionY.x;
-            newDirectionY.y = -newDirectionY.y;
-          }
-
-          newDirectionX = glm::normalize(newDirectionX);
-          newDirectionY = glm::normalize(newDirectionY);
-
-          for (uint32_t i = 0; i < curve.points.size(); i++)
-          {
-            double xx = curve.points[i].x - end.x;
-            double yy = curve.points[i].y - end.y;
-            double dx = xx * newDirectionX.x + yy * newDirectionX.y;
-            double dy = xx * newDirectionY.x + yy * newDirectionY.y;
-            double newDx = StartPoint.x + DirectionX.x * dx + DirectionY.x * dy;
-            double newDy = StartPoint.y + DirectionX.y * dx + DirectionY.y * dy;
-            curve.points[i].x = newDx;
-            curve.points[i].y = newDy;
-          }
-        }
 
         alignmentCurve = curve;
         alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
-        alignmentCurve.userData.push_back("TYPE: " + str);
+        alignmentCurve.userData.push_back("TYPE: " + str);  
+        alignmentCurve.userData.push_back("STARTRAD: " + std::to_string(ifcStartDirection));
         alignmentCurve.userData.push_back("START RADIUS: " + std::to_string(StartRadiusOfCurvature));
         alignmentCurve.userData.push_back("END RADIUS: " + std::to_string(EndRadiusOfCurvature));
-        alignmentCurve.userData.push_back("A: " + std::to_string(A));
+        alignmentCurve.userData.push_back("SEGMENTLENGHT: " + std::to_string(SegmentLength));
 
         break;
       }
@@ -820,8 +738,8 @@ namespace webifc::geometry
         alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("RADIUS: " + std::to_string(RadiusOfCurvature));
-        alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
-        alignmentCurve.userData.push_back("END GRADIENT: " + std::to_string(EndGradient));
+        alignmentCurve.userData.push_back("STARTRAD: " + std::to_string(ifcStartDirection));      
+        alignmentCurve.userData.push_back("ENDRAD: " + std::to_string(ifcEndDirection));        
 
         break;
       }
@@ -831,17 +749,7 @@ namespace webifc::geometry
 
         glm::dvec2 StartPoint(StartDistAlong, StartHeight);
 
-        double R = HorizontalLength / (EndGradient - StartGradient);
-
-        std::vector<glm::dvec2> points;
-
-        for (double i = 0; i <= _circleSegments; i++)
-        {
-          double pr = i / _circleSegments;
-          double grad = ((HorizontalLength * pr) / R) + StartGradient;
-          double alt = (HorizontalLength * pr * (grad + StartGradient) * 0.5) + StartHeight;
-          points.push_back(glm::dvec2(HorizontalLength * pr, alt));
-        }
+        std::vector<glm::dvec2> points = bimGeometry::SolveParabola(_circleSegments, StartPoint, HorizontalLength, StartHeight, StartGradient, EndGradient);
 
         glm::dvec2 desp = glm::dvec2(StartPoint.x - points[0].x, StartPoint.y - points[0].y);
 
@@ -854,9 +762,9 @@ namespace webifc::geometry
         alignmentCurve.userData.push_back("ID: " + std::to_string(parentExpressID));
         alignmentCurve.userData.push_back("TYPE: " + str);
         alignmentCurve.userData.push_back("LENGHT: " + std::to_string(HorizontalLength));
+        alignmentCurve.userData.push_back("START HEIGHT: " + std::to_string(StartHeight));
         alignmentCurve.userData.push_back("START GRADIENT: " + std::to_string(StartGradient));
         alignmentCurve.userData.push_back("END GRADIENT: " + std::to_string(EndGradient));
-        alignmentCurve.userData.push_back("R: " + std::to_string(R));
 
         break;
       }

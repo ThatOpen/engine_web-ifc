@@ -1820,9 +1820,7 @@ namespace webifc::geometry
             }
             else if (surface.CylinderSurface.Active)
             {
-				// TriangulateCylindricalSurface(geometry, bounds3D, surface, _circleSegments);
-				// cylinder surface is not reliable enough, use simple triangulation
-				TriangulateBounds(geometry, bounds3D, expressID);
+                TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
             }
             else if (surface.RevolutionSurface.Active)
             {

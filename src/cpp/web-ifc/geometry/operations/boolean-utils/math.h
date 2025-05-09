@@ -97,9 +97,6 @@ namespace fuzzybools
 		glm::dvec3 v12(v2 - v1);
 		glm::dvec3 v13(v3 - v1);
 
-		v12 = glm::normalize(v12);
-		v13 = glm::normalize(v13);
-
 		glm::dvec3 norm = glm::cross(v12, v13);
 
 		return glm::normalize(norm);
