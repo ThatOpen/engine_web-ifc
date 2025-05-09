@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
+#include <format>
 #include <fast_float/fast_float.h>
 #include <spdlog/spdlog.h>
 #include "IfcLoader.h"
@@ -296,14 +297,13 @@ namespace webifc::parsing {
    
    bool IfcLoader::IsValidExpressID(const uint32_t expressID) const
    {  
-   	 if (expressID == 0 || expressID > _maxExpressId ) return false;
-	 if (_lines.find(expressID) == _lines.end()) return false;
+   	 if (expressID == 0 || expressID > _maxExpressId || !_lines.contains(expressID)) return false;
      else return true;
    }
    
    uint32_t IfcLoader::GetLineType(const uint32_t expressID) const
    { 
-      if (expressID == 0 || expressID > _maxExpressId || _lines.find(expressID) == _lines.end()) {
+      if (expressID == 0 || expressID > _maxExpressId || !_lines.contains(expressID)) {
         spdlog::error("[GetLineType()] Attempt to Access Invalid ExpressID {}", expressID);
         return 0;
       }
@@ -321,7 +321,7 @@ namespace webifc::parsing {
    
    void IfcLoader::MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const
    { 
-     if (_lines.find(expressID) == _lines.end()) return;
+     if (!_lines.contains(expressID)) return;
      _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
      ArgumentOffset(argumentIndex);
    }
@@ -346,7 +346,7 @@ namespace webifc::parsing {
 
    void IfcLoader::PushDouble(double input)
    {             
-      std::string numberString = std::to_string(input);
+      std::string numberString = std::format("{}", input);
       size_t eLoc = numberString.find_first_of('e');
       if (eLoc != std::string::npos) numberString[eLoc]='E';
       else if (std::floor(input) == input) numberString+='.';
@@ -367,7 +367,7 @@ namespace webifc::parsing {
    { 
       std::string_view str = GetStringArgument();
       double number_value;
-      fast_float::from_chars(str.data(), str.data() +str.size(), number_value);
+      fast_float::from_chars(str.data(), str.data() + str.size(), number_value);
       return number_value;
    }
 
@@ -429,7 +429,7 @@ namespace webifc::parsing {
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
   {
-    if (_lines.find(expressID) == _lines.end())
+    if (!_lines.contains(expressID))
   	{
       // create line object
   		IfcLine * line = new IfcLine();
@@ -510,11 +510,6 @@ namespace webifc::parsing {
        {
          depth--;
        }
-       else if (t == IfcTokenType::LINE_END)
-       {
-           spdlog::error("[GetSetArgument[{}]) unexpected LINE_END token", GetCurrentLineExpressID());
-           break;
-       }
        else
        {
          tapeOffsets.push_back(offset);
@@ -530,7 +525,7 @@ namespace webifc::parsing {
          }
          else
          {
-           spdlog::error("[GetSetArgument[{}]) unexpected token", GetCurrentLineExpressID());
+           spdlog::error("[GetSetArgument[]) unexpected token", GetCurrentLineExpressID());
          }
        }
 
@@ -659,7 +654,7 @@ namespace webifc::parsing {
    uint32_t IfcLoader::GetNoLineArguments(uint32_t expressID) const
    {
 
-      if (_lines.find(expressID) == _lines.end()) return 0;
+      if (!_lines.contains(expressID)) return 0;
       _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
       _tokenStream->Read<char>();
       _tokenStream->Read<uint32_t>();
@@ -702,7 +697,7 @@ namespace webifc::parsing {
    
    void IfcLoader::MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const
    {
-    if (_lines.find(expressID) != _lines.end()) {
+    if (_lines.contains(expressID)) {
       _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
    	  ArgumentOffset(argumentIndex);
     }
@@ -737,7 +732,7 @@ namespace webifc::parsing {
 
     uint32_t IfcLoader::GetNextExpressID(uint32_t expressId) const {
       uint32_t currentId = expressId+1;
-      while(_lines.find(currentId) == _lines.end()) currentId++;
+      while(!_lines.contains(currentId)) currentId++;
       return currentId;
     }
 

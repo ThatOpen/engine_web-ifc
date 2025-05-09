@@ -6,7 +6,7 @@
 #include "IfcGeometryLoader.h"
 #include "operations/curve-utils.h"
 #include "operations/geometryutils.h"
-#if defined(DEBUG_DUMP_SVG) || defined(_DEBUG)
+#ifdef DEBUG_DUMP_SVG
 #include "../../test/io_helpers.h"
 #endif
 
@@ -167,48 +167,36 @@ namespace webifc::geometry
     {
     case schema::IFCSECTIONEDSOLIDHORIZONTAL:
     {
-		// IfcSectionedSolidHorizontal -------------------------------------------
-		//		IfcCurve									Directrix;
-		//		std::vector<IfcProfileDef>					CrossSections;
-		//		std::vector<IfcAxis2PlacementLinear>		CrossSectionPositions;
-
       _loader.MoveToArgumentOffset(expressID, 0);
       auto curveId = _loader.GetRefArgument();
 
-      // CrossSections
+      // faces
       _loader.MoveToArgumentOffset(expressID, 1);
-      auto CrossSections = _loader.GetSetArgument();
+      auto faces = _loader.GetSetArgument();
 
       // linear position
       _loader.MoveToArgumentOffset(expressID, 2);
-      auto CrossSectionPositions = _loader.GetSetArgument();
+      auto linearPositions = _loader.GetSetArgument();
 
       IfcCurve curve = GetCurve(curveId, 3);
 
       std::vector<IfcProfile> profiles;
       std::vector<IfcCurve> curves;
-      std::vector<uint32_t> CrossSectionExpressIds;
+      std::vector<uint32_t> expressIds;
 
       std::vector<glm::dmat4> transform;
-      for (auto &CrossSectionPositionTapeOffset : CrossSectionPositions)
+      for (auto &linearPosition : linearPositions)
       {
-        auto CrossSectionPositionID = _loader.GetRefArgument(CrossSectionPositionTapeOffset);
-        glm::dmat4 linearPlacement = GetLocalPlacement(CrossSectionPositionID) * scale;
+        auto expressID = _loader.GetRefArgument(linearPosition);
+        glm::dmat4 linearPlacement = GetLocalPlacement(expressID) * scale;
         transform.push_back(linearPlacement);
       }
 
-	  if (transform.size() < CrossSections.size())
-	  {
-		  // if there are more cross sections than positions, ignore the extra cross sections
-		  CrossSections.resize(transform.size());
-	  }
-
       uint32_t id = 0;
-      for (auto &face : CrossSections)
+      for (auto &face : faces)
       {
-        auto CrossSectionExpressID = _loader.GetRefArgument(face);
-        IfcProfile profile = GetProfile(CrossSectionExpressID);
-		// the profile normal agrees with the tangent of the Directrix, the profile X axis is oriented perpendicularly to the left of the Directrix
+        auto expressID = _loader.GetRefArgument(face);
+        IfcProfile profile = GetProfile(expressID);
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
           glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
@@ -216,12 +204,12 @@ namespace webifc::geometry
         }
         profiles.push_back(profile);
         curves.push_back(profile.curve);
-		CrossSectionExpressIds.push_back(CrossSectionExpressID);
+        expressIds.push_back(expressID);
         id++;
       }
 
       sections.curves = curves;
-      sections.expressID = CrossSectionExpressIds;
+      sections.expressID = expressIds;
 
       return sections;
 
@@ -347,9 +335,9 @@ namespace webifc::geometry
       }
 
      
-      if (_relNests.count(expressID) == 1)
+      if (_relAggregates.count(expressID) == 1)
       {
-        auto &relAgg = _relNests.at(expressID);
+        auto &relAgg = _relAggregates.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
@@ -383,9 +371,9 @@ namespace webifc::geometry
         transform_t = GetLocalPlacement(localPlacement);
       }
 
-      if (_relNests.count(expressID) == 1)
+      if (_relAggregates.count(expressID) == 1)
       {
-        auto &relAgg = _relNests.at(expressID);
+        auto &relAgg = _relAggregates.at(expressID);
         for (auto expressID : relAgg)
         {
           alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -1942,19 +1930,9 @@ namespace webifc::geometry
       }
       case schema::IFCGRADIENTCURVE:
       {
-		  // IfcGradientCurve --------------------------------------------------------
-		  //	std::vector<IfcSegment>				Segments;
-		  //	IfcLogical							SelfIntersect;
-		  //	IfcBoundedCurve						BaseCurve;
-		  //	IfcPlacement						EndPoint;				//optional
-
-		  // IfcGradientCurve: 3D curve, based on its 2D projection (BaseCurve) and a height defined by its gradient 
-		  // segments which can be derived from the segment start height, its placement and 
-		  // the ParentCurve instance and the type of the ParentCurve
-
         _loader.MoveToArgumentOffset(expressID, 0);
         auto tokens = _loader.GetSetArgument();
-        auto SelfIntersect = _loader.GetStringArgument();
+        auto u = _loader.GetStringArgument();
         auto masterCurveID = _loader.GetRefArgument();
         curve = GetCurve(masterCurveID, 3, false);
 
@@ -1972,21 +1950,14 @@ namespace webifc::geometry
       }
       case schema::IFCCURVESEGMENT:
       {
-		  // IfcCurveSegment ---------------------------------------------
-		  //	IfcTransitionCode							Transition;
-		  //	IfcPlacement								Placement;
-		  //	IfcCurveMeasureSelect						SegmentStart;
-		  //	IfcCurveMeasureSelect						SegmentLength;
-		  //	IfcCurve									ParentCurve;
-
         _loader.MoveToArgumentOffset(expressID, 0);
         auto type = _loader.GetStringArgument();
         _loader.MoveToArgumentOffset(expressID, 1);
         auto placementID = _loader.GetRefArgument();
         _loader.MoveToArgumentOffset(expressID, 2);
-        double SegmentStart = ReadCurveMeasureSelect();
+        double SegmentStart = ReadLenghtMeasure();
         _loader.MoveToArgumentOffset(expressID, 4);
-        double SegmentEnd = ReadCurveMeasureSelect();
+        double SegmentEnd = ReadLenghtMeasure();
         _loader.MoveToArgumentOffset(expressID, 6);
         auto curveID = _loader.GetRefArgument();
 
@@ -1995,7 +1966,6 @@ namespace webifc::geometry
         trim.end.param = SegmentEnd;
         trim.start.hasParam = true;
         trim.end.hasParam = true;
-		trim.exist = true;
         ComputeCurve(curveID, curve, 3, false, -1, -1, trim);
 
         glm::dmat3 placement = GetAxis2Placement2D(placementID);
@@ -2006,212 +1976,6 @@ namespace webifc::geometry
         }
         break;
       }
-	  case schema::IFCPOLYNOMIALCURVE:
-	  {
-		  // IfcPolynomialCurve -----------------------------------------------------------
-		  //		IfcPlacement								Position;
-		  //		std::vector<IfcReal>						CoefficientsX;			//optional
-		  //		std::vector<IfcReal>						CoefficientsY;			//optional
-		  //		std::vector<IfcReal>						CoefficientsZ;			//optional
-
-		  // #452417=IFCPOLYNOMIALCURVE(#452416,(0.0,1.0),(0.0,-0.0249887896744,0.0031250),$);
-		  _loader.MoveToArgumentOffset(expressID, 0);
-		  auto placementID = _loader.GetRefArgument();
-		  glm::dmat3 placement = GetAxis2Placement2D(placementID);
-
-		  //auto type = _loader.GetStringArgument();
-		  _loader.MoveToArgumentOffset(expressID, 1);
-		  
-
-		  // Read coefficients for X, Y, and Z
-		  std::vector<double> CoefficientsX, CoefficientsY, CoefficientsZ;
-
-		  auto ReadCoefficients = [&](size_t offset, std::vector<double>& coefficients) {
-			  _loader.MoveToArgumentOffset(expressID, offset);
-			  auto tt = _loader.GetTokenType();
-			  if ( tt == parsing::SET_BEGIN) {
-				  for (size_t ii = 0; ii < 100; ++ii) {
-					  tt = _loader.GetTokenType(); // Move to next token
-					  if (tt != parsing::IfcTokenType::REAL) {
-						  break;
-					  }
-					  _loader.StepBack();
-					  coefficients.emplace_back(_loader.GetDoubleArgument());
-				  }
-			  }
-			  };
-
-		  ReadCoefficients(1, CoefficientsX);
-		  ReadCoefficients(2, CoefficientsY);
-		  ReadCoefficients(3, CoefficientsZ);
-
-		  
-		  std::vector<glm::dvec3> points;
-		  double tMin = 0.0, tMax = 1.0; // Define evaluation range
-		  size_t numPoints = 6; // Number of samples for curve resolution
-
-		  for (size_t i = 0; i <= numPoints; ++i) {
-			  double t = tMin + (tMax - tMin) * (static_cast<double>(i) / numPoints);
-			  double x = 0.0, y = 0.0, z = 0.0;
-
-			  for (size_t j = 0; j < CoefficientsX.size(); ++j)
-				  x += CoefficientsX[j] * std::pow(t, j);
-
-			  for (size_t j = 0; j < CoefficientsY.size(); ++j)
-				  y += CoefficientsY[j] * std::pow(t, j);
-
-			  for (size_t j = 0; j < CoefficientsZ.size(); ++j)
-				  z += CoefficientsZ[j] * std::pow(t, j);
-
-			  points.emplace_back(x, y, z);
-		  }
-
-		  // Apply placement transformation
-		  for (auto& pt : points) {
-			  glm::dvec3 transformed = placement * pt;
-			  curve.points.push_back(glm::dvec3(transformed));
-		  }
-		  break;
-	  }
-	  case schema::IFCCLOTHOID:
-	  {
-		  // IfcClothoid ----------------------------------------------------
-		  //		IfcAxis2Placement						Position;
-		  //		IfcLengthMeasure						ClothoidConstant;
-
-		  _loader.MoveToArgumentOffset(expressID, 0);
-		  auto positionID = _loader.GetRefArgument();
-		  glm::dmat3 placement = GetAxis2Placement2D(positionID);
-
-		  _loader.MoveToArgumentOffset(expressID, 1);
-		  double ClothoidConstantA = ReadCurveMeasureSelect();
-
-		  //#113=IFCCARTESIANPOINT((0.0,0.0));
-		  //#114=IFCDIRECTION((1.0,0.0));
-		  //#115=IFCAXIS2PLACEMENT2D(#113,#114);
-		  //#116=IFCCLOTHOID(#115,-120.0);
-		  //#117=IFCCURVESEGMENT(.CONTSAMEGRADIENTSAMECURVATURE.,#112,IFCPARAMETERVALUE(-82.285),IFCPARAMETERVALUE(82.285),#116);
-
-		  double startParam = 0;
-		  double endParam = 1.0;
-		  if (trim.exist)
-		  {
-			  if (trim.start.hasParam && trim.end.hasParam)
-			  {
-				  startParam = trim.start.param;  // e.g., 0
-				  endParam = trim.end.param;        // e.g., 28
-			  }
-		  }
-
-		  std::vector<glm::dvec3> clothoidPoints;
-		  if (curve.points.size() > 1)
-		  {
-			  // Determine the last two points (possibly using arcSegments if available)
-			  glm::dvec3 lastPoint2 = curve.points[curve.points.size() - 2];
-			  glm::dvec3 lastPoint1 = curve.points[curve.points.size() - 1];
-			  if (curve.arcSegments.size() > 1)
-			  {
-				  uint32_t lastPointIndex2 = curve.arcSegments[curve.arcSegments.size() - 2];
-				  uint32_t lastPointIndex1 = curve.arcSegments[curve.arcSegments.size() - 1];
-				  if (lastPointIndex2 < curve.points.size() && lastPointIndex1 < curve.points.size())
-				  {
-					  lastPoint1 = curve.points[lastPointIndex1];
-					  lastPoint2 = curve.points[lastPointIndex2];
-				  }
-			  }
-
-			  // Compute the local basis: tangent and a perpendicular 'normal'
-			  glm::dvec3 tangent = glm::normalize(lastPoint1 - lastPoint2);
-			  glm::dvec3 up(0.0, 0.0, 1.0);
-			  if (std::abs(glm::dot(tangent, up)) > 0.999)
-				  up = glm::dvec3(1.0, 0.0, 0.0);
-			  glm::dvec3 normal = glm::normalize(glm::cross(tangent, up));
-
-			  // Number of segments (10 segments means 11 points)
-			  const uint32_t numPoints = 10;
-			  clothoidPoints.resize(numPoints + 1);
-
-			  // Our target arc length for the clothoid
-			  double desiredLength = endParam - startParam;
-
-			  // Lambda to compute total polyline length for a given scale factor.
-			  auto computeLength = [&](double scaleStep) -> double {
-				  double length = 0.0;
-				  glm::dvec3 prevPoint = lastPoint1;
-				  for (uint32_t i = 0; i <= numPoints; ++i)
-				  {
-					  double u = static_cast<double>(i) / static_cast<double>(numPoints);
-					  // Adjust parameter s by the current scale factor.
-					  double s = startParam + u * (endParam - startParam) * scaleStep;
-					  // Normalize s with the clothoid constant A.
-					  double sScaled = s / ClothoidConstantA;
-					  // Series approximations for the Fresnel integrals, scaled by A.
-					  double C = ClothoidConstantA * (sScaled - (std::pow(sScaled, 5) / 40.0));
-					  double S = ClothoidConstantA * ((std::pow(sScaled, 3) / 3.0) - (std::pow(sScaled, 7) / 56.0));
-					  glm::dvec3 currPoint = lastPoint1 + tangent * C + normal * S;
-					  if (i > 0)
-					  {
-						  length += glm::distance(currPoint, prevPoint);
-					  }
-					  prevPoint = currPoint;
-				  }
-				  return length;
-				  };
-
-			  // Find an initial bracket for scaleStep.
-			  double scaleLow = 0.0;
-			  double scaleHigh = 1.0;
-			  double L = computeLength(scaleHigh);
-			  while (L < desiredLength)
-			  {
-				  scaleHigh *= 2.0;
-				  L = computeLength(scaleHigh);
-				  // Safety break to avoid infinite loop.
-				  if (scaleHigh > 1e6) break;
-			  }
-
-			  // Now perform a binary search for the correct scaleStep that gives us the desired length.
-			  double tol = 0.001;
-			  double scaleStep = scaleHigh;
-			  for (int iter = 0; iter < 100; ++iter)
-			  {
-				  scaleStep = (scaleLow + scaleHigh) * 0.5;
-				  L = computeLength(scaleStep);
-				  if (std::abs(L - desiredLength) < tol)
-					  break;
-				  if (L < desiredLength)
-					  scaleLow = scaleStep;
-				  else
-					  scaleHigh = scaleStep;
-			  }
-
-			  // With the computed scaleStep, generate the final clothoid points.
-			  for (uint32_t i = 0; i <= numPoints; ++i)
-			  {
-				  double u = static_cast<double>(i) / static_cast<double>(numPoints);
-				  double s = startParam + u * (endParam - startParam) * scaleStep;
-				  double sScaled = s / ClothoidConstantA;
-				  double C = ClothoidConstantA * (sScaled - (std::pow(sScaled, 5) / 40.0));
-				  double S = ClothoidConstantA * ((std::pow(sScaled, 3) / 3.0) - (std::pow(sScaled, 7) / 56.0));
-				  clothoidPoints[i] = lastPoint1 + tangent * C + normal * S;
-			  }
-
-			  // Apply any placement transformation if needed.
-			  for (size_t j = 0; j < clothoidPoints.size(); j++)
-			  {
-				  clothoidPoints[j] = placement * clothoidPoints[j];
-			  }
-
-			  // Append the generated clothoid points to the curve.
-			  curve.points.insert(curve.points.end(), clothoidPoints.begin(), clothoidPoints.end());
-		  }
-		  
-		  #ifdef _DEBUG
-		  webifc::io::DumpSVGCurveXY(clothoidPoints, "curve_clothoid.html");
-		  webifc::io::DumpSVGCurveXY(curve.points, "curve.html");
-		  #endif
-		  break;
-	  }
       case schema::IFCBSPLINECURVE:
       {
         bool condition = sameSense == 0;
@@ -2942,7 +2706,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       {
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
-          profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i].x, profile.curve.points[i].y, 0);
+          profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i].x, profile.curve.points[i].y, 1);
         }
       }
       else
@@ -2951,7 +2715,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
         {
           for (uint32_t i = 0; i < profile.profiles[j].curve.points.size(); i++)
           {
-            profile.profiles[j].curve.points[i] = transformation * glm::dvec3(profile.profiles[j].curve.points[i].x, profile.profiles[j].curve.points[i].y, 0);
+            profile.profiles[j].curve.points[i] = transformation * glm::dvec3(profile.profiles[j].curve.points[i].x, profile.profiles[j].curve.points[i].y, 1);
           }
         }
       }
@@ -3244,12 +3008,10 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     return curve;
   }
 
-  glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID) const
+  glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID, glm::dvec3 vector) const
   {
-	auto itFind = _expressIDToPlacement.find(expressID);
-	if (itFind != _expressIDToPlacement.end())
-	{
-	  return itFind->second;
+    if(_expressIDToPlacement.contains(expressID)) {
+      return _expressIDToPlacement[expressID];
     }
     else
     {
@@ -3261,7 +3023,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       {
         _loader.MoveToArgumentOffset(expressID, 0);
         IfcCurve curve;
-        auto lnSegment = 0.0;
+        auto lnSegment = 0;
 
         if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
         {
@@ -3486,48 +3248,15 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       }
       case schema::IFCAXIS2PLACEMENTLINEAR:
       {
-        glm::dvec3 xAxis = glm::dvec3(1, 0, 0);
-        glm::dvec3 zAxis = glm::dvec3(0, 0, 1);
-		glm::dvec3 Location = glm::dvec3(0, 0, 0);
+        glm::dvec3 vector = glm::dvec3(0, 0, 1);
         _loader.MoveToArgumentOffset(expressID, 0);
-        uint32_t posID = _loader.GetRefArgument();   // Location : IfcPoint;
-		uint32_t LocationType = _loader.GetLineType(posID);
-		if (LocationType == schema::IFCPOINTBYDISTANCEEXPRESSION)
-		{
-			glm::dmat4 LocationMatrix = GetLocalPlacement(posID);
-			_expressIDToPlacement[expressID] = LocationMatrix;
-			return LocationMatrix;
-		}
-		else
-		{
-			Location = GetCartesianPoint3D(posID);
-		}
-		
-		_loader.MoveToArgumentOffset(expressID, 1);
-		auto tokenTypeAxis = _loader.GetTokenType();
-        if (tokenTypeAxis == parsing::IfcTokenType::REF)
+        uint32_t posID = _loader.GetRefArgument();
+        if (_loader.GetRefArgument() == parsing::IfcTokenType::REF)
         {
-			// Axis : OPTIONAL IfcDirection;    The exact direction of the local Z Axis.
           _loader.StepBack();
-		  zAxis = GetCartesianPoint3D(_loader.GetRefArgument());
+          glm::dvec3 vector = GetCartesianPoint3D(_loader.GetRefArgument());
         }
-        
-		auto tokenTypeRefDirection = _loader.GetTokenType();
-		if (tokenTypeRefDirection == parsing::IfcTokenType::REF)
-		{
-			// tokenTypeRefDirection : OPTIONAL IfcDirection;    The direction used to determine the direction of the local X Axis.
-			_loader.StepBack();
-			xAxis = GetCartesianPoint3D(_loader.GetRefArgument());
-		}
-
-		glm::dvec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
-		xAxis = glm::normalize(glm::cross(zAxis, yAxis));
-
-		glm::dmat4 result = glm::dmat4(
-			glm::dvec4(xAxis, 0),
-			glm::dvec4(yAxis, 0),
-			glm::dvec4(zAxis, 0),
-			glm::dvec4(Location, 1));
+        glm::dmat4 result = GetLocalPlacement(posID, vector);
 
         _expressIDToPlacement[expressID] = result;
         return result;
@@ -3894,47 +3623,18 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
   double IfcGeometryLoader::ReadLenghtMeasure() const
   {
-	  parsing::IfcTokenType t = _loader.GetTokenType();
-	  if (t == parsing::IfcTokenType::LABEL)
-	  {
-		  _loader.StepBack();
-		  std::string_view selectType = _loader.GetStringArgument();
-		  if (selectType == "IFCNONNEGATIVELENGTHMEASURE" || selectType == "IFCLENGTHMEASURE")
-		  {
-			  _loader.GetTokenType();
-			  return _loader.GetDoubleArgument();
-		  }
-	  }
-	  return 0.0;
+    parsing::IfcTokenType t = _loader.GetTokenType();
+    if (t == parsing::IfcTokenType::LABEL)
+    {
+      _loader.StepBack();
+      if (_loader.GetStringArgument() == "IFCNONNEGATIVELENGTHMEASURE")
+      {
+        _loader.GetTokenType();
+        return _loader.GetDoubleArgument();
+      }
+    }
   }
 
-  double IfcGeometryLoader::ReadCurveMeasureSelect() const
-  {
-	  // TYPE IfcCurveMeasureSelect = SELECT(IfcLengthMeasure, IfcParameterValue);
-	  // TYPE IfcParameterValue = REAL;
-
-	  parsing::IfcTokenType t = _loader.GetTokenType();
-	  if (t == parsing::IfcTokenType::LABEL)
-	  {
-		  _loader.StepBack();
-		  std::string_view selectType = _loader.GetStringArgument();
-		  if (selectType == "IFCLENGTHMEASURE" || selectType == "IFCPARAMETERVALUE")
-		  {
-			  // argument with SELELCT label: #116=IFCCLOTHOID(#115,IFCPARAMETERVALUE(-120.0));
-			  _loader.GetTokenType();
-			  return _loader.GetDoubleArgument();
-		  }
-	  }
-	  else if (t == parsing::IfcTokenType::REAL)
-	  {
-		  // argument without SELELCT label: #116=IFCCLOTHOID(#115,-120.0);
-		  _loader.StepBack();
-		  double value = _loader.GetDoubleArgument();
-		  return value;
-	  }
-	  return 0.0;
-  }
-  
   std::vector<IfcSegmentIndexSelect> IfcGeometryLoader::ReadCurveIndices() const
   {
     std::vector<IfcSegmentIndexSelect> result;

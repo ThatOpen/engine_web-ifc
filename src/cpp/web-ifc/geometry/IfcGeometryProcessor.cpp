@@ -207,10 +207,6 @@ namespace webifc::geometry
                             {
                                 joinedVoidGeoms.push_back(geom);
                             }
-                            else if (geom.isPolygon)
-                            {
-                                joinedVoidGeoms.push_back(geom);
-                            }
                             else
                             {
                                 std::vector<IfcGeometry> geomVector = {geom};  // Wrap 'geom' in a vector
@@ -293,21 +289,6 @@ namespace webifc::geometry
                 {
                     resultMesh.hasColor = false;
                 }
-
-                // Sometimes, a geometric item like IFCEXTRUDEDAREASOLID has a color assigned.
-                // With flatten() and BoolProcess, that color gets lost. Restore it here:
-                if (!mesh.hasGeometry && mesh.children.size() > 0)
-                {
-                    auto geometricItem = mesh.children.front();
-                    std::optional<glm::dvec4> geometricItemColor = geometricItem.GetColor();
-                    if (geometricItemColor.has_value())
-                    {
-                        glm::dvec4 colorValue = geometricItemColor.value();
-                        resultMesh.color = colorValue;
-                        resultMesh.hasColor = true;
-                    }
-                }
-
 
                 return resultMesh;
             }
@@ -1129,9 +1110,7 @@ namespace webifc::geometry
 			case schema::IFCCIRCLE:
             case schema::IFCPOLYLINE:
             case schema::IFCINDEXEDPOLYCURVE:
-			case schema::IFCCOMPOSITECURVE:
             case schema::IFCTRIMMEDCURVE:
-			case schema::IFCGRADIENTCURVE:
 			{
 				auto lineProfileType = _loader.GetLineType(expressID);
 				IfcCurve curve = _geometryLoader.GetCurve(expressID, 3, false);

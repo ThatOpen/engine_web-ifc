@@ -62,8 +62,8 @@ void SaveModel(uint32_t modelID, emscripten::val callback)
     manager.GetIfcLoader(modelID)->SaveFile([&](char* src, size_t srcSize)
         {
             emscripten::val retVal = callback((uint32_t)src, srcSize);
-        }
-    , false);
+        }, false
+    );
 }
 
 int GetModelSize(uint32_t modelID) {

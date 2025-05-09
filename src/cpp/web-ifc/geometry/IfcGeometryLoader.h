@@ -29,7 +29,7 @@ namespace webifc::geometry
     void ResetCache();
     std::array<glm::dvec3,2> GetAxis1Placement(const uint32_t expressID) const;
     glm::dmat3 GetAxis2Placement2D(const uint32_t expressID) const;
-    glm::dmat4 GetLocalPlacement(const uint32_t expressID) const;
+    glm::dmat4 GetLocalPlacement(const uint32_t expressID, glm::dvec3 vector = glm::dvec3(1)) const;
     glm::dvec3 GetCartesianPoint3D(const uint32_t expressID) const;
     glm::dvec2 GetCartesianPoint2D(const uint32_t expressID) const;
     glm::dvec3 GetVector(const uint32_t expressID) const;
@@ -64,7 +64,6 @@ namespace webifc::geometry
     void ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool edge, int sameSense = -1, int trimSense = -1, IfcTrimmingArguments trim = {}) const;
     void convertAngleUnits(double &Degrees, double &Rad) const;
     double ReadLenghtMeasure() const;
-	double ReadCurveMeasureSelect() const;
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
     const webifc::parsing::IfcLoader &_loader;
     const webifc::schema::IfcSchemaManager &_schemaManager;

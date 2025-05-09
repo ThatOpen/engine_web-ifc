@@ -149,7 +149,7 @@ namespace webifc::geometry {
 		void Geometry::GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const
 		{
 			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
-			glm::dvec3 max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
+			glm::dvec3 max(DBL_MIN, DBL_MIN, DBL_MIN);
 
 			for (size_t i = 0; i < numPoints; i++)
 			{
@@ -269,46 +269,43 @@ namespace webifc::geometry {
 		glm::dvec3 center = normalizationCenter;
 		if (!normalized)
 		{	
-			if (numPoints > 0)
+			glm::dvec3 extents;
+			GetCenterExtents(center,extents);
+			for (size_t i = 0; i < vertexData.size(); i += 6)
 			{
-				glm::dvec3 extents;
-				GetCenterExtents(center, extents);
-				for (size_t i = 0; i < vertexData.size(); i += 6)
-				{
-					vertexData[i + 0] = vertexData[i + 0] - center.x;
-					vertexData[i + 1] = vertexData[i + 1] - center.y;
-					vertexData[i + 2] = vertexData[i + 2] - center.z;
-				}
-				for (size_t i = 0; i < sweptDiskSolid.axis.size(); i++)
-				{
-					for (size_t j = 0; j < sweptDiskSolid.axis[i].points.size(); j++)
-					{
-						sweptDiskSolid.axis[i].points[j].x -= center.x;
-						sweptDiskSolid.axis[i].points[j].y -= center.y;
-						sweptDiskSolid.axis[i].points[j].z -= center.z;
-					}
-				}
-
-				for (size_t i = 0; i < sweptDiskSolid.profiles.size(); i++)
-				{
-					for (size_t j = 0; j < sweptDiskSolid.profiles[i].curve.points.size(); j++)
-					{
-						sweptDiskSolid.profiles[i].curve.points[j].x -= center.x;
-						sweptDiskSolid.profiles[i].curve.points[j].y -= center.y;
-						sweptDiskSolid.profiles[i].curve.points[j].z -= center.z;
-					}
-					for (size_t j = 0; j < sweptDiskSolid.profiles[i].holes.size(); j++)
-					{
-						for (size_t k = 0; k < sweptDiskSolid.profiles[i].holes[j].points.size(); k++)
-						{
-							sweptDiskSolid.profiles[i].holes[j].points[k].x -= center.x;
-							sweptDiskSolid.profiles[i].holes[j].points[k].y -= center.y;
-							sweptDiskSolid.profiles[i].holes[j].points[k].z -= center.z;
-						}
-					}
-				}
-				normalizationCenter = center;
+				vertexData[i + 0] = vertexData[i + 0] - center.x;
+				vertexData[i + 1] = vertexData[i + 1] - center.y;
+				vertexData[i + 2] = vertexData[i + 2] - center.z;
 			}
+			for (size_t i = 0; i < sweptDiskSolid.axis.size(); i++)
+			{
+				for (size_t j = 0; j < sweptDiskSolid.axis[i].points.size(); j++)
+				{
+					sweptDiskSolid.axis[i].points[j].x -= center.x;
+					sweptDiskSolid.axis[i].points[j].y -= center.y;
+					sweptDiskSolid.axis[i].points[j].z -= center.z;
+				}
+			}
+			
+			for (size_t i = 0; i < sweptDiskSolid.profiles.size(); i++)
+			{
+				for (size_t j = 0; j < sweptDiskSolid.profiles[i].curve.points.size(); j++)
+				{
+					sweptDiskSolid.profiles[i].curve.points[j].x -= center.x;
+					sweptDiskSolid.profiles[i].curve.points[j].y -= center.y;
+					sweptDiskSolid.profiles[i].curve.points[j].z -= center.z;
+				}
+				for (size_t j = 0; j < sweptDiskSolid.profiles[i].holes.size(); j++)
+				{
+					for (size_t k = 0; k < sweptDiskSolid.profiles[i].holes[j].points.size(); k++)
+					{
+						sweptDiskSolid.profiles[i].holes[j].points[k].x -= center.x;
+						sweptDiskSolid.profiles[i].holes[j].points[k].y -= center.y;
+						sweptDiskSolid.profiles[i].holes[j].points[k].z -= center.z;
+					}
+				}
+			}
+			normalizationCenter = center;
 			normalized = true;
 		}
 		glm::dmat4 resultMat = glm::dmat4(1.0);

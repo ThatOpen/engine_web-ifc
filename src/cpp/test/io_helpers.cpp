@@ -95,15 +95,6 @@ namespace webifc::io
         }
         writeFile(filename, makeSVGLines(points2D, indices));
     }
-	void DumpSVGCurveXY(std::vector<glm::dvec3> points, std::string filename, std::vector<uint32_t> indices)
-	{
-		std::vector<glm::dvec2> points2D;
-		for (auto &pt : points)
-		{
-			points2D.emplace_back(pt.x, pt.y);
-		}
-		writeFile(filename, makeSVGLines(points2D, indices));
-	}
 
     void svgMakeLine(glm::dvec2 a, glm::dvec2 b, std::stringstream &svg, std::string col)
     {
