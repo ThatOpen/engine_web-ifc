@@ -162,7 +162,9 @@ export interface AABB {
 
 export interface Extrusion {
     GetBuffers(): Buffers;
-    SetValues(profile_: Array<number>, dir_: Array<number>, len_: number): void;
+    SetValues(profile_: Array<number>, dir_: Array<number>, len_: number, cuttingPlaneNormal_: Array<number>, cuttingPlanePos_: Array<number>, cap_: boolean): void;
+    SetHoles(profile_: Array<number>): void;
+    ClearHoles(): void;
 }
 
 export interface Sweep {
@@ -175,6 +177,19 @@ export interface Sweep {
         initialNormal?: Array<number>,
         rotate90?: boolean,
         optimize?: boolean
+      ): void;
+}
+
+export interface CircularSweep {
+    GetBuffers(): Buffers;
+    SetValues( 
+        scaling: number,
+        closed: boolean,
+        profile: Array<number>,
+        radius: number,
+        directrix: Array<number>,
+        initialNormal?: Array<number>,
+        rotate90?: boolean,
       ): void;
 }
 
@@ -521,6 +536,11 @@ export class IfcAPI {
     CreateSweep()
     {
         return this.wasmModule.CreateSweep();
+    }
+
+    CreateCircularSweep()
+    {
+        return this.wasmModule.CreateCircularSweep();
     }
 
     CreateRevolution()
