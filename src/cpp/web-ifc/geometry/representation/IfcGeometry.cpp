@@ -149,7 +149,7 @@ namespace webifc::geometry {
 		void Geometry::GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const
 		{
 			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
-			glm::dvec3 max(DBL_MIN, DBL_MIN, DBL_MIN);
+			glm::dvec3 max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
 
 			for (size_t i = 0; i < numPoints; i++)
 			{
