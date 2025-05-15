@@ -1483,6 +1483,7 @@ electron-to-chromium@^1.5.73:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.153.tgz"
   integrity sha512-4bwluTFwjXZ0/ei1qDpHDGzVveuBfx4wiZ9VQ8j/30+T2JxSF2TfZ00d1X+wNMeDyUdZXgLkJFbarJdAMtd+/w==
 
+
 emittery@^0.13.1:
   version "0.13.1"
   resolved "https://registry.npmjs.org/emittery/-/emittery-0.13.1.tgz"

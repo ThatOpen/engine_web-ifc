@@ -60,6 +60,7 @@ namespace webifc::parsing
         void MoveTo(const size_t pos);
         size_t GetReadOffset();
         size_t GetTotalSize();
+        IfcTokenStream * Clone();
 
       private:
         void checkMemory();
@@ -82,6 +83,7 @@ namespace webifc::parsing
             bool IsAtEnd();
             char Get();
             void Clear();
+            IfcFileStream * Clone();
           private:
             void load();
             std::function<uint32_t(char *, size_t, size_t)> _dataSource;
@@ -95,7 +97,7 @@ namespace webifc::parsing
         class IfcTokenChunk
         {
             public:
-            	IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcFileStream *_fileStream);
+            	IfcTokenChunk(const size_t chunkSize, const size_t startRef, const size_t fileStartRef, IfcTokenStream::IfcFileStream *_fileStream);
               bool Clear(bool force);
               bool Clear();
               bool IsLoaded();
@@ -125,6 +127,7 @@ namespace webifc::parsing
             	uint8_t *_chunkData;
               IfcFileStream *_fileStream;
         };
+        IfcTokenStream(size_t activeChunks, uint64_t maxChunks, std::vector<IfcTokenChunk> &chunks,IfcFileStream * fileStream);
         std::vector<IfcTokenChunk> _chunks;
         IfcTokenChunk * _cChunk;
         IfcFileStream * _fileStream;
