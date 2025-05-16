@@ -1635,7 +1635,7 @@ namespace webifc::geometry
 
     IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
     {
-        return boolEngine.BoolProcess(firstGeoms, secondGeoms, op);
+        return _boolEngine.BoolProcess(firstGeoms, secondGeoms, op);
     }
 
     std::vector<uint32_t> IfcGeometryProcessor::Read2DArrayOfThreeIndices()
@@ -1974,5 +1974,15 @@ namespace webifc::geometry
         fuzzybools::Geometry secondEngGeom = convertToEngine(secondOperator);
         return convertToWebIfc(fuzzybools::Subtract(firstEngGeom, secondEngGeom));
     }
+
+    IfcGeometryProcessor * IfcGeometryProcessor::Clone(const webifc::parsing::IfcLoader &newLoader) const {
+        IfcGeometryProcessor *newProcessor = new IfcGeometryProcessor(_settings,_expressIDToGeometry,*_geometryLoader.Clone(newLoader),_transformation, newLoader, _boolEngine, _schemaManager, _isCoordinated, _expressIdCyl, _expressIdRect, _coordinationMatrix, _predefinedCylinder, _predefinedCube);
+        return newProcessor;
+    }
+
+    IfcGeometryProcessor::IfcGeometryProcessor(const IfcGeometrySettings &settings,std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry,const IfcGeometryLoader &geometryLoader,glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube)
+    : _settings(settings), _expressIDToGeometry(expressIDToGeometry), _geometryLoader(geometryLoader), _transformation(transformation), _loader(loader), _boolEngine(boolEngine), _schemaManager(schemaManager), _isCoordinated(isCoordinated), _expressIdCyl(expressIdCyl), _expressIdRect(expressIdRect), _coordinationMatrix(coordinationMatrix), _predefinedCylinder(predefinedCylinder), _predefinedCube(predefinedCube)
+    {}
+     
 
 }
