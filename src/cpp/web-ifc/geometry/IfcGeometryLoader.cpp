@@ -2995,16 +2995,16 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
   IfcCurve IfcGeometryLoader::GetLocalCurve(uint32_t expressID) const
   {
     spdlog::debug("[GetLocalCurve({})]",expressID);
-    for (uint32_t i = 0; i < LocalcurvesIndices.size(); i++)
+    for (uint32_t i = 0; i < _localcurvesIndices.size(); i++)
     {
-      if (LocalcurvesIndices[i] == expressID)
+      if (_localcurvesIndices[i] == expressID)
       {
-        return LocalCurvesList[i];
+        return _localCurvesList[i];
       }
     }
     IfcCurve curve = GetCurve(expressID, 3, false);
-    LocalcurvesIndices.push_back(expressID);
-    LocalCurvesList.push_back(curve);
+    _localcurvesIndices.push_back(expressID);
+    _localCurvesList.push_back(curve);
     return curve;
   }
 
@@ -3677,5 +3677,16 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
     return result;
   }
+
+  IfcGeometryLoader* IfcGeometryLoader::Clone(const webifc::parsing::IfcLoader &newLoader) const {
+    IfcGeometryLoader * newGeomLoader = new IfcGeometryLoader(newLoader, _schemaManager, _relVoids, _relNests, _relAggregates, _styledItems, _relMaterials, _materialDefinitions, _linearScalingFactor, _squaredScalingFactor, _cubicScalingFactor, _angularScalingFactor, _angleUnits, _circleSegments, _localCurvesList, _localcurvesIndices, _expressIDToPlacement);
+    return newGeomLoader;
+  }
+
+
+  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relVoids, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relNests, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relAggregates, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &styledItems, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &relMaterials, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &materialDefinitions, double linearScalingFactor, double squaredScalingFactor, double cubicScalingFactor, double angularScalingFactor, std::string angleUnits, uint16_t circleSegments, std::vector<IfcCurve> &localCurvesList, std::vector<uint32_t> &localcurvesIndices, std::unordered_map<uint32_t, glm::dmat4> expressIDToPlacement) 
+  : _loader(loader),_schemaManager(schemaManager),_relVoids(relVoids),_relNests(relNests),_relAggregates(relAggregates),_styledItems(styledItems),_relMaterials(relMaterials), _materialDefinitions(materialDefinitions), _linearScalingFactor(linearScalingFactor), _squaredScalingFactor(squaredScalingFactor), _cubicScalingFactor(cubicScalingFactor), _angularScalingFactor(angularScalingFactor), _angleUnits(angleUnits), _circleSegments(circleSegments),_localCurvesList(localCurvesList), _localcurvesIndices(localcurvesIndices), _expressIDToPlacement(expressIDToPlacement)
+  {}
+   
 
 }
