@@ -774,11 +774,11 @@
     "@shikijs/types" "3.4.2"
 
 "@shikijs/themes@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.npmjs.org/@shikijs/themes/-/themes-3.3.0.tgz"
-  integrity sha512-tXeCvLXBnqq34B0YZUEaAD1lD4lmN6TOHAhnHacj4Owh7Ptb/rf5XCDeROZt2rEOk5yuka3OOW2zLqClV7/SOg==
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@shikijs/themes/-/themes-3.4.2.tgz#05ef9d924c73ba841e2209e918642aa385b91da7"
+  integrity sha512-qAEuAQh+brd8Jyej2UDDf+b4V2g1Rm8aBIdvt32XhDPrHvDkEnpb7Kzc9hSuHUxz0Iuflmq7elaDuQAP9bHIhg==
   dependencies:
-    "@shikijs/types" "3.3.0"
+    "@shikijs/types" "3.4.2"
 
 "@shikijs/types@3.3.0", "@shikijs/types@^3.3.0":
   version "3.3.0"
