@@ -557,7 +557,7 @@ namespace bimGeometry
 
 		// build the caps
 		{
-			using Point = std::array<double, 2>;
+			using Point = std::array<double, 3>;
 			int polygonCount = profile.size(); // Main profile + holes
 			std::vector<std::vector<Point>> polygon(polygonCount);
 
@@ -565,11 +565,11 @@ namespace bimGeometry
 
 			for (size_t i = 0; i < profile[0].size(); i++)
 			{
-				glm::dvec2 pt = profile[0][i];
-				glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0) + dir * distance, 1);
+				glm::dvec3 pt = profile[0][i];
+				glm::dvec4 et = glm::dvec4(glm::dvec3(pt) + dir * distance, 1);
 
 				geom.AddPoint(et, normal);
-				polygon[0].push_back(Point{pt.x, pt.y});
+				polygon[0].push_back(Point{pt.x, pt.y, pt.z});
 			}
 
 			for (size_t i = 0; i < profile[0].size(); i++)
@@ -591,7 +591,7 @@ namespace bimGeometry
 
 					profile[0].push_back(pt);
 					geom.AddPoint(et, normal);
-					polygon[i].push_back({pt.x, pt.y}); // Index 0 is main profile; see earcut reference
+					polygon[i].push_back({pt.x, pt.y, pt.z}); // Index 0 is main profile; see earcut reference
 				}
 			}
 
@@ -624,12 +624,12 @@ namespace bimGeometry
 
 			for (size_t i = 0; i < profile[0].size(); i++)
 			{
-				glm::dvec2 pt = profile[0][i];
-				glm::dvec4 et = glm::dvec4(glm::dvec3(pt, 0), 1);
+				glm::dvec3 pt = profile[0][i];
+				glm::dvec4 et = glm::dvec4(glm::dvec3(pt), 1);
 
 				if (cuttingPlaneNormal != glm::dvec3(0))
 				{
-					et = glm::dvec4(glm::dvec3(pt, 0), 1);
+					et = glm::dvec4(glm::dvec3(pt), 1);
 					glm::dvec3 transDir = glm::dvec4(dir, 0);
 
 					// project {et} onto the plane, following the extrusion normal
