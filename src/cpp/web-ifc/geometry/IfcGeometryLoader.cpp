@@ -3640,6 +3640,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       }
 	  spdlog::warn("[ReadLenghtMeasure()] Unrecognised type {}", LengthMeasureLabel);
     }
+	return 0.0;
   }
 
   std::vector<IfcSegmentIndexSelect> IfcGeometryLoader::ReadCurveIndices() const
