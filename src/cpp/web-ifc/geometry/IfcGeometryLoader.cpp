@@ -3627,11 +3627,18 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     if (t == parsing::IfcTokenType::LABEL)
     {
       _loader.StepBack();
-      if (_loader.GetStringArgument() == "IFCNONNEGATIVELENGTHMEASURE")
+	  std::string_view LengthMeasureLabel = _loader.GetStringArgument();
+      if (LengthMeasureLabel == "IFCNONNEGATIVELENGTHMEASURE")
       {
         _loader.GetTokenType();
         return _loader.GetDoubleArgument();
       }
+	  if (LengthMeasureLabel == "IFCLENGTHMEASURE")
+      {
+        _loader.GetTokenType();
+        return _loader.GetDoubleArgument();
+      }
+	  spdlog::warn("[ReadLenghtMeasure()] Unrecognised type {}", LengthMeasureLabel);
     }
   }
 
