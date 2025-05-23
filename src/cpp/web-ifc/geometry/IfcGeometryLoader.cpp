@@ -1955,9 +1955,9 @@ namespace webifc::geometry
         _loader.MoveToArgumentOffset(expressID, 1);
         auto placementID = _loader.GetRefArgument();
         _loader.MoveToArgumentOffset(expressID, 2);
-        double SegmentStart = ReadLenghtMeasure();
+        double SegmentStart = ReadLengthMeasure();
         _loader.MoveToArgumentOffset(expressID, 4);
-        double SegmentEnd = ReadLenghtMeasure();
+        double SegmentEnd = ReadLengthMeasure();
         _loader.MoveToArgumentOffset(expressID, 6);
         auto curveID = _loader.GetRefArgument();
 
@@ -3028,7 +3028,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
         if (_loader.GetTokenType() != parsing::IfcTokenType::EMPTY)
         {
           _loader.StepBack();
-          lnSegment = ReadLenghtMeasure();
+          lnSegment = ReadLengthMeasure();
         }
 
         _loader.MoveToArgumentOffset(expressID, 5);
@@ -3621,7 +3621,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
     return _angleUnits;
   }
 
-  double IfcGeometryLoader::ReadLenghtMeasure() const
+  double IfcGeometryLoader::ReadLengthMeasure() const
   {
     parsing::IfcTokenType t = _loader.GetTokenType();
     if (t == parsing::IfcTokenType::LABEL)
@@ -3638,7 +3638,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
         _loader.GetTokenType();
         return _loader.GetDoubleArgument();
       }
-	  spdlog::warn("[ReadLenghtMeasure()] Unrecognised type {}", LengthMeasureLabel);
+	  spdlog::warn("[ReadLengthMeasure()] Unrecognised type {}", LengthMeasureLabel);
     }
   }
 
