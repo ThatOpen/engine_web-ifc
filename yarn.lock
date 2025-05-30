@@ -1607,9 +1607,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.149:
-  version "1.5.155"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.155.tgz"
-  integrity sha512-ps5KcGGmwL8VaeJlvlDlu4fORQpv3+GIcF5I3f9tUKUlJ/wsysh6HU8P5L1XWRYeXfA0oJd4PyM8ds8zTFf6Ng==
+  version "1.5.161"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.161.tgz#650376bd3be7ff8e581031409fc2d4f150620b12"
+  integrity sha512-hwtetwfKNZo/UlwHIVBlKZVdy7o8bIZxxKs0Mv/ROPiQQQmDgdm5a+KvKtBsxM8ZjFzTaCeLoodZ8jiBE3o9rA==
 
 emittery@^0.13.1:
   version "0.13.1"
