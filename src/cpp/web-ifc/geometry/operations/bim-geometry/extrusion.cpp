@@ -17,7 +17,7 @@ namespace bimGeometry {
         Geometry geom;
         if(!cap)
         {
-        geom = Extrude(profile, dir, len);
+            geom = Extrude(profile, dir, len);
         }
         else
         {   

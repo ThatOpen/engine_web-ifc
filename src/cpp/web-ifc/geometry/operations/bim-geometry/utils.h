@@ -520,29 +520,79 @@ namespace bimGeometry
 
             double npx = points[j].x + dir.x * len;
             double npy = points[j].y + dir.y * len;
-            double npz = dir.z * len;
+            double npz = points[j].z + dir.z * len;
             glm::dvec3 nptj1 = glm::dvec3(
                 npx,
                 npy,
                 npz);
             npx = points[j2].x + dir.x * len;
             npy = points[j2].y + dir.y * len;
-            npz = dir.z * len;
+            npz = points[j2].z + dir.z * len;
             glm::dvec3 nptj2 = glm::dvec3(
                 npx,
                 npy,
                 npz);
             geom.AddFace(
-                glm::dvec3(points[j].x, points[j].y, 0),
-                glm::dvec3(points[j2].x, points[j2].y, 0),
+                glm::dvec3(points[j].x, points[j].y, points[j].z),
+                glm::dvec3(points[j2].x, points[j2].y, points[j2].z),
                 nptj1);
 			geom.AddFace(
-                glm::dvec3(points[j2].x, points[j2].y, 0),
+                glm::dvec3(points[j2].x, points[j2].y, points[j2].z),
                 nptj2,
                 nptj1);
         }
 		return geom;
     }
+
+	enum class Projection { XY, XZ, YZ };
+	using Point = std::array<double, 3>;
+
+	// Projecta el polígon a 2D segons la millor vista
+	inline Projection bestProjection(const std::vector<Point>& poly) {
+		auto area2D = [](const std::vector<Point>& p, int i1, int i2) {
+			double area = 0.0;
+			for (size_t i = 0; i < p.size(); ++i) {
+				const auto& a = p[i];
+				const auto& b = p[(i + 1) % p.size()];
+				area += (a[i1] * b[i2]) - (b[i1] * a[i2]);
+			}
+			return std::abs(area * 0.5);
+		};
+
+		double areaXY = area2D(poly, 0, 1); // x, y
+		double areaXZ = area2D(poly, 0, 2); // x, z
+		double areaYZ = area2D(poly, 1, 2); // y, z
+
+		if (areaXY >= areaXZ && areaXY >= areaYZ) return Projection::XY;
+		if (areaXZ >= areaYZ) return Projection::XZ;
+		return Projection::YZ;
+	}
+
+	// Funció per projectar punts 3D a 2D segons la projecció triada
+	inline std::vector<std::vector<Point>> projectTo2D(
+		const std::vector<std::vector<Point>>& poly3D,
+		Projection proj) {
+
+		std::vector<std::vector<Point>> poly2D(poly3D.size());
+
+		for (size_t i = 0; i < poly3D.size(); ++i) {
+			for (const auto& pt : poly3D[i]) {
+				switch (proj) {
+					case Projection::XY:
+						poly2D[i].push_back({pt[0], pt[1], pt[2]});
+						break;
+					case Projection::XZ:
+						poly2D[i].push_back({pt[0], pt[2], pt[1]});
+						break;
+					case Projection::YZ:
+						poly2D[i].push_back({pt[1], pt[2], pt[0]});
+						break;
+				}
+			}
+		}
+
+		return poly2D;
+	}
 
 	inline bimGeometry::Geometry Extrude(std::vector<std::vector<glm::dvec3>> profile, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
 	{
@@ -557,7 +607,6 @@ namespace bimGeometry
 
 		// build the caps
 		{
-			using Point = std::array<double, 3>;
 			int polygonCount = profile.size(); // Main profile + holes
 			std::vector<std::vector<Point>> polygon(polygonCount);
 
@@ -595,26 +644,29 @@ namespace bimGeometry
 				}
 			}
 
-			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
-
-			if (indices.size() < 3)
-			{
-				return geom;
-			}
+			Projection proj = bestProjection(polygon[0]);
+			auto polygon2D = projectTo2D(polygon, proj);
+			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon2D);
 
 			uint32_t offset = 0;
-			bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
-			bool flipWinding = !winding;
+			bool winding = true;
+			bool flipWinding = false;
 
-			for (size_t i = 0; i < indices.size(); i += 3)
+			if (indices.size() >= 3)
 			{
-				if (flipWinding)
+				bool winding = GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
+				bool flipWinding = !winding;
+
+				for (size_t i = 0; i < indices.size(); i += 3)
 				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
-				}
-				else
-				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+					if (flipWinding)
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+					}
+					else
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+					}
 				}
 			}
 
