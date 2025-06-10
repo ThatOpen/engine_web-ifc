@@ -738,16 +738,24 @@
     "@shikijs/types" "3.4.2"
 
 "@shikijs/themes@^3.4.2":
-  version "3.4.2"
-  resolved "https://registry.npmjs.org/@shikijs/themes/-/themes-3.4.2.tgz"
-  integrity sha512-qAEuAQh+brd8Jyej2UDDf+b4V2g1Rm8aBIdvt32XhDPrHvDkEnpb7Kzc9hSuHUxz0Iuflmq7elaDuQAP9bHIhg==
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@shikijs/themes/-/themes-3.6.0.tgz#6003780e033f9fec6b1336395a8994be17959e81"
+  integrity sha512-Fq2j4nWr1DF4drvmhqKq8x5vVQ27VncF8XZMBuHuQMZvUSS3NBgpqfwz/FoGe36+W6PvniZ1yDlg2d4kmYDU6w==
   dependencies:
-    "@shikijs/types" "3.4.2"
+    "@shikijs/types" "3.6.0"
 
 "@shikijs/types@3.4.2", "@shikijs/types@^3.4.2":
   version "3.4.2"
   resolved "https://registry.npmjs.org/@shikijs/types/-/types-3.4.2.tgz"
   integrity sha512-zHC1l7L+eQlDXLnxvM9R91Efh2V4+rN3oMVS2swCBssbj2U/FBwybD1eeLaq8yl/iwT+zih8iUbTBCgGZOYlVg==
+  dependencies:
+    "@shikijs/vscode-textmate" "^10.0.2"
+    "@types/hast" "^3.0.4"
+
+"@shikijs/types@3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@shikijs/types/-/types-3.6.0.tgz#0a4944724320eaa6f151d26d8f982a7f4a0b53ff"
+  integrity sha512-cLWFiToxYu0aAzJqhXTQsFiJRTFDAGl93IrMSBNaGSzs7ixkLfdG6pH11HipuWFGW5vyx4X47W8HDQ7eSrmBUg==
   dependencies:
     "@shikijs/vscode-textmate" "^10.0.2"
     "@types/hast" "^3.0.4"
