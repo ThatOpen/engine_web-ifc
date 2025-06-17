@@ -245,6 +245,13 @@ export interface Alignment {
     SetValues(horizontal: Array<number>, vertical: Array<number>): void;
 }
 
+export interface BooleanOperator {
+    GetBuffers(): Buffers;
+    SetValues(triangles_: Array<number>, type_: string): void;
+    SetSecond(triangles_: Array<number>): void;
+    clear(): void;
+}
+
 export interface IfcType {
     typeID: number;
     typeName: string;
@@ -573,6 +580,10 @@ export class IfcAPI {
         return this.wasmModule.CreateAlignment();
     }
 
+    CreateBooleanOperator()
+    {
+        return this.wasmModule.CreateBooleanOperator();
+    }
 
     /**
      * Gets the header information required by the user

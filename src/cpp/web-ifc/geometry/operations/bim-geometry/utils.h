@@ -20,10 +20,15 @@ namespace bimGeometry
 		return point1.x * point2.y - point1.y * point2.x;
 	}
 
-    inline	bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
+    inline bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
     {
         return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
     }
+
+	inline bool equals(double A, double B, double eps = 0)
+	{
+		return std::fabs(A - B) <= eps;
+	}
 
     inline double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
@@ -661,11 +666,11 @@ namespace bimGeometry
 				{
 					if (flipWinding)
 					{
-						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1], -1);
 					}
 					else
 					{
-						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
 					}
 				}
 			}
@@ -706,11 +711,11 @@ namespace bimGeometry
 			{
 				if (flipWinding)
 				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
 				}
 				else
 				{
-					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1]);
+					geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1], -1);
 				}
 			}
 		}
@@ -1239,8 +1244,8 @@ namespace bimGeometry
 			{
 				for (size_t j = 0; j < indices.size() - 2; j += 4)
 				{
-					geom.AddFace(indices[j], indices[j + 1], indices[j + 2]);
-					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3]);
+					geom.AddFace(indices[j], indices[j + 1], indices[j + 2], -1);
+					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3], -1);
 				}
 			}
 		}

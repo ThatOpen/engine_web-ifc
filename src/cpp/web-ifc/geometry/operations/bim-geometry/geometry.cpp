@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "face.h"
 
+#pragma once
 namespace bimGeometry
 {
     void Geometry::AddPoint(glm::dvec4& pt, glm::dvec3& n)
@@ -63,6 +64,7 @@ namespace bimGeometry
         f.i0 = indexData[index * 3 + 0];
         f.i1 = indexData[index * 3 + 1];
         f.i2 = indexData[index * 3 + 2];
+        f.pId = planeData[index]; 
         return f;
     }
 
@@ -81,10 +83,10 @@ namespace bimGeometry
         AddPoint(b, normal);
         AddPoint(c, normal);
 
-        AddFace(numPoints - 3, numPoints - 2, numPoints - 1);
+        AddFace(numPoints - 3, numPoints - 2, numPoints - 1, -1);
     }
 
-    void Geometry::AddFace(uint32_t a, uint32_t b, uint32_t c)
+    void Geometry::AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId)
     {
         indexData.push_back(a);
         indexData.push_back(b);
@@ -93,5 +95,113 @@ namespace bimGeometry
         double area = areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
 
         numFaces++;
+
+        planeData.push_back(pId);
     }
+
+    size_t Geometry::AddPlane(const glm::dvec3 &normal, double d)
+    {
+        for (auto &plane : planes)
+        {
+            if (plane.IsEqualTo(normal, d))
+            {
+                return plane.id;
+            }
+        }
+
+        Plane p;
+        p.id = planes.size();
+        p.normal = glm::normalize(normal);
+        p.distance = d;
+
+        planes.push_back(p);
+
+        return p.id;
+    }
+    
+    void Geometry::buildPlanes()
+    {
+        if(!hasPlanes)
+        {
+            planes.clear();
+            planeData.clear();
+
+            for (size_t i = 0; i < numFaces; i++)
+            {
+                planeData.push_back(-1);
+            }
+
+            Vec centroid = Vec(0,0,0);
+
+            for (size_t i = 0; i < numFaces; i++)
+            {
+                Face f = GetFace(i);
+
+                auto a = GetPoint(f.i0);
+                auto b = GetPoint(f.i1);
+                auto c = GetPoint(f.i2);
+
+                centroid = centroid + (a + b + c) / 3.0;
+            }
+
+            for (size_t i = 0; i < numFaces; i++)
+            {
+                Face f = GetFace(i);
+
+                auto a = GetPoint(f.i0);
+                auto b = GetPoint(f.i1);
+                auto c = GetPoint(f.i2);
+
+                glm::dvec3 norm;
+
+                if (computeSafeNormal(a, b, c, norm, EPS_SMALL))
+                {
+                    double da = glm::dot(norm, a - centroid);
+
+                    size_t id = AddPlane(norm, da);
+                    planeData[i] = id;
+                    hasPlanes = true;
+                }
+            }
+
+            for (size_t i = 0; i < numFaces; i++)
+            {
+                Face f = GetFace(i);
+
+                if(f.pId > -1)
+                {
+                    auto a = GetPoint(f.i0);
+                    auto b = GetPoint(f.i1);
+                    auto c = GetPoint(f.i2);
+
+                    double da = glm::dot(planes[f.pId].normal, a);
+
+                    planes[f.pId].distance = da;
+                }
+            }
+        }
+        // TODO: Remove unused planes
+    }
+
+    void Geometry::AddGeometry(Geometry geom)
+	{
+		for (uint32_t i = 0; i < geom.numFaces; i++)
+		{
+			Face f = geom.GetFace(i);
+			glm::dvec3 a = geom.GetPoint(f.i0);
+			glm::dvec3 b = geom.GetPoint(f.i1);
+			glm::dvec3 c = geom.GetPoint(f.i2);         
+			AddFace(a, b, c);         
+		}
+        uint32_t planeDataOffset = geom.planes.size();
+        for (uint32_t i = 0; i < geom.planeData.size(); i++)
+		{
+            planeData.push_back(planeDataOffset + geom.planeData[i]);
+		}
+
+        for (uint32_t i = 0; i < geom.planes.size(); i++)
+		{
+            planes.push_back(geom.planes[i]);
+		}
+	}
 }

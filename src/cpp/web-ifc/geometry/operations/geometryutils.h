@@ -306,7 +306,7 @@ namespace webifc::geometry
 					// edgesPrinted.push_back({glm::dvec2(b.z + b.x / 2, b.y + b.x / 2), glm::dvec2(c.z + c.x / 2, c.y + c.x / 2)});
 					// fuzzybools::DumpSVGLines(edgesPrinted, L"triangulateBounds_tri.html");
 				#endif
-				geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2]);
+				geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
 			}
 
 			#ifdef CSG_DEBUG_OUTPUT
@@ -453,7 +453,7 @@ namespace webifc::geometry
 			{
 				for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 				{
-					Face f = meshGeom.GetFace(i);
+					bimGeometry::Face f = meshGeom.GetFace(i);
 					glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 
 					return a;
@@ -519,7 +519,7 @@ namespace webifc::geometry
 						
 						for (uint32_t i = 0; i < newMeshGeom.numFaces; i++)
 						{
-							Face f = newMeshGeom.GetFace(i);
+							bimGeometry::Face f = newMeshGeom.GetFace(i);
 							glm::dvec3 a = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i0), 1);
 							glm::dvec3 b = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i1), 1);
 							glm::dvec3 c = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i2), 1);
@@ -554,7 +554,7 @@ namespace webifc::geometry
 					
 					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 					{
-						Face f = meshGeom.GetFace(i);
+						bimGeometry::Face f = meshGeom.GetFace(i);
 						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
 						glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
 						glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
@@ -599,7 +599,7 @@ namespace webifc::geometry
 					{
 						for (uint32_t i = 0; i < geoms[g].numFaces; i++)
 						{
-							Face f = geoms[g].GetFace(i);
+							bimGeometry::Face f = geoms[g].GetFace(i);
 							glm::dvec3 a = geoms[g].GetPoint(f.i0);
 							glm::dvec3 b = geoms[g].GetPoint(f.i1);
 							glm::dvec3 c = geoms[g].GetPoint(f.i2);
