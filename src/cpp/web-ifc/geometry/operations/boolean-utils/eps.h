@@ -43,7 +43,7 @@ constexpr double toleranceAABB     = 1.0E-03;
 */    
 constexpr double toleranceParallel      = 1.0E-04;
 constexpr double toleranceParallelTight = 1.0E-10;
-constexpr double toleranceInsideOutside = 1.0E-03; // This eps works for some models at 10-4 but others require 10-10
+constexpr double toleranceInsideOutside = 1.0E-10; // This eps works for some models at 10-4 but others require 10-10
 constexpr double toleranceInsideOutsideToPlane = 1.0E-04; // This eps works for some models at 10-4 but others require 10-10
 constexpr double toleranceThinTriangle = 1.0e-10;
 /*
