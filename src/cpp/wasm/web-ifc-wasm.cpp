@@ -23,6 +23,7 @@
 #include "../web-ifc/geometry/operations/bim-geometry/alignment.h"
 #include "../web-ifc/geometry/operations/bim-geometry/utils.h"
 #include "../web-ifc/geometry/operations/bim-geometry/boolean.h"
+#include "../web-ifc/geometry/operations/bim-geometry/ProfileI.h"
 
 namespace webifc::parsing { 
     void p21encode(std::string_view input, std::ostringstream &output);
@@ -843,6 +844,11 @@ bimGeometry::Boolean CreateBoolean()
     return bimGeometry::Boolean();
 }
 
+bimGeometry::ProfileI CreateProfileI()
+{
+    return bimGeometry::ProfileI();
+}
+
 EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::class_<webifc::geometry::IfcGeometry>("IfcGeometry")
@@ -1037,6 +1043,12 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("clear", &bimGeometry::Boolean::clear)
         ;
 
+    emscripten::class_<bimGeometry::ProfileI>("ProfileI")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::ProfileI::GetBuffers)
+        .function("SetValues", &bimGeometry::ProfileI::SetValues)
+        ;
+
     emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("CreateExtrusion", &CreateExtrusion);
     emscripten::function("CreateSweep", &CreateSweep);
@@ -1048,6 +1060,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("CreateArc", &CreateArc);
     emscripten::function("CreateAlignment", &CreateAlignment);
     emscripten::function("CreateBooleanOperator", &CreateBoolean);
+    emscripten::function("CreateProfileI", &CreateProfileI);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);
