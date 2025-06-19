@@ -1252,4 +1252,296 @@ namespace bimGeometry
 
 		return geom;
 	}
+
+	///
+
+	inline Curve GetRectangleCurve(double xdim, double ydim, glm::dmat3 placement = glm::dmat3(1))
+	{
+		double halfX = xdim / 2;
+		double halfY = ydim / 2;
+
+		glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
+		glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
+
+		glm::dvec2 tl = placement * glm::dvec3(-halfX, halfY, 1);
+		glm::dvec2 tr = placement * glm::dvec3(halfX, halfY, 1);
+
+		Curve c;
+		c.Add(bl);
+		c.Add(br);
+		c.Add(tr);
+		c.Add(tl);
+		c.Add(bl);
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+	inline Curve GetIShapedCurve(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, double filletRadius, glm::dmat3 placement = glm::dmat3(1))
+	{
+		Curve c;
+
+		double hw = width / 2;
+		double hd = depth / 2;
+		double hweb = webThickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));				   // TL
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));				   // TR
+		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness, 1)); // TR knee
+
+		if (hasFillet)
+		{
+			// TODO: interpolate
+			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, +hd - flangeThickness, 1)); // TR elbow start
+			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness - filletRadius, 1)); // TR elbow end
+
+			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness + filletRadius, 1)); // BR elbow start
+			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, -hd + flangeThickness, 1)); // BR elbow end
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness, 1)); // TR elbow
+			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness, 1)); // BR elbow
+		}
+
+		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness, 1)); // BR knee
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));				   // BR
+
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));				   // BL
+		c.points.push_back(placement * glm::dvec3(-hw, -hd + flangeThickness, 1)); // BL knee
+
+		if (hasFillet)
+		{
+			// TODO: interpolate
+			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, -hd + flangeThickness, 1)); // BL elbow start
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness + filletRadius, 1)); // BL elbow end
+
+			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness - filletRadius, 1)); // TL elbow start
+			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, +hd - flangeThickness, 1)); // TL elbow end
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness, 1)); // BL elbow
+			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness, 1)); // TL elbow
+		}
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd - flangeThickness, 1)); // TL knee
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));				   // TL
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+	inline Curve GetUShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, double filletRadius, double edgeRadius, double flangeSlope, glm::dmat3 placement = glm::dmat3(1))
+	{
+		Curve c;
+
+		double hd = depth / 2;
+		double hw = flangeWidth / 2;
+		//		double hweb = webThickness / 2;
+		double slopeOffsetRight = flangeSlope * hw;
+		double slopeOffsetLeft = flangeSlope * (hw - webThickness);
+		// double flangeReferencePointY = hd - flangeThickness;
+
+		// TODO: implement the radius
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
+
+		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness + slopeOffsetRight, 1));
+
+		c.points.push_back(placement * glm::dvec3(-hw + webThickness, +hd - flangeThickness, 1 - slopeOffsetLeft));
+		c.points.push_back(placement * glm::dvec3(-hw + webThickness, -hd + flangeThickness, 1 + slopeOffsetLeft));
+
+		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness - slopeOffsetRight, 1));
+
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+	inline Curve GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
+	{
+		Curve c;
+
+		double hw = width / 2;
+		double hd = depth / 2;
+		double hweb = thickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));
+
+		if (hasFillet)
+		{
+			// TODO: Create interpolation and sloped lines
+			c.points.push_back(placement * glm::dvec3(+hw, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, +hd, 1));
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(+hw, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, +hd, 1));
+		}
+
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+	inline Curve GetTShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
+	{
+		Curve c;
+
+		double hw = width / 2;
+		double hd = depth / 2;
+		double hweb = thickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+
+		if (hasFillet)
+		{
+			// TODO: Create interpolation and sloped lines
+			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hweb, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hweb, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hweb, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hweb, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		}
+
+		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+	inline Curve GetCShapedCurve(double width, double depth, double girth, double thickness, bool hasFillet, double filletRadius, glm::dmat3 placement = glm::dmat3(1))
+	{
+		Curve c;
+
+		double hw = width / 2;
+		double hd = depth / 2;
+		// double hweb = thickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+
+		if (hasFillet)
+		{
+			// TODO: Create interpolation and sloped lines
+		}
+		else
+		{
+			c.points.push_back(placement * glm::dvec3(hw, hd - girth, 1));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, hd - girth, 1));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, hd - thickness, 1));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, -hd + thickness, 1));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, -hd + girth, 1));
+			c.points.push_back(placement * glm::dvec3(hw, -hd + girth, 1));
+			c.points.push_back(placement * glm::dvec3(hw, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+		}
+
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+	inline Curve GetZShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, double filletRadius, double edgeRadius, glm::dmat3 placement = glm::dmat3(1))
+	{
+		Curve c;
+		double hw = flangeWidth / 2;
+		double hd = depth / 2;
+		double hweb = webThickness / 2;
+		// double hfla = flangeThickness / 2;
+
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(hweb, hd, 1));
+		c.points.push_back(placement * glm::dvec3(hweb, -hd + flangeThickness, 1));
+		c.points.push_back(placement * glm::dvec3(hw, -hd + flangeThickness, 1));
+		c.points.push_back(placement * glm::dvec3(hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hweb, hd - flangeThickness, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, hd - flangeThickness, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
+
+	inline Curve GetTrapeziumCurve(double bottomXDim, double topXDim, double yDim, double topXOffset, glm::dmat3 placement = glm::dmat3(1))
+	{
+		double halfX = bottomXDim / 2;
+		double halfY = yDim / 2;
+
+		glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
+		glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
+
+		glm::dvec2 tl = placement * glm::dvec3(-halfX + topXOffset, halfY, 1);
+		glm::dvec2 tr = placement * glm::dvec3(-halfX + topXOffset + topXDim, halfY, 1);
+
+		Curve c;
+		c.Add(bl);
+		c.Add(br);
+		c.Add(tr);
+		c.Add(tl);
+		c.Add(bl);
+
+		if (MatrixFlipsTriangles(placement))
+		{
+			c.Invert();
+		}
+
+		return c;
+	}
 }
