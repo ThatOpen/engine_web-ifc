@@ -252,15 +252,18 @@ export interface BooleanOperator {
     clear(): void;
 }
 
-export interface ProfileI {
+export interface ProfileSection {
     GetBuffers(): Buffers;
     SetValues(    
+        pType: number,
         width: number,
         depth: number,
         webThickness: number,
         flangeThickness: number,
         hasFillet: boolean,
         filletRadius: number,
+        radius: number,
+        slope: number,
         placement: Array<number>): void;
 }
 
@@ -597,9 +600,9 @@ export class IfcAPI {
         return this.wasmModule.CreateBooleanOperator();
     }
 
-    CreateProfileI()
+    CreateProfile()
     {
-        return this.wasmModule.CreateProfileI();
+        return this.wasmModule.CreateProfile();
     }
 
     /**

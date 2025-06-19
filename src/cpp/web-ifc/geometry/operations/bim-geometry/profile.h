@@ -7,18 +7,21 @@
 #pragma once
 
 namespace bimGeometry {
-	struct ProfileI
+	struct Profile
 	{
+        uint16_t pType;
         double width;
         double depth; 
-        double webThickness; 
+        double thickness; 
         double flangeThickness; 
         bool hasFillet;
         double filletRadius; 
+        double radius;
+        double slope; 
         std::vector<double> placement;
         Curve profile;
 
-        void SetValues(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, double filletRadius, std::vector<double> placement);
+        void SetValues(uint16_t _pType, double _width, double _depth, double _webThickness, double _flangeThickness, bool _hasFillet, double _filletRadius, double _radius, double _slope, std::vector<double> _placement);
         Buffers GetBuffers();
     };
 }
