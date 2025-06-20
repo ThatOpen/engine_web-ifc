@@ -55,7 +55,7 @@ namespace webifc::geometry
         void Clear();
 		IfcGeometrySettings _settings;
         
-        private:
+        protected:
         std::optional<glm::dvec4> GetStyleItemFromExpressId(uint32_t expressID);
         void AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry);
         IfcGeometry GetBrep(uint32_t expressID);
