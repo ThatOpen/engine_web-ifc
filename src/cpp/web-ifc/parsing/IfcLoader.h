@@ -64,6 +64,7 @@ namespace webifc::parsing
       void PushDouble(double input);
       void PushInt(int input);
       std::string GenerateUUID() const;
+      IfcLoader* Clone();
 
       uint32_t GetNextExpressID(uint32_t expressId) const;
       template <typename T> void Push(T input)
@@ -77,6 +78,7 @@ namespace webifc::parsing
         uint32_t ifcType;
         uint32_t tapeOffset;
       };
+      IfcLoader(uint32_t maxExpressId, uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager, IfcTokenStream * tokenStream, std::unordered_map<uint32_t,IfcLine*> &lines, std::vector<IfcLine*> &headerLines,std::unordered_map<uint32_t, std::vector<uint32_t>> &ifcTypeToExpressID);
       uint32_t _maxExpressId;
       const uint32_t _lineWriterBuffer;
       const schema::IfcSchemaManager &_schemaManager;

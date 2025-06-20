@@ -112,7 +112,8 @@
     "__verbose_abort": "cpp",
     "coroutine": "cpp",
     "expected": "cpp",
-    "source_location": "cpp"
+    "source_location": "cpp",
+    "booleanutils": "cpp"
   },
   "cmake.configureOnOpen": true,
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",

@@ -14,6 +14,7 @@
 #include "../version.h"
 #include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
 #include "../web-ifc/geometry/operations/bim-geometry/sweep.h"
+#include "../web-ifc/geometry/operations/bim-geometry/circularSweep.h"
 #include "../web-ifc/geometry/operations/bim-geometry/revolution.h"
 #include "../web-ifc/geometry/operations/bim-geometry/cylindricalRevolution.h"
 #include "../web-ifc/geometry/operations/bim-geometry/parabola.h"
@@ -21,6 +22,8 @@
 #include "../web-ifc/geometry/operations/bim-geometry/arc.h"
 #include "../web-ifc/geometry/operations/bim-geometry/alignment.h"
 #include "../web-ifc/geometry/operations/bim-geometry/utils.h"
+#include "../web-ifc/geometry/operations/bim-geometry/boolean.h"
+#include "../web-ifc/geometry/operations/bim-geometry/profile.h"
 
 namespace webifc::parsing { 
     void p21encode(std::string_view input, std::ostringstream &output);
@@ -800,6 +803,12 @@ bimGeometry::Sweep CreateSweep()
     return bimGeometry::Sweep();
 }
 
+bimGeometry::CircularSweep CreateCircularSweep()
+{
+    return bimGeometry::CircularSweep();
+}
+
+
 bimGeometry::Revolve CreateRevolution()
 {
     return bimGeometry::Revolve();
@@ -830,6 +839,15 @@ bimGeometry::Alignment CreateAlignment()
     return bimGeometry::Alignment();
 }
 
+bimGeometry::Boolean CreateBoolean()
+{
+    return bimGeometry::Boolean();
+}
+
+bimGeometry::Profile CreateProfile()
+{
+    return bimGeometry::Profile();
+}
 
 EMSCRIPTEN_BINDINGS(my_module) {
 
@@ -841,8 +859,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetIndexDataSize", &webifc::geometry::IfcGeometry::GetIndexDataSize)
         .function("GetSweptDiskSolid", &webifc::geometry::IfcGeometry::GetSweptDiskSolid)
         ;
-
-
 
     emscripten::value_object<glm::dvec4>("dvec4")
         .field("x", &glm::dvec4::x)
@@ -962,18 +978,25 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetBuffers", &bimGeometry::AABB::GetBuffers)
         .function("SetValues", &bimGeometry::AABB::SetValues)
         ;
-
         
     emscripten::class_<bimGeometry::Extrusion>("Extrusion")
         .constructor<>()
         .function("GetBuffers", &bimGeometry::Extrusion::GetBuffers)
         .function("SetValues", &bimGeometry::Extrusion::SetValues)
+        .function("SetHoles", &bimGeometry::Extrusion::SetHoles)
+        .function("ClearHoles", &bimGeometry::Extrusion::ClearHoles)
         ;
     
     emscripten::class_<bimGeometry::Sweep>("Sweep")
         .constructor<>()
         .function("GetBuffers", &bimGeometry::Sweep::GetBuffers)
         .function("SetValues", &bimGeometry::Sweep::SetValues)
+        ;
+    
+    emscripten::class_<bimGeometry::CircularSweep>("CircularSweep")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::CircularSweep::GetBuffers)
+        .function("SetValues", &bimGeometry::CircularSweep::SetValues)
         ;
 
     emscripten::class_<bimGeometry::Revolve>("Revolution")
@@ -1011,16 +1034,33 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .function("GetBuffers", &bimGeometry::Alignment::GetBuffers)
         .function("SetValues", &bimGeometry::Alignment::SetValues)
         ;
+    
+    emscripten::class_<bimGeometry::Boolean>("BooleanOperator")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Boolean::GetBuffers)
+        .function("SetValues", &bimGeometry::Boolean::SetValues)
+        .function("SetSecond", &bimGeometry::Boolean::SetSecond)
+        .function("clear", &bimGeometry::Boolean::clear)
+        ;
+
+    emscripten::class_<bimGeometry::Profile>("Profile")
+        .constructor<>()
+        .function("GetBuffers", &bimGeometry::Profile::GetBuffers)
+        .function("SetValues", &bimGeometry::Profile::SetValues)
+        ;
 
     emscripten::function("CreateAABB", &CreateAABB);
     emscripten::function("CreateExtrusion", &CreateExtrusion);
     emscripten::function("CreateSweep", &CreateSweep);
+    emscripten::function("CreateCircularSweep", &CreateCircularSweep);
     emscripten::function("CreateRevolution", &CreateRevolution);
     emscripten::function("CreateCylindricalRevolution", &CreateCylindricalRevolution);
     emscripten::function("CreateParabola", &CreateParabola);
     emscripten::function("CreateClothoid", &CreateClothoid);
     emscripten::function("CreateArc", &CreateArc);
     emscripten::function("CreateAlignment", &CreateAlignment);
+    emscripten::function("CreateBooleanOperator", &CreateBoolean);
+    emscripten::function("CreateProfile", &CreateProfile);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);
     emscripten::function("GetAllAlignments", &GetAllAlignments);

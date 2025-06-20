@@ -162,7 +162,9 @@ export interface AABB {
 
 export interface Extrusion {
     GetBuffers(): Buffers;
-    SetValues(profile_: Array<number>, dir_: Array<number>, len_: number): void;
+    SetValues(profile_: Array<number>, dir_: Array<number>, len_: number, cuttingPlaneNormal_: Array<number>, cuttingPlanePos_: Array<number>, cap_: boolean): void;
+    SetHoles(profile_: Array<number>): void;
+    ClearHoles(): void;
 }
 
 export interface Sweep {
@@ -175,6 +177,19 @@ export interface Sweep {
         initialNormal?: Array<number>,
         rotate90?: boolean,
         optimize?: boolean
+      ): void;
+}
+
+export interface CircularSweep {
+    GetBuffers(): Buffers;
+    SetValues( 
+        scaling: number,
+        closed: boolean,
+        profile: Array<number>,
+        radius: number,
+        directrix: Array<number>,
+        initialNormal?: Array<number>,
+        rotate90?: boolean,
       ): void;
 }
 
@@ -228,6 +243,28 @@ export interface Arc {
 export interface Alignment {
     GetBuffers(): Buffers;
     SetValues(horizontal: Array<number>, vertical: Array<number>): void;
+}
+
+export interface BooleanOperator {
+    GetBuffers(): Buffers;
+    SetValues(triangles_: Array<number>, type_: string): void;
+    SetSecond(triangles_: Array<number>): void;
+    clear(): void;
+}
+
+export interface ProfileSection {
+    GetBuffers(): Buffers;
+    SetValues(    
+        pType: number,
+        width: number,
+        depth: number,
+        webThickness: number,
+        flangeThickness: number,
+        hasFillet: boolean,
+        filletRadius: number,
+        radius: number,
+        slope: number,
+        placement: Array<number>): void;
 }
 
 export interface IfcType {
@@ -523,6 +560,11 @@ export class IfcAPI {
         return this.wasmModule.CreateSweep();
     }
 
+    CreateCircularSweep()
+    {
+        return this.wasmModule.CreateCircularSweep();
+    }
+
     CreateRevolution()
     {
         return this.wasmModule.CreateRevolution();
@@ -553,6 +595,15 @@ export class IfcAPI {
         return this.wasmModule.CreateAlignment();
     }
 
+    CreateBooleanOperator()
+    {
+        return this.wasmModule.CreateBooleanOperator();
+    }
+
+    CreateProfile()
+    {
+        return this.wasmModule.CreateProfile();
+    }
 
     /**
      * Gets the header information required by the user

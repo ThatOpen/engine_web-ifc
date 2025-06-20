@@ -53,9 +53,11 @@ namespace webifc::geometry
         std::array<double, 16> GetFlatCoordinationMatrix() const;
         glm::dmat4 GetCoordinationMatrix() const;
         void Clear();
-		IfcGeometrySettings _settings;
-        
-        private:
+        IfcGeometryProcessor * Clone(const webifc::parsing::IfcLoader &loader) const;
+		    
+        protected:
+        IfcGeometryProcessor(const IfcGeometrySettings &settings,std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry,const IfcGeometryLoader &geometryLoader,glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube);
+        IfcGeometrySettings _settings;
         std::optional<glm::dvec4> GetStyleItemFromExpressId(uint32_t expressID);
         void AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry);
         IfcGeometry GetBrep(uint32_t expressID);
@@ -65,16 +67,16 @@ namespace webifc::geometry
         const IfcGeometryLoader _geometryLoader;
         glm::dmat4 _transformation = glm::dmat4(1.0);
         const parsing::IfcLoader &_loader;
-        booleanManager boolEngine;
+        booleanManager _boolEngine;
         const schema::IfcSchemaManager &_schemaManager;
         bool _isCoordinated = false;
-        uint32_t expressIdCyl = 0;
-        uint32_t expressIdRect = 0;
+        uint32_t _expressIdCyl = 0;
+        uint32_t _expressIdRect = 0;
         glm::dmat4 _coordinationMatrix = glm::dmat4(1.0);
         void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false);
         std::vector<uint32_t> Read2DArrayOfThreeIndices();
         void ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points);
-        IfcGeometry predefinedCylinder;
-        IfcGeometry predefinedCube;
+        IfcGeometry _predefinedCylinder;
+        IfcGeometry _predefinedCube;
   };
 }
