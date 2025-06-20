@@ -290,6 +290,21 @@ namespace webifc::geometry
                     resultMesh.hasColor = false;
                 }
 
+
+				// Sometimes, a geometric item like IFCEXTRUDEDAREASOLID has a color assigned.
+                // With flatten() and BoolProcess, that color gets lost. Restore it here:
+                if (!mesh.hasGeometry && mesh.children.size() > 0)
+                {
+                    auto geometricItem = mesh.children.front();
+                    std::optional<glm::dvec4> geometricItemColor = geometricItem.GetColor();
+                    if (geometricItemColor.has_value())
+                    {
+                        glm::dvec4 colorValue = geometricItemColor.value();
+                        resultMesh.color = colorValue;
+                        resultMesh.hasColor = true;
+                    }
+                }
+
                 return resultMesh;
             }
             else
