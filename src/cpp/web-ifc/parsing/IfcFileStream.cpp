@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
  #include "IfcTokenStream.h"
- 
+
  namespace webifc::parsing {
 
    IfcTokenStream::IfcFileStream::IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, uint32_t size) : _dataSource(requestData), _size(size)
@@ -82,5 +82,10 @@
    char IfcTokenStream::IfcFileStream::Get()
    { 
      return _buffer[_pointer]; 
+   }
+
+   IfcTokenStream::IfcFileStream* IfcTokenStream::IfcFileStream::Clone() {
+    IfcFileStream * newStream = new IfcFileStream(_dataSource,_size);
+    return newStream;
    }
  }

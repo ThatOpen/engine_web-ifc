@@ -158,5 +158,13 @@ namespace webifc::parsing
   {
       return _cChunk->GetTokenRef() + _readPtr;
   }
-  
+
+  IfcTokenStream * IfcTokenStream::Clone() {
+    IfcTokenStream * newStream = new IfcTokenStream(_activeChunks,_maxChunks,_chunks,_fileStream->Clone());
+    return newStream;
+  }
+
+  IfcTokenStream::IfcTokenStream(size_t activeChunks, uint64_t maxChunks, std::vector<IfcTokenStream::IfcTokenChunk> &chunks,IfcTokenStream::IfcFileStream * fileStream) : _activeChunks(activeChunks), _maxChunks(maxChunks), _chunks(chunks),  _cChunk(&chunks[0]), _fileStream(fileStream)
+  {}
+
 }

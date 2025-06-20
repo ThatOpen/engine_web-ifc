@@ -160,7 +160,7 @@ namespace webifc::io
 
         for (uint32_t i = 0; i < geom.numFaces; i++)
         {
-            webifc::geometry::Face f = geom.GetFace(i);
+            bimGeometry::Face f = geom.GetFace(i);
             obj << "f " << (f.i0 + 1 + offset) << "// " << (f.i1 + 1 + offset) << "// " << (f.i2 + 1 + offset) << "//\n";
         }
 
@@ -231,7 +231,7 @@ namespace webifc::io
 
         for (uint32_t i = 0; i < geom.numFaces; i++)
         {
-            webifc::geometry::Face f = geom.GetFace(i);
+            bimGeometry::Face f = geom.GetFace(i);
             obj << "f " << (f.i0 + 1 + offset) << "// " << (f.i1 + 1 + offset) << "// " << (f.i2 + 1 + offset) << "//\n";
         }
 
