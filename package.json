@@ -46,7 +46,8 @@
     "regression-update": "node --max-old-space-size=8192 ./tests/regression/regression.mjs update",
     "test": "jest  --runInBand ",
     "gen-docs": "typedoc --out dist/docs && cpy ./banner.png ./dist/docs",
-    "usage_example": "cd examples/usage  && ts-node index.ts"
+    "usage_example": "cd examples/usage  && ts-node index.ts",
+    "serve-api": "node server.js"
   },
   "author": "web-ifc",
   "files": [
@@ -87,6 +88,8 @@
     "fs": false
   },
   "dependencies": {
-    "glm": "^1.0.0"
+    "express": "^5.1.0",
+    "glm": "^1.0.0",
+    "multer": "^2.0.1"
   }
 }
