@@ -1635,6 +1635,7 @@ namespace webifc::geometry
 
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;
+            geometry.hasColor = newHasColor;
 
             flatMesh.geometries.push_back(geometry);
         } else if (composedMesh.hasColor) {

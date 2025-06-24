@@ -193,6 +193,7 @@ namespace webifc::geometry {
 		struct IfcPlacedGeometry
 		{
 			glm::dvec4 color;
+			bool hasColor = false;
 			glm::dmat4 transformation;
 			std::array<double, 16> flatTransformation;
 			uint32_t geometryExpressID;
