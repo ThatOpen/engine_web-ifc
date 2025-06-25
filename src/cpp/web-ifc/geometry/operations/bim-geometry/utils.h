@@ -1260,11 +1260,11 @@ namespace bimGeometry
 		double halfX = xdim / 2;
 		double halfY = ydim / 2;
 
-		glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
-		glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
+		glm::dvec3 bl = placement * glm::dvec3(-halfX, -halfY, 1);
+		glm::dvec3 br = placement * glm::dvec3(halfX, -halfY, 1);
 
-		glm::dvec2 tl = placement * glm::dvec3(-halfX, halfY, 1);
-		glm::dvec2 tr = placement * glm::dvec3(halfX, halfY, 1);
+		glm::dvec3 tl = placement * glm::dvec3(-halfX, halfY, 1);
+		glm::dvec3 tr = placement * glm::dvec3(halfX, halfY, 1);
 
 		Curve c;
 		c.Add(bl);
@@ -1524,11 +1524,11 @@ namespace bimGeometry
 		double halfX = bottomXDim / 2;
 		double halfY = yDim / 2;
 
-		glm::dvec2 bl = placement * glm::dvec3(-halfX, -halfY, 1);
-		glm::dvec2 br = placement * glm::dvec3(halfX, -halfY, 1);
+		glm::dvec3 bl = placement * glm::dvec3(-halfX, -halfY, 1);
+		glm::dvec3 br = placement * glm::dvec3(halfX, -halfY, 1);
 
-		glm::dvec2 tl = placement * glm::dvec3(-halfX + topXOffset, halfY, 1);
-		glm::dvec2 tr = placement * glm::dvec3(-halfX + topXOffset + topXDim, halfY, 1);
+		glm::dvec3 tl = placement * glm::dvec3(-halfX + topXOffset, halfY, 1);
+		glm::dvec3 tr = placement * glm::dvec3(-halfX + topXOffset + topXDim, halfY, 1);
 
 		Curve c;
 		c.Add(bl);
