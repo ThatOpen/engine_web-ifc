@@ -38,7 +38,6 @@ namespace webifc::geometry
 	  bool _coordinateToOrigin = false;
       bool _optimize_profiles = true;
 	  bool _exportPolylines = false;
-	  uint16_t _circleSegments = 12;
   };
 
   class IfcGeometryProcessor 
