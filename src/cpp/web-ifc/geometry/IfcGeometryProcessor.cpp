@@ -23,10 +23,9 @@ namespace webifc::geometry
         : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager)
     {
 		_settings._coordinateToOrigin = coordinateToOrigin;
-		_settings._circleSegments = circleSegments;
     }
 
-    IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
+    IfcGeometryLoader& IfcGeometryProcessor::GetLoader()
     {
         return _geometryLoader;
     }
@@ -720,11 +719,11 @@ namespace webifc::geometry
 				}
 				else if (surface.CylinderSurface.Active)
 				{
-					TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
+					TriangulateCylindricalSurface(geometry, bounds3D, surface, _geometryLoader.GetCircleSegments());
 				}
 				else if (surface.RevolutionSurface.Active)
 				{
-					TriangulateRevolution(geometry, bounds3D, surface, _settings._circleSegments);
+					TriangulateRevolution(geometry, bounds3D, surface, _geometryLoader.GetCircleSegments());
 				}
 				else if (surface.ExtrusionSurface.Active)
 				{
@@ -906,7 +905,7 @@ namespace webifc::geometry
                 IfcCurve directrix = _geometryLoader.GetCurve(directrixRef, 3);
 
                 IfcProfile profile;
-                profile.curve = GetCircleCurve(radius, _settings._circleSegments);
+                profile.curve = GetCircleCurve(radius, _geometryLoader.GetCircleSegments());
 
                 IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), closed, profile, radius, directrix);
 
@@ -938,7 +937,7 @@ namespace webifc::geometry
 
                 glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[1];
 
-                IfcCurve directrix = BuildArc(_geometryLoader.GetLinearScalingFactor(), pos, axis, angle, _settings._circleSegments);
+                IfcCurve directrix = BuildArc(_geometryLoader.GetLinearScalingFactor(), pos, axis, angle, _geometryLoader.GetCircleSegments());
                 if(glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG)
                 {
                     closed = true;
@@ -1060,6 +1059,37 @@ namespace webifc::geometry
 
                 return mesh;
             }
+            case schema::IFCRIGHTCIRCULARCYLINDER:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                uint32_t placementID = _loader.GetRefArgument();
+                double height = _loader.GetDoubleArgument();
+                double radius = _loader.GetDoubleArgument();
+
+                // Create a circular profile
+                IfcProfile profile;
+                profile.isConvex = true;
+                profile.curve = GetCircleCurve(radius, _geometryLoader.GetCircleSegments());
+
+                // Extrude along Z-axis
+                glm::dvec3 extrusionDir = glm::dvec3(0, 0, 1);
+                IfcGeometry geom = Extrude(profile, extrusionDir, height);
+
+                // Set transformation
+                if (placementID)
+                {
+                    mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
+                }
+
+#ifdef CSG_DEBUG_OUTPUT
+                io::DumpIfcGeometry(geom, "IFCRIGHTCIRCULARCYLINDER_geom.obj");
+#endif
+
+                _expressIDToGeometry[expressID] = geom;
+                mesh.expressID = expressID;
+                mesh.hasGeometry = true;
+                return mesh;
+            }
             case schema::IFCGEOMETRICSET:
             case schema::IFCGEOMETRICCURVESET:
             {
@@ -1124,6 +1154,8 @@ namespace webifc::geometry
 			}
 			case schema::IFCCIRCLE:
             case schema::IFCPOLYLINE:
+            case schema::IFCCOMPOSITECURVE:
+            case schema::IFCCURVESEGMENT:
             case schema::IFCINDEXEDPOLYCURVE:
             case schema::IFCTRIMMEDCURVE:
 			{
@@ -1815,11 +1847,11 @@ namespace webifc::geometry
             }
             else if (surface.CylinderSurface.Active)
             {
-                TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
+                TriangulateCylindricalSurface(geometry, bounds3D, surface, _geometryLoader.GetCircleSegments());
             }
             else if (surface.RevolutionSurface.Active)
             {
-                TriangulateRevolution(geometry, bounds3D, surface, _settings._circleSegments);
+                TriangulateRevolution(geometry, bounds3D, surface, _geometryLoader.GetCircleSegments());
             }
             else if (surface.ExtrusionSurface.Active)
             {

@@ -2219,6 +2219,52 @@ namespace webifc::geometry
 
       break;
     }
+    case schema::IFCCLOTHOID:
+    {
+        _loader.MoveToArgumentOffset(expressID, 0);
+        uint32_t positionID = _loader.GetRefArgument();
+        double A = _loader.GetDoubleArgument();
+        glm::dmat3 placement = GetAxis2Placement2D(positionID);
+        double s1 = 0, s2 = 0; // default
+        bool sense = true; // default
+        if (trim.exist && trim.start.hasParam && trim.end.hasParam)
+        {
+            s1 = trim.start.param;
+            s2 = trim.end.param;
+            if (trimSense == 0) { // reverse
+                std::swap(s1, s2);
+                sense = false;
+            }
+        }
+        else {
+            // if no trim, use default range
+            s1 = 0;
+            s2 = A * sqrt(2 * CONST_PI);
+            sense = true;
+        }
+        if (s1 > s2) std::swap(s1, s2); // ensure s1 < s2
+        int numSegments = _circleSegments;
+        double ds = (s2 - s1) / (numSegments - 1);
+        double current_s = s1;
+        double current_theta = (current_s * current_s) / (2 * A * A);
+        glm::dvec2 current_pos = glm::dvec2(0, 0);
+        for (int i = 0; i < numSegments; i++)
+        {
+            glm::dvec2 p = current_pos;
+            curve.Add(placement * glm::dvec3(p, 1));
+            double dtheta = current_s * ds / (A * A) + ds * ds / (2 * A * A); // exact dtheta = int k ds = int (s/A^2) ds = (s ds + (ds^2)/2 ) / A^2
+            current_theta += dtheta;
+            double dx = ds * cos(current_theta);
+            double dy = ds * sin(current_theta);
+            current_pos += glm::dvec2(dx, dy);
+            current_s += ds;
+        }
+        if (!sense)
+        {
+            std::reverse(curve.points.begin(), curve.points.end());
+        }
+        break;
+    }
     default:
 
     spdlog::error("[ComputeCurve()] Unsupported curve type {}", expressID, lineType);
