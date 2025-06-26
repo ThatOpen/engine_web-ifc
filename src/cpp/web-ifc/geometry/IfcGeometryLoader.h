@@ -82,7 +82,7 @@ namespace webifc::geometry
     double _cubicScalingFactor = 1;
     double _angularScalingFactor = 1;
     std::string _angleUnits;
-    uint16_t _circleSegments;
+    uint16_t _circleSegments = 12;
     mutable std::vector<IfcCurve> _localCurvesList;
     mutable std::vector<uint32_t> _localcurvesIndices;
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsMap();

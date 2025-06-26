@@ -25,7 +25,7 @@ namespace webifc::geometry
 		_settings._coordinateToOrigin = coordinateToOrigin;
     }
 
-    IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
+    IfcGeometryLoader& IfcGeometryProcessor::GetLoader()
     {
         return _geometryLoader;
     }
