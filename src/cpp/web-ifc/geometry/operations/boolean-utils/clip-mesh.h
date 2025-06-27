@@ -91,8 +91,8 @@ namespace fuzzybools
             auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir);
             auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir);
 
-            Vec extraDir1 = glm::normalize(Vec(1.1, 1.4, 1.2));
-            Vec extraDir2 = glm::normalize(Vec(-2.1, 1.4, -3.2));
+            Vec extraDir1 = glm::normalize(raydir + Vec(0.02,0.01,0.04));
+            Vec extraDir2 = glm::normalize(raydir + Vec(0.20,-0.1,0.40));
 
             auto isInside1Loc_B = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir1);
             auto isInside2Loc_B = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir1);

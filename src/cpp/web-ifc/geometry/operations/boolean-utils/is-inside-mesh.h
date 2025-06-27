@@ -5,13 +5,13 @@
 /*
     This function was revised on 2024-03-17.  Further review is needed once we have an overview
     of the entire package.
-    
+
     Parameter normal is assumed to be normalised.
     Function computeNormal returns a normalised vector.
-    
+
     The constants toleranceBoundaryPoint and toleranceParallel are defined in eps.h.
 */
-    #pragma once
+#pragma once
 
 #include <glm/glm.hpp>
 #include <iostream>
@@ -37,22 +37,20 @@ namespace fuzzybools
         Vec normal;
     };
 
-    inline InsideResult isInsideMesh
-    (
-        const Vec& pt,
+    inline InsideResult isInsideMesh(
+        const Vec &pt,
         Vec normal,
-        const Geometry& g,
-        BVH& bvh,
+        const Geometry &g,
+        BVH &bvh,
         Vec dir = Vec(1.0, 1.1, 1.4),
-        bool UNION = false
-    )
+        bool UNION = false)
     {
         int winding = 0;
-        dir = dir + Vec(0.02,0.01,0.04); //Randomly changing the normal to create a truly random direction for raytrace 
+        dir = dir + Vec(0.02, 0.01, 0.04); // Randomly changing the normal to create a truly random direction for raytrace
         InsideResult result;
         result.loc = MeshLocation::BOUNDARY;
         result.normal = glm::dvec3(0);
-        
+
         double dirLength = dir.length();
 
         bool hasResult = bvh.IntersectRay(pt, dir, [&](uint32_t i) -> bool

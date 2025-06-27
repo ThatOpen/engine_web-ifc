@@ -52,6 +52,14 @@ namespace bimGeometry
         {
             profile = bimGeometry::GetUShapedCurve(width, depth, thickness, flangeThickness, filletRadius, radius, slope, _placement);
         }
+        if(pType == 6)
+        {
+            profile = bimGeometry::GetRectangleCurve(width, depth, _placement);
+        }
+        if(pType == 7)
+        {
+            profile = bimGeometry::GetTrapeziumCurve(width, thickness, depth, flangeThickness, _placement);
+        }
 
 
         for (int r = 0; r <  profile.points.size(); r++)
