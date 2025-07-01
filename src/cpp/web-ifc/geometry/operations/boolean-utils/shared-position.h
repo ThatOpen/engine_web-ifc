@@ -1590,8 +1590,8 @@ namespace fuzzybools
             }
         }
 
-        auto Astart = lineA.origin + lineA.direction * size;
-        auto Aend = lineA.origin - lineA.direction * size;
+        auto Astart = lineA.origin + lineA.direction * (size * 2);
+        auto Aend = lineA.origin - lineA.direction * (size * 2);
 
         std::vector<double> distances;
         distances.reserve(p.lines.size());
@@ -1611,7 +1611,7 @@ namespace fuzzybools
                     sp.points[seg.first].location3D,
                     sp.points[seg.second].location3D);
 
-                if (result.distance < SCALED_EPS_BIG)
+                if (result.distance < EPS_INTERSECTION_LINES)
                 {
                     if (!p.aabb.contains(sp.points[seg.first].location3D))
                     {
@@ -1640,7 +1640,7 @@ namespace fuzzybools
                         }
                     }
 
-                    if (!equals(pt, result.point2, SCALED_EPS_BIG))
+                    if (!equals(pt, result.point2, EPS_INTERSECTION_LINES))
                     {
                         if (messages)
                         {
@@ -1812,71 +1812,68 @@ namespace fuzzybools
             AddLineLineIsects(plane, sp);
         }
 
-        if (true)
+        // intersect planes
+        for (size_t planeAIndex = 0; planeAIndex < sp.planes.size(); planeAIndex++)
         {
-            // intersect planes
-            for (size_t planeAIndex = 0; planeAIndex < sp.planes.size(); planeAIndex++)
+            for (size_t planeBIndex = 0; planeBIndex < sp.planes.size(); planeBIndex++)
             {
-                for (size_t planeBIndex = 0; planeBIndex < sp.planes.size(); planeBIndex++)
+                auto &planeA = sp.planes[planeAIndex];
+                auto &planeB = sp.planes[planeBIndex];
+
+                if (!planeA.aabb.intersects(planeB.aabb))
                 {
-                    auto &planeA = sp.planes[planeAIndex];
-                    auto &planeB = sp.planes[planeBIndex];
+                    continue;
+                }
 
-                    if (!planeA.aabb.intersects(planeB.aabb))
+                // plane intersect results in new lines
+                // new lines result in new line intersects
+                // new line intersects result in new points
+
+                if (std::fabs(glm::dot(planeA.normal, planeB.normal)) > 1.0 - EPS_BIG)
+                {
+                    // parallel planes, don't care
+                    continue;
+                }
+
+                // calculate plane intersection line
+                auto result = PlanePlaneIsect(planeA.normal, planeA.distance, planeB.normal, planeB.distance);
+
+                // TODO: invalid temp line object
+                Line intersectionLine;
+                intersectionLine.origin = result.pos;
+                intersectionLine.direction = result.dir;
+
+                if (!planeA.IsPointOnPlane(intersectionLine.origin) || !planeA.IsPointOnPlane(intersectionLine.origin + intersectionLine.direction * 1000.))
+                {
+                    if (messages)
                     {
-                        continue;
+                        printf("Bad isect line in Normalize\n");
                     }
-
-                    // plane intersect results in new lines
-                    // new lines result in new line intersects
-                    // new line intersects result in new points
-
-                    if (std::fabs(glm::dot(planeA.normal, planeB.normal)) > 1.0 - EPS_BIG)
+                }
+                if (!planeB.IsPointOnPlane(intersectionLine.origin) || !planeB.IsPointOnPlane(intersectionLine.origin + intersectionLine.direction * 1000.))
+                {
+                    if (messages)
                     {
-                        // parallel planes, don't care
-                        continue;
+                        printf("Bad isect line in Normalize\n");
                     }
+                }
 
-                    // calculate plane intersection line
-                    auto result = PlanePlaneIsect(planeA.normal, planeA.distance, planeB.normal, planeB.distance);
+                // get all intersection points with the shared line and both planes
+                auto isectA = ComputeInitialIntersections(planeA, sp, intersectionLine);
+                auto isectB = ComputeInitialIntersections(planeB, sp, intersectionLine);
 
-                    // TODO: invalid temp line object
-                    Line intersectionLine;
-                    intersectionLine.origin = result.pos;
-                    intersectionLine.direction = result.dir;
+                // from these, figure out the shared segments on the current line produced by these two planes
+                auto segments = sp.BuildSegments(isectA, isectB);
 
-                    if (!planeA.IsPointOnPlane(intersectionLine.origin) || !planeA.IsPointOnPlane(intersectionLine.origin + intersectionLine.direction * 1000.))
-                    {
-                        if (messages)
-                        {
-                            printf("Bad isect line in Normalize\n");
-                        }
-                    }
-                    if (!planeB.IsPointOnPlane(intersectionLine.origin) || !planeB.IsPointOnPlane(intersectionLine.origin + intersectionLine.direction * 1000.))
-                    {
-                        if (messages)
-                        {
-                            printf("Bad isect line in Normalize\n");
-                        }
-                    }
-
-                    // get all intersection points with the shared line and both planes
-                    auto isectA = ComputeInitialIntersections(planeA, sp, intersectionLine);
-                    auto isectB = ComputeInitialIntersections(planeB, sp, intersectionLine);
-
-                    // from these, figure out the shared segments on the current line produced by these two planes
-                    auto segments = sp.BuildSegments(isectA, isectB);
-
-                    if (segments.empty())
-                    {
-                        // nothing resulted from this plane-plane intersection
-                        continue;
-                    }
-                    else
-                    {
-                        AddSegments(planeA, sp, intersectionLine, segments);
-                        AddSegments(planeB, sp, intersectionLine, segments);
-                    }
+                if (segments.empty())
+                {
+                    // nothing resulted from this plane-plane intersection
+                    continue;
+                }
+                else
+                {
+                    AddSegments(planeA, sp, intersectionLine, segments);
+                    AddSegments(planeB, sp, intersectionLine, segments);
                 }
             }
         }
@@ -1904,7 +1901,43 @@ namespace fuzzybools
         Geometry geom;
         for (auto &plane : sp.planes)
         {
+
+            #ifdef CSG_DEBUG_OUTPUT
+                // std::vector<std::vector<glm::dvec2>> edges;
+
+                // auto basis = plane.MakeBasis();
+
+                // for (auto& line : plane.lines) {
+                //     // Get line parameters
+                //     auto origin = line.origin;      // 3D point (glm::dvec3)
+                //     auto direction = line.direction; // 3D vector (glm::dvec3)
+                    
+                //     // Convert each distance to a 3D point along the line
+                //     std::vector<glm::dvec2> lineSegments;
+                //     for (auto distance : line.points) {
+                //         glm::dvec3 point3D = origin + glm::dvec3(direction.x * distance.first, direction.y * distance.first, direction.z * distance.first);  // 3D calculation
+                //         glm::dvec2 point2D = basis.project(point3D);        // Project to 2D
+                //         lineSegments.push_back(point2D);
+                //     }
+                    
+                //     // Create edges between consecutive points
+                //     for (size_t i = 0; i < lineSegments.size() - 1; ++i) {
+                //         edges.push_back({ 
+                //             lineSegments[i], 
+                //             lineSegments[i + 1] 
+                //         });
+                //     }
+                // }
+
+                // DumpSVGLines(edges, L"contour.html");
+            #endif
+
             sp.TriangulatePlane(geom, plane);
+
+            #ifdef CSG_DEBUG_OUTPUT
+                // DumpGeometry(geom, L"triangulated.obj");
+            #endif
+
         }
 
         for (auto &plane : A.planes)
