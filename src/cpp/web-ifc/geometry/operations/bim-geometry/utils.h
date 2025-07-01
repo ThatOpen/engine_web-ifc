@@ -1290,48 +1290,48 @@ namespace bimGeometry
 		double hd = depth / 2;
 		double hweb = webThickness / 2;
 
-		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));				   // TL
-		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));				   // TR
-		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness, 1)); // TR knee
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 0));				   // TL
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 0));				   // TR
+		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness, 0)); // TR knee
 
 		if (hasFillet)
 		{
 			// TODO: interpolate
-			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, +hd - flangeThickness, 1)); // TR elbow start
-			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness - filletRadius, 1)); // TR elbow end
+			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, +hd - flangeThickness, 0)); // TR elbow start
+			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness - filletRadius, 0)); // TR elbow end
 
-			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness + filletRadius, 1)); // BR elbow start
-			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, -hd + flangeThickness, 1)); // BR elbow end
+			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness + filletRadius, 0)); // BR elbow start
+			c.points.push_back(placement * glm::dvec3(+hweb + filletRadius, -hd + flangeThickness, 0)); // BR elbow end
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness, 1)); // TR elbow
-			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness, 1)); // BR elbow
+			c.points.push_back(placement * glm::dvec3(+hweb, +hd - flangeThickness, 0)); // TR elbow
+			c.points.push_back(placement * glm::dvec3(+hweb, -hd + flangeThickness, 0)); // BR elbow
 		}
 
-		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness, 1)); // BR knee
-		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));				   // BR
+		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness, 0)); // BR knee
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 0));				   // BR
 
-		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));				   // BL
-		c.points.push_back(placement * glm::dvec3(-hw, -hd + flangeThickness, 1)); // BL knee
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 0));				   // BL
+		c.points.push_back(placement * glm::dvec3(-hw, -hd + flangeThickness, 0)); // BL knee
 
 		if (hasFillet)
 		{
 			// TODO: interpolate
-			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, -hd + flangeThickness, 1)); // BL elbow start
-			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness + filletRadius, 1)); // BL elbow end
+			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, -hd + flangeThickness, 0)); // BL elbow start
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness + filletRadius, 0)); // BL elbow end
 
-			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness - filletRadius, 1)); // TL elbow start
-			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, +hd - flangeThickness, 1)); // TL elbow end
+			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness - filletRadius, 0)); // TL elbow start
+			c.points.push_back(placement * glm::dvec3(-hweb - filletRadius, +hd - flangeThickness, 0)); // TL elbow end
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness, 1)); // BL elbow
-			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness, 1)); // TL elbow
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd + flangeThickness, 0)); // BL elbow
+			c.points.push_back(placement * glm::dvec3(-hweb, +hd - flangeThickness, 0)); // TL elbow
 		}
 
-		c.points.push_back(placement * glm::dvec3(-hw, +hd - flangeThickness, 1)); // TL knee
-		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));				   // TL
+		c.points.push_back(placement * glm::dvec3(-hw, +hd - flangeThickness, 0)); // TL knee
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 0));				   // TL
 
 		if (MatrixFlipsTriangles(placement))
 		{
@@ -1354,20 +1354,20 @@ namespace bimGeometry
 
 		// TODO: implement the radius
 
-		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
-		c.points.push_back(placement * glm::dvec3(+hw, +hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 0));
+		c.points.push_back(placement * glm::dvec3(+hw, +hd, 0));
 
-		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness + slopeOffsetRight, 1));
+		c.points.push_back(placement * glm::dvec3(+hw, +hd - flangeThickness + slopeOffsetRight, 0));
 
-		c.points.push_back(placement * glm::dvec3(-hw + webThickness, +hd - flangeThickness, 1 - slopeOffsetLeft));
-		c.points.push_back(placement * glm::dvec3(-hw + webThickness, -hd + flangeThickness, 1 + slopeOffsetLeft));
+		c.points.push_back(placement * glm::dvec3(-hw + webThickness, +hd - flangeThickness, 0 - slopeOffsetLeft));
+		c.points.push_back(placement * glm::dvec3(-hw + webThickness, -hd + flangeThickness, 0 + slopeOffsetLeft));
 
-		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness - slopeOffsetRight, 1));
+		c.points.push_back(placement * glm::dvec3(+hw, -hd + flangeThickness - slopeOffsetRight, 0));
 
-		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));
-		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 0));
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 0));
 
-		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 0));
 
 		if (MatrixFlipsTriangles(placement))
 		{
@@ -1385,25 +1385,25 @@ namespace bimGeometry
 		double hd = depth / 2;
 		double hweb = thickness / 2;
 
-		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
-		c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
-		c.points.push_back(placement * glm::dvec3(+hw, -hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 0));
+		c.points.push_back(placement * glm::dvec3(-hw, -hd, 0));
+		c.points.push_back(placement * glm::dvec3(+hw, -hd, 0));
 
 		if (hasFillet)
 		{
 			// TODO: Create interpolation and sloped lines
-			c.points.push_back(placement * glm::dvec3(+hw, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw + thickness, +hd, 1));
+			c.points.push_back(placement * glm::dvec3(+hw, -hd + thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, +hd, 0));
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec3(+hw, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw + thickness, +hd, 1));
+			c.points.push_back(placement * glm::dvec3(+hw, -hd + thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, +hd, 0));
 		}
 
-		c.points.push_back(placement * glm::dvec3(-hw, +hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, +hd, 0));
 
 		if (MatrixFlipsTriangles(placement))
 		{
@@ -1421,31 +1421,31 @@ namespace bimGeometry
 		double hd = depth / 2;
 		double hweb = thickness / 2;
 
-		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(hw, hd, 0));
 
 		if (hasFillet)
 		{
 			// TODO: Create interpolation and sloped lines
-			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(hweb, -hd, 1));
-			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
-			c.points.push_back(placement * glm::dvec3(-hweb, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(hweb, -hd, 0));
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 0));
+			c.points.push_back(placement * glm::dvec3(-hweb, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw, hd, 0));
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(hweb, -hd, 1));
-			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
-			c.points.push_back(placement * glm::dvec3(-hweb, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+			c.points.push_back(placement * glm::dvec3(hw, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(hweb, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(hweb, -hd, 0));
+			c.points.push_back(placement * glm::dvec3(-hweb, -hd, 0));
+			c.points.push_back(placement * glm::dvec3(-hweb, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw, hd, 0));
 		}
 
-		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(hw, hd, 0));
 
 		if (MatrixFlipsTriangles(placement))
 		{
@@ -1463,8 +1463,8 @@ namespace bimGeometry
 		double hd = depth / 2;
 		// double hweb = thickness / 2;
 
-		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
-		c.points.push_back(placement * glm::dvec3(hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 0));
+		c.points.push_back(placement * glm::dvec3(hw, hd, 0));
 
 		if (hasFillet)
 		{
@@ -1472,19 +1472,19 @@ namespace bimGeometry
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec3(hw, hd - girth, 1));
-			c.points.push_back(placement * glm::dvec3(hw - thickness, hd - girth, 1));
-			c.points.push_back(placement * glm::dvec3(hw - thickness, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw + thickness, hd - thickness, 1));
-			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(hw - thickness, -hd + thickness, 1));
-			c.points.push_back(placement * glm::dvec3(hw - thickness, -hd + girth, 1));
-			c.points.push_back(placement * glm::dvec3(hw, -hd + girth, 1));
-			c.points.push_back(placement * glm::dvec3(hw, -hd, 1));
-			c.points.push_back(placement * glm::dvec3(-hw, -hd, 1));
+			c.points.push_back(placement * glm::dvec3(hw, hd - girth, 0));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, hd - girth, 0));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, hd - thickness, 0));
+			c.points.push_back(placement * glm::dvec3(-hw + thickness, -hd + thickness, 0));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, -hd + thickness, 0));
+			c.points.push_back(placement * glm::dvec3(hw - thickness, -hd + girth, 0));
+			c.points.push_back(placement * glm::dvec3(hw, -hd + girth, 0));
+			c.points.push_back(placement * glm::dvec3(hw, -hd, 0));
+			c.points.push_back(placement * glm::dvec3(-hw, -hd, 0));
 		}
 
-		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 0));
 
 		if (MatrixFlipsTriangles(placement))
 		{
@@ -1502,15 +1502,15 @@ namespace bimGeometry
 		double hweb = webThickness / 2;
 		// double hfla = flangeThickness / 2;
 
-		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
-		c.points.push_back(placement * glm::dvec3(hweb, hd, 1));
-		c.points.push_back(placement * glm::dvec3(hweb, -hd + flangeThickness, 1));
-		c.points.push_back(placement * glm::dvec3(hw, -hd + flangeThickness, 1));
-		c.points.push_back(placement * glm::dvec3(hw, -hd, 1));
-		c.points.push_back(placement * glm::dvec3(-hweb, -hd, 1));
-		c.points.push_back(placement * glm::dvec3(-hweb, hd - flangeThickness, 1));
-		c.points.push_back(placement * glm::dvec3(-hw, hd - flangeThickness, 1));
-		c.points.push_back(placement * glm::dvec3(-hw, hd, 1));
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 0));
+		c.points.push_back(placement * glm::dvec3(hweb, hd, 0));
+		c.points.push_back(placement * glm::dvec3(hweb, -hd + flangeThickness, 0));
+		c.points.push_back(placement * glm::dvec3(hw, -hd + flangeThickness, 0));
+		c.points.push_back(placement * glm::dvec3(hw, -hd, 0));
+		c.points.push_back(placement * glm::dvec3(-hweb, -hd, 0));
+		c.points.push_back(placement * glm::dvec3(-hweb, hd - flangeThickness, 0));
+		c.points.push_back(placement * glm::dvec3(-hw, hd - flangeThickness, 0));
+		c.points.push_back(placement * glm::dvec3(-hw, hd, 0));
 
 		if (MatrixFlipsTriangles(placement))
 		{
