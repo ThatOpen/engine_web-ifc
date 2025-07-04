@@ -27,7 +27,7 @@ constexpr double toleranceIsInsideCenterExtents = 1.0E-10;
 constexpr double toleranceVectorEquality = 1.0E-04;
 constexpr double toleranceScalarEquality = 1.0E-04;
 constexpr double toleranceCollinear      = 1.0E-04;
-constexpr double EPS_INTERSECTION_LINES = 1.0E-02;
+constexpr double EPS_INTERSECTION_LINES = 1.0E-01;
 
 /*
     Constants used in shared-position

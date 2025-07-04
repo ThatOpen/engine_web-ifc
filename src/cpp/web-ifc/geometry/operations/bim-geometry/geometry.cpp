@@ -30,10 +30,6 @@ namespace bimGeometry
 
     void Geometry::AddPoint(glm::dvec3& pt, glm::dvec3& n)
     {
-        //vertexData.reserve((numPoints + 1) * VERTEX_FORMAT_SIZE_FLOATS);
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
         vertexData.push_back(pt.x);
         vertexData.push_back(pt.y);
         vertexData.push_back(pt.z);
@@ -41,10 +37,6 @@ namespace bimGeometry
         vertexData.push_back(n.x);
         vertexData.push_back(n.y);
         vertexData.push_back(n.z);
-
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
 
         numPoints += 1;
     }
@@ -58,6 +50,13 @@ namespace bimGeometry
         );
     }
 
+    void Geometry::SetPoint(double x, double y, double z, size_t index)
+    {
+        vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0] = x;
+        vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1] = y;
+        vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2] = z;
+    }
+
     Face Geometry::GetFace(size_t index) const
     {
         Face f;
@@ -68,7 +67,7 @@ namespace bimGeometry
         return f;
     }
 
-    void Geometry::AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+    void Geometry::AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, uint32_t pId)
     {
         glm::dvec3 normal;
 
@@ -83,7 +82,7 @@ namespace bimGeometry
         AddPoint(b, normal);
         AddPoint(c, normal);
 
-        AddFace(numPoints - 3, numPoints - 2, numPoints - 1, -1);
+        AddFace(numPoints - 3, numPoints - 2, numPoints - 1, pId);
     }
 
     void Geometry::AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId)

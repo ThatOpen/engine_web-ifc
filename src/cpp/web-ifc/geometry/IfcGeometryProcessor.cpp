@@ -266,7 +266,7 @@ namespace webifc::geometry
                     finalGeometry = BoolProcess(flatElementMeshes, voidGeoms, "DIFFERENCE");
                     
                     #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
+                    //    io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
                     #endif
                 }
 
@@ -995,7 +995,7 @@ namespace webifc::geometry
 
                 // TODO: correct dump in case of compositeProfile
                 #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
+                //    io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
                 #endif
 
                 IfcGeometry geom;
@@ -1036,7 +1036,7 @@ namespace webifc::geometry
 
                 // TODO: correct dump in case of compositeProfile
                 #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
+                //    io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
                 #endif
 
                 _expressIDToGeometry[expressID] = geom;

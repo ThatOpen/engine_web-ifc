@@ -952,13 +952,13 @@ namespace fuzzybools
                 if (isA)
                 {
 #ifdef CSG_DEBUG_OUTPUT
-                    DumpGeometry(geom, L"Initial_A.obj");
+//                    DumpGeometry(geom, L"Initial_A.obj");
 #endif
                 }
                 else
                 {
 #ifdef CSG_DEBUG_OUTPUT
-                    DumpGeometry(geom, L"Initial_B.obj");
+//                    DumpGeometry(geom, L"Initial_B.obj");
 #endif
                 }
 
@@ -967,7 +967,7 @@ namespace fuzzybools
                 auto c = geom.GetPoint(f.i2);
 
 #ifdef CSG_DEBUG_OUTPUT
-                relevant.AddFace(a, b, c, -1);
+//                relevant.AddFace(a, b, c, -1);
 #endif
 
                 Vec3 norm;
@@ -1062,14 +1062,14 @@ namespace fuzzybools
             }
 
 #ifdef CSG_DEBUG_OUTPUT
-            if (isA)
-            {
-                DumpGeometry(relevant, L"relevantA.obj");
-            }
-            else
-            {
-                DumpGeometry(relevant, L"relevantB.obj");
-            }
+            // if (isA)
+            // {
+            //     DumpGeometry(relevant, L"relevantA.obj");
+            // }
+            // else
+            // {
+            //     DumpGeometry(relevant, L"relevantB.obj");
+            // }
 #endif
         }
 
@@ -1292,14 +1292,14 @@ namespace fuzzybools
             }
 
 #ifdef CSG_DEBUG_OUTPUT
-            std::vector<std::vector<glm::dvec2>> edgesPrinted;
+            // std::vector<std::vector<glm::dvec2>> edgesPrinted;
 
-            for (auto &e : edges)
-            {
-                edgesPrinted.push_back({projectedPoints[e.first], projectedPoints[e.second]});
-            }
+            // for (auto &e : edges)
+            // {
+            //     edgesPrinted.push_back({projectedPoints[e.first], projectedPoints[e.second]});
+            // }
 
-            DumpSVGLines(edgesPrinted, L"poly.html");
+            // DumpSVGLines(edgesPrinted, L"poly.html");
 #endif
 
             CDT::Triangulation<double> cdt(CDT::VertexInsertionOrder::AsProvided);
