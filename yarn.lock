@@ -54,14 +54,14 @@
     semver "^6.3.1"
 
 "@babel/generator@^7.27.5":
-  version "7.27.5"
-  resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.27.5.tgz"
-  integrity sha512-ZGhA37l0e/g2s1Cnzdix0O3aLYm66eF8aufiVteOgnwxgnRP8GoyMj7VWsgWnQbVKXyge7hqrFh2K2TQM6t1Hw==
+  version "7.28.0"
+  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.28.0.tgz#9cc2f7bd6eb054d77dc66c2664148a0c5118acd2"
+  integrity sha512-lJjzvrbEeWrhB4P3QBsH7tey117PjLZnDbLiQEKjQ/fNJTjuq4HSqgFA+UNSwZT8D7dxxbnuSBMsa1lrWzKlQg==
   dependencies:
-    "@babel/parser" "^7.27.5"
-    "@babel/types" "^7.27.3"
-    "@jridgewell/gen-mapping" "^0.3.5"
-    "@jridgewell/trace-mapping" "^0.3.25"
+    "@babel/parser" "^7.28.0"
+    "@babel/types" "^7.28.0"
+    "@jridgewell/gen-mapping" "^0.3.12"
+    "@jridgewell/trace-mapping" "^0.3.28"
     jsesc "^3.0.2"
 
 "@babel/helper-compilation-targets@^7.27.2":
@@ -120,7 +120,7 @@
     "@babel/template" "^7.27.2"
     "@babel/types" "^7.27.6"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.23.9", "@babel/parser@^7.27.2", "@babel/parser@^7.27.5", "@babel/parser@^7.27.7":
+"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.23.9", "@babel/parser@^7.27.2", "@babel/parser@^7.27.7", "@babel/parser@^7.28.0":
   version "7.28.0"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.28.0.tgz#979829fbab51a29e13901e5a80713dbcb840825e"
   integrity sha512-jVZGvOxOuNSsuQuLRTh13nU0AogFlw32w/MT+LV6D3sP5WdbW61E77RnkbaO2dUvmPAYrBDJXGn5gGS6tH4j8g==
@@ -724,7 +724,7 @@
     "@types/yargs" "^17.0.33"
     chalk "^4.1.2"
 
-"@jridgewell/gen-mapping@^0.3.5":
+"@jridgewell/gen-mapping@^0.3.12", "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.12"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.12.tgz#2234ce26c62889f03db3d7fea43c1932ab3e927b"
   integrity sha512-OuLGC46TjB5BbN1dH8JULVVZY4WTdkF7tV9Ys6wLL1rubZnCMstOhNHueU5bLCrnRuDhKPDM4g6sw4Bel5Gzqg==
@@ -754,6 +754,14 @@
   version "0.3.25"
   resolved "https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.25.tgz"
   integrity sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==
+  dependencies:
+    "@jridgewell/resolve-uri" "^3.1.0"
+    "@jridgewell/sourcemap-codec" "^1.4.14"
+
+"@jridgewell/trace-mapping@^0.3.28":
+  version "0.3.29"
+  resolved "https://registry.yarnpkg.com/@jridgewell/trace-mapping/-/trace-mapping-0.3.29.tgz#a58d31eaadaf92c6695680b2e1d464a9b8fbf7fc"
+  integrity sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ==
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
