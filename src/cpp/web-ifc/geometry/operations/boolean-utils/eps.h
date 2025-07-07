@@ -27,7 +27,7 @@ constexpr double toleranceIsInsideCenterExtents = 1.0E-10;
 constexpr double toleranceVectorEquality = 1.0E-04;
 constexpr double toleranceScalarEquality = 1.0E-04;
 constexpr double toleranceCollinear      = 1.0E-04;
-constexpr double EPS_INTERSECTION_LINES = 1.0E-01;
+constexpr double EPS_INTERSECTION_LINES = 1.0E-04; // Controls the plane intersection margin. Increasing it to 1.0E+01 solves #1092 and some others, but breaks #527, #384, etc.
 
 /*
     Constants used in shared-position

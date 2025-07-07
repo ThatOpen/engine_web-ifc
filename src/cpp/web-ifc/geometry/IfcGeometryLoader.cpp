@@ -2366,13 +2366,16 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       double xdim = _loader.GetDoubleArgument();
       double ydim = _loader.GetDoubleArgument();
       double thickness = _loader.GetDoubleArgument();
+      double innerRadius = _loader.GetDoubleArgument();
+      double outerRadius = _loader.GetDoubleArgument();
 
       // fillets not implemented yet
 
       glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-      profile.curve = GetRectangleCurve(xdim, ydim, placement);
-      profile.holes.push_back(GetRectangleCurve(xdim - thickness, ydim - thickness, placement));
+      profile.curve = GetRectangleCurve(xdim, ydim, placement, _circleSegments, outerRadius);
+      profile.holes.push_back(GetRectangleCurve(xdim - thickness, ydim - thickness, placement, _circleSegments, innerRadius));
+
       std::reverse(profile.holes[0].points.begin(), profile.holes[0].points.end());
 
       return profile;

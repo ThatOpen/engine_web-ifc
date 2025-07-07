@@ -375,9 +375,15 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 		return GetEllipseCurve(radius, radius, numSegments, placement);
 	}
 
-	inline IfcCurve GetRectangleCurve(double xdim, double ydim, glm::dmat3 placement = glm::dmat3(1))
+	inline IfcCurve GetRectangleCurve(double xdim, double ydim, glm::dmat3 placement = glm::dmat3(1), int numSegments = 12, double radius = 0)
 	{
-		bimGeometry::Curve temp = bimGeometry::GetRectangleCurve(xdim, ydim, placement);
+		glm::dmat4 placement4 = glm::dmat4(
+			glm::dvec4(placement[0], 0.0),  // First column + w=0
+			glm::dvec4(placement[1], 0.0),  // Second column + w=0  
+			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
+			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
+		);
+		bimGeometry::Curve temp = bimGeometry::GetRectangleCurve(xdim, ydim, placement4, numSegments, radius);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;
@@ -385,7 +391,13 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve GetIShapedCurve(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, double filletRadius, glm::dmat3 placement = glm::dmat3(1))
 	{
-		bimGeometry::Curve temp = bimGeometry::GetIShapedCurve(width, depth, webThickness, flangeThickness, hasFillet, filletRadius,placement);
+		glm::dmat4 placement4 = glm::dmat4(
+			glm::dvec4(placement[0], 0.0),  // First column + w=0
+			glm::dvec4(placement[1], 0.0),  // Second column + w=0  
+			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
+			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
+		);
+		bimGeometry::Curve temp = bimGeometry::GetIShapedCurve(width, depth, webThickness, flangeThickness, hasFillet, filletRadius, placement4);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;
@@ -393,7 +405,13 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve GetUShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, double filletRadius, double edgeRadius, double flangeSlope, glm::dmat3 placement = glm::dmat3(1))
 	{
-		bimGeometry::Curve temp = bimGeometry::GetUShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, flangeSlope,placement);
+		glm::dmat4 placement4 = glm::dmat4(
+			glm::dvec4(placement[0], 0.0),  // First column + w=0
+			glm::dvec4(placement[1], 0.0),  // Second column + w=0  
+			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
+			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
+		);
+		bimGeometry::Curve temp = bimGeometry::GetUShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, flangeSlope, placement4);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;
@@ -401,7 +419,13 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
 	{
-		bimGeometry::Curve temp = bimGeometry::GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement);
+		glm::dmat4 placement4 = glm::dmat4(
+			glm::dvec4(placement[0], 0.0),  // First column + w=0
+			glm::dvec4(placement[1], 0.0),  // Second column + w=0  
+			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
+			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
+		);
+		bimGeometry::Curve temp = bimGeometry::GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement4);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;
@@ -409,7 +433,13 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve GetTShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
 	{
-		bimGeometry::Curve temp = bimGeometry::GetTShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement);
+		glm::dmat4 placement4 = glm::dmat4(
+			glm::dvec4(placement[0], 0.0),  // First column + w=0
+			glm::dvec4(placement[1], 0.0),  // Second column + w=0  
+			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
+			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
+		);
+		bimGeometry::Curve temp = bimGeometry::GetTShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement4);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;
@@ -417,7 +447,13 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve GetCShapedCurve(double width, double depth, double girth, double thickness, bool hasFillet, double filletRadius, glm::dmat3 placement = glm::dmat3(1))
 	{
-		bimGeometry::Curve temp = bimGeometry::GetCShapedCurve(width, depth, girth, thickness, hasFillet, filletRadius, placement);
+		glm::dmat4 placement4 = glm::dmat4(
+			glm::dvec4(placement[0], 0.0),  // First column + w=0
+			glm::dvec4(placement[1], 0.0),  // Second column + w=0  
+			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
+			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
+		);
+		bimGeometry::Curve temp = bimGeometry::GetCShapedCurve(width, depth, girth, thickness, hasFillet, filletRadius, placement4);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;
@@ -425,7 +461,13 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve GetZShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, double filletRadius, double edgeRadius, glm::dmat3 placement = glm::dmat3(1))
 	{
-		bimGeometry::Curve temp = bimGeometry::GetZShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, placement);
+		glm::dmat4 placement4 = glm::dmat4(
+			glm::dvec4(placement[0], 0.0),  // First column + w=0
+			glm::dvec4(placement[1], 0.0),  // Second column + w=0  
+			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
+			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
+		);
+		bimGeometry::Curve temp = bimGeometry::GetZShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, placement4);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;
@@ -433,7 +475,13 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 	inline IfcCurve GetTrapeziumCurve(double bottomXDim, double topXDim, double yDim, double topXOffset, glm::dmat3 placement = glm::dmat3(1))
 	{
-		bimGeometry::Curve temp = bimGeometry::GetTrapeziumCurve(bottomXDim, topXDim, yDim, topXOffset, placement);
+		glm::dmat4 placement4 = glm::dmat4(
+			glm::dvec4(placement[0], 0.0),  // First column + w=0
+			glm::dvec4(placement[1], 0.0),  // Second column + w=0  
+			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
+			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
+		);
+		bimGeometry::Curve temp = bimGeometry::GetTrapeziumCurve(bottomXDim, topXDim, yDim, topXOffset, placement4);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;

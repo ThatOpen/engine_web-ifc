@@ -23,10 +23,10 @@ namespace bimGeometry
     Buffers Profile::GetBuffers()
     {
         Buffers buffers;
-        glm::dmat4 _placement = glm::dmat4(glm::dvec4(placement[0],placement[1],placement[2], 1),
-                                            glm::dvec4(placement[3],placement[4],placement[5], 1),
-                                            glm::dvec4(placement[6],placement[7],placement[8], 1),
-                                            glm::dvec4(placement[9],placement[10],placement[11], 1));
+        glm::dmat4 _placement = glm::dmat4(glm::dvec4(placement[0],placement[1],placement[2], placement[3]),
+                                            glm::dvec4(placement[4],placement[5],placement[6], placement[7]),
+                                            glm::dvec4(placement[8],placement[9],placement[10], placement[11]),
+                                            glm::dvec4(placement[12],placement[13],placement[14], placement[15]));
 
         if(pType == 0)
         {
