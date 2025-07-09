@@ -282,7 +282,6 @@ namespace fuzzybools
             }
             else if (isInside1 == MeshLocation::BOUNDARY && isInside2 == MeshLocation::BOUNDARY)
             {
-                /*
                 // both boundary, no dice if normals are opposite direction
                 auto dot = glm::dot(isInside1Loc.normal, isInside2Loc.normal);
 
@@ -292,9 +291,8 @@ namespace fuzzybools
                 {
                     // normals face away from eachother, we can keep this face
                     // furthermore, since the first operand is the first added, we don't flip
-                    result.AddFace(a, b, c);
+                    result.AddFace(a, b, c, tri.pId);
                 }
-                */
             }
             else if (isInside1 == MeshLocation::BOUNDARY && isInside2 == MeshLocation::OUTSIDE)
             {
