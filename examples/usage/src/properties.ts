@@ -86,6 +86,7 @@ export default async function() {
         propsets.forEach((set:any) => {
             set.HasProperties.forEach((p:any) => {
                 console.log(`${set.Name.value}/${p.Name.value}:  ${p.NominalValue.value}`);
+                console.log(p);
                 props.push(p);
             });
         });

@@ -26,8 +26,8 @@ export default async function() {
             }
         });
 
-        Equals("total num vertices", totalSizeVerts, 262872);
-        Equals("total num indices", totalSizeIndices, 43812);
+        Equals("total num vertices", totalSizeVerts, 181548);
+        Equals("total num indices", totalSizeIndices, 43980);
     });
 
     await WithIFCFileLoaded("partialgeometrystream", (ifcapi: WebIFC.IfcAPI, modelID: number) => {
@@ -56,7 +56,7 @@ export default async function() {
             }
         });
 
-        Equals("total num vertices", totalSizeVerts, 192384);
-        Equals("total num indices", totalSizeIndices, 32064);
+        Equals("total num vertices", totalSizeVerts, 132060);
+        Equals("total num indices", totalSizeIndices, 32196);
     });
 }
