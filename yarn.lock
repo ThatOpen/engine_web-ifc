@@ -1798,11 +1798,6 @@ get-stream@^6.0.0:
   resolved "https://registry.npmjs.org/get-stream/-/get-stream-6.0.1.tgz"
   integrity sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==
 
-glm@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/glm/-/glm-1.0.0.tgz"
-  integrity sha512-9/ubsXH/3w4pWunc1b3iVY9O/avtwt0kiEM07lydjASWI6CC4oFJHPURlpn8KuluDRlSHwNH6FlHFc5P1SBiJQ==
-
 glob-parent@^5.1.2:
   version "5.1.2"
   resolved "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz"
