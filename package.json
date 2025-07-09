@@ -4,6 +4,7 @@
   "description": "ifc loading on the web",
   "module": "./web-ifc-api.js",
   "main": "./web-ifc-api-node.js",
+  "license": "MPL-2.0",
   "exports": {
     ".": {
       "require": "./web-ifc-api-node.js",
@@ -24,7 +25,7 @@
     "build-cleanup": "rimraf dist/helpers/log.ts && rimraf dist/helpers/properties.ts && rimraf dist/web-ifc-api.ts && rimraf dist/ifc-schema.ts",
     "build-debug": "npm run build-wasm-debug && npm run build-api && npm run build-cleanup",
     "publish-repo": "npm run set-version && cd dist && npm publish",
-    "build-publish-repo": "npm run build-release && cpy ./npmrc ./dist/  --rename=.npmrc && cd dist && npm publish",
+    "build-publish-repo": "npm run build-release && cpy ./npmrc ./dist/  --rename=.npmrc && cp ./LICENSE.md ./dist && cd dist && npm publish",
     "copy-to-dist": "make-dir dist && cpy \"src/cpp/build_wasm/*.js\" dist &&  cpy \"src/cpp/build_wasm/*.wasm\" dist ",
     "copy-debug-to-dist": "make-dir dist && cpy \"src/cpp/build_wasm_debug/*.js\" dist &&  cpy \"src/cpp/build_wasm_debug/*.wasm\" dist ",
     "build-wasm-debug": "make-dir src/cpp/build_wasm_debug && cd src/cpp/build_wasm_debug && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Debug   && emmake make && npm run copy-debug-to-dist",
@@ -61,7 +62,8 @@
     "ifc-schema.d.ts",
     "helpers/properties.d.ts",
     "helpers/log.d.ts",
-    "web-ifc-mt.worker.js"
+    "web-ifc-mt.worker.js",
+    "LICENSE.md"
   ],
   "devDependencies": {
     "@types/jest": "^30.0.0",
