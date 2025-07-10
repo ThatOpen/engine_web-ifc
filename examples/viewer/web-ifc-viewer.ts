@@ -163,7 +163,7 @@ function getData(reader : FileReader){
 async function LoadModel(data: Uint8Array) {
     const start = ms();
     //TODO: This needs to be fixed in the future to rely on elalish/manifold
-    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true }); 
+    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, tolerancePlaneIntersection: 1.0E-01, toleranceBoundaryPoint: 1.0E-04, toleranceInsideOutsideToPlane: 1.0E-04, toleranceInsideOutside: 1.0E-10 }); 
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
     ifcThree.LoadAllGeometry(scene, modelID);

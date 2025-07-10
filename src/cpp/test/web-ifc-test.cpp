@@ -461,9 +461,9 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/VEC-IFC-INST-totaal-20130726.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/F_MA_160_ALT3.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Sample3_ArchiCAD25.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/384.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/384.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Spacewell_Wall.ifc");
 
     struct LoaderSettings
@@ -473,6 +473,10 @@ int main()
         uint32_t TAPE_SIZE = 67108864; // probably no need for anyone other than web-ifc devs to change this
         uint32_t MEMORY_LIMIT = 2147483648;
         uint16_t LINEWRITER_BUFFER = 10000;
+        double tolerancePlaneIntersection = 1.0E-04;
+        double toleranceBoundaryPoint = 1.0E-04;
+        double toleranceInsideOutsideToPlane = 1.0E-04;
+        double toleranceInsideOutside = 1.0E-10;
     };
 
     LoaderSettings set;
@@ -499,12 +503,12 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.tolerancePlaneIntersection, set.toleranceBoundaryPoint, set.toleranceInsideOutsideToPlane, set.toleranceInsideOutside);
 
     start = ms();
 
-    // SpecificLoadTest(loader, geometryLoader, 107287);
-    SpecificLoadTest(loader, geometryLoader, 36487);
+    SpecificLoadTest(loader, geometryLoader, 107287);
+    // SpecificLoadTest(loader, geometryLoader, 36487);
     // auto meshes = LoadAllTest(loader, geometryLoader, -1);
     // auto rebars = GetAllRebars(loader, geometryLoader);
     // std::cout << GetLine(loader, 225) << std::endl;

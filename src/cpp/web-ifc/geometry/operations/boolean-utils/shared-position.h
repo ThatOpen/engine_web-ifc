@@ -1611,7 +1611,7 @@ namespace fuzzybools
                     sp.points[seg.first].location3D,
                     sp.points[seg.second].location3D);
 
-                if (result.distance < EPS_INTERSECTION_LINES)
+                if (result.distance < _tolerancePlaneIntersection)
                 {
                     if (!p.aabb.contains(sp.points[seg.first].location3D))
                     {
@@ -1640,7 +1640,7 @@ namespace fuzzybools
                         }
                     }
 
-                    if (!equals(pt, result.point2, EPS_INTERSECTION_LINES))
+                    if (!equals(pt, result.point2, _tolerancePlaneIntersection))
                     {
                         if (messages)
                         {

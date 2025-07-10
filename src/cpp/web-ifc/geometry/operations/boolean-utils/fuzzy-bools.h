@@ -6,7 +6,15 @@
 
 namespace fuzzybools
 {
-	inline Geometry Subtract(const Geometry& A, const Geometry& B)
+	inline void SetEpsilons(double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside)
+	{
+		_tolerancePlaneIntersection = tolerancePlaneIntersection;
+		_toleranceBoundaryPoint = toleranceBoundaryPoint;
+		_toleranceInsideOutsideToPlane = toleranceInsideOutsideToPlane;
+		_toleranceInsideOutside = toleranceInsideOutside;
+	}
+
+	inline Geometry Subtract(const Geometry &A, const Geometry &B)
 	{
 		fuzzybools::SharedPosition sp;
 		sp.Construct(A, B, false);

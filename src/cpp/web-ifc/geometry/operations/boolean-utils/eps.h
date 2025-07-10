@@ -1,5 +1,10 @@
 #pragma once
 
+inline double _tolerancePlaneIntersection = 1.0E-04;
+inline double _toleranceBoundaryPoint = 1.0E-04;
+inline double _toleranceInsideOutsideToPlane = 1.0E-04;
+inline double _toleranceInsideOutside = 1.0E-10;
+
 constexpr bool messages = false;
 
 /*
@@ -27,7 +32,6 @@ constexpr double toleranceIsInsideCenterExtents = 1.0E-10;
 constexpr double toleranceVectorEquality = 1.0E-04;
 constexpr double toleranceScalarEquality = 1.0E-04;
 constexpr double toleranceCollinear      = 1.0E-04;
-constexpr double EPS_INTERSECTION_LINES = 1.0E-04; // Controls the plane intersection margin. Increasing it to 1.0E+01 solves #1092 and some others, but breaks #527, #384, etc.
 
 /*
     Constants used in shared-position
@@ -44,13 +48,10 @@ constexpr double toleranceAABB     = 1.0E-03;
 */    
 constexpr double toleranceParallel      = 1.0E-04;
 constexpr double toleranceParallelTight = 1.0E-10;
-constexpr double toleranceInsideOutside = 1.0E-10; // This eps works for some models at 10-4 but others require 10-10
-constexpr double toleranceInsideOutsideToPlane = 1.0E-04; // This eps works for some models at 10-4 but others require 10-10
 constexpr double toleranceThinTriangle = 1.0e-10;
 /*
     Constants used in function isInsideMesh
 */    
-constexpr double toleranceBoundaryPoint = 1.0E-04;
 
 /*
     Constants used in function AddFace in geometry.h

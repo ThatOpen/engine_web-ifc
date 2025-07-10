@@ -22,10 +22,22 @@ namespace webifc::geometry
 
   // this class performs the processing of raw geometry data from the geometry loader to produce meshes
 
+  struct IfcGeometrySettings
+  {
+	  bool _coordinateToOrigin = false;
+    bool _optimize_profiles = true;
+	  bool _exportPolylines = false;
+	  uint16_t _circleSegments = 12;
+    double tolerancePlaneIntersection = 1.0E-04;
+    double toleranceBoundaryPoint = 1.0E-04;
+    double toleranceInsideOutsideToPlane = 1.0E-04;
+    double toleranceInsideOutside = 1.0E-10;
+  };
+
   class booleanManager
   {
     public:
-      IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op);
+      IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings);
     private:
       fuzzybools::Geometry convertToEngine(Geometry geom);
       IfcGeometry convertToWebIfc(fuzzybools::Geometry geom);
@@ -33,18 +45,10 @@ namespace webifc::geometry
       IfcGeometry Subtract(IfcGeometry firstOperator, IfcGeometry secondOperator);
   };
 
-  struct IfcGeometrySettings
-  {
-	  bool _coordinateToOrigin = false;
-      bool _optimize_profiles = true;
-	  bool _exportPolylines = false;
-	  uint16_t _circleSegments = 12;
-  };
-
   class IfcGeometryProcessor 
   {
       public:
-        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin);
+        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside);
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
         IfcFlatMesh GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor = true);
@@ -61,7 +65,7 @@ namespace webifc::geometry
         std::optional<glm::dvec4> GetStyleItemFromExpressId(uint32_t expressID);
         void AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry);
         IfcGeometry GetBrep(uint32_t expressID);
-        IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, std::string op);
+        IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, std::string op, IfcGeometrySettings _settings);
         std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
         IfcSurface GetSurface(uint32_t expressID);
         const IfcGeometryLoader _geometryLoader;

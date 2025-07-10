@@ -19,11 +19,15 @@
 
 namespace webifc::geometry
 {
-    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin)
-        : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager)
+    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside)
+        : _geometryLoader(loader, schemaManager, circleSegments, tolerancePlaneIntersection, toleranceBoundaryPoint, toleranceInsideOutsideToPlane, toleranceInsideOutside), _loader(loader), _schemaManager(schemaManager)
     {
 		_settings._coordinateToOrigin = coordinateToOrigin;
 		_settings._circleSegments = circleSegments;
+        _settings.tolerancePlaneIntersection = tolerancePlaneIntersection;
+        _settings.toleranceBoundaryPoint = toleranceBoundaryPoint;
+        _settings.toleranceInsideOutsideToPlane = toleranceInsideOutsideToPlane;
+        _settings.toleranceInsideOutside = toleranceInsideOutside;
     }
 
     IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
@@ -210,7 +214,7 @@ namespace webifc::geometry
                             else
                             {
                                 std::vector<IfcGeometry> geomVector = {geom};  // Wrap 'geom' in a vector
-                                fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION");
+                                fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION", _settings);
                             }
                         }
 
@@ -263,7 +267,7 @@ namespace webifc::geometry
                     //     flatElementMeshes.shrink_to_fit();
                     // }
 
-                    finalGeometry = BoolProcess(flatElementMeshes, voidGeoms, "DIFFERENCE");
+                    finalGeometry = BoolProcess(flatElementMeshes, voidGeoms, "DIFFERENCE", _settings);
                     
                     #ifdef CSG_DEBUG_OUTPUT
                     //    io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
@@ -347,7 +351,7 @@ namespace webifc::geometry
                 auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
                 auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
-                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, "DIFFERENCE");
+                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, "DIFFERENCE", _settings);
 
                 _expressIDToGeometry[expressID] = resultMesh;
                 mesh.hasGeometry = true;
@@ -393,7 +397,7 @@ namespace webifc::geometry
                     return mesh;
                 }
 
-                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, std::string(op));
+                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, std::string(op), _settings);
 
                 _expressIDToGeometry[expressID] = resultMesh;
                 mesh.hasGeometry = true;
@@ -1633,9 +1637,9 @@ namespace webifc::geometry
         }
     }
 
-    IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
+    IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
-        return _boolEngine.BoolProcess(firstGeoms, secondGeoms, op);
+        return _boolEngine.BoolProcess(firstGeoms, secondGeoms, op, _settings);
     }
 
     std::vector<uint32_t> IfcGeometryProcessor::Read2DArrayOfThreeIndices()
@@ -1864,7 +1868,7 @@ namespace webifc::geometry
         return newGeom;
     }
 
-    IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
+    IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
         spdlog::debug("[BoolProcess({})]");
         IfcGeometry finalResult;
@@ -1941,6 +1945,8 @@ namespace webifc::geometry
                     firstOperator.buildPlanes();
                     secondOperator.buildPlanes();
 
+                    fuzzybools::SetEpsilons(_settings.tolerancePlaneIntersection, _settings.toleranceBoundaryPoint, _settings.toleranceInsideOutsideToPlane, _settings.toleranceInsideOutside);
+                    
                     if (op == "DIFFERENCE")
                     {
                         firstOperator = Subtract(firstOperator, secondOperator);

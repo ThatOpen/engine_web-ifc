@@ -69,7 +69,7 @@ namespace fuzzybools
                     Vec otherNormal = computeNormal(a, b, c);  // normalised
                     double d = glm::dot(otherNormal, dir);
                     double dn = glm::dot(otherNormal, normal);
-                    if (std::fabs(d_plane) < toleranceBoundaryPoint)
+                    if (std::fabs(d_plane) < _toleranceBoundaryPoint)
                     {
                         if (dn > 1.0 - toleranceParallel)
                         {

@@ -873,6 +873,10 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("TAPE_SIZE", &webifc::manager::LoaderSettings::TAPE_SIZE)
         .field("MEMORY_LIMIT", &webifc::manager::LoaderSettings::MEMORY_LIMIT)
         .field("LINEWRITER_BUFFER",&webifc::manager::LoaderSettings::LINEWRITER_BUFFER)
+        .field("tolerancePlaneIntersection", &webifc::manager::LoaderSettings::tolerancePlaneIntersection)
+        .field("toleranceBoundaryPoint", &webifc::manager::LoaderSettings::toleranceBoundaryPoint)
+                .field("toleranceInsideOutsideToPlane",&webifc::manager::LoaderSettings::toleranceInsideOutsideToPlane)
+        .field("toleranceInsideOutside", &webifc::manager::LoaderSettings::toleranceInsideOutside)
     ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
