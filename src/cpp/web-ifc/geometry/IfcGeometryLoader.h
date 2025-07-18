@@ -25,7 +25,7 @@ namespace webifc::geometry
   class IfcGeometryLoader 
   {
   public:
-    IfcGeometryLoader(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside);
+    IfcGeometryLoader(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside, double toleranceScalarEquality, double addPlaneIterations);
     void ResetCache();
     std::array<glm::dvec3,2> GetAxis1Placement(const uint32_t expressID) const;
     glm::dmat3 GetAxis2Placement2D(const uint32_t expressID) const;

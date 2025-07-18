@@ -19,8 +19,8 @@
 
 namespace webifc::geometry
 {
-    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside)
-        : _geometryLoader(loader, schemaManager, circleSegments, tolerancePlaneIntersection, toleranceBoundaryPoint, toleranceInsideOutsideToPlane, toleranceInsideOutside), _loader(loader), _schemaManager(schemaManager)
+    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside, double toleranceScalarEquality, double addPlaneIterations)
+        : _geometryLoader(loader, schemaManager, circleSegments, tolerancePlaneIntersection, toleranceBoundaryPoint, toleranceInsideOutsideToPlane, toleranceInsideOutside, toleranceScalarEquality, addPlaneIterations), _loader(loader), _schemaManager(schemaManager)
     {
 		_settings._coordinateToOrigin = coordinateToOrigin;
 		_settings._circleSegments = circleSegments;
@@ -28,6 +28,7 @@ namespace webifc::geometry
         _settings.toleranceBoundaryPoint = toleranceBoundaryPoint;
         _settings.toleranceInsideOutsideToPlane = toleranceInsideOutsideToPlane;
         _settings.toleranceInsideOutside = toleranceInsideOutside;
+        SetEpsilons(toleranceScalarEquality, addPlaneIterations);
     }
 
     IfcGeometryLoader IfcGeometryProcessor::GetLoader() const

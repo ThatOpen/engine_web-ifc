@@ -69,6 +69,8 @@ export interface LoaderSettings {
     toleranceBoundaryPoint ?: number;
     toleranceInsideOutsideToPlane?: number;
     toleranceInsideOutside?: number;
+    toleranceScalarEquality?: number;
+    addPlaneIterations?: number;
 }
 
 export interface Vector<T> extends Iterable<T> {
@@ -384,6 +386,8 @@ export class IfcAPI {
             toleranceBoundaryPoint: 1.0E-04,
             toleranceInsideOutsideToPlane: 1.0E-04,
             toleranceInsideOutside: 1.0E-10,
+            toleranceScalarEquality: 1.0E-04,
+            addPlaneIterations: 1,
             ...settings
         };
         return s;

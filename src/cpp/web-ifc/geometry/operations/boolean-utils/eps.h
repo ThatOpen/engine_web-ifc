@@ -32,6 +32,7 @@ constexpr double toleranceIsInsideCenterExtents = 1.0E-10;
 constexpr double toleranceVectorEquality = 1.0E-04;
 constexpr double toleranceScalarEquality = 1.0E-04;
 constexpr double toleranceCollinear      = 1.0E-04;
+constexpr double triangleEvaluationFactor = 0.90;
 
 /*
     Constants used in shared-position

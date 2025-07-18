@@ -18,6 +18,11 @@
 namespace webifc::geometry
 {
 
+	inline void SetEpsilons(double toleranceScalarEquality, double addPlaneIterations)
+	{
+		bimGeometry::SetEpsilons(toleranceScalarEquality, addPlaneIterations);
+	}
+
 	inline double angleConversion(double angle, std::string angleUnits)
 	{
 		if(angleUnits == "RADIAN")

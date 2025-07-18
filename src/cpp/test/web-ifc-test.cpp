@@ -461,10 +461,13 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/VEC-IFC-INST-totaal-20130726.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/F_MA_160_ALT3.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/540.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1092_A.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Sample3_ArchiCAD25.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/384.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Spacewell_Wall.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/711054.ifc");
 
     struct LoaderSettings
     {
@@ -477,6 +480,8 @@ int main()
         double toleranceBoundaryPoint = 1.0E-04;
         double toleranceInsideOutsideToPlane = 1.0E-04;
         double toleranceInsideOutside = 1.0E-10;
+        double toleranceScalarEquality = 1.0E-04;
+        uint16_t addPlaneIterations = 1;
     };
 
     LoaderSettings set;
@@ -503,15 +508,18 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.tolerancePlaneIntersection, set.toleranceBoundaryPoint, set.toleranceInsideOutsideToPlane, set.toleranceInsideOutside);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.tolerancePlaneIntersection, set.toleranceBoundaryPoint, set.toleranceInsideOutsideToPlane, set.toleranceInsideOutside, set.toleranceScalarEquality, set.addPlaneIterations);
 
     start = ms();
 
-    SpecificLoadTest(loader, geometryLoader, 107287);
+    // SpecificLoadTest(loader, geometryLoader, 140426); //1256
+    // SpecificLoadTest(loader, geometryLoader, 107287);
+    // SpecificLoadTest(loader, geometryLoader, 437004); // 540
+    // SpecificLoadTest(loader, geometryLoader, 165617); // 1092_A
     // SpecificLoadTest(loader, geometryLoader, 36487);
     // auto meshes = LoadAllTest(loader, geometryLoader, -1);
     // auto rebars = GetAllRebars(loader, geometryLoader);
-    // std::cout << GetLine(loader, 225) << std::endl;
+    std::cout << GetLine(loader, 2) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;

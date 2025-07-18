@@ -1394,6 +1394,7 @@ namespace fuzzybools
 
                 if (!inside2d)
                 {
+
                     auto postA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA, raydir);
                     auto postB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB, raydir);
 
@@ -1402,9 +1403,7 @@ namespace fuzzybools
                         continue;
                     }
 
-                    double inc = 0.9;
-
-                    auto ptt = glm::mix(triCenter, ptA, inc);
+                    auto ptt = glm::mix(triCenter, ptA, triangleEvaluationFactor);
 
                     postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
                     postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
@@ -1414,7 +1413,7 @@ namespace fuzzybools
                         continue;
                     }
 
-                    ptt = glm::mix(triCenter, ptB, inc);
+                    ptt = glm::mix(triCenter, ptB, triangleEvaluationFactor);
 
                     postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
                     postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);
@@ -1424,7 +1423,7 @@ namespace fuzzybools
                         continue;
                     }
 
-                    ptt = glm::mix(triCenter, ptC, inc);
+                    ptt = glm::mix(triCenter, ptC, triangleEvaluationFactor);
 
                     postA = isInsideMesh(ptt, glm::dvec3(0), relevantA, relevantBVHA, raydir);
                     postB = isInsideMesh(ptt, glm::dvec3(0), relevantB, relevantBVHB, raydir);

@@ -25,6 +25,8 @@ namespace webifc::manager {
         double toleranceBoundaryPoint = 1.0E-04;
         double toleranceInsideOutsideToPlane = 1.0E-04;
         double toleranceInsideOutside = 1.0E-10;
+        double toleranceScalarEquality = 1.0E-04;
+        uint16_t addPlaneIterations = 1;
     };
 
     class ModelManager {

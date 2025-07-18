@@ -875,8 +875,10 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("LINEWRITER_BUFFER",&webifc::manager::LoaderSettings::LINEWRITER_BUFFER)
         .field("tolerancePlaneIntersection", &webifc::manager::LoaderSettings::tolerancePlaneIntersection)
         .field("toleranceBoundaryPoint", &webifc::manager::LoaderSettings::toleranceBoundaryPoint)
-                .field("toleranceInsideOutsideToPlane",&webifc::manager::LoaderSettings::toleranceInsideOutsideToPlane)
+        .field("toleranceInsideOutsideToPlane",&webifc::manager::LoaderSettings::toleranceInsideOutsideToPlane)
         .field("toleranceInsideOutside", &webifc::manager::LoaderSettings::toleranceInsideOutside)
+        .field("toleranceScalarEquality", &webifc::manager::LoaderSettings::toleranceScalarEquality)
+        .field("addPlaneIterations", &webifc::manager::LoaderSettings::addPlaneIterations)
     ;
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")

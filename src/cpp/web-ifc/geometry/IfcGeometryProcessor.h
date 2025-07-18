@@ -48,7 +48,7 @@ namespace webifc::geometry
   class IfcGeometryProcessor 
   {
       public:
-        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside);
+        IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside, double toleranceScalarEquality, double addPlaneIterations);
         IfcGeometry &GetGeometry(uint32_t expressID);
         IfcGeometryLoader GetLoader() const;
         IfcFlatMesh GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor = true);

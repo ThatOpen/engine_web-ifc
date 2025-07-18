@@ -13,7 +13,7 @@
 namespace webifc::geometry
 {
 
-  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside)
+  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside, double toleranceScalarEquality, double addPlaneIterations)
       : _loader(loader), _schemaManager(schemaManager), _relVoids(PopulateRelVoidsMap()), _relNests(PopulateRelNestsMap()), _relAggregates(PopulateRelAggregatesMap()),
         _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
   {

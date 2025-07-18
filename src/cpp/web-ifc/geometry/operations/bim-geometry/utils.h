@@ -1616,4 +1616,11 @@ namespace bimGeometry
 
 		return c;
 	}
+
+	inline void SetEpsilons(double toleranceScalarEquality, double addPlaneIterations)
+	{
+		_toleranceScalarEquality = toleranceScalarEquality;
+		if(addPlaneIterations < 1) { addPlaneIterations = 1; }
+		_addPlaneIterations = addPlaneIterations;
+	}
 }
