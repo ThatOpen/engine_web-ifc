@@ -816,11 +816,11 @@
     "@shikijs/vscode-textmate" "^10.0.2"
 
 "@shikijs/langs@^3.7.0":
-  version "3.7.0"
-  resolved "https://registry.npmjs.org/@shikijs/langs/-/langs-3.7.0.tgz"
-  integrity sha512-1zYtdfXLr9xDKLTGy5kb7O0zDQsxXiIsw1iIBcNOO8Yi5/Y1qDbJ+0VsFoqTlzdmneO8Ij35g7QKF8kcLyznCQ==
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/@shikijs/langs/-/langs-3.8.1.tgz#ebf04cc68e0a4dfbbdaa122042af0c5ad41f1361"
+  integrity sha512-TjOFg2Wp1w07oKnXjs0AUMb4kJvujML+fJ1C5cmEj45lhjbUXtziT1x2bPQb9Db6kmPhkG5NI2tgYW1/DzhUuQ==
   dependencies:
-    "@shikijs/types" "3.7.0"
+    "@shikijs/types" "3.8.1"
 
 "@shikijs/themes@^3.7.0":
   version "3.8.1"
@@ -829,18 +829,18 @@
   dependencies:
     "@shikijs/types" "3.8.1"
 
-"@shikijs/types@3.7.0", "@shikijs/types@^3.7.0":
-  version "3.7.0"
-  resolved "https://registry.npmjs.org/@shikijs/types/-/types-3.7.0.tgz"
-  integrity sha512-MGaLeaRlSWpnP0XSAum3kP3a8vtcTsITqoEPYdt3lQG3YCdQH4DnEhodkYcNMcU0uW0RffhoD1O3e0vG5eSBBg==
-  dependencies:
-    "@shikijs/vscode-textmate" "^10.0.2"
-    "@types/hast" "^3.0.4"
-
 "@shikijs/types@3.8.1":
   version "3.8.1"
   resolved "https://registry.npmjs.org/@shikijs/types/-/types-3.8.1.tgz"
   integrity sha512-5C39Q8/8r1I26suLh+5TPk1DTrbY/kn3IdWA5HdizR0FhlhD05zx5nKCqhzSfDHH3p4S0ZefxWd77DLV+8FhGg==
+  dependencies:
+    "@shikijs/vscode-textmate" "^10.0.2"
+    "@types/hast" "^3.0.4"
+
+"@shikijs/types@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.npmjs.org/@shikijs/types/-/types-3.7.0.tgz"
+  integrity sha512-MGaLeaRlSWpnP0XSAum3kP3a8vtcTsITqoEPYdt3lQG3YCdQH4DnEhodkYcNMcU0uW0RffhoD1O3e0vG5eSBBg==
   dependencies:
     "@shikijs/vscode-textmate" "^10.0.2"
     "@types/hast" "^3.0.4"
