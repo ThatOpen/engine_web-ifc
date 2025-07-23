@@ -380,35 +380,6 @@ namespace webifc::geometry
 	// TODO: Send to bimGeometry
     inline double VectorToAngle2D(double x, double y)
 	{
-		double dd = sqrt(x * x + y * y);
-		double xx = x / dd;
-		double yy = y / dd;
-
-		double angle = acos(xx);
-		double cosv = cos(angle);
-		double sinv = sin(angle);
-		if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
-		{
-			angle = asin(yy);
-			sinv = sin(angle);
-			cosv = cos(angle);
-			if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
-			{
-				angle = angle + (CONST_PI - angle) * 2;
-				sinv = sin(angle);
-				cosv = cos(angle);
-				if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
-				{
-					angle = angle + CONST_PI;
-				}
-			}
-		}
-
-		return (angle / (2 * CONST_PI)) * 360;
-	}
-
-	inline double VectorToAngle(double x, double y)
-	{
 		return bimGeometry::VectorToAngle(x, y);
 	}
 

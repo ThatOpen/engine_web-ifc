@@ -193,7 +193,10 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 				break;
 			}
 		}
-
+		if(s == 0)
+		{
+			s = domainHigh - 1;
+		}
 		// TODO: this should be done before calling the function, instead of calling it for each t
 		// convert points to homogeneous coordinates
 		std::vector<glm::dvec4> homogeneousPoints;
@@ -212,7 +215,9 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 			for (int i = s; i > s - degree - 1 + l; i--)
 			{
 				alpha = (tPrime - knots[i]) / (knots[i + degree + 1 - l] - knots[i]);
-
+				if (std::isnan(alpha) || std::isinf(alpha)) {
+					alpha = 1.0;
+				}
 				// interpolate each component
 
 				double x = (1 - alpha) * homogeneousPoints[i - 1].x + alpha * homogeneousPoints[i].x;

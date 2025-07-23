@@ -76,20 +76,20 @@ namespace bimGeometry
 		double xx = x / dd;
 		double yy = y / dd;
 
-		double angle = asin(xx);
+		double angle = acos(xx);
 		double cosv = cos(angle);
-
-		if (glm::abs(yy - cosv) > 1e-5)
+		double sinv = sin(angle);
+		if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
 		{
-			angle = acos(yy);
-			double sinv = sin(angle);
+			angle = asin(yy);
+			sinv = sin(angle);
 			cosv = cos(angle);
-			if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
+			if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
 			{
 				angle = angle + (CONST_PI - angle) * 2;
 				sinv = sin(angle);
 				cosv = cos(angle);
-				if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
+				if (glm::abs(xx - cosv) > 1e-5 || glm::abs(yy - sinv) > 1e-5)
 				{
 					angle = angle + CONST_PI;
 				}

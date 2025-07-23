@@ -1816,8 +1816,8 @@ namespace webifc::geometry
               double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
               // double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
 
-              endDegrees = VectorToAngle(dxS, dyS) - 90;
-              startDegrees = VectorToAngle(dxE, dyE) - 90;
+              endDegrees = VectorToAngle2D(dxS, dyS);
+              startDegrees = VectorToAngle2D(dxE, dyE);
             }
             if (_angleUnits == "RADIAN")
             {
@@ -1858,6 +1858,27 @@ namespace webifc::geometry
         }
 
         double lengthDegrees = 0;
+
+        if(dimensions == 3)
+        {
+          if (trimSense == 1 || trimSense == -1)
+          {
+            trimSense = 0;
+          }
+          else
+          {
+            trimSense = 1;
+          }
+
+          if (sameSense == 1)
+          {
+            sameSense = 0;
+          }
+          else
+          {
+            sameSense = 1;
+          }
+        }
 
         if (trimSense == 1 || trimSense == -1)
         {
@@ -1914,7 +1935,7 @@ namespace webifc::geometry
           {
             glm::dvec3 vec(0);
             vec[0] = radius1 * std::cos(angle);
-            vec[1] = radius2 * std::sin(angle) * sameSense; // negative or not???
+            vec[1] = radius2 * std::sin(angle); // negative or not???
             glm::dvec3 pos = GetLocalPlacement(positionID) * glm::dvec4(glm::dvec3(vec), 1);
             curve.Add(pos);
           }
