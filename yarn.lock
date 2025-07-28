@@ -870,9 +870,9 @@
   integrity sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==
 
 "@sinclair/typebox@^0.34.0":
-  version "0.34.37"
-  resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.34.37.tgz"
-  integrity sha512-2TRuQVgQYfy+EzHRTIvkhv2ADEouJ2xNS/Vq+W5EuuewBdOrvATvljZTxHWZSTYr2sTjTHpGvucaGAt67S2akw==
+  version "0.34.38"
+  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.34.38.tgz#2365df7c23406a4d79413a766567bfbca708b49d"
+  integrity sha512-HpkxMmc2XmZKhvaKIZZThlHmx1L0I/V1hWK1NubtlFnr6ZqdiOpV72TKudZUNQjZNsyDBay72qFEhEvb+bcwcA==
 
 "@sinonjs/commons@^3.0.1":
   version "3.0.1"
