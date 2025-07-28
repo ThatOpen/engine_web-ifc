@@ -163,7 +163,7 @@ function getData(reader : FileReader){
 async function LoadModel(data: Uint8Array) {
     const start = ms();
     //TODO: This needs to be fixed in the future to rely on elalish/manifold
-    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, tolerancePlaneIntersection: 1.0E-04, toleranceBoundaryPoint: 1.0E-04, toleranceInsideOutsideToPlane: 1.0E-04, toleranceInsideOutside: 1.0E-10, toleranceScalarEquality: 1.0E-04, addPlaneIterations: 1}); 
+    const modelID = ifcAPI.OpenModel(data, { COORDINATE_TO_ORIGIN: true, CIRCLE_SEGMENTS: 24, tolerancePlaneIntersection: 1.0E-04, toleranceBoundaryPoint: 1.0E-04, toleranceInsideOutsideToPlane: 1.0E-04, toleranceInsideOutside: 1.0E-10, toleranceScalarEquality: 1.0E-04, addPlaneIterations: 1}); 
     // #1092A -> tolerancePlaneIntersection: 5.0E-02
     // #1256 -> tolerancePlaneIntersection: 1.0E-02, toleranceBoundaryPoint: 1.0E-01, toleranceInsideOutsideToPlane: 1.0E-01
     // #1023 -> toleranceBoundaryPoint: 1.0E-01, toleranceInsideOutsideToPlane: 1.0E-01
