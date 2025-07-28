@@ -1448,7 +1448,7 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline Curve GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat4 placement = glm::dmat4(1))
+	inline Curve GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, int numSegments = 12, glm::dmat4 placement = glm::dmat4(1))
 	{
 		Curve c;
 
@@ -1462,10 +1462,41 @@ namespace bimGeometry
 
 		if (hasFillet)
 		{
+			double secondFilletRadius = filletRadius;
+			if(thickness < filletRadius)
+			{
+				secondFilletRadius = thickness;
+			}
 			// TODO: Create interpolation and sloped lines
-			c.points.push_back(placement * glm::dvec4(+hw, -hd + thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hw + thickness, -hd + thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hw + thickness, +hd, 0, 1));
+			glm::dvec4 cen1 = glm::dvec4(+hw - filletRadius, -hd + thickness - secondFilletRadius, 0, 1);
+			glm::dmat3 placement1 = glm::dmat3(1);
+			placement1[2][0] = cen1.x;
+			placement1[2][1] = cen1.y;
+			std::vector<glm::dvec3> round1 = (bimGeometry::GetEllipseCurve(filletRadius, secondFilletRadius, numSegments, placement1, 0, CONST_PI / 2)).points;
+			for (size_t i = 0; i < round1.size(); i++)
+			{
+				c.Add(glm::dvec3(placement * glm::dvec4(round1[i], 1)));
+			}
+
+			glm::dvec4 cen2 = glm::dvec4(-hw + thickness + filletRadius, -hd + thickness + filletRadius, 0, 1);
+			glm::dmat3 placement2 = glm::dmat3(1);
+			placement2[2][0] = cen2.x;
+			placement2[2][1] = cen2.y;
+			std::vector<glm::dvec3> round2 = (bimGeometry::GetEllipseCurve(filletRadius, filletRadius, numSegments, placement2, 3 * CONST_PI / 2, CONST_PI)).points;	
+			for (size_t i = 0; i < round2.size(); i++)
+			{
+				c.Add(glm::dvec3(placement * glm::dvec4(round2[i], 1)));
+			}
+
+			glm::dvec4 cen3 = glm::dvec4(-hw + thickness - secondFilletRadius, hd - filletRadius, 0, 1);
+			glm::dmat3 placement3 = glm::dmat3(1);
+			placement3[2][0] = cen3.x;
+			placement3[2][1] = cen3.y;
+			std::vector<glm::dvec3> round3 = (bimGeometry::GetEllipseCurve(secondFilletRadius, filletRadius, numSegments, placement3, 0, CONST_PI / 2)).points;
+			for (size_t i = 0; i < round3.size(); i++)
+			{
+				c.Add(glm::dvec3(placement * glm::dvec4(round3[i], 1)));
+			}
 		}
 		else
 		{

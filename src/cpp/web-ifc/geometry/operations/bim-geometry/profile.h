@@ -17,11 +17,12 @@ namespace bimGeometry {
         bool hasFillet;
         double filletRadius; 
         double radius;
-        double slope; 
+        double slope;
+        uint16_t numSegments;
         std::vector<double> placement;
         Curve profile;
 
-        void SetValues(uint16_t _pType, double _width, double _depth, double _webThickness, double _flangeThickness, bool _hasFillet, double _filletRadius, double _radius, double _slope, std::vector<double> _placement);
+        void SetValues(uint16_t _pType, double _width, double _depth, double _webThickness, double _flangeThickness, bool _hasFillet, double _filletRadius, double _radius, double _slope, uint16_t _numSegments, std::vector<double> _placement);
         Buffers GetBuffers();
     };
 }

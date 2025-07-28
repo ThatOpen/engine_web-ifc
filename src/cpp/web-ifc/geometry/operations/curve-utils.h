@@ -422,7 +422,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 		return c;
 	}
 
-	inline IfcCurve GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat3 placement = glm::dmat3(1))
+	inline IfcCurve GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, int numSegments, glm::dmat3 placement = glm::dmat3(1))
 	{
 		glm::dmat4 placement4 = glm::dmat4(
 			glm::dvec4(placement[0], 0.0),  // First column + w=0
@@ -430,7 +430,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 			glm::dvec4(0.0, 0.0, 1.0, 0.0),  // Third column + w=0
 			glm::dvec4(placement[2][0], placement[2][1], 0.0, 1.0)  // Translation + w=1
 		);
-		bimGeometry::Curve temp = bimGeometry::GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement4);
+		bimGeometry::Curve temp = bimGeometry::GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, numSegments, placement4);
 		IfcCurve c;
 		c.points = temp.points;
 		return c;

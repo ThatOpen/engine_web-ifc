@@ -2551,15 +2551,12 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       // optional fillet
       bool hasFillet = false;
 
-      if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+      if (filletRadius > 0)
       {
-        _loader.StepBack();
-
         hasFillet = true;
-        filletRadius = _loader.GetDoubleArgument();
       }
 
-      profile.curve = GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement);
+      profile.curve = GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope,  _circleSegments, placement);
 
       return profile;
     }

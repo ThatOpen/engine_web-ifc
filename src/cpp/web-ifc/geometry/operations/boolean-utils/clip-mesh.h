@@ -192,9 +192,9 @@ namespace fuzzybools
             #ifdef CSG_DEBUG_OUTPUT
                 if (doit)
                 {
-                    edgesPrinted.push_back({ glm::dvec2(a.z + a.x/2, a.y+ a.x/2), glm::dvec2(b.z+ b.x/2, b.y+ b.x/2)});
-                    edgesPrinted.push_back({ glm::dvec2(a.z+ a.x/2, a.y+ a.x/2), glm::dvec2(c.z+ c.x/2, c.y+ c.x/2) });
-                    edgesPrinted.push_back({ glm::dvec2(b.z+ b.x/2, b.y+ b.x/2), glm::dvec2(c.z+ c.x/2, c.y+ c.x/2) });
+                    edgesPrinted.push_back({ glm::dvec2(a.z + a.x/2, a.y + a.x/2), glm::dvec2(b.z + b.x/2, b.y+ b.x/2)});
+                    edgesPrinted.push_back({ glm::dvec2(a.z + a.x/2, a.y + a.x/2), glm::dvec2(c.z + c.x/2, c.y+ c.x/2) });
+                    edgesPrinted.push_back({ glm::dvec2(b.z + b.x/2, b.y + b.x/2), glm::dvec2(c.z + c.x/2, c.y+ c.x/2) });
                     DumpSVGLines(edgesPrinted, L"final_tri.html");
                     doit = true;
                 }
