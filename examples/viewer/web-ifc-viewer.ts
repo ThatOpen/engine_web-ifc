@@ -169,6 +169,7 @@ async function LoadModel(data: Uint8Array) {
     // #1023 -> toleranceBoundaryPoint: 1.0E-01, toleranceInsideOutsideToPlane: 1.0E-01
     // #540 -> tolerancePlaneIntersection: 1.0E-03, toleranceScalarEquality: 1.0E-01, addPlaneIterations: 3
     // #1225 -> toleranceBoundaryPoint: 1.0E-02, toleranceInsideOutsideToPlane: 1.0E-02, toleranceInsideOutside: 1.0E-02
+    // #1506 -> tolerancePlaneIntersection = 1.0E-02, toleranceBoundaryPoint = 1.0E-02, toleranceInsideOutsideToPlane = 1.0E-02;
     
     const time = ms() - start;
     console.log(`Opening model took ${time} ms`);
