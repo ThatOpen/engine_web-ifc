@@ -808,11 +808,11 @@
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
 "@shikijs/engine-oniguruma@^3.8.1":
-  version "3.8.1"
-  resolved "https://registry.npmjs.org/@shikijs/engine-oniguruma/-/engine-oniguruma-3.8.1.tgz"
-  integrity sha512-KGQJZHlNY7c656qPFEQpIoqOuC4LrxjyNndRdzk5WKB/Ie87+NJCF1xo9KkOUxwxylk7rT6nhlZyTGTC4fCe1g==
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/@shikijs/engine-oniguruma/-/engine-oniguruma-3.9.1.tgz#f4b67790eaa6d73d84a66e9023fa24428af206ae"
+  integrity sha512-WPlL/xqviwS3te4unSGGGfflKsuHLMI6tPdNYvgz/IygcBT6UiwDFSzjBKyebwi5GGSlXsjjdoJLIBnAplmEZw==
   dependencies:
-    "@shikijs/types" "3.8.1"
+    "@shikijs/types" "3.9.1"
     "@shikijs/vscode-textmate" "^10.0.2"
 
 "@shikijs/langs@^3.8.1":
@@ -833,6 +833,14 @@
   version "3.8.1"
   resolved "https://registry.npmjs.org/@shikijs/types/-/types-3.8.1.tgz"
   integrity sha512-5C39Q8/8r1I26suLh+5TPk1DTrbY/kn3IdWA5HdizR0FhlhD05zx5nKCqhzSfDHH3p4S0ZefxWd77DLV+8FhGg==
+  dependencies:
+    "@shikijs/vscode-textmate" "^10.0.2"
+    "@types/hast" "^3.0.4"
+
+"@shikijs/types@3.9.1":
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/@shikijs/types/-/types-3.9.1.tgz#88af89be81ea26e6aa7bf9662f5e9d69a699d636"
+  integrity sha512-rqM3T7a0iM1oPKz9iaH/cVgNX9Vz1HERcUcXJ94/fulgVdwqfnhXzGxO4bLrAnh/o5CPLy3IcYedogfV+Ns0Qg==
   dependencies:
     "@shikijs/vscode-textmate" "^10.0.2"
     "@types/hast" "^3.0.4"
