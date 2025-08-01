@@ -22,10 +22,11 @@ namespace bimGeometry {
 
         AABB GetAABB() const;
         Vec GetPoint(size_t index) const;
+        void SetPoint(double x, double y, double z, size_t index);
         Face GetFace(size_t index) const;
         void buildPlanes();
         size_t AddPlane(const glm::dvec3 &normal, double d);
-        void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c);
+        void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, uint32_t pId = -1);
         void AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId);
         void AddPoint(glm::dvec4& pt, glm::dvec3& n);
 		void AddPoint(glm::dvec3& pt, glm::dvec3& n);

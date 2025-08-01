@@ -13,7 +13,7 @@
 namespace webifc::geometry
 {
 
-  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments)
+  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside, double toleranceScalarEquality, double addPlaneIterations)
       : _loader(loader), _schemaManager(schemaManager), _relVoids(PopulateRelVoidsMap()), _relNests(PopulateRelNestsMap()), _relAggregates(PopulateRelAggregatesMap()),
         _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
   {
@@ -1816,8 +1816,8 @@ namespace webifc::geometry
               double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
               // double dzE = vecZ.x * v2.x + vecZ.y * v2.y + vecZ.z * v2.z;
 
-              endDegrees = VectorToAngle(dxS, dyS) - 90;
-              startDegrees = VectorToAngle(dxE, dyE) - 90;
+              endDegrees = VectorToAngle2D(dxS, dyS);
+              startDegrees = VectorToAngle2D(dxE, dyE);
             }
             if (_angleUnits == "RADIAN")
             {
@@ -1858,6 +1858,27 @@ namespace webifc::geometry
         }
 
         double lengthDegrees = 0;
+
+        if(dimensions == 3)
+        {
+          if (trimSense == 1 || trimSense == -1)
+          {
+            trimSense = 0;
+          }
+          else
+          {
+            trimSense = 1;
+          }
+
+          if (sameSense == 1)
+          {
+            sameSense = 0;
+          }
+          else
+          {
+            sameSense = 1;
+          }
+        }
 
         if (trimSense == 1 || trimSense == -1)
         {
@@ -1914,7 +1935,7 @@ namespace webifc::geometry
           {
             glm::dvec3 vec(0);
             vec[0] = radius1 * std::cos(angle);
-            vec[1] = radius2 * std::sin(angle) * sameSense; // negative or not???
+            vec[1] = radius2 * std::sin(angle); // negative or not???
             glm::dvec3 pos = GetLocalPlacement(positionID) * glm::dvec4(glm::dvec3(vec), 1);
             curve.Add(pos);
           }
@@ -2412,13 +2433,16 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       double xdim = _loader.GetDoubleArgument();
       double ydim = _loader.GetDoubleArgument();
       double thickness = _loader.GetDoubleArgument();
+      double innerRadius = _loader.GetDoubleArgument();
+      double outerRadius = _loader.GetDoubleArgument();
 
       // fillets not implemented yet
 
       glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
-      profile.curve = GetRectangleCurve(xdim, ydim, placement);
-      profile.holes.push_back(GetRectangleCurve(xdim - thickness, ydim - thickness, placement));
+      profile.curve = GetRectangleCurve(xdim, ydim, placement, _circleSegments, outerRadius);
+      profile.holes.push_back(GetRectangleCurve(xdim - thickness, ydim - thickness, placement, _circleSegments, innerRadius));
+
       std::reverse(profile.holes[0].points.begin(), profile.holes[0].points.end());
 
       return profile;
@@ -2491,7 +2515,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
 
       return profile;
     }
-    case schema::IFCISHAPEPROFILEDEF:
+        case schema::IFCISHAPEPROFILEDEF:
     {
       IfcProfile profile;
 
@@ -2526,7 +2550,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
         _loader.StepBack();
 
         hasFillet = true;
-        filletRadius = _loader.GetDoubleArgument();
+        filletRadius = _loader.GetOptionalDoubleParam(0);
       }
 
       profile.curve = GetIShapedCurve(width, depth, webThickness, flangeThickness, hasFillet, filletRadius, placement);
@@ -2556,28 +2580,29 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       _loader.MoveToArgumentOffset(expressID, 3);
       double filletRadius = 0;
       double depth = _loader.GetDoubleArgument();
-      double width = _loader.GetDoubleArgument();
+      double width = _loader.GetOptionalDoubleParam(0);
+      if (width == 0)
+      {
+        width = depth;
+      }
       double thickness = _loader.GetDoubleArgument();
-      filletRadius = _loader.GetDoubleArgument();
-      double edgeRadius = _loader.GetDoubleArgument();
-      double legSlope = _loader.GetDoubleArgument();
+      filletRadius = _loader.GetOptionalDoubleParam(0);
+      double edgeRadius = _loader.GetOptionalDoubleParam(0);
+      double legSlope = _loader.GetOptionalDoubleParam(0);
       // double centreOfGravityInX =
-      _loader.GetDoubleArgument();
+      _loader.GetOptionalDoubleParam(0);
       // double centreOfGravityInY =
-      _loader.GetDoubleArgument();
+      _loader.GetOptionalDoubleParam(0);
 
       // optional fillet
       bool hasFillet = false;
 
-      if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+      if (filletRadius > 0)
       {
-        _loader.StepBack();
-
         hasFillet = true;
-        filletRadius = _loader.GetDoubleArgument();
       }
 
-      profile.curve = GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, placement);
+      profile.curve = GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope,  _circleSegments, placement);
 
       return profile;
     }
@@ -2607,15 +2632,15 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       double webThickness = _loader.GetDoubleArgument();
       // double flangeThickness =
       _loader.GetDoubleArgument();
-      double filletRadius = _loader.GetDoubleArgument();
-      double flangeEdgeRadius = _loader.GetDoubleArgument();
+      double filletRadius = _loader.GetOptionalDoubleParam(0);
+      double flangeEdgeRadius = _loader.GetOptionalDoubleParam(0);
       // double webEdgeRadius =
-      _loader.GetDoubleArgument();
+      _loader.GetOptionalDoubleParam(0);
       // double webSlope =
-      _loader.GetDoubleArgument();
-      double flangeSlope = _loader.GetDoubleArgument();
+      _loader.GetOptionalDoubleParam(0);
+      double flangeSlope = _loader.GetOptionalDoubleParam(0);
 
-      // optional fillet
+      // TODO: REVIEW THIS OPTIONS FILLET (should be CentreOfGravityInY not optional fillet)
       bool hasFillet = false;
 
       if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
@@ -2623,7 +2648,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
         _loader.StepBack();
 
         hasFillet = true;
-        filletRadius = _loader.GetDoubleArgument();
+        filletRadius = _loader.GetOptionalDoubleParam(0);
       }
 
       profile.curve = GetTShapedCurve(width, depth, webThickness, hasFillet, filletRadius, flangeEdgeRadius, flangeSlope, placement);
@@ -2697,7 +2722,9 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       double Width = _loader.GetDoubleArgument();
       double Thickness = _loader.GetDoubleArgument();
       double girth = _loader.GetDoubleArgument();
-      double filletRadius = _loader.GetDoubleArgument();
+      double filletRadius = _loader.GetOptionalDoubleParam(0);
+      // double ventreOfGravityInX = 
+      _loader.GetOptionalDoubleParam(0);
 
       profile.curve = GetCShapedCurve(Width, depth, girth, Thickness, hasFillet, filletRadius, placement);
 
@@ -2731,8 +2758,8 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       double flangeWidth = _loader.GetDoubleArgument();
       double webThickness = _loader.GetDoubleArgument();
       double flangeThickness = _loader.GetDoubleArgument();
-      double filletRadius = _loader.GetDoubleArgument();
-      double edgeRadius = _loader.GetDoubleArgument();
+      double filletRadius = _loader.GetOptionalDoubleParam(0);
+      double edgeRadius = _loader.GetOptionalDoubleParam(0);
 
       profile.curve = GetZShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, placement);
 

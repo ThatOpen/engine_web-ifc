@@ -6,7 +6,15 @@
 
 namespace fuzzybools
 {
-	inline Geometry Subtract(const Geometry& A, const Geometry& B)
+	inline void SetEpsilons(double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside)
+	{
+		_tolerancePlaneIntersection = tolerancePlaneIntersection;
+		_toleranceBoundaryPoint = toleranceBoundaryPoint;
+		_toleranceInsideOutsideToPlane = toleranceInsideOutsideToPlane;
+		_toleranceInsideOutside = toleranceInsideOutside;
+	}
+
+	inline Geometry Subtract(const Geometry &A, const Geometry &B)
 	{
 		fuzzybools::SharedPosition sp;
 		sp.Construct(A, B, false);
@@ -17,7 +25,7 @@ namespace fuzzybools
 		auto geom = Normalize(A, B, sp, false);
 
         #ifdef CSG_DEBUG_OUTPUT
-			DumpGeometry(geom, L"Post-normalize.obj");
+		//	DumpGeometry(geom, L"Post-normalize.obj");
 		#endif
 
 		return fuzzybools::clipSubtract(geom, bvh1, bvh2);

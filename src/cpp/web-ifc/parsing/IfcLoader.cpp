@@ -720,7 +720,6 @@ namespace webifc::parsing {
         StepBack();
         return GetIntArgument();
       }
-      StepBack();
       return defaultValue;
     }
 

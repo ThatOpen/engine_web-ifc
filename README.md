@@ -106,7 +106,7 @@ The output of the build process consts of the following files:
 
 ## Stand alone C++
 
-Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/ThatOpen/engine_web-ifc/blob/main/src/cpp/web-ifc-test.cpp) for a simple entry point to get started.
+Although the primary focus of the library is to be used through WebAssembly in the browser/nodejs, the project can be used stand-alone as a c++ library or executable. See [here](https://github.com/ThatOpen/engine_web-ifc/blob/main/src/cpp/test/web-ifc-test.cpp) for a simple entry point to get started.
 
 [npm]: https://img.shields.io/npm/v/web-ifc
 [npm-url]: https://www.npmjs.com/package/web-ifc

@@ -19,10 +19,16 @@
 
 namespace webifc::geometry
 {
-    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin)
-        : _geometryLoader(loader, schemaManager, circleSegments), _loader(loader), _schemaManager(schemaManager)
+    IfcGeometryProcessor::IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside, double toleranceScalarEquality, double addPlaneIterations)
+        : _geometryLoader(loader, schemaManager, circleSegments, tolerancePlaneIntersection, toleranceBoundaryPoint, toleranceInsideOutsideToPlane, toleranceInsideOutside, toleranceScalarEquality, addPlaneIterations), _loader(loader), _schemaManager(schemaManager)
     {
 		_settings._coordinateToOrigin = coordinateToOrigin;
+		_settings._circleSegments = circleSegments;
+    _settings.tolerancePlaneIntersection = tolerancePlaneIntersection;
+    _settings.toleranceBoundaryPoint = toleranceBoundaryPoint;
+    _settings.toleranceInsideOutsideToPlane = toleranceInsideOutsideToPlane;
+    _settings.toleranceInsideOutside = toleranceInsideOutside;
+    SetEpsilons(toleranceScalarEquality, addPlaneIterations);
     }
 
     IfcGeometryLoader& IfcGeometryProcessor::GetLoader()
@@ -130,11 +136,11 @@ namespace webifc::geometry
         spdlog::debug("[GetMesh({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
         auto &relVoids = _geometryLoader.GetRelVoids();
-        
+
         IfcComposedMesh mesh;
         mesh.expressID = expressID;
         std::optional<glm::dvec4> generatedColor = GetStyleItemFromExpressId(expressID);
-        if (!generatedColor) 
+        if (!generatedColor)
         {
             mesh.color = glm::dvec4(1.0);
             mesh.hasColor = false;
@@ -197,7 +203,7 @@ namespace webifc::geometry
                     }
 
                     if(relVoidsIt->second.size() > 50) // When voids are greater than 10 they are all fused
-                    {   
+                    {
                         std::vector<IfcGeometry> joinedVoidGeoms;
                         IfcGeometry fusedVoids;
                         for (auto geom : voidGeoms)
@@ -209,7 +215,7 @@ namespace webifc::geometry
                             else
                             {
                                 std::vector<IfcGeometry> geomVector = {geom};  // Wrap 'geom' in a vector
-                                fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION");
+                                fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION", _settings);
                             }
                         }
 
@@ -224,7 +230,7 @@ namespace webifc::geometry
                     }
 
                     // if(flatElementMeshes.size() > 10) // When elements are greater than 10 they are all fused
-                    // {   
+                    // {
                     //     std::vector<IfcGeometry> joinedMeshGeoms;
                     //     IfcGeometry fusedMesh;
                     //     for (auto geom : flatElementMeshes)
@@ -262,10 +268,10 @@ namespace webifc::geometry
                     //     flatElementMeshes.shrink_to_fit();
                     // }
 
-                    finalGeometry = BoolProcess(flatElementMeshes, voidGeoms, "DIFFERENCE");
-                    
+                    finalGeometry = BoolProcess(flatElementMeshes, voidGeoms, "DIFFERENCE", _settings);
+
                     #ifdef CSG_DEBUG_OUTPUT
-                        io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
+                    //    io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
                     #endif
                 }
 
@@ -310,7 +316,7 @@ namespace webifc::geometry
             {
                 return mesh;
             }
-            
+
         }
         else
         {
@@ -361,7 +367,7 @@ namespace webifc::geometry
                 auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
                 auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
-                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, "DIFFERENCE");
+                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, "DIFFERENCE", _settings);
 
                 _expressIDToGeometry[expressID] = resultMesh;
                 mesh.hasGeometry = true;
@@ -407,7 +413,7 @@ namespace webifc::geometry
                     return mesh;
                 }
 
-                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, std::string(op));
+                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, std::string(op), _settings);
 
                 _expressIDToGeometry[expressID] = resultMesh;
                 mesh.hasGeometry = true;
@@ -1009,7 +1015,7 @@ namespace webifc::geometry
 
                 // TODO: correct dump in case of compositeProfile
                 #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
+                //    io::DumpSVGCurve(profile.curve.points, "IFCEXTRUDEDAREASOLID_curve.html");
                 #endif
 
                 IfcGeometry geom;
@@ -1050,7 +1056,7 @@ namespace webifc::geometry
 
                 // TODO: correct dump in case of compositeProfile
                 #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
+                //    io::DumpIfcGeometry(geom, "IFCEXTRUDEDAREASOLID_geom.obj");
                 #endif
 
                 _expressIDToGeometry[expressID] = geom;
@@ -1608,7 +1614,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix, const glm::dvec4 &color, bool hasColor)
     {
-    
+
         glm::dvec4 newParentColor = color;
         bool newHasColor = hasColor;
         glm::dmat4 newMatrix = parentMatrix * composedMesh.transformation;
@@ -1635,7 +1641,7 @@ namespace webifc::geometry
                 }
             }
 
-     
+
             auto geom = _expressIDToGeometry[composedMesh.expressID];
 			if (geom.isPolygon)
  			{
@@ -1681,9 +1687,9 @@ namespace webifc::geometry
         }
     }
 
-    IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
+    IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
-        return _boolEngine.BoolProcess(firstGeoms, secondGeoms, op);
+        return _boolEngine.BoolProcess(firstGeoms, secondGeoms, op, _settings);
     }
 
     std::vector<uint32_t> IfcGeometryProcessor::Read2DArrayOfThreeIndices()
@@ -1708,7 +1714,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points)
     {
-        
+
         spdlog::debug("[ReadIndexedPolygonalFace({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
@@ -1912,7 +1918,7 @@ namespace webifc::geometry
         return newGeom;
     }
 
-    IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op)
+    IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
         spdlog::debug("[BoolProcess({})]");
         IfcGeometry finalResult;
@@ -1989,6 +1995,8 @@ namespace webifc::geometry
                     firstOperator.buildPlanes();
                     secondOperator.buildPlanes();
 
+                    fuzzybools::SetEpsilons(_settings.tolerancePlaneIntersection, _settings.toleranceBoundaryPoint, _settings.toleranceInsideOutsideToPlane, _settings.toleranceInsideOutside);
+
                     if (op == "DIFFERENCE")
                     {
                         firstOperator = Subtract(firstOperator, secondOperator);
@@ -2010,7 +2018,7 @@ namespace webifc::geometry
     }
 
     IfcGeometry booleanManager::Union(IfcGeometry firstOperator, IfcGeometry secondOperator)
-    {        
+    {
         fuzzybools::Geometry firstEngGeom = convertToEngine(firstOperator);
         fuzzybools::Geometry secondEngGeom = convertToEngine(secondOperator);
         return convertToWebIfc(fuzzybools::Union(firstEngGeom, secondEngGeom));
@@ -2031,6 +2039,6 @@ namespace webifc::geometry
     IfcGeometryProcessor::IfcGeometryProcessor(const IfcGeometrySettings &settings,std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry,const IfcGeometryLoader &geometryLoader,glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube)
     : _settings(settings), _expressIDToGeometry(expressIDToGeometry), _geometryLoader(geometryLoader), _transformation(transformation), _loader(loader), _boolEngine(boolEngine), _schemaManager(schemaManager), _isCoordinated(isCoordinated), _expressIdCyl(expressIdCyl), _expressIdRect(expressIdRect), _coordinationMatrix(coordinationMatrix), _predefinedCylinder(predefinedCylinder), _predefinedCube(predefinedCube)
     {}
-     
+
 
 }

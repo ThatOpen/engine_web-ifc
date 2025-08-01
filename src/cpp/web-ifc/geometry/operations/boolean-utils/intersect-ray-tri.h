@@ -91,7 +91,7 @@ namespace fuzzybools
         (c) Check if the triangle is behind the ray.  If so, return false.
 */    
 //      if (t < -toleranceInsideOutside * dirLength) return false;
-        if (t < -toleranceInsideOutsideToPlane) return false;
+        if (t < -_toleranceInsideOutsideToPlane) return false;
 /*
         (d) Compute p, the point of intersection.
 */    
@@ -128,7 +128,7 @@ namespace fuzzybools
         cLength = c.length();
         double valdot = glm::dot(n, c);
 //      if (glm::dot(n, c) < -toleranceInsideOutside * nLength * cLength) return false;
-        if (valdot < -toleranceInsideOutside) return false;
+        if (valdot < -_toleranceInsideOutside) return false;
  
         // edge 1
         Vec edge1 = v2 - v1; 
@@ -137,7 +137,7 @@ namespace fuzzybools
         cLength = c.length();
         valdot = glm::dot(n, c);
 //      if (glm::dot(n, c) < -toleranceInsideOutside * nLength * cLength) return false;
-        if (valdot < -toleranceInsideOutside) return false;
+        if (valdot < -_toleranceInsideOutside) return false;
  
         // edge 2
         Vec edge2 = v0 - v2; 
@@ -146,7 +146,7 @@ namespace fuzzybools
         cLength = c.length();
         valdot = glm::dot(n, c);	
 //      if (glm::dot(n, c) < -toleranceInsideOutside * nLength * cLength) return false;
-        if (valdot < -toleranceInsideOutside) return false;
+        if (valdot < -_toleranceInsideOutside) return false;
     
         hitPosition = p;
 

@@ -65,6 +65,12 @@ export interface LoaderSettings {
     MEMORY_LIMIT?: number;
     TAPE_SIZE? : number;
     LINEWRITER_BUFFER?: number;
+    tolerancePlaneIntersection?: number;
+    toleranceBoundaryPoint ?: number;
+    toleranceInsideOutsideToPlane?: number;
+    toleranceInsideOutside?: number;
+    toleranceScalarEquality?: number;
+    addPlaneIterations?: number;
 }
 
 export interface Vector<T> extends Iterable<T> {
@@ -376,6 +382,12 @@ export class IfcAPI {
             TAPE_SIZE: 67108864,
             MEMORY_LIMIT: 2147483648,
             LINEWRITER_BUFFER: 10000,
+            tolerancePlaneIntersection: 1.0E-04,
+            toleranceBoundaryPoint: 1.0E-04,
+            toleranceInsideOutsideToPlane: 1.0E-04,
+            toleranceInsideOutside: 1.0E-10,
+            toleranceScalarEquality: 1.0E-04,
+            addPlaneIterations: 1,
             ...settings
         };
         return s;

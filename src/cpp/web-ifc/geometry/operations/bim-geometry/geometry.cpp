@@ -30,10 +30,6 @@ namespace bimGeometry
 
     void Geometry::AddPoint(glm::dvec3& pt, glm::dvec3& n)
     {
-        //vertexData.reserve((numPoints + 1) * VERTEX_FORMAT_SIZE_FLOATS);
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 0] = pt.x;
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 1] = pt.y;
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 2] = pt.z;
         vertexData.push_back(pt.x);
         vertexData.push_back(pt.y);
         vertexData.push_back(pt.z);
@@ -41,10 +37,6 @@ namespace bimGeometry
         vertexData.push_back(n.x);
         vertexData.push_back(n.y);
         vertexData.push_back(n.z);
-
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 3] = n.x;
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 4] = n.y;
-        //vertexData[numPoints * VERTEX_FORMAT_SIZE_FLOATS + 5] = n.z;
 
         numPoints += 1;
     }
@@ -58,6 +50,13 @@ namespace bimGeometry
         );
     }
 
+    void Geometry::SetPoint(double x, double y, double z, size_t index)
+    {
+        vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0] = x;
+        vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1] = y;
+        vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2] = z;
+    }
+
     Face Geometry::GetFace(size_t index) const
     {
         Face f;
@@ -68,7 +67,7 @@ namespace bimGeometry
         return f;
     }
 
-    void Geometry::AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+    void Geometry::AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, uint32_t pId)
     {
         glm::dvec3 normal;
 
@@ -83,7 +82,7 @@ namespace bimGeometry
         AddPoint(b, normal);
         AddPoint(c, normal);
 
-        AddFace(numPoints - 3, numPoints - 2, numPoints - 1, -1);
+        AddFace(numPoints - 3, numPoints - 2, numPoints - 1, pId);
     }
 
     void Geometry::AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId)
@@ -123,44 +122,114 @@ namespace bimGeometry
     {
         if(!hasPlanes)
         {
-            planes.clear();
-            planeData.clear();
-
-            for (size_t i = 0; i < numFaces; i++)
+            std::vector<double> storedVertexData = vertexData;
+            auto GetStoredPoint = [&](size_t index) -> glm::dvec3 {
+                return glm::dvec3(
+                    storedVertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0],
+                    storedVertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
+                    storedVertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
+                );
+            };
+            
+            for(uint32_t r = 0; r < _addPlaneIterations; r++)
             {
-                planeData.push_back(-1);
-            }
+                planes.clear();
+                planeData.clear();
 
-            Vec centroid = Vec(0,0,0);
-
-            for (size_t i = 0; i < numFaces; i++)
-            {
-                Face f = GetFace(i);
-
-                auto a = GetPoint(f.i0);
-                auto b = GetPoint(f.i1);
-                auto c = GetPoint(f.i2);
-
-                centroid = centroid + (a + b + c) / 3.0;
-            }
-
-            for (size_t i = 0; i < numFaces; i++)
-            {
-                Face f = GetFace(i);
-
-                auto a = GetPoint(f.i0);
-                auto b = GetPoint(f.i1);
-                auto c = GetPoint(f.i2);
-
-                glm::dvec3 norm;
-
-                if (computeSafeNormal(a, b, c, norm, EPS_SMALL))
+                for (size_t i = 0; i < numFaces; i++)
                 {
-                    double da = glm::dot(norm, a - centroid);
+                    planeData.push_back(-1);
+                }
 
-                    size_t id = AddPlane(norm, da);
-                    planeData[i] = id;
-                    hasPlanes = true;
+                Vec centroid = Vec(0,0,0);
+
+                for (size_t i = 0; i < numFaces; i++)
+                {
+                    Face f = GetFace(i);
+
+                    auto a = GetPoint(f.i0);
+                    auto b = GetPoint(f.i1);
+                    auto c = GetPoint(f.i2);
+
+                    centroid = centroid + (a + b + c) / 3.0;
+                }
+
+                for (size_t i = 0; i < numFaces; i++)
+                {
+                    Face f = GetFace(i);
+
+                    auto a = GetPoint(f.i0);
+                    auto b = GetPoint(f.i1);
+                    auto c = GetPoint(f.i2);
+
+                    glm::dvec3 norm;
+
+                    if (computeSafeNormal(a, b, c, norm, EPS_SMALL))
+                    {
+                        double da = glm::dot(norm, a - centroid);
+                        double db = glm::dot(norm, b - centroid);
+                        double dc = glm::dot(norm, c - centroid);
+
+                        size_t id = AddPlane(norm, (da + db + dc) / 3.0);
+                        planeData[i] = id;
+                        hasPlanes = true;
+                    }
+                }
+
+                for (size_t i = 0; i < numFaces; i++)
+                {
+                    Face f = GetFace(i);
+
+                    auto a = GetPoint(f.i0);
+                    auto b = GetPoint(f.i1);
+                    auto c = GetPoint(f.i2);
+
+                    if (f.pId != -1)
+                    {
+                        Plane p = planes[f.pId];
+
+                        double da = glm::dot(p.normal, a - centroid);
+                        double db = glm::dot(p.normal, b - centroid);
+                        double dc = glm::dot(p.normal, c - centroid);
+
+                        da = p.distance - da;
+                        db = p.distance - db;
+                        dc = p.distance - dc;
+
+                        glm::dvec3 va = a + p.normal * da;
+                        glm::dvec3 vb = b + p.normal * db;
+                        glm::dvec3 vc = c + p.normal * dc;
+
+                        glm::dvec3 dsa = GetStoredPoint(f.i0) - va;
+                        glm::dvec3 dsb = GetStoredPoint(f.i1) - vb;
+                        glm::dvec3 dsc = GetStoredPoint(f.i2) - vc;
+                        
+                        double fa = glm::length(dsa) / reconstructTolerance;
+                        double fb = glm::length(dsb) / reconstructTolerance;
+                        double fc = glm::length(dsc) / reconstructTolerance;
+                        
+                        if(fa > 1)
+                        {
+                            fa = glm::length(dsa) / fa;
+                            dsa = glm::normalize(dsa) * fa;
+                            va = va + dsa;
+                        }
+                        if(fb > 1)
+                        {
+                            fb = glm::length(dsb) / fb;
+                            dsb = glm::normalize(dsb) * fb;
+                            vb = vb + dsb;
+                        }
+                        if(fc > 1)
+                        {
+                            fc = glm::length(dsc) / fc;
+                            dsc = glm::normalize(dsc) * fc;
+                            vc = vc + dsc;
+                        }
+                        SetPoint(va.x, va.y, va.z, f.i0);
+                        SetPoint(vb.x, vb.y, vb.z, f.i1);
+                        SetPoint(vc.x, vc.y, vc.z, f.i2);
+                    }
                 }
             }
 

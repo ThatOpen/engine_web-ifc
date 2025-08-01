@@ -91,8 +91,8 @@ namespace fuzzybools
             auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir);
             auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir);
 
-            Vec extraDir1 = glm::normalize(Vec(1.1, 1.4, 1.2));
-            Vec extraDir2 = glm::normalize(Vec(-2.1, 1.4, -3.2));
+            Vec extraDir1 = glm::normalize(raydir + Vec(0.02,0.01,0.04));
+            Vec extraDir2 = glm::normalize(raydir + Vec(0.20,-0.1,0.40));
 
             auto isInside1Loc_B = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir1);
             auto isInside2Loc_B = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir1);
@@ -192,9 +192,9 @@ namespace fuzzybools
             #ifdef CSG_DEBUG_OUTPUT
                 if (doit)
                 {
-                    edgesPrinted.push_back({ glm::dvec2(a.z + a.x/2, a.y+ a.x/2), glm::dvec2(b.z+ b.x/2, b.y+ b.x/2)});
-                    edgesPrinted.push_back({ glm::dvec2(a.z+ a.x/2, a.y+ a.x/2), glm::dvec2(c.z+ c.x/2, c.y+ c.x/2) });
-                    edgesPrinted.push_back({ glm::dvec2(b.z+ b.x/2, b.y+ b.x/2), glm::dvec2(c.z+ c.x/2, c.y+ c.x/2) });
+                    edgesPrinted.push_back({ glm::dvec2(a.z + a.x/2, a.y + a.x/2), glm::dvec2(b.z + b.x/2, b.y+ b.x/2)});
+                    edgesPrinted.push_back({ glm::dvec2(a.z + a.x/2, a.y + a.x/2), glm::dvec2(c.z + c.x/2, c.y+ c.x/2) });
+                    edgesPrinted.push_back({ glm::dvec2(b.z + b.x/2, b.y + b.x/2), glm::dvec2(c.z + c.x/2, c.y+ c.x/2) });
                     DumpSVGLines(edgesPrinted, L"final_tri.html");
                     doit = true;
                 }
@@ -282,7 +282,6 @@ namespace fuzzybools
             }
             else if (isInside1 == MeshLocation::BOUNDARY && isInside2 == MeshLocation::BOUNDARY)
             {
-                /*
                 // both boundary, no dice if normals are opposite direction
                 auto dot = glm::dot(isInside1Loc.normal, isInside2Loc.normal);
 
@@ -292,9 +291,8 @@ namespace fuzzybools
                 {
                     // normals face away from eachother, we can keep this face
                     // furthermore, since the first operand is the first added, we don't flip
-                    result.AddFace(a, b, c);
+                    result.AddFace(a, b, c, tri.pId);
                 }
-                */
             }
             else if (isInside1 == MeshLocation::BOUNDARY && isInside2 == MeshLocation::OUTSIDE)
             {
