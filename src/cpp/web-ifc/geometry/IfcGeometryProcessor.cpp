@@ -1059,6 +1059,37 @@ namespace webifc::geometry
 
                 return mesh;
             }
+            case schema::IFCRIGHTCIRCULARCYLINDER:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                uint32_t placementID = _loader.GetRefArgument();
+                double height = _loader.GetDoubleArgument();
+                double radius = _loader.GetDoubleArgument();
+
+                // Create a circular profile
+                IfcProfile profile;
+                profile.isConvex = true;
+                profile.curve = GetCircleCurve(radius, _geometryLoader.GetCircleSegments());
+
+                // Extrude along Z-axis
+                glm::dvec3 extrusionDir = glm::dvec3(0, 0, 1);
+                IfcGeometry geom = Extrude(profile, extrusionDir, height);
+
+                // Set transformation
+                if (placementID)
+                {
+                    mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
+                }
+
+#ifdef CSG_DEBUG_OUTPUT
+                io::DumpIfcGeometry(geom, "IFCRIGHTCIRCULARCYLINDER_geom.obj");
+#endif
+
+                _expressIDToGeometry[expressID] = geom;
+                mesh.expressID = expressID;
+                mesh.hasGeometry = true;
+                return mesh;
+            }
             case schema::IFCGEOMETRICSET:
             case schema::IFCGEOMETRICCURVESET:
             {
@@ -1123,6 +1154,8 @@ namespace webifc::geometry
 			}
 			case schema::IFCCIRCLE:
             case schema::IFCPOLYLINE:
+            case schema::IFCCOMPOSITECURVE:
+            case schema::IFCCURVESEGMENT:
             case schema::IFCINDEXEDPOLYCURVE:
             case schema::IFCTRIMMEDCURVE:
 			{

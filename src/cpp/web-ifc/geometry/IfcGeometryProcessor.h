@@ -63,7 +63,7 @@ namespace webifc::geometry
         IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, std::string op);
         std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
         IfcSurface GetSurface(uint32_t expressID);
-        const IfcGeometryLoader _geometryLoader;
+        IfcGeometryLoader _geometryLoader;
         glm::dmat4 _transformation = glm::dmat4(1.0);
         const parsing::IfcLoader &_loader;
         booleanManager _boolEngine;
