@@ -31,7 +31,7 @@ namespace webifc::geometry
         SetEpsilons(toleranceScalarEquality, addPlaneIterations);
     }
 
-    IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
+    IfcGeometryLoader& IfcGeometryProcessor::GetLoader()
     {
         return _geometryLoader;
     }
@@ -136,11 +136,11 @@ namespace webifc::geometry
         spdlog::debug("[GetMesh({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
         auto &relVoids = _geometryLoader.GetRelVoids();
-        
+
         IfcComposedMesh mesh;
         mesh.expressID = expressID;
         std::optional<glm::dvec4> generatedColor = GetStyleItemFromExpressId(expressID);
-        if (!generatedColor) 
+        if (!generatedColor)
         {
             mesh.color = glm::dvec4(1.0);
             mesh.hasColor = false;
@@ -203,7 +203,7 @@ namespace webifc::geometry
                     }
 
                     if(relVoidsIt->second.size() > 50) // When voids are greater than 10 they are all fused
-                    {   
+                    {
                         std::vector<IfcGeometry> joinedVoidGeoms;
                         IfcGeometry fusedVoids;
                         for (auto geom : voidGeoms)
@@ -230,7 +230,7 @@ namespace webifc::geometry
                     }
 
                     // if(flatElementMeshes.size() > 10) // When elements are greater than 10 they are all fused
-                    // {   
+                    // {
                     //     std::vector<IfcGeometry> joinedMeshGeoms;
                     //     IfcGeometry fusedMesh;
                     //     for (auto geom : flatElementMeshes)
@@ -269,7 +269,7 @@ namespace webifc::geometry
                     // }
 
                     finalGeometry = BoolProcess(flatElementMeshes, voidGeoms, "DIFFERENCE", _settings);
-                    
+
                     #ifdef CSG_DEBUG_OUTPUT
                     //    io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
                     #endif
@@ -301,7 +301,7 @@ namespace webifc::geometry
             {
                 return mesh;
             }
-            
+
         }
         else
         {
@@ -710,11 +710,11 @@ namespace webifc::geometry
 				}
 				else if (surface.CylinderSurface.Active)
 				{
-					TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
+					TriangulateCylindricalSurface(geometry, bounds3D, surface, _geometryLoader.GetCircleSegments());
 				}
 				else if (surface.RevolutionSurface.Active)
 				{
-					TriangulateRevolution(geometry, bounds3D, surface, _settings._circleSegments);
+					TriangulateRevolution(geometry, bounds3D, surface, _geometryLoader.GetCircleSegments());
 				}
 				else if (surface.ExtrusionSurface.Active)
 				{
@@ -896,7 +896,7 @@ namespace webifc::geometry
                 IfcCurve directrix = _geometryLoader.GetCurve(directrixRef, 3);
 
                 IfcProfile profile;
-                profile.curve = GetCircleCurve(radius, _settings._circleSegments);
+                profile.curve = GetCircleCurve(radius, _geometryLoader.GetCircleSegments());
 
                 IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), closed, profile, radius, directrix);
 
@@ -928,7 +928,7 @@ namespace webifc::geometry
 
                 glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[1];
 
-                IfcCurve directrix = BuildArc(_geometryLoader.GetLinearScalingFactor(), pos, axis, angle, _settings._circleSegments);
+                IfcCurve directrix = BuildArc(_geometryLoader.GetLinearScalingFactor(), pos, axis, angle, _geometryLoader.GetCircleSegments());
                 if(glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG)
                 {
                     closed = true;
@@ -1050,6 +1050,37 @@ namespace webifc::geometry
 
                 return mesh;
             }
+            case schema::IFCRIGHTCIRCULARCYLINDER:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                uint32_t placementID = _loader.GetRefArgument();
+                double height = _loader.GetDoubleArgument();
+                double radius = _loader.GetDoubleArgument();
+
+                // Create a circular profile
+                IfcProfile profile;
+                profile.isConvex = true;
+                profile.curve = GetCircleCurve(radius, _geometryLoader.GetCircleSegments());
+
+                // Extrude along Z-axis
+                glm::dvec3 extrusionDir = glm::dvec3(0, 0, 1);
+                IfcGeometry geom = Extrude(profile, extrusionDir, height);
+
+                // Set transformation
+                if (placementID)
+                {
+                    mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
+                }
+
+#ifdef CSG_DEBUG_OUTPUT
+                io::DumpIfcGeometry(geom, "IFCRIGHTCIRCULARCYLINDER_geom.obj");
+#endif
+
+                _expressIDToGeometry[expressID] = geom;
+                mesh.expressID = expressID;
+                mesh.hasGeometry = true;
+                return mesh;
+            }
             case schema::IFCGEOMETRICSET:
             case schema::IFCGEOMETRICCURVESET:
             {
@@ -1114,6 +1145,8 @@ namespace webifc::geometry
 			}
 			case schema::IFCCIRCLE:
             case schema::IFCPOLYLINE:
+            case schema::IFCCOMPOSITECURVE:
+            case schema::IFCCURVESEGMENT:
             case schema::IFCINDEXEDPOLYCURVE:
             case schema::IFCTRIMMEDCURVE:
 			{
@@ -1566,7 +1599,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix, const glm::dvec4 &color, bool hasColor)
     {
-    
+
         glm::dvec4 newParentColor = color;
         bool newHasColor = hasColor;
         glm::dmat4 newMatrix = parentMatrix * composedMesh.transformation;
@@ -1593,7 +1626,7 @@ namespace webifc::geometry
                 }
             }
 
-     
+
             auto geom = _expressIDToGeometry[composedMesh.expressID];
 			if (geom.isPolygon)
  			{
@@ -1665,7 +1698,7 @@ namespace webifc::geometry
 
     void IfcGeometryProcessor::ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points)
     {
-        
+
         spdlog::debug("[ReadIndexedPolygonalFace({})]",expressID);
         auto lineType = _loader.GetLineType(expressID);
 
@@ -1804,11 +1837,11 @@ namespace webifc::geometry
             }
             else if (surface.CylinderSurface.Active)
             {
-                TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
+                TriangulateCylindricalSurface(geometry, bounds3D, surface, _geometryLoader.GetCircleSegments());
             }
             else if (surface.RevolutionSurface.Active)
             {
-                TriangulateRevolution(geometry, bounds3D, surface, _settings._circleSegments);
+                TriangulateRevolution(geometry, bounds3D, surface, _geometryLoader.GetCircleSegments());
             }
             else if (surface.ExtrusionSurface.Active)
             {
@@ -1947,7 +1980,7 @@ namespace webifc::geometry
                     secondOperator.buildPlanes();
 
                     fuzzybools::SetEpsilons(_settings.tolerancePlaneIntersection, _settings.toleranceBoundaryPoint, _settings.toleranceInsideOutsideToPlane, _settings.toleranceInsideOutside);
-                    
+
                     if (op == "DIFFERENCE")
                     {
                         firstOperator = Subtract(firstOperator, secondOperator);
@@ -1969,7 +2002,7 @@ namespace webifc::geometry
     }
 
     IfcGeometry booleanManager::Union(IfcGeometry firstOperator, IfcGeometry secondOperator)
-    {        
+    {
         fuzzybools::Geometry firstEngGeom = convertToEngine(firstOperator);
         fuzzybools::Geometry secondEngGeom = convertToEngine(secondOperator);
         return convertToWebIfc(fuzzybools::Union(firstEngGeom, secondEngGeom));
@@ -1990,6 +2023,6 @@ namespace webifc::geometry
     IfcGeometryProcessor::IfcGeometryProcessor(const IfcGeometrySettings &settings,std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry,const IfcGeometryLoader &geometryLoader,glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube)
     : _settings(settings), _expressIDToGeometry(expressIDToGeometry), _geometryLoader(geometryLoader), _transformation(transformation), _loader(loader), _boolEngine(boolEngine), _schemaManager(schemaManager), _isCoordinated(isCoordinated), _expressIdCyl(expressIdCyl), _expressIdRect(expressIdRect), _coordinationMatrix(coordinationMatrix), _predefinedCylinder(predefinedCylinder), _predefinedCube(predefinedCube)
     {}
-     
+
 
 }

@@ -1,9 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
- 
+
 #pragma once
- 
+
 #include <glm/glm.hpp>
 #include <string>
 #include <cstdint>
@@ -45,12 +45,12 @@ namespace webifc::geometry
       IfcGeometry Subtract(IfcGeometry firstOperator, IfcGeometry secondOperator);
   };
 
-  class IfcGeometryProcessor 
+  class IfcGeometryProcessor
   {
       public:
         IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments,bool coordinateToOrigin, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside, double toleranceScalarEquality, double addPlaneIterations);
         IfcGeometry &GetGeometry(uint32_t expressID);
-        IfcGeometryLoader GetLoader() const;
+        IfcGeometryLoader& GetLoader();
         IfcFlatMesh GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor = true);
         IfcComposedMesh GetMesh(uint32_t expressID);
         void SetTransformation(const std::array<double, 16> &val);
@@ -58,7 +58,7 @@ namespace webifc::geometry
         glm::dmat4 GetCoordinationMatrix() const;
         void Clear();
         IfcGeometryProcessor * Clone(const webifc::parsing::IfcLoader &loader) const;
-		    
+
         protected:
         IfcGeometryProcessor(const IfcGeometrySettings &settings,std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry,const IfcGeometryLoader &geometryLoader,glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube);
         IfcGeometrySettings _settings;
@@ -68,7 +68,7 @@ namespace webifc::geometry
         IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, std::string op, IfcGeometrySettings _settings);
         std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
         IfcSurface GetSurface(uint32_t expressID);
-        const IfcGeometryLoader _geometryLoader;
+        IfcGeometryLoader _geometryLoader;
         glm::dmat4 _transformation = glm::dmat4(1.0);
         const parsing::IfcLoader &_loader;
         booleanManager _boolEngine;
