@@ -3155,11 +3155,21 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
       }
       case schema::IFCAXIS2PLACEMENT3D:
       {
+        glm::dvec3 pos(0, 0, 0);
         glm::dvec3 zAxis(0, 0, 1);
         glm::dvec3 xAxis(1, 0, 0);
 
         _loader.MoveToArgumentOffset(expressID, 0);
-        uint32_t posID = _loader.GetRefArgument();
+        parsing::IfcTokenType positionTokenType = _loader.GetTokenType();
+        if (positionTokenType == parsing::IfcTokenType::REF)
+        {
+            // position is mandatory, but check it anyways, sometimes IFC files have errors like this.
+            _loader.StepBack();
+            uint32_t posID = _loader.GetRefArgument();
+            pos = GetCartesianPoint3D(posID);
+        }
+
+        _loader.MoveToArgumentOffset(expressID, 1);
         parsing::IfcTokenType zID = _loader.GetTokenType();
         if (zID == parsing::IfcTokenType::REF)
         {
@@ -3176,9 +3186,7 @@ IfcProfile IfcGeometryLoader::GetProfile(uint32_t expressID) const
           auto tmpVec = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
           if (glm::length(tmpVec) > 0) xAxis = tmpVec;
         }
-
-        glm::dvec3 pos = GetCartesianPoint3D(posID);
-
+        
         glm::dvec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
         xAxis = glm::normalize(glm::cross(yAxis, zAxis));
 
