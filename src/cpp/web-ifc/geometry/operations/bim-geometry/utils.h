@@ -15,22 +15,22 @@ namespace bimGeometry
 {
 	constexpr int VERTEX_FORMAT_SIZE_FLOATS = 6;
 
-    inline double cross2d(const glm::dvec2 &point1, const glm::dvec2 &point2)
+	inline double cross2d(const glm::dvec2 &point1, const glm::dvec2 &point2)
 	{
 		return point1.x * point2.y - point1.y * point2.x;
 	}
 
-    inline bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
-    {
-        return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
-    }
+	inline bool equals(glm::dvec3 A, glm::dvec3 B, double eps = 0)
+	{
+		return std::fabs(A.x - B.x) <= eps && std::fabs(A.y - B.y) <= eps && std::fabs(A.z - B.z) <= eps;
+	}
 
 	inline bool equals(double A, double B, double eps = 0)
 	{
 		return std::fabs(A - B) <= eps;
 	}
 
-    inline double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+	inline double areaOfTriangle(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
 	{
 		glm::dvec3 ab = b - a;
 		glm::dvec3 ac = c - a;
@@ -39,7 +39,7 @@ namespace bimGeometry
 		return glm::length(norm) / 2;
 	}
 
-    inline double areaOfTriangle2D(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
+	inline double areaOfTriangle2D(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
 	{
 		glm::dvec2 ab = b - a;
 		glm::dvec2 ac = c - a;
@@ -70,7 +70,8 @@ namespace bimGeometry
 	inline double VectorToAngle(double x, double y)
 	{
 		double dd = sqrt(x * x + y * y);
-		if (std::abs(dd) < EPS_MINISCULE) {
+		if (std::abs(dd) < EPS_MINISCULE)
+		{
 			return 0;
 		}
 		double xx = x / dd;
@@ -110,7 +111,7 @@ namespace bimGeometry
 
 	inline Geometry Revolution(glm::dmat4 transform, double startDegrees, double endDegrees, std::vector<glm::dvec3> Profile, double numRots)
 	{
-		Geometry geometry;	
+		Geometry geometry;
 
 		glm::dvec3 cent = transform[3];
 		glm::dvec3 vecX = glm::normalize(transform[0]);
@@ -124,8 +125,8 @@ namespace bimGeometry
 			newPoints.push_back(newList);
 		}
 
-			// Then we use the start and end angles as bounding boxes of the boundary ...
-			//  ... we will represent this bounding box.
+		// Then we use the start and end angles as bounding boxes of the boundary ...
+		//  ... we will represent this bounding box.
 
 		double startRad = startDegrees / 180 * CONST_PI;
 		double endRad = endDegrees / 180 * CONST_PI;
@@ -161,18 +162,22 @@ namespace bimGeometry
 		for (int r = 0; r < numRots - 1; r++)
 		{
 			int r1 = r + 1;
-			if (r1 >= newPoints.size()) {
+			if (r1 >= newPoints.size())
+			{
 				break;
 			}
-			const std::vector<glm::dvec3>& newPointsR = newPoints[r];
-			const std::vector<glm::dvec3>& newPointsR1 = newPoints[r1];
-			if (newPointsR.size() > 0) {
+			const std::vector<glm::dvec3> &newPointsR = newPoints[r];
+			const std::vector<glm::dvec3> &newPointsR1 = newPoints[r1];
+			if (newPointsR.size() > 0)
+			{
 				for (size_t s = 0; s < newPointsR.size() - 1; s++)
 				{
-					if (s + 1 >= newPointsR.size()) {
+					if (s + 1 >= newPointsR.size())
+					{
 						break;
 					}
-					if (s + 1 >= newPointsR1.size()) {
+					if (s + 1 >= newPointsR1.size())
+					{
 						break;
 					}
 					geometry.AddFace(newPointsR[s], newPointsR[s + 1], newPointsR1[s]);
@@ -183,7 +188,6 @@ namespace bimGeometry
 
 		return geometry;
 	}
-
 
 	inline Geometry RevolveCylinder(glm::dmat4 transform, double startDegrees, double endDegrees, double minZ, double maxZ, int numRots, double radius)
 	{
@@ -259,34 +263,39 @@ namespace bimGeometry
 	}
 
 	inline std::vector<glm::dvec3> Convert2DAlignmentsTo3D(
-		const std::vector<glm::dvec3>& horizontal,
-		const std::vector<glm::dvec3>& vertical) {
-		
+		const std::vector<glm::dvec3> &horizontal,
+		const std::vector<glm::dvec3> &vertical)
+	{
+
 		std::vector<glm::dvec3> curve3D;
-		
-		if (horizontal.empty() || vertical.empty()) {
+
+		if (horizontal.empty() || vertical.empty())
+		{
 			return curve3D; // Return empty if no valid alignment
 		}
-		
+
 		double length = 0.0;
 		double lastX = horizontal[0].x;
 		double lastY = horizontal[0].y;
-		
-		for (const auto& ptH : horizontal) {
+
+		for (const auto &ptH : horizontal)
+		{
 			double dx = ptH.x - lastX;
 			double dy = ptH.y - lastY;
 			length += std::sqrt(dx * dx + dy * dy);
 			lastX = ptH.x;
 			lastY = ptH.y;
-			
+
 			double altitude = 0.0;
 			double lastAlt = vertical[0].y;
 			double lastVx = vertical[0].x;
 			bool found = false;
-			
-			for (size_t i = 1; i < vertical.size(); ++i) {
-				const auto& ptV = vertical[i];
-				if (ptV.x >= length) {
+
+			for (size_t i = 1; i < vertical.size(); ++i)
+			{
+				const auto &ptV = vertical[i];
+				if (ptV.x >= length)
+				{
 					double ratio = (length - lastVx) / (ptV.x - lastVx);
 					altitude = lastAlt * (1.0 - ratio) + ptV.y * ratio;
 					found = true;
@@ -295,35 +304,36 @@ namespace bimGeometry
 				lastAlt = ptV.y;
 				lastVx = ptV.x;
 			}
-			
-			if (!found) {
+
+			if (!found)
+			{
 				altitude = vertical.back().y; // If length exceeds vertical range, use last known altitude
 			}
-			
+
 			curve3D.emplace_back(ptH.x, altitude, -ptH.y);
 		}
-		
+
 		return curve3D;
 	}
 
 	inline Curve GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true, bool normalToCenterEnding = false)
 	{
 		Curve c;
-		if(normalToCenterEnding)
+		if (normalToCenterEnding)
 		{
 			double sweep_angle = (endRad - startRad);
 
 			double step = sweep_angle / (numSegments - 1);
 
-			if(endRad > startRad)
+			if (endRad > startRad)
 			{
-				startRad -= step /2;
-				endRad += step /2;
+				startRad -= step / 2;
+				endRad += step / 2;
 			}
-			if(endRad <= startRad)
+			if (endRad <= startRad)
 			{
-				startRad += step /2;
-				endRad -= step /2;
+				startRad += step / 2;
+				endRad -= step / 2;
 			}
 
 			for (int i = 0; i < numSegments; i++)
@@ -345,7 +355,7 @@ namespace bimGeometry
 						radiusY * std::cos(angle));
 				}
 				glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
-				c.points.push_back(glm::dvec3(pos,0));
+				c.points.push_back(glm::dvec3(pos, 0));
 			}
 
 			c.points[0] = (c.points[0] + c.points[1]) * 0.5;
@@ -384,7 +394,7 @@ namespace bimGeometry
 						radiusY * std::cos(angle));
 				}
 				glm::dvec2 pos = placement * glm::dvec3(circleCoordinate, 1);
-				c.points.push_back(glm::dvec3(pos,0));
+				c.points.push_back(glm::dvec3(pos, 0));
 			}
 
 			// check for a closed curve
@@ -401,19 +411,19 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline std::vector<glm::dvec2> SolveParabola(uint16_t segments,glm::dvec2 startPoint, double HorizontalLength, double StartHeight, double StartGradient, double EndGradient)
+	inline std::vector<glm::dvec2> SolveParabola(uint16_t segments, glm::dvec2 startPoint, double HorizontalLength, double StartHeight, double StartGradient, double EndGradient)
 	{
 		std::vector<glm::dvec2> points;
 
 		double R = HorizontalLength / (EndGradient - StartGradient);
 
-        for (double i = 0; i <= segments; i++)
-        {
-          double pr = i / segments;
-          double grad = ((HorizontalLength * pr) / R) + StartGradient;
-          double alt = (HorizontalLength * pr * (grad + StartGradient) * 0.5) + StartHeight;
-          points.push_back(glm::dvec2(HorizontalLength * pr, alt));
-        }
+		for (double i = 0; i <= segments; i++)
+		{
+			double pr = i / segments;
+			double grad = ((HorizontalLength * pr) / R) + StartGradient;
+			double alt = (HorizontalLength * pr * (grad + StartGradient) * 0.5) + StartHeight;
+			points.push_back(glm::dvec2(HorizontalLength * pr, alt));
+		}
 
 		return points;
 	}
@@ -423,147 +433,155 @@ namespace bimGeometry
 		std::vector<glm::dvec2> points;
 
 		bool inverse = false;
-        if (abs(StartRadiusOfCurvature) > abs(EndRadiusOfCurvature))
-        {
-          inverse = true;
-        }
+		if (abs(StartRadiusOfCurvature) > abs(EndRadiusOfCurvature))
+		{
+			inverse = true;
+		}
 
-        double A = sqrt(abs(EndRadiusOfCurvature - StartRadiusOfCurvature) * SegmentLength);
-        double Api = A * sqrt(CONST_PI);
-        double uMax = SegmentLength / Api;
+		double A = sqrt(abs(EndRadiusOfCurvature - StartRadiusOfCurvature) * SegmentLength);
+		double Api = A * sqrt(CONST_PI);
+		double uMax = SegmentLength / Api;
 
-        double s = A * uMax * sqrt(CONST_PI);
-        double radFin = (A * A * A) / (A * s);
+		double s = A * uMax * sqrt(CONST_PI);
+		double radFin = (A * A * A) / (A * s);
 
-        double vSin = 0;
-        double vCos = 0;
+		double vSin = 0;
+		double vCos = 0;
 
-        glm::dvec2 DirectionX(
-            glm::cos(ifcStartDirection),
-            glm::sin(ifcStartDirection));
-        glm::dvec2 DirectionY(
-            -glm::sin(ifcStartDirection),
-            glm::cos(ifcStartDirection));
+		glm::dvec2 DirectionX(
+			glm::cos(ifcStartDirection),
+			glm::sin(ifcStartDirection));
+		glm::dvec2 DirectionY(
+			-glm::sin(ifcStartDirection),
+			glm::cos(ifcStartDirection));
 
-        if (EndRadiusOfCurvature < 0 || StartRadiusOfCurvature < 0)
-        {
-          DirectionY.x = -DirectionY.x;
-          DirectionY.y = -DirectionY.y;
-        }
+		if (EndRadiusOfCurvature < 0 || StartRadiusOfCurvature < 0)
+		{
+			DirectionY.x = -DirectionY.x;
+			DirectionY.y = -DirectionY.y;
+		}
 
-        if (inverse)
-        {
-          DirectionX.x = -DirectionX.x;
-          DirectionX.y = -DirectionX.y;
-        }
+		if (inverse)
+		{
+			DirectionX.x = -DirectionX.x;
+			DirectionX.y = -DirectionX.y;
+		}
 
-        double def = segments;
-        double dif = def / 10;
-        double count = 0;
-        double tram = uMax / def;
-        glm::dvec2 end(0, 0);
-        glm::dvec2 prev(0, 0);
-        glm::dvec2 endDir;
-        for (double c = 1; c < def + 1; c++)
-        {
-          prev = end;
-          end = startPoint + Api * (DirectionX * vCos + DirectionY * vSin);
-          if (c == def || c == 1 || count >= dif)
-          {
-            points.push_back(end);
-            count = 0;
-          }
-          if (c == def)
-          {
-            endDir = prev - end;
-          }
-          double val = c * tram;
-          vSin += sin(CONST_PI * ((A * val * val) / (2 * abs(A)))) * tram;
-          vCos += cos(CONST_PI * ((A * val * val) / (2 * abs(A)))) * tram;
-          count++;
-        }
+		double def = segments;
+		double dif = def / 10;
+		double count = 0;
+		double tram = uMax / def;
+		glm::dvec2 end(0, 0);
+		glm::dvec2 prev(0, 0);
+		glm::dvec2 endDir;
+		for (double c = 1; c < def + 1; c++)
+		{
+			prev = end;
+			end = startPoint + Api * (DirectionX * vCos + DirectionY * vSin);
+			if (c == def || c == 1 || count >= dif)
+			{
+				points.push_back(end);
+				count = 0;
+			}
+			if (c == def)
+			{
+				endDir = prev - end;
+			}
+			double val = c * tram;
+			vSin += sin(CONST_PI * ((A * val * val) / (2 * abs(A)))) * tram;
+			vCos += cos(CONST_PI * ((A * val * val) / (2 * abs(A)))) * tram;
+			count++;
+		}
 
-        if (inverse)
-        {
-          DirectionX.x = -DirectionX.x;
-          DirectionX.y = -DirectionX.y;
+		if (inverse)
+		{
+			DirectionX.x = -DirectionX.x;
+			DirectionX.y = -DirectionX.y;
 
-          glm::dvec2 newDirectionX(
-              endDir.x,
-              endDir.y);
-          glm::dvec2 newDirectionY(
-              -endDir.y,
-              endDir.x);
+			glm::dvec2 newDirectionX(
+				endDir.x,
+				endDir.y);
+			glm::dvec2 newDirectionY(
+				-endDir.y,
+				endDir.x);
 
-          if (EndRadiusOfCurvature < 0 || StartRadiusOfCurvature < 0)
-          {
-            newDirectionY.x = -newDirectionY.x;
-            newDirectionY.y = -newDirectionY.y;
-          }
+			if (EndRadiusOfCurvature < 0 || StartRadiusOfCurvature < 0)
+			{
+				newDirectionY.x = -newDirectionY.x;
+				newDirectionY.y = -newDirectionY.y;
+			}
 
-          newDirectionX = glm::normalize(newDirectionX);
-          newDirectionY = glm::normalize(newDirectionY);
+			newDirectionX = glm::normalize(newDirectionX);
+			newDirectionY = glm::normalize(newDirectionY);
 
-          for (uint32_t i = 0; i < points.size(); i++)
-          {
-            double xx = points[i].x - end.x;
-            double yy = points[i].y - end.y;
-            double dx = xx * newDirectionX.x + yy * newDirectionX.y;
-            double dy = xx * newDirectionY.x + yy * newDirectionY.y;
-            double newDx = startPoint.x + DirectionX.x * dx + DirectionY.x * dy;
-            double newDy = startPoint.y + DirectionX.y * dx + DirectionY.y * dy;
-            points[i].x = newDx;
-            points[i].y = newDy;
-          }
-        }
+			for (uint32_t i = 0; i < points.size(); i++)
+			{
+				double xx = points[i].x - end.x;
+				double yy = points[i].y - end.y;
+				double dx = xx * newDirectionX.x + yy * newDirectionX.y;
+				double dy = xx * newDirectionY.x + yy * newDirectionY.y;
+				double newDx = startPoint.x + DirectionX.x * dx + DirectionY.x * dy;
+				double newDy = startPoint.y + DirectionX.y * dx + DirectionY.y * dy;
+				points[i].x = newDx;
+				points[i].y = newDy;
+			}
+		}
 
 		return points;
 	}
 
 	inline bimGeometry::Geometry Extrude(std::vector<glm::dvec3> &points, glm::dvec3 &dir, double len)
-    {
+	{
 		bimGeometry::Geometry geom;
 
-        for (size_t j = 0; j < points.size() - 1; j++)
-        {
-            int j2 = j + 1;
+		for (size_t j = 0; j < points.size() - 1; j++)
+		{
+			int j2 = j + 1;
 
-            double npx = points[j].x + dir.x * len;
-            double npy = points[j].y + dir.y * len;
-            double npz = points[j].z + dir.z * len;
-            glm::dvec3 nptj1 = glm::dvec3(
-                npx,
-                npy,
-                npz);
-            npx = points[j2].x + dir.x * len;
-            npy = points[j2].y + dir.y * len;
-            npz = points[j2].z + dir.z * len;
-            glm::dvec3 nptj2 = glm::dvec3(
-                npx,
-                npy,
-                npz);
-            geom.AddFace(
-                glm::dvec3(points[j].x, points[j].y, points[j].z),
-                glm::dvec3(points[j2].x, points[j2].y, points[j2].z),
-                nptj1);
+			double npx = points[j].x + dir.x * len;
+			double npy = points[j].y + dir.y * len;
+			double npz = points[j].z + dir.z * len;
+			glm::dvec3 nptj1 = glm::dvec3(
+				npx,
+				npy,
+				npz);
+			npx = points[j2].x + dir.x * len;
+			npy = points[j2].y + dir.y * len;
+			npz = points[j2].z + dir.z * len;
+			glm::dvec3 nptj2 = glm::dvec3(
+				npx,
+				npy,
+				npz);
 			geom.AddFace(
-                glm::dvec3(points[j2].x, points[j2].y, points[j2].z),
-                nptj2,
-                nptj1);
-        }
+				glm::dvec3(points[j].x, points[j].y, points[j].z),
+				glm::dvec3(points[j2].x, points[j2].y, points[j2].z),
+				nptj1);
+			geom.AddFace(
+				glm::dvec3(points[j2].x, points[j2].y, points[j2].z),
+				nptj2,
+				nptj1);
+		}
 		return geom;
-    }
+	}
 
-	enum class Projection { XY, XZ, YZ };
+	enum class Projection
+	{
+		XY,
+		XZ,
+		YZ
+	};
 	using Point = std::array<double, 3>;
 
 	// Projecta el polígon a 2D segons la millor vista
-	inline Projection bestProjection(const std::vector<Point>& poly) {
-		auto area2D = [](const std::vector<Point>& p, int i1, int i2) {
+	inline Projection bestProjection(const std::vector<Point> &poly)
+	{
+		auto area2D = [](const std::vector<Point> &p, int i1, int i2)
+		{
 			double area = 0.0;
-			for (size_t i = 0; i < p.size(); ++i) {
-				const auto& a = p[i];
-				const auto& b = p[(i + 1) % p.size()];
+			for (size_t i = 0; i < p.size(); ++i)
+			{
+				const auto &a = p[i];
+				const auto &b = p[(i + 1) % p.size()];
 				area += (a[i1] * b[i2]) - (b[i1] * a[i2]);
 			}
 			return std::abs(area * 0.5);
@@ -573,30 +591,36 @@ namespace bimGeometry
 		double areaXZ = area2D(poly, 0, 2); // x, z
 		double areaYZ = area2D(poly, 1, 2); // y, z
 
-		if (areaXY >= areaXZ && areaXY >= areaYZ) return Projection::XY;
-		if (areaXZ >= areaYZ) return Projection::XZ;
+		if (areaXY >= areaXZ && areaXY >= areaYZ)
+			return Projection::XY;
+		if (areaXZ >= areaYZ)
+			return Projection::XZ;
 		return Projection::YZ;
 	}
 
 	// Funció per projectar punts 3D a 2D segons la projecció triada
 	inline std::vector<std::vector<Point>> projectTo2D(
-		const std::vector<std::vector<Point>>& poly3D,
-		Projection proj) {
+		const std::vector<std::vector<Point>> &poly3D,
+		Projection proj)
+	{
 
 		std::vector<std::vector<Point>> poly2D(poly3D.size());
 
-		for (size_t i = 0; i < poly3D.size(); ++i) {
-			for (const auto& pt : poly3D[i]) {
-				switch (proj) {
-					case Projection::XY:
-						poly2D[i].push_back({pt[0], pt[1], pt[2]});
-						break;
-					case Projection::XZ:
-						poly2D[i].push_back({pt[0], pt[2], pt[1]});
-						break;
-					case Projection::YZ:
-						poly2D[i].push_back({pt[1], pt[2], pt[0]});
-						break;
+		for (size_t i = 0; i < poly3D.size(); ++i)
+		{
+			for (const auto &pt : poly3D[i])
+			{
+				switch (proj)
+				{
+				case Projection::XY:
+					poly2D[i].push_back({pt[0], pt[1], pt[2]});
+					break;
+				case Projection::XZ:
+					poly2D[i].push_back({pt[0], pt[2], pt[1]});
+					break;
+				case Projection::YZ:
+					poly2D[i].push_back({pt[1], pt[2], pt[0]});
+					break;
 				}
 			}
 		}
@@ -611,7 +635,8 @@ namespace bimGeometry
 
 		// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
 		glm::dvec3 lastToFirstPoint = profile[0].front() - profile[0].back();
-		if (glm::length(lastToFirstPoint) > 1e-8) {
+		if (glm::length(lastToFirstPoint) > 1e-8)
+		{
 			profile[0].push_back(profile[0].front());
 		}
 
@@ -698,7 +723,6 @@ namespace bimGeometry
 					double ldotn = glm::dot(transDir, cuttingPlaneNormal);
 					if (ldotn == 0)
 					{
-
 					}
 					else
 					{
@@ -742,12 +766,12 @@ namespace bimGeometry
 
 			// this winding should be correct
 			geom.AddFace(geom.GetPoint(tl),
-						geom.GetPoint(br),
-						geom.GetPoint(bl));
+						 geom.GetPoint(br),
+						 geom.GetPoint(bl));
 
 			geom.AddFace(geom.GetPoint(tl),
-						geom.GetPoint(tr),
-						geom.GetPoint(br));
+						 geom.GetPoint(tr),
+						 geom.GetPoint(br));
 		}
 
 		return geom;
@@ -772,7 +796,7 @@ namespace bimGeometry
 	//! This implementation generates much more vertices than needed, and does not have smoothed normals
 	// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
 	// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
-	inline	Geometry SweepFunction(const double scaling, const bool closed, const std::vector<glm::dvec3> &profilePoints, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
+	inline Geometry SweepFunction(const double scaling, const bool closed, const std::vector<glm::dvec3> &profilePoints, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
 		Geometry geom;
 
@@ -906,14 +930,14 @@ namespace bimGeometry
 				// TODO: look at holes
 				auto &ppts = profilePoints;
 				for (auto &pt2D : ppts)
-				{				
+				{
 					glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
-					if(rotate90)
+					if (rotate90)
 					{
 						pt = -pt2D.x * right - pt2D.y * left + planeOrigin;
 					}
 					glm::dvec3 proj = bimGeometry::projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
-					
+
 					segmentForCurve.Add(proj);
 				}
 			}
@@ -963,13 +987,13 @@ namespace bimGeometry
 
 				geom.AddFace(tl, br, bl);
 				geom.AddFace(tl, tr, br);
-			}	
+			}
 		}
 
 		return geom;
 	}
 
-	inline	Geometry SweepCircular(const double scaling, const bool closed, const std::vector<glm::dvec3> &profile, const double radius, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
+	inline Geometry SweepCircular(const double scaling, const bool closed, const std::vector<glm::dvec3> &profile, const double radius, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		Geometry geom;
 
@@ -1007,11 +1031,11 @@ namespace bimGeometry
 
 		if (dpts.size() <= 1)
 		{
-				// nothing to sweep
+			// nothing to sweep
 			return geom;
 		}
 
-			// compute curve for each part of the directrix
+		// compute curve for each part of the directrix
 		std::vector<std::vector<glm::dvec3>> curves;
 		std::vector<glm::dmat4> transforms;
 
@@ -1048,13 +1072,13 @@ namespace bimGeometry
 
 				// double prod = glm::dot(n1, n2);
 
-					if (std::isnan(p.x))
-					{
-						// TODO: sometimes outliers cause the perp to become NaN!
-						// this is bad news, as it nans the points added to the final mesh
-						// also, it's hard to bail out now :/
-						// see curve.add() for more info on how this is currently "solved"
-					}
+				if (std::isnan(p.x))
+				{
+					// TODO: sometimes outliers cause the perp to become NaN!
+					// this is bad news, as it nans the points added to the final mesh
+					// also, it's hard to bail out now :/
+					// see curve.add() for more info on how this is currently "solved"
+				}
 
 				glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
 				glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
@@ -1081,10 +1105,12 @@ namespace bimGeometry
 
 			double parallelZ = glm::abs(glm::dot(dz, glm::dvec3(0, 0, 1)));
 
-			if(parallelZ > 1 - EPS_BIG2)
+			if (parallelZ > 1 - EPS_BIG2)
 			{
 				dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 1, 0)));
-			} else {
+			}
+			else
+			{
 				dx = glm::normalize(glm::cross(dz, glm::dvec3(0, 0, 1)));
 			}
 
@@ -1096,7 +1122,7 @@ namespace bimGeometry
 				glm::dvec4(dz, 0),
 				glm::dvec4(planeOrigin, 1));
 
-			transforms.push_back(profileScale);	
+			transforms.push_back(profileScale);
 
 			if (curves.empty())
 			{
@@ -1134,14 +1160,14 @@ namespace bimGeometry
 				// TODO: look at holes
 				auto &ppts = profile;
 				for (auto &pt2D : ppts)
-				{				
+				{
 					glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
-					if(rotate90)
+					if (rotate90)
 					{
 						pt = -pt2D.x * right - pt2D.y * left + planeOrigin;
 					}
 					glm::dvec3 proj = bimGeometry::projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
-					
+
 					segmentForCurve.push_back(proj);
 				}
 			}
@@ -1180,7 +1206,7 @@ namespace bimGeometry
 			glm::dvec4 ddir = glm::dvec4(dir, 0);
 			const double di = glm::distance(p1, p2);
 
-			//Only segments smaller than 10 cm will be represented, those that are bigger will be standardized
+			// Only segments smaller than 10 cm will be represented, those that are bigger will be standardized
 
 			const auto &c1 = curves[i - 1];
 			const auto &c2 = curves[i];
@@ -1262,7 +1288,7 @@ namespace bimGeometry
 
 	inline Curve GetRectangleCurve(double xdim, double ydim, glm::dmat4 placement = glm::dmat4(1), int numSegments = 12, double radius = 0)
 	{
-		if(radius == 0)
+		if (radius == 0)
 		{
 			double halfX = xdim / 2;
 			double halfY = ydim / 2;
@@ -1317,11 +1343,11 @@ namespace bimGeometry
 			placement4[2][1] = tr.y;
 
 			// Generate the rounded corners with appropriate angles for each quadrant
-			std::vector<glm::dvec3> round1 = (bimGeometry::GetEllipseCurve(radius, radius, numSegments, placement1, CONST_PI, 3 * CONST_PI / 2)).points;        // BL: 180° to 270°
-			std::vector<glm::dvec3> round2 = (bimGeometry::GetEllipseCurve(radius, radius, numSegments, placement2, 3 * CONST_PI / 2, 2 * CONST_PI)).points;    // BR: 270° to 360°
-			std::vector<glm::dvec3> round3 = (bimGeometry::GetEllipseCurve(radius, radius, numSegments, placement3, CONST_PI / 2, CONST_PI)).points;             // TL: 90° to 180°
-			std::vector<glm::dvec3> round4 = (bimGeometry::GetEllipseCurve(radius, radius, numSegments, placement4, 0, CONST_PI / 2)).points;   
-				
+			std::vector<glm::dvec3> round1 = (bimGeometry::GetEllipseCurve(radius, radius, numSegments, placement1, CONST_PI, 3 * CONST_PI / 2)).points;	 // BL: 180° to 270°
+			std::vector<glm::dvec3> round2 = (bimGeometry::GetEllipseCurve(radius, radius, numSegments, placement2, 3 * CONST_PI / 2, 2 * CONST_PI)).points; // BR: 270° to 360°
+			std::vector<glm::dvec3> round3 = (bimGeometry::GetEllipseCurve(radius, radius, numSegments, placement3, CONST_PI / 2, CONST_PI)).points;		 // TL: 90° to 180°
+			std::vector<glm::dvec3> round4 = (bimGeometry::GetEllipseCurve(radius, radius, numSegments, placement4, 0, CONST_PI / 2)).points;
+
 			Curve c;
 			for (size_t i = 0; i < round1.size(); i++)
 			{
@@ -1339,7 +1365,7 @@ namespace bimGeometry
 			{
 				c.Add(glm::dvec3(placement * glm::dvec4(round3[i], 1)));
 			}
-			if(round1.size() > 0)
+			if (round1.size() > 0)
 			{
 				c.Add(glm::dvec3(placement * glm::dvec4(round1[0], 1)));
 			}
@@ -1361,8 +1387,8 @@ namespace bimGeometry
 		double hd = depth / 2;
 		double hweb = webThickness / 2;
 
-		c.points.push_back(placement * glm::dvec4(-hw, +hd, 0, 1));				   // TL
-		c.points.push_back(placement * glm::dvec4(+hw, +hd, 0, 1));				   // TR
+		c.points.push_back(placement * glm::dvec4(-hw, +hd, 0, 1));					  // TL
+		c.points.push_back(placement * glm::dvec4(+hw, +hd, 0, 1));					  // TR
 		c.points.push_back(placement * glm::dvec4(+hw, +hd - flangeThickness, 0, 1)); // TR knee
 
 		if (hasFillet)
@@ -1381,9 +1407,9 @@ namespace bimGeometry
 		}
 
 		c.points.push_back(placement * glm::dvec4(+hw, -hd + flangeThickness, 0, 1)); // BR knee
-		c.points.push_back(placement * glm::dvec4(+hw, -hd, 0, 1));				   // BR
+		c.points.push_back(placement * glm::dvec4(+hw, -hd, 0, 1));					  // BR
 
-		c.points.push_back(placement * glm::dvec4(-hw, -hd, 0, 1));				   // BL
+		c.points.push_back(placement * glm::dvec4(-hw, -hd, 0, 1));					  // BL
 		c.points.push_back(placement * glm::dvec4(-hw, -hd + flangeThickness, 0, 1)); // BL knee
 
 		if (hasFillet)
@@ -1402,7 +1428,7 @@ namespace bimGeometry
 		}
 
 		c.points.push_back(placement * glm::dvec4(-hw, +hd - flangeThickness, 0, 1)); // TL knee
-		c.points.push_back(placement * glm::dvec4(-hw, +hd, 0, 1));				   // TL
+		c.points.push_back(placement * glm::dvec4(-hw, +hd, 0, 1));					  // TL
 
 		if (MatrixFlipsTriangles(placement))
 		{
@@ -1463,7 +1489,7 @@ namespace bimGeometry
 		if (hasFillet)
 		{
 			double secondFilletRadius = filletRadius;
-			if(thickness < filletRadius)
+			if (thickness < filletRadius)
 			{
 				secondFilletRadius = thickness;
 			}
@@ -1482,7 +1508,7 @@ namespace bimGeometry
 			glm::dmat3 placement2 = glm::dmat3(1);
 			placement2[2][0] = cen2.x;
 			placement2[2][1] = cen2.y;
-			std::vector<glm::dvec3> round2 = (bimGeometry::GetEllipseCurve(filletRadius, filletRadius, numSegments, placement2, 3 * CONST_PI / 2, CONST_PI)).points;	
+			std::vector<glm::dvec3> round2 = (bimGeometry::GetEllipseCurve(filletRadius, filletRadius, numSegments, placement2, 3 * CONST_PI / 2, CONST_PI)).points;
 			for (size_t i = 0; i < round2.size(); i++)
 			{
 				c.Add(glm::dvec3(placement * glm::dvec4(round2[i], 1)));
@@ -1648,10 +1674,18 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline void SetEpsilons(double toleranceScalarEquality, double addPlaneIterations)
+	inline void SetEpsilons(double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD)
 	{
-		_toleranceScalarEquality = toleranceScalarEquality;
-		if(addPlaneIterations < 1) { addPlaneIterations = 1; }
-		_addPlaneIterations = addPlaneIterations;
+		_TOLERANCE_SCALAR_EQUALITY = TOLERANCE_SCALAR_EQUALITY;
+		if (PLANE_REFIT_ITERATIONS < 1)
+		{
+			PLANE_REFIT_ITERATIONS = 1;
+		}
+		_PLANE_REFIT_ITERATIONS = PLANE_REFIT_ITERATIONS;
+		if (BOOLEAN_UNION_THRESHOLD < 1)
+		{
+			BOOLEAN_UNION_THRESHOLD = 1;
+		}
+		_BOOLEAN_UNION_THRESHOLD = BOOLEAN_UNION_THRESHOLD;
 	}
 }

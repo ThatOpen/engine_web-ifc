@@ -9,7 +9,7 @@
     Parameter normal is assumed to be normalised.
     Function computeNormal returns a normalised vector.
 
-    The constants toleranceBoundaryPoint and toleranceParallel are defined in eps.h.
+    The constants TOLERANCE_PLANE_DEVIATION and toleranceParallel are defined in eps.h.
 */
 #pragma once
 
@@ -54,7 +54,7 @@ namespace fuzzybools
         double dirLength = dir.length();
 
         bool hasResult = bvh.IntersectRay(pt, dir, [&](uint32_t i) -> bool
-            {
+                                          {
                 Face f = g.GetFace(i);
                 const Vec a = g.GetPoint(f.i0);
                 const Vec b = g.GetPoint(f.i1);
@@ -69,7 +69,7 @@ namespace fuzzybools
                     Vec otherNormal = computeNormal(a, b, c);  // normalised
                     double d = glm::dot(otherNormal, dir);
                     double dn = glm::dot(otherNormal, normal);
-                    if (std::fabs(d_plane) < _toleranceBoundaryPoint)
+                    if (std::fabs(d_plane) < _TOLERANCE_PLANE_DEVIATION)
                     {
                         if (dn > 1.0 - toleranceParallel)
                         {
@@ -121,9 +121,7 @@ namespace fuzzybools
                 }
 
                 // Continue to search.
-                return false;
-            }
-        );
+                return false; });
 
         if (hasResult)
         {

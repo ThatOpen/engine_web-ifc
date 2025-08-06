@@ -12,6 +12,6 @@ namespace bimGeometry
 {
     bool Plane::IsEqualTo(const Vec &n, double d)
     {
-        return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, _toleranceScalarEquality));
+        return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, _TOLERANCE_SCALAR_EQUALITY));
     }
 }

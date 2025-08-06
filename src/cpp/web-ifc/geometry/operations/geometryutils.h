@@ -18,14 +18,14 @@
 namespace webifc::geometry
 {
 
-	inline void SetEpsilons(double toleranceScalarEquality, double addPlaneIterations)
+	inline void SetEpsilons(double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD)
 	{
-		bimGeometry::SetEpsilons(toleranceScalarEquality, addPlaneIterations);
+		bimGeometry::SetEpsilons(TOLERANCE_SCALAR_EQUALITY, PLANE_REFIT_ITERATIONS, BOOLEAN_UNION_THRESHOLD);
 	}
 
 	inline double angleConversion(double angle, std::string angleUnits)
 	{
-		if(angleUnits == "RADIAN")
+		if (angleUnits == "RADIAN")
 		{
 			return angle;
 		}
@@ -39,16 +39,16 @@ namespace webifc::geometry
 	inline IfcGeometry ToIfcGeometry(bimGeometry::Geometry geom)
 	{
 		IfcGeometry ifcGeom;
-        ifcGeom.fvertexData = geom.fvertexData;
-        ifcGeom.vertexData = geom.vertexData;
-        ifcGeom.indexData = geom.indexData;
-        ifcGeom.numPoints = geom.numPoints;
+		ifcGeom.fvertexData = geom.fvertexData;
+		ifcGeom.vertexData = geom.vertexData;
+		ifcGeom.indexData = geom.indexData;
+		ifcGeom.numPoints = geom.numPoints;
 		ifcGeom.numFaces = geom.numFaces;
-		if(ifcGeom.planeData.size() != ifcGeom.numFaces)
+		if (ifcGeom.planeData.size() != ifcGeom.numFaces)
 		{
 			for (size_t i = 0; i < ifcGeom.numFaces; i++)
 			{
-				if(i >= ifcGeom.planeData.size())
+				if (i >= ifcGeom.planeData.size())
 				{
 					ifcGeom.planeData.push_back(-1);
 				}
@@ -57,13 +57,13 @@ namespace webifc::geometry
 		return ifcGeom;
 	}
 
-	inline	IfcGeometry Sweep(const double scaling, const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
+	inline IfcGeometry Sweep(const double scaling, const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
 		IfcGeometry geom = ToIfcGeometry(bimGeometry::SweepFunction(scaling, closed, profile.curve.points, directrix.points, initialDirectrixNormal, rotate90, optimize));
 		return geom;
 	}
 
-	inline	IfcGeometry SweepCircular(const double scaling, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
+	inline IfcGeometry SweepCircular(const double scaling, const bool closed, const IfcProfile &profile, const double radius, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
 	{
 		spdlog::debug("[SweepCircular({})]");
 
@@ -87,7 +87,7 @@ namespace webifc::geometry
 
 		auto &ppts = profile.curve.points;
 		for (auto &pt2D : ppts)
-		{				
+		{
 			profile_vector.push_back(pt2D);
 		}
 
@@ -281,42 +281,42 @@ namespace webifc::geometry
 				polygon.push_back(points);
 			}
 
-			#ifdef CSG_DEBUG_OUTPUT
-				// std::vector<std::vector<glm::dvec2>> polygonEdgesPrinted;
-				// std::vector<std::vector<glm::dvec2>> edgesPrinted;
+#ifdef CSG_DEBUG_OUTPUT
+			// std::vector<std::vector<glm::dvec2>> polygonEdgesPrinted;
+			// std::vector<std::vector<glm::dvec2>> edgesPrinted;
 
-				// for (size_t i = 0; i < polygon[0].size() - 1; i++)
-				// {	
-				// 	auto& a = polygon[0][i];       // Access the current point
-				// 	auto& b = polygon[0][i + 1];   // Access the next point
-				// 	polygonEdgesPrinted.push_back({glm::dvec2(a[0], a[1]), glm::dvec2(b[0], b[1])});
-				// }
-				// auto& a = polygon[0][polygon[0].size() - 1];       // Access the current point
-				// auto& b = polygon[0][0];   // Access the next point
-				// polygonEdgesPrinted.push_back({glm::dvec2(a[0], a[1]), glm::dvec2(b[0], b[1])});
+			// for (size_t i = 0; i < polygon[0].size() - 1; i++)
+			// {
+			// 	auto& a = polygon[0][i];       // Access the current point
+			// 	auto& b = polygon[0][i + 1];   // Access the next point
+			// 	polygonEdgesPrinted.push_back({glm::dvec2(a[0], a[1]), glm::dvec2(b[0], b[1])});
+			// }
+			// auto& a = polygon[0][polygon[0].size() - 1];       // Access the current point
+			// auto& b = polygon[0][0];   // Access the next point
+			// polygonEdgesPrinted.push_back({glm::dvec2(a[0], a[1]), glm::dvec2(b[0], b[1])});
 
-				// fuzzybools::DumpSVGLines(polygonEdgesPrinted, L"Polygon.html");
-			#endif
+			// fuzzybools::DumpSVGLines(polygonEdgesPrinted, L"Polygon.html");
+#endif
 
 			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 
 			for (size_t i = 0; i < indices.size(); i += 3)
 			{
-				#ifdef CSG_DEBUG_OUTPUT
-					// auto a = geometry.GetPoint(offset + indices[i + 0]);
-					// auto b = geometry.GetPoint(offset + indices[i + 1]);
-					// auto c = geometry.GetPoint(offset + indices[i + 2]);
-					// edgesPrinted.push_back({glm::dvec2(a.z + a.x / 2, a.y + a.x / 2), glm::dvec2(b.z + b.x / 2, b.y + b.x / 2)});
-					// edgesPrinted.push_back({glm::dvec2(a.z + a.x / 2, a.y + a.x / 2), glm::dvec2(c.z + c.x / 2, c.y + c.x / 2)});
-					// edgesPrinted.push_back({glm::dvec2(b.z + b.x / 2, b.y + b.x / 2), glm::dvec2(c.z + c.x / 2, c.y + c.x / 2)});
-					// fuzzybools::DumpSVGLines(edgesPrinted, L"triangulateBounds_tri.html");
-				#endif
+#ifdef CSG_DEBUG_OUTPUT
+				// auto a = geometry.GetPoint(offset + indices[i + 0]);
+				// auto b = geometry.GetPoint(offset + indices[i + 1]);
+				// auto c = geometry.GetPoint(offset + indices[i + 2]);
+				// edgesPrinted.push_back({glm::dvec2(a.z + a.x / 2, a.y + a.x / 2), glm::dvec2(b.z + b.x / 2, b.y + b.x / 2)});
+				// edgesPrinted.push_back({glm::dvec2(a.z + a.x / 2, a.y + a.x / 2), glm::dvec2(c.z + c.x / 2, c.y + c.x / 2)});
+				// edgesPrinted.push_back({glm::dvec2(b.z + b.x / 2, b.y + b.x / 2), glm::dvec2(c.z + c.x / 2, c.y + c.x / 2)});
+				// fuzzybools::DumpSVGLines(edgesPrinted, L"triangulateBounds_tri.html");
+#endif
 				geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
 			}
 
-			#ifdef CSG_DEBUG_OUTPUT
-				// fuzzybools::DumpSVGLines(edgesPrinted, L"triangulateBounds_tri.html");
-			#endif
+#ifdef CSG_DEBUG_OUTPUT
+			// fuzzybools::DumpSVGLines(edgesPrinted, L"triangulateBounds_tri.html");
+#endif
 		}
 		else
 		{
@@ -351,7 +351,8 @@ namespace webifc::geometry
 
 		// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
 		glm::dvec3 lastToFirstPoint = profile.curve.points.front() - profile.curve.points.back();
-		if (glm::length(lastToFirstPoint) > 1e-8) {
+		if (glm::length(lastToFirstPoint) > 1e-8)
+		{
 			profile.curve.points.push_back(profile.curve.points.front());
 		}
 
@@ -378,7 +379,7 @@ namespace webifc::geometry
 	}
 
 	// TODO: Send to bimGeometry
-    inline double VectorToAngle2D(double x, double y)
+	inline double VectorToAngle2D(double x, double y)
 	{
 		return bimGeometry::VectorToAngle(x, y);
 	}
@@ -463,7 +464,7 @@ namespace webifc::geometry
 		}
 	}
 
-	inline	void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
+	inline void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
@@ -492,7 +493,7 @@ namespace webifc::geometry
 							newGeom.halfSpaceY = newMat * glm::dvec4(newMeshGeom.halfSpaceY, 1);
 							newGeom.halfSpaceZ = newMat * glm::dvec4(newMeshGeom.halfSpaceZ, 1);
 						}
-						
+
 						for (uint32_t i = 0; i < newMeshGeom.numFaces; i++)
 						{
 							bimGeometry::Face f = newMeshGeom.GetFace(i);
@@ -527,7 +528,7 @@ namespace webifc::geometry
 						newGeom.halfSpaceY = newMat * glm::dvec4(meshGeom.halfSpaceY, 1);
 						newGeom.halfSpaceZ = newMat * glm::dvec4(meshGeom.halfSpaceZ, 1);
 					}
-					
+
 					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
 					{
 						bimGeometry::Face f = meshGeom.GetFace(i);
@@ -569,25 +570,25 @@ namespace webifc::geometry
 		IfcGeometry newGeom;
 		for (uint32_t g = 0; g < geoms.size(); g++)
 		{
-			if(!geoms[g].halfSpace)
+			if (!geoms[g].halfSpace)
 			{
-					if (geoms[g].numFaces)
+				if (geoms[g].numFaces)
+				{
+					for (uint32_t i = 0; i < geoms[g].numFaces; i++)
 					{
-						for (uint32_t i = 0; i < geoms[g].numFaces; i++)
-						{
-							bimGeometry::Face f = geoms[g].GetFace(i);
-							glm::dvec3 a = geoms[g].GetPoint(f.i0);
-							glm::dvec3 b = geoms[g].GetPoint(f.i1);
-							glm::dvec3 c = geoms[g].GetPoint(f.i2);
-							newGeom.AddFace(a, b, c);
-						}
+						bimGeometry::Face f = geoms[g].GetFace(i);
+						glm::dvec3 a = geoms[g].GetPoint(f.i0);
+						glm::dvec3 b = geoms[g].GetPoint(f.i1);
+						glm::dvec3 c = geoms[g].GetPoint(f.i2);
+						newGeom.AddFace(a, b, c);
 					}
+				}
 			}
 		}
 		newGeoms.push_back(newGeom);
 		for (uint32_t g = 0; g < geoms.size(); g++)
 		{
-			if(geoms[g].halfSpace)
+			if (geoms[g].halfSpace)
 			{
 				newGeoms.push_back(geoms[g]);
 			}

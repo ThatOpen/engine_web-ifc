@@ -9,7 +9,7 @@
 #pragma once
 namespace bimGeometry
 {
-    void Geometry::AddPoint(glm::dvec4& pt, glm::dvec3& n)
+    void Geometry::AddPoint(glm::dvec4 &pt, glm::dvec3 &n)
     {
         glm::dvec3 p = pt;
         AddPoint(p, n);
@@ -28,7 +28,7 @@ namespace bimGeometry
         return aabb;
     }
 
-    void Geometry::AddPoint(glm::dvec3& pt, glm::dvec3& n)
+    void Geometry::AddPoint(glm::dvec3 &pt, glm::dvec3 &n)
     {
         vertexData.push_back(pt.x);
         vertexData.push_back(pt.y);
@@ -46,8 +46,7 @@ namespace bimGeometry
         return glm::dvec3(
             vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0],
             vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
-            vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
-        );
+            vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]);
     }
 
     void Geometry::SetPoint(double x, double y, double z, size_t index)
@@ -63,7 +62,7 @@ namespace bimGeometry
         f.i0 = indexData[index * 3 + 0];
         f.i1 = indexData[index * 3 + 1];
         f.i2 = indexData[index * 3 + 2];
-        f.pId = planeData[index]; 
+        f.pId = planeData[index];
         return f;
     }
 
@@ -117,21 +116,21 @@ namespace bimGeometry
 
         return p.id;
     }
-    
+
     void Geometry::buildPlanes()
     {
-        if(!hasPlanes)
+        if (!hasPlanes)
         {
             std::vector<double> storedVertexData = vertexData;
-            auto GetStoredPoint = [&](size_t index) -> glm::dvec3 {
+            auto GetStoredPoint = [&](size_t index) -> glm::dvec3
+            {
                 return glm::dvec3(
                     storedVertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0],
                     storedVertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
-                    storedVertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
-                );
+                    storedVertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]);
             };
-            
-            for(uint32_t r = 0; r < _addPlaneIterations; r++)
+
+            for (uint32_t r = 0; r < _PLANE_REFIT_ITERATIONS; r++)
             {
                 planes.clear();
                 planeData.clear();
@@ -141,7 +140,7 @@ namespace bimGeometry
                     planeData.push_back(-1);
                 }
 
-                Vec centroid = Vec(0,0,0);
+                Vec centroid = Vec(0, 0, 0);
 
                 for (size_t i = 0; i < numFaces; i++)
                 {
@@ -203,24 +202,24 @@ namespace bimGeometry
                         glm::dvec3 dsa = GetStoredPoint(f.i0) - va;
                         glm::dvec3 dsb = GetStoredPoint(f.i1) - vb;
                         glm::dvec3 dsc = GetStoredPoint(f.i2) - vc;
-                        
+
                         double fa = glm::length(dsa) / reconstructTolerance;
                         double fb = glm::length(dsb) / reconstructTolerance;
                         double fc = glm::length(dsc) / reconstructTolerance;
-                        
-                        if(fa > 1)
+
+                        if (fa > 1)
                         {
                             fa = glm::length(dsa) / fa;
                             dsa = glm::normalize(dsa) * fa;
                             va = va + dsa;
                         }
-                        if(fb > 1)
+                        if (fb > 1)
                         {
                             fb = glm::length(dsb) / fb;
                             dsb = glm::normalize(dsb) * fb;
                             vb = vb + dsb;
                         }
-                        if(fc > 1)
+                        if (fc > 1)
                         {
                             fc = glm::length(dsc) / fc;
                             dsc = glm::normalize(dsc) * fc;
@@ -237,7 +236,7 @@ namespace bimGeometry
             {
                 Face f = GetFace(i);
 
-                if(f.pId > -1)
+                if (f.pId > -1)
                 {
                     auto a = GetPoint(f.i0);
                     auto b = GetPoint(f.i1);
@@ -253,24 +252,24 @@ namespace bimGeometry
     }
 
     void Geometry::AddGeometry(Geometry geom)
-	{
-		for (uint32_t i = 0; i < geom.numFaces; i++)
-		{
-			Face f = geom.GetFace(i);
-			glm::dvec3 a = geom.GetPoint(f.i0);
-			glm::dvec3 b = geom.GetPoint(f.i1);
-			glm::dvec3 c = geom.GetPoint(f.i2);         
-			AddFace(a, b, c);         
-		}
+    {
+        for (uint32_t i = 0; i < geom.numFaces; i++)
+        {
+            Face f = geom.GetFace(i);
+            glm::dvec3 a = geom.GetPoint(f.i0);
+            glm::dvec3 b = geom.GetPoint(f.i1);
+            glm::dvec3 c = geom.GetPoint(f.i2);
+            AddFace(a, b, c);
+        }
         uint32_t planeDataOffset = geom.planes.size();
         for (uint32_t i = 0; i < geom.planeData.size(); i++)
-		{
+        {
             planeData.push_back(planeDataOffset + geom.planeData[i]);
-		}
+        }
 
         for (uint32_t i = 0; i < geom.planes.size(); i++)
-		{
+        {
             planes.push_back(geom.planes[i]);
-		}
-	}
+        }
+    }
 }
