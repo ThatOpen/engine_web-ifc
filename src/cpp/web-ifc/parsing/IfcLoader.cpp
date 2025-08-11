@@ -495,44 +495,40 @@ namespace webifc::parsing {
    const std::vector<uint32_t> IfcLoader::GetSetArgument() const
    { 
      std::vector<uint32_t> tapeOffsets;
+     tapeOffsets.reserve(4);
+
      _tokenStream->Read<char>(); // set begin
      int depth = 1;
-     while (true)
+     while (depth > 0)
      {
-       uint32_t offset = _tokenStream->GetReadOffset();
-       IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
+         uint32_t offset = _tokenStream->GetReadOffset();
+         IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
 
-       if (t == IfcTokenType::SET_BEGIN)
-       {
-         depth++;
-       }
-       else if (t == IfcTokenType::SET_END)
-       {
-         depth--;
-       }
-       else
-       {
-         tapeOffsets.push_back(offset);
-
-         if (t == IfcTokenType::REF)
-         {
-           _tokenStream->Read<uint32_t>();
+         switch (t) {
+         case IfcTokenType::SET_BEGIN:
+             depth++;
+             break;
+         case IfcTokenType::SET_END:
+             depth--;
+             break;
+         case IfcTokenType::REF:
+             tapeOffsets.push_back(offset);
+             _tokenStream->Read<uint32_t>();
+             break;
+         case IfcTokenType::STRING:
+         case IfcTokenType::INTEGER:
+         case IfcTokenType::REAL:
+         case IfcTokenType::LABEL:
+         case IfcTokenType::ENUM: {
+             tapeOffsets.push_back(offset);
+             uint16_t length = _tokenStream->Read<uint16_t>();
+             _tokenStream->Forward(length);
+             break;
          }
-         else if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM)
-         {
-           uint16_t length = _tokenStream->Read<uint16_t>();
-           _tokenStream->Forward(length);
+         default:
+             spdlog::error("[GetSetArgument[]) unexpected token", GetCurrentLineExpressID());
+             break;
          }
-         else
-         {
-           spdlog::error("[GetSetArgument[]) unexpected token", GetCurrentLineExpressID());
-         }
-       }
-
-       if (depth == 0)
-       {
-         break;
-       }
      }
 
      return tapeOffsets;
