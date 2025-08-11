@@ -31,10 +31,22 @@ double RandomDouble(double lo, double hi)
 
 std::string ReadFile(std::string filename)
 {
-    std::ifstream t(filename);
-    std::stringstream buffer;
-    buffer << t.rdbuf();
-    return buffer.str();
+    std::ifstream file(filename, std::ios::binary);
+    if (!file) {
+        throw std::runtime_error("Could not open file");
+    }
+
+    file.seekg(0, std::ios::end);
+    std::streamsize size = file.tellg();
+    file.seekg(0, std::ios::beg);
+
+    std::string buffer(size, '\0');
+    
+    if (!file.read(buffer.data(), size)) {
+        throw std::runtime_error("Error reading file");
+    }
+
+    return buffer;
 }
 
 void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint64_t num)
