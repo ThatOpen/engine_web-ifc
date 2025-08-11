@@ -76,7 +76,7 @@
     "make-dir-cli": "^4.0.0",
     "monaco-editor": "^0.52.0",
     "rimraf": "^6.0.0",
-    "three": "^0.178.0",
+    "three": "^0.179.1",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
