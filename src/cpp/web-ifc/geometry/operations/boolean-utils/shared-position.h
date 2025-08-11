@@ -24,6 +24,9 @@
 #include "is-inside-mesh.h"
 #include "is-inside-boundary.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/norm.hpp>
+
 using Vec2 = glm::dvec2;
 using Vec3 = glm::dvec3;
 
@@ -1579,16 +1582,15 @@ namespace fuzzybools
 
     inline std::vector<double> ComputeInitialIntersections(Plane &p, SharedPosition &sp, const Line &lineA)
     {
-        double size = 1.0E+04; // TODO: this is bad
+        double size = 1.0E+08; // TODO: this is bad
 
         for (auto &point : sp.points)
         {
-            double d = glm::distance(lineA.origin, point.location3D);
-            if (size < d)
-            {
-                size = d;
-            }
+            const auto d2 = glm::distance2(lineA.origin, point.location3D);
+            size = std::max(size, d2);
         }
+
+        size = std::sqrt(size);
 
         auto Astart = lineA.origin + lineA.direction * (size * 2);
         auto Aend = lineA.origin - lineA.direction * (size * 2);
