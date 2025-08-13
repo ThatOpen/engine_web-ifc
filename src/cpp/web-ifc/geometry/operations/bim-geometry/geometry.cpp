@@ -28,7 +28,7 @@ namespace bimGeometry
         return aabb;
     }
 
-    void Geometry::AddPoint(glm::dvec3 &pt, glm::dvec3 &n)
+    void Geometry::AddPoint(const glm::dvec3 &pt, const glm::dvec3 &n)
     {
         vertexData.push_back(pt.x);
         vertexData.push_back(pt.y);

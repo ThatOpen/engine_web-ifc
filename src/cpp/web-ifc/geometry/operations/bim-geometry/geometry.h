@@ -29,7 +29,7 @@ namespace bimGeometry {
         void AddFace(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, uint32_t pId = -1);
         void AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId);
         void AddPoint(glm::dvec4& pt, glm::dvec3& n);
-		void AddPoint(glm::dvec3& pt, glm::dvec3& n);
+		void AddPoint(const glm::dvec3& pt, const glm::dvec3& n);
         void AddGeometry(Geometry geom);
     };
 }
