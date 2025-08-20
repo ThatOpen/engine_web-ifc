@@ -823,16 +823,16 @@
     "@shikijs/types" "3.9.2"
 
 "@shikijs/themes@^3.8.1":
-  version "3.8.1"
-  resolved "https://registry.npmjs.org/@shikijs/themes/-/themes-3.8.1.tgz"
-  integrity sha512-Vu3t3BBLifc0GB0UPg2Pox1naTemrrvyZv2lkiSw3QayVV60me1ujFQwPZGgUTmwXl1yhCPW8Lieesm0CYruLQ==
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/@shikijs/themes/-/themes-3.11.0.tgz#616547ef5aad491c3e57b0f090c452d1a9f7bc45"
+  integrity sha512-BhhWRzCTEk2CtWt4S4bgsOqPJRkapvxdsifAwqP+6mk5uxboAQchc0etiJ0iIasxnMsb764qGD24DK9albcU9Q==
   dependencies:
-    "@shikijs/types" "3.8.1"
+    "@shikijs/types" "3.11.0"
 
-"@shikijs/types@3.8.1", "@shikijs/types@^3.8.1":
-  version "3.8.1"
-  resolved "https://registry.npmjs.org/@shikijs/types/-/types-3.8.1.tgz"
-  integrity sha512-5C39Q8/8r1I26suLh+5TPk1DTrbY/kn3IdWA5HdizR0FhlhD05zx5nKCqhzSfDHH3p4S0ZefxWd77DLV+8FhGg==
+"@shikijs/types@3.11.0":
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/@shikijs/types/-/types-3.11.0.tgz#d5bda9febcd3bde3ab08f19f5da8441a3797aab9"
+  integrity sha512-RB7IMo2E7NZHyfkqAuaf4CofyY8bPzjWPjJRzn6SEak3b46fIQyG6Vx5fG/obqkfppQ+g8vEsiD7Uc6lqQt32Q==
   dependencies:
     "@shikijs/vscode-textmate" "^10.0.2"
     "@types/hast" "^3.0.4"
@@ -841,6 +841,14 @@
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/@shikijs/types/-/types-3.9.2.tgz#a29da422d0a4d853a56156abfafc3ad2b3bb6316"
   integrity sha512-/M5L0Uc2ljyn2jKvj4Yiah7ow/W+DJSglVafvWAJ/b8AZDeeRAdMu3c2riDzB7N42VD+jSnWxeP9AKtd4TfYVw==
+  dependencies:
+    "@shikijs/vscode-textmate" "^10.0.2"
+    "@types/hast" "^3.0.4"
+
+"@shikijs/types@^3.8.1":
+  version "3.8.1"
+  resolved "https://registry.npmjs.org/@shikijs/types/-/types-3.8.1.tgz"
+  integrity sha512-5C39Q8/8r1I26suLh+5TPk1DTrbY/kn3IdWA5HdizR0FhlhD05zx5nKCqhzSfDHH3p4S0ZefxWd77DLV+8FhGg==
   dependencies:
     "@shikijs/vscode-textmate" "^10.0.2"
     "@types/hast" "^3.0.4"
