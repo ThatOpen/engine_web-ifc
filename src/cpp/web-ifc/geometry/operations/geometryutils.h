@@ -15,6 +15,18 @@
 #include <mapbox/earcut.hpp>
 #include "bim-geometry/utils.h"
 
+namespace mapbox::util {
+	template <>
+	struct nth<0, glm::dvec2> {
+		inline static auto get(const glm::dvec2& t) { return t.x; };
+	};
+
+	template <>
+	struct nth<1, glm::dvec2> {
+		inline static auto get(const glm::dvec2& t) { return t.y; };
+	};
+}
+
 namespace webifc::geometry
 {
 
@@ -185,8 +197,6 @@ namespace webifc::geometry
 		else if (bounds.size() > 0 && bounds[0].curve.points.size() >= 3)
 		{
 			// bound greater than 4 vertices or with holes, triangulate
-			// TODO: modify to use glm::dvec2 with custom accessors
-			using Point = std::array<double, 2>;
 			uint32_t offset = geometry.numPoints;
 
 			// if more than one bound
@@ -256,29 +266,24 @@ namespace webifc::geometry
 				std::swap(v12, v13);
 			}
 
-			std::vector<std::vector<Point>> polygon;
-			polygon.reserve(bounds.size());
+			std::vector<std::vector<glm::dvec2>> polygon(bounds.size());
 
-			for (auto &bound : bounds)
+			for (size_t i = 0; i < bounds.size(); i++)
 			{
-				std::vector<Point> points;
-				points.reserve(bound.curve.points.size());
-				for (size_t i = 0; i < bound.curve.points.size(); i++)
+				const auto& curvePoints = bounds[i].curve.points;
+				auto& points = polygon[i];
+				points.reserve(curvePoints.size());
+
+				for (const glm::dvec3& pt : curvePoints)
 				{
-					glm::dvec3 pt = bound.curve.points[i];
 					geometry.AddPoint(pt, n);
 
 					// project pt onto plane of curve to obtain 2d coords
-					glm::dvec3 pt2 = pt - v1;
+					const glm::dvec3 pt2 = pt - v1;
+					const glm::dvec2 proj(glm::dot(pt2, v12), glm::dot(pt2, v13));
 
-					glm::dvec2 proj(
-						glm::dot(pt2, v12),
-						glm::dot(pt2, v13));
-
-					points.push_back({proj.x, proj.y});
+					points.push_back(proj);
 				}
-
-				polygon.push_back(points);
 			}
 
 #ifdef CSG_DEBUG_OUTPUT
