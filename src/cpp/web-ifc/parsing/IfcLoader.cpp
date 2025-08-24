@@ -303,11 +303,18 @@ namespace webifc::parsing {
    
    uint32_t IfcLoader::GetLineType(const uint32_t expressID) const
    { 
-      if (expressID == 0 || expressID > _maxExpressId || !_lines.contains(expressID)) {
+      if (expressID == 0 || expressID > _maxExpressId) {
         spdlog::error("[GetLineType()] Attempt to Access Invalid ExpressID {}", expressID);
         return 0;
       }
-      return _lines.at(expressID)->ifcType;
+
+      const auto lineIt = _lines.find(expressID);
+      if (lineIt == _lines.end()) {
+          spdlog::error("[GetLineType()] Attempt to Access Invalid ExpressID {}", expressID);
+          return 0;
+      }
+
+      return lineIt->second->ifcType;
    }
    
    IfcLoader::~IfcLoader()
@@ -320,10 +327,11 @@ namespace webifc::parsing {
    }
    
    void IfcLoader::MoveToLineArgument(const uint32_t expressID, const uint32_t argumentIndex) const
-   { 
-     if (!_lines.contains(expressID)) return;
-     _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
-     ArgumentOffset(argumentIndex);
+   {
+       const auto lineIt = _lines.find(expressID);
+       if (lineIt == _lines.end()) return;
+       _tokenStream->MoveTo(lineIt->second->tapeOffset);
+       ArgumentOffset(argumentIndex);
    }
    
    void IfcLoader::MoveToHeaderLineArgument(const uint32_t lineID, const uint32_t argumentIndex) const
@@ -429,19 +437,21 @@ namespace webifc::parsing {
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
   {
-    if (!_lines.contains(expressID))
-  	{
-      // create line object
+      const auto lineIt = _lines.find(expressID);
+      if (lineIt == _lines.end()) {
+        // create line object
   		IfcLine * line = new IfcLine();
   		// fill line data
   		line->ifcType = type;
-      line->tapeOffset = start;
-      //place in vector
-      _lines[expressID]=line;
+        line->tapeOffset = start;
+        //place in vector
+        _lines[expressID]=line;
   		_ifcTypeToExpressID[type].push_back(expressID);
-      if (expressID > _maxExpressId) _maxExpressId=expressID;
-
-  	} else _lines[expressID]->tapeOffset = start;
+        _maxExpressId = std::max(expressID, _maxExpressId);
+      }
+      else {
+          _lines[expressID]->tapeOffset = start;
+      }
   }
 
   void IfcLoader::AddHeaderLineTape(const uint32_t type, const uint32_t start)
@@ -649,9 +659,9 @@ namespace webifc::parsing {
 
    uint32_t IfcLoader::GetNoLineArguments(uint32_t expressID) const
    {
-
-      if (!_lines.contains(expressID)) return 0;
-      _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
+      const auto lineIt = _lines.find(expressID);
+      if (lineIt == _lines.end()) return 0;
+      _tokenStream->MoveTo(lineIt->second->tapeOffset);
       _tokenStream->Read<char>();
       _tokenStream->Read<uint32_t>();
       _tokenStream->Read<char>();
@@ -693,10 +703,11 @@ namespace webifc::parsing {
    
    void IfcLoader::MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const
    {
-    if (_lines.contains(expressID)) {
-      _tokenStream->MoveTo(_lines.at(expressID)->tapeOffset);
-   	  ArgumentOffset(argumentIndex);
-    }
+       const auto lineIt = _lines.find(expressID);
+       if (lineIt == _lines.end()) return;
+
+        _tokenStream->MoveTo(lineIt->second->tapeOffset);
+   	    ArgumentOffset(argumentIndex);
    }
    
    void IfcLoader::StepBack() const {
