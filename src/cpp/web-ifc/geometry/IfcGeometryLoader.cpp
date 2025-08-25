@@ -1860,7 +1860,7 @@ namespace webifc::geometry
 
       double lengthDegrees = 0;
 
-      if (dimensions == 3)
+      if (dimensions == 3 && (trim.exist && trim.start.hasPos))
       {
         if (trimSense == 1 || trimSense == -1)
         {
