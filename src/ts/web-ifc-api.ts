@@ -313,6 +313,7 @@ export interface ProfileSection {
     filletRadius: number,
     radius: number,
     slope: number,
+    circleSegments: number,
     placement: Array<number>
   ): void;
 }
