@@ -69,7 +69,7 @@
     "@types/jest": "^30.0.0",
     "@types/three": "^0.178.0",
     "adm-zip": "^0.5.10",
-    "cpy-cli": "^5.0.0",
+    "cpy-cli": "^6.0.0",
     "esbuild": "^0.25.0",
     "jest": "^30.0.3",
     "local-web-server": "^5.2.1",
