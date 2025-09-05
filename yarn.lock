@@ -462,14 +462,14 @@
   integrity sha512-cn3Yr7+OaaZq1c+2pe+8yxC8E144SReCQjN6/2ynubzYjvyqZjTXfQJpAcQpsdJq3My7XADANiYGHoFC69pLQw==
 
 "@gerrit0/mini-shiki@^3.9.0":
-  version "3.11.0"
-  resolved "https://registry.npmjs.org/@gerrit0/mini-shiki/-/mini-shiki-3.11.0.tgz"
-  integrity sha512-ooCDMAOKv71O7MszbXjSQGcI6K5T6NKlemQZOBHLq7Sv/oXCRfYbZ7UgbzFdl20lSXju6Juds4I3y30R6rHA4Q==
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/@gerrit0/mini-shiki/-/mini-shiki-3.12.2.tgz#228b6ab36a0fb8a7912fabe26059c9e820630fc7"
+  integrity sha512-HKZPmO8OSSAAo20H2B3xgJdxZaLTwtlMwxg0967scnrDlPwe6j5+ULGHyIqwgTbFCn9yv/ff8CmfWZLE9YKBzA==
   dependencies:
-    "@shikijs/engine-oniguruma" "^3.11.0"
-    "@shikijs/langs" "^3.11.0"
-    "@shikijs/themes" "^3.11.0"
-    "@shikijs/types" "^3.11.0"
+    "@shikijs/engine-oniguruma" "^3.12.2"
+    "@shikijs/langs" "^3.12.2"
+    "@shikijs/themes" "^3.12.2"
+    "@shikijs/types" "^3.12.2"
     "@shikijs/vscode-textmate" "^10.0.2"
 
 "@hapi/bourne@^3.0.0":
@@ -830,32 +830,32 @@
   resolved "https://registry.npmjs.org/@pkgr/core/-/core-0.2.9.tgz"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@shikijs/engine-oniguruma@^3.11.0":
-  version "3.11.0"
-  resolved "https://registry.npmjs.org/@shikijs/engine-oniguruma/-/engine-oniguruma-3.11.0.tgz"
-  integrity sha512-4DwIjIgETK04VneKbfOE4WNm4Q7WC1wo95wv82PoHKdqX4/9qLRUwrfKlmhf0gAuvT6GHy0uc7t9cailk6Tbhw==
+"@shikijs/engine-oniguruma@^3.12.2":
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/@shikijs/engine-oniguruma/-/engine-oniguruma-3.12.2.tgz#3314a43666d751f80c0d1fc584029a3074af4e9a"
+  integrity sha512-hozwnFHsLvujK4/CPVHNo3Bcg2EsnG8krI/ZQ2FlBlCRpPZW4XAEQmEwqegJsypsTAN9ehu2tEYe30lYKSZW/w==
   dependencies:
-    "@shikijs/types" "3.11.0"
+    "@shikijs/types" "3.12.2"
     "@shikijs/vscode-textmate" "^10.0.2"
 
-"@shikijs/langs@^3.11.0":
-  version "3.11.0"
-  resolved "https://registry.npmjs.org/@shikijs/langs/-/langs-3.11.0.tgz"
-  integrity sha512-Njg/nFL4HDcf/ObxcK2VeyidIq61EeLmocrwTHGGpOQx0BzrPWM1j55XtKQ1LvvDWH15cjQy7rg96aJ1/l63uw==
+"@shikijs/langs@^3.12.2":
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/@shikijs/langs/-/langs-3.12.2.tgz#f41f1e0eb940c5c41f1017f8765be969e74a0c9b"
+  integrity sha512-bVx5PfuZHDSHoBal+KzJZGheFuyH4qwwcwG/n+MsWno5cTlKmaNtTsGzJpHYQ8YPbB5BdEdKU1rga5/6JGY8ww==
   dependencies:
-    "@shikijs/types" "3.11.0"
+    "@shikijs/types" "3.12.2"
 
-"@shikijs/themes@^3.11.0":
-  version "3.11.0"
-  resolved "https://registry.npmjs.org/@shikijs/themes/-/themes-3.11.0.tgz"
-  integrity sha512-BhhWRzCTEk2CtWt4S4bgsOqPJRkapvxdsifAwqP+6mk5uxboAQchc0etiJ0iIasxnMsb764qGD24DK9albcU9Q==
+"@shikijs/themes@^3.12.2":
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/@shikijs/themes/-/themes-3.12.2.tgz#e4b9b636669658576cdc532ebe1c405cadba6272"
+  integrity sha512-fTR3QAgnwYpfGczpIbzPjlRnxyONJOerguQv1iwpyQZ9QXX4qy/XFQqXlf17XTsorxnHoJGbH/LXBvwtqDsF5A==
   dependencies:
-    "@shikijs/types" "3.11.0"
+    "@shikijs/types" "3.12.2"
 
-"@shikijs/types@3.11.0", "@shikijs/types@^3.11.0":
-  version "3.11.0"
-  resolved "https://registry.npmjs.org/@shikijs/types/-/types-3.11.0.tgz"
-  integrity sha512-RB7IMo2E7NZHyfkqAuaf4CofyY8bPzjWPjJRzn6SEak3b46fIQyG6Vx5fG/obqkfppQ+g8vEsiD7Uc6lqQt32Q==
+"@shikijs/types@3.12.2", "@shikijs/types@^3.12.2":
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/@shikijs/types/-/types-3.12.2.tgz#8f7f02a1fd67a93470aac9409d072880b3148612"
+  integrity sha512-K5UIBzxCyv0YoxN3LMrKB9zuhp1bV+LgewxuVwHdl4Gz5oePoUFrr9EfgJlGlDeXCU1b/yhdnXeuRvAnz8HN8Q==
   dependencies:
     "@shikijs/vscode-textmate" "^10.0.2"
     "@types/hast" "^3.0.4"
