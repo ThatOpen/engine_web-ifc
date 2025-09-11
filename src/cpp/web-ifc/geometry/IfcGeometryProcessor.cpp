@@ -192,14 +192,32 @@ namespace webifc::geometry
 
                 if (flatElementMeshes.size() != 0)
                 {
+                    // Calculate the BBOX of the first operand(s). Then skip second boolean operands that are outside of the first operands BBOX
+                    bimGeometry::AABB firstOperandBBox;
+                    for (size_t iMesh = 0; iMesh < flatElementMeshes.size(); ++iMesh)
+                    {
+                        IfcGeometry& elementMesh = flatElementMeshes[iMesh];
+                        bimGeometry::AABB meshBBox = elementMesh.GetAABB();
+                        firstOperandBBox.merge(meshBBox);
+                    }
 
                     std::vector<IfcGeometry> voidGeoms;
-
                     for (auto relVoidExpressID : relVoidsIt->second)
                     {
                         IfcComposedMesh voidGeom = GetMesh(relVoidExpressID);
                         auto flatVoidMesh = flatten(voidGeom, _expressIDToGeometry, normalizeMat);
-                        voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
+                        bimGeometry::AABB voidMeshBBox;
+                        for (size_t iMesh = 0; iMesh < flatVoidMesh.size(); ++iMesh)
+                        {
+                            IfcGeometry& voidMesh = flatVoidMesh[iMesh];
+                            bimGeometry::AABB meshBBox = voidMesh.GetAABB();
+                            voidMeshBBox.merge(meshBBox);
+                        }
+                        
+                        if (firstOperandBBox.intersects(voidMeshBBox))
+                        {
+                            voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
+                        }
                     }
 
                     if(relVoidsIt->second.size() > 50) // When voids are greater than 10 they are all fused
