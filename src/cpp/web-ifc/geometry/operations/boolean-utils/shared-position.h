@@ -24,6 +24,9 @@
 #include "is-inside-mesh.h"
 #include "is-inside-boundary.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/norm.hpp>
+
 using Vec2 = glm::dvec2;
 using Vec3 = glm::dvec3;
 
@@ -199,7 +202,8 @@ namespace fuzzybools
 
         auto GetSegments() const
         {
-            const auto makeSegments = [&](int i) {
+            const auto makeSegments = [&](int i)
+            {
                 return std::make_pair(points[i - 1].second, points[i].second);
             };
 
@@ -377,7 +381,7 @@ namespace fuzzybools
 
         bool IsEqualTo(const Vec3 &n, double d)
         {
-            return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, toleranceScalarEquality));
+            return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, TOLERANCE_SCALAR_EQUALITY));
         }
 
         //============================================================================================
@@ -972,12 +976,12 @@ namespace fuzzybools
 
                 Vec3 norm;
                 if (computeSafeNormal(a, b, c, norm, EPS_SMALL))
-                {   
-                    double rs =  glm::dot(geom.planes[f.pId].normal , norm);
+                {
+                    double rs = glm::dot(geom.planes[f.pId].normal, norm);
 
                     size_t planeId = -1;
 
-                    if(rs < 0)
+                    if (rs < 0)
                     {
                         planeId = AddPlane(-geom.planes[f.pId].normal, -geom.planes[f.pId].distance, f.pId + offsetPlane);
                     }
@@ -985,7 +989,6 @@ namespace fuzzybools
                     {
                         planeId = AddPlane(geom.planes[f.pId].normal, geom.planes[f.pId].distance, f.pId + offsetPlane);
                     }
-
 
                     auto ia = AddPoint(a);
                     auto ib = AddPoint(b);
@@ -1121,7 +1124,8 @@ namespace fuzzybools
                 }
             }
 
-            const auto double_less = +[](double left, double right) { return left < right; };
+            const auto double_less = +[](double left, double right)
+            { return left < right; };
             std::sort(points.begin(), points.end(), double_less);
 
             std::vector<std::pair<double, double>> result;
@@ -1304,10 +1308,10 @@ namespace fuzzybools
 
             CDT::Triangulation<double> cdt(CDT::VertexInsertionOrder::AsProvided);
             std::vector<CDT::Edge> cdt_edges;
-			cdt_edges.reserve(edges.size());
+            cdt_edges.reserve(edges.size());
 
             std::vector<CDT::V2d<double>> cdt_verts;
-			cdt_verts.reserve(projectedPoints.size());
+            cdt_verts.reserve(projectedPoints.size());
 
             for (auto &point : projectedPoints)
             {
@@ -1578,16 +1582,15 @@ namespace fuzzybools
 
     inline std::vector<double> ComputeInitialIntersections(Plane &p, SharedPosition &sp, const Line &lineA)
     {
-        double size = 1.0E+04; // TODO: this is bad
+        double size = 1.0E+08; // TODO: this is bad
 
         for (auto &point : sp.points)
         {
-            double d = glm::distance(lineA.origin, point.location3D);
-            if (size < d)
-            {
-                size = d;
-            }
+            const auto d2 = glm::distance2(lineA.origin, point.location3D);
+            size = std::max(size, d2);
         }
+
+        size = std::sqrt(size);
 
         auto Astart = lineA.origin + lineA.direction * (size * 2);
         auto Aend = lineA.origin - lineA.direction * (size * 2);
@@ -1610,7 +1613,7 @@ namespace fuzzybools
                     sp.points[seg.first].location3D,
                     sp.points[seg.second].location3D);
 
-                if (result.distance < _tolerancePlaneIntersection)
+                if (result.distance < _TOLERANCE_PLANE_INTERSECTION)
                 {
                     if (!p.aabb.contains(sp.points[seg.first].location3D))
                     {
@@ -1639,7 +1642,7 @@ namespace fuzzybools
                         }
                     }
 
-                    if (!equals(pt, result.point2, _tolerancePlaneIntersection))
+                    if (!equals(pt, result.point2, _TOLERANCE_PLANE_INTERSECTION))
                     {
                         if (messages)
                         {
@@ -1650,7 +1653,8 @@ namespace fuzzybools
             }
         }
 
-        const auto double_less = +[](double left, double right) { return left < right; };
+        const auto double_less = +[](double left, double right)
+        { return left < right; };
         std::sort(distances.begin(), distances.end(), double_less);
 
         distances.erase(std::unique(distances.begin(), distances.end()), distances.end());
@@ -1741,7 +1745,7 @@ namespace fuzzybools
 
     //============================================================================================
 
-    inline Geometry Normalize(const Geometry& A, const Geometry& B, SharedPosition &sp, bool UNION)
+    inline Geometry Normalize(const Geometry &A, const Geometry &B, SharedPosition &sp, bool UNION)
     {
 
         // construct all contours, derive lines
@@ -1901,42 +1905,41 @@ namespace fuzzybools
         for (auto &plane : sp.planes)
         {
 
-            #ifdef CSG_DEBUG_OUTPUT
-                // std::vector<std::vector<glm::dvec2>> edges;
+#ifdef CSG_DEBUG_OUTPUT
+            // std::vector<std::vector<glm::dvec2>> edges;
 
-                // auto basis = plane.MakeBasis();
+            // auto basis = plane.MakeBasis();
 
-                // for (auto& line : plane.lines) {
-                //     // Get line parameters
-                //     auto origin = line.origin;      // 3D point (glm::dvec3)
-                //     auto direction = line.direction; // 3D vector (glm::dvec3)
-                    
-                //     // Convert each distance to a 3D point along the line
-                //     std::vector<glm::dvec2> lineSegments;
-                //     for (auto distance : line.points) {
-                //         glm::dvec3 point3D = origin + glm::dvec3(direction.x * distance.first, direction.y * distance.first, direction.z * distance.first);  // 3D calculation
-                //         glm::dvec2 point2D = basis.project(point3D);        // Project to 2D
-                //         lineSegments.push_back(point2D);
-                //     }
-                    
-                //     // Create edges between consecutive points
-                //     for (size_t i = 0; i < lineSegments.size() - 1; ++i) {
-                //         edges.push_back({ 
-                //             lineSegments[i], 
-                //             lineSegments[i + 1] 
-                //         });
-                //     }
-                // }
+            // for (auto& line : plane.lines) {
+            //     // Get line parameters
+            //     auto origin = line.origin;      // 3D point (glm::dvec3)
+            //     auto direction = line.direction; // 3D vector (glm::dvec3)
 
-                // DumpSVGLines(edges, L"contour.html");
-            #endif
+            //     // Convert each distance to a 3D point along the line
+            //     std::vector<glm::dvec2> lineSegments;
+            //     for (auto distance : line.points) {
+            //         glm::dvec3 point3D = origin + glm::dvec3(direction.x * distance.first, direction.y * distance.first, direction.z * distance.first);  // 3D calculation
+            //         glm::dvec2 point2D = basis.project(point3D);        // Project to 2D
+            //         lineSegments.push_back(point2D);
+            //     }
+
+            //     // Create edges between consecutive points
+            //     for (size_t i = 0; i < lineSegments.size() - 1; ++i) {
+            //         edges.push_back({
+            //             lineSegments[i],
+            //             lineSegments[i + 1]
+            //         });
+            //     }
+            // }
+
+            // DumpSVGLines(edges, L"contour.html");
+#endif
 
             sp.TriangulatePlane(geom, plane);
 
-            #ifdef CSG_DEBUG_OUTPUT
-                // DumpGeometry(geom, L"triangulated.obj");
-            #endif
-
+#ifdef CSG_DEBUG_OUTPUT
+            // DumpGeometry(geom, L"triangulated.obj");
+#endif
         }
 
         for (auto &plane : A.planes)
@@ -1979,7 +1982,7 @@ namespace fuzzybools
             auto b = sp._linkedB->GetPoint(f.i1);
             auto c = sp._linkedB->GetPoint(f.i2);
 
-            geom.AddFace(a, b, c,  f.pId + offsetA);
+            geom.AddFace(a, b, c, f.pId + offsetA);
         }
 
         geom.data = geom.numFaces;

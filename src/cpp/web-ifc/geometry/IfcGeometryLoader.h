@@ -17,17 +17,17 @@
 #include "representation/IfcGeometry.h"
 #include "representation/IfcCurve.h"
 
- // This class takes care of loading raw unprocessed geometry data from the IFC loader
+// This class takes care of loading raw unprocessed geometry data from the IFC loader
 
 namespace webifc::geometry
 {
 
-  class IfcGeometryLoader 
+  class IfcGeometryLoader
   {
   public:
-    IfcGeometryLoader(const webifc::parsing::IfcLoader &loader,const webifc::schema::IfcSchemaManager &schemaManager,uint16_t circleSegments, double tolerancePlaneIntersection, double toleranceBoundaryPoint, double toleranceInsideOutsideToPlane, double toleranceInsideOutside, double toleranceScalarEquality, double addPlaneIterations);
+    IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double, double BOOLEAN_UNION_THRESHOLD);
     void ResetCache();
-    std::array<glm::dvec3,2> GetAxis1Placement(const uint32_t expressID) const;
+    std::array<glm::dvec3, 2> GetAxis1Placement(const uint32_t expressID) const;
     glm::dmat3 GetAxis2Placement2D(const uint32_t expressID) const;
     glm::dmat4 GetLocalPlacement(const uint32_t expressID, glm::dvec3 vector = glm::dvec3(1)) const;
     glm::dvec3 GetCartesianPoint3D(const uint32_t expressID) const;
@@ -36,7 +36,7 @@ namespace webifc::geometry
     IfcProfile GetProfile(uint32_t expressID) const;
     IfcProfile GetProfile3D(uint32_t expressID) const;
     IfcCurve GetLocalCurve(uint32_t expressID) const;
-    IfcCurve GetCurve(uint32_t expressID,uint8_t dimensions, bool edge=false) const;
+    IfcCurve GetCurve(uint32_t expressID, uint8_t dimensions, bool edge = false) const;
     bool ReadIfcCartesianPointList(const uint32_t expressID) const;
     std::vector<glm::dvec3> ReadIfcCartesianPointList3D(const uint32_t expressID) const;
     std::vector<glm::dvec2> ReadIfcCartesianPointList2D(const uint32_t expressID) const;
@@ -48,7 +48,7 @@ namespace webifc::geometry
     IfcCrossSections GetCrossSections2D(uint32_t expressID) const;
     IfcCrossSections GetCrossSections3D(uint32_t expressID, bool scaled = false, glm::dmat4 coordination = glm::dmat4(1)) const;
     IfcAlignment GetAlignment(uint32_t expressID, IfcAlignment alignment = IfcAlignment(), glm::dmat4 transform = glm::dmat4(1), uint32_t sourceExpressID = -1) const;
-    bool GetColor(const uint32_t expressID, const glm::dvec4 &outputColor) const; 
+    bool GetColor(const uint32_t expressID, const glm::dvec4 &outputColor) const;
     const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetStyledItems() const;
     const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetRelMaterials() const;
@@ -59,6 +59,7 @@ namespace webifc::geometry
 	uint16_t GetCircleSegments() const { return _circleSegments; }
     void Clear() const;
     IfcGeometryLoader* Clone(const webifc::parsing::IfcLoader &loader) const;
+	
   protected:
     IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relVoids, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relNests, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relAggregates, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &styledItems, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &relMaterials, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &materialDefinitions, double linearScalingFactor, double squaredScalingFactor, double cubicScalingFactor, double angularScalingFactor, std::string angleUnits, uint16_t circleSegments, std::vector<IfcCurve> &localCurvesList, std::vector<uint32_t> &localcurvesIndices, std::unordered_map<uint32_t, glm::dmat4> expressIDToPlacement);
     IfcCurve GetAlignmentCurve(uint32_t expressID, uint32_t parentExpressID = -1) const;
@@ -71,7 +72,7 @@ namespace webifc::geometry
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
     const webifc::parsing::IfcLoader &_loader;
     const webifc::schema::IfcSchemaManager &_schemaManager;
-    std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids; 
+    std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
     std::unordered_map<uint32_t, std::vector<uint32_t>> _relNests;
     std::unordered_map<uint32_t, std::vector<uint32_t>> _relAggregates;
     std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;
@@ -95,5 +96,5 @@ namespace webifc::geometry
     double ConvertPrefix(const std::string_view &prefix);
     mutable std::unordered_map<uint32_t, glm::dmat4> _expressIDToPlacement;
   };
-  
+
 }

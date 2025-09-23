@@ -1,6 +1,6 @@
 {
   "name": "web-ifc",
-  "version": "0.0.71",
+  "version": "0.0.72",
   "description": "ifc loading on the web",
   "module": "./web-ifc-api.js",
   "main": "./web-ifc-api-node.js",
@@ -77,7 +77,7 @@
     "make-dir-cli": "^4.0.0",
     "monaco-editor": "^0.52.0",
     "rimraf": "^6.0.0",
-    "three": "^0.178.0",
+    "three": "^0.179.1",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
