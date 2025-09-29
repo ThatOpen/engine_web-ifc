@@ -10,15 +10,15 @@ namespace fuzzybools
 {
 	constexpr int VERTEX_FORMAT_SIZE_FLOATS = 6;
 
-    struct SimplePlane
-    {
-        double distance;
-        Vec normal;
+	struct SimplePlane
+	{
+		double distance;
+		Vec normal;
 
 		bool IsEqualTo(const Vec &n, double d)
-        {
-            return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, toleranceScalarEquality));
-        }
+		{
+			return (equals(normal, n, toleranceVectorEquality) && equals(distance, d, TOLERANCE_SCALAR_EQUALITY));
+		}
 	};
 
 	struct Face
@@ -42,7 +42,7 @@ namespace fuzzybools
 		uint32_t numFaces = 0;
 		uint32_t data = 0;
 
-		void BuildFromVectors(std::vector<double>& d, std::vector<uint32_t>& i)
+		void BuildFromVectors(std::vector<double> &d, std::vector<uint32_t> &i)
 		{
 			vertexData = d;
 			indexData = i;
@@ -51,7 +51,7 @@ namespace fuzzybools
 			numFaces = indexData.size() / 3;
 		}
 
-		inline void AddPoint(glm::dvec4& pt, glm::dvec3& n)
+		inline void AddPoint(glm::dvec4 &pt, glm::dvec3 &n)
 		{
 			glm::dvec3 p = pt;
 			AddPoint(p, n);
@@ -70,7 +70,7 @@ namespace fuzzybools
 			return aabb;
 		}
 
-		inline void AddPoint(glm::dvec3& pt, glm::dvec3& n)
+		inline void AddPoint(glm::dvec3 &pt, glm::dvec3 &n)
 		{
 			vertexData.push_back(pt.x);
 			vertexData.push_back(pt.y);
@@ -82,12 +82,18 @@ namespace fuzzybools
 
 			if (std::isnan(pt.x) || std::isnan(pt.y) || std::isnan(pt.z))
 			{
-				if (messages) { printf("NaN in geom!\n"); }
+				if (messages)
+				{
+					printf("NaN in geom!\n");
+				}
 			}
 
 			if (std::isnan(n.x) || std::isnan(n.y) || std::isnan(n.z))
 			{
-				if (messages) { printf("NaN in geom!\n"); }
+				if (messages)
+				{
+					printf("NaN in geom!\n");
+				}
 			}
 
 			numPoints += 1;
@@ -101,7 +107,10 @@ namespace fuzzybools
 			if (!computeSafeNormal(a, b, c, normal, toleranceAddFace))
 			{
 				// bail out, zero area triangle
-				if (messages) { printf("zero triangle, AddFace(vec, vec, vec)\n"); }
+				if (messages)
+				{
+					printf("zero triangle, AddFace(vec, vec, vec)\n");
+				}
 				return;
 			}
 
@@ -114,10 +123,10 @@ namespace fuzzybools
 
 		inline void AddFace(uint32_t a, uint32_t b, uint32_t c, uint32_t pId)
 		{
-//			indexData.reserve((numFaces + 1) * 3);
-//			indexData[numFaces * 3 + 0] = a;
-//			indexData[numFaces * 3 + 1] = b;
-//			indexData[numFaces * 3 + 2] = c;
+			//			indexData.reserve((numFaces + 1) * 3);
+			//			indexData[numFaces * 3 + 0] = a;
+			//			indexData[numFaces * 3 + 1] = b;
+			//			indexData[numFaces * 3 + 2] = c;
 			indexData.push_back(a);
 			indexData.push_back(b);
 			indexData.push_back(c);
@@ -126,11 +135,14 @@ namespace fuzzybools
 			double area = areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
 
 			glm::dvec3 normal;
-//			if (!computeSafeNormal(GetPoint(a), GetPoint(b), GetPoint(c), normal, EPS_SMALL))
+			//			if (!computeSafeNormal(GetPoint(a), GetPoint(b), GetPoint(c), normal, EPS_SMALL))
 			if (!computeSafeNormal(GetPoint(a), GetPoint(b), GetPoint(c), normal, toleranceAddFace))
 			{
 				// bail out, zero area triangle
-				if (messages) { printf("zero triangle, AddFace(int, int, int)\n"); }
+				if (messages)
+				{
+					printf("zero triangle, AddFace(int, int, int)\n");
+				}
 			}
 
 			numFaces++;
@@ -173,11 +185,10 @@ namespace fuzzybools
 			return glm::dvec3(
 				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 0],
 				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 1],
-				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]
-			);
+				vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 2]);
 		}
 
-		void GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const
+		void GetCenterExtents(glm::dvec3 &center, glm::dvec3 &extents) const
 		{
 			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
 			glm::dvec3 max(DBL_MIN, DBL_MIN, DBL_MIN);
@@ -215,7 +226,6 @@ namespace fuzzybools
 				newGeom.AddFace(pa, pb, pc, face.pId);
 			}
 
-
 			return newGeom;
 		}
 
@@ -241,16 +251,15 @@ namespace fuzzybools
 				newGeom.AddFace(a, b, c, face.pId);
 			}
 
-
 			return newGeom;
 		}
-		
+
 		bool IsEmpty()
 		{
 			return vertexData.empty();
 		}
 
-		double Volume(const glm::dmat4& trans = glm::dmat4(1))
+		double Volume(const glm::dmat4 &trans = glm::dmat4(1))
 		{
 			double totalVolume = 0;
 
@@ -264,7 +273,7 @@ namespace fuzzybools
 
 				glm::dvec3 norm;
 
-//				if (computeSafeNormal(a, b, c, norm))
+				//				if (computeSafeNormal(a, b, c, norm))
 				if (computeSafeNormal(a, b, c, norm, EPS_SMALL))
 				{
 					double area = areaOfTriangle(a, b, c);

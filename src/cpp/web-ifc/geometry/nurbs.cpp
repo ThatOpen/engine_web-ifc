@@ -174,14 +174,17 @@ namespace webifc::geometry{
 		};
 
 		// Compute sample surface points.
-		this->ptc = tinynurbs::surfacePoint(*this->nurbs, 0.0, 0.0);
-		this->pth = tinynurbs::surfacePoint(*this->nurbs, 1.0, 0.0);
-		this->ptv = tinynurbs::surfacePoint(*this->nurbs, 0.0, 1.0);
+		this->ptc = tinynurbs::surfacePoint(*this->nurbs, EPS_TINY, EPS_TINY);
+		this->pth = tinynurbs::surfacePoint(*this->nurbs, 1.0, EPS_TINY);
+		this->ptv = tinynurbs::surfacePoint(*this->nurbs, EPS_TINY, 1.0);
 
 		// Compute distances for further use.
 		this->dh = glm::distance(ptc, pth);
 		this->dv = glm::distance(ptc, ptv);
 		this->pr = (dh + 1) / (dv + 1);
+		if (std::isnan(this->pr) || std::isinf(this->pr)) {
+			this->pr = 1.0;
+		}
 
 		// Scale error tolerances.
 		this->minError /= this->scaling;

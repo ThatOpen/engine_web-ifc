@@ -1,9 +1,10 @@
 {
   "name": "web-ifc",
-  "version": "0.0.69",
+  "version": "0.0.72",
   "description": "ifc loading on the web",
   "module": "./web-ifc-api.js",
   "main": "./web-ifc-api-node.js",
+  "license": "MPL-2.0",
   "exports": {
     ".": {
       "require": "./web-ifc-api-node.js",
@@ -24,7 +25,7 @@
     "build-cleanup": "rimraf dist/helpers/log.ts && rimraf dist/helpers/properties.ts && rimraf dist/web-ifc-api.ts && rimraf dist/ifc-schema.ts",
     "build-debug": "npm run build-wasm-debug && npm run build-api && npm run build-cleanup",
     "publish-repo": "npm run set-version && cd dist && npm publish",
-    "build-publish-repo": "npm run build-release && cpy ./npmrc ./dist/  --rename=.npmrc && cd dist && npm publish",
+    "build-publish-repo": "npm run build-release && cpy ./npmrc ./dist/  --rename=.npmrc && cp ./LICENSE.md ./dist && cd dist && npm publish",
     "copy-to-dist": "make-dir dist && cpy \"src/cpp/build_wasm/*.js\" dist &&  cpy \"src/cpp/build_wasm/*.wasm\" dist ",
     "copy-debug-to-dist": "make-dir dist && cpy \"src/cpp/build_wasm_debug/*.js\" dist &&  cpy \"src/cpp/build_wasm_debug/*.wasm\" dist ",
     "build-wasm-debug": "make-dir src/cpp/build_wasm_debug && cd src/cpp/build_wasm_debug && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Debug   && emmake make && npm run copy-debug-to-dist",
@@ -61,20 +62,21 @@
     "ifc-schema.d.ts",
     "helpers/properties.d.ts",
     "helpers/log.d.ts",
-    "web-ifc-mt.worker.js"
+    "web-ifc-mt.worker.js",
+    "LICENSE.md"
   ],
   "devDependencies": {
-    "@types/jest": "^29.5.14",
-    "@types/three": "^0.176.0",
+    "@types/jest": "^30.0.0",
+    "@types/three": "^0.178.0",
     "adm-zip": "^0.5.10",
     "cpy-cli": "^5.0.0",
     "esbuild": "^0.25.0",
-    "jest": "^29.7.0",
+    "jest": "^30.0.3",
     "local-web-server": "^5.2.1",
     "make-dir-cli": "^4.0.0",
     "monaco-editor": "^0.52.0",
     "rimraf": "^6.0.0",
-    "three": "^0.176.0",
+    "three": "^0.179.1",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
@@ -85,8 +87,5 @@
     "crypto": false,
     "path": false,
     "fs": false
-  },
-  "dependencies": {
-    "glm": "^1.0.0"
   }
 }
