@@ -1150,7 +1150,7 @@ namespace webifc::geometry
                 // Create a circular profile
                 IfcProfile profile;
                 profile.isConvex = true;
-                profile.curve = GetCircleCurve(radius, _geometryLoader.GetCircleSegments());
+                profile.curve = GetCircleCurve(radius, _settings._circleSegments);
 
                 // Extrude along Z-axis
                 glm::dvec3 extrusionDir = glm::dvec3(0, 0, 1);

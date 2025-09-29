@@ -2334,7 +2334,7 @@ namespace webifc::geometry
             uint32_t segmentId = _loader.GetRefArgument(segmentTokens[ii]);
             ComputeCurve(segmentId, gradientCurve, params);// dimensions, edge, sameSense, trimSense);
         }
-#ifdef _DEBUG
+#ifdef DEBUG_DUMP_SVG
         dump::DumpCurveToHtml(gradientCurve.points, "GradientCurve.html");
 #endif
 
