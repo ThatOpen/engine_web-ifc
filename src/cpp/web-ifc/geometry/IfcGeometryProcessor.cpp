@@ -32,9 +32,9 @@ namespace webifc::geometry
         SetEpsilons(TOLERANCE_SCALAR_EQUALITY, PLANE_REFIT_ITERATIONS, BOOLEAN_UNION_THRESHOLD);
     }
 
-    IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
+    const IfcGeometryLoader& IfcGeometryProcessor::GetLoader() const
     {
-        return _geometryLoader;
+         return _geometryLoader;
     }
 
     void IfcGeometryProcessor::SetTransformation(const std::array<double, 16> &val)
@@ -313,9 +313,20 @@ namespace webifc::geometry
             case schema::IFCSECTIONEDSOLID:
             case schema::IFCSECTIONEDSURFACE:
             {
-                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID));
+                bool scaled = false;
+                glm::dmat4 coordination = glm::dmat4(1);
+                IfcCrossSections crossSections = _geometryLoader.GetCrossSections3D(expressID, scaled, coordination);
+
+                bool buildCaps = false;
+                if (lineType == schema::IFCSECTIONEDSOLIDHORIZONTAL || lineType == schema::IFCSECTIONEDSOLID)
+                {
+                    // add front and back caps to close the solid
+                    buildCaps = true;
+                }
+
+                auto geom = SectionedSurface(crossSections, buildCaps);
                 mesh.transformation = glm::dmat4(1);
-                // TODO: this is getting problematic.....
+                
                 _expressIDToGeometry[expressID] = geom;
                 mesh.hasGeometry = true;
 
@@ -865,11 +876,49 @@ namespace webifc::geometry
 
                 return mesh;
             }
+            case schema::IFCFIXEDREFERENCESWEPTAREASOLID:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                uint32_t profileID = _loader.GetRefArgument();
+                uint32_t placementID = _loader.GetOptionalRefArgument();
+                uint32_t directrixRef = _loader.GetRefArgument();
+                uint32_t fixedReferenceID = _loader.GetRefArgument();
+
+                // Retrieve profile, placement, directrix, and fixed reference direction
+                IfcProfile profile = _geometryLoader.GetProfile(profileID);
+                glm::dmat4 placement = placementID ? _geometryLoader.GetLocalPlacement(placementID) : glm::dmat4(1.0);
+                IfcCurve directrix = _geometryLoader.GetCurve(directrixRef, 3);
+                glm::dvec3 fixedReference = _geometryLoader.GetCartesianPoint3D(fixedReferenceID);
+
+                // Check for valid profile and directrix
+                if (profile.curve.points.empty() || directrix.points.empty()) {
+                    spdlog::error("[GetMesh()] Invalid profile or directrix for IFCFIXEDREFERENCESWEPTAREASOLID {}", expressID);
+                    return mesh;
+                }
+
+                // Determine if the sweep is closed
+                bool closed = glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_SMALL;
+
+                // Generate geometry by sweeping the profile with fixed orientation
+                IfcGeometry geom = SweepFixedReference(
+                    _geometryLoader.GetLinearScalingFactor(),
+                    closed,
+                    profile,
+                    directrix,
+                    fixedReference
+                );
+
+                // Store the geometry and update mesh
+                _expressIDToGeometry[expressID] = geom;
+                mesh.expressID = expressID;
+                mesh.hasGeometry = true;
+                mesh.transformation = placement;
+
+                return mesh;
+            }
             case schema::IFCSWEPTDISKSOLID:
             {
-
                 // TODO: prevent self intersections in Sweep function still not working properly
-
                 bool closed = false;
 
                 _loader.MoveToArgumentOffset(expressID, 0);
@@ -1057,6 +1106,37 @@ namespace webifc::geometry
 
                 return mesh;
             }
+            case schema::IFCRIGHTCIRCULARCYLINDER:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                uint32_t placementID = _loader.GetRefArgument();
+                double height = _loader.GetDoubleArgument();
+                double radius = _loader.GetDoubleArgument();
+
+                // Create a circular profile
+                IfcProfile profile;
+                profile.isConvex = true;
+                profile.curve = GetCircleCurve(radius, _settings._circleSegments);
+
+                // Extrude along Z-axis
+                glm::dvec3 extrusionDir = glm::dvec3(0, 0, 1);
+                IfcGeometry geom = Extrude(profile, extrusionDir, height);
+
+                // Set transformation
+                if (placementID)
+                {
+                    mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
+                }
+
+#ifdef CSG_DEBUG_OUTPUT
+                io::DumpIfcGeometry(geom, "IFCRIGHTCIRCULARCYLINDER_geom.obj");
+#endif
+
+                _expressIDToGeometry[expressID] = geom;
+                mesh.expressID = expressID;
+                mesh.hasGeometry = true;
+                return mesh;
+            }
             case schema::IFCGEOMETRICSET:
             case schema::IFCGEOMETRICCURVESET:
             {
@@ -1120,9 +1200,11 @@ namespace webifc::geometry
                 return mesh;
             }
             case schema::IFCCIRCLE:
+            case schema::IFCCOMPOSITECURVE:
             case schema::IFCPOLYLINE:
             case schema::IFCINDEXEDPOLYCURVE:
             case schema::IFCTRIMMEDCURVE:
+            case schema::IFCGRADIENTCURVE:
             {
                 auto lineProfileType = _loader.GetLineType(expressID);
                 IfcCurve curve = _geometryLoader.GetCurve(expressID, 3, false);

@@ -1230,61 +1230,81 @@ namespace bimGeometry
 	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles)
 	{
 		Geometry geom;
+		double eps = 1e-6; // Small epsilon for numerical stability
 
-		// Iterate over each profile, and create a surface by connecting the corresponding points with faces.
+		// Check for insufficient profiles
+		if (profiles.size() < 2)
+		{
+			//spdlog::warn("SectionedSurface: Fewer than 2 profiles provided ({}), returning empty geometry.", profiles.size());
+			return geom;
+		}
+
+		// Iterate over each pair of consecutive profiles
 		for (size_t i = 0; i < profiles.size() - 1; i++)
 		{
-			std::vector<glm::dvec3> &profile1 = profiles[i];
-			std::vector<glm::dvec3> &profile2 = profiles[i + 1];
+			std::vector<glm::dvec3>& profile1 = profiles[i];
+			std::vector<glm::dvec3>& profile2 = profiles[i + 1];
 
-			// Check that the profiles have the same number of points
+			// Check that profiles have the same number of points and are non-empty
+			if (profile1.empty() || profile2.empty())
+			{
+				//spdlog::warn("SectionedSurface: Empty profile at index {}, skipping.", i);
+				continue;
+			}
 			if (profile1.size() != profile2.size())
 			{
+				//spdlog::warn("SectionedSurface: Profile {} has {} points, but profile {} has {} points, skipping.", i, profile1.size(), i + 1, profile2.size());
+				continue;
 			}
 
 			std::vector<uint32_t> indices;
 
-			// Create faces by connecting corresponding points from the two profiles
+			// Add points and compute normals
 			for (size_t j = 0; j < profile1.size(); j++)
 			{
-				glm::dvec3 &p1 = profile1[j];
-				int j2 = 0;
-				if (profile1.size() > 1)
+				glm::dvec3& p1 = profile1[j];
+				glm::dvec3& p2 = profile2[j]; // Direct correspondence, assuming equal sizes
+
+				// Compute normal
+				glm::dvec3 normal(0.0, 0.0, 1.0); // Default normal
+				glm::dvec3 edge = p2 - p1;
+				if (glm::length(edge) > eps)
 				{
-					double pr = (double)j / (double)(profile1.size() - 1);
-					j2 = pr * (profile2.size() - 1);
+					glm::dvec3 crossVec = glm::cross(edge, glm::dvec3(0.0, 0.0, 1.0));
+					if (glm::length(crossVec) > eps)
+					{
+						normal = glm::normalize(glm::cross(edge, crossVec));
+					}
+					else
+					{
+						//spdlog::warn("SectionedSurface: Degenerate normal at profile {}, point {}, using default normal.", i, j);
+					}
 				}
-				glm::dvec3 &p2 = profile2[j2];
 
-				glm::dvec3 normal = glm::dvec3(0.0, 0.0, 1.0);
-
-				if (glm::distance(p1, p2) > 1E-5)
-				{
-					normal = glm::normalize(glm::cross(p2 - p1, glm::cross(p2 - p1, glm::dvec3(0.0, 0.0, 1.0))));
-				}
-
+				// Add points to geometry with computed normal
 				geom.AddPoint(p1, normal);
 				geom.AddPoint(p2, normal);
 
-				indices.push_back(geom.numPoints - 2);
-				indices.push_back(geom.numPoints - 1);
+				indices.push_back(geom.numPoints - 2); // Index of p1
+				indices.push_back(geom.numPoints - 1); // Index of p2
 			}
 
-			// Create the faces
-			if (indices.size() > 0)
+			// Create triangular faces
+			for (size_t j = 0; j < indices.size() - 2; j += 2)
 			{
-				for (size_t j = 0; j < indices.size() - 2; j += 4)
+				if (j + 3 < indices.size()) // Ensure enough indices for two triangles
 				{
+					// Form two triangles for each quad (p1[j], p2[j], p1[j+1], p2[j+1])
+					// Triangle 1: p1[j], p2[j], p1[j+1]
 					geom.AddFace(indices[j], indices[j + 1], indices[j + 2], -1);
-					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3], -1);
+					// Triangle 2: p2[j], p2[j+1], p1[j+1]
+					geom.AddFace(indices[j + 1], indices[j + 3], indices[j + 2], -1);
 				}
 			}
 		}
 
 		return geom;
 	}
-
-	///
 
 	inline Curve GetRectangleCurve(double xdim, double ydim, glm::dmat4 placement = glm::dmat4(1), int numSegments = 12, double radius = 0)
 	{
