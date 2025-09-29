@@ -43,6 +43,17 @@ namespace webifc::geometry {
 
 		const double EXTRUSION_DISTANCE_HALFSPACE_M = 100;
 
+		enum IfcTrimmingSelectType { TRIM_NONE, TRIM_BY_POSITION, TRIM_BY_PARAMETER, TRIM_BY_LENGTH };
+		struct IfcTrimmingSelect
+		{
+			IfcTrimmingSelectType trimType = TRIM_NONE;
+			double value = 0;
+			glm::dvec2 pos;
+			glm::dvec3 pos3D;
+		};
+
+		enum TrimSense { TRIM_SENSE_SAME = 1, TRIM_SENSE_REVERSE = 0 };
+
 		struct IfcSegmentIndexSelect
 		{
 			std::string_view type;
@@ -173,27 +184,9 @@ namespace webifc::geometry {
 			}
 		};
 
-		struct IfcTrimmingSelect
-		{
-			bool hasParam = false;
-			bool hasPos = false;
-			bool hasLenght = false;
-			double param;
-			glm::dvec2 pos;
-			glm::dvec3 pos3D;
-		};
-
-		struct IfcTrimmingArguments
-		{
-			bool exist = false;
-			IfcTrimmingSelect start;
-			IfcTrimmingSelect end;
-		};
-
 		struct IfcPlacedGeometry
 		{
 			glm::dvec4 color;
-			bool hasColor = false;
 			glm::dmat4 transformation;
 			std::array<double, 16> flatTransformation;
 			uint32_t geometryExpressID;

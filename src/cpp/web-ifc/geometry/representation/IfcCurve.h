@@ -18,12 +18,19 @@ namespace webifc::geometry {
 		std::vector<uint32_t> arcSegments;
 		std::vector<std::string> userData;
 		std::vector<uint16_t> indices;
+		glm::dvec3 endTangent = glm::dvec3(0,0,0);
+		// Stores the precise analytic tangent for the start of each segment, in case of IfcCurveSegment
+		std::vector<glm::dvec3> segmentStartTangents;
+
 		glm::dvec2 Get2d(size_t i) const;
 		glm::dvec3 Get3d(size_t i) const;
-		glm::dmat4 getPlacementAtDistance(double length);
 		
-		private:
-			static constexpr double EPS_TINY = 1e-9;
+		enum CurvePlacementMode { TangentAsZAxis, GlobalZAxis };
+		/// \brief Get a transformation matrix at a specified distance along the curve. Z axis is aligned with the curve tangent, or with global z axis, depending on mode
+		glm::dmat4 getPlacementAtDistance(double distance, CurvePlacementMode mode);
+
+	protected:
+		static constexpr double EPS_TINY = 1e-9;
 	};
 
 }

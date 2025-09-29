@@ -5,6 +5,8 @@
 #pragma once
 
 #include <cstdint>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "../representation/IfcCurve.h"
 
 namespace webifc::geometry {
@@ -533,5 +535,4 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 
 		return curve;
 	}
-
 }
