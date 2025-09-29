@@ -31,7 +31,7 @@
     "build-wasm-debug": "make-dir src/cpp/build_wasm_debug && cd src/cpp/build_wasm_debug && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Debug   && emmake make && npm run copy-debug-to-dist",
     "build-wasm-release": "make-dir src/cpp/build_wasm     && cd src/cpp/build_wasm       && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Release && emmake make && npm run copy-to-dist",
     "build-api": "make-dir dist/helpers && npm run build-ts-api && npm run build-web-ifc-api-browser && npm run build-web-ifc-api-node && npm run build-web-ifc-api-iife &&cpy README.md dist && cpy package.json dist",
-    "build-ts-api": "make-dir dist/helpers && cpy \"src/ts/*.ts\" dist && cpy \"src/ts/helpers/*\" dist/helpers --flat && tsc  --incremental --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts ./web-ifc-api-node.d.ts",
+    "build-ts-api": "make-dir dist/helpers && cpy \"src/ts/*.ts\" dist && cpy \"src/ts/helpers/*\" dist/helpers --flat && tsc  --incremental --emitDeclarationOnly && cpy dist/web-ifc-api.d.ts ./dist/web-ifc-api-node.d.ts",
     "build-web-ifc-api-node": "make-dir dist && esbuild dist/web-ifc-api.ts --define:__WASM_PATH__=\\\"./web-ifc-node\\\" --bundle --platform=node --outfile=./dist/web-ifc-api-node.js",
     "build-web-ifc-api-browser": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=esm --define:__WASM_PATH__=\\\"./web-ifc\\\" --outfile=./dist/web-ifc-api.js",
     "build-web-ifc-api-iife": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=iife --define:__WASM_PATH__=\\\"./web-ifc\\\" --global-name=WebIFC --outfile=./dist/web-ifc-api-iife.js",
