@@ -1908,22 +1908,9 @@ namespace webifc::geometry
       curve.arcSegments.push_back(curve.points.size() - 1); // This is required to identify arc points in the points list
       for (int i = 0; i < _circleSegments; i++)
       {
-<<<<<<< HEAD
-        _loader.MoveToArgumentOffset(expressID, 0);
-        auto type = _loader.GetStringArgument();
-        _loader.MoveToArgumentOffset(expressID, 1);
-        auto placementID = _loader.GetRefArgument();
-        _loader.MoveToArgumentOffset(expressID, 2);
-        double SegmentStart = ReadLengthMeasure();
-        _loader.MoveToArgumentOffset(expressID, 4);
-        double SegmentEnd = ReadLengthMeasure();
-        _loader.MoveToArgumentOffset(expressID, 6);
-        auto curveID = _loader.GetRefArgument();
-=======
         double ratio = static_cast<double>(i) / (_circleSegments - 1);
         double angle = 0;
         angle = startRad + ratio * lengthRad;
->>>>>>> maino
 
         if (sameSense == 0)
         {
@@ -1991,9 +1978,9 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(expressID, 1);
       auto placementID = _loader.GetRefArgument();
       _loader.MoveToArgumentOffset(expressID, 2);
-      double SegmentStart = ReadLenghtMeasure();
+      double SegmentStart = ReadLengthMeasure();
       _loader.MoveToArgumentOffset(expressID, 4);
-      double SegmentEnd = ReadLenghtMeasure();
+      double SegmentEnd = ReadLengthMeasure();
       _loader.MoveToArgumentOffset(expressID, 6);
       auto curveID = _loader.GetRefArgument();
 

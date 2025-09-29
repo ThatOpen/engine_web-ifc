@@ -32,7 +32,7 @@ namespace webifc::geometry
         SetEpsilons(TOLERANCE_SCALAR_EQUALITY, PLANE_REFIT_ITERATIONS, BOOLEAN_UNION_THRESHOLD);
     }
 
-    IfcGeometryLoader& IfcGeometryProcessor::GetLoader()
+    IfcGeometryLoader IfcGeometryProcessor::GetLoader() const
     {
         return _geometryLoader;
     }
