@@ -31,10 +31,22 @@ double RandomDouble(double lo, double hi)
 
 std::string ReadFile(std::string filename)
 {
-    std::ifstream t(filename);
-    std::stringstream buffer;
-    buffer << t.rdbuf();
-    return buffer.str();
+    std::ifstream file(filename, std::ios::binary);
+    if (!file) {
+        throw std::runtime_error("Could not open file");
+    }
+
+    file.seekg(0, std::ios::end);
+    std::streamsize size = file.tellg();
+    file.seekg(0, std::ios::beg);
+
+    std::string buffer(size, '\0');
+    
+    if (!file.read(buffer.data(), size)) {
+        throw std::runtime_error("Error reading file");
+    }
+
+    return buffer;
 }
 
 void SpecificLoadTest(webifc::parsing::IfcLoader &loader, webifc::geometry::IfcGeometryProcessor &geometryLoader, uint64_t num)
@@ -76,8 +88,8 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
     for (size_t i = 0; i < alignments.size(); i++)
     {
         webifc::geometry::IfcAlignment alignment = alignments[i];
-        std::vector<glm::dvec3>  pointsH;
-        std::vector<glm::dvec3>  pointsV;
+        std::vector<glm::dvec3> pointsH;
+        std::vector<glm::dvec3> pointsV;
         for (size_t j = 0; j < alignment.Horizontal.curves.size(); j++)
         {
             for (size_t k = 0; k < alignment.Horizontal.curves[j].points.size(); k++)
@@ -96,7 +108,6 @@ std::vector<webifc::geometry::IfcAlignment> GetAlignments(webifc::parsing::IfcLo
         curve.points = bimGeometry::Convert2DAlignmentsTo3D(pointsH, pointsV);
         alignments[i].Absolute.curves.push_back(curve);
     }
-
 
     return alignments;
 }
@@ -299,7 +310,7 @@ std::vector<webifc::geometry::SweptDiskSolid> GetAllRebars(webifc::parsing::IfcL
     auto elements = loader.GetExpressIDsWithType(type);
 
     for (size_t i = 0; i < elements.size(); i++)
-    {    
+    {
         auto mesh = geometryLoader.GetFlatMesh(elements[i]);
 
         for (auto &geom : mesh.geometries)
@@ -462,7 +473,19 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/F_MA_160_ALT3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/540.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1092_A.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Sample3_ArchiCAD25.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/384.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Spacewell_Wall.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1450.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/15.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1544.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/800087_5217721a.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/818.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/bc-78.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/83.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1506.ifc");
 
     struct LoaderSettings
     {
@@ -471,6 +494,13 @@ int main()
         uint32_t TAPE_SIZE = 67108864; // probably no need for anyone other than web-ifc devs to change this
         uint32_t MEMORY_LIMIT = 2147483648;
         uint16_t LINEWRITER_BUFFER = 10000;
+        double TOLERANCE_PLANE_INTERSECTION = 1.0E-04;
+        double TOLERANCE_PLANE_DEVIATION = 1.0E-04;
+        double TOLERANCE_BACK_DEVIATION_DISTANCE = 1.0E-04;
+        double TOLERANCE_INSIDE_OUTSIDE_PERIMETER = 1.0E-10;
+        double TOLERANCE_SCALAR_EQUALITY = 1.0E-04;
+        uint16_t PLANE_REFIT_ITERATIONS = 1;
+        uint16_t BOOLEAN_UNION_THRESHOLD = 150;
     };
 
     LoaderSettings set;
@@ -497,14 +527,22 @@ int main()
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
 
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.TOLERANCE_PLANE_INTERSECTION, set.TOLERANCE_PLANE_DEVIATION, set.TOLERANCE_BACK_DEVIATION_DISTANCE, set.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, set.TOLERANCE_SCALAR_EQUALITY, set.PLANE_REFIT_ITERATIONS, set.BOOLEAN_UNION_THRESHOLD);
 
     start = ms();
-
-    SpecificLoadTest(loader, geometryLoader, 211736);
+    SpecificLoadTest(loader, geometryLoader, 252); // 1506
+    // SpecificLoadTest(loader, geometryLoader, 407); // 1450
+    // SpecificLoadTest(loader, geometryLoader, 1125); // 1544
+    // SpecificLoadTest(loader, geometryLoader, 92180); // 15
+    // SpecificLoadTest(loader, geometryLoader, 140426); //1256
+    // SpecificLoadTest(loader, geometryLoader, 107287);
+    // SpecificLoadTest(loader, geometryLoader, 437004); // 540
+    // SpecificLoadTest(loader, geometryLoader, 165617); // 1092_A
+    // SpecificLoadTest(loader, geometryLoader, 36487);
+    // SpecificLoadTest(loader, geometryLoader, 1201);
     // auto meshes = LoadAllTest(loader, geometryLoader, -1);
     // auto rebars = GetAllRebars(loader, geometryLoader);
-    // std::cout << GetLine(loader, 225) << std::endl;
+    // std::cout << GetLine(loader, 13) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
 
     time = ms() - start;

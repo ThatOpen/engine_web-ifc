@@ -107,7 +107,7 @@ if(EMSCRIPTEN)
 
 	add_executable(web-ifc-node ${web-ifc-source} ${web-ifc-wasm})
 	param_setter(web-ifc-node)
-	set_target_properties(web-ifc-node PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 ")
+	set_target_properties(web-ifc-node PROPERTIES LINK_FLAGS "${DEBUG_FLAG} --bind -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=\"['HEAPU8','HEAPU32','HEAPF32']\"")
 
 	# multi-treaded versions
 	add_executable(web-ifc-mt ${web-ifc-source} ${web-ifc-wasm})

@@ -20,6 +20,39 @@
 namespace webifc::geometry
 {
 
+	// TODO: This function is wrong, but changing it breaks many models #172 -> 15.ifc, should be reviewed
+	inline double VectorToAngle3D(double x, double y)
+	{
+		double dd = sqrt(x * x + y * y);
+		if (std::abs(dd) < EPS_MINISCULE) {
+			return 0;
+		}
+		double xx = x / dd;
+		double yy = y / dd;
+
+		double angle = asin(xx);
+		double cosv = cos(angle);
+
+		if (glm::abs(yy - cosv) > 1e-5)
+		{
+			angle = acos(yy);
+			double sinv = sin(angle);
+			cosv = cos(angle);
+			if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
+			{
+				angle = angle + (CONST_PI - angle) * 2;
+				sinv = sin(angle);
+				cosv = cos(angle);
+				if (glm::abs(yy - cosv) > 1e-5 || glm::abs(xx - sinv) > 1e-5)
+				{
+					angle = angle + CONST_PI;
+				}
+			}
+		}
+
+		return (angle / (2 * CONST_PI)) * 360;
+	}
+
 	// TODO: review and simplify
 	inline void TriangulateRevolution(IfcGeometry& geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double numRots)
 	{
@@ -124,7 +157,7 @@ namespace webifc::geometry
 			double dx = transform[0].x * xx + transform[0].y * yy + transform[0].z * zz;
 			double dy = transform[1].x * xx + transform[1].y * yy + transform[1].z * zz;
 				//				double dz = vecZ.x * xx + vecZ.y * yy + vecZ.z * zz;
-			double temp = VectorToAngle(dx, dy);
+			double temp = VectorToAngle3D(dx, dy);
 			while (temp < 0)
 			{
 				temp += 360;
@@ -328,7 +361,7 @@ namespace webifc::geometry
 			double dx = glm::dot(vecX, vv);
 			double dy = glm::dot(vecY, vv);
 				// double dz = glm::dot(vecZ, vv);
-			double temp = VectorToAngle(dx, dy);
+			double temp = VectorToAngle3D(dx, dy);
 			while (temp < 0)
 			{
 				temp += 360;
@@ -435,6 +468,7 @@ namespace webifc::geometry
 		}
     }
 
+	// TODO: sent to bimGeometry
     inline void TriangulateBspline(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface, double const scaling)
 	{
 		spdlog::debug("[TriangulateBspline({})]");
