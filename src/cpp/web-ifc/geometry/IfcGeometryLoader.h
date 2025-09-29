@@ -84,6 +84,9 @@ namespace webifc::geometry
     uint16_t _circleSegments;
     mutable std::vector<IfcCurve> _localCurvesList;
     mutable std::vector<uint32_t> _localcurvesIndices;
+    // Caches to avoid repeatedly decoding the same points
+    mutable std::unordered_map<uint32_t, glm::dvec3> _cartesianPoint3DCache;
+    mutable std::unordered_map<uint32_t, glm::dvec2> _cartesianPoint2DCache;
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsMap();
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelNestsMap();
     std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelAggregatesMap();
