@@ -62,7 +62,7 @@ namespace webifc::geometry
 			{
 				if (i >= ifcGeom.planeData.size())
 				{
-					ifcGeom.planeData.push_back(-1);
+					ifcGeom.planeData.push_back(UINT32_MAX);
 				}
 			}
 		}
@@ -329,7 +329,7 @@ namespace webifc::geometry
 		}
 	}
 
-	inline IfcGeometry SectionedSurface(IfcCrossSections profiles_)
+	inline IfcGeometry SectionedSurface(IfcCrossSections profiles_, bool buildCaps)
 	{
 		spdlog::debug("[SectionedSurface({})]");
 
@@ -342,10 +342,12 @@ namespace webifc::geometry
 			{
 				profile.push_back({profiles_.curves[i].points[j].x, profiles_.curves[i].points[j].y, profiles_.curves[i].points[j].z});
 			}
+			
 			profiles.push_back(profile);
 		}
 
-		return ToIfcGeometry(bimGeometry::SectionedSurface(profiles));
+		IfcGeometry geom = ToIfcGeometry(bimGeometry::SectionedSurface(profiles, buildCaps));
+		return geom;
 	}
 
 	inline IfcGeometry Extrude(IfcProfile profile, glm::dvec3 dir, double distance, glm::dvec3 cuttingPlaneNormal = glm::dvec3(0), glm::dvec3 cuttingPlanePos = glm::dvec3(0))
