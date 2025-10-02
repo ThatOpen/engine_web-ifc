@@ -332,7 +332,6 @@ namespace webifc::geometry
 	}
 
 	using Point = std::array<double, 3>;
-
 	inline IfcGeometry SectionedSurface(IfcCrossSections profiles_, bool buildCaps)
 	{
 		spdlog::debug("[SectionedSurface({})]");

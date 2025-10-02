@@ -1230,6 +1230,7 @@ namespace bimGeometry
 	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps, double eps=0.0)
 	{
 		Geometry geom;
+		double eps = 1e-6; // Small epsilon for numerical stability
 
 		// Check for insufficient profiles
 		if (profiles.size() < 2)
