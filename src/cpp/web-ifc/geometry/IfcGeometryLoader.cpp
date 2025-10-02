@@ -35,6 +35,10 @@ namespace webifc::geometry
   {
     _expressIDToPlacement.clear();
     std::unordered_map<uint32_t, glm::dmat4>().swap(_expressIDToPlacement);
+    _cartesianPoint3DCache.clear();
+    std::unordered_map<uint32_t, glm::dvec3>().swap(_cartesianPoint3DCache);
+    _cartesianPoint2DCache.clear();
+    std::unordered_map<uint32_t, glm::dvec2>().swap(_cartesianPoint2DCache);
   }
 
   IfcCrossSections IfcGeometryLoader::GetCrossSections2D(uint32_t expressID) const
@@ -1526,6 +1530,10 @@ namespace webifc::geometry
   glm::dvec3 IfcGeometryLoader::GetCartesianPoint3D(const uint32_t expressID) const
   {
     spdlog::debug("[GetCartesianPoint3D({})]", expressID);
+    if (auto it = _cartesianPoint3DCache.find(expressID); it != _cartesianPoint3DCache.end())
+    {
+      return it->second;
+    }
     _loader.MoveToArgumentOffset(expressID, 0);
     _loader.GetTokenType();
     // because these calls cannot be reordered we have to use intermediate variables
@@ -1533,18 +1541,24 @@ namespace webifc::geometry
     double y = _loader.GetDoubleArgument();
     double z = _loader.GetOptionalDoubleParam(0);
     glm::dvec3 point(x, y, z);
+    _cartesianPoint3DCache.emplace(expressID, point);
     return point;
   }
 
   glm::dvec2 IfcGeometryLoader::GetCartesianPoint2D(const uint32_t expressID) const
   {
     spdlog::debug("[GetCartesianPoint2D({})]", expressID);
+    if (auto it = _cartesianPoint2DCache.find(expressID); it != _cartesianPoint2DCache.end())
+    {
+      return it->second;
+    }
     _loader.MoveToArgumentOffset(expressID, 0);
     _loader.GetTokenType();
     // because these calls cannot be reordered we have to use intermediate variables
     double x = _loader.GetDoubleArgument();
     double y = _loader.GetDoubleArgument();
     glm::dvec2 point(x, y);
+    _cartesianPoint2DCache.emplace(expressID, point);
     return point;
   }
 
