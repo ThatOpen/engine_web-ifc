@@ -137,7 +137,7 @@ namespace bimGeometry
 
                 for (size_t i = 0; i < numFaces; i++)
                 {
-                    planeData.push_back(-1);
+                    planeData.push_back(UINT32_MAX);
                 }
 
                 Vec centroid = Vec(0, 0, 0);

@@ -1227,7 +1227,7 @@ namespace bimGeometry
 		return geom;
 	}
 
-	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles)
+	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps, double eps=0.0)
 	{
 		Geometry geom;
 
@@ -1275,12 +1275,94 @@ namespace bimGeometry
 			{
 				for (size_t j = 0; j < indices.size() - 2; j += 4)
 				{
-					geom.AddFace(indices[j], indices[j + 1], indices[j + 2], -1);
-					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3], -1);
+					geom.AddFace(indices[j], indices[j + 1], indices[j + 2], UINT32_MAX);
+					geom.AddFace(indices[j + 2], indices[j + 1], indices[j + 3], UINT32_MAX);
 				}
 			}
 		}
 
+		if (buildCaps && profiles.size() >= 2)
+		{
+			// Process the first and last profiles for caps
+			for (size_t capIdx = 0; capIdx < profiles.size(); capIdx += profiles.size() - 1)
+			{
+				std::vector<glm::dvec3>& profile = profiles[capIdx];
+				if (profile.size() < 3) // Need at least 3 points for a polygon
+				{
+					continue;
+				}
+
+				// Convert profile to std::vector<Point> for bestProjection
+				std::vector<Point> poly3D;
+				for (const auto& p : profile)
+				{
+					poly3D.push_back({ p.x, p.y, p.z });
+				}
+
+				// Determine the best projection plane
+				Projection proj = bestProjection(poly3D);
+
+				// Convert profile to std::vector<std::vector<Point>> for projectTo2D
+				std::vector<std::vector<Point>> poly3DVec = { poly3D };
+
+				// Project to 2D
+				std::vector<std::vector<Point>> poly2D = projectTo2D(poly3DVec, proj);
+
+				// Convert to std::vector<std::vector<std::array<double, 2>>> for earcut
+				std::vector<std::vector<std::array<double, 2>>> polygon(1);
+				for (const auto& pt : poly2D[0])
+				{
+					polygon[0].push_back({ pt[0], pt[1] });
+				}
+
+				// Run earcut triangulation (assuming mapbox/earcut.hpp is included)
+				std::vector<uint32_t> capIndices = mapbox::earcut<uint32_t>(polygon);
+
+				// Compute average normal for the cap
+				glm::dvec3 avgNormal(0.0);
+				for (size_t i = 0; i < profile.size(); ++i)
+				{
+					glm::dvec3 p1 = profile[i];
+					glm::dvec3 p2 = profile[(i + 1) % profile.size()];
+					glm::dvec3 edge = p2 - p1;
+					glm::dvec3 crossVec = glm::cross(edge, glm::dvec3(0.0, 0.0, 1.0));
+					if (glm::length(crossVec) > eps)
+					{
+						avgNormal += glm::normalize(crossVec);
+					}
+				}
+				if (glm::length(avgNormal) < eps)
+				{
+					avgNormal = glm::dvec3(0.0, 0.0, 1.0);
+				}
+				else
+				{
+					avgNormal = glm::normalize(avgNormal);
+				}
+
+				// Add cap points to geometry with appropriate normal
+				uint32_t baseIndex = geom.numPoints;
+				for (const auto& p : profile)
+				{
+					// Use reversed normal for first cap (outward facing)
+					glm::dvec3 normal = (capIdx == 0) ? -avgNormal : avgNormal;
+					geom.AddPoint(p, normal);
+				}
+
+				// Add triangular faces for the cap
+				for (size_t i = 0; i < capIndices.size(); i += 3)
+				{
+					uint32_t i0 = baseIndex + capIndices[i];
+					uint32_t i1 = baseIndex + capIndices[i + 1];
+					uint32_t i2 = baseIndex + capIndices[i + 2];
+					// Reverse indices for first cap to ensure correct winding
+					if (capIdx == 0)
+						geom.AddFace(i0, i2, i1, UINT32_MAX);
+					else
+						geom.AddFace(i0, i1, i2, UINT32_MAX);
+				}
+			}
+		}
 		return geom;
 	}
 
