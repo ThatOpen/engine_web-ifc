@@ -1227,7 +1227,7 @@ namespace bimGeometry
 		return geom;
 	}
 
-	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps)
+	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps, double eps=0.0)
 	{
 		Geometry geom;
 
