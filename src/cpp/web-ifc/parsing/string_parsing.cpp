@@ -13,7 +13,6 @@
 
 namespace webifc::parsing {
 
-    bool foundRoman = false;
 
 	std::u16string utf16_from_utf8(const std::string& utf8) {
 		std::u16string utf16;
@@ -264,6 +263,7 @@ namespace webifc::parsing {
                 return error;
             }
         private:
+            bool foundRoman = false;
             std::string_view::iterator iter;
             std::string_view::iterator end;
             unsigned char codepage;
