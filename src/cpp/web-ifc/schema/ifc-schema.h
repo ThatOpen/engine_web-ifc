@@ -897,9 +897,13 @@ namespace webifc::schema {
 	static const unsigned int IFCCONTROLLER = 25142252;
 	static const unsigned int IFCALIGNMENTPARAMETERSEGMENT = 2879124712;
 	static const unsigned int IFCALIGNMENTVERTICALSEGMENT = 3633395639;
+	static const unsigned int IFCGEOGRAPHICCRS = 917726184;
+	static const unsigned int IFCMAPCONVERSIONSCALED = 4105526436;
 	static const unsigned int IFCQUANTITYNUMBER = 2691318326;
+	static const unsigned int IFCRIGIDOPERATION = 1794013214;
 	static const unsigned int IFCTEXTURECOORDINATEINDICES = 222769930;
 	static const unsigned int IFCTEXTURECOORDINATEINDICESWITHVOIDS = 1010789467;
+	static const unsigned int IFCWELLKNOWNTEXT = 1175146630;
 	static const unsigned int IFCALIGNMENTCANTSEGMENT = 3752311538;
 	static const unsigned int IFCALIGNMENTHORIZONTALSEGMENT = 536804194;
 	static const unsigned int IFCLINEARPLACEMENT = 388784114;
@@ -1142,6 +1146,8 @@ namespace webifc::schema {
 	static const unsigned int IFCTEMPERATURERATEOFCHANGEMEASURE = 1209108979;
 	static const unsigned int IFCTIME = 4075327185;
 	static const unsigned int IFCURIREFERENCE = 950732822;
+	static const unsigned int IFCSTRIPPEDOPTIONAL = 1805707277;
+	static const unsigned int IFCWELLKNOWNTEXTLITERAL = 2149462589;
 }
 enum IFC_SCHEMA {
 IFC2X3,

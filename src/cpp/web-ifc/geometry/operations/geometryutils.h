@@ -331,6 +331,7 @@ namespace webifc::geometry
 		}
 	}
 
+	using Point = std::array<double, 3>;
 	inline IfcGeometry SectionedSurface(IfcCrossSections profiles_, bool buildCaps)
 	{
 		spdlog::debug("[SectionedSurface({})]");
@@ -348,7 +349,159 @@ namespace webifc::geometry
 			profiles.push_back(profile);
 		}
 
-		IfcGeometry geom = ToIfcGeometry(bimGeometry::SectionedSurface(profiles, buildCaps));
+		IfcGeometry geom = ToIfcGeometry(bimGeometry::SectionedSurface(profiles,buildCaps,EPS_SMALL));
+
+		if (buildCaps && profiles.size() > 1)
+		{
+			bimGeometry::Geometry geom;
+			std::vector<bool> holesIndicesHash;
+
+			// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
+			glm::dvec3 lastToFirstPoint = profiles[0].front() - profiles[0].back();
+			if (glm::length(lastToFirstPoint) > 1e-8)
+			{
+				profiles[0].push_back(profiles[0].front());
+			}
+			
+			glm::dvec3 pointInSection0 = profiles[0][0];
+			glm::dvec3 pointInSection1 = profiles[1][0];
+			glm::dvec3 normal = pointInSection1 - pointInSection0;
+			double distance = normal.length();
+			normal = glm::normalize(normal);
+			glm::dvec3 dir = normal;
+			glm::dvec3 cuttingPlaneNormal = glm::dvec3(0);
+			glm::dvec3 cuttingPlanePos = glm::dvec3(0);
+
+			// build the caps
+			{
+				int polygonCount = profiles.size(); // Main profile + holes
+				std::vector<std::vector<Point>> polygon(polygonCount);
+							
+
+				for (size_t i = 0; i < profiles[0].size(); i++)
+				{
+					glm::dvec3 pt = profiles[0][i];
+					glm::dvec4 et = glm::dvec4(glm::dvec3(pt) + dir * distance, 1);
+
+					geom.AddPoint(et, normal);
+					polygon[0].push_back(Point{ pt.x, pt.y, pt.z });
+				}
+
+				for (size_t i = 0; i < profiles[0].size(); i++)
+				{
+					holesIndicesHash.push_back(false);
+				}
+
+				for (size_t i = 1; i < profiles.size(); i++)
+				{
+					std::vector<glm::dvec3> hole = profiles[i];
+					int pointCount = hole.size();
+
+					for (int j = 0; j < pointCount; j++)
+					{
+						holesIndicesHash.push_back(j == 0);
+
+						glm::dvec3 pt = hole[j];
+						glm::dvec4 et = glm::dvec4(pt + dir * distance, 1);
+
+						profiles[0].push_back(pt);
+						geom.AddPoint(et, normal);
+						polygon[i].push_back({ pt.x, pt.y, pt.z }); // Index 0 is main profile; see earcut reference
+					}
+				}
+
+				bimGeometry::Projection proj = bimGeometry::bestProjection(polygon[0]);
+				auto polygon2D = projectTo2D(polygon, proj);
+				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon2D);
+
+				uint32_t offset = 0;
+				bool winding = true;
+				bool flipWinding = false;
+
+				if (indices.size() >= 3)
+				{
+					bool winding = bimGeometry::GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
+					bool flipWinding = !winding;
+
+					for (size_t i = 0; i < indices.size(); i += 3)
+					{
+						if (flipWinding)
+						{
+							geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1], -1);
+						}
+						else
+						{
+							geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
+						}
+					}
+				}
+
+				offset += geom.numPoints;
+
+				normal = -dir;
+
+				for (size_t i = 0; i < profiles[0].size(); i++)
+				{
+					glm::dvec3 pt = profiles[0][i];
+					glm::dvec4 et = glm::dvec4(glm::dvec3(pt), 1);
+
+					if (cuttingPlaneNormal != glm::dvec3(0))
+					{
+						et = glm::dvec4(glm::dvec3(pt), 1);
+						glm::dvec3 transDir = glm::dvec4(dir, 0);
+
+						// project {et} onto the plane, following the extrusion normal
+						double ldotn = glm::dot(transDir, cuttingPlaneNormal);
+						if (ldotn == 0)
+						{
+						}
+						else
+						{
+							glm::dvec3 dpos = cuttingPlanePos - glm::dvec3(et);
+							double dist = glm::dot(dpos, cuttingPlaneNormal) / ldotn;
+							// we want to apply dist, even when negative
+							et = et + glm::dvec4(dist * transDir, 1);
+						}
+					}
+
+					geom.AddPoint(et, normal);
+				}
+
+				for (size_t i = 0; i < indices.size(); i += 3)
+				{
+					if (flipWinding)
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
+					}
+					else
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1], -1);
+					}
+				}
+			}
+
+			uint32_t capSize = profiles[0].size();
+			for (size_t i = 1; i < capSize; i++)
+			{
+				// https://github.com/tomvandig/web-ifc/issues/5
+				if (holesIndicesHash[i])
+				{
+					continue;
+				}
+
+				uint32_t bl = i - 1;
+				uint32_t br = i - 0;
+
+				uint32_t tl = capSize + i - 1;
+				uint32_t tr = capSize + i - 0;
+
+				// this winding should be correct
+				geom.AddFace(geom.GetPoint(tl), geom.GetPoint(br), geom.GetPoint(bl));
+				geom.AddFace(geom.GetPoint(tl), geom.GetPoint(tr), geom.GetPoint(br));
+			}
+
+		}
+
 		return geom;
 	}
 

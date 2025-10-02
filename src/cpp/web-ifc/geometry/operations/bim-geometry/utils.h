@@ -1227,7 +1227,7 @@ namespace bimGeometry
 		return geom;
 	}
 
-	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps)
+	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps, double eps=0.0)
 	{
 		Geometry geom;
 		double eps = 1e-6; // Small epsilon for numerical stability
@@ -1296,9 +1296,9 @@ namespace bimGeometry
 				{
 					// Form two triangles for each quad (p1[j], p2[j], p1[j+1], p2[j+1])
 					// Triangle 1: p1[j], p2[j], p1[j+1]
-					geom.AddFace(indices[j], indices[j + 1], indices[j + 2], UINT32_MAX);
+					geom.AddFace(indices[j], indices[j + 1], indices[j + 2], -1);
 					// Triangle 2: p2[j], p2[j+1], p1[j+1]
-					geom.AddFace(indices[j + 1], indices[j + 3], indices[j + 2], UINT32_MAX);
+					geom.AddFace(indices[j + 1], indices[j + 3], indices[j + 2], -1);
 				}
 			}
 		}

@@ -1143,9 +1143,13 @@ case schema::IFCALARM: return "IfcAlarm";
 case schema::IFCCONTROLLER: return "IfcController";
 case schema::IFCALIGNMENTPARAMETERSEGMENT: return "IfcAlignmentParameterSegment";
 case schema::IFCALIGNMENTVERTICALSEGMENT: return "IfcAlignmentVerticalSegment";
+case schema::IFCGEOGRAPHICCRS: return "IfcGeographicCRS";
+case schema::IFCMAPCONVERSIONSCALED: return "IfcMapConversionScaled";
 case schema::IFCQUANTITYNUMBER: return "IfcQuantityNumber";
+case schema::IFCRIGIDOPERATION: return "IfcRigidOperation";
 case schema::IFCTEXTURECOORDINATEINDICES: return "IfcTextureCoordinateIndices";
 case schema::IFCTEXTURECOORDINATEINDICESWITHVOIDS: return "IfcTextureCoordinateIndicesWithVoids";
+case schema::IFCWELLKNOWNTEXT: return "IfcWellKnownText";
 case schema::IFCALIGNMENTCANTSEGMENT: return "IfcAlignmentCantSegment";
 case schema::IFCALIGNMENTHORIZONTALSEGMENT: return "IfcAlignmentHorizontalSegment";
 case schema::IFCLINEARPLACEMENT: return "IfcLinearPlacement";
@@ -1388,6 +1392,8 @@ case schema::IFCSOUNDPRESSURELEVELMEASURE: return "IfcSoundPressureLevelMeasure"
 case schema::IFCTEMPERATURERATEOFCHANGEMEASURE: return "IfcTemperatureRateOfChangeMeasure";
 case schema::IFCTIME: return "IfcTime";
 case schema::IFCURIREFERENCE: return "IfcURIReference";
+case schema::IFCSTRIPPEDOPTIONAL: return "IfcStrippedOptional";
+case schema::IFCWELLKNOWNTEXTLITERAL: return "IfcWellKnownTextLiteral";
 default: return "<web-ifc-type-unknown>";
 }
 }
