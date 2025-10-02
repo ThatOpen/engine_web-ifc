@@ -350,7 +350,7 @@ namespace webifc::geometry
 			profiles.push_back(profile);
 		}
 
-		IfcGeometry geom = ToIfcGeometry(bimGeometry::SectionedSurface(profiles));
+		IfcGeometry geom = ToIfcGeometry(bimGeometry::SectionedSurface(profiles,buildCaps,EPS_SMALL));
 
 		if (buildCaps && profiles.size() > 1)
 		{
