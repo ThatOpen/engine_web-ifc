@@ -64,7 +64,7 @@ namespace webifc::geometry
 			{
 				if (i >= ifcGeom.planeData.size())
 				{
-					ifcGeom.planeData.push_back(-1);
+					ifcGeom.planeData.push_back(UINT32_MAX);
 				}
 			}
 		}
@@ -332,6 +332,7 @@ namespace webifc::geometry
 	}
 
 	using Point = std::array<double, 3>;
+
 	inline IfcGeometry SectionedSurface(IfcCrossSections profiles_, bool buildCaps)
 	{
 		spdlog::debug("[SectionedSurface({})]");
@@ -345,6 +346,7 @@ namespace webifc::geometry
 			{
 				profile.push_back({profiles_.curves[i].points[j].x, profiles_.curves[i].points[j].y, profiles_.curves[i].points[j].z});
 			}
+			
 			profiles.push_back(profile);
 		}
 
@@ -500,7 +502,6 @@ namespace webifc::geometry
 			}
 
 		}
-
 
 		return geom;
 	}

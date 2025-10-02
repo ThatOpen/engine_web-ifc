@@ -328,18 +328,8 @@ namespace webifc::geometry
             case schema::IFCSECTIONEDSOLID:
             case schema::IFCSECTIONEDSURFACE:
             {
-                bool scaled = false;
-                glm::dmat4 coordination = glm::dmat4(1);
-                IfcCrossSections crossSections = _geometryLoader.GetCrossSections3D(expressID, scaled, coordination);
+                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID),EPS_SMALL);
 
-                bool buildCaps = false;
-                if (lineType == schema::IFCSECTIONEDSOLIDHORIZONTAL || lineType == schema::IFCSECTIONEDSOLID)
-                {
-                    // add front and back caps to close the solid
-                    buildCaps = true;
-                }
-
-                auto geom = SectionedSurface(crossSections, buildCaps);
                 mesh.transformation = glm::dmat4(1);
                 
                 _expressIDToGeometry[expressID] = geom;
