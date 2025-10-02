@@ -8,8 +8,10 @@
 #include "boolean-utils/svg.h"
 #endif
 
+#include <array>
 #include <cstdint>
 #include <spdlog/spdlog.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include <mapbox/earcut.hpp>
@@ -329,6 +331,8 @@ namespace webifc::geometry
 		}
 	}
 
+	using Point = std::array<double, 3>;
+
 	inline IfcGeometry SectionedSurface(IfcCrossSections profiles_, bool buildCaps)
 	{
 		spdlog::debug("[SectionedSurface({})]");
@@ -346,7 +350,159 @@ namespace webifc::geometry
 			profiles.push_back(profile);
 		}
 
-		IfcGeometry geom = ToIfcGeometry(bimGeometry::SectionedSurface(profiles, buildCaps));
+		IfcGeometry geom = ToIfcGeometry(bimGeometry::SectionedSurface(profiles,buildCaps,EPS_SMALL));
+
+		if (buildCaps && profiles.size() > 1)
+		{
+			bimGeometry::Geometry geom;
+			std::vector<bool> holesIndicesHash;
+
+			// check if first point is equal to last point, otherwise the outer loop of the shape is not closed
+			glm::dvec3 lastToFirstPoint = profiles[0].front() - profiles[0].back();
+			if (glm::length(lastToFirstPoint) > 1e-8)
+			{
+				profiles[0].push_back(profiles[0].front());
+			}
+			
+			glm::dvec3 pointInSection0 = profiles[0][0];
+			glm::dvec3 pointInSection1 = profiles[1][0];
+			glm::dvec3 normal = pointInSection1 - pointInSection0;
+			double distance = normal.length();
+			normal = glm::normalize(normal);
+			glm::dvec3 dir = normal;
+			glm::dvec3 cuttingPlaneNormal = glm::dvec3(0);
+			glm::dvec3 cuttingPlanePos = glm::dvec3(0);
+
+			// build the caps
+			{
+				int polygonCount = profiles.size(); // Main profile + holes
+				std::vector<std::vector<Point>> polygon(polygonCount);
+							
+
+				for (size_t i = 0; i < profiles[0].size(); i++)
+				{
+					glm::dvec3 pt = profiles[0][i];
+					glm::dvec4 et = glm::dvec4(glm::dvec3(pt) + dir * distance, 1);
+
+					geom.AddPoint(et, normal);
+					polygon[0].push_back(Point{ pt.x, pt.y, pt.z });
+				}
+
+				for (size_t i = 0; i < profiles[0].size(); i++)
+				{
+					holesIndicesHash.push_back(false);
+				}
+
+				for (size_t i = 1; i < profiles.size(); i++)
+				{
+					std::vector<glm::dvec3> hole = profiles[i];
+					int pointCount = hole.size();
+
+					for (int j = 0; j < pointCount; j++)
+					{
+						holesIndicesHash.push_back(j == 0);
+
+						glm::dvec3 pt = hole[j];
+						glm::dvec4 et = glm::dvec4(pt + dir * distance, 1);
+
+						profiles[0].push_back(pt);
+						geom.AddPoint(et, normal);
+						polygon[i].push_back({ pt.x, pt.y, pt.z }); // Index 0 is main profile; see earcut reference
+					}
+				}
+
+				bimGeometry::Projection proj = bimGeometry::bestProjection(polygon[0]);
+				auto polygon2D = projectTo2D(polygon, proj);
+				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon2D);
+
+				uint32_t offset = 0;
+				bool winding = true;
+				bool flipWinding = false;
+
+				if (indices.size() >= 3)
+				{
+					bool winding = bimGeometry::GetWindingOfTriangle(geom.GetPoint(offset + indices[0]), geom.GetPoint(offset + indices[1]), geom.GetPoint(offset + indices[2]));
+					bool flipWinding = !winding;
+
+					for (size_t i = 0; i < indices.size(); i += 3)
+					{
+						if (flipWinding)
+						{
+							geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1], -1);
+						}
+						else
+						{
+							geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
+						}
+					}
+				}
+
+				offset += geom.numPoints;
+
+				normal = -dir;
+
+				for (size_t i = 0; i < profiles[0].size(); i++)
+				{
+					glm::dvec3 pt = profiles[0][i];
+					glm::dvec4 et = glm::dvec4(glm::dvec3(pt), 1);
+
+					if (cuttingPlaneNormal != glm::dvec3(0))
+					{
+						et = glm::dvec4(glm::dvec3(pt), 1);
+						glm::dvec3 transDir = glm::dvec4(dir, 0);
+
+						// project {et} onto the plane, following the extrusion normal
+						double ldotn = glm::dot(transDir, cuttingPlaneNormal);
+						if (ldotn == 0)
+						{
+						}
+						else
+						{
+							glm::dvec3 dpos = cuttingPlanePos - glm::dvec3(et);
+							double dist = glm::dot(dpos, cuttingPlaneNormal) / ldotn;
+							// we want to apply dist, even when negative
+							et = et + glm::dvec4(dist * transDir, 1);
+						}
+					}
+
+					geom.AddPoint(et, normal);
+				}
+
+				for (size_t i = 0; i < indices.size(); i += 3)
+				{
+					if (flipWinding)
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
+					}
+					else
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1], -1);
+					}
+				}
+			}
+
+			uint32_t capSize = profiles[0].size();
+			for (size_t i = 1; i < capSize; i++)
+			{
+				// https://github.com/tomvandig/web-ifc/issues/5
+				if (holesIndicesHash[i])
+				{
+					continue;
+				}
+
+				uint32_t bl = i - 1;
+				uint32_t br = i - 0;
+
+				uint32_t tl = capSize + i - 1;
+				uint32_t tr = capSize + i - 0;
+
+				// this winding should be correct
+				geom.AddFace(geom.GetPoint(tl), geom.GetPoint(br), geom.GetPoint(bl));
+				geom.AddFace(geom.GetPoint(tl), geom.GetPoint(tr), geom.GetPoint(br));
+			}
+
+		}
+
 		return geom;
 	}
 
@@ -383,6 +539,100 @@ namespace webifc::geometry
 		}
 
 		return ToIfcGeometry(bimGeometry::Extrude(profile_vector, dir, distance, cuttingPlaneNormal, cuttingPlanePos));
+	}
+
+	inline IfcGeometry SweepFixedReference(double linearScalingFactor, bool closed, const IfcProfile& profile, const IfcCurve& directrix, const glm::dvec3& fixedReference)
+	{
+		IfcGeometry geom;
+
+		// Normalize the fixed reference direction
+		glm::dvec3 refDir = glm::normalize(fixedReference);
+
+		// Create a transformation matrix to align the profile with the fixed reference
+		glm::dvec3 zAxis(0, 0, 1); // Default profile z-axis
+		glm::dvec3 rotationAxis = glm::cross(zAxis, refDir);
+		double angle = glm::acos(glm::dot(zAxis, refDir));
+		glm::dmat4 orientation = (glm::length(rotationAxis) > EPS_SMALL) ?
+			glm::rotate(glm::dmat4(1.0), angle, rotationAxis) : glm::dmat4(1.0);
+
+		// Sweep the profile along the directrix
+		std::vector<glm::dvec3> profilePoints = profile.curve.points;
+		std::vector<glm::dvec3> pathPoints = directrix.points;
+		uint32_t segments = closed ? pathPoints.size() : pathPoints.size() - 1;
+
+		// Store profiles for start and end caps
+		std::vector<glm::dvec3> startProfile;
+		std::vector<glm::dvec3> endProfile;
+
+		// Compute start profile (at first directrix point)
+		glm::dvec3 startPos = pathPoints[0];
+		for (const auto& pt : profilePoints) {
+			glm::dvec4 transformedPt = orientation * glm::dvec4(pt, 1.0);
+			startProfile.push_back(startPos + glm::dvec3(transformedPt));
+		}
+
+		for (uint32_t i = 0; i < segments; i++) {
+			glm::dvec3 pos = pathPoints[i];
+			glm::dvec3 nextPos = pathPoints[(i + 1) % pathPoints.size()];
+
+			// Transform profile points at the current position
+			std::vector<glm::dvec3> currentProfile;
+			for (const auto& pt : profilePoints) {
+				glm::dvec4 transformedPt = orientation * glm::dvec4(pt, 1.0);
+				currentProfile.push_back(pos + glm::dvec3(transformedPt));
+			}
+
+			// Transform profile points at the next position
+			std::vector<glm::dvec3> nextProfile;
+			if (!closed || i < segments - 1) {
+				for (const auto& pt : profilePoints) {
+					glm::dvec4 transformedPt = orientation * glm::dvec4(pt, 1.0);
+					nextProfile.push_back(nextPos + glm::dvec3(transformedPt));
+				}
+			}
+			else {
+				nextProfile = startProfile; // For closed curves, connect to the start
+			}
+
+			// Store end profile (at last directrix point)
+			if (i == segments - 1) {
+				endProfile = nextProfile;
+			}
+
+			// Add two triangles for each segment of the profile
+			for (size_t j = 0; j < profilePoints.size(); j++) {
+				size_t jNext = (j + 1) % profilePoints.size();
+
+				// First triangle: (current[j], next[j], next[jNext])
+				geom.AddFace(
+					currentProfile[j],
+					nextProfile[j],
+					nextProfile[jNext]
+				);
+
+				// Second triangle: (current[j], next[jNext], current[jNext])
+				geom.AddFace(
+					currentProfile[j],
+					nextProfile[jNext],
+					currentProfile[jNext]
+				);
+			}
+		}
+
+		// Handle caps for non-closed sweeps
+		if (!closed) {
+			// Add start cap
+			IfcProfile startCap = profile;
+			startCap.curve.points = startProfile;
+			geom.AddGeometry(Extrude(startCap, glm::dvec3(0, 0, -1), 0)); // Zero-depth extrusion for cap
+
+			// Add end cap
+			IfcProfile endCap = profile;
+			endCap.curve.points = endProfile;
+			geom.AddGeometry(Extrude(endCap, glm::dvec3(0, 0, 1), 0));
+		}
+
+		return geom;
 	}
 
 	// TODO: Send to bimGeometry

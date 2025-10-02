@@ -50,9 +50,9 @@ namespace webifc::geometry
   class IfcGeometryProcessor
   {
   public:
-    IfcGeometryProcessor(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD);
+    IfcGeometryProcessor(webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD);
     IfcGeometry &GetGeometry(uint32_t expressID);
-    IfcGeometryLoader GetLoader() const;
+    IfcGeometryLoader& GetLoader();
     IfcFlatMesh GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor = true);
     IfcComposedMesh GetMesh(uint32_t expressID);
     void SetTransformation(const std::array<double, 16> &val);
@@ -70,7 +70,7 @@ namespace webifc::geometry
     IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, std::string op, IfcGeometrySettings _settings);
     std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
     IfcSurface GetSurface(uint32_t expressID);
-    const IfcGeometryLoader _geometryLoader;
+    IfcGeometryLoader _geometryLoader;
     glm::dmat4 _transformation = glm::dmat4(1.0);
     const parsing::IfcLoader &_loader;
     booleanManager _boolEngine;
