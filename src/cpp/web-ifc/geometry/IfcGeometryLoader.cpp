@@ -1452,27 +1452,21 @@ namespace webifc::geometry
     }
     case schema::IFCEDGECURVE:
     {
-      ComputeCurveParams edgeParams;
-      edgeParams.hasTrim = true;
       _loader.MoveToArgumentOffset(expressID, 0);
       glm::dvec3 p1 = GetVertexPoint(_loader.GetRefArgument());
       _loader.MoveToArgumentOffset(expressID, 1);
       glm::dvec3 p2 = GetVertexPoint(_loader.GetRefArgument());
-      edgeParams.trimStart.pos3D = p1;
-      edgeParams.trimStart.trimType = TRIM_BY_POSITION;
-      edgeParams.trimEnd.pos3D = p2;
-      edgeParams.trimEnd.trimType = TRIM_BY_POSITION;
+      IfcTrimmingSelect trimStart;
+      IfcTrimmingSelect trimEnd;
+      trimStart.pos3D = p1;
+      trimStart.trimType = TRIM_BY_POSITION;
+      trimEnd.pos3D = p2;
+      trimEnd.trimType = TRIM_BY_POSITION;
 
       _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t CurveRef = _loader.GetRefArgument();
       IfcCurve curve;
-      
-      edgeParams.dimensions = 3;
-      edgeParams.edge = true;
-      edgeParams.sameSense = -1;
-      edgeParams.trimSense = TRIM_SENSE_SAME;
-      
-      ComputeCurve(CurveRef, curve, edgeParams);
+      ComputeCurve(CurveRef, curve, 3,false,true,-1,true,trimStart,trimEnd,TRIM_SENSE_SAME);
 
       return curve;
     }
@@ -1650,68 +1644,15 @@ namespace webifc::geometry
     return result;
   }
 
-
-  // Helper function to compute the total length of the curve
-  double IfcGeometryLoader::ComputeCurveLength(const IfcCurve& curve)const
-  {
-      double totalLength = 0.0;
-      if (curve.points.size() < 2)
-          return totalLength;
-
-      for (size_t i = 1; i < curve.points.size(); ++i)
-      {
-          const auto& p1 = curve.points[i - 1];
-          const auto& p2 = curve.points[i];
-          totalLength += glm::distance(p1, p2);
-      }
-      return totalLength;
-  }
-
-  // Helper function to compute the length along the curve up to a specific point
-  double IfcGeometryLoader::ComputeLengthToPoint(const IfcCurve& curve, const glm::dvec3& targetPoint)const
-  {
-      double length = 0.0;
-      if (curve.points.size() < 2)
-          return length;
-
-      for (size_t i = 1; i < curve.points.size(); ++i)
-      {
-          const auto& p1 = curve.points[i - 1];
-          const auto& p2 = curve.points[i];
-
-          // Check if targetPoint matches p1 or p2 (within a small tolerance)
-          if (glm::distance(targetPoint, p1) < 1e-6)
-              return length;
-          if (glm::distance(targetPoint, p2) < 1e-6)
-              return length + glm::distance(p1, p2);
-
-          length += glm::distance(p1, p2);
-      }
-      return length;
-  }
-
-  // Helper function to compute parameter for a point on the base curve
-  double IfcGeometryLoader::GetParameterForPoint(const IfcCurve& curve, double totalLength, const glm::dvec3& point) const
-  {
-      if (curve.points.empty())
-          return 0.0;
-            
-      double lengthToPoint = ComputeLengthToPoint(curve, point);
-      return (totalLength > 0.0) ? (lengthToPoint / totalLength) : 0.0;
-  }
-
   IfcCurve IfcGeometryLoader::GetCurve(uint32_t expressID, uint8_t dimensions, bool edge) const
   {
     spdlog::debug("[GetCurve({})]", expressID);
     IfcCurve curve;
-    ComputeCurveParams params;
-    params.dimensions = dimensions;
-    params.edge = edge;
-    ComputeCurve(expressID, curve, params);
+    ComputeCurve(expressID, curve, dimensions, false, edge);
     return curve;
   }
 
-  void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params) const
+  void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions, bool ignorePlacement, bool edge, int sameSense, bool hasTrim, const IfcTrimmingSelect &trimStart, const IfcTrimmingSelect &trimEnd, TrimSense trimSense) const
   {
     spdlog::debug("[ComputeCurve({})]", expressID);
     auto lineType = _loader.GetLineType(expressID);
@@ -1725,15 +1666,15 @@ namespace webifc::geometry
       for (auto &token : points)
       {
         uint32_t pointId = _loader.GetRefArgument(token);
-        if (params.dimensions == 2)
+        if (dimensions == 2)
           curve.Add(GetCartesianPoint2D(pointId));
         else
           curve.Add(GetCartesianPoint3D(pointId));
       }
 
-      if (params.edge)
+      if (edge)
       {
-        if (params.sameSense == 1 || params.sameSense == -1)
+        if (sameSense == 1 || sameSense == -1)
         {
           std::reverse(curve.points.begin(), curve.points.end());
         }
@@ -1760,7 +1701,7 @@ namespace webifc::geometry
       for (size_t ii = 0; ii < segments.size(); ++ii)
       {
           uint32_t segmentId = _loader.GetRefArgument(segments[ii]);
-          ComputeCurve(segmentId, curve, params);
+          ComputeCurve(segmentId, curve, dimensions, ignorePlacement, edge, sameSense, hasTrim, trimStart, trimEnd, trimSense);
           
         #ifdef DEBUG_DUMP_SVG
           dump::DumpCurveToHtml(curve.points, "dumpCurve.html");
@@ -1776,9 +1717,7 @@ namespace webifc::geometry
       auto sameSenseS = _loader.GetStringArgument();
       auto parentID = _loader.GetRefArgument();
 
-	  ComputeCurveParams segmentParams( params );
-      segmentParams.sameSense = sameSenseS == "T";
-      ComputeCurve(parentID, curve, segmentParams);
+      ComputeCurve(parentID, curve, dimensions, ignorePlacement, edge , sameSenseS == "T", hasTrim, trimStart, trimEnd, trimSense);
 
       break;
     }
@@ -1786,28 +1725,28 @@ namespace webifc::geometry
       // TODO: review and simplify
     case schema::IFCLINE:
     {
-      bool condition = params.sameSense == 1 || params.sameSense == -1;
-      if (params.edge)
+      bool condition = sameSense == 1 || sameSense == -1;
+      if (edge)
       {
         condition = !condition;
       }
-      if (params.dimensions == 2 && params.hasTrim)
+      if (dimensions == 2 && hasTrim)
       {
-        if (params.trimStart.trimType == TRIM_BY_POSITION && params.trimEnd.trimType == TRIM_BY_POSITION)
+        if (trimStart.trimType == TRIM_BY_POSITION && trimEnd.trimType == TRIM_BY_POSITION)
         {
 
           if (condition)
           {
-            curve.Add(params.trimStart.pos);
-            curve.Add(params.trimEnd.pos);
+            curve.Add(trimStart.pos);
+            curve.Add(trimEnd.pos);
           }
           else
           {
-            curve.Add(params.trimEnd.pos);
-            curve.Add(params.trimStart.pos);
+            curve.Add(trimEnd.pos);
+            curve.Add(trimStart.pos);
           }
         }
-        else if (params.trimStart.trimType == TRIM_BY_PARAMETER && params.trimEnd.trimType == TRIM_BY_PARAMETER)
+        else if (trimStart.trimType == TRIM_BY_PARAMETER && trimEnd.trimType == TRIM_BY_PARAMETER)
         {
           _loader.MoveToArgumentOffset(expressID, 0);
           auto positionID = _loader.GetRefArgument();
@@ -1816,7 +1755,7 @@ namespace webifc::geometry
           glm::dvec3 vector;
           vector = GetVector(vectorID);
 
-          if (params.ignorePlacement)
+          if (ignorePlacement)
           {
               vector = glm::dvec3(1, 0, 0);
               placement = glm::dvec3(0, 0, 0);
@@ -1824,15 +1763,15 @@ namespace webifc::geometry
 
           if (condition)
           {
-            glm::dvec3 p1 = placement + vector * params.trimStart.value;
-            glm::dvec3 p2 = placement + vector * params.trimEnd.value;
+            glm::dvec3 p1 = placement + vector * trimStart.value;
+            glm::dvec3 p2 = placement + vector * trimEnd.value;
             curve.Add(p1);
             curve.Add(p2);
           }
           else
           {
-            glm::dvec3 p2 = placement + vector * params.trimStart.value;
-            glm::dvec3 p1 = placement + vector * params.trimEnd.value;
+            glm::dvec3 p2 = placement + vector * trimStart.value;
+            glm::dvec3 p1 = placement + vector * trimEnd.value;
             curve.Add(p1);
             curve.Add(p2);
           }
@@ -1842,23 +1781,23 @@ namespace webifc::geometry
           spdlog::error("[ComputeCurve()] Unsupported trimmingselect 2D IFCLINE {}", expressID, lineType);
         }
       }
-      else if (params.dimensions == 3 && params.hasTrim)
+      else if (dimensions == 3 && hasTrim)
       {
-        if (params.trimStart.trimType == TRIM_BY_POSITION && params.trimEnd.trimType == TRIM_BY_POSITION)
+        if (trimStart.trimType == TRIM_BY_POSITION && trimEnd.trimType == TRIM_BY_POSITION)
         {
           if (condition)
           {
-            curve.Add(params.trimStart.pos3D);
-            curve.Add(params.trimEnd.pos3D);
+            curve.Add(trimStart.pos3D);
+            curve.Add(trimEnd.pos3D);
           }
           else
           {
-            curve.Add(params.trimEnd.pos3D);
-            curve.Add(params.trimStart.pos3D);
+            curve.Add(trimEnd.pos3D);
+            curve.Add(trimStart.pos3D);
           }
         }
-        else if ((params.trimStart.trimType == TRIM_BY_PARAMETER && params.trimEnd.trimType == TRIM_BY_PARAMETER)
-            || (params.trimStart.trimType == TRIM_BY_LENGTH && params.trimEnd.trimType == TRIM_BY_LENGTH))
+        else if ((trimStart.trimType == TRIM_BY_PARAMETER && trimEnd.trimType == TRIM_BY_PARAMETER)
+            || (trimStart.trimType == TRIM_BY_LENGTH && trimEnd.trimType == TRIM_BY_LENGTH))
         {
           _loader.MoveToArgumentOffset(expressID, 0);
           auto positionID = _loader.GetRefArgument();
@@ -1867,30 +1806,30 @@ namespace webifc::geometry
           glm::dvec3 vector;
           vector = GetVector(vectorID);
 
-          if (params.ignorePlacement)
+          if (ignorePlacement)
           {
               vector = glm::dvec3(1, 0, 0);
               placement = glm::dvec3(0, 0, 0);
           }
           if (condition)
           {
-            glm::dvec3 p1 = placement + vector * params.trimStart.value;
+            glm::dvec3 p1 = placement + vector * trimStart.value;
             curve.Add(p1);
 
-            if (params.trimStart.value != params.trimEnd.value)
+            if (trimStart.value != trimEnd.value)
             {
-                glm::dvec3 p2 = placement + vector * params.trimEnd.value;
+                glm::dvec3 p2 = placement + vector * trimEnd.value;
                 curve.Add(p2);
             }
           }
           else
           {
-              glm::dvec3 p1 = placement + vector * params.trimEnd.value;
+              glm::dvec3 p1 = placement + vector * trimEnd.value;
               curve.Add(p1);
 
-              if (params.trimStart.value != params.trimEnd.value)
+              if (trimStart.value != trimEnd.value)
               {
-                  glm::dvec3 p2 = placement + vector * params.trimStart.value;
+                  glm::dvec3 p2 = placement + vector * trimStart.value;
                   curve.Add(p2);
               }
           }
@@ -1914,16 +1853,13 @@ namespace webifc::geometry
       auto senseAgreementS = _loader.GetStringArgument();
       auto trimmingPreference = _loader.GetStringArgument();
 
-      auto trim1 = GetTrimSelect(params.dimensions, trim1Set);
-      auto trim2 = GetTrimSelect(params.dimensions, trim2Set);
+      auto trim1 = GetTrimSelect(dimensions, trim1Set);
+      auto trim2 = GetTrimSelect(dimensions, trim2Set);
 
-      ComputeCurveParams basisCurveParams(params);
-      basisCurveParams.hasTrim = true;
-      basisCurveParams.trimStart = trim1;
-      basisCurveParams.trimEnd = trim2;
+      hasTrim = true;
 
       TrimSense senseAgreement = senseAgreementS == "T" ? TRIM_SENSE_SAME : TRIM_SENSE_REVERSE;
-      if (params.trimSense == TRIM_SENSE_REVERSE)
+      if (trimSense == TRIM_SENSE_REVERSE)
       {
           if (senseAgreement == TRIM_SENSE_SAME)
           {
@@ -1935,8 +1871,8 @@ namespace webifc::geometry
           }
       }
 
-      basisCurveParams.trimSense = senseAgreement;
-      ComputeCurve(basisCurveID, curve, basisCurveParams);
+      trimSense = senseAgreement;
+      ComputeCurve(basisCurveID, curve, dimensions, ignorePlacement, edge, sameSense, hasTrim, trim1, trim2, trimSense);
 
       break;
     }
@@ -2079,18 +2015,18 @@ namespace webifc::geometry
         double startRad = 0.0;
         double endRad = 2.0 * CONST_PI;
         bool byPos = false;
-        TrimSense trimSense = params.trimSense;
-        if (params.hasTrim)
+        TrimSense trimSense = trimSense;
+        if (hasTrim)
         {
-            if (params.trimStart.trimType == TRIM_BY_PARAMETER && params.trimEnd.trimType == TRIM_BY_PARAMETER)
+            if (trimStart.trimType == TRIM_BY_PARAMETER && trimEnd.trimType == TRIM_BY_PARAMETER)
             {
-                startRad = params.trimStart.value * CONST_PI / 180.0;
-                endRad = params.trimEnd.value * CONST_PI / 180.0;
+                startRad = trimStart.value * CONST_PI / 180.0;
+                endRad = trimEnd.value * CONST_PI / 180.0;
             }
-            else if (params.trimStart.trimType == TRIM_BY_LENGTH && params.trimEnd.trimType == TRIM_BY_LENGTH)
+            else if (trimStart.trimType == TRIM_BY_LENGTH && trimEnd.trimType == TRIM_BY_LENGTH)
             {
-                double startLength = params.trimStart.value;
-                double endLength = params.trimEnd.value;
+                double startLength = trimStart.value;
+                double endLength = trimEnd.value;
                 if (radius1 > 0)
                 {
                     startRad = startLength / radius1;
@@ -2102,34 +2038,34 @@ namespace webifc::geometry
                     return;
                 }
             }
-            else if (params.trimStart.trimType == TRIM_BY_POSITION && params.trimEnd.trimType == TRIM_BY_POSITION)
+            else if (trimStart.trimType == TRIM_BY_POSITION && trimEnd.trimType == TRIM_BY_POSITION)
             {
                 byPos = true;
                 if (dimensions == 2)
                 {
                     glm::dmat3 placement = glm::dmat3(1);
-                    if (!params.ignorePlacement)
+                    if (!ignorePlacement)
                     {
                         placement = GetAxis2Placement2D(positionID);
                     }
-                    double xx = params.trimStart.pos.x - placement[2].x;  // not sure if rotation can be ignored here...
-                    double yy = params.trimStart.pos.y - placement[2].y;
+                    double xx = trimStart.pos.x - placement[2].x;  // not sure if rotation can be ignored here...
+                    double yy = trimStart.pos.y - placement[2].y;
                     startRad = VectorToAngle2D(xx, yy);
-                    xx = params.trimEnd.pos.x - placement[2].x;
-                    yy = params.trimEnd.pos.y - placement[2].y;
+                    xx = trimEnd.pos.x - placement[2].x;
+                    yy = trimEnd.pos.y - placement[2].y;
                     endRad = VectorToAngle2D(xx, yy);
                 }
                 else if (dimensions == 3)
                 {
                     glm::dmat4 placement = glm::dmat4(1);
-                    if (!params.ignorePlacement)
+                    if (!ignorePlacement)
                     {
                         placement = GetLocalPlacement(positionID);
                     }
                     glm::dvec4 vecX = placement[0];
                     glm::dvec4 vecY = placement[1];
-                    glm::dvec3 v1 = glm::dvec3(params.trimStart.pos3D.x - placement[3].x, params.trimStart.pos3D.y - placement[3].y, params.trimStart.pos3D.z - placement[3].z);
-                    glm::dvec3 v2 = glm::dvec3(params.trimEnd.pos3D.x - placement[3].x, params.trimEnd.pos3D.y - placement[3].y, params.trimEnd.pos3D.z - placement[3].z);
+                    glm::dvec3 v1 = glm::dvec3(trimStart.pos3D.x - placement[3].x, trimStart.pos3D.y - placement[3].y, trimStart.pos3D.z - placement[3].z);
+                    glm::dvec3 v2 = glm::dvec3(trimEnd.pos3D.x - placement[3].x, trimEnd.pos3D.y - placement[3].y, trimEnd.pos3D.z - placement[3].z);
                     double dxS = vecX.x * v1.x + vecX.y * v1.y + vecX.z * v1.z;
                     double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
                     double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
@@ -2155,7 +2091,7 @@ namespace webifc::geometry
 
         // Handle trim sense
         double openingAngleRad = endRad - startRad;
-        if (params.trimStart.trimType != TRIM_BY_LENGTH)
+        if (trimStart.trimType != TRIM_BY_LENGTH)
         {
             // flipping to the other part of the circle does only apply to parameter and cartesian trimming
             if (trimSense == TRIM_SENSE_SAME)
@@ -2188,7 +2124,7 @@ namespace webifc::geometry
         size_t startIndex = curve.points.size();
         glm::dmat4 position3D(1);
         glm::dmat3 position2D(1);
-        if (!params.ignorePlacement)
+        if (!ignorePlacement)
         {
             if (dimensions == 3)
             {
@@ -2298,7 +2234,7 @@ namespace webifc::geometry
             curve.endTangent = glm::normalize(glm::dvec3(world));
         }
         double tangentSign = (deltaAngle >= 0) ? 1.0 : -1.0;
-        if (params.sameSense == TRIM_SENSE_REVERSE)
+        if (sameSense == TRIM_SENSE_REVERSE)
         {
             tangentSign *= -1.0;
         }
@@ -2307,7 +2243,7 @@ namespace webifc::geometry
         
         curve.segmentStartTangents.push_back(startTangent);
 
-        if (params.sameSense == TRIM_SENSE_REVERSE)
+        if (sameSense == TRIM_SENSE_REVERSE)
         {
             // reverse current segment
             std::reverse(points.begin(), points.end());
@@ -2318,7 +2254,7 @@ namespace webifc::geometry
         }
 
         curve.arcSegments.push_back(curve.points.size() - 1);
-        if (!params.hasTrim)
+        if (!hasTrim)
         {
             curve.Add(curve.points[startIndex]);
         }
@@ -2347,7 +2283,7 @@ namespace webifc::geometry
         for (size_t ii = 0; ii < segmentTokens.size(); ++ii)
         {
             uint32_t segmentId = _loader.GetRefArgument(segmentTokens[ii]);
-            ComputeCurve(segmentId, gradientCurve, params);// dimensions, edge, sameSense, trimSense);
+            ComputeCurve(segmentId, gradientCurve, dimensions, edge, sameSense, trimSense);
         }
 #ifdef DEBUG_DUMP_SVG
         dump::DumpCurveToHtml(gradientCurve.points, "GradientCurve.html");
@@ -2494,28 +2430,21 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(expressID, 6);
       uint32_t ParentCurveID = _loader.GetRefArgument();
       
-      ComputeCurveParams segmentParams;
-      segmentParams.trimStart = startTrim;
-      segmentParams.trimEnd = endTrim;
-      segmentParams.hasTrim = true;
+    
+      hasTrim = true;
       size_t curvePointsOffset = curve.points.size();
       glm::dvec3 previousEndTangent = curve.endTangent;
       
-      segmentParams.ignorePlacement = true;
-      segmentParams.dimensions = 3;
-      segmentParams.edge = false;
-      segmentParams.sameSense = -1;
-      segmentParams.trimSense = trimSense;
+      ignorePlacement = true;
+      dimensions = 3;
+      edge = false;
+      sameSense = -1;
+      trimSense = trimSense;
 
-      if (expressID == 192475)
-      {
-          int wait = 0;
-}
-
-      ComputeCurve(ParentCurveID, curve, segmentParams);
+      ComputeCurve(ParentCurveID, curve, dimensions, ignorePlacement, edge, sameSense, hasTrim, startTrim, endTrim, trimSense);
       
       bool applyOwnPlacement = true;
-      if (params.ignorePlacement) {
+      if (ignorePlacement) {
           applyOwnPlacement = false;
       }
 
@@ -2642,8 +2571,8 @@ namespace webifc::geometry
     }
     case schema::IFCBSPLINECURVE:
     {
-      bool condition = params.sameSense == 0;
-      if (params.edge)
+      bool condition = sameSense == 0;
+      if (edge)
       {
         condition = !condition;
       }
@@ -2677,7 +2606,7 @@ namespace webifc::geometry
         weights.push_back(1);
       }
 
-      if (params.dimensions == 2)
+      if (dimensions == 2)
       {
         std::vector<glm::dvec2> ctrolPts;
         for (auto &token : points)
@@ -2690,7 +2619,7 @@ namespace webifc::geometry
         for (size_t i = 0; i < tempPoints.size(); i++)
           curve.Add(tempPoints[i]);
       }
-      else if (params.dimensions == 3)
+      else if (dimensions == 3)
       {
         std::vector<glm::dvec3> ctrolPts;
         for (auto &token : points)
@@ -2714,8 +2643,8 @@ namespace webifc::geometry
     }
     case schema::IFCBSPLINECURVEWITHKNOTS:
     {
-      bool condition = params.sameSense == 0;
-      if (params.edge)
+      bool condition = sameSense == 0;
+      if (edge)
       {
         condition = !condition;
       }
@@ -2770,7 +2699,7 @@ namespace webifc::geometry
         weights.push_back(1);
       }
 
-      if (params.dimensions == 2)
+      if (dimensions == 2)
       {
         std::vector<glm::dvec2> ctrolPts;
         for (auto &token : points)
@@ -2782,7 +2711,7 @@ namespace webifc::geometry
         for (size_t i = 0; i < tempPoints.size(); i++)
           curve.Add(tempPoints[i]);
       }
-      else if (params.dimensions == 3)
+      else if (dimensions == 3)
       {
         std::vector<glm::dvec3> ctrolPts;
         for (auto &token : points)
@@ -2806,8 +2735,8 @@ namespace webifc::geometry
     case schema::IFCRATIONALBSPLINECURVEWITHKNOTS:
     {
 
-      bool condition = params.sameSense == 0;
-      if (params.edge)
+      bool condition = sameSense == 0;
+      if (edge)
       {
         condition = !condition;
       }
@@ -2856,7 +2785,7 @@ namespace webifc::geometry
         std::cout << "Error: Knots and control points do not match" << std::endl;
       }
 
-      if (params.dimensions == 2)
+      if (dimensions == 2)
       {
         std::vector<glm::dvec2> ctrolPts;
         for (auto &token : points)
@@ -2869,7 +2798,7 @@ namespace webifc::geometry
         for (size_t i = 0; i < tempPoints.size(); i++)
           curve.Add(tempPoints[i]);
       }
-      else if (params.dimensions == 3)
+      else if (dimensions == 3)
       {
         std::vector<glm::dvec3> ctrolPts;
         for (auto &token : points)
@@ -2906,26 +2835,26 @@ namespace webifc::geometry
         }
 
         glm::dmat3 placement = glm::dmat3(1);
-        if (!params.ignorePlacement)
+        if (!ignorePlacement)
         {
             placement = GetAxis2Placement2D(positionID);
         }
         double s1 = 0, s2 = 0; // default
         bool sense = true; // default
-        TrimSense trimSense = params.trimSense;
-        if (params.hasTrim && params.trimStart.trimType == TRIM_BY_PARAMETER && params.trimEnd.trimType == TRIM_BY_PARAMETER)
+        TrimSense trimSense = trimSense;
+        if (hasTrim && trimStart.trimType == TRIM_BY_PARAMETER && trimEnd.trimType == TRIM_BY_PARAMETER)
         {
-            s1 = params.trimStart.value;
-            s2 = params.trimEnd.value;
+            s1 = trimStart.value;
+            s2 = trimEnd.value;
             if (trimSense == TRIM_SENSE_REVERSE) { // reverse
                 std::swap(s1, s2);
                 sense = false;
             }
         }
-        else if (params.hasTrim && params.trimStart.trimType == TRIM_BY_LENGTH && params.trimEnd.trimType == TRIM_BY_LENGTH)
+        else if (hasTrim && trimStart.trimType == TRIM_BY_LENGTH && trimEnd.trimType == TRIM_BY_LENGTH)
         {
-            s1 = params.trimStart.value;
-            s2 = params.trimEnd.value;
+            s1 = trimStart.value;
+            s2 = trimEnd.value;
             if (trimSense == TRIM_SENSE_REVERSE) { // reverse
                 std::swap(s1, s2);
                 sense = false;
