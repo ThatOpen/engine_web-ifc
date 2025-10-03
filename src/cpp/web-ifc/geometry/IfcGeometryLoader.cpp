@@ -2283,7 +2283,7 @@ namespace webifc::geometry
         for (size_t ii = 0; ii < segmentTokens.size(); ++ii)
         {
             uint32_t segmentId = _loader.GetRefArgument(segmentTokens[ii]);
-            ComputeCurve(segmentId, gradientCurve, dimensions, edge, sameSense, trimSense);
+            ComputeCurve(segmentId, gradientCurve, dimensions,ignorePlacement, edge, sameSense, hasTrim,trimStart,trimEnd,trimSense);
         }
 #ifdef DEBUG_DUMP_SVG
         dump::DumpCurveToHtml(gradientCurve.points, "GradientCurve.html");
@@ -2430,18 +2430,12 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(expressID, 6);
       uint32_t ParentCurveID = _loader.GetRefArgument();
       
-    
-      hasTrim = true;
+
       size_t curvePointsOffset = curve.points.size();
       glm::dvec3 previousEndTangent = curve.endTangent;
       
-      ignorePlacement = true;
-      dimensions = 3;
-      edge = false;
-      sameSense = -1;
-      trimSense = trimSense;
 
-      ComputeCurve(ParentCurveID, curve, dimensions, ignorePlacement, edge, sameSense, hasTrim, startTrim, endTrim, trimSense);
+      ComputeCurve(ParentCurveID, curve, 3, true, false, -1, true, startTrim, endTrim, trimSense);
       
       bool applyOwnPlacement = true;
       if (ignorePlacement) {
