@@ -39,14 +39,6 @@ namespace webifc::geometry
     IfcCurve GetLocalCurve(uint32_t expressID) const;
     IfcCurve GetCurve(uint32_t expressID, uint8_t dimensions, bool edge = false) const;
 
-    // Helper function to compute the total length of the curve
-    double ComputeCurveLength(const IfcCurve& curve) const;
-
-    // Helper function to compute the length along the curve up to a specific point
-    double ComputeLengthToPoint(const IfcCurve& curve, const glm::dvec3& targetPoint) const;
-
-    // Helper function to compute parameter for a point on the base curve
-    double GetParameterForPoint(const IfcCurve& curve, double totalLength, const glm::dvec3& point) const;
 
     bool ReadIfcCartesianPointList(const uint32_t expressID) const;
     std::vector<glm::dvec3> ReadIfcCartesianPointList3D(const uint32_t expressID) const;
@@ -76,29 +68,7 @@ namespace webifc::geometry
     IfcProfile GetProfileByLine(uint32_t expressID) const;
     glm::dvec3 GetVertexPoint(uint32_t expressID) const;
     IfcTrimmingSelect GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const;
-
-    struct ComputeCurveParams {
-		ComputeCurveParams() = default;
-        ComputeCurveParams(const ComputeCurveParams& other) {
-			dimensions = other.dimensions;
-			ignorePlacement = other.ignorePlacement;
-			edge = other.edge;
-			sameSense = other.sameSense;
-			hasTrim = other.hasTrim;
-            trimStart = other.trimStart;
-            trimEnd = other.trimEnd;
-            trimSense = other.trimSense;
-        }
-        uint8_t dimensions = 2;
-        bool ignorePlacement = false;
-        bool edge = false;
-        int sameSense = -1;
-       	bool hasTrim = false;
-       	IfcTrimmingSelect trimStart;
-       	IfcTrimmingSelect trimEnd;
-        TrimSense trimSense = TRIM_SENSE_SAME;
-    };
-    void ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params) const;
+    void ComputeCurve(uint32_t expressID, IfcCurve &curve, uint8_t dimensions = 2, bool ignorePlacement = false, bool edge = false, int sameSense = -1, bool hasTrim = false, const IfcTrimmingSelect &trimStart = IfcTrimmingSelect(), const IfcTrimmingSelect &trimEnd = IfcTrimmingSelect(), TrimSense trimSense = TRIM_SENSE_SAME) const;
     void convertAngleUnits(double &Degrees, double &Rad) const;
     double ReadLenghtMeasure() const;
     void ReadCurveMeasureSelect(IfcTrimmingSelect& trim) const;

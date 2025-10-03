@@ -29,6 +29,15 @@ namespace webifc::geometry {
 		/// \brief Get a transformation matrix at a specified distance along the curve. Z axis is aligned with the curve tangent, or with global z axis, depending on mode
 		glm::dmat4 getPlacementAtDistance(double distance, CurvePlacementMode mode);
 
+		 // Helper function to compute the total length of the curve
+    	double ComputeCurveLength() const;
+
+    	// Helper function to compute the length along the curve up to a specific point
+    	double ComputeLengthToPoint(const glm::dvec3& targetPoint) const;
+
+    	// Helper function to compute parameter for a point on the base curve
+    	double GetParameterForPoint(double totalLength, const glm::dvec3& point) const;
+	
 	protected:
 		static constexpr double EPS_TINY = 1e-9;
 	};

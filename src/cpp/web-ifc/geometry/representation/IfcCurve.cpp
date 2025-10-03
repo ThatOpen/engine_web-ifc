@@ -142,4 +142,53 @@ namespace webifc::geometry
             glm::dvec4(vz, 0),
             glm::dvec4(pos, 1));
     }
+
+     // Helper function to compute the total length of the curve
+  double IfcCurve::ComputeCurveLength() const
+  {
+      double totalLength = 0.0;
+      if (points.size() < 2)
+          return totalLength;
+
+      for (size_t i = 1; i < points.size(); ++i)
+      {
+          const auto& p1 = points[i - 1];
+          const auto& p2 = points[i];
+          totalLength += glm::distance(p1, p2);
+      }
+      return totalLength;
+  }
+
+  // Helper function to compute the length along the curve up to a specific point
+  double IfcCurve::ComputeLengthToPoint(const glm::dvec3& targetPoint) const
+  {
+      double length = 0.0;
+      if (points.size() < 2)
+          return length;
+
+      for (size_t i = 1; i < points.size(); ++i)
+      {
+          const auto& p1 = points[i - 1];
+          const auto& p2 = points[i];
+
+          // Check if targetPoint matches p1 or p2 (within a small tolerance)
+          if (glm::distance(targetPoint, p1) < 1e-6)
+              return length;
+          if (glm::distance(targetPoint, p2) < 1e-6)
+              return length + glm::distance(p1, p2);
+
+          length += glm::distance(p1, p2);
+      }
+      return length;
+  }
+
+  // Helper function to compute parameter for a point on the base curve
+  double IfcCurve::GetParameterForPoint( double totalLength, const glm::dvec3& point) const
+  {
+      if (points.empty())
+          return 0.0;
+            
+      double lengthToPoint = ComputeLengthToPoint(point);
+      return (totalLength > 0.0) ? (lengthToPoint / totalLength) : 0.0;
+  }
 }
