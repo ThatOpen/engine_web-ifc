@@ -1856,8 +1856,6 @@ namespace webifc::geometry
       auto trim1 = GetTrimSelect(dimensions, trim1Set);
       auto trim2 = GetTrimSelect(dimensions, trim2Set);
 
-      hasTrim = true;
-
       TrimSense senseAgreement = senseAgreementS == "T" ? TRIM_SENSE_SAME : TRIM_SENSE_REVERSE;
       if (trimSense == TRIM_SENSE_REVERSE)
       {
@@ -1871,8 +1869,7 @@ namespace webifc::geometry
           }
       }
 
-      trimSense = senseAgreement;
-      ComputeCurve(basisCurveID, curve, dimensions, ignorePlacement, edge, sameSense, hasTrim, trim1, trim2, trimSense);
+      ComputeCurve(basisCurveID, curve, dimensions, ignorePlacement, edge, sameSense, false, trim1, trim2, senseAgreement);
 
       break;
     }
