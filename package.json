@@ -74,7 +74,7 @@
     "jest": "^30.0.3",
     "local-web-server": "^5.2.1",
     "make-dir-cli": "^4.0.0",
-    "monaco-editor": "^0.53.0",
+    "monaco-editor": "^0.54.0",
     "rimraf": "^6.0.0",
     "three": "^0.179.1",
     "ts-jest": "^29.3.2",
