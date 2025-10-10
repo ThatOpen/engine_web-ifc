@@ -6,6 +6,7 @@
 
 #if defined(DEBUG_DUMP_SVG) || defined(DUMP_CSG_MESHES)
 #include "../../test/io_helpers.h"
+#include "../../test/dumpToThree.h"
 #endif
 
 #include "IfcGeometryProcessor.h"
@@ -437,6 +438,38 @@ namespace webifc::geometry
 
                 IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, std::string(op), _settings);
 
+                bool meshValid = isValidAndClosed(resultMesh);
+                if (!meshValid)
+                {
+                    bool inputMeshesValid = true;
+                    for (auto mesh : flatFirstMeshes)
+                    {
+                        bool meshValid = isValidAndClosed(mesh);
+                        if (!meshValid)
+                        {
+                            inputMeshesValid = false;
+                        }
+                    }
+                    
+#if defined(DEBUG_DUMP_SVG) || defined(DUMP_CSG_MESHES)
+                    dump::DumpIfcGeometryThree(flatFirstMeshes, "flatFirstMeshes.html");
+                    dump::DumpIfcGeometryThree(flatSecondMeshes, "flatSecondMeshes.html"); 
+                    dump::DumpIfcGeometryThree({ resultMesh }, "resultMeshInvalid.html");
+#endif
+                    if (inputMeshesValid)
+                    {
+                        if (op == "DIFFERENCE")
+                        {
+                            // input was valid, output not valid. keep operand 1 as result
+                            resultMesh = IfcGeometry();
+                            for (auto mesh : flatFirstMeshes)
+                            {
+                                resultMesh.AddGeometry(mesh);
+                            }
+                        }
+                    }
+                }
+
                 _expressIDToGeometry[expressID] = resultMesh;
                 mesh.hasGeometry = true;
                 mesh.transformation = glm::translate(origin);
@@ -552,7 +585,7 @@ namespace webifc::geometry
                 }
 
 #ifdef DUMP_CSG_MESHES
-                DumpIfcGeometry(geom, "pbhs.obj");
+                io::DumpIfcGeometry(geom, "pbhs.obj");
 #endif
 
                 // TODO: this is getting problematic.....

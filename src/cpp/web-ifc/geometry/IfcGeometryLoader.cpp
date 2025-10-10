@@ -2201,7 +2201,8 @@ namespace webifc::geometry
             }
         }
         curve.arcSegments.push_back(curve.points.size());
-        const int numPointsCurrentArc = _circleSegments;
+        int numPointsCurrentArc = _circleSegments* openingAngleRad / (2.0*CONST_PI);
+        numPointsCurrentArc = std::max(numPointsCurrentArc, 4);
         double deltaAngle = openingAngleRad / (numPointsCurrentArc - 1);
         double angle = startRad;
         std::vector<glm::dvec3> points;
@@ -2325,8 +2326,6 @@ namespace webifc::geometry
         }
         break;
     }
-
-    
     case schema::IFCGRADIENTCURVE:
     {
         // IfcGradientCurve -----------------------------------------------------------

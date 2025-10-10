@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/norm.hpp>
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include <mapbox/earcut.hpp>
@@ -876,6 +877,148 @@ namespace webifc::geometry
 				return false;
 			}
 		}
+		return true;
+	}
+
+	// Custom hash function for Coord (std::tuple<double, double, double>)
+		struct CoordHash {
+		std::size_t operator()(const std::tuple<double, double, double>& coord) const {
+			// Combine hashes of x, y, z using a robust method
+			std::size_t h1 = std::hash<double>{}(std::get<0>(coord));
+			std::size_t h2 = std::hash<double>{}(std::get<1>(coord));
+			std::size_t h3 = std::hash<double>{}(std::get<2>(coord));
+			// Boost-like hash combine
+			return h1 ^ (h2 << 1) ^ (h3 << 2);
+		}
+	};
+
+	// Custom equality comparison for Coord with epsilon tolerance
+	struct CoordEqual {
+		double eps;
+		explicit CoordEqual(double eps) : eps(eps) {}
+		bool operator()(const std::tuple<double, double, double>& a, const std::tuple<double, double, double>& b) const {
+			return std::abs(std::get<0>(a) - std::get<0>(b)) < eps &&
+				std::abs(std::get<1>(a) - std::get<1>(b)) < eps &&
+				std::abs(std::get<2>(a) - std::get<2>(b)) < eps;
+		}
+	};
+
+	static bool isValidAndClosed(IfcGeometry& geom, double eps = 1e-8) {
+		// Check basic validity
+		if (geom.numPoints == 0 || geom.numFaces == 0 || geom.indexData.size() < geom.numFaces * 3 || geom.vertexData.size() < geom.numPoints * 6) {
+			return false; // No points, faces, or insufficient data
+		}
+
+		// Validate vertex indices
+		for (uint32_t i = 0; i < geom.numFaces * 3; ++i) {
+			if (geom.indexData[i] >= geom.numPoints) {
+				return false; // Invalid vertex index
+			}
+		}
+
+		// Validate and verify plane data if present (improved for plane-based CSG robustness)
+		bool usesPlanes = geom.hasPlanes;
+		if (usesPlanes) {
+			if (geom.planeData.size() < geom.numFaces || geom.planes.empty()) {
+				return false; // Inconsistent plane data
+			}
+			for (uint32_t i = 0; i < geom.numFaces; ++i) {
+				uint32_t pId = geom.planeData[i];
+				if (pId >= geom.planes.size()) {
+					return false; // Invalid plane index
+				}
+
+				// Verify face points lie on the assigned plane
+				bimGeometry::Face f = geom.GetFace(i);
+				glm::dvec3 p0 = geom.GetPoint(f.i0);
+				glm::dvec3 p1 = geom.GetPoint(f.i1);
+				glm::dvec3 p2 = geom.GetPoint(f.i2);
+
+				bimGeometry::Plane assignedPlane = geom.planes[pId]; // Assumes Plane has normal (glm::dvec3) and d (double)
+				auto distanceToPlane = [&](const glm::dvec3& pt) -> double {
+					return glm::dot(assignedPlane.normal, pt) + assignedPlane.distance;
+					};
+
+				if (std::abs(distanceToPlane(p0)) >= eps ||
+					std::abs(distanceToPlane(p1)) >= eps ||
+					std::abs(distanceToPlane(p2)) >= eps) {
+					return false; // Points do not lie on the assigned plane
+				}
+
+				// Verify computed normal and d match assigned plane (for consistency)
+				glm::dvec3 computedNormal = glm::normalize(glm::cross(p1 - p0, p2 - p0));
+				double computedD = -glm::dot(computedNormal, p0);
+				if (glm::length(computedNormal - assignedPlane.normal) >= eps ||
+					std::abs(computedD - assignedPlane.distance) >= eps) {
+					return false; // Assigned plane does not match computed face plane
+				}
+			}
+		}
+
+		// Map vertices to unique coordinates (ignoring normals)
+		using Coord = std::tuple<double, double, double>;
+		std::unordered_map<Coord, uint32_t, CoordHash, CoordEqual> coordToIndex(0, CoordHash{}, CoordEqual{ eps });
+		std::vector<uint32_t> indexMap(geom.numPoints);
+		uint32_t uniqueIndex = 0;
+
+		// Extract coordinates and map to unique indices
+		for (uint32_t i = 0; i < geom.numPoints; ++i) {
+			glm::dvec3 p = geom.GetPoint(i); // Extracts x, y, z
+			// Snap coordinates to handle floating-point precision
+			double scale = 1.0 / eps;
+			Coord coord{
+				std::round(p.x * scale) / scale,
+				std::round(p.y * scale) / scale,
+				std::round(p.z * scale) / scale
+			};
+			if (coordToIndex.find(coord) == coordToIndex.end()) {
+				coordToIndex[coord] = uniqueIndex;
+				indexMap[i] = uniqueIndex++;
+			}
+			else {
+				indexMap[i] = coordToIndex[coord];
+			}
+		}
+
+		// Check closedness (manifold mesh: each edge shared by exactly two faces)
+		using Edge = std::pair<uint32_t, uint32_t>;
+		std::map<Edge, int> edgeCount;
+		for (uint32_t i = 0; i < geom.numFaces; ++i) {
+			bimGeometry::Face f = geom.GetFace(i);
+			uint32_t a = indexMap[f.i0], b = indexMap[f.i1], c = indexMap[f.i2];
+			// Use undirected edges
+			edgeCount[{std::min(a, b), std::max(a, b)}]++;
+			edgeCount[{std::min(b, c), std::max(b, c)}]++;
+			edgeCount[{std::min(c, a), std::max(c, a)}]++;
+		}
+
+		// Check if every edge is shared by exactly two faces
+		bool isClosed = true;
+		for (const auto& e : edgeCount) {
+			if (e.second != 2) {
+				isClosed = false;
+				break;
+			}
+		}
+
+		// Relax closedness if using planes (for CSG robustness with open meshes) or halfSpace
+		if (usesPlanes || geom.halfSpace) {
+			isClosed = true; // Assume valid for plane-based CSG even if open
+		}
+
+		// Recursively check sub-geometries in part
+		for (auto& subGeom : geom.part) {
+			if (!isValidAndClosed(subGeom, eps)) {
+				return false; // A sub-geometry is invalid
+			}
+		}
+
+		// If no parts and not halfSpace/planes, return whether the main geometry is closed
+		if (geom.part.empty() && !geom.halfSpace && !usesPlanes) {
+			return isClosed;
+		}
+
+		// For geometries with parts, assume valid if all parts are valid
 		return true;
 	}
 }
