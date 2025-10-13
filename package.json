@@ -67,7 +67,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/three": "^0.178.0",
+    "@types/three": "^0.180.0",
     "adm-zip": "^0.5.10",
     "cpy-cli": "^5.0.0",
     "esbuild": "^0.25.0",
@@ -76,7 +76,7 @@
     "make-dir-cli": "^4.0.0",
     "monaco-editor": "^0.54.0",
     "rimraf": "^6.0.0",
-    "three": "^0.179.1",
+    "three": "^0.180.0",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
