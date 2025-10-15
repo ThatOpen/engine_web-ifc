@@ -239,6 +239,10 @@ namespace webifc::geometry
                                 std::vector<IfcGeometry> geomVector = {geom}; // Wrap 'geom' in a vector
                                 fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION", _settings);
                             }
+                            if (fusedVoids.numFaces > _settings._CSG_MAX_NUM_FACES) {
+                                spdlog::warn("Number of faces in voids for element {} is very high ({}), skipping further CSG operations", expressID, fusedVoids.numFaces);
+                                break;
+                            }
                         }
 
 #ifdef CSG_DEBUG_OUTPUT
