@@ -2202,9 +2202,7 @@ namespace webifc::geometry
         }
         curve.arcSegments.push_back(curve.points.size());
         int numPointsCurrentArc = _circleSegments* openingAngleRad / (2.0*CONST_PI);
-        // TODO: adjust num points by size relative to the model. For example for a long road section with small opening angle, this number should be higher
-        numPointsCurrentArc = std::max(numPointsCurrentArc, (int)(_circleSegments * 0.5));  // at least half the default circle segments
-        numPointsCurrentArc = std::max(numPointsCurrentArc, 4);                             // at least 4 points
+        numPointsCurrentArc = std::max(numPointsCurrentArc, 4);
         double deltaAngle = openingAngleRad / (numPointsCurrentArc - 1);
         double angle = startRad;
         std::vector<glm::dvec3> points;
