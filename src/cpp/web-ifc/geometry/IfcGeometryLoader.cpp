@@ -2201,7 +2201,7 @@ namespace webifc::geometry
             }
         }
         curve.arcSegments.push_back(curve.points.size());
-        int numPointsCurrentArc = _circleSegments* openingAngleRad / (2.0*CONST_PI);
+        int numPointsCurrentArc = _circleSegments;
         numPointsCurrentArc = std::max(numPointsCurrentArc, 4);
         double deltaAngle = openingAngleRad / (numPointsCurrentArc - 1);
         double angle = startRad;
