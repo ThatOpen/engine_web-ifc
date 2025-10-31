@@ -496,13 +496,14 @@ export class IfcAPI {
     this.deletedLines.set(result, new Set());
     var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0]
       .value;
-    this.modelSchemaList[result] = this.LookupSchemaId(schemaName);
-    this.modelSchemaNameList[result] = schemaName;
-    if (this.modelSchemaList[result] == -1) {
+    let id = this.LookupSchemaId(schemaName);
+    if (id == -1) {
       Log.error("Unsupported Schema:" + schemaName);
       this.CloseModel(result);
       return -1;
     }
+    this.modelSchemaList[result] = id;
+    this.modelSchemaNameList[result] = schemaName;
     Log.debug("Parsing Model using " + schemaName + " Schema");
     return result;
   }
@@ -559,13 +560,14 @@ export class IfcAPI {
   CreateModel(model: NewIfcModel, settings?: LoaderSettings): number {
     let s = this.CreateSettings(settings);
     let result = this.wasmModule.CreateModel(s);
-    this.modelSchemaList[result] = this.LookupSchemaId(model.schema);
-    this.modelSchemaNameList[result] = model.schema;
-    if (this.modelSchemaList[result] == -1) {
+    let id = this.LookupSchemaId(model.schema);
+    if (id == -1) {
       Log.error("Unsupported Schema:" + model.schema);
       this.CloseModel(result);
       return -1;
     }
+    this.modelSchemaList[result] = id;
+    this.modelSchemaNameList[result] = model.schema;
     this.deletedLines.set(result, new Set());
     const modelName = model.name || "web-ifc-model-" + result + ".ifc";
     const timestamp = new Date().toISOString().slice(0, 19);
@@ -687,7 +689,7 @@ export class IfcAPI {
   }
 
   CreateBooleanOperator() {
-    return this.wasmModule.CreateBooleanOperator();
+    return this.wasmModule.CreateBoolean();
   }
 
   CreateProfile() {
@@ -1517,6 +1519,6 @@ export class IfcAPI {
    */
 
   ResetCache(modelID: number) {
-    return this.wasmModule.DecodeText(modelID);
+    return this.wasmModule.ResetCache(modelID);
   }
 }
