@@ -2114,10 +2114,10 @@ namespace webifc::geometry
                     }
                     double xx = params.trimStart.pos.x - placement[2].x;  // not sure if rotation can be ignored here...
                     double yy = params.trimStart.pos.y - placement[2].y;
-                    startRad = VectorToAngle2D(xx, yy);
+                    startRad = VectorToAngle2D(xx, yy) * CONST_PI / 180.0;  // VectorToAngle2D returns degrees
                     xx = params.trimEnd.pos.x - placement[2].x;
                     yy = params.trimEnd.pos.y - placement[2].y;
-                    endRad = VectorToAngle2D(xx, yy);
+                    endRad = VectorToAngle2D(xx, yy) * CONST_PI / 180.0;  // VectorToAngle2D returns degrees
                 }
                 else if (dimensions == 3)
                 {
@@ -2134,8 +2134,8 @@ namespace webifc::geometry
                     double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
                     double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
                     double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
-                    startRad = VectorToAngle2D(dxS, dyS);
-                    endRad = VectorToAngle2D(dxE, dyE);
+                    startRad = VectorToAngle2D(dxS, dyS) * CONST_PI / 180.0;  // VectorToAngle2D returns degrees
+                    endRad = VectorToAngle2D(dxE, dyE) * CONST_PI / 180.0;  // VectorToAngle2D returns degrees
                 }
             }
         }
