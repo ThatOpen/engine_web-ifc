@@ -3156,8 +3156,18 @@ namespace webifc::geometry
       double xdim = _loader.GetDoubleArgument();
       double ydim = _loader.GetDoubleArgument();
       double thickness = _loader.GetDoubleArgument();
-      double innerRadius = _loader.GetDoubleArgument();
-      double outerRadius = _loader.GetDoubleArgument();
+      double innerRadius = 0;
+      double outerRadius = 0;
+      if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+      {
+        _loader.StepBack();
+        innerRadius = _loader.GetDoubleArgument();
+      }
+            if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+      {
+        _loader.StepBack();
+        outerRadius = _loader.GetDoubleArgument();
+      }
 
       // fillets not implemented yet
 
