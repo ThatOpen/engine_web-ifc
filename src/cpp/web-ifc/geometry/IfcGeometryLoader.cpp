@@ -2071,7 +2071,8 @@ namespace webifc::geometry
             auto tokenType = _loader.GetTokenType();
             if (tokenType == parsing::IfcTokenType::REAL)
             {
-                radius2 = _loader.GetDoubleArgument();
+              _loader.StepBack();
+              radius2 = _loader.GetDoubleArgument();
             }
         }
 
