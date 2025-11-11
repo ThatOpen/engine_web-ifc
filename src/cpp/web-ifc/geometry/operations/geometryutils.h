@@ -8,6 +8,10 @@
 #include "boolean-utils/svg.h"
 #endif
 
+#ifndef GLM_ENABLE_EXPERIMENTAL
+#define GLM_ENABLE_EXPERIMENTAL
+#endif
+
 #include <array>
 #include <cstdint>
 #include <spdlog/spdlog.h>
@@ -186,22 +190,19 @@ namespace webifc::geometry
 		return computeSafeNormal(v1, v2, v3, normal, 1e-08);
 	}
 
-	inline void TriangulateBounds(IfcGeometry &geometry, std::vector<IfcBound3D> &bounds, uint32_t expressID)
+	inline void TriangulateBounds(IfcGeometry& geometry, std::vector<IfcBound3D>& bounds, uint32_t expressID)
 	{
 		spdlog::debug("[TriangulateBounds({})]");
 		if (bounds.size() == 1 && bounds[0].curve.points.size() == 3)
 		{
 			auto c = bounds[0].curve;
-
 			// size_t offset = geometry.numPoints;
-
 			geometry.AddFace(c.points[0], c.points[1], c.points[2]);
 		}
 		else if (bounds.size() > 0 && bounds[0].curve.points.size() >= 3)
 		{
 			// bound greater than 4 vertices or with holes, triangulate
 			uint32_t offset = geometry.numPoints;
-
 			// if more than one bound
 			if (bounds.size() > 1)
 			{
@@ -215,7 +216,6 @@ namespace webifc::geometry
 						break;
 					}
 				}
-
 				if (outerIndex == -1)
 				{
 					spdlog::error("[TriangulateBounds()] Expected outer bound! {}", expressID);
@@ -226,13 +226,11 @@ namespace webifc::geometry
 					std::swap(bounds[0], bounds[outerIndex]);
 				}
 			}
-
 			// if the first bound is not an outer bound now, this is unexpected
 			if (bounds[0].type != IfcBoundType::OUTERBOUND)
 			{
 				spdlog::error("[TriangulateBounds() Expected outer bound first! {}", expressID);
 			}
-
 			glm::dvec3 v1, v2, v3;
 			if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3))
 			{
@@ -240,52 +238,138 @@ namespace webifc::geometry
 				spdlog::error("[TriangulateBounds()] No basis found for brep! {}", expressID);
 				return;
 			}
-
 			glm::dvec3 v12(glm::normalize(v3 - v2));
 			glm::dvec3 v13(glm::normalize(v1 - v2));
 			glm::dvec3 n = glm::normalize(glm::cross(v12, v13));
 			v12 = glm::cross(v13, n);
-
 			// check winding of outer bound
 			IfcCurve test;
 			test.points.reserve(bounds[0].curve.points.size());
-
 			for (size_t i = 0; i < bounds[0].curve.points.size(); i++)
 			{
 				glm::dvec3 pt = bounds[0].curve.points[i];
 				glm::dvec3 pt2 = pt - v1;
-
 				glm::dvec2 proj(
 					glm::dot(pt2, v12),
 					glm::dot(pt2, v13));
-
 				test.Add(proj);
 			}
-
 			// if the outer bound is clockwise under the current projection (v12,v13,n), we invert the projection
 			if (!test.IsCCW())
 			{
 				n *= -1;
 				std::swap(v12, v13);
 			}
-
 			std::vector<std::vector<glm::dvec2>> polygon(bounds.size());
-
 			for (size_t i = 0; i < bounds.size(); i++)
 			{
 				const auto& curvePoints = bounds[i].curve.points;
 				auto& points = polygon[i];
 				points.reserve(curvePoints.size());
+				for (const glm::dvec3& pt : curvePoints)
+				{
+					// Do not add to geometry yet
+					const glm::dvec3 pt2 = pt - v1;
+					const glm::dvec2 proj(glm::dot(pt2, v12), glm::dot(pt2, v13));
+					points.push_back(proj);
+				}
+			}
 
+			// Function to check if a point is inside a polygon (ray casting algorithm)
+			auto PointInPolygon = [](const std::vector<glm::dvec2>& poly, const glm::dvec2& p) -> bool {
+				bool inside = false;
+				size_t n = poly.size();
+				for (size_t i = 0, j = n - 1; i < n; j = i++) {
+					if ((poly[i].y > p.y) != (poly[j].y > p.y) &&
+						(p.x < poly[i].x + (poly[j].x - poly[i].x) * (p.y - poly[i].y) / (poly[j].y - poly[i].y + 1e-10))) {
+						inside = !inside;
+					}
+				}
+				return inside;
+				};
+
+			// Check if the supposed outer (polygon[0]) contains all others
+			bool isValidOuter = true;
+			for (size_t i = 1; i < polygon.size(); i++) {
+				if (!polygon[i].empty()) {
+					glm::dvec2 pt = polygon[i][0];
+					if (!PointInPolygon(polygon[0], pt)) {
+						isValidOuter = false;
+						break;
+					}
+				}
+			}
+
+			if (!isValidOuter) {
+				spdlog::warn("[TriangulateBounds()] Labeled outer bound does not contain all inners! {}", expressID);
+				// Find the true outer bound that contains all others
+				int trueOuterIndex = -1;
+				for (size_t j = 0; j < polygon.size(); j++) {
+					bool containsAll = true;
+					for (size_t k = 0; k < polygon.size(); k++) {
+						if (k == j) continue;
+						if (!polygon[k].empty() && !PointInPolygon(polygon[j], polygon[k][0])) {
+							containsAll = false;
+							break;
+						}
+					}
+					if (containsAll) {
+						trueOuterIndex = static_cast<int>(j);
+						break;
+					}
+				}
+				if (trueOuterIndex == -1) {
+					spdlog::error("[TriangulateBounds()] No bound found that contains all others! {}", expressID);
+					return;
+				}
+				else if (trueOuterIndex != 0) {
+					// Swap to make it the outer
+					std::swap(bounds[0], bounds[trueOuterIndex]);
+					std::swap(polygon[0], polygon[trueOuterIndex]);
+					// Re-compute basis from the true outer
+					if (!GetBasisFromCoplanarPoints(bounds[0].curve.points, v1, v2, v3)) {
+						spdlog::error("[TriangulateBounds()] No basis found for true outer bound! {}", expressID);
+						return;
+					}
+					v12 = glm::normalize(v3 - v2);
+					v13 = glm::normalize(v1 - v2);
+					n = glm::normalize(glm::cross(v12, v13));
+					v12 = glm::cross(v13, n);
+					// Re-check winding for the true outer
+					IfcCurve test;
+					test.points.reserve(bounds[0].curve.points.size());
+					for (size_t i = 0; i < bounds[0].curve.points.size(); i++) {
+						glm::dvec3 pt = bounds[0].curve.points[i];
+						glm::dvec3 pt2 = pt - v1;
+						glm::dvec2 proj(glm::dot(pt2, v12), glm::dot(pt2, v13));
+						test.Add(proj);
+					}
+					if (!test.IsCCW()) {
+						n *= -1;
+						std::swap(v12, v13);
+					}
+					// Re-project all polygons with the updated basis/projection
+					for (size_t i = 0; i < bounds.size(); i++) {
+						const auto& curvePoints = bounds[i].curve.points;
+						auto& points = polygon[i];
+						points.clear();
+						points.reserve(curvePoints.size());
+						for (const glm::dvec3& pt : curvePoints) {
+							const glm::dvec3 pt2 = pt - v1;
+							const glm::dvec2 proj(glm::dot(pt2, v12), glm::dot(pt2, v13));
+							points.push_back(proj);
+						}
+					}
+				}
+			}
+
+			// Now add points to geometry
+			for (size_t i = 0; i < bounds.size(); i++)
+			{
+				const auto& curvePoints = bounds[i].curve.points;
 				for (const glm::dvec3& pt : curvePoints)
 				{
 					geometry.AddPoint(pt, n);
-
-					// project pt onto plane of curve to obtain 2d coords
-					const glm::dvec3 pt2 = pt - v1;
-					const glm::dvec2 proj(glm::dot(pt2, v12), glm::dot(pt2, v13));
-
-					points.push_back(proj);
 				}
 			}
 
@@ -305,9 +389,7 @@ namespace webifc::geometry
 
 			// fuzzybools::DumpSVGLines(polygonEdgesPrinted, L"Polygon.html");
 #endif
-
 			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
-
 			for (size_t i = 0; i < indices.size(); i += 3)
 			{
 #ifdef CSG_DEBUG_OUTPUT
@@ -321,7 +403,6 @@ namespace webifc::geometry
 #endif
 				geometry.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
 			}
-
 #ifdef CSG_DEBUG_OUTPUT
 			// fuzzybools::DumpSVGLines(edgesPrinted, L"triangulateBounds_tri.html");
 #endif
