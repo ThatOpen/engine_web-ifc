@@ -8,6 +8,10 @@
 #include "boolean-utils/svg.h"
 #endif
 
+#ifndef GLM_ENABLE_EXPERIMENTAL
+#define GLM_ENABLE_EXPERIMENTAL
+#endif
+
 #include <array>
 #include <cstdint>
 #include <spdlog/spdlog.h>
