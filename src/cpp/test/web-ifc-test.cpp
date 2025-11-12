@@ -486,7 +486,10 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/bc-78.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/83.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1506.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/TAR_E1A_LA_RVT_0001.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/TAR_E1A_LA_RVT_0001.ifc");
+
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1604.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/fragments_89.ifc");
 
     struct LoaderSettings
     {
@@ -532,7 +535,11 @@ int main()
 
     start = ms();
 
-    SpecificLoadTest(loader, geometryLoader, 543139); // 
+    // SpecificLoadTest(loader, geometryLoader, 2099); //1604
+
+    SpecificLoadTest(loader, geometryLoader, 164); //1604
+
+    // SpecificLoadTest(loader, geometryLoader, 543139); // 
     // SpecificLoadTest(loader, geometryLoader, 350038); // 
     // SpecificLoadTest(loader, geometryLoader, 252); // 1506
     // SpecificLoadTest(loader, geometryLoader, 407); // 1450

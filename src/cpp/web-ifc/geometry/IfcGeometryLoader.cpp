@@ -2011,7 +2011,8 @@ namespace webifc::geometry
               auto pts = ReadIfcCartesianPointList3D(ptsRef);
               for (auto &pt : sg.indexs)
               {
-                curve.Add(pts[pt - 1]);
+                // Fragments -> Issue #89 -> requires not to skip overlapped points, this is why "removeCoincident" is set to false
+                curve.Add(pts[pt - 1], false);
               }
             }
             if (sg.type == "IFCARCINDEX")
@@ -2020,7 +2021,8 @@ namespace webifc::geometry
               IfcCurve arc = Build3DArc3Pt(pts[sg.indexs[0] - 1], pts[sg.indexs[1] - 1], pts[sg.indexs[2] - 1], _circleSegments, EPS_MINISCULE);
               for (auto &pt : arc.points)
               {
-                curve.Add(pt);
+                // Fragments -> Issue #89 -> requires not to skip overlapped points, this is why "removeCoincident" is set to false
+                curve.Add(pt, false);
               }
               curve.arcSegments.push_back(curve.points.size() - 1 - arc.points.size());
               curve.arcSegments.push_back(curve.points.size() - 1);
@@ -3088,8 +3090,9 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       _loader.MoveToArgumentOffset(expressID, 2);
+      uint32_t curveID = _loader.GetRefArgument();
       // ISSUE 765 requires dimension 3, not sure how to solve it without a stopgap
-      profile.curve = GetCurve(_loader.GetRefArgument(), 2);
+      profile.curve = GetCurve(curveID, 2);
       profile.isConvex = IsCurveConvex(profile.curve);
 
       return profile;
