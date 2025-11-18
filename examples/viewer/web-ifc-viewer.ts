@@ -220,6 +220,7 @@ async function LoadModel(data: Uint8Array) {
   // #1225 -> TOLERANCE_PLANE_DEVIATION: 1.0E-02, TOLERANCE_BACK_DEVIATION_DISTANCE: 1.0E-02, TOLERANCE_INSIDE_OUTSIDE_PERIMETER: 1.0E-02
   // #1506 -> TOLERANCE_PLANE_INTERSECTION = 1.0E-02, TOLERANCE_PLANE_DEVIATION = 1.0E-02, TOLERANCE_BACK_DEVIATION_DISTANCE = 1.0E-02;
   // #604 -> BOOLEAN_UNION_THRESHOLD: 50
+  // https://github.com/ThatOpen/engine_fragment/issues/97 -> CIRCLE_SEGMENTS: 4, PLANE_REFIT_ITERATIONS: 0, BOOLEAN_UNION_THRESHOLD: 1000
   // Ferroflex, samMateo -> CIRCLE_SEGMENTS: 6
   const time = ms() - start;
   console.log(`Opening model took ${time} ms`);

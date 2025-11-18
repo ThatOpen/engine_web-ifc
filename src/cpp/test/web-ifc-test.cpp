@@ -485,7 +485,11 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/818.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/bc-78.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/83.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1506.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1506.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/TAR_E1A_LA_RVT_0001.ifc");
+
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1604.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/fragments_89.ifc");
 
     struct LoaderSettings
     {
@@ -530,7 +534,14 @@ int main()
     webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.TOLERANCE_PLANE_INTERSECTION, set.TOLERANCE_PLANE_DEVIATION, set.TOLERANCE_BACK_DEVIATION_DISTANCE, set.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, set.TOLERANCE_SCALAR_EQUALITY, set.PLANE_REFIT_ITERATIONS, set.BOOLEAN_UNION_THRESHOLD);
 
     start = ms();
-    SpecificLoadTest(loader, geometryLoader, 252); // 1506
+
+    // SpecificLoadTest(loader, geometryLoader, 2099); //1604
+
+    SpecificLoadTest(loader, geometryLoader, 164); //1604
+
+    // SpecificLoadTest(loader, geometryLoader, 543139); // 
+    // SpecificLoadTest(loader, geometryLoader, 350038); // 
+    // SpecificLoadTest(loader, geometryLoader, 252); // 1506
     // SpecificLoadTest(loader, geometryLoader, 407); // 1450
     // SpecificLoadTest(loader, geometryLoader, 1125); // 1544
     // SpecificLoadTest(loader, geometryLoader, 92180); // 15

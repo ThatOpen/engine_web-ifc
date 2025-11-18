@@ -2011,7 +2011,8 @@ namespace webifc::geometry
               auto pts = ReadIfcCartesianPointList3D(ptsRef);
               for (auto &pt : sg.indexs)
               {
-                curve.Add(pts[pt - 1]);
+                // Fragments -> Issue #89 -> requires not to skip overlapped points, this is why "removeCoincident" is set to false
+                curve.Add(pts[pt - 1], false);
               }
             }
             if (sg.type == "IFCARCINDEX")
@@ -2020,7 +2021,8 @@ namespace webifc::geometry
               IfcCurve arc = Build3DArc3Pt(pts[sg.indexs[0] - 1], pts[sg.indexs[1] - 1], pts[sg.indexs[2] - 1], _circleSegments, EPS_MINISCULE);
               for (auto &pt : arc.points)
               {
-                curve.Add(pt);
+                // Fragments -> Issue #89 -> requires not to skip overlapped points, this is why "removeCoincident" is set to false
+                curve.Add(pt, false);
               }
               curve.arcSegments.push_back(curve.points.size() - 1 - arc.points.size());
               curve.arcSegments.push_back(curve.points.size() - 1);
@@ -2071,7 +2073,8 @@ namespace webifc::geometry
             auto tokenType = _loader.GetTokenType();
             if (tokenType == parsing::IfcTokenType::REAL)
             {
-                radius2 = _loader.GetDoubleArgument();
+              _loader.StepBack();
+              radius2 = _loader.GetDoubleArgument();
             }
         }
 
@@ -2114,10 +2117,10 @@ namespace webifc::geometry
                     }
                     double xx = params.trimStart.pos.x - placement[2].x;  // not sure if rotation can be ignored here...
                     double yy = params.trimStart.pos.y - placement[2].y;
-                    startRad = VectorToAngle2D(xx, yy);
+                    startRad = VectorToAngle2D(xx, yy) * CONST_PI / 180.0;  // VectorToAngle2D returns degrees
                     xx = params.trimEnd.pos.x - placement[2].x;
                     yy = params.trimEnd.pos.y - placement[2].y;
-                    endRad = VectorToAngle2D(xx, yy);
+                    endRad = VectorToAngle2D(xx, yy) * CONST_PI / 180.0;  // VectorToAngle2D returns degrees
                 }
                 else if (dimensions == 3)
                 {
@@ -2134,8 +2137,8 @@ namespace webifc::geometry
                     double dyS = vecY.x * v1.x + vecY.y * v1.y + vecY.z * v1.z;
                     double dxE = vecX.x * v2.x + vecX.y * v2.y + vecX.z * v2.z;
                     double dyE = vecY.x * v2.x + vecY.y * v2.y + vecY.z * v2.z;
-                    startRad = VectorToAngle2D(dxS, dyS);
-                    endRad = VectorToAngle2D(dxE, dyE);
+                    startRad = VectorToAngle2D(dxS, dyS) * CONST_PI / 180.0;  // VectorToAngle2D returns degrees
+                    endRad = VectorToAngle2D(dxE, dyE) * CONST_PI / 180.0;  // VectorToAngle2D returns degrees
                 }
             }
         }
@@ -3087,8 +3090,9 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       _loader.MoveToArgumentOffset(expressID, 2);
+      uint32_t curveID = _loader.GetRefArgument();
       // ISSUE 765 requires dimension 3, not sure how to solve it without a stopgap
-      profile.curve = GetCurve(_loader.GetRefArgument(), 2);
+      profile.curve = GetCurve(curveID, 2);
       profile.isConvex = IsCurveConvex(profile.curve);
 
       return profile;
@@ -3156,8 +3160,18 @@ namespace webifc::geometry
       double xdim = _loader.GetDoubleArgument();
       double ydim = _loader.GetDoubleArgument();
       double thickness = _loader.GetDoubleArgument();
-      double innerRadius = _loader.GetDoubleArgument();
-      double outerRadius = _loader.GetDoubleArgument();
+      double innerRadius = 0;
+      double outerRadius = 0;
+      if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+      {
+        _loader.StepBack();
+        innerRadius = _loader.GetDoubleArgument();
+      }
+            if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+      {
+        _loader.StepBack();
+        outerRadius = _loader.GetDoubleArgument();
+      }
 
       // fillets not implemented yet
 
@@ -3266,15 +3280,8 @@ namespace webifc::geometry
       double flangeThickness = _loader.GetDoubleArgument();
 
       // optional fillet
-      bool hasFillet = false;
-      double filletRadius = 0;
-      if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-      {
-        _loader.StepBack();
-
-        hasFillet = true;
-        filletRadius = _loader.GetOptionalDoubleParam(0);
-      }
+      double filletRadius = _loader.GetOptionalDoubleParam(0);
+      bool hasFillet = filletRadius > 0;
 
       profile.curve = GetIShapedCurve(width, depth, webThickness, flangeThickness, hasFillet, filletRadius, placement);
 
@@ -3301,29 +3308,18 @@ namespace webifc::geometry
       }
 
       _loader.MoveToArgumentOffset(expressID, 3);
-      double filletRadius = 0;
       double depth = _loader.GetDoubleArgument();
       double width = _loader.GetOptionalDoubleParam(0);
-      if (width == 0)
-      {
-        width = depth;
-      }
+      if (width == 0) { width = depth;}
       double thickness = _loader.GetDoubleArgument();
-      filletRadius = _loader.GetOptionalDoubleParam(0);
+      double filletRadius = _loader.GetOptionalDoubleParam(0);
+      bool hasFillet = filletRadius > 0;
       double edgeRadius = _loader.GetOptionalDoubleParam(0);
       double legSlope = _loader.GetOptionalDoubleParam(0);
       // double centreOfGravityInX =
       _loader.GetOptionalDoubleParam(0);
       // double centreOfGravityInY =
       _loader.GetOptionalDoubleParam(0);
-
-      // optional fillet
-      bool hasFillet = false;
-
-      if (filletRadius > 0)
-      {
-        hasFillet = true;
-      }
 
       profile.curve = GetLShapedCurve(width, depth, thickness, hasFillet, filletRadius, edgeRadius, legSlope, _circleSegments, placement);
 
@@ -3356,23 +3352,13 @@ namespace webifc::geometry
       // double flangeThickness =
       _loader.GetDoubleArgument();
       double filletRadius = _loader.GetOptionalDoubleParam(0);
+      bool hasFillet = filletRadius != 0;
       double flangeEdgeRadius = _loader.GetOptionalDoubleParam(0);
       // double webEdgeRadius =
       _loader.GetOptionalDoubleParam(0);
       // double webSlope =
       _loader.GetOptionalDoubleParam(0);
       double flangeSlope = _loader.GetOptionalDoubleParam(0);
-
-      // TODO: REVIEW THIS OPTIONS FILLET (should be CentreOfGravityInY not optional fillet)
-      bool hasFillet = false;
-
-      if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-      {
-        _loader.StepBack();
-
-        hasFillet = true;
-        filletRadius = _loader.GetOptionalDoubleParam(0);
-      }
 
       profile.curve = GetTShapedCurve(width, depth, webThickness, hasFillet, filletRadius, flangeEdgeRadius, flangeSlope, placement);
 
@@ -3406,10 +3392,10 @@ namespace webifc::geometry
       double flangeThickness = _loader.GetDoubleArgument();
 
       // optional parameters
-      // double filletRadius = GetOptionalDoubleParam();
+      double filletRadius = _loader.GetOptionalDoubleParam(0);
+      bool hasFillet = filletRadius > 0;
       // double edgeRadius = GetOptionalDoubleParam();
       // double flangeSlope = GetOptionalDoubleParam();
-      double filletRadius = 0;
       double edgeRadius = 0;
       double flangeSlope = 0;
 
@@ -3437,8 +3423,6 @@ namespace webifc::geometry
         placement = GetAxis2Placement2D(placementID);
       }
 
-      bool hasFillet = false;
-
       _loader.MoveToArgumentOffset(expressID, 3);
 
       double depth = _loader.GetDoubleArgument();
@@ -3446,6 +3430,7 @@ namespace webifc::geometry
       double Thickness = _loader.GetDoubleArgument();
       double girth = _loader.GetDoubleArgument();
       double filletRadius = _loader.GetOptionalDoubleParam(0);
+      bool hasFillet = filletRadius > 0;
       // double ventreOfGravityInX =
       _loader.GetOptionalDoubleParam(0);
 
@@ -3473,8 +3458,6 @@ namespace webifc::geometry
         glm::dmat3 placement = GetAxis2Placement2D(placementID);
       }
 
-      bool hasFillet = false;
-
       _loader.MoveToArgumentOffset(expressID, 3);
 
       double depth = _loader.GetDoubleArgument();
@@ -3482,6 +3465,7 @@ namespace webifc::geometry
       double webThickness = _loader.GetDoubleArgument();
       double flangeThickness = _loader.GetDoubleArgument();
       double filletRadius = _loader.GetOptionalDoubleParam(0);
+      bool hasFillet = filletRadius > 0;
       double edgeRadius = _loader.GetOptionalDoubleParam(0);
 
       profile.curve = GetZShapedCurve(depth, flangeWidth, webThickness, flangeThickness, filletRadius, edgeRadius, placement);
