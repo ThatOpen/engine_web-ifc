@@ -816,11 +816,11 @@
     "@shikijs/vscode-textmate" "^10.0.2"
 
 "@shikijs/langs@^3.14.0":
-  version "3.14.0"
-  resolved "https://registry.npmjs.org/@shikijs/langs/-/langs-3.14.0.tgz"
-  integrity sha512-DIB2EQY7yPX1/ZH7lMcwrK5pl+ZkP/xoSpUzg9YC8R+evRCCiSQ7yyrvEyBsMnfZq4eBzLzBlugMyTAf13+pzg==
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/@shikijs/langs/-/langs-3.15.0.tgz#d8385a9ca66ce9923149c650336444b1d25fc248"
+  integrity sha512-WpRvEFvkVvO65uKYW4Rzxs+IG0gToyM8SARQMtGGsH4GDMNZrr60qdggXrFOsdfOVssG/QQGEl3FnJ3EZ+8w8A==
   dependencies:
-    "@shikijs/types" "3.14.0"
+    "@shikijs/types" "3.15.0"
 
 "@shikijs/themes@^3.14.0":
   version "3.14.0"
