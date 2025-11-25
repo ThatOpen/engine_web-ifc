@@ -437,7 +437,7 @@ namespace bimGeometry
 		{
 			inverse = true;
 		}
-
+    
 		double A = sqrt(abs(EndRadiusOfCurvature - StartRadiusOfCurvature) * SegmentLength);
 		double Api = A * sqrt(CONST_PI);
 		double uMax = SegmentLength / Api;
@@ -468,6 +468,10 @@ namespace bimGeometry
 		}
 
 		double def = segments;
+		if (def < 200)
+		{
+			def = 200;
+		}
 		double dif = def / 10;
 		double count = 0;
 		double tram = uMax / (def - 1);
