@@ -467,12 +467,8 @@ namespace bimGeometry
 			DirectionX.y = -DirectionX.y;
 		}
 
-		double def = segments;
-		if (def < 200)
-		{
-			def = 200;
-		}
-		double dif = def / 10;
+		double def = 2000;
+		double dif = def / segments;
 		double count = 0;
 		double tram = uMax / (def - 1);
 		glm::dvec2 end(0, 0);
