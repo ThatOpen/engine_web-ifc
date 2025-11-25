@@ -7,10 +7,11 @@
 
 namespace bimGeometry
 {
-
-	void Curve::Add(glm::dvec3 pt)
+    // Fragments -> Issue #89 -> requires "removeCoincident" switch
+	void Curve::Add(glm::dvec3 pt, bool removeCoincident)
 	{
-		if (points.empty())
+
+		if (points.empty() || !removeCoincident)
 			points.push_back(pt);
 		else if (!equals(pt, points.back(), EPS_TINY_CURVE))
 			points.push_back(pt);

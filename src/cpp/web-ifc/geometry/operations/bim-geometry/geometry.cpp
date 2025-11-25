@@ -153,6 +153,8 @@ namespace bimGeometry
                     centroid = centroid + (a + b + c) / 3.0;
                 }
 
+                centroid /= numFaces;
+
                 for (size_t i = 0; i < numFaces; i++)
                 {
                     Face f = GetFace(i);

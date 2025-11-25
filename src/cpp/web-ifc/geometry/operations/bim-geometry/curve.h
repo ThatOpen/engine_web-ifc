@@ -11,7 +11,7 @@ namespace bimGeometry {
 		
         void Invert();
 		bool IsCCW() const;
-        void Add(glm::dvec3 pt);
+        void Add(glm::dvec3 pt, bool removeCoincident = true);
 		void Add(glm::dvec2 pt);
     };
 }
