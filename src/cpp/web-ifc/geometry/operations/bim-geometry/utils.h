@@ -470,7 +470,7 @@ namespace bimGeometry
 		double def = segments;
 		double dif = def / 10;
 		double count = 0;
-		double tram = uMax / def;
+		double tram = uMax / (def - 1);
 		glm::dvec2 end(0, 0);
 		glm::dvec2 prev(0, 0);
 		glm::dvec2 endDir;
