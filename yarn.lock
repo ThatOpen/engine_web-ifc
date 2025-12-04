@@ -1678,9 +1678,9 @@ cross-spawn@^7.0.3, cross-spawn@^7.0.6:
     which "^2.0.1"
 
 current-module-paths@^1.1.1:
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/current-module-paths/-/current-module-paths-1.1.2.tgz"
-  integrity sha512-H4s4arcLx/ugbu1XkkgSvcUZax0L6tXUqnppGniQb8l5VjUKGHoayXE5RiriiPhYDd+kjZnaok1Uig13PKtKYQ==
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/current-module-paths/-/current-module-paths-1.1.3.tgz#b106039be7d7e0c59b79e2a2d45c9773850de0ac"
+  integrity sha512-7AH+ZTRKikdK4s1RmY0l6067UD/NZc7p3zZVZxvmnH80G31kr0y0W0E6ibYM4IS01MEm8DiC5FnTcgcgkbFHoA==
 
 debug@*, debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2:
   version "4.4.3"
