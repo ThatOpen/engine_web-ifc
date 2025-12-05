@@ -210,7 +210,7 @@ namespace webifc::geometry {
 		return  resultMat;
 	}
 
-	uint32_t IfcGeometry::GetVertexData()
+	uintptr_t IfcGeometry::GetVertexData()
 	{
 		// unfortunately webgl can't do doubles
 		if (fvertexData.size() != vertexData.size())
@@ -228,7 +228,7 @@ namespace webifc::geometry {
 		{
 			return 0;
 		}
-		return (uint32_t)(size_t)&fvertexData[0];
+		return (uintptr_t)(size_t)&fvertexData[0];
 	}
 
     uint32_t IfcGeometry::GetVertexDataSize()
@@ -236,9 +236,9 @@ namespace webifc::geometry {
 		return (uint32_t)fvertexData.size();
 	}
 
-	uint32_t IfcGeometry::GetIndexData()
+	uintptr_t IfcGeometry::GetIndexData()
 	{
-		return (uint32_t)(size_t)&indexData[0];
+		return (uintptr_t)(size_t)&indexData[0];
 	}
 
 	uint32_t IfcGeometry::GetIndexDataSize()
