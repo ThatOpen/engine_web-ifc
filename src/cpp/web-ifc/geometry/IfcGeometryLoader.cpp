@@ -2087,8 +2087,8 @@ namespace webifc::geometry
         {
             if (params.trimStart.trimType == TRIM_BY_PARAMETER && params.trimEnd.trimType == TRIM_BY_PARAMETER)
             {
-                startRad = params.trimStart.value * CONST_PI / 180.0;
-                endRad = params.trimEnd.value * CONST_PI / 180.0;
+                startRad = params.trimStart.value * _angularScalingFactor;
+                endRad = params.trimEnd.value * _angularScalingFactor;
             }
             else if (params.trimStart.trimType == TRIM_BY_LENGTH && params.trimEnd.trimType == TRIM_BY_LENGTH)
             {
