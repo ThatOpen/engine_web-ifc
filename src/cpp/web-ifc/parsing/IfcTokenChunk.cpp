@@ -19,7 +19,7 @@ namespace webifc::parsing
   bool IfcTokenStream::IfcTokenChunk::Clear(bool force)
   {
     if (_fileStream==nullptr && !force) return false; 
-    if (_chunkData!=nullptr) delete[] _chunkData;
+    if (_chunkData!=nullptr) { delete[] _chunkData; _chunkData = nullptr; }
     _loaded=false;
     return true;
   }

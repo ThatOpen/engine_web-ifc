@@ -60,9 +60,9 @@ namespace webifc::geometry {
 		void AddPart(Geometry geom);
 		void AddGeometry(Geometry geom, glm::dmat4 trans = glm::dmat4(1), double scx = 1, double scy = 1, double scz = 1, glm::dvec3 origin = glm::dvec3(0, 0, 0));
 		void MergeGeometry(Geometry geom);
-		uint32_t GetVertexData();
+		uintptr_t GetVertexData();
 		uint32_t GetVertexDataSize();
-		uint32_t GetIndexData();
+		uintptr_t GetIndexData();
 		uint32_t GetIndexDataSize();
 		SweptDiskSolid GetSweptDiskSolid();
 		glm::dmat4 Normalize();

@@ -14,7 +14,10 @@
 
    IfcTokenStream::IfcFileStream::~IfcFileStream() 
    {
-    delete _buffer;
+    if (_buffer != nullptr) {
+      delete[] _buffer;
+      _buffer = nullptr;
+    }
    }
    
    void IfcTokenStream::IfcFileStream::load()
