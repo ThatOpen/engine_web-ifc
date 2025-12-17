@@ -88,6 +88,12 @@ namespace fuzzybools
 
             Vec raydir = computeNormal(a, b, c);
 
+            // This is an example about how to debug specific triangles in specific boolean operations
+            // if ((i == 49 || i == 53 || i == 84) && _BOOLSTATUS == 66)
+            // {
+            //     doit = false; // This assignation is useless just to add some content
+            // }
+
             auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir);
             auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir);
 

@@ -19,6 +19,9 @@
 
 namespace webifc::geometry
 {
+    
+    double BOOLSTATUS = 0;
+
     IfcGeometryProcessor::IfcGeometryProcessor(webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD)
         : _geometryLoader(loader, schemaManager, circleSegments, TOLERANCE_PLANE_INTERSECTION, TOLERANCE_PLANE_DEVIATION, TOLERANCE_BACK_DEVIATION_DISTANCE, TOLERANCE_INSIDE_OUTSIDE_PERIMETER, TOLERANCE_SCALAR_EQUALITY, PLANE_REFIT_ITERATIONS, BOOLEAN_UNION_THRESHOLD), _loader(loader), _schemaManager(schemaManager)
     {
@@ -2044,17 +2047,20 @@ namespace webifc::geometry
                     }
 
 #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpIfcGeometry(secondOperator, "second.obj");
+                    // io::DumpIfcGeometry(secondOperator, "second.obj");
 #endif
 
 #ifdef CSG_DEBUG_OUTPUT
-                    io::DumpIfcGeometry(firstOperator, "first.obj");
+                    // io::DumpIfcGeometry(firstOperator, "first.obj");
+
+                    // BOOLSTATUS++;
+
 #endif
 
                     firstOperator.buildPlanes();
                     secondOperator.buildPlanes();
 
-                    fuzzybools::SetEpsilons(_settings.TOLERANCE_PLANE_INTERSECTION, _settings.TOLERANCE_PLANE_DEVIATION, _settings.TOLERANCE_BACK_DEVIATION_DISTANCE, _settings.TOLERANCE_INSIDE_OUTSIDE_PERIMETER);
+                    fuzzybools::SetEpsilons(_settings.TOLERANCE_PLANE_INTERSECTION, _settings.TOLERANCE_PLANE_DEVIATION, _settings.TOLERANCE_BACK_DEVIATION_DISTANCE, _settings.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, _settings.TOLERANCE_BOUNDING_BOX, BOOLSTATUS);
 
                     if (op == "DIFFERENCE")
                     {

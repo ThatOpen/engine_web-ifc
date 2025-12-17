@@ -23,8 +23,9 @@ namespace fuzzybools
 	static void writeFile(std::wstring filename, std::string data)
 	{
 #ifdef _MSC_VER
-		std::ofstream out(L"debug_output/" + filename);
-		out << data;
+        std::wstring fullPath = L"debug_output/" + filename;
+        std::wofstream out(fullPath.c_str());
+        out << data.c_str();
 #endif
 	}
 }

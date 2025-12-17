@@ -474,7 +474,7 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/F_MA_160_ALT3.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1256.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/540.ifc");
-    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1092_A.ifc");
+    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1092_A.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Sample3_ArchiCAD25.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/384.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/Spacewell_Wall.ifc");
@@ -487,9 +487,10 @@ int main()
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/83.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1506.ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/TAR_E1A_LA_RVT_0001.ifc");
-
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1665.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1677 (2).ifc");
     // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/1604.ifc");
-    std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/fragments_89.ifc");
+    // std::string content = ReadFile("C:/Users/qmoya/Desktop/MODELS/fragments_89.ifc");
 
     struct LoaderSettings
     {
@@ -498,12 +499,12 @@ int main()
         uint32_t TAPE_SIZE = 67108864; // probably no need for anyone other than web-ifc devs to change this
         uint32_t MEMORY_LIMIT = 2147483648;
         uint16_t LINEWRITER_BUFFER = 10000;
-        double TOLERANCE_PLANE_INTERSECTION = 1.0E-04;
-        double TOLERANCE_PLANE_DEVIATION = 1.0E-04;
-        double TOLERANCE_BACK_DEVIATION_DISTANCE = 1.0E-04;
+        double TOLERANCE_PLANE_INTERSECTION = 1.0E-01;
+        double TOLERANCE_PLANE_DEVIATION = 3.0E-04;
+        double TOLERANCE_BACK_DEVIATION_DISTANCE = 3.0E-04;
         double TOLERANCE_INSIDE_OUTSIDE_PERIMETER = 1.0E-10;
         double TOLERANCE_SCALAR_EQUALITY = 1.0E-04;
-        uint16_t PLANE_REFIT_ITERATIONS = 1;
+        uint16_t PLANE_REFIT_ITERATIONS = 10;
         uint16_t BOOLEAN_UNION_THRESHOLD = 150;
     };
 
@@ -534,11 +535,10 @@ int main()
     webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.TOLERANCE_PLANE_INTERSECTION, set.TOLERANCE_PLANE_DEVIATION, set.TOLERANCE_BACK_DEVIATION_DISTANCE, set.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, set.TOLERANCE_SCALAR_EQUALITY, set.PLANE_REFIT_ITERATIONS, set.BOOLEAN_UNION_THRESHOLD);
 
     start = ms();
-
-    // SpecificLoadTest(loader, geometryLoader, 2099); //1604
-
-    SpecificLoadTest(loader, geometryLoader, 164); //1604
-
+    SpecificLoadTest(loader, geometryLoader, 85583); //1092_A
+    // SpecificLoadTest(loader, geometryLoader, 44230); //1677 (2)
+    // SpecificLoadTest(loader, geometryLoader, 1229); //1665
+    // SpecificLoadTest(loader, geometryLoader, 146); //1604
     // SpecificLoadTest(loader, geometryLoader, 543139); // 
     // SpecificLoadTest(loader, geometryLoader, 350038); // 
     // SpecificLoadTest(loader, geometryLoader, 252); // 1506
@@ -551,7 +551,8 @@ int main()
     // SpecificLoadTest(loader, geometryLoader, 165617); // 1092_A
     // SpecificLoadTest(loader, geometryLoader, 36487);
     // SpecificLoadTest(loader, geometryLoader, 1201);
-    // auto meshes = LoadAllTest(loader, geometryLoader, -1);
+    // auto meshes = LoadAllTest(loader, geometryLoader, 85583);
+    // auto meshes = LoadAllTest(loader, geometryLoader, 85261);
     // auto rebars = GetAllRebars(loader, geometryLoader);
     // std::cout << GetLine(loader, 13) << std::endl;
     // auto alignments = GetAlignments(loader, geometryLoader);
