@@ -506,8 +506,46 @@ namespace fuzzybools
 		result.param2 = t;
 		result.point1 = P0 + s * P1mP0;
 		result.point2 = Q0 + t * Q1mQ0;
+
+		// Issue #1665: Calculate distance within the plane containing both lines,
+		// ignoring perpendicular offset between lines. This allows detecting 
+		// intersections even when lines are slightly offset in 3D space.
+
 		glm::dvec3 diff = result.point1 - result.point2;
-		result.distance = std::sqrt(glm::dot(diff, diff));
+		double totalDist = std::sqrt(glm::dot(diff, diff));
+
+		if(totalDist < 1E-12)
+		{
+			result.distance = totalDist;
+			return result;
+		}
+
+		if(totalDist > TOLERANCE_SCALAR_EQUALITY)
+		{
+			result.distance = totalDist;
+			return result;
+		}
+
+		glm::dvec3 v1 = glm::normalize(P1mP0);
+		glm::dvec3 v2 = glm::normalize(Q1mQ0);
+		if (glm::abs(glm::dot(v1, v2)) > 1 - _TOLERANCE_PLANE_DEVIATION) 
+		{ 
+			result.distance = totalDist;
+			return result;
+		}
+
+		// Calculate normal to the plane containing both lines
+		glm::dvec3 normal = glm::cross(P1mP0, Q1mQ0);
+		double normalLength = glm::length(normal);
+		normal = normal / normalLength;  // Normalize
+		
+		// Perpendicular distance to the plane
+		double perpDist = std::abs(glm::dot(diff, normal));
+		
+		// Distance within the plane (Pythagoras)
+		double subs = totalDist * totalDist - perpDist * perpDist;
+		if(subs < 0) {subs = 0;}
+		result.distance = std::sqrt(subs);
 		return result;
 	}
 

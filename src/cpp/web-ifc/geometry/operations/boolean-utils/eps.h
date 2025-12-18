@@ -4,6 +4,10 @@ inline double _TOLERANCE_PLANE_INTERSECTION = 1.0E-04;
 inline double _TOLERANCE_PLANE_DEVIATION = 1.0E-04;
 inline double _TOLERANCE_BACK_DEVIATION_DISTANCE = 1.0E-04;
 inline double _TOLERANCE_INSIDE_OUTSIDE_PERIMETER = 1.0E-10;
+inline double _TOLERANCE_BOUNDING_BOX = 1.0E-02;
+
+// Debug value
+inline double _BOOLSTATUS = 1.0E-10;
 
 constexpr bool messages = false;
 
