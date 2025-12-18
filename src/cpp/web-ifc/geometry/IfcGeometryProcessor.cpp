@@ -1207,6 +1207,113 @@ namespace webifc::geometry
 
                 return mesh;
             }
+            case schema::IFCSPHERE:
+            {
+                // IfcSphere is a CSG solid primitive: center + radius
+                // Arguments:
+                // 0: Position (IfcAxis2Placement3D) - defines center and local orientation
+                // 1: Radius
+
+                _loader.MoveToArgumentOffset(expressID, 0);
+                uint32_t placementID = _loader.GetRefArgument();
+                double radius = _loader.GetDoubleArgument();
+
+                // Get the placement matrix (center at [3], orientation in columns 0-2)
+                glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID);
+
+                glm::dvec3 center = glm::dvec3(placement[3]);
+                glm::dvec3 xAxis = glm::normalize(glm::dvec3(placement[0]));
+                glm::dvec3 yAxis = glm::normalize(glm::dvec3(placement[1]));
+                glm::dvec3 zAxis = glm::normalize(glm::dvec3(placement[2]));
+
+                // Tessellate sphere using latitude/longitude grid
+                // Use circleSegments for azimuthal (longitude) resolution
+                // Use half that for latitudinal resolution (reasonable quality)
+                uint32_t azimuthSegments = _settings._circleSegments;
+                uint32_t altitudeSegments = _settings._circleSegments / 2;
+                if (altitudeSegments < 4) altitudeSegments = 4; // minimum for decent sphere
+
+                IfcGeometry geom;
+
+                // Generate vertices (position + dummy normal for consistency with other cases)
+                std::vector<glm::dvec3> vertices;
+                vertices.reserve((altitudeSegments + 1) * (azimuthSegments + 1));
+
+                for (uint32_t lat = 0; lat <= altitudeSegments; ++lat)
+                {
+                    double theta = glm::pi<double>() * lat / altitudeSegments; // 0 (north pole) to pi (south pole)
+                    double sinTheta = std::sin(theta);
+                    double cosTheta = std::cos(theta);
+
+                    for (uint32_t lon = 0; lon <= azimuthSegments; ++lon)
+                    {
+                        double phi = 2.0 * glm::pi<double>() * lon / azimuthSegments;
+                        double sinPhi = std::sin(phi);
+                        double cosPhi = std::cos(phi);
+
+                        // Spherical coordinates to Cartesian (in local space)
+                        glm::dvec3 localPos(
+                            radius * sinTheta * cosPhi,
+                            radius * sinTheta * sinPhi,
+                            radius * cosTheta
+                        );
+
+                        // Transform to world space using placement axes
+                        glm::dvec3 pos = center + localPos.x * xAxis + localPos.y * yAxis + localPos.z * zAxis;
+
+                        vertices.push_back(pos);
+                    }
+                }
+
+                // Build vertex buffer (6 floats per vertex: pos + dummy normal)
+                for (const auto& v : vertices)
+                {
+                    geom.vertexData.push_back(v.x);
+                    geom.vertexData.push_back(v.y);
+                    geom.vertexData.push_back(v.z);
+                    geom.vertexData.push_back(0.0); // dummy normal X
+                    geom.vertexData.push_back(0.0); // dummy normal Y
+                    geom.vertexData.push_back(1.0); // dummy normal Z
+                }
+
+                // Generate triangle indices (quads -> two triangles, poles handled correctly)
+                uint32_t vertsPerRing = azimuthSegments + 1;
+                for (uint32_t lat = 0; lat < altitudeSegments; ++lat)
+                {
+                    uint32_t bottom = lat * vertsPerRing;
+                    uint32_t top = bottom + vertsPerRing;
+
+                    for (uint32_t lon = 0; lon < azimuthSegments; ++lon)
+                    {
+                        uint32_t bl = bottom + lon;     // bottom-left
+                        uint32_t br = bottom + lon + 1; // bottom-right
+                        uint32_t tl = top + lon;        // top-left
+                        uint32_t tr = top + lon + 1;    // top-right
+
+                        // First triangle
+                        geom.indexData.push_back(bl);
+                        geom.indexData.push_back(br);
+                        geom.indexData.push_back(tl);
+
+                        // Second triangle
+                        geom.indexData.push_back(br);
+                        geom.indexData.push_back(tr);
+                        geom.indexData.push_back(tl);
+                    }
+                }
+
+                geom.numFaces = geom.indexData.size() / 3;
+                geom.numPoints = static_cast<uint32_t>(vertices.size());
+                geom.isPolygon = false;
+                geom.buildPlanes();
+
+                _expressIDToGeometry[expressID] = geom;
+                mesh.hasGeometry = true;
+                mesh.expressID = expressID;
+                mesh.transformation = placement; // apply the sphere's placement
+                
+                return mesh;
+            }
             case schema::IFCCIRCLE:
             case schema::IFCCOMPOSITECURVE:
             case schema::IFCPOLYLINE:
@@ -1245,7 +1352,8 @@ namespace webifc::geometry
                 // TODO: save string of the text literal in IfcComposedMesh
                 return mesh;
             default:
-                spdlog::error("[GetMesh()] unexpected mesh type {}", expressID, lineType);
+                std::string lineTypeString = _schemaManager.IfcTypeCodeToType(lineType);
+                spdlog::error("[GetMesh()] unexpected mesh type {}", expressID, lineTypeString);
                 break;
             }
         }
