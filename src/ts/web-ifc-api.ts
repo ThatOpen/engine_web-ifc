@@ -1266,6 +1266,10 @@ export class IfcAPI {
         horizontal: horList,
         vertical: verList,
         curve3D: curve3DList,
+        FlattenedWorldTransformMatrix: this.GetWorldTransformMatrix(
+          modelID,
+          alignment.PlacementExpressId
+        ),
       };
       alignmentList.push(align);
     }
@@ -1295,7 +1299,15 @@ export class IfcAPI {
   GetCoordinationMatrix(modelID: number): Array<number> {
     return this.wasmModule.GetCoordinationMatrix(modelID) as Array<number>;
   }
-
+  GetWorldTransformMatrix(
+    modelID: number,
+    placementExpressId: number
+  ): Array<number> {
+    return this.wasmModule.GetWorldTransformMatrix(
+      modelID,
+      placementExpressId
+    ) as Array<number>;
+  }
   GetVertexArray(ptr: number, size: number): Float32Array {
     return this.getSubArray(this.wasmModule.HEAPF32, ptr, size);
   }

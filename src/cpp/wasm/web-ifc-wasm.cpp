@@ -311,7 +311,32 @@ std::array<double, 16> GetCoordinationMatrix(uint32_t modelID)
 {
     return manager.IsModelOpen(modelID) ? manager.GetGeometryProcessor(modelID)->GetFlatCoordinationMatrix() : std::array<double, 16>();
 }
+/*
+ * @brief Returns the 4x4 world transformation matrix for a given placement Express ID,
+ * flattened into a 1D array of 16 doubles in **column-major order**.
+ *
+ * @param modelID: ID of the IFC model.
+ * @param placementExpressId: Express ID of the placement (e.g. IfcLocalPlacement).
+ * @return std::array<double,16> containing the flattened matrix.
+ */
+std::array<double, 16> GetWorldTransformMatrix(uint32_t modelID, uint32_t placementExpressId)
+{
+    std::array<double, 16> out{};
+    if (!manager.IsModelOpen(modelID))
+        return out;
 
+    glm::dmat4 m = manager.GetGeometryProcessor(modelID)->GetLoader().GetLocalPlacement(placementExpressId);
+
+    int index = 0;
+    for (int col = 0; col < 4; ++col)
+    {
+        for (int row = 0; row < 4; ++row)
+        {
+            out[index++] = m[col][row];
+        }
+    }
+    return out;
+}
 std::vector<uint32_t> GetLineIDsWithType(uint32_t modelID, emscripten::val types)
 {
     if (!manager.IsModelOpen(modelID))
@@ -1000,7 +1025,8 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::value_object<webifc::geometry::IfcAlignment>("IfcAlignment")
         .field("Horizontal", &webifc::geometry::IfcAlignment::Horizontal)
         .field("Vertical", &webifc::geometry::IfcAlignment::Vertical)
-        .field("Absolute", &webifc::geometry::IfcAlignment::Absolute);
+        .field("Absolute", &webifc::geometry::IfcAlignment::Absolute)
+        .field("PlacementExpressId", &webifc::geometry::IfcAlignment::PlacementExpressId);
 
     emscripten::value_object<glm::dvec3>("glmDvec3")
         .field("x", &glm::dvec3::x)
@@ -1132,6 +1158,7 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
+    emscripten::function("GetWorldTransformMatrix", &GetWorldTransformMatrix);
     emscripten::function("StreamMeshes", &StreamMeshesWithExpressID);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
