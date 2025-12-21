@@ -132,6 +132,7 @@ namespace webifc::geometry {
 			IfcAlignmentSegment Horizontal;
 			IfcAlignmentSegment Vertical;
 			IfcAlignmentSegment Absolute;
+			uint32_t PlacementExpressId;
 
 			void transform(glm::dmat4 coordinationMatrix)
 			{
