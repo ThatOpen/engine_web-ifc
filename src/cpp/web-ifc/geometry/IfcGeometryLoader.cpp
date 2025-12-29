@@ -542,6 +542,7 @@ namespace webifc::geometry
       if (localPlacement != 0 && _loader.IsValidExpressID(localPlacement))
       {
         transform_t = GetLocalPlacement(localPlacement);
+        alignment.PlacementExpressId = localPlacement;
       }
 
       if (_relAggregates.count(expressID) == 1)
