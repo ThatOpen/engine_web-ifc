@@ -34,7 +34,6 @@ namespace webifc::geometry
     double TOLERANCE_INSIDE_OUTSIDE_PERIMETER = 1.0E-10;
     double TOLERANCE_BOUNDING_BOX = 1.0E-02;
     uint16_t _BOOLEAN_UNION_THRESHOLD = 150;
-    uint16_t _CSG_MAX_NUM_FACES = 20000;
   };
 
   class booleanManager
