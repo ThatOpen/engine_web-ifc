@@ -185,161 +185,57 @@ namespace webifc::geometry
             }
 
             auto relVoidsIt = relVoids.find(expressID);
-
             if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
             {
-                IfcComposedMesh resultMesh;
-
                 auto origin = GetOrigin(mesh, _expressIDToGeometry);
                 auto normalizeMat = glm::translate(-origin);
-                auto flatElementMeshes = flatten(mesh, _expressIDToGeometry, normalizeMat);
-                auto elementColor = mesh.GetColor();
 
-                IfcGeometry finalGeometry;
+                std::vector<IfcGeometry> voidGeoms;
 
-                if (flatElementMeshes.size() != 0)
+                for (auto relVoidExpressID : relVoidsIt->second)
                 {
-                    // Calculate the BBOX of the first operand(s). Then skip second boolean operands that are outside of the first operands BBOX
-                    bimGeometry::AABB firstOperandBBox;
-                    for (size_t iMesh = 0; iMesh < flatElementMeshes.size(); ++iMesh)
-                    {
-                        IfcGeometry& elementMesh = flatElementMeshes[iMesh];
-                        bimGeometry::AABB meshBBox = elementMesh.GetAABB();
-                        firstOperandBBox.merge(meshBBox);
-                    }
 
-                    std::vector<IfcGeometry> voidGeoms;
-                    for (auto relVoidExpressID : relVoidsIt->second)
+                    IfcComposedMesh voidGeom = GetMesh(relVoidExpressID);
+                    auto flatVoidMesh = flatten(voidGeom, _expressIDToGeometry, normalizeMat);
+                    voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
+                }
+
+                if (relVoidsIt->second.size() > _settings._BOOLEAN_UNION_THRESHOLD) // When voids are greater than 10 they are all fused
+                {
+                    std::vector<IfcGeometry> joinedVoidGeoms;
+                    IfcGeometry fusedVoids;
+                    for (auto geom : voidGeoms)
                     {
-                        IfcComposedMesh voidGeom = GetMesh(relVoidExpressID);
-                        auto flatVoidMesh = flatten(voidGeom, _expressIDToGeometry, normalizeMat);
-                        bimGeometry::AABB voidMeshBBox;
-                        for (size_t iMesh = 0; iMesh < flatVoidMesh.size(); ++iMesh)
+                        if (geom.halfSpace)
                         {
-                            IfcGeometry& voidMesh = flatVoidMesh[iMesh];
-                            bimGeometry::AABB meshBBox = voidMesh.GetAABB();
-                            voidMeshBBox.merge(meshBBox);
+                            joinedVoidGeoms.push_back(geom);
                         }
-                        
-                        if (firstOperandBBox.intersects(voidMeshBBox))
+                        else
                         {
-                            voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
+                            std::vector<IfcGeometry> geomVector = {geom}; // Wrap 'geom' in a vector
+                            fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION", _settings);
                         }
                     }
 
-                    if (relVoidsIt->second.size() > _settings._BOOLEAN_UNION_THRESHOLD) // When voids are greater than 10 they are all fused
-                    {
-                        std::vector<IfcGeometry> joinedVoidGeoms;
-                        IfcGeometry fusedVoids;
-                        for (auto geom : voidGeoms)
-                        {
-                            if (geom.halfSpace)
-                            {
-                                joinedVoidGeoms.push_back(geom);
-                            }
-                            else
-                            {
-                                std::vector<IfcGeometry> geomVector = {geom}; // Wrap 'geom' in a vector
-                                fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION", _settings);
-                            }
-                            if (fusedVoids.numFaces > _settings._CSG_MAX_NUM_FACES) {
-                                spdlog::warn("Number of faces in voids for element {} is very high ({}), skipping further CSG operations", expressID, fusedVoids.numFaces);
-                                break;
-                            }
-                        }
+                    joinedVoidGeoms.push_back(fusedVoids);
+
+                    voidGeoms = joinedVoidGeoms;
+                    voidGeoms.shrink_to_fit();
+                }
+
+                ApplyBooleanToMeshChildren(mesh, voidGeoms, "DIFFERENCE", _settings, normalizeMat);
 
 #ifdef CSG_DEBUG_OUTPUT
-                        // io::DumpIfcGeometry(fusedVoids, "union_bool_void.obj");
+                IfcGeometry testGeo;
+                std::vector<IfcGeometry> geomResult = flatten(mesh, _expressIDToGeometry, normalizeMat);
+                for (auto &geom : geomResult)
+                {
+                    testGeo.MergeGeometry(geom);
+                }
+                io::DumpIfcGeometry(testGeo, "test.obj");
+                std::cout << "Dumped test.obj" << std::endl;
 #endif
-
-                        joinedVoidGeoms.push_back(fusedVoids);
-
-                        voidGeoms = joinedVoidGeoms;
-                        voidGeoms.shrink_to_fit();
-                    }
-
-                    // if(flatElementMeshes.size() > 10) // When elements are greater than 10 they are all fused
-                    // {
-                    //     std::vector<IfcGeometry> joinedMeshGeoms;
-                    //     IfcGeometry fusedMesh;
-                    //     for (auto geom : flatElementMeshes)
-                    //     {
-                    //         if (geom.halfSpace)
-                    //         {
-                    //             joinedMeshGeoms.push_back(geom);
-                    //         }
-                    //         else
-                    //         {
-                    //             #ifdef CSG_DEBUG_OUTPUT
-                    //                 // io::DumpIfcGeometry(fusedMesh, "union_bool_solid_partial_A.obj");
-                    //             #endif
-
-                    //             #ifdef CSG_DEBUG_OUTPUT
-                    //                 // io::DumpIfcGeometry(geom, "union_bool_solid_partial_B.obj");
-                    //             #endif
-
-                    //             std::vector<IfcGeometry> geomVector = {geom};  // Wrap 'geom' in a vector
-                    //             fusedMesh = BoolProcess(std::vector<IfcGeometry>{fusedMesh}, geomVector, "UNION");
-
-                    //             #ifdef CSG_DEBUG_OUTPUT
-                    //                 // io::DumpIfcGeometry(fusedMesh, "union_bool_solid_partial.obj");
-                    //             #endif
-                    //         }
-                    //     }
-
-                    //     #ifdef CSG_DEBUG_OUTPUT
-                    //         // io::DumpIfcGeometry(fusedMesh, "union_bool_solid.obj");
-                    //     #endif
-
-                    //     joinedMeshGeoms.push_back(fusedMesh);
-
-                    //     flatElementMeshes = joinedMeshGeoms;
-                    //     flatElementMeshes.shrink_to_fit();
-                    // }
-
-                    finalGeometry = BoolProcess(flatElementMeshes, voidGeoms, "DIFFERENCE", _settings);
-
-#ifdef CSG_DEBUG_OUTPUT
-//    io::DumpIfcGeometry(finalGeometry, "mesh_bool.obj");
-#endif
-                }
-
-                _expressIDToGeometry[expressID] = finalGeometry;
-                resultMesh.transformation = glm::translate(origin);
-                resultMesh.expressID = expressID;
-                resultMesh.hasGeometry = true;
-                // If there is no styledItemcolor apply color of the object
-                if (mesh.hasColor)
-                {
-                    resultMesh.color = mesh.color;
-                    resultMesh.hasColor = true;
-                }
-                else if (elementColor.has_value())
-                {
-                    resultMesh.hasColor = true;
-                    resultMesh.color = *elementColor;
-                }
-                else
-                {
-                    resultMesh.hasColor = false;
-                }
-
-
-				// Sometimes, a geometric item like IFCEXTRUDEDAREASOLID has a color assigned.
-                // With flatten() and BoolProcess, that color gets lost. Restore it here:
-                if (!mesh.hasGeometry && mesh.children.size() > 0)
-                {
-                    auto geometricItem = mesh.children.front();
-                    std::optional<glm::dvec4> geometricItemColor = geometricItem.GetColor();
-                    if (geometricItemColor.has_value())
-                    {
-                        glm::dvec4 colorValue = geometricItemColor.value();
-                        resultMesh.color = colorValue;
-                        resultMesh.hasColor = true;
-                    }
-                }
-
-                return resultMesh;
+                return mesh;
             }
             else
             {
@@ -1817,7 +1713,6 @@ namespace webifc::geometry
         if (applyLinearScalingFactor)
         {
             mat = glm::scale(glm::dvec3(_geometryLoader.GetLinearScalingFactor()));
-            ;
         }
 
         glm::dvec4 color = glm::dvec4(1, 1, 1, 1);
@@ -1827,6 +1722,10 @@ namespace webifc::geometry
         return flatMesh;
     }
 
+    /**
+     * Extracts all the geometries and their associated colors and transformations from a composed mesh
+     * and adds them to the flat mesh geometries field.
+     */
     void IfcGeometryProcessor::AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix, const glm::dvec4 &color, bool hasColor)
     {
 
@@ -1906,6 +1805,49 @@ namespace webifc::geometry
     IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
         return _boolEngine.BoolProcess(firstGeoms, secondGeoms, op, _settings);
+    }
+    /**
+     * This function traverses an IfcComposedMesh, transforming each child
+     * IfcGeometry into world coordinates to perform Boolean operations
+     * with the geometries in `secondGroups` (e.g., voids).
+     *
+     * After performing the Boolean operations in world space, the resulting
+     * geometry is transformed back into the local coordinate system of the
+     * original IfcComposedMesh and updated in `_expressIDToGeometry`.
+     *
+     * @param composedMesh The composed mesh whose geometry will be processed.
+     * @param secondGroups A vector of IfcGeometry elements to use in Boolean operations (e.g., voids).
+     * @param op The Boolean operation to perform ("UNION", "SUBTRACT", "INTERSECT", etc.).
+     * @param _settings Settings that control precision, tolerance, or other geometry-specific options.
+     * @param mat Transformation matrix representing the parent transformation.
+     */
+    void IfcGeometryProcessor::ApplyBooleanToMeshChildren(IfcComposedMesh &composedMesh, std::vector<IfcGeometry> &secondGroups, std::string op, IfcGeometrySettings _settings, glm::dmat4 mat = glm::dmat4(1))
+    {
+        glm::dmat4 newMat = mat * composedMesh.transformation;
+        bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
+        auto geomIt = _expressIDToGeometry.find(composedMesh.expressID);
+        if (composedMesh.hasGeometry && geomIt != _expressIDToGeometry.end())
+        {
+            IfcGeometry meshGeom = geomIt->second;
+            std::vector<IfcGeometry> transformedGeoms = transformIfcGeometry(meshGeom, newMat, transformationBreaksWinding);
+
+            IfcGeometry geometryResult = BoolProcess(transformedGeoms, secondGroups, op, _settings);
+
+            glm::dmat4 invMat = glm::inverse(newMat);
+            transformationBreaksWinding = MatrixFlipsTriangles(invMat);
+
+            std::vector<IfcGeometry> localGeom = transformIfcGeometry(geometryResult, invMat, transformationBreaksWinding);
+            IfcGeometry localGeomMerged;
+            for (const auto &geom : localGeom)
+            {
+                localGeomMerged.MergeGeometry(geom);
+            }
+            _expressIDToGeometry[composedMesh.expressID] = localGeomMerged;
+        }
+        for (auto &c : composedMesh.children)
+        {
+            ApplyBooleanToMeshChildren(c, secondGroups, op, _settings, newMat);
+        }
     }
 
     std::vector<uint32_t> IfcGeometryProcessor::Read2DArrayOfThreeIndices()
@@ -2144,14 +2086,13 @@ namespace webifc::geometry
             IfcGeometry firstOperator = firstGeom;
             for (auto &secondGeom : secondGeoms)
             {
-                bool doit = true;
                 if (secondGeom.numFaces == 0)
                 {
                     spdlog::error("[BoolProcess()] bool aborted due to empty source or target");
 
                     // bail out because we will get strange meshes
                     // if this happens, probably there's an issue parsing the mesh that occurred earlier
-                    doit = false;
+                    continue;
                 }
 
                 if (firstOperator.numFaces == 0 && op != "UNION")
@@ -2163,82 +2104,79 @@ namespace webifc::geometry
                     break;
                 }
 
-                if (doit)
+                IfcGeometry secondOperator;
+
+                if (secondGeom.halfSpace)
                 {
-                    IfcGeometry secondOperator;
+                    glm::dvec3 origin = secondGeom.halfSpaceOrigin;
+                    glm::dvec3 x = secondGeom.halfSpaceX - origin;
+                    glm::dvec3 y = secondGeom.halfSpaceY - origin;
+                    glm::dvec3 z = secondGeom.halfSpaceZ - origin;
+                    glm::dmat4 trans = glm::dmat4(
+                        glm::dvec4(x, 0),
+                        glm::dvec4(y, 0),
+                        glm::dvec4(z, 0),
+                        glm::dvec4(0, 0, 0, 1));
 
-                    if (secondGeom.halfSpace)
+                    double scaleX = 1;
+                    double scaleY = 1;
+                    double scaleZ = 1;
+
+                    for (uint32_t i = 0; i < firstOperator.numPoints; i++)
                     {
-                        glm::dvec3 origin = secondGeom.halfSpaceOrigin;
-                        glm::dvec3 x = secondGeom.halfSpaceX - origin;
-                        glm::dvec3 y = secondGeom.halfSpaceY - origin;
-                        glm::dvec3 z = secondGeom.halfSpaceZ - origin;
-                        glm::dmat4 trans = glm::dmat4(
-                            glm::dvec4(x, 0),
-                            glm::dvec4(y, 0),
-                            glm::dvec4(z, 0),
-                            glm::dvec4(0, 0, 0, 1));
-
-                        double scaleX = 1;
-                        double scaleY = 1;
-                        double scaleZ = 1;
-
-                        for (uint32_t i = 0; i < firstOperator.numPoints; i++)
+                        glm::dvec3 p = firstOperator.GetPoint(i);
+                        glm::dvec3 vec = (p - origin);
+                        double dx = glm::dot(vec, x);
+                        double dy = glm::dot(vec, y);
+                        double dz = glm::dot(vec, z);
+                        if (glm::abs(dx) > scaleX)
                         {
-                            glm::dvec3 p = firstOperator.GetPoint(i);
-                            glm::dvec3 vec = (p - origin);
-                            double dx = glm::dot(vec, x);
-                            double dy = glm::dot(vec, y);
-                            double dz = glm::dot(vec, z);
-                            if (glm::abs(dx) > scaleX)
-                            {
-                                scaleX = glm::abs(dx);
-                            }
-                            if (glm::abs(dy) > scaleY)
-                            {
-                                scaleY = glm::abs(dy);
-                            }
-                            if (glm::abs(dz) > scaleZ)
-                            {
-                                scaleZ = glm::abs(dz);
-                            }
+                            scaleX = glm::abs(dx);
                         }
-                        secondOperator.AddGeometry(secondGeom, trans, scaleX * 2, scaleY * 2, scaleZ * 2, secondGeom.halfSpaceOrigin);
+                        if (glm::abs(dy) > scaleY)
+                        {
+                            scaleY = glm::abs(dy);
+                        }
+                        if (glm::abs(dz) > scaleZ)
+                        {
+                            scaleZ = glm::abs(dz);
+                        }
                     }
-                    else
-                    {
-                        secondOperator = secondGeom;
-                    }
-
-#ifdef CSG_DEBUG_OUTPUT
-                    // io::DumpIfcGeometry(secondOperator, "second.obj");
-#endif
-
-#ifdef CSG_DEBUG_OUTPUT
-                    // io::DumpIfcGeometry(firstOperator, "first.obj");
-
-                    // BOOLSTATUS++;
-
-#endif
-
-                    firstOperator.buildPlanes();
-                    secondOperator.buildPlanes();
-
-                    fuzzybools::SetEpsilons(_settings.TOLERANCE_PLANE_INTERSECTION, _settings.TOLERANCE_PLANE_DEVIATION, _settings.TOLERANCE_BACK_DEVIATION_DISTANCE, _settings.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, _settings.TOLERANCE_BOUNDING_BOX, BOOLSTATUS);
-
-                    if (op == "DIFFERENCE")
-                    {
-                        firstOperator = Subtract(firstOperator, secondOperator);
-                    }
-                    else if (op == "UNION")
-                    {
-                        firstOperator = Union(firstOperator, secondOperator);
-                    }
-
-#ifdef CSG_DEBUG_OUTPUT
-                    io::DumpIfcGeometry(firstOperator, "result.obj");
-#endif
+                    secondOperator.AddGeometry(secondGeom, trans, scaleX * 2, scaleY * 2, scaleZ * 2, secondGeom.halfSpaceOrigin);
                 }
+                else
+                {
+                    secondOperator = secondGeom;
+                }
+
+#ifdef CSG_DEBUG_OUTPUT
+                // io::DumpIfcGeometry(secondOperator, "second.obj");
+#endif
+
+#ifdef CSG_DEBUG_OUTPUT
+                // io::DumpIfcGeometry(firstOperator, "first.obj");
+
+                // BOOLSTATUS++;
+
+#endif
+
+                firstOperator.buildPlanes();
+                secondOperator.buildPlanes();
+
+                fuzzybools::SetEpsilons(_settings.TOLERANCE_PLANE_INTERSECTION, _settings.TOLERANCE_PLANE_DEVIATION, _settings.TOLERANCE_BACK_DEVIATION_DISTANCE, _settings.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, _settings.TOLERANCE_BOUNDING_BOX, BOOLSTATUS);
+
+                if (op == "DIFFERENCE")
+                {
+                    firstOperator = Subtract(firstOperator, secondOperator);
+                }
+                else if (op == "UNION")
+                {
+                    firstOperator = Union(firstOperator, secondOperator);
+                }
+
+#ifdef CSG_DEBUG_OUTPUT
+                io::DumpIfcGeometry(firstOperator, "result.obj");
+#endif
             }
             finalResult.AddGeometry(firstOperator);
         }

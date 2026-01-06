@@ -801,6 +801,94 @@ namespace webifc::geometry
 			return glm::dvec3(0);
 		}
 	}
+	/**
+	 * Transforms an IfcGeometry by applying a transformation matrix to faces points.
+	 *
+	 * @param sourceGeom            The source IfcGeometry to transform
+	 * @param matrix                The transformation matrix to apply
+	 * @param transformationBreaksWinding  Whether the transformation breaks winding order
+	 *
+	 * @return A vector of transformed IfcGeometry objects
+	 */
+	inline std::vector<IfcGeometry> transformIfcGeometry(const IfcGeometry &sourceGeom, glm::dmat4 matrix, bool transformationBreaksWinding)
+	{
+		std::vector<IfcGeometry> geomsTransformed;
+		if (sourceGeom.part.size() > 0)
+		{
+			for (uint32_t i = 0; i < sourceGeom.part.size(); i++)
+			{
+
+				IfcGeometry newMeshGeom = sourceGeom.part[i];
+				if (newMeshGeom.numFaces)
+				{
+					IfcGeometry newGeom;
+					newGeom.halfSpace = newMeshGeom.halfSpace;
+					if (newGeom.halfSpace)
+					{
+						newGeom.halfSpaceOrigin = matrix * glm::dvec4(newMeshGeom.halfSpaceOrigin, 1);
+						newGeom.halfSpaceX = matrix * glm::dvec4(newMeshGeom.halfSpaceX, 1);
+						newGeom.halfSpaceY = matrix * glm::dvec4(newMeshGeom.halfSpaceY, 1);
+						newGeom.halfSpaceZ = matrix * glm::dvec4(newMeshGeom.halfSpaceZ, 1);
+					}
+
+					for (uint32_t i = 0; i < newMeshGeom.numFaces; i++)
+					{
+						bimGeometry::Face f = newMeshGeom.GetFace(i);
+						glm::dvec3 a = matrix * glm::dvec4(newMeshGeom.GetPoint(f.i0), 1);
+						glm::dvec3 b = matrix * glm::dvec4(newMeshGeom.GetPoint(f.i1), 1);
+						glm::dvec3 c = matrix * glm::dvec4(newMeshGeom.GetPoint(f.i2), 1);
+
+						if (transformationBreaksWinding)
+						{
+							newGeom.AddFace(b, a, c);
+						}
+						else
+						{
+							newGeom.AddFace(a, b, c);
+						}
+					}
+
+					geomsTransformed.push_back(newGeom);
+				}
+			}
+		}
+		else
+		{
+			if (sourceGeom.numFaces)
+			{
+				IfcGeometry newGeom;
+				newGeom.halfSpace = sourceGeom.halfSpace;
+				if (newGeom.halfSpace)
+				{
+					newGeom.halfSpaceOrigin = matrix * glm::dvec4(sourceGeom.halfSpaceOrigin, 1);
+					newGeom.halfSpaceX = matrix * glm::dvec4(sourceGeom.halfSpaceX, 1);
+					newGeom.halfSpaceY = matrix * glm::dvec4(sourceGeom.halfSpaceY, 1);
+					newGeom.halfSpaceZ = matrix * glm::dvec4(sourceGeom.halfSpaceZ, 1);
+				}
+
+				for (uint32_t i = 0; i < sourceGeom.numFaces; i++)
+				{
+					bimGeometry::Face f = sourceGeom.GetFace(i);
+					glm::dvec3 a = matrix * glm::dvec4(sourceGeom.GetPoint(f.i0), 1);
+					glm::dvec3 b = matrix * glm::dvec4(sourceGeom.GetPoint(f.i1), 1);
+					glm::dvec3 c = matrix * glm::dvec4(sourceGeom.GetPoint(f.i2), 1);
+
+					if (transformationBreaksWinding)
+					{
+						newGeom.AddFace(b, a, c);
+					}
+					else
+					{
+						newGeom.AddFace(a, b, c);
+					}
+				}
+
+				geomsTransformed.push_back(newGeom);
+			}
+		}
+
+		return geomsTransformed;
+	}
 
 	inline void flattenRecursive(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, std::vector<IfcGeometry> &geoms, glm::dmat4 mat)
 	{
@@ -814,79 +902,8 @@ namespace webifc::geometry
 		{
 			auto meshGeom = geomIt->second;
 
-			if (meshGeom.part.size() > 0)
-			{
-				for (uint32_t i = 0; i < meshGeom.part.size(); i++)
-				{
-
-					IfcGeometry newMeshGeom = meshGeom.part[i];
-					if (newMeshGeom.numFaces)
-					{
-						IfcGeometry newGeom;
-						newGeom.halfSpace = newMeshGeom.halfSpace;
-						if (newGeom.halfSpace)
-						{
-							newGeom.halfSpaceOrigin = newMat * glm::dvec4(newMeshGeom.halfSpaceOrigin, 1);
-							newGeom.halfSpaceX = newMat * glm::dvec4(newMeshGeom.halfSpaceX, 1);
-							newGeom.halfSpaceY = newMat * glm::dvec4(newMeshGeom.halfSpaceY, 1);
-							newGeom.halfSpaceZ = newMat * glm::dvec4(newMeshGeom.halfSpaceZ, 1);
-						}
-
-						for (uint32_t i = 0; i < newMeshGeom.numFaces; i++)
-						{
-							bimGeometry::Face f = newMeshGeom.GetFace(i);
-							glm::dvec3 a = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i0), 1);
-							glm::dvec3 b = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i1), 1);
-							glm::dvec3 c = newMat * glm::dvec4(newMeshGeom.GetPoint(f.i2), 1);
-
-							if (transformationBreaksWinding)
-							{
-								newGeom.AddFace(b, a, c);
-							}
-							else
-							{
-								newGeom.AddFace(a, b, c);
-							}
-						}
-
-						geoms.push_back(newGeom);
-					}
-				}
-			}
-			else
-			{
-				if (meshGeom.numFaces)
-				{
-					IfcGeometry newGeom;
-					newGeom.halfSpace = meshGeom.halfSpace;
-					if (newGeom.halfSpace)
-					{
-						newGeom.halfSpaceOrigin = newMat * glm::dvec4(meshGeom.halfSpaceOrigin, 1);
-						newGeom.halfSpaceX = newMat * glm::dvec4(meshGeom.halfSpaceX, 1);
-						newGeom.halfSpaceY = newMat * glm::dvec4(meshGeom.halfSpaceY, 1);
-						newGeom.halfSpaceZ = newMat * glm::dvec4(meshGeom.halfSpaceZ, 1);
-					}
-
-					for (uint32_t i = 0; i < meshGeom.numFaces; i++)
-					{
-						bimGeometry::Face f = meshGeom.GetFace(i);
-						glm::dvec3 a = newMat * glm::dvec4(meshGeom.GetPoint(f.i0), 1);
-						glm::dvec3 b = newMat * glm::dvec4(meshGeom.GetPoint(f.i1), 1);
-						glm::dvec3 c = newMat * glm::dvec4(meshGeom.GetPoint(f.i2), 1);
-
-						if (transformationBreaksWinding)
-						{
-							newGeom.AddFace(b, a, c);
-						}
-						else
-						{
-							newGeom.AddFace(a, b, c);
-						}
-					}
-
-					geoms.push_back(newGeom);
-				}
-			}
+			std::vector<IfcGeometry> transformedGeoms = transformIfcGeometry(meshGeom, newMat, transformationBreaksWinding);
+			geoms.insert(geoms.end(), transformedGeoms.begin(), transformedGeoms.end());
 		}
 
 		for (auto &c : mesh.children)
@@ -895,13 +912,24 @@ namespace webifc::geometry
 		}
 	}
 
+	/**
+	 * Recursively flattens an IfcComposedMesh hierarchy into a list of geometries
+	 * expressed in world coordinates.
+	 *
+	 * @param mesh         Root IfcComposedMesh to flatten
+	 * @param geometryMap  Map of expressID -> local-space IfcGeometry
+	 * @param geoms        Output vector collecting world-space geometries
+	 * @param mat          Accumulated parent transform (world matrix)
+	 *
+	 * @note This function intentionally converts geometry from local space to
+	 *       world space. The returned geometries must NOT be re-transformed.
+	 */
 	inline std::vector<IfcGeometry> flatten(IfcComposedMesh &mesh, std::unordered_map<uint32_t, IfcGeometry> &geometryMap, glm::dmat4 mat = glm::dmat4(1))
 	{
 		std::vector<IfcGeometry> geoms;
 		flattenRecursive(mesh, geometryMap, geoms, mat);
 		return geoms;
 	}
-
 	inline std::vector<IfcGeometry> flattenSolids(std::vector<IfcGeometry> geoms)
 	{
 		std::vector<IfcGeometry> newGeoms;
