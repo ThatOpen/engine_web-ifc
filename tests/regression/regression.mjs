@@ -3,11 +3,6 @@ import { readFileSync, writeFileSync, readdirSync,readSync, openSync } from "fs"
 import * as path from "path"
 const {createHash} = await import('node:crypto');
 import {IfcAPI} from "../../dist/web-ifc-api-node.js";
-import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { Blob, FileReader } from 'vblob';
-global.Blob = Blob;
-global.FileReader = FileReader;
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import AdmZip from 'adm-zip';
 
 const REGRESSION_FILES_DIR = "./tests/ifcfiles/";
@@ -28,9 +23,7 @@ async function RunRegression()
       let files = await GetRegressionFiles();
       for (let fileName of files) {
         let properFileName = fileName.replaceAll("\\","/");
-        regressionResults[properFileName] = await CreateModelResuts(fileName);
-        regressionResults[properFileName] = createHash('sha256').update(JSON.stringify(regressionResults[properFileName])).digest('hex');
-
+        regressionResults[properFileName] = createHash('sha256').update(Buffer.from(CreateModelResuts(fileName))).digest('hex');
       }
       if (update) {
           writeFileSync(REGRESSION_RESULT_FILE, JSON.stringify(regressionResults));
@@ -73,7 +66,7 @@ async function GetRegressionFiles()
     return files.concat(privateFiles);
 }
 
-async function CreateModelResuts(filename)
+function CreateModelResuts(filename)
 {
   let modelID;
   console.log("Parsing:"+filename);
@@ -110,16 +103,7 @@ async function CreateModelResuts(filename)
 
   console.log("Parsed Model:"+filename+"Loading " + geometries.length +" geometries");
   if (geometries.length > 0) {
-    const combinedGeometry = BufferGeometryUtils.mergeGeometries(geometries);
-    const mat = new THREE.MeshStandardMaterial({ side: THREE.DoubleSide });
-    mat.vertexColors = true;
-    const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
-    const scene = new THREE.Scene();
-    scene.add(mergedMesh);
-    const exporter = new GLTFExporter();
-    return new Promise((resolve, reject) => {
-        exporter.parse(scene, ( gltf ) => { resolve(gltf);}, (e) => {reject(e);});
-    });
+    return geometries;
   }
 }
 
