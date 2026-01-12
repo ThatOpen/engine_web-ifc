@@ -42,6 +42,13 @@ namespace webifc::geometry {
 
 		void Geometry::GetCenterExtents(glm::dvec3& center, glm::dvec3& extents) const
 		{
+			if (numPoints == 0)
+			{
+				// avoid inf values
+				extents = glm::dvec3(0,0,0);
+				center = glm::dvec3(0, 0, 0);
+				return;
+			}
 			glm::dvec3 min(DBL_MAX, DBL_MAX, DBL_MAX);
 			glm::dvec3 max(-DBL_MAX, -DBL_MAX, -DBL_MAX);
 
@@ -163,7 +170,7 @@ namespace webifc::geometry {
 		glm::dvec3 center = normalizationCenter;
 		if (!normalized)
 		{	
-			glm::dvec3 extents;
+			glm::dvec3 extents(0,0,0);
 			GetCenterExtents(center,extents);
 			for (size_t i = 0; i < vertexData.size(); i += 6)
 			{

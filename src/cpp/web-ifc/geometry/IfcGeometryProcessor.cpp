@@ -6,6 +6,7 @@
 
 #if defined(DEBUG_DUMP_SVG) || defined(DUMP_CSG_MESHES)
 #include "../../test/io_helpers.h"
+#include "../../test/dumpToThree.h"
 #endif
 
 #include "IfcGeometryProcessor.h"
@@ -193,6 +194,7 @@ namespace webifc::geometry
 
                 for (auto relVoidExpressID : relVoidsIt->second)
                 {
+
                     IfcComposedMesh voidGeom = GetMesh(relVoidExpressID);
                     auto flatVoidMesh = flatten(voidGeom, _expressIDToGeometry, normalizeMat);
                     voidGeoms.insert(voidGeoms.end(), flatVoidMesh.begin(), flatVoidMesh.end());
@@ -239,6 +241,7 @@ namespace webifc::geometry
             {
                 return mesh;
             }
+
         }
         else
         {
@@ -453,7 +456,7 @@ namespace webifc::geometry
                 }
 
 #ifdef DUMP_CSG_MESHES
-                DumpIfcGeometry(geom, "pbhs.obj");
+                io::DumpIfcGeometry(geom, "pbhs.obj");
 #endif
 
                 // TODO: this is getting problematic.....
