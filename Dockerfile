@@ -1,4 +1,4 @@
-FROM emscripten/emsdk:3.1.44
+FROM emscripten/emsdk:4.0.23
 WORKDIR /web-ifc-app
 COPY package*.json .
 RUN npm i -g cpy-cli
