@@ -368,7 +368,6 @@ namespace webifc::geometry
                     mesh.transformation = glm::translate(origin);
 
                     if (!mesh.hasColor && firstMesh.hasColor) {
-					
                         mesh.hasColor = true;
                         mesh.color = firstMesh.color;
                     }
