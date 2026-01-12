@@ -74,14 +74,12 @@
     "jest": "^30.0.3",
     "local-web-server": "^5.2.1",
     "make-dir-cli": "^4.0.0",
-    "monaco-editor": "^0.55.1",
     "rimraf": "^6.0.0",
     "three": "^0.182.0",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
-    "typescript": "^5.8.3",
-    "vblob": "^1.1.0"
+    "typescript": "^5.8.3"
   },
   "browser": {
     "crypto": false,
