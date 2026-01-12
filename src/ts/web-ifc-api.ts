@@ -468,7 +468,7 @@ export class IfcAPI {
     for (var i = 0; i < SchemaNames.length; i++) {
       if (typeof SchemaNames[i] !== "undefined") {
         for (var j = 0; j < SchemaNames[i].length; j++) {
-          if (SchemaNames[i][j] == schemaName) return i;
+          if (SchemaNames[i][j] == schemaName.toUpperCase()) return i;
         }
       }
     }
