@@ -680,7 +680,7 @@ opacity: 0.7
         return { min, max };
     }
 
-    void DumpCurveToHtml(std::vector<glm::dvec3> points, std::string filename, std::vector<uint32_t> indices = {})
+    inline void DumpCurveToHtml(std::vector<glm::dvec3> points, std::string filename, std::vector<uint32_t> indices = {})
     {
         writeFile(filename, makeThreeJSViewer(points, indices));
     }
