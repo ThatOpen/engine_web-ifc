@@ -512,9 +512,15 @@ namespace fuzzybools
 		// intersections even when lines are slightly offset in 3D space.
 
 		glm::dvec3 diff = result.point1 - result.point2;
-		double totalDist = glm::length(diff);
+		double totalDist = std::sqrt(glm::dot(diff, diff));
 
 		if(totalDist < 1E-12)
+		{
+			result.distance = totalDist;
+			return result;
+		}
+
+		if(totalDist > TOLERANCE_SCALAR_EQUALITY)
 		{
 			result.distance = totalDist;
 			return result;
