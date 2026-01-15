@@ -520,7 +520,7 @@ namespace fuzzybools
 			return result;
 		}
 
-		if(totalDist > TOLERANCE_SCALAR_EQUALITY)
+		if(totalDist > TOLERANCE_SCALAR_EQUALITY * 10)
 		{
 			result.distance = totalDist;
 			return result;

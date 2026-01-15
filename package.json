@@ -36,7 +36,7 @@
     "build-web-ifc-api-browser": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=esm --define:__WASM_PATH__=\\\"./web-ifc\\\" --outfile=./dist/web-ifc-api.js",
     "build-web-ifc-api-iife": "make-dir dist && esbuild dist/web-ifc-api.ts --bundle --format=iife --define:__WASM_PATH__=\\\"./web-ifc\\\" --global-name=WebIFC --outfile=./dist/web-ifc-api-iife.js",
     "build-viewer": "cd examples/viewer/ && make-dir dist && node makesrc.js && esbuild --bundle web-ifc-viewer.ts --outfile=./dist/web-ifc-viewer.js && rimraf ts_src.js && cpy index.html dist && cpy ../../dist/web-ifc.wasm dist/web-ifc.wasm && cpy ../../dist/web-ifc-mt.js dist/web-ifc-mt.js && cpy ../../dist/web-ifc-mt.wasm dist/web-ifc-mt.wasm && cpy ../example.ifc dist/example.ifc",
-    "dev": "npm run build-viewer && cd examples/viewer/dist && ws -p 8080 --cors.opener-policy same-origin --cors.embedder-policy require-cor",
+    "dev": "npm run build-viewer && cd examples/viewer/dist && ws -p 8080",
     "docker-build": "docker build -t web-ifc .",
     "docker-run": "npm run docker-run-container && npm run docker-get-compiled-files ",
     "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
@@ -74,14 +74,12 @@
     "jest": "^30.0.3",
     "local-web-server": "^5.2.1",
     "make-dir-cli": "^4.0.0",
-    "monaco-editor": "^0.55.1",
     "rimraf": "^6.0.0",
     "three": "^0.182.0",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
-    "typescript": "^5.8.3",
-    "vblob": "^1.1.0"
+    "typescript": "^5.8.3"
   },
   "browser": {
     "crypto": false,
