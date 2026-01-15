@@ -16,7 +16,6 @@
 #include <cstdint>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/norm.hpp>
 #include "../representation/geometry.h"
 #include "../representation/IfcGeometry.h"
 #include <mapbox/earcut.hpp>
@@ -118,61 +117,76 @@ namespace webifc::geometry
 		return bimGeometry::computeSafeNormal(v1, v2, v3, normal, eps);
 	}
 
-	inline bool GetBasisFromCoplanarPoints(
-		const std::vector<glm::dvec3>& points,
-		glm::dvec3& v1,
-		glm::dvec3& v2,
-		glm::dvec3& v3
-	)
+	inline bool GetBasisFromCoplanarPoints(std::vector<glm::dvec3> &points, glm::dvec3 &v1, glm::dvec3 &v2, glm::dvec3 &v3)
 	{
-		if (points.size() < 3) {
-			// Need at least three points to define a plane (basis)
-			return false;
-		}
-
 		v1 = points[0];
 
-		// --- 1. Find the second distinct point (v2) ---
-		bool v2_found = false;
-		for (size_t i = 1; i < points.size(); ++i) {
-			if (glm::distance2(v1, points[i]) > EPS_SMALL * EPS_SMALL) {
-				v2 = points[i];
-				v2_found = true;
+		for (auto &p : points)
+		{
+			if (v1 != p)
+			{
+				v2 = p;
 				break;
 			}
 		}
-		if (!v2_found) {
-			// All points are identical
-			return false;
+
+		glm::dvec3 normal;
+		// multiple tries to find the best match
+		for (double i = 0; i < 4; i++)
+		{
+			double EPS = EPS_SMALL;
+			if (i == 0)
+			{
+				EPS = 100;
+			}
+			if (i == 1)
+			{
+				EPS = 1;
+			}
+			if (i == 2)
+			{
+				EPS = 0.01;
+			}
+			if (i == 3)
+			{
+				EPS = 1e-03;
+			}
+			for (auto &p : points)
+			{
+				if (computeSafeNormal(v1, v2, p, normal, EPS))
+				{
+					v3 = p;
+					return true;
+				}
+			}
 		}
 
-		// --- 2. Search for the third non-collinear point (v3) ---
-		glm::dvec3 v1v2 = v2 - v1;
+		double d1 = 0;
 
-		// Use a robust check for collinearity: check the area of the triangle (v1, v2, p)
-		for (size_t i = 1; i < points.size(); ++i) {
-			const glm::dvec3& p = points[i];
-
-			// Skip v1 and v2, though the check below should handle them correctly
-			if (glm::distance2(v1, p) < EPS_SMALL * EPS_SMALL || glm::distance2(v2, p) < EPS_SMALL * EPS_SMALL) {
-				continue;
+		for (auto &p : points)
+		{
+			double d2 = glm::distance(v1, p);
+			if (d1 < d2)
+			{
+				d1 = d2;
+				v2 = p;
 			}
+		}
 
-			glm::dvec3 v1p = p - v1;
-
-			// Check if the cross product is significant (meaning the points are not collinear)
-			glm::dvec3 cross_product = glm::cross(v1v2, v1p);
-
-			// Use a small, fixed tolerance (e.g., 1e-12) for the square of the cross product magnitude.
-			if (glm::length2(cross_product) > 1e-12) {
+		d1 = 0;
+		for (auto &p : points)
+		{
+			double d2 = glm::distance(v1, p);
+			double d3 = glm::distance(v2, p);
+			if (d1 < d2 + d3)
+			{
+				d1 = d2 + d3;
 				v3 = p;
-				return true;
 			}
 		}
 
-		// --- 3. Fallback: No three non-collinear points found ---
-		// All points are either identical or collinear.
-		return false;
+		// multiple tries to find the best match
+		return computeSafeNormal(v1, v2, v3, normal, 1e-08);
 	}
 
 	inline void TriangulateBounds(IfcGeometry& geometry, std::vector<IfcBound3D>& bounds, uint32_t expressID)
