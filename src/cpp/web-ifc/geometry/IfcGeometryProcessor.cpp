@@ -215,10 +215,6 @@ namespace webifc::geometry
                             std::vector<IfcGeometry> geomVector = {geom}; // Wrap 'geom' in a vector
                             fusedVoids = BoolProcess(std::vector<IfcGeometry>{fusedVoids}, geomVector, "UNION", _settings);
                         }
-                        if (fusedVoids.numFaces > _settings._CSG_MAX_NUM_FACES) {
-                            spdlog::warn("High number of faces ({}) in voids for element {}, skipping further CSG operations", fusedVoids.numFaces, expressID);
-                            break;
-                        }
                     }
 
                     joinedVoidGeoms.push_back(fusedVoids);
@@ -340,39 +336,6 @@ namespace webifc::geometry
                 {
                     // bail out because we will get strange meshes
                     // if this happens, probably there's an issue parsing the first mesh
-                    return mesh;
-                }
-
-                size_t numFacesGeoms = 0;
-                for (auto& geom : flatFirstMeshes) {
-                    numFacesGeoms += geom.numFaces;
-                }
-                for (auto& geom : flatSecondMeshes) {
-                    numFacesGeoms += geom.numFaces;
-                }
-
-                if (numFacesGeoms > _settings._CSG_MAX_NUM_FACES) {
-                    spdlog::warn("High number of faces in CSG operand ({}), skipping further CSG operations", numFacesGeoms);
-
-                    // Flatten the first operand (transformed and normalized, like in the normal path)
-                    auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
-
-                    // Merge into a single geometry (equivalent to the first operand without boolean)
-                    IfcGeometry resultMesh;
-                    for (const auto& g : flatFirstMeshes) {
-                        resultMesh.MergeGeometry(g);
-                    }
-
-                    _expressIDToGeometry[expressID] = resultMesh;
-                    mesh.hasGeometry = true;
-                    mesh.transformation = glm::translate(origin);
-
-                    if (!mesh.hasColor && firstMesh.hasColor) {
-                        mesh.hasColor = true;
-                        mesh.color = firstMesh.color;
-                    }
-
-                    // No need to set mesh = firstMesh; we're building a flat geometry here for consistency
                     return mesh;
                 }
 
