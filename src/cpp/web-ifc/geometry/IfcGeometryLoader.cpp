@@ -4330,10 +4330,22 @@ namespace webifc::geometry
 
     auto projectEID = projects[0];
     _loader.MoveToArgumentOffset(projectEID, 8);
+    auto tk = _loader.GetTokenType();
+    if (tk != parsing::REF)
+    {
+        // IfcProject::UnitsInContext is an optional argument, no error or warning
+        return;
+    }
 
     auto unitsID = _loader.GetRefArgument();
     _loader.MoveToArgumentOffset(unitsID, 0);
 
+    tk = _loader.GetTokenType();
+    if (tk != parsing::SET_BEGIN)
+    {
+        // IfcUnitAssignment::Units vector can be empty. Avoid infinite loop in _loader.GetSetArgument()
+        return;
+    }
     auto unitIds = _loader.GetSetArgument();
 
     for (auto &unitID : unitIds)
