@@ -4331,6 +4331,7 @@ namespace webifc::geometry
     auto projectEID = projects[0];
     _loader.MoveToArgumentOffset(projectEID, 8);
     auto tk = _loader.GetTokenType();
+    _loader.StepBack();
     if (tk != parsing::REF)
     {
         // IfcProject::UnitsInContext is an optional argument, no error or warning
@@ -4341,6 +4342,7 @@ namespace webifc::geometry
     _loader.MoveToArgumentOffset(unitsID, 0);
 
     tk = _loader.GetTokenType();
+    _loader.StepBack();
     if (tk != parsing::SET_BEGIN)
     {
         // IfcUnitAssignment::Units vector can be empty. Avoid infinite loop in _loader.GetSetArgument()
