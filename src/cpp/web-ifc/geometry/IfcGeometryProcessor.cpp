@@ -369,7 +369,7 @@ namespace webifc::geometry
                     flipWinding = true;
                 }
 
-                double d = 1;
+                double d = EXTRUSION_DISTANCE_HALFSPACE_M / _geometryLoader.GetLinearScalingFactor();
 
                 IfcProfile profile;
                 profile.isConvex = false;
