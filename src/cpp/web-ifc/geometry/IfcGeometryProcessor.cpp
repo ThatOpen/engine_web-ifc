@@ -945,6 +945,7 @@ namespace webifc::geometry
                 return mesh;
             }
             case schema::IFCEXTRUDEDAREASOLID:
+            case schema::IFCEXTRUDEDAREASOLIDTAPERED:
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t profileID = _loader.GetRefArgument();
