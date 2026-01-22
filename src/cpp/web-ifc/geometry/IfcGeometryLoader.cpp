@@ -1361,6 +1361,11 @@ namespace webifc::geometry
 
         // Important not to repeat the last point otherwise triangulation fails
         // if the list has zero points this is initial, no repetition is possible, otherwise we must check
+        auto nearEqual = [](const auto& p1, const auto& p2) { 
+            return distance(p1, p2) < EPS_BIG; 
+        };
+
+        // Important not to repeat the last point otherwise triangulation fails
         if (curve.points.size() == 0)
         {
           for (auto &pt : edgeCurve.points)
@@ -1371,16 +1376,55 @@ namespace webifc::geometry
         }
         else
         {
-          for (auto &pt : edgeCurve.points)
-          {
-            if (notPresent(pt, curve.points))
-            {
-              curve.points.push_back(pt);
-              curve.indices.push_back(id);
+            // Issue #1144, this issue was caused by segments being added in reverse orientation
+            // Unable to find a better solution we used a method that simply connects the endings of the curve and the edge.
+
+            // Check connection and reverse if needed
+            auto& ec = edgeCurve.points; // referència per brevetat
+            if (!ec.empty()) {
+                if (nearEqual(curve.points.back(), ec.back())) {
+                    std::reverse(ec.begin(), ec.end());
+                }
+                else if (nearEqual(curve.points.front(), ec.front())) {
+                    std::reverse(curve.points.begin(), curve.points.end());
+                    std::reverse(curve.indices.begin(), curve.indices.end());
+                }
+                else if (nearEqual(curve.points.front(), ec.back())) {
+                    std::reverse(curve.points.begin(), curve.points.end());
+                    std::reverse(curve.indices.begin(), curve.indices.end());
+                    std::reverse(ec.begin(), ec.end());
+                }
             }
-          }
+
+            for (auto &pt : edgeCurve.points)
+            {
+                if (notPresent(pt, curve.points))
+                {
+                    curve.points.push_back(pt);
+                    curve.indices.push_back(id);
+                }
+            }
         }
         id++;
+
+#ifdef CSG_DEBUG_OUTPUT
+
+			// // Volcar dades a fitxer
+			// {
+			// 	std::ofstream logFile("C:/Users/" + std::string(getenv("USERNAME")) + "/Desktop/log/curve.txt");
+			// 	logFile << "=== CURVE PRINTED ===" << std::endl;
+			// 	logFile << "Total edges: " << curve.points.size() << std::endl << std::endl;
+				
+			// 	for (size_t i = 0; i < curve.points.size(); i++) {
+			// 		logFile << "  Point [" << i << "]: x=" << curve.points[i].x 
+			// 			      << ", y=" << curve.points[i].y << std::endl;
+					
+			// 	}
+			// 	logFile.close();
+			// }
+
+#endif
+
       }
 
       return curve;
@@ -2328,6 +2372,36 @@ namespace webifc::geometry
         {
             curve.Add(curve.points[startIndex]);
         }
+
+#ifdef CSG_DEBUG_OUTPUT
+			// std::vector<std::vector<glm::dvec2>> polygonEdgesPrinted;
+			// std::vector<std::vector<glm::dvec2>> edgesPrinted;
+
+			// for (size_t i = 0; i < curve.points.size() - 1; i++)
+			// {
+			// 	auto& a = curve.points[i];       // Access the current point
+			// 	auto& b = curve.points[i + 1];   // Access the next point
+			// 	polygonEdgesPrinted.push_back({glm::dvec2(a[0], a[1]), glm::dvec2(b[0], b[1])});
+			// }
+			// fuzzybools::DumpSVGLines(polygonEdgesPrinted, L"Segment.html");
+
+      // // Volcar dades a fitxer
+			// {
+			// 	std::ofstream logFile("C:/Users/" + std::string(getenv("USERNAME")) + "/Desktop/log/log.txt");
+			// 	logFile << "=== POLYGON EDGES PRINTED ===" << std::endl;
+			// 	logFile << "Total edges: " << polygonEdgesPrinted.size() << std::endl << std::endl;
+				
+			// 	for (size_t i = 0; i < polygonEdgesPrinted.size(); i++) {
+			// 		logFile << "Edge [" << i << "]:" << std::endl;
+			// 		for (size_t j = 0; j < polygonEdgesPrinted[i].size(); j++) {
+			// 			logFile << "  Point [" << j << "]: x=" << polygonEdgesPrinted[i][j].x 
+			// 			        << ", y=" << polygonEdgesPrinted[i][j].y << std::endl;
+			// 		}
+			// 	}
+			// 	logFile.close();
+			// }
+
+#endif
         break;
     }
     case schema::IFCGRADIENTCURVE:
