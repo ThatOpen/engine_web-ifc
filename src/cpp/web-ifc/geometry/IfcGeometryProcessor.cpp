@@ -406,7 +406,7 @@ namespace webifc::geometry
                     flipWinding = true;
                 }
 
-                double d = 1;
+                double d = EXTRUSION_DISTANCE_HALFSPACE_M / _geometryLoader.GetLinearScalingFactor();
 
                 IfcProfile profile;
                 profile.isConvex = false;
@@ -982,6 +982,7 @@ namespace webifc::geometry
                 return mesh;
             }
             case schema::IFCEXTRUDEDAREASOLID:
+            case schema::IFCEXTRUDEDAREASOLIDTAPERED:
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t profileID = _loader.GetRefArgument();
@@ -1141,6 +1142,7 @@ namespace webifc::geometry
                 return mesh;
             }
             case schema::IFCEDGE:
+            case schema::IFCEDGECURVE:
             {
                 // IfcEdge is derived from IfcRepresentationItem and can be used as representation item directly
                 IfcCurve edge = _geometryLoader.GetEdge(expressID);
@@ -1773,6 +1775,7 @@ namespace webifc::geometry
 
             auto translation = glm::dmat4(1.0);
 
+            // #1462 Reports having problems with this line, not sure why this is needed
             translation = geom.Normalize();
 
             _expressIDToGeometry[composedMesh.expressID] = geom;

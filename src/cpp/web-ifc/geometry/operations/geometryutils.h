@@ -373,6 +373,22 @@ namespace webifc::geometry
 			// polygonEdgesPrinted.push_back({glm::dvec2(a[0], a[1]), glm::dvec2(b[0], b[1])});
 
 			// fuzzybools::DumpSVGLines(polygonEdgesPrinted, L"Polygon.html");
+
+			// // Volcar dades a fitxer
+			// {
+			// 	std::ofstream logFile("C:/Users/" + std::string(getenv("USERNAME")) + "/Desktop/log/log.txt");
+			// 	logFile << "=== POLYGON EDGES PRINTED ===" << std::endl;
+			// 	logFile << "Total edges: " << polygonEdgesPrinted.size() << std::endl << std::endl;
+				
+			// 	for (size_t i = 0; i < polygonEdgesPrinted.size(); i++) {
+			// 		logFile << "Edge [" << i << "]:" << std::endl;
+			// 		for (size_t j = 0; j < polygonEdgesPrinted[i].size(); j++) {
+			// 			logFile << "  Point [" << j << "]: x=" << polygonEdgesPrinted[i][j].x 
+			// 			        << ", y=" << polygonEdgesPrinted[i][j].y << std::endl;
+			// 		}
+			// 	}
+			// 	logFile.close();
+			// }
 #endif
 			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
 			for (size_t i = 0; i < indices.size(); i += 3)
