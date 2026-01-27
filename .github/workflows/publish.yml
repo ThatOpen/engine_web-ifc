@@ -23,9 +23,8 @@ jobs:
       - run: sudo npm install -g npm@latest
       - run: npm ci
       - run: npm run build-release
-      - run: cd dist
       - run: npm publish --access public
-      - run: cd ..
+        working-directory: ./dist
       - run: npm version patch --git-tag-version false
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
