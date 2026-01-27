@@ -1,6 +1,4 @@
 name: Publish Web-IFC to NPM Registry
-env:
-  NPM_TOKEN: ${{ secrets.NPM_AUTH_KEY }}
 on: 
   release:
     types: [created]
@@ -13,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
       - uses: mymindstorm/setup-emsdk@v14
         with:
           version: 4.0.23
