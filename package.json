@@ -16,9 +16,9 @@
     "./web-ifc-mt.wasm": "./web-ifc-mt.wasm",
     "./web-ifc-node.wasm": "./web-ifc-node.wasm"
   },
-   "repository": {
+  "repository": {
     "type": "git",
-    "url": "https://github.com/ThatOpen/engine_web-ifc.git"
+    "url": "git+https://github.com/ThatOpen/engine_web-ifc.git"
   },
   "pckg-gui": {},
   "scripts": {
