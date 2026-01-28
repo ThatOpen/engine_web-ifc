@@ -13,6 +13,7 @@
 
 webifc::manager::ModelManager::ModelManager(bool _mt_enabled)
 {
+    _logger = spdlog::default_logger();
     mt_enabled = _mt_enabled;
 }
 
@@ -34,10 +35,16 @@ void webifc::manager::ModelManager::CloseAllModels()
     _geometryProcessors.clear();
 }
 
+void webifc::manager::ModelManager::SetLogger(std::shared_ptr<spdlog::logger> logger) {
+    _logger = logger;
+}
+
 void webifc::manager::ModelManager::SetLogLevel(uint8_t levelArg)
 {
-    spdlog::set_level((spdlog::level::level_enum)levelArg);
-    spdlog::set_pattern("[WEB-IFC][%l]%v");
+    if (_logger) {
+        _logger->set_level((spdlog::level::level_enum)levelArg);
+        _logger->set_pattern("[WEB-IFC][%l]%v");
+    }
 }
 
 webifc::geometry::IfcGeometryProcessor *webifc::manager::ModelManager::GetGeometryProcessor(uint32_t modelID)
