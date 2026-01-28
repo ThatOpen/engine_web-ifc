@@ -7,6 +7,8 @@
 #include "../schema/IfcSchemaManager.h"
 #include "../geometry/IfcGeometryProcessor.h"
 #include "../parsing/IfcLoader.h"
+#include <spdlog/spdlog.h>
+#include <memory>
 #include <vector>
 #include <map>
 #include <optional>
@@ -42,6 +44,7 @@ namespace webifc::manager
         bool IsModelOpen(uint32_t modelID) const;
         void CloseModel(uint32_t modelID);
         uint32_t CreateModel(LoaderSettings settings);
+        void SetLogger(std::shared_ptr<spdlog::logger> logger);
         void SetLogLevel(uint8_t levelArg);
         void CloseAllModels();
 
@@ -50,6 +53,7 @@ namespace webifc::manager
         std::vector<webifc::parsing::IfcLoader *> _loaders;
         std::vector<LoaderSettings> _settings;
         std::map<uint32_t, webifc::geometry::IfcGeometryProcessor *> _geometryProcessors;
+        std::shared_ptr<spdlog::logger> _logger;
         bool header_shown = false;
         bool mt_enabled;
     };
