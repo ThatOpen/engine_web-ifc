@@ -1,6 +1,6 @@
 {
   "name": "web-ifc",
-  "version": "0.0.75",
+  "version": "0.0.76",
   "description": "ifc loading on the web",
   "module": "./web-ifc-api.js",
   "main": "./web-ifc-api-node.js",
@@ -16,6 +16,10 @@
     "./web-ifc-mt.wasm": "./web-ifc-mt.wasm",
     "./web-ifc-node.wasm": "./web-ifc-node.wasm"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThatOpen/engine_web-ifc.git"
+  },
   "pckg-gui": {},
   "scripts": {
     "gen-schema": "cd src/schema-generator && ts-node gen_functional_types.ts",
@@ -24,9 +28,7 @@
     "build-release": "npm run build-wasm-release && npm run build-api && npm run build-cleanup",
     "build-cleanup": "rimraf dist/helpers/log.ts && rimraf dist/helpers/properties.ts && rimraf dist/web-ifc-api.ts && rimraf dist/ifc-schema.ts",
     "build-debug": "npm run build-wasm-debug && npm run build-api && npm run build-cleanup",
-    "publish-repo": "npm run set-version && cd dist && npm publish",
-    "build-publish-repo": "npm run build-release && cpy ./npmrc ./dist/  --rename=.npmrc && cp ./LICENSE.md ./dist && cd dist && npm publish",
-    "copy-to-dist": "make-dir dist && cpy \"src/cpp/build_wasm/*.js\" dist &&  cpy \"src/cpp/build_wasm/*.wasm\" dist ",
+    "copy-to-dist": "make-dir dist && cpy \"src/cpp/build_wasm/*.js\" dist &&  cpy \"src/cpp/build_wasm/*.wasm\" dist && cp ./LICENSE.md ./dist",
     "copy-debug-to-dist": "make-dir dist && cpy \"src/cpp/build_wasm_debug/*.js\" dist &&  cpy \"src/cpp/build_wasm_debug/*.wasm\" dist ",
     "build-wasm-debug": "make-dir src/cpp/build_wasm_debug && cd src/cpp/build_wasm_debug && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Debug   && emmake make && npm run copy-debug-to-dist",
     "build-wasm-release": "make-dir src/cpp/build_wasm     && cd src/cpp/build_wasm       && emcmake cmake .. -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Release && emmake make && npm run copy-to-dist",

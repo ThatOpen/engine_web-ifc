@@ -1144,7 +1144,7 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("CreateClothoid", &CreateClothoid);
     emscripten::function("CreateArc", &CreateArc);
     emscripten::function("CreateAlignment", &CreateAlignment);
-    emscripten::function("CreateBooleanOperator", &CreateBoolean);
+    emscripten::function("CreateBoolean", &CreateBoolean);
     emscripten::function("CreateProfile", &CreateProfile);
     emscripten::function("LoadAllGeometry", &LoadAllGeometry);
     emscripten::function("GetAllCrossSections", &GetAllCrossSections);

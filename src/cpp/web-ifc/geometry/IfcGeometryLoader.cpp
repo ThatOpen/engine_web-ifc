@@ -3166,8 +3166,8 @@ namespace webifc::geometry
       profile.type = _loader.GetStringArgument();
       _loader.MoveToArgumentOffset(expressID, 2);
       uint32_t curveID = _loader.GetRefArgument();
-      // ISSUE 765 requires dimension 3, not sure how to solve it without a stopgap
-      profile.curve = GetCurve(curveID, 2);
+      // ISSUES 765,1604 require dimension 3, not sure how to solve it without a stopgap
+      profile.curve = GetCurve(curveID, 3);
       profile.isConvex = IsCurveConvex(profile.curve);
 
       return profile;
