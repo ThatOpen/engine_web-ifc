@@ -180,8 +180,6 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
 
 async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkResult>
 {
-    await module.Init();
-
     let result = new BenchMarkResult();
     result.results = new Map<string, FileResult>();
     for (let file in files)
@@ -264,6 +262,7 @@ async function RunBenchmark()
     console.log(``);
     const noRuns = 3;
     let results = [];
+    await newIfcAPI.Init();
     for (let i=0; i < noRuns; i++) {
         console.log("Run:"+i);
         let newResult = await BenchmarkWebIFC(newIfcAPI, files);
