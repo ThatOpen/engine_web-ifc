@@ -65,7 +65,6 @@ namespace webifc::parsing
       void PushInt(int input);
       std::string GenerateUUID() const;
       IfcLoader* Clone();
-
       uint32_t GetNextExpressID(uint32_t expressId) const;
       template <typename T> void Push(T input)
       {
