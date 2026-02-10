@@ -20,9 +20,9 @@
     picocolors "^1.1.1"
 
 "@babel/compat-data@^7.28.6":
-  version "7.28.6"
-  resolved "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.28.6.tgz"
-  integrity sha512-2lfu57JtzctfIrcGMz992hyLlByuzgIk58+hhGCxjKZ3rWI82NnVLjXcaTqkI2NvlcvOskZaiZ5kjUALo3Lpxg==
+  version "7.29.0"
+  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.29.0.tgz#00d03e8c0ac24dd9be942c5370990cbe1f17d88d"
+  integrity sha512-T1NCJqT/j9+cn8fvkt7jtwbLBfLC/1y1c7NtCeXFRgzGTsafi68MRv8yzkYSapBnFA6L3U2VSc02ciDzoAJhJg==
 
 "@babel/core@^7.23.9", "@babel/core@^7.27.4":
   version "7.29.0"
