@@ -227,7 +227,8 @@ namespace webifc::parsing {
   
    void IfcLoader::ParseLines() 
    {
-  			uint32_t currentIfcType = 0;
+  			_lines.reserve(_tokenStream->GetNoLines());
+        uint32_t currentIfcType = 0;
   			uint32_t currentExpressID = 0;
   			uint32_t currentTapeOffset = 0;
   			while (!_tokenStream->IsAtEnd())
