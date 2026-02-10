@@ -71,7 +71,7 @@
     "@types/jest": "^30.0.0",
     "@types/three": "^0.182.0",
     "adm-zip": "^0.5.10",
-    "cpy-cli": "^5.0.0",
+    "cpy-cli": "^7.0.0",
     "esbuild": "^0.27.0",
     "jest": "^30.0.3",
     "local-web-server": "^5.2.1",
