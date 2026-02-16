@@ -1197,27 +1197,38 @@ namespace bimGeometry
 			dpts.erase(dpts.begin());
 		}
 
-		// connect the curves
+		std::vector<std::vector<uint32_t>> curvePointIndices;
+		curvePointIndices.reserve(curves.size());
+		for (size_t i = 0; i < curves.size(); ++i)
+		{
+			auto& pts = curves[i];
+			std::vector<uint32_t>& indices = curvePointIndices.emplace_back();
+			indices.reserve(pts.size());
+			const glm::dvec3 center = dpts[i];
+
+			for (glm::dvec3& p : pts)
+			{
+				// Radially outward normals
+				glm::dvec3 n = p - center;
+				const double len2 = glm::dot(n, n);
+				n = (len2 > 0.0) ? n / std::sqrt(len2) : glm::dvec3(0.0, 0.0, 1.0);
+				geom.AddPoint(p, n);
+				indices.push_back(geom.numPoints - 1);
+			}
+		}
+ 		// connect consecutive circles with faces
 		for (size_t i = 1; i < dpts.size(); i++)
 		{
-			glm::dvec3 p1 = dpts[i - 1];
-			glm::dvec3 p2 = dpts[i];
-			glm::dvec3 dir = p1 - p2;
-			glm::dvec4 ddir = glm::dvec4(dir, 0);
-			const double di = glm::distance(p1, p2);
+			const auto& idx1 = curvePointIndices[i - 1];
+			const auto& idx2 = curvePointIndices[i];
 
-			// Only segments smaller than 10 cm will be represented, those that are bigger will be standardized
-
-			const auto &c1 = curves[i - 1];
-			const auto &c2 = curves[i];
-
-			uint32_t capSize = c1.size();
+			const uint32_t capSize = static_cast<uint32_t>(idx1.size());
 			for (size_t j = 1; j < capSize; j++)
 			{
-				glm::dvec3 bl = c1[j - 1];
-				glm::dvec3 br = c1[j - 0];
-				glm::dvec3 tl = c2[j - 1];
-				glm::dvec3 tr = c2[j - 0];
+				const uint32_t bl = idx1[j - 1];
+				const uint32_t br = idx1[j - 0];
+				const uint32_t tl = idx2[j - 1];
+				const uint32_t tr = idx2[j - 0];
 
 				geom.AddFace(tl, br, bl);
 				geom.AddFace(tl, tr, br);
