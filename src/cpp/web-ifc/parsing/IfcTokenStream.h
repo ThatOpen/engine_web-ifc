@@ -61,6 +61,7 @@ namespace webifc::parsing
         size_t GetReadOffset();
         size_t GetTotalSize();
         IfcTokenStream * Clone();
+        size_t GetNoLines();
 
       private:
         void checkMemory();
@@ -83,6 +84,7 @@ namespace webifc::parsing
             bool IsAtEnd();
             char Get();
             void Clear();
+            size_t GetNoLines();
             IfcFileStream * Clone();
           private:
             void load();
@@ -92,7 +94,8 @@ namespace webifc::parsing
             char prev;
             size_t _currentSize=0;
             size_t _startRef=0;
-            char * _buffer; 
+            char * _buffer;
+            size_t noLines=0;
         };
         class IfcTokenChunk
         {

@@ -24,6 +24,11 @@ namespace webifc::parsing
     delete _fileStream;
   }
 
+  size_t IfcTokenStream::GetNoLines() {
+    if (_fileStream != nullptr) return _fileStream->GetNoLines();
+    return 0;
+  }
+
   void IfcTokenStream::SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData) 
   {
       _fileStream = new IfcFileStream(requestData,_chunkSize);

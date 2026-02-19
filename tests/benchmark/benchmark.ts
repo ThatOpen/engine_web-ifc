@@ -11,14 +11,41 @@ const BENCHMARK_FILES_DIR = "./tests/ifcfiles/";
 
 class FileResult
 {
-    filename !: string;
-    fileSize !: number;
-    timeTakenToOpenModel !: number;
-    timeSuccess !: number;
-    numberOfIfcEntities !: number;
-    totalNumberOfProducedMesh !: number;
-    totalNumberOfGeometries !: number;
-    totalNumberOfErrors !: number;
+    filename : string = "";
+    fileSize : number = 0;
+    timeTakenToOpenModel : number = 0
+    timeSuccess : number = 0
+    numberOfIfcEntities : number =0
+    totalNumberOfProducedMesh : number = 0;
+    totalNumberOfGeometries : number =0;
+    totalNumberOfErrors : number = 0
+
+    sum(result: FileResult){
+        this.fileSize += result.fileSize
+        this.timeTakenToOpenModel += result.timeTakenToOpenModel
+        this.timeSuccess += result.timeSuccess
+        this.numberOfIfcEntities += result.numberOfIfcEntities
+        this.totalNumberOfProducedMesh += result.totalNumberOfProducedMesh
+        this.totalNumberOfGeometries += result.totalNumberOfGeometries
+        this.totalNumberOfErrors += result.totalNumberOfErrors
+    };
+
+    mean(noRuns: number) {
+        this.fileSize /= noRuns
+        this.timeTakenToOpenModel /= noRuns
+        this.timeSuccess /= noRuns
+        this.numberOfIfcEntities /= noRuns
+        this.totalNumberOfProducedMesh /= noRuns
+        this.totalNumberOfGeometries /= noRuns
+        this.totalNumberOfErrors /= noRuns
+        this.fileSize = Math.round(this.fileSize)
+        this.timeTakenToOpenModel = Math.round(this.timeTakenToOpenModel)
+        this.timeSuccess = Math.round(this.timeSuccess)
+        this.numberOfIfcEntities = Math.round(this.numberOfIfcEntities)
+        this.totalNumberOfProducedMesh = Math.round(this.totalNumberOfProducedMesh)
+        this.totalNumberOfGeometries = Math.round(this.totalNumberOfGeometries)
+        this.totalNumberOfErrors = Math.round(this.totalNumberOfErrors)
+    };
 }
 
 class SystemInfo{
@@ -153,8 +180,6 @@ async function BenchmarkIfcFile(module: any, filename: string): Promise<FileResu
 
 async function BenchmarkWebIFC(module: any, files: string[]): Promise<BenchMarkResult>
 {
-    await module.Init();
-
     let result = new BenchMarkResult();
     result.results = new Map<string, FileResult>();
     for (let file in files)
@@ -193,7 +218,7 @@ async function getSystemInformations(): Promise<SystemInfo>
 
     return systemInfo;
 }
-function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string, FileResult>): string
+function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string, FileResult>[], noRuns: number): string
 {
     let formatter = new BenchmarkResultFormatter();
     formatter.columns = {
@@ -207,8 +232,22 @@ function generateMarkdownReport(systemInfo : SystemInfo, fileResult : Map<string
         totalNumberOfErrors: "total errors"
     };
     let markdown : string = "# System informations \n "+JSON.stringify(systemInfo)+"\n _________ \n";
-    formatter.results = fileResult;
+    for (let i=1; i < noRuns; i++) {
+        for (let s of fileResult[i].entries()) fileResult[0].get(s[0])?.sum(s[1])
+    }
+    let totalTimeParse = 0;
+    let totalTimeAll = 0;
+    for (let fR of fileResult[0].values()) {
+        fR.mean(noRuns);
+        totalTimeParse+=fR.timeTakenToOpenModel;
+        totalTimeAll+=fR.timeSuccess;
+    }
+    formatter.results = fileResult[0];
+    
     markdown += formatter.getMarkdownTable();
+    markdown += "#Totals\n"
+    markdown += "*Total Time to Open*:"+ totalTimeParse +"\n";
+    markdown += "*Total Time*:"+ totalTimeAll +"\n";
     return markdown;
 }
 async function RunBenchmark()
@@ -221,9 +260,15 @@ async function RunBenchmark()
     console.log(``);
     console.log(systemInfo);
     console.log(``);
-
-    let newResult = await BenchmarkWebIFC(newIfcAPI, files);
-    let markdown = generateMarkdownReport(systemInfo, newResult.results);
+    const noRuns = 3;
+    let results = [];
+    await newIfcAPI.Init();
+    for (let i=0; i < noRuns; i++) {
+        console.log("Run:"+i);
+        let newResult = await BenchmarkWebIFC(newIfcAPI, files);
+        results.push(newResult.results);
+    }
+    let markdown = generateMarkdownReport(systemInfo, results,noRuns);
 
 
     await writeResult(markdown);

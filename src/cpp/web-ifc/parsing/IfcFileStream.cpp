@@ -8,8 +8,17 @@
 
    IfcTokenStream::IfcFileStream::IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, uint32_t size) : _dataSource(requestData), _size(size)
    {
-     _buffer = nullptr;
-     load();
+   
+      char * countBuffer = new char[_size];
+      size_t countSize = 0;
+      size_t startCountRef =0;
+      while ((countSize = _dataSource(countBuffer, startCountRef, _size)) != 0) {
+        for (size_t i=0; i < countSize;i++) if (countBuffer[i]=='\n') noLines++;
+          startCountRef+=countSize;
+      }
+      delete[] countBuffer;
+      _buffer = nullptr;
+      load();
    }
 
    IfcTokenStream::IfcFileStream::~IfcFileStream() 
@@ -18,6 +27,10 @@
       delete[] _buffer;
       _buffer = nullptr;
     }
+   }
+
+   size_t IfcTokenStream::IfcFileStream::GetNoLines() {
+    return noLines;
    }
    
    void IfcTokenStream::IfcFileStream::load()
