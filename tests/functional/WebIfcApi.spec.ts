@@ -380,11 +380,22 @@ describe('WebIfcApi writing methods', () => {
         expect(aSpaceReloaded.Name.value).toEqual("foo");
     })
 
+    test('Write a nominal value', () => {
+        let aProp: any = ifcApi.GetLine(modelID, 14033);
+        aProp.NominalValue.value = 100;
+        aProp.expressID = 150000;
+        ifcApi.WriteLine(emptyFileModelID, aProp);
+        let ifcDatas = ifcApi.SaveModel(emptyFileModelID);
+        let exportModelID = ifcApi.OpenModel(ifcDatas);
+        expect(ifcApi.GetLine(exportModelID,150000) instanceof IFC2X3.IfcInteger == true);
+       
+    })
+
     test('can Export File As IFC', () => {
         let ifcDatas = ifcApi.SaveModel(modelID);
         let exportModelID = ifcApi.OpenModel(ifcDatas);
         const line: any = ifcApi.GetLine(exportModelID, expressId);
-        expect(exportModelID).toEqual(2);
+        expect(exportModelID).toEqual(3);
         expect(line.expressID).toEqual(expressId);
     })
 
@@ -454,7 +465,7 @@ describe('some use cases', () => {
 describe('creating ifc', () => {
     test('can create new ifc model', () => {
         let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
-        expect(createdID).toBe(4);
+        expect(createdID).toBe(5);
         expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
         expect(ifcApi.wasmModule.GetModelSize(createdID)).toBeGreaterThan(0);
         expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBe(7);
@@ -465,7 +476,7 @@ describe('creating ifc', () => {
 
     test('can create & save new ifc model', () => {
         let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
-        expect(createdID).toBe(5);
+        expect(createdID).toBe(6);
         ifcApi.SaveModel(createdID);
         ifcApi.CloseModel(createdID);
     });
@@ -506,7 +517,7 @@ describe('opening large amounts of data', () => {
         };
         const exampleIFCData = fs.readFileSync(path.join(__dirname, '../ifcfiles/public/S_Office_Integrated Design Archi.ifc'));
         let modelId = ifcApi.OpenModel(exampleIFCData,s);
-        expect(modelId).toBe(6);
+        expect(modelId).toBe(7);
     });
 
      test("open a small model but many times", () => {
