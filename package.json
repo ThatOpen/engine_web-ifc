@@ -9,8 +9,7 @@
     ".": {
       "require": "./web-ifc-api-node.js",
       "node": "./web-ifc-api-node.js",
-      "import": "./web-ifc-api.js",
-      "browser": "./web-ifc-api.js"
+      "import": "./web-ifc-api.js"
     },
     "./web-ifc.wasm": "./web-ifc.wasm",
     "./web-ifc-mt.wasm": "./web-ifc-mt.wasm",
