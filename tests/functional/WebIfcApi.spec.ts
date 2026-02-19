@@ -19,9 +19,9 @@ let expressId: number = 9989; // an IFCSPACE
 let geometries: Vector < FlatMesh > ; // to store geometries instead of refetching them
 let allGeometriesSize: number = 119;
 let meshesCount: number = 115;
-let totalLineNumber : number = 6489;
+let totalLineNumber : number = 6490;
 let emptyFileModelID: number;
-let lastExpressId : number = 14314;
+let lastExpressId : number = 14315;
 let expectedFileDescription : string = "ViewDefinition [CoordinationView_V2.0]";
 let expectedFileSchema = "IFC2X3";
 let expectedFileName = "3458";
@@ -125,7 +125,7 @@ describe('WebIfcApi reading methods', () => {
         expect(ifcApi.GetNextExpressID(modelID, 9)).toBe(11);
     })
     test('returns next expressID if it is the max ID', () => {
-        expect(ifcApi.GetNextExpressID(modelID, 14313)).toBe(14314);
+        expect(ifcApi.GetNextExpressID(modelID, 14314)).toBe(14315);
     })
     test('Can get max expressID', () => {
         const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
@@ -407,6 +407,15 @@ describe('WebIfcApi writing methods', () => {
         expect(line.expressID).toEqual(expressId);
     })
 
+    test('Read in IFCSTyle and Check it', () => {
+        let aProp: any = ifcApi.GetLine(modelID, 14315);
+        aProp.expressID = 150001;
+        ifcApi.WriteLine(emptyFileModelID, aProp);
+        let ifcDatas = ifcApi.SaveModel(emptyFileModelID);
+        let exportModelID = ifcApi.OpenModel(ifcDatas);
+        console.log(ifcApi.GetLine(exportModelID,150001).Sizeable === true);
+    })
+
 });
 
 describe('WebIfcApi known failures', () => {
@@ -473,7 +482,7 @@ describe('some use cases', () => {
 describe('creating ifc', () => {
     test('can create new ifc model', () => {
         let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
-        expect(createdID).toBe(5);
+        expect(createdID).toBe(6);
         expect(ifcApi.GetModelSchema(createdID)).toBe(WebIFC.Schemas.IFC2X3);
         expect(ifcApi.wasmModule.GetModelSize(createdID)).toBeGreaterThan(0);
         expect(ifcApi.GetHeaderLine(createdID, WebIFC.FILE_NAME)['arguments'].length).toBe(7);
@@ -484,7 +493,7 @@ describe('creating ifc', () => {
 
     test('can create & save new ifc model', () => {
         let createdID = ifcApi.CreateModel({schema: WebIFC.Schemas.IFC2X3});
-        expect(createdID).toBe(6);
+        expect(createdID).toBe(7);
         ifcApi.SaveModel(createdID);
         ifcApi.CloseModel(createdID);
     });
@@ -525,7 +534,7 @@ describe('opening large amounts of data', () => {
         };
         const exampleIFCData = fs.readFileSync(path.join(__dirname, '../ifcfiles/public/S_Office_Integrated Design Archi.ifc'));
         let modelId = ifcApi.OpenModel(exampleIFCData,s);
-        expect(modelId).toBe(7);
+        expect(modelId).toBe(8);
     });
 
      test("open a small model but many times", () => {
@@ -553,7 +562,7 @@ describe('function based opening', () => {
         }
         let modelId = ifcApi.OpenModelFromCallback(retriever);
         fs.closeSync(file);
-        expect(ifcApi.GetAllLines(modelId).size()).toBe(6489);
+        expect(ifcApi.GetAllLines(modelId).size()).toBe(6490);
     });
 });
 
