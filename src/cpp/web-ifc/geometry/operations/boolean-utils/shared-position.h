@@ -30,6 +30,30 @@
 using Vec2 = glm::dvec2;
 using Vec3 = glm::dvec3;
 
+
+// Custom hash for std::tuple<int64_t, int64_t, int64_t>
+// Combine the three 64-bit integers in a reasonably collision-resistant way
+template<>
+struct std::hash<std::tuple<int64_t, int64_t, int64_t>>
+{
+    using argument_type = std::tuple<int64_t, int64_t, int64_t>;
+    using result_type = std::size_t;
+
+    result_type operator()(const argument_type& t) const noexcept
+    {
+        auto [x, y, z] = t;  // C++17 structured binding (preferred)
+
+        // Simple, fast mixing - inspired by boost::hash_combine + murmur-like finalizer
+        std::size_t seed = 0x517cc1b727220a95ULL;  // random 64-bit constant
+
+        seed ^= static_cast<std::size_t>(x) + 0x9e3779b97f4a7c15ULL + (seed << 6) + (seed >> 2);
+        seed ^= static_cast<std::size_t>(y) + 0x9e3779b97f4a7c15ULL + (seed << 6) + (seed >> 2);
+        seed ^= static_cast<std::size_t>(z) + 0x9e3779b97f4a7c15ULL + (seed << 6) + (seed >> 2);
+
+        return seed;
+    }
+};
+
 namespace fuzzybools
 {
 
@@ -680,6 +704,8 @@ namespace fuzzybools
         BVH relevantBVHA;
         BVH relevantBVHB;
 
+        std::unordered_map<std::tuple<int64_t, int64_t, int64_t>, std::vector<size_t>> pointGrid;
+
         //============================================================================================
 
         //      assumes all triangleIds are connected to base with an edge and are flipped correctly
@@ -839,22 +865,52 @@ namespace fuzzybools
         }
 
         //============================================================================================
-
-        size_t AddPoint(const Vec3 &newPoint)
+        size_t AddPoint(const Vec3& newPoint)
         {
-            for (auto &pt : points)
-            {
-                if (pt == newPoint)
-                {
-                    return pt.id;
+            // 1. Compute the grid cell for the query point
+            const double cellSize = toleranceVectorEquality;   // same tolerance you already use for ==
+
+            auto getKey = [&](const Vec3& p) -> std::tuple<int64_t, int64_t, int64_t> {
+                return {
+                    static_cast<int64_t>(std::floor(p.x / cellSize)),
+                    static_cast<int64_t>(std::floor(p.y / cellSize)),
+                    static_cast<int64_t>(std::floor(p.z / cellSize))
+                };
+                };
+
+            const auto centerKey = getKey(newPoint);
+
+            // 2. Check the point against all 27 neighbouring cells (guaranteed to contain any point
+            //    that is within toleranceVectorEquality because |delta_x|,|delta_y|,|delta_z| < tolerance)
+            for (int dx = -1; dx <= 1; ++dx) {
+                for (int dy = -1; dy <= 1; ++dy) {
+                    for (int dz = -1; dz <= 1; ++dz) {
+                        const std::tuple<int64_t, int64_t, int64_t> neighbourKey = {
+                            std::get<0>(centerKey) + dx,
+                            std::get<1>(centerKey) + dy,
+                            std::get<2>(centerKey) + dz
+                        };
+
+                        auto it = pointGrid.find(neighbourKey);
+                        if (it != pointGrid.end()) {
+                            for (size_t existingId : it->second) {
+                                if (points[existingId] == newPoint) {   // re-uses your existing tolerance check
+                                    return existingId;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
+            // 3. Point does not exist -> insert it
             Point p;
             p.id = points.size();
             p.location3D = newPoint;
-
             points.push_back(p);
+
+            // Insert into spatial grid (same cell as the point itself)
+            pointGrid[getKey(newPoint)].push_back(p.id);
 
             return p.id;
         }
