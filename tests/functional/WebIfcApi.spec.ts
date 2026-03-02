@@ -413,7 +413,7 @@ describe('WebIfcApi writing methods', () => {
         ifcApi.WriteLine(emptyFileModelID, aProp);
         let ifcDatas = ifcApi.SaveModel(emptyFileModelID);
         let exportModelID = ifcApi.OpenModel(ifcDatas);
-        console.log(ifcApi.GetLine(exportModelID,150001).Sizeable === true);
+       expect(ifcApi.GetLine(exportModelID,150001).Sizeable === true);
     })
 
 });
