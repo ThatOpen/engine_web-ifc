@@ -88,9 +88,12 @@ export class Properties {
         {
             let types = await this.getTypeProperties(modelID,elementID,false);
             let results: any[] = [];
-            for (let t of types) results.push(...await this.getPropertySets(modelID,t.expressID,recursive));
+            for (let t of types) {
+                for (let p of t.HasPropertySets) {
+                    results.push(await this.api.GetLine(modelID, p.value, recursive));
+                }
+            }
             return results;
-
         } else return await this.getRelatedProperties(modelID, elementID, PropsNames.psets, recursive);
     }
 
