@@ -6,17 +6,18 @@
 
  namespace webifc::parsing {
 
-   IfcTokenStream::IfcFileStream::IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, uint32_t size) : _dataSource(requestData), _size(size)
+   IfcTokenStream::IfcFileStream::IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, uint32_t size, bool fromStream) : _dataSource(requestData), _size(size), _fromStream(fromStream)
    {
-   
-      char * countBuffer = new char[_size];
-      size_t countSize = 0;
-      size_t startCountRef =0;
-      while ((countSize = _dataSource(countBuffer, startCountRef, _size)) != 0) {
-        for (size_t i=0; i < countSize;i++) if (countBuffer[i]=='\n') noLines++;
-          startCountRef+=countSize;
+      if (!fromStream) {
+        char * countBuffer = new char[_size];
+        size_t countSize = 0;
+        size_t startCountRef =0;
+        while ((countSize = _dataSource(countBuffer, startCountRef, _size)) != 0) {
+          for (size_t i=0; i < countSize;i++) if (countBuffer[i]=='\n') noLines++;
+            startCountRef+=countSize;
+        }
+        delete[] countBuffer;
       }
-      delete[] countBuffer;
       _buffer = nullptr;
       load();
    }
@@ -101,7 +102,7 @@
    }
 
    IfcTokenStream::IfcFileStream* IfcTokenStream::IfcFileStream::Clone() {
-    IfcFileStream * newStream = new IfcFileStream(_dataSource,_size);
+    IfcFileStream * newStream = new IfcFileStream(_dataSource,_size,_fromStream);
     return newStream;
    }
  }
