@@ -9,6 +9,7 @@
 #include <cstdint>
 #include "representation/geometry.h"
 #include "../parsing/IfcLoader.h"
+#include "../cache/IfcCache.h"
 #include "../schema/IfcSchemaManager.h"
 #include "IfcGeometryLoader.h"
 
@@ -63,7 +64,7 @@ namespace webifc::geometry
     IfcGeometryProcessor *Clone(const webifc::parsing::IfcLoader &loader) const;
 
   protected:
-    IfcGeometryProcessor(const IfcGeometrySettings &settings, std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry, const IfcGeometryLoader &geometryLoader, glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube);
+    IfcGeometryProcessor(const IfcGeometrySettings &settings, std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry, glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube);
     IfcGeometrySettings _settings;
     std::optional<glm::dvec4> GetStyleItemFromExpressId(uint32_t expressID);
     void AddFaceToGeometry(uint32_t expressID, IfcGeometry &geometry);
@@ -74,6 +75,7 @@ namespace webifc::geometry
     IfcGeometryLoader _geometryLoader;
     glm::dmat4 _transformation = glm::dmat4(1.0);
     const parsing::IfcLoader &_loader;
+    webifc::cache::IfcCache _cache;
     booleanManager _boolEngine;
     const schema::IfcSchemaManager &_schemaManager;
     bool _isCoordinated = false;

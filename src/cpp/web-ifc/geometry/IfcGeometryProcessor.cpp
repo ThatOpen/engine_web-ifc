@@ -24,7 +24,7 @@ namespace webifc::geometry
     double BOOLSTATUS = 0;
 
     IfcGeometryProcessor::IfcGeometryProcessor(webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD)
-        : _geometryLoader(loader, schemaManager, circleSegments, TOLERANCE_PLANE_INTERSECTION, TOLERANCE_PLANE_DEVIATION, TOLERANCE_BACK_DEVIATION_DISTANCE, TOLERANCE_INSIDE_OUTSIDE_PERIMETER, TOLERANCE_SCALAR_EQUALITY, PLANE_REFIT_ITERATIONS, BOOLEAN_UNION_THRESHOLD), _loader(loader), _schemaManager(schemaManager)
+        : _loader(loader), _cache(loader), _schemaManager(schemaManager), _geometryLoader(loader, _cache, circleSegments)
     {
         _settings._coordinateToOrigin = coordinateToOrigin;
         _settings._circleSegments = circleSegments;
@@ -65,7 +65,7 @@ namespace webifc::geometry
     {
         _expressIDToGeometry.clear();
         std::unordered_map<uint32_t, IfcGeometry>().swap(_expressIDToGeometry);
-        _geometryLoader.Clear();
+        _cache.Clear();
     }
 
     std::array<double, 16> IfcGeometryProcessor::GetFlatCoordinationMatrix() const
@@ -89,9 +89,9 @@ namespace webifc::geometry
     std::optional<glm::dvec4> IfcGeometryProcessor::GetStyleItemFromExpressId(uint32_t expressID)
     {
         std::optional<glm::dvec4> styledItemColor;
-        auto &styledItems = _geometryLoader.GetStyledItems();
-        auto &relMaterials = _geometryLoader.GetRelMaterials();
-        auto &materialDefinitions = _geometryLoader.GetMaterialDefinitions();
+        auto &styledItems = _cache.GetStyledItems();
+        auto &relMaterials = _cache.GetRelMaterials();
+        auto &materialDefinitions = _cache.GetMaterialDefinitions();
         auto styledItem = styledItems.find(expressID);
         if (styledItem != styledItems.end())
         {
@@ -140,7 +140,7 @@ namespace webifc::geometry
     {
         spdlog::debug("[GetMesh({})]", expressID);
         auto lineType = _loader.GetLineType(expressID);
-        auto &relVoids = _geometryLoader.GetRelVoids();
+        auto &relVoids = _cache.GetRelVoids();
 
         IfcComposedMesh mesh;
         mesh.expressID = expressID;
@@ -369,7 +369,7 @@ namespace webifc::geometry
                     flipWinding = true;
                 }
 
-                double d = EXTRUSION_DISTANCE_HALFSPACE_M / _geometryLoader.GetLinearScalingFactor();
+                double d = EXTRUSION_DISTANCE_HALFSPACE_M / _cache.GetLinearScalingFactor();
 
                 IfcProfile profile;
                 profile.isConvex = false;
@@ -423,7 +423,7 @@ namespace webifc::geometry
                 auto localPlanePos = invPosition * glm::dvec4(planePosition, 1);
 
                 bool flipWinding = false;
-                double extrudeDistance = EXTRUSION_DISTANCE_HALFSPACE_M / _geometryLoader.GetLinearScalingFactor();
+                double extrudeDistance = EXTRUSION_DISTANCE_HALFSPACE_M / _cache.GetLinearScalingFactor();
 
                 bool halfSpaceInPlaneDirection = agreement != "T";
                 bool extrudeInPlaneDirection = glm::dot(localPlaneNormal, extrusionNormal) > 0;
@@ -652,7 +652,7 @@ namespace webifc::geometry
 
                 if (surface.BSplineSurface.Active)
                 {
-                    TriangulateBspline(geometry, bounds3D, surface, _geometryLoader.GetLinearScalingFactor());
+                    TriangulateBspline(geometry, bounds3D, surface, _cache.GetLinearScalingFactor());
                 }
                 else if (surface.CylinderSurface.Active)
                 {
@@ -795,7 +795,7 @@ namespace webifc::geometry
 
                 std::reverse(profile.curve.points.begin(), profile.curve.points.end());
 
-                IfcGeometry geom = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile, directrix, surface.normal(), true);
+                IfcGeometry geom = Sweep(_cache.GetLinearScalingFactor(), closed, profile, directrix, surface.normal(), true);
 
                 mesh.transformation = placement;
                 _expressIDToGeometry[expressID] = geom;
@@ -829,7 +829,7 @@ namespace webifc::geometry
 
                 // Generate geometry by sweeping the profile with fixed orientation
                 IfcGeometry geom = SweepFixedReference(
-                    _geometryLoader.GetLinearScalingFactor(),
+                    _cache.GetLinearScalingFactor(),
                     closed,
                     profile,
                     directrix,
@@ -882,7 +882,7 @@ namespace webifc::geometry
                 IfcProfile profile;
                 profile.curve = GetCircleCurve(radius, _settings._circleSegments);
 
-                IfcGeometry geom = SweepCircular(_geometryLoader.GetLinearScalingFactor(), closed, profile, radius, directrix);
+                IfcGeometry geom = SweepCircular(_cache.GetLinearScalingFactor(), closed, profile, radius, directrix);
 
                 geom.sweptDiskSolid.axis = std::vector<IfcCurve>{directrix};
                 geom.sweptDiskSolid.profiles = std::vector<IfcProfile>{profile};
@@ -902,7 +902,7 @@ namespace webifc::geometry
                 uint32_t profileID = _loader.GetRefArgument();
                 uint32_t placementID = _loader.GetRefArgument();
                 uint32_t axis1PlacementID = _loader.GetRefArgument();
-                double angle = angleConversion(_loader.GetDoubleArgument(), _geometryLoader.GetAngleUnits());
+                double angle = angleConversion(_loader.GetDoubleArgument(), _cache.GetAngleUnits());
 
                 IfcProfile profile = _geometryLoader.GetProfile(profileID);
                 glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID);
@@ -912,7 +912,7 @@ namespace webifc::geometry
 
                 glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[1];
 
-                IfcCurve directrix = BuildArc(_geometryLoader.GetLinearScalingFactor(), pos, axis, angle, _settings._circleSegments);
+                IfcCurve directrix = BuildArc(_cache.GetLinearScalingFactor(), pos, axis, angle, _settings._circleSegments);
                 if (glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG)
                 {
                     closed = true;
@@ -922,13 +922,13 @@ namespace webifc::geometry
 
                 if (!profile.isComposite)
                 {
-                    geom = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile, directrix, axis, false);
+                    geom = Sweep(_cache.GetLinearScalingFactor(), closed, profile, directrix, axis, false);
                 }
                 else
                 {
                     for (uint32_t i = 0; i < profile.profiles.size(); i++)
                     {
-                        IfcGeometry geom_t = Sweep(_geometryLoader.GetLinearScalingFactor(), closed, profile.profiles[i], directrix, axis, false, false);
+                        IfcGeometry geom_t = Sweep(_cache.GetLinearScalingFactor(), closed, profile.profiles[i], directrix, axis, false, false);
                         geom.AddPart(geom_t);
                         geom.AddGeometry(geom_t);
                     }
@@ -1682,7 +1682,7 @@ namespace webifc::geometry
         glm::dmat4 mat = glm::dmat4(1);
         if (applyLinearScalingFactor)
         {
-            mat = glm::scale(glm::dvec3(_geometryLoader.GetLinearScalingFactor()));
+            mat = glm::scale(glm::dvec3(_cache.GetLinearScalingFactor()));
         }
 
         glm::dvec4 color = glm::dvec4(1, 1, 1, 1);
@@ -1978,7 +1978,7 @@ namespace webifc::geometry
 
             if (surface.BSplineSurface.Active)
             {
-                TriangulateBspline(geometry, bounds3D, surface, _geometryLoader.GetLinearScalingFactor());
+                TriangulateBspline(geometry, bounds3D, surface, _cache.GetLinearScalingFactor());
             }
             else if (surface.CylinderSurface.Active)
             {
@@ -2171,12 +2171,12 @@ namespace webifc::geometry
 
     IfcGeometryProcessor *IfcGeometryProcessor::Clone(const webifc::parsing::IfcLoader &newLoader) const
     {
-        IfcGeometryProcessor *newProcessor = new IfcGeometryProcessor(_settings, _expressIDToGeometry, *_geometryLoader.Clone(newLoader), _transformation, newLoader, _boolEngine, _schemaManager, _isCoordinated, _expressIdCyl, _expressIdRect, _coordinationMatrix, _predefinedCylinder, _predefinedCube);
+        IfcGeometryProcessor *newProcessor = new IfcGeometryProcessor(_settings, _expressIDToGeometry, _transformation, newLoader, _boolEngine, _schemaManager, _isCoordinated, _expressIdCyl, _expressIdRect, _coordinationMatrix, _predefinedCylinder, _predefinedCube);
         return newProcessor;
     }
 
-    IfcGeometryProcessor::IfcGeometryProcessor(const IfcGeometrySettings &settings, std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry, const IfcGeometryLoader &geometryLoader, glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube)
-        : _settings(settings), _expressIDToGeometry(expressIDToGeometry), _geometryLoader(geometryLoader), _transformation(transformation), _loader(loader), _boolEngine(boolEngine), _schemaManager(schemaManager), _isCoordinated(isCoordinated), _expressIdCyl(expressIdCyl), _expressIdRect(expressIdRect), _coordinationMatrix(coordinationMatrix), _predefinedCylinder(predefinedCylinder), _predefinedCube(predefinedCube)
+    IfcGeometryProcessor::IfcGeometryProcessor(const IfcGeometrySettings &settings, std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry, glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube)
+        : _settings(settings), _expressIDToGeometry(expressIDToGeometry), _transformation(transformation), _loader(loader), _cache(cache::IfcCache(loader)), _boolEngine(boolEngine), _schemaManager(schemaManager), _isCoordinated(isCoordinated), _expressIdCyl(expressIdCyl), _expressIdRect(expressIdRect), _coordinationMatrix(coordinationMatrix), _predefinedCylinder(predefinedCylinder), _predefinedCube(predefinedCube), _geometryLoader(geometry::IfcGeometryLoader(loader,_cache,settings._circleSegments))
     {
     }
 

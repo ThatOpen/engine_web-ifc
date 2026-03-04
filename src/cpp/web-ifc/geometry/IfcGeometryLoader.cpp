@@ -15,31 +15,9 @@
 namespace webifc::geometry
 {
 
-  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD)
-      : _loader(loader), _schemaManager(schemaManager), _relVoids(PopulateRelVoidsMap()), _relNests(PopulateRelNestsMap()), _relAggregates(PopulateRelAggregatesMap()),
-        _styledItems(PopulateStyledItemMap()), _relMaterials(PopulateRelMaterialsMap()), _materialDefinitions(PopulateMaterialDefinitionsMap()), _circleSegments(circleSegments)
+  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, webifc::cache::IfcCache &cache, uint16_t circleSegments)
+      : _loader(loader), _cache(cache),  _circleSegments(circleSegments)
   {
-    ReadLinearScalingFactor();
-  }
-
-  void IfcGeometryLoader::ResetCache()
-  {
-    _relVoids = PopulateRelVoidsMap();
-    _relAggregates = PopulateRelAggregatesMap();
-    _relNests = PopulateRelNestsMap();
-    _styledItems = PopulateStyledItemMap();
-    _relMaterials = PopulateRelMaterialsMap();
-    _materialDefinitions = PopulateMaterialDefinitionsMap();
-  }
-
-  void IfcGeometryLoader::Clear() const
-  {
-    _expressIDToPlacement.clear();
-    std::unordered_map<uint32_t, glm::dmat4>().swap(_expressIDToPlacement);
-    _cartesianPoint3DCache.clear();
-    std::unordered_map<uint32_t, glm::dvec3>().swap(_cartesianPoint3DCache);
-    _cartesianPoint2DCache.clear();
-    std::unordered_map<uint32_t, glm::dvec2>().swap(_cartesianPoint2DCache);
   }
 
   IfcCrossSections IfcGeometryLoader::GetCrossSections2D(uint32_t expressID) const
@@ -68,7 +46,6 @@ namespace webifc::geometry
       std::vector<IfcCurve> curves;
       std::vector<uint32_t> expressIds;
 
-      uint32_t id = 0;
       for (auto &face : faces)
       {
         auto expressID = _loader.GetRefArgument(face);
@@ -76,7 +53,6 @@ namespace webifc::geometry
         profiles.push_back(profile);
         curves.push_back(profile.curve);
         expressIds.push_back(expressID);
-        id++;
       }
 
       sections.curves = curves;
@@ -105,7 +81,6 @@ namespace webifc::geometry
       std::vector<IfcCurve> curves;
       std::vector<uint32_t> expressIds;
 
-      uint32_t id = 0;
       for (auto &face : faces)
       {
         auto expressID = _loader.GetRefArgument(face);
@@ -113,7 +88,6 @@ namespace webifc::geometry
         profiles.push_back(profile);
         curves.push_back(profile.curve);
         expressIds.push_back(expressID);
-        id++;
       }
 
       sections.curves = curves;
@@ -137,7 +111,6 @@ namespace webifc::geometry
       std::vector<IfcCurve> curves;
       std::vector<uint32_t> expressIds;
 
-      uint32_t id = 0;
       for (auto &face : faces)
       {
         auto expressID = _loader.GetRefArgument(face);
@@ -145,7 +118,6 @@ namespace webifc::geometry
         profiles.push_back(profile);
         curves.push_back(profile.curve);
         expressIds.push_back(expressID);
-        id++;
       }
 
       sections.curves = curves;
@@ -222,7 +194,7 @@ namespace webifc::geometry
     double scale = 1;
     if (scaled)
     {
-      scale = GetLinearScalingFactor();
+      scale = _cache.GetLinearScalingFactor();
       glm::dvec4 ps = coordination[3];
       double y = ps[1];
       double z = -ps[2];
@@ -307,7 +279,6 @@ namespace webifc::geometry
             //    IfcCurve								BasisCurve;
 
             uint32_t locationType = _loader.GetLineType(LocationID);
-            std::string locationTypeString = _schemaManager.IfcTypeCodeToType(locationType);
             if (locationType == schema::IFCPOINTBYDISTANCEEXPRESSION)
             {
                 _loader.MoveToArgumentOffset(LocationID, 0);
@@ -545,18 +516,18 @@ namespace webifc::geometry
         alignment.PlacementExpressId = localPlacement;
       }
 
-      if (_relAggregates.count(expressID) == 1)
+      if (_cache.GetRelAggregates().count(expressID) == 1)
       {
-        auto &relAgg = _relAggregates.at(expressID);
+        auto &relAgg = _cache.GetRelAggregates().at(expressID);
         for (auto expressID : relAgg)
         {
           alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
         }
       }
 
-      if (_relNests.count(expressID) == 1)
+      if (_cache.GetRelNests().count(expressID) == 1)
       {
-        auto &relNest = _relNests.at(expressID);
+        auto &relNest = _cache.GetRelNests().at(expressID);
         for (auto expressID : relNest)
         {
           alignment = GetAlignment(expressID, alignment, transform * transform_t, expressID);
@@ -581,9 +552,9 @@ namespace webifc::geometry
         transform_t = GetLocalPlacement(localPlacement);
       }
 
-      if (_relAggregates.count(expressID) == 1)
+      if (_cache.GetRelAggregates().count(expressID) == 1)
       {
-        auto &relAgg = _relAggregates.at(expressID);
+        auto &relAgg = _cache.GetRelAggregates().at(expressID);
         for (auto expressID : relAgg)
         {
           alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -599,9 +570,9 @@ namespace webifc::geometry
         }
       }
 
-      if (_relNests.count(expressID) == 1)
+      if (_cache.GetRelNests().count(expressID) == 1)
       {
-        auto &relNest = _relNests.at(expressID);
+        auto &relNest = _cache.GetRelNests().at(expressID);
         for (auto expressID : relNest)
         {
           alignment.Horizontal.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -635,9 +606,9 @@ namespace webifc::geometry
         transform_t = GetLocalPlacement(localPlacement);
       }
 
-      if (_relAggregates.count(expressID) == 1)
+      if (_cache.GetRelAggregates().count(expressID) == 1)
       {
-        auto &relAgg = _relAggregates.at(expressID);
+        auto &relAgg = _cache.GetRelAggregates().at(expressID);
         for (auto expressID : relAgg)
         {
           alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -653,9 +624,9 @@ namespace webifc::geometry
         }
       }
 
-      if (_relNests.count(expressID) == 1)
+      if (_cache.GetRelNests().count(expressID) == 1)
       {
-        auto &relNest = _relNests.at(expressID);
+        auto &relNest = _cache.GetRelNests().at(expressID);
         for (auto expressID : relNest)
         {
           alignment.Vertical.curves.push_back(GetAlignmentCurve(expressID, sourceExpressID));
@@ -1143,9 +1114,9 @@ namespace webifc::geometry
     }
     case schema::IFCMATERIAL:
     {
-      if (GetMaterialDefinitions().count(expressID) != 0)
+      if (_cache.GetMaterialDefinitions().count(expressID) != 0)
       {
-        auto &defs = GetMaterialDefinitions().at(expressID);
+        auto &defs = _cache.GetMaterialDefinitions().at(expressID);
         for (auto def : defs)
         {
           auto success = GetColor(def.second);
@@ -1577,7 +1548,7 @@ namespace webifc::geometry
   glm::dvec3 IfcGeometryLoader::GetCartesianPoint3D(const uint32_t expressID) const
   {
     spdlog::debug("[GetCartesianPoint3D({})]", expressID);
-    if (auto it = _cartesianPoint3DCache.find(expressID); it != _cartesianPoint3DCache.end())
+    if (auto it = _cache.GetCartesianPoint3DCache().find(expressID); it != _cache.GetCartesianPoint3DCache().end())
     {
       return it->second;
     }
@@ -1588,14 +1559,14 @@ namespace webifc::geometry
     double y = _loader.GetDoubleArgument();
     double z = _loader.GetOptionalDoubleParam(0);
     glm::dvec3 point(x, y, z);
-    _cartesianPoint3DCache.emplace(expressID, point);
+    _cache.GetCartesianPoint3DCache().emplace(expressID, point);
     return point;
   }
 
   glm::dvec2 IfcGeometryLoader::GetCartesianPoint2D(const uint32_t expressID) const
   {
     spdlog::debug("[GetCartesianPoint2D({})]", expressID);
-    if (auto it = _cartesianPoint2DCache.find(expressID); it != _cartesianPoint2DCache.end())
+    if (auto it = _cache.GetCartesianPoint2DCache().find(expressID); it != _cache.GetCartesianPoint2DCache().end())
     {
       return it->second;
     }
@@ -1605,7 +1576,7 @@ namespace webifc::geometry
     double x = _loader.GetDoubleArgument();
     double y = _loader.GetDoubleArgument();
     glm::dvec2 point(x, y);
-    _cartesianPoint2DCache.emplace(expressID, point);
+    _cache.GetCartesianPoint2DCache().emplace(expressID, point);
     return point;
   }
 
@@ -2133,8 +2104,8 @@ namespace webifc::geometry
         {
             if (params.trimStart.trimType == TRIM_BY_PARAMETER && params.trimEnd.trimType == TRIM_BY_PARAMETER)
             {
-                startRad = params.trimStart.value * _angularScalingFactor;
-                endRad = params.trimEnd.value * _angularScalingFactor;
+                startRad = params.trimStart.value * _cache.GetAngularScalingFactor();
+                endRad = params.trimEnd.value * _cache.GetAngularScalingFactor();
             }
             else if (params.trimStart.trimType == TRIM_BY_LENGTH && params.trimEnd.trimType == TRIM_BY_LENGTH)
             {
@@ -3101,7 +3072,7 @@ namespace webifc::geometry
 
   void IfcGeometryLoader::convertAngleUnits(double &Degrees, double &Rad) const
   {
-    if (_angleUnits == "RADIAN")
+    if (_cache.GetAngleUnits() == "RADIAN")
     {
       Degrees = (Rad / CONST_PI) * 180.0;
     }
@@ -3866,24 +3837,24 @@ namespace webifc::geometry
   IfcCurve IfcGeometryLoader::GetLocalCurve(uint32_t expressID) const
   {
     spdlog::debug("[GetLocalCurve({})]", expressID);
-    for (uint32_t i = 0; i < _localcurvesIndices.size(); i++)
+    for (uint32_t i = 0; i < _cache.GetLocalCurvesIndices().size(); i++)
     {
-      if (_localcurvesIndices[i] == expressID)
+      if (_cache.GetLocalCurvesIndices()[i] == expressID)
       {
-        return _localCurvesList[i];
+        return _cache.GetLocalCurvesList()[i];
       }
     }
     IfcCurve curve = GetCurve(expressID, 3, false);
-    _localcurvesIndices.push_back(expressID);
-    _localCurvesList.push_back(curve);
+    _cache.GetLocalCurvesIndices().push_back(expressID);
+    _cache.GetLocalCurvesList().push_back(curve);
     return curve;
   }
 
   glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID, glm::dvec3 vector) const
   {
-    if (_expressIDToPlacement.contains(expressID))
+    if (_cache.GetExpressIDToPlacement().contains(expressID))
     {
-      return _expressIDToPlacement[expressID];
+      return _cache.GetExpressIDToPlacement()[expressID];
     }
     else
     {
@@ -3970,7 +3941,7 @@ namespace webifc::geometry
             glm::dmat4 globalVerticalTranslation = glm::translate(glm::dmat4(1), glm::dvec3(0, 0, OffsetVertical));
             result = globalVerticalTranslation * (result * localTranslation);
         }
-        _expressIDToPlacement[expressID] = result;
+        _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }
       case schema::IFCAXIS1PLACEMENT:
@@ -3999,7 +3970,7 @@ namespace webifc::geometry
             glm::dvec4(zAxis, 0),
             glm::dvec4(pos, 1));
 
-        _expressIDToPlacement[expressID] = result;
+        _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }
       case schema::IFCAXIS2PLACEMENT3D:
@@ -4039,7 +4010,7 @@ namespace webifc::geometry
             glm::dvec4(zAxis, 0),
             glm::dvec4(pos, 1));
 
-        _expressIDToPlacement[expressID] = result;
+        _cache.GetExpressIDToPlacement()[expressID] = result;
 
         return result;
       }
@@ -4072,7 +4043,7 @@ namespace webifc::geometry
             glm::dvec4(zAxis, 0),
             glm::dvec4(pos, 1));
 
-        _expressIDToPlacement[expressID] = result;
+        _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }
       case schema::IFCLOCALPLACEMENT:
@@ -4094,7 +4065,7 @@ namespace webifc::geometry
 
         auto result = relPlacement * axis2Placement;
 
-        _expressIDToPlacement[expressID] = result;
+        _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }
       case schema::IFCCARTESIANTRANSFORMATIONOPERATOR3D:
@@ -4179,7 +4150,7 @@ namespace webifc::geometry
             glm::dvec4(Axis3 * scale3, 0),
             glm::dvec4(LocalOrigin, 1));
 
-        _expressIDToPlacement[expressID] = result;
+        _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }
       case schema::IFCAXIS2PLACEMENTLINEAR:
@@ -4205,7 +4176,7 @@ namespace webifc::geometry
             result = GetLocalPlacement(posID, vector);
         }
 
-        _expressIDToPlacement[expressID] = result;
+        _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }
       case schema::IFCLINEARPLACEMENT:
@@ -4214,7 +4185,7 @@ namespace webifc::geometry
         uint32_t posID = _loader.GetRefArgument();
         glm::dmat4 result = GetLocalPlacement(posID);
 
-        _expressIDToPlacement[expressID] = result;
+        _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }
       default:
@@ -4245,343 +4216,6 @@ namespace webifc::geometry
     return {axis, pos};
   }
 
-  std::unordered_map<uint32_t, std::vector<uint32_t>> IfcGeometryLoader::PopulateRelVoidsMap()
-  {
-    std::unordered_map<uint32_t, std::vector<uint32_t>> resultVector;
-    auto relVoids = _loader.GetExpressIDsWithType(schema::IFCRELVOIDSELEMENT);
-
-    for (uint32_t relVoidID : relVoids)
-    {
-      _loader.MoveToArgumentOffset(relVoidID, 4);
-
-      uint32_t relatingBuildingElement = _loader.GetRefArgument();
-      uint32_t relatedOpeningElement = _loader.GetRefArgument();
-
-      resultVector[relatingBuildingElement].push_back(relatedOpeningElement);
-    }
-
-    return resultVector;
-  }
-
-  std::unordered_map<uint32_t, std::vector<uint32_t>> IfcGeometryLoader::PopulateRelAggregatesMap()
-  {
-    std::unordered_map<uint32_t, std::vector<uint32_t>> resultVector;
-    auto relAggregates = _loader.GetExpressIDsWithType(schema::IFCRELAGGREGATES);
-
-    for (uint32_t relAggregateID : relAggregates)
-    {
-      _loader.MoveToArgumentOffset(relAggregateID, 4);
-
-      uint32_t relatingBuildingElement = _loader.GetRefArgument();
-      auto aggregates = _loader.GetSetArgument();
-      auto lineType2 = _loader.GetLineType(relatingBuildingElement);
-      auto relVoidsIt2 = _relVoids.find(relatingBuildingElement);
-
-      for (auto &aggregate : aggregates)
-      {
-        uint32_t aggregateID = _loader.GetRefArgument(aggregate);
-        resultVector[relatingBuildingElement].push_back(aggregateID);
-        if (relVoidsIt2 != _relVoids.end() && !relVoidsIt2->second.empty())
-        {
-          auto relVoidsIt1 = _relVoids.find(aggregateID);
-          // any any voids that are aggregated to the voids map
-          if (relVoidsIt1 == _relVoids.end())
-          {
-            _relVoids[aggregateID] = std::vector<uint32_t>();
-            relVoidsIt1 = _relVoids.find(aggregateID);
-          }
-          relVoidsIt1->second.insert(relVoidsIt1->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
-        }
-      }
-    }
-    return resultVector;
-  }
-
-  std::unordered_map<uint32_t, std::vector<uint32_t>> IfcGeometryLoader::PopulateRelNestsMap()
-  {
-    std::unordered_map<uint32_t, std::vector<uint32_t>> resultVector;
-    auto relNests = _loader.GetExpressIDsWithType(schema::IFCRELNESTS);
-
-    for (uint32_t relNestID : relNests)
-    {
-      _loader.MoveToArgumentOffset(relNestID, 4);
-
-      uint32_t relatingBuildingElement = _loader.GetRefArgument();
-      auto nests = _loader.GetSetArgument();
-
-      for (auto &nest : nests)
-      {
-        uint32_t nestID = _loader.GetRefArgument(nest);
-        resultVector[relatingBuildingElement].push_back(nestID);
-      }
-    }
-    return resultVector;
-  }
-
-  std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> IfcGeometryLoader::PopulateStyledItemMap()
-  {
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> returnVector;
-    auto styledItems = _loader.GetExpressIDsWithType(schema::IFCSTYLEDITEM);
-
-    for (uint32_t styledItemID : styledItems)
-    {
-      _loader.MoveToArgumentOffset(styledItemID, 0);
-
-      if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
-      {
-        _loader.StepBack();
-        uint32_t representationItem = _loader.GetRefArgument();
-
-        auto styleAssignments = _loader.GetSetArgument();
-
-        for (auto &styleAssignment : styleAssignments)
-        {
-          uint32_t styleAssignmentID = _loader.GetRefArgument(styleAssignment);
-          returnVector[representationItem].emplace_back(styledItemID, styleAssignmentID);
-        }
-      }
-    }
-    return returnVector;
-  }
-
-  std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> IfcGeometryLoader::PopulateRelMaterialsMap()
-  {
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> resultVector;
-    auto styledItems = _loader.GetExpressIDsWithType(schema::IFCRELASSOCIATESMATERIAL);
-
-    for (uint32_t styledItemID : styledItems)
-    {
-      _loader.MoveToArgumentOffset(styledItemID, 5);
-
-      uint32_t materialSelect = _loader.GetRefArgument();
-
-      _loader.MoveToArgumentOffset(styledItemID, 4);
-
-      auto RelatedObjects = _loader.GetSetArgument();
-
-      for (auto &ifcRoot : RelatedObjects)
-      {
-        uint32_t ifcRootID = _loader.GetRefArgument(ifcRoot);
-        resultVector[ifcRootID].emplace_back(styledItemID, materialSelect);
-      }
-    }
-    return resultVector;
-  }
-
-  std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> IfcGeometryLoader::PopulateMaterialDefinitionsMap()
-  {
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> resultVector;
-    auto matDefs = _loader.GetExpressIDsWithType(schema::IFCMATERIALDEFINITIONREPRESENTATION);
-
-    for (uint32_t styledItemID : matDefs)
-    {
-      _loader.MoveToArgumentOffset(styledItemID, 2);
-
-      auto representations = _loader.GetSetArgument();
-
-      _loader.MoveToArgumentOffset(styledItemID, 3);
-
-      uint32_t material = _loader.GetRefArgument();
-
-      for (auto &representation : representations)
-      {
-        uint32_t representationID = _loader.GetRefArgument(representation);
-        resultVector[material].emplace_back(styledItemID, representationID);
-      }
-    }
-    return resultVector;
-  }
-
-  void IfcGeometryLoader::ReadLinearScalingFactor()
-  {
-    auto projects = _loader.GetExpressIDsWithType(schema::IFCPROJECT);
-
-    if (projects.size() != 1)
-    {
-      spdlog::error("[ReadLinearScalingFactor()] unexpected empty ifc project");
-      return;
-    }
-
-    auto projectEID = projects[0];
-    _loader.MoveToArgumentOffset(projectEID, 8);
-    auto tk = _loader.GetTokenType();
-    _loader.StepBack();
-    if (tk != parsing::REF)
-    {
-        // IfcProject::UnitsInContext is an optional argument, no error or warning
-        return;
-    }
-
-    auto unitsID = _loader.GetRefArgument();
-    _loader.MoveToArgumentOffset(unitsID, 0);
-
-    tk = _loader.GetTokenType();
-    _loader.StepBack();
-    if (tk != parsing::SET_BEGIN)
-    {
-        // IfcUnitAssignment::Units vector can be empty. Avoid infinite loop in _loader.GetSetArgument()
-        return;
-    }
-    auto unitIds = _loader.GetSetArgument();
-
-    for (auto &unitID : unitIds)
-    {
-      auto unitRef = _loader.GetRefArgument(unitID);
-      auto lineType = _loader.GetLineType(unitRef);
-
-      if (lineType == schema::IFCSIUNIT)
-      {
-        _loader.MoveToArgumentOffset(unitRef, 1);
-        std::string_view unitType = _loader.GetStringArgument();
-
-        std::string_view unitPrefix;
-
-        _loader.MoveToArgumentOffset(unitRef, 2);
-        if (_loader.GetTokenType() == parsing::IfcTokenType::ENUM)
-        {
-          _loader.StepBack();
-          unitPrefix = _loader.GetStringArgument();
-        }
-
-        _loader.MoveToArgumentOffset(unitRef, 3);
-        std::string_view unitName = _loader.GetStringArgument();
-
-        if (unitType == "LENGTHUNIT" && unitName == "METRE")
-        {
-          double prefix = ConvertPrefix(unitPrefix);
-          _linearScalingFactor *= prefix;
-        }
-        if (unitType == "PLANEANGLEUNIT")
-        {
-          _angleUnits = unitName;
-        }
-      }
-      if (lineType == schema::IFCCONVERSIONBASEDUNIT)
-      {
-        _loader.MoveToArgumentOffset(unitRef, 1);
-        std::string_view unitType = _loader.GetStringArgument();
-        _loader.MoveToArgumentOffset(unitRef, 3);
-        auto unitRefLine = _loader.GetRefArgument();
-
-        _loader.MoveToArgumentOffset(unitRefLine, 1);
-        auto ratios = _loader.GetSetArgument();
-
-        /// Scale Correction
-
-        _loader.MoveToArgumentOffset(unitRefLine, 2);
-        auto scaleRefLine = _loader.GetRefArgument();
-
-        _loader.MoveToArgumentOffset(scaleRefLine, 1);
-        std::string_view unitTypeScale = _loader.GetStringArgument();
-
-        std::string_view unitPrefix;
-
-        _loader.MoveToArgumentOffset(scaleRefLine, 2);
-        if (_loader.GetTokenType() == parsing::IfcTokenType::ENUM)
-        {
-          _loader.StepBack();
-          unitPrefix = _loader.GetStringArgument();
-        }
-
-        _loader.MoveToArgumentOffset(scaleRefLine, 3);
-        std::string_view unitName = _loader.GetStringArgument();
-
-        if (unitTypeScale == "LENGTHUNIT" && unitName == "METRE")
-        {
-          double prefix = ConvertPrefix(unitPrefix);
-          _linearScalingFactor *= prefix;
-        }
-
-        double ratio = _loader.GetDoubleArgument(ratios[0]);
-        if (unitType == "LENGTHUNIT")
-        {
-          _linearScalingFactor *= ratio;
-        }
-        else if (unitType == "AREAUNIT")
-        {
-          _squaredScalingFactor *= ratio;
-        }
-        else if (unitType == "VOLUMEUNIT")
-        {
-          _cubicScalingFactor *= ratio;
-        }
-        else if (unitType == "PLANEANGLEUNIT")
-        {
-          _angularScalingFactor *= ratio;
-        }
-      }
-    }
-  }
-
-  double IfcGeometryLoader::ConvertPrefix(const std::string_view &prefix)
-  {
-    if (prefix == "")
-      return 1;
-    else if (prefix == "EXA")
-      return 1e18;
-    else if (prefix == "PETA")
-      return 1e15;
-    else if (prefix == "TERA")
-      return 1e12;
-    else if (prefix == "GIGA")
-      return 1e9;
-    else if (prefix == "MEGA")
-      return 1e6;
-    else if (prefix == "KILO")
-      return 1e3;
-    else if (prefix == "HECTO")
-      return 1e2;
-    else if (prefix == "DECA")
-      return 10;
-    else if (prefix == "DECI")
-      return 1e-1;
-    else if (prefix == "CENTI")
-      return 1e-2;
-    else if (prefix == "MILLI")
-      return 1e-3;
-    else if (prefix == "MICRO")
-      return 1e-6;
-    else if (prefix == "NANO")
-      return 1e-9;
-    else if (prefix == "PICO")
-      return 1e-12;
-    else if (prefix == "FEMTO")
-      return 1e-15;
-    else if (prefix == "ATTO")
-      return 1e-18;
-    else
-      return 1;
-  }
-
-  const std::unordered_map<uint32_t, std::vector<uint32_t>> &IfcGeometryLoader::GetRelVoids() const
-  {
-    return _relVoids;
-  }
-
-  const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetStyledItems() const
-  {
-    return _styledItems;
-  }
-
-  const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetRelMaterials() const
-  {
-    return _relMaterials;
-  }
-
-  const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &IfcGeometryLoader::GetMaterialDefinitions() const
-  {
-    return _materialDefinitions;
-  }
-
-  double IfcGeometryLoader::GetLinearScalingFactor() const
-  {
-    return _linearScalingFactor;
-  }
-
-  std::string IfcGeometryLoader::GetAngleUnits() const
-  {
-    return _angleUnits;
-  }
 
   double IfcGeometryLoader::ReadLenghtMeasure() const
   {
@@ -4672,17 +4306,6 @@ namespace webifc::geometry
     }
 
     return result;
-  }
-
-  IfcGeometryLoader *IfcGeometryLoader::Clone(const webifc::parsing::IfcLoader &newLoader) const
-  {
-    IfcGeometryLoader *newGeomLoader = new IfcGeometryLoader(newLoader, _schemaManager, _relVoids, _relNests, _relAggregates, _styledItems, _relMaterials, _materialDefinitions, _linearScalingFactor, _squaredScalingFactor, _cubicScalingFactor, _angularScalingFactor, _angleUnits, _circleSegments, _localCurvesList, _localcurvesIndices, _expressIDToPlacement);
-    return newGeomLoader;
-  }
-
-  IfcGeometryLoader::IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relVoids, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relNests, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relAggregates, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &styledItems, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &relMaterials, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &materialDefinitions, double linearScalingFactor, double squaredScalingFactor, double cubicScalingFactor, double angularScalingFactor, std::string angleUnits, uint16_t circleSegments, std::vector<IfcCurve> &localCurvesList, std::vector<uint32_t> &localcurvesIndices, std::unordered_map<uint32_t, glm::dmat4> expressIDToPlacement)
-      : _loader(loader), _schemaManager(schemaManager), _relVoids(relVoids), _relNests(relNests), _relAggregates(relAggregates), _styledItems(styledItems), _relMaterials(relMaterials), _materialDefinitions(materialDefinitions), _linearScalingFactor(linearScalingFactor), _squaredScalingFactor(squaredScalingFactor), _cubicScalingFactor(cubicScalingFactor), _angularScalingFactor(angularScalingFactor), _angleUnits(angleUnits), _circleSegments(circleSegments), _localCurvesList(localCurvesList), _localcurvesIndices(localcurvesIndices), _expressIDToPlacement(expressIDToPlacement)
-  {
   }
 
 }
