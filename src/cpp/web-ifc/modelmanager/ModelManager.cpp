@@ -54,8 +54,7 @@ webifc::geometry::IfcGeometryProcessor *webifc::manager::ModelManager::GetGeomet
     if (!_geometryProcessors.contains(modelID))
     {
         auto loader = GetIfcLoader(modelID);
-        webifc::cache::IfcCache cache(*loader);
-        webifc::geometry::IfcGeometryProcessor *processor = new webifc::geometry::IfcGeometryProcessor(*loader, cache, _schemaManager, GetSettings(modelID).CIRCLE_SEGMENTS, GetSettings(modelID).COORDINATE_TO_ORIGIN, GetSettings(modelID).TOLERANCE_PLANE_INTERSECTION, GetSettings(modelID).TOLERANCE_PLANE_DEVIATION, GetSettings(modelID).TOLERANCE_BACK_DEVIATION_DISTANCE, GetSettings(modelID).TOLERANCE_INSIDE_OUTSIDE_PERIMETER, GetSettings(modelID).TOLERANCE_SCALAR_EQUALITY, GetSettings(modelID).PLANE_REFIT_ITERATIONS, GetSettings(modelID).BOOLEAN_UNION_THRESHOLD);
+        webifc::geometry::IfcGeometryProcessor *processor = new webifc::geometry::IfcGeometryProcessor(*loader, _schemaManager, GetSettings(modelID).CIRCLE_SEGMENTS, GetSettings(modelID).COORDINATE_TO_ORIGIN, GetSettings(modelID).TOLERANCE_PLANE_INTERSECTION, GetSettings(modelID).TOLERANCE_PLANE_DEVIATION, GetSettings(modelID).TOLERANCE_BACK_DEVIATION_DISTANCE, GetSettings(modelID).TOLERANCE_INSIDE_OUTSIDE_PERIMETER, GetSettings(modelID).TOLERANCE_SCALAR_EQUALITY, GetSettings(modelID).PLANE_REFIT_ITERATIONS, GetSettings(modelID).BOOLEAN_UNION_THRESHOLD);
         _geometryProcessors[modelID] = processor;
     }
     return _geometryProcessors.at(modelID);
