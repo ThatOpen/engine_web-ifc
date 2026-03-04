@@ -881,7 +881,7 @@ std::string DecodeText(std::string text)
 void ResetCache(uint32_t modelID)
 {
     if (manager.IsModelOpen(modelID))
-        manager.GetGeometryProcessor(modelID)->GetLoader().ResetCache();
+        manager.GetGeometryProcessor(modelID)->Clear();
 }
 
 bimGeometry::AABB CreateAABB()

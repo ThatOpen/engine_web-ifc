@@ -12,7 +12,7 @@
 #include <glm/glm.hpp>
 
 #include "../parsing/IfcLoader.h"
-#include "../schema/IfcSchemaManager.h"
+#include "../cache/IfcCache.h"
 
 #include "representation/geometry.h"
 #include "representation/IfcGeometry.h"
@@ -26,8 +26,7 @@ namespace webifc::geometry
   class IfcGeometryLoader
   {
   public:
-    IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double, double BOOLEAN_UNION_THRESHOLD);
-    void ResetCache();
+    IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, webifc::cache::IfcCache &cache, uint16_t circleSegments);
     std::array<glm::dvec3, 2> GetAxis1Placement(const uint32_t expressID) const;
     glm::dmat3 GetAxis2Placement2D(const uint32_t expressID) const;
     glm::dmat4 GetLocalPlacement(const uint32_t expressID, glm::dvec3 vector = glm::dvec3(1)) const;
@@ -61,17 +60,8 @@ namespace webifc::geometry
     void getPlacementsOnCurvePoints(uint32_t curveID, std::map<double, glm::dmat4>& mapPlacements) const;
     IfcAlignment GetAlignment(uint32_t expressID, IfcAlignment alignment = IfcAlignment(), glm::dmat4 transform = glm::dmat4(1), uint32_t sourceExpressID = -1) const;
     bool GetColor(const uint32_t expressID, const glm::dvec4 &outputColor) const;
-    const std::unordered_map<uint32_t, std::vector<uint32_t>> &GetRelVoids() const;
-    const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetStyledItems() const;
-    const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetRelMaterials() const;
-    const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &GetMaterialDefinitions() const;
-    double GetLinearScalingFactor() const;
-    std::string GetAngleUnits() const;
-    void Clear() const;
-    IfcGeometryLoader *Clone(const webifc::parsing::IfcLoader &loader) const;
 
   private:
-    IfcGeometryLoader(const webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relVoids, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relNests, const std::unordered_map<uint32_t, std::vector<uint32_t>> &relAggregates, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &styledItems, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &relMaterials, const std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> &materialDefinitions, double linearScalingFactor, double squaredScalingFactor, double cubicScalingFactor, double angularScalingFactor, std::string angleUnits, uint16_t circleSegments, std::vector<IfcCurve> &localCurvesList, std::vector<uint32_t> &localcurvesIndices, std::unordered_map<uint32_t, glm::dmat4> expressIDToPlacement);
     IfcCurve GetAlignmentCurve(uint32_t expressID, uint32_t parentExpressID = -1) const;
     IfcProfile GetProfileByLine(uint32_t expressID) const;
     glm::dvec3 GetVertexPoint(uint32_t expressID) const;
@@ -104,33 +94,8 @@ namespace webifc::geometry
     void ReadCurveMeasureSelect(IfcTrimmingSelect& trim) const;
     std::vector<IfcSegmentIndexSelect> ReadCurveIndices() const;
     const webifc::parsing::IfcLoader &_loader;
-    const webifc::schema::IfcSchemaManager &_schemaManager;
-    std::unordered_map<uint32_t, std::vector<uint32_t>> _relVoids;
-    std::unordered_map<uint32_t, std::vector<uint32_t>> _relNests;
-    std::unordered_map<uint32_t, std::vector<uint32_t>> _relAggregates;
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _styledItems;
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _relMaterials;
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> _materialDefinitions;
-    double _linearScalingFactor = 1;
-    double _squaredScalingFactor = 1;
-    double _cubicScalingFactor = 1;
-    double _angularScalingFactor = 1;
-    std::string _angleUnits;
+    webifc::cache::IfcCache &_cache;
     uint16_t _circleSegments;
-    mutable std::vector<IfcCurve> _localCurvesList;
-    mutable std::vector<uint32_t> _localcurvesIndices;
-    // Caches to avoid repeatedly decoding the same points
-    mutable std::unordered_map<uint32_t, glm::dvec3> _cartesianPoint3DCache;
-    mutable std::unordered_map<uint32_t, glm::dvec2> _cartesianPoint2DCache;
-    std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelVoidsMap();
-    std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelNestsMap();
-    std::unordered_map<uint32_t, std::vector<uint32_t>> PopulateRelAggregatesMap();
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateStyledItemMap();
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateRelMaterialsMap();
-    std::unordered_map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> PopulateMaterialDefinitionsMap();
-    void ReadLinearScalingFactor();
-    double ConvertPrefix(const std::string_view &prefix);
-    mutable std::unordered_map<uint32_t, glm::dmat4> _expressIDToPlacement;
   };
 
 }
