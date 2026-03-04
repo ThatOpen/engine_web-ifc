@@ -9,6 +9,7 @@
 #include "io_helpers.h"
 
 #include "../web-ifc/parsing/IfcLoader.h"
+#include "../web-ifc/cache/IfcCache.h"
 #include "../web-ifc/schema/IfcSchemaManager.h"
 #include "../web-ifc/geometry/IfcGeometryProcessor.h"
 #include "../web-ifc/schema/ifc-schema.h"
@@ -531,8 +532,8 @@ int main()
     // std::ofstream outputFile("output.ifc");
     // outputFile << loader.DumpSingleObjectAsIFC(14363);
     // outputFile.close();
-
-    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.TOLERANCE_PLANE_INTERSECTION, set.TOLERANCE_PLANE_DEVIATION, set.TOLERANCE_BACK_DEVIATION_DISTANCE, set.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, set.TOLERANCE_SCALAR_EQUALITY, set.PLANE_REFIT_ITERATIONS, set.BOOLEAN_UNION_THRESHOLD);
+    webifc::cache::IfcCache cache(loader);
+    webifc::geometry::IfcGeometryProcessor geometryLoader(loader, schemaManager, loader,  set.CIRCLE_SEGMENTS, set.COORDINATE_TO_ORIGIN, set.TOLERANCE_PLANE_INTERSECTION, set.TOLERANCE_PLANE_DEVIATION, set.TOLERANCE_BACK_DEVIATION_DISTANCE, set.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, set.TOLERANCE_SCALAR_EQUALITY, set.PLANE_REFIT_ITERATIONS, set.BOOLEAN_UNION_THRESHOLD);
 
     start = ms();
     SpecificLoadTest(loader, geometryLoader, 85583); //1092_A
