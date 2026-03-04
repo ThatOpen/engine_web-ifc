@@ -29,9 +29,9 @@ namespace webifc::parsing
     return 0;
   }
 
-  void IfcTokenStream::SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData) 
+  void IfcTokenStream::SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData, bool fromStream) 
   {
-      _fileStream = new IfcFileStream(requestData,_chunkSize);
+      _fileStream = new IfcFileStream(requestData,_chunkSize,fromStream);
       size_t tokenOffset=0;
       while (!_fileStream->IsAtEnd())
       {
@@ -49,7 +49,7 @@ namespace webifc::parsing
 
   void IfcTokenStream::SetTokenSource(std::istream &requestData)
   { 
-     SetTokenSource([&](char* dest, size_t sourceOffset, size_t destSize) { requestData.seekg(sourceOffset); requestData.read(dest, destSize); return requestData.gcount();});
+     SetTokenSource([&](char* dest, size_t sourceOffset, size_t destSize) { requestData.seekg(sourceOffset); requestData.read(dest, destSize); return requestData.gcount();},true);
   }
   
   std::string_view IfcTokenStream::ReadString() 
