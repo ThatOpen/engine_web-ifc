@@ -2772,9 +2772,9 @@ koa-compose@^4.1.0:
   integrity sha512-8ODW8TrDuMYvXRwra/Kh7/rJo9BtOfPc6qO8eAfC80CnCvSjSl0bkRM24X6/XBBEyj0v1nRUQ1LyOy3dbqOWXw==
 
 koa-compress@^5.0.1:
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/koa-compress/-/koa-compress-5.2.0.tgz"
-  integrity sha512-RsRnI+v+/rs1lYpcAUcxowUzHYssf71qbMr0Mpdq1wktbtXDZmxBIgxJHtaEsBjSe4jiWYELpGFbASa2AemmOg==
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/koa-compress/-/koa-compress-5.2.1.tgz#a602ba25302e7dff2388e9b885d56028d55710ef"
+  integrity sha512-k8VJMZI7vvSq1/G/t6Jggeg4h7fec1NJxcYaDWC4/1PK6mJFPs0OYqj44vx/soUcDVEJR7ysR5cc6pszKpnzXA==
   dependencies:
     bytes "^3.1.2"
     compressible "^2.0.18"
