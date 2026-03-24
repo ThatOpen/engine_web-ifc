@@ -1238,6 +1238,11 @@ array-back@^6.2.2:
   resolved "https://registry.npmjs.org/array-back/-/array-back-6.2.2.tgz"
   integrity sha512-gUAZ7HPyb4SJczXAMUXMGAvI976JoK3qEx9v1FTmeYuJj0IBiaKttG1ydtGKdkfqWkIkouke7nG8ufGy77+Cvw==
 
+array-back@^6.2.3:
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/array-back/-/array-back-6.2.3.tgz#d41e67598805e614f23b319b9e5960dfbcd72ae2"
+  integrity sha512-SGDvmg6QTYiTxCBkYVmThcoa67uLl35pyzRHdpCGBOcqFy6BtwnphoFPk7LhJshD+Yk1Kt35WGWeZPTgwR4Fhw==
+
 babel-jest@30.3.0:
   version "30.3.0"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-30.3.0.tgz#3ff5553fa3bcbb8738d2d7335a4dbdc3bd1a0eb5"
@@ -1509,14 +1514,14 @@ color-name@~1.1.4:
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
 command-line-args@^6.0.0:
-  version "6.0.1"
-  resolved "https://registry.npmjs.org/command-line-args/-/command-line-args-6.0.1.tgz"
-  integrity sha512-Jr3eByUjqyK0qd8W0SGFW1nZwqCaNCtbXjRo2cRJC1OYxWl3MZ5t1US3jq+cO4sPavqgw4l9BMGX0CBe+trepg==
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/command-line-args/-/command-line-args-6.0.2.tgz#a5b8a87d3f12aa1707c122c5ed38bc64535514a0"
+  integrity sha512-AIjYVxrV9X752LmPDLbVYv8aMCuHPSLZJXEo2qo/xJfv+NYhaZ4sMSF01rM+gHPaMgvPM0l5D/F+Qx+i2WfSmQ==
   dependencies:
-    array-back "^6.2.2"
+    array-back "^6.2.3"
     find-replace "^5.0.2"
     lodash.camelcase "^4.3.0"
-    typical "^7.2.0"
+    typical "^7.3.0"
 
 command-line-usage@^7.0.3:
   version "7.0.4"
@@ -4068,7 +4073,7 @@ typical@^5.2.0:
   resolved "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz"
   integrity sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg==
 
-typical@^7.1.1, typical@^7.2.0, typical@^7.3.0:
+typical@^7.1.1, typical@^7.3.0:
   version "7.3.0"
   resolved "https://registry.npmjs.org/typical/-/typical-7.3.0.tgz"
   integrity sha512-ya4mg/30vm+DOWfBg4YK3j2WD6TWtRkCbasOJr40CseYENzCUby/7rIvXA99JGsQHeNxLbnXdyLLxKSv3tauFw==
