@@ -80,7 +80,7 @@
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.3",
-    "typescript": "^5.8.3"
+    "typescript": "^6.0.3"
   },
   "browser": {
     "crypto": false,

@@ -3,7 +3,7 @@
     "lib": ["es6", "dom", "es2017"],
     "target": "es6",
     "outDir": "dist",
-    "moduleResolution" : "node",
+    "moduleResolution" : "node16",
     "declaration": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
@@ -13,7 +13,12 @@
     "noUnusedParameters": true,                           
     "strictFunctionTypes": true,                 
     "strictPropertyInitialization": true,        
-    "alwaysStrict": true              
+    "alwaysStrict": true,
+    "rootDir":"./src/ts",
+    "ignoreDeprecations": "6.0",
+    "types": ["node","jest"],
+    "module":"node16",
+    "isolatedModules": true
   },
   "files": [
     "src/ts/web-ifc-api.ts"

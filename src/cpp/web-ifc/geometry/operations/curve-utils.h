@@ -19,76 +19,49 @@ inline bool isConvexOrColinear(glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
 inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const glm::dvec3 &p3, uint16_t circleSegments, double EPS_MINSIZE)
 {
     spdlog::debug("[Build3DArc3Pt({})]");
-    // Calculate the center of the circle
-    glm::dvec3 v1 = p2 - p1;
-    glm::dvec3 v2 = p3 - p1;
-    glm::dvec3 normal = glm::normalize(glm::cross(v1, v2));
-    glm::dvec3 mid1 = 0.5 * (p1 + p2);
-    glm::dvec3 mid2 = 0.5 * (p1 + p3);
-    glm::dvec3 center;
 
-    if (glm::length(glm::cross(v1, v2)) < EPS_MINSIZE)
-    {
-        // Points are collinear, so there's no unique circle.
-        // You can handle this case differently or return an error.
-        // For simplicity, let's return an empty curve.
-        return IfcCurve();
-    }
-    else
-    {
-        // Calculate the center of the circle
-        double Cx = p2.x-p1.x;
-        double Cy = p2.y-p1.y;
-        double Cz = p2.z-p1.z;
-        double Bx = p3.x-p1.x;
-        double By = p3.y-p1.y;
-        double Bz = p3.z-p1.z;
-        double B2 = p1.x*p1.x-p3.x*p3.x+p1.y*p1.y-p3.y*p3.y+p1.z*p1.z-p3.z*p3.z;
-        double C2 = p1.x*p1.x-p2.x*p2.x+p1.y*p1.y-p2.y*p2.y+p1.z*p1.z-p2.z*p2.z;
+    glm::dvec3 a = p2 - p1;
+    glm::dvec3 b = p3 - p1;
+    glm::dvec3 n = glm::cross(a, b);
 
-        double CByz = Cy*Bz-Cz*By;
-        double CBxz = Cx*Bz-Cz*Bx;
-        double CBxy = Cx*By-Cy*Bx;
-        double ZZ1 = -(Bz-Cz*Bx/Cx)/(By-Cy*Bx/Cx);
-        double Z01 = -(B2-Bx/Cx*C2)/(2*(By-Cy*Bx/Cx));
-        double ZZ2 = -(ZZ1*Cy+Cz)/Cx;
-        double Z02 = -(2*Z01*Cy+C2)/(2*Cx);
+	double n2 = glm::dot(n, n);
+	if (n2 < EPS_MINSIZE * EPS_MINSIZE)
+	{
+		return IfcCurve();
+	}
 
-        double dz = -((Z02-p1.x)*CByz-(Z01-p1.y)*CBxz-p1.z*CBxy)/(ZZ2*CByz-ZZ1*CBxz+CBxy);
-        double dx = ZZ2*dz + Z02;
-        double dy = ZZ1*dz + Z01;
+    // Numerically stable circumcenter: no division by individual coordinates
+    glm::dvec3 numerator = glm::dot(b, b) * glm::cross(n, a) + glm::dot(a, a) * glm::cross(b, n);
+    glm::dvec3 center = p1 + numerator / (2.0 * glm::dot(n, n));
 
-		center = glm::dvec3(dx, dy, dz);
-    }
-
-    // Calculate the radius
     double radius = glm::distance(center, p1);
 
-    // Using geometrical subdivision to create points on the arc
-    std::vector<glm::dvec3> pointList;
-    pointList.push_back(p1);
-    pointList.push_back(p2);
-    pointList.push_back(p3);
+    // Local 2D basis in the arc plane
+    glm::dvec3 normal = glm::normalize(n);
+    glm::dvec3 xAxis  = glm::normalize(p1 - center);
+    glm::dvec3 yAxis  = glm::normalize(glm::cross(normal, xAxis));
 
-    while (pointList.size() < (size_t)circleSegments)
-    {
-        std::vector<glm::dvec3> tempPointList;
-        for (size_t j = 0; j < pointList.size() - 1; j++)
-        {
-            glm::dvec3 pt = (pointList[j] + pointList[j + 1]) / 2.0;
-            glm::dvec3 vc = glm::normalize(pt - center);
-            pt = center + vc * radius;
-            tempPointList.push_back(pointList[j]);
-            tempPointList.push_back(pt);
-        }
-        tempPointList.push_back(pointList.back());
-        pointList = tempPointList;
-    }
+    auto getAngle = [&](const glm::dvec3 &p) -> double {
+        glm::dvec3 r = glm::normalize(p - center);
+        double angle = std::atan2(glm::dot(r, yAxis), glm::dot(r, xAxis));
+        if (angle < 0.0) angle += 2.0 * CONST_PI;
+        return angle;
+    };
 
+    double angle2 = getAngle(p2);
+    double angle3 = getAngle(p3);
+
+    // Traverse from p1 (angle 0) to p3, passing through p2.
+    // If angle3 > angle2 the CCW arc covers p2; otherwise go CW.
+    double totalAngle = (angle3 > angle2) ? angle3 : (angle3 - 2.0 * CONST_PI);
+
+    int nPts = std::max(static_cast<int>(circleSegments + 1), 2);
     IfcCurve curve;
-    for (size_t j = 0; j < pointList.size(); j++)
+    for (int i = 0; i < nPts; i++)
     {
-        curve.Add(pointList.at(j));
+        double t = static_cast<double>(i) / (nPts - 1);
+        double angle = t * totalAngle;
+        curve.Add(center + radius * (std::cos(angle) * xAxis + std::sin(angle) * yAxis));
     }
 
     return curve;
