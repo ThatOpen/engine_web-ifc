@@ -15,7 +15,7 @@
     "strictPropertyInitialization": true,        
     "alwaysStrict": true,
     "rootDir":"./src/ts",
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": "5.0",
     "types": ["node","jest"],
     "module":"node16",
     "isolatedModules": true
