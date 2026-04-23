@@ -115,6 +115,13 @@ export interface FlatMesh {
   delete(): void;
 }
 
+export interface BooleanOperands {
+    expressID: number;
+    bodyMesh: FlatMesh;
+    voidMeshes: Vector<FlatMesh>;
+    hasBooleanOp: boolean;
+}
+
 export interface Point {
   x: number;
   y: number;
@@ -730,7 +737,11 @@ export class IfcAPI {
    * @param modelID Model handle retrieved by OpenModel
    * @param headerType Type of header data you want to retrieve
    * ifc.FILE_NAME, ifc.FILE_DESCRIPTION or ifc.FILE_SCHEMA
-   * @returns An object with parameters ID, type and arguments
+   *despres tenim aquests dos arxius.
+   
+   
+   
+   Bé la cosa es que necessito d'alguna manera pensar un métode per extreure, d'un objecte del IFC els elements que fa servir en una operació booleana pero sense fer la booleana @returns An object with parameters ID, type and arguments
    */
   GetHeaderLine(modelID: number, headerType: number) {
     return this.wasmModule.GetHeaderLine(modelID, headerType);
@@ -1437,6 +1448,19 @@ export class IfcAPI {
    */
   GetFlatMesh(modelID: number, expressID: number): FlatMesh {
     return this.wasmModule.GetFlatMesh(modelID, expressID);
+  }
+
+  /**
+   * Returns the boolean operands for an element without performing the final boolean operation.
+   * The body mesh includes all internal CSG operations (clippings, halfspaces) fully resolved.
+   * The void meshes are the resolved geometries of each IfcOpeningElement linked via IfcRelVoidsElement.
+   * If the element has no voids, hasBooleanOp is false and voidMeshes is empty.
+   * @param modelID Model handle retrieved by OpenModel
+   * @param expressID ExpressID of the IfcElement (wall, slab, etc.)
+   * @returns BooleanOperands with separated body and void geometries
+   */
+  GetBooleanOperands(modelID: number, expressID: number): BooleanOperands {
+      return this.wasmModule.GetBooleanOperands(modelID, expressID);
   }
 
   /**

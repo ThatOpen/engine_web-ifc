@@ -91,6 +91,23 @@ webifc::geometry::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
     return mesh;
 }
 
+webifc::geometry::IfcGeometryProcessor::IfcBooleanOperands GetBooleanOperands(uint32_t modelID, uint32_t expressID)
+{
+    if (!manager.IsModelOpen(modelID))
+        return {};
+    auto geomProc = manager.GetGeometryProcessor(modelID);
+    auto result = geomProc->GetBooleanOperands(expressID);
+
+    for (auto &geom : result.bodyMesh.geometries)
+        geomProc->GetGeometry(geom.geometryExpressID).GetVertexData();
+
+    for (auto &voidMesh : result.voidMeshes)
+        for (auto &geom : voidMesh.geometries)
+            geomProc->GetGeometry(geom.geometryExpressID).GetVertexData();
+
+    return result;
+}
+
 void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> &expressIds, emscripten::val callback)
 {
     if (!manager.IsModelOpen(modelID))
@@ -1007,6 +1024,13 @@ EMSCRIPTEN_BINDINGS(my_module)
         .field("expressID", &webifc::geometry::IfcFlatMesh::expressID);
 
     emscripten::register_vector<webifc::geometry::IfcFlatMesh>("IfcFlatMeshVector");
+
+    emscripten::value_object<webifc::geometry::IfcGeometryProcessor::IfcBooleanOperands>("IfcBooleanOperands")
+        .field("expressID", &webifc::geometry::IfcGeometryProcessor::IfcBooleanOperands::expressID)
+        .field("bodyMesh", &webifc::geometry::IfcGeometryProcessor::IfcBooleanOperands::bodyMesh)
+        .field("voidMeshes", &webifc::geometry::IfcGeometryProcessor::IfcBooleanOperands::voidMeshes)
+        .field("hasBooleanOp", &webifc::geometry::IfcGeometryProcessor::IfcBooleanOperands::hasBooleans);
+
     emscripten::register_vector<uint32_t>("UintVector");
 
     emscripten::value_object<webifc::geometry::SweptDiskSolid>("SweptDiskSolid")
@@ -1157,6 +1181,7 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
+    emscripten::function("GetBooleanOperands", &GetBooleanOperands);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("GetWorldTransformMatrix", &GetWorldTransformMatrix);
     emscripten::function("StreamMeshes", &StreamMeshesWithExpressID);
