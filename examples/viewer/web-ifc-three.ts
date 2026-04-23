@@ -23,7 +23,7 @@ export class IfcThree
      * @scene Threejs Scene object
      * @modelID Model handle retrieved by OpenModel, model must not be closed
     */
-    public LoadAllGeometry(scene: THREE.Scene, modelID: number) {
+    public LoadAllGeometry(scene: THREE.Scene, modelID: number, repair: boolean = false) {
 
         const startUploadingTime = ms();
 
@@ -40,6 +40,14 @@ export class IfcThree
         let geometries = [];
         let transparentGeometries = [];
 
+        // Repair stats accumulator (only used if repair=true).
+        let repairTotals = {
+            processed: 0,
+            flipped: 0,
+            componentsLowConfidence: 0,
+            worstMargin: 0,
+        };
+
         this.ifcAPI.StreamAllMeshes(modelID, (mesh: FlatMesh) => {
             // only during the lifetime of this function call, the geometry is available in memory
             const placedGeometries = mesh.geometries;
@@ -47,7 +55,7 @@ export class IfcThree
             for (let i = 0; i < placedGeometries.size(); i++)
             {
                 const placedGeometry = placedGeometries.get(i);
-                let mesh = this.getPlacedGeometry(modelID, placedGeometry);
+                let mesh = this.getPlacedGeometry(modelID, placedGeometry, repair, repairTotals);
                 let geom = mesh.geometry.applyMatrix4(mesh.matrix);
                 if (placedGeometry.color.w !== 1)
                 {
@@ -62,11 +70,20 @@ export class IfcThree
             //console.log(this.ifcAPI.wasmModule.HEAPU8.length);
         });
 
+        if (repair) {
+            console.log(
+                `[RepairFaces] processed ${repairTotals.processed} geometries, ` +
+                `flipped ${repairTotals.flipped} triangles, ` +
+                `${repairTotals.componentsLowConfidence} low-confidence components, ` +
+                `worst margin ${repairTotals.worstMargin.toFixed(4)}`
+            );
+        }
+
         console.log("Loading "+geometries.length+" geometries and "+transparentGeometries.length+" transparent geometries");
         if (geometries.length > 0)
         { 
             const combinedGeometry = BufferGeometryUtils.mergeGeometries(geometries);
-            let mat = new THREE.MeshPhongMaterial({side:THREE.DoubleSide});
+            let mat = new THREE.MeshPhongMaterial({side:THREE.FrontSide});
             mat.vertexColors = true;
             const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
             scene.add(mergedMesh);
@@ -75,7 +92,7 @@ export class IfcThree
         if (transparentGeometries.length > 0)
         {
             const combinedGeometryTransp = BufferGeometryUtils.mergeGeometries(transparentGeometries);
-            let matTransp = new THREE.MeshPhongMaterial({side:THREE.DoubleSide});
+            let matTransp = new THREE.MeshPhongMaterial({side:THREE.FrontSide});
             matTransp.vertexColors = true;
             matTransp.transparent = true;
             matTransp.opacity = 0.5;
@@ -96,8 +113,13 @@ export class IfcThree
         return flatMeshes;
     }
     
-    private getPlacedGeometry(modelID: number, placedGeometry: PlacedGeometry) {
-        const geometry = this.getBufferGeometry(modelID, placedGeometry);
+    private getPlacedGeometry(
+        modelID: number,
+        placedGeometry: PlacedGeometry,
+        repair: boolean = false,
+        repairTotals?: { processed: number; flipped: number; componentsLowConfidence: number; worstMargin: number; }
+    ) {
+        const geometry = this.getBufferGeometry(modelID, placedGeometry, repair, repairTotals);
         const material = this.getMeshMaterial(placedGeometry.color);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.matrix = this.getMeshMatrix(placedGeometry.flatTransformation);
@@ -105,16 +127,40 @@ export class IfcThree
         return mesh;
     }
     
-    private getBufferGeometry(modelID: number, placedGeometry: PlacedGeometry) {
-        // WARNING: geometry must be deleted when requested from WASM
-        const geometry = this.ifcAPI.GetGeometry(modelID, placedGeometry.geometryExpressID);
-        const verts = this.ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
-        const indices = this.ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
-        const bufferGeometry = this.ifcGeometryToBuffer(placedGeometry.color, verts, indices);
+    private getBufferGeometry(
+        modelID: number,
+        placedGeometry: PlacedGeometry,
+        repair: boolean = false,
+        repairTotals?: { processed: number; flipped: number; componentsLowConfidence: number; worstMargin: number; }
+    ) {
+        let verts: Float32Array;
+        let indices: Uint32Array;
 
-        //@ts-ignore
-        geometry.delete();
-        return bufferGeometry;
+        if (repair) {
+            // Repaired path: copy of the geometry with winding fixed and
+            // normals regenerated. Original cached geometry is untouched.
+            const repaired = this.ifcAPI.GetRepairedMesh(modelID, placedGeometry.geometryExpressID);
+            verts = repaired.vertexData;
+            indices = repaired.indexData;
+
+            if (repairTotals) {
+                repairTotals.processed += 1;
+                repairTotals.flipped += repaired.stats.trianglesFlipped;
+                if (!repaired.stats.confident) repairTotals.componentsLowConfidence += 1;
+                if (repaired.stats.maxVoteMargin > repairTotals.worstMargin) {
+                    repairTotals.worstMargin = repaired.stats.maxVoteMargin;
+                }
+            }
+        } else {
+            // WARNING: geometry must be deleted when requested from WASM
+            const geometry = this.ifcAPI.GetGeometry(modelID, placedGeometry.geometryExpressID);
+            verts = this.ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
+            indices = this.ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
+            //@ts-ignore
+            geometry.delete();
+        }
+
+        return this.ifcGeometryToBuffer(placedGeometry.color, verts, indices);
     }
 
     private materials = {};
@@ -127,7 +173,7 @@ export class IfcThree
         }
 
         const col = new THREE.Color(color.x, color.y, color.z);
-        const material = new THREE.MeshPhongMaterial({ color: col, side: THREE.DoubleSide });
+        const material = new THREE.MeshPhongMaterial({ color: col, side: THREE.FrontSide });
         material.transparent = color.w !== 1;
         if (material.transparent) material.opacity = color.w;
 
