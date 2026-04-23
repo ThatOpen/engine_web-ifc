@@ -24,6 +24,7 @@
 #include "../web-ifc/geometry/operations/bim-geometry/utils.h"
 #include "../web-ifc/geometry/operations/bim-geometry/boolean.h"
 #include "../web-ifc/geometry/operations/bim-geometry/profile.h"
+#include "../web-ifc/geometry/operations/mesh-orientation-repair.h"
 
 namespace webifc::parsing
 {
@@ -944,6 +945,95 @@ bimGeometry::Profile CreateProfile()
     return bimGeometry::Profile();
 }
 
+// ---------------------------------------------------------------------------
+// Mesh orientation repair (Layer 1 voting + Layer 2 global orientation)
+// ---------------------------------------------------------------------------
+//
+// These helpers are intentionally decoupled from the geometry pipeline. They
+// operate on the FINAL mesh (after booleans) and are called explicitly by
+// the user. See mesh-orientation-repair.h for the full algorithm contract.
+
+// Struct carried back to JS. Mirrors webifc::geometry::OrientationRepairResult
+// but with plain fields that Embind can serialize as a value_object.
+struct RepairedMesh
+{
+    // Geometry buffers after repair (vertex positions unchanged; normals
+    // regenerated; index winding flipped where needed).
+    std::vector<float>    fvertexData;
+    std::vector<uint32_t> indexData;
+
+    // Quantitative confidence signals.
+    uint32_t trianglesFlipped     = 0;
+    uint32_t componentsProcessed  = 0;
+    double   maxVoteMargin        = 0.0;
+    uint32_t unsatisfiedEdges     = 0;
+    bool     layer2Decisive       = true;
+    bool     confident            = true;
+};
+
+static RepairedMesh BuildRepairedMeshFromBuffers(
+    std::vector<double>&   vertexData,
+    std::vector<uint32_t>& indexData)
+{
+    webifc::geometry::OrientationRepairOptions options; // defaults
+    webifc::geometry::OrientationRepairResult stats =
+        webifc::geometry::RepairMeshOrientation(vertexData, indexData, options);
+
+    RepairedMesh out;
+    // Convert the double vertex buffer to float (same convention as
+    // IfcGeometry::GetVertexData()).
+    out.fvertexData.resize(vertexData.size());
+    for (size_t i = 0; i < vertexData.size(); ++i)
+        out.fvertexData[i] = static_cast<float>(vertexData[i]);
+
+    out.indexData            = std::move(indexData);
+    out.trianglesFlipped     = stats.trianglesFlipped;
+    out.componentsProcessed  = stats.componentsProcessed;
+    out.maxVoteMargin        = stats.maxVoteMargin;
+    out.unsatisfiedEdges     = stats.unsatisfiedEdges;
+    out.layer2Decisive       = stats.layer2Decisive;
+    out.confident            = stats.confident;
+    return out;
+}
+
+// Option B: repair from a geometryExpressID held by the model.
+// The model's own IfcGeometry is NOT modified -- we copy its buffers first.
+RepairedMesh GetRepairedMesh(uint32_t modelID, uint32_t geometryExpressID)
+{
+    if (!manager.IsModelOpen(modelID))
+        return RepairedMesh{};
+
+    webifc::geometry::IfcGeometry& geom =
+        manager.GetGeometryProcessor(modelID)->GetGeometry(geometryExpressID);
+
+    // Copy buffers so the in-place repair does not mutate the cached geometry.
+    std::vector<double>   verts = geom.vertexData;
+    std::vector<uint32_t> idx   = geom.indexData;
+
+    return BuildRepairedMeshFromBuffers(verts, idx);
+}
+
+// Option C: repair from raw arrays provided by the caller (no IFC model
+// involved). Input vertices are float (3 positions + 3 normals, interleaved)
+// because that's what the TS side already has as Float32Array / Uint32Array.
+RepairedMesh RepairMeshOrientationRaw(
+    emscripten::val vertexDataVal,
+    emscripten::val indexDataVal)
+{
+    const uint32_t vlen = vertexDataVal["length"].as<uint32_t>();
+    const uint32_t ilen = indexDataVal["length"].as<uint32_t>();
+
+    std::vector<double>   verts(vlen);
+    std::vector<uint32_t> idx(ilen);
+
+    for (uint32_t i = 0; i < vlen; ++i)
+        verts[i] = vertexDataVal[i].as<double>();
+    for (uint32_t i = 0; i < ilen; ++i)
+        idx[i] = indexDataVal[i].as<uint32_t>();
+
+    return BuildRepairedMeshFromBuffers(verts, idx);
+}
+
 EMSCRIPTEN_BINDINGS(my_module)
 {
 
@@ -1070,6 +1160,16 @@ EMSCRIPTEN_BINDINGS(my_module)
 
     emscripten::register_vector<float>("vector<float>");
 
+    emscripten::value_object<RepairedMesh>("RepairedMesh")
+        .field("fvertexData",          &RepairedMesh::fvertexData)
+        .field("indexData",            &RepairedMesh::indexData)
+        .field("trianglesFlipped",     &RepairedMesh::trianglesFlipped)
+        .field("componentsProcessed",  &RepairedMesh::componentsProcessed)
+        .field("maxVoteMargin",        &RepairedMesh::maxVoteMargin)
+        .field("unsatisfiedEdges",     &RepairedMesh::unsatisfiedEdges)
+        .field("layer2Decisive",       &RepairedMesh::layer2Decisive)
+        .field("confident",            &RepairedMesh::confident);
+
     emscripten::class_<bimGeometry::AABB>("AABB")
         .constructor<>()
         .function("GetBuffers", &bimGeometry::AABB::GetBuffers)
@@ -1156,6 +1256,8 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("GetModelSize", &GetModelSize);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
+    emscripten::function("GetRepairedMesh", &GetRepairedMesh);
+    emscripten::function("RepairMeshOrientationRaw", &RepairMeshOrientationRaw);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("GetWorldTransformMatrix", &GetWorldTransformMatrix);
