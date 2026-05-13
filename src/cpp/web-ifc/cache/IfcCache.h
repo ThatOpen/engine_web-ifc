@@ -11,7 +11,7 @@
 
 #include "../parsing/IfcLoader.h"
 #include "../geometry/representation/IfcCurve.h"
-#include "../util/unordered_dense.h"
+#include <ankerl/unordered_dense.h>
 
 namespace webifc::cache
 {

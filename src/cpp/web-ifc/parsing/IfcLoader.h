@@ -13,7 +13,7 @@
 
 #include "IfcTokenStream.h"
 #include "../schema/IfcSchemaManager.h"
-#include "../util/unordered_dense.h"
+#include <ankerl/unordered_dense.h>
 
 namespace webifc::parsing
 {
