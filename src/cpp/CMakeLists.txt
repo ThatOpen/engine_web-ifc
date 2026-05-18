@@ -65,6 +65,10 @@ FetchContent_Declare(stduuid GIT_REPOSITORY "https://github.com/mariusbancila/st
 FetchContent_MakeAvailable(stduuid)
 FetchContent_GetProperties(stduuid)
 
+Message("Downloading unordered_dense")
+FetchContent_Declare(unordered_dense GIT_REPOSITORY "https://github.com/martinus/unordered_dense" GIT_TAG "3234af2c03549bc85656bfd3a86993bf1cd8aef1" SOURCE_SUBDIR "../")
+FetchContent_MakeAvailable(unordered_dense)
+FetchContent_GetProperties(unordered_dense)
 
 Message("Downloads Finished")
 
@@ -77,6 +81,7 @@ function(PARAM_SETTER THE_EXECUTABLE)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC $<BUILD_INTERFACE:${earcut_SOURCE_DIR}/include>)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC $<BUILD_INTERFACE:${spdlog_SOURCE_DIR}/include>)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC $<BUILD_INTERFACE:${stduuid_SOURCE_DIR}/include>)
+	target_include_directories(${THE_EXECUTABLE} PUBLIC $<BUILD_INTERFACE:${unordered_dense_SOURCE_DIR}/include>)
 
 	if(NOT MSVC)
 		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wall")
@@ -190,6 +195,9 @@ if(NOT EMSCRIPTEN)
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
 	install(DIRECTORY ${stduuid_SOURCE_DIR}/include/
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+	)
+	install(DIRECTORY ${unordered_dense_SOURCE_DIR}/include/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
 
