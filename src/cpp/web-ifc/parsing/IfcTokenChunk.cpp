@@ -68,6 +68,17 @@ namespace webifc::parsing
             // if its a quote, maybe its the end of the string
             if (_fileStream->Get() == '\'')
             {
+              // ISO 10303-21: \S\c encodes a single character c with high bit set.
+              // If c happens to be an apostrophe, it is NOT a string terminator.
+              size_t sz = temp.size();
+              if (sz >= 4 &&
+                  temp[sz - 4] == '\\' &&
+                  (temp[sz - 3] == 'S' || temp[sz - 3] == 's') &&
+                  temp[sz - 2] == '\\')
+              {
+                _fileStream->Forward();
+                continue;
+              }
               // if there's another quote behind it, its not
               _fileStream->Forward();
               if (_fileStream->Get() == '\'')
