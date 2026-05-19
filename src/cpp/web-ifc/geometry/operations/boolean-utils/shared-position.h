@@ -1371,7 +1371,7 @@ namespace fuzzybools
 
             for (auto &point : projectedPoints)
             {
-                cdt_verts.emplace_back(CDT::V2d<double>::make(point.x, point.y));
+                cdt_verts.emplace_back(point.x, point.y);
             }
 
             for (auto &edge : edges)
