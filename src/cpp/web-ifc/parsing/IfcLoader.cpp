@@ -61,14 +61,22 @@ namespace webifc::parsing {
       while (!_tokenStream->IsAtEnd()) {
           IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
           if (t == IfcTokenType::LINE_END) break;
-          if (t == IfcTokenType::LABEL) 
+          if (t == IfcTokenType::LABEL || t == IfcTokenType::STRING)
           {
             std::string_view schemaName = _tokenStream->ReadString();
+            IFC_SCHEMA bestMatch = IFC2X3;
+            size_t bestLen = 0;
             for (size_t i = 0; i < schemas.size();i++) 
             {
-              if (_schemaManager.GetSchemaName(schemas[i]) == schemaName) return schemas[i];
+              auto registered = _schemaManager.GetSchemaName(schemas[i]);
+              if (schemaName.starts_with(registered) && registered.size() > bestLen)
+              {
+                bestLen = registered.size();
+                bestMatch = schemas[i];
             }
           }
+            if (bestLen > 0) return bestMatch;
+      }
       }
       return IFC2X3;
    }
