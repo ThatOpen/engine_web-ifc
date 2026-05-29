@@ -3150,7 +3150,7 @@ namespace webifc::geometry
       _loader.MoveToArgumentOffset(expressID, 0);
       profile.type = _loader.GetStringArgument();
       _loader.MoveToArgumentOffset(expressID, 2);
-      // Same as IFCARBITRARYCLOSEDPROFILEDEF: 3D curves require dimension 3
+      // ISSUE 1973 same as IFCARBITRARYCLOSEDPROFILEDEF: 3D curves require dimension 3
       profile.curve = GetCurve(_loader.GetRefArgument(), 3);
       profile.isConvex = IsCurveConvex(profile.curve);
 
