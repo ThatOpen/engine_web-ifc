@@ -6,6 +6,7 @@
 
 #include "ifc-schema.h"
 #include <vector>
+#include <map>
 #include <string>
 #include <string_view>
 #include <unordered_set>
@@ -17,6 +18,7 @@ namespace webifc::schema {
         public:
             IfcSchemaManager();
             const std::vector<IFC_SCHEMA> GetAvailableSchemas() const;
+            const std::map<std::string_view,std::string_view> &GetAvailableSchemaMaps() const;
             std::string_view GetSchemaName(IFC_SCHEMA schema) const;
             uint32_t IfcTypeToTypeCode(const std::string_view name) const;
             std::string IfcTypeCodeToType(const uint32_t typeCode) const; 
@@ -27,6 +29,7 @@ namespace webifc::schema {
             std::unordered_set<uint32_t> _ifcElements;
             std::vector<IFC_SCHEMA> _schemas;
             std::vector<std::string_view> _schemaNames;
+            std::map<std::string_view,std::string_view> _schemaMap;
             void initSchemaData();
             uint32_t IfcTypeToTypeCode(const void * name, const size_t len) const;
     };

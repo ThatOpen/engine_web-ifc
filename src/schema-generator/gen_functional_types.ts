@@ -354,7 +354,9 @@ cppSchema.push("#include <string>");
 cppSchema.push("#include \"ifc-schema.h\"");
 cppSchema.push("#include \"IfcSchemaManager.h\"");
 cppSchema.push("namespace webifc::schema {")
+
 cppSchema.push("void IfcSchemaManager::initSchemaData() {");
+for (const schemaAlias of schemaAliases) cppSchema.push(`_schemaMap["${schemaAlias.schemaName}"]="${schemaAlias.alias}";`);
 completeifcElementList.forEach(element => {
     cppSchema.push(`_ifcElements.insert(${element.toUpperCase()});`);
 });

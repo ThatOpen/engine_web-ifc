@@ -57,6 +57,7 @@ namespace webifc::parsing {
       auto line = GetHeaderLinesWithType(schema::FILE_SCHEMA)[0];
       MoveToHeaderLineArgument(line, 0);
       auto schemas = _schemaManager.GetAvailableSchemas();
+      auto schemaMaps = _schemaManager.GetAvailableSchemaMaps();
 
       while (!_tokenStream->IsAtEnd()) {
           IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
@@ -64,6 +65,7 @@ namespace webifc::parsing {
           if (t == IfcTokenType::LABEL) 
           {
             std::string_view schemaName = _tokenStream->ReadString();
+            if (schemaMaps.contains(schemaName)) schemaName = schemaMaps[schemaName];
             for (size_t i = 0; i < schemas.size();i++) 
             {
               if (_schemaManager.GetSchemaName(schemas[i]) == schemaName) return schemas[i];
