@@ -32,6 +32,11 @@ namespace webifc::schema {
         return _schemas;
     }
 
+    const std::map<std::string_view,std::string_view> &IfcSchemaManager::GetAvailableSchemaMaps() const
+    {
+        return _schemaMap;
+    }
+
     uint32_t IfcSchemaManager::IfcTypeToTypeCode(std::string_view name) const
     {
         return IfcTypeToTypeCode(name.data(),name.size());

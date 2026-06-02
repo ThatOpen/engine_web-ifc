@@ -4,6 +4,16 @@
 #include "IfcSchemaManager.h"
 namespace webifc::schema {
 void IfcSchemaManager::initSchemaData() {
+_schemaMap["IFC2X_FINAL"]="IFC2X3";
+_schemaMap["IFC4X1"]="IFC4X3";
+_schemaMap["IFC4X2"]="IFC4X3";
+_schemaMap["IFC4X3_RC3"]="IFC4X3";
+_schemaMap["IFC4X3_RC4"]="IFC4X3";
+_schemaMap["IFC4X3_RC1"]="IFC4X3";
+_schemaMap["IFC4X3_RC2"]="IFC4X3";
+_schemaMap["IFC4X3_ADD2"]="IFC4X3";
+_schemaMap["IFC4X3_ADD1"]="IFC4X3";
+_schemaMap["IFC4X2SCGL"]="IFC4X3";
 _ifcElements.insert(IFCPRODUCT);
 _ifcElements.insert(IFCPROXY);
 _ifcElements.insert(IFCSPATIALSTRUCTUREELEMENT);
