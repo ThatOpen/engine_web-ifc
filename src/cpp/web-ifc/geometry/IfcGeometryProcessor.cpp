@@ -1692,6 +1692,83 @@ namespace webifc::geometry
         return flatMesh;
     }
 
+    IfcGeometryProcessor::IfcBooleanOperands IfcGeometryProcessor::GetBooleanOperands(uint32_t expressID)
+    {
+        spdlog::debug("[GetBooleanOperands({})]", expressID);
+        IfcBooleanOperands result;
+        result.expressID = expressID;
+
+        auto lineType = _loader.GetLineType(expressID);
+        if (!_schemaManager.IsIfcElement(lineType))
+            return result;
+
+        _loader.MoveToArgumentOffset(expressID, 5);
+        uint32_t localPlacement = 0;
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
+        {
+            _loader.StepBack();
+            localPlacement = _loader.GetRefArgument();
+        }
+        uint32_t ifcPresentation = 0;
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
+        {
+            _loader.StepBack();
+            ifcPresentation = _loader.GetRefArgument();
+        }
+
+        IfcComposedMesh bodyMesh;
+        bodyMesh.expressID = expressID;
+        bodyMesh.transformation = glm::dmat4(1);
+
+        std::optional<glm::dvec4> generatedColor = GetStyleItemFromExpressId(expressID);
+        if (generatedColor)
+        {
+            bodyMesh.color = generatedColor.value();
+            bodyMesh.hasColor = true;
+        }
+        else
+        {
+            bodyMesh.color = glm::dvec4(1.0);
+            bodyMesh.hasColor = false;
+        }
+
+        if (localPlacement != 0 && _loader.IsValidExpressID(localPlacement))
+            bodyMesh.transformation = _geometryLoader.GetLocalPlacement(localPlacement);
+
+        if (ifcPresentation != 0 && _loader.IsValidExpressID(ifcPresentation))
+            bodyMesh.children.push_back(GetMesh(ifcPresentation));
+
+        glm::dmat4 mat = glm::scale(glm::dvec3(_cache.GetLinearScalingFactor()));
+
+        result.bodyMesh.expressID = expressID;
+        glm::dvec4 bodyColor = glm::dvec4(1, 1, 1, 1);
+        bool bodyHasColor = false;
+        AddComposedMeshToFlatMesh(result.bodyMesh, bodyMesh, _transformation * NormalizeIFC * mat, bodyColor, bodyHasColor);
+
+        auto &relVoids = _cache.GetRelVoids();
+        auto relVoidsIt = relVoids.find(expressID);
+
+        if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
+        {
+            result.hasBooleans = true;
+
+            for (auto relVoidExpressID : relVoidsIt->second)
+            {
+                IfcComposedMesh voidComposed = GetMesh(relVoidExpressID);
+
+                IfcFlatMesh voidFlat;
+                voidFlat.expressID = relVoidExpressID;
+                glm::dvec4 voidColor = glm::dvec4(1, 1, 1, 1);
+                bool voidHasColor = false;
+                AddComposedMeshToFlatMesh(voidFlat, voidComposed, _transformation * NormalizeIFC * mat, voidColor, voidHasColor);
+
+                result.voidMeshes.push_back(voidFlat);
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Extracts all the geometries and their associated colors and transformations from a composed mesh
      * and adds them to the flat mesh geometries field.
