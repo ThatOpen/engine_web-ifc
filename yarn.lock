@@ -830,9 +830,9 @@
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
 "@pkgr/core@^0.2.9":
-  version "0.2.9"
-  resolved "https://registry.npmjs.org/@pkgr/core/-/core-0.2.9.tgz"
-  integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.10.tgz#a8cc84f2e5a207b81b1000737f1c10942e4025cb"
+  integrity sha512-x6fFWCeak8aCGfqZfe6CXYt5xVjxe9Os1cIPmVRcToInKLjhJkRVXvJ/L3/1KxFkjDQdbZV/YsuLKqa8t/xKpA==
 
 "@shikijs/engine-oniguruma@^3.23.0":
   version "3.23.0"
