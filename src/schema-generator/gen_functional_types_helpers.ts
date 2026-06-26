@@ -7,7 +7,9 @@ export function generateInitialiser(type: Type, initialisersDone: Set<string>,bu
     if (type.isList)
     {
         if (initialisersDone.has(type.name)) return;
-        buffer.push(`${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v.map( (x:any) => x.value)),`);
+        const elementIsIfcType = types.some((t: Type) => t.name === type.typeName);
+        const valueExpr = elementIsIfcType ? `new ${schemaName}.${type.typeName}(x.value)` : `x.value`;
+        buffer.push(`${crc32(type.name.toUpperCase(),crcTable)}:(v:any) => new ${schemaName}.${type.name}(v.map( (x:any) => ${valueExpr})),`);
         initialisersDone.add(type.name);
         return
     }
@@ -69,7 +71,11 @@ export function generatePropAssignment(p: Prop, i:number, types:Type[],schemaNam
 
     }
     else if (isType) {
-        if (type?.isList) content='new '+schemaName+'.'+p.type+'(v['+i+'].map( (x:any) => x.value))';
+        if (type?.isList) {
+        const elemIsIfcType = type.typeName ? types.some((t: Type) => t.name === type.typeName) : false;
+        const valExpr = elemIsIfcType ? `new ${schemaName}.${type.typeName}(x.value)` : `x.value`;
+        content = `new ${schemaName}.${p.type}(v[${i}].map( (x:any) => ${valExpr}))`;
+    }
         else content = 'new '+schemaName+'.'+p.type+'(' + valueCheckPrefix + 'v['+i+'].value)';
     }
     else if (p.primitive && p.type === "number") content = 'new NumberHandle('+valueCheckPrefix+'v['+i+'].value, '+p.typeNum+')';
