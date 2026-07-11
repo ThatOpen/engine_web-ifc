@@ -645,7 +645,19 @@ namespace bimGeometry
 			int polygonCount = profile.size(); // Main profile + holes
 			std::vector<std::vector<Point>> polygon(polygonCount);
 
-			glm::dvec3 normal = dir;
+			glm::dvec3 capNormal(0);
+			for (size_t i = 0, n = profile[0].size(); i < n; i++)
+			{
+				capNormal += glm::cross(profile[0][i], profile[0][(i + 1) % n]);
+			}
+			double capNormalLength = glm::length(capNormal);
+			capNormal = capNormalLength > 0 ? capNormal / capNormalLength : glm::normalize(dir);
+			if (glm::dot(capNormal, dir) < 0)
+			{
+				capNormal = -capNormal;
+			}
+
+			glm::dvec3 normal = capNormal;
 
 			for (size_t i = 0; i < profile[0].size(); i++)
 			{
@@ -707,7 +719,15 @@ namespace bimGeometry
 
 			offset += geom.numPoints;
 
-			normal = -dir;
+			normal = -capNormal;
+			if (cuttingPlaneNormal != glm::dvec3(0))
+			{
+				normal = glm::normalize(cuttingPlaneNormal);
+				if (glm::dot(normal, dir) > 0)
+				{
+					normal = -normal;
+				}
+			}
 
 			for (size_t i = 0; i < profile[0].size(); i++)
 			{
