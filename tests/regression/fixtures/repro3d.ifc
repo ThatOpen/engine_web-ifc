@@ -1,0 +1,64 @@
+ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION((''),'2;1');
+FILE_NAME('repro3d.ifc','2026-07-13T00:00:00',(''),(''),'','','');
+FILE_SCHEMA(('IFC4'));
+ENDSEC;
+DATA;
+#1= IFCPROJECT('0YvctVUKr0kugbFTf53O9L',$,'repro',$,$,$,$,(#20),#10);
+#10= IFCUNITASSIGNMENT((#11,#12,#13));
+#11= IFCSIUNIT(*,.LENGTHUNIT.,$,.METRE.);
+#12= IFCSIUNIT(*,.AREAUNIT.,$,.SQUARE_METRE.);
+#13= IFCSIUNIT(*,.VOLUMEUNIT.,$,.CUBIC_METRE.);
+#20= IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.0E-5,#21,$);
+#21= IFCAXIS2PLACEMENT3D(#22,$,$);
+#22= IFCCARTESIANPOINT((0.,0.,0.));
+#23= IFCGEOMETRICREPRESENTATIONSUBCONTEXT('Body','Model',*,*,*,*,#20,$,.MODEL_VIEW.,$);
+
+#30= IFCSITE('1YvctVUKr0kugbFTf53O9L',$,'Site',$,$,#40,$,$,.ELEMENT.,$,$,$,$,$);
+#31= IFCBUILDING('2YvctVUKr0kugbFTf53O9L',$,'Building',$,$,#40,$,$,.ELEMENT.,$,$,$);
+#32= IFCBUILDINGSTOREY('3YvctVUKr0kugbFTf53O9L',$,'Storey',$,$,#40,$,$,.ELEMENT.,0.);
+#40= IFCLOCALPLACEMENT($,#21);
+
+#50= IFCRELAGGREGATES('4YvctVUKr0kugbFTf53O9L',$,$,$,#1,(#30));
+#51= IFCRELAGGREGATES('5YvctVUKr0kugbFTf53O9L',$,$,$,#30,(#31));
+#52= IFCRELAGGREGATES('6YvctVUKr0kugbFTf53O9L',$,$,$,#31,(#32));
+#53= IFCRELCONTAINEDINSPATIALSTRUCTURE('7YvctVUKr0kugbFTf53O9L',$,$,$,(#100),#32);
+
+/* ---- The element under test: a slab whose profile is an
+   IFCARBITRARYPROFILEDEFWITHVOIDS authored with 3D IfcCartesianPoints.
+   This is the exact shape of issues #1604 / #1973: the exporter writes 3D points,
+   web-ifc read them with GetCurve(ref, 2) and misparsed the coordinate stream,
+   collapsing the profile and producing no geometry. Commit df182060 changed that
+   read to dimension 3. ---- */
+
+#100= IFCSLAB('8YvctVUKr0kugbFTf53O9L',$,'Slab3D',$,$,#101,#110,$,.FLOOR.);
+#101= IFCLOCALPLACEMENT(#40,#102);
+#102= IFCAXIS2PLACEMENT3D(#103,$,$);
+#103= IFCCARTESIANPOINT((0.,0.,0.));
+
+#110= IFCPRODUCTDEFINITIONSHAPE($,$,(#111));
+#111= IFCSHAPEREPRESENTATION(#23,'Body','SweptSolid',(#120));
+
+#120= IFCEXTRUDEDAREASOLID(#130,#121,#124,2.0);
+#121= IFCAXIS2PLACEMENT3D(#122,$,$);
+#122= IFCCARTESIANPOINT((0.,0.,0.));
+#124= IFCDIRECTION((0.,0.,1.));
+
+/* profile: 10x6 outer rectangle with a 4x2 rectangular void, ALL POINTS 3D */
+#130= IFCARBITRARYPROFILEDEFWITHVOIDS(.AREA.,'P3D',#131,(#141));
+
+#131= IFCPOLYLINE((#132,#133,#134,#135,#132));
+#132= IFCCARTESIANPOINT((0.,0.,0.));
+#133= IFCCARTESIANPOINT((10.,0.,0.));
+#134= IFCCARTESIANPOINT((10.,6.,0.));
+#135= IFCCARTESIANPOINT((0.,6.,0.));
+
+#141= IFCPOLYLINE((#142,#143,#144,#145,#142));
+#142= IFCCARTESIANPOINT((3.,2.,0.));
+#143= IFCCARTESIANPOINT((7.,2.,0.));
+#144= IFCCARTESIANPOINT((7.,4.,0.));
+#145= IFCCARTESIANPOINT((3.,4.,0.));
+
+ENDSEC;
+END-ISO-10303-21;

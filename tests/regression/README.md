@@ -80,8 +80,34 @@ cmake --build build --target webifc_validate -j
 ## Run
 
 ```bash
-./build/webifc_validate model.ifc report.json
+./build/webifc_validate model.ifc report.json [commit-label]
 ```
+
+## Comparing two builds — what this is actually for
+
+```bash
+# build the validator against each kernel, holding validate.cpp identical
+./build_before/webifc_validate model.ifc before.json "abc123 (before)"
+./build_after/webifc_validate  model.ifc after.json  "def456 (after)"
+python3 driver/compare.py before.json after.json
+```
+
+`compare.py` exits 0 on improvement/neutral, 1 on mixed-needing-review, 2 on regression.
+
+**Hold the validator constant.** Only the kernel may vary between the two builds. If
+`validate.cpp` differs across the two sides you are measuring your own instrument, not
+the change.
+
+### The API window (a real constraint, learned the hard way)
+
+The validator links against the kernel, so **it can only compare commits that share the
+kernel's API**. Concretely: anything before `353c231f "Seperate Cache from Loader"` has
+no `IfcCache`, and `IfcGeometryProcessor` takes a different constructor — the validator
+does not compile there at all.
+
+So an A/B across that boundary needs a compatibility shim, or a validator pinned to each
+era's API. Reaching for an older "known fix" to test against and finding it does not
+build is the expected outcome, not a surprise.
 
 ## Not yet implemented
 
