@@ -423,29 +423,38 @@ static void ClassifyExpectedGeometry(const parsing::IfcLoader &loader, uint32_t 
     }
 
     // IfcProductDefinitionShape(Name, Description, Representations=2)
+    //
+    // GetSetArgument() returns TAPE TOKENS, not ExpressIDs -- each one has to go through
+    // GetRefArgument(token) to become an ID. Treating the tokens as IDs directly makes
+    // IsValidExpressID() reject every one of them, so the walk silently finds nothing and
+    // the classifier declares the whole model unexpected. Mirrors the engine's own
+    // traversal in IfcGeometryProcessor.cpp:563-592.
     loader.MoveToArgumentOffset(pdsID, 2);
-    std::vector<uint32_t> reps = loader.GetSetArgument();
+    std::vector<uint32_t> repTokens = loader.GetSetArgument();
 
     bool bodyWithItems = false;
-    for (uint32_t repID : reps)
+    for (uint32_t repToken : repTokens)
     {
-        if (!loader.IsValidExpressID(repID)) continue;
+        uint32_t repID = loader.GetRefArgument(repToken);
+        if (!repID || !loader.IsValidExpressID(repID)) continue;
+
+        uint32_t repType = loader.GetLineType(repID);
+        if (repType != schema::IFCSHAPEREPRESENTATION &&
+            repType != schema::IFCTOPOLOGYREPRESENTATION)
+            continue;
+
         // IfcShapeRepresentation(ContextOfItems, RepresentationIdentifier=1,
         //                        RepresentationType=2, Items=3)
         loader.MoveToArgumentOffset(repID, 1);
-        std::string ident;
-        if (loader.GetTokenType() == parsing::IfcTokenType::STRING)
-        {
-            loader.StepBack();
-            ident = ToUpper(loader.GetStringArgument());
-        }
+        std::string ident = ToUpper(loader.GetStringArgument());
+
         loader.MoveToArgumentOffset(repID, 3);
         std::vector<uint32_t> items = loader.GetSetArgument();
 
         if (!ident.empty()) r.subcontexts.push_back(ident);
 
         // "Body" is the meshable one. "Facetation" is what some exporters use instead
-        // (#117 — gating on Body alone silently drops whole categories of geometry).
+        // (#117 -- gating on Body alone silently drops whole categories of geometry).
         // Axis / FootPrint / Box / Profile have nothing to mesh, by design.
         if ((ident == "BODY" || ident == "FACETATION") && !items.empty())
             bodyWithItems = true;
@@ -456,7 +465,7 @@ static void ClassifyExpectedGeometry(const parsing::IfcLoader &loader, uint32_t 
         r.expected = true;
         r.expectedReason = "Body/Facetation representation with items";
     }
-    else if (reps.empty())
+    else if (repTokens.empty())
     {
         r.expected = false;
         r.expectedReason = "ProductDefinitionShape has no representations";
@@ -548,6 +557,10 @@ static void EmitJson(FILE *out, const std::vector<ElementResult> &rows,
         fprintf(out, "    {\"expressID\": %u, \"ifcType\": \"%s\", ", r.expressID, r.ifcTypeName.c_str());
         fprintf(out, "\"expected\": %s, \"expectedReason\": \"%s\", ",
                 r.expected ? "true" : "false", r.expectedReason.c_str());
+        fprintf(out, "\"subcontexts\": [");
+        for (size_t k = 0; k < r.subcontexts.size(); ++k)
+            fprintf(out, "%s\"%s\"", k ? "," : "", r.subcontexts[k].c_str());
+        fprintf(out, "], ");
         fprintf(out, "\"hasGeometry\": %s, \"partCount\": %u, ",
                 r.hasGeometry ? "true" : "false", r.partCount);
         fprintf(out, "\"triangles\": %llu, \"components\": %llu, ",
