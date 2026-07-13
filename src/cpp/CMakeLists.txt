@@ -150,6 +150,11 @@ if(NOT EMSCRIPTEN)
 	param_setter(web-ifc)
 	target_include_directories(web-ifc PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
 
+	# intrinsic geometry validators (tests/regression) — judges mesh validity with no
+	# golden file, so it can say which of two builds is better, not just that they differ
+	add_executable(webifc_validate ${web-ifc-source} "../../tests/regression/src/validate.cpp")
+	param_setter(webifc_validate)
+
 	# comment these to prevent debug files being generated
 	if(NOT RELEASE)
 		target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
