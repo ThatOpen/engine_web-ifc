@@ -5,8 +5,10 @@
 #include <unordered_map>
 #include <set>
 #include <ranges>
+#include <exception>
 
 #include <glm/glm.hpp>
+#include <spdlog/spdlog.h>
 
 #pragma warning(push)
 #pragma warning(disable : 4267)
@@ -1381,10 +1383,28 @@ namespace fuzzybools
 
             auto mapping = CDT::RemoveDuplicatesAndRemapEdges(cdt_verts, cdt_edges).mapping;
 
-            cdt.insertVertices(cdt_verts);
-            cdt.insertEdges(cdt_edges);
-
-            cdt.eraseSuperTriangle();
+            // CDT >= 1.4.4 throws CDT::IntersectingConstraintsError when the constraint edges
+            // self-intersect. Self-intersecting profiles are a data defect, and a common one in
+            // real exports, so this is reachable on ordinary files. Left unguarded the exception
+            // escapes to std::terminate and aborts the process: one bad plane kills the whole
+            // model, with no indication of which element caused it.
+            //
+            // The NURBS path already guards its CDT call this way (nurbs.cpp:387); this brings
+            // the boolean path in line. Dropping the plane is not the correct geometric result --
+            // the element will come out missing or malformed -- but that is a localised, visible
+            // defect the caller can see and report, rather than a process abort that tells you
+            // nothing.
+            try
+            {
+                cdt.insertVertices(cdt_verts);
+                cdt.insertEdges(cdt_edges);
+                cdt.eraseSuperTriangle();
+            }
+            catch (const std::exception &e)
+            {
+                spdlog::error("[TriangulatePlane()] CDT triangulation failed, dropping plane: {}", e.what());
+                return;
+            }
 
             auto triangles = cdt.triangles;
 
