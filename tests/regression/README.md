@@ -129,3 +129,35 @@ The QTO oracle (comparing mesh volume against authored `IfcElementQuantity`) is 
 confirm that variant, and its false-positive rate against real files is unmeasured — unit
 mismatch (mm vs m ⇒ 1e9 error on volume) and gross-vs-net authoring disagreement would likely
 swamp the signal. It is queued as an *experiment* with a measured FP rate, not an assumption.
+
+## Corpus quality harness (better/worse across all models)
+
+`regression.mjs` hashes each model's geometry and reports PASS/FAIL — it tells you a model
+**differs**, never whether it got **better or worse**. The quality harness answers the second
+question over the *same* corpus (`tests/ifcfiles/public` + `private`).
+
+- `quality.mjs` runs the intrinsic validator (`src/validate.mjs`, the WASM port of
+  `validate.cpp`) on every model, as an isolated subprocess per model so a kernel abort/hang
+  is recorded (crash / TIMEOUT) instead of killing the run. It writes a per-model snapshot.
+- `driver/quality-compare.py` diffs two snapshots with the **dominance rule** (tier 1 coverage
+  > 2 invalidity > 3 topology > 4 fidelity), per model and globally. A tier-1 loss on any model
+  can never be washed out by tier-3 gains elsewhere.
+
+```bash
+# snapshot the current build (defaults: dist/web-ifc-api-node.js over tests/ifcfiles)
+npm run quality                       # -> tests/regression/quality-current.json
+cp tests/regression/quality-current.json baseline.json
+# ...make a C++ change, rebuild dist (npm run build-release), then:
+npm run quality
+python tests/regression/driver/quality-compare.py baseline.json tests/regression/quality-current.json
+```
+
+`quality.mjs` also accepts explicit args — `node quality.mjs <web-ifc-module> <corpusRoot> <out.json> <label>`
+— so a snapshot can be taken against any prebuilt release (`npm i web-ifc@X`) with **zero
+compilation**, for released-version A/Bs.
+
+**Tier-2 refinement.** An inverted-volume element that was *open* in the baseline and only
+became watertight now is the *visibility* of improved topology, not a fresh regression. The
+comparator uses per-element IDs to separate a genuine "was a valid closed solid, now inward"
+flip (real tier-2 loss) from "newly watertight and inward" (surfaced for review, not counted
+as tier-2).

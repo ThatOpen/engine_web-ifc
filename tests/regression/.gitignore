@@ -1,0 +1,3 @@
+# generated quality snapshots (regenerate with `npm run quality`)
+quality-current.json
+quality-baseline.json

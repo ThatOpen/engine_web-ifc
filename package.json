@@ -46,6 +46,7 @@
     "benchmark": "ts-node ./tests/benchmark/benchmark.ts",
     "regression": "node --max-old-space-size=8192 ./tests/regression/regression.mjs",
     "regression-update": "node --max-old-space-size=8192 ./tests/regression/regression.mjs update",
+    "quality": "node --max-old-space-size=8192 ./tests/regression/quality.mjs",
     "test": "jest  --runInBand ",
     "gen-docs": "typedoc --out dist/docs && cpy ./banner.png ./dist/docs",
     "usage_example": "cd examples/usage  && ts-node index.ts"
