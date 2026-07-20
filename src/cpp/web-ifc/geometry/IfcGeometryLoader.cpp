@@ -1026,6 +1026,7 @@ namespace webifc::geometry
       return {};
     }
     case schema::IFCSURFACESTYLERENDERING:
+    case schema::IFCSURFACESTYLESHADING:
     {
       _loader.MoveToArgumentOffset(expressID, 0);
       auto outputColor = GetColor(_loader.GetRefArgument());
@@ -1038,11 +1039,6 @@ namespace webifc::geometry
       }
 
       return outputColor;
-    }
-    case schema::IFCSURFACESTYLESHADING:
-    {
-      _loader.MoveToArgumentOffset(expressID, 0);
-      return GetColor(_loader.GetRefArgument());
     }
     case schema::IFCSTYLEDREPRESENTATION:
     {
