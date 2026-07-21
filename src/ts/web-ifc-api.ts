@@ -413,6 +413,18 @@ export class IfcAPI {
         const modulePromise = WebIFCWasm({
           noInitialRun: true,
           locateFile: customLocateFileHandler || locateFileHandler,
+          // The generated pthread bootstrap falls back to
+          // `document.currentScript?.src` to find its own script URL when
+          // spawning its worker. That is always `undefined` when this
+          // module is loaded as an ES module (which is how `web-ifc` is
+          // distributed and how virtually every modern bundler loads it),
+          // causing `new Worker(undefined)` and a silent hang. Passing
+          // `mainScriptUrlOrBlob` explicitly (which the generated bootstrap
+          // already prefers over `document.currentScript` when present)
+          // avoids that entirely. `import.meta.url` is correctly populated
+          // for ES modules, unlike `document.currentScript`.
+          // @ts-ignore
+          ...(shouldRetrySingleThread ? { mainScriptUrlOrBlob: import.meta.url } : {}),
         });
         if (shouldRetrySingleThread) {
           this.wasmModule = await Promise.race([
