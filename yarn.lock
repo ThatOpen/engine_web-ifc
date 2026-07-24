@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@75lb/deep-merge@^1.1.2":
+"@75lb/deep-merge@^1.1.4":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@75lb/deep-merge/-/deep-merge-1.1.4.tgz#6084e9852aebfbf84e76046eb07b8c359ab30dca"
   integrity sha512-Fjmi8VSxoGF80wn8HSHTPfUKLSJ+aiQE7rXyrFV6apP8Xyj8v4bqdC7BBoklxjt671gUqP0yREwpDlUP5R/VyQ==
@@ -1172,9 +1172,9 @@ ansi-escape-sequences@^5.1.2:
   dependencies:
     array-back "^4.0.0"
 
-ansi-escape-sequences@^6.2.2:
+ansi-escape-sequences@^6.2.4:
   version "6.2.4"
-  resolved "https://registry.npmjs.org/ansi-escape-sequences/-/ansi-escape-sequences-6.2.4.tgz"
+  resolved "https://registry.yarnpkg.com/ansi-escape-sequences/-/ansi-escape-sequences-6.2.4.tgz#bb647da8641b6b19ab8dd796f8cefc30102c1cff"
   integrity sha512-2KJQAG1Nk4Iyu0dJENKXQJE9smEASrpu/E0F7LSnR72tQXngKGLqfRkHbkinjNct5vvAQY4BwQNt+4Tvg73nDQ==
   dependencies:
     array-back "^6.2.2"
@@ -1399,9 +1399,9 @@ byte-size@^6.2.0:
   resolved "https://registry.npmjs.org/byte-size/-/byte-size-6.2.0.tgz"
   integrity sha512-6EspYUCAPMc7E2rltBgKwhG+Cmk0pDm9zDtF1Awe2dczNUL3YpZ8mTs/dueOTS1hqGWBOatqef4jYMGjln7WmA==
 
-byte-size@^9.0.0:
+byte-size@^9.0.1:
   version "9.0.1"
-  resolved "https://registry.npmjs.org/byte-size/-/byte-size-9.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/byte-size/-/byte-size-9.0.1.tgz#7014b9f0e11ea732a8f2c21bef1cb8a78c6c55ff"
   integrity sha512-YLe9x3rabBrcI0cueCdLS2l5ONUKywcRpTs02B8KP9/Cimhj7o3ZccGrPnRvcbyHMbb7W79/3MUJl7iGgTXKEw==
 
 bytes@^3.1.2, bytes@~3.1.2:
@@ -1525,9 +1525,9 @@ color-name@~1.1.4:
   resolved "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
-command-line-args@^6.0.0:
+command-line-args@^6.0.2:
   version "6.0.2"
-  resolved "https://registry.npmjs.org/command-line-args/-/command-line-args-6.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/command-line-args/-/command-line-args-6.0.2.tgz#a5b8a87d3f12aa1707c122c5ed38bc64535514a0"
   integrity sha512-AIjYVxrV9X752LmPDLbVYv8aMCuHPSLZJXEo2qo/xJfv+NYhaZ4sMSF01rM+gHPaMgvPM0l5D/F+Qx+i2WfSmQ==
   dependencies:
     array-back "^6.2.3"
@@ -1535,9 +1535,9 @@ command-line-args@^6.0.0:
     lodash.camelcase "^4.3.0"
     typical "^7.3.0"
 
-command-line-usage@^7.0.3:
+command-line-usage@^7.0.4:
   version "7.0.4"
-  resolved "https://registry.npmjs.org/command-line-usage/-/command-line-usage-7.0.4.tgz"
+  resolved "https://registry.yarnpkg.com/command-line-usage/-/command-line-usage-7.0.4.tgz#759449bac39c5410e23513f1f78551b669df1514"
   integrity sha512-85UdvzTNx/+s5CkSgBm/0hzP80RFHAa7PsfeADE5ezZF3uHz3/Tqj9gIKGT9PTtpycc3Ua64T0oVulGfKxzfqg==
   dependencies:
     array-back "^6.2.2"
@@ -1645,7 +1645,7 @@ cross-spawn@^7.0.3, cross-spawn@^7.0.6:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-current-module-paths@^1.1.1:
+current-module-paths@^1.1.1, current-module-paths@^1.1.3:
   version "1.1.3"
   resolved "https://registry.npmjs.org/current-module-paths/-/current-module-paths-1.1.3.tgz"
   integrity sha512-7AH+ZTRKikdK4s1RmY0l6067UD/NZc7p3zZVZxvmnH80G31kr0y0W0E6ibYM4IS01MEm8DiC5FnTcgcgkbFHoA==
@@ -2873,9 +2873,9 @@ koa-static@^5.0.0:
     debug "^3.1.0"
     koa-send "^5.0.0"
 
-koa@^2.15.3:
+koa@^2.16.4:
   version "2.16.4"
-  resolved "https://registry.npmjs.org/koa/-/koa-2.16.4.tgz"
+  resolved "https://registry.yarnpkg.com/koa/-/koa-2.16.4.tgz#303b996f5c3f2a3bb771c7db5e4303ee05f2265f"
   integrity sha512-3An0GCLDSR34tsCO4H8Tef8Pp2ngtaZDAZnsWJYelqXUK5wyiHvGItgK/xcSkmHLSTn1Jcho1mRQs2ehRzvKKw==
   dependencies:
     accepts "^1.3.5"
@@ -3109,24 +3109,24 @@ lws-static@^3.1.1:
     koa-static "^5.0.0"
 
 lws@^4.1.5:
-  version "4.2.0"
-  resolved "https://registry.npmjs.org/lws/-/lws-4.2.0.tgz"
-  integrity sha512-J6mZB9mNauMBjIEh0wCF3U5bdhhuiamwTmDQ0nCTXWp6tvXNi/3RCgc4F1UN6rGpTaKgEfDnDQEo9ThLsc0UAg==
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/lws/-/lws-4.2.1.tgz#10ccd8c7d883f87943235a5e5320bb1cbc3049c2"
+  integrity sha512-KE8prUUZWn83fQ55mDRWx8asxqhToX0tOhxIiC4pXfVvRN1Y/eTvw8nez7ix4CqHOT3RT/YaOd5erXiaa0hBBg==
   dependencies:
-    "@75lb/deep-merge" "^1.1.2"
-    ansi-escape-sequences "^6.2.2"
-    array-back "^6.2.2"
-    byte-size "^9.0.0"
-    command-line-args "^6.0.0"
-    command-line-usage "^7.0.3"
+    "@75lb/deep-merge" "^1.1.4"
+    ansi-escape-sequences "^6.2.4"
+    array-back "^6.2.3"
+    byte-size "^9.0.1"
+    command-line-args "^6.0.2"
+    command-line-usage "^7.0.4"
     create-mixin "^3.0.0"
-    current-module-paths "^1.1.1"
-    koa "^2.15.3"
+    current-module-paths "^1.1.3"
+    koa "^2.16.4"
     load-module "^5.0.0"
     open "^8.4.2"
     qrcode-terminal "^0.12.0"
-    typical "^7.1.1"
-    walk-back "^5.1.0"
+    typical "^7.3.0"
+    walk-back "^5.1.2"
 
 make-dir-cli@^4.0.0:
   version "4.0.0"
@@ -4178,9 +4178,9 @@ vary@^1.1.2:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-walk-back@^5.1.0:
+walk-back@^5.1.2:
   version "5.1.2"
-  resolved "https://registry.npmjs.org/walk-back/-/walk-back-5.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/walk-back/-/walk-back-5.1.2.tgz#e8bef424a21476aa513363dec2898b49cd8a2372"
   integrity sha512-uCgzIY1U7fyXvJm+mesY0xjf2HXu7mtTnptONwVQ11ur1JhMrUyQJn2fDje1CGFQDnTFTo1Slr1vRuvUS9PYoQ==
 
 walker@^1.0.8:
