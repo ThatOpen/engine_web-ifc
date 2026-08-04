@@ -77,7 +77,13 @@ namespace webifc::geometry
 
 	inline IfcGeometry Sweep(const double scaling, const bool closed, const IfcProfile &profile, const IfcCurve &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
-		IfcGeometry geom = ToIfcGeometry(bimGeometry::SweepFunction(scaling, closed, profile.curve.points, directrix.points, initialDirectrixNormal, rotate90, optimize));
+		std::vector<std::vector<glm::dvec3>> rings;
+		rings.push_back(profile.curve.points);
+		for (auto &hole : profile.holes)
+		{
+			rings.push_back(hole.points);
+		}
+		IfcGeometry geom = ToIfcGeometry(bimGeometry::SweepFunction(scaling, closed, rings, directrix.points, initialDirectrixNormal, rotate90, optimize));
 		return geom;
 	}
 

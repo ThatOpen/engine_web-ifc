@@ -815,7 +815,6 @@ namespace webifc::geometry
             }
             case schema::IFCSURFACECURVESWEPTAREASOLID:
             {
-
                 // TODO: closed sweeps not implemented
                 // TODO: the plane is not being used now
 

@@ -819,7 +819,8 @@ namespace bimGeometry
 	//! This implementation generates much more vertices than needed, and does not have smoothed normals
 	// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
 	// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
-	inline Geometry SweepFunction(const double scaling, const bool closed, const std::vector<glm::dvec3> &profilePoints, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
+	//! profile[0] is the outer contour, profile[1..] are holes (e.g. from IfcCircleHollowProfileDef)
+	inline Geometry SweepFunction(const double scaling, const bool closed, const std::vector<std::vector<glm::dvec3>> &profile, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
 		Geometry geom;
 
@@ -862,14 +863,20 @@ namespace bimGeometry
 			return geom;
 		}
 
-		// compute curve for each part of the directrix
-		std::vector<Curve> curves;
-		std::vector<glm::dmat4> transforms;
+		// cap normals for open sweeps (dpts is unmodified when not closed)
+		glm::dvec3 startNormal(0);
+		glm::dvec3 endNormal(0);
+		if (!closed)
+		{
+			startNormal = -glm::normalize(dpts[1] - dpts[0]);
+			endNormal = glm::normalize(dpts[dpts.size() - 1] - dpts[dpts.size() - 2]);
+		}
+
+		// compute the swept curve of each profile ring for each part of the directrix
+		std::vector<std::vector<Curve>> curves; // curves[i][r]: ring r at directrix point i
 
 		for (size_t i = 0; i < dpts.size(); i++)
 		{
-			Curve segmentForCurve;
-
 			glm::dvec3 planeNormal;
 			glm::dvec3 directrixSegmentNormal;
 			glm::dvec3 planeOrigin;
@@ -922,6 +929,8 @@ namespace bimGeometry
 				planeOrigin = dpts[i];
 			}
 
+			std::vector<Curve> curvesAtPoint(profile.size());
+
 			if (curves.empty())
 			{
 				// construct initial curve
@@ -950,38 +959,43 @@ namespace bimGeometry
 					right *= side;
 				}
 
-				// project profile onto planeNormal, place on planeOrigin
-				// TODO: look at holes
-				auto &ppts = profilePoints;
-				for (auto &pt2D : ppts)
+				// project the profile rings onto planeNormal, place on planeOrigin
+				for (size_t r = 0; r < profile.size(); r++)
 				{
-					glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
-					if (rotate90)
+					auto &ppts = profile[r];
+					for (auto &pt2D : ppts)
 					{
-						pt = -pt2D.x * right - pt2D.y * left + planeOrigin;
-					}
-					glm::dvec3 proj = bimGeometry::projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
+						glm::dvec3 pt = -pt2D.x * left + -pt2D.y * right + planeOrigin;
+						if (rotate90)
+						{
+							pt = -pt2D.x * right - pt2D.y * left + planeOrigin;
+						}
+						glm::dvec3 proj = bimGeometry::projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
-					segmentForCurve.Add(proj);
+						curvesAtPoint[r].Add(proj);
+					}
 				}
 			}
 			else
 			{
-				// project previous curve onto the normal
-				const Curve &prevCurve = curves.back();
+				// project previous curves onto the normal
+				const std::vector<Curve> &prevCurves = curves.back();
 
-				auto &ppts = prevCurve.points;
-				for (auto &pt : ppts)
+				for (size_t r = 0; r < prevCurves.size(); r++)
 				{
-					glm::dvec3 proj = bimGeometry::projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
+					auto &ppts = prevCurves[r].points;
+					for (auto &pt : ppts)
+					{
+						glm::dvec3 proj = bimGeometry::projectOntoPlane(planeOrigin, planeNormal, pt, directrixSegmentNormal);
 
-					segmentForCurve.Add(proj);
+						curvesAtPoint[r].Add(proj);
+					}
 				}
 			}
 
 			if (!closed || (i != 0 && i != dpts.size() - 1))
 			{
-				curves.push_back(segmentForCurve);
+				curves.push_back(curvesAtPoint);
 			}
 		}
 
@@ -997,21 +1011,80 @@ namespace bimGeometry
 			glm::dvec3 p1 = dpts[i - 1];
 			glm::dvec3 p2 = dpts[i];
 
-			const auto &c1 = curves[i - 1].points;
-			const auto &c2 = curves[i].points;
+			const auto &c1 = curves[i - 1];
+			const auto &c2 = curves[i];
 
-			uint32_t capSize = c1.size();
-			for (size_t j = 1; j < capSize; j++)
+			for (size_t r = 0; r < c1.size(); r++)
 			{
-				glm::dvec3 bl = c1[j - 1];
-				glm::dvec3 br = c1[j - 0];
+				const auto &ring1 = c1[r].points;
+				const auto &ring2 = c2[r].points;
 
-				glm::dvec3 tl = c2[j - 1];
-				glm::dvec3 tr = c2[j - 0];
+				uint32_t capSize = ring1.size();
+				for (size_t j = 1; j < capSize; j++)
+				{
+					glm::dvec3 bl = ring1[j - 1];
+					glm::dvec3 br = ring1[j - 0];
 
-				geom.AddFace(tl, br, bl);
-				geom.AddFace(tl, tr, br);
+					glm::dvec3 tl = ring2[j - 1];
+					glm::dvec3 tr = ring2[j - 0];
+
+					geom.AddFace(tl, br, bl);
+					geom.AddFace(tl, tr, br);
+				}
 			}
+		}
+
+		// add caps to open sweeps
+		if (!closed)
+		{
+			// triangulate a cap (outer ring + holes) with earcut
+			auto AddCap = [&](const std::vector<Curve> &rings, const glm::dvec3 &normal)
+			{
+				uint32_t offset = geom.numPoints;
+				std::vector<std::vector<Point>> polygon(rings.size());
+
+				for (size_t r = 0; r < rings.size(); r++)
+				{
+					const auto &ring = rings[r].points;
+					for (const auto &pt : ring)
+					{
+						geom.AddPoint(pt, normal);
+						polygon[r].push_back(Point{pt.x, pt.y, pt.z});
+					}
+				}
+
+				Projection proj = bestProjection(polygon[0]);
+				auto polygon2D = projectTo2D(polygon, proj);
+				std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon2D);
+
+				bool flipWinding = false;
+				if (indices.size() >= 3)
+				{
+					glm::dvec3 a = geom.GetPoint(offset + indices[0]);
+					glm::dvec3 b = geom.GetPoint(offset + indices[1]);
+					glm::dvec3 c = geom.GetPoint(offset + indices[2]);
+					glm::dvec3 triNormal = glm::cross(b - a, c - a);
+					if (glm::dot(triNormal, normal) < 0)
+					{
+						flipWinding = true;
+					}
+				}
+
+				for (size_t i = 0; i < indices.size(); i += 3)
+				{
+					if (flipWinding)
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 2], offset + indices[i + 1], -1);
+					}
+					else
+					{
+						geom.AddFace(offset + indices[i + 0], offset + indices[i + 1], offset + indices[i + 2], -1);
+					}
+				}
+			};
+
+			AddCap(curves[0], startNormal);
+			AddCap(curves[curves.size() - 1], endNormal);
 		}
 
 		return geom;

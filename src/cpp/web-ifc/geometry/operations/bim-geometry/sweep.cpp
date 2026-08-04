@@ -14,7 +14,7 @@ namespace bimGeometry {
     {
         Buffers buffers;
 
-        Geometry geom = SweepFunction(scaling, closed, profilePoints, directrix, initialDirectrixNormal, rotate90, optimize);
+        Geometry geom = SweepFunction(scaling, closed, std::vector<std::vector<glm::dvec3>>{profilePoints}, directrix, initialDirectrixNormal, rotate90, optimize);
 
         for (int r = 0; r < geom.numFaces; r++)
         {
