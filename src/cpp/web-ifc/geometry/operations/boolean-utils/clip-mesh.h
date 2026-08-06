@@ -86,7 +86,12 @@ namespace fuzzybools
 
             auto isInsideTarget = MeshLocation::INSIDE;
 
-            Vec raydir = computeNormal(a, b, c);
+            Vec raydirInPlane = glm::cross(n, Vec(0.0, 0.0, 1.0));
+            if (glm::length(raydirInPlane) < 1e-8)
+            {
+                raydirInPlane = glm::cross(n, Vec(0.0, 1.0, 0.0));
+            }
+            Vec raydir = n + glm::normalize(raydirInPlane); // ~45 deg to the face, never parallel to the face or its normal (#1932)
 
             // This is an example about how to debug specific triangles in specific boolean operations
             // if ((i == 49 || i == 53 || i == 84) && _BOOLSTATUS == 66)
@@ -244,7 +249,12 @@ namespace fuzzybools
 
             auto isInsideTarget = MeshLocation::INSIDE;
 
-            Vec raydir = computeNormal(a, b, c);
+            Vec raydirInPlane = glm::cross(n, Vec(0.0, 0.0, 1.0));
+            if (glm::length(raydirInPlane) < 1e-8)
+            {
+                raydirInPlane = glm::cross(n, Vec(0.0, 1.0, 0.0));
+            }
+            Vec raydir = n + glm::normalize(raydirInPlane); // ~45 deg to the face, never parallel to the face or its normal (#1932)
 
             auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir, true);
             auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir, true);

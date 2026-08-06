@@ -1442,7 +1442,20 @@ namespace fuzzybools
 
                 auto triCenter = (ptA + ptB + ptC) / 3.0;
 
-                Vec raydir = computeNormal(ptA, ptB, ptC);
+                // Cast the classification ray at ~45 degrees to the face instead of using the
+                // face normal. It must have a component along the face normal (a strictly
+                // in-plane ray is rejected by the parallel test in intersect_ray_triangle) and a
+                // component in the face plane (a ray along the normal skips the t=0 coplanar
+                // self-hit, classifying an on-surface triangle as OUTSIDE and dropping it). This
+                // guaranteed construction avoids both degenerate cases for any face orientation,
+                // whereas a fixed ray may equal some face normal and reintroduce the bug (#1932).
+                Vec raydirNorm = computeNormal(ptA, ptB, ptC);
+                Vec raydirInPlane = glm::cross(raydirNorm, Vec(0.0, 0.0, 1.0));
+                if (glm::length(raydirInPlane) < 1e-8)
+                {
+                    raydirInPlane = glm::cross(raydirNorm, Vec(0.0, 1.0, 0.0));
+                }
+                Vec raydir = raydirNorm + glm::normalize(raydirInPlane);
 
                 auto posA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA, raydir);
                 auto posB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB, raydir);
