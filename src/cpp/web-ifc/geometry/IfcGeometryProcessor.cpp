@@ -1725,7 +1725,13 @@ namespace webifc::geometry
                 }
             }
 
-            auto geom = _expressIDToGeometry[composedMesh.expressID];
+            // Emission is read-only on the shared geometry cache (#1462): the
+            // cache keeps raw local-frame vertices, so expressID-based consumers
+            // that compose placements themselves agree with the emitted
+            // transformation. Normalizing and face-reversing here mutated state
+            // other consumers already held (and testReverse read the placed
+            // transformation before it was assigned).
+            const auto &geom = _expressIDToGeometry[composedMesh.expressID];
             if (geom.isPolygon)
             {
                 if (!_settings._exportPolylines)
@@ -1733,15 +1739,6 @@ namespace webifc::geometry
                     return; // only triangles
                 }
             }
-            if (geometry.testReverse())
-                geom.ReverseFaces();
-
-            auto translation = glm::dmat4(1.0);
-
-            // #1462 Reports having problems with this line, not sure why this is needed
-            translation = geom.Normalize();
-
-            _expressIDToGeometry[composedMesh.expressID] = geom;
 
             if (!composedMesh.hasColor)
             {
@@ -1754,7 +1751,7 @@ namespace webifc::geometry
                 newHasColor = composedMesh.hasColor;
             }
 
-            geometry.transformation = _coordinationMatrix * newMatrix * translation;
+            geometry.transformation = _coordinationMatrix * newMatrix;
 
             geometry.SetFlatTransformation();
             geometry.geometryExpressID = composedMesh.expressID;

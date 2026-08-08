@@ -169,7 +169,10 @@ namespace webifc::geometry {
 	{
 		glm::dvec3 center = normalizationCenter;
 		if (!normalized)
-		{	
+		{
+			// vertex values change below; drop the float shadow so a caller
+			// holding GetVertexData output never sees pre-normalization data
+			fvertexData.clear();
 			glm::dvec3 extents(0,0,0);
 			GetCenterExtents(center,extents);
 			for (size_t i = 0; i < vertexData.size(); i += 6)
