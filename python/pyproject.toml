@@ -1,0 +1,26 @@
+[build-system]
+requires = ["scikit-build-core>=0.10", "cython>=3.0", "numpy>=1.26"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "webifc"
+version = "0.1.0"
+description = "Native (non-WASM) Python bindings for the web-ifc IFC engine"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MPL-2.0" }
+dependencies = ["numpy>=1.24"]
+
+[tool.scikit-build]
+minimum-version = "0.10"
+cmake.version = ">=3.18"
+wheel.packages = ["webifc"]
+build.verbose = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# slow tests write a ~4.7GiB synthetic model to disk: opt in with `pytest -m slow`
+addopts = "-m 'not slow'"
+markers = [
+    "slow: long-running tests (multi-GiB synthetic models); run explicitly with -m slow",
+]

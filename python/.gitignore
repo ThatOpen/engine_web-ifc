@@ -1,0 +1,8 @@
+.venv/
+.pytest_cache/
+__pycache__/
+_skbuild/
+*.egg-info/
+*.so
+*.cpp
+!bridge/*.cpp
