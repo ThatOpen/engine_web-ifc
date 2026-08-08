@@ -58,6 +58,7 @@ export const INTEGER = 10;
 /**
  * Settings for the IFCLoader
  * @property {boolean} COORDINATE_TO_ORIGIN - If true, the model will be translated to the origin.
+ * @property {boolean} INCLUDE_SPACES_AND_OPENINGS - If true, StreamAllMeshes/LoadAllGeometry also emit IFCSPACE, IFCOPENINGELEMENT and IFCOPENINGSTANDARDCASE geometry. Hole subtraction in host elements is unaffected.
  * @property {number} CIRCLE_SEGMENTS - Number of segments used to approximate circles.
  * @property {number} MEMORY_LIMIT - Maximum memory (in bytes) to be reserved for IFC data in memory.
  * @property {number} TAPE_SIZE - Size of the internal buffer tape for the loader (in bytes or units).
@@ -72,6 +73,7 @@ export const INTEGER = 10;
  */
 export interface LoaderSettings {
   COORDINATE_TO_ORIGIN?: boolean;
+  INCLUDE_SPACES_AND_OPENINGS?: boolean;
   CIRCLE_SEGMENTS?: number;
   MEMORY_LIMIT?: number;
   TAPE_SIZE?: number;
@@ -489,6 +491,7 @@ export class IfcAPI {
   private CreateSettings(settings?: LoaderSettings) {
     let s: LoaderSettings = {
       COORDINATE_TO_ORIGIN: false,
+      INCLUDE_SPACES_AND_OPENINGS: false,
       CIRCLE_SEGMENTS: 12,
       TAPE_SIZE: 67108864,
       MEMORY_LIMIT: 2147483648,

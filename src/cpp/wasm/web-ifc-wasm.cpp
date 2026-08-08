@@ -71,9 +71,9 @@ void SaveModel(uint32_t modelID, emscripten::val callback)
                                             { emscripten::val retVal = callback((uint32_t)src, srcSize); }, false);
 }
 
-int GetModelSize(uint32_t modelID)
+double GetModelSize(uint32_t modelID)
 {
-    return manager.IsModelOpen(modelID) ? manager.GetIfcLoader(modelID)->GetTotalSize() : 0;
+    return manager.IsModelOpen(modelID) ? (double)manager.GetIfcLoader(modelID)->GetTotalSize() : 0;
 }
 
 void CloseModel(uint32_t modelID)
@@ -175,10 +175,11 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback)
     if (!manager.IsModelOpen(modelID))
         return;
     std::vector<uint32_t> types;
+    bool includeSpacesAndOpenings = manager.GetSettings(modelID).INCLUDE_SPACES_AND_OPENINGS;
 
     for (auto &type : manager.GetSchemaManager().GetIfcElementList())
     {
-        if (type == webifc::schema::IFCOPENINGELEMENT || type == webifc::schema::IFCSPACE || type == webifc::schema::IFCOPENINGSTANDARDCASE)
+        if (!includeSpacesAndOpenings && (type == webifc::schema::IFCOPENINGELEMENT || type == webifc::schema::IFCSPACE || type == webifc::schema::IFCOPENINGSTANDARDCASE))
         {
             continue;
         }
@@ -195,12 +196,13 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
     auto loader = manager.GetIfcLoader(modelID);
     auto geomLoader = manager.GetGeometryProcessor(modelID);
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
+    bool includeSpacesAndOpenings = manager.GetSettings(modelID).INCLUDE_SPACES_AND_OPENINGS;
 
     for (auto type : manager.GetSchemaManager().GetIfcElementList())
     {
         auto elements = loader->GetExpressIDsWithType(type);
 
-        if (type == webifc::schema::IFCOPENINGELEMENT || type == webifc::schema::IFCSPACE || type == webifc::schema::IFCOPENINGSTANDARDCASE)
+        if (!includeSpacesAndOpenings && (type == webifc::schema::IFCOPENINGELEMENT || type == webifc::schema::IFCSPACE || type == webifc::schema::IFCOPENINGSTANDARDCASE))
         {
             continue;
         }
@@ -439,8 +441,8 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
             copy = "T";
         else if (copy == "false")
             copy = "F";
-        uint16_t length = copy.size();
-        loader->Push<uint16_t>((uint16_t)length);
+        uint32_t length = (uint32_t)copy.size();
+        loader->Push<uint32_t>(length);
         loader->Push((void *)copy.c_str(), copy.size());
 
         break;
@@ -537,8 +539,8 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
 
                 std::string copy = label.as<std::string>();
 
-                uint16_t length = copy.size();
-                loader->Push<uint16_t>((uint16_t)length);
+                uint32_t length = (uint32_t)copy.size();
+                loader->Push<uint32_t>(length);
                 loader->Push((void *)copy.c_str(), copy.size());
 
                 loader->Push<uint8_t>(webifc::parsing::IfcTokenType::SET_BEGIN);
@@ -610,11 +612,11 @@ bool WriteHeaderLine(uint32_t modelID, uint32_t type, emscripten::val parameters
     if (!manager.IsModelOpen(modelID))
         return false;
     auto loader = manager.GetIfcLoader(modelID);
-    uint32_t start = loader->GetTotalSize();
+    uint64_t start = loader->GetTotalSize();
     std::string ifcName = manager.GetSchemaManager().IfcTypeCodeToType(type);
     std::transform(ifcName.begin(), ifcName.end(), ifcName.begin(), ::toupper);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
-    loader->Push<uint16_t>((uint16_t)ifcName.size());
+    loader->Push<uint32_t>((uint32_t)ifcName.size());
     loader->Push((void *)ifcName.data(), ifcName.size());
     bool responseCode = WriteSet(modelID, parameters);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
@@ -633,7 +635,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     if (!manager.IsModelOpen(modelID))
         return false;
     auto loader = manager.GetIfcLoader(modelID);
-    uint32_t start = loader->GetTotalSize();
+    uint64_t start = loader->GetTotalSize();
 
     // line ID
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::REF);
@@ -643,7 +645,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     std::string ifcName = manager.GetSchemaManager().IfcTypeCodeToType(type);
     std::transform(ifcName.begin(), ifcName.end(), ifcName.begin(), ::toupper);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LABEL);
-    loader->Push<uint16_t>((uint16_t)ifcName.size());
+    loader->Push<uint32_t>((uint32_t)ifcName.size());
     loader->Push((void *)ifcName.data(), ifcName.size());
     bool responseCode = WriteSet(modelID, parameters);
     // end line
@@ -963,9 +965,13 @@ EMSCRIPTEN_BINDINGS(my_module)
 
     emscripten::value_object<webifc::manager::LoaderSettings>("LoaderSettings")
         .field("COORDINATE_TO_ORIGIN", &webifc::manager::LoaderSettings::COORDINATE_TO_ORIGIN)
+        .field("INCLUDE_SPACES_AND_OPENINGS", &webifc::manager::LoaderSettings::INCLUDE_SPACES_AND_OPENINGS)
         .field("CIRCLE_SEGMENTS", &webifc::manager::LoaderSettings::CIRCLE_SEGMENTS)
         .field("TAPE_SIZE", &webifc::manager::LoaderSettings::TAPE_SIZE)
-        .field("MEMORY_LIMIT", &webifc::manager::LoaderSettings::MEMORY_LIMIT)
+        // uint64 in C++; marshalled as a JS Number (exact for < 2^53)
+        .field("MEMORY_LIMIT",
+               +[](const webifc::manager::LoaderSettings &s) -> double { return (double)s.MEMORY_LIMIT; },
+               +[](webifc::manager::LoaderSettings &s, double v) { s.MEMORY_LIMIT = (uint64_t)v; })
         .field("LINEWRITER_BUFFER", &webifc::manager::LoaderSettings::LINEWRITER_BUFFER)
         .field("TOLERANCE_PLANE_INTERSECTION", &webifc::manager::LoaderSettings::TOLERANCE_PLANE_INTERSECTION)
         .field("TOLERANCE_PLANE_DEVIATION", &webifc::manager::LoaderSettings::TOLERANCE_PLANE_DEVIATION)
