@@ -21,6 +21,22 @@
 
 **web-ifc** is a javascript library to read and write ifc files, at native speeds. **web-ifc** is part of the [That Open Company](https://thatopen.com) project, which aims to lower the threshold for developing open BIM applications.
 
+## About this fork
+
+This is the [contextmachine](https://github.com/contextmachine) fork of [ThatOpen/engine_web-ifc](https://github.com/ThatOpen/engine_web-ifc), maintained for **server-side IFC processing** where the upstream browser-first trade-offs don't apply. It diverges in three ways:
+
+1. **Multi-GiB files.** The token tape uses 64-bit offsets and 32-bit token lengths (upstream: 32/16-bit, silently truncating strings over 64KiB), and the chunk eviction/reload path is fixed and hardened, so files far beyond the wasm 4GiB ceiling parse natively from disk with bounded memory. Verified with a 4.7GiB model under a 1GiB memory limit.
+2. **IfcSpace / IfcOpeningElement are first-class.** The wasm API gains a `INCLUDE_SPACES_AND_OPENINGS` setting (default `false`, upstream-compatible) that makes `StreamAllMeshes`/`LoadAllGeometry` emit them; the native/Python API never filters. Hole subtraction in host elements is unaffected either way. Flat-mesh emission no longer mutates the shared geometry cache (fixes upstream [#1462](https://github.com/ThatOpen/engine_web-ifc/issues/1462)); as a consequence, emitted vertex buffers are no longer origin-centered — wasm viewers of georeferenced models should use `COORDINATE_TO_ORIGIN`.
+3. **Native Python bindings.** [`python/`](python/) contains `webifc`, a Cython package over the C++ core (no WASM): numpy float64 geometry, `GetLine`-compatible attribute access, streaming from disk. See [python/README.md](python/README.md). Its pytest suite is the fork's primary regression harness (exact mesh-count parity with `benchmark.md` plus pinned geometry digests):
+
+   ```
+   cd python && uv venv && uv pip install cython scikit-build-core numpy pytest && uv pip install -e . --no-build-isolation
+   uv run pytest             # fast suite
+   uv run pytest -m slow     # generates and parses a 4.7GiB model
+   ```
+
+Native C++ checks: `cd src/cpp && cmake -B Build -DCMAKE_BUILD_TYPE=Release && cmake --build Build -j && ctest --test-dir Build -L web-ifc` (includes a placement-consistency gate for openings/spaces, `web-ifc-placement-check`).
+
 ## Install
 
 `npm install web-ifc`
