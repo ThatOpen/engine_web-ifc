@@ -121,6 +121,8 @@ if(EMSCRIPTEN)
 	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -flto --define-macro=REAL_T_IS_DOUBLE -sSTACK_SIZE=5MB -s ALLOW_MEMORY_GROWTH=1 -s DYNAMIC_EXECUTION=0 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web,worker")
 endif()
 
+option(WEBIFC_BUILD_TESTS "Build native test executables" ON)
+
 if(NOT EMSCRIPTEN)
 	include(GNUInstallDirs)
 	include(CMakePackageConfigHelpers)
@@ -128,6 +130,7 @@ if(NOT EMSCRIPTEN)
 	# build web-ifc as a static library
 	add_library(web-ifc-library STATIC ${web-ifc-source})
 	param_setter(web-ifc-library)
+	set_property(TARGET web-ifc-library PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 	# Add generator expressions for install support
 	target_include_directories(web-ifc-library PUBLIC
@@ -137,6 +140,7 @@ if(NOT EMSCRIPTEN)
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/web-ifc>
 	)
 
+	if(WEBIFC_BUILD_TESTS)
 	# build parameters for web-ifc-test
 	add_executable(web-ifc-test ${web-ifc-source} "./test/encoding_test.cpp" "./test/main.cpp" "./test/io_helpers.cpp")
 	param_setter(web-ifc-test)
@@ -149,6 +153,18 @@ if(NOT EMSCRIPTEN)
 	add_executable(web-ifc ${web-ifc-source} "./test/web-ifc-test.cpp" "./test/io_helpers.cpp")
 	param_setter(web-ifc)
 	target_include_directories(web-ifc PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
+
+	# placement-consistency harness for openings/spaces (issue #1462)
+	add_executable(web-ifc-placement-check "./test/placement_check.cpp")
+	param_setter(web-ifc-placement-check)
+	target_link_libraries(web-ifc-placement-check web-ifc-library)
+
+	# gate the placement invariants on a fixture with clean openings/spaces
+	# (duplex is excluded: it carries a known furnishing-opening data anomaly)
+	add_test(NAME web-ifc-placement-fzk
+		COMMAND web-ifc-placement-check ${CMAKE_CURRENT_SOURCE_DIR}/../../tests/ifcfiles/public/AC20-FZK-Haus.ifc --assert)
+	set_tests_properties(web-ifc-placement-fzk PROPERTIES LABELS "web-ifc")
+	endif()
 
 	# comment these to prevent debug files being generated
 	if(NOT RELEASE)
