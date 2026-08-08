@@ -43,13 +43,23 @@ namespace webifc::parsing
           _chunks.push_back(chunk);
           _activeChunks++;
       }
+      if (_chunks.empty())
+      {
+        // empty source (e.g. zero-byte file): one empty writer chunk keeps
+        // every downstream invariant (front()/IsAtEnd) intact
+        _chunks.emplace_back(_chunkSize, 0, 0, nullptr);
+        _activeChunks++;
+      }
       _cChunk = &_chunks.front();
       _fileStream->Clear();
   }
 
   void IfcTokenStream::SetTokenSource(std::istream &requestData)
-  { 
-     SetTokenSource([&](char* dest, size_t sourceOffset, size_t destSize) { requestData.seekg(sourceOffset); requestData.read(dest, destSize); return requestData.gcount();},true);
+  {
+     // clear() first: once a read hits EOF the stream keeps failbit, and a
+     // failed seekg would make every later chunk reload return 0 bytes —
+     // chunk eviction re-reads the source for the model's whole lifetime.
+     SetTokenSource([&](char* dest, size_t sourceOffset, size_t destSize) { requestData.clear(); requestData.seekg(sourceOffset); requestData.read(dest, destSize); return (uint32_t)requestData.gcount();},true);
   }
   
   std::string_view IfcTokenStream::ReadString() 
@@ -58,8 +68,8 @@ namespace webifc::parsing
         checkMemory();
         _activeChunks++;
       }
-      auto length = _cChunk->Read<uint16_t>(_readPtr);
-      Forward(2);
+      auto length = _cChunk->Read<uint32_t>(_readPtr);
+      Forward(sizeof(uint32_t));
       if (length > 0) 
       {
         auto str = _cChunk->ReadString(_readPtr,length);
@@ -85,9 +95,13 @@ namespace webifc::parsing
   
   void IfcTokenStream::checkMemory()
   {
-    if (_maxChunks != 0 && _activeChunks == _maxChunks){
-      for (uint32_t x = 0; x < _chunks.size(); x++) 
+    if (_maxChunks != 0 && _activeChunks >= _maxChunks){
+      for (uint32_t x = 0; x < _chunks.size(); x++)
       {
+        // never evict the chunk under the read cursor: callers may hold
+        // string_views into it between loader calls
+        if (&_chunks[x] == _cChunk)
+          continue;
         if (_chunks[x].IsLoaded())
         {
           if (_chunks[x].Clear())
@@ -102,17 +116,19 @@ namespace webifc::parsing
   
   void IfcTokenStream::Push(void *v, const size_t size)
   {
+      // Writer-fed chunks get a null file stream: their content does not
+      // exist in the source file, so eviction must never free them (Clear()
+      // refuses when _fileStream is null) — a reload would re-tokenize file
+      // bytes instead of the written tokens.
       if (_chunks.empty())
       {
-        _chunks.emplace_back(_chunkSize,0,0,_fileStream);
+        _chunks.emplace_back(_chunkSize,0,0,nullptr);
         _activeChunks++;
       }
       if ( _chunks.back().TokenSize() + size > _chunks.back().GetMaxSize())
       {
         checkMemory();
-        size_t fsRef = 0;
-        if (_fileStream !=nullptr) fsRef = _fileStream->GetRef();
-        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),fsRef,_fileStream);
+        _chunks.emplace_back(_chunkSize,_chunks.back().GetTokenRef() + _chunks.back().TokenSize(),0,nullptr);
         _activeChunks++;
       }
       _chunks.back().Push(v,size);

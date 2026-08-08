@@ -106,9 +106,9 @@ namespace webifc::parsing
         class IfcFileStream
         {
           public:
-            IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, const uint32_t size, bool fromStream);
+            IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, const size_t size, bool fromStream);
             ~IfcFileStream();
-            void Go(const uint32_t ref);
+            void Go(const size_t ref);
             void Back();
             char Next();
             void Clear();

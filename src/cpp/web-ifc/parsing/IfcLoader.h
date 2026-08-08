@@ -40,26 +40,26 @@ namespace webifc::parsing
       std::string GetExpandedUUIDArgument() const;
       double GetDoubleArgument() const;
       long GetIntArgument() const;
-      long GetIntArgument(const uint32_t tapeOffset) const;
-      double GetDoubleArgument(const uint32_t tapeOffset) const;
+      long GetIntArgument(const uint64_t tapeOffset) const;
+      double GetDoubleArgument(const uint64_t tapeOffset) const;
       std::string_view  GetDoubleArgumentAsString() const;
       double GetOptionalDoubleParam(double defaultValue) const;
       uint32_t GetRefArgument() const;
-      uint32_t GetRefArgument(const uint32_t tapeOffset) const;
+      uint32_t GetRefArgument(const uint64_t tapeOffset) const;
       uint32_t GetOptionalRefArgument() const;
       IfcTokenType GetTokenType() const;
-      IfcTokenType GetTokenType(const uint32_t tapeOffset) const;
-      const std::vector<uint32_t> GetSetArgument() const;
+      IfcTokenType GetTokenType(const uint64_t tapeOffset) const;
+      const std::vector<uint64_t> GetSetArgument() const;
       std::vector<uint32_t> GetAllLines() const;
-      const std::vector<std::vector<uint32_t>> GetSetListArgument() const;
+      const std::vector<std::vector<uint64_t>> GetSetListArgument() const;
       void MoveToArgumentOffset(const uint32_t expressID, const uint32_t argumentIndex) const;
       uint32_t GetNoLineArguments(uint32_t expressID) const;
       void StepBack() const;
       IFC_SCHEMA GetSchema() const;
       void Push(void *v, const uint64_t size);
       uint64_t GetTotalSize() const;
-      void UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start);
-      void AddHeaderLineTape(const uint32_t type, const uint32_t start);
+      void UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint64_t start);
+      void AddHeaderLineTape(const uint32_t type, const uint64_t start);
       uint32_t GetCurrentLineExpressID() const;
       void RemoveLine(const uint32_t expressID);
       void PushDouble(double input);
@@ -76,7 +76,7 @@ namespace webifc::parsing
       struct IfcLine 
       {
         uint32_t ifcType;
-        uint32_t tapeOffset;
+        uint64_t tapeOffset;
       };
       IfcLoader(uint32_t maxExpressId, uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager, IfcTokenStream * tokenStream, ankerl::unordered_dense::map<uint32_t, IfcLine> &lines, std::vector<IfcLine> &headerLines,std::unordered_map<uint32_t, std::vector<uint32_t>> &ifcTypeToExpressID);
       uint32_t _maxExpressId;

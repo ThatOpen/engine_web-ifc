@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 
+#include <spdlog/spdlog.h>
 #include "IfcTokenStream.h"
 
 namespace webifc::parsing
@@ -37,6 +38,9 @@ namespace webifc::parsing
     
   void IfcTokenStream::IfcTokenChunk::Load()
   {
+      // On a reload after eviction the tokenizer must reproduce the chunk
+      // bit-for-bit, or every tape offset behind it is invalid.
+      const size_t expectedSize = _currentSize;
       _chunkData = new uint8_t[_chunkSize];
       _loaded=true;
       if (_fileStream->GetRef()!=_fileStartRef) _fileStream->Go(_fileStartRef);
@@ -96,7 +100,7 @@ namespace webifc::parsing
              _fileStream->Forward();
           }
           Push<uint8_t>(IfcTokenType::STRING);
-          Push<uint16_t>(temp.size());
+          Push<uint32_t>((uint32_t)temp.size());
           if (temp.size() > 0) Push(temp.data(),temp.size());
         } 
         else if (c == '#')
@@ -122,8 +126,8 @@ namespace webifc::parsing
           {
             _fileStream->Forward();
 
-            // comment
-            while (!(_fileStream->Prev() == '*' && _fileStream->Get() == '/')) _fileStream->Forward();
+            // comment (EOF-guarded: an unterminated comment must not scan past the buffer)
+            while (!_fileStream->IsAtEnd() && !(_fileStream->Prev() == '*' && _fileStream->Get() == '/')) _fileStream->Forward();
   
           }
           else Push<uint8_t>(IfcTokenType::UNKNOWN);
@@ -144,7 +148,7 @@ namespace webifc::parsing
           }
           if (isFrac) Push<uint8_t>(IfcTokenType::REAL);
           else Push<uint8_t>(IfcTokenType::INTEGER);  
-          Push<uint16_t>(temp.size());
+          Push<uint32_t>((uint32_t)temp.size());
           Push(temp.data(), temp.size());
 
           // skip next advance
@@ -163,7 +167,7 @@ namespace webifc::parsing
           }
 
           Push<uint8_t>(IfcTokenType::ENUM);
-          Push<uint16_t>(temp.size());
+          Push<uint32_t>((uint32_t)temp.size());
           Push(temp.data(), temp.size());
         }
         else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
@@ -178,7 +182,7 @@ namespace webifc::parsing
           }
 
           Push<uint8_t>(IfcTokenType::LABEL);
-          Push<uint16_t>(temp.size());
+          Push<uint32_t>((uint32_t)temp.size());
           Push(temp.data(), temp.size ());
 
           // skip next advance
@@ -188,5 +192,7 @@ namespace webifc::parsing
         else if (c == ';') Push<uint8_t>(IfcTokenType::LINE_END);
         _fileStream->Forward();  
       }
+      if (expectedSize != 0 && _currentSize != expectedSize)
+        spdlog::error("[IfcTokenChunk::Load()] chunk reload diverged: expected {} bytes, got {} (byte source changed or failed)", expectedSize, _currentSize);
     }
 }

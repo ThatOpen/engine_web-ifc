@@ -65,7 +65,7 @@ namespace webifc::geometry
     IfcCurve GetAlignmentCurve(uint32_t expressID, uint32_t parentExpressID = -1) const;
     IfcProfile GetProfileByLine(uint32_t expressID) const;
     glm::dvec3 GetVertexPoint(uint32_t expressID) const;
-    IfcTrimmingSelect GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const;
+    IfcTrimmingSelect GetTrimSelect(uint32_t DIM, std::vector<uint64_t> &tapeOffsets) const;
 
     struct ComputeCurveParams {
 		ComputeCurveParams() = default;

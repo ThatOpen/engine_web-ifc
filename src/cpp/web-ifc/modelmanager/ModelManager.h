@@ -19,9 +19,12 @@ namespace webifc::manager
     struct LoaderSettings
     {
         bool COORDINATE_TO_ORIGIN = false;
+        // emit IFCSPACE / IFCOPENINGELEMENT / IFCOPENINGSTANDARDCASE from the
+        // all-mesh paths; hole subtraction is unaffected either way
+        bool INCLUDE_SPACES_AND_OPENINGS = false;
         uint16_t CIRCLE_SEGMENTS = 12;
         uint32_t TAPE_SIZE = 67108864; // probably no need for anyone other than web-ifc devs to change this
-        uint32_t MEMORY_LIMIT = 2147483648;
+        uint64_t MEMORY_LIMIT = 2147483648ull;
         uint16_t LINEWRITER_BUFFER = 10000;
         double TOLERANCE_PLANE_INTERSECTION = 1.0E-04;
         double TOLERANCE_PLANE_DEVIATION = 1.0E-04;

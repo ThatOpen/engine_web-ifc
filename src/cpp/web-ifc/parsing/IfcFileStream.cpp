@@ -6,7 +6,7 @@
 
  namespace webifc::parsing {
 
-   IfcTokenStream::IfcFileStream::IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, uint32_t size, bool fromStream) : _dataSource(requestData), _size(size), _fromStream(fromStream)
+   IfcTokenStream::IfcFileStream::IfcFileStream(const std::function<uint32_t(char *, size_t, size_t)> &requestData, size_t size, bool fromStream) : _dataSource(requestData), _size(size), _fromStream(fromStream)
    {
       if (!fromStream) {
         char * countBuffer = new char[_size];
@@ -33,12 +33,22 @@
    void IfcTokenStream::IfcFileStream::load()
    {
      if (_buffer == nullptr) _buffer = new char[_size];
-     else if (_currentSize > 0) prev=_buffer[_currentSize-1];
+     // Prev() must be exact after ANY window move (Go/Back included): the
+     // tokenizer consults it for leading '-' on numbers and '/*' comments, so
+     // a stale byte makes an eviction reload diverge from the original
+     // tokenization and silently shifts every tape offset in the chunk.
+     if (_startRef > 0)
+     {
+       char pb = 0;
+       if (_dataSource(&pb, _startRef - 1, 1) == 1) prev = pb;
+       else prev = 0;
+     }
+     else prev = 0;
      _currentSize = _dataSource(_buffer, _startRef, _size);
      _pointer = 0;
    }
        
-   void IfcTokenStream::IfcFileStream::Go(uint32_t ref)
+   void IfcTokenStream::IfcFileStream::Go(size_t ref)
    {
       _startRef=ref;
       load();

@@ -235,7 +235,7 @@ namespace webifc::geometry
       std::unordered_map<uint32_t, std::set<double> > mapCurveToDistanceAlong;
       std::vector<glm::dmat4> vecCrossSectionPositionsFallback;
 
-      for ( uint32_t offset : CrossSectionPositionOffsets)
+      for ( uint64_t offset : CrossSectionPositionOffsets)
       {
         auto CrossSectionPositionID = _loader.GetRefArgument(offset);
         // IfcAxis2PlacementLinear
@@ -1501,7 +1501,7 @@ namespace webifc::geometry
     return IfcCurve();
   }
 
-  IfcTrimmingSelect IfcGeometryLoader::GetTrimSelect(uint32_t DIM, std::vector<uint32_t> &tapeOffsets) const
+  IfcTrimmingSelect IfcGeometryLoader::GetTrimSelect(uint32_t DIM, std::vector<uint64_t> &tapeOffsets) const
   {
     IfcTrimmingSelect ts;
 

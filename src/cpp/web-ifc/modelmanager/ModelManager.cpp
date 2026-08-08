@@ -70,7 +70,11 @@ webifc::parsing::IfcLoader *webifc::manager::ModelManager::GetIfcLoader(uint32_t
 const webifc::manager::LoaderSettings &webifc::manager::ModelManager::GetSettings(uint32_t modelID) const
 {
     if (!IsModelOpen(modelID))
-        return LoaderSettings();
+    {
+        // never hand out a reference to a temporary
+        static const LoaderSettings defaults;
+        return defaults;
+    }
     return _settings[modelID];
 }
 
