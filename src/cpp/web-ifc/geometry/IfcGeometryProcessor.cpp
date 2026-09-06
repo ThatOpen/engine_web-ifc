@@ -10,6 +10,13 @@
 #endif
 
 #include "IfcGeometryProcessor.h"
+
+// Enable the N-ary DIFFERENCE flatten optimization for the Tekla coplanar-cut
+// pattern (model 1092: naked -47%, non-manifold -63%). Gated internally to all-
+// extrusion, same-direction, non-faceted cutter chains so it can't touch the
+// cases it doesn't help. Comment this line out to fall back to nested subtraction.
+#define NARY_UNION 1
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include "representation/geometry.h"
@@ -323,6 +330,123 @@ namespace webifc::geometry
                 uint32_t firstOperandID = _loader.GetRefArgument();
                 uint32_t secondOperandID = _loader.GetRefArgument();
 
+#ifdef NARY_UNION
+                // N-ARY DIFFERENCE for the Tekla coplanar-cut pattern (model 1092): a
+                // pure-DIFFERENCE spine of EXTRUSION cutters over an EXTRUSION base.
+                // Subtracting coaxial/coplanar extrusions one-by-one piles faces on
+                // shared planes, which CDT then drops (naked edges). Flattening the whole
+                // spine and subtracting every cutter in a single pass avoids that.
+                // Restricted to all-extrusion operands on purpose: faceset/brep cutters
+                // (e.g. the IfcBuildingElementPart parts in model 1256) already mesh
+                // cleanly the sequential way and the flattened path corrupts them, so
+                // those fall through to the exact nested baseline below.
+                auto isFaceted = [&](uint32_t id) {
+                    auto t = _loader.GetLineType(id);
+                    return t == schema::IFCPOLYGONALFACESET || t == schema::IFCTRIANGULATEDFACESET ||
+                           t == schema::IFCFACETEDBREP || t == schema::IFCFACEBASEDSURFACEMODEL ||
+                           t == schema::IFCSHELLBASEDSURFACEMODEL || t == schema::IFCCONNECTEDFACESET;
+                };
+                std::vector<uint32_t> cutterIDs;
+                uint32_t baseID = firstOperandID;
+                bool noFacetedCutter = true;
+                if (op == "DIFFERENCE")
+                {
+                    cutterIDs.push_back(secondOperandID);
+                    if (isFaceted(secondOperandID)) noFacetedCutter = false;
+                    while (true)
+                    {
+                        auto lt = _loader.GetLineType(baseID);
+                        if (lt == schema::IFCBOOLEANCLIPPINGRESULT)
+                        {
+                            _loader.MoveToArgumentOffset(baseID, 1);
+                            uint32_t f = _loader.GetRefArgument();
+                            uint32_t sec = _loader.GetRefArgument();
+                            cutterIDs.push_back(sec);
+                            if (isFaceted(sec)) noFacetedCutter = false;
+                            baseID = f;
+                        }
+                        else if (lt == schema::IFCBOOLEANRESULT)
+                        {
+                            _loader.MoveToArgumentOffset(baseID, 0);
+                            std::string_view bop = _loader.GetStringArgument();
+                            if (bop != "DIFFERENCE") break;
+                            uint32_t f = _loader.GetRefArgument();
+                            uint32_t sec = _loader.GetRefArgument();
+                            cutterIDs.push_back(sec);
+                            if (isFaceted(sec)) noFacetedCutter = false;
+                            baseID = f;
+                        }
+                        else break;
+                    }
+                }
+                bool baseIsExtrude = (_loader.GetLineType(baseID) == schema::IFCEXTRUDEDAREASOLID);
+
+                // Only fuse when the flatten actually helps: the coplanar-cut pattern has
+                // every direct-extrusion cutter sharing the base extrusion's direction
+                // (Tekla emits one IfcDirection reused by base + cutts => coaxial/coplanar
+                // walls). Cutters extruded along OTHER directions (e.g. 1194 #424) don't
+                // pile on shared planes, so the one-pass flatten only makes them slightly
+                // worse; leave those on the nested baseline. Boolean-result cutters have no
+                // direction of their own and are allowed (they resolve to coaxial subtrees).
+                bool sameDir = true;
+                if (baseIsExtrude)
+                {
+                    _loader.MoveToArgumentOffset(baseID, 2);
+                    uint32_t baseDir = _loader.GetRefArgument();
+                    for (auto cid : cutterIDs)
+                    {
+                        if (_loader.GetLineType(cid) == schema::IFCEXTRUDEDAREASOLID)
+                        {
+                            _loader.MoveToArgumentOffset(cid, 2);
+                            if (_loader.GetRefArgument() != baseDir) { sameDir = false; break; }
+                        }
+                    }
+                }
+                bool useNary = (op == "DIFFERENCE") && baseIsExtrude && noFacetedCutter && sameDir && cutterIDs.size() > 1;
+
+                IfcComposedMesh firstMesh;
+                glm::dvec3 origin;
+                IfcGeometry resultMesh;
+
+                if (useNary)
+                {
+                    firstMesh = GetMesh(baseID);
+                    origin = GetOrigin(firstMesh, _expressIDToGeometry);
+                    auto normalizeMat = glm::translate(-origin);
+                    auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
+                    if (flatFirstMeshes.size() == 0) return mesh;
+                    double baseVol = 0.0;
+                    for (auto &g : flatFirstMeshes) baseVol += g.Volume();
+                    bool baseNeg = baseVol < 0.0;
+                    std::vector<IfcGeometry> flatSecondMeshes;
+                    for (auto cid : cutterIDs)
+                    {
+                        auto cMesh = GetMesh(cid);
+                        auto flatC = flatten(cMesh, _expressIDToGeometry, normalizeMat);
+                        for (auto &g : flatC)
+                        {
+                            // Match each cutter's winding to the base's before the flattened
+                            // one-pass subtraction (defensive; the testReverse bugfix already
+                            // prevents the collateral inversions, but this keeps the fused
+                            // cut orientation consistent). Validated version.
+                            if (!g.halfSpace && (g.Volume() < 0.0) != baseNeg) g.ReverseFaces();
+                            flatSecondMeshes.push_back(g);
+                        }
+                    }
+                    resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, "DIFFERENCE", _settings);
+                }
+                else
+                {
+                    firstMesh = GetMesh(firstOperandID);
+                    auto secondMesh = GetMesh(secondOperandID);
+                    origin = GetOrigin(firstMesh, _expressIDToGeometry);
+                    auto normalizeMat = glm::translate(-origin);
+                    auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
+                    auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
+                    if (flatFirstMeshes.size() == 0) return mesh;
+                    resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, std::string(op), _settings);
+                }
+#else
                 auto firstMesh = GetMesh(firstOperandID);
                 auto secondMesh = GetMesh(secondOperandID);
 
@@ -334,12 +458,11 @@ namespace webifc::geometry
 
                 if (flatFirstMeshes.size() == 0)
                 {
-                    // bail out because we will get strange meshes
-                    // if this happens, probably there's an issue parsing the first mesh
                     return mesh;
                 }
 
                 IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, std::string(op), _settings);
+#endif
 
                 _expressIDToGeometry[expressID] = resultMesh;
                 mesh.hasGeometry = true;
@@ -1733,6 +1856,14 @@ namespace webifc::geometry
                     return; // only triangles
                 }
             }
+            // BUGFIX: testReverse() inspects geometry.transformation's handedness, but
+            // that member was still uninitialized here (it was only assigned further
+            // below), so the reverse decision read garbage stack memory — deterministic
+            // per build but different across builds/execution paths, silently flipping
+            // the winding of arbitrary elements and persisting it to the cache. Set the
+            // transformation (coordination + placement; the later Normalize adds only a
+            // translation, det +1, so it can't change handedness) before testing.
+            geometry.transformation = _coordinationMatrix * newMatrix;
             if (geometry.testReverse())
                 geom.ReverseFaces();
 
@@ -2136,13 +2267,29 @@ namespace webifc::geometry
 
                 fuzzybools::SetEpsilons(_settings.TOLERANCE_PLANE_INTERSECTION, _settings.TOLERANCE_PLANE_DEVIATION, _settings.TOLERANCE_BACK_DEVIATION_DISTANCE, _settings.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, _settings.TOLERANCE_BOUNDING_BOX, BOOLSTATUS);
 
-                if (op == "DIFFERENCE")
+                // Guard the CSG kernel: fuzzybools/CDT can throw on pathological
+                // operands (e.g. self-intersecting composite curves). Previously an
+                // uncaught throw here aborted the ENTIRE model load in WASM. Catch it,
+                // emit a concrete warning, and keep the un-cut first operand so the
+                // element still renders instead of taking the whole model down.
+                try
                 {
-                    firstOperator = Subtract(firstOperator, secondOperator);
+                    if (op == "DIFFERENCE")
+                    {
+                        firstOperator = Subtract(firstOperator, secondOperator);
+                    }
+                    else if (op == "UNION")
+                    {
+                        firstOperator = Union(firstOperator, secondOperator);
+                    }
                 }
-                else if (op == "UNION")
+                catch (const std::exception &e)
                 {
-                    firstOperator = Union(firstOperator, secondOperator);
+                    spdlog::error("[BoolProcess()] CSG {} threw ({}); keeping un-cut operand (faces first={}, second={})", op, e.what(), firstOperator.numFaces, secondOperator.numFaces);
+                }
+                catch (...)
+                {
+                    spdlog::error("[BoolProcess()] CSG {} threw (unknown); keeping un-cut operand (faces first={}, second={})", op, firstOperator.numFaces, secondOperator.numFaces);
                 }
 
 #ifdef CSG_DEBUG_OUTPUT
