@@ -1381,10 +1381,20 @@ namespace fuzzybools
 
             auto mapping = CDT::RemoveDuplicatesAndRemapEdges(cdt_verts, cdt_edges).mapping;
 
-            cdt.insertVertices(cdt_verts);
-            cdt.insertEdges(cdt_edges);
-
-            cdt.eraseSuperTriangle();
+            try
+            {
+                cdt.insertVertices(cdt_verts);
+                cdt.insertEdges(cdt_edges);
+                cdt.eraseSuperTriangle();
+            }
+            catch (...)
+            {
+                // CDT throws when the projected constraint edges self-intersect.
+                // Drop only this plane's triangulation instead of letting the
+                // exception unwind and discard the whole cut operand (which would
+                // render the element uncut). catch(...) works even without RTTI.
+                return;
+            }
 
             auto triangles = cdt.triangles;
 
