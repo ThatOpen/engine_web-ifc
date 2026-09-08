@@ -1615,9 +1615,9 @@ cpy-cli@^7.0.0:
     meow "^14.0.0"
 
 cpy@^13.2.0:
-  version "13.2.2"
-  resolved "https://registry.yarnpkg.com/cpy/-/cpy-13.2.2.tgz#d3a50fc6592cb65f5dc4bd6fa0506e64720f7ce9"
-  integrity sha512-FEc7gmNSj4mDQCWNt3mByVn3qZX3EjMvggiqgCQPF1yJAFfyX6Ai/emN89w18TRp+QcFmdTLgX3hfNnIVgYHcw==
+  version "13.2.3"
+  resolved "https://registry.yarnpkg.com/cpy/-/cpy-13.2.3.tgz#2d7b3d586bafbdc27b0d0e57e87a8ecbe3468ff2"
+  integrity sha512-N+jPR8ODTJIzAKmCtUglRSCQzMuDkB/saH1ZJfY1MDfXYMZbfsuih3GhpUEYeuTCDQLBr4GvKyHDwV0Y2Sd0gQ==
   dependencies:
     copy-file "^11.1.0"
     globby "^16.1.0"
