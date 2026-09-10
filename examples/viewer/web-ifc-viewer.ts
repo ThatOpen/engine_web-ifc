@@ -30,6 +30,10 @@ let ifcAPI = new IfcAPI();
 ifcAPI.SetWasmPath("./");
 let ifcThree = new IfcThree(ifcAPI);
 
+// Keeps the most recently loaded model open so the "Repair Faces" button
+// can re-stream its geometry with orientation repair enabled.
+let lastLoadedModelID: number | undefined = undefined;
+
 let timeout = undefined;
 
 function Edited(monacoEditor: Monaco.editor.IStandaloneCodeEditor) {
@@ -103,6 +107,8 @@ if (typeof window != "undefined") {
     coderun.addEventListener("click", runCode);
     const clearmem = document.getElementById("cmem");
     clearmem.addEventListener("click", clearMem);
+    const repairFacesBtn = document.getElementById("repairfaces");
+    repairFacesBtn.addEventListener("click", repairFaces);
     const changeLogLevelSelect = document.getElementById("logLevel");
     changeLogLevelSelect.addEventListener("change", changeLogLevel);
     Init3DView();
@@ -169,7 +175,25 @@ async function resetCode() {
 async function clearMem() {
   ClearScene();
   ifcAPI.Dispose();
+  lastLoadedModelID = undefined;
   await ifcAPI.Init();
+}
+
+async function repairFaces() {
+  if (lastLoadedModelID === undefined) {
+    console.warn("[RepairFaces] no model loaded yet.");
+    return;
+  }
+  if (!ifcAPI.IsModelOpen(lastLoadedModelID)) {
+    console.warn("[RepairFaces] model is no longer open.");
+    return;
+  }
+
+  const t0 = ms();
+  ClearScene();
+  InitBasicScene();
+  ifcThree.LoadAllGeometry(scene, lastLoadedModelID, true);
+  console.log(`[RepairFaces] rebuilt scene in ${ms() - t0} ms.`);
 }
 
 async function fileInputChanged() {
@@ -225,6 +249,13 @@ async function LoadModel(data: Uint8Array) {
   // Ferroflex, samMateo -> CIRCLE_SEGMENTS: 6
   const time = ms() - start;
   console.log(`Opening model took ${time} ms`);
+
+  // Close any previously-loaded model so only one stays open at a time.
+  if (lastLoadedModelID !== undefined && lastLoadedModelID !== modelID) {
+    try { ifcAPI.CloseModel(lastLoadedModelID); } catch (_) {}
+  }
+  lastLoadedModelID = modelID;
+
   ifcThree.LoadAllGeometry(scene, modelID);
 
   if (
@@ -265,5 +296,8 @@ async function LoadModel(data: Uint8Array) {
       //console.log(ifcAPI.GetLine(modelID, unitList.Units[u].value));
     }
   }
-  ifcAPI.CloseModel(modelID);
+  // NOTE: the model is intentionally kept open so the "Repair Faces" button
+  //       can re-stream geometry with orientation repair applied. It will be
+  //       closed automatically when another model is loaded, or by the
+  //       "Clear Memory" button (ifcAPI.Dispose()).
 }

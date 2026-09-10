@@ -56,6 +56,13 @@ namespace webifc::geometry
     IfcGeometry &GetGeometry(uint32_t expressID);
     IfcGeometryLoader& GetLoader();
     IfcFlatMesh GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor = true);
+    struct IfcBooleanOperands {
+        uint32_t expressID = 0;
+        IfcFlatMesh bodyMesh;
+        std::vector<IfcFlatMesh> voidMeshes;
+        bool hasBooleans = false;
+    };
+    IfcBooleanOperands GetBooleanOperands(uint32_t expressID);
     IfcComposedMesh GetMesh(uint32_t expressID);
     void SetTransformation(const std::array<double, 16> &val);
     std::array<double, 16> GetFlatCoordinationMatrix() const;
