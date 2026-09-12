@@ -424,6 +424,14 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     switch (t)
     {
     case webifc::parsing::IfcTokenType::STRING:
+    {
+        std::ostringstream encoded;
+        webifc::parsing::p21encode(value.as<std::string>(), encoded);
+        const std::string text = encoded.str();
+        loader->Push<uint16_t>(static_cast<uint16_t>(text.size()));
+        loader->Push((void*)text.data(), text.size());
+        break;
+    }
     case webifc::parsing::IfcTokenType::ENUM:
     {
         std::string copy;

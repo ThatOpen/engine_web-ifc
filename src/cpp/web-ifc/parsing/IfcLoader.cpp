@@ -160,7 +160,7 @@ namespace webifc::parsing {
               case IfcTokenType::STRING:
               {
                 output << "'";
-                p21encode(_tokenStream->ReadString(),output);
+                output << _tokenStream->ReadString();
                 output << "'";
                 break;
               }
