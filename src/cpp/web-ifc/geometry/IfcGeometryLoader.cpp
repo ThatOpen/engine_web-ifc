@@ -1729,6 +1729,66 @@ namespace webifc::geometry
     return curve;
   }
 
+  IfcCurve IfcGeometryLoader::GetCurveWithParameters(uint32_t expressID, uint8_t dimensions,
+      std::optional<double> start, std::optional<double> end) const
+  {
+    if (!start && !end) return GetCurve(expressID, dimensions);
+    const auto type = _loader.GetLineType(expressID);
+    IfcCurve result;
+    if ((start && !std::isfinite(*start)) || (end && !std::isfinite(*end))) return result;
+    if (type == schema::IFCPOLYLINE)
+    {
+      // Each polyline segment has a unit parameter interval, independently of its length.
+      auto source = GetCurve(expressID, dimensions);
+      if (source.points.size() < 2) return result;
+      const double last = static_cast<double>(source.points.size() - 1);
+      const double firstParam = start.value_or(0.0), lastParam = end.value_or(last);
+      if (firstParam < 0 || lastParam > last || firstParam >= lastParam)
+      {
+        spdlog::error("[GetCurveWithParameters()] Invalid polyline interval {}", expressID);
+        return result;
+      }
+      auto pointAt = [&](double parameter) {
+        const size_t i = std::min(static_cast<size_t>(parameter), source.points.size() - 2);
+        return glm::mix(source.points[i], source.points[i + 1], parameter - static_cast<double>(i));
+      };
+      result.Add(pointAt(firstParam));
+      for (size_t i = static_cast<size_t>(std::floor(firstParam)) + 1; i < source.points.size() && i < lastParam; ++i)
+        result.Add(source.points[i]);
+      result.Add(pointAt(lastParam));
+      return result;
+    }
+    if (type == schema::IFCLINE || type == schema::IFCCIRCLE || type == schema::IFCELLIPSE)
+    {
+      if (type == schema::IFCLINE && (!start || !end || *start >= *end))
+      {
+        spdlog::error("[GetCurveWithParameters()] A line needs a finite increasing interval {}", expressID);
+        return result;
+      }
+      ComputeCurveParams params;
+      params.dimensions = dimensions;
+      params.hasTrim = true;
+      params.trimStart.trimType = params.trimEnd.trimType = TRIM_BY_PARAMETER;
+      params.trimStart.value = start.value_or(0.0);
+      params.trimEnd.value = end.value_or(2.0 * static_cast<double>(CONST_PI) / _cache.GetAngularScalingFactor());
+      if (type != schema::IFCLINE)
+      {
+        const double period = 2.0 * static_cast<double>(CONST_PI) / _cache.GetAngularScalingFactor();
+        if (!std::isfinite(period) || period <= 0) return result;
+        const double span = params.trimEnd.value - params.trimStart.value;
+        params.trimStart.value = std::fmod(params.trimStart.value, period);
+        params.trimEnd.value = std::fmod(params.trimEnd.value, period);
+        if (params.trimEnd.value == params.trimStart.value && span != 0)
+          params.trimEnd.value = params.trimStart.value + period;
+      }
+      ComputeCurve(expressID, result, params);
+      return result;
+    }
+    // Do not silently sweep the complete curve when its parameterization is unsupported.
+    spdlog::error("[GetCurveWithParameters()] Unsupported parameter trimming for curve {} (type {})", expressID, type);
+    return result;
+  }
+
   void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params) const
   {
     spdlog::debug("[ComputeCurve({})]", expressID);

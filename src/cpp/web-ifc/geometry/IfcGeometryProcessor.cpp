@@ -984,22 +984,20 @@ namespace webifc::geometry
                     innerRadius = _loader.GetDoubleArgument();
                 }
 
-                // double startParam = 0;
-                // double endParam = 0;
-
+                std::optional<double> startParam, endParam;
                 if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
                 {
                     _loader.StepBack();
-                    _loader.GetDoubleArgument();
+                    startParam = _loader.GetDoubleArgument();
                 }
-
                 if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
                 {
                     _loader.StepBack();
-                    _loader.GetDoubleArgument();
+                    endParam = _loader.GetDoubleArgument();
                 }
 
-                IfcCurve directrix = _geometryLoader.GetCurve(directrixRef, 3);
+                IfcCurve directrix = _geometryLoader.GetCurveWithParameters(directrixRef, 3, startParam, endParam);
+                if (directrix.points.size() < 2) return mesh;
                 closed = directrix.points.size() > 2 && glm::distance(directrix.points.front(), directrix.points.back()) < EPS_SMALL;
 
                 IfcProfile profile;
