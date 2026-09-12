@@ -638,6 +638,76 @@ namespace webifc::geometry
 		return ToIfcGeometry(bimGeometry::Extrude(profile_vector, dir, distance, cuttingPlaneNormal, cuttingPlanePos));
 	}
 
+	inline IfcGeometry RevolveProfile(const IfcProfile& profile, glm::dvec3 axis, const glm::dvec3& origin, double angle, uint16_t circleSegments)
+	{
+		IfcGeometry geometry;
+		if (profile.isComposite)
+		{
+			for (const auto& child : profile.profiles)
+				geometry.AddGeometry(RevolveProfile(child, axis, origin, angle, circleSegments));
+			return geometry;
+		}
+		if (glm::length(axis) == 0 || !std::isfinite(angle) || angle == 0 || profile.curve.points.size() < 3) return geometry;
+        // Some exporters use signed plane-angle measures. Preserve their direction
+        // instead of silently dropping the solid; standard positive angles are unchanged.
+        if (angle < 0) { axis = -axis; angle = -angle; }
+        if (angle > 2 * glm::pi<double>() + 1e-8) return geometry;
+		axis = glm::normalize(axis);
+		std::vector<std::vector<glm::dvec2>> rings;
+		for (size_t r = 0; r <= profile.holes.size(); ++r)
+		{
+			auto points = r == 0 ? profile.curve.points : profile.holes[r - 1].points;
+			if (points.size() > 1 && glm::length(points.front() - points.back()) < 1e-8) points.pop_back();
+			if (points.size() < 3) return IfcGeometry();
+			double area = 0;
+			for (size_t i = 0; i < points.size(); ++i)
+				area += points[i].x * points[(i + 1) % points.size()].y - points[(i + 1) % points.size()].x * points[i].y;
+			if ((area > 0) != (r == 0)) std::reverse(points.begin(), points.end());
+			rings.emplace_back();
+			for (const auto& point : points) rings.back().emplace_back(point.x, point.y);
+		}
+		const double fullAngle = 2 * glm::pi<double>();
+		const bool closed = std::abs(angle - fullAngle) < 1e-8;
+		const size_t segments = std::max<size_t>(3, std::ceil(std::max<uint16_t>(circleSegments, 12) * angle / fullAngle));
+		glm::dvec3 centre(0);
+		for (const auto& point : rings[0]) centre += glm::dvec3(point, 0);
+		centre /= static_cast<double>(rings[0].size());
+		const bool reverse = glm::cross(axis, centre - origin).z < 0;
+		auto pointAt = [&](const glm::dvec2& point, size_t step)
+		{
+			const double theta = closed && step == segments ? 0 : angle * step / segments;
+			return origin + glm::dvec3(glm::rotate(glm::dmat4(1), theta, axis) * glm::dvec4(glm::dvec3(point, 0) - origin, 0));
+		};
+		auto face = [&](glm::dvec3 a, glm::dvec3 b, glm::dvec3 c)
+		{
+			if (reverse) std::swap(b, c);
+			if (glm::length(glm::cross(b - a, c - a)) > 1e-14) geometry.AddFace(a, b, c);
+		};
+		for (const auto& ring : rings)
+			for (size_t step = 0; step < segments; ++step)
+				for (size_t i = 0; i < ring.size(); ++i)
+				{
+					const size_t j = (i + 1) % ring.size();
+					const auto a = pointAt(ring[i], step), b = pointAt(ring[j], step);
+					const auto c = pointAt(ring[j], step + 1), d = pointAt(ring[i], step + 1);
+					face(a, b, c); face(a, c, d);
+				}
+		if (!closed)
+		{
+			const auto indices = mapbox::earcut<uint32_t>(rings);
+			std::vector<glm::dvec2> points;
+			for (const auto& ring : rings) points.insert(points.end(), ring.begin(), ring.end());
+			for (size_t i = 0; i < indices.size(); i += 3)
+			{
+				auto a = points[indices[i]], b = points[indices[i + 1]], c = points[indices[i + 2]];
+				if ((b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x) < 0) std::swap(b, c);
+				face(pointAt(a, 0), pointAt(c, 0), pointAt(b, 0));
+				face(pointAt(a, segments), pointAt(b, segments), pointAt(c, segments));
+			}
+		}
+		return geometry;
+	}
+
 	inline IfcGeometry SweepFixedReference(double linearScalingFactor, bool closed, const IfcProfile& profile, const IfcCurve& directrix, const glm::dvec3& fixedReference)
 	{
 		IfcGeometry geom;
