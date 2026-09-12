@@ -6,6 +6,7 @@
 
 #include <map>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <optional>
 #include <cstdint>
@@ -62,6 +63,7 @@ namespace webifc::geometry
     bool GetColor(const uint32_t expressID, const glm::dvec4 &outputColor) const;
 
   private:
+    mutable std::unordered_set<uint32_t> _activePlacements;
     IfcCurve GetAlignmentCurve(uint32_t expressID, uint32_t parentExpressID = -1) const;
     IfcProfile GetProfileByLine(uint32_t expressID) const;
     glm::dvec3 GetVertexPoint(uint32_t expressID) const;

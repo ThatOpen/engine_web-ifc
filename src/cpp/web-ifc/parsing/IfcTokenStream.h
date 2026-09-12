@@ -115,7 +115,8 @@ namespace webifc::parsing
             IfcFileStream * Clone();
 
             inline void Forward() 
-            { 
+            {
+              if (IsAtEnd()) return;
               _pointer++;
               if (_pointer == _currentSize && _currentSize != 0)
               {
@@ -127,7 +128,7 @@ namespace webifc::parsing
             inline char Prev() { return _pointer == 0 ? prev : _buffer[_pointer-1]; }
             inline bool IsAtEnd() { return _pointer == _currentSize && _currentSize == 0; }
             inline size_t GetRef() { return _startRef + _pointer; }
-            inline char Get() { return _buffer[_pointer]; }
+            inline char Get() { return _pointer < _currentSize ? _buffer[_pointer] : 0; }
             inline size_t GetNoLines() { return noLines; }
 
           private:
@@ -135,7 +136,7 @@ namespace webifc::parsing
             std::function<uint32_t(char *, size_t, size_t)> _dataSource;
             size_t _pointer=0;
             size_t _size;
-            char prev;
+            char prev = 0;
             size_t _currentSize=0;
             size_t _startRef=0;
             char * _buffer;
