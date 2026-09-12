@@ -534,6 +534,7 @@ export class IfcAPI {
         return srcSize;
       }
     );
+    if (result < 0) return -1;
     this.deletedLines.set(result, new Set());
     const schemaName = this.GetHeaderLine(result, FILE_SCHEMA)?.arguments?.[0]?.[0]?.value;
     if (typeof schemaName !== "string") {
@@ -574,6 +575,7 @@ export class IfcAPI {
         return srcSize;
       }
     );
+    if (result < 0) return -1;
     this.deletedLines.set(result, new Set());
     const schemaName = this.GetHeaderLine(result, FILE_SCHEMA)?.arguments?.[0]?.[0]?.value;
     if (typeof schemaName !== "string") {

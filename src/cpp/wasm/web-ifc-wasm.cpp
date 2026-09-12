@@ -59,7 +59,11 @@ int OpenModel(webifc::manager::LoaderSettings settings, emscripten::val callback
         return len;
     };
 
-    manager.GetIfcLoader(modelID)->LoadFile(loaderFunc);
+    if (!manager.GetIfcLoader(modelID)->LoadFile(loaderFunc))
+    {
+        manager.CloseModel(modelID);
+        return -1;
+    }
     return modelID;
 }
 

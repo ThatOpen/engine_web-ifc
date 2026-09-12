@@ -64,7 +64,7 @@ namespace webifc::parsing
           // turns out this is just part of ISO 10303-21, thanks ottosson!
           while (true)
           {
-            if (_fileStream->IsAtEnd()) { spdlog::error("Unterminated STEP string"); return; }
+            if (_fileStream->IsAtEnd()) { _parseFailed = true; spdlog::error("Unterminated STEP string"); return; }
   
             temp.push_back(_fileStream->Get());
             // if its a quote, maybe its the end of the string
@@ -126,7 +126,7 @@ namespace webifc::parsing
 
             // comment
             while (!_fileStream->IsAtEnd() && !(_fileStream->Prev() == '*' && _fileStream->Get() == '/')) _fileStream->Forward();
-            if (_fileStream->IsAtEnd()) { spdlog::error("Unterminated STEP comment"); return; }
+            if (_fileStream->IsAtEnd()) { _parseFailed = true; spdlog::error("Unterminated STEP comment"); return; }
   
           }
           else Push<uint8_t>(IfcTokenType::UNKNOWN);
@@ -160,7 +160,7 @@ namespace webifc::parsing
           char c = _fileStream->Get();
           while ( c != '.')
           {
-            if (_fileStream->IsAtEnd()) { spdlog::error("Unterminated STEP enumeration"); return; }
+            if (_fileStream->IsAtEnd()) { _parseFailed = true; spdlog::error("Unterminated STEP enumeration"); return; }
             temp.push_back(c);
             _fileStream->Forward();
             c = _fileStream->Get();
