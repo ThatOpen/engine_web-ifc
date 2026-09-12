@@ -1023,39 +1023,18 @@ namespace webifc::geometry
 
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t profileID = _loader.GetRefArgument();
-                uint32_t placementID = _loader.GetRefArgument();
+                uint32_t placementID = _loader.GetOptionalRefArgument();
                 uint32_t axis1PlacementID = _loader.GetRefArgument();
-                double angle = angleConversion(_loader.GetDoubleArgument(), _cache.GetAngleUnits());
+                double angle = _loader.GetDoubleArgument() * _cache.GetAngularScalingFactor();
+                // Compatibility with exporters using DEGREE in IfcSIUnit, which is not an IFC SI unit name.
+                if (_cache.GetAngleUnits() == "DEGREE") angle = angleConversion(angle, "DEGREE");
 
                 IfcProfile profile = _geometryLoader.GetProfile(profileID);
-                glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID);
+                glm::dmat4 placement = placementID ? _geometryLoader.GetLocalPlacement(placementID) : glm::dmat4(1);
                 glm::dvec3 axis = _geometryLoader.GetAxis1Placement(axis1PlacementID)[0];
 
-                bool closed = false;
-
                 glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[1];
-
-                IfcCurve directrix = BuildArc(_cache.GetLinearScalingFactor(), pos, axis, angle, _settings._circleSegments);
-                if (glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG)
-                {
-                    closed = true;
-                }
-
-                IfcGeometry geom;
-
-                if (!profile.isComposite)
-                {
-                    geom = Sweep(_cache.GetLinearScalingFactor(), closed, profile, directrix, axis, false);
-                }
-                else
-                {
-                    for (uint32_t i = 0; i < profile.profiles.size(); i++)
-                    {
-                        IfcGeometry geom_t = Sweep(_cache.GetLinearScalingFactor(), closed, profile.profiles[i], directrix, axis, false, false);
-                        geom.AddPart(geom_t);
-                        geom.AddGeometry(geom_t);
-                    }
-                }
+                IfcGeometry geom = RevolveProfile(profile, axis, pos, angle, _settings._circleSegments);
 
                 mesh.transformation = placement;
                 _expressIDToGeometry[expressID] = geom;
