@@ -4,6 +4,7 @@
  
 
 #include "IfcTokenStream.h"
+#include <spdlog/spdlog.h>
 
 namespace webifc::parsing
 {
@@ -99,6 +100,24 @@ namespace webifc::parsing
           Push<uint16_t>(temp.size());
           if (temp.size() > 0) Push(temp.data(),temp.size());
         } 
+        else if (c == '"')
+        {
+          temp.clear();
+          _fileStream->Forward();
+          while (!_fileStream->IsAtEnd() && _fileStream->Get() != '"')
+          {
+            const char digit = _fileStream->Get();
+            if (!((digit >= '0' && digit <= '9') || (digit >= 'A' && digit <= 'F')))
+            { spdlog::error("Invalid STEP binary digit"); return; }
+            temp.push_back(digit);
+            _fileStream->Forward();
+          }
+          if (_fileStream->IsAtEnd() || temp.empty() || temp[0] < '0' || temp[0] > '3')
+          { spdlog::error("Invalid or unterminated STEP binary value"); return; }
+          Push<uint8_t>(IfcTokenType::BINARY);
+          Push<uint16_t>(temp.size());
+          Push(temp.data(), temp.size());
+        }
         else if (c == '#')
         {
           _fileStream->Forward();

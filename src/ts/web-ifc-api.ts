@@ -54,6 +54,8 @@ export const SET_BEGIN = 7;
 export const SET_END = 8;
 export const LINE_END = 9;
 export const INTEGER = 10;
+/** STEP binary literal body: unused-bit count followed by hexadecimal digits. */
+export const BINARY = 11;
 
 /**
  * Settings for the IFCLoader

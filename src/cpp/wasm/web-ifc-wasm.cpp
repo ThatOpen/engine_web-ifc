@@ -423,6 +423,13 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     auto loader = manager.GetIfcLoader(modelID);
     switch (t)
     {
+    case webifc::parsing::IfcTokenType::BINARY:
+    {
+        const std::string text = value.as<std::string>();
+        loader->Push<uint16_t>(static_cast<uint16_t>(text.size()));
+        loader->Push((void*)text.data(), text.size());
+        break;
+    }
     case webifc::parsing::IfcTokenType::STRING:
     case webifc::parsing::IfcTokenType::ENUM:
     {
@@ -555,6 +562,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
                 WriteValue(modelID, type, child["internalValue"]);
                 break;
             }
+            case webifc::parsing::IfcTokenType::BINARY:
             case webifc::parsing::IfcTokenType::STRING:
             case webifc::parsing::IfcTokenType::ENUM:
             case webifc::parsing::IfcTokenType::REF:
@@ -658,6 +666,8 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     auto loader = manager.GetIfcLoader(modelID);
     switch (t)
     {
+    case webifc::parsing::IfcTokenType::BINARY:
+        return emscripten::val(std::string(loader->GetStringArgument()));
     case webifc::parsing::IfcTokenType::STRING:
     {
         return emscripten::val(loader->GetDecodedStringArgument());
@@ -747,6 +757,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject = false, bool inList = f
             arguments.set(size++, obj);
             break;
         }
+        case webifc::parsing::IfcTokenType::BINARY:
         case webifc::parsing::IfcTokenType::STRING:
         case webifc::parsing::IfcTokenType::ENUM:
         case webifc::parsing::IfcTokenType::REAL:
