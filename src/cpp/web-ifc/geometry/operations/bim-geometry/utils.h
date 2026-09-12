@@ -1673,35 +1673,35 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline Curve GetTShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat4 placement = glm::dmat4(1))
+	inline Curve GetTShapedCurve(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat4 placement = glm::dmat4(1))
 	{
 		Curve c;
 
 		double hw = width / 2;
 		double hd = depth / 2;
-		double hweb = thickness / 2;
+		double hweb = webThickness / 2;
 
 		c.points.push_back(placement * glm::dvec4(hw, hd, 0, 1));
 
 		if (hasFillet)
 		{
 			// TODO: Create interpolation and sloped lines
-			c.points.push_back(placement * glm::dvec4(hw, hd - thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(hweb, hd - thickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(hw, hd - flangeThickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(hweb, hd - flangeThickness, 0, 1));
 			c.points.push_back(placement * glm::dvec4(hweb, -hd, 0, 1));
 			c.points.push_back(placement * glm::dvec4(-hweb, -hd, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hweb, hd - thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hw, hd - thickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(-hweb, hd - flangeThickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(-hw, hd - flangeThickness, 0, 1));
 			c.points.push_back(placement * glm::dvec4(-hw, hd, 0, 1));
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec4(hw, hd - thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(hweb, hd - thickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(hw, hd - flangeThickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(hweb, hd - flangeThickness, 0, 1));
 			c.points.push_back(placement * glm::dvec4(hweb, -hd, 0, 1));
 			c.points.push_back(placement * glm::dvec4(-hweb, -hd, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hweb, hd - thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hw, hd - thickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(-hweb, hd - flangeThickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(-hw, hd - flangeThickness, 0, 1));
 			c.points.push_back(placement * glm::dvec4(-hw, hd, 0, 1));
 		}
 

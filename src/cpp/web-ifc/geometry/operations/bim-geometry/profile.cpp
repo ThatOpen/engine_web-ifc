@@ -43,7 +43,7 @@ namespace bimGeometry
         }
         if(pType == 3)
         {
-            profile = bimGeometry::GetTShapedCurve(width, depth, thickness, hasFillet, filletRadius, radius, slope, _placement);
+            profile = bimGeometry::GetTShapedCurve(width, depth, thickness, thickness, hasFillet, filletRadius, radius, slope, _placement);
         }
         if(pType == 4)
         {

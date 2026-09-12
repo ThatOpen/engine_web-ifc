@@ -3397,8 +3397,7 @@ namespace webifc::geometry
       double depth = _loader.GetDoubleArgument();
       double width = _loader.GetDoubleArgument();
       double webThickness = _loader.GetDoubleArgument();
-      // double flangeThickness =
-      _loader.GetDoubleArgument();
+      double flangeThickness = _loader.GetDoubleArgument();
       double filletRadius = _loader.GetOptionalDoubleParam(0);
       bool hasFillet = filletRadius != 0;
       double flangeEdgeRadius = _loader.GetOptionalDoubleParam(0);
@@ -3408,7 +3407,7 @@ namespace webifc::geometry
       _loader.GetOptionalDoubleParam(0);
       double flangeSlope = _loader.GetOptionalDoubleParam(0);
 
-      profile.curve = GetTShapedCurve(width, depth, webThickness, hasFillet, filletRadius, flangeEdgeRadius, flangeSlope, placement);
+      profile.curve = GetTShapedCurve(width, depth, webThickness, flangeThickness, hasFillet, filletRadius, flangeEdgeRadius, flangeSlope, placement);
 
       return profile;
     }
