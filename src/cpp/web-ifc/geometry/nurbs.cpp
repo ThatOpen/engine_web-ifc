@@ -67,6 +67,9 @@ namespace webifc::geometry{
 			auto pt00 {tinynurbs::surfacePoint(*this->nurbs, p0.x, p0.y)};
 			auto pt01 {tinynurbs::surfacePoint(*this->nurbs, p1.x, p1.y)};
 			auto pt10 {tinynurbs::surfacePoint(*this->nurbs, p2.x, p2.y)};
+            // Positive UV winding follows dS/du x dS/dv, regardless of bound order.
+            const auto u = p1 - p0, v = p2 - p0;
+            if (u.x * v.y - u.y * v.x < 0) std::swap(pt01, pt10);
 			geometry.AddFace(pt00, pt01, pt10);
 		}
 	}	
