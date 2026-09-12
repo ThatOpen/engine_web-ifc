@@ -321,7 +321,7 @@ namespace webifc::geometry
                 _loader.MoveToArgumentOffset(expressID, 0);
                 std::string_view op = _loader.GetStringArgument();
 
-                if (op != "DIFFERENCE" && op != "UNION")
+                if (op != "DIFFERENCE" && op != "UNION" && op != "INTERSECTION")
                 {
                     spdlog::error("[GetMesh()] Unsupported boolean op {}", std::string(op), expressID);
                     return mesh;
@@ -2180,6 +2180,15 @@ namespace webifc::geometry
 
     IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
+        // A intersect B = A minus (A minus B). Reuse the bounded difference kernel,
+        // including its handling of transformed/multipart operands and half spaces.
+        if (op == "INTERSECTION")
+        {
+            if (firstGeoms.empty() || secondGeoms.empty()) return IfcGeometry();
+            std::vector<IfcGeometry> outside{BoolProcess(firstGeoms, secondGeoms, "DIFFERENCE", _settings)};
+            return BoolProcess(firstGeoms, outside, "DIFFERENCE", _settings);
+        }
+
         spdlog::debug("[BoolProcess({})]");
         IfcGeometry finalResult;
 
