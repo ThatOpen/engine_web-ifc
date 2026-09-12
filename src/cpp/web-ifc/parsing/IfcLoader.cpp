@@ -46,10 +46,11 @@ namespace webifc::parsing {
      return ret;
    }
    
-   void IfcLoader::LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData)
+   bool IfcLoader::LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData)
    { 
-     _tokenStream->SetTokenSource(requestData);
+     if (!_tokenStream->SetTokenSource(requestData)) return false;
      ParseLines();
+     return true;
    }
 
    IFC_SCHEMA IfcLoader::GetSchema() const
@@ -75,10 +76,11 @@ namespace webifc::parsing {
       return IFC2X3;
    }
    
-   void IfcLoader::LoadFile(std::istream &requestData)
+   bool IfcLoader::LoadFile(std::istream &requestData)
    { 
-     _tokenStream->SetTokenSource(requestData);
+     if (!_tokenStream->SetTokenSource(requestData)) return false;
      ParseLines();
+     return true;
    }
    
    void IfcLoader::SaveFile(const std::function<void(char *, size_t)> &outputData, bool orderLinesByExpressID) const

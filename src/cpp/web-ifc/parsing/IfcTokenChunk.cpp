@@ -4,6 +4,7 @@
  
 
 #include "IfcTokenStream.h"
+#include "StepBinary.h"
 #include <spdlog/spdlog.h>
 
 namespace webifc::parsing
@@ -107,13 +108,21 @@ namespace webifc::parsing
           while (!_fileStream->IsAtEnd() && _fileStream->Get() != '"')
           {
             const char digit = _fileStream->Get();
-            if (!((digit >= '0' && digit <= '9') || (digit >= 'A' && digit <= 'F')))
-            { spdlog::error("Invalid STEP binary digit"); return; }
-            temp.push_back(digit);
+            if (BinaryHexDigit(digit) < 0 || temp.size() == MAX_BINARY_LENGTH)
+            {
+              spdlog::error("Invalid STEP binary digit or value exceeds 65535 characters");
+              _parseFailed = true;
+              return;
+            }
+            temp.push_back(CanonicalBinaryDigit(digit));
             _fileStream->Forward();
           }
-          if (_fileStream->IsAtEnd() || temp.empty() || temp[0] < '0' || temp[0] > '3')
-          { spdlog::error("Invalid or unterminated STEP binary value"); return; }
+          if (_fileStream->IsAtEnd() || !IsValidStepBinary(std::string_view(temp.data(), temp.size())))
+          {
+            spdlog::error("Invalid or unterminated STEP binary value");
+            _parseFailed = true;
+            return;
+          }
           Push<uint8_t>(IfcTokenType::BINARY);
           Push<uint16_t>(temp.size());
           Push(temp.data(), temp.size());
