@@ -2,11 +2,11 @@ const { test } = require("@jest/globals");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { IfcAPI, LogLevel } = require(process.env.WEB_IFC_API || "../../dist/web-ifc-api-node.js");
-async function check(text, expected) {
+async function check(text, expected, segments = 96) {
   const api = new IfcAPI();
   await api.Init();
   api.SetLogLevel(LogLevel.LOG_LEVEL_OFF);
-  const model = api.OpenModel(new TextEncoder().encode(text), { CIRCLE_SEGMENTS: 96 });
+  const model = api.OpenModel(new TextEncoder().encode(text), { CIRCLE_SEGMENTS: segments });
   try {
     const product = Number(text.match(/#(\d+)=IFCBUILDINGELEMENTPROXY/)[1]);
     const mesh = api.GetFlatMesh(model, product);
@@ -60,4 +60,11 @@ test("sphere placement is applied exactly once", async () => {
   const text = fs.readFileSync(new URL("./fixtures/circular-seams-and-sphere/ifc4-sphere.ifc", require("node:url").pathToFileURL(__filename).href), "utf8").replace("#13=IFCCARTESIANPOINT((0.,0.,0.));", "#13=IFCCARTESIANPOINT((10.,20.,30.));");
   const bounds = await check(text, 32 * Math.PI / 3);
   for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) assert.ok(Math.abs(bounds[i][j] - ([10, 20, 30][i] + (j ? 2 : -2))) < 1e-5);
+});
+
+test.each([0, 1, 2, 3, 4])("full circles retain three unique vertices at CIRCLE_SEGMENTS=%i", async segments => {
+  for (const [name, volume] of [["circle", 12 * Math.sqrt(3)], ["ellipse", 6 * Math.sqrt(3)], ["hollow-circle", 21 * Math.sqrt(3) / 4]]) {
+    const text = fs.readFileSync(new URL(`./fixtures/circular-seams-and-sphere/ifc4-${name}.ifc`, require("node:url").pathToFileURL(__filename).href), "utf8");
+    await check(text, volume, segments);
+  }
 });

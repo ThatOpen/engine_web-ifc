@@ -319,8 +319,9 @@ namespace bimGeometry
 	inline Curve GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true, bool normalToCenterEnding = false)
 	{
 		Curve c;
-        numSegments = std::max(3, numSegments);
         const bool fullCircle = std::abs(std::abs(endRad - startRad) - 2 * static_cast<double>(CONST_PI)) < 1e-12;
+        // Full circles include a duplicated closing endpoint.
+        numSegments = std::max(fullCircle ? 4 : 3, numSegments);
 		if (normalToCenterEnding)
 		{
 			double sweep_angle = (endRad - startRad);
