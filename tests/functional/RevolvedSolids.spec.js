@@ -72,6 +72,11 @@ test("revolution: profile with a rectangular void", async () => {
 test("revolution: offset axis", async () => check(source.replace("#18=IFCCARTESIANPOINT((0.,0.,0.));", "#18=IFCCARTESIANPOINT((1.,0.,0.));"), 2 * Math.PI));
 test("revolution: rotated profile", async () => check(source.replace("#14=IFCAXIS2PLACEMENT2D(#13,$);", "#900=IFCDIRECTION((0.8660254037844386,0.5));\n#14=IFCAXIS2PLACEMENT2D(#13,#900);"), 3 * Math.PI));
 test("revolution: missing angle unit defaults to radians", async () => check(source.replace("IFCUNITASSIGNMENT((#9,#10))", "IFCUNITASSIGNMENT((#9))"), 3 * Math.PI));
+test("revolution: non-standard SI DEGREE unit preserves compatibility", async () => {
+  // DEGREE is not an IfcSIUnitName; retain compatibility with previously accepted files.
+  const text = source.replace(".RADIAN.", ".DEGREE.").replace("#20,1.5707963267948966)", "#20,90.)");
+  await check(text, 3 * Math.PI);
+});
 test("revolution: conversion-based degree unit", async () => check(source.replace("#10=IFCSIUNIT(*,.PLANEANGLEUNIT.,$,.RADIAN.);", "#910=IFCSIUNIT(*,.PLANEANGLEUNIT.,$,.RADIAN.);\n#911=IFCDIMENSIONALEXPONENTS(0,0,0,0,0,0,0);\n#912=IFCMEASUREWITHUNIT(IFCPLANEANGLEMEASURE(0.017453292519943295),#910);\n#10=IFCCONVERSIONBASEDUNIT(#911,.PLANEANGLEUNIT.,'DEGREE',#912);").replace("#20,1.5707963267948966)", "#20,90.)"), 3 * Math.PI));
 test("revolution: negative exported angle preserves geometry", async () => check(source.replace("#20,1.5707963267948966)", "#20,-1.5707963267948966)"), 3 * Math.PI));
 test("revolution: direction follows axis cross radius", async () => {
