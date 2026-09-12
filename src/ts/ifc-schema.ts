@@ -1419,7 +1419,7 @@ FromRawLineData[1]={
 2529465313:(v:any[])=>new IFC2X3.IfcParameterizedProfileDef(v[0], (((v[1] ?? undefined) === undefined) || v[1] === '') ? null :new IFC2X3.IfcLabel((((v[1] ?? undefined) === undefined) || v[1] === '') ? null :v[1].value), new Handle<IFC2X3.IfcAxis2Placement2D>((((v[2] ?? undefined) === undefined) || v[2] === '') ? null :v[2].value, 1, v[2])),
 2519244187:(v:any[])=>new IFC2X3.IfcPath(v[0]?.map((p:any) =>  (p?.value ?? undefined) !== undefined && p?.value!=='' ?new Handle<IFC2X3.IfcOrientedEdge>(p.value, 1, p) : null) || []),
 3021840470:(v:any[])=>new IFC2X3.IfcPhysicalComplexQuantity(new IFC2X3.IfcLabel((((v[0] ?? undefined) === undefined) || v[0] === '') ? null :v[0].value), (((v[1] ?? undefined) === undefined) || v[1] === '') ? null :new IFC2X3.IfcText((((v[1] ?? undefined) === undefined) || v[1] === '') ? null :v[1].value), v[2]?.map((p:any) =>  (p?.value ?? undefined) !== undefined && p?.value!=='' ?new Handle<IFC2X3.IfcPhysicalQuantity>(p.value, 1, p) : null) || [], new IFC2X3.IfcLabel((((v[3] ?? undefined) === undefined) || v[3] === '') ? null :v[3].value), (((v[4] ?? undefined) === undefined) || v[4] === '') ? null :new IFC2X3.IfcLabel((((v[4] ?? undefined) === undefined) || v[4] === '') ? null :v[4].value), (((v[5] ?? undefined) === undefined) || v[5] === '') ? null :new IFC2X3.IfcLabel((((v[5] ?? undefined) === undefined) || v[5] === '') ? null :v[5].value)),
-597895409:(v:any[])=>new IFC2X3.IfcPixelTexture((((v[0] ?? undefined) === undefined) || v[0] === '') ? null :v[0].value, (((v[1] ?? undefined) === undefined) || v[1] === '') ? null :v[1].value, v[2], (((v[3] ?? undefined) === undefined) || v[3] === '') ? null :new Handle<IFC2X3.IfcCartesianTransformationOperator2D>((((v[3] ?? undefined) === undefined) || v[3] === '') ? null :v[3].value, 1, v[3]), new IFC2X3.IfcInteger((((v[4] ?? undefined) === undefined) || v[4] === '') ? null :v[4].value), new IFC2X3.IfcInteger((((v[5] ?? undefined) === undefined) || v[5] === '') ? null :v[5].value), new IFC2X3.IfcInteger((((v[6] ?? undefined) === undefined) || v[6] === '') ? null :v[6].value), v[7]?.map((p:any) =>  (p?.value ?? undefined) !== undefined && p?.value!=='' ?Number(p.value) : null) || []),
+597895409:(v:any[])=>new IFC2X3.IfcPixelTexture((((v[0] ?? undefined) === undefined) || v[0] === '') ? null :v[0].value, (((v[1] ?? undefined) === undefined) || v[1] === '') ? null :v[1].value, v[2], (((v[3] ?? undefined) === undefined) || v[3] === '') ? null :new Handle<IFC2X3.IfcCartesianTransformationOperator2D>((((v[3] ?? undefined) === undefined) || v[3] === '') ? null :v[3].value, 1, v[3]), new IFC2X3.IfcInteger((((v[4] ?? undefined) === undefined) || v[4] === '') ? null :v[4].value), new IFC2X3.IfcInteger((((v[5] ?? undefined) === undefined) || v[5] === '') ? null :v[5].value), new IFC2X3.IfcInteger((((v[6] ?? undefined) === undefined) || v[6] === '') ? null :v[6].value), v[7]?.map((p:any) =>  (p?.value ?? undefined) !== undefined && p?.value!=='' ?p.value : null) || []),
 2004835150:(v:any[])=>new IFC2X3.IfcPlacement(new Handle<IFC2X3.IfcCartesianPoint>((((v[0] ?? undefined) === undefined) || v[0] === '') ? null :v[0].value, 1, v[0])),
 1663979128:(v:any[])=>new IFC2X3.IfcPlanarExtent(new IFC2X3.IfcLengthMeasure((((v[0] ?? undefined) === undefined) || v[0] === '') ? null :v[0].value), new IFC2X3.IfcLengthMeasure((((v[1] ?? undefined) === undefined) || v[1] === '') ? null :v[1].value)),
 2067069095:(_:any)=>new IFC2X3.IfcPoint(),
@@ -3333,7 +3333,7 @@ ToRawLineData[1]={
 2529465313:(i:IFC2X3.IfcParameterizedProfileDef):unknown[]=>[i.ProfileType, i.ProfileName, i.Position],
 2519244187:(i:IFC2X3.IfcPath):unknown[]=>[i.EdgeList],
 3021840470:(i:IFC2X3.IfcPhysicalComplexQuantity):unknown[]=>[i.Name, i.Description, i.HasQuantities, i.Discrimination, i.Quality, i.Usage],
-597895409:(i:IFC2X3.IfcPixelTexture):unknown[]=>[i.RepeatS, i.RepeatT, i.TextureType, i.TextureTransform, i.Width, i.Height, i.ColourComponents, i.Pixel],
+597895409:(i:IFC2X3.IfcPixelTexture):unknown[]=>[i.RepeatS, i.RepeatT, i.TextureType, i.TextureTransform, i.Width, i.Height, i.ColourComponents, i.Pixel == null ? null : i.Pixel!.map((p:any) => ({type:11,value:typeof p === "string" ? p : p.value}))],
 2004835150:(i:IFC2X3.IfcPlacement):unknown[]=>[i.Location],
 1663979128:(i:IFC2X3.IfcPlanarExtent):unknown[]=>[i.SizeInX, i.SizeInY],
 2067069095:(_:any):unknown[]=>[],
@@ -6167,7 +6167,7 @@ super(Name, Description);
 }
 export class IfcPixelTexture extends IfcSurfaceTexture {
 type:number=597895409;
-constructor(public RepeatS: (Handle<boolean>| boolean) , public RepeatT: (Handle<boolean>| boolean) , public TextureType: IfcSurfaceTextureEnum , public TextureTransform: (Handle<IfcCartesianTransformationOperator2D>| IfcCartesianTransformationOperator2D) | null, public Width: IfcInteger , public Height: IfcInteger , public ColourComponents: IfcInteger , public Pixel: (NumberHandle| number)[] )
+constructor(public RepeatS: (Handle<boolean>| boolean) , public RepeatT: (Handle<boolean>| boolean) , public TextureType: IfcSurfaceTextureEnum , public TextureTransform: (Handle<IfcCartesianTransformationOperator2D>| IfcCartesianTransformationOperator2D) | null, public Width: IfcInteger , public Height: IfcInteger , public ColourComponents: IfcInteger , public Pixel: (Handle<string>| string)[] )
 {
 super(RepeatS, RepeatT, TextureType, TextureTransform);
 }
@@ -12590,9 +12590,10 @@ export class IfcAreaMeasure extends NumberHandle {
 type: number=4;
 name: string='IFCAREAMEASURE';
 }
-export class IfcBinary extends NumberHandle {
-type: number=4;
+export class IfcBinary {
+type: number=11;
 name: string='IFCBINARY';
+constructor(public value: string) {}
 }
 export class IfcBoolean {
 type: number=3;
@@ -22679,9 +22680,10 @@ export class IfcAreaMeasure extends NumberHandle {
 type: number=4;
 name: string='IFCAREAMEASURE';
 }
-export class IfcBinary extends NumberHandle {
-type: number=4;
+export class IfcBinary {
+type: number=11;
 name: string='IFCBINARY';
+constructor(public value: string) {}
 }
 export class IfcBoolean {
 type: number=3;

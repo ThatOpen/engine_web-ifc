@@ -23694,7 +23694,7 @@ case 3: return propTypeNames[132];
 case 4: return propTypeNames[198];
 case 5: return propTypeNames[198];
 case 6: return propTypeNames[198];
-case 7: return propTypeNames[51];
+case 7: return propTypeNames[134];
 }
 case  2004835150:
 switch (prop) { 
