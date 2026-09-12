@@ -3854,6 +3854,18 @@ namespace webifc::geometry
 
   glm::dmat4 IfcGeometryLoader::GetLocalPlacement(uint32_t expressID, glm::dvec3 vector) const
   {
+    if (_activePlacements.size() >= 512 || !_activePlacements.insert(expressID).second)
+    {
+      spdlog::error("[GetLocalPlacement()] Cyclic or excessively deep placement {}", expressID);
+      return glm::dmat4(1);
+    }
+    struct PlacementScope
+    {
+      std::unordered_set<uint32_t>& active;
+      uint32_t id;
+      ~PlacementScope() { active.erase(id); }
+    } scope{_activePlacements, expressID};
+
     if (_cache.GetExpressIDToPlacement().contains(expressID))
     {
       return _cache.GetExpressIDToPlacement()[expressID];

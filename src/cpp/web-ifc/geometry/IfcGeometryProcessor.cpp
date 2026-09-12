@@ -827,12 +827,18 @@ namespace webifc::geometry
                     // std::cout << "Unsupported IFCTRIANGULATEDFACESET with PnIndex!" << std::endl;
                 }
 
-                for (size_t i = 0; i < indices.size(); i += 3)
+                for (size_t i = 0; i + 2 < indices.size(); i += 3)
                 {
                     int i1 = indices[i + 0] - 1;
                     int i2 = indices[i + 1] - 1;
                     int i3 = indices[i + 2] - 1;
 
+                    if (i1 < 0 || i2 < 0 || i3 < 0 ||
+                        static_cast<size_t>(i1) >= points.size() || static_cast<size_t>(i2) >= points.size() || static_cast<size_t>(i3) >= points.size())
+                    {
+                        spdlog::error("[GetMesh()] Invalid triangulated face index in {}", expressID);
+                        return mesh;
+                    }
                     geom.AddFace(points[i1], points[i2], points[i3]);
                 }
 

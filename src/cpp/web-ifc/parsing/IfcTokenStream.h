@@ -36,8 +36,8 @@ namespace webifc::parsing
       public:
         IfcTokenStream(const size_t chunkSize, const uint64_t maxChunks);
         ~IfcTokenStream();
-        void SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData, bool fromStream = false);
-        void SetTokenSource(std::istream &requestData);
+        bool SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData, bool fromStream = false);
+        bool SetTokenSource(std::istream &requestData);
         template <typename T> T Read()
         {
           if (!_cChunk->IsLoaded()) {
@@ -115,7 +115,8 @@ namespace webifc::parsing
             IfcFileStream * Clone();
 
             inline void Forward() 
-            { 
+            {
+              if (IsAtEnd()) return;
               _pointer++;
               if (_pointer == _currentSize && _currentSize != 0)
               {
@@ -127,7 +128,7 @@ namespace webifc::parsing
             inline char Prev() { return _pointer == 0 ? prev : _buffer[_pointer-1]; }
             inline bool IsAtEnd() { return _pointer == _currentSize && _currentSize == 0; }
             inline size_t GetRef() { return _startRef + _pointer; }
-            inline char Get() { return _buffer[_pointer]; }
+            inline char Get() { return _pointer < _currentSize ? _buffer[_pointer] : 0; }
             inline size_t GetNoLines() { return noLines; }
 
           private:
@@ -135,7 +136,7 @@ namespace webifc::parsing
             std::function<uint32_t(char *, size_t, size_t)> _dataSource;
             size_t _pointer=0;
             size_t _size;
-            char prev;
+            char prev = 0;
             size_t _currentSize=0;
             size_t _startRef=0;
             char * _buffer;
@@ -150,6 +151,7 @@ namespace webifc::parsing
               bool Clear();
               std::string_view ReadString(const size_t ptr,const size_t size);
               inline bool IsLoaded() { return _loaded; }
+              inline bool HasParseError() const { return _parseFailed; }
               inline size_t TokenSize() { return _currentSize; }
               inline size_t GetTokenRef() { return _startRef; }
               inline size_t GetMaxSize() { return _chunkSize; }
@@ -183,6 +185,7 @@ namespace webifc::parsing
             private:
               void Load();
               bool _loaded=false;
+              bool _parseFailed=false;
               size_t _currentSize=0;
               size_t _startRef=0;
               size_t _fileStartRef;
