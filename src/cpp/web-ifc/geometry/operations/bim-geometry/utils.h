@@ -1258,69 +1258,122 @@ namespace bimGeometry
 		return geom;
 	}
 
-	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps, double eps=0.0)
-	{
+    // Each section contains an outer ring followed by its void boundaries.
+    inline Geometry SectionedSurfaceRings(std::vector<std::vector<std::vector<glm::dvec3>>> sections, bool buildCaps, double eps = 0.0)
+    {
         Geometry geom;
-        if (profiles.size() < 2 || profiles.front().size() < 2) return geom;
+        if (sections.size() < 2 || sections.front().empty()) return geom;
         const double tolerance = std::max(eps, 1e-12);
-        const bool closed = buildCaps || glm::distance(profiles.front().front(), profiles.front().back()) < tolerance;
-        for (auto& profile : profiles)
+        const size_t ringCount = sections.front().size();
+        std::vector<bool> closed(ringCount);
+        for (size_t r = 0; r < ringCount; ++r)
         {
-            if (profile.size() > 2 && glm::distance(profile.front(), profile.back()) < tolerance)
-                profile.pop_back();
-            if (profile.size() != profiles.front().size()) return geom;
+            const auto& ring = sections.front()[r];
+            if (ring.size() < 2) return geom;
+            closed[r] = buildCaps || glm::distance(ring.front(), ring.back()) < tolerance;
         }
-        const size_t count = profiles.front().size();
-        if (count < 2 || (buildCaps && count < 3)) return geom;
+        for (auto& section : sections)
+        {
+            if (section.size() != ringCount) return geom;
+            for (auto& ring : section)
+            {
+                if (ring.size() > 2 && glm::distance(ring.front(), ring.back()) < tolerance) ring.pop_back();
+                if (ring.size() < (buildCaps ? 3 : 2)) return geom;
+            }
+        }
+        for (const auto& section : sections)
+            for (size_t r = 0; r < ringCount; ++r)
+                if (section[r].size() != sections.front()[r].size()) return geom;
         auto normal = [](const std::vector<glm::dvec3>& ring) {
             glm::dvec3 n(0);
             for (size_t j = 0; j < ring.size(); ++j)
                 n += glm::cross(ring[j] - ring.front(), ring[(j + 1) % ring.size()] - ring.front());
             return n;
         };
-        // Ring order determines the wall winding. Orient the whole loft once,
-        // then orient cap triangles against the same ring normal in 3D.
         glm::dvec3 advance(0);
-        for (size_t j = 0; j < count; ++j) advance += profiles[1][j] - profiles[0][j];
-        const bool reverse = buildCaps && glm::dot(normal(profiles.front()), advance) < 0;
-        auto face = [&](glm::dvec3 a, glm::dvec3 b, glm::dvec3 c) {
-            if (reverse) std::swap(b, c);
-            geom.AddFace(a, b, c);
-        };
-        for (size_t i = 1; i < profiles.size(); ++i)
-        {
-            const auto& a = profiles[i - 1];
-            const auto& b = profiles[i];
-            const size_t edges = closed ? count : count - 1;
-            for (size_t j = 0; j < edges; ++j)
-            {
-                const size_t k = (j + 1) % count;
-                face(a[j], a[k], b[k]);
-                face(a[j], b[k], b[j]);
-            }
-        }
+        for (size_t j = 0; j < sections[0][0].size(); ++j) advance += sections[1][0][j] - sections[0][0][j];
         if (buildCaps)
         {
-            for (size_t cap : {size_t(0), profiles.size() - 1})
+            // Inner walls have the opposite orientation to the outer shell.
+            for (auto& section : sections)
+                for (size_t r = 0; r < ringCount; ++r)
+                    if (glm::dot(normal(section[r]), advance) * (r == 0 ? 1.0 : -1.0) < 0)
+                        std::reverse(section[r].begin(), section[r].end());
+        }
+        for (size_t i = 1; i < sections.size(); ++i)
+            for (size_t r = 0; r < ringCount; ++r)
             {
-                const auto& ring = profiles[cap];
-                std::vector<Point> points;
-                for (const auto& p : ring) points.push_back({p.x, p.y, p.z});
-                const auto projected = projectTo2D({points}, bestProjection(points));
-                std::vector<std::vector<std::array<double, 2>>> polygon(1);
-                for (const auto& p : projected[0]) polygon[0].push_back({p[0], p[1]});
-                const auto indices = mapbox::earcut<uint32_t>(polygon);
-                const glm::dvec3 outward = normal(ring) * (cap == 0 ? -1.0 : 1.0);
-                for (size_t j = 0; j + 2 < indices.size(); j += 3)
+                const auto& a = sections[i - 1][r];
+                const auto& b = sections[i][r];
+                const size_t edges = closed[r] ? a.size() : a.size() - 1;
+                for (size_t j = 0; j < edges; ++j)
                 {
-                    auto a = ring[indices[j]], b = ring[indices[j + 1]], c = ring[indices[j + 2]];
-                    if (glm::dot(glm::cross(b - a, c - a), outward) < 0) std::swap(b, c);
-                    face(a, b, c);
+                    const size_t k = (j + 1) % a.size();
+                    geom.AddFace(a[j], a[k], b[k]);
+                    geom.AddFace(a[j], b[k], b[j]);
                 }
             }
-        }
+        if (buildCaps)
+            for (size_t cap : {size_t(0), sections.size() - 1})
+            {
+                std::vector<std::vector<Point>> polygon;
+                std::vector<glm::dvec3> vertices;
+                for (const auto& ring : sections[cap])
+                {
+                    polygon.emplace_back();
+                    for (const auto& p : ring)
+                    {
+                        polygon.back().push_back({p.x, p.y, p.z});
+                        vertices.push_back(p);
+                    }
+                }
+                const auto projected = projectTo2D(polygon, bestProjection(polygon.front()));
+                const auto indices = mapbox::earcut<uint32_t>(projected);
+                std::vector<std::array<uint32_t, 3>> capFaces;
+                for (size_t j = 0; j + 2 < indices.size(); j += 3)
+                    capFaces.push_back({indices[j], indices[j + 1], indices[j + 2]});
+                // Earcut can omit collinear vertices along a hole bridge. Split those
+                // edges so cap boundaries still match the independently built walls.
+                for (size_t i = 0; i < capFaces.size(); ++i)
+                {
+                    bool split = true;
+                    while (split)
+                    {
+                        split = false;
+                        for (uint32_t v = 0; v < vertices.size() && !split; ++v)
+                            for (size_t e = 0; e < 3 && !split; ++e)
+                            {
+                                const auto triangle = capFaces[i];
+                                if (v == triangle[0] || v == triangle[1] || v == triangle[2]) continue;
+                                const auto a = triangle[e], b = triangle[(e + 1) % 3], c = triangle[(e + 2) % 3];
+                                const auto edge = vertices[b] - vertices[a], offset = vertices[v] - vertices[a];
+                                const double length2 = glm::dot(edge, edge);
+                                if (length2 == 0) continue;
+                                const double t = glm::dot(offset, edge) / length2;
+                                if (t <= 1e-12 || t >= 1 - 1e-12 || glm::length(offset - t * edge) > 1e-12) continue;
+                                capFaces[i] = {a, v, c};
+                                capFaces.push_back({v, b, c});
+                                split = true;
+                            }
+                    }
+                }
+                const glm::dvec3 outward = normal(sections[cap][0]) * (cap == 0 ? -1.0 : 1.0);
+                for (const auto& triangle : capFaces)
+                {
+                    auto a = vertices[triangle[0]], b = vertices[triangle[1]], c = vertices[triangle[2]];
+                    if (glm::dot(glm::cross(b - a, c - a), outward) < 0) std::swap(b, c);
+                    geom.AddFace(a, b, c);
+                }
+            }
         return geom;
-	}
+    }
+
+    inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps, double eps = 0.0)
+    {
+        std::vector<std::vector<std::vector<glm::dvec3>>> sections;
+        for (auto& profile : profiles) sections.push_back({std::move(profile)});
+        return SectionedSurfaceRings(std::move(sections), buildCaps, eps);
+    }
 
 	inline Curve GetRectangleCurve(double xdim, double ydim, glm::dmat4 placement = glm::dmat4(1), int numSegments = 12, double radius = 0)
 	{

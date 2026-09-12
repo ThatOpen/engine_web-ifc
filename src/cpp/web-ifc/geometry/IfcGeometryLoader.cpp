@@ -375,7 +375,9 @@ namespace webifc::geometry
               glm::dvec3 pTemp = placement * glm::dvec4(currentProfile.curve.points[i], 1);
               currentProfile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
           }
-          //profiles.push_back(currentProfile);
+          for (auto& hole : currentProfile.holes)
+              for (auto& point : hole.points) point = coordination * placement * glm::dvec4(point, 1);
+          sections.holes.push_back(currentProfile.holes);
           curves.push_back(currentProfile.curve);
           CrossSectionIDs.push_back(currentCrossSectionID);
 
@@ -422,6 +424,7 @@ namespace webifc::geometry
         transform.push_back(linearPlacement);
       }
 
+      if (faces.size() != transform.size()) return sections;
       uint32_t id = 0;
       for (auto &face : faces)
       {
@@ -432,6 +435,9 @@ namespace webifc::geometry
           glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
           profile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
         }
+        for (auto& hole : profile.holes)
+            for (auto& point : hole.points) point = coordination * transform[id] * glm::dvec4(point, 1);
+        sections.holes.push_back(profile.holes);
         profiles.push_back(profile);
         curves.push_back(profile.curve);
         expressIds.push_back(expressID);
@@ -459,9 +465,10 @@ namespace webifc::geometry
       {
         auto expressID = _loader.GetRefArgument(linearPosition);
         glm::dmat4 linearPlacement = GetLocalPlacement(expressID) * scale;
-        transform.push_back(linearPlacement);
+        transform.emplace_back(linearPlacement[1], linearPlacement[2], linearPlacement[0], linearPlacement[3]);
       }
 
+      if (faces.size() != transform.size()) return sections;
       uint32_t id = 0;
       std::vector<IfcProfile> profiles;
       std::vector<IfcCurve> curves;
@@ -470,12 +477,15 @@ namespace webifc::geometry
       for (auto &face : faces)
       {
         auto expressID = _loader.GetRefArgument(face);
-        IfcProfile profile = GetProfile(expressID);
+        IfcProfile profile = GetProfileByLine(expressID);
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
           glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
           profile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
         }
+        for (auto& hole : profile.holes)
+            for (auto& point : hole.points) point = coordination * transform[id] * glm::dvec4(point, 1);
+        sections.holes.push_back(profile.holes);
         profiles.push_back(profile);
         curves.push_back(profile.curve);
         expressIds.push_back(expressID);
@@ -3226,7 +3236,7 @@ namespace webifc::geometry
       glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
       profile.curve = GetRectangleCurve(xdim, ydim, placement, _circleSegments, outerRadius);
-      profile.holes.push_back(GetRectangleCurve(xdim - thickness, ydim - thickness, placement, _circleSegments, innerRadius));
+      profile.holes.push_back(GetRectangleCurve(xdim - 2 * thickness, ydim - 2 * thickness, placement, _circleSegments, innerRadius));
 
       std::reverse(profile.holes[0].points.begin(), profile.holes[0].points.end());
 
@@ -4157,27 +4167,26 @@ namespace webifc::geometry
       }
       case schema::IFCAXIS2PLACEMENTLINEAR:
       {
-        glm::dvec3 vector = glm::dvec3(0, 0, 1);
-        glm::dmat4 result = glm::dmat4(1);
         _loader.MoveToArgumentOffset(expressID, 0);
-        auto tokenTypeLocation = _loader.GetTokenType();
-        // Location is not optional, but check anyway:
-        if (tokenTypeLocation == parsing::IfcTokenType::REF)
+        const uint32_t locationID = _loader.GetRefArgument();
+        glm::dvec3 zAxis(0, 0, 1), xAxis(1, 0, 0);
+        _loader.MoveToArgumentOffset(expressID, 1);
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
-            _loader.StepBack();
-            uint32_t posID = _loader.GetRefArgument();
-
-            // Axis is optional:
-            _loader.MoveToArgumentOffset(expressID, 1);
-            auto tokenTypeAxis = _loader.GetTokenType();
-            if (tokenTypeAxis == parsing::IfcTokenType::REF)
-            {
-                _loader.StepBack();
-                vector = GetCartesianPoint3D(_loader.GetRefArgument());
-            }
-            result = GetLocalPlacement(posID, vector);
+          _loader.StepBack();
+          zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
         }
-
+        _loader.MoveToArgumentOffset(expressID, 2);
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
+        {
+          _loader.StepBack();
+          xAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        }
+        const auto yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+        xAxis = glm::normalize(glm::cross(yAxis, zAxis));
+        // Axis and RefDirection are expressed in the curve's reference frame.
+        const glm::dmat4 relative(glm::dvec4(xAxis, 0), glm::dvec4(yAxis, 0), glm::dvec4(zAxis, 0), glm::dvec4(0, 0, 0, 1));
+        const auto result = GetLocalPlacement(locationID) * relative;
         _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }
