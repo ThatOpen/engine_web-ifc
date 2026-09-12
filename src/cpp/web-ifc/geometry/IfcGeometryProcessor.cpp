@@ -755,50 +755,11 @@ namespace webifc::geometry
             case schema::IFCFACESURFACE:
             {
                 IfcGeometry geometry;
-                _loader.MoveToArgumentOffset(expressID, 0);
-                auto bounds = _loader.GetSetArgument();
-
-                std::vector<IfcBound3D> bounds3D(bounds.size());
-
-                for (size_t i = 0; i < bounds.size(); i++)
-                {
-                    uint32_t boundID = _loader.GetRefArgument(bounds[i]);
-                    bounds3D[i] = _geometryLoader.GetBound(boundID);
-                }
-
-                TriangulateBounds(geometry, bounds3D, expressID);
-
-                _loader.MoveToArgumentOffset(expressID, 1);
-                auto surfRef = _loader.GetRefArgument();
-
-                auto surface = GetSurface(surfRef);
-
-                if (surface.BSplineSurface.Active)
-                {
-                    TriangulateBspline(geometry, bounds3D, surface, _cache.GetLinearScalingFactor());
-                }
-                else if (surface.CylinderSurface.Active)
-                {
-                    TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
-                }
-                else if (surface.RevolutionSurface.Active)
-                {
-                    TriangulateRevolution(geometry, bounds3D, surface, _settings._circleSegments);
-                }
-                else if (surface.ExtrusionSurface.Active)
-                {
-                    TriangulateExtrusion(geometry, bounds3D, surface);
-                }
-                else
-                {
-                    TriangulateBounds(geometry, bounds3D, expressID);
-                }
-
+                AddFaceToGeometry(expressID, geometry);
                 _expressIDToGeometry[expressID] = geometry;
                 mesh.expressID = expressID;
                 mesh.hasGeometry = true;
-
-                break;
+                return mesh;
             }
             case schema::IFCTRIANGULATEDIRREGULARNETWORK:
             case schema::IFCTRIANGULATEDFACESET:
@@ -2104,29 +2065,52 @@ namespace webifc::geometry
             _loader.MoveToArgumentOffset(expressID, 1);
             auto surfRef = _loader.GetRefArgument();
 
+            _loader.MoveToArgumentOffset(expressID, 2);
+            const bool sameSense = _loader.GetStringArgument() == "T";
             auto surface = GetSurface(surfRef);
+            IfcGeometry faceGeometry;
 
             // TODO: place the face in the surface and tringulate
 
             if (surface.BSplineSurface.Active)
             {
-                TriangulateBspline(geometry, bounds3D, surface, _cache.GetLinearScalingFactor());
+                TriangulateBspline(faceGeometry, bounds3D, surface, _cache.GetLinearScalingFactor());
             }
             else if (surface.CylinderSurface.Active)
             {
-                TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
+                TriangulateCylindricalSurface(faceGeometry, bounds3D, surface, _settings._circleSegments);
             }
             else if (surface.RevolutionSurface.Active)
             {
-                TriangulateRevolution(geometry, bounds3D, surface, _settings._circleSegments);
+                TriangulateRevolution(faceGeometry, bounds3D, surface, _settings._circleSegments);
             }
             else if (surface.ExtrusionSurface.Active)
             {
-                TriangulateExtrusion(geometry, bounds3D, surface);
+                TriangulateExtrusion(faceGeometry, bounds3D, surface);
             }
             else
             {
-                TriangulateBounds(geometry, bounds3D, expressID);
+                TriangulateBounds(faceGeometry, bounds3D, expressID);
+            }
+            // Bound orientation describes the loops. SameSense describes the face
+            // relative to its underlying surface, independently of those loops.
+            for (uint32_t i = 0; i < faceGeometry.numFaces; ++i)
+            {
+                const auto f = faceGeometry.GetFace(i);
+                auto a = faceGeometry.GetPoint(f.i0), b = faceGeometry.GetPoint(f.i1), c = faceGeometry.GetPoint(f.i2);
+                glm::dvec3 surfaceNormal(0);
+                if (_loader.GetLineType(surfRef) == schema::IFCPLANE)
+                    surfaceNormal = glm::dvec3(surface.transformation[2]);
+                else if (surface.CylinderSurface.Active)
+                {
+                    const auto axis = glm::normalize(glm::dvec3(surface.transformation[2]));
+                    const auto radial = (a + b + c) / 3.0 - glm::dvec3(surface.transformation[3]);
+                    surfaceNormal = radial - axis * glm::dot(radial, axis);
+                }
+                if (glm::dot(glm::cross(b - a, c - a), surfaceNormal) < 0) std::swap(b, c);
+                if (!sameSense) std::swap(b, c);
+                // Rebuild normals together with triangle winding.
+                geometry.AddFace(a, b, c);
             }
             break;
         }
