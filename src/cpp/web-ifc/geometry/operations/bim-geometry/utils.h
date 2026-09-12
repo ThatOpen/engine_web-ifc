@@ -1013,9 +1013,10 @@ namespace bimGeometry
 		return geom;
 	}
 
-	inline Geometry SweepCircular(const double scaling, const bool closed, const std::vector<glm::dvec3> &profile, const double radius, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false)
+	inline Geometry SweepCircular(const double scaling, const bool closed, const std::vector<glm::dvec3> &profile, const double radius, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const double innerRadius = 0)
 	{
 		Geometry geom;
+		if (radius <= 0 || innerRadius < 0 || innerRadius >= radius) return geom;
 
 		std::vector<glm::vec<3, glm::f64>> dpts;
 
@@ -1084,37 +1085,13 @@ namespace bimGeometry
 			}
 			else // middle
 			{
-				// possibly the directrix is bad
-				glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
-				glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
-				glm::dvec3 p = glm::normalize(glm::cross(n1, n2));
-				directrix2 = -n1;
-
-				// double prod = glm::dot(n1, n2);
-
-				if (std::isnan(p.x))
-				{
-					// TODO: sometimes outliers cause the perp to become NaN!
-					// this is bad news, as it nans the points added to the final mesh
-					// also, it's hard to bail out now :/
-					// see curve.add() for more info on how this is currently "solved"
-				}
-
-				glm::dvec3 u1 = glm::normalize(glm::cross(n1, p));
-				glm::dvec3 u2 = glm::normalize(glm::cross(n2, p));
-
-				// TODO: When n1 and n2 have similar direction but opposite side...
-				// ... projection tend to infinity. -> glm::dot(n1, n2)
-				// I implemented a bad solution to prevent projection to infinity
-				if (glm::dot(n1, n2) < -0.9)
-				{
-					n2 = -n2;
-					u2 = -u2;
-				}
-
-				glm::dvec3 au = glm::normalize(u1 + u2);
-				planeNormal = glm::normalize(glm::cross(au, p));
-				directrixSegmentNormal = n1; // n1 or n2 doesn't matter
+                const glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
+                const glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
+                // A reversal has no finite miter plane. Collinear forward segments do.
+                if (glm::dot(n1, n2) < -0.999999) return geom;
+                planeNormal = glm::normalize(n1 + n2);
+                directrixSegmentNormal = n1;
+                directrix2 = n1;
 
 				planeOrigin = dpts[i];
 			}
@@ -1217,46 +1194,58 @@ namespace bimGeometry
 			dpts.erase(dpts.begin());
 		}
 
-		std::vector<std::vector<uint32_t>> curvePointIndices;
-		curvePointIndices.reserve(curves.size());
-		for (size_t i = 0; i < curves.size(); ++i)
-		{
-			auto& pts = curves[i];
-			std::vector<uint32_t>& indices = curvePointIndices.emplace_back();
-			indices.reserve(pts.size());
-			const glm::dvec3 center = dpts[i];
-
-			for (glm::dvec3& p : pts)
-			{
-				// Radially outward normals
-				glm::dvec3 n = p - center;
-				const double len2 = glm::dot(n, n);
-				n = (len2 > 0.0) ? n / std::sqrt(len2) : glm::dvec3(0.0, 0.0, 1.0);
-				geom.AddPoint(p, n);
-				indices.push_back(geom.numPoints - 1);
-			}
-		}
- 		// connect consecutive circles with faces
-		for (size_t i = 1; i < dpts.size(); i++)
-		{
-			const auto& idx1 = curvePointIndices[i - 1];
-			const auto& idx2 = curvePointIndices[i];
-
-			const uint32_t capSize = static_cast<uint32_t>(idx1.size());
-			for (size_t j = 1; j < capSize; j++)
-			{
-				const uint32_t bl = idx1[j - 1];
-				const uint32_t br = idx1[j - 0];
-				const uint32_t tl = idx2[j - 1];
-				const uint32_t tr = idx2[j - 0];
-
-				geom.AddFace(tl, br, bl);
-				geom.AddFace(tl, tr, br);
-			}
-		}
-
-		return geom;
-	}
+        // Close each circular contour explicitly; the curve sampler need not repeat
+        // its first point. Build inward-facing inner walls and annular end faces.
+        if (curves.size() < 2) return geom;
+        for (auto& ring : curves)
+            if (ring.size() > 1 && glm::distance(ring.front(), ring.back()) < EPS_SMALL)
+                ring.pop_back();
+        const size_t count = curves.front().size();
+        if (count < 3) return geom;
+        for (const auto& ring : curves) if (ring.size() != count) return geom;
+        if (closed && glm::distance(dpts.front(), dpts.back()) < EPS_SMALL)
+            curves.back() = curves.front();
+        auto inner = [&](size_t i, size_t j) {
+            return dpts[i] + (curves[i][j] - dpts[i]) * (innerRadius / radius);
+        };
+        auto face = [&](glm::dvec3 a, glm::dvec3 b, glm::dvec3 c, glm::dvec3 outward) {
+            if (glm::dot(glm::cross(b - a, c - a), outward) < 0) std::swap(b, c);
+            geom.AddFace(a, b, c);
+        };
+        for (size_t i = 1; i < curves.size(); ++i)
+        {
+            for (size_t j = 0; j < count; ++j)
+            {
+                const size_t k = (j + 1) % count;
+                const glm::dvec3 radial = (curves[i - 1][j] + curves[i - 1][k]) * 0.5 - dpts[i - 1];
+                face(curves[i - 1][j], curves[i - 1][k], curves[i][k], radial);
+                face(curves[i - 1][j], curves[i][k], curves[i][j], radial);
+                if (innerRadius > 0)
+                {
+                    face(inner(i - 1, j), inner(i - 1, k), inner(i, k), -radial);
+                    face(inner(i - 1, j), inner(i, k), inner(i, j), -radial);
+                }
+            }
+        }
+        if (!closed)
+        {
+            for (size_t i : {size_t(0), curves.size() - 1})
+            {
+                const glm::dvec3 normal = i == 0 ? dpts[0] - dpts[1] : dpts[i] - dpts[i - 1];
+                for (size_t j = 0; j < count; ++j)
+                {
+                    const size_t k = (j + 1) % count;
+                    if (innerRadius > 0)
+                    {
+                        face(curves[i][j], curves[i][k], inner(i, k), normal);
+                        face(curves[i][j], inner(i, k), inner(i, j), normal);
+                    }
+                    else face(dpts[i], curves[i][j], curves[i][k], normal);
+                }
+            }
+        }
+        return geom;
+    }
 
 	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps, double eps=0.0)
 	{
