@@ -50,3 +50,8 @@ test("tapered: negative extrusion direction", async () => check(source.replace("
 test("tapered: oblique extrusion direction", async () => check(source.replace("IFCDIRECTION((0.,0.,1.))", "IFCDIRECTION((0.,0.6,0.8))"), 22.4));
 test("tapered: independently shrinking hole", async () => check(fs.readFileSync(new URL("./fixtures/tapered-extrusion/ifc4-tapered-hole.ifc", require("node:url").pathToFileURL(__filename).href), "utf8"), 21));
 test("tapered: shifted end profile", async () => check(source.replace("#17=IFCRECTANGLEPROFILEDEF(.AREA.,$,$,2.,2.);", "#100=IFCCARTESIANPOINT((1.,0.5));\n#101=IFCAXIS2PLACEMENT2D(#100,$);\n#17=IFCRECTANGLEPROFILEDEF(.AREA.,$,#101,2.,2.);"), 28));
+
+test.each([["$", 21], ["0.5", 21], ["2.", 39]])("tapered: nonuniform end profile Scale2=%s", async (scale2, volume) => {
+  const text = fs.readFileSync(new URL("./fixtures/tapered-extrusion/ifc4-tapered-hole.ifc", require("node:url").pathToFileURL(__filename).href), "utf8");
+  await check(text.replace("OPERATOR2D($,$,#26,0.5)", `OPERATOR2DNONUNIFORM($,$,#26,0.5,${scale2})`), volume);
+});

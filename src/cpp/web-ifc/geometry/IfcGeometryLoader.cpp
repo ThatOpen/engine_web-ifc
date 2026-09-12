@@ -3807,6 +3807,8 @@ namespace webifc::geometry
         scale1 = _loader.GetDoubleArgument();
       }
 
+      // Scl2 inherits Scl when the optional Scale2 is omitted.
+      scale2 = scale1;
       if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
       {
         _loader.MoveToArgumentOffset(expressID, 4);
@@ -3815,11 +3817,6 @@ namespace webifc::geometry
           _loader.StepBack();
           scale2 = _loader.GetDoubleArgument();
         }
-      }
-
-      if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
-      {
-        scale2 = scale1;
       }
 
       return glm::dmat3(
