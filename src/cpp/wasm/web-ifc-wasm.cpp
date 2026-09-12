@@ -10,6 +10,7 @@
 #include <memory>
 #include <emscripten/bind.h>
 #include <spdlog/spdlog.h>
+#include <limits>
 #include "../web-ifc/modelmanager/ModelManager.h"
 #include "../version.h"
 #include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
@@ -417,6 +418,53 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     return manager.IsModelOpen(modelID) ? manager.GetIfcLoader(modelID)->GetAllLines() : std::vector<uint32_t>();
 }
 
+// The tape stores encoded STRING lengths as uint16_t. Validate before changing it.
+bool EncodeStringValue(const emscripten::val &value, std::string &text)
+{
+    if (!value.isString()) return false;
+    std::ostringstream encoded;
+    webifc::parsing::p21encode(value.as<std::string>(), encoded);
+    text = encoded.str();
+    return text.size() <= std::numeric_limits<uint16_t>::max();
+}
+
+bool ValidateStringArguments(const emscripten::val &value)
+{
+    if (value.isString())
+    {
+        std::string encoded;
+        return EncodeStringValue(value, encoded);
+    }
+    if (value.isArray())
+    {
+        for (uint32_t i = 0; i < value["length"].as<uint32_t>(); ++i)
+            if (!ValidateStringArguments(value[std::to_string(i)])) return false;
+    }
+    else if (!value.isNull() && !value.isUndefined() && value.typeOf().as<std::string>() == "object")
+    {
+        const auto type = value["type"];
+        if (!type.isNumber()) return true;
+        const auto token = static_cast<webifc::parsing::IfcTokenType>(type.as<uint32_t>());
+        const bool string = token == webifc::parsing::IfcTokenType::STRING ||
+            (token == webifc::parsing::IfcTokenType::LABEL && value["valueType"].isNumber() &&
+             value["valueType"].as<uint32_t>() == webifc::parsing::IfcTokenType::STRING);
+        const auto payload = value["value"];
+        if (string)
+        {
+            std::string encoded;
+            if (payload.isArray())
+            {
+                if (token != webifc::parsing::IfcTokenType::STRING) return false;
+                for (uint32_t i = 0; i < payload["length"].as<uint32_t>(); ++i)
+                    if (!EncodeStringValue(payload[std::to_string(i)], encoded)) return false;
+            }
+            else if (!EncodeStringValue(payload, encoded)) return false;
+        }
+        else if (payload.isArray() && !ValidateStringArguments(payload)) return false;
+    }
+    return true;
+}
+
 bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::val value)
 {
     bool responseCode = true;
@@ -425,9 +473,8 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     {
     case webifc::parsing::IfcTokenType::STRING:
     {
-        std::ostringstream encoded;
-        webifc::parsing::p21encode(value.as<std::string>(), encoded);
-        const std::string text = encoded.str();
+        std::string text;
+        if (!EncodeStringValue(value, text)) return false;
         loader->Push<uint16_t>(static_cast<uint16_t>(text.size()));
         loader->Push((void*)text.data(), text.size());
         break;
@@ -495,7 +542,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
         else if (child.isUndefined())
             loader->Push<uint8_t>(webifc::parsing::IfcTokenType::UNKNOWN);
         else if (child.isArray())
-            WriteSet(modelID, child);
+            responseCode = WriteSet(modelID, child) && responseCode;
         else if (child["value"].isArray())
         {
             emscripten::val innerVal = child["value"];
@@ -505,7 +552,11 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
             for (size_t z = 0; z < sz; z++)
             {
                 loader->Push<uint8_t>(type);
-                if (type == webifc::parsing::IfcTokenType::INTEGER)
+                if (type == webifc::parsing::IfcTokenType::STRING)
+                {
+                    responseCode = WriteValue(modelID, type, innerVal[std::to_string(z)]) && responseCode;
+                }
+                else if (type == webifc::parsing::IfcTokenType::INTEGER)
                 {
                     int value = innerVal[std::to_string(z)].as<int>();
                     loader->PushInt(value);
@@ -552,7 +603,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
                 loader->Push<uint8_t>(webifc::parsing::IfcTokenType::SET_BEGIN);
 
                 loader->Push<uint8_t>(valueType);
-                WriteValue(modelID, valueType, value);
+                responseCode = WriteValue(modelID, valueType, value) && responseCode;
 
                 loader->Push<uint8_t>(webifc::parsing::IfcTokenType::SET_END);
 
@@ -560,7 +611,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
             }
             case webifc::parsing::IfcTokenType::REAL:
             {
-                WriteValue(modelID, type, child["internalValue"]);
+                responseCode = WriteValue(modelID, type, child["internalValue"]) && responseCode;
                 break;
             }
             case webifc::parsing::IfcTokenType::STRING:
@@ -568,7 +619,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
             case webifc::parsing::IfcTokenType::REF:
             case webifc::parsing::IfcTokenType::INTEGER:
             {
-                WriteValue(modelID, type, child["value"]);
+                responseCode = WriteValue(modelID, type, child["value"]) && responseCode;
                 break;
             }
             default:
@@ -585,7 +636,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
             else
                 type = webifc::parsing::IfcTokenType::ENUM;
             loader->Push<uint8_t>(type);
-            WriteValue(modelID, type, child);
+            responseCode = WriteValue(modelID, type, child) && responseCode;
         }
         else
         {
@@ -617,6 +668,11 @@ bool WriteHeaderLine(uint32_t modelID, uint32_t type, emscripten::val parameters
 {
     if (!manager.IsModelOpen(modelID))
         return false;
+    if (!ValidateStringArguments(parameters))
+    {
+        spdlog::error("STRING exceeds the encoded tape limit or is not a string");
+        return false;
+    }
     auto loader = manager.GetIfcLoader(modelID);
     uint32_t start = loader->GetTotalSize();
     std::string ifcName = manager.GetSchemaManager().IfcTypeCodeToType(type);
@@ -626,7 +682,7 @@ bool WriteHeaderLine(uint32_t modelID, uint32_t type, emscripten::val parameters
     loader->Push((void *)ifcName.data(), ifcName.size());
     bool responseCode = WriteSet(modelID, parameters);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
-    loader->AddHeaderLineTape(type, start);
+    if (responseCode) loader->AddHeaderLineTape(type, start);
     return responseCode;
 }
 
@@ -640,6 +696,11 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 {
     if (!manager.IsModelOpen(modelID))
         return false;
+    if (!ValidateStringArguments(parameters))
+    {
+        spdlog::error("STRING exceeds the encoded tape limit or is not a string");
+        return false;
+    }
     auto loader = manager.GetIfcLoader(modelID);
     uint32_t start = loader->GetTotalSize();
 
@@ -657,7 +718,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     // end line
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
 
-    loader->UpdateLineTape(expressID, type, start);
+    if (responseCode) loader->UpdateLineTape(expressID, type, start);
     return responseCode;
 }
 
