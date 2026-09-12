@@ -1260,162 +1260,66 @@ namespace bimGeometry
 
 	inline Geometry SectionedSurface(std::vector<std::vector<glm::dvec3>> profiles, bool buildCaps, double eps=0.0)
 	{
-		Geometry geom;
-
-		// Check for insufficient profiles
-		if (profiles.size() < 2)
-		{
-			//spdlog::warn("SectionedSurface: Fewer than 2 profiles provided ({}), returning empty geometry.", profiles.size());
-			return geom;
-		}
-
-		// Iterate over each pair of consecutive profiles
-		for (size_t i = 0; i < profiles.size() - 1; i++)
-		{
-			std::vector<glm::dvec3>& profile1 = profiles[i];
-			std::vector<glm::dvec3>& profile2 = profiles[i + 1];
-
-			// Check that profiles have the same number of points and are non-empty
-			if (profile1.empty() || profile2.empty())
-			{
-				//spdlog::warn("SectionedSurface: Empty profile at index {}, skipping.", i);
-				continue;
-			}
-			if (profile1.size() != profile2.size())
-			{
-				//spdlog::warn("SectionedSurface: Profile {} has {} points, but profile {} has {} points, skipping.", i, profile1.size(), i + 1, profile2.size());
-				continue;
-			}
-
-			std::vector<uint32_t> indices;
-
-			// Add points and compute normals
-			for (size_t j = 0; j < profile1.size(); j++)
-			{
-				glm::dvec3& p1 = profile1[j];
-				glm::dvec3& p2 = profile2[j]; // Direct correspondence, assuming equal sizes
-
-				// Compute normal
-				glm::dvec3 normal(0.0, 0.0, 1.0); // Default normal
-				glm::dvec3 edge = p2 - p1;
-				if (glm::length(edge) > eps)
-				{
-					glm::dvec3 crossVec = glm::cross(edge, glm::dvec3(0.0, 0.0, 1.0));
-					if (glm::length(crossVec) > eps)
-					{
-						normal = glm::normalize(glm::cross(edge, crossVec));
-					}
-					else
-					{
-						//spdlog::warn("SectionedSurface: Degenerate normal at profile {}, point {}, using default normal.", i, j);
-					}
-				}
-
-				// Add points to geometry with computed normal
-				geom.AddPoint(p1, normal);
-				geom.AddPoint(p2, normal);
-
-				indices.push_back(geom.numPoints - 2); // Index of p1
-				indices.push_back(geom.numPoints - 1); // Index of p2
-			}
-
-			// Create triangular faces
-			for (size_t j = 0; j < indices.size() - 2; j += 2)
-			{
-				if (j + 3 < indices.size()) // Ensure enough indices for two triangles
-				{
-					// Form two triangles for each quad (p1[j], p2[j], p1[j+1], p2[j+1])
-					// Triangle 1: p1[j], p2[j], p1[j+1]
-					geom.AddFace(indices[j], indices[j + 1], indices[j + 2], -1);
-					// Triangle 2: p2[j], p2[j+1], p1[j+1]
-					geom.AddFace(indices[j + 1], indices[j + 3], indices[j + 2], -1);
-				}
-			}
-		}
-
-		if (buildCaps && profiles.size() >= 2)
-		{
-			// Process the first and last profiles for caps
-			for (size_t capIdx = 0; capIdx < profiles.size(); capIdx += profiles.size() - 1)
-			{
-				std::vector<glm::dvec3>& profile = profiles[capIdx];
-				if (profile.size() < 3) // Need at least 3 points for a polygon
-				{
-					continue;
-				}
-
-				// Convert profile to std::vector<Point> for bestProjection
-				std::vector<Point> poly3D;
-				for (const auto& p : profile)
-				{
-					poly3D.push_back({ p.x, p.y, p.z });
-				}
-
-				// Determine the best projection plane
-				Projection proj = bestProjection(poly3D);
-
-				// Convert profile to std::vector<std::vector<Point>> for projectTo2D
-				std::vector<std::vector<Point>> poly3DVec = { poly3D };
-
-				// Project to 2D
-				std::vector<std::vector<Point>> poly2D = projectTo2D(poly3DVec, proj);
-
-				// Convert to std::vector<std::vector<std::array<double, 2>>> for earcut
-				std::vector<std::vector<std::array<double, 2>>> polygon(1);
-				for (const auto& pt : poly2D[0])
-				{
-					polygon[0].push_back({ pt[0], pt[1] });
-				}
-
-				// Run earcut triangulation (assuming mapbox/earcut.hpp is included)
-				std::vector<uint32_t> capIndices = mapbox::earcut<uint32_t>(polygon);
-
-				// Compute average normal for the cap
-				glm::dvec3 avgNormal(0.0);
-				for (size_t i = 0; i < profile.size(); ++i)
-				{
-					glm::dvec3 p1 = profile[i];
-					glm::dvec3 p2 = profile[(i + 1) % profile.size()];
-					glm::dvec3 edge = p2 - p1;
-					glm::dvec3 crossVec = glm::cross(edge, glm::dvec3(0.0, 0.0, 1.0));
-					if (glm::length(crossVec) > eps)
-					{
-						avgNormal += glm::normalize(crossVec);
-					}
-				}
-				if (glm::length(avgNormal) < eps)
-				{
-					avgNormal = glm::dvec3(0.0, 0.0, 1.0);
-				}
-				else
-				{
-					avgNormal = glm::normalize(avgNormal);
-				}
-
-				// Add cap points to geometry with appropriate normal
-				uint32_t baseIndex = geom.numPoints;
-				for (const auto& p : profile)
-				{
-					// Use reversed normal for first cap (outward facing)
-					glm::dvec3 normal = (capIdx == 0) ? -avgNormal : avgNormal;
-					geom.AddPoint(p, normal);
-				}
-
-				// Add triangular faces for the cap
-				for (size_t i = 0; i < capIndices.size(); i += 3)
-				{
-					uint32_t i0 = baseIndex + capIndices[i];
-					uint32_t i1 = baseIndex + capIndices[i + 1];
-					uint32_t i2 = baseIndex + capIndices[i + 2];
-					// Reverse indices for first cap to ensure correct winding
-					if (capIdx == 0)
-						geom.AddFace(i0, i2, i1, UINT32_MAX);
-					else
-						geom.AddFace(i0, i1, i2, UINT32_MAX);
-				}
-			}
-		}
-		return geom;
+        Geometry geom;
+        if (profiles.size() < 2 || profiles.front().size() < 2) return geom;
+        const double tolerance = std::max(eps, 1e-12);
+        const bool closed = buildCaps || glm::distance(profiles.front().front(), profiles.front().back()) < tolerance;
+        for (auto& profile : profiles)
+        {
+            if (profile.size() > 2 && glm::distance(profile.front(), profile.back()) < tolerance)
+                profile.pop_back();
+            if (profile.size() != profiles.front().size()) return geom;
+        }
+        const size_t count = profiles.front().size();
+        if (count < 2 || (buildCaps && count < 3)) return geom;
+        auto normal = [](const std::vector<glm::dvec3>& ring) {
+            glm::dvec3 n(0);
+            for (size_t j = 0; j < ring.size(); ++j)
+                n += glm::cross(ring[j] - ring.front(), ring[(j + 1) % ring.size()] - ring.front());
+            return n;
+        };
+        // Ring order determines the wall winding. Orient the whole loft once,
+        // then orient cap triangles against the same ring normal in 3D.
+        glm::dvec3 advance(0);
+        for (size_t j = 0; j < count; ++j) advance += profiles[1][j] - profiles[0][j];
+        const bool reverse = buildCaps && glm::dot(normal(profiles.front()), advance) < 0;
+        auto face = [&](glm::dvec3 a, glm::dvec3 b, glm::dvec3 c) {
+            if (reverse) std::swap(b, c);
+            geom.AddFace(a, b, c);
+        };
+        for (size_t i = 1; i < profiles.size(); ++i)
+        {
+            const auto& a = profiles[i - 1];
+            const auto& b = profiles[i];
+            const size_t edges = closed ? count : count - 1;
+            for (size_t j = 0; j < edges; ++j)
+            {
+                const size_t k = (j + 1) % count;
+                face(a[j], a[k], b[k]);
+                face(a[j], b[k], b[j]);
+            }
+        }
+        if (buildCaps)
+        {
+            for (size_t cap : {size_t(0), profiles.size() - 1})
+            {
+                const auto& ring = profiles[cap];
+                std::vector<Point> points;
+                for (const auto& p : ring) points.push_back({p.x, p.y, p.z});
+                const auto projected = projectTo2D({points}, bestProjection(points));
+                std::vector<std::vector<std::array<double, 2>>> polygon(1);
+                for (const auto& p : projected[0]) polygon[0].push_back({p[0], p[1]});
+                const auto indices = mapbox::earcut<uint32_t>(polygon);
+                const glm::dvec3 outward = normal(ring) * (cap == 0 ? -1.0 : 1.0);
+                for (size_t j = 0; j + 2 < indices.size(); j += 3)
+                {
+                    auto a = ring[indices[j]], b = ring[indices[j + 1]], c = ring[indices[j + 2]];
+                    if (glm::dot(glm::cross(b - a, c - a), outward) < 0) std::swap(b, c);
+                    face(a, b, c);
+                }
+            }
+        }
+        return geom;
 	}
 
 	inline Curve GetRectangleCurve(double xdim, double ydim, glm::dmat4 placement = glm::dmat4(1), int numSegments = 12, double radius = 0)
