@@ -460,8 +460,9 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
-        int val = value.as<int>();
-        loader->PushInt(val);
+        const double val = value.as<double>();
+        if (!std::isfinite(val) || std::floor(val) != val || std::abs(val) > 9007199254740991.0) return false;
+        loader->PushInt(static_cast<int64_t>(val));
         break;
     }
     default:
@@ -686,8 +687,8 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
-        long d = loader->GetIntArgument();
-        return emscripten::val(d);
+        const int64_t d = loader->GetIntArgument();
+        return emscripten::val(static_cast<double>(d));
     }
     case webifc::parsing::IfcTokenType::REF:
     {

@@ -1,0 +1,23 @@
+const { test } = require("@jest/globals");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const w = require(process.env.WEB_IFC_API || "../../dist/web-ifc-api-node.js");
+const source = fs.readFileSync(new URL("./fixtures/integers/strings-base.ifc", require("node:url").pathToFileURL(__filename).href), "utf8");
+for (const value of [0, 2147483647, 2147483648, -2147483649, 9007199254740991, -9007199254740991]) test("integer read/write " + value, async () => {
+  const api = new w.IfcAPI();
+  await api.Init();
+  const text = source.replace("ENDSEC;\nEND-ISO", `#9000=IFCPROPERTYSINGLEVALUE('RoundTrip',$,IFCINTEGER(${value}),$);
+ENDSEC;
+END-ISO`);
+  let m = api.OpenModel(new TextEncoder().encode(text));
+  let p = api.GetLine(m, 9e3);
+  assert.equal(p.NominalValue.value, value);
+  p.NominalValue.value = -value;
+  api.WriteLine(m, p);
+  assert.equal(api.GetLine(m, 9e3).NominalValue.value, -value || 0);
+  const saved = api.SaveModel(m);
+  api.CloseModel(m);
+  m = api.OpenModel(saved);
+  assert.equal(api.GetLine(m, 9e3).NominalValue.value, -value || 0);
+  api.CloseModel(m);
+});
