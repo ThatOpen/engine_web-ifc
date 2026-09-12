@@ -45,3 +45,10 @@ async function check(text, expected) {
 }
 test("derived profile: scale includes the void", async () => check(source, 12));
 test("derived profile: enlargement includes the void", async () => check(source.replace(",0.5);", ",2.);"), 192));
+
+test.each([["$", 12], ["0.5", 12], ["2.", 48]])("derived profile: nonuniform Scale2=%s", async (scale2, volume) => {
+  await check(source.replace("OPERATOR2D($,$,#26,0.5)", `OPERATOR2DNONUNIFORM($,$,#26,0.5,${scale2})`), volume);
+});
+test("derived profile: both optional scales default to one", async () => {
+  await check(source.replace("OPERATOR2D($,$,#26,0.5)", "OPERATOR2DNONUNIFORM($,$,#26,$,$)"), 48);
+});
