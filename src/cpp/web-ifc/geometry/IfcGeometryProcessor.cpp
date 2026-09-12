@@ -670,16 +670,24 @@ namespace webifc::geometry
                 return mesh;
             }
             case schema::IFCFACETEDBREP:
+            case schema::IFCFACETEDBREPWITHVOIDS:
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
-                uint32_t ifcPresentation = _loader.GetRefArgument();
-
-                _expressIDToGeometry[expressID] = GetBrep(ifcPresentation);
+                const uint32_t outer = _loader.GetRefArgument();
+                std::vector<uint32_t> voids;
+                if (lineType == schema::IFCFACETEDBREPWITHVOIDS)
+                {
+                    const auto tokens = _loader.GetSetArgument();
+                    for (const auto token : tokens) voids.push_back(_loader.GetRefArgument(token));
+                }
+                IfcGeometry geometry = GetBrep(outer);
+                // Valid void shells are oriented into their cavities. Preserve that
+                // orientation when merging the boundary of the material volume.
+                for (const auto shell : voids) geometry.MergeGeometry(GetBrep(shell));
+                _expressIDToGeometry[expressID] = geometry;
                 if (!mesh.hasColor)
-                    mesh.color = GetStyleItemFromExpressId(ifcPresentation).value_or(glm::dvec4(1.0));
-                ;
+                    mesh.color = GetStyleItemFromExpressId(outer).value_or(glm::dvec4(1.0));
                 mesh.hasGeometry = true;
-
                 return mesh;
             }
             case schema::IFCPRODUCTREPRESENTATION:
@@ -1156,6 +1164,67 @@ namespace webifc::geometry
                 mesh.expressID = expressID;
                 mesh.hasGeometry = true;
 
+                return mesh;
+            }
+            case schema::IFCCSGSOLID:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                mesh.children.push_back(GetMesh(_loader.GetRefArgument()));
+                return mesh;
+            }
+            case schema::IFCBLOCK:
+            case schema::IFCRECTANGULARPYRAMID:
+            case schema::IFCRIGHTCIRCULARCONE:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                const uint32_t placementID = _loader.GetRefArgument();
+                const double x = _loader.GetDoubleArgument();
+                const double y = _loader.GetDoubleArgument();
+                IfcGeometry geom;
+                if (lineType == schema::IFCRIGHTCIRCULARCONE)
+                {
+                    const double height = x, radius = y;
+                    if (height <= 0 || radius <= 0) return mesh;
+                    const size_t segments = std::max<uint32_t>(12, _settings._circleSegments);
+                    const glm::dvec3 apex(0, 0, height), center(0);
+                    for (size_t i = 0; i < segments; ++i)
+                    {
+                        const double a = 2 * CONST_PI * i / segments;
+                        const double b = 2 * CONST_PI * ((i + 1) % segments) / segments;
+                        const glm::dvec3 p(radius * std::cos(a), radius * std::sin(a), 0);
+                        const glm::dvec3 q(radius * std::cos(b), radius * std::sin(b), 0);
+                        geom.AddFace(p, q, apex);
+                        geom.AddFace(center, q, p);
+                    }
+                }
+                else
+                {
+                    const double height = _loader.GetDoubleArgument();
+                    if (x <= 0 || y <= 0 || height <= 0) return mesh;
+                    if (lineType == schema::IFCBLOCK)
+                    {
+                        IfcProfile profile;
+                        profile.isConvex = true;
+                        // Unlike a centred profile, a block starts at the placement origin.
+                        profile.curve = GetRectangleCurve(x, y);
+                        for (auto& p : profile.curve.points) p += glm::dvec3(x / 2, y / 2, 0);
+                        geom = Extrude(profile, glm::dvec3(0, 0, 1), height);
+                    }
+                    else
+                    {
+                        const std::vector<glm::dvec3> ring = {
+                            {-x / 2, -y / 2, 0}, {x / 2, -y / 2, 0},
+                            {x / 2, y / 2, 0}, {-x / 2, y / 2, 0}};
+                        const glm::dvec3 apex(0, 0, height);
+                        for (size_t i = 0; i < ring.size(); ++i)
+                            geom.AddFace(ring[i], ring[(i + 1) % ring.size()], apex);
+                        geom.AddFace(ring[0], ring[2], ring[1]);
+                        geom.AddFace(ring[0], ring[3], ring[2]);
+                    }
+                }
+                mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
+                _expressIDToGeometry[expressID] = geom;
+                mesh.hasGeometry = true;
                 return mesh;
             }
             case schema::IFCRIGHTCIRCULARCYLINDER:
