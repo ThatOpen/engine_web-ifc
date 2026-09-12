@@ -47,3 +47,37 @@ test("t-profile: different flange and web thickness", async () => check(source, 
 test("t-profile: equal flange and web thickness", async () => check(source.replace("0.5,1.,$,$,$,$,$", "0.5,0.5,$,$,$,$,$"), 13));
 test("t-profile: thicker flange", async () => check(source.replace("0.5,1.,$,$,$,$,$", "0.5,1.5,$,$,$,$,$"), 23));
 test("t-profile: thinner flange", async () => check(source.replace("0.5,1.,$,$,$,$,$", "0.5,0.25,$,$,$,$,$"), 10.5));
+
+test.each([
+  [1, 4.5],
+  [0.5, 3.25],
+  [1.5, 5.75],
+  [0.25, 2.625],
+])("t-profile API: flange thickness %s gives area %s", async (flangeThickness, expectedArea) => {
+  const api = new IfcAPI();
+  await api.Init();
+  const profile = api.CreateProfile();
+  const placement = new api.wasmModule.DoubleVector();
+  let buffers;
+  try {
+    for (const value of [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]) placement.push_back(value);
+    // T profile: width 3, depth 4, web thickness 0.5, no fillets or slopes.
+    profile.SetValues(3, 3, 4, 0.5, flangeThickness, false, 0, 0, 0, 12, placement);
+    buffers = profile.GetBuffers();
+    const vertices = Array.from({ length: buffers.fvertexData.size() }, (_, i) => buffers.fvertexData.get(i));
+    assert.ok(vertices.length >= 9 && vertices.length % 3 === 0);
+    assert.ok(vertices.every(Number.isFinite));
+    let twiceArea = 0;
+    for (let i = 0; i < vertices.length; i += 3) {
+      const next = (i + 3) % vertices.length;
+      twiceArea += vertices[i] * vertices[next + 1] - vertices[next] * vertices[i + 1];
+    }
+    const area = Math.abs(twiceArea) / 2;
+    assert.ok(Math.abs(area - expectedArea) < 1e-6, `area ${area}, expected ${expectedArea}`);
+  } finally {
+    buffers?.fvertexData.delete();
+    buffers?.indexData.delete();
+    placement.delete();
+    profile.delete();
+  }
+});
