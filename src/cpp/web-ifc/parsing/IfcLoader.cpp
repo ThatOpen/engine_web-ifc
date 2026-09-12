@@ -364,7 +364,7 @@ namespace webifc::parsing {
       Push((void*)numberString.c_str(), numberString.size());        
    }
 
-   void IfcLoader::PushInt(int input)
+   void IfcLoader::PushInt(int64_t input)
    {
     std::string numberString = std::to_string(input);
     uint16_t length = numberString.size();
@@ -385,13 +385,13 @@ namespace webifc::parsing {
       return GetStringArgument();
    }
 
-   long IfcLoader::GetIntArgument() const
+   int64_t IfcLoader::GetIntArgument() const
    {
        std::string_view str = GetStringArgument();
        return std::stoll(std::string(str));
    }
 
-  long IfcLoader::GetIntArgument(const uint32_t tapeOffset) const
+  int64_t IfcLoader::GetIntArgument(const uint32_t tapeOffset) const
   {
     _tokenStream->MoveTo(tapeOffset);
     return GetIntArgument();

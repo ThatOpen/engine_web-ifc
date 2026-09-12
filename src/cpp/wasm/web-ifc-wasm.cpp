@@ -7,6 +7,7 @@
 #include <vector>
 #include <stack>
 #include <cstdint>
+#include <cmath>
 #include <memory>
 #include <emscripten/bind.h>
 #include <spdlog/spdlog.h>
@@ -417,6 +418,43 @@ std::vector<uint32_t> GetAllLines(uint32_t modelID)
     return manager.IsModelOpen(modelID) ? manager.GetIfcLoader(modelID)->GetAllLines() : std::vector<uint32_t>();
 }
 
+bool IsSafeInteger(const emscripten::val &value)
+{
+    if (!value.isNumber()) return false;
+    const double number = value.as<double>();
+    return std::isfinite(number) && std::floor(number) == number && std::abs(number) <= 9007199254740991.0;
+}
+
+// Validate integer payloads before appending any tokens or replacing a line's tape offset.
+bool ValidateIntegerArguments(const emscripten::val &value)
+{
+    if (value.isArray())
+    {
+        const uint32_t size = value["length"].as<uint32_t>();
+        for (uint32_t i = 0; i < size; ++i)
+            if (!ValidateIntegerArguments(value[std::to_string(i)])) return false;
+    }
+    else if (!value.isNull() && !value.isUndefined() && value.typeOf().as<std::string>() == "object")
+    {
+        const auto type = value["type"];
+        if (!type.isNumber()) return true;
+        const auto token = static_cast<webifc::parsing::IfcTokenType>(type.as<uint32_t>());
+        const bool integer = token == webifc::parsing::IfcTokenType::INTEGER ||
+            (token == webifc::parsing::IfcTokenType::LABEL && value["valueType"].isNumber() &&
+             value["valueType"].as<uint32_t>() == webifc::parsing::IfcTokenType::INTEGER);
+        const auto payload = value["value"];
+        if (integer)
+        {
+            if (!payload.isArray()) return IsSafeInteger(payload);
+            const uint32_t size = payload["length"].as<uint32_t>();
+            for (uint32_t i = 0; i < size; ++i)
+                if (!IsSafeInteger(payload[std::to_string(i)])) return false;
+        }
+        else if (payload.isArray()) return ValidateIntegerArguments(payload);
+    }
+    return true;
+}
+
 bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::val value)
 {
     bool responseCode = true;
@@ -460,8 +498,8 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
-        int val = value.as<int>();
-        loader->PushInt(val);
+        if (!IsSafeInteger(value)) return false;
+        loader->PushInt(static_cast<int64_t>(value.as<double>()));
         break;
     }
     default:
@@ -487,7 +525,9 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
         else if (child.isUndefined())
             loader->Push<uint8_t>(webifc::parsing::IfcTokenType::UNKNOWN);
         else if (child.isArray())
-            WriteSet(modelID, child);
+        {
+            if (!WriteSet(modelID, child)) responseCode = false;
+        }
         else if (child["value"].isArray())
         {
             emscripten::val innerVal = child["value"];
@@ -499,8 +539,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
                 loader->Push<uint8_t>(type);
                 if (type == webifc::parsing::IfcTokenType::INTEGER)
                 {
-                    int value = innerVal[std::to_string(z)].as<int>();
-                    loader->PushInt(value);
+                    if (!WriteValue(modelID, type, innerVal[std::to_string(z)])) responseCode = false;
                 }
                 else
                 {
@@ -544,7 +583,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
                 loader->Push<uint8_t>(webifc::parsing::IfcTokenType::SET_BEGIN);
 
                 loader->Push<uint8_t>(valueType);
-                WriteValue(modelID, valueType, value);
+                if (!WriteValue(modelID, valueType, value)) responseCode = false;
 
                 loader->Push<uint8_t>(webifc::parsing::IfcTokenType::SET_END);
 
@@ -552,7 +591,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
             }
             case webifc::parsing::IfcTokenType::REAL:
             {
-                WriteValue(modelID, type, child["internalValue"]);
+                if (!WriteValue(modelID, type, child["internalValue"])) responseCode = false;
                 break;
             }
             case webifc::parsing::IfcTokenType::STRING:
@@ -560,7 +599,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
             case webifc::parsing::IfcTokenType::REF:
             case webifc::parsing::IfcTokenType::INTEGER:
             {
-                WriteValue(modelID, type, child["value"]);
+                if (!WriteValue(modelID, type, child["value"])) responseCode = false;
                 break;
             }
             default:
@@ -577,7 +616,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
             else
                 type = webifc::parsing::IfcTokenType::ENUM;
             loader->Push<uint8_t>(type);
-            WriteValue(modelID, type, child);
+            if (!WriteValue(modelID, type, child)) responseCode = false;
         }
         else
         {
@@ -609,6 +648,11 @@ bool WriteHeaderLine(uint32_t modelID, uint32_t type, emscripten::val parameters
 {
     if (!manager.IsModelOpen(modelID))
         return false;
+    if (!ValidateIntegerArguments(parameters))
+    {
+        spdlog::error("Integer write rejected: expected a number within the JavaScript safe integer range");
+        return false;
+    }
     auto loader = manager.GetIfcLoader(modelID);
     uint32_t start = loader->GetTotalSize();
     std::string ifcName = manager.GetSchemaManager().IfcTypeCodeToType(type);
@@ -618,7 +662,7 @@ bool WriteHeaderLine(uint32_t modelID, uint32_t type, emscripten::val parameters
     loader->Push((void *)ifcName.data(), ifcName.size());
     bool responseCode = WriteSet(modelID, parameters);
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
-    loader->AddHeaderLineTape(type, start);
+    if (responseCode) loader->AddHeaderLineTape(type, start);
     return responseCode;
 }
 
@@ -632,6 +676,11 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 {
     if (!manager.IsModelOpen(modelID))
         return false;
+    if (!ValidateIntegerArguments(parameters))
+    {
+        spdlog::error("Integer write rejected: expected a number within the JavaScript safe integer range");
+        return false;
+    }
     auto loader = manager.GetIfcLoader(modelID);
     uint32_t start = loader->GetTotalSize();
 
@@ -649,7 +698,7 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
     // end line
     loader->Push<uint8_t>(webifc::parsing::IfcTokenType::LINE_END);
 
-    loader->UpdateLineTape(expressID, type, start);
+    if (responseCode) loader->UpdateLineTape(expressID, type, start);
     return responseCode;
 }
 
@@ -686,8 +735,8 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
-        long d = loader->GetIntArgument();
-        return emscripten::val(d);
+        const int64_t d = loader->GetIntArgument();
+        return emscripten::val(static_cast<double>(d));
     }
     case webifc::parsing::IfcTokenType::REF:
     {
