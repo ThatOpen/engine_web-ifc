@@ -62,21 +62,21 @@ namespace webifc::cache
       uint32_t relatingBuildingElement = _loader.GetRefArgument();
       auto aggregates = _loader.GetSetArgument();
       auto relVoidsIt2 = _relVoids.find(relatingBuildingElement);
+      // Copy the parent's voids by value: inserting new keys into _relVoids inside the loop
+      // below can rehash the map and invalidate relVoidsIt2, leaving a dangling range whose
+      // insert throws std::length_error (crash opening e.g. ArchiCAD-24_missing_hole.ifc).
+      std::vector<uint32_t> parentVoids = (relVoidsIt2 != _relVoids.end()) ? relVoidsIt2->second : std::vector<uint32_t>();
 
       for (auto &aggregate : aggregates)
       {
         uint32_t aggregateID = _loader.GetRefArgument(aggregate);
         resultVector[relatingBuildingElement].push_back(aggregateID);
-        if (relVoidsIt2 != _relVoids.end() && !relVoidsIt2->second.empty())
+        if (!parentVoids.empty())
         {
-          auto relVoidsIt1 = _relVoids.find(aggregateID);
-          // any any voids that are aggregated to the voids map
-          if (relVoidsIt1 == _relVoids.end())
-          {
-            _relVoids[aggregateID] = std::vector<uint32_t>();
-            relVoidsIt1 = _relVoids.find(aggregateID);
-          }
-          relVoidsIt1->second.insert(relVoidsIt1->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
+          // aggregate the parent's voids; take the destination reference AFTER the (possibly
+          // rehashing) key insertion and use it immediately, holding no stale map iterator.
+          auto &dst = _relVoids[aggregateID];
+          dst.insert(dst.end(), parentVoids.begin(), parentVoids.end());
         }
       }
     }
