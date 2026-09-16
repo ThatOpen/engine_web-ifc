@@ -375,7 +375,9 @@ namespace webifc::geometry
               glm::dvec3 pTemp = placement * glm::dvec4(currentProfile.curve.points[i], 1);
               currentProfile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
           }
-          //profiles.push_back(currentProfile);
+          for (auto& hole : currentProfile.holes)
+              for (auto& point : hole.points) point = coordination * placement * glm::dvec4(point, 1);
+          sections.holes.push_back(currentProfile.holes);
           curves.push_back(currentProfile.curve);
           CrossSectionIDs.push_back(currentCrossSectionID);
 
@@ -422,6 +424,7 @@ namespace webifc::geometry
         transform.push_back(linearPlacement);
       }
 
+      if (faces.size() != transform.size()) return sections;
       uint32_t id = 0;
       for (auto &face : faces)
       {
@@ -432,6 +435,9 @@ namespace webifc::geometry
           glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
           profile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
         }
+        for (auto& hole : profile.holes)
+            for (auto& point : hole.points) point = coordination * transform[id] * glm::dvec4(point, 1);
+        sections.holes.push_back(profile.holes);
         profiles.push_back(profile);
         curves.push_back(profile.curve);
         expressIds.push_back(expressID);
@@ -459,9 +465,10 @@ namespace webifc::geometry
       {
         auto expressID = _loader.GetRefArgument(linearPosition);
         glm::dmat4 linearPlacement = GetLocalPlacement(expressID) * scale;
-        transform.push_back(linearPlacement);
+        transform.emplace_back(linearPlacement[1], linearPlacement[2], linearPlacement[0], linearPlacement[3]);
       }
 
+      if (faces.size() != transform.size()) return sections;
       uint32_t id = 0;
       std::vector<IfcProfile> profiles;
       std::vector<IfcCurve> curves;
@@ -470,12 +477,15 @@ namespace webifc::geometry
       for (auto &face : faces)
       {
         auto expressID = _loader.GetRefArgument(face);
-        IfcProfile profile = GetProfile(expressID);
+        IfcProfile profile = GetProfileByLine(expressID);
         for (uint32_t i = 0; i < profile.curve.points.size(); i++)
         {
           glm::dvec3 pTemp = transform[id] * glm::dvec4(profile.curve.points[i], 1);
           profile.curve.points[i] = coordination * glm::dvec4(pTemp.x, pTemp.y, pTemp.z, 1);
         }
+        for (auto& hole : profile.holes)
+            for (auto& point : hole.points) point = coordination * transform[id] * glm::dvec4(point, 1);
+        sections.holes.push_back(profile.holes);
         profiles.push_back(profile);
         curves.push_back(profile.curve);
         expressIds.push_back(expressID);
@@ -1727,6 +1737,66 @@ namespace webifc::geometry
     params.edge = edge;
     ComputeCurve(expressID, curve, params);
     return curve;
+  }
+
+  IfcCurve IfcGeometryLoader::GetCurveWithParameters(uint32_t expressID, uint8_t dimensions,
+      std::optional<double> start, std::optional<double> end) const
+  {
+    if (!start && !end) return GetCurve(expressID, dimensions);
+    const auto type = _loader.GetLineType(expressID);
+    IfcCurve result;
+    if ((start && !std::isfinite(*start)) || (end && !std::isfinite(*end))) return result;
+    if (type == schema::IFCPOLYLINE)
+    {
+      // Each polyline segment has a unit parameter interval, independently of its length.
+      auto source = GetCurve(expressID, dimensions);
+      if (source.points.size() < 2) return result;
+      const double last = static_cast<double>(source.points.size() - 1);
+      const double firstParam = start.value_or(0.0), lastParam = end.value_or(last);
+      if (firstParam < 0 || lastParam > last || firstParam >= lastParam)
+      {
+        spdlog::error("[GetCurveWithParameters()] Invalid polyline interval {}", expressID);
+        return result;
+      }
+      auto pointAt = [&](double parameter) {
+        const size_t i = std::min(static_cast<size_t>(parameter), source.points.size() - 2);
+        return glm::mix(source.points[i], source.points[i + 1], parameter - static_cast<double>(i));
+      };
+      result.Add(pointAt(firstParam));
+      for (size_t i = static_cast<size_t>(std::floor(firstParam)) + 1; i < source.points.size() && i < lastParam; ++i)
+        result.Add(source.points[i]);
+      result.Add(pointAt(lastParam));
+      return result;
+    }
+    if (type == schema::IFCLINE || type == schema::IFCCIRCLE || type == schema::IFCELLIPSE)
+    {
+      if (type == schema::IFCLINE && (!start || !end || *start >= *end))
+      {
+        spdlog::error("[GetCurveWithParameters()] A line needs a finite increasing interval {}", expressID);
+        return result;
+      }
+      ComputeCurveParams params;
+      params.dimensions = dimensions;
+      params.hasTrim = true;
+      params.trimStart.trimType = params.trimEnd.trimType = TRIM_BY_PARAMETER;
+      params.trimStart.value = start.value_or(0.0);
+      params.trimEnd.value = end.value_or(2.0 * static_cast<double>(CONST_PI) / _cache.GetAngularScalingFactor());
+      if (type != schema::IFCLINE)
+      {
+        const double period = 2.0 * static_cast<double>(CONST_PI) / _cache.GetAngularScalingFactor();
+        if (!std::isfinite(period) || period <= 0) return result;
+        const double span = params.trimEnd.value - params.trimStart.value;
+        params.trimStart.value = std::fmod(params.trimStart.value, period);
+        params.trimEnd.value = std::fmod(params.trimEnd.value, period);
+        if (params.trimEnd.value == params.trimStart.value && span != 0)
+          params.trimEnd.value = params.trimStart.value + period;
+      }
+      ComputeCurve(expressID, result, params);
+      return result;
+    }
+    // Do not silently sweep the complete curve when its parameterization is unsupported.
+    spdlog::error("[GetCurveWithParameters()] Unsupported parameter trimming for curve {} (type {})", expressID, type);
+    return result;
   }
 
   void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params) const
@@ -4163,27 +4233,26 @@ namespace webifc::geometry
       }
       case schema::IFCAXIS2PLACEMENTLINEAR:
       {
-        glm::dvec3 vector = glm::dvec3(0, 0, 1);
-        glm::dmat4 result = glm::dmat4(1);
         _loader.MoveToArgumentOffset(expressID, 0);
-        auto tokenTypeLocation = _loader.GetTokenType();
-        // Location is not optional, but check anyway:
-        if (tokenTypeLocation == parsing::IfcTokenType::REF)
+        const uint32_t locationID = _loader.GetRefArgument();
+        glm::dvec3 zAxis(0, 0, 1), xAxis(1, 0, 0);
+        _loader.MoveToArgumentOffset(expressID, 1);
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
-            _loader.StepBack();
-            uint32_t posID = _loader.GetRefArgument();
-
-            // Axis is optional:
-            _loader.MoveToArgumentOffset(expressID, 1);
-            auto tokenTypeAxis = _loader.GetTokenType();
-            if (tokenTypeAxis == parsing::IfcTokenType::REF)
-            {
-                _loader.StepBack();
-                vector = GetCartesianPoint3D(_loader.GetRefArgument());
-            }
-            result = GetLocalPlacement(posID, vector);
+          _loader.StepBack();
+          zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
         }
-
+        _loader.MoveToArgumentOffset(expressID, 2);
+        if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
+        {
+          _loader.StepBack();
+          xAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        }
+        const auto yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+        xAxis = glm::normalize(glm::cross(yAxis, zAxis));
+        // Axis and RefDirection are expressed in the curve's reference frame.
+        const glm::dmat4 relative(glm::dvec4(xAxis, 0), glm::dvec4(yAxis, 0), glm::dvec4(zAxis, 0), glm::dvec4(0, 0, 0, 1));
+        const auto result = GetLocalPlacement(locationID) * relative;
         _cache.GetExpressIDToPlacement()[expressID] = result;
         return result;
       }

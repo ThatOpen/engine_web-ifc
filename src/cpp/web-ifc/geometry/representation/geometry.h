@@ -124,6 +124,7 @@ namespace webifc::geometry {
 		struct IfcCrossSections
 		{
 			std::vector<IfcCurve> curves;
+            std::vector<std::vector<IfcCurve>> holes;
 			std::vector<uint32_t> expressID;
 		};
 
