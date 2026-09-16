@@ -841,6 +841,7 @@ namespace bimGeometry
 			}
 		}
 
+		if (dpts.size() < 2) return geom;
 		if (closed)
 		{
 			glm::vec<3, glm::f64> dirStart = dpts[dpts.size() - 2] - dpts[dpts.size() - 1];
@@ -1039,6 +1040,7 @@ namespace bimGeometry
 			}
 		}
 
+		if (dpts.size() < 2) return geom;
 		if (closed)
 		{
 			glm::vec<3, glm::f64> dirStart = dpts[dpts.size() - 2] - dpts[dpts.size() - 1];
