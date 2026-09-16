@@ -319,6 +319,9 @@ namespace bimGeometry
 	inline Curve GetEllipseCurve(float radiusX, float radiusY, int numSegments, glm::dmat3 placement = glm::dmat3(1), double startRad = 0, double endRad = CONST_PI * 2, bool swap = true, bool normalToCenterEnding = false)
 	{
 		Curve c;
+        const bool fullCircle = std::abs(std::abs(endRad - startRad) - 2 * static_cast<double>(CONST_PI)) < 1e-12;
+        // Full circles include a duplicated closing endpoint.
+        numSegments = std::max(fullCircle ? 4 : 3, numSegments);
 		if (normalToCenterEnding)
 		{
 			double sweep_angle = (endRad - startRad);
@@ -363,9 +366,9 @@ namespace bimGeometry
 			c.points[c.points.size() - 1] = (c.points[c.points.size() - 1] + c.points[c.points.size() - 2]) * 0.5;
 
 			// check for a closed curve
-			if (endRad == CONST_PI * 2 && startRad == 0)
+			if (fullCircle)
 			{
-				c.points.push_back(c.points[0]);
+				c.points.back() = c.points.front();
 
 				if (MatrixFlipsTriangles(placement))
 				{
@@ -398,9 +401,9 @@ namespace bimGeometry
 			}
 
 			// check for a closed curve
-			if (endRad == CONST_PI * 2 && startRad == 0)
+			if (fullCircle)
 			{
-				c.points.push_back(c.points[0]);
+				c.points.back() = c.points.front();
 
 				if (MatrixFlipsTriangles(placement))
 				{
@@ -1673,35 +1676,35 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline Curve GetTShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat4 placement = glm::dmat4(1))
+	inline Curve GetTShapedCurve(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat4 placement = glm::dmat4(1))
 	{
 		Curve c;
 
 		double hw = width / 2;
 		double hd = depth / 2;
-		double hweb = thickness / 2;
+		double hweb = webThickness / 2;
 
 		c.points.push_back(placement * glm::dvec4(hw, hd, 0, 1));
 
 		if (hasFillet)
 		{
 			// TODO: Create interpolation and sloped lines
-			c.points.push_back(placement * glm::dvec4(hw, hd - thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(hweb, hd - thickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(hw, hd - flangeThickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(hweb, hd - flangeThickness, 0, 1));
 			c.points.push_back(placement * glm::dvec4(hweb, -hd, 0, 1));
 			c.points.push_back(placement * glm::dvec4(-hweb, -hd, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hweb, hd - thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hw, hd - thickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(-hweb, hd - flangeThickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(-hw, hd - flangeThickness, 0, 1));
 			c.points.push_back(placement * glm::dvec4(-hw, hd, 0, 1));
 		}
 		else
 		{
-			c.points.push_back(placement * glm::dvec4(hw, hd - thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(hweb, hd - thickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(hw, hd - flangeThickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(hweb, hd - flangeThickness, 0, 1));
 			c.points.push_back(placement * glm::dvec4(hweb, -hd, 0, 1));
 			c.points.push_back(placement * glm::dvec4(-hweb, -hd, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hweb, hd - thickness, 0, 1));
-			c.points.push_back(placement * glm::dvec4(-hw, hd - thickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(-hweb, hd - flangeThickness, 0, 1));
+			c.points.push_back(placement * glm::dvec4(-hw, hd - flangeThickness, 0, 1));
 			c.points.push_back(placement * glm::dvec4(-hw, hd, 0, 1));
 		}
 

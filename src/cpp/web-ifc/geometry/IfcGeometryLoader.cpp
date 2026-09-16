@@ -3226,7 +3226,7 @@ namespace webifc::geometry
       glm::dmat3 placement = GetAxis2Placement2D(placementID);
 
       profile.curve = GetRectangleCurve(xdim, ydim, placement, _circleSegments, outerRadius);
-      profile.holes.push_back(GetRectangleCurve(xdim - thickness, ydim - thickness, placement, _circleSegments, innerRadius));
+      profile.holes.push_back(GetRectangleCurve(xdim - 2 * thickness, ydim - 2 * thickness, placement, _circleSegments, innerRadius));
 
       std::reverse(profile.holes[0].points.begin(), profile.holes[0].points.end());
 
@@ -3397,8 +3397,7 @@ namespace webifc::geometry
       double depth = _loader.GetDoubleArgument();
       double width = _loader.GetDoubleArgument();
       double webThickness = _loader.GetDoubleArgument();
-      // double flangeThickness =
-      _loader.GetDoubleArgument();
+      double flangeThickness = _loader.GetDoubleArgument();
       double filletRadius = _loader.GetOptionalDoubleParam(0);
       bool hasFillet = filletRadius != 0;
       double flangeEdgeRadius = _loader.GetOptionalDoubleParam(0);
@@ -3408,7 +3407,7 @@ namespace webifc::geometry
       _loader.GetOptionalDoubleParam(0);
       double flangeSlope = _loader.GetOptionalDoubleParam(0);
 
-      profile.curve = GetTShapedCurve(width, depth, webThickness, hasFillet, filletRadius, flangeEdgeRadius, flangeSlope, placement);
+      profile.curve = GetTShapedCurve(width, depth, webThickness, flangeThickness, hasFillet, filletRadius, flangeEdgeRadius, flangeSlope, placement);
 
       return profile;
     }
@@ -3530,24 +3529,22 @@ namespace webifc::geometry
       uint32_t transformID = _loader.GetRefArgument();
       glm::dmat3 transformation = GetAxis2Placement2D(transformID);
 
-      if (!profile.isComposite)
+      // Apply the operator to every boundary, including voids and composite children.
+      const auto transformProfile = [&](auto&& self, IfcProfile& value) -> void
       {
-        for (uint32_t i = 0; i < profile.curve.points.size(); i++)
+        const auto transformCurve = [&](IfcCurve& curve)
         {
-          profile.curve.points[i] = transformation * glm::dvec3(profile.curve.points[i].x, profile.curve.points[i].y, 1);
-          profile.curve.points[i].z = 0;
-        }
-      }
-      else
-      {
-        for (uint32_t j = 0; j < profile.profiles.size(); j++)
-        {
-          for (uint32_t i = 0; i < profile.profiles[j].curve.points.size(); i++)
+          for (auto& point : curve.points)
           {
-            profile.profiles[j].curve.points[i] = transformation * glm::dvec3(profile.profiles[j].curve.points[i].x, profile.profiles[j].curve.points[i].y, 1);
+            point = transformation * glm::dvec3(point.x, point.y, 1);
+            point.z = 0;
           }
-        }
-      }
+        };
+        transformCurve(value.curve);
+        for (auto& hole : value.holes) transformCurve(hole);
+        for (auto& child : value.profiles) self(self, child);
+      };
+      transformProfile(transformProfile, profile);
 
       return profile;
     }
@@ -3809,6 +3806,8 @@ namespace webifc::geometry
         scale1 = _loader.GetDoubleArgument();
       }
 
+      // Scl2 inherits Scl when the optional Scale2 is omitted.
+      scale2 = scale1;
       if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM)
       {
         _loader.MoveToArgumentOffset(expressID, 4);
@@ -3817,11 +3816,6 @@ namespace webifc::geometry
           _loader.StepBack();
           scale2 = _loader.GetDoubleArgument();
         }
-      }
-
-      if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR2D)
-      {
-        scale2 = scale1;
       }
 
       return glm::dmat3(

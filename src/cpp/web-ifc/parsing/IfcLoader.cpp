@@ -159,6 +159,11 @@ namespace webifc::parsing {
                 output << ")";
                 break;
               }
+              case IfcTokenType::BINARY:
+              {
+                output << '\"' << _tokenStream->ReadString() << '\"';
+                break;
+              }
               case IfcTokenType::STRING:
               {
                 output << "'";
@@ -268,6 +273,7 @@ namespace webifc::parsing {
   				case IfcTokenType::SET_BEGIN:
   				case IfcTokenType::SET_END:
   					break;
+				case IfcTokenType::BINARY:
   				case IfcTokenType::STRING:
           case IfcTokenType::REAL:
           case IfcTokenType::INTEGER:
@@ -528,6 +534,7 @@ namespace webifc::parsing {
              tapeOffsets.push_back(offset);
              _tokenStream->Read<uint32_t>();
              break;
+         case IfcTokenType::BINARY:
          case IfcTokenType::STRING:
          case IfcTokenType::INTEGER:
          case IfcTokenType::REAL:
@@ -581,7 +588,7 @@ namespace webifc::parsing {
      			{
      				_tokenStream->Read<uint32_t>();
      			}
-     			else if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM)
+			else if (t == IfcTokenType::BINARY || t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM)
      			{
      				uint16_t length = _tokenStream->Read<uint16_t>();
      				_tokenStream->Forward(length);
@@ -639,6 +646,7 @@ namespace webifc::parsing {
    				return;
    			}
    			break;
+		case IfcTokenType::BINARY:
    		case IfcTokenType::STRING:
    		case IfcTokenType::ENUM:
    		case IfcTokenType::LABEL:
@@ -687,7 +695,7 @@ namespace webifc::parsing {
 		      continue;
 
         }
-        if (t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM) {
+        if (t == IfcTokenType::BINARY || t == IfcTokenType::STRING || t == IfcTokenType::INTEGER || t == IfcTokenType::REAL || t == IfcTokenType::LABEL || t == IfcTokenType::ENUM) {
           uint16_t length = _tokenStream->Read<uint16_t>();
           _tokenStream->Forward(length);
           noArguments++;
