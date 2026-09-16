@@ -258,7 +258,7 @@ namespace webifc::geometry
             case schema::IFCSECTIONEDSOLID:
             case schema::IFCSECTIONEDSURFACE:
             {
-                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID),EPS_SMALL);
+                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID), lineType != schema::IFCSECTIONEDSURFACE);
 
                 mesh.transformation = glm::dmat4(1);
                 
