@@ -258,7 +258,7 @@ namespace webifc::geometry
             case schema::IFCSECTIONEDSOLID:
             case schema::IFCSECTIONEDSURFACE:
             {
-                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID),EPS_SMALL);
+                auto geom = SectionedSurface(_geometryLoader.GetCrossSections3D(expressID), lineType != schema::IFCSECTIONEDSURFACE);
 
                 mesh.transformation = glm::dmat4(1);
                 
@@ -321,7 +321,7 @@ namespace webifc::geometry
                 _loader.MoveToArgumentOffset(expressID, 0);
                 std::string_view op = _loader.GetStringArgument();
 
-                if (op != "DIFFERENCE" && op != "UNION")
+                if (op != "DIFFERENCE" && op != "UNION" && op != "INTERSECTION")
                 {
                     spdlog::error("[GetMesh()] Unsupported boolean op {}", std::string(op), expressID);
                     return mesh;
@@ -670,16 +670,24 @@ namespace webifc::geometry
                 return mesh;
             }
             case schema::IFCFACETEDBREP:
+            case schema::IFCFACETEDBREPWITHVOIDS:
             {
                 _loader.MoveToArgumentOffset(expressID, 0);
-                uint32_t ifcPresentation = _loader.GetRefArgument();
-
-                _expressIDToGeometry[expressID] = GetBrep(ifcPresentation);
+                const uint32_t outer = _loader.GetRefArgument();
+                std::vector<uint32_t> voids;
+                if (lineType == schema::IFCFACETEDBREPWITHVOIDS)
+                {
+                    const auto tokens = _loader.GetSetArgument();
+                    for (const auto token : tokens) voids.push_back(_loader.GetRefArgument(token));
+                }
+                IfcGeometry geometry = GetBrep(outer);
+                // Valid void shells are oriented into their cavities. Preserve that
+                // orientation when merging the boundary of the material volume.
+                for (const auto shell : voids) geometry.MergeGeometry(GetBrep(shell));
+                _expressIDToGeometry[expressID] = geometry;
                 if (!mesh.hasColor)
-                    mesh.color = GetStyleItemFromExpressId(ifcPresentation).value_or(glm::dvec4(1.0));
-                ;
+                    mesh.color = GetStyleItemFromExpressId(outer).value_or(glm::dvec4(1.0));
                 mesh.hasGeometry = true;
-
                 return mesh;
             }
             case schema::IFCPRODUCTREPRESENTATION:
@@ -755,50 +763,11 @@ namespace webifc::geometry
             case schema::IFCFACESURFACE:
             {
                 IfcGeometry geometry;
-                _loader.MoveToArgumentOffset(expressID, 0);
-                auto bounds = _loader.GetSetArgument();
-
-                std::vector<IfcBound3D> bounds3D(bounds.size());
-
-                for (size_t i = 0; i < bounds.size(); i++)
-                {
-                    uint32_t boundID = _loader.GetRefArgument(bounds[i]);
-                    bounds3D[i] = _geometryLoader.GetBound(boundID);
-                }
-
-                TriangulateBounds(geometry, bounds3D, expressID);
-
-                _loader.MoveToArgumentOffset(expressID, 1);
-                auto surfRef = _loader.GetRefArgument();
-
-                auto surface = GetSurface(surfRef);
-
-                if (surface.BSplineSurface.Active)
-                {
-                    TriangulateBspline(geometry, bounds3D, surface, _cache.GetLinearScalingFactor());
-                }
-                else if (surface.CylinderSurface.Active)
-                {
-                    TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
-                }
-                else if (surface.RevolutionSurface.Active)
-                {
-                    TriangulateRevolution(geometry, bounds3D, surface, _settings._circleSegments);
-                }
-                else if (surface.ExtrusionSurface.Active)
-                {
-                    TriangulateExtrusion(geometry, bounds3D, surface);
-                }
-                else
-                {
-                    TriangulateBounds(geometry, bounds3D, expressID);
-                }
-
+                AddFaceToGeometry(expressID, geometry);
                 _expressIDToGeometry[expressID] = geometry;
                 mesh.expressID = expressID;
                 mesh.hasGeometry = true;
-
-                break;
+                return mesh;
             }
             case schema::IFCTRIANGULATEDIRREGULARNETWORK:
             case schema::IFCTRIANGULATEDFACESET:
@@ -976,36 +945,34 @@ namespace webifc::geometry
                 auto directrixRef = _loader.GetRefArgument();
 
                 double radius = _loader.GetDoubleArgument();
-                // double innerRadius = 0.0;
-
-                if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-                {
-                    spdlog::error("[GetMesh()] Inner radius of IFCSWEPTDISKSOLID currently not supported {}", expressID);
-                    _loader.StepBack();
-                    _loader.GetDoubleArgument();
-                }
-
-                // double startParam = 0;
-                // double endParam = 0;
+                double innerRadius = 0.0;
 
                 if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
                 {
                     _loader.StepBack();
-                    _loader.GetDoubleArgument();
+                    innerRadius = _loader.GetDoubleArgument();
                 }
 
+                std::optional<double> startParam, endParam;
                 if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
                 {
                     _loader.StepBack();
-                    _loader.GetDoubleArgument();
+                    startParam = _loader.GetDoubleArgument();
+                }
+                if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
+                {
+                    _loader.StepBack();
+                    endParam = _loader.GetDoubleArgument();
                 }
 
-                IfcCurve directrix = _geometryLoader.GetCurve(directrixRef, 3);
+                IfcCurve directrix = _geometryLoader.GetCurveWithParameters(directrixRef, 3, startParam, endParam);
+                if (directrix.points.size() < 2) return mesh;
+                closed = directrix.points.size() > 2 && glm::distance(directrix.points.front(), directrix.points.back()) < EPS_SMALL;
 
                 IfcProfile profile;
                 profile.curve = GetCircleCurve(radius, _settings._circleSegments);
 
-                IfcGeometry geom = SweepCircular(_cache.GetLinearScalingFactor(), closed, profile, radius, directrix);
+                IfcGeometry geom = SweepCircular(_cache.GetLinearScalingFactor(), closed, profile, radius, directrix, glm::dvec3(0), false, innerRadius);
 
                 geom.sweptDiskSolid.axis = std::vector<IfcCurve>{directrix};
                 geom.sweptDiskSolid.profiles = std::vector<IfcProfile>{profile};
@@ -1023,39 +990,18 @@ namespace webifc::geometry
 
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t profileID = _loader.GetRefArgument();
-                uint32_t placementID = _loader.GetRefArgument();
+                uint32_t placementID = _loader.GetOptionalRefArgument();
                 uint32_t axis1PlacementID = _loader.GetRefArgument();
-                double angle = angleConversion(_loader.GetDoubleArgument(), _cache.GetAngleUnits());
+                double angle = _loader.GetDoubleArgument() * _cache.GetAngularScalingFactor();
+                // Compatibility with exporters using DEGREE in IfcSIUnit, which is not an IFC SI unit name.
+                if (_cache.GetAngleUnits() == "DEGREE") angle = angleConversion(angle, "DEGREE");
 
                 IfcProfile profile = _geometryLoader.GetProfile(profileID);
-                glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID);
+                glm::dmat4 placement = placementID ? _geometryLoader.GetLocalPlacement(placementID) : glm::dmat4(1);
                 glm::dvec3 axis = _geometryLoader.GetAxis1Placement(axis1PlacementID)[0];
 
-                bool closed = false;
-
                 glm::dvec3 pos = _geometryLoader.GetAxis1Placement(axis1PlacementID)[1];
-
-                IfcCurve directrix = BuildArc(_cache.GetLinearScalingFactor(), pos, axis, angle, _settings._circleSegments);
-                if (glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_BIG)
-                {
-                    closed = true;
-                }
-
-                IfcGeometry geom;
-
-                if (!profile.isComposite)
-                {
-                    geom = Sweep(_cache.GetLinearScalingFactor(), closed, profile, directrix, axis, false);
-                }
-                else
-                {
-                    for (uint32_t i = 0; i < profile.profiles.size(); i++)
-                    {
-                        IfcGeometry geom_t = Sweep(_cache.GetLinearScalingFactor(), closed, profile.profiles[i], directrix, axis, false, false);
-                        geom.AddPart(geom_t);
-                        geom.AddGeometry(geom_t);
-                    }
-                }
+                IfcGeometry geom = RevolveProfile(profile, axis, pos, angle, _settings._circleSegments);
 
                 mesh.transformation = placement;
                 _expressIDToGeometry[expressID] = geom;
@@ -1075,6 +1021,8 @@ namespace webifc::geometry
                 uint32_t placementID = _loader.GetOptionalRefArgument();
                 uint32_t directionID = _loader.GetRefArgument();
                 double depth = _loader.GetDoubleArgument();
+                const bool tapered = _loader.GetLineType(expressID) == schema::IFCEXTRUDEDAREASOLIDTAPERED;
+                const uint32_t endProfileID = tapered ? _loader.GetRefArgument() : 0;
 
                 auto lineProfileType = _loader.GetLineType(profileID);
                 IfcProfile profile = _geometryLoader.GetProfile(profileID);
@@ -1113,7 +1061,11 @@ namespace webifc::geometry
 
                 IfcGeometry geom;
 
-                if (!profile.isComposite)
+                if (tapered)
+                {
+                    geom = ExtrudeTapered(profile, _geometryLoader.GetProfile(endProfileID), dir, depth);
+                }
+                else if (!profile.isComposite)
                 {
                     geom = Extrude(profile, dir, depth);
                     if (flipWinding)
@@ -1156,6 +1108,67 @@ namespace webifc::geometry
                 mesh.expressID = expressID;
                 mesh.hasGeometry = true;
 
+                return mesh;
+            }
+            case schema::IFCCSGSOLID:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                mesh.children.push_back(GetMesh(_loader.GetRefArgument()));
+                return mesh;
+            }
+            case schema::IFCBLOCK:
+            case schema::IFCRECTANGULARPYRAMID:
+            case schema::IFCRIGHTCIRCULARCONE:
+            {
+                _loader.MoveToArgumentOffset(expressID, 0);
+                const uint32_t placementID = _loader.GetRefArgument();
+                const double x = _loader.GetDoubleArgument();
+                const double y = _loader.GetDoubleArgument();
+                IfcGeometry geom;
+                if (lineType == schema::IFCRIGHTCIRCULARCONE)
+                {
+                    const double height = x, radius = y;
+                    if (height <= 0 || radius <= 0) return mesh;
+                    const size_t segments = std::max<uint32_t>(12, _settings._circleSegments);
+                    const glm::dvec3 apex(0, 0, height), center(0);
+                    for (size_t i = 0; i < segments; ++i)
+                    {
+                        const double a = 2 * CONST_PI * i / segments;
+                        const double b = 2 * CONST_PI * ((i + 1) % segments) / segments;
+                        const glm::dvec3 p(radius * std::cos(a), radius * std::sin(a), 0);
+                        const glm::dvec3 q(radius * std::cos(b), radius * std::sin(b), 0);
+                        geom.AddFace(p, q, apex);
+                        geom.AddFace(center, q, p);
+                    }
+                }
+                else
+                {
+                    const double height = _loader.GetDoubleArgument();
+                    if (x <= 0 || y <= 0 || height <= 0) return mesh;
+                    if (lineType == schema::IFCBLOCK)
+                    {
+                        IfcProfile profile;
+                        profile.isConvex = true;
+                        // Unlike a centred profile, a block starts at the placement origin.
+                        profile.curve = GetRectangleCurve(x, y);
+                        for (auto& p : profile.curve.points) p += glm::dvec3(x / 2, y / 2, 0);
+                        geom = Extrude(profile, glm::dvec3(0, 0, 1), height);
+                    }
+                    else
+                    {
+                        const std::vector<glm::dvec3> ring = {
+                            {-x / 2, -y / 2, 0}, {x / 2, -y / 2, 0},
+                            {x / 2, y / 2, 0}, {-x / 2, y / 2, 0}};
+                        const glm::dvec3 apex(0, 0, height);
+                        for (size_t i = 0; i < ring.size(); ++i)
+                            geom.AddFace(ring[i], ring[(i + 1) % ring.size()], apex);
+                        geom.AddFace(ring[0], ring[2], ring[1]);
+                        geom.AddFace(ring[0], ring[3], ring[2]);
+                    }
+                }
+                mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
+                _expressIDToGeometry[expressID] = geom;
+                mesh.hasGeometry = true;
                 return mesh;
             }
             case schema::IFCRIGHTCIRCULARCYLINDER:
@@ -1254,109 +1267,38 @@ namespace webifc::geometry
             }
             case schema::IFCSPHERE:
             {
-                // IfcSphere is a CSG solid primitive: center + radius
-                // Arguments:
-                // 0: Position (IfcAxis2Placement3D) - defines center and local orientation
-                // 1: Radius
-
                 _loader.MoveToArgumentOffset(expressID, 0);
-                uint32_t placementID = _loader.GetRefArgument();
-                double radius = _loader.GetDoubleArgument();
-
-                // Get the placement matrix (center at [3], orientation in columns 0-2)
-                glm::dmat4 placement = _geometryLoader.GetLocalPlacement(placementID);
-
-                glm::dvec3 center = glm::dvec3(placement[3]);
-                glm::dvec3 xAxis = glm::normalize(glm::dvec3(placement[0]));
-                glm::dvec3 yAxis = glm::normalize(glm::dvec3(placement[1]));
-                glm::dvec3 zAxis = glm::normalize(glm::dvec3(placement[2]));
-
-                // Tessellate sphere using latitude/longitude grid
-                // Use circleSegments for azimuthal (longitude) resolution
-                // Use half that for latitudinal resolution (reasonable quality)
-                uint32_t azimuthSegments = _settings._circleSegments;
-                uint32_t altitudeSegments = _settings._circleSegments / 2;
-                if (altitudeSegments < 4) altitudeSegments = 4; // minimum for decent sphere
-
+                const uint32_t placementID = _loader.GetRefArgument();
+                const double radius = _loader.GetDoubleArgument();
+                if (radius <= 0) return mesh;
+                const uint32_t azimuth = std::max<uint32_t>(12, _settings._circleSegments);
+                const uint32_t altitude = std::max<uint32_t>(4, azimuth / 2);
                 IfcGeometry geom;
-
-                // Generate vertices (position + dummy normal for consistency with other cases)
-                std::vector<glm::dvec3> vertices;
-                vertices.reserve((altitudeSegments + 1) * (azimuthSegments + 1));
-
-                for (uint32_t lat = 0; lat <= altitudeSegments; ++lat)
-                {
-                    double theta = glm::pi<double>() * lat / altitudeSegments; // 0 (north pole) to pi (south pole)
-                    double sinTheta = std::sin(theta);
-                    double cosTheta = std::cos(theta);
-
-                    for (uint32_t lon = 0; lon <= azimuthSegments; ++lon)
+                auto point = [&](uint32_t lat, uint32_t lon) {
+                    if (lat == 0) return glm::dvec3(0, 0, radius);
+                    if (lat == altitude) return glm::dvec3(0, 0, -radius);
+                    const double theta = glm::pi<double>() * lat / altitude;
+                    const double phi = 2 * glm::pi<double>() * (lon % azimuth) / azimuth;
+                    return radius * glm::dvec3(std::sin(theta) * std::cos(phi),
+                                              std::sin(theta) * std::sin(phi), std::cos(theta));
+                };
+                auto face = [&](glm::dvec3 a, glm::dvec3 b, glm::dvec3 c) {
+                    if (glm::dot(glm::cross(b - a, c - a), a + b + c) < 0) std::swap(b, c);
+                    const uint32_t start = geom.numPoints;
+                    for (const auto p : {a, b, c}) geom.AddPoint(p, p / radius);
+                    geom.AddFace(start, start + 1, start + 2);
+                };
+                for (uint32_t lat = 0; lat < altitude; ++lat)
+                    for (uint32_t lon = 0; lon < azimuth; ++lon)
                     {
-                        double phi = 2.0 * glm::pi<double>() * lon / azimuthSegments;
-                        double sinPhi = std::sin(phi);
-                        double cosPhi = std::cos(phi);
-
-                        // Spherical coordinates to Cartesian (in local space)
-                        glm::dvec3 localPos(
-                            radius * sinTheta * cosPhi,
-                            radius * sinTheta * sinPhi,
-                            radius * cosTheta
-                        );
-
-                        // Transform to world space using placement axes
-                        glm::dvec3 pos = center + localPos.x * xAxis + localPos.y * yAxis + localPos.z * zAxis;
-
-                        vertices.push_back(pos);
+                        const auto a = point(lat, lon), b = point(lat, lon + 1);
+                        const auto c = point(lat + 1, lon), d = point(lat + 1, lon + 1);
+                        if (lat != 0) face(a, b, c);
+                        if (lat + 1 != altitude) face(b, d, c);
                     }
-                }
-
-                // Build vertex buffer (6 floats per vertex: pos + dummy normal)
-                for (const auto& v : vertices)
-                {
-                    geom.vertexData.push_back(v.x);
-                    geom.vertexData.push_back(v.y);
-                    geom.vertexData.push_back(v.z);
-                    geom.vertexData.push_back(0.0); // dummy normal X
-                    geom.vertexData.push_back(0.0); // dummy normal Y
-                    geom.vertexData.push_back(1.0); // dummy normal Z
-                }
-
-                // Generate triangle indices (quads -> two triangles, poles handled correctly)
-                uint32_t vertsPerRing = azimuthSegments + 1;
-                for (uint32_t lat = 0; lat < altitudeSegments; ++lat)
-                {
-                    uint32_t bottom = lat * vertsPerRing;
-                    uint32_t top = bottom + vertsPerRing;
-
-                    for (uint32_t lon = 0; lon < azimuthSegments; ++lon)
-                    {
-                        uint32_t bl = bottom + lon;     // bottom-left
-                        uint32_t br = bottom + lon + 1; // bottom-right
-                        uint32_t tl = top + lon;        // top-left
-                        uint32_t tr = top + lon + 1;    // top-right
-
-                        // First triangle
-                        geom.indexData.push_back(bl);
-                        geom.indexData.push_back(br);
-                        geom.indexData.push_back(tl);
-
-                        // Second triangle
-                        geom.indexData.push_back(br);
-                        geom.indexData.push_back(tr);
-                        geom.indexData.push_back(tl);
-                    }
-                }
-
-                geom.numFaces = geom.indexData.size() / 3;
-                geom.numPoints = static_cast<uint32_t>(vertices.size());
-                geom.isPolygon = false;
-                geom.buildPlanes();
-
                 _expressIDToGeometry[expressID] = geom;
                 mesh.hasGeometry = true;
-                mesh.expressID = expressID;
-                mesh.transformation = placement; // apply the sphere's placement
-                
+                mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
                 return mesh;
             }
             case schema::IFCCIRCLE:
@@ -2087,6 +2029,7 @@ namespace webifc::geometry
             TriangulateBounds(geometry, bounds3D, expressID);
             break;
         }
+        case schema::IFCFACESURFACE:
         case schema::IFCADVANCEDFACE:
         {
             _loader.MoveToArgumentOffset(expressID, 0);
@@ -2103,29 +2046,52 @@ namespace webifc::geometry
             _loader.MoveToArgumentOffset(expressID, 1);
             auto surfRef = _loader.GetRefArgument();
 
+            _loader.MoveToArgumentOffset(expressID, 2);
+            const bool sameSense = _loader.GetStringArgument() == "T";
             auto surface = GetSurface(surfRef);
+            IfcGeometry faceGeometry;
 
             // TODO: place the face in the surface and tringulate
 
             if (surface.BSplineSurface.Active)
             {
-                TriangulateBspline(geometry, bounds3D, surface, _cache.GetLinearScalingFactor());
+                TriangulateBspline(faceGeometry, bounds3D, surface, _cache.GetLinearScalingFactor());
             }
             else if (surface.CylinderSurface.Active)
             {
-                TriangulateCylindricalSurface(geometry, bounds3D, surface, _settings._circleSegments);
+                TriangulateCylindricalSurface(faceGeometry, bounds3D, surface, _settings._circleSegments);
             }
             else if (surface.RevolutionSurface.Active)
             {
-                TriangulateRevolution(geometry, bounds3D, surface, _settings._circleSegments);
+                TriangulateRevolution(faceGeometry, bounds3D, surface, _settings._circleSegments);
             }
             else if (surface.ExtrusionSurface.Active)
             {
-                TriangulateExtrusion(geometry, bounds3D, surface);
+                TriangulateExtrusion(faceGeometry, bounds3D, surface);
             }
             else
             {
-                TriangulateBounds(geometry, bounds3D, expressID);
+                TriangulateBounds(faceGeometry, bounds3D, expressID);
+            }
+            // Bound orientation describes the loops. SameSense describes the face
+            // relative to its underlying surface, independently of those loops.
+            for (uint32_t i = 0; i < faceGeometry.numFaces; ++i)
+            {
+                const auto f = faceGeometry.GetFace(i);
+                auto a = faceGeometry.GetPoint(f.i0), b = faceGeometry.GetPoint(f.i1), c = faceGeometry.GetPoint(f.i2);
+                glm::dvec3 surfaceNormal(0);
+                if (_loader.GetLineType(surfRef) == schema::IFCPLANE)
+                    surfaceNormal = glm::dvec3(surface.transformation[2]);
+                else if (surface.CylinderSurface.Active)
+                {
+                    const auto axis = glm::normalize(glm::dvec3(surface.transformation[2]));
+                    const auto radial = (a + b + c) / 3.0 - glm::dvec3(surface.transformation[3]);
+                    surfaceNormal = radial - axis * glm::dot(radial, axis);
+                }
+                if (glm::dot(glm::cross(b - a, c - a), surfaceNormal) < 0) std::swap(b, c);
+                if (!sameSense) std::swap(b, c);
+                // Rebuild normals together with triangle winding.
+                geometry.AddFace(a, b, c);
             }
             break;
         }
@@ -2180,6 +2146,15 @@ namespace webifc::geometry
 
     IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
+        // A intersect B = A minus (A minus B). Reuse the bounded difference kernel,
+        // including its handling of transformed/multipart operands and half spaces.
+        if (op == "INTERSECTION")
+        {
+            if (firstGeoms.empty() || secondGeoms.empty()) return IfcGeometry();
+            std::vector<IfcGeometry> outside{BoolProcess(firstGeoms, secondGeoms, "DIFFERENCE", _settings)};
+            return BoolProcess(firstGeoms, outside, "DIFFERENCE", _settings);
+        }
+
         spdlog::debug("[BoolProcess({})]");
         IfcGeometry finalResult;
 

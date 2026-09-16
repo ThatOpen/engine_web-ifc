@@ -27,7 +27,8 @@ namespace webifc::parsing
     SET_BEGIN,
     SET_END,
     LINE_END,
-    INTEGER
+    INTEGER,
+    BINARY
   };
   
   
@@ -36,8 +37,8 @@ namespace webifc::parsing
       public:
         IfcTokenStream(const size_t chunkSize, const uint64_t maxChunks);
         ~IfcTokenStream();
-        void SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData, bool fromStream = false);
-        void SetTokenSource(std::istream &requestData);
+        bool SetTokenSource(const std::function<uint32_t(char *, size_t, size_t)> &requestData, bool fromStream = false);
+        bool SetTokenSource(std::istream &requestData);
         template <typename T> T Read()
         {
           if (!_cChunk->IsLoaded()) {
@@ -150,6 +151,7 @@ namespace webifc::parsing
               bool Clear();
               std::string_view ReadString(const size_t ptr,const size_t size);
               inline bool IsLoaded() { return _loaded; }
+              inline bool HasParseError() const { return _parseFailed; }
               inline size_t TokenSize() { return _currentSize; }
               inline size_t GetTokenRef() { return _startRef; }
               inline size_t GetMaxSize() { return _chunkSize; }
@@ -183,6 +185,7 @@ namespace webifc::parsing
             private:
               void Load();
               bool _loaded=false;
+              bool _parseFailed=false;
               size_t _currentSize=0;
               size_t _startRef=0;
               size_t _fileStartRef;

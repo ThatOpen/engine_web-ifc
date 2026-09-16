@@ -38,6 +38,8 @@ namespace webifc::geometry
     IfcCurve GetLocalCurve(uint32_t expressID) const;
     IfcCurve GetCurve(uint32_t expressID, uint8_t dimensions, bool edge = false) const;
 
+    IfcCurve GetCurveWithParameters(uint32_t expressID, uint8_t dimensions, std::optional<double> start, std::optional<double> end) const;
+
     // Helper function to compute the total length of the curve
     double ComputeCurveLength(const IfcCurve& curve) const;
 

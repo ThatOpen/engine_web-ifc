@@ -24,8 +24,8 @@ namespace webifc::parsing
       IfcLoader(uint32_t tapeSize, uint64_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager);  
       ~IfcLoader();
       const std::vector<uint32_t> GetHeaderLinesWithType(const uint32_t type) const;
-      void LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
-      void LoadFile(std::istream &requestData);
+      bool LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
+      bool LoadFile(std::istream &requestData);
       void SaveFile(const std::function<void(char *, size_t)> &outputData, bool orderLinesByExpressID) const;
       void SaveFile(std::ostream &outputData, bool orderLinesByExpressID) const;
       const std::vector<uint32_t> GetExpressIDsWithType(const uint32_t type) const;
