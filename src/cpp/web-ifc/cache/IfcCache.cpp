@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.   */
 
 #include <spdlog/spdlog.h>
+#include <algorithm>
 #include "IfcCache.h"
 
 namespace webifc::cache
@@ -61,22 +62,55 @@ namespace webifc::cache
 
       uint32_t relatingBuildingElement = _loader.GetRefArgument();
       auto aggregates = _loader.GetSetArgument();
-      auto relVoidsIt2 = _relVoids.find(relatingBuildingElement);
 
       for (auto &aggregate : aggregates)
       {
         uint32_t aggregateID = _loader.GetRefArgument(aggregate);
         resultVector[relatingBuildingElement].push_back(aggregateID);
-        if (relVoidsIt2 != _relVoids.end() && !relVoidsIt2->second.empty())
+      }
+    }
+
+    // Propagate voids from an aggregating element down through the whole
+    // (possibly nested) aggregate hierarchy. This must reach a fixed point
+    // because the aggregate definitions are not guaranteed to be ordered
+    // such that a parent's voids are known before its children are processed.
+    bool changed = true;
+    while (changed)
+    {
+      changed = false;
+      for (auto &aggregatePair : resultVector)
+      {
+        auto relVoidsIt2 = _relVoids.find(aggregatePair.first);
+        if (relVoidsIt2 == _relVoids.end() || relVoidsIt2->second.empty())
+        {
+          continue;
+        }
+        // Copy the parent's voids up front so we never dereference a map
+        // iterator in _relVoids after a rehash-triggering insertion below.
+        std::vector<uint32_t> parentVoidIDs = relVoidsIt2->second;
+        for (uint32_t aggregateID : aggregatePair.second)
         {
           auto relVoidsIt1 = _relVoids.find(aggregateID);
-          // any any voids that are aggregated to the voids map
           if (relVoidsIt1 == _relVoids.end())
           {
-            _relVoids[aggregateID] = std::vector<uint32_t>();
-            relVoidsIt1 = _relVoids.find(aggregateID);
+            _relVoids[aggregateID] = parentVoidIDs;
+            changed = true;
           }
-          relVoidsIt1->second.insert(relVoidsIt1->second.end(), relVoidsIt2->second.begin(), relVoidsIt2->second.end());
+          else
+          {
+            // Only add voids that are not already present to avoid infinite loops
+            std::vector<uint32_t> &existing = relVoidsIt1->second;
+            bool anyNew = false;
+            for (uint32_t relVoidExpressID : parentVoidIDs)
+            {
+              if (std::find(existing.begin(), existing.end(), relVoidExpressID) == existing.end())
+              {
+                existing.push_back(relVoidExpressID);
+                anyNew = true;
+              }
+            }
+            changed = changed || anyNew;
+          }
         }
       }
     }
