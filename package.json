@@ -86,5 +86,10 @@
     "crypto": false,
     "path": false,
     "fs": false
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "esbuild@0.28.2": true,
+    "unrs-resolver@1.12.2": true
   }
 }

@@ -24,8 +24,8 @@ namespace webifc::parsing
       IfcLoader(uint32_t tapeSize, uint64_t memoryLimit,uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager);  
       ~IfcLoader();
       const std::vector<uint32_t> GetHeaderLinesWithType(const uint32_t type) const;
-      void LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
-      void LoadFile(std::istream &requestData);
+      bool LoadFile(const std::function<uint32_t(char *, size_t, size_t)> &requestData);
+      bool LoadFile(std::istream &requestData);
       void SaveFile(const std::function<void(char *, size_t)> &outputData, bool orderLinesByExpressID) const;
       void SaveFile(std::ostream &outputData, bool orderLinesByExpressID) const;
       const std::vector<uint32_t> GetExpressIDsWithType(const uint32_t type) const;
@@ -39,8 +39,8 @@ namespace webifc::parsing
       std::string GetDecodedStringArgument() const;
       std::string GetExpandedUUIDArgument() const;
       double GetDoubleArgument() const;
-      long GetIntArgument() const;
-      long GetIntArgument(const uint32_t tapeOffset) const;
+      int64_t GetIntArgument() const;
+      int64_t GetIntArgument(const uint32_t tapeOffset) const;
       double GetDoubleArgument(const uint32_t tapeOffset) const;
       std::string_view  GetDoubleArgumentAsString() const;
       double GetOptionalDoubleParam(double defaultValue) const;
@@ -63,7 +63,7 @@ namespace webifc::parsing
       uint32_t GetCurrentLineExpressID() const;
       void RemoveLine(const uint32_t expressID);
       void PushDouble(double input);
-      void PushInt(int input);
+      void PushInt(int64_t input);
       std::string GenerateUUID() const;
       IfcLoader* Clone();
       uint32_t GetNextExpressID(uint32_t expressId) const;

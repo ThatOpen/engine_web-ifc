@@ -7,12 +7,14 @@
 #include <vector>
 #include <stack>
 #include <cstdint>
+#include <cmath>
 #include <memory>
 #include <emscripten/bind.h>
 #include <spdlog/spdlog.h>
 #include <limits>
 #include "../web-ifc/modelmanager/ModelManager.h"
 #include "../version.h"
+#include "../web-ifc/parsing/StepBinary.h"
 #include "../web-ifc/geometry/operations/bim-geometry/extrusion.h"
 #include "../web-ifc/geometry/operations/bim-geometry/sweep.h"
 #include "../web-ifc/geometry/operations/bim-geometry/circularSweep.h"
@@ -60,7 +62,11 @@ int OpenModel(webifc::manager::LoaderSettings settings, emscripten::val callback
         return len;
     };
 
-    manager.GetIfcLoader(modelID)->LoadFile(loaderFunc);
+    if (!manager.GetIfcLoader(modelID)->LoadFile(loaderFunc))
+    {
+        manager.CloseModel(modelID);
+        return -1;
+    }
     return modelID;
 }
 
@@ -465,12 +471,93 @@ bool ValidateStringArguments(const emscripten::val &value)
     return true;
 }
 
+bool IsSafeInteger(const emscripten::val &value)
+{
+    if (!value.isNumber()) return false;
+    const double number = value.as<double>();
+    return std::isfinite(number) && std::floor(number) == number && std::abs(number) <= 9007199254740991.0;
+}
+
+// Validate integer payloads before appending any tokens or replacing a line's tape offset.
+bool ValidateIntegerArguments(const emscripten::val &value)
+{
+    if (value.isArray())
+    {
+        const uint32_t size = value["length"].as<uint32_t>();
+        for (uint32_t i = 0; i < size; ++i)
+            if (!ValidateIntegerArguments(value[std::to_string(i)])) return false;
+    }
+    else if (!value.isNull() && !value.isUndefined() && value.typeOf().as<std::string>() == "object")
+    {
+        const auto type = value["type"];
+        if (!type.isNumber()) return true;
+        const auto token = static_cast<webifc::parsing::IfcTokenType>(type.as<uint32_t>());
+        const bool integer = token == webifc::parsing::IfcTokenType::INTEGER ||
+            (token == webifc::parsing::IfcTokenType::LABEL && value["valueType"].isNumber() &&
+             value["valueType"].as<uint32_t>() == webifc::parsing::IfcTokenType::INTEGER);
+        const auto payload = value["value"];
+        if (integer)
+        {
+            if (!payload.isArray()) return IsSafeInteger(payload);
+            const uint32_t size = payload["length"].as<uint32_t>();
+            for (uint32_t i = 0; i < size; ++i)
+                if (!IsSafeInteger(payload[std::to_string(i)])) return false;
+        }
+        else if (payload.isArray()) return ValidateIntegerArguments(payload);
+    }
+    return true;
+}
+
+bool IsBinaryValue(const emscripten::val &value)
+{
+    return value.isString() && webifc::parsing::IsValidStepBinary(value.as<std::string>());
+}
+
+// Validate binary payloads before appending any tokens or replacing a line's tape offset.
+bool ValidateBinaryArguments(const emscripten::val &value)
+{
+    if (value.isArray())
+    {
+        const uint32_t size = value["length"].as<uint32_t>();
+        for (uint32_t i = 0; i < size; ++i)
+            if (!ValidateBinaryArguments(value[std::to_string(i)])) return false;
+    }
+    else if (!value.isNull() && !value.isUndefined() && value.typeOf().as<std::string>() == "object")
+    {
+        const auto type = value["type"];
+        if (!type.isNumber()) return true;
+        const auto token = static_cast<webifc::parsing::IfcTokenType>(type.as<uint32_t>());
+        const bool binary = token == webifc::parsing::IfcTokenType::BINARY ||
+            (token == webifc::parsing::IfcTokenType::LABEL && value["valueType"].isNumber() &&
+             value["valueType"].as<uint32_t>() == webifc::parsing::IfcTokenType::BINARY);
+        const auto payload = value["value"];
+        if (binary)
+        {
+            if (!payload.isArray()) return IsBinaryValue(payload);
+            const uint32_t size = payload["length"].as<uint32_t>();
+            for (uint32_t i = 0; i < size; ++i)
+                if (!IsBinaryValue(payload[std::to_string(i)])) return false;
+        }
+        else if (payload.isArray()) return ValidateBinaryArguments(payload);
+    }
+    return true;
+}
+
 bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::val value)
 {
     bool responseCode = true;
     auto loader = manager.GetIfcLoader(modelID);
     switch (t)
     {
+    case webifc::parsing::IfcTokenType::BINARY:
+    {
+        if (!IsBinaryValue(value)) return false;
+        std::string text = value.as<std::string>();
+        std::transform(text.begin(), text.end(), text.begin(), webifc::parsing::CanonicalBinaryDigit);
+        loader->Push<uint16_t>(static_cast<uint16_t>(text.size()));
+        loader->Push((void*)text.data(), text.size());
+        break;
+    }
     case webifc::parsing::IfcTokenType::STRING:
     {
         std::string text;
@@ -515,8 +602,8 @@ bool WriteValue(uint32_t modelID, webifc::parsing::IfcTokenType t, emscripten::v
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
-        int val = value.as<int>();
-        loader->PushInt(val);
+        if (!IsSafeInteger(value)) return false;
+        loader->PushInt(static_cast<int64_t>(value.as<double>()));
         break;
     }
     default:
@@ -552,14 +639,13 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
             for (size_t z = 0; z < sz; z++)
             {
                 loader->Push<uint8_t>(type);
-                if (type == webifc::parsing::IfcTokenType::STRING)
+                if (type == webifc::parsing::IfcTokenType::BINARY || type == webifc::parsing::IfcTokenType::STRING)
                 {
                     responseCode = WriteValue(modelID, type, innerVal[std::to_string(z)]) && responseCode;
                 }
                 else if (type == webifc::parsing::IfcTokenType::INTEGER)
                 {
-                    int value = innerVal[std::to_string(z)].as<int>();
-                    loader->PushInt(value);
+                    if (!WriteValue(modelID, type, innerVal[std::to_string(z)])) responseCode = false;
                 }
                 else
                 {
@@ -614,6 +700,7 @@ bool WriteSet(uint32_t modelID, emscripten::val &val)
                 responseCode = WriteValue(modelID, type, child["internalValue"]) && responseCode;
                 break;
             }
+            case webifc::parsing::IfcTokenType::BINARY:
             case webifc::parsing::IfcTokenType::STRING:
             case webifc::parsing::IfcTokenType::ENUM:
             case webifc::parsing::IfcTokenType::REF:
@@ -668,6 +755,16 @@ bool WriteHeaderLine(uint32_t modelID, uint32_t type, emscripten::val parameters
 {
     if (!manager.IsModelOpen(modelID))
         return false;
+    if (!ValidateBinaryArguments(parameters))
+    {
+        spdlog::error("Invalid STEP binary value: expected a hex string with valid padding, at most 65535 characters");
+        return false;
+    }
+    if (!ValidateIntegerArguments(parameters))
+    {
+        spdlog::error("Integer write rejected: expected a number within the JavaScript safe integer range");
+        return false;
+    }
     if (!ValidateStringArguments(parameters))
     {
         spdlog::error("STRING exceeds the encoded tape limit or is not a string");
@@ -696,6 +793,16 @@ bool WriteLine(uint32_t modelID, uint32_t expressID, uint32_t type, emscripten::
 {
     if (!manager.IsModelOpen(modelID))
         return false;
+    if (!ValidateBinaryArguments(parameters))
+    {
+        spdlog::error("Invalid STEP binary value: expected a hex string with valid padding, at most 65535 characters");
+        return false;
+    }
+    if (!ValidateIntegerArguments(parameters))
+    {
+        spdlog::error("Integer write rejected: expected a number within the JavaScript safe integer range");
+        return false;
+    }
     if (!ValidateStringArguments(parameters))
     {
         spdlog::error("STRING exceeds the encoded tape limit or is not a string");
@@ -727,6 +834,8 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     auto loader = manager.GetIfcLoader(modelID);
     switch (t)
     {
+    case webifc::parsing::IfcTokenType::BINARY:
+        return emscripten::val(std::string(loader->GetStringArgument()));
     case webifc::parsing::IfcTokenType::STRING:
     {
         return emscripten::val(loader->GetDecodedStringArgument());
@@ -755,8 +864,8 @@ emscripten::val ReadValue(uint32_t modelID, webifc::parsing::IfcTokenType t)
     }
     case webifc::parsing::IfcTokenType::INTEGER:
     {
-        long d = loader->GetIntArgument();
-        return emscripten::val(d);
+        const int64_t d = loader->GetIntArgument();
+        return emscripten::val(static_cast<double>(d));
     }
     case webifc::parsing::IfcTokenType::REF:
     {
@@ -816,6 +925,7 @@ emscripten::val GetArgs(uint32_t modelID, bool inObject = false, bool inList = f
             arguments.set(size++, obj);
             break;
         }
+        case webifc::parsing::IfcTokenType::BINARY:
         case webifc::parsing::IfcTokenType::STRING:
         case webifc::parsing::IfcTokenType::ENUM:
         case webifc::parsing::IfcTokenType::REAL:
