@@ -71,8 +71,9 @@ export const INTEGER = 10;
  * @property {number} BOOLEAN_UNION_THRESHOLD - Minimum number of solids before triggering a boolean union operation.
  */
 export interface LoaderSettings {
-  /** Opt into parsing older/preview schemas using incompatible generated layouts.
-   * Defaults to false. This does not provide full support for the named schema.
+  /** Allow best-effort parsing of older/preview schemas using incompatible generated layouts.
+   * Defaults to true for backward compatibility. Set false to reject these aliases.
+   * This does not provide full support for the named schema.
    */
   ALLOW_INCOMPATIBLE_SCHEMA_ALIASES?: boolean;
   COORDINATE_TO_ORIGIN?: boolean;
@@ -492,6 +493,7 @@ export class IfcAPI {
 
   private CreateSettings(settings?: LoaderSettings) {
     let s: LoaderSettings = {
+      ALLOW_INCOMPATIBLE_SCHEMA_ALIASES: true,
       COORDINATE_TO_ORIGIN: false,
       CIRCLE_SEGMENTS: 12,
       TAPE_SIZE: 67108864,
@@ -509,7 +511,7 @@ export class IfcAPI {
     return s;
   }
 
-  private LookupSchemaId(schemaName: string, allowIncompatibleAlias = false) {
+  private LookupSchemaId(schemaName: string, allowIncompatibleAlias = true) {
     const name = schemaName.toUpperCase();
     for (var i = 0; i < SchemaNames.length; i++) {
       if (typeof SchemaNames[i] !== "undefined") {
@@ -521,7 +523,7 @@ export class IfcAPI {
             if (!compatible) {
               if (!allowIncompatibleAlias) {
                 Log.error(`Schema ${name} requires an incompatible ${canonical} alias. ` +
-                  "Set ALLOW_INCOMPATIBLE_SCHEMA_ALIASES only for explicit best-effort parsing.");
+                  "Set ALLOW_INCOMPATIBLE_SCHEMA_ALIASES to true to allow best-effort parsing.");
                 return -1;
               }
               Log.warn(`Parsing ${name} using ${canonical}; entity and attribute layouts may differ.`);
