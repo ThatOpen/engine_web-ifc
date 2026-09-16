@@ -91,7 +91,9 @@ tsSchema.push('const _valueName = tapeItem.type === 4 ? "internalValue" : "value
 tsSchema.push('return {[_valueName]:tapeItem[_valueName],valueType:tapeItem.type,type:2,label:tapeItem.name};');
 tsSchema.push('}')
 
-var files = fs.readdirSync("./");
+// Keep schema IDs independent of unrelated files in this directory.
+// Published schemas use IDs 1 (IFC2X3), 2 (IFC4), and 3 (IFC4X3).
+const files: string[] = ["", ...fs.readdirSync("./").filter((name: string) => name.endsWith(".exp")).sort()];
 tsSchema.push("// supported ifc schemas");
   tsSchema.push(`export enum Schemas {`);
   for (var i = 0; i < files.length; i++) {
