@@ -1524,8 +1524,10 @@ namespace fuzzybools
                 //    continue;
                 //}
 
-                // TODO: why is this swapped? winding doesnt matter much, but still
-                geom.AddFace(ptB, ptA, ptC, p.refPlane);
+                // Preserve the operand boundary orientation, including shared planes.
+                const auto boundaryNormal = posA.loc == MeshLocation::BOUNDARY ? posA.normal : posB.normal;
+                if (glm::dot(raydir, boundaryNormal) < 0) std::swap(ptA, ptB);
+                geom.AddFace(ptA, ptB, ptC, p.refPlane);
 
 #ifdef CSG_DEBUG_OUTPUT
                 // edges3DTriangles.push_back({ glm::dvec2(ptA.z+ ptA.x/2, ptA.y+ ptA.x/2), glm::dvec2(ptB.z+ ptB.x/2, ptB.y+ ptB.x/2) });
