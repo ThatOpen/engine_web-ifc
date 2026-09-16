@@ -545,6 +545,8 @@ namespace webifc::geometry
 			}
 		}
 		return geometry;
+	}
+
 	// Connect corresponding sampled edges of the start and end profiles.
 	// End profile placement is already applied by GetProfile; translate only by the spine.
 	inline IfcGeometry ExtrudeTapered(const IfcProfile& start, const IfcProfile& end, glm::dvec3 dir, double depth)
