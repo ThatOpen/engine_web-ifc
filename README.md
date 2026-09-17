@@ -84,6 +84,24 @@ Run `npm run setup-env` whenever you open a new terminal, this will set up the r
 
 Run `npm run build-release` to build a release version of the wasm binary and the accompanying web-ifc api. It will be placed in `./dist`.
 
+Release builds enable SIMD, link-time optimization and
+[native WebAssembly exception handling](https://emscripten.org/docs/porting/exceptions.html#webassembly-exception-handling-based-support)
+during both compilation and linking. Native exception handling reduces the
+code-size and runtime overhead of C++ exceptions on modern WebAssembly engines.
+
+To build for an older WebAssembly runtime without native exception support,
+configure the existing build directory once before running the same release command:
+
+```sh
+emcmake cmake -S src/cpp -B src/cpp/build_wasm -DEMSCRIPTEN=true -DCMAKE_BUILD_TYPE=Release -DWEB_IFC_WASM_NATIVE_EXCEPTIONS=OFF
+npm run build-release
+```
+
+The option applies to the browser, Node and multithreaded targets. It defaults to
+`ON`; setting it to `OFF` uses JavaScript-based exception handling instead. C++
+exception catching remains enabled in both modes. This option does not affect
+native C++ builds.
+
 If you wish to build the WASM with debugging enabled you can run `npm run build-debug`. This will enable you to inspect debugging information better when running web-ifc.
 
 Run `npm run dev` to launch a development server with a basic ifc file viewer.
