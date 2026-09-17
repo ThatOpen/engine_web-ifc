@@ -985,8 +985,6 @@ namespace webifc::geometry
             }
             case schema::IFCREVOLVEDAREASOLID:
             {
-                IfcComposedMesh mesh;
-
                 _loader.MoveToArgumentOffset(expressID, 0);
                 uint32_t profileID = _loader.GetRefArgument();
                 uint32_t placementID = _loader.GetOptionalRefArgument();
