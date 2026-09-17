@@ -551,7 +551,7 @@ export class IfcAPI {
     let result = this.wasmModule.OpenModel(
       s,
       (destPtr: number, offsetInSrc: number, destSize: number) => {
-        let srcSize = Math.min(data.byteLength - offsetInSrc, destSize);
+        let srcSize = Math.max(0, Math.min(data.byteLength - offsetInSrc, destSize));
         let dest = this.wasmModule.HEAPU8.subarray(destPtr, destPtr + srcSize);
         let src = data.subarray(offsetInSrc, offsetInSrc + srcSize);
         dest.set(src);
@@ -560,8 +560,12 @@ export class IfcAPI {
     );
     if (result < 0) return -1;
     this.deletedLines.set(result, new Set());
-    var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0]
-      .value;
+    var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
+    if (typeof schemaName !== "string") {
+      Log.error("Missing or invalid FILE_SCHEMA header");
+      this.CloseModel(result);
+      return -1;
+    }
     let id = this.LookupSchemaId(schemaName, s.ALLOW_INCOMPATIBLE_SCHEMA_ALIASES);
     if (id == -1) {
       Log.error("Unsupported Schema:" + schemaName);
@@ -597,8 +601,12 @@ export class IfcAPI {
     );
     if (result < 0) return -1;
     this.deletedLines.set(result, new Set());
-    var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0]
-      .value;
+    var schemaName = this.GetHeaderLine(result, FILE_SCHEMA).arguments[0][0].value;
+    if (typeof schemaName !== "string") {
+      Log.error("Missing or invalid FILE_SCHEMA header");
+      this.CloseModel(result);
+      return -1;
+    }
     this.modelSchemaList[result] = this.LookupSchemaId(schemaName, s.ALLOW_INCOMPATIBLE_SCHEMA_ALIASES);
     this.modelSchemaNameList[result] = schemaName;
     if (this.modelSchemaList[result] == -1) {
