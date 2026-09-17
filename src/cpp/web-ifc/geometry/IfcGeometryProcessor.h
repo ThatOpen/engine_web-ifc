@@ -60,7 +60,7 @@ namespace webifc::geometry
     void SetTransformation(const std::array<double, 16> &val);
     std::array<double, 16> GetFlatCoordinationMatrix() const;
     glm::dmat4 GetCoordinationMatrix() const;
-    void Clear();
+    void Clear(bool keepMappedRepresentations = false);
     IfcGeometryProcessor *Clone(const webifc::parsing::IfcLoader &loader) const;
 
   protected:
@@ -71,6 +71,11 @@ namespace webifc::geometry
     IfcGeometry GetBrep(uint32_t expressID);
     IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGroups, std::vector<IfcGeometry> &secondGroups, std::string op, IfcGeometrySettings _settings);
     std::unordered_map<uint32_t, IfcGeometry> _expressIDToGeometry;
+    struct MappedRepresentation { IfcComposedMesh mesh; std::vector<std::pair<uint32_t, IfcGeometry>> geometries; };
+    std::unordered_map<uint32_t, MappedRepresentation> _mappedRepresentations;
+    size_t _mappedRepresentationsBytes = 0;
+    uint64_t _mappedRepresentationsRevision = 0;
+    IfcComposedMesh GetMeshUncached(uint32_t expressID, uint32_t lineType);
     IfcSurface GetSurface(uint32_t expressID);
     IfcGeometryLoader _geometryLoader;
     glm::dmat4 _transformation = glm::dmat4(1.0);
