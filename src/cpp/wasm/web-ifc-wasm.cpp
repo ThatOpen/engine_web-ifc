@@ -125,7 +125,7 @@ void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> &expressIds, ems
         }
 
         // clear geometry, freeing memory, client is expected to have consumed the data
-        geomLoader->Clear();
+        geomLoader->Clear(true);
 
         index++;
     }
@@ -1335,6 +1335,7 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("GetModelSize", &GetModelSize);
     emscripten::function("IsModelOpen", &IsModelOpen);
     emscripten::function("GetGeometry", &GetGeometry);
+    emscripten::function("ResetCache", &ResetCache);
     emscripten::function("GetFlatMesh", &GetFlatMesh);
     emscripten::function("GetCoordinationMatrix", &GetCoordinationMatrix);
     emscripten::function("GetWorldTransformMatrix", &GetWorldTransformMatrix);

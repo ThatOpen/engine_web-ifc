@@ -62,6 +62,7 @@ namespace webifc::parsing
       void AddHeaderLineTape(const uint32_t type, const uint32_t start);
       uint32_t GetCurrentLineExpressID() const;
       void RemoveLine(const uint32_t expressID);
+      uint64_t GetRevision() const { return _revision; }
       void PushDouble(double input);
       void PushInt(int64_t input);
       std::string GenerateUUID() const;
@@ -79,6 +80,7 @@ namespace webifc::parsing
         uint32_t tapeOffset;
       };
       IfcLoader(uint32_t maxExpressId, uint32_t lineWriterBuffer, const schema::IfcSchemaManager &schemaManager, IfcTokenStream * tokenStream, ankerl::unordered_dense::map<uint32_t, IfcLine> &lines, std::vector<IfcLine> &headerLines,std::unordered_map<uint32_t, std::vector<uint32_t>> &ifcTypeToExpressID);
+      uint64_t _revision = 0;
       uint32_t _maxExpressId;
       const uint32_t _lineWriterBuffer;
       const schema::IfcSchemaManager &_schemaManager;
