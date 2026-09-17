@@ -291,6 +291,72 @@ namespace webifc::geometry
                 uint32_t firstOperandID = _loader.GetRefArgument();
                 uint32_t secondOperandID = _loader.GetRefArgument();
 
+                // DEEP-CHAIN FLATTEN (fixes #1197; also helps deep-chain #1774/#1999): Tekla/Revit
+                // emit (((base - c1) - c2) - ... - cn) as a spine of nested clippings. Processing it
+                // recursively re-runs a full CSG pass per level over the growing result -> ~O(n^2),
+                // which hangs (#1197: StreamAllMeshesWithTypes never completes; 35 half-space clips)
+                // or blows the WASM stack on very long chains (#1774: 1175 extrusion cuts). For a pure-DIFFERENCE
+                // chain with NON-FACETED cutters, A-c1-c2-...-cn == subtract-all-in-one-pass
+                // (mathematically exact), so we collect the whole spine iteratively and do a
+                // SINGLE BoolProcess. Gated on depth>=8 so normal shallow booleans are untouched;
+                // faceted/brep cutters keep the exact sequential baseline (one-pass corrupts them).
+                {
+                    auto isFacetedCut = [&](uint32_t id) {
+                        auto t = _loader.GetLineType(id);
+                        return t == schema::IFCPOLYGONALFACESET || t == schema::IFCTRIANGULATEDFACESET ||
+                               t == schema::IFCFACETEDBREP || t == schema::IFCFACEBASEDSURFACEMODEL ||
+                               t == schema::IFCSHELLBASEDSURFACEMODEL || t == schema::IFCCONNECTEDFACESET;
+                    };
+                    std::vector<uint32_t> cutterIDs;
+                    uint32_t baseID = firstOperandID;
+                    bool nonFaceted = !isFacetedCut(secondOperandID);
+                    cutterIDs.push_back(secondOperandID);
+                    while (true)
+                    {
+                        auto lt = _loader.GetLineType(baseID);
+                        if (lt == schema::IFCBOOLEANCLIPPINGRESULT)
+                        {
+                            _loader.MoveToArgumentOffset(baseID, 1);
+                            uint32_t f = _loader.GetRefArgument();
+                            uint32_t s = _loader.GetRefArgument();
+                            cutterIDs.push_back(s); if (isFacetedCut(s)) nonFaceted = false; baseID = f;
+                        }
+                        else if (lt == schema::IFCBOOLEANRESULT)
+                        {
+                            _loader.MoveToArgumentOffset(baseID, 0);
+                            std::string_view bop = _loader.GetStringArgument();
+                            if (bop != "DIFFERENCE") break;
+                            uint32_t f = _loader.GetRefArgument();
+                            uint32_t s = _loader.GetRefArgument();
+                            cutterIDs.push_back(s); if (isFacetedCut(s)) nonFaceted = false; baseID = f;
+                        }
+                        else break;
+                    }
+                    if (nonFaceted && cutterIDs.size() >= 8)
+                    {
+                        auto baseMesh = GetMesh(baseID);
+                        auto origin2 = GetOrigin(baseMesh, _expressIDToGeometry);
+                        auto normalizeMat2 = glm::translate(-origin2);
+                        auto flatBase = flatten(baseMesh, _expressIDToGeometry, normalizeMat2);
+                        if (flatBase.size() != 0)
+                        {
+                            std::vector<IfcGeometry> flatCuts;
+                            for (auto cid : cutterIDs)
+                            {
+                                auto cm = GetMesh(cid);
+                                auto fc = flatten(cm, _expressIDToGeometry, normalizeMat2);
+                                for (auto &g : fc) flatCuts.push_back(g);
+                            }
+                            IfcGeometry resultMesh = BoolProcess(flatBase, flatCuts, "DIFFERENCE", _settings);
+                            _expressIDToGeometry[expressID] = resultMesh;
+                            mesh.hasGeometry = true;
+                            mesh.transformation = glm::translate(origin2);
+                            if (!mesh.hasColor && baseMesh.hasColor) { mesh.hasColor = true; mesh.color = baseMesh.color; }
+                            return mesh;
+                        }
+                    }
+                }
+
                 auto firstMesh = GetMesh(firstOperandID);
                 auto secondMesh = GetMesh(secondOperandID);
 
@@ -329,6 +395,69 @@ namespace webifc::geometry
 
                 uint32_t firstOperandID = _loader.GetRefArgument();
                 uint32_t secondOperandID = _loader.GetRefArgument();
+
+                // DEEP-CHAIN FLATTEN (perf, same rationale as IFCBOOLEANCLIPPINGRESULT above):
+                // a long pure-DIFFERENCE spine (#1774: 1175 nested IfcBooleanResult extrusion cuts)
+                // hangs when processed recursively (one CSG pass per level). Collect the whole
+                // DIFFERENCE spine iteratively and subtract every NON-FACETED cutter in a single
+                // BoolProcess. Exact for difference; gated depth>=8; faceted cutters excluded.
+                if (op == "DIFFERENCE")
+                {
+                    auto isFacetedCut = [&](uint32_t id) {
+                        auto t = _loader.GetLineType(id);
+                        return t == schema::IFCPOLYGONALFACESET || t == schema::IFCTRIANGULATEDFACESET ||
+                               t == schema::IFCFACETEDBREP || t == schema::IFCFACEBASEDSURFACEMODEL ||
+                               t == schema::IFCSHELLBASEDSURFACEMODEL || t == schema::IFCCONNECTEDFACESET;
+                    };
+                    std::vector<uint32_t> cutterIDs;
+                    uint32_t baseID = firstOperandID;
+                    bool nonFaceted = !isFacetedCut(secondOperandID);
+                    cutterIDs.push_back(secondOperandID);
+                    while (true)
+                    {
+                        auto lt = _loader.GetLineType(baseID);
+                        if (lt == schema::IFCBOOLEANCLIPPINGRESULT)
+                        {
+                            _loader.MoveToArgumentOffset(baseID, 1);
+                            uint32_t f = _loader.GetRefArgument();
+                            uint32_t s = _loader.GetRefArgument();
+                            cutterIDs.push_back(s); if (isFacetedCut(s)) nonFaceted = false; baseID = f;
+                        }
+                        else if (lt == schema::IFCBOOLEANRESULT)
+                        {
+                            _loader.MoveToArgumentOffset(baseID, 0);
+                            std::string_view bop = _loader.GetStringArgument();
+                            if (bop != "DIFFERENCE") break;
+                            uint32_t f = _loader.GetRefArgument();
+                            uint32_t s = _loader.GetRefArgument();
+                            cutterIDs.push_back(s); if (isFacetedCut(s)) nonFaceted = false; baseID = f;
+                        }
+                        else break;
+                    }
+                    if (nonFaceted && cutterIDs.size() >= 8)
+                    {
+                        auto baseMesh = GetMesh(baseID);
+                        auto origin2 = GetOrigin(baseMesh, _expressIDToGeometry);
+                        auto normalizeMat2 = glm::translate(-origin2);
+                        auto flatBase = flatten(baseMesh, _expressIDToGeometry, normalizeMat2);
+                        if (flatBase.size() != 0)
+                        {
+                            std::vector<IfcGeometry> flatCuts;
+                            for (auto cid : cutterIDs)
+                            {
+                                auto cm = GetMesh(cid);
+                                auto fc = flatten(cm, _expressIDToGeometry, normalizeMat2);
+                                for (auto &g : fc) flatCuts.push_back(g);
+                            }
+                            IfcGeometry resultMesh = BoolProcess(flatBase, flatCuts, "DIFFERENCE", _settings);
+                            _expressIDToGeometry[expressID] = resultMesh;
+                            mesh.hasGeometry = true;
+                            mesh.transformation = glm::translate(origin2);
+                            if (!mesh.hasColor && baseMesh.hasColor) { mesh.hasColor = true; mesh.color = baseMesh.color; }
+                            return mesh;
+                        }
+                    }
+                }
 
 #ifdef NARY_UNION
                 // N-ARY DIFFERENCE for the Tekla coplanar-cut pattern (model 1092): a
