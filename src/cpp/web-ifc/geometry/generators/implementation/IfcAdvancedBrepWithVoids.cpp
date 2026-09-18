@@ -3,6 +3,5 @@
 namespace webifc::geometry::generators {
 	void GenerateIfcAdvancedBrepWithVoidsImpl(const uint32_t expressID, const uint32_t lineType, webifc::parsing::IfcLoader &loader, webifc::cache::IfcCache &cache) {
 		spdlog::debug("[GenerateIfcAdvancedBrepWithVoidsImpl({})]", expressID);
-		test
 	}
 }
