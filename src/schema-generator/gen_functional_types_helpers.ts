@@ -310,7 +310,8 @@ export function parseElements(data:string)
                 inverseProps: [],
                 derivedInverseProps: [],
                 isIfcProduct: false,
-                ifcDerivedProps: []
+                ifcDerivedProps: [],
+                abstract: false
             };
             if (name === "IfcProduct") entity.isIfcProduct = true;
             readProps = true;
@@ -323,6 +324,9 @@ export function parseElements(data:string)
                 let parent = split[subIndex + 2].replace("(", "").replace(")", "");
                 entity.parent = parent;
             }
+
+            if (line.includes("ABSTRACT")) entity.abstract = true;
+        
         }
         else if (line.indexOf("END_ENTITY") == 0)
         {

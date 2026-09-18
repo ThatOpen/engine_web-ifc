@@ -36,6 +36,7 @@ export interface Entity {
     ifcDerivedProps: string[];
     derivedInverseProps: InverseProp[],
     isIfcProduct: boolean;
+    isAbstract: boolean;
 }
 
 export interface Param
