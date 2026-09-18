@@ -76,6 +76,11 @@ FetchContent_Declare(unordered_dense GIT_REPOSITORY "https://github.com/martinus
 FetchContent_MakeAvailable(unordered_dense)
 FetchContent_GetProperties(unordered_dense)
 
+Message("Downloading Manifold")
+FetchContent_Declare(manifold GIT_REPOSITORY "https://github.com/elalish/manifold/" GIT_TAG "0edd9d54876f3135e431575214dd6d8a72866fee" SOURCE_SUBDIR "../")
+FetchContent_MakeAvailable(manifold)
+FetchContent_GetProperties(manifold)
+
 Message("Downloads Finished")
 
 function(PARAM_SETTER THE_EXECUTABLE)
@@ -88,6 +93,7 @@ function(PARAM_SETTER THE_EXECUTABLE)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC $<BUILD_INTERFACE:${spdlog_SOURCE_DIR}/include>)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC $<BUILD_INTERFACE:${stduuid_SOURCE_DIR}/include>)
 	target_include_directories(${THE_EXECUTABLE} PUBLIC $<BUILD_INTERFACE:${unordered_dense_SOURCE_DIR}/include>)
+	target_include_directories(${THE_EXECUTABLE} PUBLIC $<BUILD_INTERFACE:${manifold}/include>)
 
 	if(NOT MSVC)
 		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wall")
