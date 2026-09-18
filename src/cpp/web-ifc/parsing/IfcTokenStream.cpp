@@ -55,10 +55,10 @@ namespace webifc::parsing
       return true;
   }
 
-  bool IfcTokenStream::SetTokenSource(std::istream &requestData)
-  { 
-     return SetTokenSource([&](char* dest, size_t sourceOffset, size_t destSize) { requestData.seekg(sourceOffset); requestData.read(dest, destSize); return requestData.gcount();},true);
-  }
+bool IfcTokenStream::SetTokenSource(std::istream &requestData)
+{ 
+   return SetTokenSource([&](char* dest, size_t sourceOffset, size_t destSize) { requestData.seekg(sourceOffset); requestData.read(dest, destSize); return static_cast<uint32_t>(requestData.gcount());},true);
+}
   
   std::string_view IfcTokenStream::ReadString() 
   {

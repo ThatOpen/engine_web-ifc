@@ -226,7 +226,7 @@ namespace fuzzybools
 
         auto GetSegments() const
         {
-            const auto makeSegments = [&](int i)
+            const auto makeSegments = [&](size_t i)
             {
                 return std::make_pair(points[i - 1].second, points[i].second);
             };
