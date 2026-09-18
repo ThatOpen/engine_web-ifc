@@ -30,14 +30,15 @@ let representationElements = findElementByParent(entities,"IfcRepresentationItem
 
 let header: Array<string> = [];
 let routing: Array<string> = [];
+fs.mkdir("../cpp/web-ifc/geometry/generators/implementation/", { recursive: true }, () => {});
 
-
-for (let element: representationElements) {
+for (let element of representationElements) {
 
 
 	if (!element.abstract) {
 		let implementation: Array<string> = [];
-		fs.writeFileSync("../cpp/web-ifc/geometry/generators/implementation/"+element.name+".cpp", routing.join("\n")); 
+		
+		fs.writeFileSync("../cpp/web-ifc/geometry/generators/implementation/"+element.name+".cpp", implementation.join("\n")); 
 	}
 }
 
