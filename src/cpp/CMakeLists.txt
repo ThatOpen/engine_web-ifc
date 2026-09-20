@@ -1,7 +1,8 @@
+cmake_minimum_required(VERSION 3.28)
+cmake_policy(SET CMP0054 NEW)
+
 # set up cmake to download the external projects
 include(FetchContent)
-cmake_policy(SET CMP0054 NEW)
-cmake_minimum_required(VERSION 3.28)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	message("Building In Debug Mode")
@@ -30,6 +31,8 @@ endif()
 # collect source files
 file(GLOB_RECURSE web-ifc-source web-ifc/*.cpp)
 file(GLOB_RECURSE web-ifc-wasm wasm/*.cpp)
+
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
 # download the external projects and save their paths
 Message("Downloading FastFloat")
@@ -71,7 +74,7 @@ FetchContent_MakeAvailable(unordered_dense)
 Message("Downloads Finished")
 
 function(PARAM_SETTER THE_EXECUTABLE)
-	target_include_directories(${THE_EXECUTABLE} PUBLIC 
+	target_include_directories(${THE_EXECUTABLE} PUBLIC
 		$<BUILD_INTERFACE:${glm_SOURCE_DIR}/>
 		$<BUILD_INTERFACE:${glm_SOURCE_DIR}/glm>
 	)
@@ -87,31 +90,29 @@ function(PARAM_SETTER THE_EXECUTABLE)
 	)
 
 	if(NOT MSVC)
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wall")
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wextra")
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "-Wpedantic")
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "-pedantic")
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "-std=c++20")
+		target_compile_options(${THE_EXECUTABLE} PRIVATE -Wall -Wextra -Wpedantic)
 
 		if(EMSCRIPTEN)
-			target_compile_options(${THE_EXECUTABLE} PUBLIC "-fexperimental-library")
 			# Enable C++ exception catching in the WASM build so the geometry
 			# engine's recovery guards (e.g. BoolProcess try/catch) work instead
 			# of aborting the whole module on a recoverable throw.
-			target_compile_options(${THE_EXECUTABLE} PUBLIC "${WEB_IFC_WASM_EXCEPTION_FLAG}" "-msimd128")
+			target_compile_options(${THE_EXECUTABLE} PRIVATE
+				-fexperimental-library
+				${WEB_IFC_WASM_EXCEPTION_FLAG}
+				-msimd128
+			)
 			if(RELEASE)
 				# LTO needs bitcode from the compilation step, not only a linker flag.
-				target_compile_options(${THE_EXECUTABLE} PUBLIC "-flto")
+				target_compile_options(${THE_EXECUTABLE} PRIVATE -flto)
 			endif()
 		endif()
 
 		if(RELEASE)
-			target_compile_options(${THE_EXECUTABLE} PUBLIC "-O3")
+			target_compile_options(${THE_EXECUTABLE} PRIVATE -O3)
 		endif()
 	else()
 		# Force UTF-8 for Windows MSVC
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "/utf-8")
-		target_compile_options(${THE_EXECUTABLE} PUBLIC "-std:c++latest")
+		target_compile_options(${THE_EXECUTABLE} PRIVATE /utf-8)
 	endif()
 endfunction()
 
@@ -119,17 +120,57 @@ if(EMSCRIPTEN)
 	# build parameters for web-ifc
 	add_executable(web-ifc ${web-ifc-source} ${web-ifc-wasm})
 	param_setter(web-ifc)
-	set_target_properties(web-ifc PROPERTIES LINK_FLAGS "${DEBUG_FLAG} ${WEB_IFC_WASM_EXCEPTION_FLAG} --bind -msimd128 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s DYNAMIC_EXECUTION=0 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web  -sASSERTIONS=1 -s EXPORTED_RUNTIME_METHODS=\"['HEAPU8','HEAPU32','HEAPF32']\"")
+	target_link_options(web-ifc PRIVATE
+		"SHELL:${DEBUG_FLAG}"
+		${WEB_IFC_WASM_EXCEPTION_FLAG}
+		--bind -msimd128 -flto
+		--define-macro=REAL_T_IS_DOUBLE
+		-sALLOW_MEMORY_GROWTH=1
+		-sDYNAMIC_EXECUTION=0
+		-sMAXIMUM_MEMORY=4GB
+		-sSTACK_SIZE=5MB
+		-sEXPORT_NAME=WebIFCWasm
+		-sMODULARIZE=1
+		-sENVIRONMENT=web
+		-sASSERTIONS=1
+		"-sEXPORTED_RUNTIME_METHODS=['HEAPU8','HEAPU32','HEAPF32']"
+	)
 
 	add_executable(web-ifc-node ${web-ifc-source} ${web-ifc-wasm})
 	param_setter(web-ifc-node)
-	set_target_properties(web-ifc-node PROPERTIES LINK_FLAGS "${DEBUG_FLAG} ${WEB_IFC_WASM_EXCEPTION_FLAG} --bind -msimd128 -flto --define-macro=REAL_T_IS_DOUBLE -s ALLOW_MEMORY_GROWTH=1 -s DYNAMIC_EXECUTION=0 -s MAXIMUM_MEMORY=4GB -sSTACK_SIZE=5MB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=\"['HEAPU8','HEAPU32','HEAPF32']\"")
+	target_link_options(web-ifc-node PRIVATE
+		"SHELL:${DEBUG_FLAG}"
+		${WEB_IFC_WASM_EXCEPTION_FLAG}
+		--bind -msimd128 -flto
+		--define-macro=REAL_T_IS_DOUBLE
+		-sALLOW_MEMORY_GROWTH=1
+		-sDYNAMIC_EXECUTION=0
+		-sMAXIMUM_MEMORY=4GB
+		-sSTACK_SIZE=5MB
+		-sEXPORT_NAME=WebIFCWasm
+		-sMODULARIZE=1
+		"-sEXPORTED_RUNTIME_METHODS=['HEAPU8','HEAPU32','HEAPF32']"
+	)
 
-	# multi-treaded versions
+	# multi-threaded versions
 	add_executable(web-ifc-mt ${web-ifc-source} ${web-ifc-wasm})
 	param_setter(web-ifc-mt)
-	target_compile_options(web-ifc-mt PUBLIC "-pthread")
-	set_target_properties(web-ifc-mt PROPERTIES LINK_FLAGS "${DEBUG_FLAG} ${WEB_IFC_WASM_EXCEPTION_FLAG} -msimd128 -pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency --bind -flto --define-macro=REAL_T_IS_DOUBLE -sSTACK_SIZE=5MB -s ALLOW_MEMORY_GROWTH=1 -s DYNAMIC_EXECUTION=0 -s MAXIMUM_MEMORY=4GB -s EXPORT_NAME=WebIFCWasm -s MODULARIZE=1 -s ENVIRONMENT=web,worker")
+	target_compile_options(web-ifc-mt PRIVATE -pthread)
+	target_link_options(web-ifc-mt PRIVATE
+		"SHELL:${DEBUG_FLAG}"
+		${WEB_IFC_WASM_EXCEPTION_FLAG}
+		-msimd128 -pthread
+		-sPTHREAD_POOL_SIZE=navigator.hardwareConcurrency
+		--bind -flto
+		--define-macro=REAL_T_IS_DOUBLE
+		-sSTACK_SIZE=5MB
+		-sALLOW_MEMORY_GROWTH=1
+		-sDYNAMIC_EXECUTION=0
+		-sMAXIMUM_MEMORY=4GB
+		-sEXPORT_NAME=WebIFCWasm
+		-sMODULARIZE=1
+		-sENVIRONMENT=web,worker
+	)
 endif()
 
 if(NOT EMSCRIPTEN)
@@ -166,8 +207,7 @@ if(NOT EMSCRIPTEN)
 
 	# comment these to prevent debug files being generated
 	if(NOT RELEASE)
-		target_compile_options(web-ifc PUBLIC "-DCSG_DEBUG_OUTPUT")
-		target_compile_options(web-ifc PUBLIC "-DDEBUG_DUMP_SVG")
+		target_compile_options(web-ifc PRIVATE -DCSG_DEBUG_OUTPUT -DDEBUG_DUMP_SVG)
 	endif()
 
 	# Installation rules
@@ -176,7 +216,7 @@ if(NOT EMSCRIPTEN)
 		EXPORT web-ifc-targets
 		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	)
 
 	# Install web-ifc headers
@@ -198,10 +238,10 @@ if(NOT EMSCRIPTEN)
 	)
 
 	# Install bundled dependency headers (all header-only)
-	install(DIRECTORY ${glm_SOURCE_DIR}/glm 
+	install(DIRECTORY ${glm_SOURCE_DIR}/glm
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
-	
+
 	# Export targets with namespace
 	install(EXPORT web-ifc-targets
 		FILE web-ifc-targets.cmake
