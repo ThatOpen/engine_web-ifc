@@ -180,14 +180,16 @@ if(NOT EMSCRIPTEN)
 	)
 
 	# Install web-ifc headers
+	# boolean-utils/ is entirely internal (all headers only ever included from .cpp files)
+	# mesh_utils.h and geometryutils.h are implementation-only helpers
+	# bim-geometry/utils.h and representation/ are part of the transitive public API
 	install(DIRECTORY web-ifc/
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/web-ifc
 		FILES_MATCHING
 		PATTERN "*.h"
 		PATTERN "mesh_utils.h" EXCLUDE
 		PATTERN "geometryutils.h" EXCLUDE
-		PATTERN "shared-position.h" EXCLUDE
-		PATTERN "utils.h" EXCLUDE
+		REGEX "boolean-utils" EXCLUDE
 	)
 
 	# Install version.h
