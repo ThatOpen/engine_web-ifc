@@ -88,17 +88,17 @@ void CloseModel(uint32_t modelID)
     return manager.CloseModel(modelID);
 }
 
-webifc::geometry::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID)
+webifc::geometry::IfcFlatMesh GetFlatMesh(uint32_t modelID, uint32_t expressID, bool applyLinearScalingFactor = true)
 {
     if (!manager.IsModelOpen(modelID))
         return {};
-    webifc::geometry::IfcFlatMesh mesh = manager.GetGeometryProcessor(modelID)->GetFlatMesh(expressID);
+    webifc::geometry::IfcFlatMesh mesh = manager.GetGeometryProcessor(modelID)->GetFlatMesh(expressID, applyLinearScalingFactor);
     for (auto &geom : mesh.geometries)
         manager.GetGeometryProcessor(modelID)->GetGeometry(geom.geometryExpressID).GetVertexData();
     return mesh;
 }
 
-void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> &expressIds, emscripten::val callback)
+void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> &expressIds, emscripten::val callback, bool applyLinearScalingFactor = true)
 {
     if (!manager.IsModelOpen(modelID))
         return;
@@ -109,7 +109,7 @@ void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> &expressIds, ems
     for (const auto &id : expressIds)
     {
         // read the mesh from IFC
-        webifc::geometry::IfcFlatMesh mesh = geomLoader->GetFlatMesh(id);
+        webifc::geometry::IfcFlatMesh mesh = geomLoader->GetFlatMesh(id, applyLinearScalingFactor);
 
         // prepare the geometry data
         for (auto &geom : mesh.geometries)
@@ -148,7 +148,7 @@ void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, 
     StreamMeshes(modelID, expressIds, callback);
 }
 
-void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t> &types, emscripten::val callback)
+void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t> &types, emscripten::val callback, bool applyLinearScalingFactor = true)
 {
     if (!manager.IsModelOpen(modelID))
         return;
@@ -157,11 +157,11 @@ void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t> &typ
     for (auto &type : types)
     {
         auto elements = loader->GetExpressIDsWithType(type);
-        StreamMeshes(modelID, elements, callback);
+        StreamMeshes(modelID, elements, callback, applyLinearScalingFactor);
     }
 }
 
-void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, emscripten::val callback)
+void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, emscripten::val callback, bool applyLinearScalingFactor = true)
 {
     if (!manager.IsModelOpen(modelID))
         return;
@@ -174,10 +174,10 @@ void StreamAllMeshesWithTypesVal(uint32_t modelID, emscripten::val typesVal, ems
         uint32_t type = typeVal.as<uint32_t>();
         types.push_back(type);
     }
-    StreamAllMeshesWithTypes(modelID, types, callback);
+    StreamAllMeshesWithTypes(modelID, types, callback, applyLinearScalingFactor);
 }
 
-void StreamAllMeshes(uint32_t modelID, emscripten::val callback)
+void StreamAllMeshes(uint32_t modelID, emscripten::val callback, bool applyLinearScalingFactor = true)
 {
     if (!manager.IsModelOpen(modelID))
         return;
@@ -192,10 +192,10 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback)
 
         types.push_back(type);
     }
-    StreamAllMeshesWithTypes(modelID, types, callback);
+    StreamAllMeshesWithTypes(modelID, types, callback, applyLinearScalingFactor);
 }
 
-std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
+std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID, bool applyLinearScalingFactor = true)
 {
     if (!manager.IsModelOpen(modelID))
         return std::vector<webifc::geometry::IfcFlatMesh>();
@@ -214,7 +214,7 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID)
 
         for (uint32_t i = 0; i < elements.size(); i++)
         {
-            webifc::geometry::IfcFlatMesh mesh = geomLoader->GetFlatMesh(elements[i]);
+            webifc::geometry::IfcFlatMesh mesh = geomLoader->GetFlatMesh(elements[i], applyLinearScalingFactor);
             for (auto &geom : mesh.geometries)
             {
                 auto &flatGeom = geomLoader->GetGeometry(geom.geometryExpressID);
