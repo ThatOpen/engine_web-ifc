@@ -1746,10 +1746,16 @@ namespace webifc::geometry
     const auto type = _loader.GetLineType(expressID);
     IfcCurve result;
     if ((start && !std::isfinite(*start)) || (end && !std::isfinite(*end))) return result;
-    if (type == schema::IFCPOLYLINE)
+    if (type == schema::IFCPOLYLINE || type == schema::IFCINDEXEDPOLYCURVE)
     {
       // Each polyline segment has a unit parameter interval, independently of its length.
       auto source = GetCurve(expressID, dimensions);
+      if (type == schema::IFCINDEXEDPOLYCURVE && !source.arcSegments.empty())
+      {
+        // Arc segments break the unit-per-point assumption and have no standard parameterization, so sweep the untrimmed curve instead of dropping the geometry.
+        spdlog::warn("[GetCurveWithParameters()] Unsupported parameter trimming for curve {} (type {}), using untrimmed curve", expressID, type);
+        return source;
+      }
       if (source.points.size() < 2) return result;
       const double last = static_cast<double>(source.points.size() - 1);
       const double firstParam = start.value_or(0.0), lastParam = end.value_or(last);
@@ -1794,9 +1800,9 @@ namespace webifc::geometry
       ComputeCurve(expressID, result, params);
       return result;
     }
-    // Do not silently sweep the complete curve when its parameterization is unsupported.
-    spdlog::error("[GetCurveWithParameters()] Unsupported parameter trimming for curve {} (type {})", expressID, type);
-    return result;
+    // No supported parameterization for this curve type: sweep the untrimmed curve rather than dropping the geometry entirely.
+    spdlog::warn("[GetCurveWithParameters()] Unsupported parameter trimming for curve {} (type {}), using untrimmed curve", expressID, type);
+    return GetCurve(expressID, dimensions);
   }
 
   void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params) const
