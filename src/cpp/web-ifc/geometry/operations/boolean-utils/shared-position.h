@@ -1460,11 +1460,6 @@ namespace fuzzybools
                 auto posA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA, raydir);
                 auto posB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB, raydir);
 
-                if (posA.loc != MeshLocation::BOUNDARY && posB.loc != MeshLocation::BOUNDARY)
-                {
-                    continue;
-                }
-
                 // If the 2D triangle is not inside the boundaries of the projected boundary of the face it requires further verification
                 // It can't be discarded because inside/outside could fail when boundaries have internal partitions
                 // Therefore new tests are required to verify that the triangle is on the boundary of A or B
@@ -1475,7 +1470,52 @@ namespace fuzzybools
 
                 bool inside2d = isInsideBoundary(t1, t2, t3, edges, projectedPoints);
 
-                if (!inside2d)
+                // Fix #2111 & the "missing geometry" family: the ray classifier misses a coplanar
+                // face whose triangle centre lies exactly ON a face of an operand -> the boundary
+                // triangle is classified as neither inside nor boundary and gets dropped, leaving a
+                // hole. Rescue it here, inside the normalization pipeline, so the recovered triangle
+                // shares the already-welded vertices (no T-junctions / non-manifold, unlike a
+                // post-hoc stitch). Only keep it when the centre lies on an original face of A and is
+                // not strictly inside B, i.e. it is a genuine A boundary of the A-B result.
+                bool rescued = false;
+                if (posA.loc != MeshLocation::BOUNDARY && posB.loc != MeshLocation::BOUNDARY)
+                {
+                    auto onFace = [&](const Geometry &g, Vec &outN) -> bool
+                    {
+                        for (size_t fi = 0; fi < g.numFaces; fi++)
+                        {
+                            Face f = g.GetFace(fi);
+                            Vec a = g.GetPoint(f.i0), b = g.GetPoint(f.i1), c = g.GetPoint(f.i2);
+                            Vec nn = glm::cross(b - a, c - a);
+                            double Ln = glm::length(nn);
+                            if (Ln < 1e-12) continue;
+                            nn /= Ln;
+                            double dp = glm::dot(triCenter - a, nn);
+                            if (std::abs(dp) > _TOLERANCE_PLANE_DEVIATION) continue;
+                            Vec p0 = triCenter - dp * nn;
+                            double u = glm::dot(glm::cross(b - a, p0 - a), nn);
+                            double v = glm::dot(glm::cross(c - b, p0 - b), nn);
+                            double w = glm::dot(glm::cross(a - c, p0 - c), nn);
+                            if ((u >= -1e-6 && v >= -1e-6 && w >= -1e-6) || (u <= 1e-6 && v <= 1e-6 && w <= 1e-6))
+                            { outN = nn; return true; }
+                        }
+                        return false;
+                    };
+                    Vec nn;
+                    if (posB.loc != MeshLocation::INSIDE && onFace(relevantA, nn))
+                    {
+                        posA.loc = MeshLocation::BOUNDARY;
+                        posA.normal = nn;
+                        rescued = true;
+                    }
+                }
+
+                if (posA.loc != MeshLocation::BOUNDARY && posB.loc != MeshLocation::BOUNDARY)
+                {
+                    continue;
+                }
+
+                if (!inside2d && !rescued)
                 {
 
                     auto postA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA, raydir);
