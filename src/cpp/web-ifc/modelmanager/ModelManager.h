@@ -7,11 +7,15 @@
 #include "../schema/IfcSchemaManager.h"
 #include "../geometry/IfcGeometryProcessor.h"
 #include "../parsing/IfcLoader.h"
-#include <spdlog/spdlog.h>
 #include <memory>
 #include <vector>
 #include <map>
 #include <optional>
+
+namespace spdlog
+{
+    class logger;
+}
 
 namespace webifc::manager
 {

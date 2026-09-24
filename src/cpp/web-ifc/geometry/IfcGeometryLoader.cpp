@@ -1739,6 +1739,72 @@ namespace webifc::geometry
     return curve;
   }
 
+  // Trim a curve whose segments are straight by their (uniform) segment index.
+  // Each segment occupies one unit of the parameter independently of its length.
+  static IfcCurve TrimCurveBySegmentIndex(const IfcCurve &source, std::optional<double> start, std::optional<double> end, uint32_t expressID)
+  {
+    IfcCurve result;
+    if (source.points.size() < 2) return result;
+    const double last = static_cast<double>(source.points.size() - 1);
+    const double firstParam = start.value_or(0.0), lastParam = end.value_or(last);
+    if (firstParam < 0 || lastParam > last || firstParam >= lastParam)
+    {
+      spdlog::error("[GetCurveWithParameters()] Invalid polyline interval {}", expressID);
+      return result;
+    }
+    auto pointAt = [&](double parameter) {
+      const size_t i = std::min(static_cast<size_t>(parameter), source.points.size() - 2);
+      return glm::mix(source.points[i], source.points[i + 1], parameter - static_cast<double>(i));
+    };
+    result.Add(pointAt(firstParam));
+    for (size_t i = static_cast<size_t>(std::floor(firstParam)) + 1; i < source.points.size() && i < lastParam; ++i)
+      result.Add(source.points[i]);
+    result.Add(pointAt(lastParam));
+    return result;
+  }
+
+  // Trim a curve whose segments are not uniformly parameterized (e.g. an
+  // IFCINDEXEDPOLYCURVE with arc segments) by its total arc length. The
+  // parameters are fractions of the total length within [0, 1], so 0..1 sweeps
+  // the whole directrix and a strict sub-range produces a correct partial sweep.
+  // A degenerate trim falls back to the untrimmed curve instead of dropping it.
+  static IfcCurve TrimCurveByLengthFraction(const IfcCurve &source, std::optional<double> start, std::optional<double> end, uint32_t expressID)
+  {
+    IfcCurve result;
+    const auto &pts = source.points;
+    if (pts.size() < 2) return result;
+
+    std::vector<double> cumulative(pts.size(), 0.0);
+    for (size_t i = 1; i < pts.size(); ++i)
+      cumulative[i] = cumulative[i - 1] + glm::distance(pts[i - 1], pts[i]);
+    const double total = cumulative.back();
+    if (total <= 0) return result;
+
+    const double firstFrac = std::clamp(start.value_or(0.0), 0.0, 1.0);
+    const double lastFrac = std::clamp(end.value_or(1.0), 0.0, 1.0);
+    if (firstFrac >= lastFrac)
+    {
+      spdlog::warn("[GetCurveWithParameters()] Degenerate trim for curve {}, sweeping untrimmed curve", expressID);
+      return source;
+    }
+
+    const double firstLen = firstFrac * total;
+    const double lastLen = lastFrac * total;
+    auto pointAt = [&](double len) {
+      auto it = std::upper_bound(cumulative.begin(), cumulative.end(), len);
+      const size_t i = std::min(static_cast<size_t>(it - cumulative.begin()), pts.size() - 2);
+      const double span = cumulative[i + 1] - cumulative[i];
+      const double t = span > 0 ? (len - cumulative[i]) / span : 0.0;
+      return glm::mix(pts[i], pts[i + 1], t);
+    };
+
+    result.Add(pointAt(firstLen));
+    for (size_t i = 0; i < pts.size(); ++i)
+      if (cumulative[i] > firstLen && cumulative[i] < lastLen) result.Add(pts[i]);
+    result.Add(pointAt(lastLen));
+    return result;
+  }
+
   IfcCurve IfcGeometryLoader::GetCurveWithParameters(uint32_t expressID, uint8_t dimensions,
       std::optional<double> start, std::optional<double> end) const
   {
@@ -1750,23 +1816,19 @@ namespace webifc::geometry
     {
       // Each polyline segment has a unit parameter interval, independently of its length.
       auto source = GetCurve(expressID, dimensions);
-      if (source.points.size() < 2) return result;
-      const double last = static_cast<double>(source.points.size() - 1);
-      const double firstParam = start.value_or(0.0), lastParam = end.value_or(last);
-      if (firstParam < 0 || lastParam > last || firstParam >= lastParam)
+      return TrimCurveBySegmentIndex(source, start, end, expressID);
+    }
+    if (type == schema::IFCINDEXEDPOLYCURVE)
+    {
+      auto source = GetCurve(expressID, dimensions);
+      if (source.arcSegments.empty())
       {
-        spdlog::error("[GetCurveWithParameters()] Invalid polyline interval {}", expressID);
-        return result;
+        // Line-only indexed polycurve: behave like a polyline (uniform segments).
+        return TrimCurveBySegmentIndex(source, start, end, expressID);
       }
-      auto pointAt = [&](double parameter) {
-        const size_t i = std::min(static_cast<size_t>(parameter), source.points.size() - 2);
-        return glm::mix(source.points[i], source.points[i + 1], parameter - static_cast<double>(i));
-      };
-      result.Add(pointAt(firstParam));
-      for (size_t i = static_cast<size_t>(std::floor(firstParam)) + 1; i < source.points.size() && i < lastParam; ++i)
-        result.Add(source.points[i]);
-      result.Add(pointAt(lastParam));
-      return result;
+      // Arc segments have no defined per-segment parameterization, so trim by the
+      // arc-length fraction to keep partial sweeps correct instead of dropping them.
+      return TrimCurveByLengthFraction(source, start, end, expressID);
     }
     if (type == schema::IFCLINE || type == schema::IFCCIRCLE || type == schema::IFCELLIPSE)
     {
@@ -1794,9 +1856,10 @@ namespace webifc::geometry
       ComputeCurve(expressID, result, params);
       return result;
     }
-    // Do not silently sweep the complete curve when its parameterization is unsupported.
-    spdlog::error("[GetCurveWithParameters()] Unsupported parameter trimming for curve {} (type {})", expressID, type);
-    return result;
+    // No supported parameterization for this curve type: rather than dropping the
+    // solid entirely, sweep the untrimmed curve and warn so the caller can detect it.
+    spdlog::warn("[GetCurveWithParameters()] Unsupported parameter trimming for curve {} (type {}), using untrimmed curve", expressID, type);
+    return GetCurve(expressID, dimensions);
   }
 
   void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params) const
@@ -1831,10 +1894,6 @@ namespace webifc::geometry
     }
     case schema::IFCCOMPOSITECURVE:
     {
-        // IfcCompositeCurve
-        //      std::vector<IfcSegment>			Segments;
-        //      IfcLogical						SelfIntersect;
-
       _loader.MoveToArgumentOffset(expressID, 0);
       auto segments = _loader.GetSetArgument();
       auto selfIntersects = _loader.GetStringArgument();

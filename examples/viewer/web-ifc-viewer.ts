@@ -105,6 +105,8 @@ if (typeof window != "undefined") {
     clearmem.addEventListener("click", clearMem);
     const changeLogLevelSelect = document.getElementById("logLevel");
     changeLogLevelSelect.addEventListener("change", changeLogLevel);
+    const gitRevEl = document.getElementById("gitrev");
+    if (gitRevEl) gitRevEl.textContent = ts_decl.git_rev;
     Init3DView();
   };
 }
