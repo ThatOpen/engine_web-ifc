@@ -1389,22 +1389,51 @@ namespace fuzzybools
                 mapping[duplicateMapping[original]] = original;
             }
 
-            try
+            CDT::TriangleVec triangles;
+            std::vector<CDT::V2d<double>> triangulatedVertices;
+            auto triangulate = [&](CDT::Triangulation<double> &triangulation)
             {
-                cdt.insertVertices(cdt_verts);
-                cdt.insertEdges(cdt_edges);
-                cdt.eraseSuperTriangle();
-            }
-            catch (...)
+                try
+                {
+                    triangulation.insertVertices(cdt_verts);
+                    triangulation.insertEdges(cdt_edges);
+                    triangulation.eraseSuperTriangle();
+                }
+                catch (...)
+                {
+                    // CDT throws when the projected constraint edges self-intersect.
+                    // catch(...) works even without RTTI.
+                    return false;
+                }
+                triangles = triangulation.triangles;
+                triangulatedVertices = triangulation.vertices;
+                return true;
+            };
+
+            if (!triangulate(cdt))
             {
-                // CDT throws when the projected constraint edges self-intersect.
-                // Drop only this plane's triangulation instead of letting the
-                // exception unwind and discard the whole cut operand (which would
-                // render the element uncut). catch(...) works even without RTTI.
-                return;
+                // Nearly coincident lines (e.g. an opening edge a few 1e-5 off a hole edge) produce
+                // constraint edges that cross at a tiny angle. Let CDT split them instead of
+                // dropping the whole plane, which would leave a large hole in the result.
+                CDT::Triangulation<double> resolving(CDT::VertexInsertionOrder::AsProvided, CDT::IntersectingConstraintEdges::TryResolve, TOLERANCE_SCALAR_EQUALITY);
+                if (!triangulate(resolving))
+                {
+                    // Drop only this plane's triangulation instead of letting the
+                    // exception unwind and discard the whole cut operand (which would
+                    // render the element uncut).
+                    return;
+                }
             }
 
-            auto triangles = cdt.triangles;
+            // Vertices CDT added at resolved intersections lie on the plane; lift them back to 3D.
+            for (size_t v = cdt_verts.size(); v < triangulatedVertices.size(); v++)
+            {
+                glm::dvec2 projected(triangulatedVertices[v].x, triangulatedVertices[v].y);
+                Vec3 location = basis.origin + basis.left * projected.x + basis.right * projected.y;
+                mapping.push_back(projectedPoints.size());
+                projectedPointToPoint[projectedPoints.size()] = AddPoint(location);
+                projectedPoints.push_back(projected);
+            }
 
             // auto contourLoop = FindLargestEdgeLoop(projectedPoints, edges);
 
