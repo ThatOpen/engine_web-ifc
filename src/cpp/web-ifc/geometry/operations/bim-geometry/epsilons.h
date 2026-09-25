@@ -26,4 +26,8 @@ namespace bimGeometry
         Used in geometry.cpp
     */
     constexpr double reconstructTolerance = 1.0E-01;
+    // A shared face normal may replace a triangle normal within ~1e-4 rad.
+    constexpr double SHARED_NORMAL_MIN_COS = 1.0 - 1.0E-08;
+    // Normals of triangles grouped into one plane by vertex distance may differ by ~1.4e-3 rad.
+    constexpr double COPLANAR_MIN_COS = 1.0 - 1.0E-06;
 }
