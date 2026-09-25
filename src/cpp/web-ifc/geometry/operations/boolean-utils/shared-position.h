@@ -1276,7 +1276,7 @@ namespace fuzzybools
 
         //============================================================================================
 
-        void TriangulatePlane(Geometry &geom, Plane &p)
+        void TriangulatePlane(Geometry &geom, Plane &p, bool skipTrianglesOnA = false)
         {
 
             // grab all points on the plane
@@ -1496,6 +1496,11 @@ namespace fuzzybools
 
                 auto posA = isInsideMesh(triCenter, glm::dvec3(0), relevantA, relevantBVHA, raydir);
                 auto posB = isInsideMesh(triCenter, glm::dvec3(0), relevantB, relevantBVHB, raydir);
+
+                if (skipTrianglesOnA && posA.loc == MeshLocation::BOUNDARY)
+                {
+                    continue;
+                }
 
                 // If the 2D triangle is not inside the boundaries of the projected boundary of the face it requires further verification
                 // It can't be discarded because inside/outside could fail when boundaries have internal partitions
@@ -2059,6 +2064,28 @@ namespace fuzzybools
         // from this starting point, we can triangulate all planes and obtain the triangulation of the intersected set of geometries
         // this mesh itself is not a boolean result, but rather a merging of all operands
 
+        // In a difference, a plane that only B uses and that is the reverse of a plane of A holds
+        // the contact region of two touching faces. A's plane already produces the triangles lying
+        // on A there; producing them again from B's plane adds a second, differently triangulated
+        // copy that is removed only when both triangulations happen to be identical.
+        auto isReversedPlaneOfA = [&](const Plane &plane)
+        {
+            if (UNION || plane.refPlane < static_cast<int>(A.planes.size()))
+            {
+                return false;
+            }
+            for (auto &other : sp.planes)
+            {
+                if (other.refPlane >= 0 && other.refPlane < static_cast<int>(A.planes.size()) &&
+                    equals(other.normal, -plane.normal, toleranceVectorEquality) &&
+                    equals(other.distance, -plane.distance, TOLERANCE_SCALAR_EQUALITY))
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+
         Geometry geom;
         for (auto &plane : sp.planes)
         {
@@ -2093,7 +2120,7 @@ namespace fuzzybools
             // DumpSVGLines(edges, L"contour.html");
 #endif
 
-            sp.TriangulatePlane(geom, plane);
+            sp.TriangulatePlane(geom, plane, isReversedPlaneOfA(plane));
 
 #ifdef CSG_DEBUG_OUTPUT
             // DumpGeometry(geom, L"triangulated.obj");
