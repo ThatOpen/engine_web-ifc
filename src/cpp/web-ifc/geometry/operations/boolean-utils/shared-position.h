@@ -1379,7 +1379,15 @@ namespace fuzzybools
                 cdt_edges.emplace_back((uint32_t)edge.first, (uint32_t)edge.second);
             }
 
-            auto mapping = CDT::RemoveDuplicatesAndRemapEdges(cdt_verts, cdt_edges).mapping;
+            auto duplicateMapping = CDT::RemoveDuplicatesAndRemapEdges(cdt_verts, cdt_edges).mapping;
+
+            // CDT maps original vertex indices to deduplicated ones, but its triangles index the
+            // deduplicated vertices; invert the mapping to get back to our projected points.
+            std::vector<size_t> mapping(cdt_verts.size());
+            for (size_t original = duplicateMapping.size(); original-- > 0;)
+            {
+                mapping[duplicateMapping[original]] = original;
+            }
 
             try
             {
@@ -1464,9 +1472,9 @@ namespace fuzzybools
                 // It can't be discarded because inside/outside could fail when boundaries have internal partitions
                 // Therefore new tests are required to verify that the triangle is on the boundary of A or B
 
-                glm::dvec2 t1 = projectedPoints[tri.vertices[0]];
-                glm::dvec2 t2 = projectedPoints[tri.vertices[1]];
-                glm::dvec2 t3 = projectedPoints[tri.vertices[2]];
+                glm::dvec2 t1 = projectedPoints[mapping[tri.vertices[0]]];
+                glm::dvec2 t2 = projectedPoints[mapping[tri.vertices[1]]];
+                glm::dvec2 t3 = projectedPoints[mapping[tri.vertices[2]]];
 
                 bool inside2d = isInsideBoundary(t1, t2, t3, edges, projectedPoints);
 
