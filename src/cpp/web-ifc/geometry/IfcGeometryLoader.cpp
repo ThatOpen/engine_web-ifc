@@ -1746,12 +1746,17 @@ namespace webifc::geometry
     IfcCurve result;
     if (source.points.size() < 2) return result;
     const double last = static_cast<double>(source.points.size() - 1);
-    const double firstParam = start.value_or(0.0), lastParam = end.value_or(last);
-    if (firstParam < 0 || lastParam > last || firstParam >= lastParam)
+    // Exporters write the end of the full range with rounding noise (e.g. 2.0000000000000004
+    // for a two-edge polyline), so accept parameters within a small tolerance of the range.
+    const double tolerance = 1e-9 * std::max(1.0, last);
+    double firstParam = start.value_or(0.0), lastParam = end.value_or(last);
+    if (firstParam < -tolerance || lastParam > last + tolerance || firstParam >= lastParam)
     {
-      spdlog::error("[GetCurveWithParameters()] Invalid polyline interval {}", expressID);
-      return result;
+      spdlog::warn("[GetCurveWithParameters()] Parameters {}..{} outside curve {} (0..{}), using untrimmed curve", firstParam, lastParam, expressID, last);
+      return source;
     }
+    firstParam = std::max(firstParam, 0.0);
+    lastParam = std::min(lastParam, last);
     auto pointAt = [&](double parameter) {
       const size_t i = std::min(static_cast<size_t>(parameter), source.points.size() - 2);
       return glm::mix(source.points[i], source.points[i + 1], parameter - static_cast<double>(i));

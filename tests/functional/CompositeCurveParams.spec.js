@@ -15,6 +15,11 @@ const cases = [
   ["end-rounding.ifc", 1.0 + arc + 0.5],
   ["partial.ifc", 0.5 + arc / 2],
   ["arc-only.ifc", arc],
+  // A two-edge directrix (1000 mm and 500 mm) whose EndParam exceeds 2 by rounding noise, as
+  // exporters write it; the whole curve must still be swept.
+  ["polyline-end-rounding.ifc", 1.5],
+  ["indexed-polycurve-end-rounding.ifc", 1.5],
+  ["polyline-partial.ifc", 0.5 + 0.25],
 ];
 
 async function area(file) {
@@ -50,7 +55,7 @@ async function area(file) {
 }
 
 for (const [file, length] of cases) {
-  test(`composite curve parameters: ${file}`, async () => {
+  test(`swept disk parameters: ${file}`, async () => {
     const expected = 2 * Math.PI * radius * length + 2 * Math.PI * radius * radius;
     const actual = await area(file);
     assert.ok(Math.abs(actual - expected) < 0.02 * expected, `area ${actual}, expected ${expected} for a swept length of ${length} m`);
