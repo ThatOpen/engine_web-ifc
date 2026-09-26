@@ -38,6 +38,8 @@ namespace webifc::geometry
     IfcProfile GetProfile3D(uint32_t expressID) const;
     IfcCurve GetLocalCurve(uint32_t expressID) const;
     IfcCurve GetCurve(uint32_t expressID, uint8_t dimensions, bool edge = false) const;
+    bool GetCompositeCurveParameters(uint32_t expressID, uint8_t dimensions, IfcCurve &curve, std::vector<double> &parameters) const;
+    bool GetCompositeSegmentParameterSpan(uint32_t curveID, uint8_t dimensions, size_t pointCount, double &span) const;
 
     IfcCurve GetCurveWithParameters(uint32_t expressID, uint8_t dimensions, std::optional<double> start, std::optional<double> end) const;
 
