@@ -131,7 +131,7 @@ void StreamMeshes(uint32_t modelID, const std::vector<uint32_t> &expressIds, ems
     }
 }
 
-void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback)
+void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback, bool applyLinearScalingFactor = true)
 {
     std::vector<uint32_t> expressIds;
 
@@ -145,7 +145,7 @@ void StreamMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, 
         expressIds.push_back(expressId);
     }
 
-    StreamMeshes(modelID, expressIds, callback);
+    StreamMeshes(modelID, expressIds, callback, applyLinearScalingFactor);
 }
 
 void StreamAllMeshesWithTypes(uint32_t modelID, const std::vector<uint32_t> &types, emscripten::val callback, bool applyLinearScalingFactor = true)
