@@ -195,6 +195,12 @@ namespace webifc::geometry
 		return computeSafeNormal(v1, v2, v3, normal, 1e-08);
 	}
 
+	// Out-of-plane spread (relative to the face extent) above plain floating point noise.
+	constexpr double FACE_NOISE_MIN_RELATIVE = 1.0E-10;
+	// Largest spread still treated as noise: the boolean kernel's plane tolerance. A face warped
+	// beyond it cannot become a single boolean plane, so it keeps its triangle normals.
+	constexpr double FACE_NOISE_MAX = 1.0E-04;
+
 	inline void TriangulateBounds(IfcGeometry& geometry, std::vector<IfcBound3D>& bounds, uint32_t expressID)
 	{
 		spdlog::debug("[TriangulateBounds({})]");
@@ -365,6 +371,47 @@ namespace webifc::geometry
 							points.push_back(proj);
 						}
 					}
+				}
+			}
+
+			// Give every vertex of the face the face's best-fit (Newell) normal. The three-point basis
+			// normal above is sensitive to rounding noise in the coordinates; buildPlanes reuses this
+			// shared normal so all triangles of one face land on a single boolean plane.
+			glm::dvec3 faceNormal(0);
+			const auto& outerPoints = bounds[0].curve.points;
+			for (size_t i = 0; i < outerPoints.size(); i++)
+			{
+				const glm::dvec3& a = outerPoints[i];
+				const glm::dvec3& b = outerPoints[(i + 1) % outerPoints.size()];
+				faceNormal += glm::dvec3((a.y - b.y) * (a.z + b.z), (a.z - b.z) * (a.x + b.x), (a.x - b.x) * (a.y + b.y));
+			}
+			if (glm::length(faceNormal) > 0)
+			{
+				faceNormal = glm::normalize(faceNormal);
+				if (glm::dot(faceNormal, n) < 0) faceNormal = -faceNormal;
+
+				// Only faces with measurable out-of-plane noise need the shared normal; exactly
+				// planar faces keep the basis normal so their boolean results stay unchanged.
+				glm::dvec3 boxMin(std::numeric_limits<double>::max());
+				glm::dvec3 boxMax(std::numeric_limits<double>::lowest());
+				double minOffset = std::numeric_limits<double>::max();
+				double maxOffset = std::numeric_limits<double>::lowest();
+				for (const auto& bound : bounds)
+				{
+					for (const glm::dvec3& pt : bound.curve.points)
+					{
+						boxMin = glm::min(boxMin, pt);
+						boxMax = glm::max(boxMax, pt);
+						const double offset = glm::dot(pt, faceNormal);
+						minOffset = std::min(minOffset, offset);
+						maxOffset = std::max(maxOffset, offset);
+					}
+				}
+				const double extent = glm::distance(boxMin, boxMax);
+				const double spread = maxOffset - minOffset;
+				if (glm::dot(faceNormal, n) > 0.99 && spread > FACE_NOISE_MIN_RELATIVE * extent && spread <= FACE_NOISE_MAX)
+				{
+					n = faceNormal;
 				}
 			}
 
@@ -825,8 +872,36 @@ namespace webifc::geometry
 	 *
 	 * @return A vector of transformed IfcGeometry objects
 	 */
+	// Adds a transformed triangle. A face normal shared by all three source vertices (see
+	// TriangulateBounds) is carried over, since buildPlanes relies on it to group coplanar triangles.
+	inline void AddTransformedFace(IfcGeometry &target, const IfcGeometry &source, const bimGeometry::Face &f, const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c, const glm::dmat3 &normalMatrix, bool transformationBreaksWinding)
+	{
+		const uint32_t facesBefore = target.numFaces;
+		if (transformationBreaksWinding)
+		{
+			target.AddFace(b, a, c);
+		}
+		else
+		{
+			target.AddFace(a, b, c);
+		}
+		const glm::dvec3 sharedNormal = source.GetVertexNormal(f.i0);
+		if (target.numFaces == facesBefore || sharedNormal != source.GetVertexNormal(f.i1) || sharedNormal != source.GetVertexNormal(f.i2))
+		{
+			return;
+		}
+		const glm::dvec3 normal = glm::normalize(normalMatrix * sharedNormal);
+		for (uint32_t i = target.numPoints - 3; i < target.numPoints; i++)
+		{
+			target.vertexData[i * VERTEX_FORMAT_SIZE_FLOATS + 3] = normal.x;
+			target.vertexData[i * VERTEX_FORMAT_SIZE_FLOATS + 4] = normal.y;
+			target.vertexData[i * VERTEX_FORMAT_SIZE_FLOATS + 5] = normal.z;
+		}
+	}
+
 	inline std::vector<IfcGeometry> transformIfcGeometry(const IfcGeometry &sourceGeom, glm::dmat4 matrix, bool transformationBreaksWinding)
 	{
+		const glm::dmat3 normalMatrix = glm::transpose(glm::inverse(glm::dmat3(matrix)));
 		std::vector<IfcGeometry> geomsTransformed;
 		if (sourceGeom.part.size() > 0)
 		{
@@ -853,14 +928,7 @@ namespace webifc::geometry
 						glm::dvec3 b = matrix * glm::dvec4(newMeshGeom.GetPoint(f.i1), 1);
 						glm::dvec3 c = matrix * glm::dvec4(newMeshGeom.GetPoint(f.i2), 1);
 
-						if (transformationBreaksWinding)
-						{
-							newGeom.AddFace(b, a, c);
-						}
-						else
-						{
-							newGeom.AddFace(a, b, c);
-						}
+						AddTransformedFace(newGeom, newMeshGeom, f, a, b, c, normalMatrix, transformationBreaksWinding);
 					}
 
 					geomsTransformed.push_back(newGeom);
@@ -888,14 +956,7 @@ namespace webifc::geometry
 					glm::dvec3 b = matrix * glm::dvec4(sourceGeom.GetPoint(f.i1), 1);
 					glm::dvec3 c = matrix * glm::dvec4(sourceGeom.GetPoint(f.i2), 1);
 
-					if (transformationBreaksWinding)
-					{
-						newGeom.AddFace(b, a, c);
-					}
-					else
-					{
-						newGeom.AddFace(a, b, c);
-					}
+					AddTransformedFace(newGeom, sourceGeom, f, a, b, c, normalMatrix, transformationBreaksWinding);
 				}
 
 				geomsTransformed.push_back(newGeom);

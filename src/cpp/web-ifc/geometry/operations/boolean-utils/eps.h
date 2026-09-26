@@ -37,6 +37,8 @@ constexpr double toleranceVectorEquality = 1.0E-04;
 constexpr double TOLERANCE_SCALAR_EQUALITY = 1.0E-04;
 constexpr double toleranceCollinear = 1.0E-04;
 constexpr double triangleEvaluationFactor = 0.90;
+// Relative distance (to the triangle size) at which a point still counts as lying on a triangle.
+constexpr double EDGE_ON_TOLERANCE = 1.0E-09;
 
 /*
     Constants used in shared-position

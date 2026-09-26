@@ -37,6 +37,39 @@ namespace fuzzybools
         Vec normal;
     };
 
+    // True when pt lies on triangle abc up to rounding. Both the plane and the edge distances are
+    // relative to the triangle size, so it behaves the same for millimetre and metre models and
+    // does not widen the plane deviation tolerance of the ray test.
+    inline bool isPointOnTriangle(const Vec &pt, const Vec &a, const Vec &b, const Vec &c)
+    {
+        Vec n = glm::cross(b - a, c - a);
+        double nLength = glm::length(n);
+        if (nLength < EPS_MINISCULE)
+        {
+            return false;
+        }
+        n /= nLength;
+        double size = std::max(glm::length(b - a), std::max(glm::length(c - b), glm::length(a - c)));
+        double distance = glm::dot(pt - a, n);
+        if (std::fabs(distance) > EDGE_ON_TOLERANCE * size)
+        {
+            return false;
+        }
+        Vec p = pt - n * distance;
+        const Vec vertices[3] = {a, b, c};
+        for (int i = 0; i < 3; i++)
+        {
+            Vec edge = vertices[(i + 1) % 3] - vertices[i];
+            double edgeLength = glm::length(edge);
+            double side = glm::dot(glm::cross(edge, p - vertices[i]), n) / edgeLength;
+            if (side < -EDGE_ON_TOLERANCE * edgeLength)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     inline InsideResult isInsideMesh(
         const Vec &pt,
         Vec normal,
@@ -64,6 +97,13 @@ namespace fuzzybools
                 double distance;
                 double d_plane;
                 bool hasIntersection = intersect_ray_triangle(pt, pt + dir, a, b, c, intersection, distance, d_plane, true);
+                if (!hasIntersection && isPointOnTriangle(pt, a, b, c))
+                {
+                    // A point on an edge shared by two coplanar triangles can miss both of them
+                    // in the ray test through rounding; it still lies on the surface.
+                    hasIntersection = true;
+                    d_plane = 0;
+                }
                 if (hasIntersection)
                 {
                     Vec otherNormal = computeNormal(a, b, c);  // normalised

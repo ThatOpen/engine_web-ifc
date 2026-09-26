@@ -117,6 +117,40 @@ namespace bimGeometry
         return p.id;
     }
 
+    glm::dvec3 Geometry::GetVertexNormal(size_t index) const
+    {
+        return glm::dvec3(
+            vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 3],
+            vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 4],
+            vertexData[index * VERTEX_FORMAT_SIZE_FLOATS + 5]);
+    }
+
+    size_t Geometry::FindCoplanarPlane(const glm::dvec3 &normal, double d, const glm::dvec3 &a, const glm::dvec3 &b, const glm::dvec3 &c)
+    {
+        for (auto &plane : planes)
+        {
+            if (plane.IsEqualTo(normal, d))
+            {
+                return plane.id;
+            }
+        }
+
+        // The triangle normal of a narrow triangle amplifies vertex noise; judge coplanarity by
+        // the distance of the vertices to the plane instead.
+        for (auto &plane : planes)
+        {
+            if (glm::dot(plane.normal, normal) > COPLANAR_MIN_COS &&
+                std::abs(glm::dot(plane.normal, a) - plane.distance) <= _TOLERANCE_SCALAR_EQUALITY &&
+                std::abs(glm::dot(plane.normal, b) - plane.distance) <= _TOLERANCE_SCALAR_EQUALITY &&
+                std::abs(glm::dot(plane.normal, c) - plane.distance) <= _TOLERANCE_SCALAR_EQUALITY)
+            {
+                return plane.id;
+            }
+        }
+
+        return AddPlane(normal, d);
+    }
+
     void Geometry::buildPlanes()
     {
         if (!hasPlanes)
@@ -155,7 +189,19 @@ namespace bimGeometry
 
                 centroid /= numFaces;
 
+                // Visit larger triangles first: their normals are the least sensitive to
+                // rounding noise in the vertices, so they should define the planes.
+                std::vector<size_t> order(numFaces);
+                std::vector<double> areas(numFaces);
                 for (size_t i = 0; i < numFaces; i++)
+                {
+                    Face f = GetFace(i);
+                    order[i] = i;
+                    areas[i] = areaOfTriangle(GetPoint(f.i0), GetPoint(f.i1), GetPoint(f.i2));
+                }
+                std::stable_sort(order.begin(), order.end(), [&](size_t l, size_t r) { return areas[l] > areas[r]; });
+
+                for (size_t i : order)
                 {
                     Face f = GetFace(i);
 
@@ -167,11 +213,19 @@ namespace bimGeometry
 
                     if (computeSafeNormal(a, b, c, norm, EPS_SMALL))
                     {
+                        // Prefer the face normal shared by all three vertices (set per source face
+                        // when triangulating bounds) over the noise-sensitive triangle normal.
+                        glm::dvec3 sharedNormal = GetVertexNormal(f.i0);
+                        if (sharedNormal == GetVertexNormal(f.i1) && sharedNormal == GetVertexNormal(f.i2) && glm::dot(sharedNormal, norm) > SHARED_NORMAL_MIN_COS)
+                        {
+                            norm = glm::normalize(sharedNormal);
+                        }
+
                         double da = glm::dot(norm, a - centroid);
                         double db = glm::dot(norm, b - centroid);
                         double dc = glm::dot(norm, c - centroid);
 
-                        size_t id = AddPlane(norm, (da + db + dc) / 3.0);
+                        size_t id = FindCoplanarPlane(norm, (da + db + dc) / 3.0, a - centroid, b - centroid, c - centroid);
                         planeData[i] = id;
                         hasPlanes = true;
                     }
