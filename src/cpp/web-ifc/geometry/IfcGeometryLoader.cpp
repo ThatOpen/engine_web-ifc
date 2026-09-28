@@ -1796,8 +1796,9 @@ namespace webifc::geometry
     const double firstLen = firstFrac * total;
     const double lastLen = lastFrac * total;
     auto pointAt = [&](double len) {
+      // upper_bound finds the first point beyond len, so len lies on the edge that ends there.
       auto it = std::upper_bound(cumulative.begin(), cumulative.end(), len);
-      const size_t i = std::min(static_cast<size_t>(it - cumulative.begin()), pts.size() - 2);
+      const size_t i = std::min(static_cast<size_t>(std::max<std::ptrdiff_t>(it - cumulative.begin(), 1) - 1), pts.size() - 2);
       const double span = cumulative[i + 1] - cumulative[i];
       const double t = span > 0 ? (len - cumulative[i]) / span : 0.0;
       return glm::mix(pts[i], pts[i + 1], t);

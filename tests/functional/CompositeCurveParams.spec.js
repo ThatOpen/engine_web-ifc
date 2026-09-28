@@ -20,6 +20,10 @@ const cases = [
   ["polyline-end-rounding.ifc", 1.5],
   ["indexed-polycurve-end-rounding.ifc", 1.5],
   ["polyline-partial.ifc", 0.5 + 0.25],
+  // IfcIndexedPolyCurve with a 1000 mm line, a 180 degree arc of radius 200 mm and a 500 mm line.
+  // Revit writes EndParam 1 + 180 + 1 = 182, which is swept whole; 0..0.5 is half of the length.
+  ["indexed-polycurve-arc-full.ifc", 1.5 + 0.2 * Math.PI],
+  ["indexed-polycurve-arc-half.ifc", (1.5 + 0.2 * Math.PI) / 2],
 ];
 
 async function area(file) {
