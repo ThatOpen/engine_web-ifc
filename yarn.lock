@@ -2263,9 +2263,9 @@ iconv-lite@~0.4.24:
     safer-buffer ">= 2.1.2 < 3"
 
 ignore@^7.0.5:
-  version "7.0.9"
-  resolved "https://registry.npmjs.org/ignore/-/ignore-7.0.9.tgz"
-  integrity sha512-brTTsvFRt5C1gGHtPst/281UjPD5t9fBqbgoMPlVWy11ZLTPfu7HxK4ZYqO9H7o/yC9rSTCI85EaQ4OoY12qYw==
+  version "7.0.10"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-7.0.10.tgz#c578b9e3624f77e2298876f6516c9ed976c84fdd"
+  integrity sha512-HpbUakT7xp5miBUywCHf36ZEuAJNklBJDDsGpUIjMzOSmM8ELSfA9Sa/QDPeNeqeoN31u+UTCkL4klCOVvRm4Q==
 
 import-local@^3.2.0:
   version "3.2.0"
