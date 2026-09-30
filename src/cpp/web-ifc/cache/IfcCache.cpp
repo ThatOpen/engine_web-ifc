@@ -185,6 +185,32 @@ namespace webifc::cache
         resultVector[ifcRootID].emplace_back(styledItemID, materialSelect);
       }
     }
+
+    // an occurrence without its own material uses its type's material (IfcRelAssociatesMaterial)
+    ankerl::unordered_dense::map<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>> typeMaterials;
+    auto relTypes = _loader.GetExpressIDsWithType(schema::IFCRELDEFINESBYTYPE);
+
+    for (uint32_t relTypeID : relTypes)
+    {
+      _loader.MoveToArgumentOffset(relTypeID, 5);
+
+      uint32_t relatingType = _loader.GetRefArgument();
+      auto typeMaterial = resultVector.find(relatingType);
+      if (typeMaterial == resultVector.end())
+        continue;
+
+      _loader.MoveToArgumentOffset(relTypeID, 4);
+
+      auto RelatedObjects = _loader.GetSetArgument();
+
+      for (auto &ifcRoot : RelatedObjects)
+      {
+        uint32_t ifcRootID = _loader.GetRefArgument(ifcRoot);
+        if (resultVector.count(ifcRootID) == 0)
+          typeMaterials[ifcRootID] = typeMaterial->second;
+      }
+    }
+    resultVector.insert(typeMaterials.begin(), typeMaterials.end());
     return resultVector;
   }
 
