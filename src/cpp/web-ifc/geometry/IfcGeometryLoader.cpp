@@ -1735,7 +1735,9 @@ namespace webifc::geometry
     ComputeCurveParams params;
     params.dimensions = dimensions;
     params.edge = edge;
-    ComputeCurve(expressID, curve, params);
+    const uint32_t lineType = _loader.GetLineType(expressID);
+    params.applyParentPlacement = lineType == schema::IFCCURVESEGMENT;
+    ComputeCurve(expressID, curve, params, lineType);
     return curve;
   }
 
@@ -1999,8 +2001,12 @@ namespace webifc::geometry
 
   void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params) const
   {
+    ComputeCurve(expressID, curve, params, _loader.GetLineType(expressID));
+  }
+
+  void IfcGeometryLoader::ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params, uint32_t lineType) const
+  {
     spdlog::debug("[ComputeCurve({})]", expressID);
-    auto lineType = _loader.GetLineType(expressID);
     switch (lineType)
     {
     case schema::IFCPOLYLINE:
@@ -2042,8 +2048,9 @@ namespace webifc::geometry
       for (size_t ii = 0; ii < segments.size(); ++ii)
       {
           uint32_t segmentId = _loader.GetRefArgument(segments[ii]);
-          ComputeCurve(segmentId, curve, params);
-          
+          ComputeCurveParams segmentParams(params);
+          segmentParams.applyParentPlacement = false;
+          ComputeCurve(segmentId, curve, segmentParams);
         #ifdef DEBUG_DUMP_SVG
           dump::DumpCurveToHtml(curve.points, "dumpCurve.html");
         #endif
@@ -2103,6 +2110,16 @@ namespace webifc::geometry
               vector = glm::dvec3(1, 0, 0);
               placement = glm::dvec3(0, 0, 0);
           }
+          else if (params.ignoreLineDirection)
+          {
+              // Length trims are physical distances; parameter trims use the IfcVector scale.
+              const double magnitude = params.trimStart.trimType == TRIM_BY_PARAMETER ? glm::length(vector) : 1.0;
+              vector = glm::dvec3(magnitude, 0, 0);
+          }
+          else if (params.trimStart.trimType == TRIM_BY_LENGTH && glm::length(vector) > 1e-12)
+          {
+              vector = glm::normalize(vector);
+          }
 
           if (condition)
           {
@@ -2153,6 +2170,16 @@ namespace webifc::geometry
           {
               vector = glm::dvec3(1, 0, 0);
               placement = glm::dvec3(0, 0, 0);
+          }
+          else if (params.ignoreLineDirection)
+          {
+              // Length trims are physical distances; parameter trims use the IfcVector scale.
+              const double magnitude = params.trimStart.trimType == TRIM_BY_PARAMETER ? glm::length(vector) : 1.0;
+              vector = glm::dvec3(magnitude, 0, 0);
+          }
+          else if (params.trimStart.trimType == TRIM_BY_LENGTH && glm::length(vector) > 1e-12)
+          {
+              vector = glm::normalize(vector);
           }
           if (condition)
           {
@@ -2661,7 +2688,9 @@ namespace webifc::geometry
         for (size_t ii = 0; ii < segmentTokens.size(); ++ii)
         {
             uint32_t segmentId = _loader.GetRefArgument(segmentTokens[ii]);
-            ComputeCurve(segmentId, gradientCurve, params);// dimensions, edge, sameSense, trimSense);
+            ComputeCurveParams segmentParams(params);
+            segmentParams.applyParentPlacement = false;
+            ComputeCurve(segmentId, gradientCurve, segmentParams);// dimensions, edge, sameSense, trimSense);
         }
 #ifdef DEBUG_DUMP_SVG
         dump::DumpCurveToHtml(gradientCurve.points, "GradientCurve.html");
@@ -2780,7 +2809,28 @@ namespace webifc::geometry
 
       _loader.MoveToArgumentOffset(expressID, 1);
       uint32_t placementID = _loader.GetRefArgument();
-      
+      const uint32_t placementType = _loader.GetLineType(placementID);
+      const bool is2DPlacement = placementType == schema::IFCAXIS2PLACEMENT2D;
+      std::optional<glm::dmat4> placementMatrix;
+      auto getSegmentPlacement = [&]() -> const glm::dmat4& {
+          if (!placementMatrix)
+          {
+              if (params.applyParentPlacement)
+              {
+                  placementMatrix = GetLocalPlacement(placementID);
+              }
+              else
+              {
+                  const glm::dmat3 placement2D = GetAxis2Placement2D(placementID);
+                  placementMatrix = glm::dmat4(
+                      glm::dvec4(placement2D[0].x, placement2D[0].y, 0, 0),
+                      glm::dvec4(placement2D[1].x, placement2D[1].y, 0, 0),
+                      glm::dvec4(0, 0, 1, 0),
+                      glm::dvec4(placement2D[2].x, placement2D[2].y, 0, 1));
+              }
+          }
+          return *placementMatrix;
+      };
       // SegmentStart:    TYPE IfcCurveMeasureSelect = SELECT(IfcLengthMeasure, IfcParameterValue);
       _loader.MoveToArgumentOffset(expressID, 2);
 
@@ -2814,18 +2864,26 @@ namespace webifc::geometry
       segmentParams.hasTrim = true;
       size_t curvePointsOffset = curve.points.size();
       glm::dvec3 previousEndTangent = curve.endTangent;
-      
-      segmentParams.ignorePlacement = true;
+      segmentParams.ignorePlacement = params.ignorePlacement || !params.applyParentPlacement;
+      if (!segmentParams.ignorePlacement && _loader.GetLineType(ParentCurveID) == schema::IFCLINE)
+      {
+          _loader.MoveToArgumentOffset(ParentCurveID, 1);
+          glm::dvec3 parentDirection = GetVector(_loader.GetRefArgument());
+          const glm::dmat4& segmentPlacement = getSegmentPlacement();
+          glm::dvec3 placementDirection(segmentPlacement[0].x, segmentPlacement[0].y, segmentPlacement[0].z);
+          if (glm::length(parentDirection) > 1e-12 && glm::length(placementDirection) > 1e-12)
+          {
+              parentDirection = glm::normalize(parentDirection);
+              placementDirection = glm::normalize(placementDirection);
+              segmentParams.ignoreLineDirection = glm::dot(parentDirection, placementDirection) > 1.0 - 1e-10;
+          }
+      }
       segmentParams.dimensions = 3;
       segmentParams.edge = false;
       segmentParams.sameSense = -1;
       segmentParams.trimSense = trimSense;
 
-      if (expressID == 192475)
-      {
-          int wait = 0;
-}
-
+      const size_t curveTangentsOffset = curve.segmentStartTangents.size();
       ComputeCurve(ParentCurveID, curve, segmentParams);
       
       bool applyOwnPlacement = true;
@@ -2834,6 +2892,34 @@ namespace webifc::geometry
       }
 
       std::vector<glm::dvec3> currentSegmentPoints(curve.points.begin() + curvePointsOffset, curve.points.end());
+      const bool anchorParentCurveStart = params.applyParentPlacement && !params.ignorePlacement && !currentSegmentPoints.empty();
+      const glm::dvec3 parentCurveStart = anchorParentCurveStart ? currentSegmentPoints.front() : glm::dvec3(0);
+      glm::dvec3 currentStartTangent(0);
+      if (currentSegmentPoints.size() > 1)
+      {
+          currentStartTangent = currentSegmentPoints[1] - currentSegmentPoints[0];
+          if (curve.segmentStartTangents.size() > curveTangentsOffset)
+          {
+              currentStartTangent = curve.segmentStartTangents.back();
+          }
+      }
+
+      bool applyOwnPlacementRotation = true;
+      const bool usesContinuity = Transition.compare("CONTINUOUS") == 0 ||
+          Transition.compare("CONTSAMEGRADIENT") == 0 ||
+          Transition.compare("CONTSAMEGRADIENTSAMECURVATURE") == 0;
+      if (curvePointsOffset == 0 && params.applyParentPlacement && is2DPlacement && usesContinuity && currentSegmentPoints.size() > 1)
+      {
+          const glm::dmat4& placement = getSegmentPlacement();
+          glm::dvec3 placementDirection(placement[0].x, placement[0].y, placement[0].z);
+          if (glm::length(currentStartTangent) > 1e-12 && glm::length(placementDirection) > 1e-12)
+          {
+              const glm::dvec3 startTangent = glm::normalize(currentStartTangent);
+              placementDirection = glm::normalize(placementDirection);
+              applyOwnPlacementRotation = glm::dot(startTangent, placementDirection) <= 1.0 - 1e-8;
+          }
+      }
+
       if (curvePointsOffset > 0)
       {
           // previous segment's end point for continuity check
@@ -2847,13 +2933,7 @@ namespace webifc::geometry
               connectTranslate = true;
               if (currentSegmentPoints.size() > 1)
               {
-                  // Compute the tangent of the current segment
                   glm::dvec3 currentSegmentStart = currentSegmentPoints[0];
-                  glm::dvec3 currentStartTangent = glm::normalize(currentSegmentPoints[1] - currentSegmentPoints[0]);  // this is not precise enough
-                  if (curve.segmentStartTangents.size() > 0)
-                  {
-                      currentStartTangent = curve.segmentStartTangents.back();  // exact start tangent
-                  }
 
                   // Calculate Rotation Angle (in 2D, assuming Z=0/Z-axis is rotation axis)
                   double angle_prev = std::atan2(previousEndTangent.y, previousEndTangent.x);
@@ -2915,18 +2995,24 @@ namespace webifc::geometry
 
       if (applyOwnPlacement)
       {
-          // apply placementID
-          glm::dmat3 placement = GetAxis2Placement2D(placementID);
+          glm::dmat4 placement = getSegmentPlacement();
+          if (!applyOwnPlacementRotation)
+          {
+              // The parent already carries the segment's start orientation.
+              placement[0] = glm::dvec4(1, 0, 0, 0);
+              placement[1] = glm::dvec4(0, 1, 0, 0);
+              placement[2] = glm::dvec4(0, 0, 1, 0);
+          }
           for (size_t i = 0; i < currentSegmentPoints.size(); ++i)
           {
               glm::dvec3& point = currentSegmentPoints[i];
-              double zCoord = point.z;
-              // ensure homogeneous coordinate
-              glm::dvec3 pointHomogenious(point.x, point.y, 1.0);
-              pointHomogenious = placement * pointHomogenious;
-              point.x = pointHomogenious.x;
-              point.y = pointHomogenious.y;
-              point.z = zCoord;  // restore z coordinate, in case it is a 3D curve
+              glm::dvec3 localPoint = point;
+              if (anchorParentCurveStart)
+              {
+                  localPoint -= parentCurveStart;
+              }
+              const glm::dvec4 transformedPoint = placement * glm::dvec4(localPoint, 1.0);
+              point = glm::dvec3(transformedPoint);
           }
 
           // Update the end tangent of the composite curve
