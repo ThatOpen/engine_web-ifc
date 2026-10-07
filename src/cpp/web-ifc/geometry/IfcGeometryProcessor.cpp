@@ -1097,6 +1097,31 @@ namespace webifc::geometry
                 uint32_t profileID = _loader.GetRefArgument();
                 uint32_t placementID = _loader.GetOptionalRefArgument();
                 uint32_t directrixRef = _loader.GetRefArgument();
+
+                // Skip StartParam (argument 3) and EndParam (argument 4), each an
+                // IfcCurveMeasureSelect: $, a plain number, or a typed select such as
+                // IFCPARAMETERVALUE(...). FixedReference (argument 5) follows them.
+                auto skipCurveMeasure = [&]()
+                {
+                    const auto tokenType = _loader.GetTokenType();
+                    if (tokenType == parsing::IfcTokenType::EMPTY) return;
+                    _loader.StepBack();
+                    if (tokenType == parsing::IfcTokenType::LABEL)
+                    {
+                        _loader.GetStringArgument(); // typed value's type name
+                        _loader.GetSetArgument();    // typed value's parenthesised value
+                    }
+                    else if (tokenType == parsing::IfcTokenType::REF)
+                    {
+                        _loader.GetRefArgument();
+                    }
+                    else
+                    {
+                        _loader.GetStringArgument(); // numeric value
+                    }
+                };
+                skipCurveMeasure();
+                skipCurveMeasure();
                 uint32_t fixedReferenceID = _loader.GetRefArgument();
 
                 // Retrieve profile, placement, directrix, and fixed reference direction
@@ -1112,7 +1137,7 @@ namespace webifc::geometry
                 }
 
                 // Determine if the sweep is closed
-                bool closed = glm::distance(directrix.points[0], directrix.points[directrix.points.size() - 1]) < EPS_SMALL;
+                bool closed = glm::distance(directrix.points.front(), directrix.points.back()) < EPS_SMALL;
 
                 // Generate geometry by sweeping the profile with fixed orientation
                 IfcGeometry geom = SweepFixedReference(

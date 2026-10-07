@@ -530,6 +530,37 @@ namespace webifc::geometry
 		return ToIfcGeometry(bimGeometry::Extrude(profile_vector, dir, distance, cuttingPlaneNormal, cuttingPlanePos));
 	}
 
+	// Removes a duplicated closing point from a profile ring and orients it:
+	// outer boundaries counter-clockwise, holes clockwise. Returns -1 when fewer
+	// than three points remain, 0 when unchanged, and 1 when the ring was reversed.
+	template <typename Vec>
+	inline int NormalizeRing(std::vector<Vec>& ring, bool outerBoundary, double closingTolerance)
+	{
+		if (ring.size() > 1 && glm::length(ring.front() - ring.back()) < closingTolerance) ring.pop_back();
+		if (ring.size() < 3) return -1;
+		double area = 0;
+		for (size_t i = 0; i < ring.size(); i++)
+			area += ring[i].x * ring[(i + 1) % ring.size()].y - ring[(i + 1) % ring.size()].x * ring[i].y;
+		if ((area > 0) != outerBoundary)
+		{
+			std::reverse(ring.begin(), ring.end());
+			return 1;
+		}
+		return 0;
+	}
+
+	// Triangulates a set of 2D rings (outer boundary first, then holes) with
+	// earcut and invokes fn for each triangle's three 2D points.
+	template <typename Fn>
+	inline void ForEachEarcutTriangle(const std::vector<std::vector<glm::dvec2>>& rings, Fn&& fn)
+	{
+		std::vector<glm::dvec2> flat;
+		for (const auto& ring : rings) flat.insert(flat.end(), ring.begin(), ring.end());
+		const auto indices = mapbox::earcut<uint32_t>(rings);
+		for (size_t i = 0; i + 2 < indices.size(); i += 3)
+			fn(flat[indices[i]], flat[indices[i + 1]], flat[indices[i + 2]]);
+	}
+
 	inline IfcGeometry RevolveProfile(const IfcProfile& profile, glm::dvec3 axis, const glm::dvec3& origin, double angle, uint16_t circleSegments)
 	{
 		IfcGeometry geometry;
@@ -549,12 +580,7 @@ namespace webifc::geometry
 		for (size_t r = 0; r <= profile.holes.size(); ++r)
 		{
 			auto points = r == 0 ? profile.curve.points : profile.holes[r - 1].points;
-			if (points.size() > 1 && glm::length(points.front() - points.back()) < 1e-8) points.pop_back();
-			if (points.size() < 3) return IfcGeometry();
-			double area = 0;
-			for (size_t i = 0; i < points.size(); ++i)
-				area += points[i].x * points[(i + 1) % points.size()].y - points[(i + 1) % points.size()].x * points[i].y;
-			if ((area > 0) != (r == 0)) std::reverse(points.begin(), points.end());
+			if (NormalizeRing(points, r == 0, 1e-8) < 0) return IfcGeometry();
 			rings.emplace_back();
 			for (const auto& point : points) rings.back().emplace_back(point.x, point.y);
 		}
@@ -586,16 +612,12 @@ namespace webifc::geometry
 				}
 		if (!closed)
 		{
-			const auto indices = mapbox::earcut<uint32_t>(rings);
-			std::vector<glm::dvec2> points;
-			for (const auto& ring : rings) points.insert(points.end(), ring.begin(), ring.end());
-			for (size_t i = 0; i < indices.size(); i += 3)
+			ForEachEarcutTriangle(rings, [&](glm::dvec2 a, glm::dvec2 b, glm::dvec2 c)
 			{
-				auto a = points[indices[i]], b = points[indices[i + 1]], c = points[indices[i + 2]];
-				if ((b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x) < 0) std::swap(b, c);
+				if ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) < 0) std::swap(b, c);
 				face(pointAt(a, 0), pointAt(c, 0), pointAt(b, 0));
 				face(pointAt(a, segments), pointAt(b, segments), pointAt(c, segments));
-			}
+			});
 		}
 		return geometry;
 	}
@@ -627,22 +649,15 @@ namespace webifc::geometry
 		{
 			auto a = ring == 0 ? start.curve.points : start.holes[ring - 1].points;
 			auto b = ring == 0 ? end.curve.points : end.holes[ring - 1].points;
-			if (a.size() > 1 && glm::length(a.front() - a.back()) < 1e-8) a.pop_back();
 			if (b.size() > 1 && glm::length(b.front() - b.back()) < 1e-8) b.pop_back();
-			if (a.size() < 3 || a.size() != b.size())
+			// Normalize a, then reverse b together with it to preserve vertex correspondence.
+			const int reversed = NormalizeRing(a, ring == 0, 1e-8);
+			if (reversed < 0 || a.size() != b.size())
 			{
 				spdlog::error("[ExtrudeTapered()] Profiles need matching sampled boundary vertices");
 				return IfcGeometry();
 			}
-			// Reverse both boundaries together to preserve vertex correspondence.
-			double area = 0;
-			for (size_t i = 0; i < a.size(); ++i)
-				area += a[i].x * a[(i + 1) % a.size()].y - a[(i + 1) % a.size()].x * a[i].y;
-			if ((area > 0) != (ring == 0))
-			{
-				std::reverse(a.begin(), a.end());
-				std::reverse(b.begin(), b.end());
-			}
+			if (reversed > 0) std::reverse(b.begin(), b.end());
 			lower.emplace_back(); upper.emplace_back();
 			for (size_t i = 0; i < a.size(); ++i)
 			{
@@ -669,17 +684,15 @@ namespace webifc::geometry
 		for (int cap = 0; cap < 2; ++cap)
 		{
 			const auto& rings = cap == 0 ? lower : upper;
-			const auto indices = mapbox::earcut<uint32_t>(rings);
-			std::vector<glm::dvec3> points;
-			for (const auto& ring : rings)
-				for (const auto& point : ring)
-					points.push_back(glm::dvec3(point, 0) + (cap == 0 ? glm::dvec3(0) : offset));
-			for (size_t i = 0; i < indices.size(); i += 3)
+			const glm::dvec3 capOffset = cap == 0 ? glm::dvec3(0) : offset;
+			ForEachEarcutTriangle(rings, [&](const glm::dvec2& p0, const glm::dvec2& p1, const glm::dvec2& p2)
 			{
-				auto a = points[indices[i]], b = points[indices[i + 1]], c = points[indices[i + 2]];
+				glm::dvec3 a = glm::dvec3(p0, 0) + capOffset;
+				glm::dvec3 b = glm::dvec3(p1, 0) + capOffset;
+				glm::dvec3 c = glm::dvec3(p2, 0) + capOffset;
 				if ((glm::cross(b - a, c - a).z > 0) != (cap == 1)) std::swap(b, c);
 				face(a, b, c);
-			}
+			});
 		}
 		return geom;
 	}
@@ -688,91 +701,100 @@ namespace webifc::geometry
 	{
 		IfcGeometry geom;
 
-		// Normalize the fixed reference direction
-		glm::dvec3 refDir = glm::normalize(fixedReference);
-
-		// Create a transformation matrix to align the profile with the fixed reference
-		glm::dvec3 zAxis(0, 0, 1); // Default profile z-axis
-		glm::dvec3 rotationAxis = glm::cross(zAxis, refDir);
-		double angle = glm::acos(glm::dot(zAxis, refDir));
-		glm::dmat4 orientation = (glm::length(rotationAxis) > EPS_SMALL) ?
-			glm::rotate(glm::dmat4(1.0), angle, rotationAxis) : glm::dmat4(1.0);
-
-		// Sweep the profile along the directrix
-		std::vector<glm::dvec3> profilePoints = profile.curve.points;
-		std::vector<glm::dvec3> pathPoints = directrix.points;
-		uint32_t segments = closed ? pathPoints.size() : pathPoints.size() - 1;
-
-		// Store profiles for start and end caps
-		std::vector<glm::dvec3> startProfile;
-		std::vector<glm::dvec3> endProfile;
-
-		// Compute start profile (at first directrix point)
-		glm::dvec3 startPos = pathPoints[0];
-		for (const auto& pt : profilePoints) {
-			glm::dvec4 transformedPt = orientation * glm::dvec4(pt, 1.0);
-			startProfile.push_back(startPos + glm::dvec3(transformedPt));
+		// Collect the profile rings in 2D (outer boundary first, then holes).
+		std::vector<std::vector<glm::dvec2>> rings;
+		rings.emplace_back();
+		for (const auto& p : profile.curve.points) rings.back().emplace_back(p.x, p.y);
+		for (const auto& hole : profile.holes)
+		{
+			rings.emplace_back();
+			for (const auto& p : hole.points) rings.back().emplace_back(p.x, p.y);
 		}
 
-		for (uint32_t i = 0; i < segments; i++) {
-			glm::dvec3 pos = pathPoints[i];
-			glm::dvec3 nextPos = pathPoints[(i + 1) % pathPoints.size()];
+		for (size_t r = 0; r < rings.size(); r++)
+			if (NormalizeRing(rings[r], r == 0, EPS_SMALL) < 0) return geom;
 
-			// Transform profile points at the current position
-			std::vector<glm::dvec3> currentProfile;
-			for (const auto& pt : profilePoints) {
-				glm::dvec4 transformedPt = orientation * glm::dvec4(pt, 1.0);
-				currentProfile.push_back(pos + glm::dvec3(transformedPt));
+		// Directrix points, dropping consecutive duplicates.
+		std::vector<glm::dvec3> path;
+		for (size_t i = 0; i < directrix.points.size(); i++)
+		{
+			if (i + 1 < directrix.points.size() && glm::distance(directrix.points[i], directrix.points[i + 1]) < EPS_BIG2 * linearScalingFactor) continue;
+			path.push_back(directrix.points[i]);
+		}
+		if (path.size() < 2) return geom;
+		if (closed && glm::distance(path.front(), path.back()) < EPS_SMALL) path.pop_back();
+		if (path.size() < 2) return geom;
+
+		glm::dvec3 refDir = fixedReference;
+		if (glm::length(refDir) < EPS_SMALL) refDir = glm::dvec3(0, 0, 1);
+		refDir = glm::normalize(refDir);
+
+		// Per IFC, at each directrix point the profile's local z-axis is the tangent,
+		// and its local x-axis is the orthogonal projection of FixedReference onto the
+		// plane normal to that tangent.
+		std::vector<glm::dvec3> xAxes(path.size());
+		std::vector<glm::dvec3> yAxes(path.size());
+		for (size_t i = 0; i < path.size(); i++)
+		{
+			glm::dvec3 tangent;
+			if (i == 0) tangent = path[1] - path[0];
+			else if (i == path.size() - 1) tangent = path[i] - path[i - 1];
+			else tangent = path[i + 1] - path[i - 1];
+			if (glm::length(tangent) < EPS_SMALL)
+			{
+				// A directrix point revisited two steps apart yields a zero tangent;
+				// fall back to an adjacent segment rather than normalizing zero.
+				tangent = (i == 0) ? path[1] - path[0] : path[i] - path[i - 1];
 			}
+			if (glm::length(tangent) < EPS_SMALL) return geom; // unusable directrix
+			tangent = glm::normalize(tangent);
 
-			// Transform profile points at the next position
-			std::vector<glm::dvec3> nextProfile;
-			if (!closed || i < segments - 1) {
-				for (const auto& pt : profilePoints) {
-					glm::dvec4 transformedPt = orientation * glm::dvec4(pt, 1.0);
-					nextProfile.push_back(nextPos + glm::dvec3(transformedPt));
+			glm::dvec3 x = refDir - glm::dot(refDir, tangent) * tangent;
+			if (glm::length(x) < EPS_SMALL)
+			{
+				// FixedReference parallel to the tangent (invalid input): pick any perpendicular.
+				const glm::dvec3 helper = std::abs(tangent.x) < 0.9 ? glm::dvec3(1, 0, 0) : glm::dvec3(0, 1, 0);
+				x = glm::cross(tangent, helper);
+			}
+			x = glm::normalize(x);
+			xAxes[i] = x;
+			yAxes[i] = glm::normalize(glm::cross(tangent, x));
+		}
+
+		auto ringPoint = [&](size_t step, const glm::dvec2& p) -> glm::dvec3
+		{
+			return path[step] + p.x * xAxes[step] + p.y * yAxes[step];
+		};
+
+		// Side walls.
+		const size_t steps = closed ? path.size() : path.size() - 1;
+		for (size_t i = 0; i < steps; i++)
+		{
+			const size_t next = (i + 1) % path.size();
+			for (const auto& ring : rings)
+			{
+				for (size_t j = 0; j < ring.size(); j++)
+				{
+					const size_t jNext = (j + 1) % ring.size();
+					const glm::dvec3 a = ringPoint(i, ring[j]);
+					const glm::dvec3 b = ringPoint(i, ring[jNext]);
+					const glm::dvec3 c = ringPoint(next, ring[jNext]);
+					const glm::dvec3 d = ringPoint(next, ring[j]);
+					geom.AddFace(a, b, c);
+					geom.AddFace(a, c, d);
 				}
 			}
-			else {
-				nextProfile = startProfile; // For closed curves, connect to the start
-			}
-
-			// Store end profile (at last directrix point)
-			if (i == segments - 1) {
-				endProfile = nextProfile;
-			}
-
-			// Add two triangles for each segment of the profile
-			for (size_t j = 0; j < profilePoints.size(); j++) {
-				size_t jNext = (j + 1) % profilePoints.size();
-
-				// First triangle: (current[j], next[j], next[jNext])
-				geom.AddFace(
-					currentProfile[j],
-					nextProfile[j],
-					nextProfile[jNext]
-				);
-
-				// Second triangle: (current[j], next[jNext], current[jNext])
-				geom.AddFace(
-					currentProfile[j],
-					nextProfile[jNext],
-					currentProfile[jNext]
-				);
-			}
 		}
 
-		// Handle caps for non-closed sweeps
-		if (!closed) {
-			// Add start cap
-			IfcProfile startCap = profile;
-			startCap.curve.points = startProfile;
-			geom.AddGeometry(Extrude(startCap, glm::dvec3(0, 0, -1), 0)); // Zero-depth extrusion for cap
-
-			// Add end cap
-			IfcProfile endCap = profile;
-			endCap.curve.points = endProfile;
-			geom.AddGeometry(Extrude(endCap, glm::dvec3(0, 0, 1), 0));
+		// Caps for open sweeps.
+		if (!closed)
+		{
+			ForEachEarcutTriangle(rings, [&](const glm::dvec2& p0, const glm::dvec2& p1, const glm::dvec2& p2)
+			{
+				// Start cap faces backwards along the directrix, end cap forwards.
+				geom.AddFace(ringPoint(0, p0), ringPoint(0, p2), ringPoint(0, p1));
+				geom.AddFace(ringPoint(path.size() - 1, p0), ringPoint(path.size() - 1, p1), ringPoint(path.size() - 1, p2));
+			});
 		}
 
 		return geom;
