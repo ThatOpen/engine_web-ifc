@@ -1097,6 +1097,23 @@ namespace webifc::geometry
                 uint32_t profileID = _loader.GetRefArgument();
                 uint32_t placementID = _loader.GetOptionalRefArgument();
                 uint32_t directrixRef = _loader.GetRefArgument();
+                // StartParam and EndParam precede FixedReference (also in IFC4X3).
+                auto skipParam = [&]() {
+                    auto token = _loader.GetTokenType();
+                    if (token == parsing::IfcTokenType::REAL || token == parsing::IfcTokenType::INTEGER)
+                    {
+                        _loader.StepBack();
+                        _loader.GetDoubleArgument();
+                    }
+                    else if (token == parsing::IfcTokenType::LABEL)
+                    {
+                        _loader.StepBack();
+                        _loader.GetStringArgument();
+                        _loader.GetSetArgument();
+                    }
+                };
+                skipParam();
+                skipParam();
                 uint32_t fixedReferenceID = _loader.GetRefArgument();
 
                 // Retrieve profile, placement, directrix, and fixed reference direction
@@ -1106,7 +1123,7 @@ namespace webifc::geometry
                 glm::dvec3 fixedReference = _geometryLoader.GetCartesianPoint3D(fixedReferenceID);
 
                 // Check for valid profile and directrix
-                if (profile.curve.points.empty() || directrix.points.empty()) {
+                if (profile.curve.points.empty() || directrix.points.size() < 2) {
                     spdlog::error("[GetMesh()] Invalid profile or directrix for IFCFIXEDREFERENCESWEPTAREASOLID {}", expressID);
                     return mesh;
                 }
