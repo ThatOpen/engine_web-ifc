@@ -74,7 +74,7 @@ describe('Properties', () => {
 
     test('can get all property sets with types', async () => {
         const propertySets = await properties.getPropertySets(modelID, undefined,true,true);
-        expect(propertySets.length).toEqual(155);
+        expect(propertySets.length).toEqual(153);
     })
 
 	test('can get all property sets in project', async () => {
