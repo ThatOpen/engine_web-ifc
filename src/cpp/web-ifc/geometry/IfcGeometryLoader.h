@@ -75,9 +75,11 @@ namespace webifc::geometry
 
     struct ComputeCurveParams {
 		ComputeCurveParams() = default;
-        ComputeCurveParams(const ComputeCurveParams& other) {
+		ComputeCurveParams(const ComputeCurveParams& other) {
 			dimensions = other.dimensions;
 			ignorePlacement = other.ignorePlacement;
+			ignoreLineDirection = other.ignoreLineDirection;
+			applyParentPlacement = other.applyParentPlacement;
 			edge = other.edge;
 			sameSense = other.sameSense;
 			hasTrim = other.hasTrim;
@@ -87,6 +89,8 @@ namespace webifc::geometry
         }
         uint8_t dimensions = 2;
         bool ignorePlacement = false;
+		bool ignoreLineDirection = false;
+		bool applyParentPlacement = false;
         bool edge = false;
         int sameSense = -1;
        	bool hasTrim = false;
@@ -95,6 +99,7 @@ namespace webifc::geometry
         TrimSense trimSense = TRIM_SENSE_SAME;
     };
     void ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params) const;
+    void ComputeCurve(uint32_t expressID, IfcCurve &curve, const ComputeCurveParams& params, uint32_t lineType) const;
     void convertAngleUnits(double &Degrees, double &Rad) const;
     double ReadLenghtMeasure() const;
     void ReadCurveMeasureSelect(IfcTrimmingSelect& trim) const;
