@@ -1028,17 +1028,31 @@ namespace webifc::geometry
                 auto directrixRef = _loader.GetRefArgument();
                 bool closed = false;
 
-                if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-                {
-                    _loader.StepBack();
-                    startParam = _loader.GetDoubleArgument();
-                }
-
-                if (_loader.GetTokenType() == parsing::IfcTokenType::REAL)
-                {
-                    _loader.StepBack();
-                    endParam = _loader.GetDoubleArgument();
-                }
+                // IFC4 uses optional numbers; IFC4X3 uses IfcCurveMeasureSelect.
+                // Consume the complete typed value, including its closing parenthesis.
+                auto readParam = [&](double defaultValue) {
+                    auto token = _loader.GetTokenType();
+                    if (token == parsing::IfcTokenType::REAL || token == parsing::IfcTokenType::INTEGER)
+                    {
+                        _loader.StepBack();
+                        return _loader.GetDoubleArgument();
+                    }
+                    if (token == parsing::IfcTokenType::LABEL)
+                    {
+                        _loader.StepBack();
+                        auto label = _loader.GetStringArgument();
+                        if ((label == "IFCPARAMETERVALUE" || label == "IFCLENGTHMEASURE") &&
+                            _loader.GetTokenType() == parsing::IfcTokenType::SET_BEGIN)
+                        {
+                            double value = _loader.GetOptionalDoubleParam(defaultValue);
+                            _loader.GetTokenType(); // SET_END of the typed value
+                            return value;
+                        }
+                    }
+                    return defaultValue;
+                };
+                startParam = readParam(startParam);
+                endParam = readParam(endParam);
 
                 auto surfaceID = _loader.GetRefArgument();
 
