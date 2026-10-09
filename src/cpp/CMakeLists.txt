@@ -36,7 +36,7 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
 # download the external projects and save their paths
 Message("Downloading FastFloat")
-FetchContent_Declare(fastfloat GIT_REPOSITORY "https://github.com/fastfloat/fast_float" GIT_TAG "b0ab987b3dfdde13fa1915f65ef2a5c068d9208c" SOURCE_SUBDIR "../")
+FetchContent_Declare(fastfloat GIT_REPOSITORY "https://github.com/fastfloat/fast_float" GIT_TAG "f3f02c8ad0afd8181166dabce6a9e69f8aec24de" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(fastfloat)
 
 Message("Downloading TinyNURBS")
