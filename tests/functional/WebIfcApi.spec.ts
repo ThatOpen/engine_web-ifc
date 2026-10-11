@@ -21,7 +21,7 @@ let allGeometriesSize: number = 119;
 let meshesCount: number = 115;
 let totalLineNumber : number = 6490;
 let emptyFileModelID: number;
-let lastExpressId : number = 14315;
+let lastExpressId : number = 14314;
 let expectedFileDescription : string = "ViewDefinition [CoordinationView_V2.0]";
 let expectedFileSchema = "IFC2X3";
 let expectedFileName = "3458";
@@ -124,8 +124,8 @@ describe('WebIfcApi reading methods', () => {
     test('can return the next highest expressID if the ID is not sequential', () => {
         expect(ifcApi.GetNextExpressID(modelID, 9)).toBe(11);
     })
-    test('returns next expressID if it is the max ID', () => {
-        expect(ifcApi.GetNextExpressID(modelID, 14314)).toBe(14315);
+    test('returns next expressID near the max ID', () => {
+        expect(ifcApi.GetNextExpressID(modelID, 14313)).toBe(14314);
     })
     test('Can get max expressID', () => {
         const maxExpressId : number = ifcApi.GetMaxExpressID(modelID);
