@@ -1468,10 +1468,10 @@ bs-logger@^0.2.6:
   dependencies:
     fast-json-stable-stringify "2.x"
 
-bser@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.npmjs.org/bser/-/bser-2.1.1.tgz"
-  integrity sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==
+bser@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/bser/-/bser-2.1.2.tgz#3052372d49a1bc2a25e68c267697af5e823e147a"
+  integrity sha512-V2o8YS2EhrKMO9AumnkK0ynynfFlsajpYupwq7S46H5mhcanwxDkNTw3K67wPIcKTH1ffkA4vhMOtAc7gRmPZw==
   dependencies:
     node-int64 "^0.4.0"
 
@@ -1998,11 +1998,11 @@ fastq@^1.6.0:
     reusify "^1.0.4"
 
 fb-watchman@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/fb-watchman/-/fb-watchman-2.0.2.tgz"
-  integrity sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/fb-watchman/-/fb-watchman-2.0.4.tgz#2227759ee352e8371b9de30ceda7633ce65ca3be"
+  integrity sha512-tGQtaoYisPDriJBN0mT5yZSyNETnJGA1gTYxaVRAE5KUO3LI9kPUc9WIu8JXcxaIci+faIKlzXqXyPgrmubtBQ==
   dependencies:
-    bser "2.1.1"
+    bser "2.1.2"
 
 fdir@^6.5.0:
   version "6.5.0"
