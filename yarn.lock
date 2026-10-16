@@ -3469,9 +3469,9 @@ p-locate@^4.1.0:
     p-limit "^2.2.0"
 
 p-map@^7.0.1, p-map@^7.0.4:
-  version "7.0.8"
-  resolved "https://registry.npmjs.org/p-map/-/p-map-7.0.8.tgz"
-  integrity sha512-MitaVsCuCFIvOLLPIU7NnfrZvS9H9h7kwMUkDo+T2pEISaJD48IV9S8iIdXB7PsvvdxyYcsSTTrr90XKsbulNw==
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/p-map/-/p-map-7.1.1.tgz#df42589224b93b798eb4d16dbf965bb15a522d34"
+  integrity sha512-6Lh3jQPLthYujSrlw6ccWXBGZTkoTCz27Hd92g79LH/kjAbgoEu0t442cCCNbegPSJsA0lwDX8z0bcKtkpA32g==
 
 p-timeout@^6.1.2:
   version "6.1.4"
