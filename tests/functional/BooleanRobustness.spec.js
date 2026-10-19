@@ -7,6 +7,9 @@ const { IfcAPI, LogLevel } = require(process.env.WEB_IFC_API || "../../dist/web-
 // Thin millimetre wall layers with openings, synthetic. Reference volume (m3) and area (m2) are
 // from IfcOpenShell 0.8.5. The cases cover face vertices with sub-micron rounding noise, openings
 // a few 1e-5 mm off hole edges, boxes touching a face from outside, and walls rotated off the axes.
+// The misaligned-opening walls are in metres: their openings sit 0.04-0.12 mm off the wall faces and
+// are tilted by 1.8e-5 rad. They are expected to cut through (IfcOpenShell keeps a skin for some), so
+// their references are computed from the nominal opening sizes.
 const fixtures = path.join(__dirname, "fixtures", "boolean-robustness");
 const cases = [
   ["noisy-face-opening.ifc", 0.2087, 34.1992],
@@ -20,6 +23,9 @@ const cases = [
   ["wall-openings-1170.ifc", 0.09023, 14.2827],
   ["wall-openings-3396.ifc", 3.771, 79.08],
   ["wall-openings-2892.ifc", 0.4635, 74.625],
+  ["misaligned-opening-extruded.ifc", 14.1834, 96.987],
+  ["misaligned-opening-brep.ifc", 11.1594, 84.057],
+  ["misaligned-opening-skin.ifc", 11.1594, 84.057],
 ];
 
 async function measure(file) {

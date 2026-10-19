@@ -30,4 +30,12 @@ namespace bimGeometry
     constexpr double SHARED_NORMAL_MIN_COS = 1.0 - 1.0E-08;
     // Normals of triangles grouped into one plane by vertex distance may differ by ~1.4e-3 rad.
     constexpr double COPLANAR_MIN_COS = 1.0 - 1.0E-06;
+
+    /*
+        Used before boolean differences in IfcGeometryProcessor.cpp
+    */
+    // Cutter faces within this many plane deviation tolerances of a parallel operand face are snapped onto it.
+    constexpr double SNAP_TO_OPERAND_PLANE_FACTOR = 2.0;
+    // Cutter vertices closer than this are treated as copies of one position while snapping.
+    constexpr double SNAP_WELD_DISTANCE = 1.0E-09;
 }
