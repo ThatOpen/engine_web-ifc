@@ -52,7 +52,7 @@ FetchContent_Declare(glm GIT_REPOSITORY "https://github.com/g-truc/glm" GIT_TAG 
 FetchContent_MakeAvailable(glm)
 
 Message("Downloading Earcut")
-FetchContent_Declare(earcut GIT_REPOSITORY "https://github.com/mapbox/earcut.hpp" GIT_TAG "c68c8835ccff2b7532d31d8fa8dfcf398f629498" SOURCE_SUBDIR "../")
+FetchContent_Declare(earcut GIT_REPOSITORY "https://github.com/mapbox/earcut.hpp" GIT_TAG "92acda9e2ed96ff1f910cda35de444727e9da7b0" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(earcut)
 
 Message("Downloading CDT")
