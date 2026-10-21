@@ -3,12 +3,12 @@
 
 
 "@75lb/deep-merge@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.npmjs.org/@75lb/deep-merge/-/deep-merge-1.1.4.tgz"
-  integrity sha512-Fjmi8VSxoGF80wn8HSHTPfUKLSJ+aiQE7rXyrFV6apP8Xyj8v4bqdC7BBoklxjt671gUqP0yREwpDlUP5R/VyQ==
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@75lb/deep-merge/-/deep-merge-1.1.5.tgz#988f35645374c03e662d92ee06d616e8da49c64f"
+  integrity sha512-Lg+xOSMYpJC8hiBJMfA/ljWAQRwroJdc+5HF1J0KNDP5B6Peo6xXFCB92Mz3nf+ybwzYLr+ir17v3yC88Lytnw==
   dependencies:
-    lodash "^4.17.21"
-    typical "^7.1.1"
+    lodash "^4.18.1"
+    typical "^7.3.0"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.27.1", "@babel/code-frame@^7.29.7":
   version "7.29.7"
@@ -3028,9 +3028,9 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-lodash@^4.17.21:
+lodash@^4.18.1:
   version "4.18.1"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.18.1.tgz#ff2b66c1f6326d59513de2407bf881439812771c"
   integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
 
 lru-cache@^10.2.0:
@@ -4100,7 +4100,7 @@ typical@^5.2.0:
   resolved "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz"
   integrity sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg==
 
-typical@^7.1.1, typical@^7.3.0:
+typical@^7.3.0:
   version "7.3.0"
   resolved "https://registry.npmjs.org/typical/-/typical-7.3.0.tgz"
   integrity sha512-ya4mg/30vm+DOWfBg4YK3j2WD6TWtRkCbasOJr40CseYENzCUby/7rIvXA99JGsQHeNxLbnXdyLLxKSv3tauFw==
