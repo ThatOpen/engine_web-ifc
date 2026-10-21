@@ -1721,7 +1721,7 @@ cross-spawn@^7.0.3, cross-spawn@^7.0.6:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-current-module-paths@^1.1.1, current-module-paths@^1.1.3:
+current-module-paths@^1.1.3:
   version "1.1.3"
   resolved "https://registry.npmjs.org/current-module-paths/-/current-module-paths-1.1.3.tgz"
   integrity sha512-7AH+ZTRKikdK4s1RmY0l6067UD/NZc7p3zZVZxvmnH80G31kr0y0W0E6ibYM4IS01MEm8DiC5FnTcgcgkbFHoA==
@@ -2984,18 +2984,18 @@ load-module@^5.0.0:
     array-back "^6.2.2"
 
 local-web-server@^5.2.1:
-  version "5.4.0"
-  resolved "https://registry.npmjs.org/local-web-server/-/local-web-server-5.4.0.tgz"
-  integrity sha512-FkQT6ZuX+8ywks3Mol5nHtuKzf+Rhtp88PPJUkcU0fP6JzNi7s9a+dWRQ8WrCxlGe3vHij85A4R1uL4wRg06WA==
+  version "5.4.2"
+  resolved "https://registry.yarnpkg.com/local-web-server/-/local-web-server-5.4.2.tgz#af3665bebf3ee4d4834455f0f2e227d332818a1b"
+  integrity sha512-sCeYEo7E+NgKyDvyjq1q7kx/Z7IkGKjJbBQzOyC+uBeBeTKayVi+xMee3vRRVtXZ43tiJO6u8QLyWzCcAvpwUQ==
   dependencies:
-    current-module-paths "^1.1.1"
-    lws "^4.1.5"
+    current-module-paths "^1.1.3"
+    lws "^4.2.1"
     lws-basic-auth "^2.0.0"
     lws-blacklist "^3.0.0"
     lws-body-parser "^3.0.1"
-    lws-compress "^3.1.0"
+    lws-compress "^3.1.1"
     lws-conditional-get "^3.0.0"
-    lws-cors "^4.2.1"
+    lws-cors "^4.2.2"
     lws-index "^3.1.1"
     lws-json "^2.0.0"
     lws-log "^3.0.0"
@@ -3004,7 +3004,7 @@ local-web-server@^5.2.1:
     lws-request-monitor "^2.0.0"
     lws-rewrite "^4.0.0"
     lws-spa "^4.1.1"
-    lws-static "^3.1.1"
+    lws-static "^3.1.2"
 
 locate-path@^5.0.0:
   version "5.0.0"
@@ -3077,7 +3077,7 @@ lws-body-parser@^3.0.1:
   dependencies:
     koa-bodyparser "^4.4.1"
 
-lws-compress@^3.1.0:
+lws-compress@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/lws-compress/-/lws-compress-3.1.1.tgz#a6918b975c12f8e7c13e0d0fab83e383ba9c56e7"
   integrity sha512-IPbMO+XmTs2dgFwCAqGhAQellDnL9gNTFXMBHdCe45l9hwVYjVskri5RAfqLtWq6VvTCJk0GuezPksZkVlddSQ==
@@ -3092,10 +3092,10 @@ lws-conditional-get@^3.0.0:
     koa-conditional-get "^2.0.0"
     koa-etag "^4.0.0"
 
-lws-cors@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.npmjs.org/lws-cors/-/lws-cors-4.2.1.tgz"
-  integrity sha512-KXsAn0Wn8n0riJ3SDHQzEAuzTrdeQZDJIxPHWEupsImW2hnQuBZVW5zqsmfzxD8SkCDDnQyFNuQZjSlBZmexKg==
+lws-cors@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/lws-cors/-/lws-cors-4.2.2.tgz#42ac3b89eeca9938ce38038e578bc6f1d07c8899"
+  integrity sha512-/iD10qxsdyZ/+Rnz5Rhy1o12jgPhrWh+QWSzC9jyZr10g70u7VpoL+ooIoOtihWcqG9+5aQ7i7AQfn6o7j1HAw==
   dependencies:
     "@koa/cors" "^5.0.0"
 
@@ -3158,7 +3158,7 @@ lws-spa@^4.1.1:
   dependencies:
     koa-send "^5.0.1"
 
-lws-static@^3.1.1:
+lws-static@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/lws-static/-/lws-static-3.1.2.tgz#799bf085e1cd4f65013121e812c9cf9fe904a207"
   integrity sha512-R32QwQwUe1BTmBYxxrfxCIrGFeaiNBTQ/cbe114pgkrexYE6D1FfuymcN4xPpelmAls7vzEyhy26qn++9lJskg==
@@ -3166,9 +3166,9 @@ lws-static@^3.1.1:
     array-back "^6.2.3"
     koa-static "^5.0.0"
 
-lws@^4.1.5:
+lws@^4.2.1:
   version "4.2.1"
-  resolved "https://registry.npmjs.org/lws/-/lws-4.2.1.tgz"
+  resolved "https://registry.yarnpkg.com/lws/-/lws-4.2.1.tgz#10ccd8c7d883f87943235a5e5320bb1cbc3049c2"
   integrity sha512-KE8prUUZWn83fQ55mDRWx8asxqhToX0tOhxIiC4pXfVvRN1Y/eTvw8nez7ix4CqHOT3RT/YaOd5erXiaa0hBBg==
   dependencies:
     "@75lb/deep-merge" "^1.1.4"
