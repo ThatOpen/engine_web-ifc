@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+#include <algorithm>
+#include <limits>
+
 #include <spdlog/spdlog.h>
 
 #if defined(DEBUG_DUMP_SVG) || defined(DUMP_CSG_MESHES)
@@ -2371,6 +2374,239 @@ namespace webifc::geometry
         return newGeom;
     }
 
+    // For a closed mesh the face area vectors cancel out and the first moments sum(area vector *
+    // centroid^T) equal the volume times the identity; both hold with T-junctions too. Checking the
+    // moments as well catches open meshes whose holes cancel in area, such as a tube without caps.
+    static bool IsClosed(const IfcGeometry &geometry)
+    {
+        if (geometry.numFaces == 0 || geometry.numPoints == 0) return false;
+        glm::dvec3 origin(0);
+        for (uint32_t i = 0; i < geometry.numPoints; i++) origin += geometry.GetPoint(i);
+        origin /= (double)geometry.numPoints;
+        glm::dvec3 areaSum(0);
+        glm::dmat3 moments(0);
+        double areaScale = 0, momentScale = 0;
+        for (uint32_t i = 0; i < geometry.numFaces; i++)
+        {
+            bimGeometry::Face f = geometry.GetFace(i);
+            glm::dvec3 a = geometry.GetPoint(f.i0) - origin, b = geometry.GetPoint(f.i1) - origin, c = geometry.GetPoint(f.i2) - origin;
+            glm::dvec3 area = glm::cross(b - a, c - a) * 0.5;
+            glm::dvec3 centroid = (a + b + c) / 3.0;
+            areaSum += area;
+            moments += glm::outerProduct(area, centroid);
+            areaScale += glm::length(area);
+            momentScale += glm::length(area) * glm::length(centroid);
+        }
+        if (!std::isfinite(momentScale) || areaScale <= 0) return false;
+        if (glm::length(areaSum) > 1e-6 * areaScale) return false;
+        double volume = (moments[0][0] + moments[1][1] + moments[2][2]) / 3.0;
+        for (int r = 0; r < 3; r++)
+            for (int c = 0; c < 3; c++)
+                if (std::abs(moments[c][r] - (r == c ? volume : 0.0)) > 1e-6 * momentScale) return false;
+        return true;
+    }
+
+    // Solve for the point closest to q that lies on all given planes (at most three,
+    // pairwise non-parallel). Returns false when the planes are nearly dependent.
+    static bool ClosestPointOnPlanes(const glm::dvec3 &q, const std::vector<const bimGeometry::Plane *> &planes, glm::dvec3 &result)
+    {
+        size_t k = planes.size();
+        double m[3][4] = {};
+        for (size_t i = 0; i < k; i++)
+        {
+            for (size_t j = 0; j < k; j++) m[i][j] = glm::dot(planes[i]->normal, planes[j]->normal);
+            m[i][3] = glm::dot(planes[i]->normal, q) - planes[i]->distance;
+        }
+        for (size_t c = 0; c < k; c++)
+        {
+            size_t pivot = c;
+            for (size_t r = c + 1; r < k; r++) if (std::abs(m[r][c]) > std::abs(m[pivot][c])) pivot = r;
+            // Pivots shrink with the squared sine of the angle between normals.
+            if (std::abs(m[pivot][c]) < 1e-6) return false;
+            for (size_t j = 0; j < 4; j++) std::swap(m[c][j], m[pivot][j]);
+            for (size_t r = 0; r < k; r++)
+            {
+                if (r == c) continue;
+                double f = m[r][c] / m[c][c];
+                for (size_t j = c; j < 4; j++) m[r][j] -= f * m[c][j];
+            }
+        }
+        result = q;
+        for (size_t i = 0; i < k; i++) result -= planes[i]->normal * (m[i][3] / m[i][i]);
+        return true;
+    }
+
+    // A cutter face lying within a few tolerances of a parallel face of the operand straddles the
+    // kernel's coplanarity tolerance: some of its vertices count as on the operand's plane, others
+    // as off it, and the difference comes out open, keeps a capped skin or skips the cut (an opening
+    // placed a tenth of a millimetre off a wall face and tilted by 1e-5 rad, for example). Such faces
+    // are moved exactly onto the operand's plane before the difference. Positions are welded first so
+    // that every copy of a vertex moves together, and a vertex shared by faces snapped to several
+    // planes goes to the closest point on all of them. Returns false, leaving snapped untouched, when
+    // no face needs to move or the cutter is not a closed solid.
+    static bool SnapToOperandPlanes(const IfcGeometry &operand, const IfcGeometry &cutter, double snapDistance, IfcGeometry &snapped)
+    {
+        if (cutter.numFaces == 0 || operand.planes.empty()) return false;
+
+        glm::dvec3 lo(std::numeric_limits<double>::max()), hi(std::numeric_limits<double>::lowest());
+        for (uint32_t i = 0; i < cutter.numPoints; i++)
+        {
+            glm::dvec3 q = cutter.GetPoint(i);
+            lo = glm::min(lo, q);
+            hi = glm::max(hi, q);
+        }
+
+        // Only planes that carry operand faces and pass through the cutter's bounds.
+        std::vector<const bimGeometry::Plane *> candidates;
+        std::vector<bool> seen(operand.planes.size(), false);
+        for (uint32_t i = 0; i < operand.numFaces; i++)
+        {
+            uint32_t id = operand.planeData[i];
+            if (id >= operand.planes.size() || seen[id]) continue;
+            seen[id] = true;
+            const bimGeometry::Plane &plane = operand.planes[id];
+            if (!std::isfinite(plane.distance) || !std::isfinite(plane.normal.x) || !std::isfinite(plane.normal.y) || !std::isfinite(plane.normal.z)) continue;
+            if (std::abs(glm::length(plane.normal) - 1.0) > EPS_SMALL) continue;
+            double dmin = std::numeric_limits<double>::max(), dmax = std::numeric_limits<double>::lowest();
+            for (int c = 0; c < 8; c++)
+            {
+                glm::dvec3 corner(c & 1 ? hi.x : lo.x, c & 2 ? hi.y : lo.y, c & 4 ? hi.z : lo.z);
+                double d = glm::dot(plane.normal, corner) - plane.distance;
+                dmin = std::min(dmin, d);
+                dmax = std::max(dmax, d);
+            }
+            if (dmin <= snapDistance && dmax >= -snapDistance) candidates.push_back(&plane);
+        }
+        if (candidates.empty()) return false;
+
+        // Nearest parallel operand plane within the snap distance for each cutter face. When several lie
+        // within reach at different offsets (a sliver of the operand thinner than the snap distance), the
+        // face is left alone: which side it belongs to is not decidable at this tolerance.
+        std::vector<std::pair<uint32_t, const bimGeometry::Plane *>> snappedFaces;
+        for (uint32_t i = 0; i < cutter.numFaces; i++)
+        {
+            bimGeometry::Face f = cutter.GetFace(i);
+            glm::dvec3 p[3] = {cutter.GetPoint(f.i0), cutter.GetPoint(f.i1), cutter.GetPoint(f.i2)};
+            glm::dvec3 n;
+            if (!computeSafeNormal(p[0], p[1], p[2], n, EPS_SMALL)) continue;
+            const bimGeometry::Plane *best = nullptr;
+            double bestDistance = snapDistance, bestOffset = 0;
+            bool ambiguous = false;
+            glm::dvec3 centre = (p[0] + p[1] + p[2]) / 3.0;
+            for (const bimGeometry::Plane *plane : candidates)
+            {
+                double cosine = glm::dot(plane->normal, n);
+                if (std::abs(cosine) < bimGeometry::COPLANAR_MIN_COS) continue;
+                double d = 0;
+                for (const glm::dvec3 &q : p) d = std::max(d, std::abs(glm::dot(plane->normal, q) - plane->distance));
+                if (d > snapDistance) continue;
+                double offset = (glm::dot(plane->normal, centre) - plane->distance) * (cosine > 0 ? 1.0 : -1.0);
+                if (best && std::abs(offset - bestOffset) > bimGeometry::SNAP_WELD_DISTANCE) ambiguous = true;
+                if (!best || d < bestDistance) { bestDistance = d; best = plane; bestOffset = offset; }
+            }
+            if (!best || ambiguous) continue;
+            snappedFaces.push_back({i, best});
+        }
+        // Even faces already within rounding of the plane are snapped: the kernel's result depends on
+        // sub-1e-9 offsets there too.
+        if (snappedFaces.empty()) return false;
+
+        // Inside and outside are undefined for an open cutter; moving its faces would only change
+        // which wrong result the kernel produces.
+        if (!IsClosed(cutter)) return false;
+
+        // Weld positions closer than the weld distance: sweep the points in x order, comparing each
+        // with the earlier ones whose x lies within that distance.
+        std::vector<glm::dvec3> positions;
+        std::vector<uint32_t> positionOf(cutter.numPoints);
+        {
+            std::vector<uint32_t> order(cutter.numPoints);
+            for (uint32_t i = 0; i < cutter.numPoints; i++) order[i] = i;
+            std::sort(order.begin(), order.end(), [&](uint32_t l, uint32_t r) { return cutter.GetPoint(l).x < cutter.GetPoint(r).x; });
+            for (size_t k = 0; k < order.size(); k++)
+            {
+                glm::dvec3 q = cutter.GetPoint(order[k]);
+                int64_t found = -1;
+                for (size_t j = k; j-- > 0;)
+                {
+                    glm::dvec3 other = cutter.GetPoint(order[j]);
+                    if (q.x - other.x > bimGeometry::SNAP_WELD_DISTANCE) break;
+                    if (glm::distance(other, q) <= bimGeometry::SNAP_WELD_DISTANCE) { found = positionOf[order[j]]; break; }
+                }
+                if (found < 0)
+                {
+                    found = (int64_t)positions.size();
+                    positions.push_back(q);
+                }
+                positionOf[order[k]] = (uint32_t)found;
+            }
+        }
+
+        std::vector<std::vector<const bimGeometry::Plane *>> constraints(positions.size());
+        for (auto [i, plane] : snappedFaces)
+        {
+            bimGeometry::Face f = cutter.GetFace(i);
+            for (uint32_t x : {positionOf[f.i0], positionOf[f.i1], positionOf[f.i2]})
+            {
+                auto &c = constraints[x];
+                if (std::find(c.begin(), c.end(), plane) == c.end()) c.push_back(plane);
+            }
+        }
+
+        std::vector<glm::dvec3> moved(positions);
+        for (size_t x = 0; x < positions.size(); x++)
+        {
+            auto &c = constraints[x];
+            if (c.empty()) continue;
+            // Nearest plane first; parallel planes after the first are dropped.
+            std::sort(c.begin(), c.end(), [&](const bimGeometry::Plane *l, const bimGeometry::Plane *r) {
+                return std::abs(glm::dot(l->normal, positions[x]) - l->distance) < std::abs(glm::dot(r->normal, positions[x]) - r->distance);
+            });
+            std::vector<const bimGeometry::Plane *> independent;
+            for (const bimGeometry::Plane *plane : c)
+            {
+                bool parallel = false;
+                for (const bimGeometry::Plane *u : independent) parallel = parallel || std::abs(glm::dot(plane->normal, u->normal)) >= bimGeometry::COPLANAR_MIN_COS;
+                if (!parallel && independent.size() < 3) independent.push_back(plane);
+            }
+            glm::dvec3 q;
+            while (!independent.empty() && !ClosestPointOnPlanes(positions[x], independent, q)) independent.pop_back();
+            if (independent.empty()) continue;
+            if (!std::isfinite(q.x) || !std::isfinite(q.y) || !std::isfinite(q.z) || glm::distance(q, positions[x]) > 2 * snapDistance) continue;
+            moved[x] = q;
+        }
+
+        snapped = cutter;
+        for (uint32_t i = 0; i < snapped.numPoints; i++)
+        {
+            const glm::dvec3 &q = moved[positionOf[i]];
+            snapped.SetPoint(q.x, q.y, q.z, i);
+        }
+
+        // buildPlanes prefers the stored vertex normals over the triangle normal, so the normals of a
+        // snapped face must follow it onto the operand's plane, or the refit would tilt the face back.
+        for (auto [i, plane] : snappedFaces)
+        {
+            bimGeometry::Face f = snapped.GetFace(i);
+            for (uint32_t id : {f.i0, f.i1, f.i2})
+            {
+                double *nv = &snapped.vertexData[id * VERTEX_FORMAT_SIZE_FLOATS + 3];
+                glm::dvec3 n(nv[0], nv[1], nv[2]);
+                double length = glm::length(n);
+                if (!(length > 0)) continue;
+                double cosine = glm::dot(n, plane->normal) / length;
+                if (std::abs(cosine) < bimGeometry::COPLANAR_MIN_COS) continue;
+                glm::dvec3 m = cosine > 0 ? plane->normal : -plane->normal;
+                nv[0] = m.x;
+                nv[1] = m.y;
+                nv[2] = m.z;
+            }
+        }
+        snapped.fvertexData.clear();
+        snapped.hasPlanes = false;
+        return true;
+    }
+
     IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
         // A intersect B = A minus (A minus B). Reuse the bounded difference kernel,
@@ -2465,6 +2701,16 @@ namespace webifc::geometry
 #endif
 
                 firstOperator.buildPlanes();
+                if (op == "DIFFERENCE")
+                {
+                    // Keep the snapped cutter only if it is still a closed solid once its planes are fitted.
+                    IfcGeometry snapped;
+                    if (SnapToOperandPlanes(firstOperator, secondOperator, bimGeometry::SNAP_TO_OPERAND_PLANE_FACTOR * _settings.TOLERANCE_PLANE_DEVIATION, snapped))
+                    {
+                        snapped.buildPlanes();
+                        if (IsClosed(snapped)) secondOperator = std::move(snapped);
+                    }
+                }
                 secondOperator.buildPlanes();
 
                 fuzzybools::SetEpsilons(_settings.TOLERANCE_PLANE_INTERSECTION, _settings.TOLERANCE_PLANE_DEVIATION, _settings.TOLERANCE_BACK_DEVIATION_DISTANCE, _settings.TOLERANCE_INSIDE_OUTSIDE_PERIMETER, _settings.TOLERANCE_BOUNDING_BOX, BOOLSTATUS);
