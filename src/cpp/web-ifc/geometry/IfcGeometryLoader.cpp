@@ -2795,6 +2795,22 @@ namespace webifc::geometry
         // #endif
         break;
     }
+    case schema::IFCSEGMENTEDREFERENCECURVE:
+    {
+        // IfcSegmentedReferenceCurve -------------------------------------------------
+        // Like IfcGradientCurve but with a cant (cross slope) on top of it. For
+        // visualization purposes the base curve (typically an IfcGradientCurve) is used.
+        //    IfcSegment            Segments;
+        //    IfcBoolean            SelfIntersect;
+        //    IfcCurve              BaseCurve; // typically IFCGRADIENTCURVE
+        //    IfcPlacement          EndPoint;  // optional
+        _loader.MoveToArgumentOffset(expressID, 0);
+        _loader.GetSetArgument();     // skip Segments
+        _loader.GetStringArgument();  // skip SelfIntersect
+        uint32_t baseCurveID = _loader.GetRefArgument();
+        curve = GetCurve(baseCurveID, 3, false);
+        break;
+    }
     case schema::IFCCURVESEGMENT:
     {
         // IfcCurveSegment -----------------------------------------------------------
