@@ -3160,10 +3160,11 @@ lws-spa@^4.1.1:
     koa-send "^5.0.1"
 
 lws-static@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.npmjs.org/lws-static/-/lws-static-3.1.1.tgz"
-  integrity sha512-4Xb6rE4gVp2ZmuiVYwvFaSsMUbQ8CwxSxzHzfK6URFz4g3vVT8+e+ekGlItp8ePf9w7u9l96HU7+QDswsmwhCg==
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/lws-static/-/lws-static-3.1.2.tgz#799bf085e1cd4f65013121e812c9cf9fe904a207"
+  integrity sha512-R32QwQwUe1BTmBYxxrfxCIrGFeaiNBTQ/cbe114pgkrexYE6D1FfuymcN4xPpelmAls7vzEyhy26qn++9lJskg==
   dependencies:
+    array-back "^6.2.3"
     koa-static "^5.0.0"
 
 lws@^4.1.5:
