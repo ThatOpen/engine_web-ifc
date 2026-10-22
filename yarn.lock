@@ -3141,15 +3141,15 @@ lws-request-monitor@^2.0.0:
     byte-size "^6.2.0"
 
 lws-rewrite@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/lws-rewrite/-/lws-rewrite-4.0.0.tgz"
-  integrity sha512-I9rNDyAuy/1Wz2WMWTqjxFMlUTr8CugdHlUCjIudQkt04YnRdhP32iAoRnVnLsgP1UOiM44dxTW2EomQHHfirw==
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/lws-rewrite/-/lws-rewrite-4.0.1.tgz#c50e99209133e84b0a6f2a7d1520e16b63bfe34f"
+  integrity sha512-O8hcCHawKIW0PC0mW/X301RNKi6cXrWdWMtHCrd8Ve81CBl65npDq0OHGr36tD6RszdSBDXp8/IfxcG9wIR5bA==
   dependencies:
-    array-back "^6.2.2"
+    array-back "^6.2.3"
     http-proxy-agent "^5.0.0"
     https-proxy-agent "^5.0.1"
     koa-route "^4.0.1"
-    path-to-regexp "^6.2.2"
+    path-to-regexp "^6.3.0"
 
 lws-spa@^4.1.1:
   version "4.1.1"
@@ -3529,7 +3529,7 @@ path-scurry@^2.0.2:
     lru-cache "^11.0.0"
     minipass "^7.1.2"
 
-path-to-regexp@^6.1.0, path-to-regexp@^6.2.1, path-to-regexp@^6.2.2:
+path-to-regexp@^6.1.0, path-to-regexp@^6.2.1, path-to-regexp@^6.3.0:
   version "6.3.0"
   resolved "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-6.3.0.tgz"
   integrity sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ==
