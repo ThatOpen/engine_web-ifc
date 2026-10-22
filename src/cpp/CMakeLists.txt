@@ -68,7 +68,7 @@ FetchContent_Declare(stduuid GIT_REPOSITORY "https://github.com/mariusbancila/st
 FetchContent_MakeAvailable(stduuid)
 
 Message("Downloading unordered_dense")
-FetchContent_Declare(unordered_dense GIT_REPOSITORY "https://github.com/martinus/unordered_dense" GIT_TAG "ddd49116e63be7345b448351cad153653a712fdb" SOURCE_SUBDIR "../")
+FetchContent_Declare(unordered_dense GIT_REPOSITORY "https://github.com/martinus/unordered_dense" GIT_TAG "7c58a8b7a48e790fe72f6508eb3b46317cbba9d5" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(unordered_dense)
 
 Message("Downloads Finished")
