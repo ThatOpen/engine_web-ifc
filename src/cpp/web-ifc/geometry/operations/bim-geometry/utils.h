@@ -831,7 +831,7 @@ namespace bimGeometry
 		{
 			if (i < directrix.size() - 1)
 			{
-				if (glm::distance(directrix[i], directrix[i + 1]) > EPS_BIG2 * scaling || !optimize)
+				if (glm::distance(directrix[i], directrix[i + 1]) > EPS_BIG2 / scaling || !optimize)
 				{
 					dpts.push_back(directrix[i]);
 				}
@@ -1102,7 +1102,7 @@ namespace bimGeometry
 		{
 			if (i < directrix.size() - 1)
 			{
-				if (glm::distance(directrix[i], directrix[i + 1]) > EPS_BIG2 * scaling)
+				if (glm::distance(directrix[i], directrix[i + 1]) > EPS_BIG2 / scaling)
 				{
 					dpts.push_back(directrix[i]);
 				}

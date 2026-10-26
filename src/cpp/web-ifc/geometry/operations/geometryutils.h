@@ -98,7 +98,7 @@ namespace webifc::geometry
 		{
 			if (i < directrix.points.size() - 1)
 			{
-				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 * scaling)
+				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 / scaling)
 				{
 					directrix_vector.push_back(directrix.points[i]);
 				}
