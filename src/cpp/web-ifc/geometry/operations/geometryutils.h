@@ -98,7 +98,7 @@ namespace webifc::geometry
 		{
 			if (i < directrix.points.size() - 1)
 			{
-				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 * scaling)
+				if (glm::distance(directrix.points[i], directrix.points[i + 1]) > EPS_BIG2 / scaling)
 				{
 					directrix_vector.push_back(directrix.points[i]);
 				}
@@ -693,7 +693,7 @@ namespace webifc::geometry
                 geom.AddGeometry(SweepFixedReference(linearScalingFactor, closed, child, directrix, fixedReference));
             return geom;
         }
-        const double tolerance = EPS_SMALL * linearScalingFactor;
+        const double tolerance = EPS_SMALL / linearScalingFactor;
         const double referenceLength = glm::length(fixedReference);
         if (referenceLength == 0 || !std::isfinite(referenceLength)) return IfcGeometry();
         const glm::dvec3 reference = fixedReference / referenceLength;
@@ -725,7 +725,7 @@ namespace webifc::geometry
             else if (!closed && i + 1 == path.size()) tangent = path[i] - path[i - 1];
             else tangent = glm::normalize(path[i] - path[(i + path.size() - 1) % path.size()]) +
                            glm::normalize(path[(i + 1) % path.size()] - path[i]);
-            if (glm::length(tangent) < tolerance) return IfcGeometry();
+            if (glm::length(tangent) < EPS_SMALL) return IfcGeometry();
             tangent = glm::normalize(tangent);
             // IFC defines local X as FixedReference projected onto the plane normal to the tangent.
             glm::dvec3 xAxis = reference - glm::dot(reference, tangent) * tangent;
