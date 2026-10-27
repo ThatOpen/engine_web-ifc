@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 #include <sstream>
 #include "TinyCppTest.hpp"
 
@@ -26,7 +30,7 @@ TEST(EscapeX2Test)
     string_view strIn ="\\X2\\03C0\\X0\\"sv;
     auto str = webifc::parsing::p21decode(strIn);
     ASSERT_EQ(str, "π");
-    
+
     strIn ="\\X2\\03B103B203B3\\X0\\"sv;
     str = webifc::parsing::p21decode(strIn);
     ASSERT_EQ(str, "αβγ");

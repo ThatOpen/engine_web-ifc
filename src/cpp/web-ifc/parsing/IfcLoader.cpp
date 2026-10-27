@@ -53,28 +53,26 @@ namespace webifc::parsing {
      return true;
    }
 
-   IFC_SCHEMA IfcLoader::GetSchema() const
-   { 
-      auto line = GetHeaderLinesWithType(schema::FILE_SCHEMA)[0];
-      MoveToHeaderLineArgument(line, 0);
-      auto schemas = _schemaManager.GetAvailableSchemas();
-      auto schemaMaps = _schemaManager.GetAvailableSchemaMaps();
-
-      while (!_tokenStream->IsAtEnd()) {
-          IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
-          if (t == IfcTokenType::LINE_END) break;
-          if (t == IfcTokenType::LABEL) 
-          {
-            std::string_view schemaName = _tokenStream->ReadString();
-            if (schemaMaps.contains(schemaName)) schemaName = schemaMaps[schemaName];
-            for (size_t i = 0; i < schemas.size();i++) 
-            {
-              if (_schemaManager.GetSchemaName(schemas[i]) == schemaName) return schemas[i];
-            }
-          }
+IFC_SCHEMA IfcLoader::GetSchema() const
+{ 
+   auto lines = GetHeaderLinesWithType(schema::FILE_SCHEMA);
+   if (lines.empty()) return IFC2X3;
+   MoveToHeaderLineArgument(lines[0], 0);
+   const auto& maps = _schemaManager.GetAvailableSchemaMaps();
+   for (uint32_t offset : GetSetArgument())
+   {
+      IfcTokenType t = GetTokenType(offset);
+      if (t != IfcTokenType::STRING && t != IfcTokenType::LABEL) continue;
+      StepBack();
+      std::string_view name = GetStringArgument();
+      if (maps.contains(name)) name = maps.at(name);
+      for (IFC_SCHEMA s : _schemaManager.GetAvailableSchemas())
+      {
+         if (_schemaManager.GetSchemaName(s) == name) return s;
       }
-      return IFC2X3;
    }
+   return IFC2X3;
+}
    
    bool IfcLoader::LoadFile(std::istream &requestData)
    { 
