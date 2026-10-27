@@ -242,6 +242,10 @@ if(NOT EMSCRIPTEN)
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
 
+	install(DIRECTORY ${unordered_dense_SOURCE_DIR}/include/
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+	)
+
 	# Export targets with namespace
 	install(EXPORT web-ifc-targets
 		FILE web-ifc-targets.cmake
