@@ -441,7 +441,10 @@ IFC_SCHEMA IfcLoader::GetSchema() const
   void IfcLoader::RemoveLine(const uint32_t expressID)
   {
       ++_revision;
-      _lines.erase(expressID);
+      const auto lineIt = _lines.find(expressID);
+      if (lineIt == _lines.end()) return;
+      std::erase(_ifcTypeToExpressID[lineIt->second.ifcType], expressID);
+      _lines.erase(lineIt);
   }
   
   void IfcLoader::UpdateLineTape(const uint32_t expressID, const uint32_t type, const uint32_t start)
