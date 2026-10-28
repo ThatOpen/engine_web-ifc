@@ -523,6 +523,14 @@ describe('creating ifc', () => {
         expect(ifcApi.GetLine(modelID,entity.expressID)).toBe(undefined);
     });
 
+    test('deleted ifc line is not returned by type', () => {
+        let entity: IfcLineObject  = ifcApi.CreateIfcEntity(modelID, WebIFC.IFCCARTESIANPOINT, [new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5), new IFC2X3.IfcLengthMeasure(5)]);
+        ifcApi.WriteLine(modelID, entity);
+        expect([...ifcApi.GetLineIDsWithType(modelID, WebIFC.IFCCARTESIANPOINT)]).toContain(entity.expressID);
+        ifcApi.DeleteLine(modelID,entity.expressID);
+        expect([...ifcApi.GetLineIDsWithType(modelID, WebIFC.IFCCARTESIANPOINT)]).not.toContain(entity.expressID);
+    });
+
     
 });
 
