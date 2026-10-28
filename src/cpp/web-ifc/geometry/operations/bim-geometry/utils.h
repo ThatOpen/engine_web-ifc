@@ -898,7 +898,7 @@ namespace bimGeometry
 				const glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
 				const glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
 				// A reversal has no finite miter plane. Collinear forward segments do.
-				if (glm::dot(n1, n2) < -0.999999) return geom;
+				if (glm::dot(n1, n2) < -COPLANAR_MIN_COS) return geom;
 				planeNormal = glm::normalize(n1 + n2);
 				directrixSegmentNormal = n1;
 
@@ -1142,7 +1142,7 @@ namespace bimGeometry
                 const glm::dvec3 n1 = glm::normalize(dpts[i] - dpts[i - 1]);
                 const glm::dvec3 n2 = glm::normalize(dpts[i + 1] - dpts[i]);
                 // A reversal has no finite miter plane. Collinear forward segments do.
-                if (glm::dot(n1, n2) < -0.999999) return geom;
+                if (glm::dot(n1, n2) < -COPLANAR_MIN_COS) return geom;
                 planeNormal = glm::normalize(n1 + n2);
                 directrixSegmentNormal = n1;
                 directrix2 = n1;
