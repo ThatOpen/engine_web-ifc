@@ -1098,6 +1098,11 @@ namespace webifc::geometry
                 }
 
                 std::reverse(profile.curve.points.begin(), profile.curve.points.end());
+                // Holes must keep the opposite winding to the outer ring
+                for (auto &hole : profile.holes)
+                {
+                    hole.Invert();
+                }
 
                 IfcGeometry geom = Sweep(_cache.GetLinearScalingFactor(), closed, profile, directrix, surface.normal(), true);
 
