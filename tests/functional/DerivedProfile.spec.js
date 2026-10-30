@@ -52,3 +52,13 @@ test.each([["$", 12], ["0.5", 12], ["2.", 48]])("derived profile: nonuniform Sca
 test("derived profile: both optional scales default to one", async () => {
   await check(source.replace("OPERATOR2D($,$,#26,0.5)", "OPERATOR2DNONUNIFORM($,$,#26,$,$)"), 48);
 });
+
+// A missing axis is the orthogonal complement of the other, and Axis2 only picks the side of Axis1.
+test.each([
+  ["Axis1 only", "#40=IFCDIRECTION((0.,1.));", "#40,$"],
+  ["Axis2 only", "#41=IFCDIRECTION((-1.,0.));", "$,#41"],
+  ["non-orthogonal Axis2", "#40=IFCDIRECTION((1.,0.));\n#41=IFCDIRECTION((1.,1.));", "#40,#41"],
+  ["mirroring Axis2", "#40=IFCDIRECTION((1.,0.));\n#41=IFCDIRECTION((0.,-1.));", "#40,#41"],
+])("derived profile: %s", async (_, directions, axes) => {
+  await check(source.replace("#27=IFCCARTESIANTRANSFORMATIONOPERATOR2D($,$,", `${directions}\n#27=IFCCARTESIANTRANSFORMATIONOPERATOR2D(${axes},`), 12);
+});
