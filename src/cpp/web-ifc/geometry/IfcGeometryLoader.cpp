@@ -4152,6 +4152,8 @@ namespace webifc::geometry
 
       glm::dvec2 Axis1(1, 0);
       glm::dvec2 Axis2(0, 1);
+      bool hasAxis1 = false;
+      bool hasAxis2 = false;
 
       _loader.MoveToArgumentOffset(expressID, 0);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
