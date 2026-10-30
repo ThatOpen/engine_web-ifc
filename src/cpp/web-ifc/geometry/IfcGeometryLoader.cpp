@@ -4157,13 +4157,13 @@ namespace webifc::geometry
       if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
-        Axis1 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        Axis1 = GetDirection(_loader.GetRefArgument());
       }
       _loader.MoveToArgumentOffset(expressID, 1);
       if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
       {
         _loader.StepBack();
-        Axis2 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+        Axis2 = GetDirection(_loader.GetRefArgument());
       }
 
       _loader.MoveToArgumentOffset(expressID, 2);
@@ -4333,7 +4333,7 @@ namespace webifc::geometry
         if (zID == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          zAxis = GetDirection(_loader.GetRefArgument());
         }
         glm::dvec3 pos = GetCartesianPoint3D(posID);
         if (std::abs(glm::dot(xAxis, zAxis)) > 0.9)
@@ -4363,7 +4363,7 @@ namespace webifc::geometry
         if (zID == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          auto tmpVec = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          auto tmpVec = GetDirection(_loader.GetRefArgument());
           if (glm::length(tmpVec) > 0)
             zAxis = tmpVec;
         }
@@ -4373,7 +4373,7 @@ namespace webifc::geometry
         if (xID == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          auto tmpVec = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          auto tmpVec = GetDirection(_loader.GetRefArgument());
           if (glm::length(tmpVec) > 0)
             xAxis = tmpVec;
         }
@@ -4406,7 +4406,7 @@ namespace webifc::geometry
         if (xID == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          auto tmpVec = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          auto tmpVec = GetDirection(_loader.GetRefArgument());
           if (glm::length(tmpVec) > 0)
             xAxis = tmpVec;
         }
@@ -4473,13 +4473,13 @@ namespace webifc::geometry
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          Axis1 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          Axis1 = GetDirection(_loader.GetRefArgument());
         }
         _loader.MoveToArgumentOffset(expressID, 1);
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          Axis2 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          Axis2 = GetDirection(_loader.GetRefArgument());
         }
 
         _loader.MoveToArgumentOffset(expressID, 2);
@@ -4497,7 +4497,7 @@ namespace webifc::geometry
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          Axis3 = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          Axis3 = GetDirection(_loader.GetRefArgument());
         }
 
         if (lineType == schema::IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM)
@@ -4541,13 +4541,13 @@ namespace webifc::geometry
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          zAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          zAxis = GetDirection(_loader.GetRefArgument());
         }
         _loader.MoveToArgumentOffset(expressID, 2);
         if (_loader.GetTokenType() == parsing::IfcTokenType::REF)
         {
           _loader.StepBack();
-          xAxis = glm::normalize(GetCartesianPoint3D(_loader.GetRefArgument()));
+          xAxis = GetDirection(_loader.GetRefArgument());
         }
         const auto yAxis = glm::normalize(glm::cross(zAxis, xAxis));
         xAxis = glm::normalize(glm::cross(yAxis, zAxis));
