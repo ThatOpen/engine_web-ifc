@@ -766,9 +766,9 @@
     vary "^1.1.2"
 
 "@napi-rs/wasm-runtime@^1.1.4":
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-1.2.5.tgz#8c728c07e2543d80e55ccb34158c4ae9d6bd13e8"
-  integrity sha512-HshSvXzmBxNzqejd3k/KemgQ3hdREUYFRRrgxOZ+gPljDIsO2SDZrVZMd4Z/HsxudQbE62OVyVFE8z9BCurfjA==
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-1.2.6.tgz#bc856c4ab60cd9c6c8e4432b5d6f50ceba0ca8f4"
+  integrity sha512-mRyDmEw9/fCDXCGfL1sbgIw/GUK0PVxRW4YwgPN61F3LQ+fSyoBFarJVzgGyhF6kRzEQZ0FejDqm4WLXSeqQmw==
   dependencies:
     "@tybys/wasm-util" "^0.10.3"
 
