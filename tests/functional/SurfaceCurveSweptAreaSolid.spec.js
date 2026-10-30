@@ -85,3 +85,21 @@ test.each([
   }
   assert.ok(Math.abs(Math.abs(volume) - expected) < 1e-6, `volume ${Math.abs(volume)}, expected ${expected}`);
 });
+
+// 0.2 x 0.1 rectangle with a 0.02 wall swept 2 m; the hole walls must face the hole
+// for the closed solid to enclose (0.2 * 0.1 - 0.16 * 0.06) * 2 = 0.0208
+test("surface curve sweep: profile with a hole", async () => {
+  const source = plain.replace("#32=IFCRECTANGLEPROFILEDEF(.AREA.,$,#30,0.2,0.1);",
+    "#32=IFCRECTANGLEHOLLOWPROFILEDEF(.AREA.,$,#30,0.2,0.1,0.02,$,$);")
+    .replace("#42=IFCSURFACECURVESWEPTAREASOLID(#32,#13,#52,0.,1.5707963267949,#40);",
+      "#60=IFCCARTESIANPOINT((0.,0.,0.));\n#61=IFCCARTESIANPOINT((2.,0.,0.));\n" +
+      "#63=IFCPOLYLINE((#60,#61));\n#64=IFCPLANE(#13);\n#42=IFCSURFACECURVESWEPTAREASOLID(#32,#13,#63,$,$,#64);");
+  let volume = 0;
+  for (const { vertices: v, indices } of await geometry(source)) {
+    for (let i = 0; i < indices.length; i += 3) {
+      const [a, b, c] = Array.from(indices.slice(i, i + 3), (j) => v.slice(j * 6, j * 6 + 3));
+      volume += (a[0] * (b[1] * c[2] - b[2] * c[1]) + a[1] * (b[2] * c[0] - b[0] * c[2]) + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6;
+    }
+  }
+  assert.ok(Math.abs(Math.abs(volume) - 0.0208) < 1e-6, `volume ${Math.abs(volume)}, expected 0.0208`);
+});
