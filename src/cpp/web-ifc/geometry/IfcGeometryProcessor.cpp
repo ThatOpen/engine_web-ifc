@@ -1142,7 +1142,7 @@ namespace webifc::geometry
                 IfcProfile profile = _geometryLoader.GetProfile(profileID);
                 glm::dmat4 placement = placementID ? _geometryLoader.GetLocalPlacement(placementID) : glm::dmat4(1.0);
                 IfcCurve directrix = _geometryLoader.GetCurve(directrixRef, 3);
-                glm::dvec3 fixedReference = _geometryLoader.GetCartesianPoint3D(fixedReferenceID);
+                glm::dvec3 fixedReference = _geometryLoader.GetDirection(fixedReferenceID);
 
                 // Check for valid profile and directrix
                 if (profile.curve.points.empty() || directrix.points.size() < 2) {
@@ -1281,7 +1281,7 @@ namespace webifc::geometry
                     mesh.transformation = _geometryLoader.GetLocalPlacement(placementID);
                 }
 
-                glm::dvec3 dir = _geometryLoader.GetCartesianPoint3D(directionID);
+                glm::dvec3 dir = _geometryLoader.GetDirection(directionID);
 
                 double dirDot = glm::dot(dir, glm::dvec3(0, 0, 1));
                 bool flipWinding = dirDot < 0; // can't be perp according to spec
@@ -1941,7 +1941,7 @@ namespace webifc::geometry
 
             _loader.MoveToArgumentOffset(expressID, 2);
             uint32_t directionID = _loader.GetRefArgument();
-            glm::dvec3 direction = _geometryLoader.GetCartesianPoint3D(directionID);
+            glm::dvec3 direction = _geometryLoader.GetDirection(directionID);
 
             _loader.MoveToArgumentOffset(expressID, 3);
             double length = 0;
