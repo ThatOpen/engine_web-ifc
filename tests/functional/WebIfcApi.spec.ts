@@ -118,6 +118,59 @@ describe('WebIfcApi reading methods', () => {
         ifcApi.CreateIfcGuidToExpressIdMapping(modelID);
         expect(ifcApi.ifcGuidMap.get(0)?.get(expressIDMatchingGuid.expressID)).toEqual(expressIDMatchingGuid.guid);
     })
+    test('deletes native vectors after creating the guid map', () => {
+        const originalGetLineIDsWithType = ifcApi.GetLineIDsWithType.bind(ifcApi);
+        const vectorsCreated: any[] = [];
+        const deleteCalls: number[] = [];
+        ifcApi.GetLineIDsWithType = ((...args: any[]) => {
+            const lines: any = originalGetLineIDsWithType(...args);
+            vectorsCreated.push(lines);
+            const originalDelete = lines.delete.bind(lines);
+            lines.delete = () => {
+                deleteCalls.push(1);
+                originalDelete();
+            };
+            return lines;
+        }) as typeof ifcApi.GetLineIDsWithType;
+
+        try {
+            ifcApi.CreateIfcGuidToExpressIdMapping(modelID);
+        } finally {
+            ifcApi.GetLineIDsWithType = originalGetLineIDsWithType;
+        }
+
+        expect(deleteCalls).toHaveLength(vectorsCreated.length);
+    })
+    test('deletes native vectors when reading a line fails', () => {
+        const lines: any = {
+            get: () => 1,
+            size: () => 1,
+            delete: jest.fn(),
+        };
+        const originalGetIfcEntityList = ifcApi.GetIfcEntityList;
+        const originalIsIfcElement = ifcApi.IsIfcElement;
+        const originalGetLineIDsWithType = ifcApi.GetLineIDsWithType;
+        const originalGetLine = ifcApi.GetLine;
+        ifcApi.GetIfcEntityList = () => [WebIFC.IFCWALL];
+        ifcApi.IsIfcElement = () => true;
+        ifcApi.GetLineIDsWithType = (() => lines) as typeof ifcApi.GetLineIDsWithType;
+        ifcApi.GetLine = (() => {
+            throw new Error('injected line read error');
+        }) as typeof ifcApi.GetLine;
+
+        try {
+            expect(() => ifcApi.CreateIfcGuidToExpressIdMapping(modelID)).toThrow(
+                'injected line read error'
+            );
+        } finally {
+            ifcApi.GetIfcEntityList = originalGetIfcEntityList;
+            ifcApi.IsIfcElement = originalIsIfcElement;
+            ifcApi.GetLineIDsWithType = originalGetLineIDsWithType;
+            ifcApi.GetLine = originalGetLine;
+        }
+
+        expect(lines.delete).toHaveBeenCalledTimes(1);
+    })
     test('can return the next highest expressID if the ID is sequential', () => {
         expect(ifcApi.GetNextExpressID(modelID, 5)).toBe(6);
     })
