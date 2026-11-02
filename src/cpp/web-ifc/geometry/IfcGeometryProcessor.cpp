@@ -1027,7 +1027,8 @@ namespace webifc::geometry
                 double startParam = 0;
                 double endParam = 1;
                 auto profileID = _loader.GetRefArgument();
-                auto placementID = _loader.GetRefArgument();
+                // Position is OPTIONAL in IfcSweptAreaSolid, so "$" must be accepted here
+                auto placementID = _loader.GetOptionalRefArgument();
                 auto directrixRef = _loader.GetRefArgument();
                 bool closed = false;
 
