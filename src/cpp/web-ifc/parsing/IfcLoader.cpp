@@ -521,10 +521,24 @@ IFC_SCHEMA IfcLoader::GetSchema() const
      std::vector<uint32_t> tapeOffsets;
      tapeOffsets.reserve(4);
 
-     _tokenStream->Read<char>(); // set begin
+     // The cursor must be on the SET_BEGIN of the list. Anything else (a reference,
+     // an empty list, a line end left behind by a missing line) is not a list.
+     if (GetTokenType() != IfcTokenType::SET_BEGIN)
+     {
+         StepBack();
+         spdlog::error("[GetSetArgument()] expected set begin {}", GetCurrentLineExpressID());
+         return tapeOffsets;
+     }
      int depth = 1;
      while (depth > 0)
      {
+         // A list never spans lines and the tape ends with the last line:
+         // stop at either, so a malformed list cannot walk past the end of the tape.
+         if (_tokenStream->IsAtEnd())
+         {
+             spdlog::error("[GetSetArgument()] unexpected end of file {}", GetCurrentLineExpressID());
+             break;
+         }
          uint32_t offset = _tokenStream->GetReadOffset();
          IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
 
@@ -535,6 +549,10 @@ IFC_SCHEMA IfcLoader::GetSchema() const
          case IfcTokenType::SET_END:
              depth--;
              break;
+         case IfcTokenType::LINE_END:
+             StepBack();
+             spdlog::error("[GetSetArgument()] unterminated list {}", GetCurrentLineExpressID());
+             return tapeOffsets;
          case IfcTokenType::REF:
              tapeOffsets.push_back(offset);
              _tokenStream->Read<uint32_t>();
@@ -562,16 +580,34 @@ IFC_SCHEMA IfcLoader::GetSchema() const
    const std::vector<std::vector<uint32_t>> IfcLoader::GetSetListArgument() const
    { 
      std::vector<std::vector<uint32_t>> tapeOffsets;
-   	 _tokenStream->Read<char>(); // set begin
+   	 // The cursor must be on the SET_BEGIN of the list (see GetSetArgument)
+   	 if (GetTokenType() != IfcTokenType::SET_BEGIN)
+   	 {
+   	 	StepBack();
+   	 	spdlog::error("[GetSetListArgument()] expected set begin {}", GetCurrentLineExpressID());
+   	 	return tapeOffsets;
+   	 }
    	 int depth = 1;
    	 std::vector<uint32_t> tempSet;
 
      	while (true)
      	{
+     		// Bounded by the end of the tape and by the end of the line (see GetSetArgument)
+     		if (_tokenStream->IsAtEnd())
+     		{
+     			spdlog::error("[GetSetListArgument()] unexpected end of file {}", GetCurrentLineExpressID());
+     			break;
+     		}
      		uint32_t offset = _tokenStream->GetReadOffset();
      		IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
 
-     		if (t == IfcTokenType::SET_BEGIN)
+     		if (t == IfcTokenType::LINE_END)
+     		{
+     			StepBack();
+     			spdlog::error("[GetSetListArgument()] unterminated list {}", GetCurrentLineExpressID());
+     			break;
+     		}
+     		else if (t == IfcTokenType::SET_BEGIN)
      		{
      			tempSet = std::vector<uint32_t>();
      			depth++;
@@ -629,14 +665,23 @@ IFC_SCHEMA IfcLoader::GetSchema() const
    			}
    		}
 
+   		// The argument does not exist: stop at the end of the tape (see GetSetArgument)
+   		if (_tokenStream->IsAtEnd())
+   		{
+   			spdlog::error("[ArgumentOffset()] unexpected end of file {}", GetCurrentLineExpressID());
+   			return;
+   		}
+
    		IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
 
    		switch (t)
    		{
    		case IfcTokenType::LINE_END:
    		{
+   			// Fewer arguments than requested: do not continue into the next line
+   			StepBack();
    			spdlog::error("[ArgumentOffset()] unexpected line end {}", GetCurrentLineExpressID());
-   			break;
+   			return;
    		}
    		case IfcTokenType::UNKNOWN:
    		case IfcTokenType::EMPTY:
@@ -687,6 +732,7 @@ IFC_SCHEMA IfcLoader::GetSchema() const
       uint32_t noArguments = 0;
 
        while (true) {
+        if (_tokenStream->IsAtEnd()) return noArguments;
         IfcTokenType t = static_cast<IfcTokenType>(_tokenStream->Read<char>());
         if (t == SET_END || t==LINE_END) return noArguments;
         if (t == UNKNOWN || t==EMPTY) {
