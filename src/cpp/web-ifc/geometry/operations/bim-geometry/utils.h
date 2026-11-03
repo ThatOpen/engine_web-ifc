@@ -816,9 +816,43 @@ namespace bimGeometry
 		}
 	}
 
+	// Initial profile frame of a sweep from the tangent of its first directrix segment and the initial normal.
+	// With a usable normal, Axis1 is the normal projected onto the section plane and Axis2 = tangent x Axis1.
+	// Without one, an arbitrary orthogonal frame is derived from the tangent (the basis vectors guarantee a non-degenerate cross product).
+	inline void InitialSectionFrame(const glm::dvec3 &tangent, const glm::dvec3 &initialNormal, glm::dvec3 &left, glm::dvec3 &right)
+	{
+		const glm::dvec3 axis1 = initialNormal - tangent * glm::dot(initialNormal, tangent);
+		if (glm::length(axis1) > EPS_MINISCULE)
+		{
+			right = -glm::normalize(axis1);
+		}
+		else
+		{
+			const glm::dvec3 candidates[] = {
+				glm::dvec3(tangent.y, tangent.x, tangent.z),
+				glm::dvec3(tangent.x, tangent.z, tangent.y),
+				glm::dvec3(tangent.z, tangent.y, tangent.x),
+				glm::dvec3(1, 0, 0),
+				glm::dvec3(0, 1, 0),
+				glm::dvec3(0, 0, 1)};
+			glm::dvec3 seed(0);
+			for (const auto &candidate : candidates)
+			{
+				seed = glm::cross(tangent, candidate);
+				if (seed != glm::dvec3(0))
+				{
+					break;
+				}
+			}
+			right = glm::normalize(glm::cross(tangent, seed));
+		}
+		left = glm::normalize(glm::cross(tangent, right));
+	}
+
 	//! This implementation generates much more vertices than needed, and does not have smoothed normals
-	// TODO: Review rotate90 value, as it should be inferred from IFC but the source data had not been identified yet
-	// An arbitrary value has been added in IFCSURFACECURVESWEPTAREASOLID but this is a bad solution
+	// rotate90 selects the profile mapping of the initial frame (see InitialSectionFrame): true maps profile x to Axis1
+	// (the initial normal) and y to Axis2. IFCSURFACECURVESWEPTAREASOLID passes true with the reference surface normal.
+	// Other callers choose the value themselves; it is not inferred from IFC.
 	//! profile[0] is the outer contour, profile[1..] are holes (e.g. from IfcCircleHollowProfileDef)
 	inline Geometry SweepFunction(const double scaling, const bool closed, const std::vector<std::vector<glm::dvec3>> &profile, const std::vector<glm::dvec3> &directrix, const glm::dvec3 &initialDirectrixNormal = glm::dvec3(0), const bool rotate90 = false, const bool optimize = true)
 	{
@@ -912,28 +946,7 @@ namespace bimGeometry
 				// construct initial curve
 				glm::dvec3 left;
 				glm::dvec3 right;
-				if (initialDirectrixNormal == glm::dvec3(0))
-				{
-					left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.y, directrixSegmentNormal.x, directrixSegmentNormal.z));
-					if (left == glm::dvec3(0, 0, 0))
-					{
-						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.x, directrixSegmentNormal.z, directrixSegmentNormal.y));
-					}
-					if (left == glm::dvec3(0, 0, 0))
-					{
-						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.z, directrixSegmentNormal.y, directrixSegmentNormal.x));
-					}
-					right = glm::normalize(glm::cross(directrixSegmentNormal, left));
-					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
-				}
-				else
-				{
-					left = glm::cross(directrixSegmentNormal, initialDirectrixNormal);
-					glm::dvec3 side = glm::normalize(initialDirectrixNormal);
-					right = glm::normalize(glm::cross(directrixSegmentNormal, left));
-					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
-					right *= side;
-				}
+				InitialSectionFrame(directrixSegmentNormal, initialDirectrixNormal, left, right);
 
 				// project the profile rings onto planeNormal, place on planeOrigin
 				for (size_t r = 0; r < profile.size(); r++)
@@ -1180,32 +1193,7 @@ namespace bimGeometry
 				// construct initial curve
 				glm::dvec3 left;
 				glm::dvec3 right;
-				if (initialDirectrixNormal == glm::dvec3(0))
-				{
-					left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.y, directrixSegmentNormal.x, directrixSegmentNormal.z));
-					if (left == glm::dvec3(0, 0, 0))
-					{
-						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.x, directrixSegmentNormal.z, directrixSegmentNormal.y));
-					}
-					if (left == glm::dvec3(0, 0, 0))
-					{
-						left = glm::cross(directrixSegmentNormal, glm::dvec3(directrixSegmentNormal.z, directrixSegmentNormal.y, directrixSegmentNormal.x));
-					}
-					right = glm::normalize(glm::cross(directrixSegmentNormal, left));
-					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
-				}
-				else
-				{
-					left = glm::cross(directrixSegmentNormal, initialDirectrixNormal);
-					glm::dvec3 side = glm::normalize(initialDirectrixNormal);
-					right = glm::normalize(glm::cross(directrixSegmentNormal, left));
-					left = glm::normalize(glm::cross(directrixSegmentNormal, right));
-					right *= side;
-				}
-
-				if (left == glm::dvec3(0, 0, 0))
-				{
-				}
+				InitialSectionFrame(directrixSegmentNormal, initialDirectrixNormal, left, right);
 
 				// project profile onto planeNormal, place on planeOrigin
 				// TODO: look at holes

@@ -1015,7 +1015,6 @@ namespace webifc::geometry
             case schema::IFCSURFACECURVESWEPTAREASOLID:
             {
                 // TODO: closed sweeps not implemented
-                // TODO: the plane is not being used now
 
                 _loader.MoveToArgumentOffset(expressID, 0);
 
@@ -1105,7 +1104,8 @@ namespace webifc::geometry
                     hole.Invert();
                 }
 
-                IfcGeometry geom = Sweep(_cache.GetLinearScalingFactor(), closed, profile, directrix, surface.normal(), true);
+                // IFC: Axis1 = reference surface normal at the directrix start, Axis3 = directrix tangent, Axis2 = Axis3 x Axis1
+                IfcGeometry geom = Sweep(_cache.GetLinearScalingFactor(), closed, profile, directrix, surface.normalAt(directrix.points[0]), true);
 
                 mesh.transformation = placement;
                 _expressIDToGeometry[expressID] = geom;
@@ -1940,6 +1940,15 @@ namespace webifc::geometry
             uint32_t profileID = _loader.GetRefArgument();
             IfcProfile profile = _geometryLoader.GetProfile(profileID);
 
+            // The swept curve's direction sets the sign of the surface normal, but GetProfile normalizes open
+            // profiles to CCW (reversing them), so the directrix is read again in its original direction.
+            IfcCurve sweptCurve = profile.curve;
+            if (_loader.GetLineType(profileID) == schema::IFCARBITRARYOPENPROFILEDEF)
+            {
+                _loader.MoveToArgumentOffset(profileID, 2);
+                sweptCurve = _geometryLoader.GetCurve(_loader.GetRefArgument(), 3);
+            }
+
             _loader.MoveToArgumentOffset(expressID, 2);
             uint32_t directionID = _loader.GetRefArgument();
             glm::dvec3 direction = _geometryLoader.GetDirection(directionID);
@@ -1955,6 +1964,7 @@ namespace webifc::geometry
             surface.ExtrusionSurface.Active = true;
             surface.ExtrusionSurface.Length = length;
             surface.ExtrusionSurface.Profile = profile;
+            surface.ExtrusionSurface.SweptCurve = sweptCurve;
             surface.ExtrusionSurface.Direction = direction;
 
             _loader.MoveToArgumentOffset(expressID, 1);
