@@ -11,6 +11,15 @@ export class IfcThree
     private ifcAPI: IfcAPI;
 
     /**
+     * Optional hook giving elements without an IFC style (hasColor === false)
+     * an application specific appearance. Return a Color to render the element
+     * with, or null/undefined to keep the engine's neutral default. No palette
+     * is baked into the viewer on purpose: each application decides how
+     * unstyled roofs, windows, doors etc. should look.
+     */
+    public unstyledColorProvider?: (mesh: FlatMesh, placedGeometry: PlacedGeometry) => Color | null | undefined;
+
+    /**
         Creates an instance of IfcThree, requires a valid instance of IfcAPI
     */
     constructor(ifcAPI: IfcAPI)
@@ -47,9 +56,10 @@ export class IfcThree
             for (let i = 0; i < placedGeometries.size(); i++)
             {
                 const placedGeometry = placedGeometries.get(i);
-                let mesh = this.getPlacedGeometry(modelID, placedGeometry);
-                let geom = mesh.geometry.applyMatrix4(mesh.matrix);
-                if (placedGeometry.color.w !== 1)
+                const color = this.resolveColor(mesh, placedGeometry);
+                const placedMesh = this.getPlacedGeometry(modelID, placedGeometry, color);
+                let geom = placedMesh.geometry.applyMatrix4(placedMesh.matrix);
+                if (color.w !== 1)
                 {
                     transparentGeometries.push(geom);
                 }
@@ -96,21 +106,26 @@ export class IfcThree
         return flatMeshes;
     }
     
-    private getPlacedGeometry(modelID: number, placedGeometry: PlacedGeometry) {
-        const geometry = this.getBufferGeometry(modelID, placedGeometry);
-        const material = this.getMeshMaterial(placedGeometry.color);
+    private resolveColor(mesh: FlatMesh, placedGeometry: PlacedGeometry): Color {
+        if (placedGeometry.hasColor) return placedGeometry.color;
+        return this.unstyledColorProvider?.(mesh, placedGeometry) ?? placedGeometry.color;
+    }
+
+    private getPlacedGeometry(modelID: number, placedGeometry: PlacedGeometry, color: Color) {
+        const geometry = this.getBufferGeometry(modelID, placedGeometry, color);
+        const material = this.getMeshMaterial(color);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.matrix = this.getMeshMatrix(placedGeometry.flatTransformation);
         mesh.matrixAutoUpdate = false;
         return mesh;
     }
     
-    private getBufferGeometry(modelID: number, placedGeometry: PlacedGeometry) {
+    private getBufferGeometry(modelID: number, placedGeometry: PlacedGeometry, color: Color) {
         // WARNING: geometry must be deleted when requested from WASM
         const geometry = this.ifcAPI.GetGeometry(modelID, placedGeometry.geometryExpressID);
         const verts = this.ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
         const indices = this.ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
-        const bufferGeometry = this.ifcGeometryToBuffer(placedGeometry.color, verts, indices);
+        const bufferGeometry = this.ifcGeometryToBuffer(color, verts, indices);
 
         //@ts-ignore
         geometry.delete();

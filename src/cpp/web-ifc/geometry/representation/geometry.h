@@ -239,6 +239,10 @@ namespace webifc::geometry {
 		struct IfcPlacedGeometry
 		{
 			glm::dvec4 color;
+			// false when neither the element nor any of its sub-items carries an
+			// IFC style; color is then a neutral default and must not be
+			// interpreted as a material definition
+			bool hasColor = false;
 			glm::dmat4 transformation;
 			std::array<double, 16> flatTransformation;
 			uint32_t geometryExpressID;

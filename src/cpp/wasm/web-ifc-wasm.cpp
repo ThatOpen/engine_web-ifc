@@ -1174,6 +1174,7 @@ EMSCRIPTEN_BINDINGS(my_module)
 
     emscripten::value_object<webifc::geometry::IfcPlacedGeometry>("IfcPlacedGeometry")
         .field("color", &webifc::geometry::IfcPlacedGeometry::color)
+        .field("hasColor", &webifc::geometry::IfcPlacedGeometry::hasColor)
         .field("flatTransformation", &webifc::geometry::IfcPlacedGeometry::flatTransformation)
         .field("geometryExpressID", &webifc::geometry::IfcPlacedGeometry::geometryExpressID);
 
