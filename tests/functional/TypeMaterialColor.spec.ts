@@ -111,12 +111,12 @@ END-ISO-10303-21;
 
 let ifcApi: IfcAPI;
 
-function colorOf(modelID: number, nameFragment: string) {
+function placedOf(modelID: number, nameFragment: string) {
     const ids = ifcApi.GetLineIDsWithType(modelID, IFCBUILDINGELEMENTPROXY);
     for (let i = 0; i < ids.size(); i++) {
         const id = ids.get(i);
         if (!ifcApi.GetLine(modelID, id).Name.value.includes(nameFragment)) continue;
-        return ifcApi.GetFlatMesh(modelID, id).geometries.get(0).color;
+        return ifcApi.GetFlatMesh(modelID, id).geometries.get(0);
     }
     throw new Error(`no element matching "${nameFragment}"`);
 }
@@ -130,22 +130,25 @@ beforeAll(async () => {
 describe('Material colour inherited from the element type', () => {
     test('an occurrence without its own material uses the type material colour', () => {
         const modelID = ifcApi.OpenModel(new TextEncoder().encode(TYPE_MATERIAL_IFC4));
-        const color = colorOf(modelID, 'typed box');
-        expect([color.x, color.y, color.z]).toEqual([1, 0, 0]);
+        const placed = placedOf(modelID, 'typed box');
+        expect([placed.color.x, placed.color.y, placed.color.z]).toEqual([1, 0, 0]);
+        expect(placed.hasColor).toBe(true);
         ifcApi.CloseModel(modelID);
     });
 
     test('the occurrence material overrides the type material', () => {
         const modelID = ifcApi.OpenModel(new TextEncoder().encode(TYPE_MATERIAL_IFC4));
-        const color = colorOf(modelID, 'override box');
-        expect([color.x, color.y, color.z]).toEqual([0, 0, 1]);
+        const placed = placedOf(modelID, 'override box');
+        expect([placed.color.x, placed.color.y, placed.color.z]).toEqual([0, 0, 1]);
+        expect(placed.hasColor).toBe(true);
         ifcApi.CloseModel(modelID);
     });
 
     test('IFC2X3 occurrence uses the type material colour', () => {
         const modelID = ifcApi.OpenModel(new TextEncoder().encode(TYPE_MATERIAL_IFC2X3));
-        const color = colorOf(modelID, 'ifc2x3 typed box');
-        expect([color.x, color.y, color.z]).toEqual([0, 1, 0]);
+        const placed = placedOf(modelID, 'ifc2x3 typed box');
+        expect([placed.color.x, placed.color.y, placed.color.z]).toEqual([0, 1, 0]);
+        expect(placed.hasColor).toBe(true);
         ifcApi.CloseModel(modelID);
     });
 });

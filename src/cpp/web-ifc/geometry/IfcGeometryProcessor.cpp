@@ -856,8 +856,16 @@ namespace webifc::geometry
                 uint32_t ifcPresentation = _loader.GetRefArgument();
 
                 _expressIDToGeometry[expressID] = GetBrep(ifcPresentation);
+                // A style on the referenced shell applies to the brep geometry;
+                // flag it so the color is not dropped when the flat mesh is assembled
                 if (!mesh.hasColor)
-                    mesh.color = GetStyleItemFromExpressId(ifcPresentation).value_or(glm::dvec4(1.0));
+                {
+                    if (auto shellColor = GetStyleItemFromExpressId(ifcPresentation))
+                    {
+                        mesh.color = *shellColor;
+                        mesh.hasColor = true;
+                    }
+                }
                 mesh.hasGeometry = true;
 
                 return mesh;
@@ -878,8 +886,15 @@ namespace webifc::geometry
                 // orientation when merging the boundary of the material volume.
                 for (const auto shell : voids) geometry.MergeGeometry(GetBrep(shell));
                 _expressIDToGeometry[expressID] = geometry;
+                // Same as above: honor a style attached to the outer shell
                 if (!mesh.hasColor)
-                    mesh.color = GetStyleItemFromExpressId(outer).value_or(glm::dvec4(1.0));
+                {
+                    if (auto shellColor = GetStyleItemFromExpressId(outer))
+                    {
+                        mesh.color = *shellColor;
+                        mesh.hasColor = true;
+                    }
+                }
                 mesh.hasGeometry = true;
                 return mesh;
             }
@@ -2073,6 +2088,7 @@ namespace webifc::geometry
                 newParentColor = composedMesh.color;
                 newHasColor = composedMesh.hasColor;
             }
+            geometry.hasColor = newHasColor;
 
             geometry.transformation = _coordinationMatrix * newMatrix * translation;
 

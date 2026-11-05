@@ -114,6 +114,9 @@ export interface RawLineData {
 
 export interface PlacedGeometry {
   color: Color;
+  /** False when neither the element nor any of its sub-items carries an IFC
+   * style; color is then a neutral default rather than a material. */
+  hasColor: boolean;
   geometryExpressID: number;
   flatTransformation: Array<number>;
 }
