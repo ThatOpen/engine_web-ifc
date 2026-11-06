@@ -34,7 +34,11 @@ namespace webifc::geometry {
 
 	struct Geometry : bimGeometry::Geometry
 	{
+		// true for wireframe items (curves, edges) instead of a triangle mesh
 		bool isPolygon = false;
+		// true when the vertices are independent points (IfcCartesianPoint and
+		// IfcCartesianPointList representation items) rather than a connected strip
+		bool isPoints = false;
 
 		void BuildFromVectors(std::vector<double>& d, std::vector<uint32_t>& i);
 		AABB GetFaceBox(size_t index) const;
