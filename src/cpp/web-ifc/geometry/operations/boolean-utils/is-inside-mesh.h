@@ -14,6 +14,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <cmath>
 #include <iostream>
 #include <stack>
 #include "intersect-ray-tri.h"
@@ -24,6 +25,7 @@ using Vec = glm::dvec3;
 
 namespace fuzzybools
 {
+    inline const Vec RAY_DIRECTION_PERTURBATION(0.02, 0.01, 0.04);
     enum class MeshLocation
     {
         INSIDE,
@@ -35,6 +37,8 @@ namespace fuzzybools
     {
         MeshLocation loc;
         Vec normal;
+        bool onBoundary = false;
+        bool ambiguous = false;
     };
 
     // True when pt lies on triangle abc up to rounding. Both the plane and the edge distances are
@@ -79,7 +83,7 @@ namespace fuzzybools
         bool UNION = false)
     {
         int winding = 0;
-        dir = dir + Vec(0.02, 0.01, 0.04); // Randomly changing the normal to create a truly random direction for raytrace
+        dir += RAY_DIRECTION_PERTURBATION;
         InsideResult result;
         result.loc = MeshLocation::BOUNDARY;
         result.normal = glm::dvec3(0);
@@ -96,7 +100,8 @@ namespace fuzzybools
                 Vec intersection;
                 double distance;
                 double d_plane;
-                bool hasIntersection = intersect_ray_triangle(pt, pt + dir, a, b, c, intersection, distance, d_plane, true);
+                bool onPerimeter = false;
+                bool hasIntersection = intersect_ray_triangle(pt, pt + dir, a, b, c, intersection, distance, d_plane, true, &onPerimeter);
                 if (!hasIntersection && isPointOnTriangle(pt, a, b, c))
                 {
                     // A point on an edge shared by two coplanar triangles can miss both of them
@@ -111,6 +116,7 @@ namespace fuzzybools
                     double dn = glm::dot(otherNormal, normal);
                     if (std::fabs(d_plane) < _TOLERANCE_PLANE_DEVIATION)
                     {
+                        result.onBoundary = true;
                         if (dn > 1.0 - toleranceParallel)
                         {
 /*
@@ -152,6 +158,7 @@ namespace fuzzybools
 //                  if (true || d >= 0)
                     // if (true || d > toleranceParallelTight)
                     // {
+                    result.ambiguous = result.ambiguous || onPerimeter;
                     winding++;
                     // }
                     // else
@@ -171,5 +178,42 @@ namespace fuzzybools
         result.loc = winding % 2 == 1 ? MeshLocation::INSIDE : MeshLocation::OUTSIDE;
 
         return result;
+    }
+
+    // Generalized winding numbers remain meaningful for a consistently oriented surface
+    // with small gaps, where an odd/even ray count can label exterior points as interior.
+    // Jacobson et al. (2013): https://igl.ethz.ch/projects/winding-number/
+    inline MeshLocation windingLocation(const Vec &pt, const Geometry &g)
+    {
+        double angle = 0;
+        for (uint32_t i = 0; i < g.numFaces; i++)
+        {
+            const auto f = g.GetFace(i);
+            Vec a = g.GetPoint(f.i0) - pt;
+            Vec b = g.GetPoint(f.i1) - pt;
+            Vec c = g.GetPoint(f.i2) - pt;
+            const double la = glm::length(a), lb = glm::length(b), lc = glm::length(c);
+            if (la == 0 || lb == 0 || lc == 0) continue;
+            a /= la; b /= lb; c /= lc;
+            angle += 2 * std::atan2(glm::dot(a, glm::cross(b, c)),
+                1 + glm::dot(a, b) + glm::dot(b, c) + glm::dot(c, a));
+        }
+        return std::abs(angle) > 2 * std::acos(-1.0) ? MeshLocation::INSIDE : MeshLocation::OUTSIDE;
+    }
+
+    // Use the complete operands here, not the open subsets used while normalizing planes.
+    // A closed solid gives the same parity in both ray directions. If a gap or duplicated
+    // surface makes them disagree, resolve the query using the oriented surface as a whole.
+    inline InsideResult classifyPointInSolid(const Vec &pt, Vec normal, const Geometry &g,
+        BVH &bvh, Vec dir, bool UNION = false)
+    {
+        auto forward = isInsideMesh(pt, normal, g, bvh, dir, UNION);
+        if (forward.onBoundary) return forward;
+        // isInsideMesh adds this offset internally; compensate to reverse the actual ray.
+        auto reverse = isInsideMesh(pt, normal, g, bvh, -dir - 2.0 * RAY_DIRECTION_PERTURBATION, UNION);
+        if (reverse.onBoundary) return reverse;
+        if (forward.ambiguous || reverse.ambiguous || forward.loc != reverse.loc)
+            forward.loc = windingLocation(pt, g);
+        return forward;
     }
 }
