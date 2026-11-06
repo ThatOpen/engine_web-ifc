@@ -360,10 +360,10 @@ namespace webifc::geometry
                 // recursively re-runs a full CSG pass per level over the growing result -> ~O(n^2),
                 // which hangs (#1197: StreamAllMeshesWithTypes never completes; 35 half-space clips)
                 // or blows the WASM stack on very long chains (#1774: 1175 extrusion cuts). For a pure-DIFFERENCE
-                // chain with NON-FACETED cutters, A-c1-c2-...-cn == subtract-all-in-one-pass
-                // (mathematically exact), so we collect the whole spine iteratively and do a
-                // SINGLE BoolProcess. Gated on depth>=8 so normal shallow booleans are untouched;
-                // faceted/brep cutters keep the exact sequential baseline (one-pass corrupts them).
+                // chain, collect the spine iteratively and keep one normalization frame.
+                // BoolProcess still subtracts each cutter sequentially. Faceted/BRep cutters
+                // must retain the original inner-to-outer order; reversing them corrupts meshes.
+                // Gated on depth>=8 so normal shallow booleans are untouched.
                 {
                     auto isFacetedCut = [&](uint32_t id) {
                         auto t = _loader.GetLineType(id);
@@ -396,7 +396,7 @@ namespace webifc::geometry
                         }
                         else break;
                     }
-                    if (nonFaceted && cutterIDs.size() >= 8)
+                    if (cutterIDs.size() >= 8)
                     {
                         auto baseMesh = GetMesh(baseID);
                         auto origin2 = GetOrigin(baseMesh, _expressIDToGeometry);
@@ -405,6 +405,9 @@ namespace webifc::geometry
                         if (flatBase.size() != 0)
                         {
                             std::vector<IfcGeometry> flatCuts;
+                            // The spine was collected outermost first. Faceted cuts need
+                            // their original sequential order and a stable normalization frame.
+                            if (!nonFaceted) std::reverse(cutterIDs.begin(), cutterIDs.end());
                             for (auto cid : cutterIDs)
                             {
                                 auto cm = GetMesh(cid);
@@ -463,8 +466,9 @@ namespace webifc::geometry
                 // DEEP-CHAIN FLATTEN (perf, same rationale as IFCBOOLEANCLIPPINGRESULT above):
                 // a long pure-DIFFERENCE spine (#1774: 1175 nested IfcBooleanResult extrusion cuts)
                 // hangs when processed recursively (one CSG pass per level). Collect the whole
-                // DIFFERENCE spine iteratively and subtract every NON-FACETED cutter in a single
-                // BoolProcess. Exact for difference; gated depth>=8; faceted cutters excluded.
+                // DIFFERENCE spine iteratively and pass it to the sequential BoolProcess in one
+                // normalization frame. Preserve inner-to-outer order for faceted cutters; shallow
+                // chains and the existing non-faceted ordering remain unchanged.
                 if (op == "DIFFERENCE")
                 {
                     auto isFacetedCut = [&](uint32_t id) {
@@ -498,7 +502,7 @@ namespace webifc::geometry
                         }
                         else break;
                     }
-                    if (nonFaceted && cutterIDs.size() >= 8)
+                    if (cutterIDs.size() >= 8)
                     {
                         auto baseMesh = GetMesh(baseID);
                         auto origin2 = GetOrigin(baseMesh, _expressIDToGeometry);
@@ -507,6 +511,9 @@ namespace webifc::geometry
                         if (flatBase.size() != 0)
                         {
                             std::vector<IfcGeometry> flatCuts;
+                            // The spine was collected outermost first. Faceted cuts need
+                            // their original sequential order and a stable normalization frame.
+                            if (!nonFaceted) std::reverse(cutterIDs.begin(), cutterIDs.end());
                             for (auto cid : cutterIDs)
                             {
                                 auto cm = GetMesh(cid);

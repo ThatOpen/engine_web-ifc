@@ -14,6 +14,7 @@
 
 #include <array>
 #include <cstdint>
+#include <limits>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../representation/geometry.h"
@@ -291,8 +292,24 @@ namespace webifc::geometry
 				bool inside = false;
 				size_t n = poly.size();
 				for (size_t i = 0, j = n - 1; i < n; j = i++) {
+					// Projection can put a touching inner-bound vertex a few ulps to either
+					// side of the outer edge. Boundary points belong to the containing loop;
+					// rejecting them drops the entire face and leaves the BRep cutter open.
+					const glm::dvec2 edge = poly[j] - poly[i];
+					const glm::dvec2 delta = p - poly[i];
+					const double length = glm::length(edge);
+					const double tolerance = 32 * std::numeric_limits<double>::epsilon() *
+						std::max({1.0, std::abs(poly[i].x), std::abs(poly[i].y),
+							std::abs(poly[j].x), std::abs(poly[j].y), std::abs(p.x), std::abs(p.y)});
+					const double along = glm::dot(delta, edge);
+					if ((length == 0 && glm::length(delta) <= tolerance) ||
+						(length > 0 && along >= -tolerance * length &&
+							along <= length * length + tolerance * length &&
+							std::abs(edge.x * delta.y - edge.y * delta.x) <= tolerance * length)) {
+						return true;
+					}
 					if ((poly[i].y > p.y) != (poly[j].y > p.y) &&
-						(p.x < poly[i].x + (poly[j].x - poly[i].x) * (p.y - poly[i].y) / (poly[j].y - poly[i].y + 1e-10))) {
+						(p.x < poly[i].x + (poly[j].x - poly[i].x) * (p.y - poly[i].y) / (poly[j].y - poly[i].y))) {
 						inside = !inside;
 					}
 				}

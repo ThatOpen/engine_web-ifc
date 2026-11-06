@@ -1296,12 +1296,8 @@ namespace fuzzybools
             std::vector<glm::dvec2> projectedPoints;
             projectedPoints.reserve(pointsOnPlane.size());
 
-            for (auto &pointId : pointsOnPlane)
-            {
-                pointToProjectedPoint[pointId] = projectedPoints.size();
-                projectedPointToPoint[projectedPoints.size()] = pointId;
-                projectedPoints.push_back(basis.project(points[pointId].location3D));
-            }
+            // Triangulate constraint vertices only. Unused interior points from
+            // previous CSG passes otherwise accumulate with every nested cut.
 
             std::set<std::pair<size_t, size_t>> edges;
             std::set<std::pair<size_t, size_t>> defaultEdges;
