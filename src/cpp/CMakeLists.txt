@@ -71,9 +71,41 @@ Message("Downloading unordered_dense")
 FetchContent_Declare(unordered_dense GIT_REPOSITORY "https://github.com/martinus/unordered_dense" GIT_TAG "7c58a8b7a48e790fe72f6508eb3b46317cbba9d5" SOURCE_SUBDIR "../")
 FetchContent_MakeAvailable(unordered_dense)
 
+set(MANIFOLD_CROSS_SECTION OFF CACHE BOOL "" FORCE)
+set(MANIFOLD_PAR OFF CACHE BOOL "" FORCE)
+set(MANIFOLD_TEST OFF CACHE BOOL "" FORCE)
+set(MANIFOLD_JSBIND OFF CACHE BOOL "" FORCE)
+set(MANIFOLD_PYBIND OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(manifold GIT_REPOSITORY "https://github.com/elalish/manifold"
+	GIT_TAG "ce50d78021d64507f89e8c9fc2c2e51018117857") # v3.5.4
+FetchContent_MakeAvailable(manifold)
+include(cmake/apply-manifold-patch.cmake)
+if(EMSCRIPTEN)
+	target_compile_options(manifold PRIVATE ${WEB_IFC_WASM_EXCEPTION_FLAG} -msimd128 -flto)
+	# Atomics in the threaded WASM build require a separately compiled library.
+	get_target_property(manifold_sources manifold SOURCES)
+	get_target_property(manifold_source_directory manifold SOURCE_DIR)
+	list(TRANSFORM manifold_sources PREPEND "${manifold_source_directory}/")
+	add_library(web-ifc-manifold-mt STATIC ${manifold_sources})
+	foreach(property IN ITEMS INCLUDE_DIRECTORIES INTERFACE_INCLUDE_DIRECTORIES
+		COMPILE_DEFINITIONS INTERFACE_COMPILE_DEFINITIONS COMPILE_OPTIONS)
+		get_target_property(value manifold ${property})
+		if(value)
+			set_property(TARGET web-ifc-manifold-mt PROPERTY ${property} "${value}")
+		endif()
+	endforeach()
+	target_compile_features(web-ifc-manifold-mt PUBLIC cxx_std_17)
+	target_compile_options(web-ifc-manifold-mt PRIVATE -pthread)
+endif()
+
 Message("Downloads Finished")
 
 function(PARAM_SETTER THE_EXECUTABLE)
+	if(THE_EXECUTABLE STREQUAL "web-ifc-mt")
+		target_link_libraries(${THE_EXECUTABLE} PRIVATE web-ifc-manifold-mt)
+	else()
+		target_link_libraries(${THE_EXECUTABLE} PRIVATE manifold)
+	endif()
 	target_include_directories(${THE_EXECUTABLE} PUBLIC
 		$<BUILD_INTERFACE:${glm_SOURCE_DIR}/>
 		$<BUILD_INTERFACE:${glm_SOURCE_DIR}/glm>
@@ -202,6 +234,9 @@ if(NOT EMSCRIPTEN)
 		"./test/malformed_input_test.cpp"
 		"./test/surface_curve_swept_area_test.cpp"
 		"./test/touching_face_bounds_test.cpp"
+		"./test/solid_classification_test.cpp"
+		"./test/boolean_intersection_test.cpp"
+		"./test/manifold_boolean_test.cpp"
 	)
 	param_setter(web-ifc-test)
 	target_include_directories(web-ifc-test PUBLIC ${tinycpptest_SOURCE_DIR}/Sources)
@@ -221,6 +256,8 @@ if(NOT EMSCRIPTEN)
 	endif()
 
 	# Installation rules
+	install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.manifold.txt"
+		DESTINATION "${CMAKE_INSTALL_DATADIR}/licenses/web-ifc")
 	# Install the static library
 	install(TARGETS web-ifc-library
 		EXPORT web-ifc-targets
