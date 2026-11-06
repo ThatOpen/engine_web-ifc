@@ -27,7 +27,11 @@ namespace webifc::geometry
   {
     bool _coordinateToOrigin = false;
     bool _optimize_profiles = true;
-    bool _exportPolylines = false;
+    // Export wireframe (curve/point) geometry of products whose representation
+    // contains no solid/face geometry (e.g. IfcAnnotation Curve3D, IfcGrid,
+    // IfcGeometricCurveSet). Products that also carry solid geometry keep
+    // exporting triangles only, so axis/fill curves of walls & co. never show up.
+    bool _exportPolylines = true;
     uint16_t _circleSegments = 12;
     double TOLERANCE_PLANE_INTERSECTION = 1.0E-04;
     double TOLERANCE_PLANE_DEVIATION = 1.0E-04;
@@ -52,11 +56,12 @@ namespace webifc::geometry
   class IfcGeometryProcessor
   {
   public:
-    IfcGeometryProcessor(webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD);
+    IfcGeometryProcessor(webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD, bool exportPolylines = true);
     IfcGeometry &GetGeometry(uint32_t expressID);
     IfcGeometryLoader& GetLoader();
     IfcFlatMesh GetFlatMesh(uint32_t expressID, bool applyLinearScalingFactor = true);
     IfcComposedMesh GetMesh(uint32_t expressID);
+    void SetExportPolylines(bool v) { _settings._exportPolylines = v; }
     void SetTransformation(const std::array<double, 16> &val);
     std::array<double, 16> GetFlatCoordinationMatrix() const;
     glm::dmat4 GetCoordinationMatrix() const;
@@ -87,7 +92,8 @@ namespace webifc::geometry
     uint32_t _expressIdCyl = 0;
     uint32_t _expressIdRect = 0;
     glm::dmat4 _coordinationMatrix = glm::dmat4(1.0);
-    void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false);
+    void AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix = glm::dmat4(1), const glm::dvec4 &color = glm::dvec4(1, 1, 1, 1), bool hasColor = false, bool includeCurveGeometry = true);
+    bool HasTriangleGeometry(const IfcComposedMesh &composedMesh);
     std::vector<uint32_t> Read2DArrayOfThreeIndices();
     void ReadIndexedPolygonalFace(uint32_t expressID, std::vector<IfcBound3D> &bounds, const std::vector<glm::dvec3> &points);
     void ApplyBooleanToMeshChildren(IfcComposedMesh &composedMesh, std::vector<IfcGeometry> &secondGroups, std::string op, IfcGeometrySettings _settings, glm::dmat4 mat);

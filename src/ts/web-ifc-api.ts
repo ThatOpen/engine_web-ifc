@@ -60,6 +60,22 @@ export const INTEGER = 10;
 export const BINARY = 11;
 
 /**
+ * PlacedGeometry.geomType value for a regular triangle mesh.
+ */
+export const GEOM_TRIANGLES = 0;
+/**
+ * PlacedGeometry.geomType value for wireframe geometry (IfcPolyline,
+ * IfcIndexedPolyCurve, IfcCircle, IfcEdge, ...): the vertices form a connected
+ * polyline strip that has to be drawn with line primitives instead of triangles.
+ */
+export const GEOM_LINE_STRIP = 1;
+/**
+ * PlacedGeometry.geomType value for independent points (IfcCartesianPoint and
+ * IfcCartesianPointList representation items): draw with point primitives.
+ */
+export const GEOM_POINTS = 2;
+
+/**
  * Settings for the IFCLoader
  * @property {boolean} COORDINATE_TO_ORIGIN - If true, the model will be translated to the origin.
  * @property {number} CIRCLE_SEGMENTS - Number of segments used to approximate circles.
@@ -73,6 +89,7 @@ export const BINARY = 11;
  * @property {number} TOLERANCE_SCALAR_EQUALITY - Tolerance used to compare scalar values as equal.
  * @property {number} PLANE_REFIT_ITERATIONS - Number of iterations used when adjusting triangles to a plane.
  * @property {number} BOOLEAN_UNION_THRESHOLD - Minimum number of solids before triggering a boolean union operation.
+ * @property {boolean} EXPORT_POLYLINES - Export wireframe (curve/point) geometry of products without solid geometry. Defaults to true.
  */
 export interface LoaderSettings {
   /** Allow best-effort parsing of older/preview schemas using incompatible generated layouts.
@@ -92,6 +109,14 @@ export interface LoaderSettings {
   TOLERANCE_SCALAR_EQUALITY?: number;
   PLANE_REFIT_ITERATIONS?: number;
   BOOLEAN_UNION_THRESHOLD?: number;
+  /**
+   * Export wireframe (curve/point) geometry of products that carry no solid
+   * geometry at all, e.g. IfcAnnotation Curve3D representations, IfcGrid or
+   * IfcGeometricCurveSet (defaults to true). Products that also carry solid
+   * geometry keep exporting triangles only. Set to false to receive triangles
+   * only.
+   */
+  EXPORT_POLYLINES?: boolean;
 }
 
 export interface Vector<T> extends Iterable<T> {
@@ -117,6 +142,12 @@ export interface PlacedGeometry {
   /** False when neither the element nor any of its sub-items carries an IFC
    * style; color is then a neutral default rather than a material. */
   hasColor: boolean;
+  /**
+   * GEOM_TRIANGLES (0), GEOM_LINE_STRIP (1) or GEOM_POINTS (2). Non-triangle
+   * geometry is only produced for products whose representation contains no
+   * solid or face geometry (e.g. IfcAnnotation Curve3D representations).
+   */
+  geomType: number;
   geometryExpressID: number;
   flatTransformation: Array<number>;
 }
@@ -513,6 +544,7 @@ export class IfcAPI {
       TOLERANCE_SCALAR_EQUALITY: 1.0e-4,
       PLANE_REFIT_ITERATIONS: 1,
       BOOLEAN_UNION_THRESHOLD: 150,
+      EXPORT_POLYLINES: true,
       ...settings,
     };
     return s;
