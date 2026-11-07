@@ -1000,10 +1000,10 @@ namespace fuzzybools
                     }
                     else
                     {
-                        if (isUnion || geom.numFaces < 2000) // TODO: This condition is wrong but efficient for large models
-                        {
-                            B.irrelevantFaces_toTest.push_back(i);
-                        }
+                        // A cutter face can lie entirely inside A without meeting any
+                        // of its faces. It still forms the boundary of the cut, regardless
+                        // of how densely B is tessellated.
+                        B.irrelevantFaces_toTest.push_back(i);
                     }
 
                     continue;
@@ -1296,12 +1296,8 @@ namespace fuzzybools
             std::vector<glm::dvec2> projectedPoints;
             projectedPoints.reserve(pointsOnPlane.size());
 
-            for (auto &pointId : pointsOnPlane)
-            {
-                pointToProjectedPoint[pointId] = projectedPoints.size();
-                projectedPointToPoint[projectedPoints.size()] = pointId;
-                projectedPoints.push_back(basis.project(points[pointId].location3D));
-            }
+            // Triangulate constraint vertices only. Unused interior points from
+            // previous CSG passes otherwise accumulate with every nested cut.
 
             std::set<std::pair<size_t, size_t>> edges;
             std::set<std::pair<size_t, size_t>> defaultEdges;
@@ -1535,10 +1531,7 @@ namespace fuzzybools
                             double dp = glm::dot(triCenter - a, nn);
                             if (std::abs(dp) > _TOLERANCE_PLANE_DEVIATION) continue;
                             Vec p0 = triCenter - dp * nn;
-                            double u = glm::dot(glm::cross(b - a, p0 - a), nn);
-                            double v = glm::dot(glm::cross(c - b, p0 - b), nn);
-                            double w = glm::dot(glm::cross(a - c, p0 - c), nn);
-                            if ((u >= -1e-6 && v >= -1e-6 && w >= -1e-6) || (u <= 1e-6 && v <= 1e-6 && w <= 1e-6))
+                            if (isPointOnTriangle(p0, a, b, c))
                             { outN = nn; return true; }
                         }
                         return false;
@@ -1995,7 +1988,11 @@ namespace fuzzybools
                 // new lines result in new line intersects
                 // new line intersects result in new points
 
-                if (std::fabs(glm::dot(planeA.normal, planeB.normal)) > 1.0 - EPS_BIG)
+                // Compare the sine of the angle with the angular parallelism tolerance.
+                // A dot-product epsilon measures squared angular error: 1e-4
+                // incorrectly skips intersections at angles up to 0.81 degrees,
+                // leaving triangles that straddle the other operand's boundary.
+                if (glm::length(glm::cross(planeA.normal, planeB.normal)) < toleranceParallelTight)
                 {
                     // parallel planes, don't care
                     continue;

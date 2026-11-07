@@ -27,6 +27,7 @@
 #include "operations/curve-utils.h"
 #include "operations/mesh_utils.h"
 #include "operations/boolean-utils/fuzzy-bools.h"
+#include "operations/manifold-booleans.h"
 
 namespace webifc::geometry
 {
@@ -360,10 +361,10 @@ namespace webifc::geometry
                 // recursively re-runs a full CSG pass per level over the growing result -> ~O(n^2),
                 // which hangs (#1197: StreamAllMeshesWithTypes never completes; 35 half-space clips)
                 // or blows the WASM stack on very long chains (#1774: 1175 extrusion cuts). For a pure-DIFFERENCE
-                // chain with NON-FACETED cutters, A-c1-c2-...-cn == subtract-all-in-one-pass
-                // (mathematically exact), so we collect the whole spine iteratively and do a
-                // SINGLE BoolProcess. Gated on depth>=8 so normal shallow booleans are untouched;
-                // faceted/brep cutters keep the exact sequential baseline (one-pass corrupts them).
+                // chain, collect the spine iteratively and keep one normalization frame.
+                // BoolProcess still subtracts each cutter sequentially. Faceted/BRep cutters
+                // must retain the original inner-to-outer order; reversing them corrupts meshes.
+                // Gated on depth>=8 so normal shallow booleans are untouched.
                 {
                     auto isFacetedCut = [&](uint32_t id) {
                         auto t = _loader.GetLineType(id);
@@ -396,7 +397,7 @@ namespace webifc::geometry
                         }
                         else break;
                     }
-                    if (nonFaceted && cutterIDs.size() >= 8)
+                    if (cutterIDs.size() >= 8)
                     {
                         auto baseMesh = GetMesh(baseID);
                         auto origin2 = GetOrigin(baseMesh, _expressIDToGeometry);
@@ -405,6 +406,9 @@ namespace webifc::geometry
                         if (flatBase.size() != 0)
                         {
                             std::vector<IfcGeometry> flatCuts;
+                            // The spine was collected outermost first. Faceted cuts need
+                            // their original sequential order and a stable normalization frame.
+                            if (!nonFaceted) std::reverse(cutterIDs.begin(), cutterIDs.end());
                             for (auto cid : cutterIDs)
                             {
                                 auto cm = GetMesh(cid);
@@ -463,8 +467,9 @@ namespace webifc::geometry
                 // DEEP-CHAIN FLATTEN (perf, same rationale as IFCBOOLEANCLIPPINGRESULT above):
                 // a long pure-DIFFERENCE spine (#1774: 1175 nested IfcBooleanResult extrusion cuts)
                 // hangs when processed recursively (one CSG pass per level). Collect the whole
-                // DIFFERENCE spine iteratively and subtract every NON-FACETED cutter in a single
-                // BoolProcess. Exact for difference; gated depth>=8; faceted cutters excluded.
+                // DIFFERENCE spine iteratively and pass it to the sequential BoolProcess in one
+                // normalization frame. Preserve inner-to-outer order for faceted cutters; shallow
+                // chains and the existing non-faceted ordering remain unchanged.
                 if (op == "DIFFERENCE")
                 {
                     auto isFacetedCut = [&](uint32_t id) {
@@ -498,7 +503,7 @@ namespace webifc::geometry
                         }
                         else break;
                     }
-                    if (nonFaceted && cutterIDs.size() >= 8)
+                    if (cutterIDs.size() >= 8)
                     {
                         auto baseMesh = GetMesh(baseID);
                         auto origin2 = GetOrigin(baseMesh, _expressIDToGeometry);
@@ -507,6 +512,9 @@ namespace webifc::geometry
                         if (flatBase.size() != 0)
                         {
                             std::vector<IfcGeometry> flatCuts;
+                            // The spine was collected outermost first. Faceted cuts need
+                            // their original sequential order and a stable normalization frame.
+                            if (!nonFaceted) std::reverse(cutterIDs.begin(), cutterIDs.end());
                             for (auto cid : cutterIDs)
                             {
                                 auto cm = GetMesh(cid);
@@ -2441,14 +2449,14 @@ namespace webifc::geometry
 
     // Solve for the point closest to q that lies on all given planes (at most three,
     // pairwise non-parallel). Returns false when the planes are nearly dependent.
-    static bool ClosestPointOnPlanes(const glm::dvec3 &q, const std::vector<const bimGeometry::Plane *> &planes, glm::dvec3 &result)
+    static bool ClosestPointOnPlanes(const glm::dvec3 &q, const std::vector<const bimGeometry::Plane *> &planes, glm::dvec3 &result, double outwardOffset = 0)
     {
         size_t k = planes.size();
         double m[3][4] = {};
         for (size_t i = 0; i < k; i++)
         {
             for (size_t j = 0; j < k; j++) m[i][j] = glm::dot(planes[i]->normal, planes[j]->normal);
-            m[i][3] = glm::dot(planes[i]->normal, q) - planes[i]->distance;
+            m[i][3] = glm::dot(planes[i]->normal, q) - (planes[i]->distance + outwardOffset);
         }
         for (size_t c = 0; c < k; c++)
         {
@@ -2477,7 +2485,7 @@ namespace webifc::geometry
     // that every copy of a vertex moves together, and a vertex shared by faces snapped to several
     // planes goes to the closest point on all of them. Returns false, leaving snapped untouched, when
     // no face needs to move or the cutter is not a closed solid.
-    static bool SnapToOperandPlanes(const IfcGeometry &operand, const IfcGeometry &cutter, double snapDistance, IfcGeometry &snapped)
+    static bool SnapToOperandPlanes(const IfcGeometry &operand, const IfcGeometry &cutter, double snapDistance, IfcGeometry &snapped, double outwardOffset = 0)
     {
         if (cutter.numFaces == 0 || operand.planes.empty()) return false;
 
@@ -2603,7 +2611,7 @@ namespace webifc::geometry
                 if (!parallel && independent.size() < 3) independent.push_back(plane);
             }
             glm::dvec3 q;
-            while (!independent.empty() && !ClosestPointOnPlanes(positions[x], independent, q)) independent.pop_back();
+            while (!independent.empty() && !ClosestPointOnPlanes(positions[x], independent, q, outwardOffset)) independent.pop_back();
             if (independent.empty()) continue;
             if (!std::isfinite(q.x) || !std::isfinite(q.y) || !std::isfinite(q.z) || glm::distance(q, positions[x]) > 2 * snapDistance) continue;
             moved[x] = q;
@@ -2656,6 +2664,45 @@ namespace webifc::geometry
 
         for (auto &firstGeom : firstGeoms)
         {
+            // Retain the model's existing tolerance for openings that almost
+            // reach a wall face. Build plane references without moving the
+            // operand's vertices: independent face fitting opens shared edges.
+            auto preparedCutters = secondGeoms;
+            if (op == "DIFFERENCE")
+            {
+                IfcGeometry operandPlanes = firstGeom;
+                operandPlanes.planes.clear();
+                operandPlanes.planeData.assign(firstGeom.numFaces, UINT32_MAX);
+                operandPlanes.hasPlanes = true;
+                for (uint32_t i = 0; i < firstGeom.numFaces; ++i)
+                {
+                    const auto f = firstGeom.GetFace(i);
+                    const auto a = firstGeom.GetPoint(f.i0), b = firstGeom.GetPoint(f.i1), c = firstGeom.GetPoint(f.i2);
+                    glm::dvec3 normal;
+                    if (bimGeometry::computeSafeNormal(a, b, c, normal, bimGeometry::toleranceAddFace))
+                        operandPlanes.planeData[i] = operandPlanes.AddPlane(normal, glm::dot(normal, a));
+                }
+                for (auto &cutter : preparedCutters)
+                {
+                    if (cutter.halfSpace) continue;
+                    IfcGeometry snapped;
+                    // Resolve an almost coincident boundary on the exterior side
+                    // of the operand, within the same modeling precision. An
+                    // opening then cuts through; an exterior touching cutter
+                    // stays outside. Exact floating-point coplanarity is not required.
+                    if (SnapToOperandPlanes(operandPlanes, cutter,
+                        bimGeometry::SNAP_TO_OPERAND_PLANE_FACTOR * _settings.TOLERANCE_PLANE_DEVIATION,
+                        snapped, _settings.TOLERANCE_PLANE_DEVIATION))
+                        cutter = std::move(snapped);
+                }
+            }
+            IfcGeometry solidResult;
+            if (TryManifoldBoolean(firstGeom, preparedCutters, op, solidResult, _settings.TOLERANCE_PLANE_DEVIATION))
+            {
+                if (firstGeoms.size() == 1) return solidResult;
+                finalResult.AddGeometry(solidResult);
+                continue;
+            }
             IfcGeometry firstOperator = firstGeom;
             for (auto &secondGeom : secondGeoms)
             {

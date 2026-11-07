@@ -14,6 +14,7 @@
 
 #include <array>
 #include <cstdint>
+#include <limits>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../representation/geometry.h"
@@ -201,6 +202,69 @@ namespace webifc::geometry
 	// beyond it cannot become a single boolean plane, so it keeps its triangle normals.
 	constexpr double FACE_NOISE_MAX = 1.0E-04;
 
+	// Ear clipping can skip a boundary vertex that touches the interior of another
+	// edge, filling the gap between two lobes of the same ring. Check the signed
+	// contour area first, then split such contacts into simple rings. Reuse the
+	// original vertex indices so adjacent 3D faces retain their shared boundary.
+	inline std::vector<uint32_t> TriangulateBounds2D(const std::vector<std::vector<glm::dvec2>>& polygon, double sourceMagnitude = 0)
+	{
+		auto original = mapbox::earcut<uint32_t>(polygon);
+		if (polygon.size() != 1 || polygon[0].size() < 4) return original;
+		const auto& points = polygon[0];
+		const auto cross = [](const glm::dvec2& a, const glm::dvec2& b) { return a.x*b.y-a.y*b.x; };
+		double contourArea = 0, extent = 0;
+		for (size_t i = 0; i < points.size(); ++i)
+		{
+			contourArea += cross(points[i]-points[0], points[(i+1)%points.size()]-points[0]);
+			extent = std::max(extent, glm::length(points[i]-points[0]));
+		}
+		contourArea = std::abs(contourArea);
+		const double distanceTolerance = 128*std::numeric_limits<double>::epsilon()*std::max({1.0, extent, sourceMagnitude});
+		const double areaTolerance = 2*distanceTolerance*extent*points.size();
+		const auto area = [&](const std::vector<uint32_t>& indices)
+		{
+			double sum = 0;
+			for (size_t i = 0; i < indices.size(); i += 3)
+				sum += std::abs(cross(points[indices[i+1]]-points[indices[i]], points[indices[i+2]]-points[indices[i]]));
+			return sum;
+		};
+		if (std::abs(area(original)-contourArea) <= areaTolerance) return original;
+
+		std::vector<std::vector<uint32_t>> pending(1);
+		for (uint32_t i = 0; i < points.size(); ++i) pending[0].push_back(i);
+		std::vector<uint32_t> repaired;
+		while (!pending.empty())
+		{
+			auto ring = std::move(pending.back());
+			pending.pop_back();
+			bool split = false;
+			for (size_t i = 0; i < ring.size() && !split; ++i)
+			for (size_t j = 0; j < ring.size() && !split; ++j)
+			{
+				const size_t next = (j+1)%ring.size();
+				if (i == j || i == next) continue;
+				const auto edge = points[ring[next]]-points[ring[j]];
+				const auto relative = points[ring[i]]-points[ring[j]];
+				const double length = glm::length(edge);
+				if (length <= distanceTolerance) continue;
+				const double along = glm::dot(relative, edge)/length;
+				if (along <= distanceTolerance || along >= length-distanceTolerance ||
+					std::abs(cross(edge,relative))/length > distanceTolerance) continue;
+				std::vector<uint32_t> a{ring[i]}, b{ring[i]};
+				for (size_t k = (i+1)%ring.size(); k != next; k = (k+1)%ring.size()) a.push_back(ring[k]);
+				for (size_t k = next; k != i; k = (k+1)%ring.size()) b.push_back(ring[k]);
+				if (a.size() < 3 || b.size() < 3) continue;
+				pending.push_back(std::move(a)); pending.push_back(std::move(b));
+				split = true;
+			}
+			if (split) continue;
+			std::vector<std::vector<glm::dvec2>> part(1);
+			for (auto id : ring) part[0].push_back(points[id]);
+			for (auto id : mapbox::earcut<uint32_t>(part)) repaired.push_back(ring[id]);
+		}
+		return std::abs(area(repaired)-contourArea) <= areaTolerance ? repaired : original;
+	}
+
 	inline void TriangulateBounds(IfcGeometry& geometry, std::vector<IfcBound3D>& bounds, uint32_t expressID)
 	{
 		spdlog::debug("[TriangulateBounds({})]");
@@ -291,8 +355,24 @@ namespace webifc::geometry
 				bool inside = false;
 				size_t n = poly.size();
 				for (size_t i = 0, j = n - 1; i < n; j = i++) {
+					// Projection can put a touching inner-bound vertex a few ulps to either
+					// side of the outer edge. Boundary points belong to the containing loop;
+					// rejecting them drops the entire face and leaves the BRep cutter open.
+					const glm::dvec2 edge = poly[j] - poly[i];
+					const glm::dvec2 delta = p - poly[i];
+					const double length = glm::length(edge);
+					const double tolerance = 32 * std::numeric_limits<double>::epsilon() *
+						std::max({1.0, std::abs(poly[i].x), std::abs(poly[i].y),
+							std::abs(poly[j].x), std::abs(poly[j].y), std::abs(p.x), std::abs(p.y)});
+					const double along = glm::dot(delta, edge);
+					if ((length == 0 && glm::length(delta) <= tolerance) ||
+						(length > 0 && along >= -tolerance * length &&
+							along <= length * length + tolerance * length &&
+							std::abs(edge.x * delta.y - edge.y * delta.x) <= tolerance * length)) {
+						return true;
+					}
 					if ((poly[i].y > p.y) != (poly[j].y > p.y) &&
-						(p.x < poly[i].x + (poly[j].x - poly[i].x) * (p.y - poly[i].y) / (poly[j].y - poly[i].y + 1e-10))) {
+						(p.x < poly[i].x + (poly[j].x - poly[i].x) * (p.y - poly[i].y) / (poly[j].y - poly[i].y))) {
 						inside = !inside;
 					}
 				}
@@ -457,7 +537,7 @@ namespace webifc::geometry
 			// 	logFile.close();
 			// }
 #endif
-			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon);
+			std::vector<uint32_t> indices = TriangulateBounds2D(polygon, glm::length(v1));
 			for (size_t i = 0; i < indices.size(); i += 3)
 			{
 #ifdef CSG_DEBUG_OUTPUT
