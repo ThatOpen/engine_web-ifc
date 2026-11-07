@@ -1,3 +1,10 @@
+# Temporary compatibility fix for the pinned Manifold 3.5.4.
+# Upstream removed this code path in https://github.com/elalish/manifold/pull/1790;
+# master b36ab18 passes our touching-shell reproducer without the patch.
+# When upgrading to a release containing that change, rerun the touching-shell
+# regressions without the patch, then remove this helper, its CMakeLists.txt
+# include and patches/manifold-preserve-face-orientation.patch.
+#
 # The dependency is pinned; fail configuration if its source no longer matches
 # the reviewed fix. Also support repeated configuration and source overrides.
 find_package(Git REQUIRED)
