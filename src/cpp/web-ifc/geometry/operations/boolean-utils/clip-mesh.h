@@ -99,18 +99,18 @@ namespace fuzzybools
             //     doit = false; // This assignation is useless just to add some content
             // }
 
-            auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir);
-            auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir);
+            auto isInside1Loc = classifyPointInSolid(triCenter, n, *bvh1.ptr, bvh1, raydir);
+            auto isInside2Loc = classifyPointInSolid(triCenter, n, *bvh2.ptr, bvh2, raydir);
 
             Vec extraDir1 = glm::normalize(raydir + Vec(0.02,0.01,0.04));
             Vec extraDir2 = glm::normalize(raydir + Vec(0.20,-0.1,0.40));
 
-            auto isInside1Loc_B = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir1);
-            auto isInside2Loc_B = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir1);
+            auto isInside1Loc_B = classifyPointInSolid(triCenter, n, *bvh1.ptr, bvh1, extraDir1);
+            auto isInside2Loc_B = classifyPointInSolid(triCenter, n, *bvh2.ptr, bvh2, extraDir1);
 
             if(isInside1Loc.loc != isInside1Loc_B.loc)
             {
-                auto isInside1Loc_C = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir2);
+                auto isInside1Loc_C = classifyPointInSolid(triCenter, n, *bvh1.ptr, bvh1, extraDir2);
                 if(isInside1Loc_C.loc == isInside1Loc_B.loc){isInside1Loc = isInside1Loc_B;}
                 else if(isInside1Loc_B.loc != isInside1Loc_C.loc && isInside1Loc.loc != isInside1Loc_C.loc)
                 {
@@ -120,7 +120,7 @@ namespace fuzzybools
 
             if(isInside2Loc.loc != isInside2Loc_B.loc)
             {
-                auto isInside2Loc_C = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir2);
+                auto isInside2Loc_C = classifyPointInSolid(triCenter, n, *bvh2.ptr, bvh2, extraDir2);
                 if(isInside2Loc_C.loc == isInside2Loc_B.loc){isInside2Loc = isInside2Loc_B;}
                 else if(isInside2Loc_B.loc != isInside2Loc_C.loc && isInside2Loc.loc != isInside2Loc_C.loc)
                 {
@@ -256,18 +256,18 @@ namespace fuzzybools
             }
             Vec raydir = n + glm::normalize(raydirInPlane); // ~45 deg to the face, never parallel to the face or its normal (#1932)
 
-            auto isInside1Loc = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, raydir, true);
-            auto isInside2Loc = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, raydir, true);
+            auto isInside1Loc = classifyPointInSolid(triCenter, n, *bvh1.ptr, bvh1, raydir, true);
+            auto isInside2Loc = classifyPointInSolid(triCenter, n, *bvh2.ptr, bvh2, raydir, true);
 
             Vec extraDir1 = glm::normalize(Vec(1.1, 1.4, 1.2));
             Vec extraDir2 = glm::normalize(Vec(-2.1, 1.4, -3.2));
 
-            auto isInside1Loc_B = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir1, true);
-            auto isInside2Loc_B = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir1, true);
+            auto isInside1Loc_B = classifyPointInSolid(triCenter, n, *bvh1.ptr, bvh1, extraDir1, true);
+            auto isInside2Loc_B = classifyPointInSolid(triCenter, n, *bvh2.ptr, bvh2, extraDir1, true);
 
             if(isInside1Loc.loc != isInside1Loc_B.loc)
             {
-                auto isInside1Loc_C = isInsideMesh(triCenter, n, *bvh1.ptr, bvh1, extraDir2, true);
+                auto isInside1Loc_C = classifyPointInSolid(triCenter, n, *bvh1.ptr, bvh1, extraDir2, true);
                 if(isInside1Loc_C.loc == isInside1Loc_B.loc){isInside1Loc = isInside1Loc_B;}
                 else if(isInside1Loc_B.loc != isInside1Loc_C.loc && isInside1Loc.loc != isInside1Loc_C.loc)
                 {
@@ -277,7 +277,7 @@ namespace fuzzybools
 
             if(isInside2Loc.loc != isInside2Loc_B.loc)
             {
-                auto isInside2Loc_C = isInsideMesh(triCenter, n, *bvh2.ptr, bvh2, extraDir2, true);
+                auto isInside2Loc_C = classifyPointInSolid(triCenter, n, *bvh2.ptr, bvh2, extraDir2, true);
                 if(isInside2Loc_C.loc == isInside2Loc_B.loc){isInside2Loc = isInside2Loc_B;}
                 else if(isInside2Loc_B.loc != isInside2Loc_C.loc && isInside2Loc.loc != isInside2Loc_C.loc)
                 {

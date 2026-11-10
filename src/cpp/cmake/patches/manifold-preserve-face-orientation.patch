@@ -1,0 +1,12 @@
+--- a/src/impl.cpp
++++ b/src/impl.cpp
+@@ -259,3 +259,8 @@
+       const vec3 v = vertPos_[halfedge_.End(h)];
+-      if (std::abs(dot(v - base, normal)) < tolerance_) {
++      // Coplanar faces can point in opposite directions where a surface
++      // folds back or separate shells touch. Keep that orientation: assigning
++      // the seed normal to a back face makes later edge cleanup mistake a
++      // finite triangle for a degenerate one and move the solid's boundary.
++      if (std::abs(dot(v - base, normal)) < tolerance_ &&
++          dot(faceNormal_[h / 3], normal) >= 0) {
+         const size_t tri = h / 3;
