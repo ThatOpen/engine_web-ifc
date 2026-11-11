@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <functional>
 #include <map>
 #include <random>
 #include "uuid.h"

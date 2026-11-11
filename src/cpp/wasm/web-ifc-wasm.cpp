@@ -83,8 +83,32 @@ int GetModelSize(uint32_t modelID)
     return manager.IsModelOpen(modelID) ? manager.GetIfcLoader(modelID)->GetTotalSize() : 0;
 }
 
+#ifdef BREP_ENGINE
+// The brep kernel as an alternative geometry engine, one per open model.
+#include "../brep/ifc_reader.h"
+static std::unordered_map<uint32_t, std::unique_ptr<brep::ifc::BrepEngine>> brepEngines;
+static brep::ifc::BrepEngine* BrepEngineOf(uint32_t modelID)
+{
+    auto it = brepEngines.find(modelID);
+    if (it != brepEngines.end()) return it->second.get();
+    auto engine = std::make_unique<brep::ifc::BrepEngine>(*manager.GetIfcLoader(modelID), manager.GetSchemaManager(), *manager.GetGeometryProcessor(modelID));
+    auto* raw = engine.get();
+    brepEngines.emplace(modelID, std::move(engine));
+    return raw;
+}
+// The brep engine on booleans only (see BrepEngine::booleansOnly): web-ifc meshes the rest.
+void SetBrepBooleansOnly(uint32_t modelID, bool on)
+{
+    if (!manager.IsModelOpen(modelID)) return;
+    BrepEngineOf(modelID)->booleansOnly = on;
+}
+#endif
+
 void CloseModel(uint32_t modelID)
 {
+#ifdef BREP_ENGINE
+    brepEngines.erase(modelID);
+#endif
     return manager.CloseModel(modelID);
 }
 
@@ -194,6 +218,70 @@ void StreamAllMeshes(uint32_t modelID, emscripten::val callback, bool applyLinea
     }
     StreamAllMeshesWithTypes(modelID, types, callback, applyLinearScalingFactor);
 }
+
+#ifdef BREP_ENGINE
+// As StreamMeshes, with the brep engine: the callback gets (mesh, shells, index, total). Each shell is
+// { id, points: Float64Array, rings: Int32Array } viewing wasm memory, alive for the callback only.
+// Geometries of the mesh that have a shell come with no vertices.
+void StreamBrepMeshes(uint32_t modelID, const std::vector<uint32_t> &expressIds, emscripten::val callback)
+{
+    if (!manager.IsModelOpen(modelID))
+        return;
+    auto geomLoader = manager.GetGeometryProcessor(modelID);
+    auto* engine = BrepEngineOf(modelID);
+    std::vector<brep::ifc::EngineShell> shells;
+    int index = 0;
+    int total = expressIds.size();
+    for (const auto &id : expressIds)
+    {
+        webifc::geometry::IfcFlatMesh mesh;
+        engine->flatMesh(id, &mesh, shells);
+        for (auto &geom : mesh.geometries)
+            geomLoader->GetGeometry(geom.geometryExpressID).GetVertexData();
+        if (!mesh.geometries.empty())
+        {
+            emscripten::val list = emscripten::val::array();
+            // Copied into arrays JS owns: a view on the heap is detached as soon as passing the mesh
+            // to the callback (or anything after) grows the memory.
+            static const emscripten::val Float64Array = emscripten::val::global("Float64Array");
+            static const emscripten::val Int32Array = emscripten::val::global("Int32Array");
+            for (auto &s : shells)
+            {
+                emscripten::val o = emscripten::val::object();
+                o.set("id", s.geometryExpressID);
+                o.set("points", Float64Array.new_(emscripten::typed_memory_view(s.points.size(), s.points.data())));
+                o.set("rings", Int32Array.new_(emscripten::typed_memory_view(s.rings.size(), s.rings.data())));
+                list.call<void>("push", o);
+            }
+            callback(mesh, list, index, total);
+        }
+        geomLoader->Clear();
+        index++;
+    }
+}
+
+void StreamBrepMeshesWithExpressID(uint32_t modelID, emscripten::val expressIdsVal, emscripten::val callback)
+{
+    std::vector<uint32_t> expressIds;
+    uint32_t size = expressIdsVal["length"].as<uint32_t>();
+    for (size_t i = 0; i < size; i++)
+        expressIds.push_back(expressIdsVal[std::to_string(i)].as<uint32_t>());
+    StreamBrepMeshes(modelID, expressIds, callback);
+}
+
+void StreamAllBrepMeshes(uint32_t modelID, emscripten::val callback)
+{
+    if (!manager.IsModelOpen(modelID))
+        return;
+    auto loader = manager.GetIfcLoader(modelID);
+    for (auto &type : manager.GetSchemaManager().GetIfcElementList())
+    {
+        if (type == webifc::schema::IFCOPENINGELEMENT || type == webifc::schema::IFCSPACE || type == webifc::schema::IFCOPENINGSTANDARDCASE)
+            continue;
+        StreamBrepMeshes(modelID, loader->GetExpressIDsWithType(type), callback);
+    }
+}
+#endif
 
 std::vector<webifc::geometry::IfcFlatMesh> LoadAllGeometry(uint32_t modelID, bool applyLinearScalingFactor = true)
 {
@@ -1342,6 +1430,11 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::function("GetWorldTransformMatrix", &GetWorldTransformMatrix);
     emscripten::function("StreamMeshes", &StreamMeshesWithExpressID);
     emscripten::function("StreamAllMeshes", &StreamAllMeshes);
+#ifdef BREP_ENGINE
+    emscripten::function("StreamBrepMeshes", &StreamBrepMeshesWithExpressID);
+    emscripten::function("StreamAllBrepMeshes", &StreamAllBrepMeshes);
+    emscripten::function("SetBrepBooleansOnly", &SetBrepBooleansOnly);
+#endif
     emscripten::function("StreamAllMeshesWithTypes", &StreamAllMeshesWithTypesVal);
     emscripten::function("GetLine", &GetLine);
     emscripten::function("GetLines", &GetLines);

@@ -127,6 +127,13 @@ export interface FlatMesh {
   delete(): void;
 }
 
+/** A Body item the brep engine built (see IfcAPI.StreamAllBrepMeshes). */
+export interface BrepShell {
+  id: number;
+  points: Float64Array;
+  rings: Int32Array;
+}
+
 export interface Point {
   x: number;
   y: number;
@@ -1444,6 +1451,47 @@ export class IfcAPI {
     applyLinearScalingFactor: boolean = true
   ) {
     this.wasmModule.StreamAllMeshes(modelID, meshCallback, applyLinearScalingFactor);
+  }
+
+  /**
+   * As StreamAllMeshes, with the brep kernel as the geometry engine (builds with BREP_ENGINE only).
+   * Each Body item the kernel builds comes as a shell instead of a mesh: its geometry in `mesh` has no
+   * vertices, and `shells` holds `{ id, points, rings }` for it -- points in file units, in the frame
+   * the geometry's flatTransformation places; `rings` per face: ring count, then each ring's length
+   * and point indices, the first ring the outer one. The arrays view wasm memory and are valid
+   * during the callback only. Anything the kernel does not build comes as an ordinary mesh.
+   */
+  StreamAllBrepMeshes(
+    modelID: number,
+    meshCallback: (mesh: FlatMesh, shells: BrepShell[], index: number, total: number) => void
+  ) {
+    if (!this.wasmModule.StreamAllBrepMeshes) throw new Error("web-ifc: this build has no brep engine");
+    this.wasmModule.StreamAllBrepMeshes(modelID, meshCallback);
+  }
+
+  /** As StreamMeshes, with the brep kernel as the geometry engine. See StreamAllBrepMeshes. */
+  StreamBrepMeshes(
+    modelID: number,
+    expressIDs: Array<number>,
+    meshCallback: (mesh: FlatMesh, shells: BrepShell[], index: number, total: number) => void
+  ) {
+    if (!this.wasmModule.StreamBrepMeshes) throw new Error("web-ifc: this build has no brep engine");
+    this.wasmModule.StreamBrepMeshes(modelID, expressIDs, meshCallback);
+  }
+
+  /** Whether this build carries the brep geometry engine. */
+  HasBrepEngine(): boolean {
+    return !!this.wasmModule?.StreamAllBrepMeshes;
+  }
+
+  /**
+   * The brep engine on booleans only: Body items that are IfcBooleanResult / IfcBooleanClippingResult
+   * (or belong to a product with openings) go to the brep kernel, everything else is meshed by
+   * web-ifc as with StreamMeshes, keeping its shared geometries.
+   */
+  SetBrepBooleansOnly(modelID: number, on: boolean) {
+    if (!this.wasmModule.SetBrepBooleansOnly) throw new Error("web-ifc: this build has no brep engine");
+    this.wasmModule.SetBrepBooleansOnly(modelID, on);
   }
 
   /**
