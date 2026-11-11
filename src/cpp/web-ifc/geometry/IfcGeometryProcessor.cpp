@@ -27,6 +27,7 @@
 #include "operations/curve-utils.h"
 #include "operations/mesh_utils.h"
 #include "operations/boolean-utils/fuzzy-bools.h"
+#include "operations/plane-clip.h"
 
 namespace webifc::geometry
 {
@@ -153,6 +154,12 @@ namespace webifc::geometry
         return styledItemColor;
     }
 
+    void IfcGeometryProcessor::SetSkippedItems(const std::unordered_map<uint32_t, glm::dvec3> *items, bool skipVoids)
+    {
+        _skippedItems = items;
+        _skipVoids = skipVoids;
+    }
+
     IfcComposedMesh IfcGeometryProcessor::GetMesh(uint32_t expressID)
     {
         const auto lineType = _loader.GetLineType(expressID);
@@ -229,6 +236,29 @@ namespace webifc::geometry
 
         mesh.transformation = glm::dmat4(1);
 
+        if (_skippedItems && _skippedItems->count(expressID))
+        {
+            // A boolean takes its first operand's style when it has none of its own (as the full
+            // path below does, operand by operand); a skipped item never reaches that code, so the
+            // chain of first operands is walked here for the colour alone.
+            uint32_t operand = expressID;
+            for (int depth = 0; !mesh.hasColor && depth < 32; depth++)
+            {
+                const auto t = _loader.GetLineType(operand);
+                if (t != schema::IFCBOOLEANRESULT && t != schema::IFCBOOLEANCLIPPINGRESULT) break;
+                _loader.MoveToArgumentOffset(operand, 1);
+                operand = _loader.GetRefArgument();
+                if (auto c = GetStyleItemFromExpressId(operand))
+                {
+                    mesh.color = c.value();
+                    mesh.hasColor = true;
+                }
+            }
+            _expressIDToGeometry[expressID] = IfcGeometry();
+            mesh.hasGeometry = true;
+            return mesh;
+        }
+
         if (_schemaManager.IsIfcElement(lineType))
         {
             _loader.MoveToArgumentOffset(expressID, 5);
@@ -256,7 +286,7 @@ namespace webifc::geometry
             }
 
             auto relVoidsIt = relVoids.find(expressID);
-            if (relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
+            if (!_skipVoids && relVoidsIt != relVoids.end() && !relVoidsIt->second.empty())
             {
                 auto origin = GetOrigin(mesh, _expressIDToGeometry);
                 auto normalizeMat = glm::translate(-origin);
@@ -431,9 +461,26 @@ namespace webifc::geometry
                 auto normalizeMat = glm::translate(-origin);
 
                 auto flatFirstMeshes = flatten(firstMesh, _expressIDToGeometry, normalizeMat);
-                auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
 
-                IfcGeometry resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, "DIFFERENCE", _settings);
+                // An unbounded half-space is one plane: cut and cap instead of subtracting a 50 m
+                // prism (see plane-clip.h). AgreementFlag TRUE: the plane's normal points away from
+                // the half-space's material, which is the side removed, so the normal side is kept.
+                IfcGeometry resultMesh;
+                bool clipped = false;
+                if (PlaneClipEnabled() && _loader.GetLineType(secondOperandID) == schema::IFCHALFSPACESOLID)
+                {
+                    _loader.MoveToArgumentOffset(secondOperandID, 1);
+                    const bool agreement = _loader.GetStringArgument() == "T";
+                    const glm::dmat4 m = normalizeMat * secondMesh.transformation;
+                    const glm::dvec3 planePoint = glm::dvec3(m * glm::dvec4(0, 0, 0, 1));
+                    const glm::dvec3 planeNormal = glm::dvec3(m * glm::dvec4(0, 0, 1, 0));
+                    clipped = ClipByPlane(flatFirstMeshes, planePoint, agreement ? planeNormal : -planeNormal, resultMesh);
+                }
+                if (!clipped)
+                {
+                    auto flatSecondMeshes = flatten(secondMesh, _expressIDToGeometry, normalizeMat);
+                    resultMesh = BoolProcess(flatFirstMeshes, flatSecondMeshes, "DIFFERENCE", _settings);
+                }
 
                 _expressIDToGeometry[expressID] = resultMesh;
                 mesh.hasGeometry = true;
@@ -2050,7 +2097,14 @@ namespace webifc::geometry
             if (!_isCoordinated && _settings._coordinateToOrigin)
             {
                 auto &geom = _expressIDToGeometry[composedMesh.expressID];
-                if (geom.numPoints > 0)
+                auto skipped = _skippedItems ? _skippedItems->find(composedMesh.expressID) : decltype(_skippedItems->end()){};
+                if (_skippedItems && skipped != _skippedItems->end() && geom.numPoints == 0)
+                {
+                    auto transformedPt = newMatrix * glm::dvec4(skipped->second, 1);
+                    _coordinationMatrix = glm::translate(-glm::dvec3(transformedPt));
+                    _isCoordinated = true;
+                }
+                else if (geom.numPoints > 0)
                 {
                     auto pt = geom.GetPoint(0);
                     auto transformedPt = newMatrix * glm::dvec4(pt, 1);

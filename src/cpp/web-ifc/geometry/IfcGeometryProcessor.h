@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <cstdint>
+#include <unordered_map>
 #include "representation/geometry.h"
 #include "../parsing/IfcLoader.h"
 #include "../cache/IfcCache.h"
@@ -62,8 +63,20 @@ namespace webifc::geometry
     glm::dmat4 GetCoordinationMatrix() const;
     void Clear(bool keepMappedRepresentations = false);
     IfcGeometryProcessor *Clone(const webifc::parsing::IfcLoader &loader) const;
+    // For an alternative geometry engine: representation items whose geometry it supplies itself.
+    // They come back placed and coloured as usual, with an empty geometry and an identity item
+    // transform, so the flat transformation is the frame the item's own placement is relative to.
+    // `SkipVoids` leaves an element's openings to that engine as well.
+    // The value is the item's first point, for COORDINATE_TO_ORIGIN when it is the first geometry met.
+    void SetSkippedItems(const std::unordered_map<uint32_t, glm::dvec3> *items, bool skipVoids);
+    // True once COORDINATE_TO_ORIGIN has taken its offset (or when it is off).
+    bool HasCoordination() const { return _isCoordinated || !_settings._coordinateToOrigin; }
+    // How far a point may sit off a face's plane and still count as on it (the importer's setting).
+    double PlaneDeviation() const { return _settings.TOLERANCE_PLANE_DEVIATION; }
 
   protected:
+    const std::unordered_map<uint32_t, glm::dvec3> *_skippedItems = nullptr;
+    bool _skipVoids = false;
     IfcGeometryProcessor(const IfcGeometrySettings &settings, std::unordered_map<uint32_t, IfcGeometry> expressIDToGeometry, glm::dmat4 transformation, const parsing::IfcLoader &loader, booleanManager boolEngine, const schema::IfcSchemaManager &schemaManager, bool isCoordinated, uint32_t expressIdCyl, uint32_t expressIdRect, glm::dmat4 coordinationMatrix, IfcGeometry predefinedCylinder, IfcGeometry predefinedCube);
     IfcGeometrySettings _settings;
     std::optional<glm::dvec4> GetStyleItemFromExpressId(uint32_t expressID);

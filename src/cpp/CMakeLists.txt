@@ -24,7 +24,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 option(WEB_IFC_WASM_NATIVE_EXCEPTIONS "Use native WebAssembly exception handling (requires a compatible runtime)" ON)
 option(BUILD_SHARED_LIBS "Build web-ifc as a shared library instead of static" OFF)
 set(WEB_IFC_WASM_EXCEPTION_FLAG "-fexceptions")
-if(WEB_IFC_WASM_NATIVE_EXCEPTIONS)
+# The brep engine catches its own refusals with native wasm exceptions: a build with it uses them throughout.
+if(WEB_IFC_WASM_NATIVE_EXCEPTIONS OR BREP_ENGINE OR BREP_HAVE_KERNEL)
 	set(WEB_IFC_WASM_EXCEPTION_FLAG "-fwasm-exceptions")
 endif()
 
@@ -171,6 +172,42 @@ if(EMSCRIPTEN)
 		-sMODULARIZE=1
 		-sENVIRONMENT=web,worker
 	)
+
+	# Opt-in: the brep kernel as an alternative geometry engine (StreamAllBrepMeshes / StreamBrepMeshes).
+	# It catches its own refusals, so these builds use native wasm exceptions (see WEB_IFC_WASM_EXCEPTION_FLAG).
+	if(BREP_ENGINE)
+		file(GLOB brep-engine-source brep/*.cpp)
+		list(FILTER brep-engine-source EXCLUDE REGEX ".*(bench_main|_test|sampler)\\.cpp$")
+		foreach(THE_TARGET web-ifc web-ifc-node)
+			target_sources(${THE_TARGET} PRIVATE ${brep-engine-source} "./brep/sampler.cpp")
+			target_compile_definitions(${THE_TARGET} PUBLIC BREP_ENGINE BREP_HAVE_KERNEL)
+			target_compile_options(${THE_TARGET} PRIVATE -ffp-contract=off)
+		endforeach()
+	endif()
+
+	# brep kernel bench as wasm under node: both paths (web-ifc mesh + getShellData, and the kernel)
+	# in one wasm module, reading the IFC straight from disk, to compare them on the shipping stack.
+	if(BREP_HAVE_KERNEL)
+		file(GLOB brep-source brep/*.cpp)
+		list(FILTER brep-source EXCLUDE REGEX ".*(bench_main|_test)\\.cpp$")
+		add_executable(brep-bench-wasm ${web-ifc-source} ${brep-source} "./brep/bench_main.cpp")
+		param_setter(brep-bench-wasm)
+		target_compile_definitions(brep-bench-wasm PUBLIC BREP_HAVE_KERNEL)
+		target_compile_options(brep-bench-wasm PRIVATE -ffp-contract=off)
+		target_link_options(brep-bench-wasm PRIVATE
+			"SHELL:${DEBUG_FLAG}"
+			${WEB_IFC_WASM_EXCEPTION_FLAG}
+			-flto
+			--define-macro=REAL_T_IS_DOUBLE
+			-sALLOW_MEMORY_GROWTH=1
+			-sMAXIMUM_MEMORY=4GB
+			-sSTACK_SIZE=16MB
+			-sINITIAL_MEMORY=64MB
+			-sNODERAWFS=1
+			-sENVIRONMENT=node
+			-sEXIT_RUNTIME=1
+		)
+	endif()
 endif()
 
 if(NOT EMSCRIPTEN)
@@ -209,6 +246,26 @@ if(NOT EMSCRIPTEN)
 
 	add_test(web-ifc-test web-ifc-test)
 	set_tests_properties(web-ifc-test PROPERTIES LABELS "web-ifc")
+
+	# brep kernel bench (native only), built only with the kernel: default builds are unchanged.
+	if(BREP_HAVE_KERNEL)
+		file(GLOB brep-source brep/*.cpp)
+		list(FILTER brep-source EXCLUDE REGEX ".*(bench_main|_test)\\.cpp$")
+		add_executable(brep-bench ${brep-source} "./brep/bench_main.cpp")
+		target_link_libraries(brep-bench web-ifc-library)
+		if(WIN32)
+			target_link_libraries(brep-bench winmm)
+		endif()
+		param_setter(brep-bench)
+		# JS never fuses multiply-adds; the kernel's exact predicates rely on that.
+		target_compile_options(brep-bench PUBLIC "-ffp-contract=off" "-g")
+		target_compile_definitions(brep-bench PUBLIC BREP_HAVE_KERNEL)
+		if(BREP_MIMALLOC)
+			target_compile_definitions(brep-bench PUBLIC BREP_MIMALLOC)
+			target_include_directories(brep-bench PUBLIC "${BREP_MIMALLOC}/include")
+			target_link_libraries(brep-bench "${BREP_MIMALLOC}/../mimalloc-static.o")
+		endif()
+	endif()
 
 	# build parameters for web-ifc in testing environment
 	add_executable(web-ifc ${web-ifc-source} "./test/web-ifc-test.cpp" "./test/io_helpers.cpp")
