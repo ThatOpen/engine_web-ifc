@@ -1,0 +1,89 @@
+# External boolean engine as a reserve (`SetBooleanFallback`)
+
+web-ifc computes CSG with its own kernel (fuzzybools). On many real models some boolean chains come out **open**
+(naked edges: holes, slivers, missing faces). This branch adds an **opt-in reserve**: an external, synchronous boolean
+function can be registered, and it is used **only** where web-ifc's own result is open.
+
+## Behaviour (per `booleanManager::BoolProcess` call)
+
+1. web-ifc runs the chain exactly as before (every first operand × every second operand of that call). Nothing in
+   the default path changes.
+2. If no fallback is registered → the result is returned (zero cost).
+3. The result's naked edges are counted: edges used by exactly one triangle after welding vertices on a 1e-4 m grid
+   (in model units: `1e-4 / linearScalingFactor`). **0 naked → returned as is.**
+4. Otherwise the **whole chain** is redone from the same inputs with the registered function. The operands are handed
+   over before web-ifc's plane refit (`buildPlanes`) and cutter snapping, and a result returned by the function is
+   recognised when it comes back as the next operand of the chain (so the engine can reuse its exact B-rep).
+5. If any call of that chain throws or returns an invalid mesh → the chain is abandoned and **web-ifc's result is kept**.
+6. Otherwise the result with **fewer naked edges** is kept; on a tie, web-ifc's.
+
+So, per call, the result is never more open than web-ifc's. Elements whose geometry comes from several `BoolProcess`
+calls (nested `IfcBooleanResult`) get the rule per call.
+
+`INTERSECTION` keeps upstream's `A − (A − B)` formulation: two `DIFFERENCE` calls, each with this policy.
+
+## API
+
+```ts
+const api = new WebIFC.IfcAPI();
+await api.Init();
+api.SetBooleanFallback((op, A, B, { unitToMetre }) => {
+  // op: 'DIFFERENCE' | 'UNION'
+  // A, B: { positions: Float64Array (x,y,z in MODEL units, in the frame web-ifc uses for that operation),
+  //         indices: Uint32Array }
+  // must return { positions, indices } in the same units and frame, or throw
+  return myEngine.boolean(op, A, B, { unitToMetre });
+});
+// ... OpenModel / StreamAllMeshes as usual ...
+api.SetBooleanFallback(null); // unregister
+```
+
+Counters are kept in `globalThis.__morphBoolStats`: `chainsChecked`, `chainsOpen`, `chainsRedone`,
+`chainsKeptGeokernel`, `chainsKeptWebifc`, `geokernelFails` (chains abandoned because of a failure), `calls`, `ok`,
+`fallback`, `ms`.
+
+The function is called synchronously from WASM (through `EM_JS`, with its own try/catch, so a JS exception never
+unwinds through WASM). Heap pointers are read as unsigned (`>>>`), which matters once the WASM heap exceeds 2 GB.
+
+## Connecting geokernel (external dependency)
+
+geokernel is **not** bundled in web-ifc. It ships as a single UMD file (`dist/geokernel.js`: Node → `module.exports`,
+browser/worker → `globalThis.geokernel`) and exposes `webifcBool(op, A, B, opts)` with exactly this contract:
+
+```js
+// Node
+const geokernel = require('/path/to/geokernel.js');
+api.SetBooleanFallback((op, A, B, o) => geokernel.webifcBool(op, A, B, o));
+
+// Browser / worker (after loading the script)
+api.SetBooleanFallback((op, A, B, o) => globalThis.geokernel.webifcBool(op, A, B, o));
+```
+
+`webifcBool` repairs its inputs, works internally in metres (0.1 mm), returns the mesh in model units, and throws if
+its result would not be closed — which, here, means web-ifc's result is kept.
+
+## Results
+
+See the section appended below (benchmark over 425 test models).
+
+## Results (benchmark, 2026-11-12)
+
+Node builds of this branch's C++ (main 2619f4c9 = npm 0.0.79 + this patch) vs the same commit without it, over 425
+test models (407 with both runs OK), geokernel 0.9.0 registered as the fallback. "Naked" = edges used once after
+welding all pieces of an element in the model frame (1e-4 m); "elements with booleans" = elements where at least one
+boolean chain was checked.
+
+| | web-ifc | web-ifc + reserve |
+|---|---|---|
+| elements with booleans | 69 896 | 69 896 |
+| closed elements (0 naked) | 63 719 | 68 911 |
+| naked edges (sum) | 484 077 | 225 070 |
+| elements better / worse / same | | 5 512 / 25 / 64 359 |
+| time, elements with booleans | 407 s | 1 774 s |
+| time, whole models | 707 s | 2 040 s |
+
+Chains: 134 985 checked · 9 053 open after web-ifc · 7 376 redone with geokernel (all 7 376 kept, fewer naked edges)
+· 1 677 abandoned because geokernel threw (web-ifc's result kept).
+
+The 25 elements that get worse (3 models) are elements built from several `BoolProcess` calls: the rule holds per
+call, not per element (see "Behaviour").

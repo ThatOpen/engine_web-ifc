@@ -42,6 +42,7 @@ namespace webifc::geometry
   {
   public:
     IfcGeometry BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings);
+    IfcGeometry BoolProcessChain(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings, bool useHook);
 
   private:
     fuzzybools::Geometry convertToEngine(Geometry geom);
