@@ -66,23 +66,31 @@ its result would not be closed — which, here, means web-ifc's result is kept.
 
 ## Results (benchmark, 2026-11-12)
 
-Node builds of this branch's C++ (main 2619f4c9 = npm 0.0.79 + this patch) vs the same commit without it, over 425
-test models (407 with both runs OK), geokernel 0.9.0 registered as the fallback. "Naked" = edges used once after
-welding all pieces of an element in the model frame (1e-4 m); "elements with booleans" = elements where at least one
-boolean chain was checked.
+Node build of this branch (main 2619f4c9 = npm 0.0.79 + this patch, geokernel 0.10.0 bundled and on by default) vs the
+same commit without it, over 425 test models (407 with both runs OK). "Naked" = edges used once after welding all
+pieces of an element in the model frame (1e-4 m); "elements with booleans" = elements where at least one boolean chain
+was checked.
 
-| | web-ifc | web-ifc + reserve |
+| | web-ifc | web-ifc + geokernel reserve |
 |---|---|---|
 | elements with booleans | 69 896 | 69 896 |
-| closed elements (0 naked) | 63 719 | 68 911 |
-| naked edges (sum) | 484 077 | 225 070 |
-| elements better / worse / same | | 5 512 / 25 / 64 359 |
-| time, elements with booleans | 407 s | 1 774 s |
-| time, whole models | 707 s | 2 040 s |
+| closed elements (0 naked) | 63 719 | 68 943 |
+| naked edges (sum) | 484 077 | 181 774 |
+| elements better / worse / same | | 5 544 / 25 / 64 327 |
 
-Chains: 134 985 checked · 9 053 open after web-ifc · 7 376 redone with geokernel (all 7 376 kept, fewer naked edges)
-· 1 677 abandoned because geokernel threw (web-ifc's result kept).
+Chains: 134 985 checked · 9 053 open after web-ifc · 7 408 redone with geokernel (all 7 408 kept, fewer naked edges)
+· 1 645 abandoned because geokernel threw (web-ifc's result kept).
 
 25 elements get worse (in 3 models: iss_normals__346, Storey and 1225). The fewer-naked rule is applied per
 `BoolProcess` call, while the benchmark measures whole elements (all pieces welded together), so it is not guaranteed
 per element; the cause of these 25 has not been analysed yet.
+
+### Time
+
+Where every chain closes, the only extra cost is counting naked edges; the redo with geokernel runs only where a
+chain is open, and there it is expensive: over the 407 models, whole-model time went from about 707 s to about 2 500 s (that run shared
+the machine with other jobs, so take it as an order of magnitude). Most of the extra time is in a few large models with
+many open chains (e.g. S01-NSP-ESE: 52 s → 379 s).
+
+geokernel 0.10.0 vs 0.9.0 (same binary, versions alternated per model, one process at a time, 9 of the slowest models):
+identical geometry, time inside the engine 634.7 s → 390.8 s (−38 %), whole-model time 788.2 s → 543.2 s (−31 %).
