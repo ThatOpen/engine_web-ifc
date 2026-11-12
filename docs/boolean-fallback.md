@@ -84,5 +84,3 @@ Chains: 134 985 checked · 9 053 open after web-ifc · 7 376 redone with geokern
 25 elements get worse (in 3 models: iss_normals__346, Storey and 1225). The fewer-naked rule is applied per
 `BoolProcess` call, while the benchmark measures whole elements (all pieces welded together), so it is not guaranteed
 per element; the cause of these 25 has not been analysed yet.
-
-The remaining naked edges are mostly chains where geokernel threw (web-ifc's open result is kept by design).
