@@ -1,4 +1,7 @@
 // Copyright (c) 2026 Quim Moya.
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 // geokernel (motor geomètric de MORPHEUS, consola GEOMETRY c6iqev) — fitxer generat per lab/bundle.js, no editar.
 // 2026-11-12T09:11:02.054Z
 (function (root) {

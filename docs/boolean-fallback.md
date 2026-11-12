@@ -58,8 +58,8 @@ await api.Init();                  // geokernel reserve active
 // api.SetBooleanFallback(fn);     // → another engine
 ```
 
-It exposes `webifcBool(op, A, B, opts)` with exactly the contract above. ⚠ The geokernel licence has to be decided
-before this branch is shared outside (web-ifc is MPL-2.0).
+It exposes `webifcBool(op, A, B, opts)` with exactly the contract above. geokernel is distributed under the same
+licence as web-ifc (MPL-2.0).
 
 `webifcBool` repairs its inputs, works internally in metres (0.1 mm), returns the mesh in model units, and throws if
 its result would not be closed — which, here, means web-ifc's result is kept.
