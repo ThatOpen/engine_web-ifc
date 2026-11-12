@@ -1,4 +1,4 @@
-// Copyright (c) 2026 Quim Moya. All rights reserved.
+// Copyright (c) 2026 Quim Moya.
 // geokernel (motor geomètric de MORPHEUS, consola GEOMETRY c6iqev) — fitxer generat per lab/bundle.js, no editar.
 // 2026-11-12T09:11:02.054Z
 (function (root) {
