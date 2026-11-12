@@ -62,10 +62,6 @@ api.SetBooleanFallback((op, A, B, o) => globalThis.geokernel.webifcBool(op, A, B
 `webifcBool` repairs its inputs, works internally in metres (0.1 mm), returns the mesh in model units, and throws if
 its result would not be closed — which, here, means web-ifc's result is kept.
 
-## Results
-
-See the section appended below (benchmark over 425 test models).
-
 ## Results (benchmark, 2026-11-12)
 
 Node builds of this branch's C++ (main 2619f4c9 = npm 0.0.79 + this patch) vs the same commit without it, over 425
@@ -85,5 +81,8 @@ boolean chain was checked.
 Chains: 134 985 checked · 9 053 open after web-ifc · 7 376 redone with geokernel (all 7 376 kept, fewer naked edges)
 · 1 677 abandoned because geokernel threw (web-ifc's result kept).
 
-The 25 elements that get worse (3 models) are elements built from several `BoolProcess` calls: the rule holds per
-call, not per element (see "Behaviour").
+25 elements get worse (in 3 models: iss_normals__346, Storey and 1225). The fewer-naked rule is applied per
+`BoolProcess` call, while the benchmark measures whole elements (all pieces welded together), so it is not guaranteed
+per element; the cause of these 25 has not been analysed yet.
+
+The remaining naked edges are mostly chains where geokernel threw (web-ifc's open result is kept by design).
