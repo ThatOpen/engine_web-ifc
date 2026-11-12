@@ -45,18 +45,7 @@
     json5 "^2.2.3"
     semver "^6.3.1"
 
-"@babel/generator@^7.27.5", "@babel/generator@^7.29.13":
-  version "7.29.13"
-  resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.29.13.tgz"
-  integrity sha512-T5FRo+RzVHvGjWOuF1Ljc44b+NXAOazodHkGUHp4I3zCkQ4/sNVJm56h1S278LMR0bY5xBhztGziSbli8zObIw==
-  dependencies:
-    "@babel/parser" "^7.29.13"
-    "@babel/types" "^7.29.11"
-    "@jridgewell/gen-mapping" "^0.3.12"
-    "@jridgewell/trace-mapping" "^0.3.28"
-    jsesc "^3.0.2"
-
-"@babel/generator@^7.29.14":
+"@babel/generator@^7.27.5", "@babel/generator@^7.29.13", "@babel/generator@^7.29.14":
   version "7.29.14"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.29.14.tgz#59a04e5ad227cec73a04291303e3906512a9999a"
   integrity sha512-qSY56jgW5JnSXzuekLVil6zaOQxOCtOHidr65KkaMBw772IuAY28Qx4ZykAcDn8+FRF15qk80XzKwgSc/RYW6g==
@@ -275,20 +264,7 @@
     "@babel/parser" "^7.29.7"
     "@babel/types" "^7.29.7"
 
-"@babel/traverse@^7.29.13", "@babel/traverse@^7.29.7":
-  version "7.29.14"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.29.14.tgz#97af2f5e45248b06f94d7e72f4433287cf385339"
-  integrity sha512-RAdQJrBgmIH1FWvN0X+1hoDxzMzlP4cv/1Zi4dn4tG1H0cTb+rw7CzUxQJhp1f4ANd8j5vH3fy8BAWFGkBDEsA==
-  dependencies:
-    "@babel/code-frame" "^7.29.7"
-    "@babel/generator" "^7.29.14"
-    "@babel/helper-globals" "^7.29.7"
-    "@babel/parser" "^7.29.14"
-    "@babel/template" "^7.29.7"
-    "@babel/types" "^7.29.14"
-    debug "^4.3.1"
-
-"@babel/traverse@^7.29.14":
+"@babel/traverse@^7.29.13", "@babel/traverse@^7.29.14", "@babel/traverse@^7.29.7":
   version "7.29.14"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.29.14.tgz#97af2f5e45248b06f94d7e72f4433287cf385339"
   integrity sha512-RAdQJrBgmIH1FWvN0X+1hoDxzMzlP4cv/1Zi4dn4tG1H0cTb+rw7CzUxQJhp1f4ANd8j5vH3fy8BAWFGkBDEsA==
