@@ -122,14 +122,7 @@
     "@babel/template" "^7.29.7"
     "@babel/types" "^7.29.14"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.23.9", "@babel/parser@^7.29.13", "@babel/parser@^7.29.7":
-  version "7.29.14"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.29.14.tgz#9d3f5e3d62d725aa036ab489057e72fb446d1fad"
-  integrity sha512-VL220vXuyO2z3rNIQwY7ftj9UwpqOt+33sH+sBWkOekbsSR2g7EEMnOx24ZlCH0xOA3DM/33SifVFGbnJD8r/w==
-  dependencies:
-    "@babel/types" "^7.29.14"
-
-"@babel/parser@^7.29.14":
+"@babel/parser@^7.1.0", "@babel/parser@^7.20.7", "@babel/parser@^7.23.9", "@babel/parser@^7.29.13", "@babel/parser@^7.29.14", "@babel/parser@^7.29.7":
   version "7.29.14"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.29.14.tgz#9d3f5e3d62d725aa036ab489057e72fb446d1fad"
   integrity sha512-VL220vXuyO2z3rNIQwY7ftj9UwpqOt+33sH+sBWkOekbsSR2g7EEMnOx24ZlCH0xOA3DM/33SifVFGbnJD8r/w==
@@ -1827,9 +1820,9 @@ emoji-regex@^9.2.2:
   integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
 
 encodeurl@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/encodeurl/-/encodeurl-1.0.2.tgz"
-  integrity sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.4.tgz#270ec4e3856879e63805684688c39f4eddd21c06"
+  integrity sha512-ImAQpWtQZKdkUxvj9CMNzB8M4IGg0DkRTZzmOHqgVFrf71JDmUacbt+iKljfIpD2yHcxI+HR76d8bwvdvtSvGA==
 
 entities@^4.5.0:
   version "4.5.0"
