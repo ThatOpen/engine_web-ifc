@@ -43,6 +43,11 @@ export { Properties };
 import { Log, LogLevel } from "./helpers/log";
 export { LogLevel };
 
+// geokernel (bundled): exact B-rep boolean engine, used by default as the RESERVE of web-ifc's own booleans
+// (see SetBooleanFallback and docs/boolean-fallback.md). UMD file: under the bundler it takes the CommonJS branch.
+const geokernel = require("./geokernel/geokernel.js");
+const geokernelFallback = (op: 'DIFFERENCE' | 'UNION', a: any, b: any, opts: { unitToMetre: number }) => geokernel.webifcBool(op, a, b, opts);
+
 export const UNKNOWN = 0;
 export const STRING = 1;
 export const LABEL = 2;
@@ -397,6 +402,8 @@ export class IfcAPI {
     customLocateFileHandler?: LocateFileHandlerFn,
     forceSingleThread: boolean = false
   ) {
+    // the bundled geokernel is the default reserve unless the caller chose otherwise (SetBooleanFallback)
+    if (!this.booleanFallbackChosen) (globalThis as any).__morphBool = geokernelFallback;
     let shouldRetrySingleThread = false;
     if (!WebIFCWasm) {
       if (
@@ -1644,6 +1651,25 @@ export class IfcAPI {
     Log.setLogLevel(level);
     this.wasmModule.SetLogLevel(level);
   }
+
+  /**
+   * Registers an external boolean engine used as a RESERVE: web-ifc always runs its own boolean chain first; only when
+   * the result of a chain has open (naked) edges is the whole chain redone with this function, and the result with
+   * fewer naked edges is kept (tie → web-ifc). If the function throws or returns an invalid mesh, web-ifc's result
+   * is kept. Pass null to unregister.
+   * The function is called synchronously as fn(op, A, B, { unitToMetre }) with op 'DIFFERENCE' | 'UNION' and
+   * A/B = { positions: Float64Array (x,y,z in model units), indices: Uint32Array }; it must return { positions, indices }.
+   * Counters: globalThis.__morphBoolStats (chainsChecked, chainsOpen, chainsRedone, chainsKeptGeokernel,
+   * chainsKeptWebifc, geokernelFails, calls, ok, fallback, ms).
+   * BY DEFAULT the bundled geokernel is registered by Init(); call SetBooleanFallback(null) to disable it (pure
+   * web-ifc), or pass another function to replace it.
+   * @param fn the external boolean function, or null
+   */
+  SetBooleanFallback(fn: ((op: 'DIFFERENCE' | 'UNION', a: { positions: Float64Array, indices: Uint32Array }, b: { positions: Float64Array, indices: Uint32Array }, opts: { unitToMetre: number }) => { positions: Float64Array | number[], indices: Uint32Array | number[] }) | null): void {
+    this.booleanFallbackChosen = true;
+    (globalThis as any).__morphBool = fn || undefined;
+  }
+  private booleanFallbackChosen = false;
 
   /**
    * Encodes test using IFC Encoding

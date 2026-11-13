@@ -28,6 +28,145 @@
 #include "operations/mesh_utils.h"
 #include "operations/boolean-utils/fuzzy-bools.h"
 #include "operations/plane-clip.h"
+#include <map>
+#include <tuple>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+EM_JS(int, morph_bool_present, (), { return typeof globalThis.__morphBool === 'function' ? 1 : 0; });
+EM_JS(void, morph_reserve_stat, (int kind), {
+  var st = globalThis.__morphBoolStats || (globalThis.__morphBoolStats = { calls: 0, ok: 0, fallback: 0, ms: 0, lastError: '' });
+  var k = ['chainsChecked', 'chainsOpen', 'geokernelFails', 'chainsRedone', 'chainsKeptGeokernel', 'chainsKeptWebifc'][kind];
+  st[k] = (st[k] || 0) + 1;
+});
+#endif
+
+namespace webifc::geometry
+{
+    extern double g_morphUnitToMetre;   // defined by hook.py's block, just below
+    int g_morphFallbacks = 0;           // hook calls that failed (MorphBool returned -2/-3)
+
+    static size_t MorphNakedEdges(const IfcGeometry &g)
+    {
+        const double cell = 1e-4 / (g_morphUnitToMetre > 0 ? g_morphUnitToMetre : 1.0);
+        std::map<std::tuple<int64_t, int64_t, int64_t>, uint32_t> ids;
+        std::vector<uint32_t> w(g.numPoints);
+        for (uint32_t i = 0; i < g.numPoints; i++)
+        {
+            glm::dvec3 p = g.GetPoint(i);
+            auto k = std::make_tuple((int64_t)std::llround(p.x / cell), (int64_t)std::llround(p.y / cell), (int64_t)std::llround(p.z / cell));
+            auto it = ids.find(k);
+            if (it == ids.end()) it = ids.emplace(k, (uint32_t)ids.size()).first;
+            w[i] = it->second;
+        }
+        std::map<std::pair<uint32_t, uint32_t>, uint32_t> cnt;
+        for (uint32_t f = 0; f < g.numFaces; f++)
+        {
+            auto fc = g.GetFace(f);
+            uint32_t v[3] = {w[fc.i0], w[fc.i1], w[fc.i2]};
+            for (int e = 0; e < 3; e++)
+            {
+                uint32_t a = v[e], b = v[(e + 1) % 3];
+                if (a == b) continue;
+                cnt[a < b ? std::make_pair(a, b) : std::make_pair(b, a)]++;
+            }
+        }
+        size_t n = 0;
+        for (auto &kv : cnt) if (kv.second == 1) n++;
+        return n;
+    }
+}
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+// ---- external boolean hook (hook.py) ---------------------------------------------------------------------------
+// Returns the number of result indices (>= 0) and keeps the result in globalThis.__morphBoolLast, or < 0:
+// -1 no hook, -2 bad result, -3 the hook threw (message in __morphBoolStats.lastError).
+EM_JS(int, morph_bool_call, (int opCode, const double *ap, int an, const uint32_t *ai, int ain, const double *bp, int bn, const uint32_t *bi, int bin, double unitToMetre), {
+  var fn = globalThis.__morphBool;
+  var st = globalThis.__morphBoolStats || (globalThis.__morphBoolStats = { calls: 0, ok: 0, fallback: 0, ms: 0, lastError: '' });
+  if (typeof fn !== 'function') return -1;
+  st.calls++;
+  var t0 = (typeof performance !== 'undefined' ? performance : Date).now();
+  try {
+    var A = { positions: HEAPF64.slice(ap >>> 3, (ap >>> 3) + an), indices: HEAPU32.slice(ai >>> 2, (ai >>> 2) + ain) };
+    // web-ifc chains the operations of an element: A is then our previous result, expanded one vertex per triangle
+    // corner (morph_bool_take/MorphBool). If it is that expansion (up to rounding), hand the engine the object it returned.
+    var pv = globalThis.__morphBoolPrev;
+    if (pv && pv.exp.length === A.positions.length) {
+      var same = true;
+      // web-ifc's plane refit (buildPlanes) moves vertices by a few ulps (seen: <= 2.3e-13): same geometry within 1e-9 relative
+      for (var q = 0; q < A.positions.length; q++) { var x = pv.exp[q]; if (Math.abs(A.positions[q] - x) > 1e-9 * (1 + Math.abs(x))) { same = false; break; } }
+      for (var q2 = 0; same && q2 < A.indices.length; q2++) if (A.indices[q2] !== q2) same = false;
+      if (same) { A = pv.res; st.reusedA = (st.reusedA || 0) + 1; }
+    }
+    var B = { positions: HEAPF64.slice(bp >>> 3, (bp >>> 3) + bn), indices: HEAPU32.slice(bi >>> 2, (bi >>> 2) + bin) };
+    var r = fn(opCode === 1 ? 'UNION' : 'DIFFERENCE', A, B, { unitToMetre: unitToMetre });
+    st.ms += (typeof performance !== 'undefined' ? performance : Date).now() - t0;
+    if (!r || !r.positions || !r.indices || r.indices.length % 3 !== 0) { st.fallback++; st.lastError = 'bad result'; return -2; }
+    var nv = r.positions.length / 3;
+    for (var k = 0; k < r.indices.length; k++) if (!(r.indices[k] < nv)) { st.fallback++; st.lastError = 'index out of range'; return -2; }
+    globalThis.__morphBoolLast = r; st.ok++;
+    return r.indices.length;
+  } catch (e) {
+    st.ms += (typeof performance !== 'undefined' ? performance : Date).now() - t0;
+    st.fallback++; st.lastError = String((e && e.message) || e).slice(0, 300);
+    return -3;
+  }
+});
+EM_JS(int, morph_bool_npos, (), { return globalThis.__morphBoolLast.positions.length; });
+EM_JS(void, morph_bool_take, (double *pos, uint32_t *idx), {
+  var r = globalThis.__morphBoolLast; globalThis.__morphBoolLast = null;
+  HEAPF64.set(r.positions instanceof Float64Array ? r.positions : Float64Array.from(r.positions), pos >>> 3);
+  HEAPU32.set(r.indices instanceof Uint32Array ? r.indices : Uint32Array.from(r.indices), idx >>> 2);
+  var e = new Float64Array(r.indices.length * 3);   // the exact expansion MorphBool builds (corner by corner)
+  for (var t = 0; t < r.indices.length; t++) { var v = r.indices[t] * 3; e[3 * t] = r.positions[v]; e[3 * t + 1] = r.positions[v + 1]; e[3 * t + 2] = r.positions[v + 2]; }
+  globalThis.__morphBoolPrev = { res: r, exp: e };
+});
+#endif
+
+namespace webifc::geometry
+{
+    double g_morphUnitToMetre = 1.0;   // set by IfcGeometryProcessor::BoolProcess (the model's linear scaling factor)
+
+    // true + out = the hook's result; false = no hook or it failed (caller falls back to fuzzybools)
+    static bool MorphBool(const IfcGeometry &A, const IfcGeometry &B, bool isUnion, IfcGeometry &out)
+    {
+#ifdef __EMSCRIPTEN__
+        std::vector<double> ap(A.numPoints * 3), bp(B.numPoints * 3);
+        std::vector<uint32_t> ai(A.numFaces * 3), bi(B.numFaces * 3);
+        for (uint32_t i = 0; i < A.numPoints; i++) { glm::dvec3 p = A.GetPoint(i); ap[3 * i] = p.x; ap[3 * i + 1] = p.y; ap[3 * i + 2] = p.z; }
+        for (uint32_t i = 0; i < B.numPoints; i++) { glm::dvec3 p = B.GetPoint(i); bp[3 * i] = p.x; bp[3 * i + 1] = p.y; bp[3 * i + 2] = p.z; }
+        for (uint32_t i = 0; i < A.numFaces; i++) { auto f = A.GetFace(i); ai[3 * i] = f.i0; ai[3 * i + 1] = f.i1; ai[3 * i + 2] = f.i2; }
+        for (uint32_t i = 0; i < B.numFaces; i++) { auto f = B.GetFace(i); bi[3 * i] = f.i0; bi[3 * i + 1] = f.i1; bi[3 * i + 2] = f.i2; }
+        int ni = morph_bool_call(isUnion ? 1 : 0, ap.data(), (int)ap.size(), ai.data(), (int)ai.size(), bp.data(), (int)bp.size(), bi.data(), (int)bi.size(), g_morphUnitToMetre);
+        if (ni < 0) { if (ni != -1) g_morphFallbacks++; return false; }
+        std::vector<double> rp(morph_bool_npos());
+        std::vector<uint32_t> ri(ni);
+        morph_bool_take(rp.data(), ri.data());
+        // Every triangle is kept (no degenerate filter) with its own 3 corners + flat normal, so the next operation of
+        // the chain gets an A whose positions are exactly this expansion (recognised in morph_bool_call).
+        IfcGeometry r;
+        for (int t = 0; t + 2 < ni; t += 3)
+        {
+            glm::dvec3 a(rp[3 * ri[t]], rp[3 * ri[t] + 1], rp[3 * ri[t] + 2]);
+            glm::dvec3 b(rp[3 * ri[t + 1]], rp[3 * ri[t + 1] + 1], rp[3 * ri[t + 1] + 2]);
+            glm::dvec3 c(rp[3 * ri[t + 2]], rp[3 * ri[t + 2] + 1], rp[3 * ri[t + 2] + 2]);
+            glm::dvec3 n = glm::cross(b - a, c - a);
+            double len = glm::length(n);
+            n = len > 0 ? n / len : glm::dvec3(0, 0, 1);
+            r.AddPoint(a, n); r.AddPoint(b, n); r.AddPoint(c, n);
+            r.AddFace(r.numPoints - 3, r.numPoints - 2, r.numPoints - 1);
+        }
+        out = std::move(r);
+        return true;
+#else
+        (void)A; (void)B; (void)isUnion; (void)out;
+        return false;
+#endif
+    }
+}
+
 
 namespace webifc::geometry
 {
@@ -2172,6 +2311,7 @@ namespace webifc::geometry
 
     IfcGeometry IfcGeometryProcessor::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
+        g_morphUnitToMetre = _cache.GetLinearScalingFactor();
         return _boolEngine.BoolProcess(firstGeoms, secondGeoms, op, _settings);
     }
     /**
@@ -2703,6 +2843,25 @@ namespace webifc::geometry
 
     IfcGeometry booleanManager::BoolProcess(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings)
     {
+        IfcGeometry web = BoolProcessChain(firstGeoms, secondGeoms, op, _settings, false);   // web-ifc, untouched
+#ifdef __EMSCRIPTEN__
+        if (op == "INTERSECTION" || !morph_bool_present()) return web;
+        morph_reserve_stat(0);                                    // chainsChecked
+        size_t nWeb = MorphNakedEdges(web);
+        if (nWeb == 0) return web;
+        morph_reserve_stat(1);                                    // chainsOpen
+        int fb0 = g_morphFallbacks;
+        IfcGeometry geo = BoolProcessChain(firstGeoms, secondGeoms, op, _settings, true);
+        if (g_morphFallbacks != fb0) { morph_reserve_stat(2); return web; }   // geokernelFails: chain aborted
+        morph_reserve_stat(3);                                    // chainsRedone
+        if (MorphNakedEdges(geo) < nWeb) { morph_reserve_stat(4); return geo; }   // chainsKeptGeokernel
+        morph_reserve_stat(5);                                    // chainsKeptWebifc
+#endif
+        return web;
+    }
+
+    IfcGeometry booleanManager::BoolProcessChain(const std::vector<IfcGeometry> &firstGeoms, std::vector<IfcGeometry> &secondGeoms, std::string op, IfcGeometrySettings _settings, bool useHook)
+    {
         // A intersect B = A minus (A minus B). Reuse the bounded difference kernel,
         // including its handling of transformed/multipart operands and half spaces.
         if (op == "INTERSECTION")
@@ -2794,6 +2953,18 @@ namespace webifc::geometry
 
 #endif
 
+                // External engine first, on the operands AS THEY ARE (before web-ifc refits A's planes, which moves
+                // its vertices, and before the cutter is snapped to them). On failure: the usual path below.
+                if (useHook && (op == "DIFFERENCE" || op == "UNION"))
+                {
+                    IfcGeometry hooked;
+                    if (MorphBool(firstOperator, secondOperator, op == "UNION", hooked))
+                    {
+                        firstOperator = std::move(hooked);
+                        continue;
+                    }
+                    return IfcGeometry();   // abort: the caller sees g_morphFallbacks changed and keeps web-ifc's result
+                }
                 firstOperator.buildPlanes();
                 if (op == "DIFFERENCE")
                 {
