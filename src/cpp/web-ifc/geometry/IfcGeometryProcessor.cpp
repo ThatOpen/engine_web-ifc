@@ -175,10 +175,11 @@ namespace webifc::geometry
     
     double BOOLSTATUS = 0;
 
-    IfcGeometryProcessor::IfcGeometryProcessor(webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD)
+    IfcGeometryProcessor::IfcGeometryProcessor(webifc::parsing::IfcLoader &loader, const webifc::schema::IfcSchemaManager &schemaManager, uint16_t circleSegments, bool coordinateToOrigin, double TOLERANCE_PLANE_INTERSECTION, double TOLERANCE_PLANE_DEVIATION, double TOLERANCE_BACK_DEVIATION_DISTANCE, double TOLERANCE_INSIDE_OUTSIDE_PERIMETER, double TOLERANCE_SCALAR_EQUALITY, double PLANE_REFIT_ITERATIONS, double BOOLEAN_UNION_THRESHOLD, bool exportPolylines)
         : _loader(loader), _cache(loader), _schemaManager(schemaManager), _geometryLoader(loader, _cache, circleSegments)
     {
         _settings._coordinateToOrigin = coordinateToOrigin;
+        _settings._exportPolylines = exportPolylines;
         _settings._circleSegments = circleSegments;
         _settings.TOLERANCE_PLANE_INTERSECTION = TOLERANCE_PLANE_INTERSECTION;
         _settings.TOLERANCE_PLANE_DEVIATION = TOLERANCE_PLANE_DEVIATION;
@@ -1676,8 +1677,57 @@ namespace webifc::geometry
 
                 geom.numPoints = 1;
                 geom.isPolygon = true;
+                geom.isPoints = true;
                 mesh.hasGeometry = true;
                 _expressIDToGeometry[expressID] = geom;
+
+                return mesh;
+            }
+            case schema::IFCCARTESIANPOINTLIST2D:
+            case schema::IFCCARTESIANPOINTLIST3D:
+            {
+                // IfcCartesianPointList is derived from IfcRepresentationItem and can be
+                // used as representation item directly (issue #533, IFC4X3 3D point lists)
+                IfcGeometry geom;
+
+                if (lineType == schema::IFCCARTESIANPOINTLIST3D)
+                {
+                    auto points = _geometryLoader.ReadIfcCartesianPointList3D(expressID);
+                    for (const auto &point : points)
+                    {
+                        geom.vertexData.push_back(point.x);
+                        geom.vertexData.push_back(point.y);
+                        geom.vertexData.push_back(point.z);
+                        geom.vertexData.push_back(0); // needs to be 6 values per vertex
+                        geom.vertexData.push_back(0);
+                        geom.vertexData.push_back(1);
+                        geom.indexData.push_back(static_cast<uint32_t>(geom.numPoints));
+                        geom.numPoints++;
+                    }
+                }
+                else
+                {
+                    auto points = _geometryLoader.ReadIfcCartesianPointList2D(expressID);
+                    for (const auto &point : points)
+                    {
+                        geom.vertexData.push_back(point.x);
+                        geom.vertexData.push_back(point.y);
+                        geom.vertexData.push_back(0);
+                        geom.vertexData.push_back(0); // needs to be 6 values per vertex
+                        geom.vertexData.push_back(0);
+                        geom.vertexData.push_back(1);
+                        geom.indexData.push_back(static_cast<uint32_t>(geom.numPoints));
+                        geom.numPoints++;
+                    }
+                }
+
+                if (geom.numPoints > 0)
+                {
+                    geom.isPolygon = true;
+                    geom.isPoints = true;
+                    mesh.hasGeometry = true;
+                    _expressIDToGeometry[expressID] = geom;
+                }
 
                 return mesh;
             }
@@ -2207,16 +2257,44 @@ namespace webifc::geometry
 
         glm::dvec4 color = glm::dvec4(1, 1, 1, 1);
         bool hasColor = false;
-        AddComposedMeshToFlatMesh(flatMesh, composedMesh, _transformation * NormalizeIFC * mat, color, hasColor);
+        // Wireframe (curve/point) items are only handed to the client when the
+        // product carries no solid/face geometry at all: that keeps annotations,
+        // grids and curve sets renderable (issue #533) without adding axis/fill
+        // curves next to the solids of walls, slabs & co. EXPORT_POLYLINES=false
+        // restores the triangles-only behaviour completely.
+        const bool includeCurveGeometry = _settings._exportPolylines && !HasTriangleGeometry(composedMesh);
+        AddComposedMeshToFlatMesh(flatMesh, composedMesh, _transformation * NormalizeIFC * mat, color, hasColor, includeCurveGeometry);
 
         return flatMesh;
+    }
+
+    // Whether the composed mesh carries any triangle geometry (as opposed to
+    // wireframe curve/point items, which are flagged with isPolygon).
+    bool IfcGeometryProcessor::HasTriangleGeometry(const IfcComposedMesh &composedMesh)
+    {
+        if (composedMesh.hasGeometry)
+        {
+            auto geomIt = _expressIDToGeometry.find(composedMesh.expressID);
+            if (geomIt == _expressIDToGeometry.end() || !geomIt->second.isPolygon)
+            {
+                return true;
+            }
+        }
+        for (const auto &child : composedMesh.children)
+        {
+            if (HasTriangleGeometry(child))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Extracts all the geometries and their associated colors and transformations from a composed mesh
      * and adds them to the flat mesh geometries field.
      */
-    void IfcGeometryProcessor::AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix, const glm::dvec4 &color, bool hasColor)
+    void IfcGeometryProcessor::AddComposedMeshToFlatMesh(IfcFlatMesh &flatMesh, const IfcComposedMesh &composedMesh, const glm::dmat4 &parentMatrix, const glm::dvec4 &color, bool hasColor, bool includeCurveGeometry)
     {
 
         glm::dvec4 newParentColor = color;
@@ -2255,10 +2333,11 @@ namespace webifc::geometry
             auto geom = _expressIDToGeometry[composedMesh.expressID];
             if (geom.isPolygon)
             {
-                if (!_settings._exportPolylines)
+                if (!includeCurveGeometry)
                 {
-                    return; // only triangles
+                    return; // wireframe item of a product that also has triangle geometry
                 }
+                geometry.geomType = geom.isPoints ? GEOM_POINTS : GEOM_LINE_STRIP;
             }
             // BUGFIX: testReverse() inspects geometry.transformation's handedness, but
             // that member was still uninitialized here (it was only assigned further
@@ -2305,7 +2384,7 @@ namespace webifc::geometry
 
         for (auto &c : composedMesh.children)
         {
-            AddComposedMeshToFlatMesh(flatMesh, c, newMatrix, newParentColor, newHasColor);
+            AddComposedMeshToFlatMesh(flatMesh, c, newMatrix, newParentColor, newHasColor, includeCurveGeometry);
         }
     }
 

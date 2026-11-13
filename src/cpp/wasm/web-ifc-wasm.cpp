@@ -1240,7 +1240,8 @@ EMSCRIPTEN_BINDINGS(my_module)
         .field("TOLERANCE_INSIDE_OUTSIDE_PERIMETER", &webifc::manager::LoaderSettings::TOLERANCE_INSIDE_OUTSIDE_PERIMETER)
         .field("TOLERANCE_SCALAR_EQUALITY", &webifc::manager::LoaderSettings::TOLERANCE_SCALAR_EQUALITY)
         .field("PLANE_REFIT_ITERATIONS", &webifc::manager::LoaderSettings::PLANE_REFIT_ITERATIONS)
-        .field("BOOLEAN_UNION_THRESHOLD", &webifc::manager::LoaderSettings::BOOLEAN_UNION_THRESHOLD);
+        .field("BOOLEAN_UNION_THRESHOLD", &webifc::manager::LoaderSettings::BOOLEAN_UNION_THRESHOLD)
+        .field("EXPORT_POLYLINES", &webifc::manager::LoaderSettings::EXPORT_POLYLINES);
 
     emscripten::value_array<std::array<double, 16>>("array_double_16")
         .element(emscripten::index<0>())
@@ -1263,6 +1264,7 @@ EMSCRIPTEN_BINDINGS(my_module)
     emscripten::value_object<webifc::geometry::IfcPlacedGeometry>("IfcPlacedGeometry")
         .field("color", &webifc::geometry::IfcPlacedGeometry::color)
         .field("hasColor", &webifc::geometry::IfcPlacedGeometry::hasColor)
+        .field("geomType", &webifc::geometry::IfcPlacedGeometry::geomType)
         .field("flatTransformation", &webifc::geometry::IfcPlacedGeometry::flatTransformation)
         .field("geometryExpressID", &webifc::geometry::IfcPlacedGeometry::geometryExpressID);
 

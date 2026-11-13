@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
 import * as THREE from "three";
-import { IfcAPI, ms, PlacedGeometry, Color, FlatMesh, IFCSITE } from "../../dist/web-ifc-api";
+import { IfcAPI, ms, PlacedGeometry, Color, FlatMesh, IFCSITE, GEOM_LINE_STRIP, GEOM_POINTS } from "../../dist/web-ifc-api";
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
   
 export class IfcThree
@@ -48,6 +48,8 @@ export class IfcThree
 
         let geometries = [];
         let transparentGeometries = [];
+        let lineGeometries = [];
+        let pointGeometries = [];
 
         this.ifcAPI.StreamAllMeshes(modelID, (mesh: FlatMesh) => {
             // only during the lifetime of this function call, the geometry is available in memory
@@ -59,7 +61,15 @@ export class IfcThree
                 const color = this.resolveColor(mesh, placedGeometry);
                 const placedMesh = this.getPlacedGeometry(modelID, placedGeometry, color);
                 let geom = placedMesh.geometry.applyMatrix4(placedMesh.matrix);
-                if (color.w !== 1)
+                if (placedGeometry.geomType === GEOM_LINE_STRIP)
+                {
+                    lineGeometries.push(this.toLineSegments(geom));
+                }
+                else if (placedGeometry.geomType === GEOM_POINTS)
+                {
+                    pointGeometries.push(geom);
+                }
+                else if (color.w !== 1)
                 {
                     transparentGeometries.push(geom);
                 }
@@ -93,6 +103,23 @@ export class IfcThree
             scene.add(mergedMeshTransp);
         }
 
+        // wireframe representation items (e.g. IfcAnnotation Curve3D geometry,
+        // grids, curve sets) are polylines and must not be drawn as triangles
+        if (lineGeometries.length > 0)
+        {
+            const combinedLines = BufferGeometryUtils.mergeGeometries(lineGeometries);
+            const lineMaterial = new THREE.LineBasicMaterial();
+            lineMaterial.vertexColors = true;
+            scene.add(new THREE.LineSegments(combinedLines, lineMaterial));
+        }
+
+        if (pointGeometries.length > 0)
+        {
+            const combinedPoints = BufferGeometryUtils.mergeGeometries(pointGeometries);
+            const pointMaterial = new THREE.PointsMaterial();
+            pointMaterial.vertexColors = true;
+            scene.add(new THREE.Points(combinedPoints, pointMaterial));
+        }
 
         console.log(`Uploading took ${ms() - startUploadingTime} ms`);
     }
@@ -157,6 +184,27 @@ export class IfcThree
         return mat;
     }
     
+    // Rewrites the sequential strip index of a wireframe geometry into line
+    // segment pairs, so merged polylines render as LINE_SEGMENTS without
+    // extra segments connecting unrelated curves.
+    private toLineSegments(geometry: THREE.BufferGeometry): THREE.BufferGeometry
+    {
+        const index = geometry.getIndex();
+        if (index)
+        {
+            const src = index.array as ArrayLike<number>;
+            const segments = Math.max(0, src.length - 1);
+            const pairs = new Uint32Array(segments * 2);
+            for (let i = 0; i < segments; i++)
+            {
+                pairs[i * 2] = src[i];
+                pairs[i * 2 + 1] = src[i + 1];
+            }
+            geometry.setIndex(new THREE.BufferAttribute(pairs, 1));
+        }
+        return geometry;
+    }
+
     private ifcGeometryToBuffer(color: Color, vertexData: Float32Array, indexData: Uint32Array) {
         const geometry = new THREE.BufferGeometry();
         /*
