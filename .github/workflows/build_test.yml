@@ -11,7 +11,8 @@ jobs:
   WASM_Web-IFC:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v7
       - uses: emscripten-core/setup-emsdk@v16
         with:
           version: 4.0.23
@@ -33,52 +34,102 @@ jobs:
   CPP_Web-IFC:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
-    - name: Setup Build Environment
-      run: |
-        sudo apt update
-        sudo apt install gcc-13 g++-13
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
-        sudo update-alternatives --set gcc /usr/bin/gcc-13
-    - name: Building C++ Web-IFC
-      working-directory: ${{github.workspace}}/src/cpp
-      run: |
-        cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=Release
-        cmake --build ${{github.workspace}}/src/cpp/Build --config Release
-    - name: Test C++ Web-IFC
-      working-directory: ${{github.workspace}}/src/cpp/Build
-      run: ctest -VV -C ${{matrix.configuration}} -L web-ifc
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Build Environment
+        run: |
+          sudo apt update
+          sudo apt install gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
+          sudo update-alternatives --set gcc /usr/bin/gcc-13
+      - name: Building C++ Web-IFC
+        working-directory: ${{github.workspace}}/src/cpp
+        run: |
+          cmake -B ${{github.workspace}}/src/cpp/Build -DCMAKE_BUILD_TYPE=Release
+          cmake --build ${{github.workspace}}/src/cpp/Build --config Release
+      - name: Test C++ Web-IFC
+        working-directory: ${{github.workspace}}/src/cpp/Build
+        run: ctest -VV -C ${{matrix.configuration}} -L web-ifc
+      - name: Install C++ Web-IFC
+        working-directory: ${{github.workspace}}/src/cpp
+        run: cmake --install Build --config Release --prefix ${{github.workspace}}/src/cpp/install
+      - name: Build Consumer Against Installed Headers
+        # Catches regressions like issue #2396 where a public header
+        # transitively includes an internal (non-installed) header.
+        working-directory: ${{github.workspace}}/src/cpp
+        run: |
+          cat > test_install.cpp << 'EOF'
+          /* Consumer that verifies installed web-ifc headers are usable. */
+          #include "web-ifc/version.h"
+          #include "web-ifc/cache/IfcCache.h"
+          #include "web-ifc/geometry/IfcGeometryLoader.h"
+          #include "web-ifc/geometry/IfcGeometryProcessor.h"
+          #include "web-ifc/geometry/nurbs.h"
+          #include "web-ifc/geometry/operations/plane-clip.h"
+          #include "web-ifc/geometry/operations/bim-geometry/aabb.h"
+          #include "web-ifc/geometry/operations/bim-geometry/alignment.h"
+          #include "web-ifc/geometry/operations/bim-geometry/arc.h"
+          #include "web-ifc/geometry/operations/bim-geometry/boolean.h"
+          #include "web-ifc/geometry/operations/bim-geometry/buffers.h"
+          #include "web-ifc/geometry/operations/bim-geometry/circularSweep.h"
+          #include "web-ifc/geometry/operations/bim-geometry/clothoid.h"
+          #include "web-ifc/geometry/operations/bim-geometry/curve.h"
+          #include "web-ifc/geometry/operations/bim-geometry/cylindricalRevolution.h"
+          #include "web-ifc/geometry/operations/bim-geometry/epsilons.h"
+          #include "web-ifc/geometry/operations/bim-geometry/extrusion.h"
+          #include "web-ifc/geometry/operations/bim-geometry/face.h"
+          #include "web-ifc/geometry/operations/bim-geometry/geometry.h"
+          #include "web-ifc/geometry/operations/bim-geometry/parabola.h"
+          #include "web-ifc/geometry/operations/bim-geometry/plane.h"
+          #include "web-ifc/geometry/operations/bim-geometry/profile.h"
+          #include "web-ifc/geometry/operations/bim-geometry/revolution.h"
+          #include "web-ifc/geometry/operations/bim-geometry/sweep.h"
+          #include "web-ifc/geometry/operations/bim-geometry/utils.h"
+          #include "web-ifc/geometry/representation/geometry.h"
+          #include "web-ifc/geometry/representation/IfcCurve.h"
+          #include "web-ifc/geometry/representation/IfcGeometry.h"
+          #include "web-ifc/modelmanager/ModelManager.h"
+          #include "web-ifc/parsing/IfcLoader.h"
+          #include "web-ifc/parsing/IfcTokenStream.h"
+          #include "web-ifc/parsing/StepBinary.h"
+          #include "web-ifc/schema/ifc-schema.h"
+          #include "web-ifc/schema/IfcSchemaManager.h"
+          #include "web-ifc/schema/schema-names.h"
+          int main() { return 0; }
+          EOF
+          g++ -std=c++20 -I./install/include test_install.cpp -o test_install -L./install/lib -lweb-ifc-library
+          ./test_install
   Upload_Documentation:
     runs-on: ubuntu-24.04
     needs: WASM_Web-IFC
     if: github.ref == 'refs/heads/main'
     steps:
-    - name: Checkout
-      uses: actions/checkout@v6
-    - uses: actions/download-artifact@v8
-      with:
-        name: build
-        path: dist/
-    - name: Archive Build
-      uses: montudor/action-zip@v1
-      with:
-        args: zip -qq -r build.zip dist/
-    - name: Build Viewer
-      run: |
-        npm ci
-        npm run build-viewer
-        npm run gen-docs
-        mkdir ./dist/pages
-        mkdir ./dist/pages/demo
-        mkdir ./dist/pages/examples
-        mkdir ./dist/pages/docs
-        cp -R ./examples/viewer/dist/* ./dist/pages/demo
-        cp -R ./dist/docs/* ./dist/pages/docs
-        cp -R ./build.zip ./dist/pages
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v5
-      with:
-        path: './dist/pages'
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v5
+      - name: Checkout
+        uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: build
+          path: dist/
+      - name: Archive Build
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r build.zip dist/
+      - name: Build Viewer
+        run: |
+          npm ci
+          npm run build-viewer
+          npm run gen-docs
+          mkdir ./dist/pages
+          mkdir ./dist/pages/demo
+          mkdir ./dist/pages/examples
+          mkdir ./dist/pages/docs
+          cp -R ./examples/viewer/dist/* ./dist/pages/demo
+          cp -R ./dist/docs/* ./dist/pages/docs
+          cp -R ./build.zip ./dist/pages
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: './dist/pages'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

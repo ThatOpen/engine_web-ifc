@@ -10,7 +10,6 @@
 #include <string>
 #include <cstdint>
 #include <glm/glm.hpp>
-#include "../operations/boolean-utils/geometry.h"
 #include "../operations/bim-geometry/aabb.h"
 #include "../operations/bim-geometry/face.h"
 #include "../operations/bim-geometry/geometry.h"
@@ -24,7 +23,7 @@ namespace webifc::geometry {
 
     struct Plane : bimGeometry::Plane
     {
-		
+
 	};
 
     struct AABB : bimGeometry::AABB
@@ -49,11 +48,11 @@ namespace webifc::geometry {
 	{
 		bool halfSpace = false;
 		std::vector<IfcGeometry>  part;
-		Vec halfSpaceX = Vec(1, 0, 0);
-		Vec halfSpaceY = Vec(0, 1, 0);
-		Vec halfSpaceZ = Vec(0, 0, 1);
-		Vec halfSpaceOrigin = Vec(0, 0, 0);
-		Vec normalizationCenter = Vec(0, 0, 0);
+		glm::dvec3 halfSpaceX = glm::dvec3(1, 0, 0);
+		glm::dvec3 halfSpaceY = glm::dvec3(0, 1, 0);
+		glm::dvec3 halfSpaceZ = glm::dvec3(0, 0, 1);
+		glm::dvec3 halfSpaceOrigin = glm::dvec3(0, 0, 0);
+		glm::dvec3 normalizationCenter = glm::dvec3(0, 0, 0);
 
 		void ReverseFaces();
 		void AddPart(IfcGeometry geom);

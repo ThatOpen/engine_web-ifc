@@ -7,6 +7,7 @@
 #include "IfcGeometryLoader.h"
 #include "operations/curve-utils.h"
 #include "operations/geometryutils.h"
+#include "operations/boolean-utils/eps.h"
 #ifdef DEBUG_DUMP_SVG
 #include "../../test/io_helpers.h"
 #include "../../test/dumpToThree.h"
