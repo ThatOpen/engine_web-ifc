@@ -218,8 +218,8 @@ TEST(Issue65UnstyledModelReportsHasColorFalseAndProducesGeometry)
         if (lineType == webifc::schema::IFCWINDOW) windows++;
 
         const auto flatMesh = processor.GetFlatMesh(id);
-        ASSERT_EQ(flatMesh.geometries.size() > 0, true);
-        ASSERT_EQ(TotalVertexDataSize(processor, flatMesh) > 0, true);
+        ASSERT_EQ((flatMesh.geometries.size() > 0), true);
+        ASSERT_EQ((TotalVertexDataSize(processor, flatMesh) > 0), true);
         for (const auto &placed : flatMesh.geometries)
         {
             ASSERT_EQ(placed.hasColor, false);
@@ -247,8 +247,8 @@ TEST(StyledRepresentationItemReportsHasColorTrue)
     webifc::geometry::IfcGeometryProcessor processor(loader, schemaManager, 12, false, 1.0E-01, 3.0E-04, 3.0E-04, 1.0E-10, 1.0E-04, 10, 150);
 
     const auto styled = processor.GetFlatMesh(23);
-    ASSERT_EQ(styled.geometries.size() > 0, true);
-    ASSERT_EQ(TotalVertexDataSize(processor, styled) > 0, true);
+    ASSERT_EQ((styled.geometries.size() > 0), true);
+    ASSERT_EQ((TotalVertexDataSize(processor, styled) > 0), true);
     for (const auto &placed : styled.geometries)
     {
         ASSERT_EQ(placed.hasColor, true);
@@ -258,8 +258,8 @@ TEST(StyledRepresentationItemReportsHasColorTrue)
     }
 
     const auto unstyled = processor.GetFlatMesh(34);
-    ASSERT_EQ(unstyled.geometries.size() > 0, true);
-    ASSERT_EQ(TotalVertexDataSize(processor, unstyled) > 0, true);
+    ASSERT_EQ((unstyled.geometries.size() > 0), true);
+    ASSERT_EQ((TotalVertexDataSize(processor, unstyled) > 0), true);
     for (const auto &placed : unstyled.geometries)
     {
         ASSERT_EQ(placed.hasColor, false);
@@ -287,11 +287,11 @@ TEST(StyledBrepShellReportsHasColorTrue)
 
     for (const auto &error : sink->errors)
     {
-        ASSERT_EQ(error.find("unexpected face type") == std::string::npos, true);
+        ASSERT_EQ((error.find("unexpected face type") == std::string::npos), true);
     }
 
-    ASSERT_EQ(brep.geometries.size() > 0, true);
-    ASSERT_EQ(TotalVertexDataSize(processor, brep) > 0, true);
+    ASSERT_EQ((brep.geometries.size() > 0), true);
+    ASSERT_EQ((TotalVertexDataSize(processor, brep) > 0), true);
     for (const auto &placed : brep.geometries)
     {
         ASSERT_EQ(placed.hasColor, true);

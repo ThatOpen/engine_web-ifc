@@ -471,7 +471,7 @@ inline IfcCurve Build3DArc3Pt(const glm::dvec3 &p1, const glm::dvec3 &p2, const 
 		return c;
 	}
 
-	inline IfcCurve BuildArc(double scale, const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad,uint16_t _circleSegments)
+	inline IfcCurve BuildArc([[maybe_unused]] double scale, const glm::dvec3 &pos, const glm::dvec3 &axis, double angleRad,uint16_t _circleSegments)
 	{
 		
 		spdlog::debug("[BuildArc({})]");

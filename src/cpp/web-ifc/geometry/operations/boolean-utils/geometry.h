@@ -103,7 +103,6 @@ namespace fuzzybools
 		{
 			glm::dvec3 normal;
 
-			double area = areaOfTriangle(a, b, c);
 			if (!computeSafeNormal(a, b, c, normal, toleranceAddFace))
 			{
 				// bail out, zero area triangle
@@ -132,7 +131,6 @@ namespace fuzzybools
 			indexData.push_back(c);
 			planeData.push_back(pId);
 
-			double area = areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
 
 			glm::dvec3 normal;
 			//			if (!computeSafeNormal(GetPoint(a), GetPoint(b), GetPoint(c), normal, EPS_SMALL))
@@ -204,11 +202,9 @@ namespace fuzzybools
 			center = min + extents / 2.0;
 		}
 
-		Geometry Normalize(glm::dvec3 center, glm::dvec3 extents) const
+		Geometry Normalize([[maybe_unused]] glm::dvec3 center, [[maybe_unused]] glm::dvec3 extents) const
 		{
 			Geometry newGeom;
-
-			double scale = std::max(extents.x, std::max(extents.y, extents.z)) / 10.0;
 
 			for (size_t i = 0; i < numFaces; i++)
 			{
@@ -217,9 +213,6 @@ namespace fuzzybools
 				auto pb = GetPoint(face.i1);
 				auto pc = GetPoint(face.i2);
 
-				auto a = (pa - center) / scale;
-				auto b = (pb - center) / scale;
-				auto c = (pc - center) / scale;
 
 				// std::cout << areaOfTriangle(pa, pb, pc) << std::endl;
 

@@ -178,10 +178,9 @@ std::string ReadValue(webifc::parsing::IfcLoader &loader, webifc::parsing::IfcTo
     }
 }
 
-std::string GetArgs(webifc::parsing::IfcLoader &loader, bool inObject = false, bool inList = false)
+std::string GetArgs(webifc::parsing::IfcLoader &loader, bool inObject = false, [[maybe_unused]] bool inList = false)
 {
     std::string arguments;
-    size_t size = 0;
     bool endOfLine = false;
     while (!loader.IsAtEnd() && !endOfLine)
     {
@@ -215,7 +214,7 @@ std::string GetArgs(webifc::parsing::IfcLoader &loader, bool inObject = false, b
             std::string obj;
             obj = " type: LABEL ";
             loader.StepBack();
-            auto s = loader.GetStringArgument();
+            loader.GetStringArgument();
             // read set open
             loader.GetTokenType();
             obj += " value " + GetArgs(loader, true) + " ";
@@ -273,8 +272,6 @@ std::vector<webifc::geometry::IfcFlatMesh> LoadAllTest(webifc::parsing::IfcLoade
 {
     std::vector<webifc::geometry::IfcFlatMesh> meshes;
     webifc::schema::IfcSchemaManager schema;
-
-    bool writeFiles = true;
 
     for (auto type : schema.GetIfcElementList())
     {
@@ -441,8 +438,6 @@ void TestTriangleDecompose()
         }
 
         std::cout << "Start test " << i << std::endl;
-
-        bool swapped = false;
 
         // webifc::IsValidTriangulation(triangles, points);
 

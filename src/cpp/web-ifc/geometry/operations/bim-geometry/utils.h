@@ -162,7 +162,7 @@ namespace bimGeometry
 		for (int r = 0; r < numRots - 1; r++)
 		{
 			int r1 = r + 1;
-			if (r1 >= newPoints.size())
+			if (static_cast<size_t>(r1) >= newPoints.size())
 			{
 				break;
 			}
@@ -414,7 +414,7 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline std::vector<glm::dvec2> SolveParabola(uint16_t segments, glm::dvec2 startPoint, double HorizontalLength, double StartHeight, double StartGradient, double EndGradient)
+	inline std::vector<glm::dvec2> SolveParabola(uint16_t segments, [[maybe_unused]] glm::dvec2 startPoint, double HorizontalLength, double StartHeight, double StartGradient, double EndGradient)
 	{
 		std::vector<glm::dvec2> points;
 
@@ -445,8 +445,6 @@ namespace bimGeometry
 		double Api = A * sqrt(CONST_PI);
 		double uMax = SegmentLength / Api;
 
-		double s = A * uMax * sqrt(CONST_PI);
-		double radFin = (A * A * A) / (A * s);
 
 		double vSin = 0;
 		double vCos = 0;
@@ -699,7 +697,6 @@ namespace bimGeometry
 			std::vector<uint32_t> indices = mapbox::earcut<uint32_t>(polygon2D);
 
 			uint32_t offset = 0;
-			bool winding = true;
 			bool flipWinding = false;
 
 			if (indices.size() >= 3)
@@ -997,8 +994,6 @@ namespace bimGeometry
 		// connect the curves
 		for (size_t i = 1; i < dpts.size(); i++)
 		{
-			glm::dvec3 p1 = dpts[i - 1];
-			glm::dvec3 p2 = dpts[i];
 
 			const auto &c1 = curves[i - 1];
 			const auto &c2 = curves[i];
@@ -1558,7 +1553,7 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline Curve GetUShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, double filletRadius, double edgeRadius, double flangeSlope, glm::dmat4 placement = glm::dmat4(1))
+	inline Curve GetUShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, [[maybe_unused]] double filletRadius, [[maybe_unused]] double edgeRadius, double flangeSlope, glm::dmat4 placement = glm::dmat4(1))
 	{
 		Curve c;
 
@@ -1594,13 +1589,12 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline Curve GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, int numSegments = 12, glm::dmat4 placement = glm::dmat4(1))
+	inline Curve GetLShapedCurve(double width, double depth, double thickness, bool hasFillet, [[maybe_unused]] double filletRadius, [[maybe_unused]] double edgeRadius, [[maybe_unused]] double legSlope, int numSegments = 12, glm::dmat4 placement = glm::dmat4(1))
 	{
 		Curve c;
 
 		double hw = width / 2;
 		double hd = depth / 2;
-		double hweb = thickness / 2;
 
 		c.points.push_back(placement * glm::dvec4(-hw, +hd, 0, 1));
 		c.points.push_back(placement * glm::dvec4(-hw, -hd, 0, 1));
@@ -1661,7 +1655,7 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline Curve GetTShapedCurve(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, double filletRadius, double edgeRadius, double legSlope, glm::dmat4 placement = glm::dmat4(1))
+	inline Curve GetTShapedCurve(double width, double depth, double webThickness, double flangeThickness, bool hasFillet, [[maybe_unused]] double filletRadius, [[maybe_unused]] double edgeRadius, [[maybe_unused]] double legSlope, glm::dmat4 placement = glm::dmat4(1))
 	{
 		Curve c;
 
@@ -1703,7 +1697,7 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline Curve GetCShapedCurve(double width, double depth, double girth, double thickness, bool hasFillet, double filletRadius, glm::dmat4 placement = glm::dmat4(1))
+	inline Curve GetCShapedCurve(double width, double depth, double girth, double thickness, bool hasFillet, [[maybe_unused]] double filletRadius, glm::dmat4 placement = glm::dmat4(1))
 	{
 		Curve c;
 
@@ -1742,7 +1736,7 @@ namespace bimGeometry
 		return c;
 	}
 
-	inline Curve GetZShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, double filletRadius, double edgeRadius, glm::dmat4 placement = glm::dmat4(1))
+	inline Curve GetZShapedCurve(double depth, double flangeWidth, double webThickness, double flangeThickness, [[maybe_unused]] double filletRadius, [[maybe_unused]] double edgeRadius, glm::dmat4 placement = glm::dmat4(1))
 	{
 		Curve c;
 		double hw = flangeWidth / 2;

@@ -835,8 +835,6 @@ namespace webifc::geometry
 	{
 		glm::dmat4 newMat = mat * mesh.transformation;
 
-		bool transformationBreaksWinding = MatrixFlipsTriangles(newMat);
-
 		auto geomIt = geometryMap.find(mesh.expressID);
 
 		if (geomIt != geometryMap.end())

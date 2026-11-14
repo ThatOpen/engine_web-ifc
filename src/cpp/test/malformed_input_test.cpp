@@ -122,7 +122,7 @@ TEST(MalformedDanglingUnitReferenceDoesNotHang)
     auto loader = MakeLoader(kDanglingUnitReference, schemaManager);
     webifc::cache::IfcCache cache(loader);
     // MILLI METRE is still applied; the conversion unit with the missing reference is skipped.
-    ASSERT_EQ(std::abs(cache.GetLinearScalingFactor() - 0.001) < 1e-12, true);
+    ASSERT_EQ((std::abs(cache.GetLinearScalingFactor() - 0.001) < 1e-12), true);
 }
 
 // #2332 table: "#19=IFCRELAGGREGATES('x',#5,$,$,#16);" (too few attributes).
@@ -131,7 +131,7 @@ TEST(MalformedRelAggregatesTooFewArgumentsDoesNotHang)
     webifc::schema::IfcSchemaManager schemaManager;
     auto loader = MakeLoader(BuildModel("#19=IFCRELAGGREGATES('x',#5,$,$,#16);", kValidPolyline), schemaManager);
     webifc::cache::IfcCache cache(loader);
-    ASSERT_EQ(std::abs(cache.GetLinearScalingFactor() - 0.001) < 1e-12, true);
+    ASSERT_EQ((std::abs(cache.GetLinearScalingFactor() - 0.001) < 1e-12), true);
 }
 
 // #2332 table: the closing "));" of IFCRELAGGREGATES is missing.
@@ -140,7 +140,7 @@ TEST(MalformedRelAggregatesUnclosedDoesNotHang)
     webifc::schema::IfcSchemaManager schemaManager;
     auto loader = MakeLoader(BuildModel("#19=IFCRELAGGREGATES('x',#5,$,$,#16,(#17,#18;", kValidPolyline), schemaManager);
     webifc::cache::IfcCache cache(loader);
-    ASSERT_EQ(std::abs(cache.GetLinearScalingFactor() - 0.001) < 1e-12, true);
+    ASSERT_EQ((std::abs(cache.GetLinearScalingFactor() - 0.001) < 1e-12), true);
 }
 
 // #2332 table: "#44=IFCPOLYLINE();" hangs in ComputeCurve while meshing.
@@ -169,7 +169,7 @@ TEST(MalformedEmptyPolylineDoesNotHang)
     {
         threw = true;
     }
-    ASSERT_EQ(threw || geometryCount == 0, true);
+    ASSERT_EQ((threw || geometryCount == 0), true);
 }
 
 // #2332: "FILE_SCHEMA();" hung in GetSchema(). Falls back to IFC2X3 like a missing FILE_SCHEMA.
@@ -187,7 +187,7 @@ END-ISO-10303-21;
 )IFC";
     webifc::schema::IfcSchemaManager schemaManager;
     auto loader = MakeLoader(content, schemaManager);
-    ASSERT_EQ(loader.GetSchema() == IFC2X3, true);
+    ASSERT_EQ((loader.GetSchema() == IFC2X3), true);
 }
 
 // Every truncation of a valid model must load, build the cache and read the schema
@@ -210,6 +210,6 @@ TEST(TruncatedModelsDoNotHang)
         const auto headerComplete = loaded && cut >= fileSchemaEnd;
         const IFC_SCHEMA expected = headerComplete ? IFC4 : IFC2X3;
         const IFC_SCHEMA actual = loader.GetSchema();
-        ASSERT_EQ(actual == expected, true);
+        ASSERT_EQ((actual == expected), true);
     }
 }

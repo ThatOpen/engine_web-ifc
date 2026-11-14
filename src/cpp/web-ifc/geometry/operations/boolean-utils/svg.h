@@ -21,7 +21,7 @@ namespace fuzzybools
 		}
 	};
 
-	static Bounds getBounds(std::vector<std::vector<glm::dvec2>> input, glm::dvec2 size, glm::dvec2 offset)
+	static Bounds getBounds(std::vector<std::vector<glm::dvec2>> input, [[maybe_unused]] glm::dvec2 size, [[maybe_unused]] glm::dvec2 offset)
 	{
 		std::vector<glm::dvec2> retval;
 
@@ -116,7 +116,7 @@ namespace fuzzybools
 		{
 			if (line.size() > 1)
 			{
-				for (int i = 1; i < line.size(); i++)
+				for (size_t i = 1; i < line.size(); i++)
 				{
 					glm::dvec2 a = rescale(line[i], bounds, size, offset);
 					glm::dvec2 b = rescale(line[i - 1], bounds, size, offset);
@@ -153,7 +153,7 @@ namespace fuzzybools
 		return svg.str();
 	}
 
-	static void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::wstring filename)
+	[[maybe_unused]] static void DumpSVGLines(std::vector<std::vector<glm::dvec2>> lines, std::wstring filename)
 	{
 		SVGLineSet set;
 		set.lines = lines;
