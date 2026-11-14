@@ -8,10 +8,14 @@
 
 #include <glm/glm.hpp>
 
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4267)
+#endif
 #include <CDT.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include "geometry.h"
 #include "aabb.h"
@@ -410,7 +414,7 @@ namespace fuzzybools
 
         //============================================================================================
 
-        glm::dvec2 GetPosOnPlane(const glm::dvec3 &pos)
+        glm::dvec2 GetPosOnPlane([[maybe_unused]] const glm::dvec3 &pos)
         {
             return {};
         }
@@ -447,7 +451,7 @@ namespace fuzzybools
         bool IsPointOnPlane(const glm::dvec3 &pos)
         {
             double d = glm::dot(normal, pos);
-            double posLength = pos.length();
+
             //          return equals(distance, d, toleranceVectorEquality * posLength);
             return equals(distance, d, toleranceVectorEquality);
         }
@@ -822,7 +826,6 @@ namespace fuzzybools
                 return glm::dot(normT, normNB) < 1.0 - EPS_BIG;
             }
 
-            auto A = T.GetNotShared(neighbour);
             auto E = neighbour.GetNotShared(T);
 
             TriangleVsPoint EvsT = CalcTriPt(T, E);
@@ -921,7 +924,7 @@ namespace fuzzybools
         {
             for (auto &plane : planes)
             {
-                if (plane.refPlane == refId || plane.IsEqualTo(normal, d))
+                if (static_cast<uint32_t>(plane.refPlane) == refId || plane.IsEqualTo(normal, d))
                 {
                     return plane.id;
                 }
@@ -1313,7 +1316,6 @@ namespace fuzzybools
                 {
                     if (pointToProjectedPoint.count(segment.first) == 0)
                     {
-                        bool expectedOnPlane = p.IsPointOnPlane(points[segment.first].location3D);
                         if (messages)
                         {
                             printf("unknown point in list, repairing in TriangulateLine\n");
@@ -1325,7 +1327,6 @@ namespace fuzzybools
                     }
                     if (pointToProjectedPoint.count(segment.second) == 0)
                     {
-                        bool expectedOnPlane = p.IsPointOnPlane(points[segment.second].location3D);
                         if (messages)
                         {
                             printf("unknown point in list, repairing in TriangulateLine\n");
@@ -1468,10 +1469,6 @@ namespace fuzzybools
                 {
                     continue;
                 }
-
-                auto pt2DA = projectedPoints[mapping[tri.vertices[0]]];
-                auto pt2DB = projectedPoints[mapping[tri.vertices[1]]];
-                auto pt2DC = projectedPoints[mapping[tri.vertices[2]]];
 
                 auto triCenter = (ptA + ptB + ptC) / 3.0;
 
@@ -1914,10 +1911,8 @@ namespace fuzzybools
         {
             std::vector<std::vector<glm::dvec2>> edges;
 
-            Plane &p = sp.planes[planeId];
-
 #ifdef CSG_DEBUG_OUTPUT
-            // auto basis = p.MakeBasis();
+            // auto basis = sp.planes[planeId].MakeBasis();
 
             // for (auto& segment : contours)
             // {
@@ -1928,7 +1923,7 @@ namespace fuzzybools
 
             for (auto &segment : contours)
             {
-                auto lineId = sp.planes[planeId].AddLine(sp.points[segment.first], sp.points[segment.second]);
+                sp.planes[planeId].AddLine(sp.points[segment.first], sp.points[segment.second]);
             }
         }
 
@@ -1938,10 +1933,8 @@ namespace fuzzybools
         {
             std::vector<std::vector<glm::dvec2>> edges;
 
-            Plane &p = sp.planes[planeId];
-
 #ifdef CSG_DEBUG_OUTPUT
-            // auto basis = p.MakeBasis();
+            // auto basis = sp.planes[planeId].MakeBasis();
 
             // for (auto& segment : contours)
             // {
@@ -1952,7 +1945,7 @@ namespace fuzzybools
 
             for (auto &segment : contours)
             {
-                auto lineId = sp.planes[planeId].AddLine(sp.points[segment.first], sp.points[segment.second]);
+                sp.planes[planeId].AddLine(sp.points[segment.first], sp.points[segment.second]);
             }
         }
 

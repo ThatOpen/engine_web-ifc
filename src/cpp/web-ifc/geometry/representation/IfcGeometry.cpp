@@ -63,11 +63,9 @@ namespace webifc::geometry {
 			center = min + extents / 2.0;
 		}
 
-		Geometry Geometry::Normalize(glm::dvec3 center, glm::dvec3 extents) const
+		Geometry Geometry::Normalize([[maybe_unused]] glm::dvec3 center, [[maybe_unused]] glm::dvec3 extents) const
 		{
 			Geometry newGeom;
-
-			double scale = std::max(extents.x, std::max(extents.y, extents.z)) / 10.0;
 
 			for (size_t i = 0; i < numFaces; i++)
 			{
@@ -75,10 +73,6 @@ namespace webifc::geometry {
 				auto pa = GetPoint(face.i0);
 				auto pb = GetPoint(face.i1);
 				auto pc = GetPoint(face.i2);
-
-				auto a = (pa - center) / scale;
-				auto b = (pb - center) / scale;
-				auto c = (pc - center) / scale;
 
 				// std::cout << areaOfTriangle(pa, pb, pc) << std::endl;
 

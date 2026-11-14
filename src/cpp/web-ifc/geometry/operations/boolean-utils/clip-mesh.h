@@ -29,7 +29,6 @@ namespace fuzzybools
 
         for (uint32_t i = 0; i < mesh.data; i++)
         {
-            bool doit = false;
             Face tri = mesh.GetFace(i);
             glm::dvec3 a = mesh.GetPoint(tri.i0);
             glm::dvec3 b = mesh.GetPoint(tri.i1);
@@ -84,7 +83,6 @@ namespace fuzzybools
 
             glm::dvec3 triCenter = (a + b * 1.02 + c * 1.03) * 1.0 / 3.05; // Using true centroid could cause issues (#540)
 
-            auto isInsideTarget = MeshLocation::INSIDE;
 
             Vec raydirInPlane = glm::cross(n, Vec(0.0, 0.0, 1.0));
             if (glm::length(raydirInPlane) < 1e-8)
@@ -151,7 +149,6 @@ namespace fuzzybools
                     // normals face away from eachother, we can keep this face
                     // furthermore, since the first operand is the first added, we don't flip
                     result.AddFace(a, b, c, tri.pId);
-                    doit = true;
                 }
             }
             else
@@ -170,12 +167,10 @@ namespace fuzzybools
                         if (glm::dot(n, isInside2Loc.normal) < 0)
                         {
                             result.AddFace(a, b, c, tri.pId);
-                            doit = true;
                         }
                         else
                         {
                             result.AddFace(b, a, c, tri.pId);
-                            doit = true;
                         }
                     }
                     else if (isInside1 == MeshLocation::BOUNDARY)
@@ -184,18 +179,15 @@ namespace fuzzybools
                         if (glm::dot(n, isInside1Loc.normal) < 0)
                         {
                             result.AddFace(b, a, c, tri.pId);
-                            doit = true;
                         }
                         else
                         {
                             result.AddFace(a, b, c, tri.pId);
-                            doit = true;
                         }
                     }
                     else
                     {
                         result.AddFace(a, b, c, tri.pId);
-                        doit = true;
                     }
                 }
             }
@@ -243,11 +235,9 @@ namespace fuzzybools
 
             glm::dvec3 n = computeNormal(a, b, c);
 
-            auto area = areaOfTriangle(a, b, c);
 
             glm::dvec3 triCenter = (a + b * 2.0 + c * 3.0) * 1.0 / 6.0; // Using true centroid could cause issues (#540)
 
-            auto isInsideTarget = MeshLocation::INSIDE;
 
             Vec raydirInPlane = glm::cross(n, Vec(0.0, 0.0, 1.0));
             if (glm::length(raydirInPlane) < 1e-8)

@@ -32,7 +32,7 @@ namespace fuzzybools
 		return obj.str();
 	}
 
-	static void DumpGeometry(const Geometry& geom, std::wstring filename)
+	[[maybe_unused]] static void DumpGeometry(const Geometry& geom, std::wstring filename)
 	{
 		size_t offset = 0;
 		writeFile(filename, ToObj(geom, offset));

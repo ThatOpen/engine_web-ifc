@@ -6,7 +6,6 @@
 #include "utils.h"
 #include "face.h"
 
-#pragma once
 namespace bimGeometry
 {
     void Geometry::AddPoint(glm::dvec4 &pt, glm::dvec3 &n)
@@ -70,7 +69,6 @@ namespace bimGeometry
     {
         glm::dvec3 normal;
 
-        double area = areaOfTriangle(a, b, c);
 
         if (!computeSafeNormal(a, b, c, normal, toleranceAddFace))
         {
@@ -90,7 +88,6 @@ namespace bimGeometry
         indexData.push_back(b);
         indexData.push_back(c);
 
-        double area = areaOfTriangle(GetPoint(a), GetPoint(b), GetPoint(c));
 
         numFaces++;
 
@@ -295,9 +292,6 @@ namespace bimGeometry
                 if (f.pId > -1)
                 {
                     auto a = GetPoint(f.i0);
-                    auto b = GetPoint(f.i1);
-                    auto c = GetPoint(f.i2);
-
                     double da = glm::dot(planes[f.pId].normal, a);
 
                     planes[f.pId].distance = da;

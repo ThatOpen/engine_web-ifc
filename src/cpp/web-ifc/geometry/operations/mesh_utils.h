@@ -214,7 +214,7 @@ namespace webifc::geometry
 			numRots
 			);
 		
-		for (int r = 0; r < geom.numFaces; r++)
+		for (uint32_t r = 0; r < geom.numFaces; r++)
 		{
 		 	bimGeometry::Face f = geom.GetFace(r);
 			geometry.AddFace(geom.GetPoint(f.i0), geom.GetPoint(f.i1),  geom.GetPoint(f.i2));
@@ -291,7 +291,7 @@ namespace webifc::geometry
 
 		// First we get the cylinder data
 		std::vector<glm::dvec3> bounding;
-		int repeats = 0;
+		size_t repeats = 0;
 		bool start = false;
 		size_t id = 0;
 
@@ -428,7 +428,7 @@ namespace webifc::geometry
 			numRots, 
 			surface.CylinderSurface.Radius);
 		
-		for (int r = 0; r < geom.numFaces; r++)
+		for (uint32_t r = 0; r < geom.numFaces; r++)
 		{
 		 	bimGeometry::Face f = geom.GetFace(r);
 			geometry.AddFace(geom.GetPoint(f.i0), geom.GetPoint(f.i1),  geom.GetPoint(f.i2));
@@ -436,7 +436,7 @@ namespace webifc::geometry
 	}
 
     // TODO: review and simplify
-    inline void TriangulateExtrusion(IfcGeometry &geometry, std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
+    inline void TriangulateExtrusion(IfcGeometry &geometry, [[maybe_unused]] std::vector<IfcBound3D> const& bounds, IfcSurface const& surface)
 	{
 		spdlog::debug("[TriangulateExtrusion({})]");
 
@@ -447,7 +447,7 @@ namespace webifc::geometry
 		{
 			std::vector<glm::dvec3> points = surface.ExtrusionSurface.Profile.curve.points;
 			bimGeometry::Geometry geom = bimGeometry::Extrude(points, dir, len);
-			for (int r = 0; r < geom.numFaces; r++)
+			for (uint32_t r = 0; r < geom.numFaces; r++)
 			{
 				bimGeometry::Face f = geom.GetFace(r);
 				geometry.AddFace(geom.GetPoint(f.i0), geom.GetPoint(f.i1),  geom.GetPoint(f.i2));
@@ -459,7 +459,7 @@ namespace webifc::geometry
 			{
 				std::vector<glm::dvec3> points = surface.ExtrusionSurface.Profile.profiles[i].curve.points;
                 bimGeometry::Geometry geom = bimGeometry::Extrude(points, dir, len);
-				for (int r = 0; r < geom.numFaces; r++)
+				for (uint32_t r = 0; r < geom.numFaces; r++)
 				{
 					bimGeometry::Face f = geom.GetFace(r);
 					geometry.AddFace(geom.GetPoint(f.i0), geom.GetPoint(f.i1),  geom.GetPoint(f.i2));
