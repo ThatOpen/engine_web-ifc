@@ -8,6 +8,8 @@
 #include "boolean-utils/svg.h"
 #endif
 
+#include "boolean-utils/eps.h"
+
 #ifndef GLM_ENABLE_EXPERIMENTAL
 #define GLM_ENABLE_EXPERIMENTAL
 #endif
