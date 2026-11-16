@@ -32,13 +32,14 @@ namespace fuzzybools
             Vec &hitPosition,
             double &t,
             double &d_plane,
-            bool infiniteLength = false)
+            bool infiniteLength = false,
+            bool *onPerimeter = nullptr)
         {
                 /*
                         Compute the direction of the ray from origin to end.
                 */
                 Vec dir = end - origin;
-                Vec dirNormalised = glm::normalize(dir);
+                if (onPerimeter) *onPerimeter = false;
 
                 /*
                         Compute the normal to the plane defined by v0, v1 and v2.
@@ -48,8 +49,9 @@ namespace fuzzybools
                 Vec v0v2 = v2 - v0;
                 Vec n = glm::cross(v0v1, v0v2);
 
-                double nLength = n.length();
-                double dirLength = dir.length();
+                double nLength = glm::length(n);
+                double dirLength = glm::length(dir);
+                if (nLength == 0 || dirLength == 0) return false;
 
                 /*
                         Step 0
@@ -60,12 +62,7 @@ namespace fuzzybools
                 */
                 double NdotRayDirection = glm::dot(n, dir);
 
-                // Vec n_norm = glm::normalize(n);
-                // Vec dir_norm = glm::normalize(dir);
-                // double NdotRayDirection = glm::dot(n_norm, dir_norm);
-
-                //      if (std::fabs(NdotRayDirection) < toleranceParallelTight * nLength * dirLength)
-                if (std::fabs(NdotRayDirection) < toleranceParallelTight)
+                if (std::fabs(NdotRayDirection) < toleranceParallelTight * nLength * dirLength)
                         return false;
 
                 /*
@@ -74,28 +71,27 @@ namespace fuzzybools
 
                         Find the point of intersection p of the ray with the plane defined by v0, v1 and v2.
 
-                        (a) Compute d, the distance from the origin to the plane.
+                        (a) Compute the unnormalised signed plane offset relative to v0.
+                        Subtract positions before taking the dot product to avoid cancellation
+                        when the same triangle is translated far from the coordinate origin.
                 */
-                double d = -glm::dot(n, v0);
+                double d = glm::dot(n, origin - v0);
                 /*
                         (b) Compute t.  The distance from the origin to the point of intersection is t |dir|, where
                             |dir| is the length of dir.
                 */
-                double d_origin = glm::dot(n, origin);
-
-                t = -(d_origin + d) / NdotRayDirection;
+                t = -d / NdotRayDirection;
                 /*
                         (c) Check if the triangle is behind the ray.  If so, return false.
                 */
-                //      if (t < -TOLERANCE_INSIDE_OUTSIDE_PERIMETER * dirLength) return false;
-                if (t < -_TOLERANCE_BACK_DEVIATION_DISTANCE)
+                if (t * dirLength < -_TOLERANCE_BACK_DEVIATION_DISTANCE)
                         return false;
                 /*
                         (d) Compute p, the point of intersection.
                 */
                 Vec p = origin + t * dir;
 
-                d_plane = (glm::dot(t * dir, glm::normalize(n)));
+                d_plane = -d / nLength;
                 /*
                         Step 2
                         ------
@@ -116,38 +112,18 @@ namespace fuzzybools
                         Check the other vertices and edges similarly.
                 */
 
-                Vec c;
-                double cLength = 0.0;
-
-                // edge 0
-                Vec edge0 = v1 - v0;
-                Vec v0p = p - v0;
-                c = glm::cross(edge0, v0p);
-                cLength = c.length();
-                double valdot = glm::dot(n, c);
-                //      if (glm::dot(n, c) < -TOLERANCE_INSIDE_OUTSIDE_PERIMETER * nLength * cLength) return false;
-                if (valdot < -_TOLERANCE_INSIDE_OUTSIDE_PERIMETER)
-                        return false;
-
-                // edge 1
-                Vec edge1 = v2 - v1;
-                Vec v1p = p - v1;
-                c = glm::cross(edge1, v1p);
-                cLength = c.length();
-                valdot = glm::dot(n, c);
-                //      if (glm::dot(n, c) < -TOLERANCE_INSIDE_OUTSIDE_PERIMETER * nLength * cLength) return false;
-                if (valdot < -_TOLERANCE_INSIDE_OUTSIDE_PERIMETER)
-                        return false;
-
-                // edge 2
-                Vec edge2 = v0 - v2;
-                Vec v2p = p - v2;
-                c = glm::cross(edge2, v2p);
-                cLength = c.length();
-                valdot = glm::dot(n, c);
-                //      if (glm::dot(n, c) < -TOLERANCE_INSIDE_OUTSIDE_PERIMETER * nLength * cLength) return false;
-                if (valdot < -_TOLERANCE_INSIDE_OUTSIDE_PERIMETER)
-                        return false;
+                // Compare edge distances, not quantities with fourth-power length units.
+                // A fixed threshold on dot(n, cross(edge, p-v)) changes the effective
+                // triangle boundary drastically when the same model changes units.
+                const Vec vertices[3] = {v0, v1, v2};
+                for (int i = 0; i < 3; i++)
+                {
+                        Vec edge = vertices[(i + 1) % 3] - vertices[i];
+                        double edgeLength = glm::length(edge);
+                        double side = glm::dot(n / nLength, glm::cross(edge, p - vertices[i])) / edgeLength;
+                        if (side < -_TOLERANCE_INSIDE_OUTSIDE_PERIMETER * edgeLength) return false;
+                        if (onPerimeter && std::abs(side) <= EDGE_ON_TOLERANCE * edgeLength) *onPerimeter = true;
+                }
 
                 hitPosition = p;
 
