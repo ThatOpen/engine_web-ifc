@@ -342,6 +342,32 @@ export interface ProfileSection {
   ): void;
 }
 
+/** A plane through `point` with normal `normal` (see SectionMesh / GetSection). */
+export interface SectionPlane {
+  point: ArrayLike<number>;
+  normal: ArrayLike<number>;
+}
+
+export interface SectionOptions {
+  /** distance under which two cut points are the same point */
+  weld?: number;
+  /** largest gap closed between the ends of chains that do not close (0 = never) */
+  closeGap?: number;
+}
+
+export interface SectionResult {
+  /** x, y, z per cap vertex */
+  capPositions: Float64Array;
+  /** 3 per cap triangle */
+  capIndices: Uint32Array;
+  /** x1, y1, z1, x2, y2, z2 per cut segment */
+  lines: Float64Array;
+  closedLoops: number;
+  closedByGap: number;
+  openChains: number;
+  earcutFailures: number;
+}
+
 export interface IfcType {
   typeID: number;
   typeName: string;
@@ -1670,6 +1696,65 @@ export class IfcAPI {
     (globalThis as any).__morphBool = fn || undefined;
   }
   private booleanFallbackChosen = false;
+
+  /**
+   * Section of one triangle mesh by a plane: the cut lines and the cut area (cap), triangulated. The mesh is not
+   * modified (hiding the part in front of the plane is up to the viewer, e.g. a clipping plane).
+   * Tolerant of real-world meshes: flipped triangles do not matter, loops are nested by containment (holes are
+   * kept), chains that do not close are closed when their ends are nearer than `closeGap`, and whatever stays
+   * open is returned as lines only (counted in `openChains`).
+   * @param positions x, y, z per vertex (any frame, any units)
+   * @param indices 3 per triangle
+   * @param plane the plane, through `point` with normal `normal`, in the same frame as the positions
+   * @param options weld: distance under which two cut points are the same (default 1e-6); closeGap: largest gap
+   * closed between the ends of open chains (default 0 = never)
+   * @returns capPositions (x, y, z) + capIndices, lines (x1, y1, z1, x2, y2, z2 per segment) and counters
+   */
+  SectionMesh(positions: ArrayLike<number>, indices: ArrayLike<number>, plane: SectionPlane, options: SectionOptions = {}): SectionResult {
+    const p = [plane.point[0], plane.point[1], plane.point[2], plane.normal[0], plane.normal[1], plane.normal[2]];
+    return this.wasmModule.SectionMesh(positions, indices, p, options.weld ?? 1e-6, options.closeGap ?? 0) as SectionResult;
+  }
+
+  /**
+   * Section (or floor plan, with a horizontal plane) of a whole model: every element whose geometry the plane
+   * crosses, cut as one mesh (all its pieces, placed). Coordinates are web-ifc's model frame (Y up, metres when
+   * applyLinearScalingFactor is true, the same frame as StreamAllMeshes + flatTransformation).
+   * @param modelID Model handle retrieved by OpenModel
+   * @param plane the plane, in the model frame
+   * @param options see SectionMesh (default weld 1e-5, closeGap 1e-3 here: model units after scaling)
+   * @returns one entry per element crossed, with its expressID and the colour of its first piece
+   */
+  GetSection(modelID: number, plane: SectionPlane, options: SectionOptions = {}): Array<SectionResult & { expressID: number, color: Color }> {
+    const opts = { weld: options.weld ?? 1e-5, closeGap: options.closeGap ?? 1e-3 };
+    const n = plane.normal, len = Math.hypot(n[0], n[1], n[2]) || 1;
+    const nn = [n[0] / len, n[1] / len, n[2] / len];
+    const out: Array<SectionResult & { expressID: number, color: Color }> = [];
+    this.StreamAllMeshes(modelID, (mesh: FlatMesh) => {
+      const pos: number[] = [], idx: number[] = [];
+      let below = false, above = false, color: Color | null = null;
+      for (let i = 0; i < mesh.geometries.size(); i++) {
+        const pg = mesh.geometries.get(i);
+        const g = this.GetGeometry(modelID, pg.geometryExpressID);
+        const v = this.GetVertexArray(g.GetVertexData(), g.GetVertexDataSize());
+        const ix = this.GetIndexArray(g.GetIndexData(), g.GetIndexDataSize());
+        g.delete();
+        const m = pg.flatTransformation, base = pos.length / 3;
+        if (!color) color = pg.color;
+        for (let k = 0; k < v.length; k += 6) {
+          const x = v[k], y = v[k + 1], z = v[k + 2];
+          const X = m[0] * x + m[4] * y + m[8] * z + m[12], Y = m[1] * x + m[5] * y + m[9] * z + m[13], Z = m[2] * x + m[6] * y + m[10] * z + m[14];
+          const d = (X - plane.point[0]) * nn[0] + (Y - plane.point[1]) * nn[1] + (Z - plane.point[2]) * nn[2];
+          if (d < 0) below = true; else if (d > 0) above = true;
+          pos.push(X, Y, Z);
+        }
+        for (let k = 0; k < ix.length; k++) idx.push(ix[k] + base);
+      }
+      if (!below || !above) return;                       // the plane does not cross this element
+      const r = this.SectionMesh(pos, idx, plane, opts);
+      if (r.lines.length) out.push(Object.assign(r, { expressID: mesh.expressID, color: color as Color }));
+    });
+    return out;
+  }
 
   /**
    * Encodes test using IFC Encoding
